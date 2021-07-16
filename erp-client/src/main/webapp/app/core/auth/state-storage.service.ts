@@ -5,17 +5,17 @@ import { SessionStorageService } from 'ngx-webstorage';
 export class StateStorageService {
   private previousUrlKey = 'previousUrl';
 
-  constructor(private sessionStorageService: SessionStorageService) {}
+  constructor(private $sessionStorage: SessionStorageService) {}
 
   storeUrl(url: string): void {
-    this.sessionStorageService.store(this.previousUrlKey, url);
+    this.$sessionStorage.store(this.previousUrlKey, url);
   }
 
-  getUrl(): string | null {
-    return this.sessionStorageService.retrieve(this.previousUrlKey) as string | null;
+  getUrl(): string | null | undefined {
+    return this.$sessionStorage.retrieve(this.previousUrlKey);
   }
 
   clearUrl(): void {
-    this.sessionStorageService.clear(this.previousUrlKey);
+    this.$sessionStorage.clear(this.previousUrlKey);
   }
 }

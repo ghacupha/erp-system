@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ConfigurationService } from './configuration.service';
-import { Bean, PropertySource } from './configuration.model';
+import { ConfigurationService, Bean, PropertySource } from './configuration.service';
 
 @Component({
   selector: 'jhi-configuration',
@@ -26,10 +25,8 @@ export class ConfigurationComponent implements OnInit {
   }
 
   filterAndSortBeans(): void {
-    const beansAscendingValue = this.beansAscending ? -1 : 1;
-    const beansAscendingValueReverse = this.beansAscending ? 1 : -1;
     this.beans = this.allBeans
       .filter(bean => !this.beansFilter || bean.prefix.toLowerCase().includes(this.beansFilter.toLowerCase()))
-      .sort((a, b) => (a.prefix < b.prefix ? beansAscendingValue : beansAscendingValueReverse));
+      .sort((a, b) => (a.prefix < b.prefix ? (this.beansAscending ? -1 : 1) : this.beansAscending ? 1 : -1));
   }
 }

@@ -6,6 +6,7 @@ export const activateRoute: Route = {
   path: 'activate',
   component: ActivateComponent,
   data: {
-    pageTitle: 'Activation',
+    authorities: [],
+    pageTitle: 'activate.title',
   },
 };

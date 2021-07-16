@@ -6,6 +6,7 @@ export const registerRoute: Route = {
   path: 'register',
   component: RegisterComponent,
   data: {
-    pageTitle: 'Registration',
+    authorities: [],
+    pageTitle: 'register.title',
   },
 };

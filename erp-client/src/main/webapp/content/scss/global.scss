@@ -1,6 +1,6 @@
 @import 'bootstrap-variables';
 @import '~bootstrap/scss/functions';
-@import '~bootswatch/dist/darkly/variables';
+@import '~bootswatch/dist/flatly/variables';
 @import '~bootstrap/scss/variables';
 
 /* ==============================================================
@@ -127,27 +127,20 @@ Custom alerts for notification
 /* ==========================================================================
 entity detail page css
 ========================================================================== */
-.row-md.jh-entity-details {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: 10px;
-  line-height: 1.5;
+.row.jh-entity-details > {
+  dd {
+    margin-bottom: 15px;
+  }
 }
 
 @media screen and (min-width: 768px) {
-  .row-md.jh-entity-details > {
+  .row.jh-entity-details > {
     dt {
-      float: left;
-      overflow: hidden;
-      clear: left;
-      text-align: right;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      padding: 0.5em 0;
+      margin-bottom: 15px;
     }
     dd {
       border-bottom: 1px solid #eee;
-      padding: 0.5em 0;
+      padding-left: 180px;
       margin-left: 0;
     }
   }

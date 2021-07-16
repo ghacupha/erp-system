@@ -11,7 +11,7 @@ export class NavBarPage {
   passwordMenu = element(by.css('[routerLink="account/password"]'));
   settingsMenu = element(by.css('[routerLink="account/settings"]'));
 
-  constructor(asAdmin?: boolean) {
+  constructor(asAdmin?: Boolean) {
     if (asAdmin) {
       this.adminMenu = element(by.id('admin-menu'));
     }
@@ -172,7 +172,7 @@ export class PasswordPage {
   }
 
   async getTitle(): Promise<string> {
-    return this.title.getText();
+    return this.title.getAttribute('jhiTranslate');
   }
 
   async save(): Promise<void> {
@@ -224,7 +224,7 @@ export class SettingsPage {
   }
 
   async getTitle(): Promise<string> {
-    return this.title.getText();
+    return this.title.getAttribute('jhiTranslate');
   }
 
   async save(): Promise<void> {

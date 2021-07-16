@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import { ProfileService } from './profile.service';
 
 @Component({
   selector: 'jhi-page-ribbon',
   template: `
     <div class="ribbon" *ngIf="ribbonEnv$ | async as ribbonEnv">
-      <a href="">{{ ribbonEnv }}</a>
+      <a href="" jhiTranslate="global.ribbon.{{ ribbonEnv }}">{{ ribbonEnv }}</a>
     </div>
   `,
-  styleUrls: ['./page-ribbon.component.scss'],
+  styleUrls: ['page-ribbon.scss'],
 })
 export class PageRibbonComponent implements OnInit {
   ribbonEnv$?: Observable<string | undefined>;
