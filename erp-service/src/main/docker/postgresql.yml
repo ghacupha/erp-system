@@ -1,0 +1,12 @@
+version: '2'
+services:
+  erpservice-postgresql:
+    image: postgres:12.3
+    # volumes:
+    #     - ~/volumes/jhipster/erpService/postgresql/:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=erpService
+      - POSTGRES_PASSWORD=
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 5432:5432
