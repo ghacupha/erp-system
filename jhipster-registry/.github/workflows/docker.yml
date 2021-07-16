@@ -30,11 +30,11 @@ jobs:
             - name: 'TOOLS: docker version'
               run: docker version
             - name: 'DOCKER: build image'
-              run: docker build -t jhipster/jhipster-registry:ci .
+              run: docker build -t ghacupha/jhipster-registry:ci .
             - name: 'DOCKER: list image'
               run: docker images
             - name: 'DOCKER: start container'
-              run: docker run --name jhipster-registry -p 8761:8761 -d -t jhipster/jhipster-registry:ci
+              run: docker run --name jhipster-registry -p 8761:8761 -d -t ghacupha/jhipster-registry:ci
             - name: 'DOCKER: wait 30sec'
               run: sleep 30
             - name: 'DOCKER list containers'
