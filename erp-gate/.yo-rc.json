@@ -1,8 +1,7 @@
 {
   "generator-jhipster": {
     "promptValues": {
-      "packageName": "io.github.erp",
-      "nativeLanguage": "en"
+      "packageName": "io.github.erp"
     },
     "jhipsterVersion": "6.10.5",
     "applicationType": "gateway",
@@ -12,9 +11,9 @@
     "serverPort": "8790",
     "authenticationType": "uaa",
     "uaaBaseName": "erpUaa",
-    "cacheProvider": "hazelcast",
+    "cacheProvider": "no",
     "enableHibernateCache": false,
-    "websocket": "spring-websocket",
+    "websocket": false,
     "databaseType": "no",
     "devDatabaseType": "no",
     "prodDatabaseType": "no",
@@ -24,14 +23,18 @@
     "buildTool": "maven",
     "enableSwaggerCodegen": false,
     "embeddableLaunchScript": false,
-    "creationTimestamp": 1626446245468,
-    "testFrameworks": ["gatling", "cucumber"],
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "clientFramework": "angularX",
+    "clientTheme": "flatly",
+    "clientThemeVariant": "primary",
+    "creationTimestamp": 1626554002417,
+    "testFrameworks": ["gatling", "cucumber", "protractor"],
     "jhiPrefix": "jhi",
     "entitySuffix": "",
     "dtoSuffix": "DTO",
     "otherModules": [],
     "enableTranslation": true,
-    "clientPackageManager": "npm",
     "nativeLanguage": "en",
     "languages": ["en", "fr", "de", "it"],
     "blueprints": [],
