@@ -13,25 +13,39 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-eureka:
-  client:
-    enabled: false
-  instance:
-    appname: erpGate
-    instanceId: erpGate:${spring.application.instance-id:${random.value}}
-
 spring:
+  profiles:
+    # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
+    #active: testcontainers
   application:
     name: erpGate
+  autoconfigure:
+    exclude:
+      - org.springframework.cloud.gateway.config.GatewayMetricsAutoConfiguration
+  cloud:
+    consul:
+      discovery:
+        enabled: false
+        instanceId: ${spring.application.name}:${spring.application.instance-id:${random.value}}
+      config:
+        enabled: false
+      enabled: false
   jackson:
     serialization:
       write-durations-as-timestamps: false
+  liquibase:
+    contexts: test
+    url: jdbc:h2:mem:erpgate;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
   mail:
     host: localhost
   main:
     allow-bean-definition-overriding: true
   messages:
     basename: i18n/messages
+  r2dbc:
+    url: r2dbc:h2:mem:///erpgate;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: r2dbc
+    password:
   task:
     execution:
       thread-name-prefix: erp-gate-task-
@@ -67,18 +81,16 @@ jhipster:
       host: localhost
       port: 5000
       queue-size: 512
+  mail:
+    from: test@localhost
+    base-url: http://127.0.0.1:8080
   security:
     authentication:
       jwt:
         # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
-        base64-secret:
+        base64-secret: ODFkNzNkZmUzY2UwYjg5NDBmYmI1ZTVhZDI0NGQ4YTIyNGZiYWY4MmY2MmM2YmNlZDk3ZjFhYWYwOWE1YmRlZmFmNDE3YmEyYTJlNWFlM2QwMjA2NWM5NWNkOGFkMDA3YzcwMmUxNTEyYWY5MjZmZGRhZjFmOTkyYmY1ZDZjOTQ=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
-  metrics:
-    logs: # Reports metrics in the logs
-      enabled: true
-      report-frequency: 60 # in seconds
-
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
