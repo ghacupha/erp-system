@@ -49,7 +49,7 @@ spring:
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
-    url: jdbc:postgresql://localhost:5432/erpGate
+    url: ${LOCAL_PG_SERVER}/erpGate
   mail:
     host: localhost
     port: 25
@@ -58,9 +58,10 @@ spring:
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   r2dbc:
-    url: r2dbc:postgresql://localhost:5432/erpGate
-    username: erpGate
-    password:
+    #url: r2dbc:postgresql://localhost:5432/erpGate
+    url: ${LOCAL_PG_R2DBC_SERVER}/erpGate
+    username: ${PG_DATABASE_DEV_USER}
+    password: ${PG_DATABASE_DEV_PASSWORD}
   thymeleaf:
     cache: false
   sleuth:

@@ -1,6 +1,6 @@
 {
   "global": {
-    "title": "Finerp",
+    "title": "FinErp",
     "browsehappy": "Sie benutzen einen <strong>veralteten</strong> Browser. Bitte <a href=\"http://browsehappy.com/?locale=de/\">aktualisieren Sie Ihren Browser</a>, um die Benutzerfreundlichkeit zu erhöhen.",
     "menu": {
       "home": "Startseite",
@@ -20,13 +20,13 @@
       },
       "admin": {
         "main": "Administration",
+        "gateway": "Gateway",
         "userManagement": "Benutzerverwaltung",
         "tracker": "Benutzer Aktivitäten",
         "metrics": "Metriken",
         "health": "Status",
         "configuration": "Konfiguration",
         "logs": "Protokoll",
-        "audits": "Audits",
         "apidocs": "API",
         "database": "Datenbank",
         "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -84,7 +84,7 @@
       "id": "ID"
     },
     "ribbon": {
-      "dev": "Development"
+      "dev": "Entwicklung"
     },
     "item-count": "Ergebnis {{first}} - {{second}} von {{total}} Elemente."
   },
@@ -130,9 +130,11 @@
     "emailexists": "Email wird bereits verwendet!",
     "idexists": "Ein neuer {{entityName}} kann noch keine ID haben",
     "idnull": "Ungültige ID",
+    "idinvalid": "Ungültige ID",
+    "idnotfound": "ID konnte nicht gefunden werden",
     "file": {
-      "could.not.extract": "Could not extract file",
-      "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+      "could.not.extract": "Datei konnte nicht extrahiert werden",
+      "not.image": "Es wird erwartet, dass die Datei ein Bild ist. Die Datei ist jedoch vom Typ \"{{ fileType }}\""
     }
   },
   "footer": "Dies ist Ihre Fußzeile"
