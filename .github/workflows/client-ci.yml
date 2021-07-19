@@ -1,4 +1,4 @@
-name: Application CI ERP CLIENT
+name: FINACE ERP CLIENT CI
 on: [push, pull_request]
 jobs:
     pipeline:
@@ -34,7 +34,7 @@ jobs:
                 password: ${{ secrets.DOCKERHUB_TOKEN }}
 
             - name: Build docker image
-              run: docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_ORG }}/${{ secrets.DOCKERHUB_CLIENT_REPO }}:${{ secrets.DOCKERHUB_VER }}
+              run: docker build . --file erp-client/Dockerfile --tag ${{ secrets.DOCKERHUB_ORG }}/${{ secrets.DOCKERHUB_CLIENT_REPO }}:${{ secrets.DOCKERHUB_VER }}
 
             - name: Push docker image
               run: docker push ${{ secrets.DOCKERHUB_ORG }}/${{ secrets.DOCKERHUB_CLIENT_REPO }}:${{ secrets.DOCKERHUB_VER }}
