@@ -16,16 +16,12 @@ jobs:
               with:
                   distribution: 'adopt'
                   java-version: '11.x'
-            - name: Run backend test
+            - name: Package application
               working-directory: ./erp-gate
               run: |
                   chmod +x mvnw
-                  npm run ci:backend:test
-            - name: Package application
-              working-directory: ./erp-gate
-              run: npm run java:jar:prod
+                  ./mvnw clean verify package -Pprod
             - name: Build and publish docker image
               working-directory: ./erp-gate
-              if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
               run:
                   ./mvnw -ntp jib:build -Djib.to.image=ghacupha/erp-gate:0.0.1-SNAPSHOT -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}"
