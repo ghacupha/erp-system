@@ -109,6 +109,7 @@
   },
   "defaultProject": "fin-erp",
   "cli": {
+    "analytics": "d0ba52b0-fb87-4b8a-b227-17e0440afa2d",
     "packageManager": "npm"
   }
 }
