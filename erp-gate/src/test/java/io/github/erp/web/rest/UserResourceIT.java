@@ -1,16 +1,15 @@
 package io.github.erp.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasItems;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.config.Constants;
 import io.github.erp.domain.Authority;
 import io.github.erp.domain.User;
+import io.github.erp.repository.AuthorityRepository;
 import io.github.erp.repository.UserRepository;
 import io.github.erp.security.AuthoritiesConstants;
+import io.github.erp.service.EntityManager;
 import io.github.erp.service.dto.AdminUserDTO;
 import io.github.erp.service.dto.UserDTO;
 import io.github.erp.service.mapper.UserMapper;
@@ -18,21 +17,19 @@ import io.github.erp.web.rest.vm.ManagedUserVM;
 import java.time.Instant;
 import java.util.*;
 import java.util.function.Consumer;
-import javax.persistence.EntityManager;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 /**
  * Integration tests for the {@link UserResource} REST controller.
  */
-@AutoConfigureMockMvc
+@AutoConfigureWebTestClient
 @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 @IntegrationTest
 class UserResourceIT {
@@ -64,13 +61,16 @@ class UserResourceIT {
     private UserRepository userRepository;
 
     @Autowired
+    private AuthorityRepository authorityRepository;
+
+    @Autowired
     private UserMapper userMapper;
 
     @Autowired
     private EntityManager em;
 
     @Autowired
-    private MockMvc restUserMockMvc;
+    private WebTestClient webTestClient;
 
     private User user;
 
@@ -90,13 +90,28 @@ class UserResourceIT {
         user.setLastName(DEFAULT_LASTNAME);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
+        user.setCreatedBy(Constants.SYSTEM);
         return user;
+    }
+
+    /**
+     * Delete all the users from the database.
+     */
+    public static void deleteEntities(EntityManager em) {
+        try {
+            em.deleteAll("jhi_user_authority").block();
+            em.deleteAll(User.class).block();
+        } catch (Exception e) {
+            // It can fail, if other entities are still referring this - it will be removed later.
+        }
     }
 
     /**
      * Setups the database with one user.
      */
     public static User initTestUser(UserRepository userRepository, EntityManager em) {
+        userRepository.deleteAllUserAuthorities().block();
+        userRepository.deleteAll().block();
         User user = createEntity(em);
         user.setLogin(DEFAULT_LOGIN);
         user.setEmail(DEFAULT_EMAIL);
@@ -109,9 +124,8 @@ class UserResourceIT {
     }
 
     @Test
-    @Transactional
     void createUser() throws Exception {
-        int databaseSizeBeforeCreate = userRepository.findAll().size();
+        int databaseSizeBeforeCreate = userRepository.findAll().collectList().block().size();
 
         // Create the User
         ManagedUserVM managedUserVM = new ManagedUserVM();
@@ -125,11 +139,14 @@ class UserResourceIT {
         managedUserVM.setLangKey(DEFAULT_LANGKEY);
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
-        restUserMockMvc
-            .perform(
-                post("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(managedUserVM))
-            )
-            .andExpect(status().isCreated());
+        webTestClient
+            .post()
+            .uri("/api/admin/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .exchange()
+            .expectStatus()
+            .isCreated();
 
         // Validate the User in the database
         assertPersistedUsers(
@@ -147,9 +164,8 @@ class UserResourceIT {
     }
 
     @Test
-    @Transactional
     void createUserWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = userRepository.findAll().size();
+        int databaseSizeBeforeCreate = userRepository.findAll().collectList().block().size();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId(DEFAULT_ID);
@@ -164,22 +180,24 @@ class UserResourceIT {
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restUserMockMvc
-            .perform(
-                post("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(managedUserVM))
-            )
-            .andExpect(status().isBadRequest());
+        webTestClient
+            .post()
+            .uri("/api/admin/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
 
         // Validate the User in the database
         assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeCreate));
     }
 
     @Test
-    @Transactional
     void createUserWithExistingLogin() throws Exception {
         // Initialize the database
-        userRepository.saveAndFlush(user);
-        int databaseSizeBeforeCreate = userRepository.findAll().size();
+        userRepository.save(user).block();
+        int databaseSizeBeforeCreate = userRepository.findAll().collectList().block().size();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setLogin(DEFAULT_LOGIN); // this login should already be used
@@ -193,22 +211,24 @@ class UserResourceIT {
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // Create the User
-        restUserMockMvc
-            .perform(
-                post("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(managedUserVM))
-            )
-            .andExpect(status().isBadRequest());
+        webTestClient
+            .post()
+            .uri("/api/admin/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
 
         // Validate the User in the database
         assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeCreate));
     }
 
     @Test
-    @Transactional
     void createUserWithExistingEmail() throws Exception {
         // Initialize the database
-        userRepository.saveAndFlush(user);
-        int databaseSizeBeforeCreate = userRepository.findAll().size();
+        userRepository.save(user).block();
+        int databaseSizeBeforeCreate = userRepository.findAll().collectList().block().size();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setLogin("anotherlogin");
@@ -222,69 +242,99 @@ class UserResourceIT {
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // Create the User
-        restUserMockMvc
-            .perform(
-                post("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(managedUserVM))
-            )
-            .andExpect(status().isBadRequest());
+        webTestClient
+            .post()
+            .uri("/api/admin/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
 
         // Validate the User in the database
         assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeCreate));
     }
 
     @Test
-    @Transactional
-    void getAllUsers() throws Exception {
+    void getAllUsers() {
         // Initialize the database
-        userRepository.saveAndFlush(user);
+        userRepository.save(user).block();
+        authorityRepository
+            .findById(AuthoritiesConstants.USER)
+            .flatMap(authority -> userRepository.saveUserAuthority(user.getId(), authority.getName()))
+            .block();
 
         // Get all the users
-        restUserMockMvc
-            .perform(get("/api/admin/users?sort=id,desc").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))
-            .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRSTNAME)))
-            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LASTNAME)))
-            .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
-            .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGEURL)))
-            .andExpect(jsonPath("$.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
+        AdminUserDTO foundUser = webTestClient
+            .get()
+            .uri("/api/admin/users?sort=id,DESC")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_JSON)
+            .returnResult(AdminUserDTO.class)
+            .getResponseBody()
+            .blockFirst();
+
+        assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(foundUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
+        assertThat(foundUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
+        assertThat(foundUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
+        assertThat(foundUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
+        assertThat(foundUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
+        assertThat(foundUser.getAuthorities()).containsExactly(AuthoritiesConstants.USER);
     }
 
     @Test
-    @Transactional
-    void getUser() throws Exception {
+    void getUser() {
         // Initialize the database
-        userRepository.saveAndFlush(user);
+        userRepository.save(user).block();
+        authorityRepository
+            .findById(AuthoritiesConstants.USER)
+            .flatMap(authority -> userRepository.saveUserAuthority(user.getId(), authority.getName()))
+            .block();
 
         // Get the user
-        restUserMockMvc
-            .perform(get("/api/admin/users/{login}", user.getLogin()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.login").value(user.getLogin()))
-            .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRSTNAME))
-            .andExpect(jsonPath("$.lastName").value(DEFAULT_LASTNAME))
-            .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
-            .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGEURL))
-            .andExpect(jsonPath("$.langKey").value(DEFAULT_LANGKEY));
+        webTestClient
+            .get()
+            .uri("/api/admin/users/{login}", user.getLogin())
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_JSON)
+            .expectBody()
+            .jsonPath("$.login")
+            .isEqualTo(user.getLogin())
+            .jsonPath("$.firstName")
+            .isEqualTo(DEFAULT_FIRSTNAME)
+            .jsonPath("$.lastName")
+            .isEqualTo(DEFAULT_LASTNAME)
+            .jsonPath("$.email")
+            .isEqualTo(DEFAULT_EMAIL)
+            .jsonPath("$.imageUrl")
+            .isEqualTo(DEFAULT_IMAGEURL)
+            .jsonPath("$.langKey")
+            .isEqualTo(DEFAULT_LANGKEY)
+            .jsonPath("$.authorities")
+            .isEqualTo(AuthoritiesConstants.USER);
     }
 
     @Test
-    @Transactional
-    void getNonExistingUser() throws Exception {
-        restUserMockMvc.perform(get("/api/admin/users/unknown")).andExpect(status().isNotFound());
+    void getNonExistingUser() {
+        webTestClient.get().uri("/api/admin/users/unknown").exchange().expectStatus().isNotFound();
     }
 
     @Test
-    @Transactional
     void updateUser() throws Exception {
         // Initialize the database
-        userRepository.saveAndFlush(user);
-        int databaseSizeBeforeUpdate = userRepository.findAll().size();
+        userRepository.save(user).block();
+        int databaseSizeBeforeUpdate = userRepository.findAll().collectList().block().size();
 
         // Update the user
-        User updatedUser = userRepository.findById(user.getId()).get();
+        User updatedUser = userRepository.findById(user.getId()).block();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId(updatedUser.getId());
@@ -302,11 +352,14 @@ class UserResourceIT {
         managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
-        restUserMockMvc
-            .perform(
-                put("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(managedUserVM))
-            )
-            .andExpect(status().isOk());
+        webTestClient
+            .put()
+            .uri("/api/admin/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .exchange()
+            .expectStatus()
+            .isOk();
 
         // Validate the User in the database
         assertPersistedUsers(
@@ -323,14 +376,13 @@ class UserResourceIT {
     }
 
     @Test
-    @Transactional
     void updateUserLogin() throws Exception {
         // Initialize the database
-        userRepository.saveAndFlush(user);
-        int databaseSizeBeforeUpdate = userRepository.findAll().size();
+        userRepository.save(user).block();
+        int databaseSizeBeforeUpdate = userRepository.findAll().collectList().block().size();
 
         // Update the user
-        User updatedUser = userRepository.findById(user.getId()).get();
+        User updatedUser = userRepository.findById(user.getId()).block();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId(updatedUser.getId());
@@ -348,11 +400,14 @@ class UserResourceIT {
         managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
-        restUserMockMvc
-            .perform(
-                put("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(managedUserVM))
-            )
-            .andExpect(status().isOk());
+        webTestClient
+            .put()
+            .uri("/api/admin/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .exchange()
+            .expectStatus()
+            .isOk();
 
         // Validate the User in the database
         assertPersistedUsers(
@@ -370,10 +425,9 @@ class UserResourceIT {
     }
 
     @Test
-    @Transactional
     void updateUserExistingEmail() throws Exception {
         // Initialize the database with 2 users
-        userRepository.saveAndFlush(user);
+        userRepository.save(user).block();
 
         User anotherUser = new User();
         anotherUser.setLogin("jhipster");
@@ -384,10 +438,11 @@ class UserResourceIT {
         anotherUser.setLastName("hipster");
         anotherUser.setImageUrl("");
         anotherUser.setLangKey("en");
-        userRepository.saveAndFlush(anotherUser);
+        anotherUser.setCreatedBy(Constants.SYSTEM);
+        userRepository.save(anotherUser).block();
 
         // Update the user
-        User updatedUser = userRepository.findById(user.getId()).get();
+        User updatedUser = userRepository.findById(user.getId()).block();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId(updatedUser.getId());
@@ -405,18 +460,20 @@ class UserResourceIT {
         managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
-        restUserMockMvc
-            .perform(
-                put("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(managedUserVM))
-            )
-            .andExpect(status().isBadRequest());
+        webTestClient
+            .put()
+            .uri("/api/admin/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
     }
 
     @Test
-    @Transactional
     void updateUserExistingLogin() throws Exception {
         // Initialize the database
-        userRepository.saveAndFlush(user);
+        userRepository.save(user).block();
 
         User anotherUser = new User();
         anotherUser.setLogin("jhipster");
@@ -427,10 +484,11 @@ class UserResourceIT {
         anotherUser.setLastName("hipster");
         anotherUser.setImageUrl("");
         anotherUser.setLangKey("en");
-        userRepository.saveAndFlush(anotherUser);
+        anotherUser.setCreatedBy(Constants.SYSTEM);
+        userRepository.save(anotherUser).block();
 
         // Update the user
-        User updatedUser = userRepository.findById(user.getId()).get();
+        User updatedUser = userRepository.findById(user.getId()).block();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId(updatedUser.getId());
@@ -448,24 +506,30 @@ class UserResourceIT {
         managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
-        restUserMockMvc
-            .perform(
-                put("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(managedUserVM))
-            )
-            .andExpect(status().isBadRequest());
+        webTestClient
+            .put()
+            .uri("/api/admin/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
     }
 
     @Test
-    @Transactional
-    void deleteUser() throws Exception {
+    void deleteUser() {
         // Initialize the database
-        userRepository.saveAndFlush(user);
-        int databaseSizeBeforeDelete = userRepository.findAll().size();
+        userRepository.save(user).block();
+        int databaseSizeBeforeDelete = userRepository.findAll().collectList().block().size();
 
         // Delete the user
-        restUserMockMvc
-            .perform(delete("/api/admin/users/{login}", user.getLogin()).accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isNoContent());
+        webTestClient
+            .delete()
+            .uri("/api/admin/users/{login}", user.getLogin())
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isNoContent();
 
         // Validate the database is empty
         assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeDelete - 1));
@@ -568,6 +632,6 @@ class UserResourceIT {
     }
 
     private void assertPersistedUsers(Consumer<List<User>> userAssertion) {
-        userAssertion.accept(userRepository.findAll());
+        userAssertion.accept(userRepository.findAll().collectList().block());
     }
 }

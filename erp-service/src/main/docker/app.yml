@@ -16,8 +16,9 @@ services:
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
       - SPRING_ELASTICSEARCH_REST_URIS=http://erpservice-elasticsearch:9200
       - LOCAL_PG_SERVER=${LOCAL_PG_SERVER}
-      - PG_DATABASE_DEV_USER=${PG_DATABASE_DEV_USER}
-      - PG_DATABASE_DEV_PASSWORD=${PG_DATABASE_DEV_PASSWORD}
+      - PG_DATABASE_PROD_USER=${PG_DATABASE_DEV_USER}
+      - PG_DATABASE_PROD_PASSWORD=${PG_DATABASE_DEV_PASSWORD}
+      - SPRING_DATA_JEST_URI=${SPRING_DATA_JEST_URI}
 #  erpservice-postgresql:
 #    image: postgres:13.3
 #    # volumes:

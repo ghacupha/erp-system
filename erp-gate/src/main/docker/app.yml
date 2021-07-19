@@ -9,14 +9,15 @@ services:
       - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
-      #- SPRING_DATASOURCE_URL=jdbc:postgresql://erpgate-postgresql:5432/erpGate
-      - SPRING_DATASOURCE_URL=${LOCAL_PG_SERVER}/erpGate
+      #- SPRING_R2DBC_URL=r2dbc:postgresql://erpgate-postgresql:5432/erpGate
+      - SPRING_R2DBC_URL=${LOCAL_R2DBC_URL}/erpGate
       #- SPRING_LIQUIBASE_URL=jdbc:postgresql://erpgate-postgresql:5432/erpGate
       - SPRING_LIQUIBASE_URL=${LOCAL_PG_SERVER}/erpGate
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
       - PG_DATABASE_DEV_PASSWORD=${PG_DATABASE_DEV_PASSWORD}
       - PG_DATABASE_DEV_USER=${PG_DATABASE_DEV_USER}
       - LOCAL_PG_SERVER=${LOCAL_PG_SERVER}
+      - LOCAL_R2DBC_URL=${LOCAL_R2DBC_URL}
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:

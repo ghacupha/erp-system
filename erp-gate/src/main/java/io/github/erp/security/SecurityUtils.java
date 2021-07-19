@@ -1,12 +1,11 @@
 package io.github.erp.security;
 
-import java.util.Optional;
-import java.util.stream.Stream;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import reactor.core.publisher.Mono;
 
 /**
  * Utility class for Spring Security.
@@ -20,9 +19,11 @@ public final class SecurityUtils {
      *
      * @return the login of the current user.
      */
-    public static Optional<String> getCurrentUserLogin() {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        return Optional.ofNullable(extractPrincipal(securityContext.getAuthentication()));
+    public static Mono<String> getCurrentUserLogin() {
+        return ReactiveSecurityContextHolder
+            .getContext()
+            .map(SecurityContext::getAuthentication)
+            .flatMap(authentication -> Mono.justOrEmpty(extractPrincipal(authentication)));
     }
 
     private static String extractPrincipal(Authentication authentication) {
@@ -42,10 +43,10 @@ public final class SecurityUtils {
      *
      * @return the JWT of the current user.
      */
-    public static Optional<String> getCurrentUserJWT() {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        return Optional
-            .ofNullable(securityContext.getAuthentication())
+    public static Mono<String> getCurrentUserJWT() {
+        return ReactiveSecurityContextHolder
+            .getContext()
+            .map(SecurityContext::getAuthentication)
             .filter(authentication -> authentication.getCredentials() instanceof String)
             .map(authentication -> (String) authentication.getCredentials());
     }
@@ -55,9 +56,12 @@ public final class SecurityUtils {
      *
      * @return true if the user is authenticated, false otherwise.
      */
-    public static boolean isAuthenticated() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null && getAuthorities(authentication).noneMatch(AuthoritiesConstants.ANONYMOUS::equals);
+    public static Mono<Boolean> isAuthenticated() {
+        return ReactiveSecurityContextHolder
+            .getContext()
+            .map(SecurityContext::getAuthentication)
+            .map(Authentication::getAuthorities)
+            .map(authorities -> authorities.stream().map(GrantedAuthority::getAuthority).noneMatch(AuthoritiesConstants.ANONYMOUS::equals));
     }
 
     /**
@@ -66,12 +70,11 @@ public final class SecurityUtils {
      * @param authority the authority to check.
      * @return true if the current user has the authority, false otherwise.
      */
-    public static boolean hasCurrentUserThisAuthority(String authority) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null && getAuthorities(authentication).anyMatch(authority::equals);
-    }
-
-    private static Stream<String> getAuthorities(Authentication authentication) {
-        return authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority);
+    public static Mono<Boolean> hasCurrentUserThisAuthority(String authority) {
+        return ReactiveSecurityContextHolder
+            .getContext()
+            .map(SecurityContext::getAuthentication)
+            .map(Authentication::getAuthorities)
+            .map(authorities -> authorities.stream().map(GrantedAuthority::getAuthority).anyMatch(authority::equals));
     }
 }

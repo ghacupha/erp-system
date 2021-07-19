@@ -17,7 +17,7 @@
     "pages": [],
     "creationTimestamp": 1626599830286,
     "serviceDiscoveryType": "eureka",
-    "reactive": false,
+    "reactive": true,
     "authenticationType": "jwt",
     "packageName": "io.github.erp",
     "serverPort": "8790",
