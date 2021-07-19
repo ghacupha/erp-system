@@ -25,7 +25,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       
-      - uses: actions/github-script@v4
+      - uses: actions/github-script@v2
         with: 
            script: |
               erp-client/.github/workflows/github-ci.yml
