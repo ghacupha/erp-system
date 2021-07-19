@@ -10,7 +10,7 @@ jobs:
             NODE_VERSION: 12.16.1
             NG_CLI_ANALYTICS: false
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
               with:
                   node-version: 12.16.1
