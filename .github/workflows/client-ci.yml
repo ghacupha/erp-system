@@ -4,7 +4,7 @@ jobs:
     pipeline:
         name: ERP client pipeline
         runs-on: ubuntu-latest
-        if: "contains(github.event.head_commit.message, '[client]') && !contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
+        if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
         timeout-minutes: 40
         env:
             NODE_VERSION: 12.16.1
