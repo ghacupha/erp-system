@@ -20,6 +20,13 @@ logging:
     org.hibernate.SQL: DEBUG
     io.github.erp: DEBUG
 
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
+
 spring:
   devtools:
     restart:
@@ -31,25 +38,26 @@ spring:
     serialization:
       indent-output: true
   cloud:
-    consul:
-      config:
-        fail-fast: false # if not in "prod" profile, do not force to use Spring Cloud Config
-        format: yaml
-        profile-separator: '-'
-      discovery:
-        prefer-ip-address: true
-        tags:
-          - profile=${spring.profiles.active}
-          - version=#project.version#
-          - git-version=${git.commit.id.describe:}
-          - git-commit=${git.commit.id.abbrev:}
-          - git-branch=${git.branch:}
-      host: localhost
-      port: 8500
+    config:
+      uri: http://admin:${jhipster.registry.password}@localhost:8761/config
+      # name of the config server's property source (file.yml) that we want to use
+      name: erpGate
+      profile: dev
+      label: main # toggle to switch to a different version of the configuration as stored in git
+      # it can be set to any label, branch or commit of the configuration source Git repository
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://localhost:5432/erpGate
+    username: erpGate
+    password:
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+  jpa:
+    database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
-    url: ${LOCAL_PG_SERVER}/erpGate
   mail:
     host: localhost
     port: 25
@@ -57,11 +65,6 @@ spring:
     password:
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
-  r2dbc:
-    #url: r2dbc:postgresql://localhost:5432/erpGate
-    url: ${LOCAL_PG_R2DBC_SERVER}/erpGate
-    username: ${PG_DATABASE_DEV_USER}
-    password: ${PG_DATABASE_DEV_PASSWORD}
   thymeleaf:
     cache: false
   sleuth:
@@ -89,6 +92,10 @@ jhipster:
       enabled: false
       limit: 100000
       duration-in-seconds: 3600
+    authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
+      app1: /api,/v3/api-docs # recommended dev configuration
+  registry:
+    password: admin
   # CORS is only enabled by default with the "dev" profile
   cors:
     # Allow Ionic for JHipster by default (* no longer allowed in Spring Boot 2.4+)

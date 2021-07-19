@@ -14,6 +14,31 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+eureka:
+  client:
+    enabled: true
+    healthcheck:
+      enabled: true
+    fetch-registry: true
+    register-with-eureka: true
+    instance-info-replication-interval-seconds: 10
+    registry-fetch-interval-seconds: 10
+  instance:
+    appname: erpgate
+    instanceId: erpgate:${spring.application.instance-id:${random.value}}
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+    status-page-url-path: ${management.endpoints.web.base-path}/info
+    health-check-url-path: ${management.endpoints.web.base-path}/health
+    metadata-map:
+      zone: primary # This is needed for the load balancer
+      profile: ${spring.profiles.active}
+      version: #project.version#
+      git-version: ${git.commit.id.describe:}
+      git-commit: ${git.commit.id.abbrev:}
+      git-branch: ${git.branch:}
+      context-path: ${server.servlet.context-path:}
+
 # See https://github.com/Netflix/Hystrix/wiki/Configuration
 hystrix:
   command:
@@ -28,8 +53,7 @@ management:
     web:
       base-path: /management
       exposure:
-        include:
-          ['configprops', 'env', 'gateway', 'health', 'info', 'jhimetrics', 'logfile', 'loggers', 'prometheus', 'threaddump', 'liquibase']
+        include: ['configprops', 'env', 'health', 'info', 'jhimetrics', 'logfile', 'loggers', 'prometheus', 'threaddump', 'liquibase']
   endpoint:
     health:
       show-details: when_authorized
@@ -77,34 +101,6 @@ management:
 spring:
   application:
     name: erpGate
-  cloud:
-    consul:
-      discovery:
-        healthCheckPath: /management/health
-        instanceId: erpgate:${spring.application.instance-id:${random.value}}
-        service-name: erpgate
-      config:
-        watch:
-          enabled: false
-    gateway:
-      default-filters:
-        - JWTRelay
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
-          predicates:
-            - name: Path
-              args:
-                pattern: "'/services/'+serviceId.toLowerCase()+'/**'"
-          filters:
-            - name: RewritePath
-              args:
-                regexp: "'/services/' + serviceId.toLowerCase() + '/(?<remaining>.*)'"
-                replacement: "'/${remaining}'"
-      httpclient:
-        pool:
-          max-connections: 1000
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
     # Otherwise, it will be filled in by maven when building the JAR file
@@ -118,6 +114,30 @@ spring:
         #- tls
   jmx:
     enabled: false
+  data:
+    jpa:
+      repositories:
+        bootstrap-mode: deferred
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate.jdbc.time_zone: UTC
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+      # modify batch size as necessary
+      hibernate.jdbc.batch_size: 25
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+      hibernate.query.fail_on_pagination_over_collection_fetch: true
+      hibernate.query.in_clause_parameter_padding: true
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
   messages:
     basename: i18n/messages
   main:
