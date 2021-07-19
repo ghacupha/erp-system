@@ -120,29 +120,7 @@ module.exports = (config, options, targetOptions) => {
   );
 
   config = merge(
-    config,
-    targetOptions.configuration === 'instrumenter'
-      ? {
-          module: {
-            rules: [
-              {
-                test: /\.(js|ts)$/,
-                use: [
-                  {
-                    loader: 'babel-loader',
-                    options: {
-                      plugins: ['istanbul'],
-                    },
-                  },
-                ],
-                enforce: 'post',
-                include: path.resolve(__dirname, '../src/main/webapp/'),
-                exclude: [/\.(e2e|spec)\.ts$/, /node_modules/, /(ngfactory|ngstyle)\.js/],
-              },
-            ],
-          },
-        }
-      : {}
+    config
     // jhipster-needle-add-webpack-config - JHipster will add custom config
   );
 

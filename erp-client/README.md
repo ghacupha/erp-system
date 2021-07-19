@@ -141,14 +141,6 @@ npm test
 
 UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in [src/test/javascript/e2e](src/test/javascript/e2e)
 and can be run by starting Spring Boot in one terminal (`./mvnw spring-boot:run`) and running the tests (`npm run e2e`) in a second one.
-UI end-to-end tests are powered by [Cypress][]. They're located in [src/test/javascript/cypress](src/test/javascript/cypress)
-and can be run by starting Spring Boot in one terminal (`./mvnw spring-boot:run`) and running the tests (`npm run e2e`) in a second one.
-
-#### Lighthouse audits
-
-You can execute automated [lighthouse audits][https://developers.google.com/web/tools/lighthouse/] with [cypress audits][https://github.com/mfrachet/cypress-audit] by running `npm run e2e:cypress:audits`.
-You should only run the audits when your application is packaged with the production profile.
-The lighthouse report is created in `target/cypress/lhreport.html`
 
 For more information, refer to the [Running tests page][].
 
@@ -247,6 +239,5 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [jest]: https://facebook.github.io/jest/
 [jasmine]: https://jasmine.github.io/2.0/introduction.html
 [protractor]: https://angular.github.io/protractor/
-[cypress]: https://www.cypress.io/
 [leaflet]: https://leafletjs.com/
 [definitelytyped]: https://definitelytyped.org/
