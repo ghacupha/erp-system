@@ -16,28 +16,13 @@ jobs:
               with:
                   distribution: 'adopt'
                   java-version: '11.x'
-            - name: Run backend test
+            - name: Test and Package application
               working-directory: ./erp-service
               run: |
                   chmod +x mvnw
-                  npm run ci:backend:test
-            - name: Package application
-              working-directory: ./erp-service
-              run: npm run java:jar:prod
+                  ./mvnw clean verify package -Pprod
             - name: Build and publish docker image
               working-directory: ./erp-service
               if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
               run:
                   ./mvnw -ntp jib:build -Djib.to.image=ghacupha/erp-service:0.0.1-SNAPSHOT -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}"
-            - name: 'E2E: Package'
-              working-directory: ./erp-service
-              run: npm run ci:e2e:package
-            - name: 'E2E: Prepare'
-              working-directory: ./erp-service
-              run: npm run ci:e2e:prepare
-            - name: 'E2E: Run'
-              working-directory: ./erp-service
-              run: npm run ci:e2e:run
-            - name: 'E2E: Teardown'
-              working-directory: ./erp-service
-              run: npm run ci:e2e:teardown
