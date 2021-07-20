@@ -23,6 +23,5 @@ jobs:
                   ./mvnw clean verify package -Pprod
             - name: Build and publish docker image
               working-directory: ./erp-service
-              if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
               run:
                   ./mvnw -ntp jib:build -Djib.to.image=ghacupha/erp-service:0.0.1-SNAPSHOT -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}"
