@@ -1,14 +1,17 @@
 package io.github.erp.service;
 
 import io.github.erp.service.dto.PaymentDTO;
-import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.Optional;
 
 /**
  * Service Interface for managing {@link io.github.erp.domain.Payment}.
  */
 public interface PaymentService {
+
     /**
      * Save a payment.
      *
@@ -18,20 +21,13 @@ public interface PaymentService {
     PaymentDTO save(PaymentDTO paymentDTO);
 
     /**
-     * Partially updates a payment.
-     *
-     * @param paymentDTO the entity to update partially.
-     * @return the persisted entity.
-     */
-    Optional<PaymentDTO> partialUpdate(PaymentDTO paymentDTO);
-
-    /**
      * Get all the payments.
      *
      * @param pageable the pagination information.
      * @return the list of entities.
      */
     Page<PaymentDTO> findAll(Pageable pageable);
+
 
     /**
      * Get the "id" payment.
@@ -52,7 +48,7 @@ public interface PaymentService {
      * Search for the payment corresponding to the query.
      *
      * @param query the query of the search.
-     *
+     * 
      * @param pageable the pagination information.
      * @return the list of entities.
      */

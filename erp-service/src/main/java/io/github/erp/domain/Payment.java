@@ -1,19 +1,23 @@
 package io.github.erp.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+
+import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
-import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A Payment.
  */
 @Entity
 @Table(name = "payment")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "payment")
 public class Payment implements Serializable {
 
@@ -37,7 +41,7 @@ public class Payment implements Serializable {
     private String dealerName;
 
     @OneToMany(mappedBy = "payment")
-    @JsonIgnoreProperties(value = { "payment" }, allowSetters = true)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Invoice> ownedInvoices = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -49,13 +53,8 @@ public class Payment implements Serializable {
         this.id = id;
     }
 
-    public Payment id(Long id) {
-        this.id = id;
-        return this;
-    }
-
     public String getPaymentNumber() {
-        return this.paymentNumber;
+        return paymentNumber;
     }
 
     public Payment paymentNumber(String paymentNumber) {
@@ -68,7 +67,7 @@ public class Payment implements Serializable {
     }
 
     public LocalDate getPaymentDate() {
-        return this.paymentDate;
+        return paymentDate;
     }
 
     public Payment paymentDate(LocalDate paymentDate) {
@@ -81,7 +80,7 @@ public class Payment implements Serializable {
     }
 
     public BigDecimal getPaymentAmount() {
-        return this.paymentAmount;
+        return paymentAmount;
     }
 
     public Payment paymentAmount(BigDecimal paymentAmount) {
@@ -94,7 +93,7 @@ public class Payment implements Serializable {
     }
 
     public String getDealerName() {
-        return this.dealerName;
+        return dealerName;
     }
 
     public Payment dealerName(String dealerName) {
@@ -107,11 +106,11 @@ public class Payment implements Serializable {
     }
 
     public Set<Invoice> getOwnedInvoices() {
-        return this.ownedInvoices;
+        return ownedInvoices;
     }
 
     public Payment ownedInvoices(Set<Invoice> invoices) {
-        this.setOwnedInvoices(invoices);
+        this.ownedInvoices = invoices;
         return this;
     }
 
@@ -128,15 +127,8 @@ public class Payment implements Serializable {
     }
 
     public void setOwnedInvoices(Set<Invoice> invoices) {
-        if (this.ownedInvoices != null) {
-            this.ownedInvoices.forEach(i -> i.setPayment(null));
-        }
-        if (invoices != null) {
-            invoices.forEach(i -> i.setPayment(this));
-        }
         this.ownedInvoices = invoices;
     }
-
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -152,8 +144,7 @@ public class Payment implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
-        return getClass().hashCode();
+        return 31;
     }
 
     // prettier-ignore

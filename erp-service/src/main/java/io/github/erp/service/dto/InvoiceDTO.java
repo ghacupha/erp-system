@@ -1,15 +1,14 @@
 package io.github.erp.service.dto;
 
+import java.time.LocalDate;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Objects;
 
 /**
  * A DTO for the {@link io.github.erp.domain.Invoice} entity.
  */
 public class InvoiceDTO implements Serializable {
-
+    
     private Long id;
 
     private String invoiceNumber;
@@ -18,8 +17,9 @@ public class InvoiceDTO implements Serializable {
 
     private BigDecimal invoiceAmount;
 
-    private PaymentDTO payment;
 
+    private Long paymentId;
+    
     public Long getId() {
         return id;
     }
@@ -52,12 +52,12 @@ public class InvoiceDTO implements Serializable {
         this.invoiceAmount = invoiceAmount;
     }
 
-    public PaymentDTO getPayment() {
-        return payment;
+    public Long getPaymentId() {
+        return paymentId;
     }
 
-    public void setPayment(PaymentDTO payment) {
-        this.payment = payment;
+    public void setPaymentId(Long paymentId) {
+        this.paymentId = paymentId;
     }
 
     @Override
@@ -69,16 +69,12 @@ public class InvoiceDTO implements Serializable {
             return false;
         }
 
-        InvoiceDTO invoiceDTO = (InvoiceDTO) o;
-        if (this.id == null) {
-            return false;
-        }
-        return Objects.equals(this.id, invoiceDTO.id);
+        return id != null && id.equals(((InvoiceDTO) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id);
+        return 31;
     }
 
     // prettier-ignore
@@ -89,7 +85,7 @@ public class InvoiceDTO implements Serializable {
             ", invoiceNumber='" + getInvoiceNumber() + "'" +
             ", invoiceDate='" + getInvoiceDate() + "'" +
             ", invoiceAmount=" + getInvoiceAmount() +
-            ", payment=" + getPayment() +
+            ", paymentId=" + getPaymentId() +
             "}";
     }
 }

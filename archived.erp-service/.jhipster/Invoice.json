@@ -1,0 +1,38 @@
+{
+  "fields": [
+    {
+      "fieldName": "invoiceNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "invoiceDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "invoiceAmount",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "payment",
+      "otherEntityRelationshipName": "ownedInvoice",
+      "relationshipName": "payment"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "Invoice",
+  "changelogDate": "20210627082202",
+  "entityTableName": "invoice",
+  "fluentMethods": true,
+  "embedded": false,
+  "applications": ["erpService"],
+  "microserviceName": "erpService",
+  "clientRootFolder": "payments",
+  "databaseType": "sql"
+}

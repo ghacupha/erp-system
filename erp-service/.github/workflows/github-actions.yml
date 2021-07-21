@@ -16,21 +16,11 @@ jobs:
               with:
                   distribution: 'adopt'
                   java-version: '11.x'
-            - name: Run backend test
-              run: |
-                  chmod +x mvnw
-                  npm run ci:backend:test
             - name: Package application
-              run: npm run java:jar:prod
+              run: |
+                   chmod +x mvnw
+                   ./mvnw clean verify package -Prod
             - name: Build and publish docker image
               if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
               run:
                   ./mvnw -ntp jib:build -Djib.to.image=ghacupha/erp-service:0.0.1-SNAPSHOT -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}"
-            - name: 'E2E: Package'
-              run: npm run ci:e2e:package
-            - name: 'E2E: Prepare'
-              run: npm run ci:e2e:prepare
-            - name: 'E2E: Run'
-              run: npm run ci:e2e:run
-            - name: 'E2E: Teardown'
-              run: npm run ci:e2e:teardown

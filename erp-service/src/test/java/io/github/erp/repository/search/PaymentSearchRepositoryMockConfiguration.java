@@ -12,4 +12,5 @@ public class PaymentSearchRepositoryMockConfiguration {
 
     @MockBean
     private PaymentSearchRepository mockPaymentSearchRepository;
+
 }

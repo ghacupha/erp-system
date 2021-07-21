@@ -1,20 +1,22 @@
 package io.github.erp.service.impl;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
-
+import io.github.erp.service.InvoiceService;
 import io.github.erp.domain.Invoice;
 import io.github.erp.repository.InvoiceRepository;
 import io.github.erp.repository.search.InvoiceSearchRepository;
-import io.github.erp.service.InvoiceService;
 import io.github.erp.service.dto.InvoiceDTO;
 import io.github.erp.service.mapper.InvoiceMapper;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing {@link Invoice}.
@@ -31,11 +33,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     private final InvoiceSearchRepository invoiceSearchRepository;
 
-    public InvoiceServiceImpl(
-        InvoiceRepository invoiceRepository,
-        InvoiceMapper invoiceMapper,
-        InvoiceSearchRepository invoiceSearchRepository
-    ) {
+    public InvoiceServiceImpl(InvoiceRepository invoiceRepository, InvoiceMapper invoiceMapper, InvoiceSearchRepository invoiceSearchRepository) {
         this.invoiceRepository = invoiceRepository;
         this.invoiceMapper = invoiceMapper;
         this.invoiceSearchRepository = invoiceSearchRepository;
@@ -52,41 +50,20 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public Optional<InvoiceDTO> partialUpdate(InvoiceDTO invoiceDTO) {
-        log.debug("Request to partially update Invoice : {}", invoiceDTO);
-
-        return invoiceRepository
-            .findById(invoiceDTO.getId())
-            .map(
-                existingInvoice -> {
-                    invoiceMapper.partialUpdate(existingInvoice, invoiceDTO);
-
-                    return existingInvoice;
-                }
-            )
-            .map(invoiceRepository::save)
-            .map(
-                savedInvoice -> {
-                    invoiceSearchRepository.save(savedInvoice);
-
-                    return savedInvoice;
-                }
-            )
-            .map(invoiceMapper::toDto);
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public Page<InvoiceDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Invoices");
-        return invoiceRepository.findAll(pageable).map(invoiceMapper::toDto);
+        return invoiceRepository.findAll(pageable)
+            .map(invoiceMapper::toDto);
     }
+
 
     @Override
     @Transactional(readOnly = true)
     public Optional<InvoiceDTO> findOne(Long id) {
         log.debug("Request to get Invoice : {}", id);
-        return invoiceRepository.findById(id).map(invoiceMapper::toDto);
+        return invoiceRepository.findById(id)
+            .map(invoiceMapper::toDto);
     }
 
     @Override
@@ -100,6 +77,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Transactional(readOnly = true)
     public Page<InvoiceDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Invoices for query {}", query);
-        return invoiceSearchRepository.search(queryStringQuery(query), pageable).map(invoiceMapper::toDto);
+        return invoiceSearchRepository.search(queryStringQuery(query), pageable)
+            .map(invoiceMapper::toDto);
     }
 }

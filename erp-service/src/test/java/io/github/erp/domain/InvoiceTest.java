@@ -1,14 +1,13 @@
 package io.github.erp.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import io.github.erp.web.rest.TestUtil;
 
-class InvoiceTest {
+public class InvoiceTest {
 
     @Test
-    void equalsVerifier() throws Exception {
+    public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Invoice.class);
         Invoice invoice1 = new Invoice();
         invoice1.setId(1L);
