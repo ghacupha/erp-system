@@ -31,8 +31,8 @@
   "entityTableName": "invoice",
   "fluentMethods": true,
   "embedded": false,
-  "applications": ["paymentsServer"],
+  "applications": ["erpService"],
   "microserviceName": "erpService",
-  "clientRootFolder": "erpService",
+  "clientRootFolder": "payments",
   "databaseType": "sql"
 }
