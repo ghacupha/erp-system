@@ -37,6 +37,7 @@
     "nativeLanguage": "en",
     "packageFolder": "io/github/erp",
     "jwtSecretKey": "ZWMyZGY1YTMyZDMwY2NjNThiMjgxMDczYTBmM2M4OWRkZDdlYTU5YjAzMmRkZGNkODcyZjMzZmY2ZTk0OTYxMjdjZjE5MzFjOTMxZjgxZTdmNTc0OTc3YmE3N2MyMjg3YjZhMmFlZDc1ZTNjMjYyZjUzMDA2YzZjODJlNWYwY2U=",
-    "languages": ["en", "fr", "de", "it"]
+    "languages": ["en", "fr", "de", "it"],
+    "entities": ["Payment", "Invoice"]
   }
 }
