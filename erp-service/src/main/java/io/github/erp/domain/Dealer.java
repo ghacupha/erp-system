@@ -199,13 +199,13 @@ public class Dealer implements Serializable {
 
     public Dealer addPayment(Payment payment) {
         this.payments.add(payment);
-        payment.getDealerNames().add(this);
+        payment.getDealers().add(this);
         return this;
     }
 
     public Dealer removePayment(Payment payment) {
         this.payments.remove(payment);
-        payment.getDealerNames().remove(this);
+        payment.getDealers().remove(this);
         return this;
     }
 
