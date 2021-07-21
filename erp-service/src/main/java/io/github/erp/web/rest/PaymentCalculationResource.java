@@ -37,7 +37,7 @@ public class PaymentCalculationResource {
 
     private final Logger log = LoggerFactory.getLogger(PaymentCalculationResource.class);
 
-    private static final String ENTITY_NAME = "erpServicePaymentCalculation";
+    private static final String ENTITY_NAME = "paymentsPaymentCalculation";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

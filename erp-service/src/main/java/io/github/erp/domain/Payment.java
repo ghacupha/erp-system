@@ -24,8 +24,6 @@ public class Payment implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
     @Column(name = "payment_number")
@@ -46,6 +44,12 @@ public class Payment implements Serializable {
     @OneToMany(mappedBy = "payment")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Invoice> ownedInvoices = new HashSet<>();
+
+    @OneToOne
+
+    @MapsId
+    @JoinColumn(name = "id")
+    private PaymentCalculation paymentCalculation;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -144,6 +148,19 @@ public class Payment implements Serializable {
 
     public void setOwnedInvoices(Set<Invoice> invoices) {
         this.ownedInvoices = invoices;
+    }
+
+    public PaymentCalculation getPaymentCalculation() {
+        return paymentCalculation;
+    }
+
+    public Payment paymentCalculation(PaymentCalculation paymentCalculation) {
+        this.paymentCalculation = paymentCalculation;
+        return this;
+    }
+
+    public void setPaymentCalculation(PaymentCalculation paymentCalculation) {
+        this.paymentCalculation = paymentCalculation;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

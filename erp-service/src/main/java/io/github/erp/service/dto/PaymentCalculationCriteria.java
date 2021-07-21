@@ -42,6 +42,8 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter paymentAmount;
 
+    private LongFilter paymentId;
+
     public PaymentCalculationCriteria() {
     }
 
@@ -54,6 +56,7 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
         this.withholdingVAT = other.withholdingVAT == null ? null : other.withholdingVAT.copy();
         this.withholdingTax = other.withholdingTax == null ? null : other.withholdingTax.copy();
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
+        this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
     }
 
     @Override
@@ -125,6 +128,14 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
         this.paymentAmount = paymentAmount;
     }
 
+    public LongFilter getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(LongFilter paymentId) {
+        this.paymentId = paymentId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -143,7 +154,8 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
             Objects.equals(paymentExpense, that.paymentExpense) &&
             Objects.equals(withholdingVAT, that.withholdingVAT) &&
             Objects.equals(withholdingTax, that.withholdingTax) &&
-            Objects.equals(paymentAmount, that.paymentAmount);
+            Objects.equals(paymentAmount, that.paymentAmount) &&
+            Objects.equals(paymentId, that.paymentId);
     }
 
     @Override
@@ -156,7 +168,8 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
         paymentExpense,
         withholdingVAT,
         withholdingTax,
-        paymentAmount
+        paymentAmount,
+        paymentId
         );
     }
 
@@ -172,6 +185,7 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
                 (withholdingVAT != null ? "withholdingVAT=" + withholdingVAT + ", " : "") +
                 (withholdingTax != null ? "withholdingTax=" + withholdingTax + ", " : "") +
                 (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
+                (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
             "}";
     }
 
