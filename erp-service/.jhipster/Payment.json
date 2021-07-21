@@ -43,6 +43,13 @@
       "relationshipType": "many-to-one",
       "otherEntityField": "id",
       "otherEntityRelationshipName": "payment"
+    },
+    {
+      "relationshipName": "dealer",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-many",
+      "ownerSide": false,
+      "otherEntityRelationshipName": "payment"
     }
   ],
   "service": "serviceImpl",

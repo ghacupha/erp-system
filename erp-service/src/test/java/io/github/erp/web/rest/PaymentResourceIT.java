@@ -6,6 +6,7 @@ import io.github.erp.domain.Payment;
 import io.github.erp.domain.Invoice;
 import io.github.erp.domain.PaymentCalculation;
 import io.github.erp.domain.PaymentRequisition;
+import io.github.erp.domain.Dealer;
 import io.github.erp.repository.PaymentRepository;
 import io.github.erp.repository.search.PaymentSearchRepository;
 import io.github.erp.service.PaymentService;
@@ -794,6 +795,26 @@ public class PaymentResourceIT {
 
         // Get all the paymentList where paymentRequisition equals to paymentRequisitionId + 1
         defaultPaymentShouldNotBeFound("paymentRequisitionId.equals=" + (paymentRequisitionId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllPaymentsByDealerIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+        Dealer dealer = DealerResourceIT.createEntity(em);
+        em.persist(dealer);
+        em.flush();
+        payment.addDealer(dealer);
+        paymentRepository.saveAndFlush(payment);
+        Long dealerId = dealer.getId();
+
+        // Get all the paymentList where dealer equals to dealerId
+        defaultPaymentShouldBeFound("dealerId.equals=" + dealerId);
+
+        // Get all the paymentList where dealer equals to dealerId + 1
+        defaultPaymentShouldNotBeFound("dealerId.equals=" + (dealerId + 1));
     }
 
     /**
