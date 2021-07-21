@@ -36,9 +36,16 @@ public class Invoice implements Serializable {
     @Column(name = "invoice_amount", precision = 21, scale = 2)
     private BigDecimal invoiceAmount;
 
+    @Column(name = "payment_category")
+    private String paymentCategory;
+
     @ManyToOne
     @JsonIgnoreProperties(value = "ownedInvoices", allowSetters = true)
     private Payment payment;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = "invoices", allowSetters = true)
+    private Dealer dealer;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -88,6 +95,19 @@ public class Invoice implements Serializable {
         this.invoiceAmount = invoiceAmount;
     }
 
+    public String getPaymentCategory() {
+        return paymentCategory;
+    }
+
+    public Invoice paymentCategory(String paymentCategory) {
+        this.paymentCategory = paymentCategory;
+        return this;
+    }
+
+    public void setPaymentCategory(String paymentCategory) {
+        this.paymentCategory = paymentCategory;
+    }
+
     public Payment getPayment() {
         return payment;
     }
@@ -99,6 +119,19 @@ public class Invoice implements Serializable {
 
     public void setPayment(Payment payment) {
         this.payment = payment;
+    }
+
+    public Dealer getDealer() {
+        return dealer;
+    }
+
+    public Invoice dealer(Dealer dealer) {
+        this.dealer = dealer;
+        return this;
+    }
+
+    public void setDealer(Dealer dealer) {
+        this.dealer = dealer;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
@@ -126,6 +159,7 @@ public class Invoice implements Serializable {
             ", invoiceNumber='" + getInvoiceNumber() + "'" +
             ", invoiceDate='" + getInvoiceDate() + "'" +
             ", invoiceAmount=" + getInvoiceAmount() +
+            ", paymentCategory='" + getPaymentCategory() + "'" +
             "}";
     }
 }

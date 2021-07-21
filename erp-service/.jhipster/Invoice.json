@@ -11,6 +11,10 @@
     {
       "fieldName": "invoiceAmount",
       "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "paymentCategory",
+      "fieldType": "String"
     }
   ],
   "relationships": [
@@ -18,7 +22,15 @@
       "relationshipType": "many-to-one",
       "otherEntityName": "payment",
       "otherEntityRelationshipName": "ownedInvoice",
-      "relationshipName": "payment"
+      "relationshipName": "payment",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "dealer",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id",
+      "otherEntityRelationshipName": "invoice"
     }
   ],
   "service": "serviceImpl",

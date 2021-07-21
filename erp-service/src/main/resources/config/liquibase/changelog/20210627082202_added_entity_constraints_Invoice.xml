@@ -14,5 +14,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="payment"/>
 
+        <addForeignKeyConstraint baseColumnNames="dealer_id"
+                                 baseTableName="invoice"
+                                 constraintName="fk_invoice_dealer_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
     </changeSet>
 </databaseChangeLog>
