@@ -23,6 +23,8 @@ public class PaymentDTO implements Serializable {
 
 
     private Long paymentCalculationId;
+
+    private Long paymentRequisitionId;
     
     public Long getId() {
         return id;
@@ -80,6 +82,14 @@ public class PaymentDTO implements Serializable {
         this.paymentCalculationId = paymentCalculationId;
     }
 
+    public Long getPaymentRequisitionId() {
+        return paymentRequisitionId;
+    }
+
+    public void setPaymentRequisitionId(Long paymentRequisitionId) {
+        this.paymentRequisitionId = paymentRequisitionId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -108,6 +118,7 @@ public class PaymentDTO implements Serializable {
             ", dealerName='" + getDealerName() + "'" +
             ", paymentCategory='" + getPaymentCategory() + "'" +
             ", paymentCalculationId=" + getPaymentCalculationId() +
+            ", paymentRequisitionId=" + getPaymentRequisitionId() +
             "}";
     }
 }
