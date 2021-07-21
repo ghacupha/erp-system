@@ -39,6 +39,9 @@ public class Invoice implements Serializable {
     @Column(name = "payment_category")
     private String paymentCategory;
 
+    @Column(name = "dealer_name")
+    private String dealerName;
+
     @ManyToOne
     @JsonIgnoreProperties(value = "ownedInvoices", allowSetters = true)
     private Payment payment;
@@ -108,6 +111,19 @@ public class Invoice implements Serializable {
         this.paymentCategory = paymentCategory;
     }
 
+    public String getDealerName() {
+        return dealerName;
+    }
+
+    public Invoice dealerName(String dealerName) {
+        this.dealerName = dealerName;
+        return this;
+    }
+
+    public void setDealerName(String dealerName) {
+        this.dealerName = dealerName;
+    }
+
     public Payment getPayment() {
         return payment;
     }
@@ -160,6 +176,7 @@ public class Invoice implements Serializable {
             ", invoiceDate='" + getInvoiceDate() + "'" +
             ", invoiceAmount=" + getInvoiceAmount() +
             ", paymentCategory='" + getPaymentCategory() + "'" +
+            ", dealerName='" + getDealerName() + "'" +
             "}";
     }
 }

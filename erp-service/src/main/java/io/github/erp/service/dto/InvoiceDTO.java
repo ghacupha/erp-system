@@ -19,6 +19,8 @@ public class InvoiceDTO implements Serializable {
 
     private String paymentCategory;
 
+    private String dealerName;
+
 
     private Long paymentId;
 
@@ -64,6 +66,14 @@ public class InvoiceDTO implements Serializable {
         this.paymentCategory = paymentCategory;
     }
 
+    public String getDealerName() {
+        return dealerName;
+    }
+
+    public void setDealerName(String dealerName) {
+        this.dealerName = dealerName;
+    }
+
     public Long getPaymentId() {
         return paymentId;
     }
@@ -106,6 +116,7 @@ public class InvoiceDTO implements Serializable {
             ", invoiceDate='" + getInvoiceDate() + "'" +
             ", invoiceAmount=" + getInvoiceAmount() +
             ", paymentCategory='" + getPaymentCategory() + "'" +
+            ", dealerName='" + getDealerName() + "'" +
             ", paymentId=" + getPaymentId() +
             ", dealerId=" + getDealerId() +
             "}";
