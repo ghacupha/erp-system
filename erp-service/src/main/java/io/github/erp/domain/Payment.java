@@ -1,5 +1,6 @@
 package io.github.erp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -55,6 +56,11 @@ public class Payment implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties(value = "payments", allowSetters = true)
     private PaymentRequisition paymentRequisition;
+
+    @ManyToMany(mappedBy = "payments")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnore
+    private Set<Dealer> dealers = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -179,6 +185,31 @@ public class Payment implements Serializable {
 
     public void setPaymentRequisition(PaymentRequisition paymentRequisition) {
         this.paymentRequisition = paymentRequisition;
+    }
+
+    public Set<Dealer> getDealers() {
+        return dealers;
+    }
+
+    public Payment dealers(Set<Dealer> dealers) {
+        this.dealers = dealers;
+        return this;
+    }
+
+    public Payment addDealer(Dealer dealer) {
+        this.dealers.add(dealer);
+        dealer.getPayments().add(this);
+        return this;
+    }
+
+    public Payment removeDealer(Dealer dealer) {
+        this.dealers.remove(dealer);
+        dealer.getPayments().remove(this);
+        return this;
+    }
+
+    public void setDealers(Set<Dealer> dealers) {
+        this.dealers = dealers;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

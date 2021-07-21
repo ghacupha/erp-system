@@ -20,6 +20,8 @@ public interface PaymentMapper extends EntityMapper<PaymentDTO, Payment> {
     @Mapping(target = "removeOwnedInvoice", ignore = true)
     @Mapping(source = "paymentCalculationId", target = "paymentCalculation")
     @Mapping(source = "paymentRequisitionId", target = "paymentRequisition")
+    @Mapping(target = "dealers", ignore = true)
+    @Mapping(target = "removeDealer", ignore = true)
     Payment toEntity(PaymentDTO paymentDTO);
 
     default Payment fromId(Long id) {
