@@ -8,7 +8,7 @@
       "relationshipType": "many-to-many",
       "otherEntityField": "id",
       "ownerSide": true,
-      "otherEntityRelationshipName": "dealerName"
+      "otherEntityRelationshipName": "dealer"
     }
   ],
   "fields": [
