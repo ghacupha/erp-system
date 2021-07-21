@@ -1,15 +1,14 @@
 package io.github.erp.service.dto;
 
+import java.time.LocalDate;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Objects;
 
 /**
  * A DTO for the {@link io.github.erp.domain.Payment} entity.
  */
 public class PaymentDTO implements Serializable {
-
+    
     private Long id;
 
     private String paymentNumber;
@@ -20,6 +19,7 @@ public class PaymentDTO implements Serializable {
 
     private String dealerName;
 
+    
     public Long getId() {
         return id;
     }
@@ -69,16 +69,12 @@ public class PaymentDTO implements Serializable {
             return false;
         }
 
-        PaymentDTO paymentDTO = (PaymentDTO) o;
-        if (this.id == null) {
-            return false;
-        }
-        return Objects.equals(this.id, paymentDTO.id);
+        return id != null && id.equals(((PaymentDTO) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id);
+        return 31;
     }
 
     // prettier-ignore

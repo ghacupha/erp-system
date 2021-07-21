@@ -1,14 +1,9 @@
 package io.github.erp.service;
 
-import io.github.erp.domain.*; // for static metamodels
-import io.github.erp.domain.Payment;
-import io.github.erp.repository.PaymentRepository;
-import io.github.erp.repository.search.PaymentSearchRepository;
-import io.github.erp.service.criteria.PaymentCriteria;
-import io.github.erp.service.dto.PaymentDTO;
-import io.github.erp.service.mapper.PaymentMapper;
 import java.util.List;
+
 import javax.persistence.criteria.JoinType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,7 +11,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tech.jhipster.service.QueryService;
+
+import io.github.jhipster.service.QueryService;
+
+import io.github.erp.domain.Payment;
+import io.github.erp.domain.*; // for static metamodels
+import io.github.erp.repository.PaymentRepository;
+import io.github.erp.repository.search.PaymentSearchRepository;
+import io.github.erp.service.dto.PaymentCriteria;
+import io.github.erp.service.dto.PaymentDTO;
+import io.github.erp.service.mapper.PaymentMapper;
 
 /**
  * Service for executing complex queries for {@link Payment} entities in the database.
@@ -36,11 +40,7 @@ public class PaymentQueryService extends QueryService<Payment> {
 
     private final PaymentSearchRepository paymentSearchRepository;
 
-    public PaymentQueryService(
-        PaymentRepository paymentRepository,
-        PaymentMapper paymentMapper,
-        PaymentSearchRepository paymentSearchRepository
-    ) {
+    public PaymentQueryService(PaymentRepository paymentRepository, PaymentMapper paymentMapper, PaymentSearchRepository paymentSearchRepository) {
         this.paymentRepository = paymentRepository;
         this.paymentMapper = paymentMapper;
         this.paymentSearchRepository = paymentSearchRepository;
@@ -68,7 +68,8 @@ public class PaymentQueryService extends QueryService<Payment> {
     public Page<PaymentDTO> findByCriteria(PaymentCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<Payment> specification = createSpecification(criteria);
-        return paymentRepository.findAll(specification, page).map(paymentMapper::toDto);
+        return paymentRepository.findAll(specification, page)
+            .map(paymentMapper::toDto);
     }
 
     /**
@@ -107,13 +108,8 @@ public class PaymentQueryService extends QueryService<Payment> {
                 specification = specification.and(buildStringSpecification(criteria.getDealerName(), Payment_.dealerName));
             }
             if (criteria.getOwnedInvoiceId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getOwnedInvoiceId(),
-                            root -> root.join(Payment_.ownedInvoices, JoinType.LEFT).get(Invoice_.id)
-                        )
-                    );
+                specification = specification.and(buildSpecification(criteria.getOwnedInvoiceId(),
+                    root -> root.join(Payment_.ownedInvoices, JoinType.LEFT).get(Invoice_.id)));
             }
         }
         return specification;

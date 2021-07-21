@@ -1,14 +1,9 @@
 package io.github.erp.service;
 
-import io.github.erp.domain.*; // for static metamodels
-import io.github.erp.domain.Invoice;
-import io.github.erp.repository.InvoiceRepository;
-import io.github.erp.repository.search.InvoiceSearchRepository;
-import io.github.erp.service.criteria.InvoiceCriteria;
-import io.github.erp.service.dto.InvoiceDTO;
-import io.github.erp.service.mapper.InvoiceMapper;
 import java.util.List;
+
 import javax.persistence.criteria.JoinType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,7 +11,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tech.jhipster.service.QueryService;
+
+import io.github.jhipster.service.QueryService;
+
+import io.github.erp.domain.Invoice;
+import io.github.erp.domain.*; // for static metamodels
+import io.github.erp.repository.InvoiceRepository;
+import io.github.erp.repository.search.InvoiceSearchRepository;
+import io.github.erp.service.dto.InvoiceCriteria;
+import io.github.erp.service.dto.InvoiceDTO;
+import io.github.erp.service.mapper.InvoiceMapper;
 
 /**
  * Service for executing complex queries for {@link Invoice} entities in the database.
@@ -36,11 +40,7 @@ public class InvoiceQueryService extends QueryService<Invoice> {
 
     private final InvoiceSearchRepository invoiceSearchRepository;
 
-    public InvoiceQueryService(
-        InvoiceRepository invoiceRepository,
-        InvoiceMapper invoiceMapper,
-        InvoiceSearchRepository invoiceSearchRepository
-    ) {
+    public InvoiceQueryService(InvoiceRepository invoiceRepository, InvoiceMapper invoiceMapper, InvoiceSearchRepository invoiceSearchRepository) {
         this.invoiceRepository = invoiceRepository;
         this.invoiceMapper = invoiceMapper;
         this.invoiceSearchRepository = invoiceSearchRepository;
@@ -68,7 +68,8 @@ public class InvoiceQueryService extends QueryService<Invoice> {
     public Page<InvoiceDTO> findByCriteria(InvoiceCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<Invoice> specification = createSpecification(criteria);
-        return invoiceRepository.findAll(specification, page).map(invoiceMapper::toDto);
+        return invoiceRepository.findAll(specification, page)
+            .map(invoiceMapper::toDto);
     }
 
     /**
@@ -104,10 +105,8 @@ public class InvoiceQueryService extends QueryService<Invoice> {
                 specification = specification.and(buildRangeSpecification(criteria.getInvoiceAmount(), Invoice_.invoiceAmount));
             }
             if (criteria.getPaymentId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getPaymentId(), root -> root.join(Invoice_.payment, JoinType.LEFT).get(Payment_.id))
-                    );
+                specification = specification.and(buildSpecification(criteria.getPaymentId(),
+                    root -> root.join(Invoice_.payment, JoinType.LEFT).get(Payment_.id)));
             }
         }
         return specification;

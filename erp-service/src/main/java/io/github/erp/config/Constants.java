@@ -5,7 +5,8 @@ package io.github.erp.config;
  */
 public final class Constants {
 
-    public static final String SYSTEM = "system";
+    public static final String SYSTEM_ACCOUNT = "system";
 
-    private Constants() {}
+    private Constants() {
+    }
 }

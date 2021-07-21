@@ -1,14 +1,13 @@
 package io.github.erp.service.dto;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import io.github.erp.web.rest.TestUtil;
 
-class PaymentDTOTest {
+public class PaymentDTOTest {
 
     @Test
-    void dtoEqualsVerifier() throws Exception {
+    public void dtoEqualsVerifier() throws Exception {
         TestUtil.equalsVerifier(PaymentDTO.class);
         PaymentDTO paymentDTO1 = new PaymentDTO();
         paymentDTO1.setId(1L);

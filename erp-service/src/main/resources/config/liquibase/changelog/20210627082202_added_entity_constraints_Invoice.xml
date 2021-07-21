@@ -2,16 +2,17 @@
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
     <!--
         Added the constraints for entity Invoice.
     -->
     <changeSet id="20210627082202-2" author="jhipster">
-
+        
         <addForeignKeyConstraint baseColumnNames="payment_id"
                                  baseTableName="invoice"
-                                 constraintName="fk_invoice__payment_id"
+                                 constraintName="fk_invoice_payment_id"
                                  referencedColumnNames="id"
                                  referencedTableName="payment"/>
+
     </changeSet>
 </databaseChangeLog>

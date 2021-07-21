@@ -1,0 +1,47 @@
+{
+  "name": "LeassetsFileType",
+  "fields": [
+    {
+      "fieldName": "leassetsFileTypeName",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required",
+        "unique"
+      ]
+    },
+    {
+      "fieldName": "leassetsFileMediumType",
+      "fieldType": "LeassetsFileMediumTypes",
+      "fieldValues": "EXCEL,EXCEL_XLS,EXCEL_XLSX,EXCEL_XLSB,EXCEL_CSV,EXCEL_XML,PDF,POWERPOINT,DOC,TEXT,JSON,HTML5",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fileTemplate",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "leassetsfileType",
+      "fieldType": "LeassetsFileModelType",
+      "fieldValues": "CURRENCY_LIST,FIXED_ASSET_ACQUISITION,FIXED_ASSET_DEPRECIATION,FIXED_ASSET_NBV"
+    }
+  ],
+  "relationships": [],
+  "changelogDate": "20210414144455",
+  "entityTableName": "leassets_file_type",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "leassets",
+  "applications": "*"
+}

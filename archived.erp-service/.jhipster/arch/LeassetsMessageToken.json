@@ -1,0 +1,47 @@
+{
+  "name": "LeassetsMessageToken",
+  "fields": [
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "timeSent",
+      "fieldType": "Long",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "tokenValue",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "received",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "actioned",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "contentFullyEnqueued",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [],
+  "changelogDate": "20210414144655",
+  "entityTableName": "leassets_message_token",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "leassets",
+  "applications": "*"
+}

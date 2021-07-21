@@ -1,0 +1,54 @@
+{
+  "fields": [
+    {
+      "fieldName": "assetNumber",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "serviceOutletCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assetTag",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assetDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "depreciationDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "assetCategory",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "depreciationAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "depreciationRegime",
+      "fieldType": "DepreciationRegime",
+      "fieldValues": "STRAIGHT_LINE_BASIS,DECLINING_BALANCE_BASIS"
+    },
+    {
+      "fieldName": "fileUploadToken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "searchEngine": "elasticsearch",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "FixedAssetDepreciation",
+  "changelogDate": "20210323133701"
+}

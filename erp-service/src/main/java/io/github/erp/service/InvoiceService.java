@@ -1,14 +1,17 @@
 package io.github.erp.service;
 
 import io.github.erp.service.dto.InvoiceDTO;
-import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.Optional;
 
 /**
  * Service Interface for managing {@link io.github.erp.domain.Invoice}.
  */
 public interface InvoiceService {
+
     /**
      * Save a invoice.
      *
@@ -18,20 +21,13 @@ public interface InvoiceService {
     InvoiceDTO save(InvoiceDTO invoiceDTO);
 
     /**
-     * Partially updates a invoice.
-     *
-     * @param invoiceDTO the entity to update partially.
-     * @return the persisted entity.
-     */
-    Optional<InvoiceDTO> partialUpdate(InvoiceDTO invoiceDTO);
-
-    /**
      * Get all the invoices.
      *
      * @param pageable the pagination information.
      * @return the list of entities.
      */
     Page<InvoiceDTO> findAll(Pageable pageable);
+
 
     /**
      * Get the "id" invoice.
@@ -52,7 +48,7 @@ public interface InvoiceService {
      * Search for the invoice corresponding to the query.
      *
      * @param query the query of the search.
-     *
+     * 
      * @param pageable the pagination information.
      * @return the list of entities.
      */

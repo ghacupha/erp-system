@@ -1,3 +1,6 @@
+import java.nio.charset.StandardCharsets
+import java.util.Base64
+
 import _root_.io.gatling.core.scenario.Simulation
 import ch.qos.logback.classic.{Level, LoggerContext}
 import io.gatling.core.Predef._
@@ -17,7 +20,7 @@ class PaymentGatlingTest extends Simulation {
     // Log failed HTTP requests
     //context.getLogger("io.gatling.http").setLevel(Level.valueOf("DEBUG"))
 
-    val baseURL = Option(System.getProperty("baseURL")) getOrElse """http://localhost:8791"""
+    val baseURL = Option(System.getProperty("baseURL")) getOrElse """http://localhost:8080"""
 
     val httpConf = http
         .baseUrl(baseURL)
@@ -33,14 +36,17 @@ class PaymentGatlingTest extends Simulation {
         "Accept" -> """application/json"""
     )
 
+    val authorization_header = "Basic " + Base64.getEncoder.encodeToString("erpServiceapp:bXktc2VjcmV0LXRva2VuLXRvLWNoYW5nZS1pbi1wcm9kdWN0aW9uLWFuZC10by1rZWVwLWluLWEtc2VjdXJlLXBsYWNl".getBytes(StandardCharsets.UTF_8))
+
     val headers_http_authentication = Map(
-        "Content-Type" -> """application/json""",
-        "Accept" -> """application/json"""
+        "Content-Type" -> """application/x-www-form-urlencoded""",
+        "Accept" -> """application/json""",
+        "Authorization"-> authorization_header
     )
 
     val headers_http_authenticated = Map(
         "Accept" -> """application/json""",
-        "Authorization" -> "${access_token}"
+        "Authorization" -> "Bearer ${access_token}"
     )
 
     val scn = scenario("Test the Payment entity")
@@ -51,10 +57,16 @@ class PaymentGatlingTest extends Simulation {
         ).exitHereIfFailed
         .pause(10)
         .exec(http("Authentication")
-        .post("/api/authenticate")
+        .post("/oauth/token")
         .headers(headers_http_authentication)
-        .body(StringBody("""{"username":"admin", "password":"admin"}""")).asJson
-        .check(header("Authorization").saveAs("access_token"))).exitHereIfFailed
+        .formParam("username", "admin")
+        .formParam("password", "admin")
+        .formParam("grant_type", "password")
+        .formParam("scope", "read write")
+        .formParam("client_secret", "bXktc2VjcmV0LXRva2VuLXRvLWNoYW5nZS1pbi1wcm9kdWN0aW9uLWFuZC10by1rZWVwLWluLWEtc2VjdXJlLXBsYWNl")
+        .formParam("client_id", "erpServiceapp")
+        .formParam("submit", "Login")
+        .check(jsonPath("$.access_token").saveAs("access_token"))).exitHereIfFailed
         .pause(2)
         .exec(http("Authenticated request")
         .get("/api/account")
@@ -71,7 +83,8 @@ class PaymentGatlingTest extends Simulation {
             .post("/services/erpservice/api/payments")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
-                "paymentNumber":"SAMPLE_TEXT"
+                "id":null
+                , "paymentNumber":"SAMPLE_TEXT"
                 , "paymentDate":"2020-01-01T00:00:00.000Z"
                 , "paymentAmount":"0"
                 , "dealerName":"SAMPLE_TEXT"

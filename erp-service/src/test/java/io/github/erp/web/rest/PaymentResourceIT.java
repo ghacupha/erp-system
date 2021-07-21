@@ -1,51 +1,54 @@
 package io.github.erp.web.rest;
 
-import static io.github.erp.web.rest.TestUtil.sameNumber;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import io.github.erp.IntegrationTest;
-import io.github.erp.domain.Invoice;
+import io.github.erp.ErpServiceApp;
+import io.github.erp.config.SecurityBeanOverrideConfiguration;
 import io.github.erp.domain.Payment;
+import io.github.erp.domain.Invoice;
 import io.github.erp.repository.PaymentRepository;
 import io.github.erp.repository.search.PaymentSearchRepository;
-import io.github.erp.service.criteria.PaymentCriteria;
+import io.github.erp.service.PaymentService;
 import io.github.erp.service.dto.PaymentDTO;
 import io.github.erp.service.mapper.PaymentMapper;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
+import io.github.erp.service.dto.PaymentCriteria;
+import io.github.erp.service.PaymentQueryService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import javax.persistence.EntityManager;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Collections;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link PaymentResource} REST controller.
  */
-@IntegrationTest
+@SpringBootTest(classes = { SecurityBeanOverrideConfiguration.class, ErpServiceApp.class })
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
-class PaymentResourceIT {
+public class PaymentResourceIT {
 
     private static final String DEFAULT_PAYMENT_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_PAYMENT_NUMBER = "BBBBBBBBBB";
@@ -61,18 +64,14 @@ class PaymentResourceIT {
     private static final String DEFAULT_DEALER_NAME = "AAAAAAAAAA";
     private static final String UPDATED_DEALER_NAME = "BBBBBBBBBB";
 
-    private static final String ENTITY_API_URL = "/api/payments";
-    private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/payments";
-
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
-
     @Autowired
     private PaymentRepository paymentRepository;
 
     @Autowired
     private PaymentMapper paymentMapper;
+
+    @Autowired
+    private PaymentService paymentService;
 
     /**
      * This repository is mocked in the io.github.erp.repository.search test package.
@@ -81,6 +80,9 @@ class PaymentResourceIT {
      */
     @Autowired
     private PaymentSearchRepository mockPaymentSearchRepository;
+
+    @Autowired
+    private PaymentQueryService paymentQueryService;
 
     @Autowired
     private EntityManager em;
@@ -104,7 +106,6 @@ class PaymentResourceIT {
             .dealerName(DEFAULT_DEALER_NAME);
         return payment;
     }
-
     /**
      * Create an updated entity for this test.
      *
@@ -127,12 +128,13 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void createPayment() throws Exception {
+    public void createPayment() throws Exception {
         int databaseSizeBeforeCreate = paymentRepository.findAll().size();
         // Create the Payment
         PaymentDTO paymentDTO = paymentMapper.toDto(payment);
-        restPaymentMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(paymentDTO)))
+        restPaymentMockMvc.perform(post("/api/payments").with(csrf())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(paymentDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Payment in the database
@@ -141,7 +143,7 @@ class PaymentResourceIT {
         Payment testPayment = paymentList.get(paymentList.size() - 1);
         assertThat(testPayment.getPaymentNumber()).isEqualTo(DEFAULT_PAYMENT_NUMBER);
         assertThat(testPayment.getPaymentDate()).isEqualTo(DEFAULT_PAYMENT_DATE);
-        assertThat(testPayment.getPaymentAmount()).isEqualByComparingTo(DEFAULT_PAYMENT_AMOUNT);
+        assertThat(testPayment.getPaymentAmount()).isEqualTo(DEFAULT_PAYMENT_AMOUNT);
         assertThat(testPayment.getDealerName()).isEqualTo(DEFAULT_DEALER_NAME);
 
         // Validate the Payment in Elasticsearch
@@ -150,16 +152,17 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void createPaymentWithExistingId() throws Exception {
+    public void createPaymentWithExistingId() throws Exception {
+        int databaseSizeBeforeCreate = paymentRepository.findAll().size();
+
         // Create the Payment with an existing ID
         payment.setId(1L);
         PaymentDTO paymentDTO = paymentMapper.toDto(payment);
 
-        int databaseSizeBeforeCreate = paymentRepository.findAll().size();
-
         // An entity with an existing ID cannot be created, so this API call must fail
-        restPaymentMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(paymentDTO)))
+        restPaymentMockMvc.perform(post("/api/payments").with(csrf())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(paymentDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Payment in the database
@@ -170,45 +173,45 @@ class PaymentResourceIT {
         verify(mockPaymentSearchRepository, times(0)).save(payment);
     }
 
+
     @Test
     @Transactional
-    void getAllPayments() throws Exception {
+    public void getAllPayments() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
         // Get all the paymentList
-        restPaymentMockMvc
-            .perform(get(ENTITY_API_URL + "?sort=id,desc"))
+        restPaymentMockMvc.perform(get("/api/payments?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(payment.getId().intValue())))
             .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
             .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))))
+            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].dealerName").value(hasItem(DEFAULT_DEALER_NAME)));
     }
-
+    
     @Test
     @Transactional
-    void getPayment() throws Exception {
+    public void getPayment() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
         // Get the payment
-        restPaymentMockMvc
-            .perform(get(ENTITY_API_URL_ID, payment.getId()))
+        restPaymentMockMvc.perform(get("/api/payments/{id}", payment.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(payment.getId().intValue()))
             .andExpect(jsonPath("$.paymentNumber").value(DEFAULT_PAYMENT_NUMBER))
             .andExpect(jsonPath("$.paymentDate").value(DEFAULT_PAYMENT_DATE.toString()))
-            .andExpect(jsonPath("$.paymentAmount").value(sameNumber(DEFAULT_PAYMENT_AMOUNT)))
+            .andExpect(jsonPath("$.paymentAmount").value(DEFAULT_PAYMENT_AMOUNT.intValue()))
             .andExpect(jsonPath("$.dealerName").value(DEFAULT_DEALER_NAME));
     }
 
+
     @Test
     @Transactional
-    void getPaymentsByIdFiltering() throws Exception {
+    public void getPaymentsByIdFiltering() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -224,9 +227,10 @@ class PaymentResourceIT {
         defaultPaymentShouldNotBeFound("id.lessThan=" + id);
     }
 
+
     @Test
     @Transactional
-    void getAllPaymentsByPaymentNumberIsEqualToSomething() throws Exception {
+    public void getAllPaymentsByPaymentNumberIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -239,7 +243,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByPaymentNumberIsNotEqualToSomething() throws Exception {
+    public void getAllPaymentsByPaymentNumberIsNotEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -252,7 +256,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByPaymentNumberIsInShouldWork() throws Exception {
+    public void getAllPaymentsByPaymentNumberIsInShouldWork() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -265,7 +269,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByPaymentNumberIsNullOrNotNull() throws Exception {
+    public void getAllPaymentsByPaymentNumberIsNullOrNotNull() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -275,10 +279,9 @@ class PaymentResourceIT {
         // Get all the paymentList where paymentNumber is null
         defaultPaymentShouldNotBeFound("paymentNumber.specified=false");
     }
-
-    @Test
+                @Test
     @Transactional
-    void getAllPaymentsByPaymentNumberContainsSomething() throws Exception {
+    public void getAllPaymentsByPaymentNumberContainsSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -291,7 +294,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByPaymentNumberNotContainsSomething() throws Exception {
+    public void getAllPaymentsByPaymentNumberNotContainsSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -302,9 +305,10 @@ class PaymentResourceIT {
         defaultPaymentShouldBeFound("paymentNumber.doesNotContain=" + UPDATED_PAYMENT_NUMBER);
     }
 
+
     @Test
     @Transactional
-    void getAllPaymentsByPaymentDateIsEqualToSomething() throws Exception {
+    public void getAllPaymentsByPaymentDateIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -317,7 +321,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByPaymentDateIsNotEqualToSomething() throws Exception {
+    public void getAllPaymentsByPaymentDateIsNotEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -330,7 +334,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByPaymentDateIsInShouldWork() throws Exception {
+    public void getAllPaymentsByPaymentDateIsInShouldWork() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -343,7 +347,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByPaymentDateIsNullOrNotNull() throws Exception {
+    public void getAllPaymentsByPaymentDateIsNullOrNotNull() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -356,7 +360,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByPaymentDateIsGreaterThanOrEqualToSomething() throws Exception {
+    public void getAllPaymentsByPaymentDateIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -369,7 +373,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByPaymentDateIsLessThanOrEqualToSomething() throws Exception {
+    public void getAllPaymentsByPaymentDateIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -382,7 +386,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByPaymentDateIsLessThanSomething() throws Exception {
+    public void getAllPaymentsByPaymentDateIsLessThanSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -395,7 +399,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByPaymentDateIsGreaterThanSomething() throws Exception {
+    public void getAllPaymentsByPaymentDateIsGreaterThanSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -406,9 +410,10 @@ class PaymentResourceIT {
         defaultPaymentShouldBeFound("paymentDate.greaterThan=" + SMALLER_PAYMENT_DATE);
     }
 
+
     @Test
     @Transactional
-    void getAllPaymentsByPaymentAmountIsEqualToSomething() throws Exception {
+    public void getAllPaymentsByPaymentAmountIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -421,7 +426,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByPaymentAmountIsNotEqualToSomething() throws Exception {
+    public void getAllPaymentsByPaymentAmountIsNotEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -434,7 +439,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByPaymentAmountIsInShouldWork() throws Exception {
+    public void getAllPaymentsByPaymentAmountIsInShouldWork() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -447,7 +452,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByPaymentAmountIsNullOrNotNull() throws Exception {
+    public void getAllPaymentsByPaymentAmountIsNullOrNotNull() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -460,7 +465,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByPaymentAmountIsGreaterThanOrEqualToSomething() throws Exception {
+    public void getAllPaymentsByPaymentAmountIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -473,7 +478,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByPaymentAmountIsLessThanOrEqualToSomething() throws Exception {
+    public void getAllPaymentsByPaymentAmountIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -486,7 +491,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByPaymentAmountIsLessThanSomething() throws Exception {
+    public void getAllPaymentsByPaymentAmountIsLessThanSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -499,7 +504,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByPaymentAmountIsGreaterThanSomething() throws Exception {
+    public void getAllPaymentsByPaymentAmountIsGreaterThanSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -510,9 +515,10 @@ class PaymentResourceIT {
         defaultPaymentShouldBeFound("paymentAmount.greaterThan=" + SMALLER_PAYMENT_AMOUNT);
     }
 
+
     @Test
     @Transactional
-    void getAllPaymentsByDealerNameIsEqualToSomething() throws Exception {
+    public void getAllPaymentsByDealerNameIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -525,7 +531,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByDealerNameIsNotEqualToSomething() throws Exception {
+    public void getAllPaymentsByDealerNameIsNotEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -538,7 +544,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByDealerNameIsInShouldWork() throws Exception {
+    public void getAllPaymentsByDealerNameIsInShouldWork() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -551,7 +557,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByDealerNameIsNullOrNotNull() throws Exception {
+    public void getAllPaymentsByDealerNameIsNullOrNotNull() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -561,10 +567,9 @@ class PaymentResourceIT {
         // Get all the paymentList where dealerName is null
         defaultPaymentShouldNotBeFound("dealerName.specified=false");
     }
-
-    @Test
+                @Test
     @Transactional
-    void getAllPaymentsByDealerNameContainsSomething() throws Exception {
+    public void getAllPaymentsByDealerNameContainsSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -577,7 +582,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByDealerNameNotContainsSomething() throws Exception {
+    public void getAllPaymentsByDealerNameNotContainsSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -588,9 +593,10 @@ class PaymentResourceIT {
         defaultPaymentShouldBeFound("dealerName.doesNotContain=" + UPDATED_DEALER_NAME);
     }
 
+
     @Test
     @Transactional
-    void getAllPaymentsByOwnedInvoiceIsEqualToSomething() throws Exception {
+    public void getAllPaymentsByOwnedInvoiceIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
         Invoice ownedInvoice = InvoiceResourceIT.createEntity(em);
@@ -603,7 +609,7 @@ class PaymentResourceIT {
         // Get all the paymentList where ownedInvoice equals to ownedInvoiceId
         defaultPaymentShouldBeFound("ownedInvoiceId.equals=" + ownedInvoiceId);
 
-        // Get all the paymentList where ownedInvoice equals to (ownedInvoiceId + 1)
+        // Get all the paymentList where ownedInvoice equals to ownedInvoiceId + 1
         defaultPaymentShouldNotBeFound("ownedInvoiceId.equals=" + (ownedInvoiceId + 1));
     }
 
@@ -611,19 +617,17 @@ class PaymentResourceIT {
      * Executes the search, and checks that the default entity is returned.
      */
     private void defaultPaymentShouldBeFound(String filter) throws Exception {
-        restPaymentMockMvc
-            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+        restPaymentMockMvc.perform(get("/api/payments?sort=id,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(payment.getId().intValue())))
             .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
             .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))))
+            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].dealerName").value(hasItem(DEFAULT_DEALER_NAME)));
 
         // Check, that the count call also returns 1
-        restPaymentMockMvc
-            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+        restPaymentMockMvc.perform(get("/api/payments/count?sort=id,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("1"));
@@ -633,16 +637,14 @@ class PaymentResourceIT {
      * Executes the search, and checks that the default entity is not returned.
      */
     private void defaultPaymentShouldNotBeFound(String filter) throws Exception {
-        restPaymentMockMvc
-            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+        restPaymentMockMvc.perform(get("/api/payments?sort=id,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
 
         // Check, that the count call also returns 0
-        restPaymentMockMvc
-            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+        restPaymentMockMvc.perform(get("/api/payments/count?sort=id,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("0"));
@@ -650,14 +652,15 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getNonExistingPayment() throws Exception {
+    public void getNonExistingPayment() throws Exception {
         // Get the payment
-        restPaymentMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
+        restPaymentMockMvc.perform(get("/api/payments/{id}", Long.MAX_VALUE))
+            .andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
-    void putNewPayment() throws Exception {
+    public void updatePayment() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
@@ -674,12 +677,9 @@ class PaymentResourceIT {
             .dealerName(UPDATED_DEALER_NAME);
         PaymentDTO paymentDTO = paymentMapper.toDto(updatedPayment);
 
-        restPaymentMockMvc
-            .perform(
-                put(ENTITY_API_URL_ID, paymentDTO.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(paymentDTO))
-            )
+        restPaymentMockMvc.perform(put("/api/payments").with(csrf())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(paymentDTO)))
             .andExpect(status().isOk());
 
         // Validate the Payment in the database
@@ -692,25 +692,21 @@ class PaymentResourceIT {
         assertThat(testPayment.getDealerName()).isEqualTo(UPDATED_DEALER_NAME);
 
         // Validate the Payment in Elasticsearch
-        verify(mockPaymentSearchRepository).save(testPayment);
+        verify(mockPaymentSearchRepository, times(1)).save(testPayment);
     }
 
     @Test
     @Transactional
-    void putNonExistingPayment() throws Exception {
+    public void updateNonExistingPayment() throws Exception {
         int databaseSizeBeforeUpdate = paymentRepository.findAll().size();
-        payment.setId(count.incrementAndGet());
 
         // Create the Payment
         PaymentDTO paymentDTO = paymentMapper.toDto(payment);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restPaymentMockMvc
-            .perform(
-                put(ENTITY_API_URL_ID, paymentDTO.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(paymentDTO))
-            )
+        restPaymentMockMvc.perform(put("/api/payments").with(csrf())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(paymentDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Payment in the database
@@ -723,207 +719,15 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void putWithIdMismatchPayment() throws Exception {
-        int databaseSizeBeforeUpdate = paymentRepository.findAll().size();
-        payment.setId(count.incrementAndGet());
-
-        // Create the Payment
-        PaymentDTO paymentDTO = paymentMapper.toDto(payment);
-
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        restPaymentMockMvc
-            .perform(
-                put(ENTITY_API_URL_ID, count.incrementAndGet())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(paymentDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        // Validate the Payment in the database
-        List<Payment> paymentList = paymentRepository.findAll();
-        assertThat(paymentList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the Payment in Elasticsearch
-        verify(mockPaymentSearchRepository, times(0)).save(payment);
-    }
-
-    @Test
-    @Transactional
-    void putWithMissingIdPathParamPayment() throws Exception {
-        int databaseSizeBeforeUpdate = paymentRepository.findAll().size();
-        payment.setId(count.incrementAndGet());
-
-        // Create the Payment
-        PaymentDTO paymentDTO = paymentMapper.toDto(payment);
-
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        restPaymentMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(paymentDTO)))
-            .andExpect(status().isMethodNotAllowed());
-
-        // Validate the Payment in the database
-        List<Payment> paymentList = paymentRepository.findAll();
-        assertThat(paymentList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the Payment in Elasticsearch
-        verify(mockPaymentSearchRepository, times(0)).save(payment);
-    }
-
-    @Test
-    @Transactional
-    void partialUpdatePaymentWithPatch() throws Exception {
-        // Initialize the database
-        paymentRepository.saveAndFlush(payment);
-
-        int databaseSizeBeforeUpdate = paymentRepository.findAll().size();
-
-        // Update the payment using partial update
-        Payment partialUpdatedPayment = new Payment();
-        partialUpdatedPayment.setId(payment.getId());
-
-        partialUpdatedPayment.paymentDate(UPDATED_PAYMENT_DATE);
-
-        restPaymentMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, partialUpdatedPayment.getId())
-                    .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedPayment))
-            )
-            .andExpect(status().isOk());
-
-        // Validate the Payment in the database
-        List<Payment> paymentList = paymentRepository.findAll();
-        assertThat(paymentList).hasSize(databaseSizeBeforeUpdate);
-        Payment testPayment = paymentList.get(paymentList.size() - 1);
-        assertThat(testPayment.getPaymentNumber()).isEqualTo(DEFAULT_PAYMENT_NUMBER);
-        assertThat(testPayment.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
-        assertThat(testPayment.getPaymentAmount()).isEqualByComparingTo(DEFAULT_PAYMENT_AMOUNT);
-        assertThat(testPayment.getDealerName()).isEqualTo(DEFAULT_DEALER_NAME);
-    }
-
-    @Test
-    @Transactional
-    void fullUpdatePaymentWithPatch() throws Exception {
-        // Initialize the database
-        paymentRepository.saveAndFlush(payment);
-
-        int databaseSizeBeforeUpdate = paymentRepository.findAll().size();
-
-        // Update the payment using partial update
-        Payment partialUpdatedPayment = new Payment();
-        partialUpdatedPayment.setId(payment.getId());
-
-        partialUpdatedPayment
-            .paymentNumber(UPDATED_PAYMENT_NUMBER)
-            .paymentDate(UPDATED_PAYMENT_DATE)
-            .paymentAmount(UPDATED_PAYMENT_AMOUNT)
-            .dealerName(UPDATED_DEALER_NAME);
-
-        restPaymentMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, partialUpdatedPayment.getId())
-                    .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedPayment))
-            )
-            .andExpect(status().isOk());
-
-        // Validate the Payment in the database
-        List<Payment> paymentList = paymentRepository.findAll();
-        assertThat(paymentList).hasSize(databaseSizeBeforeUpdate);
-        Payment testPayment = paymentList.get(paymentList.size() - 1);
-        assertThat(testPayment.getPaymentNumber()).isEqualTo(UPDATED_PAYMENT_NUMBER);
-        assertThat(testPayment.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
-        assertThat(testPayment.getPaymentAmount()).isEqualByComparingTo(UPDATED_PAYMENT_AMOUNT);
-        assertThat(testPayment.getDealerName()).isEqualTo(UPDATED_DEALER_NAME);
-    }
-
-    @Test
-    @Transactional
-    void patchNonExistingPayment() throws Exception {
-        int databaseSizeBeforeUpdate = paymentRepository.findAll().size();
-        payment.setId(count.incrementAndGet());
-
-        // Create the Payment
-        PaymentDTO paymentDTO = paymentMapper.toDto(payment);
-
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restPaymentMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, paymentDTO.getId())
-                    .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(paymentDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        // Validate the Payment in the database
-        List<Payment> paymentList = paymentRepository.findAll();
-        assertThat(paymentList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the Payment in Elasticsearch
-        verify(mockPaymentSearchRepository, times(0)).save(payment);
-    }
-
-    @Test
-    @Transactional
-    void patchWithIdMismatchPayment() throws Exception {
-        int databaseSizeBeforeUpdate = paymentRepository.findAll().size();
-        payment.setId(count.incrementAndGet());
-
-        // Create the Payment
-        PaymentDTO paymentDTO = paymentMapper.toDto(payment);
-
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        restPaymentMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, count.incrementAndGet())
-                    .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(paymentDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        // Validate the Payment in the database
-        List<Payment> paymentList = paymentRepository.findAll();
-        assertThat(paymentList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the Payment in Elasticsearch
-        verify(mockPaymentSearchRepository, times(0)).save(payment);
-    }
-
-    @Test
-    @Transactional
-    void patchWithMissingIdPathParamPayment() throws Exception {
-        int databaseSizeBeforeUpdate = paymentRepository.findAll().size();
-        payment.setId(count.incrementAndGet());
-
-        // Create the Payment
-        PaymentDTO paymentDTO = paymentMapper.toDto(payment);
-
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        restPaymentMockMvc
-            .perform(
-                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(paymentDTO))
-            )
-            .andExpect(status().isMethodNotAllowed());
-
-        // Validate the Payment in the database
-        List<Payment> paymentList = paymentRepository.findAll();
-        assertThat(paymentList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the Payment in Elasticsearch
-        verify(mockPaymentSearchRepository, times(0)).save(payment);
-    }
-
-    @Test
-    @Transactional
-    void deletePayment() throws Exception {
+    public void deletePayment() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
         int databaseSizeBeforeDelete = paymentRepository.findAll().size();
 
         // Delete the payment
-        restPaymentMockMvc
-            .perform(delete(ENTITY_API_URL_ID, payment.getId()).accept(MediaType.APPLICATION_JSON))
+        restPaymentMockMvc.perform(delete("/api/payments/{id}", payment.getId()).with(csrf())
+            .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
@@ -936,7 +740,7 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void searchPayment() throws Exception {
+    public void searchPayment() throws Exception {
         // Configure the mock search repository
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
@@ -944,14 +748,13 @@ class PaymentResourceIT {
             .thenReturn(new PageImpl<>(Collections.singletonList(payment), PageRequest.of(0, 1), 1));
 
         // Search the payment
-        restPaymentMockMvc
-            .perform(get(ENTITY_SEARCH_API_URL + "?query=id:" + payment.getId()))
+        restPaymentMockMvc.perform(get("/api/_search/payments?query=id:" + payment.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(payment.getId().intValue())))
             .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
             .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))))
+            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].dealerName").value(hasItem(DEFAULT_DEALER_NAME)));
     }
 }
