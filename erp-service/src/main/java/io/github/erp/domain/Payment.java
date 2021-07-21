@@ -40,6 +40,9 @@ public class Payment implements Serializable {
     @Column(name = "dealer_name")
     private String dealerName;
 
+    @Column(name = "payment_category")
+    private String paymentCategory;
+
     @OneToMany(mappedBy = "payment")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Invoice> ownedInvoices = new HashSet<>();
@@ -105,6 +108,19 @@ public class Payment implements Serializable {
         this.dealerName = dealerName;
     }
 
+    public String getPaymentCategory() {
+        return paymentCategory;
+    }
+
+    public Payment paymentCategory(String paymentCategory) {
+        this.paymentCategory = paymentCategory;
+        return this;
+    }
+
+    public void setPaymentCategory(String paymentCategory) {
+        this.paymentCategory = paymentCategory;
+    }
+
     public Set<Invoice> getOwnedInvoices() {
         return ownedInvoices;
     }
@@ -156,6 +172,7 @@ public class Payment implements Serializable {
             ", paymentDate='" + getPaymentDate() + "'" +
             ", paymentAmount=" + getPaymentAmount() +
             ", dealerName='" + getDealerName() + "'" +
+            ", paymentCategory='" + getPaymentCategory() + "'" +
             "}";
     }
 }

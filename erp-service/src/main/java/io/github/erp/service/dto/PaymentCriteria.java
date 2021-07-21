@@ -36,6 +36,8 @@ public class PaymentCriteria implements Serializable, Criteria {
 
     private StringFilter dealerName;
 
+    private StringFilter paymentCategory;
+
     private LongFilter ownedInvoiceId;
 
     public PaymentCriteria() {
@@ -47,6 +49,7 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.paymentDate = other.paymentDate == null ? null : other.paymentDate.copy();
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
         this.dealerName = other.dealerName == null ? null : other.dealerName.copy();
+        this.paymentCategory = other.paymentCategory == null ? null : other.paymentCategory.copy();
         this.ownedInvoiceId = other.ownedInvoiceId == null ? null : other.ownedInvoiceId.copy();
     }
 
@@ -95,6 +98,14 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.dealerName = dealerName;
     }
 
+    public StringFilter getPaymentCategory() {
+        return paymentCategory;
+    }
+
+    public void setPaymentCategory(StringFilter paymentCategory) {
+        this.paymentCategory = paymentCategory;
+    }
+
     public LongFilter getOwnedInvoiceId() {
         return ownedInvoiceId;
     }
@@ -119,6 +130,7 @@ public class PaymentCriteria implements Serializable, Criteria {
             Objects.equals(paymentDate, that.paymentDate) &&
             Objects.equals(paymentAmount, that.paymentAmount) &&
             Objects.equals(dealerName, that.dealerName) &&
+            Objects.equals(paymentCategory, that.paymentCategory) &&
             Objects.equals(ownedInvoiceId, that.ownedInvoiceId);
     }
 
@@ -130,6 +142,7 @@ public class PaymentCriteria implements Serializable, Criteria {
         paymentDate,
         paymentAmount,
         dealerName,
+        paymentCategory,
         ownedInvoiceId
         );
     }
@@ -143,6 +156,7 @@ public class PaymentCriteria implements Serializable, Criteria {
                 (paymentDate != null ? "paymentDate=" + paymentDate + ", " : "") +
                 (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
                 (dealerName != null ? "dealerName=" + dealerName + ", " : "") +
+                (paymentCategory != null ? "paymentCategory=" + paymentCategory + ", " : "") +
                 (ownedInvoiceId != null ? "ownedInvoiceId=" + ownedInvoiceId + ", " : "") +
             "}";
     }
