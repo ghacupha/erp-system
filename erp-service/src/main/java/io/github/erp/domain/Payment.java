@@ -1,5 +1,6 @@
 package io.github.erp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -50,6 +51,10 @@ public class Payment implements Serializable {
     @MapsId
     @JoinColumn(name = "id")
     private PaymentCalculation paymentCalculation;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = "payments", allowSetters = true)
+    private PaymentRequisition paymentRequisition;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -161,6 +166,19 @@ public class Payment implements Serializable {
 
     public void setPaymentCalculation(PaymentCalculation paymentCalculation) {
         this.paymentCalculation = paymentCalculation;
+    }
+
+    public PaymentRequisition getPaymentRequisition() {
+        return paymentRequisition;
+    }
+
+    public Payment paymentRequisition(PaymentRequisition paymentRequisition) {
+        this.paymentRequisition = paymentRequisition;
+        return this;
+    }
+
+    public void setPaymentRequisition(PaymentRequisition paymentRequisition) {
+        this.paymentRequisition = paymentRequisition;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

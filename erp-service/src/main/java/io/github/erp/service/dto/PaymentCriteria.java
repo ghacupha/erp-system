@@ -42,6 +42,8 @@ public class PaymentCriteria implements Serializable, Criteria {
 
     private LongFilter paymentCalculationId;
 
+    private LongFilter paymentRequisitionId;
+
     public PaymentCriteria() {
     }
 
@@ -54,6 +56,7 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.paymentCategory = other.paymentCategory == null ? null : other.paymentCategory.copy();
         this.ownedInvoiceId = other.ownedInvoiceId == null ? null : other.ownedInvoiceId.copy();
         this.paymentCalculationId = other.paymentCalculationId == null ? null : other.paymentCalculationId.copy();
+        this.paymentRequisitionId = other.paymentRequisitionId == null ? null : other.paymentRequisitionId.copy();
     }
 
     @Override
@@ -125,6 +128,14 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.paymentCalculationId = paymentCalculationId;
     }
 
+    public LongFilter getPaymentRequisitionId() {
+        return paymentRequisitionId;
+    }
+
+    public void setPaymentRequisitionId(LongFilter paymentRequisitionId) {
+        this.paymentRequisitionId = paymentRequisitionId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -143,7 +154,8 @@ public class PaymentCriteria implements Serializable, Criteria {
             Objects.equals(dealerName, that.dealerName) &&
             Objects.equals(paymentCategory, that.paymentCategory) &&
             Objects.equals(ownedInvoiceId, that.ownedInvoiceId) &&
-            Objects.equals(paymentCalculationId, that.paymentCalculationId);
+            Objects.equals(paymentCalculationId, that.paymentCalculationId) &&
+            Objects.equals(paymentRequisitionId, that.paymentRequisitionId);
     }
 
     @Override
@@ -156,7 +168,8 @@ public class PaymentCriteria implements Serializable, Criteria {
         dealerName,
         paymentCategory,
         ownedInvoiceId,
-        paymentCalculationId
+        paymentCalculationId,
+        paymentRequisitionId
         );
     }
 
@@ -172,6 +185,7 @@ public class PaymentCriteria implements Serializable, Criteria {
                 (paymentCategory != null ? "paymentCategory=" + paymentCategory + ", " : "") +
                 (ownedInvoiceId != null ? "ownedInvoiceId=" + ownedInvoiceId + ", " : "") +
                 (paymentCalculationId != null ? "paymentCalculationId=" + paymentCalculationId + ", " : "") +
+                (paymentRequisitionId != null ? "paymentRequisitionId=" + paymentRequisitionId + ", " : "") +
             "}";
     }
 

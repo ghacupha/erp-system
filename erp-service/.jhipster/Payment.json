@@ -36,6 +36,13 @@
       "ownerSide": true,
       "useJPADerivedIdentifier": true,
       "otherEntityRelationshipName": "payment"
+    },
+    {
+      "relationshipName": "paymentRequisition",
+      "otherEntityName": "paymentRequisition",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id",
+      "otherEntityRelationshipName": "payment"
     }
   ],
   "service": "serviceImpl",

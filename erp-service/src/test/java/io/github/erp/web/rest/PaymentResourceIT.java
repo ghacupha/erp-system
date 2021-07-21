@@ -5,6 +5,7 @@ import io.github.erp.config.SecurityBeanOverrideConfiguration;
 import io.github.erp.domain.Payment;
 import io.github.erp.domain.Invoice;
 import io.github.erp.domain.PaymentCalculation;
+import io.github.erp.domain.PaymentRequisition;
 import io.github.erp.repository.PaymentRepository;
 import io.github.erp.repository.search.PaymentSearchRepository;
 import io.github.erp.service.PaymentService;
@@ -773,6 +774,26 @@ public class PaymentResourceIT {
 
         // Get all the paymentList where paymentCalculation equals to paymentCalculationId + 1
         defaultPaymentShouldNotBeFound("paymentCalculationId.equals=" + (paymentCalculationId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllPaymentsByPaymentRequisitionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+        PaymentRequisition paymentRequisition = PaymentRequisitionResourceIT.createEntity(em);
+        em.persist(paymentRequisition);
+        em.flush();
+        payment.setPaymentRequisition(paymentRequisition);
+        paymentRepository.saveAndFlush(payment);
+        Long paymentRequisitionId = paymentRequisition.getId();
+
+        // Get all the paymentList where paymentRequisition equals to paymentRequisitionId
+        defaultPaymentShouldBeFound("paymentRequisitionId.equals=" + paymentRequisitionId);
+
+        // Get all the paymentList where paymentRequisition equals to paymentRequisitionId + 1
+        defaultPaymentShouldNotBeFound("paymentRequisitionId.equals=" + (paymentRequisitionId + 1));
     }
 
     /**
