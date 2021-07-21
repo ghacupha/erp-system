@@ -27,6 +27,15 @@
       "otherEntityName": "invoice",
       "otherEntityRelationshipName": "payment",
       "relationshipName": "ownedInvoice"
+    },
+    {
+      "relationshipName": "paymentCalculation",
+      "otherEntityName": "paymentCalculation",
+      "relationshipType": "one-to-one",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "useJPADerivedIdentifier": true,
+      "otherEntityRelationshipName": "payment"
     }
   ],
   "service": "serviceImpl",

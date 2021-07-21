@@ -3,6 +3,7 @@ package io.github.erp.web.rest;
 import io.github.erp.ErpServiceApp;
 import io.github.erp.config.SecurityBeanOverrideConfiguration;
 import io.github.erp.domain.PaymentCalculation;
+import io.github.erp.domain.Payment;
 import io.github.erp.repository.PaymentCalculationRepository;
 import io.github.erp.repository.search.PaymentCalculationSearchRepository;
 import io.github.erp.service.PaymentCalculationService;
@@ -932,6 +933,27 @@ public class PaymentCalculationResourceIT {
 
         // Get all the paymentCalculationList where paymentAmount is greater than SMALLER_PAYMENT_AMOUNT
         defaultPaymentCalculationShouldBeFound("paymentAmount.greaterThan=" + SMALLER_PAYMENT_AMOUNT);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllPaymentCalculationsByPaymentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentCalculationRepository.saveAndFlush(paymentCalculation);
+        Payment payment = PaymentResourceIT.createEntity(em);
+        em.persist(payment);
+        em.flush();
+        paymentCalculation.setPayment(payment);
+        payment.setPaymentCalculation(paymentCalculation);
+        paymentCalculationRepository.saveAndFlush(paymentCalculation);
+        Long paymentId = payment.getId();
+
+        // Get all the paymentCalculationList where payment equals to paymentId
+        defaultPaymentCalculationShouldBeFound("paymentId.equals=" + paymentId);
+
+        // Get all the paymentCalculationList where payment equals to paymentId + 1
+        defaultPaymentCalculationShouldNotBeFound("paymentId.equals=" + (paymentId + 1));
     }
 
     /**
