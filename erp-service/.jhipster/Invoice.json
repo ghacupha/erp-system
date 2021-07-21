@@ -34,5 +34,6 @@
   "applications": ["erpService"],
   "microserviceName": "erpService",
   "clientRootFolder": "payments",
-  "databaseType": "sql"
+  "databaseType": "sql",
+  "searchEngine": "elasticsearch"
 }

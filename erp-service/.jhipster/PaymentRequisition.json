@@ -1,6 +1,6 @@
 {
   "fluentMethods": true,
-  "clientRootFolder": "erpService",
+  "clientRootFolder": "payments",
   "relationships": [
     {
       "relationshipName": "requisition",
