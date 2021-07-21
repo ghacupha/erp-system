@@ -87,6 +87,7 @@ class InvoiceGatlingTest extends Simulation {
                 , "invoiceNumber":"SAMPLE_TEXT"
                 , "invoiceDate":"2020-01-01T00:00:00.000Z"
                 , "invoiceAmount":"0"
+                , "paymentCategory":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_invoice_url"))).exitHereIfFailed

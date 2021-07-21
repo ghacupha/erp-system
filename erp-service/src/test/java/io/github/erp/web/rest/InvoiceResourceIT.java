@@ -4,6 +4,7 @@ import io.github.erp.ErpServiceApp;
 import io.github.erp.config.SecurityBeanOverrideConfiguration;
 import io.github.erp.domain.Invoice;
 import io.github.erp.domain.Payment;
+import io.github.erp.domain.Dealer;
 import io.github.erp.repository.InvoiceRepository;
 import io.github.erp.repository.search.InvoiceSearchRepository;
 import io.github.erp.service.InvoiceService;
@@ -61,6 +62,9 @@ public class InvoiceResourceIT {
     private static final BigDecimal UPDATED_INVOICE_AMOUNT = new BigDecimal(2);
     private static final BigDecimal SMALLER_INVOICE_AMOUNT = new BigDecimal(1 - 1);
 
+    private static final String DEFAULT_PAYMENT_CATEGORY = "AAAAAAAAAA";
+    private static final String UPDATED_PAYMENT_CATEGORY = "BBBBBBBBBB";
+
     @Autowired
     private InvoiceRepository invoiceRepository;
 
@@ -99,7 +103,8 @@ public class InvoiceResourceIT {
         Invoice invoice = new Invoice()
             .invoiceNumber(DEFAULT_INVOICE_NUMBER)
             .invoiceDate(DEFAULT_INVOICE_DATE)
-            .invoiceAmount(DEFAULT_INVOICE_AMOUNT);
+            .invoiceAmount(DEFAULT_INVOICE_AMOUNT)
+            .paymentCategory(DEFAULT_PAYMENT_CATEGORY);
         return invoice;
     }
     /**
@@ -112,7 +117,8 @@ public class InvoiceResourceIT {
         Invoice invoice = new Invoice()
             .invoiceNumber(UPDATED_INVOICE_NUMBER)
             .invoiceDate(UPDATED_INVOICE_DATE)
-            .invoiceAmount(UPDATED_INVOICE_AMOUNT);
+            .invoiceAmount(UPDATED_INVOICE_AMOUNT)
+            .paymentCategory(UPDATED_PAYMENT_CATEGORY);
         return invoice;
     }
 
@@ -139,6 +145,7 @@ public class InvoiceResourceIT {
         assertThat(testInvoice.getInvoiceNumber()).isEqualTo(DEFAULT_INVOICE_NUMBER);
         assertThat(testInvoice.getInvoiceDate()).isEqualTo(DEFAULT_INVOICE_DATE);
         assertThat(testInvoice.getInvoiceAmount()).isEqualTo(DEFAULT_INVOICE_AMOUNT);
+        assertThat(testInvoice.getPaymentCategory()).isEqualTo(DEFAULT_PAYMENT_CATEGORY);
 
         // Validate the Invoice in Elasticsearch
         verify(mockInvoiceSearchRepository, times(1)).save(testInvoice);
@@ -181,7 +188,8 @@ public class InvoiceResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(invoice.getId().intValue())))
             .andExpect(jsonPath("$.[*].invoiceNumber").value(hasItem(DEFAULT_INVOICE_NUMBER)))
             .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())))
-            .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(DEFAULT_INVOICE_AMOUNT.intValue())));
+            .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(DEFAULT_INVOICE_AMOUNT.intValue())))
+            .andExpect(jsonPath("$.[*].paymentCategory").value(hasItem(DEFAULT_PAYMENT_CATEGORY)));
     }
     
     @Test
@@ -197,7 +205,8 @@ public class InvoiceResourceIT {
             .andExpect(jsonPath("$.id").value(invoice.getId().intValue()))
             .andExpect(jsonPath("$.invoiceNumber").value(DEFAULT_INVOICE_NUMBER))
             .andExpect(jsonPath("$.invoiceDate").value(DEFAULT_INVOICE_DATE.toString()))
-            .andExpect(jsonPath("$.invoiceAmount").value(DEFAULT_INVOICE_AMOUNT.intValue()));
+            .andExpect(jsonPath("$.invoiceAmount").value(DEFAULT_INVOICE_AMOUNT.intValue()))
+            .andExpect(jsonPath("$.paymentCategory").value(DEFAULT_PAYMENT_CATEGORY));
     }
 
 
@@ -510,6 +519,84 @@ public class InvoiceResourceIT {
 
     @Test
     @Transactional
+    public void getAllInvoicesByPaymentCategoryIsEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where paymentCategory equals to DEFAULT_PAYMENT_CATEGORY
+        defaultInvoiceShouldBeFound("paymentCategory.equals=" + DEFAULT_PAYMENT_CATEGORY);
+
+        // Get all the invoiceList where paymentCategory equals to UPDATED_PAYMENT_CATEGORY
+        defaultInvoiceShouldNotBeFound("paymentCategory.equals=" + UPDATED_PAYMENT_CATEGORY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInvoicesByPaymentCategoryIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where paymentCategory not equals to DEFAULT_PAYMENT_CATEGORY
+        defaultInvoiceShouldNotBeFound("paymentCategory.notEquals=" + DEFAULT_PAYMENT_CATEGORY);
+
+        // Get all the invoiceList where paymentCategory not equals to UPDATED_PAYMENT_CATEGORY
+        defaultInvoiceShouldBeFound("paymentCategory.notEquals=" + UPDATED_PAYMENT_CATEGORY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInvoicesByPaymentCategoryIsInShouldWork() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where paymentCategory in DEFAULT_PAYMENT_CATEGORY or UPDATED_PAYMENT_CATEGORY
+        defaultInvoiceShouldBeFound("paymentCategory.in=" + DEFAULT_PAYMENT_CATEGORY + "," + UPDATED_PAYMENT_CATEGORY);
+
+        // Get all the invoiceList where paymentCategory equals to UPDATED_PAYMENT_CATEGORY
+        defaultInvoiceShouldNotBeFound("paymentCategory.in=" + UPDATED_PAYMENT_CATEGORY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInvoicesByPaymentCategoryIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where paymentCategory is not null
+        defaultInvoiceShouldBeFound("paymentCategory.specified=true");
+
+        // Get all the invoiceList where paymentCategory is null
+        defaultInvoiceShouldNotBeFound("paymentCategory.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllInvoicesByPaymentCategoryContainsSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where paymentCategory contains DEFAULT_PAYMENT_CATEGORY
+        defaultInvoiceShouldBeFound("paymentCategory.contains=" + DEFAULT_PAYMENT_CATEGORY);
+
+        // Get all the invoiceList where paymentCategory contains UPDATED_PAYMENT_CATEGORY
+        defaultInvoiceShouldNotBeFound("paymentCategory.contains=" + UPDATED_PAYMENT_CATEGORY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInvoicesByPaymentCategoryNotContainsSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where paymentCategory does not contain DEFAULT_PAYMENT_CATEGORY
+        defaultInvoiceShouldNotBeFound("paymentCategory.doesNotContain=" + DEFAULT_PAYMENT_CATEGORY);
+
+        // Get all the invoiceList where paymentCategory does not contain UPDATED_PAYMENT_CATEGORY
+        defaultInvoiceShouldBeFound("paymentCategory.doesNotContain=" + UPDATED_PAYMENT_CATEGORY);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllInvoicesByPaymentIsEqualToSomething() throws Exception {
         // Initialize the database
         invoiceRepository.saveAndFlush(invoice);
@@ -527,6 +614,26 @@ public class InvoiceResourceIT {
         defaultInvoiceShouldNotBeFound("paymentId.equals=" + (paymentId + 1));
     }
 
+
+    @Test
+    @Transactional
+    public void getAllInvoicesByDealerIsEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+        Dealer dealer = DealerResourceIT.createEntity(em);
+        em.persist(dealer);
+        em.flush();
+        invoice.setDealer(dealer);
+        invoiceRepository.saveAndFlush(invoice);
+        Long dealerId = dealer.getId();
+
+        // Get all the invoiceList where dealer equals to dealerId
+        defaultInvoiceShouldBeFound("dealerId.equals=" + dealerId);
+
+        // Get all the invoiceList where dealer equals to dealerId + 1
+        defaultInvoiceShouldNotBeFound("dealerId.equals=" + (dealerId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -537,7 +644,8 @@ public class InvoiceResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(invoice.getId().intValue())))
             .andExpect(jsonPath("$.[*].invoiceNumber").value(hasItem(DEFAULT_INVOICE_NUMBER)))
             .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())))
-            .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(DEFAULT_INVOICE_AMOUNT.intValue())));
+            .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(DEFAULT_INVOICE_AMOUNT.intValue())))
+            .andExpect(jsonPath("$.[*].paymentCategory").value(hasItem(DEFAULT_PAYMENT_CATEGORY)));
 
         // Check, that the count call also returns 1
         restInvoiceMockMvc.perform(get("/api/invoices/count?sort=id,desc&" + filter))
@@ -586,7 +694,8 @@ public class InvoiceResourceIT {
         updatedInvoice
             .invoiceNumber(UPDATED_INVOICE_NUMBER)
             .invoiceDate(UPDATED_INVOICE_DATE)
-            .invoiceAmount(UPDATED_INVOICE_AMOUNT);
+            .invoiceAmount(UPDATED_INVOICE_AMOUNT)
+            .paymentCategory(UPDATED_PAYMENT_CATEGORY);
         InvoiceDTO invoiceDTO = invoiceMapper.toDto(updatedInvoice);
 
         restInvoiceMockMvc.perform(put("/api/invoices").with(csrf())
@@ -601,6 +710,7 @@ public class InvoiceResourceIT {
         assertThat(testInvoice.getInvoiceNumber()).isEqualTo(UPDATED_INVOICE_NUMBER);
         assertThat(testInvoice.getInvoiceDate()).isEqualTo(UPDATED_INVOICE_DATE);
         assertThat(testInvoice.getInvoiceAmount()).isEqualTo(UPDATED_INVOICE_AMOUNT);
+        assertThat(testInvoice.getPaymentCategory()).isEqualTo(UPDATED_PAYMENT_CATEGORY);
 
         // Validate the Invoice in Elasticsearch
         verify(mockInvoiceSearchRepository, times(1)).save(testInvoice);
@@ -665,6 +775,7 @@ public class InvoiceResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(invoice.getId().intValue())))
             .andExpect(jsonPath("$.[*].invoiceNumber").value(hasItem(DEFAULT_INVOICE_NUMBER)))
             .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())))
-            .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(DEFAULT_INVOICE_AMOUNT.intValue())));
+            .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(DEFAULT_INVOICE_AMOUNT.intValue())))
+            .andExpect(jsonPath("$.[*].paymentCategory").value(hasItem(DEFAULT_PAYMENT_CATEGORY)));
     }
 }

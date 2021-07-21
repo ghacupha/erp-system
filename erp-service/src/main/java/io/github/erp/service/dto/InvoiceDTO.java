@@ -17,8 +17,12 @@ public class InvoiceDTO implements Serializable {
 
     private BigDecimal invoiceAmount;
 
+    private String paymentCategory;
+
 
     private Long paymentId;
+
+    private Long dealerId;
     
     public Long getId() {
         return id;
@@ -52,12 +56,28 @@ public class InvoiceDTO implements Serializable {
         this.invoiceAmount = invoiceAmount;
     }
 
+    public String getPaymentCategory() {
+        return paymentCategory;
+    }
+
+    public void setPaymentCategory(String paymentCategory) {
+        this.paymentCategory = paymentCategory;
+    }
+
     public Long getPaymentId() {
         return paymentId;
     }
 
     public void setPaymentId(Long paymentId) {
         this.paymentId = paymentId;
+    }
+
+    public Long getDealerId() {
+        return dealerId;
+    }
+
+    public void setDealerId(Long dealerId) {
+        this.dealerId = dealerId;
     }
 
     @Override
@@ -85,7 +105,9 @@ public class InvoiceDTO implements Serializable {
             ", invoiceNumber='" + getInvoiceNumber() + "'" +
             ", invoiceDate='" + getInvoiceDate() + "'" +
             ", invoiceAmount=" + getInvoiceAmount() +
+            ", paymentCategory='" + getPaymentCategory() + "'" +
             ", paymentId=" + getPaymentId() +
+            ", dealerId=" + getDealerId() +
             "}";
     }
 }
