@@ -1,8 +1,9 @@
 id;tax_name;tax_description;tax_percentage;tax_reference_type
-1;Cambridgeshire Incredible Steel Shirt open architecture;Global Product;11250;WITHHOLDING_TAX_ON_RENT
-2;Spain Senior;Handcrafted;7767;WITHHOLDING_TAX_ON_CONSULTANCY
-3;user-centric Borders GB;invoice Cote d'Ivoire;47224;WITHHOLDING_VAT
-4;virtual Inlet Investment Account;Gorgeous generate;33516;SERVICE_CHARGE
-5;indigo Checking Account;Beauty;32296;VALUE_ADDED_TAX
-6;content-based;matrix;58944;WITHHOLDING_TAX_ON_IMPORTED_SERVICE
-10;Rustic Frozen Chair Generic Steel Mouse JBOD;Intelligent Frozen Mouse Agent Gorgeous Granite Mouse;2087;CATERING_LEVY
+1;Withholding tax on rent;Withholding taxes for all payments made for use of space;0.1;WITHHOLDING_TAX_ON_RENT
+2;Withholding taxes on cosultancy;Tax withheld for all payments made for consultancy services;0.05;WITHHOLDING_TAX_ON_CONSULTANCY
+3;Withholding VAT;Withholding VAT on all invoices issued by VAT registered service providers and dealers;0.02;WITHHOLDING_VAT
+4;Service Charge;Duty on services offered in an accommodation and  entertainment establishment;0.07;SERVICE_CHARGE
+5;Valua added tax;Value added tax applied to services or product value;0.16;VALUE_ADDED_TAX
+"6;Withholding tax on imported services;Withholding tax applicable to imported services, subject to double tax agreements;0.2;WITHHOLDING_TAX_ON_IMPORTED_SERVICE"
+10;Catering levy;Government duty applicable on catering services offered in entertainment facilities or though at the client's premises;0.02;CATERING_LEVY
+11;Telco Excise Duty;Duty applicable to services offered by a telecomm company;0.15;TELCO_EXCISE_DUTY
