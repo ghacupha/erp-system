@@ -40,7 +40,7 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: ${LOCAL_PG_SERVER}/erpService
+    url: ${LOCAL_PG_SERVER}/prodErpService
     username: ${PG_DATABASE_PROD_USER}
     password: ${PG_DATABASE_PROD_PASSWORD}
     hikari:
