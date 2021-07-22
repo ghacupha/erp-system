@@ -13,6 +13,8 @@ import org.mapstruct.*;
 public interface TaxRuleMapper extends EntityMapper<TaxRuleDTO, TaxRule> {
 
 
+    @Mapping(target = "payment", ignore = true)
+    TaxRule toEntity(TaxRuleDTO taxRuleDTO);
 
     default TaxRule fromId(Long id) {
         if (id == null) {

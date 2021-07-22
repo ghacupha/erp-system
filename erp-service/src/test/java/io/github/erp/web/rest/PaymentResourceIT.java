@@ -7,6 +7,7 @@ import io.github.erp.domain.Invoice;
 import io.github.erp.domain.PaymentCalculation;
 import io.github.erp.domain.PaymentRequisition;
 import io.github.erp.domain.Dealer;
+import io.github.erp.domain.TaxRule;
 import io.github.erp.repository.PaymentRepository;
 import io.github.erp.repository.search.PaymentSearchRepository;
 import io.github.erp.service.PaymentService;
@@ -219,7 +220,6 @@ public class PaymentResourceIT {
         em.detach(updatedPayment);
 
         // Update the PaymentCalculation with new association value
-        // TODO CONFIRM VALIDITY OF THIS RELATIONSHIP
         updatedPayment.setCalculationResult(payment.getCalculationResult());
         PaymentDTO updatedPaymentDTO = paymentMapper.toDto(updatedPayment);
 
@@ -816,6 +816,26 @@ public class PaymentResourceIT {
 
         // Get all the paymentList where dealer equals to dealerId + 1
         defaultPaymentShouldNotBeFound("dealerId.equals=" + (dealerId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllPaymentsByTaxRuleIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+        TaxRule taxRule = TaxRuleResourceIT.createEntity(em);
+        em.persist(taxRule);
+        em.flush();
+        payment.setTaxRule(taxRule);
+        paymentRepository.saveAndFlush(payment);
+        Long taxRuleId = taxRule.getId();
+
+        // Get all the paymentList where taxRule equals to taxRuleId
+        defaultPaymentShouldBeFound("taxRuleId.equals=" + taxRuleId);
+
+        // Get all the paymentList where taxRule equals to taxRuleId + 1
+        defaultPaymentShouldNotBeFound("taxRuleId.equals=" + (taxRuleId + 1));
     }
 
     /**

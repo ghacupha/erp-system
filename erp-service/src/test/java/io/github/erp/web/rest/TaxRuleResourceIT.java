@@ -3,6 +3,7 @@ package io.github.erp.web.rest;
 import io.github.erp.ErpServiceApp;
 import io.github.erp.config.SecurityBeanOverrideConfiguration;
 import io.github.erp.domain.TaxRule;
+import io.github.erp.domain.Payment;
 import io.github.erp.repository.TaxRuleRepository;
 import io.github.erp.repository.search.TaxRuleSearchRepository;
 import io.github.erp.service.TaxRuleService;
@@ -1341,6 +1342,27 @@ public class TaxRuleResourceIT {
 
         // Get all the taxRuleList where withholdingTaxImportedService is greater than SMALLER_WITHHOLDING_TAX_IMPORTED_SERVICE
         defaultTaxRuleShouldBeFound("withholdingTaxImportedService.greaterThan=" + SMALLER_WITHHOLDING_TAX_IMPORTED_SERVICE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllTaxRulesByPaymentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        taxRuleRepository.saveAndFlush(taxRule);
+        Payment payment = PaymentResourceIT.createEntity(em);
+        em.persist(payment);
+        em.flush();
+        taxRule.setPayment(payment);
+        payment.setTaxRule(taxRule);
+        taxRuleRepository.saveAndFlush(taxRule);
+        Long paymentId = payment.getId();
+
+        // Get all the taxRuleList where payment equals to paymentId
+        defaultTaxRuleShouldBeFound("paymentId.equals=" + paymentId);
+
+        // Get all the taxRuleList where payment equals to paymentId + 1
+        defaultTaxRuleShouldNotBeFound("paymentId.equals=" + (paymentId + 1));
     }
 
     /**

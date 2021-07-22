@@ -47,6 +47,8 @@ public class TaxRuleCriteria implements Serializable, Criteria {
 
     private DoubleFilter withholdingTaxImportedService;
 
+    private LongFilter paymentId;
+
     public TaxRuleCriteria() {
     }
 
@@ -62,6 +64,7 @@ public class TaxRuleCriteria implements Serializable, Criteria {
         this.cateringLevy = other.cateringLevy == null ? null : other.cateringLevy.copy();
         this.serviceCharge = other.serviceCharge == null ? null : other.serviceCharge.copy();
         this.withholdingTaxImportedService = other.withholdingTaxImportedService == null ? null : other.withholdingTaxImportedService.copy();
+        this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
     }
 
     @Override
@@ -157,6 +160,14 @@ public class TaxRuleCriteria implements Serializable, Criteria {
         this.withholdingTaxImportedService = withholdingTaxImportedService;
     }
 
+    public LongFilter getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(LongFilter paymentId) {
+        this.paymentId = paymentId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -178,7 +189,8 @@ public class TaxRuleCriteria implements Serializable, Criteria {
             Objects.equals(withholdingTaxRent, that.withholdingTaxRent) &&
             Objects.equals(cateringLevy, that.cateringLevy) &&
             Objects.equals(serviceCharge, that.serviceCharge) &&
-            Objects.equals(withholdingTaxImportedService, that.withholdingTaxImportedService);
+            Objects.equals(withholdingTaxImportedService, that.withholdingTaxImportedService) &&
+            Objects.equals(paymentId, that.paymentId);
     }
 
     @Override
@@ -194,7 +206,8 @@ public class TaxRuleCriteria implements Serializable, Criteria {
         withholdingTaxRent,
         cateringLevy,
         serviceCharge,
-        withholdingTaxImportedService
+        withholdingTaxImportedService,
+        paymentId
         );
     }
 
@@ -213,6 +226,7 @@ public class TaxRuleCriteria implements Serializable, Criteria {
                 (cateringLevy != null ? "cateringLevy=" + cateringLevy + ", " : "") +
                 (serviceCharge != null ? "serviceCharge=" + serviceCharge + ", " : "") +
                 (withholdingTaxImportedService != null ? "withholdingTaxImportedService=" + withholdingTaxImportedService + ", " : "") +
+                (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
             "}";
     }
 

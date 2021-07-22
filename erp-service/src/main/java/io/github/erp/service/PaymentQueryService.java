@@ -126,6 +126,10 @@ public class PaymentQueryService extends QueryService<Payment> {
                 specification = specification.and(buildSpecification(criteria.getDealerId(),
                     root -> root.join(Payment_.dealers, JoinType.LEFT).get(Dealer_.id)));
             }
+            if (criteria.getTaxRuleId() != null) {
+                specification = specification.and(buildSpecification(criteria.getTaxRuleId(),
+                    root -> root.join(Payment_.taxRule, JoinType.LEFT).get(TaxRule_.id)));
+            }
         }
         return specification;
     }

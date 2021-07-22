@@ -62,6 +62,10 @@ public class Payment implements Serializable {
     @JsonIgnore
     private Set<Dealer> dealers = new HashSet<>();
 
+    @OneToOne
+    @JoinColumn(unique = true)
+    private TaxRule taxRule;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -210,6 +214,19 @@ public class Payment implements Serializable {
 
     public void setDealers(Set<Dealer> dealers) {
         this.dealers = dealers;
+    }
+
+    public TaxRule getTaxRule() {
+        return taxRule;
+    }
+
+    public Payment taxRule(TaxRule taxRule) {
+        this.taxRule = taxRule;
+        return this;
+    }
+
+    public void setTaxRule(TaxRule taxRule) {
+        this.taxRule = taxRule;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

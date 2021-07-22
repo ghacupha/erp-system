@@ -29,13 +29,13 @@
       "relationshipName": "ownedInvoice"
     },
     {
-      "relationshipName": "calculationResult",
+      "relationshipName": "paymentCalculation",
       "otherEntityName": "paymentCalculation",
       "relationshipType": "one-to-one",
       "otherEntityField": "id",
       "ownerSide": true,
       "useJPADerivedIdentifier": true,
-      "otherEntityRelationshipName": "calculationResult"
+      "otherEntityRelationshipName": "payment"
     },
     {
       "relationshipName": "paymentRequisition",
@@ -49,6 +49,15 @@
       "otherEntityName": "dealer",
       "relationshipType": "many-to-many",
       "ownerSide": false,
+      "otherEntityRelationshipName": "payment"
+    },
+    {
+      "relationshipName": "taxRule",
+      "otherEntityName": "taxRule",
+      "relationshipType": "one-to-one",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "useJPADerivedIdentifier": false,
       "otherEntityRelationshipName": "payment"
     }
   ],

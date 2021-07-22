@@ -20,5 +20,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="payment_requisition"/>
 
+        <addForeignKeyConstraint baseColumnNames="tax_rule_id"
+                                 baseTableName="payment"
+                                 constraintName="fk_payment_tax_rule_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tax_rule"/>
+
     </changeSet>
 </databaseChangeLog>
