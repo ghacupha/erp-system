@@ -46,6 +46,8 @@ public class PaymentCriteria implements Serializable, Criteria {
 
     private LongFilter dealerId;
 
+    private LongFilter taxRuleId;
+
     public PaymentCriteria() {
     }
 
@@ -60,6 +62,7 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.calculationResultId = other.calculationResultId == null ? null : other.calculationResultId.copy();
         this.paymentRequisitionId = other.paymentRequisitionId == null ? null : other.paymentRequisitionId.copy();
         this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
+        this.taxRuleId = other.taxRuleId == null ? null : other.taxRuleId.copy();
     }
 
     @Override
@@ -147,6 +150,14 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.dealerId = dealerId;
     }
 
+    public LongFilter getTaxRuleId() {
+        return taxRuleId;
+    }
+
+    public void setTaxRuleId(LongFilter taxRuleId) {
+        this.taxRuleId = taxRuleId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -167,7 +178,8 @@ public class PaymentCriteria implements Serializable, Criteria {
             Objects.equals(ownedInvoiceId, that.ownedInvoiceId) &&
             Objects.equals(calculationResultId, that.calculationResultId) &&
             Objects.equals(paymentRequisitionId, that.paymentRequisitionId) &&
-            Objects.equals(dealerId, that.dealerId);
+            Objects.equals(dealerId, that.dealerId) &&
+            Objects.equals(taxRuleId, that.taxRuleId);
     }
 
     @Override
@@ -182,7 +194,8 @@ public class PaymentCriteria implements Serializable, Criteria {
         ownedInvoiceId,
         calculationResultId,
         paymentRequisitionId,
-        dealerId
+        dealerId,
+        taxRuleId
         );
     }
 
@@ -200,6 +213,7 @@ public class PaymentCriteria implements Serializable, Criteria {
                 (calculationResultId != null ? "calculationResultId=" + calculationResultId + ", " : "") +
                 (paymentRequisitionId != null ? "paymentRequisitionId=" + paymentRequisitionId + ", " : "") +
                 (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
+                (taxRuleId != null ? "taxRuleId=" + taxRuleId + ", " : "") +
             "}";
     }
 

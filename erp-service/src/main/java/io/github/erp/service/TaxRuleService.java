@@ -5,6 +5,7 @@ import io.github.erp.service.dto.TaxRuleDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -27,6 +28,12 @@ public interface TaxRuleService {
      * @return the list of entities.
      */
     Page<TaxRuleDTO> findAll(Pageable pageable);
+    /**
+     * Get all the TaxRuleDTO where Payment is {@code null}.
+     *
+     * @return the {@link List} of entities.
+     */
+    List<TaxRuleDTO> findAllWherePaymentIsNull();
 
 
     /**

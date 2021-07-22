@@ -1,5 +1,6 @@
 package io.github.erp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -57,6 +58,10 @@ public class TaxRule implements Serializable {
 
     @Column(name = "withholding_tax_imported_service")
     private Double withholdingTaxImportedService;
+
+    @OneToOne(mappedBy = "taxRule")
+    @JsonIgnore
+    private Payment payment;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -195,6 +200,19 @@ public class TaxRule implements Serializable {
 
     public void setWithholdingTaxImportedService(Double withholdingTaxImportedService) {
         this.withholdingTaxImportedService = withholdingTaxImportedService;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public TaxRule payment(Payment payment) {
+        this.payment = payment;
+        return this;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
