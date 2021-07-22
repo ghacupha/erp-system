@@ -51,10 +51,10 @@ public class Payment implements Serializable {
 
     @MapsId
     @JoinColumn(name = "id")
-    private PaymentCalculation paymentCalculation;
+    private PaymentCalculation calculationResult;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = "payments", allowSetters = true)
+    @JsonIgnoreProperties(value = "requisitions", allowSetters = true)
     private PaymentRequisition paymentRequisition;
 
     @ManyToMany(mappedBy = "payments")
@@ -161,17 +161,17 @@ public class Payment implements Serializable {
         this.ownedInvoices = invoices;
     }
 
-    public PaymentCalculation getPaymentCalculation() {
-        return paymentCalculation;
+    public PaymentCalculation getCalculationResult() {
+        return calculationResult;
     }
 
-    public Payment paymentCalculation(PaymentCalculation paymentCalculation) {
-        this.paymentCalculation = paymentCalculation;
+    public Payment calculationResult(PaymentCalculation paymentCalculation) {
+        this.calculationResult = paymentCalculation;
         return this;
     }
 
-    public void setPaymentCalculation(PaymentCalculation paymentCalculation) {
-        this.paymentCalculation = paymentCalculation;
+    public void setCalculationResult(PaymentCalculation paymentCalculation) {
+        this.calculationResult = paymentCalculation;
     }
 
     public PaymentRequisition getPaymentRequisition() {

@@ -29,11 +29,11 @@ public interface PaymentCalculationService {
      */
     Page<PaymentCalculationDTO> findAll(Pageable pageable);
     /**
-     * Get all the PaymentCalculationDTO where Payment is {@code null}.
+     * Get all the PaymentCalculationDTO where CalculationResult is {@code null}.
      *
      * @return the {@link List} of entities.
      */
-    List<PaymentCalculationDTO> findAllWherePaymentIsNull();
+    List<PaymentCalculationDTO> findAllWhereCalculationResultIsNull();
 
 
     /**
