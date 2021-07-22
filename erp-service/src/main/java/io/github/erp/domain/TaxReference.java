@@ -9,6 +9,8 @@ import javax.validation.constraints.*;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 
+import io.github.erp.domain.enumeration.taxReferenceTypes;
+
 /**
  * A TaxReference.
  */
@@ -35,6 +37,10 @@ public class TaxReference implements Serializable {
     @NotNull
     @Column(name = "tax_percentage", nullable = false)
     private Double taxPercentage;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tax_reference_type")
+    private taxReferenceTypes taxReferenceType;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -83,6 +89,19 @@ public class TaxReference implements Serializable {
     public void setTaxPercentage(Double taxPercentage) {
         this.taxPercentage = taxPercentage;
     }
+
+    public taxReferenceTypes getTaxReferenceType() {
+        return taxReferenceType;
+    }
+
+    public TaxReference taxReferenceType(taxReferenceTypes taxReferenceType) {
+        this.taxReferenceType = taxReferenceType;
+        return this;
+    }
+
+    public void setTaxReferenceType(taxReferenceTypes taxReferenceType) {
+        this.taxReferenceType = taxReferenceType;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -109,6 +128,7 @@ public class TaxReference implements Serializable {
             ", taxName='" + getTaxName() + "'" +
             ", taxDescription='" + getTaxDescription() + "'" +
             ", taxPercentage=" + getTaxPercentage() +
+            ", taxReferenceType='" + getTaxReferenceType() + "'" +
             "}";
     }
 }

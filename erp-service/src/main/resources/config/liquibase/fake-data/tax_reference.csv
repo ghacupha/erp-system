@@ -1,11 +1,11 @@
-id;tax_name;tax_description;tax_percentage
-1;Cambridgeshire Incredible Steel Shirt open architecture;Global Product;11250
-2;technologies Engineer Buckinghamshire;payment programming;5632
-3;Handcrafted;Product;76067
-4;Money Market Account best-of-breed;user-centric Borders GB;47275
-5;connecting turquoise;Proactive reinvent Buckinghamshire;33910
-6;virtual Inlet Investment Account;Gorgeous generate;33516
-7;Cambridgeshire deposit salmon;Savings Account multi-byte Home;3664
-8;local area network Lodge;content-based Face to face;24574
-9;matrix;Rubber Sausages;33814
-10;compressing;success neural unleash;8336
+id;tax_name;tax_description;tax_percentage;tax_reference_type
+1;Cambridgeshire Incredible Steel Shirt open architecture;Global Product;11250;WITHHOLDING_TAX_ON_RENT
+2;Spain Senior;Handcrafted;7767;WITHHOLDING_TAX_ON_CONSULTANCY
+3;user-centric Borders GB;invoice Cote d'Ivoire;47224;WITHHOLDING_VAT
+4;virtual Inlet Investment Account;Gorgeous generate;33516;SERVICE_CHARGE
+5;indigo Checking Account;Beauty;32296;VALUE_ADDED_TAX
+6;content-based;matrix;58944;WITHHOLDING_TAX_ON_IMPORTED_SERVICE
+7;Fresh solution-oriented;PNG;79325;WITHHOLDING_TAX_ON_IMPORTED_SERVICE
+8;online AGP Monitored;Sports SMS Credit Card Account;3853;WITHHOLDING_TAX_ON_IMPORTED_SERVICE
+9;Avon;incentivize Virtual incubate;4843;WITHHOLDING_TAX_ON_CONSULTANCY
+10;Rustic Frozen Chair Generic Steel Mouse JBOD;Intelligent Frozen Mouse Agent Gorgeous Granite Mouse;2087;CATERING_LEVY

@@ -3,6 +3,7 @@ package io.github.erp.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
+import io.github.erp.domain.enumeration.taxReferenceTypes;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
@@ -21,6 +22,24 @@ import io.github.jhipster.service.filter.StringFilter;
  * fix type specific filters.
  */
 public class TaxReferenceCriteria implements Serializable, Criteria {
+    /**
+     * Class for filtering taxReferenceTypes
+     */
+    public static class taxReferenceTypesFilter extends Filter<taxReferenceTypes> {
+
+        public taxReferenceTypesFilter() {
+        }
+
+        public taxReferenceTypesFilter(taxReferenceTypesFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public taxReferenceTypesFilter copy() {
+            return new taxReferenceTypesFilter(this);
+        }
+
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -32,6 +51,8 @@ public class TaxReferenceCriteria implements Serializable, Criteria {
 
     private DoubleFilter taxPercentage;
 
+    private taxReferenceTypesFilter taxReferenceType;
+
     public TaxReferenceCriteria() {
     }
 
@@ -40,6 +61,7 @@ public class TaxReferenceCriteria implements Serializable, Criteria {
         this.taxName = other.taxName == null ? null : other.taxName.copy();
         this.taxDescription = other.taxDescription == null ? null : other.taxDescription.copy();
         this.taxPercentage = other.taxPercentage == null ? null : other.taxPercentage.copy();
+        this.taxReferenceType = other.taxReferenceType == null ? null : other.taxReferenceType.copy();
     }
 
     @Override
@@ -79,6 +101,14 @@ public class TaxReferenceCriteria implements Serializable, Criteria {
         this.taxPercentage = taxPercentage;
     }
 
+    public taxReferenceTypesFilter getTaxReferenceType() {
+        return taxReferenceType;
+    }
+
+    public void setTaxReferenceType(taxReferenceTypesFilter taxReferenceType) {
+        this.taxReferenceType = taxReferenceType;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -93,7 +123,8 @@ public class TaxReferenceCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(taxName, that.taxName) &&
             Objects.equals(taxDescription, that.taxDescription) &&
-            Objects.equals(taxPercentage, that.taxPercentage);
+            Objects.equals(taxPercentage, that.taxPercentage) &&
+            Objects.equals(taxReferenceType, that.taxReferenceType);
     }
 
     @Override
@@ -102,7 +133,8 @@ public class TaxReferenceCriteria implements Serializable, Criteria {
         id,
         taxName,
         taxDescription,
-        taxPercentage
+        taxPercentage,
+        taxReferenceType
         );
     }
 
@@ -114,6 +146,7 @@ public class TaxReferenceCriteria implements Serializable, Criteria {
                 (taxName != null ? "taxName=" + taxName + ", " : "") +
                 (taxDescription != null ? "taxDescription=" + taxDescription + ", " : "") +
                 (taxPercentage != null ? "taxPercentage=" + taxPercentage + ", " : "") +
+                (taxReferenceType != null ? "taxReferenceType=" + taxReferenceType + ", " : "") +
             "}";
     }
 
