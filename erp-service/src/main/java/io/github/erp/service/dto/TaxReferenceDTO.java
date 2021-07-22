@@ -2,6 +2,7 @@ package io.github.erp.service.dto;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import io.github.erp.domain.enumeration.taxReferenceTypes;
 
 /**
  * A DTO for the {@link io.github.erp.domain.TaxReference} entity.
@@ -17,6 +18,8 @@ public class TaxReferenceDTO implements Serializable {
 
     @NotNull
     private Double taxPercentage;
+
+    private taxReferenceTypes taxReferenceType;
 
     
     public Long getId() {
@@ -51,6 +54,14 @@ public class TaxReferenceDTO implements Serializable {
         this.taxPercentage = taxPercentage;
     }
 
+    public taxReferenceTypes getTaxReferenceType() {
+        return taxReferenceType;
+    }
+
+    public void setTaxReferenceType(taxReferenceTypes taxReferenceType) {
+        this.taxReferenceType = taxReferenceType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -76,6 +87,7 @@ public class TaxReferenceDTO implements Serializable {
             ", taxName='" + getTaxName() + "'" +
             ", taxDescription='" + getTaxDescription() + "'" +
             ", taxPercentage=" + getTaxPercentage() +
+            ", taxReferenceType='" + getTaxReferenceType() + "'" +
             "}";
     }
 }

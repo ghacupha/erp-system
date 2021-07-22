@@ -37,6 +37,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import io.github.erp.domain.enumeration.taxReferenceTypes;
 /**
  * Integration tests for the {@link TaxReferenceResource} REST controller.
  */
@@ -55,6 +56,9 @@ public class TaxReferenceResourceIT {
     private static final Double DEFAULT_TAX_PERCENTAGE = 1D;
     private static final Double UPDATED_TAX_PERCENTAGE = 2D;
     private static final Double SMALLER_TAX_PERCENTAGE = 1D - 1D;
+
+    private static final taxReferenceTypes DEFAULT_TAX_REFERENCE_TYPE = taxReferenceTypes.TELCO_EXCISE_DUTY;
+    private static final taxReferenceTypes UPDATED_TAX_REFERENCE_TYPE = taxReferenceTypes.VALUE_ADDED_TAX;
 
     @Autowired
     private TaxReferenceRepository taxReferenceRepository;
@@ -94,7 +98,8 @@ public class TaxReferenceResourceIT {
         TaxReference taxReference = new TaxReference()
             .taxName(DEFAULT_TAX_NAME)
             .taxDescription(DEFAULT_TAX_DESCRIPTION)
-            .taxPercentage(DEFAULT_TAX_PERCENTAGE);
+            .taxPercentage(DEFAULT_TAX_PERCENTAGE)
+            .taxReferenceType(DEFAULT_TAX_REFERENCE_TYPE);
         return taxReference;
     }
     /**
@@ -107,7 +112,8 @@ public class TaxReferenceResourceIT {
         TaxReference taxReference = new TaxReference()
             .taxName(UPDATED_TAX_NAME)
             .taxDescription(UPDATED_TAX_DESCRIPTION)
-            .taxPercentage(UPDATED_TAX_PERCENTAGE);
+            .taxPercentage(UPDATED_TAX_PERCENTAGE)
+            .taxReferenceType(UPDATED_TAX_REFERENCE_TYPE);
         return taxReference;
     }
 
@@ -134,6 +140,7 @@ public class TaxReferenceResourceIT {
         assertThat(testTaxReference.getTaxName()).isEqualTo(DEFAULT_TAX_NAME);
         assertThat(testTaxReference.getTaxDescription()).isEqualTo(DEFAULT_TAX_DESCRIPTION);
         assertThat(testTaxReference.getTaxPercentage()).isEqualTo(DEFAULT_TAX_PERCENTAGE);
+        assertThat(testTaxReference.getTaxReferenceType()).isEqualTo(DEFAULT_TAX_REFERENCE_TYPE);
 
         // Validate the TaxReference in Elasticsearch
         verify(mockTaxReferenceSearchRepository, times(1)).save(testTaxReference);
@@ -196,7 +203,8 @@ public class TaxReferenceResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(taxReference.getId().intValue())))
             .andExpect(jsonPath("$.[*].taxName").value(hasItem(DEFAULT_TAX_NAME)))
             .andExpect(jsonPath("$.[*].taxDescription").value(hasItem(DEFAULT_TAX_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].taxPercentage").value(hasItem(DEFAULT_TAX_PERCENTAGE.doubleValue())));
+            .andExpect(jsonPath("$.[*].taxPercentage").value(hasItem(DEFAULT_TAX_PERCENTAGE.doubleValue())))
+            .andExpect(jsonPath("$.[*].taxReferenceType").value(hasItem(DEFAULT_TAX_REFERENCE_TYPE.toString())));
     }
     
     @Test
@@ -212,7 +220,8 @@ public class TaxReferenceResourceIT {
             .andExpect(jsonPath("$.id").value(taxReference.getId().intValue()))
             .andExpect(jsonPath("$.taxName").value(DEFAULT_TAX_NAME))
             .andExpect(jsonPath("$.taxDescription").value(DEFAULT_TAX_DESCRIPTION))
-            .andExpect(jsonPath("$.taxPercentage").value(DEFAULT_TAX_PERCENTAGE.doubleValue()));
+            .andExpect(jsonPath("$.taxPercentage").value(DEFAULT_TAX_PERCENTAGE.doubleValue()))
+            .andExpect(jsonPath("$.taxReferenceType").value(DEFAULT_TAX_REFERENCE_TYPE.toString()));
     }
 
 
@@ -495,6 +504,58 @@ public class TaxReferenceResourceIT {
         defaultTaxReferenceShouldBeFound("taxPercentage.greaterThan=" + SMALLER_TAX_PERCENTAGE);
     }
 
+
+    @Test
+    @Transactional
+    public void getAllTaxReferencesByTaxReferenceTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        taxReferenceRepository.saveAndFlush(taxReference);
+
+        // Get all the taxReferenceList where taxReferenceType equals to DEFAULT_TAX_REFERENCE_TYPE
+        defaultTaxReferenceShouldBeFound("taxReferenceType.equals=" + DEFAULT_TAX_REFERENCE_TYPE);
+
+        // Get all the taxReferenceList where taxReferenceType equals to UPDATED_TAX_REFERENCE_TYPE
+        defaultTaxReferenceShouldNotBeFound("taxReferenceType.equals=" + UPDATED_TAX_REFERENCE_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTaxReferencesByTaxReferenceTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        taxReferenceRepository.saveAndFlush(taxReference);
+
+        // Get all the taxReferenceList where taxReferenceType not equals to DEFAULT_TAX_REFERENCE_TYPE
+        defaultTaxReferenceShouldNotBeFound("taxReferenceType.notEquals=" + DEFAULT_TAX_REFERENCE_TYPE);
+
+        // Get all the taxReferenceList where taxReferenceType not equals to UPDATED_TAX_REFERENCE_TYPE
+        defaultTaxReferenceShouldBeFound("taxReferenceType.notEquals=" + UPDATED_TAX_REFERENCE_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTaxReferencesByTaxReferenceTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        taxReferenceRepository.saveAndFlush(taxReference);
+
+        // Get all the taxReferenceList where taxReferenceType in DEFAULT_TAX_REFERENCE_TYPE or UPDATED_TAX_REFERENCE_TYPE
+        defaultTaxReferenceShouldBeFound("taxReferenceType.in=" + DEFAULT_TAX_REFERENCE_TYPE + "," + UPDATED_TAX_REFERENCE_TYPE);
+
+        // Get all the taxReferenceList where taxReferenceType equals to UPDATED_TAX_REFERENCE_TYPE
+        defaultTaxReferenceShouldNotBeFound("taxReferenceType.in=" + UPDATED_TAX_REFERENCE_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTaxReferencesByTaxReferenceTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        taxReferenceRepository.saveAndFlush(taxReference);
+
+        // Get all the taxReferenceList where taxReferenceType is not null
+        defaultTaxReferenceShouldBeFound("taxReferenceType.specified=true");
+
+        // Get all the taxReferenceList where taxReferenceType is null
+        defaultTaxReferenceShouldNotBeFound("taxReferenceType.specified=false");
+    }
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -505,7 +566,8 @@ public class TaxReferenceResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(taxReference.getId().intValue())))
             .andExpect(jsonPath("$.[*].taxName").value(hasItem(DEFAULT_TAX_NAME)))
             .andExpect(jsonPath("$.[*].taxDescription").value(hasItem(DEFAULT_TAX_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].taxPercentage").value(hasItem(DEFAULT_TAX_PERCENTAGE.doubleValue())));
+            .andExpect(jsonPath("$.[*].taxPercentage").value(hasItem(DEFAULT_TAX_PERCENTAGE.doubleValue())))
+            .andExpect(jsonPath("$.[*].taxReferenceType").value(hasItem(DEFAULT_TAX_REFERENCE_TYPE.toString())));
 
         // Check, that the count call also returns 1
         restTaxReferenceMockMvc.perform(get("/api/tax-references/count?sort=id,desc&" + filter))
@@ -554,7 +616,8 @@ public class TaxReferenceResourceIT {
         updatedTaxReference
             .taxName(UPDATED_TAX_NAME)
             .taxDescription(UPDATED_TAX_DESCRIPTION)
-            .taxPercentage(UPDATED_TAX_PERCENTAGE);
+            .taxPercentage(UPDATED_TAX_PERCENTAGE)
+            .taxReferenceType(UPDATED_TAX_REFERENCE_TYPE);
         TaxReferenceDTO taxReferenceDTO = taxReferenceMapper.toDto(updatedTaxReference);
 
         restTaxReferenceMockMvc.perform(put("/api/tax-references").with(csrf())
@@ -569,6 +632,7 @@ public class TaxReferenceResourceIT {
         assertThat(testTaxReference.getTaxName()).isEqualTo(UPDATED_TAX_NAME);
         assertThat(testTaxReference.getTaxDescription()).isEqualTo(UPDATED_TAX_DESCRIPTION);
         assertThat(testTaxReference.getTaxPercentage()).isEqualTo(UPDATED_TAX_PERCENTAGE);
+        assertThat(testTaxReference.getTaxReferenceType()).isEqualTo(UPDATED_TAX_REFERENCE_TYPE);
 
         // Validate the TaxReference in Elasticsearch
         verify(mockTaxReferenceSearchRepository, times(1)).save(testTaxReference);
@@ -633,6 +697,7 @@ public class TaxReferenceResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(taxReference.getId().intValue())))
             .andExpect(jsonPath("$.[*].taxName").value(hasItem(DEFAULT_TAX_NAME)))
             .andExpect(jsonPath("$.[*].taxDescription").value(hasItem(DEFAULT_TAX_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].taxPercentage").value(hasItem(DEFAULT_TAX_PERCENTAGE.doubleValue())));
+            .andExpect(jsonPath("$.[*].taxPercentage").value(hasItem(DEFAULT_TAX_PERCENTAGE.doubleValue())))
+            .andExpect(jsonPath("$.[*].taxReferenceType").value(hasItem(DEFAULT_TAX_REFERENCE_TYPE.toString())));
     }
 }

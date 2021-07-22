@@ -104,6 +104,9 @@ public class TaxReferenceQueryService extends QueryService<TaxReference> {
             if (criteria.getTaxPercentage() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getTaxPercentage(), TaxReference_.taxPercentage));
             }
+            if (criteria.getTaxReferenceType() != null) {
+                specification = specification.and(buildSpecification(criteria.getTaxReferenceType(), TaxReference_.taxReferenceType));
+            }
         }
         return specification;
     }
