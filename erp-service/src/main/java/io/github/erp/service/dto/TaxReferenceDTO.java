@@ -19,6 +19,7 @@ public class TaxReferenceDTO implements Serializable {
     @NotNull
     private Double taxPercentage;
 
+    @NotNull
     private taxReferenceTypes taxReferenceType;
 
     

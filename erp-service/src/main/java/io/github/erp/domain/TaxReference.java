@@ -38,8 +38,9 @@ public class TaxReference implements Serializable {
     @Column(name = "tax_percentage", nullable = false)
     private Double taxPercentage;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "tax_reference_type")
+    @Column(name = "tax_reference_type", nullable = false, unique = true)
     private taxReferenceTypes taxReferenceType;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
