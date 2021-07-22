@@ -42,7 +42,7 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter paymentAmount;
 
-    private LongFilter calculationResultId;
+    private LongFilter paymentId;
 
     public PaymentCalculationCriteria() {
     }
@@ -56,7 +56,7 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
         this.withholdingVAT = other.withholdingVAT == null ? null : other.withholdingVAT.copy();
         this.withholdingTax = other.withholdingTax == null ? null : other.withholdingTax.copy();
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
-        this.calculationResultId = other.calculationResultId == null ? null : other.calculationResultId.copy();
+        this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
     }
 
     @Override
@@ -128,12 +128,12 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
         this.paymentAmount = paymentAmount;
     }
 
-    public LongFilter getCalculationResultId() {
-        return calculationResultId;
+    public LongFilter getPaymentId() {
+        return paymentId;
     }
 
-    public void setCalculationResultId(LongFilter calculationResultId) {
-        this.calculationResultId = calculationResultId;
+    public void setPaymentId(LongFilter paymentId) {
+        this.paymentId = paymentId;
     }
 
 
@@ -155,7 +155,7 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
             Objects.equals(withholdingVAT, that.withholdingVAT) &&
             Objects.equals(withholdingTax, that.withholdingTax) &&
             Objects.equals(paymentAmount, that.paymentAmount) &&
-            Objects.equals(calculationResultId, that.calculationResultId);
+            Objects.equals(paymentId, that.paymentId);
     }
 
     @Override
@@ -169,7 +169,7 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
         withholdingVAT,
         withholdingTax,
         paymentAmount,
-        calculationResultId
+        paymentId
         );
     }
 
@@ -185,7 +185,7 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
                 (withholdingVAT != null ? "withholdingVAT=" + withholdingVAT + ", " : "") +
                 (withholdingTax != null ? "withholdingTax=" + withholdingTax + ", " : "") +
                 (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
-                (calculationResultId != null ? "calculationResultId=" + calculationResultId + ", " : "") +
+                (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
             "}";
     }
 

@@ -48,9 +48,9 @@ public class PaymentCalculation implements Serializable {
     @Column(name = "payment_amount", precision = 21, scale = 2)
     private BigDecimal paymentAmount;
 
-    @OneToOne(mappedBy = "calculationResult")
+    @OneToOne(mappedBy = "paymentCalculation")
     @JsonIgnore
-    private Payment calculationResult;
+    private Payment payment;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -152,17 +152,17 @@ public class PaymentCalculation implements Serializable {
         this.paymentAmount = paymentAmount;
     }
 
-    public Payment getCalculationResult() {
-        return calculationResult;
+    public Payment getPayment() {
+        return payment;
     }
 
-    public PaymentCalculation calculationResult(Payment payment) {
-        this.calculationResult = payment;
+    public PaymentCalculation payment(Payment payment) {
+        this.payment = payment;
         return this;
     }
 
-    public void setCalculationResult(Payment payment) {
-        this.calculationResult = payment;
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

@@ -22,7 +22,7 @@ public class PaymentDTO implements Serializable {
     private String paymentCategory;
 
 
-    private Long calculationResultId;
+    private Long paymentCalculationId;
 
     private Long paymentRequisitionId;
 
@@ -76,12 +76,12 @@ public class PaymentDTO implements Serializable {
         this.paymentCategory = paymentCategory;
     }
 
-    public Long getCalculationResultId() {
-        return calculationResultId;
+    public Long getPaymentCalculationId() {
+        return paymentCalculationId;
     }
 
-    public void setCalculationResultId(Long paymentCalculationId) {
-        this.calculationResultId = paymentCalculationId;
+    public void setPaymentCalculationId(Long paymentCalculationId) {
+        this.paymentCalculationId = paymentCalculationId;
     }
 
     public Long getPaymentRequisitionId() {
@@ -127,7 +127,7 @@ public class PaymentDTO implements Serializable {
             ", paymentAmount=" + getPaymentAmount() +
             ", dealerName='" + getDealerName() + "'" +
             ", paymentCategory='" + getPaymentCategory() + "'" +
-            ", calculationResultId=" + getCalculationResultId() +
+            ", paymentCalculationId=" + getPaymentCalculationId() +
             ", paymentRequisitionId=" + getPaymentRequisitionId() +
             ", taxRuleId=" + getTaxRuleId() +
             "}";

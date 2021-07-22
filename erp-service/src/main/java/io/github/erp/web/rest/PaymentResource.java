@@ -65,7 +65,7 @@ public class PaymentResource {
         if (paymentDTO.getId() != null) {
             throw new BadRequestAlertException("A new payment cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        if (Objects.isNull(paymentDTO.getCalculationResultId())) {
+        if (Objects.isNull(paymentDTO.getPaymentCalculationId())) {
             throw new BadRequestAlertException("Invalid association value provided", ENTITY_NAME, "null");
         }
         PaymentDTO result = paymentService.save(paymentDTO);
