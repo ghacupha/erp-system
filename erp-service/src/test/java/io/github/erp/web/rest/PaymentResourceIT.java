@@ -120,7 +120,7 @@ public class PaymentResourceIT {
         } else {
             paymentCalculation = TestUtil.findAll(em, PaymentCalculation.class).get(0);
         }
-        payment.setPaymentCalculation(paymentCalculation);
+        payment.setCalculationResult(paymentCalculation);
         return payment;
     }
     /**
@@ -145,7 +145,7 @@ public class PaymentResourceIT {
         } else {
             paymentCalculation = TestUtil.findAll(em, PaymentCalculation.class).get(0);
         }
-        payment.setPaymentCalculation(paymentCalculation);
+        payment.setCalculationResult(paymentCalculation);
         return payment;
     }
 
@@ -176,7 +176,7 @@ public class PaymentResourceIT {
         assertThat(testPayment.getPaymentCategory()).isEqualTo(DEFAULT_PAYMENT_CATEGORY);
 
         // Validate the id for MapsId, the ids must be same
-        assertThat(testPayment.getId()).isEqualTo(testPayment.getPaymentCalculation().getId());
+        assertThat(testPayment.getId()).isEqualTo(testPayment.getCalculationResult().getId());
 
         // Validate the Payment in Elasticsearch
         verify(mockPaymentSearchRepository, times(1)).save(testPayment);
@@ -219,7 +219,8 @@ public class PaymentResourceIT {
         em.detach(updatedPayment);
 
         // Update the PaymentCalculation with new association value
-        updatedPayment.setPaymentCalculation();
+        // TODO CONFIRM VALIDITY OF THIS RELATIONSHIP
+        updatedPayment.setCalculationResult(payment.getCalculationResult());
         PaymentDTO updatedPaymentDTO = paymentMapper.toDto(updatedPayment);
 
         // Update the entity
@@ -259,7 +260,7 @@ public class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].dealerName").value(hasItem(DEFAULT_DEALER_NAME)))
             .andExpect(jsonPath("$.[*].paymentCategory").value(hasItem(DEFAULT_PAYMENT_CATEGORY)));
     }
-    
+
     @Test
     @Transactional
     public void getPayment() throws Exception {
@@ -764,17 +765,17 @@ public class PaymentResourceIT {
 
     @Test
     @Transactional
-    public void getAllPaymentsByPaymentCalculationIsEqualToSomething() throws Exception {
+    public void getAllPaymentsByCalculationResultIsEqualToSomething() throws Exception {
         // Get already existing entity
-        PaymentCalculation paymentCalculation = payment.getPaymentCalculation();
+        PaymentCalculation calculationResult = payment.getCalculationResult();
         paymentRepository.saveAndFlush(payment);
-        Long paymentCalculationId = paymentCalculation.getId();
+        Long calculationResultId = calculationResult.getId();
 
-        // Get all the paymentList where paymentCalculation equals to paymentCalculationId
-        defaultPaymentShouldBeFound("paymentCalculationId.equals=" + paymentCalculationId);
+        // Get all the paymentList where calculationResult equals to calculationResultId
+        defaultPaymentShouldBeFound("calculationResultId.equals=" + calculationResultId);
 
-        // Get all the paymentList where paymentCalculation equals to paymentCalculationId + 1
-        defaultPaymentShouldNotBeFound("paymentCalculationId.equals=" + (paymentCalculationId + 1));
+        // Get all the paymentList where calculationResult equals to calculationResultId + 1
+        defaultPaymentShouldNotBeFound("calculationResultId.equals=" + (calculationResultId + 1));
     }
 
 

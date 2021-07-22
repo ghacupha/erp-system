@@ -64,15 +64,15 @@ public class PaymentCalculationServiceImpl implements PaymentCalculationService 
 
 
     /**
-     *  Get all the paymentCalculations where Payment is {@code null}.
+     *  Get all the paymentCalculations where CalculationResult is {@code null}.
      *  @return the list of entities.
      */
     @Transactional(readOnly = true) 
-    public List<PaymentCalculationDTO> findAllWherePaymentIsNull() {
-        log.debug("Request to get all paymentCalculations where Payment is null");
+    public List<PaymentCalculationDTO> findAllWhereCalculationResultIsNull() {
+        log.debug("Request to get all paymentCalculations where CalculationResult is null");
         return StreamSupport
             .stream(paymentCalculationRepository.findAll().spliterator(), false)
-            .filter(paymentCalculation -> paymentCalculation.getPayment() == null)
+            .filter(paymentCalculation -> paymentCalculation.getCalculationResult() == null)
             .map(paymentCalculationMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }

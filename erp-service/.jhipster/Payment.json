@@ -29,13 +29,13 @@
       "relationshipName": "ownedInvoice"
     },
     {
-      "relationshipName": "paymentCalculation",
+      "relationshipName": "calculationResult",
       "otherEntityName": "paymentCalculation",
       "relationshipType": "one-to-one",
       "otherEntityField": "id",
       "ownerSide": true,
       "useJPADerivedIdentifier": true,
-      "otherEntityRelationshipName": "payment"
+      "otherEntityRelationshipName": "calculationResult"
     },
     {
       "relationshipName": "paymentRequisition",

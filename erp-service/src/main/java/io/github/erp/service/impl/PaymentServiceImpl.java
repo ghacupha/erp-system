@@ -47,8 +47,8 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentDTO save(PaymentDTO paymentDTO) {
         log.debug("Request to save Payment : {}", paymentDTO);
         Payment payment = paymentMapper.toEntity(paymentDTO);
-        Long paymentCalculationId = paymentDTO.getPaymentCalculationId();
-        paymentCalculationRepository.findById(paymentCalculationId).ifPresent(payment::paymentCalculation);
+        Long paymentCalculationId = paymentDTO.getCalculationResultId();
+        paymentCalculationRepository.findById(paymentCalculationId).ifPresent(payment::calculationResult);
         payment = paymentRepository.save(payment);
         PaymentDTO result = paymentMapper.toDto(payment);
         paymentSearchRepository.save(payment);

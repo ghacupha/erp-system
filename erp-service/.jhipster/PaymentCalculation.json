@@ -3,11 +3,11 @@
   "clientRootFolder": "payments",
   "relationships": [
     {
-      "relationshipName": "payment",
+      "relationshipName": "calculationResult",
       "otherEntityName": "payment",
       "relationshipType": "one-to-one",
       "ownerSide": false,
-      "otherEntityRelationshipName": "paymentCalculation"
+      "otherEntityRelationshipName": "calculationResult"
     }
   ],
   "fields": [
