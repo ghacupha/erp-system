@@ -12,14 +12,14 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {PaymentCalculationMapper.class, PaymentRequisitionMapper.class, TaxRuleMapper.class})
 public interface PaymentMapper extends EntityMapper<PaymentDTO, Payment> {
 
-    @Mapping(source = "calculationResult.id", target = "calculationResultId")
+    @Mapping(source = "paymentCalculation.id", target = "paymentCalculationId")
     @Mapping(source = "paymentRequisition.id", target = "paymentRequisitionId")
     @Mapping(source = "taxRule.id", target = "taxRuleId")
     PaymentDTO toDto(Payment payment);
 
     @Mapping(target = "ownedInvoices", ignore = true)
     @Mapping(target = "removeOwnedInvoice", ignore = true)
-    @Mapping(source = "calculationResultId", target = "calculationResult")
+    @Mapping(source = "paymentCalculationId", target = "paymentCalculation")
     @Mapping(source = "paymentRequisitionId", target = "paymentRequisition")
     @Mapping(target = "dealers", ignore = true)
     @Mapping(target = "removeDealer", ignore = true)

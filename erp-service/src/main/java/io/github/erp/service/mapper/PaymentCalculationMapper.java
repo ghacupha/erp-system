@@ -13,7 +13,7 @@ import org.mapstruct.*;
 public interface PaymentCalculationMapper extends EntityMapper<PaymentCalculationDTO, PaymentCalculation> {
 
 
-    @Mapping(target = "calculationResult", ignore = true)
+    @Mapping(target = "payment", ignore = true)
     PaymentCalculation toEntity(PaymentCalculationDTO paymentCalculationDTO);
 
     default PaymentCalculation fromId(Long id) {

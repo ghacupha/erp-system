@@ -938,22 +938,22 @@ public class PaymentCalculationResourceIT {
 
     @Test
     @Transactional
-    public void getAllPaymentCalculationsByCalculationResultIsEqualToSomething() throws Exception {
+    public void getAllPaymentCalculationsByPaymentIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentCalculationRepository.saveAndFlush(paymentCalculation);
-        Payment calculationResult = PaymentResourceIT.createEntity(em);
-        em.persist(calculationResult);
+        Payment payment = PaymentResourceIT.createEntity(em);
+        em.persist(payment);
         em.flush();
-        paymentCalculation.setCalculationResult(calculationResult);
-        calculationResult.setCalculationResult(paymentCalculation);
+        paymentCalculation.setPayment(payment);
+        payment.setPaymentCalculation(paymentCalculation);
         paymentCalculationRepository.saveAndFlush(paymentCalculation);
-        Long calculationResultId = calculationResult.getId();
+        Long paymentId = payment.getId();
 
-        // Get all the paymentCalculationList where calculationResult equals to calculationResultId
-        defaultPaymentCalculationShouldBeFound("calculationResultId.equals=" + calculationResultId);
+        // Get all the paymentCalculationList where payment equals to paymentId
+        defaultPaymentCalculationShouldBeFound("paymentId.equals=" + paymentId);
 
-        // Get all the paymentCalculationList where calculationResult equals to calculationResultId + 1
-        defaultPaymentCalculationShouldNotBeFound("calculationResultId.equals=" + (calculationResultId + 1));
+        // Get all the paymentCalculationList where payment equals to paymentId + 1
+        defaultPaymentCalculationShouldNotBeFound("paymentId.equals=" + (paymentId + 1));
     }
 
     /**

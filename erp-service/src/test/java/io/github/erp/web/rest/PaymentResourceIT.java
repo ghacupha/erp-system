@@ -121,7 +121,7 @@ public class PaymentResourceIT {
         } else {
             paymentCalculation = TestUtil.findAll(em, PaymentCalculation.class).get(0);
         }
-        payment.setCalculationResult(paymentCalculation);
+        payment.setPaymentCalculation(paymentCalculation);
         return payment;
     }
     /**
@@ -146,7 +146,7 @@ public class PaymentResourceIT {
         } else {
             paymentCalculation = TestUtil.findAll(em, PaymentCalculation.class).get(0);
         }
-        payment.setCalculationResult(paymentCalculation);
+        payment.setPaymentCalculation(paymentCalculation);
         return payment;
     }
 
@@ -177,7 +177,7 @@ public class PaymentResourceIT {
         assertThat(testPayment.getPaymentCategory()).isEqualTo(DEFAULT_PAYMENT_CATEGORY);
 
         // Validate the id for MapsId, the ids must be same
-        assertThat(testPayment.getId()).isEqualTo(testPayment.getCalculationResult().getId());
+        assertThat(testPayment.getId()).isEqualTo(testPayment.getPaymentCalculation().getId());
 
         // Validate the Payment in Elasticsearch
         verify(mockPaymentSearchRepository, times(1)).save(testPayment);
@@ -220,7 +220,7 @@ public class PaymentResourceIT {
         em.detach(updatedPayment);
 
         // Update the PaymentCalculation with new association value
-        updatedPayment.setCalculationResult(payment.getCalculationResult());
+        updatedPayment.setPaymentCalculation(payment.getPaymentCalculation());
         PaymentDTO updatedPaymentDTO = paymentMapper.toDto(updatedPayment);
 
         // Update the entity
@@ -765,17 +765,17 @@ public class PaymentResourceIT {
 
     @Test
     @Transactional
-    public void getAllPaymentsByCalculationResultIsEqualToSomething() throws Exception {
+    public void getAllPaymentsByPaymentCalculationIsEqualToSomething() throws Exception {
         // Get already existing entity
-        PaymentCalculation calculationResult = payment.getCalculationResult();
+        PaymentCalculation paymentCalculation = payment.getPaymentCalculation();
         paymentRepository.saveAndFlush(payment);
-        Long calculationResultId = calculationResult.getId();
+        Long paymentCalculationId = paymentCalculation.getId();
 
-        // Get all the paymentList where calculationResult equals to calculationResultId
-        defaultPaymentShouldBeFound("calculationResultId.equals=" + calculationResultId);
+        // Get all the paymentList where paymentCalculation equals to paymentCalculationId
+        defaultPaymentShouldBeFound("paymentCalculationId.equals=" + paymentCalculationId);
 
-        // Get all the paymentList where calculationResult equals to calculationResultId + 1
-        defaultPaymentShouldNotBeFound("calculationResultId.equals=" + (calculationResultId + 1));
+        // Get all the paymentList where paymentCalculation equals to paymentCalculationId + 1
+        defaultPaymentShouldNotBeFound("paymentCalculationId.equals=" + (paymentCalculationId + 1));
     }
 
 
