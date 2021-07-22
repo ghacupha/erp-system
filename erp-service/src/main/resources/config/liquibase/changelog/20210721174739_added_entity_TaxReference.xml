@@ -25,7 +25,7 @@
                 <constraints nullable="false" />
             </column>
             <column name="tax_reference_type" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_tax_reference_tax_reference_type" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>

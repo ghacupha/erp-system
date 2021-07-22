@@ -192,6 +192,26 @@ public class TaxReferenceResourceIT {
 
     @Test
     @Transactional
+    public void checkTaxReferenceTypeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = taxReferenceRepository.findAll().size();
+        // set the field null
+        taxReference.setTaxReferenceType(null);
+
+        // Create the TaxReference, which fails.
+        TaxReferenceDTO taxReferenceDTO = taxReferenceMapper.toDto(taxReference);
+
+
+        restTaxReferenceMockMvc.perform(post("/api/tax-references").with(csrf())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(taxReferenceDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<TaxReference> taxReferenceList = taxReferenceRepository.findAll();
+        assertThat(taxReferenceList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllTaxReferences() throws Exception {
         // Initialize the database
         taxReferenceRepository.saveAndFlush(taxReference);
