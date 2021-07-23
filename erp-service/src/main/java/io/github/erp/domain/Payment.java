@@ -54,7 +54,7 @@ public class Payment implements Serializable {
     private PaymentCalculation paymentCalculation;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = "payments", allowSetters = true)
+    @JsonIgnoreProperties(value = "requisitions", allowSetters = true)
     private PaymentRequisition paymentRequisition;
 
     @ManyToMany(mappedBy = "payments")
