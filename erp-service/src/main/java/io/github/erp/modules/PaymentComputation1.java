@@ -40,7 +40,7 @@ public class PaymentComputation1 implements PaymentComputation, HasWithholdingVA
     private PaymentCalculationInt calculate(PaymentRequisitionInt paymentRequisition, TaxRuleInt taxRule, String currencyCode) {
 
         MonetaryAmount invoiceNetOfTax =
-            Money.of(PaymentComputationUtils.queryNumerical(paymentRequisition.getInvoicedAmount().divide(PaymentComputationUtils.onePlusVAT(taxRule))).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP), currencyUnit(currencyCode));
+            Money.of(PaymentComputationUtils.queryNumerical(paymentRequisition.getInvoicedAmount().divide(PaymentComputationUtils.onePlusVAT(taxRule))), currencyUnit(currencyCode));
 
         MonetaryAmount withholdingVAT = calculateWithholdingVATAmount(taxRule, invoiceNetOfTax);
 
