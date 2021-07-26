@@ -58,7 +58,7 @@
         <jaxb-runtime.version>2.3.3</jaxb-runtime.version>
         <archunit-junit5.version>0.14.1</archunit-junit5.version>
         <log4j2-mock.version>0.0.2</log4j2-mock.version>
-        <mapstruct.version>1.3.1.Final</mapstruct.version>
+        <mapstruct.version>1.4.1.Final</mapstruct.version>
         <!-- Plugin versions -->
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -98,17 +98,17 @@
                 <version>${jhipster-dependencies.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.mapstruct</groupId>
+                        <artifactId>mapstruct</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <!-- jhipster-needle-maven-add-dependency-management -->
         </dependencies>
     </dependencyManagement>
-    <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
-    <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>${lombok.version}</version>
-        <scope>provided</scope>
-    </dependency>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.javamoney/moneta -->
         <dependency>
@@ -135,6 +135,13 @@
             <groupId>org.javamoney.moneta</groupId>
             <artifactId>moneta-convert</artifactId>
             <version>${moneta.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.github.jhipster</groupId>
@@ -233,10 +240,12 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -408,12 +417,6 @@
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-spring</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
         </dependency>
         <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>
