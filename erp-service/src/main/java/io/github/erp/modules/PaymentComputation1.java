@@ -9,7 +9,7 @@ import javax.money.MonetaryAmount;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import static io.github.erp.modules.PaymentComputationUtils.currencyUnit;
+import static io.github.erp.modules.PaymentComputationUtils.*;
 import static io.github.erp.modules.PaymentReferenceCodes.BASE_SYSTEM_CURRENCY_CODE;
 
 /**
@@ -61,6 +61,6 @@ public class PaymentComputation1 implements PaymentComputation, HasWithholdingVA
 
     @Override
     public MonetaryAmount calculateWithholdingVATAmount(TaxRuleInt taxRule, MonetaryAmount invoiceNetOfTax) {
-        return invoiceNetOfTax.multiply(taxRule.getWithholdingVAT());
+        return roundToZero(invoiceNetOfTax.multiply(taxRule.getWithholdingVAT()));
     }
 }
