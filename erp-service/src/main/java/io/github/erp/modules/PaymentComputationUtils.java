@@ -58,7 +58,10 @@ public class PaymentComputationUtils {
     static BigDecimal queryNumerical(MonetaryAmount monetaryAmount, final int fractionDigits) {
         Objects.requireNonNull(monetaryAmount, "Monetary-Amount required");
         BigDecimal number = monetaryAmount.getNumber().numberValue(BigDecimal.class);
-        number = number.setScale(fractionDigits, RoundingMode.HALF_EVEN);
-        return number.movePointRight(number.scale());
+        return number.setScale(fractionDigits, RoundingMode.HALF_EVEN);
+    }
+
+    static MonetaryAmount roundToZero(MonetaryAmount amount) {
+        return Money.of(queryNumerical(amount).setScale(0, RoundingMode.UP), amount.getCurrency());
     }
 }

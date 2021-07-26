@@ -10,20 +10,30 @@ import static io.github.erp.modules.PaymentReferenceCodes.BASE_SYSTEM_CURRENCY_C
 
 class PaymentComputation1Test extends PaymentComputationTests  {
 
-    private PaymentComputation computation;
+    private PaymentComputation1 computation;
+
+    private PaymentCalculationInt calculation;
 
     @BeforeEach
     void setUp() {
         computation = new PaymentComputation1(taxRule);
+        calculation = computation.calculate(requisition);
     }
 
     @Test
     void calculate() {
-        PaymentCalculationInt calculation = computation.calculate(requisition);
-
+        // TODO CHECK IF CALCULATION IS ACCOOUNTING FOR PERCENTAGE
         assertThat(calculation.getPaymentExpense()).isEqualTo(Money.of(40000, BASE_SYSTEM_CURRENCY_CODE));
         assertThat(calculation.getWithholdingVAT()).isEqualTo(Money.of(690, BASE_SYSTEM_CURRENCY_CODE));
         assertThat(calculation.getWithholdingTax()).isEqualTo(Money.of(0, BASE_SYSTEM_CURRENCY_CODE));
         assertThat(calculation.getPaymentAmount()).isEqualTo(Money.of(39310, BASE_SYSTEM_CURRENCY_CODE));
+    }
+
+    @Test
+    void calculateWithholdingVATAmount() {
+
+        assertThat(computation.calculateWithholdingVATAmount(taxRule, Money.of(34482.76,BASE_SYSTEM_CURRENCY_CODE)))
+            .isEqualTo(Money.of(690, BASE_SYSTEM_CURRENCY_CODE));
+
     }
 }
