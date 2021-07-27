@@ -6,21 +6,31 @@ import org.javamoney.moneta.Money;
 
 import javax.money.MonetaryAmount;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import static io.github.erp.modules.PaymentReferenceCodes.BASE_SYSTEM_CURRENCY_CODE;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PaymentComputationTests {
 
     protected MonetaryAmount INVOICE_AMOUNT = Money.of(40000,BASE_SYSTEM_CURRENCY_CODE);
-
     protected MonetaryAmount DISBURSEMENT_AMOUNT = Money.of(7000,BASE_SYSTEM_CURRENCY_CODE);
-
     protected MonetaryAmount VATABLE_AMOUNT = Money.of(33000,BASE_SYSTEM_CURRENCY_CODE);
 
     protected PaymentRequisitionInt requisition = PaymentRequisitionInt.builder()
         .invoicedAmount(INVOICE_AMOUNT)
         .disbursementCost(DISBURSEMENT_AMOUNT)
         .vatableAmount(VATABLE_AMOUNT)
+        .build();
+
+    protected MonetaryAmount INVOICE_AMOUNT$ = Money.of(40000,"USD");
+    protected MonetaryAmount DISBURSEMENT_AMOUNT$ = Money.of(7000,"USD");
+    protected MonetaryAmount VATABLE_AMOUNT$ = Money.of(33000,"USD");
+
+    protected PaymentRequisitionInt requisition$ = PaymentRequisitionInt.builder()
+        .invoicedAmount(INVOICE_AMOUNT$)
+        .disbursementCost(DISBURSEMENT_AMOUNT$)
+        .vatableAmount(VATABLE_AMOUNT$)
         .build();
 
     protected BigDecimal TELCO_EXCISE_DUTY = BigDecimal.valueOf(0.15);
@@ -42,4 +52,17 @@ public class PaymentComputationTests {
         .serviceCharge(SERVICE_CHARGE)
         .withholdingTaxImportedService(WITHHOLDING_TX_IMPORTED_SERVICE)
         .build();
+
+    /**
+     * Just running that JSR354 tests are going to be a problem due to differences in
+     * object reference. All I needed to test is the amount and currency. That's why I
+     * had to do this
+     */
+    void testEquality(MonetaryAmount m1, MonetaryAmount m2) {
+
+        assertThat(m1.getNumber().numberValue(BigDecimal.class).setScale(2, RoundingMode.HALF_EVEN))
+            .isEqualTo(m2.getNumber().numberValue(BigDecimal.class).setScale(2, RoundingMode.HALF_EVEN));
+        assertThat(m1.getCurrency().getCurrencyCode())
+            .isEqualTo(m1.getCurrency().getCurrencyCode());
+    }
 }
