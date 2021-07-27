@@ -39,11 +39,6 @@ public class FileUploadProcessorContainer {
     @Autowired
     private JobLauncher jobLauncher;
 
-    // todo auto-wire each job for each data model type
-    @Autowired
-    @Qualifier("currencyTablePersistenceJob")
-    private Job currencyTablePersistenceJob;
-
     @Autowired
     @Qualifier("fixedAssetAcquisitionListPersistenceJob")
     private Job fixedAssetAcquisitionListPersistenceJob;
