@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import static io.github.erp.modules.PaymentReferenceCodes.BASE_SYSTEM_CURRENCY_CODE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class PaymentComputation0Test extends PaymentComputationTests {
 

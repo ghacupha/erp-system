@@ -9,7 +9,6 @@ import java.math.RoundingMode;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static io.github.erp.modules.PaymentReferenceCodes.BASE_SYSTEM_CURRENCY_CODE;
-import static org.assertj.core.api.InstanceOfAssertFactories.BIG_DECIMAL;
 
 class BaseComputationTest extends PaymentComputationTests {
 
