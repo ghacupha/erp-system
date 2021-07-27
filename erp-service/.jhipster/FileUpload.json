@@ -1,5 +1,5 @@
 {
-  "name": "LeassetsFileUpload",
+  "name": "FileUpload",
   "fields": [
     {
       "fieldName": "description",
@@ -25,7 +25,7 @@
       "fieldType": "LocalDate"
     },
     {
-      "fieldName": "leassetsFileTypeId",
+      "fieldName": "fileTypeId",
       "fieldType": "Long",
       "fieldValidateRules": [
         "required"
@@ -57,7 +57,7 @@
   ],
   "relationships": [],
   "changelogDate": "20210414144555",
-  "entityTableName": "leassets_file_upload",
+  "entityTableName": "file_upload",
   "dto": "mapstruct",
   "pagination": "pagination",
   "service": "serviceImpl",
@@ -65,6 +65,6 @@
   "fluentMethods": true,
   "readOnly": false,
   "embedded": false,
-  "clientRootFolder": "leassets",
+  "clientRootFolder": "files",
   "applications": "*"
 }

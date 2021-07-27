@@ -1,5 +1,5 @@
 {
-  "name": "LeassetsMessageToken",
+  "name": "MessageToken",
   "fields": [
     {
       "fieldName": "description",
@@ -34,7 +34,7 @@
   ],
   "relationships": [],
   "changelogDate": "20210414144655",
-  "entityTableName": "leassets_message_token",
+  "entityTableName": "message_token",
   "dto": "mapstruct",
   "pagination": "pagination",
   "service": "serviceImpl",
@@ -42,6 +42,6 @@
   "fluentMethods": true,
   "readOnly": false,
   "embedded": false,
-  "clientRootFolder": "leassets",
+  "clientRootFolder": "files",
   "applications": "*"
 }
