@@ -22,6 +22,12 @@
     <include file="config/liquibase/changelog/20210721174739_added_entity_TaxReference.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210722140431_added_entity_TaxRule.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210723153046_added_entity_PaymentCategory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210414144455_added_entity_FileType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210414144555_added_entity_FileUpload.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210323113701_added_entity_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210323133701_added_entity_FixedAssetDepreciation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210323123701_added_entity_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210414144655_added_entity_MessageToken.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210627082202_added_entity_constraints_Invoice.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210721163636_added_entity_constraints_Dealer.xml" relativeToChangelogFile="false"/>
