@@ -18,16 +18,16 @@ package io.github.erp.internal.service;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.leassets.internal.framework.excel.DefaultExcelFileDeserializer;
-import io.github.leassets.internal.framework.excel.ExcelFileDeserializer;
-import io.github.leassets.internal.model.FixedAssetAcquisitionEVM;
-import io.github.leassets.internal.model.FixedAssetDepreciationEVM;
-import io.github.leassets.internal.model.FixedAssetNetBookValueEVM;
-import io.github.leassets.internal.model.sampleDataModel.CurrencyTableEVM;
+import io.github.erp.internal.framework.excel.DefaultExcelFileDeserializer;
+import io.github.erp.internal.framework.excel.ExcelFileDeserializer;
+import io.github.erp.internal.model.FixedAssetAcquisitionEVM;
+import io.github.erp.internal.model.FixedAssetDepreciationEVM;
+import io.github.erp.internal.model.FixedAssetNetBookValueEVM;
+import io.github.erp.internal.model.sampleDataModel.CurrencyTableEVM;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static io.github.leassets.internal.framework.excel.PoijiOptionsConfig.getDefaultPoijiOptions;
+import static io.github.erp.internal.framework.excel.PoijiOptionsConfig.getDefaultPoijiOptions;
 
 /**
  * This container has configurations for our excel file deserializers and a sample is provided for currency-table

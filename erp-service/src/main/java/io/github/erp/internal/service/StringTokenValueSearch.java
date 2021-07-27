@@ -19,10 +19,10 @@ package io.github.erp.internal.service;
  */
 
 import io.github.jhipster.service.filter.StringFilter;
-import io.github.leassets.internal.framework.fileProcessing.TokenValueSearch;
-import io.github.leassets.service.LeassetsMessageTokenQueryService;
-import io.github.leassets.service.dto.LeassetsMessageTokenCriteria;
-import io.github.leassets.service.dto.LeassetsMessageTokenDTO;
+import io.github.erp.internal.framework.fileProcessing.TokenValueSearch;
+import io.github.erp.service.LeassetsMessageTokenQueryService;
+import io.github.erp.service.dto.LeassetsMessageTokenCriteria;
+import io.github.erp.service.dto.LeassetsMessageTokenDTO;
 import org.springframework.stereotype.Service;
 
 /**

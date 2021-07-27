@@ -20,7 +20,7 @@ package io.github.erp.internal.model;
 
 import com.poiji.annotation.ExcelCell;
 import com.poiji.annotation.ExcelRow;
-import io.github.leassets.internal.framework.ExcelViewModel;
+import io.github.erp.internal.framework.ExcelViewModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -18,13 +18,13 @@
  */
 package io.github.erp.internal.model.sampleDataModel;
 
-import io.github.leassets.domain.enumeration.CurrencyLocality;
-import io.github.leassets.internal.framework.Mapping;
-import io.github.leassets.service.dto.CurrencyTableDTO;
+import io.github.erp.domain.enumeration.CurrencyLocality;
+import io.github.erp.internal.framework.Mapping;
+import io.github.erp.service.dto.CurrencyTableDTO;
 import org.mapstruct.Mapper;
 
-import static io.github.leassets.domain.enumeration.CurrencyLocality.FOREIGN;
-import static io.github.leassets.domain.enumeration.CurrencyLocality.LOCAL;
+import static io.github.erp.domain.enumeration.CurrencyLocality.FOREIGN;
+import static io.github.erp.domain.enumeration.CurrencyLocality.LOCAL;
 
 /**
  * This is a sample implementation of how mapping is used to move from an entity's DTO to EVM

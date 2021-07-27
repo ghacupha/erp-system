@@ -18,12 +18,12 @@ package io.github.erp.internal.service;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.leassets.domain.enumeration.LeassetsFileModelType;
-import io.github.leassets.internal.framework.fileProcessing.FileUploadProcessorChain;
-import io.github.leassets.internal.framework.service.HandlingService;
-import io.github.leassets.internal.model.FileNotification;
-import io.github.leassets.service.LeassetsFileTypeService;
-import io.github.leassets.service.LeassetsFileUploadService;
+import io.github.erp.domain.enumeration.LeassetsFileModelType;
+import io.github.erp.internal.framework.fileProcessing.FileUploadProcessorChain;
+import io.github.erp.internal.framework.service.HandlingService;
+import io.github.erp.internal.model.FileNotification;
+import io.github.erp.service.LeassetsFileTypeService;
+import io.github.erp.service.LeassetsFileUploadService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;

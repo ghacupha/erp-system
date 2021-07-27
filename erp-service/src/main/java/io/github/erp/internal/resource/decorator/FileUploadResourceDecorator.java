@@ -18,9 +18,9 @@ package io.github.erp.internal.resource.decorator;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.leassets.service.dto.LeassetsFileUploadCriteria;
-import io.github.leassets.service.dto.LeassetsFileUploadDTO;
-import io.github.leassets.web.rest.LeassetsFileUploadResource;
+import io.github.erp.service.dto.LeassetsFileUploadCriteria;
+import io.github.erp.service.dto.LeassetsFileUploadDTO;
+import io.github.erp.web.rest.LeassetsFileUploadResource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

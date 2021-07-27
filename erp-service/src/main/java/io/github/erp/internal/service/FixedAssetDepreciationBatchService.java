@@ -18,11 +18,11 @@ package io.github.erp.internal.service;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.leassets.internal.framework.BatchService;
-import io.github.leassets.repository.FixedAssetDepreciationRepository;
-import io.github.leassets.repository.search.FixedAssetDepreciationSearchRepository;
-import io.github.leassets.service.dto.FixedAssetDepreciationDTO;
-import io.github.leassets.service.mapper.FixedAssetDepreciationMapper;
+import io.github.erp.internal.framework.BatchService;
+import io.github.erp.repository.FixedAssetDepreciationRepository;
+import io.github.erp.repository.search.FixedAssetDepreciationSearchRepository;
+import io.github.erp.service.dto.FixedAssetDepreciationDTO;
+import io.github.erp.service.mapper.FixedAssetDepreciationMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

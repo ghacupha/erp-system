@@ -18,10 +18,10 @@ package io.github.erp.internal.model;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.leassets.domain.enumeration.DepreciationRegime;
-import io.github.leassets.internal.framework.MapUtils;
-import io.github.leassets.internal.framework.Mapping;
-import io.github.leassets.service.dto.FixedAssetDepreciationDTO;
+import io.github.erp.domain.enumeration.DepreciationRegime;
+import io.github.erp.internal.framework.MapUtils;
+import io.github.erp.internal.framework.Mapping;
+import io.github.erp.service.dto.FixedAssetDepreciationDTO;
 import org.mapstruct.Mapper;
 
 import java.math.BigDecimal;

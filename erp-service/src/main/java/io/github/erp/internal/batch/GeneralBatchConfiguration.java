@@ -18,9 +18,9 @@ package io.github.erp.internal.batch;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.leassets.internal.framework.batch.DeletionJobListener;
-import io.github.leassets.internal.framework.service.FileUploadDeletionService;
-import io.github.leassets.service.dto.LeassetsFileUploadDTO;
+import io.github.erp.internal.framework.batch.DeletionJobListener;
+import io.github.erp.internal.framework.service.FileUploadDeletionService;
+import io.github.erp.service.dto.LeassetsFileUploadDTO;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.beans.factory.annotation.Autowired;

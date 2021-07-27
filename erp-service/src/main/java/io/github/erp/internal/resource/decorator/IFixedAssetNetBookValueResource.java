@@ -18,8 +18,8 @@ package io.github.erp.internal.resource.decorator;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.leassets.service.dto.FixedAssetNetBookValueCriteria;
-import io.github.leassets.service.dto.FixedAssetNetBookValueDTO;
+import io.github.erp.service.dto.FixedAssetNetBookValueCriteria;
+import io.github.erp.service.dto.FixedAssetNetBookValueDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
