@@ -23,7 +23,6 @@ import io.github.erp.internal.framework.excel.ExcelFileDeserializer;
 import io.github.erp.internal.model.FixedAssetAcquisitionEVM;
 import io.github.erp.internal.model.FixedAssetDepreciationEVM;
 import io.github.erp.internal.model.FixedAssetNetBookValueEVM;
-import io.github.erp.internal.model.sampleDataModel.CurrencyTableEVM;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -34,11 +33,6 @@ import static io.github.erp.internal.framework.excel.PoijiOptionsConfig.getDefau
  */
 @Configuration
 public class ExcelDeserializerContainer {
-
-    @Bean("currencyTableExcelFileDeserializer")
-    public ExcelFileDeserializer<CurrencyTableEVM> currencyTableExcelFileDeserializer() {
-        return excelFile -> new DefaultExcelFileDeserializer<>(CurrencyTableEVM.class, getDefaultPoijiOptions()).deserialize(excelFile);
-    }
 
     @Bean("fixedAssetAcquisitionExcelFileDeserializer")
     public ExcelFileDeserializer<FixedAssetAcquisitionEVM> fixedAssetAcquisitionExcelFileDeserializer() {
