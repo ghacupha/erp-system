@@ -28,6 +28,7 @@
     <include file="config/liquibase/changelog/20210323133701_added_entity_FixedAssetDepreciation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210414144655_added_entity_MessageToken.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210414144226_added_springbatch_schema.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210627082202_added_entity_constraints_Invoice.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210721163636_added_entity_constraints_Dealer.xml" relativeToChangelogFile="false"/>
