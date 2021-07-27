@@ -42,5 +42,6 @@
   "readOnly": false,
   "pagination": "pagination",
   "name": "FixedAssetAcquisition",
-  "changelogDate": "20210323113701"
+  "changelogDate": "20210323113701",
+  "clientRootFolder": "assets"
 }

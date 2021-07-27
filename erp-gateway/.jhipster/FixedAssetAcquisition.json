@@ -2,7 +2,8 @@
   "fields": [
     {
       "fieldName": "assetNumber",
-      "fieldType": "Long"
+      "fieldType": "Long",
+      "fieldValidateRules": ["unique"]
     },
     {
       "fieldName": "serviceOutletCode",
@@ -17,7 +18,7 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "depreciationDate",
+      "fieldName": "purchaseDate",
       "fieldType": "LocalDate"
     },
     {
@@ -25,20 +26,11 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "depreciationAmount",
+      "fieldName": "purchasePrice",
       "fieldType": "BigDecimal"
     },
     {
-      "fieldName": "depreciationRegime",
-      "fieldType": "DepreciationRegime",
-      "fieldValues": "STRAIGHT_LINE_BASIS,DECLINING_BALANCE_BASIS"
-    },
-    {
       "fieldName": "fileUploadToken",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "compilationToken",
       "fieldType": "String"
     }
   ],
@@ -49,7 +41,8 @@
   "jpaMetamodelFiltering": true,
   "readOnly": false,
   "pagination": "pagination",
-  "name": "FixedAssetDepreciation",
-  "changelogDate": "20210323133701",
-  "clientRootFolder": "assets"
+  "name": "FixedAssetAcquisition",
+  "changelogDate": "20210323113701",
+  "clientRootFolder": "assets",
+  "microserviceName": "erpService"
 }
