@@ -90,7 +90,7 @@ public class AppFileUploadResource implements IFileUploadResource {
         fileNotificationHandlingService.handle(FileNotification.builder()
                                                                .filename(fileUploadDTO.getFileName())
                                                                .description(fileUploadDTO.getDescription())
-                                                               .fileModelType(fileType.getfileType())
+                                                               .fileModelType(fileType.getFileType())
                                                                .fileId(String.valueOf(Objects.requireNonNull(responseEntity.getBody()).getId()))
                                                                .build()
         );
