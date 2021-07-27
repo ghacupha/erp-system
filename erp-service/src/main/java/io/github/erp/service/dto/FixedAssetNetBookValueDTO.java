@@ -4,12 +4,15 @@ import java.time.LocalDate;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import io.github.erp.domain.enumeration.DepreciationRegime;
+import io.github.erp.internal.framework.batch.HasIndex;
 
 /**
+ * TODO implement custom object for asset-nbv
+ *
  * A DTO for the {@link io.github.erp.domain.FixedAssetNetBookValue} entity.
  */
-public class FixedAssetNetBookValueDTO implements Serializable {
-    
+public class FixedAssetNetBookValueDTO implements Serializable, HasIndex {
+
     private Long id;
 
     private Long assetNumber;
@@ -32,7 +35,7 @@ public class FixedAssetNetBookValueDTO implements Serializable {
 
     private String compilationToken;
 
-    
+
     public Long getId() {
         return id;
     }

@@ -1,15 +1,20 @@
 package io.github.erp.service.dto;
 
+import io.github.erp.internal.framework.batch.HasDataFile;
+import io.github.erp.internal.framework.batch.HasIndex;
+
 import java.time.LocalDate;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import javax.persistence.Lob;
 
 /**
+ * TODO implement custom object for file-upload
+ *
  * A DTO for the {@link io.github.erp.domain.FileUpload} entity.
  */
-public class FileUploadDTO implements Serializable {
-    
+public class FileUploadDTO implements Serializable, HasDataFile, HasIndex {
+
     private Long id;
 
     @NotNull
@@ -25,7 +30,7 @@ public class FileUploadDTO implements Serializable {
     @NotNull
     private Long fileTypeId;
 
-    
+
     @Lob
     private byte[] dataFile;
 
@@ -34,10 +39,10 @@ public class FileUploadDTO implements Serializable {
 
     private Boolean uploadProcessed;
 
-    
+
     private String uploadToken;
 
-    
+
     public Long getId() {
         return id;
     }
