@@ -1,8 +1,8 @@
 package io.github.erp.domain.enumeration;
 
 /**
- * The fileModelType enumeration.
+ * The FileModelType enumeration.
  */
-public enum fileModelType {
+public enum FileModelType {
     CURRENCY_LIST, FIXED_ASSET_ACQUISITION, FIXED_ASSET_DEPRECIATION, FIXED_ASSET_NBV
 }

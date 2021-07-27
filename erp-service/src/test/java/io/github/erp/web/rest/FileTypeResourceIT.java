@@ -36,8 +36,8 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import io.github.erp.domain.enumeration.fileMediumTypes;
-import io.github.erp.domain.enumeration.fileModelType;
+import io.github.erp.domain.enumeration.FileMediumTypes;
+import io.github.erp.domain.enumeration.FileModelType;
 /**
  * Integration tests for the {@link FileTypeResource} REST controller.
  */
@@ -50,8 +50,8 @@ public class FileTypeResourceIT {
     private static final String DEFAULT_FILE_TYPE_NAME = "AAAAAAAAAA";
     private static final String UPDATED_FILE_TYPE_NAME = "BBBBBBBBBB";
 
-    private static final fileMediumTypes DEFAULT_FILE_MEDIUM_TYPE = fileMediumTypes.EXCEL;
-    private static final fileMediumTypes UPDATED_FILE_MEDIUM_TYPE = fileMediumTypes.EXCEL_XLS;
+    private static final FileMediumTypes DEFAULT_FILE_MEDIUM_TYPE = FileMediumTypes.EXCEL;
+    private static final FileMediumTypes UPDATED_FILE_MEDIUM_TYPE = FileMediumTypes.EXCEL_XLS;
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -61,8 +61,8 @@ public class FileTypeResourceIT {
     private static final String DEFAULT_FILE_TEMPLATE_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_FILE_TEMPLATE_CONTENT_TYPE = "image/png";
 
-    private static final fileModelType DEFAULT_FILE_TYPE = fileModelType.CURRENCY_LIST;
-    private static final fileModelType UPDATED_FILE_TYPE = fileModelType.FIXED_ASSET_ACQUISITION;
+    private static final FileModelType DEFAULT_FILE_TYPE = FileModelType.CURRENCY_LIST;
+    private static final FileModelType UPDATED_FILE_TYPE = FileModelType.FIXED_ASSET_ACQUISITION;
 
     @Autowired
     private FileTypeRepository fileTypeRepository;

@@ -3,8 +3,8 @@ package io.github.erp.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
-import io.github.erp.domain.enumeration.fileMediumTypes;
-import io.github.erp.domain.enumeration.fileModelType;
+import io.github.erp.domain.enumeration.FileMediumTypes;
+import io.github.erp.domain.enumeration.FileModelType;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
@@ -24,38 +24,38 @@ import io.github.jhipster.service.filter.StringFilter;
  */
 public class FileTypeCriteria implements Serializable, Criteria {
     /**
-     * Class for filtering fileMediumTypes
+     * Class for filtering FileMediumTypes
      */
-    public static class fileMediumTypesFilter extends Filter<fileMediumTypes> {
+    public static class FileMediumTypesFilter extends Filter<FileMediumTypes> {
 
-        public fileMediumTypesFilter() {
+        public FileMediumTypesFilter() {
         }
 
-        public fileMediumTypesFilter(fileMediumTypesFilter filter) {
+        public FileMediumTypesFilter(FileMediumTypesFilter filter) {
             super(filter);
         }
 
         @Override
-        public fileMediumTypesFilter copy() {
-            return new fileMediumTypesFilter(this);
+        public FileMediumTypesFilter copy() {
+            return new FileMediumTypesFilter(this);
         }
 
     }
     /**
-     * Class for filtering fileModelType
+     * Class for filtering FileModelType
      */
-    public static class fileModelTypeFilter extends Filter<fileModelType> {
+    public static class FileModelTypeFilter extends Filter<FileModelType> {
 
-        public fileModelTypeFilter() {
+        public FileModelTypeFilter() {
         }
 
-        public fileModelTypeFilter(fileModelTypeFilter filter) {
+        public FileModelTypeFilter(FileModelTypeFilter filter) {
             super(filter);
         }
 
         @Override
-        public fileModelTypeFilter copy() {
-            return new fileModelTypeFilter(this);
+        public FileModelTypeFilter copy() {
+            return new FileModelTypeFilter(this);
         }
 
     }
@@ -66,11 +66,11 @@ public class FileTypeCriteria implements Serializable, Criteria {
 
     private StringFilter fileTypeName;
 
-    private fileMediumTypesFilter fileMediumType;
+    private FileMediumTypesFilter fileMediumType;
 
     private StringFilter description;
 
-    private fileModelTypeFilter fileType;
+    private FileModelTypeFilter fileType;
 
     public FileTypeCriteria() {
     }
@@ -104,11 +104,11 @@ public class FileTypeCriteria implements Serializable, Criteria {
         this.fileTypeName = fileTypeName;
     }
 
-    public fileMediumTypesFilter getFileMediumType() {
+    public FileMediumTypesFilter getFileMediumType() {
         return fileMediumType;
     }
 
-    public void setFileMediumType(fileMediumTypesFilter fileMediumType) {
+    public void setFileMediumType(FileMediumTypesFilter fileMediumType) {
         this.fileMediumType = fileMediumType;
     }
 
@@ -120,11 +120,11 @@ public class FileTypeCriteria implements Serializable, Criteria {
         this.description = description;
     }
 
-    public fileModelTypeFilter getFileType() {
+    public FileModelTypeFilter getFileType() {
         return fileType;
     }
 
-    public void setFileType(fileModelTypeFilter fileType) {
+    public void setFileType(FileModelTypeFilter fileType) {
         this.fileType = fileType;
     }
 

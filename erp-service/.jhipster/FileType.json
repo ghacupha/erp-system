@@ -11,7 +11,7 @@
     },
     {
       "fieldName": "fileMediumType",
-      "fieldType": "fileMediumTypes",
+      "fieldType": "FileMediumTypes",
       "fieldValues": "EXCEL,EXCEL_XLS,EXCEL_XLSX,EXCEL_XLSB,EXCEL_CSV,EXCEL_XML,PDF,POWERPOINT,DOC,TEXT,JSON,HTML5",
       "fieldValidateRules": [
         "required"
@@ -28,7 +28,7 @@
     },
     {
       "fieldName": "fileType",
-      "fieldType": "fileModelType",
+      "fieldType": "FileModelType",
       "fieldValues": "CURRENCY_LIST,FIXED_ASSET_ACQUISITION,FIXED_ASSET_DEPRECIATION,FIXED_ASSET_NBV"
     }
   ],

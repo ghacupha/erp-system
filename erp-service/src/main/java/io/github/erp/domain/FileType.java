@@ -9,9 +9,9 @@ import javax.validation.constraints.*;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 
-import io.github.erp.domain.enumeration.fileMediumTypes;
+import io.github.erp.domain.enumeration.FileMediumTypes;
 
-import io.github.erp.domain.enumeration.fileModelType;
+import io.github.erp.domain.enumeration.FileModelType;
 
 /**
  * A FileType.
@@ -36,7 +36,7 @@ public class FileType implements Serializable {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "file_medium_type", nullable = false)
-    private fileMediumTypes fileMediumType;
+    private FileMediumTypes fileMediumType;
 
     @Column(name = "description")
     private String description;
@@ -50,7 +50,7 @@ public class FileType implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "file_type")
-    private fileModelType fileType;
+    private FileModelType fileType;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -74,16 +74,16 @@ public class FileType implements Serializable {
         this.fileTypeName = fileTypeName;
     }
 
-    public fileMediumTypes getFileMediumType() {
+    public FileMediumTypes getFileMediumType() {
         return fileMediumType;
     }
 
-    public FileType fileMediumType(fileMediumTypes fileMediumType) {
+    public FileType fileMediumType(FileMediumTypes fileMediumType) {
         this.fileMediumType = fileMediumType;
         return this;
     }
 
-    public void setFileMediumType(fileMediumTypes fileMediumType) {
+    public void setFileMediumType(FileMediumTypes fileMediumType) {
         this.fileMediumType = fileMediumType;
     }
 
@@ -126,16 +126,16 @@ public class FileType implements Serializable {
         this.fileTemplateContentType = fileTemplateContentType;
     }
 
-    public fileModelType getFileType() {
+    public FileModelType getFileType() {
         return fileType;
     }
 
-    public FileType fileType(fileModelType fileType) {
+    public FileType fileType(FileModelType fileType) {
         this.fileType = fileType;
         return this;
     }
 
-    public void setFileType(fileModelType fileType) {
+    public void setFileType(FileModelType fileType) {
         this.fileType = fileType;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
