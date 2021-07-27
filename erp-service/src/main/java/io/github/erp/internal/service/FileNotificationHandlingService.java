@@ -1,7 +1,7 @@
 package io.github.erp.internal.service;
 
 /*-
- * Leassets Server - Leases and assets management platform
+ *  Server - Leases and assets management platform
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,15 +19,15 @@ package io.github.erp.internal.service;
  */
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.github.erp.domain.LeassetsMessageToken;
+import io.github.erp.domain.MessageToken;
 import io.github.erp.internal.framework.fileProcessing.FileUploadProcessorChain;
 import io.github.erp.internal.framework.service.FileUploadPersistenceService;
 import io.github.erp.internal.framework.service.HandlingService;
 import io.github.erp.internal.framework.service.TokenPersistenceService;
 import io.github.erp.internal.framework.util.TokenGenerator;
 import io.github.erp.internal.model.FileNotification;
-import io.github.erp.service.dto.LeassetsFileUploadDTO;
-import io.github.erp.service.dto.LeassetsMessageTokenDTO;
+import io.github.erp.service.dto.FileUploadDTO;
+import io.github.erp.service.dto.MessageTokenDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -47,11 +47,11 @@ public class FileNotificationHandlingService implements HandlingService<FileNoti
     public static Logger log = LoggerFactory.getLogger(FileNotificationHandlingService.class);
 
     private final TokenGenerator tokenGenerator;
-    private final TokenPersistenceService<LeassetsMessageTokenDTO, LeassetsMessageToken> messageTokenService;
-    private final FileUploadPersistenceService<LeassetsFileUploadDTO> fileUploadService;
+    private final TokenPersistenceService<MessageTokenDTO, MessageToken> messageTokenService;
+    private final FileUploadPersistenceService<FileUploadDTO> fileUploadService;
     private final FileUploadProcessorChain fileUploadProcessorChain;
 
-    public FileNotificationHandlingService(TokenGenerator tokenGenerator, TokenPersistenceService<LeassetsMessageTokenDTO, LeassetsMessageToken> messageTokenService, FileUploadPersistenceService<LeassetsFileUploadDTO> fileUploadService, FileUploadProcessorChain fileUploadProcessorChain) {
+    public FileNotificationHandlingService(TokenGenerator tokenGenerator, TokenPersistenceService<MessageTokenDTO, MessageToken> messageTokenService, FileUploadPersistenceService<FileUploadDTO> fileUploadService, FileUploadProcessorChain fileUploadProcessorChain) {
         this.tokenGenerator = tokenGenerator;
         this.messageTokenService = messageTokenService;
         this.fileUploadService = fileUploadService;
@@ -71,7 +71,7 @@ public class FileNotificationHandlingService implements HandlingService<FileNoti
         payload.setTimestamp(timestamp);
 
         // @formatter:off
-        LeassetsMessageToken messageToken = new LeassetsMessageToken()
+        MessageToken messageToken = new MessageToken()
             .tokenValue(token)
             .description(payload.getDescription())
             .timeSent(timestamp);
@@ -81,21 +81,21 @@ public class FileNotificationHandlingService implements HandlingService<FileNoti
             payload.setMessageToken(messageToken.getTokenValue());
         }
 
-        LeassetsFileUploadDTO fileUpload =
+        FileUploadDTO fileUpload =
             fileUploadService.findOne(Long.parseLong(payload.getFileId())).orElseThrow(() -> new IllegalArgumentException("Id # : " + payload.getFileId() + " does not exist"));
 
         saveFileUploadsData(payload, token, fileUpload);
 
-        LeassetsMessageTokenDTO dto = messageTokenService.save(messageToken);
+        MessageTokenDTO dto = messageTokenService.save(messageToken);
         dto.setContentFullyEnqueued(true);
 
     }
 
-    private void saveFileUploadsData(FileNotification payload, String token, LeassetsFileUploadDTO fileUpload) {
+    private void saveFileUploadsData(FileNotification payload, String token, FileUploadDTO fileUpload) {
         log.debug("FileUploadDTO object fetched from DB with id: {}", fileUpload.getId());
         if (!PROCESSED_TOKENS.contains(payload.getMessageToken())) {
             log.debug("Processing message with token {}", payload.getMessageToken());
-            List<LeassetsFileUploadDTO> processedFiles = fileUploadProcessorChain.apply(fileUpload, payload);
+            List<FileUploadDTO> processedFiles = fileUploadProcessorChain.apply(fileUpload, payload);
             fileUpload.setUploadProcessed(true);
             fileUpload.setUploadSuccessful(true);
             fileUpload.setUploadToken(token);

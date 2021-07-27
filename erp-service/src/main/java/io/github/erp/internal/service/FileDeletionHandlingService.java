@@ -1,7 +1,7 @@
 package io.github.erp.internal.service;
 
 /*-
- * Leassets Server - Leases and assets management platform
+ *  Server - Leases and assets management platform
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,12 +18,12 @@ package io.github.erp.internal.service;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.domain.enumeration.LeassetsFileModelType;
+import io.github.erp.domain.enumeration.FileModelType;
 import io.github.erp.internal.framework.fileProcessing.FileUploadProcessorChain;
 import io.github.erp.internal.framework.service.HandlingService;
 import io.github.erp.internal.model.FileNotification;
-import io.github.erp.service.LeassetsFileTypeService;
-import io.github.erp.service.LeassetsFileUploadService;
+import io.github.erp.service.FileTypeService;
+import io.github.erp.service.FileUploadService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -35,14 +35,14 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Service("fileDeletionHandlingService")
 public class FileDeletionHandlingService implements HandlingService<Long> {
-    private final LeassetsFileTypeService fileTypeService;
-    private final LeassetsFileUploadService fileUploadService;
+    private final FileTypeService fileTypeService;
+    private final FileUploadService fileUploadService;
 
     private final FileUploadProcessorChain fileUploadDeletionProcessorChain;
 
     public FileDeletionHandlingService(
-        final LeassetsFileTypeService fileTypeService,
-        final LeassetsFileUploadService fileUploadService,
+        final FileTypeService fileTypeService,
+        final FileUploadService fileUploadService,
         final @Qualifier("fileUploadDeletionProcessorChain")
             FileUploadProcessorChain fileUploadDeletionProcessorChain
     ) {
@@ -63,12 +63,12 @@ public class FileDeletionHandlingService implements HandlingService<Long> {
             .findOne(payload)
             .ifPresent(
                 file -> {
-                    final AtomicReference<LeassetsFileModelType> type = new AtomicReference<>();
+                    final AtomicReference<FileModelType> type = new AtomicReference<>();
                     fileTypeService
-                        .findOne(file.getLeassetsFileTypeId())
+                        .findOne(file.getFileTypeId())
                         .ifPresent(
                             fileType -> {
-                                type.set(fileType.getLeassetsfileType());
+                                type.set(fileType.getfileType());
 
                                 fileUploadDeletionProcessorChain.apply(
                                     file,
@@ -78,7 +78,7 @@ public class FileDeletionHandlingService implements HandlingService<Long> {
                                         .filename(file.getFileName())
                                         .messageToken(file.getUploadToken())
                                         .timestamp(System.currentTimeMillis())
-                                        .leassetsfileModelType(type.get())
+                                        .fileModelType(type.get())
                                         .build()
                                 );
                             }

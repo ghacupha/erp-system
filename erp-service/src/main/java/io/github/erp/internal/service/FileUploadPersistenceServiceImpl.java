@@ -1,7 +1,7 @@
 package io.github.erp.internal.service;
 
 /*-
- * Leassets Server - Leases and assets management platform
+ *  Server - Leases and assets management platform
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,28 +19,28 @@ package io.github.erp.internal.service;
  */
 
 import io.github.erp.internal.framework.service.FileUploadPersistenceService;
-import io.github.erp.service.LeassetsFileUploadService;
-import io.github.erp.service.dto.LeassetsFileUploadDTO;
+import io.github.erp.service.FileUploadService;
+import io.github.erp.service.dto.FileUploadDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service("fileUploadPersistenceService")
-public class FileUploadPersistenceServiceImpl implements FileUploadPersistenceService<LeassetsFileUploadDTO> {
+public class FileUploadPersistenceServiceImpl implements FileUploadPersistenceService<FileUploadDTO> {
 
-    private final LeassetsFileUploadService leassetsFileUploadService;
+    private final FileUploadService FileUploadService;
 
-    public FileUploadPersistenceServiceImpl(LeassetsFileUploadService leassetsFileUploadService) {
-        this.leassetsFileUploadService = leassetsFileUploadService;
+    public FileUploadPersistenceServiceImpl(FileUploadService FileUploadService) {
+        this.FileUploadService = FileUploadService;
     }
 
     @Override
-    public Optional<LeassetsFileUploadDTO> findOne(long fileUploadDTOId) {
-        return leassetsFileUploadService.findOne(fileUploadDTOId);
+    public Optional<FileUploadDTO> findOne(long fileUploadDTOId) {
+        return FileUploadService.findOne(fileUploadDTOId);
     }
 
     @Override
-    public LeassetsFileUploadDTO save(LeassetsFileUploadDTO fileUpload) {
-        return leassetsFileUploadService.save(fileUpload);
+    public FileUploadDTO save(FileUploadDTO fileUpload) {
+        return FileUploadService.save(fileUpload);
     }
 }

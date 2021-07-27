@@ -1,7 +1,7 @@
 package io.github.erp.internal.service;
 
 /*-
- * Leassets Server - Leases and assets management platform
+ *  Server - Leases and assets management platform
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,9 +20,9 @@ package io.github.erp.internal.service;
 
 import io.github.jhipster.service.filter.StringFilter;
 import io.github.erp.internal.framework.fileProcessing.TokenValueSearch;
-import io.github.erp.service.LeassetsMessageTokenQueryService;
-import io.github.erp.service.dto.LeassetsMessageTokenCriteria;
-import io.github.erp.service.dto.LeassetsMessageTokenDTO;
+import io.github.erp.service.MessageTokenQueryService;
+import io.github.erp.service.dto.MessageTokenCriteria;
+import io.github.erp.service.dto.MessageTokenDTO;
 import org.springframework.stereotype.Service;
 
 /**
@@ -31,16 +31,16 @@ import org.springframework.stereotype.Service;
 @Service("stringTokenValueSearch")
 public class StringTokenValueSearch implements TokenValueSearch<String> {
 
-    private final LeassetsMessageTokenQueryService messageTokenQueryService;
+    private final MessageTokenQueryService messageTokenQueryService;
 
-    public StringTokenValueSearch(final LeassetsMessageTokenQueryService messageTokenQueryService) {
+    public StringTokenValueSearch(final MessageTokenQueryService messageTokenQueryService) {
         this.messageTokenQueryService = messageTokenQueryService;
     }
 
-    public LeassetsMessageTokenDTO getMessageToken(final String tokenValue) {
+    public MessageTokenDTO getMessageToken(final String tokenValue) {
         StringFilter tokenFilter = new StringFilter();
         tokenFilter.setEquals(tokenValue);
-        LeassetsMessageTokenCriteria tokenValueCriteria = new LeassetsMessageTokenCriteria();
+        MessageTokenCriteria tokenValueCriteria = new MessageTokenCriteria();
         tokenValueCriteria.setTokenValue(tokenFilter);
         return messageTokenQueryService.findByCriteria(tokenValueCriteria).get(0);
     }

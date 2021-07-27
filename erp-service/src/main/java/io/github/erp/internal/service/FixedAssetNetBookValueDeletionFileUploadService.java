@@ -1,7 +1,7 @@
 package io.github.erp.internal.service;
 
 /*-
- * Leassets Server - Leases and assets management platform
+ *  Server - Leases and assets management platform
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,10 +21,10 @@ package io.github.erp.internal.service;
 import io.github.jhipster.service.filter.StringFilter;
 import io.github.erp.internal.framework.service.DeletionUploadService;
 import io.github.erp.service.FixedAssetNetBookValueQueryService;
-import io.github.erp.service.LeassetsFileUploadService;
+import io.github.erp.service.FileUploadService;
 import io.github.erp.service.dto.FixedAssetNetBookValueCriteria;
 import io.github.erp.service.dto.FixedAssetNetBookValueDTO;
-import io.github.erp.service.dto.LeassetsFileUploadDTO;
+import io.github.erp.service.dto.FileUploadDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,17 +33,17 @@ import java.util.Optional;
 @Service("fixedAssetNetBookValueDeletionFileUploadService")
 public class FixedAssetNetBookValueDeletionFileUploadService  implements DeletionUploadService<FixedAssetNetBookValueDTO> {
 
-    private final LeassetsFileUploadService leassetsFileUploadService;
+    private final FileUploadService FileUploadService;
     private final FixedAssetNetBookValueQueryService fixedAssetNetBookValueQueryService;
 
-    public FixedAssetNetBookValueDeletionFileUploadService(LeassetsFileUploadService leassetsFileUploadService, FixedAssetNetBookValueQueryService fixedAssetNetBookValueQueryService) {
-        this.leassetsFileUploadService = leassetsFileUploadService;
+    public FixedAssetNetBookValueDeletionFileUploadService(FileUploadService FileUploadService, FixedAssetNetBookValueQueryService fixedAssetNetBookValueQueryService) {
+        this.FileUploadService = FileUploadService;
         this.fixedAssetNetBookValueQueryService = fixedAssetNetBookValueQueryService;
     }
 
     @Override
-    public Optional<LeassetsFileUploadDTO> findOne(long fileId) {
-        return leassetsFileUploadService.findOne(fileId);
+    public Optional<FileUploadDTO> findOne(long fileId) {
+        return FileUploadService.findOne(fileId);
     }
 
     @Override

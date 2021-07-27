@@ -1,6 +1,6 @@
 
 /*-
- * Leassets Server - Leases and assets management platform
+ *  Server - Leases and assets management platform
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ import io.github.erp.internal.framework.FileUploadsProperties;
 import io.github.erp.internal.framework.Mapping;
 import io.github.erp.internal.framework.excel.ExcelFileDeserializer;
 import io.github.erp.internal.model.sampleDataModel.CurrencyTableEVM;
-import io.github.erp.service.LeassetsFileUploadService;
+import io.github.erp.service.FileUploadService;
 import io.github.erp.service.dto.CurrencyTableDTO;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
@@ -59,7 +59,7 @@ public class CurrencyTableBatchConfig {
     private ExcelFileDeserializer<CurrencyTableEVM> deserializer;
 
     @Autowired
-    private LeassetsFileUploadService fileUploadService;
+    private FileUploadService fileUploadService;
 
     @Autowired
     private FileUploadsProperties fileUploadsProperties;

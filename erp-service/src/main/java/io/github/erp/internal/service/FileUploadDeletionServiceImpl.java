@@ -1,7 +1,7 @@
 package io.github.erp.internal.service;
 
 /*-
- * Leassets Server - Leases and assets management platform
+ *  Server - Leases and assets management platform
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,8 +19,8 @@ package io.github.erp.internal.service;
  */
 
 import io.github.erp.internal.framework.service.FileUploadDeletionService;
-import io.github.erp.service.LeassetsFileUploadService;
-import io.github.erp.service.dto.LeassetsFileUploadDTO;
+import io.github.erp.service.FileUploadService;
+import io.github.erp.service.dto.FileUploadDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -30,22 +30,22 @@ import java.util.Optional;
  * has been removed from the library
  */
 @Service("fileUploadDeletionService")
-public class FileUploadDeletionServiceImpl implements FileUploadDeletionService<LeassetsFileUploadDTO> {
+public class FileUploadDeletionServiceImpl implements FileUploadDeletionService<FileUploadDTO> {
 
-    private final LeassetsFileUploadService leassetsFileUploadService;
+    private final FileUploadService FileUploadService;
 
-    public FileUploadDeletionServiceImpl(LeassetsFileUploadService leassetsFileUploadService) {
-        this.leassetsFileUploadService = leassetsFileUploadService;
+    public FileUploadDeletionServiceImpl(FileUploadService FileUploadService) {
+        this.FileUploadService = FileUploadService;
     }
 
     @Override
-    public Optional<LeassetsFileUploadDTO> findOne(long fileId) {
-        return leassetsFileUploadService.findOne(fileId);
+    public Optional<FileUploadDTO> findOne(long fileId) {
+        return FileUploadService.findOne(fileId);
     }
 
     @Override
     public void delete(Long id) {
 
-        leassetsFileUploadService.delete(id);
+        FileUploadService.delete(id);
     }
 }

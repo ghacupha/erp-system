@@ -1,6 +1,6 @@
 
 /*-
- * Leassets Server - Leases and assets management platform
+ *  Server - Leases and assets management platform
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@ import io.github.erp.internal.framework.FileUploadsProperties;
 import io.github.erp.internal.framework.batch.ListPartition;
 import io.github.erp.internal.framework.excel.ExcelFileDeserializer;
 import io.github.erp.internal.model.sampleDataModel.CurrencyTableEVM;
-import io.github.erp.service.LeassetsFileUploadService;
+import io.github.erp.service.FileUploadService;
 import org.slf4j.Logger;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
@@ -46,12 +46,12 @@ public class CurrencyTableListItemReader implements ItemReader<List<CurrencyTabl
     private final FileUploadsProperties fileUploadsProperties;
 
     private final ExcelFileDeserializer<CurrencyTableEVM> deserializer;
-    private final LeassetsFileUploadService fileUploadService;
+    private final FileUploadService fileUploadService;
     private long fileId;
 
     private ListPartition<CurrencyTableEVM> currencyTableEVMPartition;
 
-    CurrencyTableListItemReader(final ExcelFileDeserializer<CurrencyTableEVM> deserializer, final LeassetsFileUploadService fileUploadService, @Value("#{jobParameters['fileId']}") long fileId,
+    CurrencyTableListItemReader(final ExcelFileDeserializer<CurrencyTableEVM> deserializer, final FileUploadService fileUploadService, @Value("#{jobParameters['fileId']}") long fileId,
                                 final FileUploadsProperties fileUploadsProperties) {
         this.deserializer = deserializer;
         this.fileUploadService = fileUploadService;

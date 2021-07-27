@@ -1,6 +1,6 @@
 
 /*-
- * Leassets Server - Leases and assets management platform
+ *  Server - Leases and assets management platform
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -47,9 +47,9 @@ public class BatchSupportedFileUploadProcessor implements FileUploadProcessor<Fi
     }
 
     @Override
-    public LeassetsFileUploadDTO processFileUpload(final LeassetsFileUploadDTO fileUpload, final FileNotification fileNotification) {
+    public FileUploadDTO processFileUpload(final FileUploadDTO fileUpload, final FileNotification fileNotification) {
 
-        if (fileNotification.getleassetsfileModelType() == fileModelType) {
+        if (fileNotification.getfileModelType() == fileModelType) {
             log.debug("File-upload type confirmed commencing process...");
 
             JobParametersBuilder jobParametersBuilder = new JobParametersBuilder();

@@ -1,7 +1,7 @@
 package io.github.erp.internal.model;
 
 /*-
- * Leassets Server - Leases and assets management platform
+ *  Server - Leases and assets management platform
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@ package io.github.erp.internal.model;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.domain.enumeration.LeassetsFileModelType;
+import io.github.erp.domain.enumeration.FileModelType;
 import io.github.erp.internal.framework.model.TokenizableMessage;
 
 /**
@@ -37,15 +37,15 @@ public class FileNotification implements TokenizableMessage<String> {
 
     private String description;
 
-    private LeassetsFileModelType leassetsfileModelType;
+    private FileModelType fileModelType;
 
-    public FileNotification(String fileId, long timestamp, String filename, String messageToken, String description, LeassetsFileModelType leassetsfileModelType) {
+    public FileNotification(String fileId, long timestamp, String filename, String messageToken, String description, FileModelType fileModelType) {
             this.fileId = fileId;
             this.timestamp = timestamp;
             this.filename = filename;
             this.messageToken = messageToken;
             this.description = description;
-            this.leassetsfileModelType = leassetsfileModelType;
+            this.fileModelType = fileModelType;
         }
 
         public FileNotification() {
@@ -75,8 +75,8 @@ public class FileNotification implements TokenizableMessage<String> {
             return this.description;
         }
 
-        public LeassetsFileModelType getleassetsfileModelType() {
-            return this.leassetsfileModelType;
+        public FileModelType getfileModelType() {
+            return this.fileModelType;
         }
 
         public void setFileId(String fileId) {
@@ -99,8 +99,8 @@ public class FileNotification implements TokenizableMessage<String> {
             this.description = description;
         }
 
-        public void setleassetsfileModelType(LeassetsFileModelType leassetsfileModelType) {
-            this.leassetsfileModelType = leassetsfileModelType;
+        public void setfileModelType(FileModelType fileModelType) {
+            this.fileModelType = fileModelType;
         }
 
         public boolean equals(final Object o) {
@@ -123,9 +123,9 @@ public class FileNotification implements TokenizableMessage<String> {
             final Object other$description = other.getDescription();
             if (this$description == null ? other$description != null : !this$description.equals(other$description))
                 return false;
-            final Object this$leassetsfileModelType = this.getleassetsfileModelType();
-            final Object other$leassetsfileModelType = other.getleassetsfileModelType();
-            if (this$leassetsfileModelType == null ? other$leassetsfileModelType != null : !this$leassetsfileModelType.equals(other$leassetsfileModelType))
+            final Object this$fileModelType = this.getfileModelType();
+            final Object other$fileModelType = other.getfileModelType();
+            if (this$fileModelType == null ? other$fileModelType != null : !this$fileModelType.equals(other$fileModelType))
                 return false;
             return true;
         }
@@ -147,13 +147,13 @@ public class FileNotification implements TokenizableMessage<String> {
             result = result * PRIME + ($messageToken == null ? 43 : $messageToken.hashCode());
             final Object $description = this.getDescription();
             result = result * PRIME + ($description == null ? 43 : $description.hashCode());
-            final Object $leassetsfileModelType = this.getleassetsfileModelType();
-            result = result * PRIME + ($leassetsfileModelType == null ? 43 : $leassetsfileModelType.hashCode());
+            final Object $fileModelType = this.getfileModelType();
+            result = result * PRIME + ($fileModelType == null ? 43 : $fileModelType.hashCode());
             return result;
         }
 
         public String toString() {
-            return "FileNotification(fileId=" + this.getFileId() + ", timestamp=" + this.getTimestamp() + ", filename=" + this.getFilename() + ", messageToken=" + this.getMessageToken() + ", description=" + this.getDescription() + ", leassetsfileModelType=" + this.getleassetsfileModelType() + ")";
+            return "FileNotification(fileId=" + this.getFileId() + ", timestamp=" + this.getTimestamp() + ", filename=" + this.getFilename() + ", messageToken=" + this.getMessageToken() + ", description=" + this.getDescription() + ", fileModelType=" + this.getfileModelType() + ")";
         }
 
         public static class FileNotificationBuilder {
@@ -162,7 +162,7 @@ public class FileNotification implements TokenizableMessage<String> {
             private String filename;
             private String messageToken;
             private String description;
-            private LeassetsFileModelType leassetsfileModelType;
+            private FileModelType fileModelType;
 
             FileNotificationBuilder() {
             }
@@ -192,17 +192,17 @@ public class FileNotification implements TokenizableMessage<String> {
                 return this;
             }
 
-            public FileNotificationBuilder leassetsfileModelType(LeassetsFileModelType leassetsfileModelType) {
-                this.leassetsfileModelType = leassetsfileModelType;
+            public FileNotificationBuilder fileModelType(FileModelType fileModelType) {
+                this.fileModelType = fileModelType;
                 return this;
             }
 
             public FileNotification build() {
-                return new FileNotification(fileId, timestamp, filename, messageToken, description, leassetsfileModelType);
+                return new FileNotification(fileId, timestamp, filename, messageToken, description, fileModelType);
             }
 
             public String toString() {
-                return "FileNotification.FileNotificationBuilder(fileId=" + this.fileId + ", timestamp=" + this.timestamp + ", filename=" + this.filename + ", messageToken=" + this.messageToken + ", description=" + this.description + ", leassetsfileModelType=" + this.leassetsfileModelType + ")";
+                return "FileNotification.FileNotificationBuilder(fileId=" + this.fileId + ", timestamp=" + this.timestamp + ", filename=" + this.filename + ", messageToken=" + this.messageToken + ", description=" + this.description + ", fileModelType=" + this.fileModelType + ")";
             }
         }
 }
