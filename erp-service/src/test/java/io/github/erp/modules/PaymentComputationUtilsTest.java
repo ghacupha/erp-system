@@ -1,6 +1,5 @@
 package io.github.erp.modules;
 
-import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,9 +8,7 @@ import java.math.RoundingMode;
 
 import static io.github.erp.modules.PaymentComputationUtils.onePlusVAT;
 import static io.github.erp.modules.PaymentComputationUtils.queryNumerical;
-import static io.github.erp.modules.PaymentReferenceCodes.BASE_SYSTEM_CURRENCY_CODE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class PaymentComputationUtilsTest extends PaymentComputationTests {
 

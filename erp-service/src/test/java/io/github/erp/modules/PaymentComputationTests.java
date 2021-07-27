@@ -32,7 +32,6 @@ public class PaymentComputationTests {
     protected BigDecimal SERVICE_CHARGE = BigDecimal.valueOf(0.07);
     protected BigDecimal WITHHOLDING_TX_IMPORTED_SERVICE = BigDecimal.valueOf(0.2);
 
-    // todo define tax rules
     protected TaxRuleInt taxRule = TaxRuleInt.builder()
         .telcoExciseDuty(TELCO_EXCISE_DUTY)
         .valueAddedTax(VALUE_ADDED_TAX)
