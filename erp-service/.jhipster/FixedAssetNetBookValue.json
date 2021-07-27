@@ -50,5 +50,6 @@
   "readOnly": false,
   "pagination": "pagination",
   "name": "FixedAssetNetBookValue",
-  "changelogDate": "20210323123701"
+  "changelogDate": "20210323123701",
+  "clientRootFolder": "assets"
 }

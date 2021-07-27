@@ -51,5 +51,6 @@
   "pagination": "pagination",
   "name": "FixedAssetDepreciation",
   "changelogDate": "20210323133701",
-  "clientRootFolder": "assets"
+  "clientRootFolder": "assets",
+  "microserviceName": "erpService"
 }
