@@ -1,7 +1,7 @@
 package io.github.erp.internal.batch;
 
 /*-
- * Leassets Server - Leases and assets management platform
+ *  Server - Leases and assets management platform
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@ package io.github.erp.internal.batch;
 
 import io.github.erp.internal.framework.batch.DeletionJobListener;
 import io.github.erp.internal.framework.service.FileUploadDeletionService;
-import io.github.erp.service.dto.LeassetsFileUploadDTO;
+import io.github.erp.service.dto.FileUploadDTO;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ import org.springframework.context.annotation.Configuration;
 public class GeneralBatchConfiguration {
 
     @Autowired
-    private FileUploadDeletionService<LeassetsFileUploadDTO> fileUploadDeletionService;
+    private FileUploadDeletionService<FileUploadDTO> fileUploadDeletionService;
 
 
     @Bean("deletionJobListener")

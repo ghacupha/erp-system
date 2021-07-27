@@ -1,7 +1,7 @@
 package io.github.erp.internal.resource.decorator;
 
 /*-
- * Leassets Server - Leases and assets management platform
+ *  Server - Leases and assets management platform
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,8 +18,8 @@ package io.github.erp.internal.resource.decorator;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.service.dto.LeassetsFileUploadCriteria;
-import io.github.erp.service.dto.LeassetsFileUploadDTO;
+import io.github.erp.service.dto.FileUploadCriteria;
+import io.github.erp.service.dto.FileUploadDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,7 +42,7 @@ public interface IFileUploadResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new fileUploadDTO, or with status {@code 400 (Bad Request)} if the fileUpload has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    ResponseEntity<LeassetsFileUploadDTO> createFileUpload(@Valid @RequestBody LeassetsFileUploadDTO fileUploadDTO) throws URISyntaxException;
+    ResponseEntity<FileUploadDTO> createFileUpload(@Valid @RequestBody FileUploadDTO fileUploadDTO) throws URISyntaxException;
 
     /**
      * {@code PUT  /file-uploads} : Updates an existing fileUpload.
@@ -52,7 +52,7 @@ public interface IFileUploadResource {
      * status {@code 500 (Internal Server Error)} if the fileUploadDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    ResponseEntity<LeassetsFileUploadDTO> updateFileUpload(@Valid @RequestBody LeassetsFileUploadDTO fileUploadDTO) throws URISyntaxException;
+    ResponseEntity<FileUploadDTO> updateFileUpload(@Valid @RequestBody FileUploadDTO fileUploadDTO) throws URISyntaxException;
 
     /**
      * {@code GET  /file-uploads} : get all the fileUploads.
@@ -61,7 +61,7 @@ public interface IFileUploadResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of fileUploads in body.
      */
-    ResponseEntity<List<LeassetsFileUploadDTO>> getAllFileUploads(LeassetsFileUploadCriteria criteria, Pageable pageable);
+    ResponseEntity<List<FileUploadDTO>> getAllFileUploads(FileUploadCriteria criteria, Pageable pageable);
 
     /**
      * {@code GET  /file-uploads/count} : count all the fileUploads.
@@ -69,7 +69,7 @@ public interface IFileUploadResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
-    ResponseEntity<Long> countFileUploads(LeassetsFileUploadCriteria criteria);
+    ResponseEntity<Long> countFileUploads(FileUploadCriteria criteria);
 
     /**
      * {@code GET  /file-uploads/:id} : get the "id" fileUpload.
@@ -77,7 +77,7 @@ public interface IFileUploadResource {
      * @param id the id of the fileUploadDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the fileUploadDTO, or with status {@code 404 (Not Found)}.
      */
-    ResponseEntity<LeassetsFileUploadDTO> getFileUpload(@PathVariable Long id);
+    ResponseEntity<FileUploadDTO> getFileUpload(@PathVariable Long id);
 
     /**
      * {@code DELETE  /file-uploads/:id} : delete the "id" fileUpload.

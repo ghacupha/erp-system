@@ -1,7 +1,7 @@
 package io.github.erp.internal.resource;
 
 /*-
- * Leassets Server - Leases and assets management platform
+ *  Server - Leases and assets management platform
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,13 +19,13 @@ package io.github.erp.internal.resource;
  */
 
 import io.github.jhipster.web.util.HeaderUtil;
-import io.github.erp.domain.LeassetsFileType;
+import io.github.erp.domain.FileType;
 import io.github.erp.internal.framework.service.HandlingService;
 import io.github.erp.internal.model.FileNotification;
 import io.github.erp.internal.resource.decorator.IFileUploadResource;
-import io.github.erp.service.LeassetsFileTypeService;
-import io.github.erp.service.dto.LeassetsFileUploadCriteria;
-import io.github.erp.service.dto.LeassetsFileUploadDTO;
+import io.github.erp.service.FileTypeService;
+import io.github.erp.service.dto.FileUploadCriteria;
+import io.github.erp.service.dto.FileUploadDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,10 +58,10 @@ public class AppFileUploadResource implements IFileUploadResource {
     private final IFileUploadResource fileUploadResource;
     private final HandlingService<FileNotification> fileNotificationHandlingService;
     private final HandlingService<Long> fileDeletionHandlingService;
-    private final LeassetsFileTypeService fileTypeService;
+    private final FileTypeService fileTypeService;
 
     public AppFileUploadResource(final IFileUploadResource fileUploadResourceDecorator, final HandlingService<FileNotification> fileNotificationHandlingService,
-                                 HandlingService<Long> fileDeletionHandlingService, final LeassetsFileTypeService fileTypeService) {
+                                 HandlingService<Long> fileDeletionHandlingService, final FileTypeService fileTypeService) {
         this.fileUploadResource = fileUploadResourceDecorator;
         this.fileNotificationHandlingService = fileNotificationHandlingService;
         this.fileDeletionHandlingService = fileDeletionHandlingService;
@@ -76,21 +76,21 @@ public class AppFileUploadResource implements IFileUploadResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/file-uploads")
-    public ResponseEntity<LeassetsFileUploadDTO> createFileUpload(@Valid @RequestBody LeassetsFileUploadDTO fileUploadDTO) throws URISyntaxException {
+    public ResponseEntity<FileUploadDTO> createFileUpload(@Valid @RequestBody FileUploadDTO fileUploadDTO) throws URISyntaxException {
 
         log.debug("Request received for file-upload processing with internal API : {}", fileUploadDTO);
 
-        ResponseEntity<LeassetsFileUploadDTO> responseEntity = fileUploadResource.createFileUpload(fileUploadDTO);
+        ResponseEntity<FileUploadDTO> responseEntity = fileUploadResource.createFileUpload(fileUploadDTO);
 
-        LeassetsFileType fileType = fileTypeService.findOne(fileUploadDTO.getLeassetsFileTypeId())
-            .orElseThrow(() -> new NoSuchElementException("FileType of ID : " + fileUploadDTO.getLeassetsFileTypeId()+ " not found"));
+        FileType fileType = fileTypeService.findOne(fileUploadDTO.getFileTypeId())
+            .orElseThrow(() -> new NoSuchElementException("FileType of ID : " + fileUploadDTO.getFileTypeId()+ " not found"));
 
         log.debug("Invoking token-processing for file-type of id : {}", fileType.getId());
 
         fileNotificationHandlingService.handle(FileNotification.builder()
                                                                .filename(fileUploadDTO.getFileName())
                                                                .description(fileUploadDTO.getDescription())
-                                                               .leassetsfileModelType(fileType.getLeassetsfileType())
+                                                               .fileModelType(fileType.getfileType())
                                                                .fileId(String.valueOf(Objects.requireNonNull(responseEntity.getBody()).getId()))
                                                                .build()
         );
@@ -106,7 +106,7 @@ public class AppFileUploadResource implements IFileUploadResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/file-uploads")
-    public ResponseEntity<LeassetsFileUploadDTO> updateFileUpload(@Valid @RequestBody LeassetsFileUploadDTO fileUploadDTO) throws URISyntaxException {
+    public ResponseEntity<FileUploadDTO> updateFileUpload(@Valid @RequestBody FileUploadDTO fileUploadDTO) throws URISyntaxException {
 
         return fileUploadResource.updateFileUpload(fileUploadDTO);
     }
@@ -119,7 +119,7 @@ public class AppFileUploadResource implements IFileUploadResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of fileUploads in body.
      */
     @GetMapping("/file-uploads")
-    public ResponseEntity<List<LeassetsFileUploadDTO>> getAllFileUploads (LeassetsFileUploadCriteria criteria, Pageable pageable) {
+    public ResponseEntity<List<FileUploadDTO>> getAllFileUploads (FileUploadCriteria criteria, Pageable pageable) {
 
         return fileUploadResource.getAllFileUploads(criteria, pageable);
     }
@@ -131,7 +131,7 @@ public class AppFileUploadResource implements IFileUploadResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
     @GetMapping("/file-uploads/count")
-    public ResponseEntity<Long> countFileUploads (LeassetsFileUploadCriteria criteria) {
+    public ResponseEntity<Long> countFileUploads (FileUploadCriteria criteria) {
 
         return fileUploadResource.countFileUploads(criteria);
     }
@@ -143,7 +143,7 @@ public class AppFileUploadResource implements IFileUploadResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the fileUploadDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/file-uploads/{id}")
-    public ResponseEntity<LeassetsFileUploadDTO> getFileUpload(@PathVariable Long id) {
+    public ResponseEntity<FileUploadDTO> getFileUpload(@PathVariable Long id) {
 
         return fileUploadResource.getFileUpload(id);
     }

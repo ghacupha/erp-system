@@ -1,6 +1,6 @@
 
 /*-
- * Leassets Server - Leases and assets management platform
+ *  Server - Leases and assets management platform
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@ package io.github.erp.internal.framework.fileProcessing;
 
 import com.google.common.collect.ImmutableList;
 import io.github.erp.internal.model.FileNotification;
-import io.github.erp.service.dto.LeassetsFileUploadDTO;
+import io.github.erp.service.dto.FileUploadDTO;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -31,9 +31,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class FileUploadProcessorChain {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(FileUploadProcessorChain.class);
-    private final List<FileUploadProcessor<LeassetsFileUploadDTO>> fileUploadProcessors;
+    private final List<FileUploadProcessor<FileUploadDTO>> fileUploadProcessors;
 
-    public FileUploadProcessorChain(final List<FileUploadProcessor<LeassetsFileUploadDTO>> fileUploadProcessors) {
+    public FileUploadProcessorChain(final List<FileUploadProcessor<FileUploadDTO>> fileUploadProcessors) {
         this.fileUploadProcessors = fileUploadProcessors;
     }
 
@@ -41,12 +41,12 @@ public class FileUploadProcessorChain {
         this.fileUploadProcessors = new CopyOnWriteArrayList<>();
     }
 
-    public void addProcessor(FileUploadProcessor<LeassetsFileUploadDTO> fileUploadProcessor) {
+    public void addProcessor(FileUploadProcessor<FileUploadDTO> fileUploadProcessor) {
         log.info("Adding new file-upload processor {}", fileUploadProcessor);
         this.fileUploadProcessors.add(fileUploadProcessor);
     }
 
-    public List<LeassetsFileUploadDTO> apply(LeassetsFileUploadDTO fileUploadDTO, FileNotification fileNotification) {
+    public List<FileUploadDTO> apply(FileUploadDTO fileUploadDTO, FileNotification fileNotification) {
         log.debug("Applying {} file upload processors to file-upload {} with notification {}", this.fileUploadProcessors.size(), fileUploadDTO, fileNotification);
         return fileUploadProcessors.stream().map(processor -> processor.processFileUpload(fileUploadDTO, fileNotification)).collect(ImmutableList.toImmutableList());
     }

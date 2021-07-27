@@ -1,6 +1,6 @@
 
 /*-
- * Leassets Server - Leases and assets management platform
+ *  Server - Leases and assets management platform
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
  */
 package io.github.erp.internal.framework.fileProcessing;
 
-import io.github.erp.service.dto.LeassetsMessageTokenDTO;
+import io.github.erp.service.dto.MessageTokenDTO;
 
 /**
  * To search for Message-Token entity with a certain message-token-value
@@ -30,5 +30,5 @@ import io.github.erp.service.dto.LeassetsMessageTokenDTO;
  */
 public interface TokenValueSearch<T> {
 
-    LeassetsMessageTokenDTO getMessageToken(final T tokenValue);
+    MessageTokenDTO getMessageToken(final T tokenValue);
 }

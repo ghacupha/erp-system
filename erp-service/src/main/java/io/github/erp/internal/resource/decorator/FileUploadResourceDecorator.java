@@ -1,7 +1,7 @@
 package io.github.erp.internal.resource.decorator;
 
 /*-
- * Leassets Server - Leases and assets management platform
+ *  Server - Leases and assets management platform
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,9 +18,9 @@ package io.github.erp.internal.resource.decorator;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.service.dto.LeassetsFileUploadCriteria;
-import io.github.erp.service.dto.LeassetsFileUploadDTO;
-import io.github.erp.web.rest.LeassetsFileUploadResource;
+import io.github.erp.service.dto.FileUploadCriteria;
+import io.github.erp.service.dto.FileUploadDTO;
+import io.github.erp.web.rest.FileUploadResource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -44,9 +44,9 @@ import java.util.List;
 @Component("fileUploadResourceDecorator")
 public class FileUploadResourceDecorator implements IFileUploadResource {
 
-    private final LeassetsFileUploadResource fileUploadResource;
+    private final FileUploadResource fileUploadResource;
 
-    public FileUploadResourceDecorator(final LeassetsFileUploadResource fileUploadResource) {
+    public FileUploadResourceDecorator(final FileUploadResource fileUploadResource) {
         this.fileUploadResource = fileUploadResource;
     }
 
@@ -58,9 +58,9 @@ public class FileUploadResourceDecorator implements IFileUploadResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/file-uploads")
-    public ResponseEntity<LeassetsFileUploadDTO> createFileUpload(@Valid @RequestBody LeassetsFileUploadDTO fileUploadDTO) throws URISyntaxException {
+    public ResponseEntity<FileUploadDTO> createFileUpload(@Valid @RequestBody FileUploadDTO fileUploadDTO) throws URISyntaxException {
 
-        return fileUploadResource.createLeassetsFileUpload(fileUploadDTO);
+        return fileUploadResource.createFileUpload(fileUploadDTO);
     }
 
     /**
@@ -72,9 +72,9 @@ public class FileUploadResourceDecorator implements IFileUploadResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/file-uploads")
-    public ResponseEntity<LeassetsFileUploadDTO> updateFileUpload(@Valid @RequestBody LeassetsFileUploadDTO fileUploadDTO) throws URISyntaxException {
+    public ResponseEntity<FileUploadDTO> updateFileUpload(@Valid @RequestBody FileUploadDTO fileUploadDTO) throws URISyntaxException {
 
-        return fileUploadResource.updateLeassetsFileUpload(fileUploadDTO);
+        return fileUploadResource.updateFileUpload(fileUploadDTO);
     }
 
     /**
@@ -85,9 +85,9 @@ public class FileUploadResourceDecorator implements IFileUploadResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of fileUploads in body.
      */
     @GetMapping("/file-uploads")
-    public ResponseEntity<List<LeassetsFileUploadDTO>> getAllFileUploads(LeassetsFileUploadCriteria criteria, Pageable pageable) {
+    public ResponseEntity<List<FileUploadDTO>> getAllFileUploads(FileUploadCriteria criteria, Pageable pageable) {
 
-        return fileUploadResource.getAllLeassetsFileUploads(criteria, pageable);
+        return fileUploadResource.getAllFileUploads(criteria, pageable);
     }
 
     /**
@@ -97,9 +97,9 @@ public class FileUploadResourceDecorator implements IFileUploadResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
     @GetMapping("/file-uploads/count")
-    public ResponseEntity<Long> countFileUploads(LeassetsFileUploadCriteria criteria) {
+    public ResponseEntity<Long> countFileUploads(FileUploadCriteria criteria) {
 
-        return fileUploadResource.countLeassetsFileUploads(criteria);
+        return fileUploadResource.countFileUploads(criteria);
     }
 
     /**
@@ -109,9 +109,9 @@ public class FileUploadResourceDecorator implements IFileUploadResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the fileUploadDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/file-uploads/{id}")
-    public ResponseEntity<LeassetsFileUploadDTO> getFileUpload(@PathVariable Long id) {
+    public ResponseEntity<FileUploadDTO> getFileUpload(@PathVariable Long id) {
 
-        return fileUploadResource.getLeassetsFileUpload(id);
+        return fileUploadResource.getFileUpload(id);
     }
 
     /**
@@ -123,6 +123,6 @@ public class FileUploadResourceDecorator implements IFileUploadResource {
     @DeleteMapping("/file-uploads/{id}")
     public ResponseEntity<Void> deleteFileUpload(@PathVariable Long id) {
 
-        return fileUploadResource.deleteLeassetsFileUpload(id);
+        return fileUploadResource.deleteFileUpload(id);
     }
 }

@@ -1,7 +1,7 @@
 package io.github.erp.internal.service;
 
 /*-
- * Leassets Server - Leases and assets management platform
+ *  Server - Leases and assets management platform
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@ package io.github.erp.internal.service;
 
 import io.github.erp.internal.framework.batch.BatchPersistentFileUploadService;
 import io.github.erp.internal.framework.batch.HasDataFile;
-import io.github.erp.service.LeassetsFileUploadService;
+import io.github.erp.service.FileUploadService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -29,9 +29,9 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 public class BatchPersistentFileUploadServiceImpl implements BatchPersistentFileUploadService {
 
-    private final LeassetsFileUploadService fileUploadService;
+    private final FileUploadService fileUploadService;
 
-    public BatchPersistentFileUploadServiceImpl(LeassetsFileUploadService fileUploadService) {
+    public BatchPersistentFileUploadServiceImpl(FileUploadService fileUploadService) {
         this.fileUploadService = fileUploadService;
     }
 

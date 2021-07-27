@@ -1,7 +1,7 @@
 package io.github.erp.internal.service;
 
 /*-
- * Leassets Server - Leases and assets management platform
+ *  Server - Leases and assets management platform
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,26 +18,26 @@ package io.github.erp.internal.service;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.domain.LeassetsMessageToken;
+import io.github.erp.domain.MessageToken;
 import io.github.erp.internal.framework.service.TokenPersistenceService;
-import io.github.erp.service.LeassetsMessageTokenService;
-import io.github.erp.service.dto.LeassetsMessageTokenDTO;
-import io.github.erp.service.mapper.LeassetsMessageTokenMapper;
+import io.github.erp.service.MessageTokenService;
+import io.github.erp.service.dto.MessageTokenDTO;
+import io.github.erp.service.mapper.MessageTokenMapper;
 import org.springframework.stereotype.Service;
 
 @Service("tokenPersistenceServiceImpl")
-public class TokenPersistenceServiceImpl implements TokenPersistenceService<LeassetsMessageTokenDTO, LeassetsMessageToken>{
+public class TokenPersistenceServiceImpl implements TokenPersistenceService<MessageTokenDTO, MessageToken>{
 
-    private final LeassetsMessageTokenService leassetsMessageTokenService;
-    private final LeassetsMessageTokenMapper messageTokenMapper;
+    private final MessageTokenService MessageTokenService;
+    private final MessageTokenMapper messageTokenMapper;
 
-    public TokenPersistenceServiceImpl(LeassetsMessageTokenService leassetsMessageTokenService, LeassetsMessageTokenMapper messageTokenMapper) {
-        this.leassetsMessageTokenService = leassetsMessageTokenService;
+    public TokenPersistenceServiceImpl(MessageTokenService MessageTokenService, MessageTokenMapper messageTokenMapper) {
+        this.MessageTokenService = MessageTokenService;
         this.messageTokenMapper = messageTokenMapper;
     }
 
     @Override
-    public LeassetsMessageTokenDTO save(LeassetsMessageToken persistentToken) {
-        return leassetsMessageTokenService.save(messageTokenMapper.toDto(persistentToken));
+    public MessageTokenDTO save(MessageToken persistentToken) {
+        return MessageTokenService.save(messageTokenMapper.toDto(persistentToken));
     }
 }

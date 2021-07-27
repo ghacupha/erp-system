@@ -1,7 +1,7 @@
 package io.github.erp.internal.batch;
 
 /*-
- * Leassets Server - Leases and assets management platform
+ *  Server - Leases and assets management platform
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static io.github.erp.domain.enumeration.LeassetsFileModelType.*;
+import static io.github.erp.domain.enumeration.FileModelType.*;
 
 
 /**

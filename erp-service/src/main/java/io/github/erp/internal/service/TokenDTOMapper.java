@@ -1,7 +1,7 @@
 package io.github.erp.internal.service;
 
 /*-
- * Leassets Server - Leases and assets management platform
+ *  Server - Leases and assets management platform
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,9 +20,9 @@ package io.github.erp.internal.service;
 
 import io.github.erp.internal.framework.Mapping;
 import io.github.erp.internal.framework.model.TokenDTO;
-import io.github.erp.service.dto.LeassetsMessageTokenDTO;
+import io.github.erp.service.dto.MessageTokenDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = {})
-public interface TokenDTOMapper extends Mapping<TokenDTO, LeassetsMessageTokenDTO> {
+public interface TokenDTOMapper extends Mapping<TokenDTO, MessageTokenDTO> {
 }
