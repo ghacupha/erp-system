@@ -18,11 +18,11 @@ package io.github.erp.internal.service;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.leassets.domain.LeassetsMessageToken;
-import io.github.leassets.internal.framework.service.TokenPersistenceService;
-import io.github.leassets.service.LeassetsMessageTokenService;
-import io.github.leassets.service.dto.LeassetsMessageTokenDTO;
-import io.github.leassets.service.mapper.LeassetsMessageTokenMapper;
+import io.github.erp.domain.LeassetsMessageToken;
+import io.github.erp.internal.framework.service.TokenPersistenceService;
+import io.github.erp.service.LeassetsMessageTokenService;
+import io.github.erp.service.dto.LeassetsMessageTokenDTO;
+import io.github.erp.service.mapper.LeassetsMessageTokenMapper;
 import org.springframework.stereotype.Service;
 
 @Service("tokenPersistenceServiceImpl")

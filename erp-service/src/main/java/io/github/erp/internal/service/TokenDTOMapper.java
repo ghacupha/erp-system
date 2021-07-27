@@ -18,9 +18,9 @@ package io.github.erp.internal.service;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.leassets.internal.framework.Mapping;
-import io.github.leassets.internal.framework.model.TokenDTO;
-import io.github.leassets.service.dto.LeassetsMessageTokenDTO;
+import io.github.erp.internal.framework.Mapping;
+import io.github.erp.internal.framework.model.TokenDTO;
+import io.github.erp.service.dto.LeassetsMessageTokenDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = {})

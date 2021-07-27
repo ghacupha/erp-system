@@ -19,13 +19,13 @@ package io.github.erp.internal.resource;
  */
 
 import io.github.jhipster.web.util.HeaderUtil;
-import io.github.leassets.domain.LeassetsFileType;
-import io.github.leassets.internal.framework.service.HandlingService;
-import io.github.leassets.internal.model.FileNotification;
-import io.github.leassets.internal.resource.decorator.IFileUploadResource;
-import io.github.leassets.service.LeassetsFileTypeService;
-import io.github.leassets.service.dto.LeassetsFileUploadCriteria;
-import io.github.leassets.service.dto.LeassetsFileUploadDTO;
+import io.github.erp.domain.LeassetsFileType;
+import io.github.erp.internal.framework.service.HandlingService;
+import io.github.erp.internal.model.FileNotification;
+import io.github.erp.internal.resource.decorator.IFileUploadResource;
+import io.github.erp.service.LeassetsFileTypeService;
+import io.github.erp.service.dto.LeassetsFileUploadCriteria;
+import io.github.erp.service.dto.LeassetsFileUploadDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

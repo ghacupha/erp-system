@@ -19,15 +19,15 @@ package io.github.erp.internal.service;
  */
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.github.leassets.domain.LeassetsMessageToken;
-import io.github.leassets.internal.framework.fileProcessing.FileUploadProcessorChain;
-import io.github.leassets.internal.framework.service.FileUploadPersistenceService;
-import io.github.leassets.internal.framework.service.HandlingService;
-import io.github.leassets.internal.framework.service.TokenPersistenceService;
-import io.github.leassets.internal.framework.util.TokenGenerator;
-import io.github.leassets.internal.model.FileNotification;
-import io.github.leassets.service.dto.LeassetsFileUploadDTO;
-import io.github.leassets.service.dto.LeassetsMessageTokenDTO;
+import io.github.erp.domain.LeassetsMessageToken;
+import io.github.erp.internal.framework.fileProcessing.FileUploadProcessorChain;
+import io.github.erp.internal.framework.service.FileUploadPersistenceService;
+import io.github.erp.internal.framework.service.HandlingService;
+import io.github.erp.internal.framework.service.TokenPersistenceService;
+import io.github.erp.internal.framework.util.TokenGenerator;
+import io.github.erp.internal.model.FileNotification;
+import io.github.erp.service.dto.LeassetsFileUploadDTO;
+import io.github.erp.service.dto.LeassetsMessageTokenDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -35,7 +35,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static io.github.leassets.internal.framework.AppConstants.PROCESSED_TOKENS;
+import static io.github.erp.internal.framework.AppConstants.PROCESSED_TOKENS;
 
 /**
  * This is a service that handles file-notification asynchronously.

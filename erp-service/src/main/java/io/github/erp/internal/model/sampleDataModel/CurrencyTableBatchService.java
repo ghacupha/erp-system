@@ -18,11 +18,11 @@
  */
 package io.github.erp.internal.model.sampleDataModel;
 
-import io.github.leassets.internal.framework.BatchService;
-import io.github.leassets.repository.CurrencyTableRepository;
-import io.github.leassets.repository.search.CurrencyTableSearchRepository;
-import io.github.leassets.service.dto.CurrencyTableDTO;
-import io.github.leassets.service.mapper.CurrencyTableMapper;
+import io.github.erp.internal.framework.BatchService;
+import io.github.erp.repository.CurrencyTableRepository;
+import io.github.erp.repository.search.CurrencyTableSearchRepository;
+import io.github.erp.service.dto.CurrencyTableDTO;
+import io.github.erp.service.mapper.CurrencyTableMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

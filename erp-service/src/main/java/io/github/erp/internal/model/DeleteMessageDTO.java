@@ -18,7 +18,7 @@ package io.github.erp.internal.model;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.leassets.internal.framework.model.TokenizableMessage;
+import io.github.erp.internal.framework.model.TokenizableMessage;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;

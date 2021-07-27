@@ -18,8 +18,8 @@ package io.github.erp.internal.batch;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.leassets.internal.framework.fileProcessing.BatchSupportedFileUploadProcessor;
-import io.github.leassets.internal.framework.fileProcessing.FileUploadProcessorChain;
+import io.github.erp.internal.framework.fileProcessing.BatchSupportedFileUploadProcessor;
+import io.github.erp.internal.framework.fileProcessing.FileUploadProcessorChain;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static io.github.leassets.domain.enumeration.LeassetsFileModelType.*;
+import static io.github.erp.domain.enumeration.LeassetsFileModelType.*;
 
 
 /**

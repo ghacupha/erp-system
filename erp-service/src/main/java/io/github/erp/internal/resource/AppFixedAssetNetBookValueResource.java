@@ -18,12 +18,12 @@ package io.github.erp.internal.resource;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.leassets.internal.resource.decorator.FixedAssetNetBookValueResourceDecorator;
-import io.github.leassets.internal.resource.decorator.IFixedAssetNetBookValueResource;
-import io.github.leassets.service.FixedAssetNetBookValueQueryService;
-import io.github.leassets.service.dto.FixedAssetNetBookValueCriteria;
-import io.github.leassets.service.dto.FixedAssetNetBookValueDTO;
-import io.github.leassets.web.rest.FixedAssetNetBookValueResource;
+import io.github.erp.internal.resource.decorator.FixedAssetNetBookValueResourceDecorator;
+import io.github.erp.internal.resource.decorator.IFixedAssetNetBookValueResource;
+import io.github.erp.service.FixedAssetNetBookValueQueryService;
+import io.github.erp.service.dto.FixedAssetNetBookValueCriteria;
+import io.github.erp.service.dto.FixedAssetNetBookValueDTO;
+import io.github.erp.web.rest.FixedAssetNetBookValueResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;

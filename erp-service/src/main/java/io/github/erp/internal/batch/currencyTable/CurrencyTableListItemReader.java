@@ -18,11 +18,11 @@
  */
 package io.github.erp.internal.batch.currencyTable;
 
-import io.github.leassets.internal.framework.FileUploadsProperties;
-import io.github.leassets.internal.framework.batch.ListPartition;
-import io.github.leassets.internal.framework.excel.ExcelFileDeserializer;
-import io.github.leassets.internal.model.sampleDataModel.CurrencyTableEVM;
-import io.github.leassets.service.LeassetsFileUploadService;
+import io.github.erp.internal.framework.FileUploadsProperties;
+import io.github.erp.internal.framework.batch.ListPartition;
+import io.github.erp.internal.framework.excel.ExcelFileDeserializer;
+import io.github.erp.internal.model.sampleDataModel.CurrencyTableEVM;
+import io.github.erp.service.LeassetsFileUploadService;
 import org.slf4j.Logger;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;

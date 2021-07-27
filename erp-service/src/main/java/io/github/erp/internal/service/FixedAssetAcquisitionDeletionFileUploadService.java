@@ -19,12 +19,12 @@ package io.github.erp.internal.service;
  */
 
 import io.github.jhipster.service.filter.StringFilter;
-import io.github.leassets.internal.framework.service.DeletionUploadService;
-import io.github.leassets.service.FixedAssetAcquisitionQueryService;
-import io.github.leassets.service.LeassetsFileUploadService;
-import io.github.leassets.service.dto.FixedAssetAcquisitionCriteria;
-import io.github.leassets.service.dto.FixedAssetAcquisitionDTO;
-import io.github.leassets.service.dto.LeassetsFileUploadDTO;
+import io.github.erp.internal.framework.service.DeletionUploadService;
+import io.github.erp.service.FixedAssetAcquisitionQueryService;
+import io.github.erp.service.LeassetsFileUploadService;
+import io.github.erp.service.dto.FixedAssetAcquisitionCriteria;
+import io.github.erp.service.dto.FixedAssetAcquisitionDTO;
+import io.github.erp.service.dto.LeassetsFileUploadDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

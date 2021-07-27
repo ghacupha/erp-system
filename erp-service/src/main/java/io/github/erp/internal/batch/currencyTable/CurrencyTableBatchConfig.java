@@ -19,13 +19,13 @@
 package io.github.erp.internal.batch.currencyTable;
 
 import com.google.common.collect.ImmutableList;
-import io.github.leassets.internal.framework.BatchService;
-import io.github.leassets.internal.framework.FileUploadsProperties;
-import io.github.leassets.internal.framework.Mapping;
-import io.github.leassets.internal.framework.excel.ExcelFileDeserializer;
-import io.github.leassets.internal.model.sampleDataModel.CurrencyTableEVM;
-import io.github.leassets.service.LeassetsFileUploadService;
-import io.github.leassets.service.dto.CurrencyTableDTO;
+import io.github.erp.internal.framework.BatchService;
+import io.github.erp.internal.framework.FileUploadsProperties;
+import io.github.erp.internal.framework.Mapping;
+import io.github.erp.internal.framework.excel.ExcelFileDeserializer;
+import io.github.erp.internal.model.sampleDataModel.CurrencyTableEVM;
+import io.github.erp.service.LeassetsFileUploadService;
+import io.github.erp.service.dto.CurrencyTableDTO;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;

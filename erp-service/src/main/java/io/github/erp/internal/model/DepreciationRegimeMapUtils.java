@@ -18,7 +18,7 @@ package io.github.erp.internal.model;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.leassets.domain.enumeration.DepreciationRegime;
+import io.github.erp.domain.enumeration.DepreciationRegime;
 
 public class DepreciationRegimeMapUtils {
 

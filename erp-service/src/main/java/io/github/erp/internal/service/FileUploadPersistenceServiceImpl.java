@@ -18,9 +18,9 @@ package io.github.erp.internal.service;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.leassets.internal.framework.service.FileUploadPersistenceService;
-import io.github.leassets.service.LeassetsFileUploadService;
-import io.github.leassets.service.dto.LeassetsFileUploadDTO;
+import io.github.erp.internal.framework.service.FileUploadPersistenceService;
+import io.github.erp.service.LeassetsFileUploadService;
+import io.github.erp.service.dto.LeassetsFileUploadDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

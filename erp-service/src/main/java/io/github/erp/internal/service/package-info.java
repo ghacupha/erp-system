@@ -23,7 +23,7 @@
  *
  * {@code
  *
-        package io.github.leassets.internal.service;
+        package io.github.erp.internal.service;
 
         import io.github.deposits.repository.SchemeTableRepository;
         import io.github.deposits.repository.search.SchemeTableSearchRepository;

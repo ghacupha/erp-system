@@ -18,9 +18,9 @@ package io.github.erp.internal.service;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.leassets.internal.framework.batch.BatchPersistentFileUploadService;
-import io.github.leassets.internal.framework.batch.HasDataFile;
-import io.github.leassets.service.LeassetsFileUploadService;
+import io.github.erp.internal.framework.batch.BatchPersistentFileUploadService;
+import io.github.erp.internal.framework.batch.HasDataFile;
+import io.github.erp.service.LeassetsFileUploadService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

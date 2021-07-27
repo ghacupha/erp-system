@@ -19,15 +19,15 @@
 package io.github.erp.internal.batch.fixedAssetDepreciation;
 
 import com.google.common.collect.ImmutableList;
-import io.github.leassets.domain.FixedAssetDepreciation;
-import io.github.leassets.internal.framework.BatchService;
-import io.github.leassets.internal.framework.FileUploadsProperties;
-import io.github.leassets.internal.framework.Mapping;
-import io.github.leassets.internal.framework.batch.*;
-import io.github.leassets.internal.framework.excel.ExcelFileDeserializer;
-import io.github.leassets.internal.framework.service.DeletionUploadService;
-import io.github.leassets.internal.model.FixedAssetDepreciationEVM;
-import io.github.leassets.service.dto.FixedAssetDepreciationDTO;
+import io.github.erp.domain.FixedAssetDepreciation;
+import io.github.erp.internal.framework.BatchService;
+import io.github.erp.internal.framework.FileUploadsProperties;
+import io.github.erp.internal.framework.Mapping;
+import io.github.erp.internal.framework.batch.*;
+import io.github.erp.internal.framework.excel.ExcelFileDeserializer;
+import io.github.erp.internal.framework.service.DeletionUploadService;
+import io.github.erp.internal.model.FixedAssetDepreciationEVM;
+import io.github.erp.service.dto.FixedAssetDepreciationDTO;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
