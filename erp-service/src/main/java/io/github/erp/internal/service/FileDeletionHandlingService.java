@@ -68,7 +68,7 @@ public class FileDeletionHandlingService implements HandlingService<Long> {
                         .findOne(file.getFileTypeId())
                         .ifPresent(
                             fileType -> {
-                                type.set(fileType.getfileType());
+                                type.set(fileType.getFileType());
 
                                 fileUploadDeletionProcessorChain.apply(
                                     file,
