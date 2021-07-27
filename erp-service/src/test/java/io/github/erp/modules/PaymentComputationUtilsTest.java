@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import static io.github.erp.modules.PaymentComputationUtils.onePlusVAT;
 import static io.github.erp.modules.PaymentComputationUtils.queryNumerical;
@@ -27,6 +28,6 @@ class PaymentComputationUtilsTest extends PaymentComputationTests {
     @Test
     void queryNumericalTest() {
 
-        assertThat(queryNumerical(requisition.getInvoicedAmount())).isEqualTo(Money.of(40000.00,BASE_SYSTEM_CURRENCY_CODE));
+        assertThat(queryNumerical(requisition.getInvoicedAmount())).isEqualTo(BigDecimal.valueOf(40000).setScale(2, RoundingMode.HALF_EVEN));
     }
 }
