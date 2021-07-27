@@ -15,36 +15,40 @@ import java.util.Objects;
 public class PaymentComputationUtils {
 
     /**
-     * This instance implies the requisition amount is always equal to the total expense
-     *
-     * @param paymentRequisition
-     * @param currencyCode
-     * @return
+     * This instance implies the requisition amount is always equal to the total expense. This applies to
+     * most computation types except those that include reverse VAT
      */
     static MonetaryAmount requisitionEquivalentExpense(PaymentRequisitionInt paymentRequisition, String currencyCode) {
 
         return Money.of(paymentRequisition.getInvoicedAmount().getNumber().numberValue(BigDecimal.class), currencyUnit(currencyCode));
     }
 
+    /**
+     * Given the prevailing tax-rule it returns the value of 1 + vat-rate
+     */
     static BigDecimal onePlusVAT(TaxRuleInt taxRule) {
         return taxRule.getValueAddedTax().add(BigDecimal.ONE);
     }
 
+    /**
+     * Creates currency-unit object from string description code of a
+     * currency using the English locale
+     */
     static CurrencyUnit currencyUnit(String currencyCode) {
-
         return currencyUnit(currencyCode, Locale.ENGLISH);
     }
 
     /**
      * Return a currency-unit instance for a given string currency-code
-     * @param currencyCode
-     * @return
      */
     static CurrencyUnit currencyUnit(String currencyCode, Locale locale) {
 
         return CurrencyUnitBuilder.of(currencyCode, "Provided_Currency_Code").build(true, locale);
     }
 
+    /**
+     * Query numerical value for 2 decimal places
+     */
     static BigDecimal queryNumerical(MonetaryAmount monetaryAmount) {
 
         return queryNumerical(monetaryAmount, 2);
@@ -52,8 +56,6 @@ public class PaymentComputationUtils {
 
     /**
      * Query numerical amount in a monetary amount
-     * @param monetaryAmount
-     * @return
      */
     static BigDecimal queryNumerical(MonetaryAmount monetaryAmount, final int fractionDigits) {
         Objects.requireNonNull(monetaryAmount, "Monetary-Amount required");
@@ -61,7 +63,11 @@ public class PaymentComputationUtils {
         return number.setScale(fractionDigits, RoundingMode.HALF_EVEN);
     }
 
-    static MonetaryAmount roundToZero(MonetaryAmount amount) {
+    /**
+     * takes the monetary-amount provided and rounds the value of decimal places to zero
+     * rounding up if any modulus exists
+     */
+    static MonetaryAmount roundToZeroDP(MonetaryAmount amount) {
         return Money.of(queryNumerical(amount).setScale(0, RoundingMode.UP), amount.getCurrency());
     }
 }

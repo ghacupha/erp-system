@@ -7,16 +7,15 @@ import org.javamoney.moneta.Money;
 
 import javax.money.MonetaryAmount;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
-import static io.github.erp.modules.PaymentComputationUtils.*;
+import static io.github.erp.modules.PaymentComputationUtils.currencyUnit;
 import static io.github.erp.modules.PaymentReferenceCodes.BASE_SYSTEM_CURRENCY_CODE;
 
 /**
  * In this payment computation we simply pay what has been requested withholding only
  * the withholding-VAT
  */
-public class PaymentComputation1 implements PaymentComputation, HasWithholdingVATAmount {
+public class PaymentComputation1 extends BaseComputation implements PaymentComputation, HasWithholdingVATAmount {
 
     private final TaxRuleInt taxRule;
     private final String currencyCode;
@@ -42,7 +41,7 @@ public class PaymentComputation1 implements PaymentComputation, HasWithholdingVA
         MonetaryAmount invoiceNetOfTax =
             Money.of(PaymentComputationUtils.queryNumerical(paymentRequisition.getInvoicedAmount().divide(PaymentComputationUtils.onePlusVAT(taxRule))), currencyUnit(currencyCode));
 
-        MonetaryAmount withholdingVAT = calculateWithholdingVATAmount(taxRule, invoiceNetOfTax);
+        MonetaryAmount withholdingVAT = calculateRoundedWithholdingVATAmount(taxRule, invoiceNetOfTax);
 
         MonetaryAmount withholdingTax = Money.of(BigDecimal.ZERO, PaymentComputationUtils.currencyUnit(currencyCode));
 
@@ -57,10 +56,5 @@ public class PaymentComputation1 implements PaymentComputation, HasWithholdingVA
             .withholdingTax(withholdingTax)
             .withholdingVAT(withholdingVAT)
             .build();
-    }
-
-    @Override
-    public MonetaryAmount calculateWithholdingVATAmount(TaxRuleInt taxRule, MonetaryAmount invoiceNetOfTax) {
-        return roundToZero(invoiceNetOfTax.multiply(taxRule.getWithholdingVAT()));
     }
 }
