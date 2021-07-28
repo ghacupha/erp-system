@@ -9,6 +9,8 @@
     <packaging>jar</packaging>
     <name>Erp Gateway</name>
 
+    <description>Client for the Finance ERP System</description>
+
     <repositories>
         <!-- jhipster-needle-maven-repository -->
     </repositories>
