@@ -47,9 +47,8 @@
   "entityTableName": "invoice",
   "fluentMethods": true,
   "embedded": false,
-  "applications": ["erpService"],
   "microserviceName": "erpService",
   "clientRootFolder": "payments",
   "databaseType": "sql",
-  "searchEngine": "elasticsearch",
+  "searchEngine": "elasticsearch"
 }

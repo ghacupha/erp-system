@@ -1,0 +1,84 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-payment-heading">Create or edit a Payment</h2>
+
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_paymentNumber">Payment Number</label>
+                    <input type="text" class="form-control" name="paymentNumber" id="field_paymentNumber"
+                           formControlName="paymentNumber"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_paymentDate">Payment Date</label>
+                    <div class="input-group">
+                        <input id="field_paymentDate" type="text" class="form-control" name="paymentDate" ngbDatepicker #paymentDateDp="ngbDatepicker" formControlName="paymentDate"/>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="paymentDateDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_paymentAmount">Payment Amount</label>
+                    <input type="number" class="form-control" name="paymentAmount" id="field_paymentAmount"
+                           formControlName="paymentAmount"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_dealerName">Dealer Name</label>
+                    <input type="text" class="form-control" name="dealerName" id="field_dealerName"
+                           formControlName="dealerName"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_paymentCategory">Payment Category</label>
+                    <input type="text" class="form-control" name="paymentCategory" id="field_paymentCategory"
+                           formControlName="paymentCategory"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_paymentCalculation">Payment Calculation</label>
+                    <select class="form-control" id="field_paymentCalculation" name="paymentCalculation" formControlName="paymentCalculationId">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="paymentCalculationOption.id" *ngFor="let paymentCalculationOption of paymentcalculations; trackBy: trackById">{{ paymentCalculationOption.id }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_paymentRequisition">Payment Requisition</label>
+                    <select class="form-control" id="field_paymentRequisition" name="paymentRequisition" formControlName="paymentRequisitionId">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="paymentRequisitionOption.id" *ngFor="let paymentRequisitionOption of paymentrequisitions; trackBy: trackById">{{ paymentRequisitionOption.id }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_taxRule">Tax Rule</label>
+                    <select class="form-control" id="field_taxRule" name="taxRule" formControlName="taxRuleId">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="taxRuleOption.id" *ngFor="let taxRuleOption of taxrules; trackBy: trackById">{{ taxRuleOption.id }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

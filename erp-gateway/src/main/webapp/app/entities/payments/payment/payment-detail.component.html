@@ -1,0 +1,64 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="payment">
+            <h2><span>Payment</span> {{ payment.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span>Payment Number</span></dt>
+                <dd>
+                    <span>{{ payment.paymentNumber }}</span>
+                </dd>
+                <dt><span>Payment Date</span></dt>
+                <dd>
+                    <span>{{ payment.paymentDate }}</span>
+                </dd>
+                <dt><span>Payment Amount</span></dt>
+                <dd>
+                    <span>{{ payment.paymentAmount }}</span>
+                </dd>
+                <dt><span>Dealer Name</span></dt>
+                <dd>
+                    <span>{{ payment.dealerName }}</span>
+                </dd>
+                <dt><span>Payment Category</span></dt>
+                <dd>
+                    <span>{{ payment.paymentCategory }}</span>
+                </dd>
+                <dt><span>Payment Calculation</span></dt>
+                <dd>
+                    <div *ngIf="payment.paymentCalculationId">
+                        <a [routerLink]="['/payment-calculation', payment.paymentCalculationId, 'view']">{{ payment.paymentCalculationId }}</a>
+                    </div>
+                </dd>
+                <dt><span>Payment Requisition</span></dt>
+                <dd>
+                    <div *ngIf="payment.paymentRequisitionId">
+                        <a [routerLink]="['/payment-requisition', payment.paymentRequisitionId, 'view']">{{ payment.paymentRequisitionId }}</a>
+                    </div>
+                </dd>
+                <dt><span>Tax Rule</span></dt>
+                <dd>
+                    <div *ngIf="payment.taxRuleId">
+                        <a [routerLink]="['/tax-rule', payment.taxRuleId, 'view']">{{ payment.taxRuleId }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/payment', payment.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+            </button>
+        </div>
+    </div>
+</div>
