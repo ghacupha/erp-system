@@ -21,9 +21,9 @@
     </div>
 
     <div class="col-md-9">
-        <h1 class="display-4">Welcome, Java Hipster!</h1>
+        <h1 class="display-4">FINANCE ERP</h1>
 
-        <p class="lead">This is your homepage</p>
+        <p class="lead">Finance data management system</p>
 
         <div [ngSwitch]="isAuthenticated()">
             <div class="alert alert-success" *ngSwitchCase="true">
@@ -32,7 +32,7 @@
 
             <div class="alert alert-warning" *ngSwitchCase="false">
                 <span>If you want to </span>
-                <a class="alert-link" (click)="login()">sign in</a><span>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").</span>
+                <a class="alert-link" (click)="login()">sign in</a>
             </div>
 
             <div class="alert alert-warning" *ngSwitchCase="false">
