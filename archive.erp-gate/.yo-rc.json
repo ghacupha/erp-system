@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "skipClient": true,
+    "skipClient": false,
     "applicationType": "gateway",
     "baseName": "erpGate",
     "jhipsterVersion": "7.1.0",
@@ -8,7 +8,7 @@
     "skipUserManagement": false,
     "skipCheckLengthOfIdentifier": false,
     "skipFakeData": false,
-    "jhiPrefix": "jhi",
+    "jhiPrefix": "gha",
     "entitySuffix": "",
     "dtoSuffix": "DTO",
     "testFrameworks": ["gatling", "cucumber"],
@@ -28,7 +28,7 @@
     "prodDatabaseType": "postgresql",
     "buildTool": "maven",
     "serverSideOptions": [],
-    "websocket": false,
+    "websocket": "spring-websocket",
     "searchEngine": false,
     "messageBroker": false,
     "enableSwaggerCodegen": false,
@@ -39,8 +39,8 @@
     "languages": ["en", "fr", "de", "it"],
     "clientFramework": "angularX",
     "clientPackageManager": "npm",
-    "clientTheme": "none",
-    "clientThemeVariant": "",
+    "clientTheme": "lux",
+    "clientThemeVariant": "dark",
     "withAdminUi": true
   }
 }

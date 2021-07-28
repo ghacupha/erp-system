@@ -31,6 +31,7 @@
   },
   "defaultProject": "erp-gateway",
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "analytics": "5f99d406-a9b6-43de-8dbe-87e4cc087d39"
   }
 }
