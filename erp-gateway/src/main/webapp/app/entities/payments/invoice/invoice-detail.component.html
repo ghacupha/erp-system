@@ -1,0 +1,58 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="invoice">
+            <h2><span>Invoice</span> {{ invoice.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span>Invoice Number</span></dt>
+                <dd>
+                    <span>{{ invoice.invoiceNumber }}</span>
+                </dd>
+                <dt><span>Invoice Date</span></dt>
+                <dd>
+                    <span>{{ invoice.invoiceDate }}</span>
+                </dd>
+                <dt><span>Invoice Amount</span></dt>
+                <dd>
+                    <span>{{ invoice.invoiceAmount }}</span>
+                </dd>
+                <dt><span>Payment Category</span></dt>
+                <dd>
+                    <span>{{ invoice.paymentCategory }}</span>
+                </dd>
+                <dt><span>Dealer Name</span></dt>
+                <dd>
+                    <span>{{ invoice.dealerName }}</span>
+                </dd>
+                <dt><span>Payment</span></dt>
+                <dd>
+                    <div *ngIf="invoice.paymentId">
+                        <a [routerLink]="['/payment', invoice.paymentId, 'view']">{{ invoice.paymentId }}</a>
+                    </div>
+                </dd>
+                <dt><span>Dealer</span></dt>
+                <dd>
+                    <div *ngIf="invoice.dealerId">
+                        <a [routerLink]="['/dealer', invoice.dealerId, 'view']">{{ invoice.dealerId }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/invoice', invoice.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

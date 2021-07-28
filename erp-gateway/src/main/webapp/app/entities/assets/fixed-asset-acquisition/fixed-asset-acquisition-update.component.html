@@ -1,0 +1,84 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-fixed-asset-acquisition-heading">Create or edit a Fixed Asset Acquisition</h2>
+
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_assetNumber">Asset Number</label>
+                    <input type="number" class="form-control" name="assetNumber" id="field_assetNumber"
+                           formControlName="assetNumber"/>
+                    <div *ngIf="editForm.get('assetNumber')!.invalid && (editForm.get('assetNumber')!.dirty || editForm.get('assetNumber')!.touched)">
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('assetNumber')?.errors?.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_serviceOutletCode">Service Outlet Code</label>
+                    <input type="text" class="form-control" name="serviceOutletCode" id="field_serviceOutletCode"
+                           formControlName="serviceOutletCode"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_assetTag">Asset Tag</label>
+                    <input type="text" class="form-control" name="assetTag" id="field_assetTag"
+                           formControlName="assetTag"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_assetDescription">Asset Description</label>
+                    <input type="text" class="form-control" name="assetDescription" id="field_assetDescription"
+                           formControlName="assetDescription"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_purchaseDate">Purchase Date</label>
+                    <div class="input-group">
+                        <input id="field_purchaseDate" type="text" class="form-control" name="purchaseDate" ngbDatepicker #purchaseDateDp="ngbDatepicker" formControlName="purchaseDate"/>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="purchaseDateDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_assetCategory">Asset Category</label>
+                    <input type="text" class="form-control" name="assetCategory" id="field_assetCategory"
+                           formControlName="assetCategory"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_purchasePrice">Purchase Price</label>
+                    <input type="number" class="form-control" name="purchasePrice" id="field_purchasePrice"
+                           formControlName="purchasePrice"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_fileUploadToken">File Upload Token</label>
+                    <input type="text" class="form-control" name="fileUploadToken" id="field_fileUploadToken"
+                           formControlName="fileUploadToken"/>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
