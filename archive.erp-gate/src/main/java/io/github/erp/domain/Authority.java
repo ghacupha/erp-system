@@ -11,7 +11,7 @@ import org.springframework.data.relational.core.mapping.Table;
 /**
  * An authority (a security role) used by Spring Security.
  */
-@Table("jhi_authority")
+@Table("gha_authority")
 public class Authority implements Serializable, Persistable<String> {
 
     private static final long serialVersionUID = 1L;

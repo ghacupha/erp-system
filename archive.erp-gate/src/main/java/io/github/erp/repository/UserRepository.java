@@ -48,13 +48,13 @@ public interface UserRepository extends R2dbcRepository<User, Long>, UserReposit
 
     Mono<Long> count();
 
-    @Query("INSERT INTO jhi_user_authority VALUES(:userId, :authority)")
+    @Query("INSERT INTO gha_user_authority VALUES(:userId, :authority)")
     Mono<Void> saveUserAuthority(Long userId, String authority);
 
-    @Query("DELETE FROM jhi_user_authority")
+    @Query("DELETE FROM gha_user_authority")
     Mono<Void> deleteAllUserAuthorities();
 
-    @Query("DELETE FROM jhi_user_authority WHERE user_id = :userId")
+    @Query("DELETE FROM gha_user_authority WHERE user_id = :userId")
     Mono<Void> deleteUserAuthorities(Long userId);
 }
 
@@ -100,7 +100,7 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
         long size = pageable.getPageSize();
 
         return db
-            .sql("SELECT * FROM jhi_user u LEFT JOIN jhi_user_authority ua ON u.id=ua.user_id")
+            .sql("SELECT * FROM gha_user u LEFT JOIN gha_user_authority ua ON u.id=ua.user_id")
             .map(
                 (row, metadata) ->
                     Tuples.of(r2dbcConverter.read(User.class, row, metadata), Optional.ofNullable(row.get("authority_name", String.class)))
@@ -120,7 +120,7 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
     @Override
     public Mono<Void> delete(User user) {
         return db
-            .sql("DELETE FROM jhi_user_authority WHERE user_id = :userId")
+            .sql("DELETE FROM gha_user_authority WHERE user_id = :userId")
             .bind("userId", user.getId())
             .then()
             .then(r2dbcEntityTemplate.delete(User.class).matching(query(where("id").is(user.getId()))).all().then());
@@ -128,7 +128,7 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
 
     private Mono<User> findOneWithAuthoritiesBy(String fieldName, Object fieldValue) {
         return db
-            .sql("SELECT * FROM jhi_user u LEFT JOIN jhi_user_authority ua ON u.id=ua.user_id WHERE u." + fieldName + " = :" + fieldName)
+            .sql("SELECT * FROM gha_user u LEFT JOIN gha_user_authority ua ON u.id=ua.user_id WHERE u." + fieldName + " = :" + fieldName)
             .bind(fieldName, fieldValue)
             .map(
                 (row, metadata) ->
