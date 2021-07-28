@@ -17,6 +17,8 @@ public class JWTFilter implements WebFilter {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
+    public static final String AUTHORIZATION_TOKEN = "access_token";
+
     private final TokenProvider tokenProvider;
 
     public JWTFilter(TokenProvider tokenProvider) {
@@ -37,6 +39,10 @@ public class JWTFilter implements WebFilter {
         String bearerToken = request.getHeaders().getFirst(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
+        }
+        String jwt = request.getParameter(AUTHORIZATION_TOKEN);
+        if (StringUtils.hasText(jwt)) {
+            return jwt;
         }
         return null;
     }

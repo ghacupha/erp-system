@@ -1,5 +1,5 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-version: '3.3'
+version: '3.8'
 services:
   jhipster-registry:
     image: jhipster/jhipster-registry:v6.8.0

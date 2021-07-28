@@ -41,6 +41,7 @@
     "clientPackageManager": "npm",
     "clientTheme": "lux",
     "clientThemeVariant": "dark",
-    "withAdminUi": true
+    "withAdminUi": true,
+    "devServerPort": 4200
   }
 }
