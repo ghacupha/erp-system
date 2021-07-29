@@ -1,7 +1,0 @@
-version: '3'
-
-services:
-  erp-client:
-    build: .
-    container_name: ghacupha/erp-client:0.0.1-SNAPSHOT
-      - 8000:8789

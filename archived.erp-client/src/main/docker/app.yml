@@ -1,6 +1,0 @@
-version: '3'
-services:
-  erp-client:
-    image: ghacupha/erp-client:0.0.1-SNAPSHOT
-    ports:
-      - 8789:80
