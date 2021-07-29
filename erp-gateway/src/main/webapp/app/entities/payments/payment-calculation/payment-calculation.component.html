@@ -55,7 +55,7 @@
                 <tr *ngFor="let paymentCalculation of paymentCalculations ;trackBy: trackId">
                     <td><a [routerLink]="['/payment-calculation', paymentCalculation.id, 'view']">{{ paymentCalculation.id }}</a></td>
                     <td>{{ paymentCalculation.paymentNumber }}</td>
-                    <td>{{ paymentCalculation.paymentDate | date:'mediumDate' }}</td>
+                    <td>{{ paymentCalculation.paymentDate | momentMediumDate }}</td>
                     <td>{{ paymentCalculation.paymentCategory }}</td>
                     <td>{{ paymentCalculation.paymentExpense }}</td>
                     <td>{{ paymentCalculation.withholdingVAT }}</td>

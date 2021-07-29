@@ -40,8 +40,8 @@
                     <td><a [routerLink]="['/file-upload', fileUpload.id, 'view']">{{ fileUpload.id }}</a></td>
                     <td>{{ fileUpload.description }}</td>
                     <td>{{ fileUpload.fileName }}</td>
-                    <td>{{ fileUpload.periodFrom | date:'mediumDate' }}</td>
-                    <td>{{ fileUpload.periodTo | date:'mediumDate' }}</td>
+                    <td>{{ fileUpload.periodFrom | momentMediumDate }}</td>
+                    <td>{{ fileUpload.periodTo | momentMediumDate }}</td>
                     <td>{{ fileUpload.fileTypeId }}</td>
                     <td>
                         <a *ngIf="fileUpload.dataFile" (click)="openFile(fileUpload.dataFileContentType, fileUpload.dataFile)">open</a>

@@ -55,7 +55,7 @@
                 <tr *ngFor="let invoice of invoices ;trackBy: trackId">
                     <td><a [routerLink]="['/invoice', invoice.id, 'view']">{{ invoice.id }}</a></td>
                     <td>{{ invoice.invoiceNumber }}</td>
-                    <td>{{ invoice.invoiceDate | date:'mediumDate' }}</td>
+                    <td>{{ invoice.invoiceDate | momentMediumDate }}</td>
                     <td>{{ invoice.invoiceAmount }}</td>
                     <td>{{ invoice.paymentCategory }}</td>
                     <td>{{ invoice.dealerName }}</td>
