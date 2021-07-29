@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Log, LoggersResponse, Logger, Level } from './log.model';
+import { Log, LoggersResponse, Level } from './log.model';
 import { LogsService } from './logs.service';
 
 @Component({
@@ -23,12 +23,21 @@ export class LogsComponent implements OnInit {
     this.logsService.changeLevel(name, level).subscribe(() => this.findAndExtractLoggers());
   }
 
+  //  private findAndExtractLoggers(): void {
+  //   this.logsService
+  //     .findAll()
+  //     .subscribe(
+  //       (response: LoggersResponse) =>
+  //         (this.loggers = Object.entries(response.loggers).map((logger: [string, Logger]) => new Log(logger[0], logger[1].effectiveLevel)))
+  //     );
+  //  }
+
   private findAndExtractLoggers(): void {
-    this.logsService
-      .findAll()
-      .subscribe(
-        (response: LoggersResponse) =>
-          (this.loggers = Object.entries(response.loggers).map((logger: [string, Logger]) => new Log(logger[0], logger[1].effectiveLevel)))
-      );
+    this.logsService.findAll().subscribe((response: LoggersResponse) => {
+      this.loggers = Object.entries(response.loggers).map(([key, logger]) => new Log(key, logger.effectiveLevel));
+      //  this.filterAndSort();
+    });
   }
+
+
 }

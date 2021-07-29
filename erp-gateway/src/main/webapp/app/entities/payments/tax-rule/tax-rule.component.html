@@ -58,7 +58,7 @@
                 <tr *ngFor="let taxRule of taxRules ;trackBy: trackId">
                     <td><a [routerLink]="['/tax-rule', taxRule.id, 'view']">{{ taxRule.id }}</a></td>
                     <td>{{ taxRule.paymentNumber }}</td>
-                    <td>{{ taxRule.paymentDate | date:'mediumDate' }}</td>
+                    <td>{{ taxRule.paymentDate | momentMediumDate }}</td>
                     <td>{{ taxRule.telcoExciseDuty }}</td>
                     <td>{{ taxRule.valueAddedTax }}</td>
                     <td>{{ taxRule.withholdingVAT }}</td>
