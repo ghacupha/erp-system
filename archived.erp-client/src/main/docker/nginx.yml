@@ -1,9 +1,0 @@
-version: '2'
-services:
-  nginx:
-    image: nginx:1.15-alpine
-    volumes:
-      - ./../../../target/static:/usr/share/nginx/html
-      - ./nginx/site.conf:/etc/nginx/conf.d/default.conf
-    ports:
-      - '8000:80'
