@@ -29,8 +29,6 @@ export class InvoiceUpdateComponent implements OnInit {
     invoiceNumber: [],
     invoiceDate: [],
     invoiceAmount: [],
-    paymentCategory: [],
-    dealerName: [],
     paymentId: [],
     dealerId: [],
   });
@@ -59,8 +57,6 @@ export class InvoiceUpdateComponent implements OnInit {
       invoiceNumber: invoice.invoiceNumber,
       invoiceDate: invoice.invoiceDate,
       invoiceAmount: invoice.invoiceAmount,
-      paymentCategory: invoice.paymentCategory,
-      dealerName: invoice.dealerName,
       paymentId: invoice.paymentId,
       dealerId: invoice.dealerId,
     });
@@ -87,8 +83,6 @@ export class InvoiceUpdateComponent implements OnInit {
       invoiceNumber: this.editForm.get(['invoiceNumber'])!.value,
       invoiceDate: this.editForm.get(['invoiceDate'])!.value,
       invoiceAmount: this.editForm.get(['invoiceAmount'])!.value,
-      paymentCategory: this.editForm.get(['paymentCategory'])!.value,
-      dealerName: this.editForm.get(['dealerName'])!.value,
       paymentId: this.editForm.get(['paymentId'])!.value,
       dealerId: this.editForm.get(['dealerId'])!.value,
     };
