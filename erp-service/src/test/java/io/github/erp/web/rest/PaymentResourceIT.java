@@ -4,7 +4,6 @@ import io.github.erp.ErpServiceApp;
 import io.github.erp.config.SecurityBeanOverrideConfiguration;
 import io.github.erp.domain.Payment;
 import io.github.erp.domain.Invoice;
-import io.github.erp.domain.PaymentCalculation;
 import io.github.erp.domain.PaymentRequisition;
 import io.github.erp.domain.Dealer;
 import io.github.erp.domain.TaxRule;
@@ -110,16 +109,6 @@ public class PaymentResourceIT {
             .paymentAmount(DEFAULT_PAYMENT_AMOUNT)
             .description(DEFAULT_DESCRIPTION);
         // Add required entity
-        PaymentCalculation paymentCalculation;
-        if (TestUtil.findAll(em, PaymentCalculation.class).isEmpty()) {
-            paymentCalculation = PaymentCalculationResourceIT.createEntity(em);
-            em.persist(paymentCalculation);
-            em.flush();
-        } else {
-            paymentCalculation = TestUtil.findAll(em, PaymentCalculation.class).get(0);
-        }
-        payment.setPaymentCalculation(paymentCalculation);
-        // Add required entity
         PaymentCategory paymentCategory;
         if (TestUtil.findAll(em, PaymentCategory.class).isEmpty()) {
             paymentCategory = PaymentCategoryResourceIT.createEntity(em);
@@ -143,16 +132,6 @@ public class PaymentResourceIT {
             .paymentDate(UPDATED_PAYMENT_DATE)
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
             .description(UPDATED_DESCRIPTION);
-        // Add required entity
-        PaymentCalculation paymentCalculation;
-        if (TestUtil.findAll(em, PaymentCalculation.class).isEmpty()) {
-            paymentCalculation = PaymentCalculationResourceIT.createUpdatedEntity(em);
-            em.persist(paymentCalculation);
-            em.flush();
-        } else {
-            paymentCalculation = TestUtil.findAll(em, PaymentCalculation.class).get(0);
-        }
-        payment.setPaymentCalculation(paymentCalculation);
         // Add required entity
         PaymentCategory paymentCategory;
         if (TestUtil.findAll(em, PaymentCategory.class).isEmpty()) {
@@ -191,9 +170,6 @@ public class PaymentResourceIT {
         assertThat(testPayment.getPaymentAmount()).isEqualTo(DEFAULT_PAYMENT_AMOUNT);
         assertThat(testPayment.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
 
-        // Validate the id for MapsId, the ids must be same
-        assertThat(testPayment.getId()).isEqualTo(testPayment.getPaymentCalculation().getId());
-
         // Validate the Payment in Elasticsearch
         verify(mockPaymentSearchRepository, times(1)).save(testPayment);
     }
@@ -221,42 +197,6 @@ public class PaymentResourceIT {
         verify(mockPaymentSearchRepository, times(0)).save(payment);
     }
 
-    @Test
-    @Transactional
-    public void updatePaymentMapsIdAssociationWithNewId() throws Exception {
-        // Initialize the database
-        paymentRepository.saveAndFlush(payment);
-        int databaseSizeBeforeCreate = paymentRepository.findAll().size();
-
-
-        // Load the payment
-        Payment updatedPayment = paymentRepository.findById(payment.getId()).get();
-        // Disconnect from session so that the updates on updatedPayment are not directly saved in db
-        em.detach(updatedPayment);
-
-        // Update the PaymentCalculation with new association value
-        updatedPayment.setPaymentCalculation(payment.getPaymentCalculation());
-        PaymentDTO updatedPaymentDTO = paymentMapper.toDto(updatedPayment);
-
-        // Update the entity
-        restPaymentMockMvc.perform(put("/api/payments").with(csrf())
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(updatedPaymentDTO)))
-            .andExpect(status().isOk());
-
-        // Validate the Payment in the database
-        List<Payment> paymentList = paymentRepository.findAll();
-        assertThat(paymentList).hasSize(databaseSizeBeforeCreate);
-        Payment testPayment = paymentList.get(paymentList.size() - 1);
-
-        // Validate the id for MapsId, the ids must be same
-        // Uncomment the following line for assertion. However, please note that there is a known issue and uncommenting will fail the test.
-        // Please look at https://github.com/jhipster/generator-jhipster/issues/9100. You can modify this test as necessary.
-        // assertThat(testPayment.getId()).isEqualTo(testPayment.getPaymentCalculation().getId());
-
-        // Validate the Payment in Elasticsearch
-        verify(mockPaymentSearchRepository, times(1)).save(payment);
-    }
 
     @Test
     @Transactional
@@ -274,7 +214,7 @@ public class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
     }
-
+    
     @Test
     @Transactional
     public void getPayment() throws Exception {
@@ -695,22 +635,6 @@ public class PaymentResourceIT {
 
         // Get all the paymentList where ownedInvoice equals to ownedInvoiceId + 1
         defaultPaymentShouldNotBeFound("ownedInvoiceId.equals=" + (ownedInvoiceId + 1));
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllPaymentsByPaymentCalculationIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        PaymentCalculation paymentCalculation = payment.getPaymentCalculation();
-        paymentRepository.saveAndFlush(payment);
-        Long paymentCalculationId = paymentCalculation.getId();
-
-        // Get all the paymentList where paymentCalculation equals to paymentCalculationId
-        defaultPaymentShouldBeFound("paymentCalculationId.equals=" + paymentCalculationId);
-
-        // Get all the paymentList where paymentCalculation equals to paymentCalculationId + 1
-        defaultPaymentShouldNotBeFound("paymentCalculationId.equals=" + (paymentCalculationId + 1));
     }
 
 

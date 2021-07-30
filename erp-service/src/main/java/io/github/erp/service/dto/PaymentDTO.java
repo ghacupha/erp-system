@@ -21,8 +21,6 @@ public class PaymentDTO implements Serializable {
     private String description;
 
 
-    private Long paymentCalculationId;
-
     private Long paymentRequisitionId;
 
     private Long taxRuleId;
@@ -67,14 +65,6 @@ public class PaymentDTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Long getPaymentCalculationId() {
-        return paymentCalculationId;
-    }
-
-    public void setPaymentCalculationId(Long paymentCalculationId) {
-        this.paymentCalculationId = paymentCalculationId;
     }
 
     public Long getPaymentRequisitionId() {
@@ -127,7 +117,6 @@ public class PaymentDTO implements Serializable {
             ", paymentDate='" + getPaymentDate() + "'" +
             ", paymentAmount=" + getPaymentAmount() +
             ", description='" + getDescription() + "'" +
-            ", paymentCalculationId=" + getPaymentCalculationId() +
             ", paymentRequisitionId=" + getPaymentRequisitionId() +
             ", taxRuleId=" + getTaxRuleId() +
             ", paymentCategoryId=" + getPaymentCategoryId() +
