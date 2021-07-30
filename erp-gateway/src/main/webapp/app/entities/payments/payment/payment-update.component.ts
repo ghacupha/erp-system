@@ -8,14 +8,16 @@ import { map } from 'rxjs/operators';
 
 import { IPayment, Payment } from 'app/shared/model/payments/payment.model';
 import { PaymentService } from './payment.service';
-import { IPaymentCalculation } from 'app/shared/model/payments/payment-calculation.model';
-import { PaymentCalculationService } from 'app/entities/payments/payment-calculation/payment-calculation.service';
 import { IPaymentRequisition } from 'app/shared/model/payments/payment-requisition.model';
 import { PaymentRequisitionService } from 'app/entities/payments/payment-requisition/payment-requisition.service';
 import { ITaxRule } from 'app/shared/model/payments/tax-rule.model';
 import { TaxRuleService } from 'app/entities/payments/tax-rule/tax-rule.service';
+import { IPaymentCategory } from 'app/shared/model/payments/payment-category.model';
+import { PaymentCategoryService } from 'app/entities/payments/payment-category/payment-category.service';
+import { IPaymentCalculation } from 'app/shared/model/payments/payment-calculation.model';
+import { PaymentCalculationService } from 'app/entities/payments/payment-calculation/payment-calculation.service';
 
-type SelectableEntity = IPaymentCalculation | IPaymentRequisition | ITaxRule;
+type SelectableEntity = IPaymentRequisition | ITaxRule | IPaymentCategory | IPaymentCalculation;
 
 @Component({
   selector: 'jhi-payment-update',
@@ -23,9 +25,10 @@ type SelectableEntity = IPaymentCalculation | IPaymentRequisition | ITaxRule;
 })
 export class PaymentUpdateComponent implements OnInit {
   isSaving = false;
-  paymentcalculations: IPaymentCalculation[] = [];
   paymentrequisitions: IPaymentRequisition[] = [];
   taxrules: ITaxRule[] = [];
+  paymentcategories: IPaymentCategory[] = [];
+  paymentcalculations: IPaymentCalculation[] = [];
   paymentDateDp: any;
 
   editForm = this.fb.group({
@@ -33,18 +36,19 @@ export class PaymentUpdateComponent implements OnInit {
     paymentNumber: [],
     paymentDate: [],
     paymentAmount: [],
-    dealerName: [],
-    paymentCategory: [],
-    paymentCalculationId: [],
+    description: [],
     paymentRequisitionId: [],
     taxRuleId: [],
+    paymentCategoryId: [null, Validators.required],
+    paymentCalculationId: [null, Validators.required],
   });
 
   constructor(
     protected paymentService: PaymentService,
-    protected paymentCalculationService: PaymentCalculationService,
     protected paymentRequisitionService: PaymentRequisitionService,
     protected taxRuleService: TaxRuleService,
+    protected paymentCategoryService: PaymentCategoryService,
+    protected paymentCalculationService: PaymentCalculationService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
@@ -52,28 +56,6 @@ export class PaymentUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ payment }) => {
       this.updateForm(payment);
-
-      this.paymentCalculationService
-        .query({ 'paymentId.specified': 'false' })
-        .pipe(
-          map((res: HttpResponse<IPaymentCalculation[]>) => {
-            return res.body || [];
-          })
-        )
-        .subscribe((resBody: IPaymentCalculation[]) => {
-          if (!payment.paymentCalculationId) {
-            this.paymentcalculations = resBody;
-          } else {
-            this.paymentCalculationService
-              .find(payment.paymentCalculationId)
-              .pipe(
-                map((subRes: HttpResponse<IPaymentCalculation>) => {
-                  return subRes.body ? [subRes.body].concat(resBody) : resBody;
-                })
-              )
-              .subscribe((concatRes: IPaymentCalculation[]) => (this.paymentcalculations = concatRes));
-          }
-        });
 
       this.paymentRequisitionService
         .query()
@@ -100,6 +82,50 @@ export class PaymentUpdateComponent implements OnInit {
               .subscribe((concatRes: ITaxRule[]) => (this.taxrules = concatRes));
           }
         });
+
+      this.paymentCategoryService
+        .query({ 'paymentId.specified': 'false' })
+        .pipe(
+          map((res: HttpResponse<IPaymentCategory[]>) => {
+            return res.body || [];
+          })
+        )
+        .subscribe((resBody: IPaymentCategory[]) => {
+          if (!payment.paymentCategoryId) {
+            this.paymentcategories = resBody;
+          } else {
+            this.paymentCategoryService
+              .find(payment.paymentCategoryId)
+              .pipe(
+                map((subRes: HttpResponse<IPaymentCategory>) => {
+                  return subRes.body ? [subRes.body].concat(resBody) : resBody;
+                })
+              )
+              .subscribe((concatRes: IPaymentCategory[]) => (this.paymentcategories = concatRes));
+          }
+        });
+
+      this.paymentCalculationService
+        .query({ 'paymentId.specified': 'false' })
+        .pipe(
+          map((res: HttpResponse<IPaymentCalculation[]>) => {
+            return res.body || [];
+          })
+        )
+        .subscribe((resBody: IPaymentCalculation[]) => {
+          if (!payment.paymentCalculationId) {
+            this.paymentcalculations = resBody;
+          } else {
+            this.paymentCalculationService
+              .find(payment.paymentCalculationId)
+              .pipe(
+                map((subRes: HttpResponse<IPaymentCalculation>) => {
+                  return subRes.body ? [subRes.body].concat(resBody) : resBody;
+                })
+              )
+              .subscribe((concatRes: IPaymentCalculation[]) => (this.paymentcalculations = concatRes));
+          }
+        });
     });
   }
 
@@ -109,11 +135,11 @@ export class PaymentUpdateComponent implements OnInit {
       paymentNumber: payment.paymentNumber,
       paymentDate: payment.paymentDate,
       paymentAmount: payment.paymentAmount,
-      dealerName: payment.dealerName,
-      paymentCategory: payment.paymentCategory,
-      paymentCalculationId: payment.paymentCalculationId,
+      description: payment.description,
       paymentRequisitionId: payment.paymentRequisitionId,
       taxRuleId: payment.taxRuleId,
+      paymentCategoryId: payment.paymentCategoryId,
+      paymentCalculationId: payment.paymentCalculationId,
     });
   }
 
@@ -138,11 +164,11 @@ export class PaymentUpdateComponent implements OnInit {
       paymentNumber: this.editForm.get(['paymentNumber'])!.value,
       paymentDate: this.editForm.get(['paymentDate'])!.value,
       paymentAmount: this.editForm.get(['paymentAmount'])!.value,
-      dealerName: this.editForm.get(['dealerName'])!.value,
-      paymentCategory: this.editForm.get(['paymentCategory'])!.value,
-      paymentCalculationId: this.editForm.get(['paymentCalculationId'])!.value,
+      description: this.editForm.get(['description'])!.value,
       paymentRequisitionId: this.editForm.get(['paymentRequisitionId'])!.value,
       taxRuleId: this.editForm.get(['taxRuleId'])!.value,
+      paymentCategoryId: this.editForm.get(['paymentCategoryId'])!.value,
+      paymentCalculationId: this.editForm.get(['paymentCalculationId'])!.value,
     };
   }
 
