@@ -8,6 +8,7 @@ import io.github.erp.domain.PaymentRequisition;
 import io.github.erp.domain.Dealer;
 import io.github.erp.domain.TaxRule;
 import io.github.erp.domain.PaymentCategory;
+import io.github.erp.domain.PaymentCalculation;
 import io.github.erp.repository.PaymentRepository;
 import io.github.erp.repository.search.PaymentSearchRepository;
 import io.github.erp.service.PaymentService;
@@ -118,6 +119,16 @@ public class PaymentResourceIT {
             paymentCategory = TestUtil.findAll(em, PaymentCategory.class).get(0);
         }
         payment.setPaymentCategory(paymentCategory);
+        // Add required entity
+        PaymentCalculation paymentCalculation;
+        if (TestUtil.findAll(em, PaymentCalculation.class).isEmpty()) {
+            paymentCalculation = PaymentCalculationResourceIT.createEntity(em);
+            em.persist(paymentCalculation);
+            em.flush();
+        } else {
+            paymentCalculation = TestUtil.findAll(em, PaymentCalculation.class).get(0);
+        }
+        payment.setPaymentCalculation(paymentCalculation);
         return payment;
     }
     /**
@@ -142,6 +153,16 @@ public class PaymentResourceIT {
             paymentCategory = TestUtil.findAll(em, PaymentCategory.class).get(0);
         }
         payment.setPaymentCategory(paymentCategory);
+        // Add required entity
+        PaymentCalculation paymentCalculation;
+        if (TestUtil.findAll(em, PaymentCalculation.class).isEmpty()) {
+            paymentCalculation = PaymentCalculationResourceIT.createUpdatedEntity(em);
+            em.persist(paymentCalculation);
+            em.flush();
+        } else {
+            paymentCalculation = TestUtil.findAll(em, PaymentCalculation.class).get(0);
+        }
+        payment.setPaymentCalculation(paymentCalculation);
         return payment;
     }
 
@@ -711,6 +732,22 @@ public class PaymentResourceIT {
 
         // Get all the paymentList where paymentCategory equals to paymentCategoryId + 1
         defaultPaymentShouldNotBeFound("paymentCategoryId.equals=" + (paymentCategoryId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllPaymentsByPaymentCalculationIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        PaymentCalculation paymentCalculation = payment.getPaymentCalculation();
+        paymentRepository.saveAndFlush(payment);
+        Long paymentCalculationId = paymentCalculation.getId();
+
+        // Get all the paymentList where paymentCalculation equals to paymentCalculationId
+        defaultPaymentShouldBeFound("paymentCalculationId.equals=" + paymentCalculationId);
+
+        // Get all the paymentList where paymentCalculation equals to paymentCalculationId + 1
+        defaultPaymentShouldNotBeFound("paymentCalculationId.equals=" + (paymentCalculationId + 1));
     }
 
     /**

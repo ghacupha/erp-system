@@ -5,6 +5,7 @@ import io.github.erp.service.dto.PaymentCalculationDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -27,6 +28,12 @@ public interface PaymentCalculationService {
      * @return the list of entities.
      */
     Page<PaymentCalculationDTO> findAll(Pageable pageable);
+    /**
+     * Get all the PaymentCalculationDTO where Payment is {@code null}.
+     *
+     * @return the {@link List} of entities.
+     */
+    List<PaymentCalculationDTO> findAllWherePaymentIsNull();
 
 
     /**
