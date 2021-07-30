@@ -1,21 +1,5 @@
 package io.github.erp.domain;
 
-/*-
- * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
@@ -53,12 +37,6 @@ public class Payment implements Serializable {
     @Column(name = "payment_amount", precision = 21, scale = 2)
     private BigDecimal paymentAmount;
 
-    @Column(name = "dealer_name")
-    private String dealerName;
-
-    @Column(name = "payment_category")
-    private String paymentCategory;
-
     @OneToMany(mappedBy = "payment")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Invoice> ownedInvoices = new HashSet<>();
@@ -70,7 +48,7 @@ public class Payment implements Serializable {
     private PaymentCalculation paymentCalculation;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = "requisitions", allowSetters = true)
+    @JsonIgnoreProperties(value = "payments", allowSetters = true)
     private PaymentRequisition paymentRequisition;
 
     @ManyToMany(mappedBy = "payments")
@@ -128,32 +106,6 @@ public class Payment implements Serializable {
 
     public void setPaymentAmount(BigDecimal paymentAmount) {
         this.paymentAmount = paymentAmount;
-    }
-
-    public String getDealerName() {
-        return dealerName;
-    }
-
-    public Payment dealerName(String dealerName) {
-        this.dealerName = dealerName;
-        return this;
-    }
-
-    public void setDealerName(String dealerName) {
-        this.dealerName = dealerName;
-    }
-
-    public String getPaymentCategory() {
-        return paymentCategory;
-    }
-
-    public Payment paymentCategory(String paymentCategory) {
-        this.paymentCategory = paymentCategory;
-        return this;
-    }
-
-    public void setPaymentCategory(String paymentCategory) {
-        this.paymentCategory = paymentCategory;
     }
 
     public Set<Invoice> getOwnedInvoices() {
@@ -270,8 +222,6 @@ public class Payment implements Serializable {
             ", paymentNumber='" + getPaymentNumber() + "'" +
             ", paymentDate='" + getPaymentDate() + "'" +
             ", paymentAmount=" + getPaymentAmount() +
-            ", dealerName='" + getDealerName() + "'" +
-            ", paymentCategory='" + getPaymentCategory() + "'" +
             "}";
     }
 }

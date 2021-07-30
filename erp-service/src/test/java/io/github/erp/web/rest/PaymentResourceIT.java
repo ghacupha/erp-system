@@ -1,21 +1,5 @@
 package io.github.erp.web.rest;
 
-/*-
- * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import io.github.erp.ErpServiceApp;
 import io.github.erp.config.SecurityBeanOverrideConfiguration;
 import io.github.erp.domain.Payment;
@@ -81,12 +65,6 @@ public class PaymentResourceIT {
     private static final BigDecimal UPDATED_PAYMENT_AMOUNT = new BigDecimal(2);
     private static final BigDecimal SMALLER_PAYMENT_AMOUNT = new BigDecimal(1 - 1);
 
-    private static final String DEFAULT_DEALER_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_DEALER_NAME = "BBBBBBBBBB";
-
-    private static final String DEFAULT_PAYMENT_CATEGORY = "AAAAAAAAAA";
-    private static final String UPDATED_PAYMENT_CATEGORY = "BBBBBBBBBB";
-
     @Autowired
     private PaymentRepository paymentRepository;
 
@@ -125,9 +103,7 @@ public class PaymentResourceIT {
         Payment payment = new Payment()
             .paymentNumber(DEFAULT_PAYMENT_NUMBER)
             .paymentDate(DEFAULT_PAYMENT_DATE)
-            .paymentAmount(DEFAULT_PAYMENT_AMOUNT)
-            .dealerName(DEFAULT_DEALER_NAME)
-            .paymentCategory(DEFAULT_PAYMENT_CATEGORY);
+            .paymentAmount(DEFAULT_PAYMENT_AMOUNT);
         // Add required entity
         PaymentCalculation paymentCalculation;
         if (TestUtil.findAll(em, PaymentCalculation.class).isEmpty()) {
@@ -150,9 +126,7 @@ public class PaymentResourceIT {
         Payment payment = new Payment()
             .paymentNumber(UPDATED_PAYMENT_NUMBER)
             .paymentDate(UPDATED_PAYMENT_DATE)
-            .paymentAmount(UPDATED_PAYMENT_AMOUNT)
-            .dealerName(UPDATED_DEALER_NAME)
-            .paymentCategory(UPDATED_PAYMENT_CATEGORY);
+            .paymentAmount(UPDATED_PAYMENT_AMOUNT);
         // Add required entity
         PaymentCalculation paymentCalculation;
         if (TestUtil.findAll(em, PaymentCalculation.class).isEmpty()) {
@@ -189,8 +163,6 @@ public class PaymentResourceIT {
         assertThat(testPayment.getPaymentNumber()).isEqualTo(DEFAULT_PAYMENT_NUMBER);
         assertThat(testPayment.getPaymentDate()).isEqualTo(DEFAULT_PAYMENT_DATE);
         assertThat(testPayment.getPaymentAmount()).isEqualTo(DEFAULT_PAYMENT_AMOUNT);
-        assertThat(testPayment.getDealerName()).isEqualTo(DEFAULT_DEALER_NAME);
-        assertThat(testPayment.getPaymentCategory()).isEqualTo(DEFAULT_PAYMENT_CATEGORY);
 
         // Validate the id for MapsId, the ids must be same
         assertThat(testPayment.getId()).isEqualTo(testPayment.getPaymentCalculation().getId());
@@ -272,9 +244,7 @@ public class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(payment.getId().intValue())))
             .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
             .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.intValue())))
-            .andExpect(jsonPath("$.[*].dealerName").value(hasItem(DEFAULT_DEALER_NAME)))
-            .andExpect(jsonPath("$.[*].paymentCategory").value(hasItem(DEFAULT_PAYMENT_CATEGORY)));
+            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.intValue())));
     }
 
     @Test
@@ -290,9 +260,7 @@ public class PaymentResourceIT {
             .andExpect(jsonPath("$.id").value(payment.getId().intValue()))
             .andExpect(jsonPath("$.paymentNumber").value(DEFAULT_PAYMENT_NUMBER))
             .andExpect(jsonPath("$.paymentDate").value(DEFAULT_PAYMENT_DATE.toString()))
-            .andExpect(jsonPath("$.paymentAmount").value(DEFAULT_PAYMENT_AMOUNT.intValue()))
-            .andExpect(jsonPath("$.dealerName").value(DEFAULT_DEALER_NAME))
-            .andExpect(jsonPath("$.paymentCategory").value(DEFAULT_PAYMENT_CATEGORY));
+            .andExpect(jsonPath("$.paymentAmount").value(DEFAULT_PAYMENT_AMOUNT.intValue()));
     }
 
 
@@ -605,162 +573,6 @@ public class PaymentResourceIT {
 
     @Test
     @Transactional
-    public void getAllPaymentsByDealerNameIsEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentRepository.saveAndFlush(payment);
-
-        // Get all the paymentList where dealerName equals to DEFAULT_DEALER_NAME
-        defaultPaymentShouldBeFound("dealerName.equals=" + DEFAULT_DEALER_NAME);
-
-        // Get all the paymentList where dealerName equals to UPDATED_DEALER_NAME
-        defaultPaymentShouldNotBeFound("dealerName.equals=" + UPDATED_DEALER_NAME);
-    }
-
-    @Test
-    @Transactional
-    public void getAllPaymentsByDealerNameIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentRepository.saveAndFlush(payment);
-
-        // Get all the paymentList where dealerName not equals to DEFAULT_DEALER_NAME
-        defaultPaymentShouldNotBeFound("dealerName.notEquals=" + DEFAULT_DEALER_NAME);
-
-        // Get all the paymentList where dealerName not equals to UPDATED_DEALER_NAME
-        defaultPaymentShouldBeFound("dealerName.notEquals=" + UPDATED_DEALER_NAME);
-    }
-
-    @Test
-    @Transactional
-    public void getAllPaymentsByDealerNameIsInShouldWork() throws Exception {
-        // Initialize the database
-        paymentRepository.saveAndFlush(payment);
-
-        // Get all the paymentList where dealerName in DEFAULT_DEALER_NAME or UPDATED_DEALER_NAME
-        defaultPaymentShouldBeFound("dealerName.in=" + DEFAULT_DEALER_NAME + "," + UPDATED_DEALER_NAME);
-
-        // Get all the paymentList where dealerName equals to UPDATED_DEALER_NAME
-        defaultPaymentShouldNotBeFound("dealerName.in=" + UPDATED_DEALER_NAME);
-    }
-
-    @Test
-    @Transactional
-    public void getAllPaymentsByDealerNameIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        paymentRepository.saveAndFlush(payment);
-
-        // Get all the paymentList where dealerName is not null
-        defaultPaymentShouldBeFound("dealerName.specified=true");
-
-        // Get all the paymentList where dealerName is null
-        defaultPaymentShouldNotBeFound("dealerName.specified=false");
-    }
-                @Test
-    @Transactional
-    public void getAllPaymentsByDealerNameContainsSomething() throws Exception {
-        // Initialize the database
-        paymentRepository.saveAndFlush(payment);
-
-        // Get all the paymentList where dealerName contains DEFAULT_DEALER_NAME
-        defaultPaymentShouldBeFound("dealerName.contains=" + DEFAULT_DEALER_NAME);
-
-        // Get all the paymentList where dealerName contains UPDATED_DEALER_NAME
-        defaultPaymentShouldNotBeFound("dealerName.contains=" + UPDATED_DEALER_NAME);
-    }
-
-    @Test
-    @Transactional
-    public void getAllPaymentsByDealerNameNotContainsSomething() throws Exception {
-        // Initialize the database
-        paymentRepository.saveAndFlush(payment);
-
-        // Get all the paymentList where dealerName does not contain DEFAULT_DEALER_NAME
-        defaultPaymentShouldNotBeFound("dealerName.doesNotContain=" + DEFAULT_DEALER_NAME);
-
-        // Get all the paymentList where dealerName does not contain UPDATED_DEALER_NAME
-        defaultPaymentShouldBeFound("dealerName.doesNotContain=" + UPDATED_DEALER_NAME);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllPaymentsByPaymentCategoryIsEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentRepository.saveAndFlush(payment);
-
-        // Get all the paymentList where paymentCategory equals to DEFAULT_PAYMENT_CATEGORY
-        defaultPaymentShouldBeFound("paymentCategory.equals=" + DEFAULT_PAYMENT_CATEGORY);
-
-        // Get all the paymentList where paymentCategory equals to UPDATED_PAYMENT_CATEGORY
-        defaultPaymentShouldNotBeFound("paymentCategory.equals=" + UPDATED_PAYMENT_CATEGORY);
-    }
-
-    @Test
-    @Transactional
-    public void getAllPaymentsByPaymentCategoryIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentRepository.saveAndFlush(payment);
-
-        // Get all the paymentList where paymentCategory not equals to DEFAULT_PAYMENT_CATEGORY
-        defaultPaymentShouldNotBeFound("paymentCategory.notEquals=" + DEFAULT_PAYMENT_CATEGORY);
-
-        // Get all the paymentList where paymentCategory not equals to UPDATED_PAYMENT_CATEGORY
-        defaultPaymentShouldBeFound("paymentCategory.notEquals=" + UPDATED_PAYMENT_CATEGORY);
-    }
-
-    @Test
-    @Transactional
-    public void getAllPaymentsByPaymentCategoryIsInShouldWork() throws Exception {
-        // Initialize the database
-        paymentRepository.saveAndFlush(payment);
-
-        // Get all the paymentList where paymentCategory in DEFAULT_PAYMENT_CATEGORY or UPDATED_PAYMENT_CATEGORY
-        defaultPaymentShouldBeFound("paymentCategory.in=" + DEFAULT_PAYMENT_CATEGORY + "," + UPDATED_PAYMENT_CATEGORY);
-
-        // Get all the paymentList where paymentCategory equals to UPDATED_PAYMENT_CATEGORY
-        defaultPaymentShouldNotBeFound("paymentCategory.in=" + UPDATED_PAYMENT_CATEGORY);
-    }
-
-    @Test
-    @Transactional
-    public void getAllPaymentsByPaymentCategoryIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        paymentRepository.saveAndFlush(payment);
-
-        // Get all the paymentList where paymentCategory is not null
-        defaultPaymentShouldBeFound("paymentCategory.specified=true");
-
-        // Get all the paymentList where paymentCategory is null
-        defaultPaymentShouldNotBeFound("paymentCategory.specified=false");
-    }
-                @Test
-    @Transactional
-    public void getAllPaymentsByPaymentCategoryContainsSomething() throws Exception {
-        // Initialize the database
-        paymentRepository.saveAndFlush(payment);
-
-        // Get all the paymentList where paymentCategory contains DEFAULT_PAYMENT_CATEGORY
-        defaultPaymentShouldBeFound("paymentCategory.contains=" + DEFAULT_PAYMENT_CATEGORY);
-
-        // Get all the paymentList where paymentCategory contains UPDATED_PAYMENT_CATEGORY
-        defaultPaymentShouldNotBeFound("paymentCategory.contains=" + UPDATED_PAYMENT_CATEGORY);
-    }
-
-    @Test
-    @Transactional
-    public void getAllPaymentsByPaymentCategoryNotContainsSomething() throws Exception {
-        // Initialize the database
-        paymentRepository.saveAndFlush(payment);
-
-        // Get all the paymentList where paymentCategory does not contain DEFAULT_PAYMENT_CATEGORY
-        defaultPaymentShouldNotBeFound("paymentCategory.doesNotContain=" + DEFAULT_PAYMENT_CATEGORY);
-
-        // Get all the paymentList where paymentCategory does not contain UPDATED_PAYMENT_CATEGORY
-        defaultPaymentShouldBeFound("paymentCategory.doesNotContain=" + UPDATED_PAYMENT_CATEGORY);
-    }
-
-
-    @Test
-    @Transactional
     public void getAllPaymentsByOwnedInvoiceIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
@@ -864,9 +676,7 @@ public class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(payment.getId().intValue())))
             .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
             .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.intValue())))
-            .andExpect(jsonPath("$.[*].dealerName").value(hasItem(DEFAULT_DEALER_NAME)))
-            .andExpect(jsonPath("$.[*].paymentCategory").value(hasItem(DEFAULT_PAYMENT_CATEGORY)));
+            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.intValue())));
 
         // Check, that the count call also returns 1
         restPaymentMockMvc.perform(get("/api/payments/count?sort=id,desc&" + filter))
@@ -915,9 +725,7 @@ public class PaymentResourceIT {
         updatedPayment
             .paymentNumber(UPDATED_PAYMENT_NUMBER)
             .paymentDate(UPDATED_PAYMENT_DATE)
-            .paymentAmount(UPDATED_PAYMENT_AMOUNT)
-            .dealerName(UPDATED_DEALER_NAME)
-            .paymentCategory(UPDATED_PAYMENT_CATEGORY);
+            .paymentAmount(UPDATED_PAYMENT_AMOUNT);
         PaymentDTO paymentDTO = paymentMapper.toDto(updatedPayment);
 
         restPaymentMockMvc.perform(put("/api/payments").with(csrf())
@@ -932,8 +740,6 @@ public class PaymentResourceIT {
         assertThat(testPayment.getPaymentNumber()).isEqualTo(UPDATED_PAYMENT_NUMBER);
         assertThat(testPayment.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
         assertThat(testPayment.getPaymentAmount()).isEqualTo(UPDATED_PAYMENT_AMOUNT);
-        assertThat(testPayment.getDealerName()).isEqualTo(UPDATED_DEALER_NAME);
-        assertThat(testPayment.getPaymentCategory()).isEqualTo(UPDATED_PAYMENT_CATEGORY);
 
         // Validate the Payment in Elasticsearch
         verify(mockPaymentSearchRepository, times(1)).save(testPayment);
@@ -998,8 +804,6 @@ public class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(payment.getId().intValue())))
             .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
             .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.intValue())))
-            .andExpect(jsonPath("$.[*].dealerName").value(hasItem(DEFAULT_DEALER_NAME)))
-            .andExpect(jsonPath("$.[*].paymentCategory").value(hasItem(DEFAULT_PAYMENT_CATEGORY)));
+            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.intValue())));
     }
 }
