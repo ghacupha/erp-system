@@ -65,6 +65,9 @@ public class PaymentResourceIT {
     private static final BigDecimal UPDATED_PAYMENT_AMOUNT = new BigDecimal(2);
     private static final BigDecimal SMALLER_PAYMENT_AMOUNT = new BigDecimal(1 - 1);
 
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+
     @Autowired
     private PaymentRepository paymentRepository;
 
@@ -103,7 +106,8 @@ public class PaymentResourceIT {
         Payment payment = new Payment()
             .paymentNumber(DEFAULT_PAYMENT_NUMBER)
             .paymentDate(DEFAULT_PAYMENT_DATE)
-            .paymentAmount(DEFAULT_PAYMENT_AMOUNT);
+            .paymentAmount(DEFAULT_PAYMENT_AMOUNT)
+            .description(DEFAULT_DESCRIPTION);
         // Add required entity
         PaymentCalculation paymentCalculation;
         if (TestUtil.findAll(em, PaymentCalculation.class).isEmpty()) {
@@ -126,7 +130,8 @@ public class PaymentResourceIT {
         Payment payment = new Payment()
             .paymentNumber(UPDATED_PAYMENT_NUMBER)
             .paymentDate(UPDATED_PAYMENT_DATE)
-            .paymentAmount(UPDATED_PAYMENT_AMOUNT);
+            .paymentAmount(UPDATED_PAYMENT_AMOUNT)
+            .description(UPDATED_DESCRIPTION);
         // Add required entity
         PaymentCalculation paymentCalculation;
         if (TestUtil.findAll(em, PaymentCalculation.class).isEmpty()) {
@@ -163,6 +168,7 @@ public class PaymentResourceIT {
         assertThat(testPayment.getPaymentNumber()).isEqualTo(DEFAULT_PAYMENT_NUMBER);
         assertThat(testPayment.getPaymentDate()).isEqualTo(DEFAULT_PAYMENT_DATE);
         assertThat(testPayment.getPaymentAmount()).isEqualTo(DEFAULT_PAYMENT_AMOUNT);
+        assertThat(testPayment.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
 
         // Validate the id for MapsId, the ids must be same
         assertThat(testPayment.getId()).isEqualTo(testPayment.getPaymentCalculation().getId());
@@ -244,7 +250,8 @@ public class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(payment.getId().intValue())))
             .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
             .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.intValue())));
+            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.intValue())))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
     }
 
     @Test
@@ -260,7 +267,8 @@ public class PaymentResourceIT {
             .andExpect(jsonPath("$.id").value(payment.getId().intValue()))
             .andExpect(jsonPath("$.paymentNumber").value(DEFAULT_PAYMENT_NUMBER))
             .andExpect(jsonPath("$.paymentDate").value(DEFAULT_PAYMENT_DATE.toString()))
-            .andExpect(jsonPath("$.paymentAmount").value(DEFAULT_PAYMENT_AMOUNT.intValue()));
+            .andExpect(jsonPath("$.paymentAmount").value(DEFAULT_PAYMENT_AMOUNT.intValue()))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION));
     }
 
 
@@ -573,6 +581,84 @@ public class PaymentResourceIT {
 
     @Test
     @Transactional
+    public void getAllPaymentsByDescriptionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where description equals to DEFAULT_DESCRIPTION
+        defaultPaymentShouldBeFound("description.equals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the paymentList where description equals to UPDATED_DESCRIPTION
+        defaultPaymentShouldNotBeFound("description.equals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPaymentsByDescriptionIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where description not equals to DEFAULT_DESCRIPTION
+        defaultPaymentShouldNotBeFound("description.notEquals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the paymentList where description not equals to UPDATED_DESCRIPTION
+        defaultPaymentShouldBeFound("description.notEquals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPaymentsByDescriptionIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where description in DEFAULT_DESCRIPTION or UPDATED_DESCRIPTION
+        defaultPaymentShouldBeFound("description.in=" + DEFAULT_DESCRIPTION + "," + UPDATED_DESCRIPTION);
+
+        // Get all the paymentList where description equals to UPDATED_DESCRIPTION
+        defaultPaymentShouldNotBeFound("description.in=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPaymentsByDescriptionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where description is not null
+        defaultPaymentShouldBeFound("description.specified=true");
+
+        // Get all the paymentList where description is null
+        defaultPaymentShouldNotBeFound("description.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllPaymentsByDescriptionContainsSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where description contains DEFAULT_DESCRIPTION
+        defaultPaymentShouldBeFound("description.contains=" + DEFAULT_DESCRIPTION);
+
+        // Get all the paymentList where description contains UPDATED_DESCRIPTION
+        defaultPaymentShouldNotBeFound("description.contains=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPaymentsByDescriptionNotContainsSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where description does not contain DEFAULT_DESCRIPTION
+        defaultPaymentShouldNotBeFound("description.doesNotContain=" + DEFAULT_DESCRIPTION);
+
+        // Get all the paymentList where description does not contain UPDATED_DESCRIPTION
+        defaultPaymentShouldBeFound("description.doesNotContain=" + UPDATED_DESCRIPTION);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllPaymentsByOwnedInvoiceIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
@@ -676,7 +762,8 @@ public class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(payment.getId().intValue())))
             .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
             .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.intValue())));
+            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.intValue())))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
 
         // Check, that the count call also returns 1
         restPaymentMockMvc.perform(get("/api/payments/count?sort=id,desc&" + filter))
@@ -725,7 +812,8 @@ public class PaymentResourceIT {
         updatedPayment
             .paymentNumber(UPDATED_PAYMENT_NUMBER)
             .paymentDate(UPDATED_PAYMENT_DATE)
-            .paymentAmount(UPDATED_PAYMENT_AMOUNT);
+            .paymentAmount(UPDATED_PAYMENT_AMOUNT)
+            .description(UPDATED_DESCRIPTION);
         PaymentDTO paymentDTO = paymentMapper.toDto(updatedPayment);
 
         restPaymentMockMvc.perform(put("/api/payments").with(csrf())
@@ -740,6 +828,7 @@ public class PaymentResourceIT {
         assertThat(testPayment.getPaymentNumber()).isEqualTo(UPDATED_PAYMENT_NUMBER);
         assertThat(testPayment.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
         assertThat(testPayment.getPaymentAmount()).isEqualTo(UPDATED_PAYMENT_AMOUNT);
+        assertThat(testPayment.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
 
         // Validate the Payment in Elasticsearch
         verify(mockPaymentSearchRepository, times(1)).save(testPayment);
@@ -804,6 +893,7 @@ public class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(payment.getId().intValue())))
             .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
             .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.intValue())));
+            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.intValue())))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
     }
 }

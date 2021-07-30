@@ -11,6 +11,10 @@
     {
       "fieldName": "paymentAmount",
       "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
     }
   ],
   "relationships": [
