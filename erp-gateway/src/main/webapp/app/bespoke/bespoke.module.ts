@@ -10,6 +10,10 @@ const routes: Routes = [
     path: 'about/finance-erp',
     loadChildren: () => import('./about/about.module').then(m => m.AboutModule),
   },
+  {
+    path: '',
+    loadChildren: () => import('./payments/payments-maintenance.module').then(m => m.PaymentsMaintenanceModule),
+  },
 ];
 
 @NgModule({
