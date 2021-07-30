@@ -1,11 +1,11 @@
-id;payment_number;payment_date;payment_amount;description
-1;Soap Guernsey;2021-06-26;85028;haptic
-2;Polarised;2021-06-27;16066;Wooden
-3;harness solid state;2021-06-26;81878;back up
-4;e-services Skyway;2021-06-27;77152;Fish
-5;Infrastructure Automotive PNG;2021-06-27;50252;moratorium
-6;Keyboard;2021-06-27;12604;syndicate
-7;payment;2021-06-26;8762;empower Functionality
-8;Soft redundant;2021-06-27;45056;Steel Secured Dominican Republic
-9;target throughput;2021-06-26;52285;compressing leading edge
-10;red viral French Polynesia;2021-06-26;90381;United States Minor Outlying Islands Designer indigo
+id;payment_number;payment_date;payment_amount;description;payment_category_id
+1;Soap Guernsey;2021-06-26;85028;haptic;1
+2;Polarised;2021-06-27;16066;Wooden;2
+3;harness solid state;2021-06-26;81878;back up;3
+4;e-services Skyway;2021-06-27;77152;Fish;4
+5;Infrastructure Automotive PNG;2021-06-27;50252;moratorium;5
+6;Keyboard;2021-06-27;12604;syndicate;6
+7;payment;2021-06-26;8762;empower Functionality;7
+8;Soft redundant;2021-06-27;45056;Steel Secured Dominican Republic;8
+9;target throughput;2021-06-26;52285;compressing leading edge;9
+10;red viral French Polynesia;2021-06-26;90381;United States Minor Outlying Islands Designer indigo;10

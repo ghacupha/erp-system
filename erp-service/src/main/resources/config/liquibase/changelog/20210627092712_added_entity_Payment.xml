@@ -33,6 +33,9 @@
             <column name="tax_rule_id" type="bigint">
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_payment_tax_rule_id" />
             </column>
+            <column name="payment_category_id" type="bigint">
+                <constraints unique="true" nullable="false" uniqueConstraintName="ux_payment_payment_category_id" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
@@ -60,6 +63,7 @@
             <column name="payment_date" type="date"/>
             <column name="payment_amount" type="numeric"/>
             <column name="description" type="string"/>
+            <column name="payment_category_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

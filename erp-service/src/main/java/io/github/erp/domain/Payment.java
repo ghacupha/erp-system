@@ -6,6 +6,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
@@ -62,6 +63,11 @@ public class Payment implements Serializable {
     @OneToOne
     @JoinColumn(unique = true)
     private TaxRule taxRule;
+
+    @OneToOne(optional = false)
+    @NotNull
+    @JoinColumn(unique = true)
+    private PaymentCategory paymentCategory;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -211,6 +217,19 @@ public class Payment implements Serializable {
 
     public void setTaxRule(TaxRule taxRule) {
         this.taxRule = taxRule;
+    }
+
+    public PaymentCategory getPaymentCategory() {
+        return paymentCategory;
+    }
+
+    public Payment paymentCategory(PaymentCategory paymentCategory) {
+        this.paymentCategory = paymentCategory;
+        return this;
+    }
+
+    public void setPaymentCategory(PaymentCategory paymentCategory) {
+        this.paymentCategory = paymentCategory;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

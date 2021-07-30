@@ -1,21 +1,5 @@
 package io.github.erp.service.dto;
 
-/*-
- * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import java.io.Serializable;
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
@@ -67,6 +51,8 @@ public class PaymentCategoryCriteria implements Serializable, Criteria {
 
     private CategoryTypesFilter categoryType;
 
+    private LongFilter paymentId;
+
     public PaymentCategoryCriteria() {
     }
 
@@ -75,6 +61,7 @@ public class PaymentCategoryCriteria implements Serializable, Criteria {
         this.categoryName = other.categoryName == null ? null : other.categoryName.copy();
         this.categoryDescription = other.categoryDescription == null ? null : other.categoryDescription.copy();
         this.categoryType = other.categoryType == null ? null : other.categoryType.copy();
+        this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
     }
 
     @Override
@@ -114,6 +101,14 @@ public class PaymentCategoryCriteria implements Serializable, Criteria {
         this.categoryType = categoryType;
     }
 
+    public LongFilter getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(LongFilter paymentId) {
+        this.paymentId = paymentId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -128,7 +123,8 @@ public class PaymentCategoryCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(categoryName, that.categoryName) &&
             Objects.equals(categoryDescription, that.categoryDescription) &&
-            Objects.equals(categoryType, that.categoryType);
+            Objects.equals(categoryType, that.categoryType) &&
+            Objects.equals(paymentId, that.paymentId);
     }
 
     @Override
@@ -137,7 +133,8 @@ public class PaymentCategoryCriteria implements Serializable, Criteria {
         id,
         categoryName,
         categoryDescription,
-        categoryType
+        categoryType,
+        paymentId
         );
     }
 
@@ -149,6 +146,7 @@ public class PaymentCategoryCriteria implements Serializable, Criteria {
                 (categoryName != null ? "categoryName=" + categoryName + ", " : "") +
                 (categoryDescription != null ? "categoryDescription=" + categoryDescription + ", " : "") +
                 (categoryType != null ? "categoryType=" + categoryType + ", " : "") +
+                (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
             "}";
     }
 

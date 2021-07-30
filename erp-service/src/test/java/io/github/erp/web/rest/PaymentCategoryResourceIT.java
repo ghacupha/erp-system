@@ -1,24 +1,9 @@
 package io.github.erp.web.rest;
 
-/*-
- * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import io.github.erp.ErpServiceApp;
 import io.github.erp.config.SecurityBeanOverrideConfiguration;
 import io.github.erp.domain.PaymentCategory;
+import io.github.erp.domain.Payment;
 import io.github.erp.repository.PaymentCategoryRepository;
 import io.github.erp.repository.search.PaymentCategorySearchRepository;
 import io.github.erp.service.PaymentCategoryService;
@@ -478,6 +463,27 @@ public class PaymentCategoryResourceIT {
         // Get all the paymentCategoryList where categoryType is null
         defaultPaymentCategoryShouldNotBeFound("categoryType.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllPaymentCategoriesByPaymentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentCategoryRepository.saveAndFlush(paymentCategory);
+        Payment payment = PaymentResourceIT.createEntity(em);
+        em.persist(payment);
+        em.flush();
+        paymentCategory.setPayment(payment);
+        payment.setPaymentCategory(paymentCategory);
+        paymentCategoryRepository.saveAndFlush(paymentCategory);
+        Long paymentId = payment.getId();
+
+        // Get all the paymentCategoryList where payment equals to paymentId
+        defaultPaymentCategoryShouldBeFound("paymentId.equals=" + paymentId);
+
+        // Get all the paymentCategoryList where payment equals to paymentId + 1
+        defaultPaymentCategoryShouldNotBeFound("paymentId.equals=" + (paymentId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
