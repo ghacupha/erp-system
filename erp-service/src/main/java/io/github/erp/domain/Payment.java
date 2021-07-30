@@ -37,6 +37,9 @@ public class Payment implements Serializable {
     @Column(name = "payment_amount", precision = 21, scale = 2)
     private BigDecimal paymentAmount;
 
+    @Column(name = "description")
+    private String description;
+
     @OneToMany(mappedBy = "payment")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Invoice> ownedInvoices = new HashSet<>();
@@ -106,6 +109,19 @@ public class Payment implements Serializable {
 
     public void setPaymentAmount(BigDecimal paymentAmount) {
         this.paymentAmount = paymentAmount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Payment description(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Set<Invoice> getOwnedInvoices() {
@@ -222,6 +238,7 @@ public class Payment implements Serializable {
             ", paymentNumber='" + getPaymentNumber() + "'" +
             ", paymentDate='" + getPaymentDate() + "'" +
             ", paymentAmount=" + getPaymentAmount() +
+            ", description='" + getDescription() + "'" +
             "}";
     }
 }

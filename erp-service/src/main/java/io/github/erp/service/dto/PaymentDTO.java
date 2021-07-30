@@ -17,6 +17,8 @@ public class PaymentDTO implements Serializable {
 
     private BigDecimal paymentAmount;
 
+    private String description;
+
 
     private Long paymentCalculationId;
 
@@ -54,6 +56,14 @@ public class PaymentDTO implements Serializable {
 
     public void setPaymentAmount(BigDecimal paymentAmount) {
         this.paymentAmount = paymentAmount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Long getPaymentCalculationId() {
@@ -105,6 +115,7 @@ public class PaymentDTO implements Serializable {
             ", paymentNumber='" + getPaymentNumber() + "'" +
             ", paymentDate='" + getPaymentDate() + "'" +
             ", paymentAmount=" + getPaymentAmount() +
+            ", description='" + getDescription() + "'" +
             ", paymentCalculationId=" + getPaymentCalculationId() +
             ", paymentRequisitionId=" + getPaymentRequisitionId() +
             ", taxRuleId=" + getTaxRuleId() +

@@ -87,6 +87,7 @@ class PaymentGatlingTest extends Simulation {
                 , "paymentNumber":"SAMPLE_TEXT"
                 , "paymentDate":"2020-01-01T00:00:00.000Z"
                 , "paymentAmount":"0"
+                , "description":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_payment_url"))).exitHereIfFailed
