@@ -5,8 +5,15 @@ export interface IPaymentCategory {
   categoryName?: string;
   categoryDescription?: string;
   categoryType?: CategoryTypes;
+  paymentId?: number;
 }
 
 export class PaymentCategory implements IPaymentCategory {
-  constructor(public id?: number, public categoryName?: string, public categoryDescription?: string, public categoryType?: CategoryTypes) {}
+  constructor(
+    public id?: number,
+    public categoryName?: string,
+    public categoryDescription?: string,
+    public categoryType?: CategoryTypes,
+    public paymentId?: number
+  ) {}
 }

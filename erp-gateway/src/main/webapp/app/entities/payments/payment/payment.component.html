@@ -44,11 +44,11 @@
                     <th scope="col"  jhiSortBy="paymentNumber"><span>Payment Number</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="paymentDate"><span>Payment Date</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="paymentAmount"><span>Payment Amount</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="dealerName"><span>Dealer Name</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="paymentCategory"><span>Payment Category</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="paymentCalculationId"><span>Payment Calculation</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="description"><span>Description</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="paymentRequisitionId"><span>Payment Requisition</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="taxRuleId"><span>Tax Rule</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="paymentCategoryId"><span>Payment Category</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="paymentCalculationId"><span>Payment Calculation</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -58,13 +58,7 @@
                     <td>{{ payment.paymentNumber }}</td>
                     <td>{{ payment.paymentDate | momentMediumDate }}</td>
                     <td>{{ payment.paymentAmount }}</td>
-                    <td>{{ payment.dealerName }}</td>
-                    <td>{{ payment.paymentCategory }}</td>
-                    <td>
-                        <div *ngIf="payment.paymentCalculationId">
-                            <a [routerLink]="['/payment-calculation', payment.paymentCalculationId , 'view']" >{{ payment.paymentCalculationId }}</a>
-                        </div>
-                    </td>
+                    <td>{{ payment.description }}</td>
                     <td>
                         <div *ngIf="payment.paymentRequisitionId">
                             <a [routerLink]="['/payment-requisition', payment.paymentRequisitionId , 'view']" >{{ payment.paymentRequisitionId }}</a>
@@ -73,6 +67,16 @@
                     <td>
                         <div *ngIf="payment.taxRuleId">
                             <a [routerLink]="['/tax-rule', payment.taxRuleId , 'view']" >{{ payment.taxRuleId }}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="payment.paymentCategoryId">
+                            <a [routerLink]="['/payment-category', payment.paymentCategoryId , 'view']" >{{ payment.paymentCategoryId }}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="payment.paymentCalculationId">
+                            <a [routerLink]="['/payment-calculation', payment.paymentCalculationId , 'view']" >{{ payment.paymentCalculationId }}</a>
                         </div>
                     </td>
                     <td class="text-right">

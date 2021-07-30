@@ -48,18 +48,17 @@ describe('Payment e2e test', () => {
             paymentUpdatePage.setPaymentNumberInput('paymentNumber'),
             paymentUpdatePage.setPaymentDateInput('2000-12-31'),
             paymentUpdatePage.setPaymentAmountInput('5'),
-            paymentUpdatePage.setDealerNameInput('dealerName'),
-            paymentUpdatePage.setPaymentCategoryInput('paymentCategory'),
-            paymentUpdatePage.paymentCalculationSelectLastOption(),
+            paymentUpdatePage.setDescriptionInput('description'),
             paymentUpdatePage.paymentRequisitionSelectLastOption(),
             paymentUpdatePage.taxRuleSelectLastOption(),
+            paymentUpdatePage.paymentCategorySelectLastOption(),
+            paymentUpdatePage.paymentCalculationSelectLastOption(),
         ]);
 
         expect(await paymentUpdatePage.getPaymentNumberInput()).to.eq('paymentNumber', 'Expected PaymentNumber value to be equals to paymentNumber');
         expect(await paymentUpdatePage.getPaymentDateInput()).to.eq('2000-12-31', 'Expected paymentDate value to be equals to 2000-12-31');
         expect(await paymentUpdatePage.getPaymentAmountInput()).to.eq('5', 'Expected paymentAmount value to be equals to 5');
-        expect(await paymentUpdatePage.getDealerNameInput()).to.eq('dealerName', 'Expected DealerName value to be equals to dealerName');
-        expect(await paymentUpdatePage.getPaymentCategoryInput()).to.eq('paymentCategory', 'Expected PaymentCategory value to be equals to paymentCategory');
+        expect(await paymentUpdatePage.getDescriptionInput()).to.eq('description', 'Expected Description value to be equals to description');
 
         await paymentUpdatePage.save();
         expect(await paymentUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;

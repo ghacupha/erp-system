@@ -24,7 +24,7 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new Payment(0, 'AAAAAAA', currentDate, 0, 'AAAAAAA', 'AAAAAAA');
+      elemDefault = new Payment(0, 'AAAAAAA', currentDate, 0, 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -72,8 +72,7 @@ describe('Service Tests', () => {
             paymentNumber: 'BBBBBB',
             paymentDate: currentDate.format(DATE_FORMAT),
             paymentAmount: 1,
-            dealerName: 'BBBBBB',
-            paymentCategory: 'BBBBBB',
+            description: 'BBBBBB',
           },
           elemDefault
         );
@@ -98,8 +97,7 @@ describe('Service Tests', () => {
             paymentNumber: 'BBBBBB',
             paymentDate: currentDate.format(DATE_FORMAT),
             paymentAmount: 1,
-            dealerName: 'BBBBBB',
-            paymentCategory: 'BBBBBB',
+            description: 'BBBBBB',
           },
           elemDefault
         );

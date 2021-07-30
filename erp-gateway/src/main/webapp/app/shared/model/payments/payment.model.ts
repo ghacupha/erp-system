@@ -7,13 +7,13 @@ export interface IPayment {
   paymentNumber?: string;
   paymentDate?: Moment;
   paymentAmount?: number;
-  dealerName?: string;
-  paymentCategory?: string;
+  description?: string;
   ownedInvoices?: IInvoice[];
-  paymentCalculationId?: number;
   paymentRequisitionId?: number;
   dealers?: IDealer[];
   taxRuleId?: number;
+  paymentCategoryId?: number;
+  paymentCalculationId?: number;
 }
 
 export class Payment implements IPayment {
@@ -22,12 +22,12 @@ export class Payment implements IPayment {
     public paymentNumber?: string,
     public paymentDate?: Moment,
     public paymentAmount?: number,
-    public dealerName?: string,
-    public paymentCategory?: string,
+    public description?: string,
     public ownedInvoices?: IInvoice[],
-    public paymentCalculationId?: number,
     public paymentRequisitionId?: number,
     public dealers?: IDealer[],
-    public taxRuleId?: number
+    public taxRuleId?: number,
+    public paymentCategoryId?: number,
+    public paymentCalculationId?: number
   ) {}
 }

@@ -34,23 +34,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" for="field_dealerName">Dealer Name</label>
-                    <input type="text" class="form-control" name="dealerName" id="field_dealerName"
-                           formControlName="dealerName"/>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" for="field_paymentCategory">Payment Category</label>
-                    <input type="text" class="form-control" name="paymentCategory" id="field_paymentCategory"
-                           formControlName="paymentCategory"/>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" for="field_paymentCalculation">Payment Calculation</label>
-                    <select class="form-control" id="field_paymentCalculation" name="paymentCalculation" formControlName="paymentCalculationId">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="paymentCalculationOption.id" *ngFor="let paymentCalculationOption of paymentcalculations; trackBy: trackById">{{ paymentCalculationOption.id }}</option>
-                    </select>
+                    <label class="form-control-label" for="field_description">Description</label>
+                    <input type="text" class="form-control" name="description" id="field_description"
+                           formControlName="description"/>
                 </div>
 
                 <div class="form-group">
@@ -67,6 +53,34 @@
                         <option [ngValue]="null"></option>
                         <option [ngValue]="taxRuleOption.id" *ngFor="let taxRuleOption of taxrules; trackBy: trackById">{{ taxRuleOption.id }}</option>
                     </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_paymentCategory">Payment Category</label>
+                    <select class="form-control" id="field_paymentCategory" name="paymentCategory" formControlName="paymentCategoryId">
+                        <option *ngIf="!editForm.get('paymentCategoryId')!.value" [ngValue]="null" selected></option>
+                        <option [ngValue]="paymentCategoryOption.id" *ngFor="let paymentCategoryOption of paymentcategories; trackBy: trackById">{{ paymentCategoryOption.id }}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('paymentCategoryId')!.invalid && (editForm.get('paymentCategoryId')!.dirty || editForm.get('paymentCategoryId')!.touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('paymentCategoryId')?.errors?.required">
+                        This field is required.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_paymentCalculation">Payment Calculation</label>
+                    <select class="form-control" id="field_paymentCalculation" name="paymentCalculation" formControlName="paymentCalculationId">
+                        <option *ngIf="!editForm.get('paymentCalculationId')!.value" [ngValue]="null" selected></option>
+                        <option [ngValue]="paymentCalculationOption.id" *ngFor="let paymentCalculationOption of paymentcalculations; trackBy: trackById">{{ paymentCalculationOption.id }}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('paymentCalculationId')!.invalid && (editForm.get('paymentCalculationId')!.dirty || editForm.get('paymentCalculationId')!.touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('paymentCalculationId')?.errors?.required">
+                        This field is required.
+                    </small>
                 </div>
             </div>
 

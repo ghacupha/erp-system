@@ -32,12 +32,12 @@ export class PaymentUpdatePage {
   paymentNumberInput = element(by.id('field_paymentNumber'));
   paymentDateInput = element(by.id('field_paymentDate'));
   paymentAmountInput = element(by.id('field_paymentAmount'));
-  dealerNameInput = element(by.id('field_dealerName'));
-  paymentCategoryInput = element(by.id('field_paymentCategory'));
+  descriptionInput = element(by.id('field_description'));
 
-  paymentCalculationSelect = element(by.id('field_paymentCalculation'));
   paymentRequisitionSelect = element(by.id('field_paymentRequisition'));
   taxRuleSelect = element(by.id('field_taxRule'));
+  paymentCategorySelect = element(by.id('field_paymentCategory'));
+  paymentCalculationSelect = element(by.id('field_paymentCalculation'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -67,36 +67,12 @@ export class PaymentUpdatePage {
     return await this.paymentAmountInput.getAttribute('value');
   }
 
-  async setDealerNameInput(dealerName: string): Promise<void> {
-    await this.dealerNameInput.sendKeys(dealerName);
+  async setDescriptionInput(description: string): Promise<void> {
+    await this.descriptionInput.sendKeys(description);
   }
 
-  async getDealerNameInput(): Promise<string> {
-    return await this.dealerNameInput.getAttribute('value');
-  }
-
-  async setPaymentCategoryInput(paymentCategory: string): Promise<void> {
-    await this.paymentCategoryInput.sendKeys(paymentCategory);
-  }
-
-  async getPaymentCategoryInput(): Promise<string> {
-    return await this.paymentCategoryInput.getAttribute('value');
-  }
-
-  async paymentCalculationSelectLastOption(): Promise<void> {
-    await this.paymentCalculationSelect.all(by.tagName('option')).last().click();
-  }
-
-  async paymentCalculationSelectOption(option: string): Promise<void> {
-    await this.paymentCalculationSelect.sendKeys(option);
-  }
-
-  getPaymentCalculationSelect(): ElementFinder {
-    return this.paymentCalculationSelect;
-  }
-
-  async getPaymentCalculationSelectedOption(): Promise<string> {
-    return await this.paymentCalculationSelect.element(by.css('option:checked')).getText();
+  async getDescriptionInput(): Promise<string> {
+    return await this.descriptionInput.getAttribute('value');
   }
 
   async paymentRequisitionSelectLastOption(): Promise<void> {
@@ -129,6 +105,38 @@ export class PaymentUpdatePage {
 
   async getTaxRuleSelectedOption(): Promise<string> {
     return await this.taxRuleSelect.element(by.css('option:checked')).getText();
+  }
+
+  async paymentCategorySelectLastOption(): Promise<void> {
+    await this.paymentCategorySelect.all(by.tagName('option')).last().click();
+  }
+
+  async paymentCategorySelectOption(option: string): Promise<void> {
+    await this.paymentCategorySelect.sendKeys(option);
+  }
+
+  getPaymentCategorySelect(): ElementFinder {
+    return this.paymentCategorySelect;
+  }
+
+  async getPaymentCategorySelectedOption(): Promise<string> {
+    return await this.paymentCategorySelect.element(by.css('option:checked')).getText();
+  }
+
+  async paymentCalculationSelectLastOption(): Promise<void> {
+    await this.paymentCalculationSelect.all(by.tagName('option')).last().click();
+  }
+
+  async paymentCalculationSelectOption(option: string): Promise<void> {
+    await this.paymentCalculationSelect.sendKeys(option);
+  }
+
+  getPaymentCalculationSelect(): ElementFinder {
+    return this.paymentCalculationSelect;
+  }
+
+  async getPaymentCalculationSelectedOption(): Promise<string> {
+    return await this.paymentCalculationSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {
