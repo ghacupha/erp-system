@@ -43,5 +43,5 @@
   "readOnly": false,
   "embedded": false,
   "clientRootFolder": "files",
-  "applications": "*"
+  "microserviceName": "erpService"
 }

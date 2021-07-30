@@ -43,5 +43,6 @@
   "pagination": "pagination",
   "name": "FixedAssetAcquisition",
   "changelogDate": "20210323113701",
-  "clientRootFolder": "assets"
+  "clientRootFolder": "assets",
+  "microserviceName": "erpService"
 }

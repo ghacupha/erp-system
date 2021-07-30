@@ -17,7 +17,7 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "netBookValueDate",
+      "fieldName": "depreciationDate",
       "fieldType": "LocalDate"
     },
     {
@@ -25,7 +25,7 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "netBookValue",
+      "fieldName": "depreciationAmount",
       "fieldType": "BigDecimal"
     },
     {
@@ -49,7 +49,8 @@
   "jpaMetamodelFiltering": true,
   "readOnly": false,
   "pagination": "pagination",
-  "name": "FixedAssetNetBookValue",
-  "changelogDate": "20210323123701",
-  "clientRootFolder": "assets"
+  "name": "FixedAssetDepreciation",
+  "changelogDate": "20210323133701",
+  "clientRootFolder": "assets",
+  "microserviceName": "erpService"
 }
