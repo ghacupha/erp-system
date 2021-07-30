@@ -13,11 +13,7 @@
       "fieldType": "BigDecimal"
     },
     {
-      "fieldName": "dealerName",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "paymentCategory",
+      "fieldName": "description",
       "fieldType": "String"
     }
   ],
@@ -27,15 +23,6 @@
       "otherEntityName": "invoice",
       "otherEntityRelationshipName": "payment",
       "relationshipName": "ownedInvoice"
-    },
-    {
-      "relationshipName": "paymentCalculation",
-      "otherEntityName": "paymentCalculation",
-      "relationshipType": "one-to-one",
-      "otherEntityField": "id",
-      "ownerSide": true,
-      "useJPADerivedIdentifier": true,
-      "otherEntityRelationshipName": "payment"
     },
     {
       "relationshipName": "paymentRequisition",
@@ -55,6 +42,26 @@
       "relationshipName": "taxRule",
       "otherEntityName": "taxRule",
       "relationshipType": "one-to-one",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "useJPADerivedIdentifier": false,
+      "otherEntityRelationshipName": "payment"
+    },
+    {
+      "relationshipName": "paymentCategory",
+      "otherEntityName": "paymentCategory",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "useJPADerivedIdentifier": false,
+      "otherEntityRelationshipName": "payment"
+    },
+    {
+      "relationshipName": "paymentCalculation",
+      "otherEntityName": "paymentCalculation",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": ["required"],
       "otherEntityField": "id",
       "ownerSide": true,
       "useJPADerivedIdentifier": false,
