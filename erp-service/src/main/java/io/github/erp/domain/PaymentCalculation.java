@@ -1,5 +1,6 @@
 package io.github.erp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -46,6 +47,10 @@ public class PaymentCalculation implements Serializable {
 
     @Column(name = "payment_amount", precision = 21, scale = 2)
     private BigDecimal paymentAmount;
+
+    @OneToOne(mappedBy = "paymentCalculation")
+    @JsonIgnore
+    private Payment payment;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -145,6 +150,19 @@ public class PaymentCalculation implements Serializable {
 
     public void setPaymentAmount(BigDecimal paymentAmount) {
         this.paymentAmount = paymentAmount;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public PaymentCalculation payment(Payment payment) {
+        this.payment = payment;
+        return this;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

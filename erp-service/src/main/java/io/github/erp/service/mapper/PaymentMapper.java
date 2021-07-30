@@ -9,12 +9,13 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Payment} and its DTO {@link PaymentDTO}.
  */
-@Mapper(componentModel = "spring", uses = {PaymentRequisitionMapper.class, TaxRuleMapper.class, PaymentCategoryMapper.class})
+@Mapper(componentModel = "spring", uses = {PaymentRequisitionMapper.class, TaxRuleMapper.class, PaymentCategoryMapper.class, PaymentCalculationMapper.class})
 public interface PaymentMapper extends EntityMapper<PaymentDTO, Payment> {
 
     @Mapping(source = "paymentRequisition.id", target = "paymentRequisitionId")
     @Mapping(source = "taxRule.id", target = "taxRuleId")
     @Mapping(source = "paymentCategory.id", target = "paymentCategoryId")
+    @Mapping(source = "paymentCalculation.id", target = "paymentCalculationId")
     PaymentDTO toDto(Payment payment);
 
     @Mapping(target = "ownedInvoices", ignore = true)
@@ -24,6 +25,7 @@ public interface PaymentMapper extends EntityMapper<PaymentDTO, Payment> {
     @Mapping(target = "removeDealer", ignore = true)
     @Mapping(source = "taxRuleId", target = "taxRule")
     @Mapping(source = "paymentCategoryId", target = "paymentCategory")
+    @Mapping(source = "paymentCalculationId", target = "paymentCalculation")
     Payment toEntity(PaymentDTO paymentDTO);
 
     default Payment fromId(Long id) {

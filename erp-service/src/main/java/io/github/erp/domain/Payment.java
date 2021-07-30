@@ -65,6 +65,11 @@ public class Payment implements Serializable {
     @JoinColumn(unique = true)
     private PaymentCategory paymentCategory;
 
+    @OneToOne(optional = false)
+    @NotNull
+    @JoinColumn(unique = true)
+    private PaymentCalculation paymentCalculation;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -213,6 +218,19 @@ public class Payment implements Serializable {
 
     public void setPaymentCategory(PaymentCategory paymentCategory) {
         this.paymentCategory = paymentCategory;
+    }
+
+    public PaymentCalculation getPaymentCalculation() {
+        return paymentCalculation;
+    }
+
+    public Payment paymentCalculation(PaymentCalculation paymentCalculation) {
+        this.paymentCalculation = paymentCalculation;
+        return this;
+    }
+
+    public void setPaymentCalculation(PaymentCalculation paymentCalculation) {
+        this.paymentCalculation = paymentCalculation;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

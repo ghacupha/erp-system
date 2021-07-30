@@ -26,5 +26,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="payment_category"/>
 
+        <addForeignKeyConstraint baseColumnNames="payment_calculation_id"
+                                 baseTableName="payment"
+                                 constraintName="fk_payment_payment_calculation_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_calculation"/>
+
     </changeSet>
 </databaseChangeLog>
