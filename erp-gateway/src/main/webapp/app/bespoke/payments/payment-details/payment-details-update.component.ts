@@ -15,6 +15,9 @@ import {TaxRuleService} from "app/entities/payments/tax-rule/tax-rule.service";
 import {PaymentCategoryService} from "app/entities/payments/payment-category/payment-category.service";
 import {PaymentCalculationService} from "app/entities/payments/payment-calculation/payment-calculation.service";
 import {map} from "rxjs/operators";
+import {PaymentDeleteDialogComponent} from "app/entities/payments/payment/payment-delete-dialog.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {PaymentRequisitionUpdateComponent} from "app/entities/payments/payment-requisition/payment-requisition-update.component";
 
 type SelectableEntity = IPaymentRequisition | ITaxRule | IPaymentCategory | IPaymentCalculation;
 
@@ -44,6 +47,7 @@ export class PaymentDetailsUpdateComponent implements OnInit {
   });
 
   constructor(
+    protected modalService: NgbModal,
     protected paymentService: PaymentService,
     protected paymentRequisitionService: PaymentRequisitionService,
     protected taxRuleService: TaxRuleService,
@@ -191,5 +195,10 @@ export class PaymentDetailsUpdateComponent implements OnInit {
 
   trackById(index: number, item: SelectableEntity): any {
     return item.id;
+  }
+
+  newRequisition() {
+    const modalRef = this.modalService.open(PaymentRequisitionUpdateComponent, { size: 'lg', backdrop: 'static' });
+    // modalRef.componentInstance.payment = payment;
   }
 }
