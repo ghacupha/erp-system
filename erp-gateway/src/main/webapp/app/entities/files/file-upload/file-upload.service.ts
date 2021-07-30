@@ -14,7 +14,8 @@ type EntityArrayResponseType = HttpResponse<IFileUpload[]>;
 
 @Injectable({ providedIn: 'root' })
 export class FileUploadService {
-  public resourceUrl = SERVER_API_URL + 'services/erpservice/api/file-uploads';
+  // public resourceUrl = SERVER_API_URL + 'services/erpservice/api/file-uploads';
+  public resourceUrl = SERVER_API_URL + 'services/erpservice/api/app/file-uploads';
 
   constructor(protected http: HttpClient) {}
 
