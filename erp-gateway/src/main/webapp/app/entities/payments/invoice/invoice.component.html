@@ -44,8 +44,6 @@
                     <th scope="col"  jhiSortBy="invoiceNumber"><span>Invoice Number</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="invoiceDate"><span>Invoice Date</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="invoiceAmount"><span>Invoice Amount</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="paymentCategory"><span>Payment Category</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"  jhiSortBy="dealerName"><span>Dealer Name</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="paymentId"><span>Payment</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="dealerId"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"></th>
@@ -57,8 +55,6 @@
                     <td>{{ invoice.invoiceNumber }}</td>
                     <td>{{ invoice.invoiceDate | momentMediumDate }}</td>
                     <td>{{ invoice.invoiceAmount }}</td>
-                    <td>{{ invoice.paymentCategory }}</td>
-                    <td>{{ invoice.dealerName }}</td>
                     <td>
                         <div *ngIf="invoice.paymentId">
                             <a [routerLink]="['/payment', invoice.paymentId , 'view']" >{{ invoice.paymentId }}</a>

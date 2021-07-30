@@ -5,8 +5,6 @@ export interface IInvoice {
   invoiceNumber?: string;
   invoiceDate?: Moment;
   invoiceAmount?: number;
-  paymentCategory?: string;
-  dealerName?: string;
   paymentId?: number;
   dealerId?: number;
 }
@@ -17,8 +15,6 @@ export class Invoice implements IInvoice {
     public invoiceNumber?: string,
     public invoiceDate?: Moment,
     public invoiceAmount?: number,
-    public paymentCategory?: string,
-    public dealerName?: string,
     public paymentId?: number,
     public dealerId?: number
   ) {}

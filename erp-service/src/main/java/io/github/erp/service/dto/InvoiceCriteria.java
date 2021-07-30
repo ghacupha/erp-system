@@ -1,21 +1,5 @@
 package io.github.erp.service.dto;
 
-/*-
- * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import java.io.Serializable;
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
@@ -50,10 +34,6 @@ public class InvoiceCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter invoiceAmount;
 
-    private StringFilter paymentCategory;
-
-    private StringFilter dealerName;
-
     private LongFilter paymentId;
 
     private LongFilter dealerId;
@@ -66,8 +46,6 @@ public class InvoiceCriteria implements Serializable, Criteria {
         this.invoiceNumber = other.invoiceNumber == null ? null : other.invoiceNumber.copy();
         this.invoiceDate = other.invoiceDate == null ? null : other.invoiceDate.copy();
         this.invoiceAmount = other.invoiceAmount == null ? null : other.invoiceAmount.copy();
-        this.paymentCategory = other.paymentCategory == null ? null : other.paymentCategory.copy();
-        this.dealerName = other.dealerName == null ? null : other.dealerName.copy();
         this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
         this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
     }
@@ -109,22 +87,6 @@ public class InvoiceCriteria implements Serializable, Criteria {
         this.invoiceAmount = invoiceAmount;
     }
 
-    public StringFilter getPaymentCategory() {
-        return paymentCategory;
-    }
-
-    public void setPaymentCategory(StringFilter paymentCategory) {
-        this.paymentCategory = paymentCategory;
-    }
-
-    public StringFilter getDealerName() {
-        return dealerName;
-    }
-
-    public void setDealerName(StringFilter dealerName) {
-        this.dealerName = dealerName;
-    }
-
     public LongFilter getPaymentId() {
         return paymentId;
     }
@@ -156,8 +118,6 @@ public class InvoiceCriteria implements Serializable, Criteria {
             Objects.equals(invoiceNumber, that.invoiceNumber) &&
             Objects.equals(invoiceDate, that.invoiceDate) &&
             Objects.equals(invoiceAmount, that.invoiceAmount) &&
-            Objects.equals(paymentCategory, that.paymentCategory) &&
-            Objects.equals(dealerName, that.dealerName) &&
             Objects.equals(paymentId, that.paymentId) &&
             Objects.equals(dealerId, that.dealerId);
     }
@@ -169,8 +129,6 @@ public class InvoiceCriteria implements Serializable, Criteria {
         invoiceNumber,
         invoiceDate,
         invoiceAmount,
-        paymentCategory,
-        dealerName,
         paymentId,
         dealerId
         );
@@ -184,8 +142,6 @@ public class InvoiceCriteria implements Serializable, Criteria {
                 (invoiceNumber != null ? "invoiceNumber=" + invoiceNumber + ", " : "") +
                 (invoiceDate != null ? "invoiceDate=" + invoiceDate + ", " : "") +
                 (invoiceAmount != null ? "invoiceAmount=" + invoiceAmount + ", " : "") +
-                (paymentCategory != null ? "paymentCategory=" + paymentCategory + ", " : "") +
-                (dealerName != null ? "dealerName=" + dealerName + ", " : "") +
                 (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
                 (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             "}";

@@ -32,8 +32,6 @@ export class InvoiceUpdatePage {
   invoiceNumberInput = element(by.id('field_invoiceNumber'));
   invoiceDateInput = element(by.id('field_invoiceDate'));
   invoiceAmountInput = element(by.id('field_invoiceAmount'));
-  paymentCategoryInput = element(by.id('field_paymentCategory'));
-  dealerNameInput = element(by.id('field_dealerName'));
 
   paymentSelect = element(by.id('field_payment'));
   dealerSelect = element(by.id('field_dealer'));
@@ -64,22 +62,6 @@ export class InvoiceUpdatePage {
 
   async getInvoiceAmountInput(): Promise<string> {
     return await this.invoiceAmountInput.getAttribute('value');
-  }
-
-  async setPaymentCategoryInput(paymentCategory: string): Promise<void> {
-    await this.paymentCategoryInput.sendKeys(paymentCategory);
-  }
-
-  async getPaymentCategoryInput(): Promise<string> {
-    return await this.paymentCategoryInput.getAttribute('value');
-  }
-
-  async setDealerNameInput(dealerName: string): Promise<void> {
-    await this.dealerNameInput.sendKeys(dealerName);
-  }
-
-  async getDealerNameInput(): Promise<string> {
-    return await this.dealerNameInput.getAttribute('value');
   }
 
   async paymentSelectLastOption(): Promise<void> {

@@ -8,16 +8,12 @@
     {
       "fieldName": "timeSent",
       "fieldType": "Long",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "tokenValue",
       "fieldType": "String",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "received",

@@ -4,18 +4,13 @@
     {
       "fieldName": "fileTypeName",
       "fieldType": "String",
-      "fieldValidateRules": [
-        "required",
-        "unique"
-      ]
+      "fieldValidateRules": ["required", "unique"]
     },
     {
       "fieldName": "fileMediumType",
       "fieldType": "FileMediumTypes",
       "fieldValues": "EXCEL,EXCEL_XLS,EXCEL_XLSX,EXCEL_XLSB,EXCEL_CSV,EXCEL_XML,PDF,POWERPOINT,DOC,TEXT,JSON,HTML5",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "description",

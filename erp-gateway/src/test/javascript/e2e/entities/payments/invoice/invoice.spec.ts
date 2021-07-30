@@ -44,8 +44,6 @@ describe('Invoice e2e test', () => {
       invoiceUpdatePage.setInvoiceNumberInput('invoiceNumber'),
       invoiceUpdatePage.setInvoiceDateInput('2000-12-31'),
       invoiceUpdatePage.setInvoiceAmountInput('5'),
-      invoiceUpdatePage.setPaymentCategoryInput('paymentCategory'),
-      invoiceUpdatePage.setDealerNameInput('dealerName'),
       invoiceUpdatePage.paymentSelectLastOption(),
       invoiceUpdatePage.dealerSelectLastOption(),
     ]);
@@ -56,11 +54,6 @@ describe('Invoice e2e test', () => {
     );
     expect(await invoiceUpdatePage.getInvoiceDateInput()).to.eq('2000-12-31', 'Expected invoiceDate value to be equals to 2000-12-31');
     expect(await invoiceUpdatePage.getInvoiceAmountInput()).to.eq('5', 'Expected invoiceAmount value to be equals to 5');
-    expect(await invoiceUpdatePage.getPaymentCategoryInput()).to.eq(
-      'paymentCategory',
-      'Expected PaymentCategory value to be equals to paymentCategory'
-    );
-    expect(await invoiceUpdatePage.getDealerNameInput()).to.eq('dealerName', 'Expected DealerName value to be equals to dealerName');
 
     await invoiceUpdatePage.save();
     expect(await invoiceUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;

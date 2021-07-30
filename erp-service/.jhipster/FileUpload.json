@@ -4,17 +4,12 @@
     {
       "fieldName": "description",
       "fieldType": "String",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "fileName",
       "fieldType": "String",
-      "fieldValidateRules": [
-        "required",
-        "unique"
-      ]
+      "fieldValidateRules": ["required", "unique"]
     },
     {
       "fieldName": "periodFrom",
@@ -27,17 +22,13 @@
     {
       "fieldName": "fileTypeId",
       "fieldType": "Long",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "dataFile",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "any",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "uploadSuccessful",
@@ -50,9 +41,7 @@
     {
       "fieldName": "uploadToken",
       "fieldType": "String",
-      "fieldValidateRules": [
-        "unique"
-      ]
+      "fieldValidateRules": ["unique"]
     }
   ],
   "relationships": [],
