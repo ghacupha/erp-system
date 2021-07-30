@@ -55,6 +55,16 @@
       "ownerSide": true,
       "useJPADerivedIdentifier": false,
       "otherEntityRelationshipName": "payment"
+    },
+    {
+      "relationshipName": "paymentCategory",
+      "otherEntityName": "paymentCategory",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "useJPADerivedIdentifier": false,
+      "otherEntityRelationshipName": "payment"
     }
   ],
   "service": "serviceImpl",

@@ -1,6 +1,7 @@
 package io.github.erp.service.dto;
 
 import java.time.LocalDate;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -25,6 +26,8 @@ public class PaymentDTO implements Serializable {
     private Long paymentRequisitionId;
 
     private Long taxRuleId;
+
+    private Long paymentCategoryId;
     
     public Long getId() {
         return id;
@@ -90,6 +93,14 @@ public class PaymentDTO implements Serializable {
         this.taxRuleId = taxRuleId;
     }
 
+    public Long getPaymentCategoryId() {
+        return paymentCategoryId;
+    }
+
+    public void setPaymentCategoryId(Long paymentCategoryId) {
+        this.paymentCategoryId = paymentCategoryId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -119,6 +130,7 @@ public class PaymentDTO implements Serializable {
             ", paymentCalculationId=" + getPaymentCalculationId() +
             ", paymentRequisitionId=" + getPaymentRequisitionId() +
             ", taxRuleId=" + getTaxRuleId() +
+            ", paymentCategoryId=" + getPaymentCategoryId() +
             "}";
     }
 }

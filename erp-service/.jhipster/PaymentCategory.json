@@ -1,7 +1,15 @@
 {
   "fluentMethods": true,
   "clientRootFolder": "payments",
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipName": "payment",
+      "otherEntityName": "payment",
+      "relationshipType": "one-to-one",
+      "ownerSide": false,
+      "otherEntityRelationshipName": "paymentCategory"
+    }
+  ],
   "fields": [
     {
       "fieldName": "categoryName",
