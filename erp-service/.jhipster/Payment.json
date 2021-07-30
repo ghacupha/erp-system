@@ -11,14 +11,6 @@
     {
       "fieldName": "paymentAmount",
       "fieldType": "BigDecimal"
-    },
-    {
-      "fieldName": "dealerName",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "paymentCategory",
-      "fieldType": "String"
     }
   ],
   "relationships": [

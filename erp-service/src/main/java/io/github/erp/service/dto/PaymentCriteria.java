@@ -1,21 +1,5 @@
 package io.github.erp.service.dto;
 
-/*-
- * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import java.io.Serializable;
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
@@ -50,10 +34,6 @@ public class PaymentCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter paymentAmount;
 
-    private StringFilter dealerName;
-
-    private StringFilter paymentCategory;
-
     private LongFilter ownedInvoiceId;
 
     private LongFilter paymentCalculationId;
@@ -72,8 +52,6 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.paymentNumber = other.paymentNumber == null ? null : other.paymentNumber.copy();
         this.paymentDate = other.paymentDate == null ? null : other.paymentDate.copy();
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
-        this.dealerName = other.dealerName == null ? null : other.dealerName.copy();
-        this.paymentCategory = other.paymentCategory == null ? null : other.paymentCategory.copy();
         this.ownedInvoiceId = other.ownedInvoiceId == null ? null : other.ownedInvoiceId.copy();
         this.paymentCalculationId = other.paymentCalculationId == null ? null : other.paymentCalculationId.copy();
         this.paymentRequisitionId = other.paymentRequisitionId == null ? null : other.paymentRequisitionId.copy();
@@ -116,22 +94,6 @@ public class PaymentCriteria implements Serializable, Criteria {
 
     public void setPaymentAmount(BigDecimalFilter paymentAmount) {
         this.paymentAmount = paymentAmount;
-    }
-
-    public StringFilter getDealerName() {
-        return dealerName;
-    }
-
-    public void setDealerName(StringFilter dealerName) {
-        this.dealerName = dealerName;
-    }
-
-    public StringFilter getPaymentCategory() {
-        return paymentCategory;
-    }
-
-    public void setPaymentCategory(StringFilter paymentCategory) {
-        this.paymentCategory = paymentCategory;
     }
 
     public LongFilter getOwnedInvoiceId() {
@@ -189,8 +151,6 @@ public class PaymentCriteria implements Serializable, Criteria {
             Objects.equals(paymentNumber, that.paymentNumber) &&
             Objects.equals(paymentDate, that.paymentDate) &&
             Objects.equals(paymentAmount, that.paymentAmount) &&
-            Objects.equals(dealerName, that.dealerName) &&
-            Objects.equals(paymentCategory, that.paymentCategory) &&
             Objects.equals(ownedInvoiceId, that.ownedInvoiceId) &&
             Objects.equals(paymentCalculationId, that.paymentCalculationId) &&
             Objects.equals(paymentRequisitionId, that.paymentRequisitionId) &&
@@ -205,8 +165,6 @@ public class PaymentCriteria implements Serializable, Criteria {
         paymentNumber,
         paymentDate,
         paymentAmount,
-        dealerName,
-        paymentCategory,
         ownedInvoiceId,
         paymentCalculationId,
         paymentRequisitionId,
@@ -223,8 +181,6 @@ public class PaymentCriteria implements Serializable, Criteria {
                 (paymentNumber != null ? "paymentNumber=" + paymentNumber + ", " : "") +
                 (paymentDate != null ? "paymentDate=" + paymentDate + ", " : "") +
                 (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
-                (dealerName != null ? "dealerName=" + dealerName + ", " : "") +
-                (paymentCategory != null ? "paymentCategory=" + paymentCategory + ", " : "") +
                 (ownedInvoiceId != null ? "ownedInvoiceId=" + ownedInvoiceId + ", " : "") +
                 (paymentCalculationId != null ? "paymentCalculationId=" + paymentCalculationId + ", " : "") +
                 (paymentRequisitionId != null ? "paymentRequisitionId=" + paymentRequisitionId + ", " : "") +
