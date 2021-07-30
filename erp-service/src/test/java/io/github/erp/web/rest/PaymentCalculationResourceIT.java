@@ -1,25 +1,8 @@
 package io.github.erp.web.rest;
 
-/*-
- * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import io.github.erp.ErpServiceApp;
 import io.github.erp.config.SecurityBeanOverrideConfiguration;
 import io.github.erp.domain.PaymentCalculation;
-import io.github.erp.domain.Payment;
 import io.github.erp.repository.PaymentCalculationRepository;
 import io.github.erp.repository.search.PaymentCalculationSearchRepository;
 import io.github.erp.service.PaymentCalculationService;
@@ -949,27 +932,6 @@ public class PaymentCalculationResourceIT {
 
         // Get all the paymentCalculationList where paymentAmount is greater than SMALLER_PAYMENT_AMOUNT
         defaultPaymentCalculationShouldBeFound("paymentAmount.greaterThan=" + SMALLER_PAYMENT_AMOUNT);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllPaymentCalculationsByPaymentIsEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-        Payment payment = PaymentResourceIT.createEntity(em);
-        em.persist(payment);
-        em.flush();
-        paymentCalculation.setPayment(payment);
-        payment.setPaymentCalculation(paymentCalculation);
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-        Long paymentId = payment.getId();
-
-        // Get all the paymentCalculationList where payment equals to paymentId
-        defaultPaymentCalculationShouldBeFound("paymentId.equals=" + paymentId);
-
-        // Get all the paymentCalculationList where payment equals to paymentId + 1
-        defaultPaymentCalculationShouldNotBeFound("paymentId.equals=" + (paymentId + 1));
     }
 
     /**

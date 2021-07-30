@@ -24,7 +24,6 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
@@ -65,9 +64,6 @@ public class PaymentResource {
         log.debug("REST request to save Payment : {}", paymentDTO);
         if (paymentDTO.getId() != null) {
             throw new BadRequestAlertException("A new payment cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        if (Objects.isNull(paymentDTO.getPaymentCalculationId())) {
-            throw new BadRequestAlertException("Invalid association value provided", ENTITY_NAME, "null");
         }
         PaymentDTO result = paymentService.save(paymentDTO);
         return ResponseEntity.created(new URI("/api/payments/" + result.getId()))

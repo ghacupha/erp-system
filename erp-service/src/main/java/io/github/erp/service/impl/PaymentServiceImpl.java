@@ -3,7 +3,6 @@ package io.github.erp.service.impl;
 import io.github.erp.service.PaymentService;
 import io.github.erp.domain.Payment;
 import io.github.erp.repository.PaymentRepository;
-import io.github.erp.repository.PaymentCalculationRepository;
 import io.github.erp.repository.search.PaymentSearchRepository;
 import io.github.erp.service.dto.PaymentDTO;
 import io.github.erp.service.mapper.PaymentMapper;
@@ -34,21 +33,16 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentSearchRepository paymentSearchRepository;
 
-    private final PaymentCalculationRepository paymentCalculationRepository;
-
-    public PaymentServiceImpl(PaymentRepository paymentRepository, PaymentMapper paymentMapper, PaymentSearchRepository paymentSearchRepository, PaymentCalculationRepository paymentCalculationRepository) {
+    public PaymentServiceImpl(PaymentRepository paymentRepository, PaymentMapper paymentMapper, PaymentSearchRepository paymentSearchRepository) {
         this.paymentRepository = paymentRepository;
         this.paymentMapper = paymentMapper;
         this.paymentSearchRepository = paymentSearchRepository;
-        this.paymentCalculationRepository = paymentCalculationRepository;
     }
 
     @Override
     public PaymentDTO save(PaymentDTO paymentDTO) {
         log.debug("Request to save Payment : {}", paymentDTO);
         Payment payment = paymentMapper.toEntity(paymentDTO);
-        Long paymentCalculationId = paymentDTO.getPaymentCalculationId();
-        paymentCalculationRepository.findById(paymentCalculationId).ifPresent(payment::paymentCalculation);
         payment = paymentRepository.save(payment);
         PaymentDTO result = paymentMapper.toDto(payment);
         paymentSearchRepository.save(payment);

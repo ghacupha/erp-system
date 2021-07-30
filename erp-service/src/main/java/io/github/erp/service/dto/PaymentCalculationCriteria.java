@@ -1,21 +1,5 @@
 package io.github.erp.service.dto;
 
-/*-
- * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import java.io.Serializable;
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
@@ -58,8 +42,6 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter paymentAmount;
 
-    private LongFilter paymentId;
-
     public PaymentCalculationCriteria() {
     }
 
@@ -72,7 +54,6 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
         this.withholdingVAT = other.withholdingVAT == null ? null : other.withholdingVAT.copy();
         this.withholdingTax = other.withholdingTax == null ? null : other.withholdingTax.copy();
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
-        this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
     }
 
     @Override
@@ -144,14 +125,6 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
         this.paymentAmount = paymentAmount;
     }
 
-    public LongFilter getPaymentId() {
-        return paymentId;
-    }
-
-    public void setPaymentId(LongFilter paymentId) {
-        this.paymentId = paymentId;
-    }
-
 
     @Override
     public boolean equals(Object o) {
@@ -170,8 +143,7 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
             Objects.equals(paymentExpense, that.paymentExpense) &&
             Objects.equals(withholdingVAT, that.withholdingVAT) &&
             Objects.equals(withholdingTax, that.withholdingTax) &&
-            Objects.equals(paymentAmount, that.paymentAmount) &&
-            Objects.equals(paymentId, that.paymentId);
+            Objects.equals(paymentAmount, that.paymentAmount);
     }
 
     @Override
@@ -184,8 +156,7 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
         paymentExpense,
         withholdingVAT,
         withholdingTax,
-        paymentAmount,
-        paymentId
+        paymentAmount
         );
     }
 
@@ -201,7 +172,6 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
                 (withholdingVAT != null ? "withholdingVAT=" + withholdingVAT + ", " : "") +
                 (withholdingTax != null ? "withholdingTax=" + withholdingTax + ", " : "") +
                 (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
-                (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
             "}";
     }
 

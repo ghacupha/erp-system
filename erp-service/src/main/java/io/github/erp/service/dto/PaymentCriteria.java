@@ -38,8 +38,6 @@ public class PaymentCriteria implements Serializable, Criteria {
 
     private LongFilter ownedInvoiceId;
 
-    private LongFilter paymentCalculationId;
-
     private LongFilter paymentRequisitionId;
 
     private LongFilter dealerId;
@@ -58,7 +56,6 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.ownedInvoiceId = other.ownedInvoiceId == null ? null : other.ownedInvoiceId.copy();
-        this.paymentCalculationId = other.paymentCalculationId == null ? null : other.paymentCalculationId.copy();
         this.paymentRequisitionId = other.paymentRequisitionId == null ? null : other.paymentRequisitionId.copy();
         this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
         this.taxRuleId = other.taxRuleId == null ? null : other.taxRuleId.copy();
@@ -118,14 +115,6 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.ownedInvoiceId = ownedInvoiceId;
     }
 
-    public LongFilter getPaymentCalculationId() {
-        return paymentCalculationId;
-    }
-
-    public void setPaymentCalculationId(LongFilter paymentCalculationId) {
-        this.paymentCalculationId = paymentCalculationId;
-    }
-
     public LongFilter getPaymentRequisitionId() {
         return paymentRequisitionId;
     }
@@ -175,7 +164,6 @@ public class PaymentCriteria implements Serializable, Criteria {
             Objects.equals(paymentAmount, that.paymentAmount) &&
             Objects.equals(description, that.description) &&
             Objects.equals(ownedInvoiceId, that.ownedInvoiceId) &&
-            Objects.equals(paymentCalculationId, that.paymentCalculationId) &&
             Objects.equals(paymentRequisitionId, that.paymentRequisitionId) &&
             Objects.equals(dealerId, that.dealerId) &&
             Objects.equals(taxRuleId, that.taxRuleId) &&
@@ -191,7 +179,6 @@ public class PaymentCriteria implements Serializable, Criteria {
         paymentAmount,
         description,
         ownedInvoiceId,
-        paymentCalculationId,
         paymentRequisitionId,
         dealerId,
         taxRuleId,
@@ -209,7 +196,6 @@ public class PaymentCriteria implements Serializable, Criteria {
                 (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (ownedInvoiceId != null ? "ownedInvoiceId=" + ownedInvoiceId + ", " : "") +
-                (paymentCalculationId != null ? "paymentCalculationId=" + paymentCalculationId + ", " : "") +
                 (paymentRequisitionId != null ? "paymentRequisitionId=" + paymentRequisitionId + ", " : "") +
                 (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
                 (taxRuleId != null ? "taxRuleId=" + taxRuleId + ", " : "") +
