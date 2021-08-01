@@ -1,0 +1,79 @@
+{
+  "fields": [
+    {
+      "fieldName": "paymentNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "paymentDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "paymentAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "dealerName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "paymentCategory",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "invoice",
+      "otherEntityRelationshipName": "payment",
+      "relationshipName": "ownedInvoice"
+    },
+    {
+      "relationshipName": "paymentCalculation",
+      "otherEntityName": "paymentCalculation",
+      "relationshipType": "one-to-one",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "useJPADerivedIdentifier": true,
+      "otherEntityRelationshipName": "payment"
+    },
+    {
+      "relationshipName": "paymentRequisition",
+      "otherEntityName": "paymentRequisition",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id",
+      "otherEntityRelationshipName": "payment"
+    },
+    {
+      "relationshipName": "dealer",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-many",
+      "ownerSide": false,
+      "otherEntityRelationshipName": "payment"
+    },
+    {
+      "relationshipName": "taxRule",
+      "otherEntityName": "taxRule",
+      "relationshipType": "one-to-one",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "useJPADerivedIdentifier": false,
+      "otherEntityRelationshipName": "payment"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "Payment",
+  "changelogDate": "20210627092712",
+  "entityTableName": "payment",
+  "fluentMethods": true,
+  "embedded": false,
+  "applications": ["erpService"],
+  "microserviceName": "erpService",
+  "clientRootFolder": "payments",
+  "databaseType": "sql",
+  "searchEngine": "elasticsearch"
+}
