@@ -42,6 +42,22 @@
     "clientTheme": "none",
     "clientThemeVariant": "",
     "withAdminUi": true,
-    "languages": ["en", "fr"]
+    "languages": ["en", "fr"],
+    "entities": [
+      "PaymentRequisition",
+      "FixedAssetAcquisition",
+      "FixedAssetNetBookValue",
+      "FixedAssetDepreciation",
+      "FileType",
+      "FileUpload",
+      "MessageToken",
+      "Invoice",
+      "Payment",
+      "Dealer",
+      "PaymentCalculation",
+      "TaxReference",
+      "TaxRule",
+      "PaymentCategory"
+    ]
   }
 }
