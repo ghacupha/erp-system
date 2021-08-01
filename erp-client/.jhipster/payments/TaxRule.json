@@ -1,0 +1,67 @@
+{
+  "fluentMethods": true,
+  "clientRootFolder": "payments",
+  "relationships": [
+    {
+      "relationshipName": "payment",
+      "otherEntityName": "payment",
+      "relationshipType": "one-to-one",
+      "ownerSide": false,
+      "otherEntityRelationshipName": "taxRule"
+    }
+  ],
+  "fields": [
+    {
+      "fieldName": "paymentNumber",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "paymentDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "telcoExciseDuty",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "valueAddedTax",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "withholdingVAT",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "withholdingTaxConsultancy",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "withholdingTaxRent",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "cateringLevy",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "serviceCharge",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "withholdingTaxImportedService",
+      "fieldType": "Double"
+    }
+  ],
+  "changelogDate": "20210722140431",
+  "dto": "mapstruct",
+  "searchEngine": "elasticsearch",
+  "service": "serviceImpl",
+  "entityTableName": "tax_rule",
+  "databaseType": "sql",
+  "readOnly": false,
+  "jpaMetamodelFiltering": true,
+  "pagination": "pagination",
+  "microserviceName": "erpService"
+}

@@ -1,0 +1,91 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-payment-category-heading" data-cy="PaymentCategoryCreateUpdateHeading">Create or edit a Payment Category</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_categoryName">Category Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="categoryName"
+            id="field_categoryName"
+            data-cy="categoryName"
+            formControlName="categoryName"
+          />
+          <div
+            *ngIf="editForm.get('categoryName')!.invalid && (editForm.get('categoryName')!.dirty || editForm.get('categoryName')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('categoryName')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_categoryDescription">Category Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="categoryDescription"
+            id="field_categoryDescription"
+            data-cy="categoryDescription"
+            formControlName="categoryDescription"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_categoryType">Category Type</label>
+          <select class="form-control" name="categoryType" formControlName="categoryType" id="field_categoryType" data-cy="categoryType">
+            <option [ngValue]="null"></option>
+            <option value="CATEGORY0">CATEGORY0</option>
+            <option value="CATEGORY1">CATEGORY1</option>
+            <option value="CATEGORY2">CATEGORY2</option>
+            <option value="CATEGORY3">CATEGORY3</option>
+            <option value="CATEGORY4">CATEGORY4</option>
+            <option value="CATEGORY5">CATEGORY5</option>
+            <option value="CATEGORY6">CATEGORY6</option>
+            <option value="CATEGORY7">CATEGORY7</option>
+            <option value="CATEGORY8">CATEGORY8</option>
+            <option value="CATEGORY9">CATEGORY9</option>
+            <option value="CATEGORY10">CATEGORY10</option>
+            <option value="CATEGORY11">CATEGORY11</option>
+            <option value="CATEGORY12">CATEGORY12</option>
+            <option value="CATEGORY13">CATEGORY13</option>
+            <option value="CATEGORY14">CATEGORY14</option>
+            <option value="CATEGORY15">CATEGORY15</option>
+            <option value="CATEGORY16">CATEGORY16</option>
+            <option value="CATEGORY17">CATEGORY17</option>
+          </select>
+          <div
+            *ngIf="editForm.get('categoryType')!.invalid && (editForm.get('categoryType')!.dirty || editForm.get('categoryType')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('categoryType')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -14,7 +14,7 @@ services:
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
-      - 127.0.0.1:8080:8080
+      - 127.0.0.1:8973:8973
   financeerp-postgresql:
     image: postgres:13.3
     # volumes:
