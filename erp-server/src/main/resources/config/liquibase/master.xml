@@ -15,7 +15,24 @@
     <property name="datetimeType" value="datetime" dbms="oracle, mssql, postgresql, h2"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210323113701_added_entity_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210323123701_added_entity_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210323133701_added_entity_FixedAssetDepreciation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210414144455_added_entity_FileType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210414144555_added_entity_FileUpload.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210414144655_added_entity_MessageToken.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210627082202_added_entity_Invoice.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210627092712_added_entity_Payment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210721163636_added_entity_Dealer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210721172450_added_entity_PaymentCalculation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210721173014_added_entity_PaymentRequisition.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210721174739_added_entity_TaxReference.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210722140431_added_entity_TaxRule.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210723153046_added_entity_PaymentCategory.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20210627082202_added_entity_constraints_Invoice.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210627092712_added_entity_constraints_Payment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210721163636_added_entity_constraints_Dealer.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

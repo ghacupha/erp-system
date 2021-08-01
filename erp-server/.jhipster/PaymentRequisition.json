@@ -1,0 +1,34 @@
+{
+  "fluentMethods": true,
+  "clientRootFolder": "payments",
+  "relationships": [],
+  "fields": [
+    {
+      "fieldName": "dealerName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "invoicedAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "disbursementCost",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "vatableAmount",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "changelogDate": "20210721173014",
+  "dto": "mapstruct",
+  "searchEngine": "elasticsearch",
+  "service": "serviceImpl",
+  "entityTableName": "payment_requisition",
+  "databaseType": "sql",
+  "readOnly": false,
+  "jpaMetamodelFiltering": true,
+  "pagination": "pagination",
+  "microserviceName": "erpService",
+  "name": "PaymentRequisition"
+}
