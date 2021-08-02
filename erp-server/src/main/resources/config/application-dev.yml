@@ -37,9 +37,9 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/financeErp
-    username: financeErp
-    password:
+    url: ${LOCAL_PG_SERVER}/financeErp
+    username: ${PG_DATABASE_DEV_USER}
+    password: ${PG_DATABASE_DEV_USER}
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -48,7 +48,7 @@ spring:
   data:
   elasticsearch:
     rest:
-      uris: http://localhost:9200
+      uris: ${SPRING_DATA_JEST_URI}
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker

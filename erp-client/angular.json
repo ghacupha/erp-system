@@ -109,6 +109,7 @@
   },
   "defaultProject": "finance-erp",
   "cli": {
+    "analytics": "e196d2e5-cdf9-4fd9-ac43-a0fc40b8a89a",
     "packageManager": "npm"
   }
 }
