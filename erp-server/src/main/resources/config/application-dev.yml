@@ -39,7 +39,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: ${LOCAL_PG_SERVER}/financeErp
     username: ${PG_DATABASE_DEV_USER}
-    password: ${PG_DATABASE_DEV_USER}
+    password: ${PG_DATABASE_DEV_PASSWORD}
     hikari:
       poolName: Hikari
       auto-commit: false

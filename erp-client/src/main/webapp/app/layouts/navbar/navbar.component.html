@@ -1,7 +1,7 @@
 <nav data-cy="navbar" class="navbar navbar-dark navbar-expand-md bg-dark">
   <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
     <span class="logo-img"></span>
-    <span class="navbar-title">FinanceErp</span>
+    <span class="navbar-title">Finance ERP</span>
     <span class="navbar-version">{{ version }}</span>
   </a>
   <a
@@ -321,6 +321,14 @@
             </a>
           </li>
         </ul>
+      </li>
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link" routerLink="/about/finance-erp" (click)="collapseNavbar()">
+            <span>
+              <fa-icon icon="eye"></fa-icon>
+              <span>About</span>
+            </span>
+        </a>
       </li>
     </ul>
   </div>
