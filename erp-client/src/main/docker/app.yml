@@ -1,6 +1,6 @@
 version: '3'
 services:
-  leassets-client:
-    image: ghacupha/leassets-client:0.0.1-SNAPSHOT
+  erp-client:
+    image: ghacupha/erp-client:0.0.1-SNAPSHOT
     ports:
       - 8974:80
