@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  leassets-client:
+  erp-client:
     build: .
-    container_name: ghacupha/finance-erp-client:0.0.1-SNAPSHOT
+    container_name: ghacupha/erp-client:0.0.1-SNAPSHOT
       - 8000:8974
