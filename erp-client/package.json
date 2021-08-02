@@ -2,8 +2,8 @@
   "name": "finance-erp",
   "version": "0.0.1-SNAPSHOT",
   "private": true,
-  "description": "Description for financeErp",
-  "license": "UNLICENSED",
+  "description": "Finance ERP client",
+  "license": "Apache version 2",
   "scripts": {
     "prettier:check": "prettier --check \"{,src/**/,webpack/}*.{md,json,yml,html,js,ts,tsx,css,scss}\"",
     "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{md,json,yml,html,js,ts,tsx,css,scss}\"",
