@@ -25,13 +25,6 @@
       "relationshipName": "ownedInvoice"
     },
     {
-      "relationshipName": "paymentRequisition",
-      "otherEntityName": "paymentRequisition",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "id",
-      "otherEntityRelationshipName": "payment"
-    },
-    {
       "relationshipName": "dealer",
       "otherEntityName": "dealer",
       "relationshipType": "many-to-many",

@@ -45,9 +45,6 @@ public class Payment implements Serializable {
     @JsonIgnoreProperties(value = { "payment", "dealer" }, allowSetters = true)
     private Set<Invoice> ownedInvoices = new HashSet<>();
 
-    @ManyToOne
-    private PaymentRequisition paymentRequisition;
-
     @ManyToMany(mappedBy = "payments")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "payments" }, allowSetters = true)
@@ -165,19 +162,6 @@ public class Payment implements Serializable {
             invoices.forEach(i -> i.setPayment(this));
         }
         this.ownedInvoices = invoices;
-    }
-
-    public PaymentRequisition getPaymentRequisition() {
-        return this.paymentRequisition;
-    }
-
-    public Payment paymentRequisition(PaymentRequisition paymentRequisition) {
-        this.setPaymentRequisition(paymentRequisition);
-        return this;
-    }
-
-    public void setPaymentRequisition(PaymentRequisition paymentRequisition) {
-        this.paymentRequisition = paymentRequisition;
     }
 
     public Set<Dealer> getDealers() {

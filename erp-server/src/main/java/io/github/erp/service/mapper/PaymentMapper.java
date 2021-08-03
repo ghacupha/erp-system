@@ -8,12 +8,8 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Payment} and its DTO {@link PaymentDTO}.
  */
-@Mapper(
-    componentModel = "spring",
-    uses = { PaymentRequisitionMapper.class, TaxRuleMapper.class, PaymentCategoryMapper.class, PaymentCalculationMapper.class }
-)
+@Mapper(componentModel = "spring", uses = { TaxRuleMapper.class, PaymentCategoryMapper.class, PaymentCalculationMapper.class })
 public interface PaymentMapper extends EntityMapper<PaymentDTO, Payment> {
-    @Mapping(target = "paymentRequisition", source = "paymentRequisition", qualifiedByName = "id")
     @Mapping(target = "taxRule", source = "taxRule", qualifiedByName = "id")
     @Mapping(target = "paymentCategory", source = "paymentCategory", qualifiedByName = "id")
     @Mapping(target = "paymentCalculation", source = "paymentCalculation", qualifiedByName = "id")
