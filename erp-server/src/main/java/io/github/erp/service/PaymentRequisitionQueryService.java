@@ -108,6 +108,15 @@ public class PaymentRequisitionQueryService extends QueryService<PaymentRequisit
             if (criteria.getVatableAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getVatableAmount(), PaymentRequisition_.vatableAmount));
             }
+            if (criteria.getPaymentId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPaymentId(),
+                            root -> root.join(PaymentRequisition_.payment, JoinType.LEFT).get(Payment_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

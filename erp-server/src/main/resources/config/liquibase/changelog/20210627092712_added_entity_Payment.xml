@@ -35,6 +35,9 @@
             <column name="payment_calculation_id" type="bigint">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_payment__payment_calculation_id" />
             </column>
+            <column name="payment_requisition_id" type="bigint">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_payment__payment_requisition_id" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
@@ -61,6 +64,7 @@
             <column name="description" type="string"/>
             <column name="payment_category_id" type="numeric"/>
             <column name="payment_calculation_id" type="numeric"/>
+            <column name="payment_requisition_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

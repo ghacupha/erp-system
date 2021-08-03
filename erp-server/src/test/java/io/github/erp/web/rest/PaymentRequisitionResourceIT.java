@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.Payment;
 import io.github.erp.domain.PaymentRequisition;
 import io.github.erp.repository.PaymentRequisitionRepository;
 import io.github.erp.repository.search.PaymentRequisitionSearchRepository;
@@ -618,6 +619,26 @@ class PaymentRequisitionResourceIT {
 
         // Get all the paymentRequisitionList where vatableAmount is greater than SMALLER_VATABLE_AMOUNT
         defaultPaymentRequisitionShouldBeFound("vatableAmount.greaterThan=" + SMALLER_VATABLE_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByPaymentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+        Payment payment = PaymentResourceIT.createEntity(em);
+        em.persist(payment);
+        em.flush();
+        paymentRequisition.setPayment(payment);
+        payment.setPaymentRequisition(paymentRequisition);
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+        Long paymentId = payment.getId();
+
+        // Get all the paymentRequisitionList where payment equals to paymentId
+        defaultPaymentRequisitionShouldBeFound("paymentId.equals=" + paymentId);
+
+        // Get all the paymentRequisitionList where payment equals to (paymentId + 1)
+        defaultPaymentRequisitionShouldNotBeFound("paymentId.equals=" + (paymentId + 1));
     }
 
     /**

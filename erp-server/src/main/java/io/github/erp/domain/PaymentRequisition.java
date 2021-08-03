@@ -1,5 +1,6 @@
 package io.github.erp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.*;
@@ -34,6 +35,13 @@ public class PaymentRequisition implements Serializable {
 
     @Column(name = "vatable_amount", precision = 21, scale = 2)
     private BigDecimal vatableAmount;
+
+    @JsonIgnoreProperties(
+        value = { "ownedInvoices", "dealers", "taxRule", "paymentCategory", "paymentCalculation", "paymentRequisition" },
+        allowSetters = true
+    )
+    @OneToOne(mappedBy = "paymentRequisition")
+    private Payment payment;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -99,6 +107,25 @@ public class PaymentRequisition implements Serializable {
 
     public void setVatableAmount(BigDecimal vatableAmount) {
         this.vatableAmount = vatableAmount;
+    }
+
+    public Payment getPayment() {
+        return this.payment;
+    }
+
+    public PaymentRequisition payment(Payment payment) {
+        this.setPayment(payment);
+        return this;
+    }
+
+    public void setPayment(Payment payment) {
+        if (this.payment != null) {
+            this.payment.setPaymentRequisition(null);
+        }
+        if (payment != null) {
+            payment.setPaymentRequisition(this);
+        }
+        this.payment = payment;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
