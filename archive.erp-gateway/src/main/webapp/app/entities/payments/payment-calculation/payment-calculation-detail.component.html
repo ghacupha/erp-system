@@ -1,0 +1,54 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="paymentCalculation">
+            <h2><span>Payment Calculation</span> {{ paymentCalculation.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span>Payment Number</span></dt>
+                <dd>
+                    <span>{{ paymentCalculation.paymentNumber }}</span>
+                </dd>
+                <dt><span>Payment Date</span></dt>
+                <dd>
+                    <span>{{ paymentCalculation.paymentDate }}</span>
+                </dd>
+                <dt><span>Payment Category</span></dt>
+                <dd>
+                    <span>{{ paymentCalculation.paymentCategory }}</span>
+                </dd>
+                <dt><span>Payment Expense</span></dt>
+                <dd>
+                    <span>{{ paymentCalculation.paymentExpense }}</span>
+                </dd>
+                <dt><span>Withholding VAT</span></dt>
+                <dd>
+                    <span>{{ paymentCalculation.withholdingVAT }}</span>
+                </dd>
+                <dt><span>Withholding Tax</span></dt>
+                <dd>
+                    <span>{{ paymentCalculation.withholdingTax }}</span>
+                </dd>
+                <dt><span>Payment Amount</span></dt>
+                <dd>
+                    <span>{{ paymentCalculation.paymentAmount }}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/payment-calculation', paymentCalculation.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+            </button>
+        </div>
+    </div>
+</div>
