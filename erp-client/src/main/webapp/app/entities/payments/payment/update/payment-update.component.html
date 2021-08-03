@@ -69,29 +69,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_paymentRequisition">Payment Requisition</label>
-          <select
-            class="form-control"
-            id="field_paymentRequisition"
-            data-cy="paymentRequisition"
-            name="paymentRequisition"
-            formControlName="paymentRequisition"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                paymentRequisitionOption.id === editForm.get('paymentRequisition')!.value?.id
-                  ? editForm.get('paymentRequisition')!.value
-                  : paymentRequisitionOption
-              "
-              *ngFor="let paymentRequisitionOption of paymentRequisitionsSharedCollection; trackBy: trackPaymentRequisitionById"
-            >
-              {{ paymentRequisitionOption.id }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" for="field_taxRule">Tax Rule</label>
           <select class="form-control" id="field_taxRule" data-cy="taxRule" name="taxRule" formControlName="taxRule">
             <option [ngValue]="null"></option>
@@ -164,6 +141,39 @@
           "
         >
           <small class="form-text text-danger" *ngIf="editForm.get(['paymentCalculation'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_paymentRequisition">Payment Requisition</label>
+          <select
+            class="form-control"
+            id="field_paymentRequisition"
+            data-cy="paymentRequisition"
+            name="paymentRequisition"
+            formControlName="paymentRequisition"
+          >
+            <option *ngIf="editForm.get(['paymentRequisition'])!.value == null" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                paymentRequisitionOption.id === editForm.get('paymentRequisition')!.value?.id
+                  ? editForm.get('paymentRequisition')!.value
+                  : paymentRequisitionOption
+              "
+              *ngFor="let paymentRequisitionOption of paymentRequisitionsCollection; trackBy: trackPaymentRequisitionById"
+            >
+              {{ paymentRequisitionOption.id }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['paymentRequisition'])!.invalid &&
+            (editForm.get(['paymentRequisition'])!.dirty || editForm.get(['paymentRequisition'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['paymentRequisition'])?.errors?.required">
             This field is required.
           </small>
         </div>

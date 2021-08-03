@@ -35,10 +35,10 @@ export class PaymentUpdatePage {
   paymentAmountInput = element(by.id('field_paymentAmount'));
   descriptionInput = element(by.id('field_description'));
 
-  paymentRequisitionSelect = element(by.id('field_paymentRequisition'));
   taxRuleSelect = element(by.id('field_taxRule'));
   paymentCategorySelect = element(by.id('field_paymentCategory'));
   paymentCalculationSelect = element(by.id('field_paymentCalculation'));
+  paymentRequisitionSelect = element(by.id('field_paymentRequisition'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -82,22 +82,6 @@ export class PaymentUpdatePage {
 
   async getDescriptionInput(): Promise<string> {
     return await this.descriptionInput.getAttribute('value');
-  }
-
-  async paymentRequisitionSelectLastOption(): Promise<void> {
-    await this.paymentRequisitionSelect.all(by.tagName('option')).last().click();
-  }
-
-  async paymentRequisitionSelectOption(option: string): Promise<void> {
-    await this.paymentRequisitionSelect.sendKeys(option);
-  }
-
-  getPaymentRequisitionSelect(): ElementFinder {
-    return this.paymentRequisitionSelect;
-  }
-
-  async getPaymentRequisitionSelectedOption(): Promise<string> {
-    return await this.paymentRequisitionSelect.element(by.css('option:checked')).getText();
   }
 
   async taxRuleSelectLastOption(): Promise<void> {
@@ -146,6 +130,22 @@ export class PaymentUpdatePage {
 
   async getPaymentCalculationSelectedOption(): Promise<string> {
     return await this.paymentCalculationSelect.element(by.css('option:checked')).getText();
+  }
+
+  async paymentRequisitionSelectLastOption(): Promise<void> {
+    await this.paymentRequisitionSelect.all(by.tagName('option')).last().click();
+  }
+
+  async paymentRequisitionSelectOption(option: string): Promise<void> {
+    await this.paymentRequisitionSelect.sendKeys(option);
+  }
+
+  getPaymentRequisitionSelect(): ElementFinder {
+    return this.paymentRequisitionSelect;
+  }
+
+  async getPaymentRequisitionSelectedOption(): Promise<string> {
+    return await this.paymentRequisitionSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

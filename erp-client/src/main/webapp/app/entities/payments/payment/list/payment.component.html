@@ -55,10 +55,10 @@
           <th scope="col" jhiSortBy="paymentDate"><span>Payment Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentAmount"><span>Payment Amount</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="paymentRequisition.id"><span>Payment Requisition</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="taxRule.id"><span>Tax Rule</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentCategory.id"><span>Payment Category</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentCalculation.id"><span>Payment Calculation</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="paymentRequisition.id"><span>Payment Requisition</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -72,11 +72,6 @@
           <td>{{ payment.paymentAmount }}</td>
           <td>{{ payment.description }}</td>
           <td>
-            <div *ngIf="payment.paymentRequisition">
-              <a [routerLink]="['/payment-requisition', payment.paymentRequisition?.id, 'view']">{{ payment.paymentRequisition?.id }}</a>
-            </div>
-          </td>
-          <td>
             <div *ngIf="payment.taxRule">
               <a [routerLink]="['/tax-rule', payment.taxRule?.id, 'view']">{{ payment.taxRule?.id }}</a>
             </div>
@@ -89,6 +84,11 @@
           <td>
             <div *ngIf="payment.paymentCalculation">
               <a [routerLink]="['/payment-calculation', payment.paymentCalculation?.id, 'view']">{{ payment.paymentCalculation?.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="payment.paymentRequisition">
+              <a [routerLink]="['/payment-requisition', payment.paymentRequisition?.id, 'view']">{{ payment.paymentRequisition?.id }}</a>
             </div>
           </td>
           <td class="text-right">
