@@ -1,9 +1,12 @@
+import { IPayment } from 'app/entities/payments/payment/payment.model';
+
 export interface IPaymentRequisition {
   id?: number;
   dealerName?: string | null;
   invoicedAmount?: number | null;
   disbursementCost?: number | null;
   vatableAmount?: number | null;
+  payment?: IPayment | null;
 }
 
 export class PaymentRequisition implements IPaymentRequisition {
@@ -12,7 +15,8 @@ export class PaymentRequisition implements IPaymentRequisition {
     public dealerName?: string | null,
     public invoicedAmount?: number | null,
     public disbursementCost?: number | null,
-    public vatableAmount?: number | null
+    public vatableAmount?: number | null,
+    public payment?: IPayment | null
   ) {}
 }
 

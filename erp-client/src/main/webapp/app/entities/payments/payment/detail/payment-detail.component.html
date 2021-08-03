@@ -30,12 +30,6 @@
         <dd>
           <span>{{ payment.description }}</span>
         </dd>
-        <dt><span>Payment Requisition</span></dt>
-        <dd>
-          <div *ngIf="payment.paymentRequisition">
-            <a [routerLink]="['/payment-requisition', payment.paymentRequisition?.id, 'view']">{{ payment.paymentRequisition?.id }}</a>
-          </div>
-        </dd>
         <dt><span>Tax Rule</span></dt>
         <dd>
           <div *ngIf="payment.taxRule">
@@ -52,6 +46,12 @@
         <dd>
           <div *ngIf="payment.paymentCalculation">
             <a [routerLink]="['/payment-calculation', payment.paymentCalculation?.id, 'view']">{{ payment.paymentCalculation?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Payment Requisition</span></dt>
+        <dd>
+          <div *ngIf="payment.paymentRequisition">
+            <a [routerLink]="['/payment-requisition', payment.paymentRequisition?.id, 'view']">{{ payment.paymentRequisition?.id }}</a>
           </div>
         </dd>
       </dl>

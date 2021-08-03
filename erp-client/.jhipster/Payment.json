@@ -25,13 +25,6 @@
       "relationshipName": "ownedInvoice"
     },
     {
-      "relationshipName": "paymentRequisition",
-      "otherEntityName": "paymentRequisition",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "id",
-      "otherEntityRelationshipName": "payment"
-    },
-    {
       "relationshipName": "dealer",
       "otherEntityName": "dealer",
       "relationshipType": "many-to-many",
@@ -65,6 +58,16 @@
       "otherEntityField": "id",
       "ownerSide": true,
       "useJPADerivedIdentifier": false,
+      "otherEntityRelationshipName": "payment"
+    },
+    {
+      "relationshipName": "paymentRequisition",
+      "otherEntityName": "paymentRequisition",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "id": false,
       "otherEntityRelationshipName": "payment"
     }
   ],
