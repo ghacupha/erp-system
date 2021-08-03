@@ -46,7 +46,10 @@ public class PaymentCalculation implements Serializable {
     @Column(name = "payment_amount", precision = 21, scale = 2)
     private BigDecimal paymentAmount;
 
-    @JsonIgnoreProperties(value = { "ownedInvoices", "dealers", "taxRule", "paymentCategory", "paymentCalculation" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "ownedInvoices", "dealers", "taxRule", "paymentCategory", "paymentCalculation", "paymentRequisition" },
+        allowSetters = true
+    )
     @OneToOne(mappedBy = "paymentCalculation")
     private Payment payment;
 

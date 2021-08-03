@@ -37,7 +37,10 @@ public class PaymentCategory implements Serializable {
     @Column(name = "category_type", nullable = false, unique = true)
     private CategoryTypes categoryType;
 
-    @JsonIgnoreProperties(value = { "ownedInvoices", "dealers", "taxRule", "paymentCategory", "paymentCalculation" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "ownedInvoices", "dealers", "taxRule", "paymentCategory", "paymentCalculation", "paymentRequisition" },
+        allowSetters = true
+    )
     @OneToOne(mappedBy = "paymentCategory")
     private Payment payment;
 

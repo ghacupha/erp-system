@@ -14,6 +14,7 @@ import io.github.erp.domain.Invoice;
 import io.github.erp.domain.Payment;
 import io.github.erp.domain.PaymentCalculation;
 import io.github.erp.domain.PaymentCategory;
+import io.github.erp.domain.PaymentRequisition;
 import io.github.erp.domain.TaxRule;
 import io.github.erp.repository.PaymentRepository;
 import io.github.erp.repository.search.PaymentSearchRepository;
@@ -126,6 +127,16 @@ class PaymentResourceIT {
             paymentCalculation = TestUtil.findAll(em, PaymentCalculation.class).get(0);
         }
         payment.setPaymentCalculation(paymentCalculation);
+        // Add required entity
+        PaymentRequisition paymentRequisition;
+        if (TestUtil.findAll(em, PaymentRequisition.class).isEmpty()) {
+            paymentRequisition = PaymentRequisitionResourceIT.createEntity(em);
+            em.persist(paymentRequisition);
+            em.flush();
+        } else {
+            paymentRequisition = TestUtil.findAll(em, PaymentRequisition.class).get(0);
+        }
+        payment.setPaymentRequisition(paymentRequisition);
         return payment;
     }
 
@@ -161,6 +172,16 @@ class PaymentResourceIT {
             paymentCalculation = TestUtil.findAll(em, PaymentCalculation.class).get(0);
         }
         payment.setPaymentCalculation(paymentCalculation);
+        // Add required entity
+        PaymentRequisition paymentRequisition;
+        if (TestUtil.findAll(em, PaymentRequisition.class).isEmpty()) {
+            paymentRequisition = PaymentRequisitionResourceIT.createUpdatedEntity(em);
+            em.persist(paymentRequisition);
+            em.flush();
+        } else {
+            paymentRequisition = TestUtil.findAll(em, PaymentRequisition.class).get(0);
+        }
+        payment.setPaymentRequisition(paymentRequisition);
         return payment;
     }
 
@@ -717,6 +738,21 @@ class PaymentResourceIT {
 
         // Get all the paymentList where paymentCalculation equals to (paymentCalculationId + 1)
         defaultPaymentShouldNotBeFound("paymentCalculationId.equals=" + (paymentCalculationId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByPaymentRequisitionIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        PaymentRequisition paymentRequisition = payment.getPaymentRequisition();
+        paymentRepository.saveAndFlush(payment);
+        Long paymentRequisitionId = paymentRequisition.getId();
+
+        // Get all the paymentList where paymentRequisition equals to paymentRequisitionId
+        defaultPaymentShouldBeFound("paymentRequisitionId.equals=" + paymentRequisitionId);
+
+        // Get all the paymentList where paymentRequisition equals to (paymentRequisitionId + 1)
+        defaultPaymentShouldNotBeFound("paymentRequisitionId.equals=" + (paymentRequisitionId + 1));
     }
 
     /**

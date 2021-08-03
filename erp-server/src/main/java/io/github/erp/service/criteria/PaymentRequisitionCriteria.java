@@ -35,6 +35,8 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter vatableAmount;
 
+    private LongFilter paymentId;
+
     public PaymentRequisitionCriteria() {}
 
     public PaymentRequisitionCriteria(PaymentRequisitionCriteria other) {
@@ -43,6 +45,7 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
         this.invoicedAmount = other.invoicedAmount == null ? null : other.invoicedAmount.copy();
         this.disbursementCost = other.disbursementCost == null ? null : other.disbursementCost.copy();
         this.vatableAmount = other.vatableAmount == null ? null : other.vatableAmount.copy();
+        this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
     }
 
     @Override
@@ -125,6 +128,21 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
         this.vatableAmount = vatableAmount;
     }
 
+    public LongFilter getPaymentId() {
+        return paymentId;
+    }
+
+    public LongFilter paymentId() {
+        if (paymentId == null) {
+            paymentId = new LongFilter();
+        }
+        return paymentId;
+    }
+
+    public void setPaymentId(LongFilter paymentId) {
+        this.paymentId = paymentId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -139,13 +157,14 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
             Objects.equals(dealerName, that.dealerName) &&
             Objects.equals(invoicedAmount, that.invoicedAmount) &&
             Objects.equals(disbursementCost, that.disbursementCost) &&
-            Objects.equals(vatableAmount, that.vatableAmount)
+            Objects.equals(vatableAmount, that.vatableAmount) &&
+            Objects.equals(paymentId, that.paymentId)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, dealerName, invoicedAmount, disbursementCost, vatableAmount);
+        return Objects.hash(id, dealerName, invoicedAmount, disbursementCost, vatableAmount, paymentId);
     }
 
     // prettier-ignore
@@ -157,6 +176,7 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
             (invoicedAmount != null ? "invoicedAmount=" + invoicedAmount + ", " : "") +
             (disbursementCost != null ? "disbursementCost=" + disbursementCost + ", " : "") +
             (vatableAmount != null ? "vatableAmount=" + vatableAmount + ", " : "") +
+            (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
             "}";
     }
 }

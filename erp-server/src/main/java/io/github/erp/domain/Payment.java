@@ -67,6 +67,12 @@ public class Payment implements Serializable {
     @JoinColumn(unique = true)
     private PaymentCalculation paymentCalculation;
 
+    @JsonIgnoreProperties(value = { "payment" }, allowSetters = true)
+    @OneToOne(optional = false)
+    @NotNull
+    @JoinColumn(unique = true)
+    private PaymentRequisition paymentRequisition;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -232,6 +238,19 @@ public class Payment implements Serializable {
 
     public void setPaymentCalculation(PaymentCalculation paymentCalculation) {
         this.paymentCalculation = paymentCalculation;
+    }
+
+    public PaymentRequisition getPaymentRequisition() {
+        return this.paymentRequisition;
+    }
+
+    public Payment paymentRequisition(PaymentRequisition paymentRequisition) {
+        this.setPaymentRequisition(paymentRequisition);
+        return this;
+    }
+
+    public void setPaymentRequisition(PaymentRequisition paymentRequisition) {
+        this.paymentRequisition = paymentRequisition;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

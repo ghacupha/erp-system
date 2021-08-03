@@ -57,7 +57,10 @@ public class TaxRule implements Serializable {
     @Column(name = "withholding_tax_imported_service")
     private Double withholdingTaxImportedService;
 
-    @JsonIgnoreProperties(value = { "ownedInvoices", "dealers", "taxRule", "paymentCategory", "paymentCalculation" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "ownedInvoices", "dealers", "taxRule", "paymentCategory", "paymentCalculation", "paymentRequisition" },
+        allowSetters = true
+    )
     @OneToOne(mappedBy = "taxRule")
     private Payment payment;
 

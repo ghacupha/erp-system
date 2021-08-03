@@ -60,7 +60,10 @@ public class Dealer implements Serializable {
         joinColumns = @JoinColumn(name = "dealer_id"),
         inverseJoinColumns = @JoinColumn(name = "payment_id")
     )
-    @JsonIgnoreProperties(value = { "ownedInvoices", "dealers", "taxRule", "paymentCategory", "paymentCalculation" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "ownedInvoices", "dealers", "taxRule", "paymentCategory", "paymentCalculation", "paymentRequisition" },
+        allowSetters = true
+    )
     private Set<Payment> payments = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

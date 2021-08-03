@@ -8,4 +8,9 @@ import org.mapstruct.*;
  * Mapper for the entity {@link PaymentRequisition} and its DTO {@link PaymentRequisitionDTO}.
  */
 @Mapper(componentModel = "spring", uses = {})
-public interface PaymentRequisitionMapper extends EntityMapper<PaymentRequisitionDTO, PaymentRequisition> {}
+public interface PaymentRequisitionMapper extends EntityMapper<PaymentRequisitionDTO, PaymentRequisition> {
+    @Named("id")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    PaymentRequisitionDTO toDtoId(PaymentRequisition paymentRequisition);
+}
