@@ -1,0 +1,40 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "io.github.erp"
+    },
+    "jhipsterVersion": "6.10.5",
+    "applicationType": "microservice",
+    "baseName": "erpService",
+    "packageName": "io.github.erp",
+    "packageFolder": "io/github/erp",
+    "serverPort": "8788",
+    "authenticationType": "uaa",
+    "uaaBaseName": "erpUaa",
+    "cacheProvider": "hazelcast",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "postgresql",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "elasticsearch",
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "OGY0ZDQ5OTZmNDA0YWZmOTYyYzc4MDA0MTUxYmI2NTg5ZjI2YWI0ODg5MWUwMWI4YjEzODc5OGVkZDY3ZDgxZmZlZjJmNmZjNjhhM2I1NjEyOTRmNDE0NjhjZDllZjQ5NGQ4MGM1ZDhmYTFmOWU2YjliYTVhMzE0MTlhOTgzMDU=",
+    "embeddableLaunchScript": false,
+    "creationTimestamp": 1626874514738,
+    "testFrameworks": ["gatling", "cucumber"],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": false,
+    "clientPackageManager": "npm",
+    "blueprints": [],
+    "skipClient": true,
+    "skipUserManagement": true,
+    "lastLiquibaseTimestamp": 1627054246000
+  }
+}

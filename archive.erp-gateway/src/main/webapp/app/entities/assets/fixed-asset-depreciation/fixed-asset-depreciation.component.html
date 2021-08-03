@@ -1,0 +1,107 @@
+<div>
+    <h2 id="page-heading">
+        <span>Fixed Asset Depreciations</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-fixed-asset-depreciation" [routerLink]="['/fixed-asset-depreciation/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span class="hidden-sm-down">
+            Create a new Fixed Asset Depreciation
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <form name="searchForm" class="form-inline">
+                <div class="input-group w-100 mt-3">
+                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query">
+
+                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+                        <fa-icon icon="search"></fa-icon>
+                    </button>
+
+                    <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+                        <fa-icon icon="trash-alt"></fa-icon>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="fixedAssetDepreciations?.length === 0">
+        <span>No fixedAssetDepreciations found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="fixedAssetDepreciations && fixedAssetDepreciations.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
+                    <th scope="col"  jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="assetNumber"><span>Asset Number</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="serviceOutletCode"><span>Service Outlet Code</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="assetTag"><span>Asset Tag</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="assetDescription"><span>Asset Description</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="depreciationDate"><span>Depreciation Date</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="assetCategory"><span>Asset Category</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="depreciationAmount"><span>Depreciation Amount</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="depreciationRegime"><span>Depreciation Regime</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="fileUploadToken"><span>File Upload Token</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="compilationToken"><span>Compilation Token</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let fixedAssetDepreciation of fixedAssetDepreciations ;trackBy: trackId">
+                    <td><a [routerLink]="['/fixed-asset-depreciation', fixedAssetDepreciation.id, 'view']">{{ fixedAssetDepreciation.id }}</a></td>
+                    <td>{{ fixedAssetDepreciation.assetNumber }}</td>
+                    <td>{{ fixedAssetDepreciation.serviceOutletCode }}</td>
+                    <td>{{ fixedAssetDepreciation.assetTag }}</td>
+                    <td>{{ fixedAssetDepreciation.assetDescription }}</td>
+                    <td>{{ fixedAssetDepreciation.depreciationDate | momentMediumDate }}</td>
+                    <td>{{ fixedAssetDepreciation.assetCategory }}</td>
+                    <td>{{ fixedAssetDepreciation.depreciationAmount }}</td>
+                    <td>{{ fixedAssetDepreciation.depreciationRegime }}</td>
+                    <td>{{ fixedAssetDepreciation.fileUploadToken }}</td>
+                    <td>{{ fixedAssetDepreciation.compilationToken }}</td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/fixed-asset-depreciation', fixedAssetDepreciation.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/fixed-asset-depreciation', fixedAssetDepreciation.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(fixedAssetDepreciation)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="fixedAssetDepreciations && fixedAssetDepreciations.length > 0">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="ngbPaginationPage" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage($event)"></ngb-pagination>
+        </div>
+    </div>
+</div>

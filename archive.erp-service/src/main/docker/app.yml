@@ -1,0 +1,48 @@
+#
+# Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+version: '2'
+services:
+  erpservice-app:
+    image: ghacupha/erp-service:0.0.1-SNAPSHOT
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,swagger
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
+      #- SPRING_DATASOURCE_URL=jdbc:postgresql://erpservice-postgresql:5432/erpService
+      - SPRING_DATASOURCE_URL=${LOCAL_PG_SERVER}/erpService
+      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+      #- SPRING_DATA_JEST_URI=http://erpservice-elasticsearch:9200
+      - SPRING_DATA_JEST_URI=${SPRING_DATA_JEST_URI}
+      #- SPRING_ELASTICSEARCH_REST_URIS=http://erpservice-elasticsearch:9200
+      - SPRING_ELASTICSEARCH_REST_URIS=${SPRING_DATA_JEST_URI}
+#  erpservice-postgresql:
+#    extends:
+#      file: postgresql.yml
+#      service: erpservice-postgresql
+#  erpservice-elasticsearch:
+#    extends:
+#      file: elasticsearch.yml
+#      service: erpservice-elasticsearch
+#  jhipster-registry:
+#    extends:
+#      file: jhipster-registry.yml
+#      service: jhipster-registry
+#    environment:
+#      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+#      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config/docker-config/

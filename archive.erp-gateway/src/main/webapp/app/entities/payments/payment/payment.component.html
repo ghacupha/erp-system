@@ -1,0 +1,119 @@
+<div>
+    <h2 id="page-heading">
+        <span>Payments</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-payment" [routerLink]="['/payment/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span class="hidden-sm-down">
+            Create a new Payment
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <form name="searchForm" class="form-inline">
+                <div class="input-group w-100 mt-3">
+                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query">
+
+                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+                        <fa-icon icon="search"></fa-icon>
+                    </button>
+
+                    <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+                        <fa-icon icon="trash-alt"></fa-icon>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="payments?.length === 0">
+        <span>No payments found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="payments && payments.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
+                    <th scope="col"  jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="paymentNumber"><span>Payment Number</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="paymentDate"><span>Payment Date</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="paymentAmount"><span>Payment Amount</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="description"><span>Description</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="paymentRequisitionId"><span>Payment Requisition</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="taxRuleId"><span>Tax Rule</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="paymentCategoryId"><span>Payment Category</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="paymentCalculationId"><span>Payment Calculation</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let payment of payments ;trackBy: trackId">
+                    <td><a [routerLink]="['/payment', payment.id, 'view']">{{ payment.id }}</a></td>
+                    <td>{{ payment.paymentNumber }}</td>
+                    <td>{{ payment.paymentDate | momentMediumDate }}</td>
+                    <td>{{ payment.paymentAmount }}</td>
+                    <td>{{ payment.description }}</td>
+                    <td>
+                        <div *ngIf="payment.paymentRequisitionId">
+                            <a [routerLink]="['/payment-requisition', payment.paymentRequisitionId , 'view']" >{{ payment.paymentRequisitionId }}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="payment.taxRuleId">
+                            <a [routerLink]="['/tax-rule', payment.taxRuleId , 'view']" >{{ payment.taxRuleId }}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="payment.paymentCategoryId">
+                            <a [routerLink]="['/payment-category', payment.paymentCategoryId , 'view']" >{{ payment.paymentCategoryId }}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="payment.paymentCalculationId">
+                            <a [routerLink]="['/payment-calculation', payment.paymentCalculationId , 'view']" >{{ payment.paymentCalculationId }}</a>
+                        </div>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/payment', payment.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/payment', payment.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(payment)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="payments && payments.length > 0">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="ngbPaginationPage" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage($event)"></ngb-pagination>
+        </div>
+    </div>
+</div>
