@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Payment;
+import io.github.erp.domain.PaymentCalculation;
 import io.github.erp.domain.PaymentCategory;
 import io.github.erp.domain.enumeration.CategoryTypes;
 import io.github.erp.repository.PaymentCategoryRepository;
@@ -481,6 +482,25 @@ class PaymentCategoryResourceIT {
 
         // Get all the paymentCategoryList where payment equals to (paymentId + 1)
         defaultPaymentCategoryShouldNotBeFound("paymentId.equals=" + (paymentId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCategoriesByPaymentCalculationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentCategoryRepository.saveAndFlush(paymentCategory);
+        PaymentCalculation paymentCalculation = PaymentCalculationResourceIT.createEntity(em);
+        em.persist(paymentCalculation);
+        em.flush();
+        paymentCategory.addPaymentCalculation(paymentCalculation);
+        paymentCategoryRepository.saveAndFlush(paymentCategory);
+        Long paymentCalculationId = paymentCalculation.getId();
+
+        // Get all the paymentCategoryList where paymentCalculation equals to paymentCalculationId
+        defaultPaymentCategoryShouldBeFound("paymentCalculationId.equals=" + paymentCalculationId);
+
+        // Get all the paymentCategoryList where paymentCalculation equals to (paymentCalculationId + 1)
+        defaultPaymentCategoryShouldNotBeFound("paymentCalculationId.equals=" + (paymentCalculationId + 1));
     }
 
     /**

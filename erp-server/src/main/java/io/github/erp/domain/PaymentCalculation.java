@@ -31,9 +31,6 @@ public class PaymentCalculation implements Serializable {
     @Column(name = "payment_date")
     private LocalDate paymentDate;
 
-    @Column(name = "payment_category")
-    private String paymentCategory;
-
     @Column(name = "payment_expense", precision = 21, scale = 2)
     private BigDecimal paymentExpense;
 
@@ -52,6 +49,10 @@ public class PaymentCalculation implements Serializable {
     )
     @OneToOne(mappedBy = "paymentCalculation")
     private Payment payment;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "payment", "paymentCalculations" }, allowSetters = true)
+    private PaymentCategory paymentCategory;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -91,19 +92,6 @@ public class PaymentCalculation implements Serializable {
 
     public void setPaymentDate(LocalDate paymentDate) {
         this.paymentDate = paymentDate;
-    }
-
-    public String getPaymentCategory() {
-        return this.paymentCategory;
-    }
-
-    public PaymentCalculation paymentCategory(String paymentCategory) {
-        this.paymentCategory = paymentCategory;
-        return this;
-    }
-
-    public void setPaymentCategory(String paymentCategory) {
-        this.paymentCategory = paymentCategory;
     }
 
     public BigDecimal getPaymentExpense() {
@@ -177,6 +165,19 @@ public class PaymentCalculation implements Serializable {
         this.payment = payment;
     }
 
+    public PaymentCategory getPaymentCategory() {
+        return this.paymentCategory;
+    }
+
+    public PaymentCalculation paymentCategory(PaymentCategory paymentCategory) {
+        this.setPaymentCategory(paymentCategory);
+        return this;
+    }
+
+    public void setPaymentCategory(PaymentCategory paymentCategory) {
+        this.paymentCategory = paymentCategory;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -203,7 +204,6 @@ public class PaymentCalculation implements Serializable {
             "id=" + getId() +
             ", paymentNumber='" + getPaymentNumber() + "'" +
             ", paymentDate='" + getPaymentDate() + "'" +
-            ", paymentCategory='" + getPaymentCategory() + "'" +
             ", paymentExpense=" + getPaymentExpense() +
             ", withholdingVAT=" + getWithholdingVAT() +
             ", withholdingTax=" + getWithholdingTax() +

@@ -16,8 +16,6 @@ public class PaymentCalculationDTO implements Serializable {
 
     private LocalDate paymentDate;
 
-    private String paymentCategory;
-
     private BigDecimal paymentExpense;
 
     private BigDecimal withholdingVAT;
@@ -25,6 +23,8 @@ public class PaymentCalculationDTO implements Serializable {
     private BigDecimal withholdingTax;
 
     private BigDecimal paymentAmount;
+
+    private PaymentCategoryDTO paymentCategory;
 
     public Long getId() {
         return id;
@@ -48,14 +48,6 @@ public class PaymentCalculationDTO implements Serializable {
 
     public void setPaymentDate(LocalDate paymentDate) {
         this.paymentDate = paymentDate;
-    }
-
-    public String getPaymentCategory() {
-        return paymentCategory;
-    }
-
-    public void setPaymentCategory(String paymentCategory) {
-        this.paymentCategory = paymentCategory;
     }
 
     public BigDecimal getPaymentExpense() {
@@ -90,6 +82,14 @@ public class PaymentCalculationDTO implements Serializable {
         this.paymentAmount = paymentAmount;
     }
 
+    public PaymentCategoryDTO getPaymentCategory() {
+        return paymentCategory;
+    }
+
+    public void setPaymentCategory(PaymentCategoryDTO paymentCategory) {
+        this.paymentCategory = paymentCategory;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -118,11 +118,11 @@ public class PaymentCalculationDTO implements Serializable {
             "id=" + getId() +
             ", paymentNumber='" + getPaymentNumber() + "'" +
             ", paymentDate='" + getPaymentDate() + "'" +
-            ", paymentCategory='" + getPaymentCategory() + "'" +
             ", paymentExpense=" + getPaymentExpense() +
             ", withholdingVAT=" + getWithholdingVAT() +
             ", withholdingTax=" + getWithholdingTax() +
             ", paymentAmount=" + getPaymentAmount() +
+            ", paymentCategory=" + getPaymentCategory() +
             "}";
     }
 }

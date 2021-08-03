@@ -3,6 +3,8 @@ package io.github.erp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.github.erp.domain.enumeration.CategoryTypes;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -43,6 +45,11 @@ public class PaymentCategory implements Serializable {
     )
     @OneToOne(mappedBy = "paymentCategory")
     private Payment payment;
+
+    @OneToMany(mappedBy = "paymentCategory")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "payment", "paymentCategory" }, allowSetters = true)
+    private Set<PaymentCalculation> paymentCalculations = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -114,6 +121,37 @@ public class PaymentCategory implements Serializable {
             payment.setPaymentCategory(this);
         }
         this.payment = payment;
+    }
+
+    public Set<PaymentCalculation> getPaymentCalculations() {
+        return this.paymentCalculations;
+    }
+
+    public PaymentCategory paymentCalculations(Set<PaymentCalculation> paymentCalculations) {
+        this.setPaymentCalculations(paymentCalculations);
+        return this;
+    }
+
+    public PaymentCategory addPaymentCalculation(PaymentCalculation paymentCalculation) {
+        this.paymentCalculations.add(paymentCalculation);
+        paymentCalculation.setPaymentCategory(this);
+        return this;
+    }
+
+    public PaymentCategory removePaymentCalculation(PaymentCalculation paymentCalculation) {
+        this.paymentCalculations.remove(paymentCalculation);
+        paymentCalculation.setPaymentCategory(null);
+        return this;
+    }
+
+    public void setPaymentCalculations(Set<PaymentCalculation> paymentCalculations) {
+        if (this.paymentCalculations != null) {
+            this.paymentCalculations.forEach(i -> i.setPaymentCategory(null));
+        }
+        if (paymentCalculations != null) {
+            paymentCalculations.forEach(i -> i.setPaymentCategory(this));
+        }
+        this.paymentCalculations = paymentCalculations;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

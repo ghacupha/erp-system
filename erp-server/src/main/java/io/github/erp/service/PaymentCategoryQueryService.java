@@ -113,6 +113,15 @@ public class PaymentCategoryQueryService extends QueryService<PaymentCategory> {
                         )
                     );
             }
+            if (criteria.getPaymentCalculationId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPaymentCalculationId(),
+                            root -> root.join(PaymentCategory_.paymentCalculations, JoinType.LEFT).get(PaymentCalculation_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

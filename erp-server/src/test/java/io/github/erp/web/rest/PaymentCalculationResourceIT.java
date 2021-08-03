@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Payment;
 import io.github.erp.domain.PaymentCalculation;
+import io.github.erp.domain.PaymentCategory;
 import io.github.erp.repository.PaymentCalculationRepository;
 import io.github.erp.repository.search.PaymentCalculationSearchRepository;
 import io.github.erp.service.criteria.PaymentCalculationCriteria;
@@ -53,9 +54,6 @@ class PaymentCalculationResourceIT {
     private static final LocalDate DEFAULT_PAYMENT_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_PAYMENT_DATE = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_PAYMENT_DATE = LocalDate.ofEpochDay(-1L);
-
-    private static final String DEFAULT_PAYMENT_CATEGORY = "AAAAAAAAAA";
-    private static final String UPDATED_PAYMENT_CATEGORY = "BBBBBBBBBB";
 
     private static final BigDecimal DEFAULT_PAYMENT_EXPENSE = new BigDecimal(1);
     private static final BigDecimal UPDATED_PAYMENT_EXPENSE = new BigDecimal(2);
@@ -112,7 +110,6 @@ class PaymentCalculationResourceIT {
         PaymentCalculation paymentCalculation = new PaymentCalculation()
             .paymentNumber(DEFAULT_PAYMENT_NUMBER)
             .paymentDate(DEFAULT_PAYMENT_DATE)
-            .paymentCategory(DEFAULT_PAYMENT_CATEGORY)
             .paymentExpense(DEFAULT_PAYMENT_EXPENSE)
             .withholdingVAT(DEFAULT_WITHHOLDING_VAT)
             .withholdingTax(DEFAULT_WITHHOLDING_TAX)
@@ -130,7 +127,6 @@ class PaymentCalculationResourceIT {
         PaymentCalculation paymentCalculation = new PaymentCalculation()
             .paymentNumber(UPDATED_PAYMENT_NUMBER)
             .paymentDate(UPDATED_PAYMENT_DATE)
-            .paymentCategory(UPDATED_PAYMENT_CATEGORY)
             .paymentExpense(UPDATED_PAYMENT_EXPENSE)
             .withholdingVAT(UPDATED_WITHHOLDING_VAT)
             .withholdingTax(UPDATED_WITHHOLDING_TAX)
@@ -163,7 +159,6 @@ class PaymentCalculationResourceIT {
         PaymentCalculation testPaymentCalculation = paymentCalculationList.get(paymentCalculationList.size() - 1);
         assertThat(testPaymentCalculation.getPaymentNumber()).isEqualTo(DEFAULT_PAYMENT_NUMBER);
         assertThat(testPaymentCalculation.getPaymentDate()).isEqualTo(DEFAULT_PAYMENT_DATE);
-        assertThat(testPaymentCalculation.getPaymentCategory()).isEqualTo(DEFAULT_PAYMENT_CATEGORY);
         assertThat(testPaymentCalculation.getPaymentExpense()).isEqualByComparingTo(DEFAULT_PAYMENT_EXPENSE);
         assertThat(testPaymentCalculation.getWithholdingVAT()).isEqualByComparingTo(DEFAULT_WITHHOLDING_VAT);
         assertThat(testPaymentCalculation.getWithholdingTax()).isEqualByComparingTo(DEFAULT_WITHHOLDING_TAX);
@@ -213,7 +208,6 @@ class PaymentCalculationResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentCalculation.getId().intValue())))
             .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
             .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].paymentCategory").value(hasItem(DEFAULT_PAYMENT_CATEGORY)))
             .andExpect(jsonPath("$.[*].paymentExpense").value(hasItem(sameNumber(DEFAULT_PAYMENT_EXPENSE))))
             .andExpect(jsonPath("$.[*].withholdingVAT").value(hasItem(sameNumber(DEFAULT_WITHHOLDING_VAT))))
             .andExpect(jsonPath("$.[*].withholdingTax").value(hasItem(sameNumber(DEFAULT_WITHHOLDING_TAX))))
@@ -234,7 +228,6 @@ class PaymentCalculationResourceIT {
             .andExpect(jsonPath("$.id").value(paymentCalculation.getId().intValue()))
             .andExpect(jsonPath("$.paymentNumber").value(DEFAULT_PAYMENT_NUMBER))
             .andExpect(jsonPath("$.paymentDate").value(DEFAULT_PAYMENT_DATE.toString()))
-            .andExpect(jsonPath("$.paymentCategory").value(DEFAULT_PAYMENT_CATEGORY))
             .andExpect(jsonPath("$.paymentExpense").value(sameNumber(DEFAULT_PAYMENT_EXPENSE)))
             .andExpect(jsonPath("$.withholdingVAT").value(sameNumber(DEFAULT_WITHHOLDING_VAT)))
             .andExpect(jsonPath("$.withholdingTax").value(sameNumber(DEFAULT_WITHHOLDING_TAX)))
@@ -439,84 +432,6 @@ class PaymentCalculationResourceIT {
 
         // Get all the paymentCalculationList where paymentDate is greater than SMALLER_PAYMENT_DATE
         defaultPaymentCalculationShouldBeFound("paymentDate.greaterThan=" + SMALLER_PAYMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentCategoryIsEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-
-        // Get all the paymentCalculationList where paymentCategory equals to DEFAULT_PAYMENT_CATEGORY
-        defaultPaymentCalculationShouldBeFound("paymentCategory.equals=" + DEFAULT_PAYMENT_CATEGORY);
-
-        // Get all the paymentCalculationList where paymentCategory equals to UPDATED_PAYMENT_CATEGORY
-        defaultPaymentCalculationShouldNotBeFound("paymentCategory.equals=" + UPDATED_PAYMENT_CATEGORY);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentCategoryIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-
-        // Get all the paymentCalculationList where paymentCategory not equals to DEFAULT_PAYMENT_CATEGORY
-        defaultPaymentCalculationShouldNotBeFound("paymentCategory.notEquals=" + DEFAULT_PAYMENT_CATEGORY);
-
-        // Get all the paymentCalculationList where paymentCategory not equals to UPDATED_PAYMENT_CATEGORY
-        defaultPaymentCalculationShouldBeFound("paymentCategory.notEquals=" + UPDATED_PAYMENT_CATEGORY);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentCategoryIsInShouldWork() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-
-        // Get all the paymentCalculationList where paymentCategory in DEFAULT_PAYMENT_CATEGORY or UPDATED_PAYMENT_CATEGORY
-        defaultPaymentCalculationShouldBeFound("paymentCategory.in=" + DEFAULT_PAYMENT_CATEGORY + "," + UPDATED_PAYMENT_CATEGORY);
-
-        // Get all the paymentCalculationList where paymentCategory equals to UPDATED_PAYMENT_CATEGORY
-        defaultPaymentCalculationShouldNotBeFound("paymentCategory.in=" + UPDATED_PAYMENT_CATEGORY);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentCategoryIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-
-        // Get all the paymentCalculationList where paymentCategory is not null
-        defaultPaymentCalculationShouldBeFound("paymentCategory.specified=true");
-
-        // Get all the paymentCalculationList where paymentCategory is null
-        defaultPaymentCalculationShouldNotBeFound("paymentCategory.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentCategoryContainsSomething() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-
-        // Get all the paymentCalculationList where paymentCategory contains DEFAULT_PAYMENT_CATEGORY
-        defaultPaymentCalculationShouldBeFound("paymentCategory.contains=" + DEFAULT_PAYMENT_CATEGORY);
-
-        // Get all the paymentCalculationList where paymentCategory contains UPDATED_PAYMENT_CATEGORY
-        defaultPaymentCalculationShouldNotBeFound("paymentCategory.contains=" + UPDATED_PAYMENT_CATEGORY);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentCategoryNotContainsSomething() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-
-        // Get all the paymentCalculationList where paymentCategory does not contain DEFAULT_PAYMENT_CATEGORY
-        defaultPaymentCalculationShouldNotBeFound("paymentCategory.doesNotContain=" + DEFAULT_PAYMENT_CATEGORY);
-
-        // Get all the paymentCalculationList where paymentCategory does not contain UPDATED_PAYMENT_CATEGORY
-        defaultPaymentCalculationShouldBeFound("paymentCategory.doesNotContain=" + UPDATED_PAYMENT_CATEGORY);
     }
 
     @Test
@@ -955,6 +870,25 @@ class PaymentCalculationResourceIT {
         defaultPaymentCalculationShouldNotBeFound("paymentId.equals=" + (paymentId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllPaymentCalculationsByPaymentCategoryIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentCalculationRepository.saveAndFlush(paymentCalculation);
+        PaymentCategory paymentCategory = PaymentCategoryResourceIT.createEntity(em);
+        em.persist(paymentCategory);
+        em.flush();
+        paymentCalculation.setPaymentCategory(paymentCategory);
+        paymentCalculationRepository.saveAndFlush(paymentCalculation);
+        Long paymentCategoryId = paymentCategory.getId();
+
+        // Get all the paymentCalculationList where paymentCategory equals to paymentCategoryId
+        defaultPaymentCalculationShouldBeFound("paymentCategoryId.equals=" + paymentCategoryId);
+
+        // Get all the paymentCalculationList where paymentCategory equals to (paymentCategoryId + 1)
+        defaultPaymentCalculationShouldNotBeFound("paymentCategoryId.equals=" + (paymentCategoryId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -966,7 +900,6 @@ class PaymentCalculationResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentCalculation.getId().intValue())))
             .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
             .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].paymentCategory").value(hasItem(DEFAULT_PAYMENT_CATEGORY)))
             .andExpect(jsonPath("$.[*].paymentExpense").value(hasItem(sameNumber(DEFAULT_PAYMENT_EXPENSE))))
             .andExpect(jsonPath("$.[*].withholdingVAT").value(hasItem(sameNumber(DEFAULT_WITHHOLDING_VAT))))
             .andExpect(jsonPath("$.[*].withholdingTax").value(hasItem(sameNumber(DEFAULT_WITHHOLDING_TAX))))
@@ -1021,7 +954,6 @@ class PaymentCalculationResourceIT {
         updatedPaymentCalculation
             .paymentNumber(UPDATED_PAYMENT_NUMBER)
             .paymentDate(UPDATED_PAYMENT_DATE)
-            .paymentCategory(UPDATED_PAYMENT_CATEGORY)
             .paymentExpense(UPDATED_PAYMENT_EXPENSE)
             .withholdingVAT(UPDATED_WITHHOLDING_VAT)
             .withholdingTax(UPDATED_WITHHOLDING_TAX)
@@ -1042,7 +974,6 @@ class PaymentCalculationResourceIT {
         PaymentCalculation testPaymentCalculation = paymentCalculationList.get(paymentCalculationList.size() - 1);
         assertThat(testPaymentCalculation.getPaymentNumber()).isEqualTo(UPDATED_PAYMENT_NUMBER);
         assertThat(testPaymentCalculation.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
-        assertThat(testPaymentCalculation.getPaymentCategory()).isEqualTo(UPDATED_PAYMENT_CATEGORY);
         assertThat(testPaymentCalculation.getPaymentExpense()).isEqualTo(UPDATED_PAYMENT_EXPENSE);
         assertThat(testPaymentCalculation.getWithholdingVAT()).isEqualTo(UPDATED_WITHHOLDING_VAT);
         assertThat(testPaymentCalculation.getWithholdingTax()).isEqualTo(UPDATED_WITHHOLDING_TAX);
@@ -1158,7 +1089,6 @@ class PaymentCalculationResourceIT {
         PaymentCalculation testPaymentCalculation = paymentCalculationList.get(paymentCalculationList.size() - 1);
         assertThat(testPaymentCalculation.getPaymentNumber()).isEqualTo(UPDATED_PAYMENT_NUMBER);
         assertThat(testPaymentCalculation.getPaymentDate()).isEqualTo(DEFAULT_PAYMENT_DATE);
-        assertThat(testPaymentCalculation.getPaymentCategory()).isEqualTo(DEFAULT_PAYMENT_CATEGORY);
         assertThat(testPaymentCalculation.getPaymentExpense()).isEqualByComparingTo(DEFAULT_PAYMENT_EXPENSE);
         assertThat(testPaymentCalculation.getWithholdingVAT()).isEqualByComparingTo(DEFAULT_WITHHOLDING_VAT);
         assertThat(testPaymentCalculation.getWithholdingTax()).isEqualByComparingTo(DEFAULT_WITHHOLDING_TAX);
@@ -1180,7 +1110,6 @@ class PaymentCalculationResourceIT {
         partialUpdatedPaymentCalculation
             .paymentNumber(UPDATED_PAYMENT_NUMBER)
             .paymentDate(UPDATED_PAYMENT_DATE)
-            .paymentCategory(UPDATED_PAYMENT_CATEGORY)
             .paymentExpense(UPDATED_PAYMENT_EXPENSE)
             .withholdingVAT(UPDATED_WITHHOLDING_VAT)
             .withholdingTax(UPDATED_WITHHOLDING_TAX)
@@ -1200,7 +1129,6 @@ class PaymentCalculationResourceIT {
         PaymentCalculation testPaymentCalculation = paymentCalculationList.get(paymentCalculationList.size() - 1);
         assertThat(testPaymentCalculation.getPaymentNumber()).isEqualTo(UPDATED_PAYMENT_NUMBER);
         assertThat(testPaymentCalculation.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
-        assertThat(testPaymentCalculation.getPaymentCategory()).isEqualTo(UPDATED_PAYMENT_CATEGORY);
         assertThat(testPaymentCalculation.getPaymentExpense()).isEqualByComparingTo(UPDATED_PAYMENT_EXPENSE);
         assertThat(testPaymentCalculation.getWithholdingVAT()).isEqualByComparingTo(UPDATED_WITHHOLDING_VAT);
         assertThat(testPaymentCalculation.getWithholdingTax()).isEqualByComparingTo(UPDATED_WITHHOLDING_TAX);
@@ -1323,7 +1251,6 @@ class PaymentCalculationResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentCalculation.getId().intValue())))
             .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
             .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].paymentCategory").value(hasItem(DEFAULT_PAYMENT_CATEGORY)))
             .andExpect(jsonPath("$.[*].paymentExpense").value(hasItem(sameNumber(DEFAULT_PAYMENT_EXPENSE))))
             .andExpect(jsonPath("$.[*].withholdingVAT").value(hasItem(sameNumber(DEFAULT_WITHHOLDING_VAT))))
             .andExpect(jsonPath("$.[*].withholdingTax").value(hasItem(sameNumber(DEFAULT_WITHHOLDING_TAX))))
