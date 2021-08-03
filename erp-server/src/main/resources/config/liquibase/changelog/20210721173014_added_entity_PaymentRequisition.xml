@@ -14,9 +14,6 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="dealer_name" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="invoiced_amount" type="decimal(21,2)">
                 <constraints nullable="true" />
             </column>
@@ -24,6 +21,9 @@
                 <constraints nullable="true" />
             </column>
             <column name="vatable_amount" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="dealer_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -46,7 +46,6 @@
                   separator=";"
                   tableName="payment_requisition">
             <column name="id" type="numeric"/>
-            <column name="dealer_name" type="string"/>
             <column name="invoiced_amount" type="numeric"/>
             <column name="disbursement_cost" type="numeric"/>
             <column name="vatable_amount" type="numeric"/>

@@ -46,6 +46,8 @@ public class DealerCriteria implements Serializable, Criteria {
 
     private LongFilter paymentId;
 
+    private LongFilter paymentRequisitionId;
+
     public DealerCriteria() {}
 
     public DealerCriteria(DealerCriteria other) {
@@ -60,6 +62,7 @@ public class DealerCriteria implements Serializable, Criteria {
         this.bankersBranch = other.bankersBranch == null ? null : other.bankersBranch.copy();
         this.bankersSwiftCode = other.bankersSwiftCode == null ? null : other.bankersSwiftCode.copy();
         this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
+        this.paymentRequisitionId = other.paymentRequisitionId == null ? null : other.paymentRequisitionId.copy();
     }
 
     @Override
@@ -232,6 +235,21 @@ public class DealerCriteria implements Serializable, Criteria {
         this.paymentId = paymentId;
     }
 
+    public LongFilter getPaymentRequisitionId() {
+        return paymentRequisitionId;
+    }
+
+    public LongFilter paymentRequisitionId() {
+        if (paymentRequisitionId == null) {
+            paymentRequisitionId = new LongFilter();
+        }
+        return paymentRequisitionId;
+    }
+
+    public void setPaymentRequisitionId(LongFilter paymentRequisitionId) {
+        this.paymentRequisitionId = paymentRequisitionId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -252,7 +270,8 @@ public class DealerCriteria implements Serializable, Criteria {
             Objects.equals(bankersName, that.bankersName) &&
             Objects.equals(bankersBranch, that.bankersBranch) &&
             Objects.equals(bankersSwiftCode, that.bankersSwiftCode) &&
-            Objects.equals(paymentId, that.paymentId)
+            Objects.equals(paymentId, that.paymentId) &&
+            Objects.equals(paymentRequisitionId, that.paymentRequisitionId)
         );
     }
 
@@ -269,7 +288,8 @@ public class DealerCriteria implements Serializable, Criteria {
             bankersName,
             bankersBranch,
             bankersSwiftCode,
-            paymentId
+            paymentId,
+            paymentRequisitionId
         );
     }
 
@@ -288,6 +308,7 @@ public class DealerCriteria implements Serializable, Criteria {
             (bankersBranch != null ? "bankersBranch=" + bankersBranch + ", " : "") +
             (bankersSwiftCode != null ? "bankersSwiftCode=" + bankersSwiftCode + ", " : "") +
             (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
+            (paymentRequisitionId != null ? "paymentRequisitionId=" + paymentRequisitionId + ", " : "") +
             "}";
     }
 }

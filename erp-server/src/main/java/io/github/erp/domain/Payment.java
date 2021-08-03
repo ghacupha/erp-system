@@ -47,7 +47,7 @@ public class Payment implements Serializable {
 
     @ManyToMany(mappedBy = "payments")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "payments" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "payments", "paymentRequisitions" }, allowSetters = true)
     private Set<Dealer> dealers = new HashSet<>();
 
     @JsonIgnoreProperties(value = { "payment" }, allowSetters = true)
@@ -67,7 +67,7 @@ public class Payment implements Serializable {
     @JoinColumn(unique = true)
     private PaymentCalculation paymentCalculation;
 
-    @JsonIgnoreProperties(value = { "payment" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "payment", "dealer" }, allowSetters = true)
     @OneToOne(optional = false)
     @NotNull
     @JoinColumn(unique = true)

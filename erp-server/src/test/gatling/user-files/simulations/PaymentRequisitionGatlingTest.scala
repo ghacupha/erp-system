@@ -71,8 +71,7 @@ class PaymentRequisitionGatlingTest extends Simulation {
             .post("/api/payment-requisitions")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
-                "dealerName":"SAMPLE_TEXT"
-                , "invoicedAmount":"0"
+                "invoicedAmount":"0"
                 , "disbursementCost":"0"
                 , "vatableAmount":"0"
                 }""")).asJson

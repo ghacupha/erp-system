@@ -42,7 +42,7 @@ public class Invoice implements Serializable {
     private Payment payment;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "payments" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "payments", "paymentRequisitions" }, allowSetters = true)
     private Dealer dealer;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

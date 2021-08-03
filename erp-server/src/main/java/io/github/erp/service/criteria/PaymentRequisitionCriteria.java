@@ -27,8 +27,6 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private StringFilter dealerName;
-
     private BigDecimalFilter invoicedAmount;
 
     private BigDecimalFilter disbursementCost;
@@ -37,15 +35,17 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
 
     private LongFilter paymentId;
 
+    private LongFilter dealerId;
+
     public PaymentRequisitionCriteria() {}
 
     public PaymentRequisitionCriteria(PaymentRequisitionCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.dealerName = other.dealerName == null ? null : other.dealerName.copy();
         this.invoicedAmount = other.invoicedAmount == null ? null : other.invoicedAmount.copy();
         this.disbursementCost = other.disbursementCost == null ? null : other.disbursementCost.copy();
         this.vatableAmount = other.vatableAmount == null ? null : other.vatableAmount.copy();
         this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
+        this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
     }
 
     @Override
@@ -66,21 +66,6 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
-    }
-
-    public StringFilter getDealerName() {
-        return dealerName;
-    }
-
-    public StringFilter dealerName() {
-        if (dealerName == null) {
-            dealerName = new StringFilter();
-        }
-        return dealerName;
-    }
-
-    public void setDealerName(StringFilter dealerName) {
-        this.dealerName = dealerName;
     }
 
     public BigDecimalFilter getInvoicedAmount() {
@@ -143,6 +128,21 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
         this.paymentId = paymentId;
     }
 
+    public LongFilter getDealerId() {
+        return dealerId;
+    }
+
+    public LongFilter dealerId() {
+        if (dealerId == null) {
+            dealerId = new LongFilter();
+        }
+        return dealerId;
+    }
+
+    public void setDealerId(LongFilter dealerId) {
+        this.dealerId = dealerId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -154,17 +154,17 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
         final PaymentRequisitionCriteria that = (PaymentRequisitionCriteria) o;
         return (
             Objects.equals(id, that.id) &&
-            Objects.equals(dealerName, that.dealerName) &&
             Objects.equals(invoicedAmount, that.invoicedAmount) &&
             Objects.equals(disbursementCost, that.disbursementCost) &&
             Objects.equals(vatableAmount, that.vatableAmount) &&
-            Objects.equals(paymentId, that.paymentId)
+            Objects.equals(paymentId, that.paymentId) &&
+            Objects.equals(dealerId, that.dealerId)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, dealerName, invoicedAmount, disbursementCost, vatableAmount, paymentId);
+        return Objects.hash(id, invoicedAmount, disbursementCost, vatableAmount, paymentId, dealerId);
     }
 
     // prettier-ignore
@@ -172,11 +172,11 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
     public String toString() {
         return "PaymentRequisitionCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
-            (dealerName != null ? "dealerName=" + dealerName + ", " : "") +
             (invoicedAmount != null ? "invoicedAmount=" + invoicedAmount + ", " : "") +
             (disbursementCost != null ? "disbursementCost=" + disbursementCost + ", " : "") +
             (vatableAmount != null ? "vatableAmount=" + vatableAmount + ", " : "") +
             (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
+            (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             "}";
     }
 }

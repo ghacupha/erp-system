@@ -11,13 +11,13 @@ public class PaymentRequisitionDTO implements Serializable {
 
     private Long id;
 
-    private String dealerName;
-
     private BigDecimal invoicedAmount;
 
     private BigDecimal disbursementCost;
 
     private BigDecimal vatableAmount;
+
+    private DealerDTO dealer;
 
     public Long getId() {
         return id;
@@ -25,14 +25,6 @@ public class PaymentRequisitionDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getDealerName() {
-        return dealerName;
-    }
-
-    public void setDealerName(String dealerName) {
-        this.dealerName = dealerName;
     }
 
     public BigDecimal getInvoicedAmount() {
@@ -57,6 +49,14 @@ public class PaymentRequisitionDTO implements Serializable {
 
     public void setVatableAmount(BigDecimal vatableAmount) {
         this.vatableAmount = vatableAmount;
+    }
+
+    public DealerDTO getDealer() {
+        return dealer;
+    }
+
+    public void setDealer(DealerDTO dealer) {
+        this.dealer = dealer;
     }
 
     @Override
@@ -85,10 +85,10 @@ public class PaymentRequisitionDTO implements Serializable {
     public String toString() {
         return "PaymentRequisitionDTO{" +
             "id=" + getId() +
-            ", dealerName='" + getDealerName() + "'" +
             ", invoicedAmount=" + getInvoicedAmount() +
             ", disbursementCost=" + getDisbursementCost() +
             ", vatableAmount=" + getVatableAmount() +
+            ", dealer=" + getDealer() +
             "}";
     }
 }
