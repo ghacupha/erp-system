@@ -8,6 +8,12 @@
       "relationshipType": "one-to-one",
       "ownerSide": false,
       "otherEntityRelationshipName": "paymentCategory"
+    },
+    {
+      "relationshipName": "paymentCalculation",
+      "otherEntityName": "paymentCalculation",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "paymentCategory"
     }
   ],
   "fields": [

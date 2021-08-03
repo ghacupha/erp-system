@@ -73,7 +73,6 @@ class PaymentCalculationGatlingTest extends Simulation {
             .body(StringBody("""{
                 "paymentNumber":"SAMPLE_TEXT"
                 , "paymentDate":"2020-01-01T00:00:00.000Z"
-                , "paymentCategory":"SAMPLE_TEXT"
                 , "paymentExpense":"0"
                 , "withholdingVAT":"0"
                 , "withholdingTax":"0"

@@ -20,9 +20,6 @@
             <column name="payment_date" type="date">
                 <constraints nullable="true" />
             </column>
-            <column name="payment_category" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="payment_expense" type="decimal(21,2)">
                 <constraints nullable="true" />
             </column>
@@ -33,6 +30,9 @@
                 <constraints nullable="true" />
             </column>
             <column name="payment_amount" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="payment_category_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -57,7 +57,6 @@
             <column name="id" type="numeric"/>
             <column name="payment_number" type="string"/>
             <column name="payment_date" type="date"/>
-            <column name="payment_category" type="string"/>
             <column name="payment_expense" type="numeric"/>
             <column name="withholding_vat" type="numeric"/>
             <column name="withholding_tax" type="numeric"/>

@@ -55,13 +55,13 @@ public class Payment implements Serializable {
     @JoinColumn(unique = true)
     private TaxRule taxRule;
 
-    @JsonIgnoreProperties(value = { "payment" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "payment", "paymentCalculations" }, allowSetters = true)
     @OneToOne(optional = false)
     @NotNull
     @JoinColumn(unique = true)
     private PaymentCategory paymentCategory;
 
-    @JsonIgnoreProperties(value = { "payment" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "payment", "paymentCategory" }, allowSetters = true)
     @OneToOne(optional = false)
     @NotNull
     @JoinColumn(unique = true)

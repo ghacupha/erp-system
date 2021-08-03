@@ -32,8 +32,6 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
 
     private LocalDateFilter paymentDate;
 
-    private StringFilter paymentCategory;
-
     private BigDecimalFilter paymentExpense;
 
     private BigDecimalFilter withholdingVAT;
@@ -44,18 +42,20 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
 
     private LongFilter paymentId;
 
+    private LongFilter paymentCategoryId;
+
     public PaymentCalculationCriteria() {}
 
     public PaymentCalculationCriteria(PaymentCalculationCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.paymentNumber = other.paymentNumber == null ? null : other.paymentNumber.copy();
         this.paymentDate = other.paymentDate == null ? null : other.paymentDate.copy();
-        this.paymentCategory = other.paymentCategory == null ? null : other.paymentCategory.copy();
         this.paymentExpense = other.paymentExpense == null ? null : other.paymentExpense.copy();
         this.withholdingVAT = other.withholdingVAT == null ? null : other.withholdingVAT.copy();
         this.withholdingTax = other.withholdingTax == null ? null : other.withholdingTax.copy();
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
         this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
+        this.paymentCategoryId = other.paymentCategoryId == null ? null : other.paymentCategoryId.copy();
     }
 
     @Override
@@ -106,21 +106,6 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
 
     public void setPaymentDate(LocalDateFilter paymentDate) {
         this.paymentDate = paymentDate;
-    }
-
-    public StringFilter getPaymentCategory() {
-        return paymentCategory;
-    }
-
-    public StringFilter paymentCategory() {
-        if (paymentCategory == null) {
-            paymentCategory = new StringFilter();
-        }
-        return paymentCategory;
-    }
-
-    public void setPaymentCategory(StringFilter paymentCategory) {
-        this.paymentCategory = paymentCategory;
     }
 
     public BigDecimalFilter getPaymentExpense() {
@@ -198,6 +183,21 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
         this.paymentId = paymentId;
     }
 
+    public LongFilter getPaymentCategoryId() {
+        return paymentCategoryId;
+    }
+
+    public LongFilter paymentCategoryId() {
+        if (paymentCategoryId == null) {
+            paymentCategoryId = new LongFilter();
+        }
+        return paymentCategoryId;
+    }
+
+    public void setPaymentCategoryId(LongFilter paymentCategoryId) {
+        this.paymentCategoryId = paymentCategoryId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -211,12 +211,12 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(paymentNumber, that.paymentNumber) &&
             Objects.equals(paymentDate, that.paymentDate) &&
-            Objects.equals(paymentCategory, that.paymentCategory) &&
             Objects.equals(paymentExpense, that.paymentExpense) &&
             Objects.equals(withholdingVAT, that.withholdingVAT) &&
             Objects.equals(withholdingTax, that.withholdingTax) &&
             Objects.equals(paymentAmount, that.paymentAmount) &&
-            Objects.equals(paymentId, that.paymentId)
+            Objects.equals(paymentId, that.paymentId) &&
+            Objects.equals(paymentCategoryId, that.paymentCategoryId)
         );
     }
 
@@ -226,12 +226,12 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
             id,
             paymentNumber,
             paymentDate,
-            paymentCategory,
             paymentExpense,
             withholdingVAT,
             withholdingTax,
             paymentAmount,
-            paymentId
+            paymentId,
+            paymentCategoryId
         );
     }
 
@@ -242,12 +242,12 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (paymentNumber != null ? "paymentNumber=" + paymentNumber + ", " : "") +
             (paymentDate != null ? "paymentDate=" + paymentDate + ", " : "") +
-            (paymentCategory != null ? "paymentCategory=" + paymentCategory + ", " : "") +
             (paymentExpense != null ? "paymentExpense=" + paymentExpense + ", " : "") +
             (withholdingVAT != null ? "withholdingVAT=" + withholdingVAT + ", " : "") +
             (withholdingTax != null ? "withholdingTax=" + withholdingTax + ", " : "") +
             (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
             (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
+            (paymentCategoryId != null ? "paymentCategoryId=" + paymentCategoryId + ", " : "") +
             "}";
     }
 }
