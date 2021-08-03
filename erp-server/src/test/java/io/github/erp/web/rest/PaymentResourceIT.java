@@ -14,7 +14,6 @@ import io.github.erp.domain.Invoice;
 import io.github.erp.domain.Payment;
 import io.github.erp.domain.PaymentCalculation;
 import io.github.erp.domain.PaymentCategory;
-import io.github.erp.domain.PaymentRequisition;
 import io.github.erp.domain.TaxRule;
 import io.github.erp.repository.PaymentRepository;
 import io.github.erp.repository.search.PaymentSearchRepository;
@@ -650,25 +649,6 @@ class PaymentResourceIT {
 
         // Get all the paymentList where ownedInvoice equals to (ownedInvoiceId + 1)
         defaultPaymentShouldNotBeFound("ownedInvoiceId.equals=" + (ownedInvoiceId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentsByPaymentRequisitionIsEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentRepository.saveAndFlush(payment);
-        PaymentRequisition paymentRequisition = PaymentRequisitionResourceIT.createEntity(em);
-        em.persist(paymentRequisition);
-        em.flush();
-        payment.setPaymentRequisition(paymentRequisition);
-        paymentRepository.saveAndFlush(payment);
-        Long paymentRequisitionId = paymentRequisition.getId();
-
-        // Get all the paymentList where paymentRequisition equals to paymentRequisitionId
-        defaultPaymentShouldBeFound("paymentRequisitionId.equals=" + paymentRequisitionId);
-
-        // Get all the paymentList where paymentRequisition equals to (paymentRequisitionId + 1)
-        defaultPaymentShouldNotBeFound("paymentRequisitionId.equals=" + (paymentRequisitionId + 1));
     }
 
     @Test

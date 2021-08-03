@@ -35,10 +35,7 @@ public class Invoice implements Serializable {
     private BigDecimal invoiceAmount;
 
     @ManyToOne
-    @JsonIgnoreProperties(
-        value = { "ownedInvoices", "paymentRequisition", "dealers", "taxRule", "paymentCategory", "paymentCalculation" },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "ownedInvoices", "dealers", "taxRule", "paymentCategory", "paymentCalculation" }, allowSetters = true)
     private Payment payment;
 
     @ManyToOne
