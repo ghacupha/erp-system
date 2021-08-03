@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Dealer;
 import io.github.erp.domain.Payment;
+import io.github.erp.domain.PaymentRequisition;
 import io.github.erp.repository.DealerRepository;
 import io.github.erp.repository.search.DealerSearchRepository;
 import io.github.erp.service.DealerService;
@@ -1003,6 +1004,25 @@ class DealerResourceIT {
 
         // Get all the dealerList where payment equals to (paymentId + 1)
         defaultDealerShouldNotBeFound("paymentId.equals=" + (paymentId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllDealersByPaymentRequisitionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        dealerRepository.saveAndFlush(dealer);
+        PaymentRequisition paymentRequisition = PaymentRequisitionResourceIT.createEntity(em);
+        em.persist(paymentRequisition);
+        em.flush();
+        dealer.addPaymentRequisition(paymentRequisition);
+        dealerRepository.saveAndFlush(dealer);
+        Long paymentRequisitionId = paymentRequisition.getId();
+
+        // Get all the dealerList where paymentRequisition equals to paymentRequisitionId
+        defaultDealerShouldBeFound("paymentRequisitionId.equals=" + paymentRequisitionId);
+
+        // Get all the dealerList where paymentRequisition equals to (paymentRequisitionId + 1)
+        defaultDealerShouldNotBeFound("paymentRequisitionId.equals=" + (paymentRequisitionId + 1));
     }
 
     /**

@@ -66,6 +66,11 @@ public class Dealer implements Serializable {
     )
     private Set<Payment> payments = new HashSet<>();
 
+    @OneToMany(mappedBy = "dealer")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "payment", "dealer" }, allowSetters = true)
+    private Set<PaymentRequisition> paymentRequisitions = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -220,6 +225,37 @@ public class Dealer implements Serializable {
 
     public void setPayments(Set<Payment> payments) {
         this.payments = payments;
+    }
+
+    public Set<PaymentRequisition> getPaymentRequisitions() {
+        return this.paymentRequisitions;
+    }
+
+    public Dealer paymentRequisitions(Set<PaymentRequisition> paymentRequisitions) {
+        this.setPaymentRequisitions(paymentRequisitions);
+        return this;
+    }
+
+    public Dealer addPaymentRequisition(PaymentRequisition paymentRequisition) {
+        this.paymentRequisitions.add(paymentRequisition);
+        paymentRequisition.setDealer(this);
+        return this;
+    }
+
+    public Dealer removePaymentRequisition(PaymentRequisition paymentRequisition) {
+        this.paymentRequisitions.remove(paymentRequisition);
+        paymentRequisition.setDealer(null);
+        return this;
+    }
+
+    public void setPaymentRequisitions(Set<PaymentRequisition> paymentRequisitions) {
+        if (this.paymentRequisitions != null) {
+            this.paymentRequisitions.forEach(i -> i.setDealer(null));
+        }
+        if (paymentRequisitions != null) {
+            paymentRequisitions.forEach(i -> i.setDealer(this));
+        }
+        this.paymentRequisitions = paymentRequisitions;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

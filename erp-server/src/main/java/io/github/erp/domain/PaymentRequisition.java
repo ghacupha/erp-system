@@ -24,9 +24,6 @@ public class PaymentRequisition implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "dealer_name")
-    private String dealerName;
-
     @Column(name = "invoiced_amount", precision = 21, scale = 2)
     private BigDecimal invoicedAmount;
 
@@ -43,6 +40,10 @@ public class PaymentRequisition implements Serializable {
     @OneToOne(mappedBy = "paymentRequisition")
     private Payment payment;
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "payments", "paymentRequisitions" }, allowSetters = true)
+    private Dealer dealer;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -55,19 +56,6 @@ public class PaymentRequisition implements Serializable {
     public PaymentRequisition id(Long id) {
         this.id = id;
         return this;
-    }
-
-    public String getDealerName() {
-        return this.dealerName;
-    }
-
-    public PaymentRequisition dealerName(String dealerName) {
-        this.dealerName = dealerName;
-        return this;
-    }
-
-    public void setDealerName(String dealerName) {
-        this.dealerName = dealerName;
     }
 
     public BigDecimal getInvoicedAmount() {
@@ -128,6 +116,19 @@ public class PaymentRequisition implements Serializable {
         this.payment = payment;
     }
 
+    public Dealer getDealer() {
+        return this.dealer;
+    }
+
+    public PaymentRequisition dealer(Dealer dealer) {
+        this.setDealer(dealer);
+        return this;
+    }
+
+    public void setDealer(Dealer dealer) {
+        this.dealer = dealer;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -152,7 +153,6 @@ public class PaymentRequisition implements Serializable {
     public String toString() {
         return "PaymentRequisition{" +
             "id=" + getId() +
-            ", dealerName='" + getDealerName() + "'" +
             ", invoicedAmount=" + getInvoicedAmount() +
             ", disbursementCost=" + getDisbursementCost() +
             ", vatableAmount=" + getVatableAmount() +

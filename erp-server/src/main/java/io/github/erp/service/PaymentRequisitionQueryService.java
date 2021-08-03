@@ -94,9 +94,6 @@ public class PaymentRequisitionQueryService extends QueryService<PaymentRequisit
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), PaymentRequisition_.id));
             }
-            if (criteria.getDealerName() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getDealerName(), PaymentRequisition_.dealerName));
-            }
             if (criteria.getInvoicedAmount() != null) {
                 specification =
                     specification.and(buildRangeSpecification(criteria.getInvoicedAmount(), PaymentRequisition_.invoicedAmount));
@@ -114,6 +111,15 @@ public class PaymentRequisitionQueryService extends QueryService<PaymentRequisit
                         buildSpecification(
                             criteria.getPaymentId(),
                             root -> root.join(PaymentRequisition_.payment, JoinType.LEFT).get(Payment_.id)
+                        )
+                    );
+            }
+            if (criteria.getDealerId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getDealerId(),
+                            root -> root.join(PaymentRequisition_.dealer, JoinType.LEFT).get(Dealer_.id)
                         )
                     );
             }

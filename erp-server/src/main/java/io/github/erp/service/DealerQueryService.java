@@ -123,6 +123,15 @@ public class DealerQueryService extends QueryService<Dealer> {
                         buildSpecification(criteria.getPaymentId(), root -> root.join(Dealer_.payments, JoinType.LEFT).get(Payment_.id))
                     );
             }
+            if (criteria.getPaymentRequisitionId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPaymentRequisitionId(),
+                            root -> root.join(Dealer_.paymentRequisitions, JoinType.LEFT).get(PaymentRequisition_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }
