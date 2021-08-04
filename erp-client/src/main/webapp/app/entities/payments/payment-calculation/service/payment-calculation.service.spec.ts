@@ -28,7 +28,6 @@ describe('Service Tests', () => {
         id: 0,
         paymentNumber: 'AAAAAAA',
         paymentDate: currentDate,
-        paymentCategory: 'AAAAAAA',
         paymentExpense: 0,
         withholdingVAT: 0,
         withholdingTax: 0,
@@ -81,7 +80,6 @@ describe('Service Tests', () => {
             id: 1,
             paymentNumber: 'BBBBBB',
             paymentDate: currentDate.format(DATE_FORMAT),
-            paymentCategory: 'BBBBBB',
             paymentExpense: 1,
             withholdingVAT: 1,
             withholdingTax: 1,
@@ -108,9 +106,9 @@ describe('Service Tests', () => {
         const patchObject = Object.assign(
           {
             paymentDate: currentDate.format(DATE_FORMAT),
-            paymentCategory: 'BBBBBB',
-            withholdingVAT: 1,
+            paymentExpense: 1,
             withholdingTax: 1,
+            paymentAmount: 1,
           },
           new PaymentCalculation()
         );
@@ -137,7 +135,6 @@ describe('Service Tests', () => {
             id: 1,
             paymentNumber: 'BBBBBB',
             paymentDate: currentDate.format(DATE_FORMAT),
-            paymentCategory: 'BBBBBB',
             paymentExpense: 1,
             withholdingVAT: 1,
             withholdingTax: 1,
@@ -198,7 +195,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique PaymentCalculation to an array', () => {
-          const paymentCalculationArray: IPaymentCalculation[] = [{ id: 123 }, { id: 456 }, { id: 54624 }];
+          const paymentCalculationArray: IPaymentCalculation[] = [{ id: 123 }, { id: 456 }, { id: 13521 }];
           const paymentCalculationCollection: IPaymentCalculation[] = [{ id: 123 }];
           expectedResult = service.addPaymentCalculationToCollectionIfMissing(paymentCalculationCollection, ...paymentCalculationArray);
           expect(expectedResult).toHaveLength(3);

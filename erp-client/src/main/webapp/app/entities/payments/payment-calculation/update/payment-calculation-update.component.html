@@ -45,18 +45,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_paymentCategory">Payment Category</label>
-          <input
-            type="text"
-            class="form-control"
-            name="paymentCategory"
-            id="field_paymentCategory"
-            data-cy="paymentCategory"
-            formControlName="paymentCategory"
-          />
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" for="field_paymentExpense">Payment Expense</label>
           <input
             type="number"
@@ -102,6 +90,29 @@
             data-cy="paymentAmount"
             formControlName="paymentAmount"
           />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_paymentCategory">Payment Category</label>
+          <select
+            class="form-control"
+            id="field_paymentCategory"
+            data-cy="paymentCategory"
+            name="paymentCategory"
+            formControlName="paymentCategory"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                paymentCategoryOption.id === editForm.get('paymentCategory')!.value?.id
+                  ? editForm.get('paymentCategory')!.value
+                  : paymentCategoryOption
+              "
+              *ngFor="let paymentCategoryOption of paymentCategoriesSharedCollection; trackBy: trackPaymentCategoryById"
+            >
+              {{ paymentCategoryOption.id }}
+            </option>
+          </select>
         </div>
       </div>
 

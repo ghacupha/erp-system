@@ -1,4 +1,5 @@
 import { IPayment } from 'app/entities/payments/payment/payment.model';
+import { IPaymentRequisition } from 'app/entities/payments/payment-requisition/payment-requisition.model';
 
 export interface IDealer {
   id?: number;
@@ -12,6 +13,7 @@ export interface IDealer {
   bankersBranch?: string | null;
   bankersSwiftCode?: string | null;
   payments?: IPayment[] | null;
+  paymentRequisitions?: IPaymentRequisition[] | null;
 }
 
 export class Dealer implements IDealer {
@@ -26,7 +28,8 @@ export class Dealer implements IDealer {
     public bankersName?: string | null,
     public bankersBranch?: string | null,
     public bankersSwiftCode?: string | null,
-    public payments?: IPayment[] | null
+    public payments?: IPayment[] | null,
+    public paymentRequisitions?: IPaymentRequisition[] | null
   ) {}
 }
 

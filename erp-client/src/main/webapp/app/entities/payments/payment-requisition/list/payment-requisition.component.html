@@ -51,10 +51,10 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="dealerName"><span>Dealer Name</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="invoicedAmount"><span>Invoiced Amount</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="disbursementCost"><span>Disbursement Cost</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="vatableAmount"><span>Vatable Amount</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="dealer.id"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -63,10 +63,14 @@
           <td>
             <a [routerLink]="['/payment-requisition', paymentRequisition.id, 'view']">{{ paymentRequisition.id }}</a>
           </td>
-          <td>{{ paymentRequisition.dealerName }}</td>
           <td>{{ paymentRequisition.invoicedAmount }}</td>
           <td>{{ paymentRequisition.disbursementCost }}</td>
           <td>{{ paymentRequisition.vatableAmount }}</td>
+          <td>
+            <div *ngIf="paymentRequisition.dealer">
+              <a [routerLink]="['/dealer', paymentRequisition.dealer?.id, 'view']">{{ paymentRequisition.dealer?.id }}</a>
+            </div>
+          </td>
           <td class="text-right">
             <div class="btn-group">
               <button

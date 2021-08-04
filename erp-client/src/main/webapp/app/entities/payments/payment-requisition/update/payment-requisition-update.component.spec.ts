@@ -9,6 +9,8 @@ import { of, Subject } from 'rxjs';
 
 import { PaymentRequisitionService } from '../service/payment-requisition.service';
 import { IPaymentRequisition, PaymentRequisition } from '../payment-requisition.model';
+import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
+import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 
 import { PaymentRequisitionUpdateComponent } from './payment-requisition-update.component';
 
@@ -18,6 +20,7 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<PaymentRequisitionUpdateComponent>;
     let activatedRoute: ActivatedRoute;
     let paymentRequisitionService: PaymentRequisitionService;
+    let dealerService: DealerService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -31,18 +34,41 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(PaymentRequisitionUpdateComponent);
       activatedRoute = TestBed.inject(ActivatedRoute);
       paymentRequisitionService = TestBed.inject(PaymentRequisitionService);
+      dealerService = TestBed.inject(DealerService);
 
       comp = fixture.componentInstance;
     });
 
     describe('ngOnInit', () => {
+      it('Should call Dealer query and add missing value', () => {
+        const paymentRequisition: IPaymentRequisition = { id: 456 };
+        const dealer: IDealer = { id: 49433 };
+        paymentRequisition.dealer = dealer;
+
+        const dealerCollection: IDealer[] = [{ id: 8092 }];
+        jest.spyOn(dealerService, 'query').mockReturnValue(of(new HttpResponse({ body: dealerCollection })));
+        const additionalDealers = [dealer];
+        const expectedCollection: IDealer[] = [...additionalDealers, ...dealerCollection];
+        jest.spyOn(dealerService, 'addDealerToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+        activatedRoute.data = of({ paymentRequisition });
+        comp.ngOnInit();
+
+        expect(dealerService.query).toHaveBeenCalled();
+        expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerCollection, ...additionalDealers);
+        expect(comp.dealersSharedCollection).toEqual(expectedCollection);
+      });
+
       it('Should update editForm', () => {
         const paymentRequisition: IPaymentRequisition = { id: 456 };
+        const dealer: IDealer = { id: 84854 };
+        paymentRequisition.dealer = dealer;
 
         activatedRoute.data = of({ paymentRequisition });
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(paymentRequisition));
+        expect(comp.dealersSharedCollection).toContain(dealer);
       });
     });
 
@@ -107,6 +133,16 @@ describe('Component Tests', () => {
         expect(paymentRequisitionService.update).toHaveBeenCalledWith(paymentRequisition);
         expect(comp.isSaving).toEqual(false);
         expect(comp.previousState).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('Tracking relationships identifiers', () => {
+      describe('trackDealerById', () => {
+        it('Should return tracked Dealer primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackDealerById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
       });
     });
   });

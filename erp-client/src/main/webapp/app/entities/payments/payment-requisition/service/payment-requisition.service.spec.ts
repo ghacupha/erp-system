@@ -22,7 +22,6 @@ describe('Service Tests', () => {
 
       elemDefault = {
         id: 0,
-        dealerName: 'AAAAAAA',
         invoicedAmount: 0,
         disbursementCost: 0,
         vatableAmount: 0,
@@ -61,7 +60,6 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 1,
-            dealerName: 'BBBBBB',
             invoicedAmount: 1,
             disbursementCost: 1,
             vatableAmount: 1,
@@ -81,7 +79,6 @@ describe('Service Tests', () => {
       it('should partial update a PaymentRequisition', () => {
         const patchObject = Object.assign(
           {
-            dealerName: 'BBBBBB',
             invoicedAmount: 1,
             disbursementCost: 1,
             vatableAmount: 1,
@@ -104,7 +101,6 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 1,
-            dealerName: 'BBBBBB',
             invoicedAmount: 1,
             disbursementCost: 1,
             vatableAmount: 1,
@@ -159,7 +155,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique PaymentRequisition to an array', () => {
-          const paymentRequisitionArray: IPaymentRequisition[] = [{ id: 123 }, { id: 456 }, { id: 74108 }];
+          const paymentRequisitionArray: IPaymentRequisition[] = [{ id: 123 }, { id: 456 }, { id: 80448 }];
           const paymentRequisitionCollection: IPaymentRequisition[] = [{ id: 123 }];
           expectedResult = service.addPaymentRequisitionToCollectionIfMissing(paymentRequisitionCollection, ...paymentRequisitionArray);
           expect(expectedResult).toHaveLength(3);

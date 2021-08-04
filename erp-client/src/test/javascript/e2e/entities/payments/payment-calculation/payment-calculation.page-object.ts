@@ -32,11 +32,12 @@ export class PaymentCalculationUpdatePage {
   idInput = element(by.id('field_id'));
   paymentNumberInput = element(by.id('field_paymentNumber'));
   paymentDateInput = element(by.id('field_paymentDate'));
-  paymentCategoryInput = element(by.id('field_paymentCategory'));
   paymentExpenseInput = element(by.id('field_paymentExpense'));
   withholdingVATInput = element(by.id('field_withholdingVAT'));
   withholdingTaxInput = element(by.id('field_withholdingTax'));
   paymentAmountInput = element(by.id('field_paymentAmount'));
+
+  paymentCategorySelect = element(by.id('field_paymentCategory'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -64,14 +65,6 @@ export class PaymentCalculationUpdatePage {
 
   async getPaymentDateInput(): Promise<string> {
     return await this.paymentDateInput.getAttribute('value');
-  }
-
-  async setPaymentCategoryInput(paymentCategory: string): Promise<void> {
-    await this.paymentCategoryInput.sendKeys(paymentCategory);
-  }
-
-  async getPaymentCategoryInput(): Promise<string> {
-    return await this.paymentCategoryInput.getAttribute('value');
   }
 
   async setPaymentExpenseInput(paymentExpense: string): Promise<void> {
@@ -104,6 +97,22 @@ export class PaymentCalculationUpdatePage {
 
   async getPaymentAmountInput(): Promise<string> {
     return await this.paymentAmountInput.getAttribute('value');
+  }
+
+  async paymentCategorySelectLastOption(): Promise<void> {
+    await this.paymentCategorySelect.all(by.tagName('option')).last().click();
+  }
+
+  async paymentCategorySelectOption(option: string): Promise<void> {
+    await this.paymentCategorySelect.sendKeys(option);
+  }
+
+  getPaymentCategorySelect(): ElementFinder {
+    return this.paymentCategorySelect;
+  }
+
+  async getPaymentCategorySelectedOption(): Promise<string> {
+    return await this.paymentCategorySelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

@@ -22,10 +22,6 @@
         <dd>
           <span>{{ paymentCalculation.paymentDate | formatMediumDate }}</span>
         </dd>
-        <dt><span>Payment Category</span></dt>
-        <dd>
-          <span>{{ paymentCalculation.paymentCategory }}</span>
-        </dd>
         <dt><span>Payment Expense</span></dt>
         <dd>
           <span>{{ paymentCalculation.paymentExpense }}</span>
@@ -41,6 +37,14 @@
         <dt><span>Payment Amount</span></dt>
         <dd>
           <span>{{ paymentCalculation.paymentAmount }}</span>
+        </dd>
+        <dt><span>Payment Category</span></dt>
+        <dd>
+          <div *ngIf="paymentCalculation.paymentCategory">
+            <a [routerLink]="['/payment-category', paymentCalculation.paymentCategory?.id, 'view']">{{
+              paymentCalculation.paymentCategory?.id
+            }}</a>
+          </div>
         </dd>
       </dl>
 
