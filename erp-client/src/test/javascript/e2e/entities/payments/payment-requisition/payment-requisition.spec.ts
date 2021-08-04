@@ -50,10 +50,10 @@ describe('PaymentRequisition e2e test', () => {
     await paymentRequisitionComponentsPage.clickOnCreateButton();
 
     await promise.all([
-      paymentRequisitionUpdatePage.setDealerNameInput('dealerName'),
       paymentRequisitionUpdatePage.setInvoicedAmountInput('5'),
       paymentRequisitionUpdatePage.setDisbursementCostInput('5'),
       paymentRequisitionUpdatePage.setVatableAmountInput('5'),
+      paymentRequisitionUpdatePage.dealerSelectLastOption(),
     ]);
 
     await paymentRequisitionUpdatePage.save();

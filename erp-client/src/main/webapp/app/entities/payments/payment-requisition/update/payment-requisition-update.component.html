@@ -12,18 +12,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_dealerName">Dealer Name</label>
-          <input
-            type="text"
-            class="form-control"
-            name="dealerName"
-            id="field_dealerName"
-            data-cy="dealerName"
-            formControlName="dealerName"
-          />
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" for="field_invoicedAmount">Invoiced Amount</label>
           <input
             type="number"
@@ -57,6 +45,19 @@
             data-cy="vatableAmount"
             formControlName="vatableAmount"
           />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_dealer">Dealer</label>
+          <select class="form-control" id="field_dealer" data-cy="dealer" name="dealer" formControlName="dealer">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="dealerOption.id === editForm.get('dealer')!.value?.id ? editForm.get('dealer')!.value : dealerOption"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.id }}
+            </option>
+          </select>
         </div>
       </div>
 

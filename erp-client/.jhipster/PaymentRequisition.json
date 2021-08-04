@@ -8,13 +8,15 @@
       "relationshipType": "one-to-one",
       "ownerSide": false,
       "otherEntityRelationshipName": "paymentRequisition"
+    },
+    {
+      "relationshipName": "dealer",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
     }
   ],
   "fields": [
-    {
-      "fieldName": "dealerName",
-      "fieldType": "String"
-    },
     {
       "fieldName": "invoicedAmount",
       "fieldType": "BigDecimal"

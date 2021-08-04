@@ -9,6 +9,8 @@ import { of, Subject } from 'rxjs';
 
 import { PaymentCalculationService } from '../service/payment-calculation.service';
 import { IPaymentCalculation, PaymentCalculation } from '../payment-calculation.model';
+import { IPaymentCategory } from 'app/entities/payments/payment-category/payment-category.model';
+import { PaymentCategoryService } from 'app/entities/payments/payment-category/service/payment-category.service';
 
 import { PaymentCalculationUpdateComponent } from './payment-calculation-update.component';
 
@@ -18,6 +20,7 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<PaymentCalculationUpdateComponent>;
     let activatedRoute: ActivatedRoute;
     let paymentCalculationService: PaymentCalculationService;
+    let paymentCategoryService: PaymentCategoryService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -31,18 +34,44 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(PaymentCalculationUpdateComponent);
       activatedRoute = TestBed.inject(ActivatedRoute);
       paymentCalculationService = TestBed.inject(PaymentCalculationService);
+      paymentCategoryService = TestBed.inject(PaymentCategoryService);
 
       comp = fixture.componentInstance;
     });
 
     describe('ngOnInit', () => {
+      it('Should call PaymentCategory query and add missing value', () => {
+        const paymentCalculation: IPaymentCalculation = { id: 456 };
+        const paymentCategory: IPaymentCategory = { id: 26408 };
+        paymentCalculation.paymentCategory = paymentCategory;
+
+        const paymentCategoryCollection: IPaymentCategory[] = [{ id: 15897 }];
+        jest.spyOn(paymentCategoryService, 'query').mockReturnValue(of(new HttpResponse({ body: paymentCategoryCollection })));
+        const additionalPaymentCategories = [paymentCategory];
+        const expectedCollection: IPaymentCategory[] = [...additionalPaymentCategories, ...paymentCategoryCollection];
+        jest.spyOn(paymentCategoryService, 'addPaymentCategoryToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+        activatedRoute.data = of({ paymentCalculation });
+        comp.ngOnInit();
+
+        expect(paymentCategoryService.query).toHaveBeenCalled();
+        expect(paymentCategoryService.addPaymentCategoryToCollectionIfMissing).toHaveBeenCalledWith(
+          paymentCategoryCollection,
+          ...additionalPaymentCategories
+        );
+        expect(comp.paymentCategoriesSharedCollection).toEqual(expectedCollection);
+      });
+
       it('Should update editForm', () => {
         const paymentCalculation: IPaymentCalculation = { id: 456 };
+        const paymentCategory: IPaymentCategory = { id: 94444 };
+        paymentCalculation.paymentCategory = paymentCategory;
 
         activatedRoute.data = of({ paymentCalculation });
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(paymentCalculation));
+        expect(comp.paymentCategoriesSharedCollection).toContain(paymentCategory);
       });
     });
 
@@ -107,6 +136,16 @@ describe('Component Tests', () => {
         expect(paymentCalculationService.update).toHaveBeenCalledWith(paymentCalculation);
         expect(comp.isSaving).toEqual(false);
         expect(comp.previousState).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('Tracking relationships identifiers', () => {
+      describe('trackPaymentCategoryById', () => {
+        it('Should return tracked PaymentCategory primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackPaymentCategoryById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
       });
     });
   });

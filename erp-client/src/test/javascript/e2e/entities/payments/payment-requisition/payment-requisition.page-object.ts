@@ -30,10 +30,11 @@ export class PaymentRequisitionUpdatePage {
   cancelButton = element(by.id('cancel-save'));
 
   idInput = element(by.id('field_id'));
-  dealerNameInput = element(by.id('field_dealerName'));
   invoicedAmountInput = element(by.id('field_invoicedAmount'));
   disbursementCostInput = element(by.id('field_disbursementCost'));
   vatableAmountInput = element(by.id('field_vatableAmount'));
+
+  dealerSelect = element(by.id('field_dealer'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -45,14 +46,6 @@ export class PaymentRequisitionUpdatePage {
 
   async getIdInput(): Promise<string> {
     return await this.idInput.getAttribute('value');
-  }
-
-  async setDealerNameInput(dealerName: string): Promise<void> {
-    await this.dealerNameInput.sendKeys(dealerName);
-  }
-
-  async getDealerNameInput(): Promise<string> {
-    return await this.dealerNameInput.getAttribute('value');
   }
 
   async setInvoicedAmountInput(invoicedAmount: string): Promise<void> {
@@ -77,6 +70,22 @@ export class PaymentRequisitionUpdatePage {
 
   async getVatableAmountInput(): Promise<string> {
     return await this.vatableAmountInput.getAttribute('value');
+  }
+
+  async dealerSelectLastOption(): Promise<void> {
+    await this.dealerSelect.all(by.tagName('option')).last().click();
+  }
+
+  async dealerSelectOption(option: string): Promise<void> {
+    await this.dealerSelect.sendKeys(option);
+  }
+
+  getDealerSelect(): ElementFinder {
+    return this.dealerSelect;
+  }
+
+  async getDealerSelectedOption(): Promise<string> {
+    return await this.dealerSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

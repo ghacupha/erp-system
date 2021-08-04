@@ -14,10 +14,6 @@
         <dd>
           <span>{{ paymentRequisition.id }}</span>
         </dd>
-        <dt><span>Dealer Name</span></dt>
-        <dd>
-          <span>{{ paymentRequisition.dealerName }}</span>
-        </dd>
         <dt><span>Invoiced Amount</span></dt>
         <dd>
           <span>{{ paymentRequisition.invoicedAmount }}</span>
@@ -29,6 +25,12 @@
         <dt><span>Vatable Amount</span></dt>
         <dd>
           <span>{{ paymentRequisition.vatableAmount }}</span>
+        </dd>
+        <dt><span>Dealer</span></dt>
+        <dd>
+          <div *ngIf="paymentRequisition.dealer">
+            <a [routerLink]="['/dealer', paymentRequisition.dealer?.id, 'view']">{{ paymentRequisition.dealer?.id }}</a>
+          </div>
         </dd>
       </dl>
 

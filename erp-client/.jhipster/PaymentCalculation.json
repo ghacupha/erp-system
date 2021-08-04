@@ -8,6 +8,12 @@
       "relationshipType": "one-to-one",
       "ownerSide": false,
       "otherEntityRelationshipName": "paymentCalculation"
+    },
+    {
+      "relationshipName": "paymentCategory",
+      "otherEntityName": "paymentCategory",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
     }
   ],
   "fields": [
@@ -18,10 +24,6 @@
     {
       "fieldName": "paymentDate",
       "fieldType": "LocalDate"
-    },
-    {
-      "fieldName": "paymentCategory",
-      "fieldType": "String"
     },
     {
       "fieldName": "paymentExpense",

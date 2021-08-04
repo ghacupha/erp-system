@@ -3,10 +3,12 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 import { IPaymentRequisition, PaymentRequisition } from '../payment-requisition.model';
 import { PaymentRequisitionService } from '../service/payment-requisition.service';
+import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
+import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 
 @Component({
   selector: 'jhi-payment-requisition-update',
@@ -15,16 +17,19 @@ import { PaymentRequisitionService } from '../service/payment-requisition.servic
 export class PaymentRequisitionUpdateComponent implements OnInit {
   isSaving = false;
 
+  dealersSharedCollection: IDealer[] = [];
+
   editForm = this.fb.group({
     id: [],
-    dealerName: [],
     invoicedAmount: [],
     disbursementCost: [],
     vatableAmount: [],
+    dealer: [],
   });
 
   constructor(
     protected paymentRequisitionService: PaymentRequisitionService,
+    protected dealerService: DealerService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -32,6 +37,8 @@ export class PaymentRequisitionUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ paymentRequisition }) => {
       this.updateForm(paymentRequisition);
+
+      this.loadRelationshipsOptions();
     });
   }
 
@@ -47,6 +54,10 @@ export class PaymentRequisitionUpdateComponent implements OnInit {
     } else {
       this.subscribeToSaveResponse(this.paymentRequisitionService.create(paymentRequisition));
     }
+  }
+
+  trackDealerById(index: number, item: IDealer): number {
+    return item.id!;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPaymentRequisition>>): void {
@@ -71,21 +82,34 @@ export class PaymentRequisitionUpdateComponent implements OnInit {
   protected updateForm(paymentRequisition: IPaymentRequisition): void {
     this.editForm.patchValue({
       id: paymentRequisition.id,
-      dealerName: paymentRequisition.dealerName,
       invoicedAmount: paymentRequisition.invoicedAmount,
       disbursementCost: paymentRequisition.disbursementCost,
       vatableAmount: paymentRequisition.vatableAmount,
+      dealer: paymentRequisition.dealer,
     });
+
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+      this.dealersSharedCollection,
+      paymentRequisition.dealer
+    );
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.dealerService
+      .query()
+      .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
+      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('dealer')!.value)))
+      .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
   }
 
   protected createFromForm(): IPaymentRequisition {
     return {
       ...new PaymentRequisition(),
       id: this.editForm.get(['id'])!.value,
-      dealerName: this.editForm.get(['dealerName'])!.value,
       invoicedAmount: this.editForm.get(['invoicedAmount'])!.value,
       disbursementCost: this.editForm.get(['disbursementCost'])!.value,
       vatableAmount: this.editForm.get(['vatableAmount'])!.value,
+      dealer: this.editForm.get(['dealer'])!.value,
     };
   }
 }

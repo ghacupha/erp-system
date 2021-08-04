@@ -52,11 +52,11 @@ describe('PaymentCalculation e2e test', () => {
     await promise.all([
       paymentCalculationUpdatePage.setPaymentNumberInput('paymentNumber'),
       paymentCalculationUpdatePage.setPaymentDateInput('2000-12-31'),
-      paymentCalculationUpdatePage.setPaymentCategoryInput('paymentCategory'),
       paymentCalculationUpdatePage.setPaymentExpenseInput('5'),
       paymentCalculationUpdatePage.setWithholdingVATInput('5'),
       paymentCalculationUpdatePage.setWithholdingTaxInput('5'),
       paymentCalculationUpdatePage.setPaymentAmountInput('5'),
+      paymentCalculationUpdatePage.paymentCategorySelectLastOption(),
     ]);
 
     await paymentCalculationUpdatePage.save();

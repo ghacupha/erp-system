@@ -53,11 +53,11 @@
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentNumber"><span>Payment Number</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentDate"><span>Payment Date</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="paymentCategory"><span>Payment Category</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentExpense"><span>Payment Expense</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="withholdingVAT"><span>Withholding VAT</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="withholdingTax"><span>Withholding Tax</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentAmount"><span>Payment Amount</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="paymentCategory.id"><span>Payment Category</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -68,11 +68,17 @@
           </td>
           <td>{{ paymentCalculation.paymentNumber }}</td>
           <td>{{ paymentCalculation.paymentDate | formatMediumDate }}</td>
-          <td>{{ paymentCalculation.paymentCategory }}</td>
           <td>{{ paymentCalculation.paymentExpense }}</td>
           <td>{{ paymentCalculation.withholdingVAT }}</td>
           <td>{{ paymentCalculation.withholdingTax }}</td>
           <td>{{ paymentCalculation.paymentAmount }}</td>
+          <td>
+            <div *ngIf="paymentCalculation.paymentCategory">
+              <a [routerLink]="['/payment-category', paymentCalculation.paymentCategory?.id, 'view']">{{
+                paymentCalculation.paymentCategory?.id
+              }}</a>
+            </div>
+          </td>
           <td class="text-right">
             <div class="btn-group">
               <button
