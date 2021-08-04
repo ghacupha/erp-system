@@ -51,6 +51,8 @@ describe('Payment e2e test', () => {
             paymentUpdatePage.setPaymentDateInput('2000-12-31'),
             paymentUpdatePage.setPaymentAmountInput('5'),
             paymentUpdatePage.setDescriptionInput('description'),
+            paymentUpdatePage.currencySelectLastOption(),
+            paymentUpdatePage.setConversionRateInput('5'),
             paymentUpdatePage.taxRuleSelectLastOption(),
             paymentUpdatePage.paymentCategorySelectLastOption(),
             paymentUpdatePage.paymentCalculationSelectLastOption(),

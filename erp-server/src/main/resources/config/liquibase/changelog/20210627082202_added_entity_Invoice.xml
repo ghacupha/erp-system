@@ -23,6 +23,12 @@
             <column name="invoice_amount" type="decimal(21,2)">
                 <constraints nullable="true" />
             </column>
+            <column name="currency" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="conversion_rate" type="double">
+                <constraints nullable="false" />
+            </column>
             <column name="payment_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -52,6 +58,8 @@
             <column name="invoice_number" type="string"/>
             <column name="invoice_date" type="date"/>
             <column name="invoice_amount" type="numeric"/>
+            <column name="currency" type="string"/>
+            <column name="conversion_rate" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

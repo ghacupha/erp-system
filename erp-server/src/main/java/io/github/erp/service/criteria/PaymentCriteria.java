@@ -1,5 +1,6 @@
 package io.github.erp.service.criteria;
 
+import io.github.erp.domain.enumeration.CurrencyTypes;
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -24,6 +25,23 @@ import tech.jhipster.service.filter.StringFilter;
  */
 public class PaymentCriteria implements Serializable, Criteria {
 
+    /**
+     * Class for filtering CurrencyTypes
+     */
+    public static class CurrencyTypesFilter extends Filter<CurrencyTypes> {
+
+        public CurrencyTypesFilter() {}
+
+        public CurrencyTypesFilter(CurrencyTypesFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public CurrencyTypesFilter copy() {
+            return new CurrencyTypesFilter(this);
+        }
+    }
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
@@ -35,6 +53,10 @@ public class PaymentCriteria implements Serializable, Criteria {
     private BigDecimalFilter paymentAmount;
 
     private StringFilter description;
+
+    private CurrencyTypesFilter currency;
+
+    private DoubleFilter conversionRate;
 
     private LongFilter ownedInvoiceId;
 
@@ -56,6 +78,8 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.paymentDate = other.paymentDate == null ? null : other.paymentDate.copy();
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
         this.description = other.description == null ? null : other.description.copy();
+        this.currency = other.currency == null ? null : other.currency.copy();
+        this.conversionRate = other.conversionRate == null ? null : other.conversionRate.copy();
         this.ownedInvoiceId = other.ownedInvoiceId == null ? null : other.ownedInvoiceId.copy();
         this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
         this.taxRuleId = other.taxRuleId == null ? null : other.taxRuleId.copy();
@@ -142,6 +166,36 @@ public class PaymentCriteria implements Serializable, Criteria {
 
     public void setDescription(StringFilter description) {
         this.description = description;
+    }
+
+    public CurrencyTypesFilter getCurrency() {
+        return currency;
+    }
+
+    public CurrencyTypesFilter currency() {
+        if (currency == null) {
+            currency = new CurrencyTypesFilter();
+        }
+        return currency;
+    }
+
+    public void setCurrency(CurrencyTypesFilter currency) {
+        this.currency = currency;
+    }
+
+    public DoubleFilter getConversionRate() {
+        return conversionRate;
+    }
+
+    public DoubleFilter conversionRate() {
+        if (conversionRate == null) {
+            conversionRate = new DoubleFilter();
+        }
+        return conversionRate;
+    }
+
+    public void setConversionRate(DoubleFilter conversionRate) {
+        this.conversionRate = conversionRate;
     }
 
     public LongFilter getOwnedInvoiceId() {
@@ -249,6 +303,8 @@ public class PaymentCriteria implements Serializable, Criteria {
             Objects.equals(paymentDate, that.paymentDate) &&
             Objects.equals(paymentAmount, that.paymentAmount) &&
             Objects.equals(description, that.description) &&
+            Objects.equals(currency, that.currency) &&
+            Objects.equals(conversionRate, that.conversionRate) &&
             Objects.equals(ownedInvoiceId, that.ownedInvoiceId) &&
             Objects.equals(dealerId, that.dealerId) &&
             Objects.equals(taxRuleId, that.taxRuleId) &&
@@ -266,6 +322,8 @@ public class PaymentCriteria implements Serializable, Criteria {
             paymentDate,
             paymentAmount,
             description,
+            currency,
+            conversionRate,
             ownedInvoiceId,
             dealerId,
             taxRuleId,
@@ -284,6 +342,8 @@ public class PaymentCriteria implements Serializable, Criteria {
             (paymentDate != null ? "paymentDate=" + paymentDate + ", " : "") +
             (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
             (description != null ? "description=" + description + ", " : "") +
+            (currency != null ? "currency=" + currency + ", " : "") +
+            (conversionRate != null ? "conversionRate=" + conversionRate + ", " : "") +
             (ownedInvoiceId != null ? "ownedInvoiceId=" + ownedInvoiceId + ", " : "") +
             (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             (taxRuleId != null ? "taxRuleId=" + taxRuleId + ", " : "") +

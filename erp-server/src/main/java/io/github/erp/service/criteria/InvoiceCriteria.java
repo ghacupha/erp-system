@@ -1,5 +1,6 @@
 package io.github.erp.service.criteria;
 
+import io.github.erp.domain.enumeration.CurrencyTypes;
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -24,6 +25,23 @@ import tech.jhipster.service.filter.StringFilter;
  */
 public class InvoiceCriteria implements Serializable, Criteria {
 
+    /**
+     * Class for filtering CurrencyTypes
+     */
+    public static class CurrencyTypesFilter extends Filter<CurrencyTypes> {
+
+        public CurrencyTypesFilter() {}
+
+        public CurrencyTypesFilter(CurrencyTypesFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public CurrencyTypesFilter copy() {
+            return new CurrencyTypesFilter(this);
+        }
+    }
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
@@ -33,6 +51,10 @@ public class InvoiceCriteria implements Serializable, Criteria {
     private LocalDateFilter invoiceDate;
 
     private BigDecimalFilter invoiceAmount;
+
+    private CurrencyTypesFilter currency;
+
+    private DoubleFilter conversionRate;
 
     private LongFilter paymentId;
 
@@ -45,6 +67,8 @@ public class InvoiceCriteria implements Serializable, Criteria {
         this.invoiceNumber = other.invoiceNumber == null ? null : other.invoiceNumber.copy();
         this.invoiceDate = other.invoiceDate == null ? null : other.invoiceDate.copy();
         this.invoiceAmount = other.invoiceAmount == null ? null : other.invoiceAmount.copy();
+        this.currency = other.currency == null ? null : other.currency.copy();
+        this.conversionRate = other.conversionRate == null ? null : other.conversionRate.copy();
         this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
         this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
     }
@@ -114,6 +138,36 @@ public class InvoiceCriteria implements Serializable, Criteria {
         this.invoiceAmount = invoiceAmount;
     }
 
+    public CurrencyTypesFilter getCurrency() {
+        return currency;
+    }
+
+    public CurrencyTypesFilter currency() {
+        if (currency == null) {
+            currency = new CurrencyTypesFilter();
+        }
+        return currency;
+    }
+
+    public void setCurrency(CurrencyTypesFilter currency) {
+        this.currency = currency;
+    }
+
+    public DoubleFilter getConversionRate() {
+        return conversionRate;
+    }
+
+    public DoubleFilter conversionRate() {
+        if (conversionRate == null) {
+            conversionRate = new DoubleFilter();
+        }
+        return conversionRate;
+    }
+
+    public void setConversionRate(DoubleFilter conversionRate) {
+        this.conversionRate = conversionRate;
+    }
+
     public LongFilter getPaymentId() {
         return paymentId;
     }
@@ -158,6 +212,8 @@ public class InvoiceCriteria implements Serializable, Criteria {
             Objects.equals(invoiceNumber, that.invoiceNumber) &&
             Objects.equals(invoiceDate, that.invoiceDate) &&
             Objects.equals(invoiceAmount, that.invoiceAmount) &&
+            Objects.equals(currency, that.currency) &&
+            Objects.equals(conversionRate, that.conversionRate) &&
             Objects.equals(paymentId, that.paymentId) &&
             Objects.equals(dealerId, that.dealerId)
         );
@@ -165,7 +221,7 @@ public class InvoiceCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, invoiceNumber, invoiceDate, invoiceAmount, paymentId, dealerId);
+        return Objects.hash(id, invoiceNumber, invoiceDate, invoiceAmount, currency, conversionRate, paymentId, dealerId);
     }
 
     // prettier-ignore
@@ -176,6 +232,8 @@ public class InvoiceCriteria implements Serializable, Criteria {
             (invoiceNumber != null ? "invoiceNumber=" + invoiceNumber + ", " : "") +
             (invoiceDate != null ? "invoiceDate=" + invoiceDate + ", " : "") +
             (invoiceAmount != null ? "invoiceAmount=" + invoiceAmount + ", " : "") +
+            (currency != null ? "currency=" + currency + ", " : "") +
+            (conversionRate != null ? "conversionRate=" + conversionRate + ", " : "") +
             (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
             (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             "}";

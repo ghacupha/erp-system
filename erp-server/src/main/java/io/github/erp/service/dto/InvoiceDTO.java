@@ -1,9 +1,11 @@
 package io.github.erp.service.dto;
 
+import io.github.erp.domain.enumeration.CurrencyTypes;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link io.github.erp.domain.Invoice} entity.
@@ -17,6 +19,13 @@ public class InvoiceDTO implements Serializable {
     private LocalDate invoiceDate;
 
     private BigDecimal invoiceAmount;
+
+    @NotNull
+    private CurrencyTypes currency;
+
+    @NotNull
+    @DecimalMin(value = "1.00")
+    private Double conversionRate;
 
     private PaymentDTO payment;
 
@@ -52,6 +61,22 @@ public class InvoiceDTO implements Serializable {
 
     public void setInvoiceAmount(BigDecimal invoiceAmount) {
         this.invoiceAmount = invoiceAmount;
+    }
+
+    public CurrencyTypes getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(CurrencyTypes currency) {
+        this.currency = currency;
+    }
+
+    public Double getConversionRate() {
+        return conversionRate;
+    }
+
+    public void setConversionRate(Double conversionRate) {
+        this.conversionRate = conversionRate;
     }
 
     public PaymentDTO getPayment() {
@@ -99,6 +124,8 @@ public class InvoiceDTO implements Serializable {
             ", invoiceNumber='" + getInvoiceNumber() + "'" +
             ", invoiceDate='" + getInvoiceDate() + "'" +
             ", invoiceAmount=" + getInvoiceAmount() +
+            ", currency='" + getCurrency() + "'" +
+            ", conversionRate=" + getConversionRate() +
             ", payment=" + getPayment() +
             ", dealer=" + getDealer() +
             "}";

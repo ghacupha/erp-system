@@ -15,6 +15,18 @@
     {
       "fieldName": "description",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "currency",
+      "fieldType": "CurrencyTypes",
+      "fieldValues": "KES,USD,GBP,EUR,INR,ZAR,AED,CNY,CHF,UGX,TZS,JPY,CAD",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "conversionRate",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "1.00"
     }
   ],
   "relationships": [

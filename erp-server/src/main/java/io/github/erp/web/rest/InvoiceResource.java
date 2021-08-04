@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -62,7 +64,7 @@ public class InvoiceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/invoices")
-    public ResponseEntity<InvoiceDTO> createInvoice(@RequestBody InvoiceDTO invoiceDTO) throws URISyntaxException {
+    public ResponseEntity<InvoiceDTO> createInvoice(@Valid @RequestBody InvoiceDTO invoiceDTO) throws URISyntaxException {
         log.debug("REST request to save Invoice : {}", invoiceDTO);
         if (invoiceDTO.getId() != null) {
             throw new BadRequestAlertException("A new invoice cannot already have an ID", ENTITY_NAME, "idexists");
@@ -87,7 +89,7 @@ public class InvoiceResource {
     @PutMapping("/invoices/{id}")
     public ResponseEntity<InvoiceDTO> updateInvoice(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody InvoiceDTO invoiceDTO
+        @Valid @RequestBody InvoiceDTO invoiceDTO
     ) throws URISyntaxException {
         log.debug("REST request to update Invoice : {}, {}", id, invoiceDTO);
         if (invoiceDTO.getId() == null) {
@@ -122,7 +124,7 @@ public class InvoiceResource {
     @PatchMapping(value = "/invoices/{id}", consumes = "application/merge-patch+json")
     public ResponseEntity<InvoiceDTO> partialUpdateInvoice(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody InvoiceDTO invoiceDTO
+        @NotNull @RequestBody InvoiceDTO invoiceDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update Invoice partially : {}, {}", id, invoiceDTO);
         if (invoiceDTO.getId() == null) {

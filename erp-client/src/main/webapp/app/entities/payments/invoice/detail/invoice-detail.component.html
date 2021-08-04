@@ -26,6 +26,14 @@
         <dd>
           <span>{{ invoice.invoiceAmount }}</span>
         </dd>
+        <dt><span>Currency</span></dt>
+        <dd>
+          <span>{{ invoice.currency }}</span>
+        </dd>
+        <dt><span>Conversion Rate</span></dt>
+        <dd>
+          <span>{{ invoice.conversionRate }}</span>
+        </dd>
         <dt><span>Payment</span></dt>
         <dd>
           <div *ngIf="invoice.payment">

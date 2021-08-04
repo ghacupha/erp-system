@@ -26,6 +26,12 @@
             <column name="description" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="currency" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="conversion_rate" type="double">
+                <constraints nullable="false" />
+            </column>
             <column name="tax_rule_id" type="bigint">
                 <constraints nullable="true" unique="true" uniqueConstraintName="ux_payment__tax_rule_id" />
             </column>
@@ -62,6 +68,8 @@
             <column name="payment_date" type="date"/>
             <column name="payment_amount" type="numeric"/>
             <column name="description" type="string"/>
+            <column name="currency" type="string"/>
+            <column name="conversion_rate" type="numeric"/>
             <column name="payment_category_id" type="numeric"/>
             <column name="payment_calculation_id" type="numeric"/>
             <column name="payment_requisition_id" type="numeric"/>

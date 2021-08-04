@@ -12,6 +12,7 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Dealer;
 import io.github.erp.domain.Invoice;
 import io.github.erp.domain.Payment;
+import io.github.erp.domain.enumeration.CurrencyTypes;
 import io.github.erp.repository.InvoiceRepository;
 import io.github.erp.repository.search.InvoiceSearchRepository;
 import io.github.erp.service.criteria.InvoiceCriteria;
@@ -59,6 +60,13 @@ class InvoiceResourceIT {
     private static final BigDecimal UPDATED_INVOICE_AMOUNT = new BigDecimal(2);
     private static final BigDecimal SMALLER_INVOICE_AMOUNT = new BigDecimal(1 - 1);
 
+    private static final CurrencyTypes DEFAULT_CURRENCY = CurrencyTypes.KES;
+    private static final CurrencyTypes UPDATED_CURRENCY = CurrencyTypes.USD;
+
+    private static final Double DEFAULT_CONVERSION_RATE = 1.00D;
+    private static final Double UPDATED_CONVERSION_RATE = 2D;
+    private static final Double SMALLER_CONVERSION_RATE = 1.00D - 1D;
+
     private static final String ENTITY_API_URL = "/api/invoices";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/invoices";
@@ -98,7 +106,9 @@ class InvoiceResourceIT {
         Invoice invoice = new Invoice()
             .invoiceNumber(DEFAULT_INVOICE_NUMBER)
             .invoiceDate(DEFAULT_INVOICE_DATE)
-            .invoiceAmount(DEFAULT_INVOICE_AMOUNT);
+            .invoiceAmount(DEFAULT_INVOICE_AMOUNT)
+            .currency(DEFAULT_CURRENCY)
+            .conversionRate(DEFAULT_CONVERSION_RATE);
         return invoice;
     }
 
@@ -112,7 +122,9 @@ class InvoiceResourceIT {
         Invoice invoice = new Invoice()
             .invoiceNumber(UPDATED_INVOICE_NUMBER)
             .invoiceDate(UPDATED_INVOICE_DATE)
-            .invoiceAmount(UPDATED_INVOICE_AMOUNT);
+            .invoiceAmount(UPDATED_INVOICE_AMOUNT)
+            .currency(UPDATED_CURRENCY)
+            .conversionRate(UPDATED_CONVERSION_RATE);
         return invoice;
     }
 
@@ -138,6 +150,8 @@ class InvoiceResourceIT {
         assertThat(testInvoice.getInvoiceNumber()).isEqualTo(DEFAULT_INVOICE_NUMBER);
         assertThat(testInvoice.getInvoiceDate()).isEqualTo(DEFAULT_INVOICE_DATE);
         assertThat(testInvoice.getInvoiceAmount()).isEqualByComparingTo(DEFAULT_INVOICE_AMOUNT);
+        assertThat(testInvoice.getCurrency()).isEqualTo(DEFAULT_CURRENCY);
+        assertThat(testInvoice.getConversionRate()).isEqualTo(DEFAULT_CONVERSION_RATE);
 
         // Validate the Invoice in Elasticsearch
         verify(mockInvoiceSearchRepository, times(1)).save(testInvoice);
@@ -167,6 +181,42 @@ class InvoiceResourceIT {
 
     @Test
     @Transactional
+    void checkCurrencyIsRequired() throws Exception {
+        int databaseSizeBeforeTest = invoiceRepository.findAll().size();
+        // set the field null
+        invoice.setCurrency(null);
+
+        // Create the Invoice, which fails.
+        InvoiceDTO invoiceDTO = invoiceMapper.toDto(invoice);
+
+        restInvoiceMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(invoiceDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Invoice> invoiceList = invoiceRepository.findAll();
+        assertThat(invoiceList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkConversionRateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = invoiceRepository.findAll().size();
+        // set the field null
+        invoice.setConversionRate(null);
+
+        // Create the Invoice, which fails.
+        InvoiceDTO invoiceDTO = invoiceMapper.toDto(invoice);
+
+        restInvoiceMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(invoiceDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Invoice> invoiceList = invoiceRepository.findAll();
+        assertThat(invoiceList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllInvoices() throws Exception {
         // Initialize the database
         invoiceRepository.saveAndFlush(invoice);
@@ -179,7 +229,9 @@ class InvoiceResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(invoice.getId().intValue())))
             .andExpect(jsonPath("$.[*].invoiceNumber").value(hasItem(DEFAULT_INVOICE_NUMBER)))
             .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())))
-            .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(sameNumber(DEFAULT_INVOICE_AMOUNT))));
+            .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(sameNumber(DEFAULT_INVOICE_AMOUNT))))
+            .andExpect(jsonPath("$.[*].currency").value(hasItem(DEFAULT_CURRENCY.toString())))
+            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())));
     }
 
     @Test
@@ -196,7 +248,9 @@ class InvoiceResourceIT {
             .andExpect(jsonPath("$.id").value(invoice.getId().intValue()))
             .andExpect(jsonPath("$.invoiceNumber").value(DEFAULT_INVOICE_NUMBER))
             .andExpect(jsonPath("$.invoiceDate").value(DEFAULT_INVOICE_DATE.toString()))
-            .andExpect(jsonPath("$.invoiceAmount").value(sameNumber(DEFAULT_INVOICE_AMOUNT)));
+            .andExpect(jsonPath("$.invoiceAmount").value(sameNumber(DEFAULT_INVOICE_AMOUNT)))
+            .andExpect(jsonPath("$.currency").value(DEFAULT_CURRENCY.toString()))
+            .andExpect(jsonPath("$.conversionRate").value(DEFAULT_CONVERSION_RATE.doubleValue()));
     }
 
     @Test
@@ -505,6 +559,162 @@ class InvoiceResourceIT {
 
     @Test
     @Transactional
+    void getAllInvoicesByCurrencyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where currency equals to DEFAULT_CURRENCY
+        defaultInvoiceShouldBeFound("currency.equals=" + DEFAULT_CURRENCY);
+
+        // Get all the invoiceList where currency equals to UPDATED_CURRENCY
+        defaultInvoiceShouldNotBeFound("currency.equals=" + UPDATED_CURRENCY);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByCurrencyIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where currency not equals to DEFAULT_CURRENCY
+        defaultInvoiceShouldNotBeFound("currency.notEquals=" + DEFAULT_CURRENCY);
+
+        // Get all the invoiceList where currency not equals to UPDATED_CURRENCY
+        defaultInvoiceShouldBeFound("currency.notEquals=" + UPDATED_CURRENCY);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByCurrencyIsInShouldWork() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where currency in DEFAULT_CURRENCY or UPDATED_CURRENCY
+        defaultInvoiceShouldBeFound("currency.in=" + DEFAULT_CURRENCY + "," + UPDATED_CURRENCY);
+
+        // Get all the invoiceList where currency equals to UPDATED_CURRENCY
+        defaultInvoiceShouldNotBeFound("currency.in=" + UPDATED_CURRENCY);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByCurrencyIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where currency is not null
+        defaultInvoiceShouldBeFound("currency.specified=true");
+
+        // Get all the invoiceList where currency is null
+        defaultInvoiceShouldNotBeFound("currency.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByConversionRateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where conversionRate equals to DEFAULT_CONVERSION_RATE
+        defaultInvoiceShouldBeFound("conversionRate.equals=" + DEFAULT_CONVERSION_RATE);
+
+        // Get all the invoiceList where conversionRate equals to UPDATED_CONVERSION_RATE
+        defaultInvoiceShouldNotBeFound("conversionRate.equals=" + UPDATED_CONVERSION_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByConversionRateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where conversionRate not equals to DEFAULT_CONVERSION_RATE
+        defaultInvoiceShouldNotBeFound("conversionRate.notEquals=" + DEFAULT_CONVERSION_RATE);
+
+        // Get all the invoiceList where conversionRate not equals to UPDATED_CONVERSION_RATE
+        defaultInvoiceShouldBeFound("conversionRate.notEquals=" + UPDATED_CONVERSION_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByConversionRateIsInShouldWork() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where conversionRate in DEFAULT_CONVERSION_RATE or UPDATED_CONVERSION_RATE
+        defaultInvoiceShouldBeFound("conversionRate.in=" + DEFAULT_CONVERSION_RATE + "," + UPDATED_CONVERSION_RATE);
+
+        // Get all the invoiceList where conversionRate equals to UPDATED_CONVERSION_RATE
+        defaultInvoiceShouldNotBeFound("conversionRate.in=" + UPDATED_CONVERSION_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByConversionRateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where conversionRate is not null
+        defaultInvoiceShouldBeFound("conversionRate.specified=true");
+
+        // Get all the invoiceList where conversionRate is null
+        defaultInvoiceShouldNotBeFound("conversionRate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByConversionRateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where conversionRate is greater than or equal to DEFAULT_CONVERSION_RATE
+        defaultInvoiceShouldBeFound("conversionRate.greaterThanOrEqual=" + DEFAULT_CONVERSION_RATE);
+
+        // Get all the invoiceList where conversionRate is greater than or equal to UPDATED_CONVERSION_RATE
+        defaultInvoiceShouldNotBeFound("conversionRate.greaterThanOrEqual=" + UPDATED_CONVERSION_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByConversionRateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where conversionRate is less than or equal to DEFAULT_CONVERSION_RATE
+        defaultInvoiceShouldBeFound("conversionRate.lessThanOrEqual=" + DEFAULT_CONVERSION_RATE);
+
+        // Get all the invoiceList where conversionRate is less than or equal to SMALLER_CONVERSION_RATE
+        defaultInvoiceShouldNotBeFound("conversionRate.lessThanOrEqual=" + SMALLER_CONVERSION_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByConversionRateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where conversionRate is less than DEFAULT_CONVERSION_RATE
+        defaultInvoiceShouldNotBeFound("conversionRate.lessThan=" + DEFAULT_CONVERSION_RATE);
+
+        // Get all the invoiceList where conversionRate is less than UPDATED_CONVERSION_RATE
+        defaultInvoiceShouldBeFound("conversionRate.lessThan=" + UPDATED_CONVERSION_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByConversionRateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where conversionRate is greater than DEFAULT_CONVERSION_RATE
+        defaultInvoiceShouldNotBeFound("conversionRate.greaterThan=" + DEFAULT_CONVERSION_RATE);
+
+        // Get all the invoiceList where conversionRate is greater than SMALLER_CONVERSION_RATE
+        defaultInvoiceShouldBeFound("conversionRate.greaterThan=" + SMALLER_CONVERSION_RATE);
+    }
+
+    @Test
+    @Transactional
     void getAllInvoicesByPaymentIsEqualToSomething() throws Exception {
         // Initialize the database
         invoiceRepository.saveAndFlush(invoice);
@@ -552,7 +762,9 @@ class InvoiceResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(invoice.getId().intValue())))
             .andExpect(jsonPath("$.[*].invoiceNumber").value(hasItem(DEFAULT_INVOICE_NUMBER)))
             .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())))
-            .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(sameNumber(DEFAULT_INVOICE_AMOUNT))));
+            .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(sameNumber(DEFAULT_INVOICE_AMOUNT))))
+            .andExpect(jsonPath("$.[*].currency").value(hasItem(DEFAULT_CURRENCY.toString())))
+            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())));
 
         // Check, that the count call also returns 1
         restInvoiceMockMvc
@@ -600,7 +812,12 @@ class InvoiceResourceIT {
         Invoice updatedInvoice = invoiceRepository.findById(invoice.getId()).get();
         // Disconnect from session so that the updates on updatedInvoice are not directly saved in db
         em.detach(updatedInvoice);
-        updatedInvoice.invoiceNumber(UPDATED_INVOICE_NUMBER).invoiceDate(UPDATED_INVOICE_DATE).invoiceAmount(UPDATED_INVOICE_AMOUNT);
+        updatedInvoice
+            .invoiceNumber(UPDATED_INVOICE_NUMBER)
+            .invoiceDate(UPDATED_INVOICE_DATE)
+            .invoiceAmount(UPDATED_INVOICE_AMOUNT)
+            .currency(UPDATED_CURRENCY)
+            .conversionRate(UPDATED_CONVERSION_RATE);
         InvoiceDTO invoiceDTO = invoiceMapper.toDto(updatedInvoice);
 
         restInvoiceMockMvc
@@ -618,6 +835,8 @@ class InvoiceResourceIT {
         assertThat(testInvoice.getInvoiceNumber()).isEqualTo(UPDATED_INVOICE_NUMBER);
         assertThat(testInvoice.getInvoiceDate()).isEqualTo(UPDATED_INVOICE_DATE);
         assertThat(testInvoice.getInvoiceAmount()).isEqualTo(UPDATED_INVOICE_AMOUNT);
+        assertThat(testInvoice.getCurrency()).isEqualTo(UPDATED_CURRENCY);
+        assertThat(testInvoice.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
 
         // Validate the Invoice in Elasticsearch
         verify(mockInvoiceSearchRepository).save(testInvoice);
@@ -709,7 +928,7 @@ class InvoiceResourceIT {
         Invoice partialUpdatedInvoice = new Invoice();
         partialUpdatedInvoice.setId(invoice.getId());
 
-        partialUpdatedInvoice.invoiceAmount(UPDATED_INVOICE_AMOUNT);
+        partialUpdatedInvoice.invoiceAmount(UPDATED_INVOICE_AMOUNT).currency(UPDATED_CURRENCY).conversionRate(UPDATED_CONVERSION_RATE);
 
         restInvoiceMockMvc
             .perform(
@@ -726,6 +945,8 @@ class InvoiceResourceIT {
         assertThat(testInvoice.getInvoiceNumber()).isEqualTo(DEFAULT_INVOICE_NUMBER);
         assertThat(testInvoice.getInvoiceDate()).isEqualTo(DEFAULT_INVOICE_DATE);
         assertThat(testInvoice.getInvoiceAmount()).isEqualByComparingTo(UPDATED_INVOICE_AMOUNT);
+        assertThat(testInvoice.getCurrency()).isEqualTo(UPDATED_CURRENCY);
+        assertThat(testInvoice.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
     }
 
     @Test
@@ -740,7 +961,12 @@ class InvoiceResourceIT {
         Invoice partialUpdatedInvoice = new Invoice();
         partialUpdatedInvoice.setId(invoice.getId());
 
-        partialUpdatedInvoice.invoiceNumber(UPDATED_INVOICE_NUMBER).invoiceDate(UPDATED_INVOICE_DATE).invoiceAmount(UPDATED_INVOICE_AMOUNT);
+        partialUpdatedInvoice
+            .invoiceNumber(UPDATED_INVOICE_NUMBER)
+            .invoiceDate(UPDATED_INVOICE_DATE)
+            .invoiceAmount(UPDATED_INVOICE_AMOUNT)
+            .currency(UPDATED_CURRENCY)
+            .conversionRate(UPDATED_CONVERSION_RATE);
 
         restInvoiceMockMvc
             .perform(
@@ -757,6 +983,8 @@ class InvoiceResourceIT {
         assertThat(testInvoice.getInvoiceNumber()).isEqualTo(UPDATED_INVOICE_NUMBER);
         assertThat(testInvoice.getInvoiceDate()).isEqualTo(UPDATED_INVOICE_DATE);
         assertThat(testInvoice.getInvoiceAmount()).isEqualByComparingTo(UPDATED_INVOICE_AMOUNT);
+        assertThat(testInvoice.getCurrency()).isEqualTo(UPDATED_CURRENCY);
+        assertThat(testInvoice.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
     }
 
     @Test
@@ -873,6 +1101,8 @@ class InvoiceResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(invoice.getId().intValue())))
             .andExpect(jsonPath("$.[*].invoiceNumber").value(hasItem(DEFAULT_INVOICE_NUMBER)))
             .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())))
-            .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(sameNumber(DEFAULT_INVOICE_AMOUNT))));
+            .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(sameNumber(DEFAULT_INVOICE_AMOUNT))))
+            .andExpect(jsonPath("$.[*].currency").value(hasItem(DEFAULT_CURRENCY.toString())))
+            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())));
     }
 }

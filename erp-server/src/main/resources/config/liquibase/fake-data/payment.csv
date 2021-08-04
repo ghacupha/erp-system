@@ -1,11 +1,11 @@
-id;payment_number;payment_date;payment_amount;description;payment_category_id;payment_calculation_id;payment_requisition_id
-1;Soap killer;2021-06-27;79884;core Rustic;1;1;1
-2;Practical;2021-06-27;81027;Buckinghamshire back e-services;2;2;2
-3;product Fish Infrastructure;2021-06-26;88589;tan moratorium Keyboard;3;3;3
-4;framework;2021-06-27;65405;bandwidth empower Pre-emptive;4;4;4
-5;redundant Route Gorgeous;2021-06-26;39371;throughput Nigeria;5;5;5
-6;edge;2021-06-27;3132;back-end Interactions;6;6;6
-7;Usability indigo;2021-06-26;21680;whiteboard feed exploit;7;7;7
-8;Music open-source;2021-06-26;33371;Awesome Metrics Azerbaijan;8;8;8
-9;program withdrawal;2021-06-26;25057;and;9;9;9
-10;connecting;2021-06-26;57369;SMTP wireless Accounts;10;10;10
+id;payment_number;payment_date;payment_amount;description;currency;conversion_rate;payment_category_id;payment_calculation_id;payment_requisition_id
+1;Soap killer;2021-06-27;79884;core Rustic;USD;10362;1;1;1
+2;harness Optimization;2021-06-27;74131;deploy;AED;76430;2;2;2
+3;hack;2021-06-26;96282;Alabama PNG Avon;CHF;13398;3;3;3
+4;Keyboard;2021-06-27;37440;Baby bandwidth;ZAR;29947;4;4;4
+5;Pre-emptive transmit Multi-channelled;2021-06-27;5290;haptic;ZAR;39372;5;5;5
+6;throughput Nigeria;2021-06-27;26102;Dynamic viral;EUR;93667;6;6;6
+7;generate Designer transmit;2021-06-27;86981;Guilder Nuevo;JPY;16005;7;7;7
+8;Music open-source;2021-06-26;33371;Awesome Metrics Azerbaijan;CHF;74324;8;8;8
+9;New incubate Beauty;2021-06-26;17239;Avon Virginia Lari;UGX;5045;9;9;9
+10;transmit reboot Borders;2021-06-26;15109;Parkway discrete;UGX;81036;10;10;10

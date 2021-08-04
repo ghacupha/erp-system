@@ -34,6 +34,8 @@ export class PaymentUpdatePage {
   paymentDateInput = element(by.id('field_paymentDate'));
   paymentAmountInput = element(by.id('field_paymentAmount'));
   descriptionInput = element(by.id('field_description'));
+  currencySelect = element(by.id('field_currency'));
+  conversionRateInput = element(by.id('field_conversionRate'));
 
   taxRuleSelect = element(by.id('field_taxRule'));
   paymentCategorySelect = element(by.id('field_paymentCategory'));
@@ -82,6 +84,26 @@ export class PaymentUpdatePage {
 
   async getDescriptionInput(): Promise<string> {
     return await this.descriptionInput.getAttribute('value');
+  }
+
+  async setCurrencySelect(currency: string): Promise<void> {
+    await this.currencySelect.sendKeys(currency);
+  }
+
+  async getCurrencySelect(): Promise<string> {
+    return await this.currencySelect.element(by.css('option:checked')).getText();
+  }
+
+  async currencySelectLastOption(): Promise<void> {
+    await this.currencySelect.all(by.tagName('option')).last().click();
+  }
+
+  async setConversionRateInput(conversionRate: string): Promise<void> {
+    await this.conversionRateInput.sendKeys(conversionRate);
+  }
+
+  async getConversionRateInput(): Promise<string> {
+    return await this.conversionRateInput.getAttribute('value');
   }
 
   async taxRuleSelectLastOption(): Promise<void> {

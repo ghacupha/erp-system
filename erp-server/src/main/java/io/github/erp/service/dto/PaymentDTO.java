@@ -1,5 +1,6 @@
 package io.github.erp.service.dto;
 
+import io.github.erp.domain.enumeration.CurrencyTypes;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,6 +21,13 @@ public class PaymentDTO implements Serializable {
     private BigDecimal paymentAmount;
 
     private String description;
+
+    @NotNull
+    private CurrencyTypes currency;
+
+    @NotNull
+    @DecimalMin(value = "1.00")
+    private Double conversionRate;
 
     private TaxRuleDTO taxRule;
 
@@ -67,6 +75,22 @@ public class PaymentDTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public CurrencyTypes getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(CurrencyTypes currency) {
+        this.currency = currency;
+    }
+
+    public Double getConversionRate() {
+        return conversionRate;
+    }
+
+    public void setConversionRate(Double conversionRate) {
+        this.conversionRate = conversionRate;
     }
 
     public TaxRuleDTO getTaxRule() {
@@ -131,6 +155,8 @@ public class PaymentDTO implements Serializable {
             ", paymentDate='" + getPaymentDate() + "'" +
             ", paymentAmount=" + getPaymentAmount() +
             ", description='" + getDescription() + "'" +
+            ", currency='" + getCurrency() + "'" +
+            ", conversionRate=" + getConversionRate() +
             ", taxRule=" + getTaxRule() +
             ", paymentCategory=" + getPaymentCategory() +
             ", paymentCalculation=" + getPaymentCalculation() +
