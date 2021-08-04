@@ -3,6 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
+import { CurrencyTypes } from 'app/entities/enumerations/currency-types.model';
 import { IPayment, Payment } from '../payment.model';
 
 import { PaymentService } from './payment.service';
@@ -30,6 +31,8 @@ describe('Service Tests', () => {
         paymentDate: currentDate,
         paymentAmount: 0,
         description: 'AAAAAAA',
+        currency: CurrencyTypes.KES,
+        conversionRate: 0,
       };
     });
 
@@ -80,6 +83,8 @@ describe('Service Tests', () => {
             paymentDate: currentDate.format(DATE_FORMAT),
             paymentAmount: 1,
             description: 'BBBBBB',
+            currency: 'BBBBBB',
+            conversionRate: 1,
           },
           elemDefault
         );
@@ -102,6 +107,8 @@ describe('Service Tests', () => {
         const patchObject = Object.assign(
           {
             paymentDate: currentDate.format(DATE_FORMAT),
+            currency: 'BBBBBB',
+            conversionRate: 1,
           },
           new Payment()
         );
@@ -130,6 +137,8 @@ describe('Service Tests', () => {
             paymentDate: currentDate.format(DATE_FORMAT),
             paymentAmount: 1,
             description: 'BBBBBB',
+            currency: 'BBBBBB',
+            conversionRate: 1,
           },
           elemDefault
         );
@@ -186,7 +195,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique Payment to an array', () => {
-          const paymentArray: IPayment[] = [{ id: 123 }, { id: 456 }, { id: 68258 }];
+          const paymentArray: IPayment[] = [{ id: 123 }, { id: 456 }, { id: 4957 }];
           const paymentCollection: IPayment[] = [{ id: 123 }];
           expectedResult = service.addPaymentToCollectionIfMissing(paymentCollection, ...paymentArray);
           expect(expectedResult).toHaveLength(3);

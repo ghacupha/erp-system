@@ -30,6 +30,14 @@
         <dd>
           <span>{{ payment.description }}</span>
         </dd>
+        <dt><span>Currency</span></dt>
+        <dd>
+          <span>{{ payment.currency }}</span>
+        </dd>
+        <dt><span>Conversion Rate</span></dt>
+        <dd>
+          <span>{{ payment.conversionRate }}</span>
+        </dd>
         <dt><span>Tax Rule</span></dt>
         <dd>
           <div *ngIf="payment.taxRule">

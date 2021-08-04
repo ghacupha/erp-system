@@ -1,10 +1,12 @@
 package io.github.erp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.github.erp.domain.enumeration.CurrencyTypes;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -33,6 +35,16 @@ public class Invoice implements Serializable {
 
     @Column(name = "invoice_amount", precision = 21, scale = 2)
     private BigDecimal invoiceAmount;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "currency", nullable = false)
+    private CurrencyTypes currency;
+
+    @NotNull
+    @DecimalMin(value = "1.00")
+    @Column(name = "conversion_rate", nullable = false)
+    private Double conversionRate;
 
     @ManyToOne
     @JsonIgnoreProperties(
@@ -98,6 +110,32 @@ public class Invoice implements Serializable {
         this.invoiceAmount = invoiceAmount;
     }
 
+    public CurrencyTypes getCurrency() {
+        return this.currency;
+    }
+
+    public Invoice currency(CurrencyTypes currency) {
+        this.currency = currency;
+        return this;
+    }
+
+    public void setCurrency(CurrencyTypes currency) {
+        this.currency = currency;
+    }
+
+    public Double getConversionRate() {
+        return this.conversionRate;
+    }
+
+    public Invoice conversionRate(Double conversionRate) {
+        this.conversionRate = conversionRate;
+        return this;
+    }
+
+    public void setConversionRate(Double conversionRate) {
+        this.conversionRate = conversionRate;
+    }
+
     public Payment getPayment() {
         return this.payment;
     }
@@ -151,6 +189,8 @@ public class Invoice implements Serializable {
             ", invoiceNumber='" + getInvoiceNumber() + "'" +
             ", invoiceDate='" + getInvoiceDate() + "'" +
             ", invoiceAmount=" + getInvoiceAmount() +
+            ", currency='" + getCurrency() + "'" +
+            ", conversionRate=" + getConversionRate() +
             "}";
     }
 }

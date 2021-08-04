@@ -1,0 +1,378 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-1">
+        <createSequence incrementBy="50" sequenceName="sequence_generator" startValue="1"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-2">
+        <createTable tableName="dealer">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="dealerPK"/>
+            </column>
+            <column name="account_name" type="VARCHAR(255)"/>
+            <column name="account_number" type="VARCHAR(255)"/>
+            <column name="bankers_branch" type="VARCHAR(255)"/>
+            <column name="bankers_name" type="VARCHAR(255)"/>
+            <column name="bankers_swift_code" type="VARCHAR(255)"/>
+            <column name="dealer_name" type="VARCHAR(255)"/>
+            <column name="physical_address" type="VARCHAR(255)"/>
+            <column name="postal_address" type="VARCHAR(255)"/>
+            <column name="tax_number" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-3">
+        <createTable tableName="file_type">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="file_typePK"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="file_medium_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_template" type="BYTEA"/>
+            <column name="file_template_content_type" type="VARCHAR(255)"/>
+            <column name="file_type" type="VARCHAR(255)"/>
+            <column name="file_type_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-4">
+        <createTable tableName="file_upload">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="file_uploadPK"/>
+            </column>
+            <column name="data_file" type="BYTEA">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_file_content_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_type_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="period_from" type="date"/>
+            <column name="period_to" type="date"/>
+            <column name="upload_processed" type="BOOLEAN"/>
+            <column name="upload_successful" type="BOOLEAN"/>
+            <column name="upload_token" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-5">
+        <createTable tableName="fixed_asset_acquisition">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="fixed_asset_acquisitionPK"/>
+            </column>
+            <column name="asset_category" type="VARCHAR(255)"/>
+            <column name="asset_description" type="VARCHAR(255)"/>
+            <column name="asset_number" type="BIGINT"/>
+            <column name="asset_tag" type="VARCHAR(255)"/>
+            <column name="file_upload_token" type="VARCHAR(255)"/>
+            <column name="purchase_date" type="date"/>
+            <column name="purchase_price" type="numeric(21, 2)"/>
+            <column name="service_outlet_code" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-6">
+        <createTable tableName="fixed_asset_depreciation">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="fixed_asset_depreciationPK"/>
+            </column>
+            <column name="asset_category" type="VARCHAR(255)"/>
+            <column name="asset_description" type="VARCHAR(255)"/>
+            <column name="asset_number" type="BIGINT"/>
+            <column name="asset_tag" type="VARCHAR(255)"/>
+            <column name="compilation_token" type="VARCHAR(255)"/>
+            <column name="depreciation_amount" type="numeric(21, 2)"/>
+            <column name="depreciation_date" type="date"/>
+            <column name="depreciation_regime" type="VARCHAR(255)"/>
+            <column name="file_upload_token" type="VARCHAR(255)"/>
+            <column name="service_outlet_code" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-7">
+        <createTable tableName="fixed_asset_net_book_value">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="fixed_asset_net_book_valuePK"/>
+            </column>
+            <column name="asset_category" type="VARCHAR(255)"/>
+            <column name="asset_description" type="VARCHAR(255)"/>
+            <column name="asset_number" type="BIGINT"/>
+            <column name="asset_tag" type="VARCHAR(255)"/>
+            <column name="compilation_token" type="VARCHAR(255)"/>
+            <column name="depreciation_regime" type="VARCHAR(255)"/>
+            <column name="file_upload_token" type="VARCHAR(255)"/>
+            <column name="net_book_value" type="numeric(21, 2)"/>
+            <column name="net_book_value_date" type="date"/>
+            <column name="service_outlet_code" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-8">
+        <createTable tableName="invoice">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="invoicePK"/>
+            </column>
+            <column name="invoice_amount" type="numeric(21, 2)"/>
+            <column name="invoice_date" type="date"/>
+            <column name="invoice_number" type="VARCHAR(255)"/>
+            <column name="dealer_id" type="BIGINT"/>
+            <column name="payment_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-9">
+        <createTable tableName="jhi_authority">
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="jhi_authorityPK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-10">
+        <createTable tableName="jhi_user">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="jhi_userPK"/>
+            </column>
+            <column name="created_by" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="last_modified_by" type="VARCHAR(50)"/>
+            <column name="last_modified_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="activated" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="activation_key" type="VARCHAR(20)"/>
+            <column name="email" type="VARCHAR(254)"/>
+            <column name="first_name" type="VARCHAR(50)"/>
+            <column name="image_url" type="VARCHAR(256)"/>
+            <column name="lang_key" type="VARCHAR(10)"/>
+            <column name="last_name" type="VARCHAR(50)"/>
+            <column name="login" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password_hash" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reset_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="reset_key" type="VARCHAR(20)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-11">
+        <createTable tableName="jhi_user_authority">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="authority_name" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-12">
+        <createTable tableName="message_token">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="message_tokenPK"/>
+            </column>
+            <column name="actioned" type="BOOLEAN"/>
+            <column name="content_fully_enqueued" type="BOOLEAN"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="received" type="BOOLEAN"/>
+            <column name="time_sent" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token_value" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-13">
+        <createTable tableName="payment">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="paymentPK"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="payment_amount" type="numeric(21, 2)"/>
+            <column name="payment_date" type="date"/>
+            <column name="payment_number" type="VARCHAR(255)"/>
+            <column name="payment_calculation_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_category_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_requisition_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tax_rule_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-14">
+        <createTable tableName="payment_calculation">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="payment_calculationPK"/>
+            </column>
+            <column name="payment_amount" type="numeric(21, 2)"/>
+            <column name="payment_date" type="date"/>
+            <column name="payment_expense" type="numeric(21, 2)"/>
+            <column name="payment_number" type="VARCHAR(255)"/>
+            <column name="withholding_tax" type="numeric(21, 2)"/>
+            <column name="withholding_vat" type="numeric(21, 2)"/>
+            <column name="payment_category_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-15">
+        <createTable tableName="payment_category">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="payment_categoryPK"/>
+            </column>
+            <column name="category_description" type="VARCHAR(255)"/>
+            <column name="category_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-16">
+        <createTable tableName="payment_requisition">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="payment_requisitionPK"/>
+            </column>
+            <column name="disbursement_cost" type="numeric(21, 2)"/>
+            <column name="invoiced_amount" type="numeric(21, 2)"/>
+            <column name="vatable_amount" type="numeric(21, 2)"/>
+            <column name="dealer_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-17">
+        <createTable tableName="rel_dealer__payment">
+            <column name="dealer_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="payment_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-18">
+        <createTable tableName="tax_reference">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tax_referencePK"/>
+            </column>
+            <column name="tax_description" type="VARCHAR(255)"/>
+            <column name="tax_name" type="VARCHAR(255)"/>
+            <column name="tax_percentage" type="FLOAT8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tax_reference_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-19">
+        <createTable tableName="tax_rule">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tax_rulePK"/>
+            </column>
+            <column name="catering_levy" type="FLOAT8"/>
+            <column name="payment_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="service_charge" type="FLOAT8"/>
+            <column name="telco_excise_duty" type="FLOAT8"/>
+            <column name="value_added_tax" type="FLOAT8"/>
+            <column name="withholding_tax_consultancy" type="FLOAT8"/>
+            <column name="withholding_tax_imported_service" type="FLOAT8"/>
+            <column name="withholding_tax_rent" type="FLOAT8"/>
+            <column name="withholding_vat" type="FLOAT8"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-20">
+        <addUniqueConstraint columnNames="dealer_name" constraintName="UC_DEALERDEALER_NAME_COL" tableName="dealer"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-21">
+        <addUniqueConstraint columnNames="file_type_name" constraintName="UC_FILE_TYPEFILE_TYPE_NAME_COL" tableName="file_type"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-22">
+        <addUniqueConstraint columnNames="file_name" constraintName="UC_FILE_UPLOADFILE_NAME_COL" tableName="file_upload"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-23">
+        <addUniqueConstraint columnNames="upload_token" constraintName="UC_FILE_UPLOADUPLOAD_TOKEN_COL" tableName="file_upload"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-24">
+        <addUniqueConstraint columnNames="asset_number" constraintName="UC_FIXED_ASSET_ACQUISITIONASSET_NUMBER_COL" tableName="fixed_asset_acquisition"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-25">
+        <addUniqueConstraint columnNames="email" constraintName="UC_JHI_USEREMAIL_COL" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-26">
+        <addUniqueConstraint columnNames="login" constraintName="UC_JHI_USERLOGIN_COL" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-27">
+        <addUniqueConstraint columnNames="tax_rule_id" constraintName="UC_PAYMENTTAX_RULE_ID_COL" tableName="payment"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-28">
+        <addUniqueConstraint columnNames="category_name" constraintName="UC_PAYMENT_CATEGORYCATEGORY_NAME_COL" tableName="payment_category"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-29">
+        <addUniqueConstraint columnNames="category_type" constraintName="UC_PAYMENT_CATEGORYCATEGORY_TYPE_COL" tableName="payment_category"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-30">
+        <addUniqueConstraint columnNames="tax_name" constraintName="UC_TAX_REFERENCETAX_NAME_COL" tableName="tax_reference"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-31">
+        <addUniqueConstraint columnNames="tax_reference_type" constraintName="UC_TAX_REFERENCETAX_REFERENCE_TYPE_COL" tableName="tax_reference"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-32">
+        <addUniqueConstraint columnNames="payment_requisition_id" constraintName="UK_15qwio3vijh7aqvt2kopewd1t" tableName="payment"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-33">
+        <addUniqueConstraint columnNames="payment_calculation_id" constraintName="UK_gqiq1ldwlmf18h4179vb50f44" tableName="payment"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-34">
+        <addUniqueConstraint columnNames="payment_category_id" constraintName="UK_qphp6uj66uu6xs8bgmct0hge" tableName="payment"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-35">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="jhi_user_authority" constraintName="FK290okww5jujghp4el5i7mgwu0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-36">
+        <addForeignKeyConstraint baseColumnNames="payment_category_id" baseTableName="payment_calculation" constraintName="FK2ingqeyg19rrqadxe0sr174qm" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="payment_category" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-37">
+        <addForeignKeyConstraint baseColumnNames="authority_name" baseTableName="jhi_user_authority" constraintName="FK4psxl0jtx6nr7rhqbynr6itoc" deferrable="false" initiallyDeferred="false" referencedColumnNames="name" referencedTableName="jhi_authority" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-38">
+        <addForeignKeyConstraint baseColumnNames="tax_rule_id" baseTableName="payment" constraintName="FK9nmjh1ho598cm4ng0u6j8a387" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="tax_rule" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-39">
+        <addForeignKeyConstraint baseColumnNames="payment_requisition_id" baseTableName="payment" constraintName="FKaxmwjqorylaipceqb9h7u9fpj" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="payment_requisition" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-40">
+        <addForeignKeyConstraint baseColumnNames="payment_id" baseTableName="invoice" constraintName="FKbaxa82hce5x7dqj0sotnc1cxf" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="payment" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-41">
+        <addForeignKeyConstraint baseColumnNames="payment_category_id" baseTableName="payment" constraintName="FKd9y272nk5a74rdtxawxdmqpds" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="payment_category" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-42">
+        <addForeignKeyConstraint baseColumnNames="dealer_id" baseTableName="payment_requisition" constraintName="FKdyo7frkb3viwcleo22i0rsxq6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="dealer" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-43">
+        <addForeignKeyConstraint baseColumnNames="payment_id" baseTableName="rel_dealer__payment" constraintName="FKg22fwc6oj77su74no0quh0uq9" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="payment" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-44">
+        <addForeignKeyConstraint baseColumnNames="dealer_id" baseTableName="rel_dealer__payment" constraintName="FKh4hsjrjfk2rpdgdv9au71ou2h" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="dealer" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-45">
+        <addForeignKeyConstraint baseColumnNames="dealer_id" baseTableName="invoice" constraintName="FKllofid7o6rk1bljc7syv296i1" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="dealer" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1628069979059-46">
+        <addForeignKeyConstraint baseColumnNames="payment_calculation_id" baseTableName="payment" constraintName="FKtfy7m09a12ikpktdk6shd6ld9" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="payment_calculation" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

@@ -106,6 +106,12 @@ public class PaymentQueryService extends QueryService<Payment> {
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), Payment_.description));
             }
+            if (criteria.getCurrency() != null) {
+                specification = specification.and(buildSpecification(criteria.getCurrency(), Payment_.currency));
+            }
+            if (criteria.getConversionRate() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getConversionRate(), Payment_.conversionRate));
+            }
             if (criteria.getOwnedInvoiceId() != null) {
                 specification =
                     specification.and(

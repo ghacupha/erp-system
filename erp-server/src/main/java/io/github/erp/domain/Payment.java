@@ -1,6 +1,7 @@
 package io.github.erp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.github.erp.domain.enumeration.CurrencyTypes;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -39,6 +40,16 @@ public class Payment implements Serializable {
 
     @Column(name = "description")
     private String description;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "currency", nullable = false)
+    private CurrencyTypes currency;
+
+    @NotNull
+    @DecimalMin(value = "1.00")
+    @Column(name = "conversion_rate", nullable = false)
+    private Double conversionRate;
 
     @OneToMany(mappedBy = "payment")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -137,6 +148,32 @@ public class Payment implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public CurrencyTypes getCurrency() {
+        return this.currency;
+    }
+
+    public Payment currency(CurrencyTypes currency) {
+        this.currency = currency;
+        return this;
+    }
+
+    public void setCurrency(CurrencyTypes currency) {
+        this.currency = currency;
+    }
+
+    public Double getConversionRate() {
+        return this.conversionRate;
+    }
+
+    public Payment conversionRate(Double conversionRate) {
+        this.conversionRate = conversionRate;
+        return this;
+    }
+
+    public void setConversionRate(Double conversionRate) {
+        this.conversionRate = conversionRate;
     }
 
     public Set<Invoice> getOwnedInvoices() {
@@ -281,6 +318,8 @@ public class Payment implements Serializable {
             ", paymentDate='" + getPaymentDate() + "'" +
             ", paymentAmount=" + getPaymentAmount() +
             ", description='" + getDescription() + "'" +
+            ", currency='" + getCurrency() + "'" +
+            ", conversionRate=" + getConversionRate() +
             "}";
     }
 }

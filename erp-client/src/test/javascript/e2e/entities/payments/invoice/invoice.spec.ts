@@ -46,6 +46,8 @@ describe('Invoice e2e test', () => {
       invoiceUpdatePage.setInvoiceNumberInput('invoiceNumber'),
       invoiceUpdatePage.setInvoiceDateInput('2000-12-31'),
       invoiceUpdatePage.setInvoiceAmountInput('5'),
+      invoiceUpdatePage.currencySelectLastOption(),
+      invoiceUpdatePage.setConversionRateInput('5'),
       invoiceUpdatePage.paymentSelectLastOption(),
       invoiceUpdatePage.dealerSelectLastOption(),
     ]);

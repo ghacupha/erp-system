@@ -55,6 +55,8 @@
           <th scope="col" jhiSortBy="paymentDate"><span>Payment Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentAmount"><span>Payment Amount</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="currency"><span>Currency</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="conversionRate"><span>Conversion Rate</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="taxRule.id"><span>Tax Rule</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentCategory.id"><span>Payment Category</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentCalculation.id"><span>Payment Calculation</span> <fa-icon icon="sort"></fa-icon></th>
@@ -71,6 +73,8 @@
           <td>{{ payment.paymentDate | formatMediumDate }}</td>
           <td>{{ payment.paymentAmount }}</td>
           <td>{{ payment.description }}</td>
+          <td>{{ payment.currency }}</td>
+          <td>{{ payment.conversionRate }}</td>
           <td>
             <div *ngIf="payment.taxRule">
               <a [routerLink]="['/tax-rule', payment.taxRule?.id, 'view']">{{ payment.taxRule?.id }}</a>

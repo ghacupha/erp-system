@@ -3,6 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
+import { CurrencyTypes } from 'app/entities/enumerations/currency-types.model';
 import { IInvoice, Invoice } from '../invoice.model';
 
 import { InvoiceService } from './invoice.service';
@@ -29,6 +30,8 @@ describe('Service Tests', () => {
         invoiceNumber: 'AAAAAAA',
         invoiceDate: currentDate,
         invoiceAmount: 0,
+        currency: CurrencyTypes.KES,
+        conversionRate: 0,
       };
     });
 
@@ -78,6 +81,8 @@ describe('Service Tests', () => {
             invoiceNumber: 'BBBBBB',
             invoiceDate: currentDate.format(DATE_FORMAT),
             invoiceAmount: 1,
+            currency: 'BBBBBB',
+            conversionRate: 1,
           },
           elemDefault
         );
@@ -101,6 +106,7 @@ describe('Service Tests', () => {
           {
             invoiceDate: currentDate.format(DATE_FORMAT),
             invoiceAmount: 1,
+            currency: 'BBBBBB',
           },
           new Invoice()
         );
@@ -128,6 +134,8 @@ describe('Service Tests', () => {
             invoiceNumber: 'BBBBBB',
             invoiceDate: currentDate.format(DATE_FORMAT),
             invoiceAmount: 1,
+            currency: 'BBBBBB',
+            conversionRate: 1,
           },
           elemDefault
         );
@@ -184,7 +192,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique Invoice to an array', () => {
-          const invoiceArray: IInvoice[] = [{ id: 123 }, { id: 456 }, { id: 63704 }];
+          const invoiceArray: IInvoice[] = [{ id: 123 }, { id: 456 }, { id: 95170 }];
           const invoiceCollection: IInvoice[] = [{ id: 123 }];
           expectedResult = service.addInvoiceToCollectionIfMissing(invoiceCollection, ...invoiceArray);
           expect(expectedResult).toHaveLength(3);

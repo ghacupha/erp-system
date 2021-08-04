@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
@@ -27,6 +27,8 @@ export class InvoiceUpdateComponent implements OnInit {
     invoiceNumber: [],
     invoiceDate: [],
     invoiceAmount: [],
+    currency: [null, [Validators.required]],
+    conversionRate: [null, [Validators.required, Validators.min(1.0)]],
     payment: [],
     dealer: [],
   });
@@ -94,6 +96,8 @@ export class InvoiceUpdateComponent implements OnInit {
       invoiceNumber: invoice.invoiceNumber,
       invoiceDate: invoice.invoiceDate,
       invoiceAmount: invoice.invoiceAmount,
+      currency: invoice.currency,
+      conversionRate: invoice.conversionRate,
       payment: invoice.payment,
       dealer: invoice.dealer,
     });
@@ -125,6 +129,8 @@ export class InvoiceUpdateComponent implements OnInit {
       invoiceNumber: this.editForm.get(['invoiceNumber'])!.value,
       invoiceDate: this.editForm.get(['invoiceDate'])!.value,
       invoiceAmount: this.editForm.get(['invoiceAmount'])!.value,
+      currency: this.editForm.get(['currency'])!.value,
+      conversionRate: this.editForm.get(['conversionRate'])!.value,
       payment: this.editForm.get(['payment'])!.value,
       dealer: this.editForm.get(['dealer'])!.value,
     };
