@@ -57,8 +57,8 @@
           <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="currency"><span>Currency</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="conversionRate"><span>Conversion Rate</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="taxRule.id"><span>Tax Rule</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentCategory.id"><span>Payment Category</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="taxRule.id"><span>Tax Rule</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentCalculation.id"><span>Payment Calculation</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentRequisition.id"><span>Payment Requisition</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
@@ -76,13 +76,13 @@
           <td>{{ payment.currency }}</td>
           <td>{{ payment.conversionRate }}</td>
           <td>
-            <div *ngIf="payment.taxRule">
-              <a [routerLink]="['/tax-rule', payment.taxRule?.id, 'view']">{{ payment.taxRule?.id }}</a>
+            <div *ngIf="payment.paymentCategory">
+              <a [routerLink]="['/payment-category', payment.paymentCategory?.id, 'view']">{{ payment.paymentCategory?.id }}</a>
             </div>
           </td>
           <td>
-            <div *ngIf="payment.paymentCategory">
-              <a [routerLink]="['/payment-category', payment.paymentCategory?.id, 'view']">{{ payment.paymentCategory?.id }}</a>
+            <div *ngIf="payment.taxRule">
+              <a [routerLink]="['/tax-rule', payment.taxRule?.id, 'view']">{{ payment.taxRule?.id }}</a>
             </div>
           </td>
           <td>

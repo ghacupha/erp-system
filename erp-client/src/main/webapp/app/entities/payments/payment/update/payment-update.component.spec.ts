@@ -9,10 +9,10 @@ import { of, Subject } from 'rxjs';
 
 import { PaymentService } from '../service/payment.service';
 import { IPayment, Payment } from '../payment.model';
-import { ITaxRule } from 'app/entities/payments/tax-rule/tax-rule.model';
-import { TaxRuleService } from 'app/entities/payments/tax-rule/service/tax-rule.service';
 import { IPaymentCategory } from 'app/entities/payments/payment-category/payment-category.model';
 import { PaymentCategoryService } from 'app/entities/payments/payment-category/service/payment-category.service';
+import { ITaxRule } from 'app/entities/payments/tax-rule/tax-rule.model';
+import { TaxRuleService } from 'app/entities/payments/tax-rule/service/tax-rule.service';
 import { IPaymentCalculation } from 'app/entities/payments/payment-calculation/payment-calculation.model';
 import { PaymentCalculationService } from 'app/entities/payments/payment-calculation/service/payment-calculation.service';
 import { IPaymentRequisition } from 'app/entities/payments/payment-requisition/payment-requisition.model';
@@ -26,8 +26,8 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<PaymentUpdateComponent>;
     let activatedRoute: ActivatedRoute;
     let paymentService: PaymentService;
-    let taxRuleService: TaxRuleService;
     let paymentCategoryService: PaymentCategoryService;
+    let taxRuleService: TaxRuleService;
     let paymentCalculationService: PaymentCalculationService;
     let paymentRequisitionService: PaymentRequisitionService;
 
@@ -43,8 +43,8 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(PaymentUpdateComponent);
       activatedRoute = TestBed.inject(ActivatedRoute);
       paymentService = TestBed.inject(PaymentService);
-      taxRuleService = TestBed.inject(TaxRuleService);
       paymentCategoryService = TestBed.inject(PaymentCategoryService);
+      taxRuleService = TestBed.inject(TaxRuleService);
       paymentCalculationService = TestBed.inject(PaymentCalculationService);
       paymentRequisitionService = TestBed.inject(PaymentRequisitionService);
 
@@ -52,6 +52,28 @@ describe('Component Tests', () => {
     });
 
     describe('ngOnInit', () => {
+      it('Should call PaymentCategory query and add missing value', () => {
+        const payment: IPayment = { id: 456 };
+        const paymentCategory: IPaymentCategory = { id: 30270 };
+        payment.paymentCategory = paymentCategory;
+
+        const paymentCategoryCollection: IPaymentCategory[] = [{ id: 97857 }];
+        jest.spyOn(paymentCategoryService, 'query').mockReturnValue(of(new HttpResponse({ body: paymentCategoryCollection })));
+        const additionalPaymentCategories = [paymentCategory];
+        const expectedCollection: IPaymentCategory[] = [...additionalPaymentCategories, ...paymentCategoryCollection];
+        jest.spyOn(paymentCategoryService, 'addPaymentCategoryToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+        activatedRoute.data = of({ payment });
+        comp.ngOnInit();
+
+        expect(paymentCategoryService.query).toHaveBeenCalled();
+        expect(paymentCategoryService.addPaymentCategoryToCollectionIfMissing).toHaveBeenCalledWith(
+          paymentCategoryCollection,
+          ...additionalPaymentCategories
+        );
+        expect(comp.paymentCategoriesSharedCollection).toEqual(expectedCollection);
+      });
+
       it('Should call taxRule query and add missing value', () => {
         const payment: IPayment = { id: 456 };
         const taxRule: ITaxRule = { id: 92001 };
@@ -68,27 +90,6 @@ describe('Component Tests', () => {
         expect(taxRuleService.query).toHaveBeenCalled();
         expect(taxRuleService.addTaxRuleToCollectionIfMissing).toHaveBeenCalledWith(taxRuleCollection, taxRule);
         expect(comp.taxRulesCollection).toEqual(expectedCollection);
-      });
-
-      it('Should call paymentCategory query and add missing value', () => {
-        const payment: IPayment = { id: 456 };
-        const paymentCategory: IPaymentCategory = { id: 30270 };
-        payment.paymentCategory = paymentCategory;
-
-        const paymentCategoryCollection: IPaymentCategory[] = [{ id: 97857 }];
-        jest.spyOn(paymentCategoryService, 'query').mockReturnValue(of(new HttpResponse({ body: paymentCategoryCollection })));
-        const expectedCollection: IPaymentCategory[] = [paymentCategory, ...paymentCategoryCollection];
-        jest.spyOn(paymentCategoryService, 'addPaymentCategoryToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-        activatedRoute.data = of({ payment });
-        comp.ngOnInit();
-
-        expect(paymentCategoryService.query).toHaveBeenCalled();
-        expect(paymentCategoryService.addPaymentCategoryToCollectionIfMissing).toHaveBeenCalledWith(
-          paymentCategoryCollection,
-          paymentCategory
-        );
-        expect(comp.paymentCategoriesCollection).toEqual(expectedCollection);
       });
 
       it('Should call paymentCalculation query and add missing value', () => {
@@ -135,10 +136,10 @@ describe('Component Tests', () => {
 
       it('Should update editForm', () => {
         const payment: IPayment = { id: 456 };
-        const taxRule: ITaxRule = { id: 2708 };
-        payment.taxRule = taxRule;
         const paymentCategory: IPaymentCategory = { id: 45196 };
         payment.paymentCategory = paymentCategory;
+        const taxRule: ITaxRule = { id: 2708 };
+        payment.taxRule = taxRule;
         const paymentCalculation: IPaymentCalculation = { id: 68581 };
         payment.paymentCalculation = paymentCalculation;
         const paymentRequisition: IPaymentRequisition = { id: 74321 };
@@ -148,8 +149,8 @@ describe('Component Tests', () => {
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(payment));
+        expect(comp.paymentCategoriesSharedCollection).toContain(paymentCategory);
         expect(comp.taxRulesCollection).toContain(taxRule);
-        expect(comp.paymentCategoriesCollection).toContain(paymentCategory);
         expect(comp.paymentCalculationsCollection).toContain(paymentCalculation);
         expect(comp.paymentRequisitionsCollection).toContain(paymentRequisition);
       });
@@ -220,18 +221,18 @@ describe('Component Tests', () => {
     });
 
     describe('Tracking relationships identifiers', () => {
-      describe('trackTaxRuleById', () => {
-        it('Should return tracked TaxRule primary key', () => {
-          const entity = { id: 123 };
-          const trackResult = comp.trackTaxRuleById(0, entity);
-          expect(trackResult).toEqual(entity.id);
-        });
-      });
-
       describe('trackPaymentCategoryById', () => {
         it('Should return tracked PaymentCategory primary key', () => {
           const entity = { id: 123 };
           const trackResult = comp.trackPaymentCategoryById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
+      });
+
+      describe('trackTaxRuleById', () => {
+        it('Should return tracked TaxRule primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackTaxRuleById(0, entity);
           expect(trackResult).toEqual(entity.id);
         });
       });

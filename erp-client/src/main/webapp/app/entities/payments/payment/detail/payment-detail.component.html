@@ -38,16 +38,16 @@
         <dd>
           <span>{{ payment.conversionRate }}</span>
         </dd>
-        <dt><span>Tax Rule</span></dt>
-        <dd>
-          <div *ngIf="payment.taxRule">
-            <a [routerLink]="['/tax-rule', payment.taxRule?.id, 'view']">{{ payment.taxRule?.id }}</a>
-          </div>
-        </dd>
         <dt><span>Payment Category</span></dt>
         <dd>
           <div *ngIf="payment.paymentCategory">
             <a [routerLink]="['/payment-category', payment.paymentCategory?.id, 'view']">{{ payment.paymentCategory?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Tax Rule</span></dt>
+        <dd>
+          <div *ngIf="payment.taxRule">
+            <a [routerLink]="['/tax-rule', payment.taxRule?.id, 'view']">{{ payment.taxRule?.id }}</a>
           </div>
         </dd>
         <dt><span>Payment Calculation</span></dt>

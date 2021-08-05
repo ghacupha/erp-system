@@ -7,10 +7,10 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IPayment, Payment } from '../payment.model';
 import { PaymentService } from '../service/payment.service';
-import { ITaxRule } from 'app/entities/payments/tax-rule/tax-rule.model';
-import { TaxRuleService } from 'app/entities/payments/tax-rule/service/tax-rule.service';
 import { IPaymentCategory } from 'app/entities/payments/payment-category/payment-category.model';
 import { PaymentCategoryService } from 'app/entities/payments/payment-category/service/payment-category.service';
+import { ITaxRule } from 'app/entities/payments/tax-rule/tax-rule.model';
+import { TaxRuleService } from 'app/entities/payments/tax-rule/service/tax-rule.service';
 import { IPaymentCalculation } from 'app/entities/payments/payment-calculation/payment-calculation.model';
 import { PaymentCalculationService } from 'app/entities/payments/payment-calculation/service/payment-calculation.service';
 import { IPaymentRequisition } from 'app/entities/payments/payment-requisition/payment-requisition.model';
@@ -23,8 +23,8 @@ import { PaymentRequisitionService } from 'app/entities/payments/payment-requisi
 export class PaymentUpdateComponent implements OnInit {
   isSaving = false;
 
+  paymentCategoriesSharedCollection: IPaymentCategory[] = [];
   taxRulesCollection: ITaxRule[] = [];
-  paymentCategoriesCollection: IPaymentCategory[] = [];
   paymentCalculationsCollection: IPaymentCalculation[] = [];
   paymentRequisitionsCollection: IPaymentRequisition[] = [];
 
@@ -36,16 +36,16 @@ export class PaymentUpdateComponent implements OnInit {
     description: [],
     currency: [null, [Validators.required]],
     conversionRate: [null, [Validators.required, Validators.min(1.0)]],
+    paymentCategory: [],
     taxRule: [],
-    paymentCategory: [null, Validators.required],
-    paymentCalculation: [null, Validators.required],
-    paymentRequisition: [null, Validators.required],
+    paymentCalculation: [],
+    paymentRequisition: [],
   });
 
   constructor(
     protected paymentService: PaymentService,
-    protected taxRuleService: TaxRuleService,
     protected paymentCategoryService: PaymentCategoryService,
+    protected taxRuleService: TaxRuleService,
     protected paymentCalculationService: PaymentCalculationService,
     protected paymentRequisitionService: PaymentRequisitionService,
     protected activatedRoute: ActivatedRoute,
@@ -74,11 +74,11 @@ export class PaymentUpdateComponent implements OnInit {
     }
   }
 
-  trackTaxRuleById(index: number, item: ITaxRule): number {
+  trackPaymentCategoryById(index: number, item: IPaymentCategory): number {
     return item.id!;
   }
 
-  trackPaymentCategoryById(index: number, item: IPaymentCategory): number {
+  trackTaxRuleById(index: number, item: ITaxRule): number {
     return item.id!;
   }
 
@@ -118,17 +118,17 @@ export class PaymentUpdateComponent implements OnInit {
       description: payment.description,
       currency: payment.currency,
       conversionRate: payment.conversionRate,
-      taxRule: payment.taxRule,
       paymentCategory: payment.paymentCategory,
+      taxRule: payment.taxRule,
       paymentCalculation: payment.paymentCalculation,
       paymentRequisition: payment.paymentRequisition,
     });
 
-    this.taxRulesCollection = this.taxRuleService.addTaxRuleToCollectionIfMissing(this.taxRulesCollection, payment.taxRule);
-    this.paymentCategoriesCollection = this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
-      this.paymentCategoriesCollection,
+    this.paymentCategoriesSharedCollection = this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
+      this.paymentCategoriesSharedCollection,
       payment.paymentCategory
     );
+    this.taxRulesCollection = this.taxRuleService.addTaxRuleToCollectionIfMissing(this.taxRulesCollection, payment.taxRule);
     this.paymentCalculationsCollection = this.paymentCalculationService.addPaymentCalculationToCollectionIfMissing(
       this.paymentCalculationsCollection,
       payment.paymentCalculation
@@ -140,16 +140,8 @@ export class PaymentUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
-    this.taxRuleService
-      .query({ 'paymentId.specified': 'false' })
-      .pipe(map((res: HttpResponse<ITaxRule[]>) => res.body ?? []))
-      .pipe(
-        map((taxRules: ITaxRule[]) => this.taxRuleService.addTaxRuleToCollectionIfMissing(taxRules, this.editForm.get('taxRule')!.value))
-      )
-      .subscribe((taxRules: ITaxRule[]) => (this.taxRulesCollection = taxRules));
-
     this.paymentCategoryService
-      .query({ 'paymentId.specified': 'false' })
+      .query()
       .pipe(map((res: HttpResponse<IPaymentCategory[]>) => res.body ?? []))
       .pipe(
         map((paymentCategories: IPaymentCategory[]) =>
@@ -159,7 +151,15 @@ export class PaymentUpdateComponent implements OnInit {
           )
         )
       )
-      .subscribe((paymentCategories: IPaymentCategory[]) => (this.paymentCategoriesCollection = paymentCategories));
+      .subscribe((paymentCategories: IPaymentCategory[]) => (this.paymentCategoriesSharedCollection = paymentCategories));
+
+    this.taxRuleService
+      .query({ 'paymentId.specified': 'false' })
+      .pipe(map((res: HttpResponse<ITaxRule[]>) => res.body ?? []))
+      .pipe(
+        map((taxRules: ITaxRule[]) => this.taxRuleService.addTaxRuleToCollectionIfMissing(taxRules, this.editForm.get('taxRule')!.value))
+      )
+      .subscribe((taxRules: ITaxRule[]) => (this.taxRulesCollection = taxRules));
 
     this.paymentCalculationService
       .query({ 'paymentId.specified': 'false' })
@@ -198,8 +198,8 @@ export class PaymentUpdateComponent implements OnInit {
       description: this.editForm.get(['description'])!.value,
       currency: this.editForm.get(['currency'])!.value,
       conversionRate: this.editForm.get(['conversionRate'])!.value,
-      taxRule: this.editForm.get(['taxRule'])!.value,
       paymentCategory: this.editForm.get(['paymentCategory'])!.value,
+      taxRule: this.editForm.get(['taxRule'])!.value,
       paymentCalculation: this.editForm.get(['paymentCalculation'])!.value,
       paymentRequisition: this.editForm.get(['paymentRequisition'])!.value,
     };
