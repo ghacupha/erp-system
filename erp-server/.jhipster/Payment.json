@@ -44,6 +44,12 @@
       "otherEntityRelationshipName": "payment"
     },
     {
+      "relationshipName": "paymentCategory",
+      "otherEntityName": "paymentCategory",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    },
+    {
       "relationshipName": "taxRule",
       "otherEntityName": "taxRule",
       "relationshipType": "one-to-one",

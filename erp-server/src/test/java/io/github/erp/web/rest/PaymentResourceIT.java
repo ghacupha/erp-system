@@ -13,6 +13,7 @@ import io.github.erp.domain.Dealer;
 import io.github.erp.domain.Invoice;
 import io.github.erp.domain.Payment;
 import io.github.erp.domain.PaymentCalculation;
+import io.github.erp.domain.PaymentCategory;
 import io.github.erp.domain.PaymentRequisition;
 import io.github.erp.domain.TaxRule;
 import io.github.erp.domain.enumeration.CurrencyTypes;
@@ -838,6 +839,25 @@ class PaymentResourceIT {
 
         // Get all the paymentList where dealer equals to (dealerId + 1)
         defaultPaymentShouldNotBeFound("dealerId.equals=" + (dealerId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByPaymentCategoryIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+        PaymentCategory paymentCategory = PaymentCategoryResourceIT.createEntity(em);
+        em.persist(paymentCategory);
+        em.flush();
+        payment.setPaymentCategory(paymentCategory);
+        paymentRepository.saveAndFlush(payment);
+        Long paymentCategoryId = paymentCategory.getId();
+
+        // Get all the paymentList where paymentCategory equals to paymentCategoryId
+        defaultPaymentShouldBeFound("paymentCategoryId.equals=" + paymentCategoryId);
+
+        // Get all the paymentList where paymentCategory equals to (paymentCategoryId + 1)
+        defaultPaymentShouldNotBeFound("paymentCategoryId.equals=" + (paymentCategoryId + 1));
     }
 
     @Test

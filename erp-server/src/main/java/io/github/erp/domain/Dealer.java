@@ -61,7 +61,7 @@ public class Dealer implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "payment_id")
     )
     @JsonIgnoreProperties(
-        value = { "ownedInvoices", "dealers", "taxRule", "paymentCalculation", "paymentRequisition" },
+        value = { "ownedInvoices", "dealers", "paymentCategory", "taxRule", "paymentCalculation", "paymentRequisition" },
         allowSetters = true
     )
     private Set<Payment> payments = new HashSet<>();

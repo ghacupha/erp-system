@@ -7,6 +7,12 @@
       "otherEntityName": "paymentCalculation",
       "relationshipType": "one-to-many",
       "otherEntityRelationshipName": "paymentCategory"
+    },
+    {
+      "relationshipName": "payment",
+      "otherEntityName": "payment",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "paymentCategory"
     }
   ],
   "fields": [

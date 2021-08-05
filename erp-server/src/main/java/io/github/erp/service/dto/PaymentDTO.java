@@ -29,6 +29,8 @@ public class PaymentDTO implements Serializable {
     @DecimalMin(value = "1.00")
     private Double conversionRate;
 
+    private PaymentCategoryDTO paymentCategory;
+
     private TaxRuleDTO taxRule;
 
     private PaymentCalculationDTO paymentCalculation;
@@ -91,6 +93,14 @@ public class PaymentDTO implements Serializable {
         this.conversionRate = conversionRate;
     }
 
+    public PaymentCategoryDTO getPaymentCategory() {
+        return paymentCategory;
+    }
+
+    public void setPaymentCategory(PaymentCategoryDTO paymentCategory) {
+        this.paymentCategory = paymentCategory;
+    }
+
     public TaxRuleDTO getTaxRule() {
         return taxRule;
     }
@@ -147,6 +157,7 @@ public class PaymentDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", currency='" + getCurrency() + "'" +
             ", conversionRate=" + getConversionRate() +
+            ", paymentCategory=" + getPaymentCategory() +
             ", taxRule=" + getTaxRule() +
             ", paymentCalculation=" + getPaymentCalculation() +
             ", paymentRequisition=" + getPaymentRequisition() +
