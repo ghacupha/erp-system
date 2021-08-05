@@ -39,13 +39,6 @@ public class PaymentCategory implements Serializable {
     @Column(name = "category_type", nullable = false, unique = true)
     private CategoryTypes categoryType;
 
-    @JsonIgnoreProperties(
-        value = { "ownedInvoices", "dealers", "taxRule", "paymentCategory", "paymentCalculation", "paymentRequisition" },
-        allowSetters = true
-    )
-    @OneToOne(mappedBy = "paymentCategory")
-    private Payment payment;
-
     @OneToMany(mappedBy = "paymentCategory")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "payment", "paymentCategory" }, allowSetters = true)
@@ -102,25 +95,6 @@ public class PaymentCategory implements Serializable {
 
     public void setCategoryType(CategoryTypes categoryType) {
         this.categoryType = categoryType;
-    }
-
-    public Payment getPayment() {
-        return this.payment;
-    }
-
-    public PaymentCategory payment(Payment payment) {
-        this.setPayment(payment);
-        return this;
-    }
-
-    public void setPayment(Payment payment) {
-        if (this.payment != null) {
-            this.payment.setPaymentCategory(null);
-        }
-        if (payment != null) {
-            payment.setPaymentCategory(this);
-        }
-        this.payment = payment;
     }
 
     public Set<PaymentCalculation> getPaymentCalculations() {

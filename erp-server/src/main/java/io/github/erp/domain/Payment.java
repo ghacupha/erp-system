@@ -66,21 +66,13 @@ public class Payment implements Serializable {
     @JoinColumn(unique = true)
     private TaxRule taxRule;
 
-    @JsonIgnoreProperties(value = { "payment", "paymentCalculations" }, allowSetters = true)
-    @OneToOne(optional = false)
-    @NotNull
-    @JoinColumn(unique = true)
-    private PaymentCategory paymentCategory;
-
     @JsonIgnoreProperties(value = { "payment", "paymentCategory" }, allowSetters = true)
-    @OneToOne(optional = false)
-    @NotNull
+    @OneToOne
     @JoinColumn(unique = true)
     private PaymentCalculation paymentCalculation;
 
     @JsonIgnoreProperties(value = { "payment", "dealer" }, allowSetters = true)
-    @OneToOne(optional = false)
-    @NotNull
+    @OneToOne
     @JoinColumn(unique = true)
     private PaymentRequisition paymentRequisition;
 
@@ -249,19 +241,6 @@ public class Payment implements Serializable {
 
     public void setTaxRule(TaxRule taxRule) {
         this.taxRule = taxRule;
-    }
-
-    public PaymentCategory getPaymentCategory() {
-        return this.paymentCategory;
-    }
-
-    public Payment paymentCategory(PaymentCategory paymentCategory) {
-        this.setPaymentCategory(paymentCategory);
-        return this;
-    }
-
-    public void setPaymentCategory(PaymentCategory paymentCategory) {
-        this.paymentCategory = paymentCategory;
     }
 
     public PaymentCalculation getPaymentCalculation() {

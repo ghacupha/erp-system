@@ -8,11 +8,7 @@ import io.github.erp.repository.search.PaymentCategorySearchRepository;
 import io.github.erp.service.PaymentCategoryService;
 import io.github.erp.service.dto.PaymentCategoryDTO;
 import io.github.erp.service.mapper.PaymentCategoryMapper;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -84,20 +80,6 @@ public class PaymentCategoryServiceImpl implements PaymentCategoryService {
     public Page<PaymentCategoryDTO> findAll(Pageable pageable) {
         log.debug("Request to get all PaymentCategories");
         return paymentCategoryRepository.findAll(pageable).map(paymentCategoryMapper::toDto);
-    }
-
-    /**
-     *  Get all the paymentCategories where Payment is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<PaymentCategoryDTO> findAllWherePaymentIsNull() {
-        log.debug("Request to get all paymentCategories where Payment is null");
-        return StreamSupport
-            .stream(paymentCategoryRepository.findAll().spliterator(), false)
-            .filter(paymentCategory -> paymentCategory.getPayment() == null)
-            .map(paymentCategoryMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override

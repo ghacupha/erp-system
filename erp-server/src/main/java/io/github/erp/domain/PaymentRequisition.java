@@ -34,7 +34,7 @@ public class PaymentRequisition implements Serializable {
     private BigDecimal vatableAmount;
 
     @JsonIgnoreProperties(
-        value = { "ownedInvoices", "dealers", "taxRule", "paymentCategory", "paymentCalculation", "paymentRequisition" },
+        value = { "ownedInvoices", "dealers", "taxRule", "paymentCalculation", "paymentRequisition" },
         allowSetters = true
     )
     @OneToOne(mappedBy = "paymentRequisition")

@@ -53,20 +53,9 @@
       "otherEntityRelationshipName": "payment"
     },
     {
-      "relationshipName": "paymentCategory",
-      "otherEntityName": "paymentCategory",
-      "relationshipType": "one-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "id",
-      "ownerSide": true,
-      "useJPADerivedIdentifier": false,
-      "otherEntityRelationshipName": "payment"
-    },
-    {
       "relationshipName": "paymentCalculation",
       "otherEntityName": "paymentCalculation",
       "relationshipType": "one-to-one",
-      "relationshipValidateRules": ["required"],
       "otherEntityField": "id",
       "ownerSide": true,
       "useJPADerivedIdentifier": false,
@@ -76,7 +65,6 @@
       "relationshipName": "paymentRequisition",
       "otherEntityName": "paymentRequisition",
       "relationshipType": "one-to-one",
-      "relationshipValidateRules": ["required"],
       "otherEntityField": "id",
       "ownerSide": true,
       "id": false,

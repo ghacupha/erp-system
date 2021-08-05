@@ -44,14 +44,14 @@ public class PaymentCalculation implements Serializable {
     private BigDecimal paymentAmount;
 
     @JsonIgnoreProperties(
-        value = { "ownedInvoices", "dealers", "taxRule", "paymentCategory", "paymentCalculation", "paymentRequisition" },
+        value = { "ownedInvoices", "dealers", "taxRule", "paymentCalculation", "paymentRequisition" },
         allowSetters = true
     )
     @OneToOne(mappedBy = "paymentCalculation")
     private Payment payment;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "payment", "paymentCalculations" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "paymentCalculations" }, allowSetters = true)
     private PaymentCategory paymentCategory;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

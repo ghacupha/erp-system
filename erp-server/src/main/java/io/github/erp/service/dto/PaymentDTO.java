@@ -31,8 +31,6 @@ public class PaymentDTO implements Serializable {
 
     private TaxRuleDTO taxRule;
 
-    private PaymentCategoryDTO paymentCategory;
-
     private PaymentCalculationDTO paymentCalculation;
 
     private PaymentRequisitionDTO paymentRequisition;
@@ -101,14 +99,6 @@ public class PaymentDTO implements Serializable {
         this.taxRule = taxRule;
     }
 
-    public PaymentCategoryDTO getPaymentCategory() {
-        return paymentCategory;
-    }
-
-    public void setPaymentCategory(PaymentCategoryDTO paymentCategory) {
-        this.paymentCategory = paymentCategory;
-    }
-
     public PaymentCalculationDTO getPaymentCalculation() {
         return paymentCalculation;
     }
@@ -158,7 +148,6 @@ public class PaymentDTO implements Serializable {
             ", currency='" + getCurrency() + "'" +
             ", conversionRate=" + getConversionRate() +
             ", taxRule=" + getTaxRule() +
-            ", paymentCategory=" + getPaymentCategory() +
             ", paymentCalculation=" + getPaymentCalculation() +
             ", paymentRequisition=" + getPaymentRequisition() +
             "}";
