@@ -2,7 +2,8 @@
   "fields": [
     {
       "fieldName": "invoiceNumber",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
     },
     {
       "fieldName": "invoiceDate",

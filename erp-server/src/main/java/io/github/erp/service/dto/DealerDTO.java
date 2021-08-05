@@ -13,6 +13,7 @@ public class DealerDTO implements Serializable {
 
     private Long id;
 
+    @NotNull
     private String dealerName;
 
     private String taxNumber;

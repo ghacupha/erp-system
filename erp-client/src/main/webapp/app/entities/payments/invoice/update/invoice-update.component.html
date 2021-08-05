@@ -21,6 +21,13 @@
             data-cy="invoiceNumber"
             formControlName="invoiceNumber"
           />
+          <div
+            *ngIf="
+              editForm.get('invoiceNumber')!.invalid && (editForm.get('invoiceNumber')!.dirty || editForm.get('invoiceNumber')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('invoiceNumber')?.errors?.required"> This field is required. </small>
+          </div>
         </div>
 
         <div class="form-group">

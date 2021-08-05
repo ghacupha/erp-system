@@ -3,7 +3,6 @@ package io.github.erp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -24,12 +23,6 @@ public class PaymentCalculation implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
-
-    @Column(name = "payment_number")
-    private String paymentNumber;
-
-    @Column(name = "payment_date")
-    private LocalDate paymentDate;
 
     @Column(name = "payment_expense", precision = 21, scale = 2)
     private BigDecimal paymentExpense;
@@ -66,32 +59,6 @@ public class PaymentCalculation implements Serializable {
     public PaymentCalculation id(Long id) {
         this.id = id;
         return this;
-    }
-
-    public String getPaymentNumber() {
-        return this.paymentNumber;
-    }
-
-    public PaymentCalculation paymentNumber(String paymentNumber) {
-        this.paymentNumber = paymentNumber;
-        return this;
-    }
-
-    public void setPaymentNumber(String paymentNumber) {
-        this.paymentNumber = paymentNumber;
-    }
-
-    public LocalDate getPaymentDate() {
-        return this.paymentDate;
-    }
-
-    public PaymentCalculation paymentDate(LocalDate paymentDate) {
-        this.paymentDate = paymentDate;
-        return this;
-    }
-
-    public void setPaymentDate(LocalDate paymentDate) {
-        this.paymentDate = paymentDate;
     }
 
     public BigDecimal getPaymentExpense() {
@@ -202,8 +169,6 @@ public class PaymentCalculation implements Serializable {
     public String toString() {
         return "PaymentCalculation{" +
             "id=" + getId() +
-            ", paymentNumber='" + getPaymentNumber() + "'" +
-            ", paymentDate='" + getPaymentDate() + "'" +
             ", paymentExpense=" + getPaymentExpense() +
             ", withholdingVAT=" + getWithholdingVAT() +
             ", withholdingTax=" + getWithholdingTax() +

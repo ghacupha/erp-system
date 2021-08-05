@@ -181,6 +181,24 @@ class InvoiceResourceIT {
 
     @Test
     @Transactional
+    void checkInvoiceNumberIsRequired() throws Exception {
+        int databaseSizeBeforeTest = invoiceRepository.findAll().size();
+        // set the field null
+        invoice.setInvoiceNumber(null);
+
+        // Create the Invoice, which fails.
+        InvoiceDTO invoiceDTO = invoiceMapper.toDto(invoice);
+
+        restInvoiceMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(invoiceDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Invoice> invoiceList = invoiceRepository.findAll();
+        assertThat(invoiceList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void checkCurrencyIsRequired() throws Exception {
         int databaseSizeBeforeTest = invoiceRepository.findAll().size();
         // set the field null

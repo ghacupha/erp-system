@@ -26,7 +26,8 @@ public class Dealer implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "dealer_name", unique = true)
+    @NotNull
+    @Column(name = "dealer_name", nullable = false, unique = true)
     private String dealerName;
 
     @Column(name = "tax_number")

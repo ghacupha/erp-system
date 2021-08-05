@@ -205,6 +205,24 @@ class DealerResourceIT {
 
     @Test
     @Transactional
+    void checkDealerNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = dealerRepository.findAll().size();
+        // set the field null
+        dealer.setDealerName(null);
+
+        // Create the Dealer, which fails.
+        DealerDTO dealerDTO = dealerMapper.toDto(dealer);
+
+        restDealerMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(dealerDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Dealer> dealerList = dealerRepository.findAll();
+        assertThat(dealerList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllDealers() throws Exception {
         // Initialize the database
         dealerRepository.saveAndFlush(dealer);

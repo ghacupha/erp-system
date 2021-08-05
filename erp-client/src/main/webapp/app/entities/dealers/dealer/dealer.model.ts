@@ -3,7 +3,7 @@ import { IPaymentRequisition } from 'app/entities/payments/payment-requisition/p
 
 export interface IDealer {
   id?: number;
-  dealerName?: string | null;
+  dealerName?: string;
   taxNumber?: string | null;
   postalAddress?: string | null;
   physicalAddress?: string | null;
@@ -19,7 +19,7 @@ export interface IDealer {
 export class Dealer implements IDealer {
   constructor(
     public id?: number,
-    public dealerName?: string | null,
+    public dealerName?: string,
     public taxNumber?: string | null,
     public postalAddress?: string | null,
     public physicalAddress?: string | null,

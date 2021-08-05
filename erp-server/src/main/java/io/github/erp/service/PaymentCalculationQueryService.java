@@ -94,12 +94,6 @@ public class PaymentCalculationQueryService extends QueryService<PaymentCalculat
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), PaymentCalculation_.id));
             }
-            if (criteria.getPaymentNumber() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getPaymentNumber(), PaymentCalculation_.paymentNumber));
-            }
-            if (criteria.getPaymentDate() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getPaymentDate(), PaymentCalculation_.paymentDate));
-            }
             if (criteria.getPaymentExpense() != null) {
                 specification =
                     specification.and(buildRangeSpecification(criteria.getPaymentExpense(), PaymentCalculation_.paymentExpense));

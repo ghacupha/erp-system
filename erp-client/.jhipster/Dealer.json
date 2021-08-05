@@ -21,7 +21,7 @@
     {
       "fieldName": "dealerName",
       "fieldType": "String",
-      "fieldValidateRules": ["unique"]
+      "fieldValidateRules": ["required", "unique"]
     },
     {
       "fieldName": "taxNumber",
