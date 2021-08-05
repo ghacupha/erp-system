@@ -43,8 +43,6 @@ describe('TaxRule e2e test', () => {
     await taxRuleComponentsPage.clickOnCreateButton();
 
     await promise.all([
-      taxRuleUpdatePage.setPaymentNumberInput('paymentNumber'),
-      taxRuleUpdatePage.setPaymentDateInput('2000-12-31'),
       taxRuleUpdatePage.setTelcoExciseDutyInput('5'),
       taxRuleUpdatePage.setValueAddedTaxInput('5'),
       taxRuleUpdatePage.setWithholdingVATInput('5'),

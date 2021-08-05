@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,7 +62,7 @@ public class TaxRuleResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/tax-rules")
-    public ResponseEntity<TaxRuleDTO> createTaxRule(@Valid @RequestBody TaxRuleDTO taxRuleDTO) throws URISyntaxException {
+    public ResponseEntity<TaxRuleDTO> createTaxRule(@RequestBody TaxRuleDTO taxRuleDTO) throws URISyntaxException {
         log.debug("REST request to save TaxRule : {}", taxRuleDTO);
         if (taxRuleDTO.getId() != null) {
             throw new BadRequestAlertException("A new taxRule cannot already have an ID", ENTITY_NAME, "idexists");
@@ -89,7 +87,7 @@ public class TaxRuleResource {
     @PutMapping("/tax-rules/{id}")
     public ResponseEntity<TaxRuleDTO> updateTaxRule(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody TaxRuleDTO taxRuleDTO
+        @RequestBody TaxRuleDTO taxRuleDTO
     ) throws URISyntaxException {
         log.debug("REST request to update TaxRule : {}, {}", id, taxRuleDTO);
         if (taxRuleDTO.getId() == null) {
@@ -124,7 +122,7 @@ public class TaxRuleResource {
     @PatchMapping(value = "/tax-rules/{id}", consumes = "application/merge-patch+json")
     public ResponseEntity<TaxRuleDTO> partialUpdateTaxRule(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody TaxRuleDTO taxRuleDTO
+        @RequestBody TaxRuleDTO taxRuleDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update TaxRule partially : {}, {}", id, taxRuleDTO);
         if (taxRuleDTO.getId() == null) {

@@ -14,12 +14,6 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="payment_number" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
-            <column name="payment_date" type="date">
-                <constraints nullable="false" />
-            </column>
             <column name="telco_excise_duty" type="double">
                 <constraints nullable="true" />
             </column>
@@ -64,8 +58,6 @@
                   separator=";"
                   tableName="tax_rule">
             <column name="id" type="numeric"/>
-            <column name="payment_number" type="string"/>
-            <column name="payment_date" type="date"/>
             <column name="telco_excise_duty" type="numeric"/>
             <column name="value_added_tax" type="numeric"/>
             <column name="withholding_vat" type="numeric"/>

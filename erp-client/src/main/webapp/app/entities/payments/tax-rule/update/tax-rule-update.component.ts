@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -17,8 +17,6 @@ export class TaxRuleUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    paymentNumber: [null, [Validators.required]],
-    paymentDate: [null, [Validators.required]],
     telcoExciseDuty: [],
     valueAddedTax: [],
     withholdingVAT: [],
@@ -73,8 +71,6 @@ export class TaxRuleUpdateComponent implements OnInit {
   protected updateForm(taxRule: ITaxRule): void {
     this.editForm.patchValue({
       id: taxRule.id,
-      paymentNumber: taxRule.paymentNumber,
-      paymentDate: taxRule.paymentDate,
       telcoExciseDuty: taxRule.telcoExciseDuty,
       valueAddedTax: taxRule.valueAddedTax,
       withholdingVAT: taxRule.withholdingVAT,
@@ -90,8 +86,6 @@ export class TaxRuleUpdateComponent implements OnInit {
     return {
       ...new TaxRule(),
       id: this.editForm.get(['id'])!.value,
-      paymentNumber: this.editForm.get(['paymentNumber'])!.value,
-      paymentDate: this.editForm.get(['paymentDate'])!.value,
       telcoExciseDuty: this.editForm.get(['telcoExciseDuty'])!.value,
       valueAddedTax: this.editForm.get(['valueAddedTax'])!.value,
       withholdingVAT: this.editForm.get(['withholdingVAT'])!.value,

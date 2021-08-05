@@ -8,7 +8,6 @@ import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
-import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 
@@ -26,10 +25,6 @@ public class TaxRuleCriteria implements Serializable, Criteria {
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
-
-    private StringFilter paymentNumber;
-
-    private LocalDateFilter paymentDate;
 
     private DoubleFilter telcoExciseDuty;
 
@@ -53,8 +48,6 @@ public class TaxRuleCriteria implements Serializable, Criteria {
 
     public TaxRuleCriteria(TaxRuleCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.paymentNumber = other.paymentNumber == null ? null : other.paymentNumber.copy();
-        this.paymentDate = other.paymentDate == null ? null : other.paymentDate.copy();
         this.telcoExciseDuty = other.telcoExciseDuty == null ? null : other.telcoExciseDuty.copy();
         this.valueAddedTax = other.valueAddedTax == null ? null : other.valueAddedTax.copy();
         this.withholdingVAT = other.withholdingVAT == null ? null : other.withholdingVAT.copy();
@@ -85,36 +78,6 @@ public class TaxRuleCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
-    }
-
-    public StringFilter getPaymentNumber() {
-        return paymentNumber;
-    }
-
-    public StringFilter paymentNumber() {
-        if (paymentNumber == null) {
-            paymentNumber = new StringFilter();
-        }
-        return paymentNumber;
-    }
-
-    public void setPaymentNumber(StringFilter paymentNumber) {
-        this.paymentNumber = paymentNumber;
-    }
-
-    public LocalDateFilter getPaymentDate() {
-        return paymentDate;
-    }
-
-    public LocalDateFilter paymentDate() {
-        if (paymentDate == null) {
-            paymentDate = new LocalDateFilter();
-        }
-        return paymentDate;
-    }
-
-    public void setPaymentDate(LocalDateFilter paymentDate) {
-        this.paymentDate = paymentDate;
     }
 
     public DoubleFilter getTelcoExciseDuty() {
@@ -263,8 +226,6 @@ public class TaxRuleCriteria implements Serializable, Criteria {
         final TaxRuleCriteria that = (TaxRuleCriteria) o;
         return (
             Objects.equals(id, that.id) &&
-            Objects.equals(paymentNumber, that.paymentNumber) &&
-            Objects.equals(paymentDate, that.paymentDate) &&
             Objects.equals(telcoExciseDuty, that.telcoExciseDuty) &&
             Objects.equals(valueAddedTax, that.valueAddedTax) &&
             Objects.equals(withholdingVAT, that.withholdingVAT) &&
@@ -281,8 +242,6 @@ public class TaxRuleCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
             id,
-            paymentNumber,
-            paymentDate,
             telcoExciseDuty,
             valueAddedTax,
             withholdingVAT,
@@ -300,8 +259,6 @@ public class TaxRuleCriteria implements Serializable, Criteria {
     public String toString() {
         return "TaxRuleCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
-            (paymentNumber != null ? "paymentNumber=" + paymentNumber + ", " : "") +
-            (paymentDate != null ? "paymentDate=" + paymentDate + ", " : "") +
             (telcoExciseDuty != null ? "telcoExciseDuty=" + telcoExciseDuty + ", " : "") +
             (valueAddedTax != null ? "valueAddedTax=" + valueAddedTax + ", " : "") +
             (withholdingVAT != null ? "withholdingVAT=" + withholdingVAT + ", " : "") +

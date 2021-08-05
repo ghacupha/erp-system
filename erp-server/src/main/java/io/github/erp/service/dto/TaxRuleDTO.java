@@ -1,9 +1,7 @@
 package io.github.erp.service.dto;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Objects;
-import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link io.github.erp.domain.TaxRule} entity.
@@ -11,12 +9,6 @@ import javax.validation.constraints.*;
 public class TaxRuleDTO implements Serializable {
 
     private Long id;
-
-    @NotNull
-    private String paymentNumber;
-
-    @NotNull
-    private LocalDate paymentDate;
 
     private Double telcoExciseDuty;
 
@@ -40,22 +32,6 @@ public class TaxRuleDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getPaymentNumber() {
-        return paymentNumber;
-    }
-
-    public void setPaymentNumber(String paymentNumber) {
-        this.paymentNumber = paymentNumber;
-    }
-
-    public LocalDate getPaymentDate() {
-        return paymentDate;
-    }
-
-    public void setPaymentDate(LocalDate paymentDate) {
-        this.paymentDate = paymentDate;
     }
 
     public Double getTelcoExciseDuty() {
@@ -148,8 +124,6 @@ public class TaxRuleDTO implements Serializable {
     public String toString() {
         return "TaxRuleDTO{" +
             "id=" + getId() +
-            ", paymentNumber='" + getPaymentNumber() + "'" +
-            ", paymentDate='" + getPaymentDate() + "'" +
             ", telcoExciseDuty=" + getTelcoExciseDuty() +
             ", valueAddedTax=" + getValueAddedTax() +
             ", withholdingVAT=" + getWithholdingVAT() +

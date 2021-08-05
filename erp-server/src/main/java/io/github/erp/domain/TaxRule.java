@@ -2,9 +2,7 @@ package io.github.erp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.time.LocalDate;
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -24,14 +22,6 @@ public class TaxRule implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
-
-    @NotNull
-    @Column(name = "payment_number", nullable = false)
-    private String paymentNumber;
-
-    @NotNull
-    @Column(name = "payment_date", nullable = false)
-    private LocalDate paymentDate;
 
     @Column(name = "telco_excise_duty")
     private Double telcoExciseDuty;
@@ -76,32 +66,6 @@ public class TaxRule implements Serializable {
     public TaxRule id(Long id) {
         this.id = id;
         return this;
-    }
-
-    public String getPaymentNumber() {
-        return this.paymentNumber;
-    }
-
-    public TaxRule paymentNumber(String paymentNumber) {
-        this.paymentNumber = paymentNumber;
-        return this;
-    }
-
-    public void setPaymentNumber(String paymentNumber) {
-        this.paymentNumber = paymentNumber;
-    }
-
-    public LocalDate getPaymentDate() {
-        return this.paymentDate;
-    }
-
-    public TaxRule paymentDate(LocalDate paymentDate) {
-        this.paymentDate = paymentDate;
-        return this;
-    }
-
-    public void setPaymentDate(LocalDate paymentDate) {
-        this.paymentDate = paymentDate;
     }
 
     public Double getTelcoExciseDuty() {
@@ -251,8 +215,6 @@ public class TaxRule implements Serializable {
     public String toString() {
         return "TaxRule{" +
             "id=" + getId() +
-            ", paymentNumber='" + getPaymentNumber() + "'" +
-            ", paymentDate='" + getPaymentDate() + "'" +
             ", telcoExciseDuty=" + getTelcoExciseDuty() +
             ", valueAddedTax=" + getValueAddedTax() +
             ", withholdingVAT=" + getWithholdingVAT() +

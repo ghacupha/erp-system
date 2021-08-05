@@ -1,10 +1,7 @@
-import * as dayjs from 'dayjs';
 import { IPayment } from 'app/entities/payments/payment/payment.model';
 
 export interface ITaxRule {
   id?: number;
-  paymentNumber?: string;
-  paymentDate?: dayjs.Dayjs;
   telcoExciseDuty?: number | null;
   valueAddedTax?: number | null;
   withholdingVAT?: number | null;
@@ -19,8 +16,6 @@ export interface ITaxRule {
 export class TaxRule implements ITaxRule {
   constructor(
     public id?: number,
-    public paymentNumber?: string,
-    public paymentDate?: dayjs.Dayjs,
     public telcoExciseDuty?: number | null,
     public valueAddedTax?: number | null,
     public withholdingVAT?: number | null,

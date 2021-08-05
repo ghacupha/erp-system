@@ -12,49 +12,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_paymentNumber">Payment Number</label>
-          <input
-            type="text"
-            class="form-control"
-            name="paymentNumber"
-            id="field_paymentNumber"
-            data-cy="paymentNumber"
-            formControlName="paymentNumber"
-          />
-          <div
-            *ngIf="
-              editForm.get('paymentNumber')!.invalid && (editForm.get('paymentNumber')!.dirty || editForm.get('paymentNumber')!.touched)
-            "
-          >
-            <small class="form-text text-danger" *ngIf="editForm.get('paymentNumber')?.errors?.required"> This field is required. </small>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_paymentDate">Payment Date</label>
-          <div class="input-group">
-            <input
-              id="field_paymentDate"
-              data-cy="paymentDate"
-              type="text"
-              class="form-control"
-              name="paymentDate"
-              ngbDatepicker
-              #paymentDateDp="ngbDatepicker"
-              formControlName="paymentDate"
-            />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="paymentDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
-          </div>
-          <div *ngIf="editForm.get('paymentDate')!.invalid && (editForm.get('paymentDate')!.dirty || editForm.get('paymentDate')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('paymentDate')?.errors?.required"> This field is required. </small>
-          </div>
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" for="field_telcoExciseDuty">Telco Excise Duty</label>
           <input
             type="number"
