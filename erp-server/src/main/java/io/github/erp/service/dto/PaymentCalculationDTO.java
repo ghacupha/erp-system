@@ -2,7 +2,6 @@ package io.github.erp.service.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -11,10 +10,6 @@ import java.util.Objects;
 public class PaymentCalculationDTO implements Serializable {
 
     private Long id;
-
-    private String paymentNumber;
-
-    private LocalDate paymentDate;
 
     private BigDecimal paymentExpense;
 
@@ -32,22 +27,6 @@ public class PaymentCalculationDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getPaymentNumber() {
-        return paymentNumber;
-    }
-
-    public void setPaymentNumber(String paymentNumber) {
-        this.paymentNumber = paymentNumber;
-    }
-
-    public LocalDate getPaymentDate() {
-        return paymentDate;
-    }
-
-    public void setPaymentDate(LocalDate paymentDate) {
-        this.paymentDate = paymentDate;
     }
 
     public BigDecimal getPaymentExpense() {
@@ -116,8 +95,6 @@ public class PaymentCalculationDTO implements Serializable {
     public String toString() {
         return "PaymentCalculationDTO{" +
             "id=" + getId() +
-            ", paymentNumber='" + getPaymentNumber() + "'" +
-            ", paymentDate='" + getPaymentDate() + "'" +
             ", paymentExpense=" + getPaymentExpense() +
             ", withholdingVAT=" + getWithholdingVAT() +
             ", withholdingTax=" + getWithholdingTax() +

@@ -51,8 +51,6 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="paymentNumber"><span>Payment Number</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="paymentDate"><span>Payment Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentExpense"><span>Payment Expense</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="withholdingVAT"><span>Withholding VAT</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="withholdingTax"><span>Withholding Tax</span> <fa-icon icon="sort"></fa-icon></th>
@@ -66,8 +64,6 @@
           <td>
             <a [routerLink]="['/payment-calculation', paymentCalculation.id, 'view']">{{ paymentCalculation.id }}</a>
           </td>
-          <td>{{ paymentCalculation.paymentNumber }}</td>
-          <td>{{ paymentCalculation.paymentDate | formatMediumDate }}</td>
           <td>{{ paymentCalculation.paymentExpense }}</td>
           <td>{{ paymentCalculation.withholdingVAT }}</td>
           <td>{{ paymentCalculation.withholdingTax }}</td>

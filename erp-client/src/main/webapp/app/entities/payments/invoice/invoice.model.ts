@@ -5,7 +5,7 @@ import { CurrencyTypes } from 'app/entities/enumerations/currency-types.model';
 
 export interface IInvoice {
   id?: number;
-  invoiceNumber?: string | null;
+  invoiceNumber?: string;
   invoiceDate?: dayjs.Dayjs | null;
   invoiceAmount?: number | null;
   currency?: CurrencyTypes;
@@ -17,7 +17,7 @@ export interface IInvoice {
 export class Invoice implements IInvoice {
   constructor(
     public id?: number,
-    public invoiceNumber?: string | null,
+    public invoiceNumber?: string,
     public invoiceDate?: dayjs.Dayjs | null,
     public invoiceAmount?: number | null,
     public currency?: CurrencyTypes,

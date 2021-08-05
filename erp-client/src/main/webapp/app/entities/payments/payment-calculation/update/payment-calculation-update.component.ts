@@ -21,8 +21,6 @@ export class PaymentCalculationUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    paymentNumber: [],
-    paymentDate: [],
     paymentExpense: [],
     withholdingVAT: [],
     withholdingTax: [],
@@ -85,8 +83,6 @@ export class PaymentCalculationUpdateComponent implements OnInit {
   protected updateForm(paymentCalculation: IPaymentCalculation): void {
     this.editForm.patchValue({
       id: paymentCalculation.id,
-      paymentNumber: paymentCalculation.paymentNumber,
-      paymentDate: paymentCalculation.paymentDate,
       paymentExpense: paymentCalculation.paymentExpense,
       withholdingVAT: paymentCalculation.withholdingVAT,
       withholdingTax: paymentCalculation.withholdingTax,
@@ -119,8 +115,6 @@ export class PaymentCalculationUpdateComponent implements OnInit {
     return {
       ...new PaymentCalculation(),
       id: this.editForm.get(['id'])!.value,
-      paymentNumber: this.editForm.get(['paymentNumber'])!.value,
-      paymentDate: this.editForm.get(['paymentDate'])!.value,
       paymentExpense: this.editForm.get(['paymentExpense'])!.value,
       withholdingVAT: this.editForm.get(['withholdingVAT'])!.value,
       withholdingTax: this.editForm.get(['withholdingTax'])!.value,

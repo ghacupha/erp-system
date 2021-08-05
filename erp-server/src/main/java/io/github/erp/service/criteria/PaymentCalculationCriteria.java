@@ -9,7 +9,6 @@ import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
-import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 
@@ -28,10 +27,6 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private StringFilter paymentNumber;
-
-    private LocalDateFilter paymentDate;
-
     private BigDecimalFilter paymentExpense;
 
     private BigDecimalFilter withholdingVAT;
@@ -48,8 +43,6 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
 
     public PaymentCalculationCriteria(PaymentCalculationCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.paymentNumber = other.paymentNumber == null ? null : other.paymentNumber.copy();
-        this.paymentDate = other.paymentDate == null ? null : other.paymentDate.copy();
         this.paymentExpense = other.paymentExpense == null ? null : other.paymentExpense.copy();
         this.withholdingVAT = other.withholdingVAT == null ? null : other.withholdingVAT.copy();
         this.withholdingTax = other.withholdingTax == null ? null : other.withholdingTax.copy();
@@ -76,36 +69,6 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
-    }
-
-    public StringFilter getPaymentNumber() {
-        return paymentNumber;
-    }
-
-    public StringFilter paymentNumber() {
-        if (paymentNumber == null) {
-            paymentNumber = new StringFilter();
-        }
-        return paymentNumber;
-    }
-
-    public void setPaymentNumber(StringFilter paymentNumber) {
-        this.paymentNumber = paymentNumber;
-    }
-
-    public LocalDateFilter getPaymentDate() {
-        return paymentDate;
-    }
-
-    public LocalDateFilter paymentDate() {
-        if (paymentDate == null) {
-            paymentDate = new LocalDateFilter();
-        }
-        return paymentDate;
-    }
-
-    public void setPaymentDate(LocalDateFilter paymentDate) {
-        this.paymentDate = paymentDate;
     }
 
     public BigDecimalFilter getPaymentExpense() {
@@ -209,8 +172,6 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
         final PaymentCalculationCriteria that = (PaymentCalculationCriteria) o;
         return (
             Objects.equals(id, that.id) &&
-            Objects.equals(paymentNumber, that.paymentNumber) &&
-            Objects.equals(paymentDate, that.paymentDate) &&
             Objects.equals(paymentExpense, that.paymentExpense) &&
             Objects.equals(withholdingVAT, that.withholdingVAT) &&
             Objects.equals(withholdingTax, that.withholdingTax) &&
@@ -222,17 +183,7 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(
-            id,
-            paymentNumber,
-            paymentDate,
-            paymentExpense,
-            withholdingVAT,
-            withholdingTax,
-            paymentAmount,
-            paymentId,
-            paymentCategoryId
-        );
+        return Objects.hash(id, paymentExpense, withholdingVAT, withholdingTax, paymentAmount, paymentId, paymentCategoryId);
     }
 
     // prettier-ignore
@@ -240,8 +191,6 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
     public String toString() {
         return "PaymentCalculationCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
-            (paymentNumber != null ? "paymentNumber=" + paymentNumber + ", " : "") +
-            (paymentDate != null ? "paymentDate=" + paymentDate + ", " : "") +
             (paymentExpense != null ? "paymentExpense=" + paymentExpense + ", " : "") +
             (withholdingVAT != null ? "withholdingVAT=" + withholdingVAT + ", " : "") +
             (withholdingTax != null ? "withholdingTax=" + withholdingTax + ", " : "") +

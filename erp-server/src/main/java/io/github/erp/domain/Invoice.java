@@ -27,7 +27,8 @@ public class Invoice implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "invoice_number")
+    @NotNull
+    @Column(name = "invoice_number", nullable = false, unique = true)
     private String invoiceNumber;
 
     @Column(name = "invoice_date")

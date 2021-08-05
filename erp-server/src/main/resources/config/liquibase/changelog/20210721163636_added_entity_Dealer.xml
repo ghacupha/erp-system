@@ -15,7 +15,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="dealer_name" type="varchar(255)">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_dealer__dealer_name" />
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_dealer__dealer_name" />
             </column>
             <column name="tax_number" type="varchar(255)">
                 <constraints nullable="true" />

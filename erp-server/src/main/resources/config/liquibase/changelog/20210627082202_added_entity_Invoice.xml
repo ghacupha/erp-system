@@ -15,7 +15,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="invoice_number" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_invoice__invoice_number" />
             </column>
             <column name="invoice_date" type="date">
                 <constraints nullable="true" />

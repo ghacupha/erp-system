@@ -18,8 +18,6 @@ import io.github.erp.service.criteria.PaymentCalculationCriteria;
 import io.github.erp.service.dto.PaymentCalculationDTO;
 import io.github.erp.service.mapper.PaymentCalculationMapper;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -47,13 +45,6 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @WithMockUser
 class PaymentCalculationResourceIT {
-
-    private static final String DEFAULT_PAYMENT_NUMBER = "AAAAAAAAAA";
-    private static final String UPDATED_PAYMENT_NUMBER = "BBBBBBBBBB";
-
-    private static final LocalDate DEFAULT_PAYMENT_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_PAYMENT_DATE = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_PAYMENT_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final BigDecimal DEFAULT_PAYMENT_EXPENSE = new BigDecimal(1);
     private static final BigDecimal UPDATED_PAYMENT_EXPENSE = new BigDecimal(2);
@@ -108,8 +99,6 @@ class PaymentCalculationResourceIT {
      */
     public static PaymentCalculation createEntity(EntityManager em) {
         PaymentCalculation paymentCalculation = new PaymentCalculation()
-            .paymentNumber(DEFAULT_PAYMENT_NUMBER)
-            .paymentDate(DEFAULT_PAYMENT_DATE)
             .paymentExpense(DEFAULT_PAYMENT_EXPENSE)
             .withholdingVAT(DEFAULT_WITHHOLDING_VAT)
             .withholdingTax(DEFAULT_WITHHOLDING_TAX)
@@ -125,8 +114,6 @@ class PaymentCalculationResourceIT {
      */
     public static PaymentCalculation createUpdatedEntity(EntityManager em) {
         PaymentCalculation paymentCalculation = new PaymentCalculation()
-            .paymentNumber(UPDATED_PAYMENT_NUMBER)
-            .paymentDate(UPDATED_PAYMENT_DATE)
             .paymentExpense(UPDATED_PAYMENT_EXPENSE)
             .withholdingVAT(UPDATED_WITHHOLDING_VAT)
             .withholdingTax(UPDATED_WITHHOLDING_TAX)
@@ -157,8 +144,6 @@ class PaymentCalculationResourceIT {
         List<PaymentCalculation> paymentCalculationList = paymentCalculationRepository.findAll();
         assertThat(paymentCalculationList).hasSize(databaseSizeBeforeCreate + 1);
         PaymentCalculation testPaymentCalculation = paymentCalculationList.get(paymentCalculationList.size() - 1);
-        assertThat(testPaymentCalculation.getPaymentNumber()).isEqualTo(DEFAULT_PAYMENT_NUMBER);
-        assertThat(testPaymentCalculation.getPaymentDate()).isEqualTo(DEFAULT_PAYMENT_DATE);
         assertThat(testPaymentCalculation.getPaymentExpense()).isEqualByComparingTo(DEFAULT_PAYMENT_EXPENSE);
         assertThat(testPaymentCalculation.getWithholdingVAT()).isEqualByComparingTo(DEFAULT_WITHHOLDING_VAT);
         assertThat(testPaymentCalculation.getWithholdingTax()).isEqualByComparingTo(DEFAULT_WITHHOLDING_TAX);
@@ -206,8 +191,6 @@ class PaymentCalculationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentCalculation.getId().intValue())))
-            .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
-            .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].paymentExpense").value(hasItem(sameNumber(DEFAULT_PAYMENT_EXPENSE))))
             .andExpect(jsonPath("$.[*].withholdingVAT").value(hasItem(sameNumber(DEFAULT_WITHHOLDING_VAT))))
             .andExpect(jsonPath("$.[*].withholdingTax").value(hasItem(sameNumber(DEFAULT_WITHHOLDING_TAX))))
@@ -226,8 +209,6 @@ class PaymentCalculationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(paymentCalculation.getId().intValue()))
-            .andExpect(jsonPath("$.paymentNumber").value(DEFAULT_PAYMENT_NUMBER))
-            .andExpect(jsonPath("$.paymentDate").value(DEFAULT_PAYMENT_DATE.toString()))
             .andExpect(jsonPath("$.paymentExpense").value(sameNumber(DEFAULT_PAYMENT_EXPENSE)))
             .andExpect(jsonPath("$.withholdingVAT").value(sameNumber(DEFAULT_WITHHOLDING_VAT)))
             .andExpect(jsonPath("$.withholdingTax").value(sameNumber(DEFAULT_WITHHOLDING_TAX)))
@@ -250,188 +231,6 @@ class PaymentCalculationResourceIT {
 
         defaultPaymentCalculationShouldBeFound("id.lessThanOrEqual=" + id);
         defaultPaymentCalculationShouldNotBeFound("id.lessThan=" + id);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentNumberIsEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-
-        // Get all the paymentCalculationList where paymentNumber equals to DEFAULT_PAYMENT_NUMBER
-        defaultPaymentCalculationShouldBeFound("paymentNumber.equals=" + DEFAULT_PAYMENT_NUMBER);
-
-        // Get all the paymentCalculationList where paymentNumber equals to UPDATED_PAYMENT_NUMBER
-        defaultPaymentCalculationShouldNotBeFound("paymentNumber.equals=" + UPDATED_PAYMENT_NUMBER);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentNumberIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-
-        // Get all the paymentCalculationList where paymentNumber not equals to DEFAULT_PAYMENT_NUMBER
-        defaultPaymentCalculationShouldNotBeFound("paymentNumber.notEquals=" + DEFAULT_PAYMENT_NUMBER);
-
-        // Get all the paymentCalculationList where paymentNumber not equals to UPDATED_PAYMENT_NUMBER
-        defaultPaymentCalculationShouldBeFound("paymentNumber.notEquals=" + UPDATED_PAYMENT_NUMBER);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentNumberIsInShouldWork() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-
-        // Get all the paymentCalculationList where paymentNumber in DEFAULT_PAYMENT_NUMBER or UPDATED_PAYMENT_NUMBER
-        defaultPaymentCalculationShouldBeFound("paymentNumber.in=" + DEFAULT_PAYMENT_NUMBER + "," + UPDATED_PAYMENT_NUMBER);
-
-        // Get all the paymentCalculationList where paymentNumber equals to UPDATED_PAYMENT_NUMBER
-        defaultPaymentCalculationShouldNotBeFound("paymentNumber.in=" + UPDATED_PAYMENT_NUMBER);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentNumberIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-
-        // Get all the paymentCalculationList where paymentNumber is not null
-        defaultPaymentCalculationShouldBeFound("paymentNumber.specified=true");
-
-        // Get all the paymentCalculationList where paymentNumber is null
-        defaultPaymentCalculationShouldNotBeFound("paymentNumber.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentNumberContainsSomething() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-
-        // Get all the paymentCalculationList where paymentNumber contains DEFAULT_PAYMENT_NUMBER
-        defaultPaymentCalculationShouldBeFound("paymentNumber.contains=" + DEFAULT_PAYMENT_NUMBER);
-
-        // Get all the paymentCalculationList where paymentNumber contains UPDATED_PAYMENT_NUMBER
-        defaultPaymentCalculationShouldNotBeFound("paymentNumber.contains=" + UPDATED_PAYMENT_NUMBER);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentNumberNotContainsSomething() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-
-        // Get all the paymentCalculationList where paymentNumber does not contain DEFAULT_PAYMENT_NUMBER
-        defaultPaymentCalculationShouldNotBeFound("paymentNumber.doesNotContain=" + DEFAULT_PAYMENT_NUMBER);
-
-        // Get all the paymentCalculationList where paymentNumber does not contain UPDATED_PAYMENT_NUMBER
-        defaultPaymentCalculationShouldBeFound("paymentNumber.doesNotContain=" + UPDATED_PAYMENT_NUMBER);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentDateIsEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-
-        // Get all the paymentCalculationList where paymentDate equals to DEFAULT_PAYMENT_DATE
-        defaultPaymentCalculationShouldBeFound("paymentDate.equals=" + DEFAULT_PAYMENT_DATE);
-
-        // Get all the paymentCalculationList where paymentDate equals to UPDATED_PAYMENT_DATE
-        defaultPaymentCalculationShouldNotBeFound("paymentDate.equals=" + UPDATED_PAYMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentDateIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-
-        // Get all the paymentCalculationList where paymentDate not equals to DEFAULT_PAYMENT_DATE
-        defaultPaymentCalculationShouldNotBeFound("paymentDate.notEquals=" + DEFAULT_PAYMENT_DATE);
-
-        // Get all the paymentCalculationList where paymentDate not equals to UPDATED_PAYMENT_DATE
-        defaultPaymentCalculationShouldBeFound("paymentDate.notEquals=" + UPDATED_PAYMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentDateIsInShouldWork() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-
-        // Get all the paymentCalculationList where paymentDate in DEFAULT_PAYMENT_DATE or UPDATED_PAYMENT_DATE
-        defaultPaymentCalculationShouldBeFound("paymentDate.in=" + DEFAULT_PAYMENT_DATE + "," + UPDATED_PAYMENT_DATE);
-
-        // Get all the paymentCalculationList where paymentDate equals to UPDATED_PAYMENT_DATE
-        defaultPaymentCalculationShouldNotBeFound("paymentDate.in=" + UPDATED_PAYMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentDateIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-
-        // Get all the paymentCalculationList where paymentDate is not null
-        defaultPaymentCalculationShouldBeFound("paymentDate.specified=true");
-
-        // Get all the paymentCalculationList where paymentDate is null
-        defaultPaymentCalculationShouldNotBeFound("paymentDate.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentDateIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-
-        // Get all the paymentCalculationList where paymentDate is greater than or equal to DEFAULT_PAYMENT_DATE
-        defaultPaymentCalculationShouldBeFound("paymentDate.greaterThanOrEqual=" + DEFAULT_PAYMENT_DATE);
-
-        // Get all the paymentCalculationList where paymentDate is greater than or equal to UPDATED_PAYMENT_DATE
-        defaultPaymentCalculationShouldNotBeFound("paymentDate.greaterThanOrEqual=" + UPDATED_PAYMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentDateIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-
-        // Get all the paymentCalculationList where paymentDate is less than or equal to DEFAULT_PAYMENT_DATE
-        defaultPaymentCalculationShouldBeFound("paymentDate.lessThanOrEqual=" + DEFAULT_PAYMENT_DATE);
-
-        // Get all the paymentCalculationList where paymentDate is less than or equal to SMALLER_PAYMENT_DATE
-        defaultPaymentCalculationShouldNotBeFound("paymentDate.lessThanOrEqual=" + SMALLER_PAYMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentDateIsLessThanSomething() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-
-        // Get all the paymentCalculationList where paymentDate is less than DEFAULT_PAYMENT_DATE
-        defaultPaymentCalculationShouldNotBeFound("paymentDate.lessThan=" + DEFAULT_PAYMENT_DATE);
-
-        // Get all the paymentCalculationList where paymentDate is less than UPDATED_PAYMENT_DATE
-        defaultPaymentCalculationShouldBeFound("paymentDate.lessThan=" + UPDATED_PAYMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentDateIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-
-        // Get all the paymentCalculationList where paymentDate is greater than DEFAULT_PAYMENT_DATE
-        defaultPaymentCalculationShouldNotBeFound("paymentDate.greaterThan=" + DEFAULT_PAYMENT_DATE);
-
-        // Get all the paymentCalculationList where paymentDate is greater than SMALLER_PAYMENT_DATE
-        defaultPaymentCalculationShouldBeFound("paymentDate.greaterThan=" + SMALLER_PAYMENT_DATE);
     }
 
     @Test
@@ -898,8 +697,6 @@ class PaymentCalculationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentCalculation.getId().intValue())))
-            .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
-            .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].paymentExpense").value(hasItem(sameNumber(DEFAULT_PAYMENT_EXPENSE))))
             .andExpect(jsonPath("$.[*].withholdingVAT").value(hasItem(sameNumber(DEFAULT_WITHHOLDING_VAT))))
             .andExpect(jsonPath("$.[*].withholdingTax").value(hasItem(sameNumber(DEFAULT_WITHHOLDING_TAX))))
@@ -952,8 +749,6 @@ class PaymentCalculationResourceIT {
         // Disconnect from session so that the updates on updatedPaymentCalculation are not directly saved in db
         em.detach(updatedPaymentCalculation);
         updatedPaymentCalculation
-            .paymentNumber(UPDATED_PAYMENT_NUMBER)
-            .paymentDate(UPDATED_PAYMENT_DATE)
             .paymentExpense(UPDATED_PAYMENT_EXPENSE)
             .withholdingVAT(UPDATED_WITHHOLDING_VAT)
             .withholdingTax(UPDATED_WITHHOLDING_TAX)
@@ -972,8 +767,6 @@ class PaymentCalculationResourceIT {
         List<PaymentCalculation> paymentCalculationList = paymentCalculationRepository.findAll();
         assertThat(paymentCalculationList).hasSize(databaseSizeBeforeUpdate);
         PaymentCalculation testPaymentCalculation = paymentCalculationList.get(paymentCalculationList.size() - 1);
-        assertThat(testPaymentCalculation.getPaymentNumber()).isEqualTo(UPDATED_PAYMENT_NUMBER);
-        assertThat(testPaymentCalculation.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
         assertThat(testPaymentCalculation.getPaymentExpense()).isEqualTo(UPDATED_PAYMENT_EXPENSE);
         assertThat(testPaymentCalculation.getWithholdingVAT()).isEqualTo(UPDATED_WITHHOLDING_VAT);
         assertThat(testPaymentCalculation.getWithholdingTax()).isEqualTo(UPDATED_WITHHOLDING_TAX);
@@ -1073,7 +866,7 @@ class PaymentCalculationResourceIT {
         PaymentCalculation partialUpdatedPaymentCalculation = new PaymentCalculation();
         partialUpdatedPaymentCalculation.setId(paymentCalculation.getId());
 
-        partialUpdatedPaymentCalculation.paymentNumber(UPDATED_PAYMENT_NUMBER);
+        partialUpdatedPaymentCalculation.paymentExpense(UPDATED_PAYMENT_EXPENSE);
 
         restPaymentCalculationMockMvc
             .perform(
@@ -1087,9 +880,7 @@ class PaymentCalculationResourceIT {
         List<PaymentCalculation> paymentCalculationList = paymentCalculationRepository.findAll();
         assertThat(paymentCalculationList).hasSize(databaseSizeBeforeUpdate);
         PaymentCalculation testPaymentCalculation = paymentCalculationList.get(paymentCalculationList.size() - 1);
-        assertThat(testPaymentCalculation.getPaymentNumber()).isEqualTo(UPDATED_PAYMENT_NUMBER);
-        assertThat(testPaymentCalculation.getPaymentDate()).isEqualTo(DEFAULT_PAYMENT_DATE);
-        assertThat(testPaymentCalculation.getPaymentExpense()).isEqualByComparingTo(DEFAULT_PAYMENT_EXPENSE);
+        assertThat(testPaymentCalculation.getPaymentExpense()).isEqualByComparingTo(UPDATED_PAYMENT_EXPENSE);
         assertThat(testPaymentCalculation.getWithholdingVAT()).isEqualByComparingTo(DEFAULT_WITHHOLDING_VAT);
         assertThat(testPaymentCalculation.getWithholdingTax()).isEqualByComparingTo(DEFAULT_WITHHOLDING_TAX);
         assertThat(testPaymentCalculation.getPaymentAmount()).isEqualByComparingTo(DEFAULT_PAYMENT_AMOUNT);
@@ -1108,8 +899,6 @@ class PaymentCalculationResourceIT {
         partialUpdatedPaymentCalculation.setId(paymentCalculation.getId());
 
         partialUpdatedPaymentCalculation
-            .paymentNumber(UPDATED_PAYMENT_NUMBER)
-            .paymentDate(UPDATED_PAYMENT_DATE)
             .paymentExpense(UPDATED_PAYMENT_EXPENSE)
             .withholdingVAT(UPDATED_WITHHOLDING_VAT)
             .withholdingTax(UPDATED_WITHHOLDING_TAX)
@@ -1127,8 +916,6 @@ class PaymentCalculationResourceIT {
         List<PaymentCalculation> paymentCalculationList = paymentCalculationRepository.findAll();
         assertThat(paymentCalculationList).hasSize(databaseSizeBeforeUpdate);
         PaymentCalculation testPaymentCalculation = paymentCalculationList.get(paymentCalculationList.size() - 1);
-        assertThat(testPaymentCalculation.getPaymentNumber()).isEqualTo(UPDATED_PAYMENT_NUMBER);
-        assertThat(testPaymentCalculation.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
         assertThat(testPaymentCalculation.getPaymentExpense()).isEqualByComparingTo(UPDATED_PAYMENT_EXPENSE);
         assertThat(testPaymentCalculation.getWithholdingVAT()).isEqualByComparingTo(UPDATED_WITHHOLDING_VAT);
         assertThat(testPaymentCalculation.getWithholdingTax()).isEqualByComparingTo(UPDATED_WITHHOLDING_TAX);
@@ -1249,8 +1036,6 @@ class PaymentCalculationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentCalculation.getId().intValue())))
-            .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
-            .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].paymentExpense").value(hasItem(sameNumber(DEFAULT_PAYMENT_EXPENSE))))
             .andExpect(jsonPath("$.[*].withholdingVAT").value(hasItem(sameNumber(DEFAULT_WITHHOLDING_VAT))))
             .andExpect(jsonPath("$.[*].withholdingTax").value(hasItem(sameNumber(DEFAULT_WITHHOLDING_TAX))))

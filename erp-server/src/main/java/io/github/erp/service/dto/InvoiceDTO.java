@@ -14,6 +14,7 @@ public class InvoiceDTO implements Serializable {
 
     private Long id;
 
+    @NotNull
     private String invoiceNumber;
 
     private LocalDate invoiceDate;

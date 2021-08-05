@@ -24,7 +24,7 @@ export class InvoiceUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    invoiceNumber: [],
+    invoiceNumber: [null, [Validators.required]],
     invoiceDate: [],
     invoiceAmount: [],
     currency: [null, [Validators.required]],

@@ -71,9 +71,7 @@ class PaymentCalculationGatlingTest extends Simulation {
             .post("/api/payment-calculations")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
-                "paymentNumber":"SAMPLE_TEXT"
-                , "paymentDate":"2020-01-01T00:00:00.000Z"
-                , "paymentExpense":"0"
+                "paymentExpense":"0"
                 , "withholdingVAT":"0"
                 , "withholdingTax":"0"
                 , "paymentAmount":"0"

@@ -30,8 +30,6 @@ export class PaymentCalculationUpdatePage {
   cancelButton = element(by.id('cancel-save'));
 
   idInput = element(by.id('field_id'));
-  paymentNumberInput = element(by.id('field_paymentNumber'));
-  paymentDateInput = element(by.id('field_paymentDate'));
   paymentExpenseInput = element(by.id('field_paymentExpense'));
   withholdingVATInput = element(by.id('field_withholdingVAT'));
   withholdingTaxInput = element(by.id('field_withholdingTax'));
@@ -49,22 +47,6 @@ export class PaymentCalculationUpdatePage {
 
   async getIdInput(): Promise<string> {
     return await this.idInput.getAttribute('value');
-  }
-
-  async setPaymentNumberInput(paymentNumber: string): Promise<void> {
-    await this.paymentNumberInput.sendKeys(paymentNumber);
-  }
-
-  async getPaymentNumberInput(): Promise<string> {
-    return await this.paymentNumberInput.getAttribute('value');
-  }
-
-  async setPaymentDateInput(paymentDate: string): Promise<void> {
-    await this.paymentDateInput.sendKeys(paymentDate);
-  }
-
-  async getPaymentDateInput(): Promise<string> {
-    return await this.paymentDateInput.getAttribute('value');
   }
 
   async setPaymentExpenseInput(paymentExpense: string): Promise<void> {
