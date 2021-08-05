@@ -13,7 +13,6 @@ import io.github.erp.domain.Dealer;
 import io.github.erp.domain.Invoice;
 import io.github.erp.domain.Payment;
 import io.github.erp.domain.PaymentCalculation;
-import io.github.erp.domain.PaymentCategory;
 import io.github.erp.domain.PaymentRequisition;
 import io.github.erp.domain.TaxRule;
 import io.github.erp.domain.enumeration.CurrencyTypes;
@@ -117,36 +116,6 @@ class PaymentResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .currency(DEFAULT_CURRENCY)
             .conversionRate(DEFAULT_CONVERSION_RATE);
-        // Add required entity
-        PaymentCategory paymentCategory;
-        if (TestUtil.findAll(em, PaymentCategory.class).isEmpty()) {
-            paymentCategory = PaymentCategoryResourceIT.createEntity(em);
-            em.persist(paymentCategory);
-            em.flush();
-        } else {
-            paymentCategory = TestUtil.findAll(em, PaymentCategory.class).get(0);
-        }
-        payment.setPaymentCategory(paymentCategory);
-        // Add required entity
-        PaymentCalculation paymentCalculation;
-        if (TestUtil.findAll(em, PaymentCalculation.class).isEmpty()) {
-            paymentCalculation = PaymentCalculationResourceIT.createEntity(em);
-            em.persist(paymentCalculation);
-            em.flush();
-        } else {
-            paymentCalculation = TestUtil.findAll(em, PaymentCalculation.class).get(0);
-        }
-        payment.setPaymentCalculation(paymentCalculation);
-        // Add required entity
-        PaymentRequisition paymentRequisition;
-        if (TestUtil.findAll(em, PaymentRequisition.class).isEmpty()) {
-            paymentRequisition = PaymentRequisitionResourceIT.createEntity(em);
-            em.persist(paymentRequisition);
-            em.flush();
-        } else {
-            paymentRequisition = TestUtil.findAll(em, PaymentRequisition.class).get(0);
-        }
-        payment.setPaymentRequisition(paymentRequisition);
         return payment;
     }
 
@@ -164,36 +133,6 @@ class PaymentResourceIT {
             .description(UPDATED_DESCRIPTION)
             .currency(UPDATED_CURRENCY)
             .conversionRate(UPDATED_CONVERSION_RATE);
-        // Add required entity
-        PaymentCategory paymentCategory;
-        if (TestUtil.findAll(em, PaymentCategory.class).isEmpty()) {
-            paymentCategory = PaymentCategoryResourceIT.createUpdatedEntity(em);
-            em.persist(paymentCategory);
-            em.flush();
-        } else {
-            paymentCategory = TestUtil.findAll(em, PaymentCategory.class).get(0);
-        }
-        payment.setPaymentCategory(paymentCategory);
-        // Add required entity
-        PaymentCalculation paymentCalculation;
-        if (TestUtil.findAll(em, PaymentCalculation.class).isEmpty()) {
-            paymentCalculation = PaymentCalculationResourceIT.createUpdatedEntity(em);
-            em.persist(paymentCalculation);
-            em.flush();
-        } else {
-            paymentCalculation = TestUtil.findAll(em, PaymentCalculation.class).get(0);
-        }
-        payment.setPaymentCalculation(paymentCalculation);
-        // Add required entity
-        PaymentRequisition paymentRequisition;
-        if (TestUtil.findAll(em, PaymentRequisition.class).isEmpty()) {
-            paymentRequisition = PaymentRequisitionResourceIT.createUpdatedEntity(em);
-            em.persist(paymentRequisition);
-            em.flush();
-        } else {
-            paymentRequisition = TestUtil.findAll(em, PaymentRequisition.class).get(0);
-        }
-        payment.setPaymentRequisition(paymentRequisition);
         return payment;
     }
 
@@ -922,24 +861,13 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByPaymentCategoryIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        PaymentCategory paymentCategory = payment.getPaymentCategory();
-        paymentRepository.saveAndFlush(payment);
-        Long paymentCategoryId = paymentCategory.getId();
-
-        // Get all the paymentList where paymentCategory equals to paymentCategoryId
-        defaultPaymentShouldBeFound("paymentCategoryId.equals=" + paymentCategoryId);
-
-        // Get all the paymentList where paymentCategory equals to (paymentCategoryId + 1)
-        defaultPaymentShouldNotBeFound("paymentCategoryId.equals=" + (paymentCategoryId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllPaymentsByPaymentCalculationIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        PaymentCalculation paymentCalculation = payment.getPaymentCalculation();
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+        PaymentCalculation paymentCalculation = PaymentCalculationResourceIT.createEntity(em);
+        em.persist(paymentCalculation);
+        em.flush();
+        payment.setPaymentCalculation(paymentCalculation);
         paymentRepository.saveAndFlush(payment);
         Long paymentCalculationId = paymentCalculation.getId();
 
@@ -953,8 +881,12 @@ class PaymentResourceIT {
     @Test
     @Transactional
     void getAllPaymentsByPaymentRequisitionIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        PaymentRequisition paymentRequisition = payment.getPaymentRequisition();
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+        PaymentRequisition paymentRequisition = PaymentRequisitionResourceIT.createEntity(em);
+        em.persist(paymentRequisition);
+        em.flush();
+        payment.setPaymentRequisition(paymentRequisition);
         paymentRepository.saveAndFlush(payment);
         Long paymentRequisitionId = paymentRequisition.getId();
 

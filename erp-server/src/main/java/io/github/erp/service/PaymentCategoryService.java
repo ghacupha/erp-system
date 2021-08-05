@@ -1,7 +1,6 @@
 package io.github.erp.service;
 
 import io.github.erp.service.dto.PaymentCategoryDTO;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,12 +32,6 @@ public interface PaymentCategoryService {
      * @return the list of entities.
      */
     Page<PaymentCategoryDTO> findAll(Pageable pageable);
-    /**
-     * Get all the PaymentCategoryDTO where Payment is {@code null}.
-     *
-     * @return the {@link List} of entities.
-     */
-    List<PaymentCategoryDTO> findAllWherePaymentIsNull();
 
     /**
      * Get the "id" paymentCategory.

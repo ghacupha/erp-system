@@ -14,12 +14,6 @@
                                  referencedColumnNames="id"
                                  referencedTableName="tax_rule"/>
 
-        <addForeignKeyConstraint baseColumnNames="payment_category_id"
-                                 baseTableName="payment"
-                                 constraintName="fk_payment__payment_category_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="payment_category"/>
-
         <addForeignKeyConstraint baseColumnNames="payment_calculation_id"
                                  baseTableName="payment"
                                  constraintName="fk_payment__payment_calculation_id"

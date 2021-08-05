@@ -48,7 +48,7 @@ public class TaxRule implements Serializable {
     private Double withholdingTaxImportedService;
 
     @JsonIgnoreProperties(
-        value = { "ownedInvoices", "dealers", "taxRule", "paymentCategory", "paymentCalculation", "paymentRequisition" },
+        value = { "ownedInvoices", "dealers", "taxRule", "paymentCalculation", "paymentRequisition" },
         allowSetters = true
     )
     @OneToOne(mappedBy = "taxRule")
