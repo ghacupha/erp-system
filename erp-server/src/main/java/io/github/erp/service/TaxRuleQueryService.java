@@ -94,12 +94,6 @@ public class TaxRuleQueryService extends QueryService<TaxRule> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), TaxRule_.id));
             }
-            if (criteria.getPaymentNumber() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getPaymentNumber(), TaxRule_.paymentNumber));
-            }
-            if (criteria.getPaymentDate() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getPaymentDate(), TaxRule_.paymentDate));
-            }
             if (criteria.getTelcoExciseDuty() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getTelcoExciseDuty(), TaxRule_.telcoExciseDuty));
             }

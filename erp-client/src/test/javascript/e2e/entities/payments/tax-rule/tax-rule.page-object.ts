@@ -30,8 +30,6 @@ export class TaxRuleUpdatePage {
   cancelButton = element(by.id('cancel-save'));
 
   idInput = element(by.id('field_id'));
-  paymentNumberInput = element(by.id('field_paymentNumber'));
-  paymentDateInput = element(by.id('field_paymentDate'));
   telcoExciseDutyInput = element(by.id('field_telcoExciseDuty'));
   valueAddedTaxInput = element(by.id('field_valueAddedTax'));
   withholdingVATInput = element(by.id('field_withholdingVAT'));
@@ -51,22 +49,6 @@ export class TaxRuleUpdatePage {
 
   async getIdInput(): Promise<string> {
     return await this.idInput.getAttribute('value');
-  }
-
-  async setPaymentNumberInput(paymentNumber: string): Promise<void> {
-    await this.paymentNumberInput.sendKeys(paymentNumber);
-  }
-
-  async getPaymentNumberInput(): Promise<string> {
-    return await this.paymentNumberInput.getAttribute('value');
-  }
-
-  async setPaymentDateInput(paymentDate: string): Promise<void> {
-    await this.paymentDateInput.sendKeys(paymentDate);
-  }
-
-  async getPaymentDateInput(): Promise<string> {
-    return await this.paymentDateInput.getAttribute('value');
   }
 
   async setTelcoExciseDutyInput(telcoExciseDuty: string): Promise<void> {

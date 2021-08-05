@@ -51,8 +51,6 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="paymentNumber"><span>Payment Number</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="paymentDate"><span>Payment Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="telcoExciseDuty"><span>Telco Excise Duty</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="valueAddedTax"><span>Value Added Tax</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="withholdingVAT"><span>Withholding VAT</span> <fa-icon icon="sort"></fa-icon></th>
@@ -73,8 +71,6 @@
           <td>
             <a [routerLink]="['/tax-rule', taxRule.id, 'view']">{{ taxRule.id }}</a>
           </td>
-          <td>{{ taxRule.paymentNumber }}</td>
-          <td>{{ taxRule.paymentDate | formatMediumDate }}</td>
           <td>{{ taxRule.telcoExciseDuty }}</td>
           <td>{{ taxRule.valueAddedTax }}</td>
           <td>{{ taxRule.withholdingVAT }}</td>

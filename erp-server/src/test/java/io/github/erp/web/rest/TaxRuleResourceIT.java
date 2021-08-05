@@ -15,8 +15,6 @@ import io.github.erp.repository.search.TaxRuleSearchRepository;
 import io.github.erp.service.criteria.TaxRuleCriteria;
 import io.github.erp.service.dto.TaxRuleDTO;
 import io.github.erp.service.mapper.TaxRuleMapper;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -44,13 +42,6 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @WithMockUser
 class TaxRuleResourceIT {
-
-    private static final String DEFAULT_PAYMENT_NUMBER = "AAAAAAAAAA";
-    private static final String UPDATED_PAYMENT_NUMBER = "BBBBBBBBBB";
-
-    private static final LocalDate DEFAULT_PAYMENT_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_PAYMENT_DATE = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_PAYMENT_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final Double DEFAULT_TELCO_EXCISE_DUTY = 1D;
     private static final Double UPDATED_TELCO_EXCISE_DUTY = 2D;
@@ -121,8 +112,6 @@ class TaxRuleResourceIT {
      */
     public static TaxRule createEntity(EntityManager em) {
         TaxRule taxRule = new TaxRule()
-            .paymentNumber(DEFAULT_PAYMENT_NUMBER)
-            .paymentDate(DEFAULT_PAYMENT_DATE)
             .telcoExciseDuty(DEFAULT_TELCO_EXCISE_DUTY)
             .valueAddedTax(DEFAULT_VALUE_ADDED_TAX)
             .withholdingVAT(DEFAULT_WITHHOLDING_VAT)
@@ -142,8 +131,6 @@ class TaxRuleResourceIT {
      */
     public static TaxRule createUpdatedEntity(EntityManager em) {
         TaxRule taxRule = new TaxRule()
-            .paymentNumber(UPDATED_PAYMENT_NUMBER)
-            .paymentDate(UPDATED_PAYMENT_DATE)
             .telcoExciseDuty(UPDATED_TELCO_EXCISE_DUTY)
             .valueAddedTax(UPDATED_VALUE_ADDED_TAX)
             .withholdingVAT(UPDATED_WITHHOLDING_VAT)
@@ -174,8 +161,6 @@ class TaxRuleResourceIT {
         List<TaxRule> taxRuleList = taxRuleRepository.findAll();
         assertThat(taxRuleList).hasSize(databaseSizeBeforeCreate + 1);
         TaxRule testTaxRule = taxRuleList.get(taxRuleList.size() - 1);
-        assertThat(testTaxRule.getPaymentNumber()).isEqualTo(DEFAULT_PAYMENT_NUMBER);
-        assertThat(testTaxRule.getPaymentDate()).isEqualTo(DEFAULT_PAYMENT_DATE);
         assertThat(testTaxRule.getTelcoExciseDuty()).isEqualTo(DEFAULT_TELCO_EXCISE_DUTY);
         assertThat(testTaxRule.getValueAddedTax()).isEqualTo(DEFAULT_VALUE_ADDED_TAX);
         assertThat(testTaxRule.getWithholdingVAT()).isEqualTo(DEFAULT_WITHHOLDING_VAT);
@@ -213,42 +198,6 @@ class TaxRuleResourceIT {
 
     @Test
     @Transactional
-    void checkPaymentNumberIsRequired() throws Exception {
-        int databaseSizeBeforeTest = taxRuleRepository.findAll().size();
-        // set the field null
-        taxRule.setPaymentNumber(null);
-
-        // Create the TaxRule, which fails.
-        TaxRuleDTO taxRuleDTO = taxRuleMapper.toDto(taxRule);
-
-        restTaxRuleMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(taxRuleDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<TaxRule> taxRuleList = taxRuleRepository.findAll();
-        assertThat(taxRuleList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    void checkPaymentDateIsRequired() throws Exception {
-        int databaseSizeBeforeTest = taxRuleRepository.findAll().size();
-        // set the field null
-        taxRule.setPaymentDate(null);
-
-        // Create the TaxRule, which fails.
-        TaxRuleDTO taxRuleDTO = taxRuleMapper.toDto(taxRule);
-
-        restTaxRuleMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(taxRuleDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<TaxRule> taxRuleList = taxRuleRepository.findAll();
-        assertThat(taxRuleList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllTaxRules() throws Exception {
         // Initialize the database
         taxRuleRepository.saveAndFlush(taxRule);
@@ -259,8 +208,6 @@ class TaxRuleResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(taxRule.getId().intValue())))
-            .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
-            .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].telcoExciseDuty").value(hasItem(DEFAULT_TELCO_EXCISE_DUTY.doubleValue())))
             .andExpect(jsonPath("$.[*].valueAddedTax").value(hasItem(DEFAULT_VALUE_ADDED_TAX.doubleValue())))
             .andExpect(jsonPath("$.[*].withholdingVAT").value(hasItem(DEFAULT_WITHHOLDING_VAT.doubleValue())))
@@ -285,8 +232,6 @@ class TaxRuleResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(taxRule.getId().intValue()))
-            .andExpect(jsonPath("$.paymentNumber").value(DEFAULT_PAYMENT_NUMBER))
-            .andExpect(jsonPath("$.paymentDate").value(DEFAULT_PAYMENT_DATE.toString()))
             .andExpect(jsonPath("$.telcoExciseDuty").value(DEFAULT_TELCO_EXCISE_DUTY.doubleValue()))
             .andExpect(jsonPath("$.valueAddedTax").value(DEFAULT_VALUE_ADDED_TAX.doubleValue()))
             .andExpect(jsonPath("$.withholdingVAT").value(DEFAULT_WITHHOLDING_VAT.doubleValue()))
@@ -313,188 +258,6 @@ class TaxRuleResourceIT {
 
         defaultTaxRuleShouldBeFound("id.lessThanOrEqual=" + id);
         defaultTaxRuleShouldNotBeFound("id.lessThan=" + id);
-    }
-
-    @Test
-    @Transactional
-    void getAllTaxRulesByPaymentNumberIsEqualToSomething() throws Exception {
-        // Initialize the database
-        taxRuleRepository.saveAndFlush(taxRule);
-
-        // Get all the taxRuleList where paymentNumber equals to DEFAULT_PAYMENT_NUMBER
-        defaultTaxRuleShouldBeFound("paymentNumber.equals=" + DEFAULT_PAYMENT_NUMBER);
-
-        // Get all the taxRuleList where paymentNumber equals to UPDATED_PAYMENT_NUMBER
-        defaultTaxRuleShouldNotBeFound("paymentNumber.equals=" + UPDATED_PAYMENT_NUMBER);
-    }
-
-    @Test
-    @Transactional
-    void getAllTaxRulesByPaymentNumberIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        taxRuleRepository.saveAndFlush(taxRule);
-
-        // Get all the taxRuleList where paymentNumber not equals to DEFAULT_PAYMENT_NUMBER
-        defaultTaxRuleShouldNotBeFound("paymentNumber.notEquals=" + DEFAULT_PAYMENT_NUMBER);
-
-        // Get all the taxRuleList where paymentNumber not equals to UPDATED_PAYMENT_NUMBER
-        defaultTaxRuleShouldBeFound("paymentNumber.notEquals=" + UPDATED_PAYMENT_NUMBER);
-    }
-
-    @Test
-    @Transactional
-    void getAllTaxRulesByPaymentNumberIsInShouldWork() throws Exception {
-        // Initialize the database
-        taxRuleRepository.saveAndFlush(taxRule);
-
-        // Get all the taxRuleList where paymentNumber in DEFAULT_PAYMENT_NUMBER or UPDATED_PAYMENT_NUMBER
-        defaultTaxRuleShouldBeFound("paymentNumber.in=" + DEFAULT_PAYMENT_NUMBER + "," + UPDATED_PAYMENT_NUMBER);
-
-        // Get all the taxRuleList where paymentNumber equals to UPDATED_PAYMENT_NUMBER
-        defaultTaxRuleShouldNotBeFound("paymentNumber.in=" + UPDATED_PAYMENT_NUMBER);
-    }
-
-    @Test
-    @Transactional
-    void getAllTaxRulesByPaymentNumberIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        taxRuleRepository.saveAndFlush(taxRule);
-
-        // Get all the taxRuleList where paymentNumber is not null
-        defaultTaxRuleShouldBeFound("paymentNumber.specified=true");
-
-        // Get all the taxRuleList where paymentNumber is null
-        defaultTaxRuleShouldNotBeFound("paymentNumber.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllTaxRulesByPaymentNumberContainsSomething() throws Exception {
-        // Initialize the database
-        taxRuleRepository.saveAndFlush(taxRule);
-
-        // Get all the taxRuleList where paymentNumber contains DEFAULT_PAYMENT_NUMBER
-        defaultTaxRuleShouldBeFound("paymentNumber.contains=" + DEFAULT_PAYMENT_NUMBER);
-
-        // Get all the taxRuleList where paymentNumber contains UPDATED_PAYMENT_NUMBER
-        defaultTaxRuleShouldNotBeFound("paymentNumber.contains=" + UPDATED_PAYMENT_NUMBER);
-    }
-
-    @Test
-    @Transactional
-    void getAllTaxRulesByPaymentNumberNotContainsSomething() throws Exception {
-        // Initialize the database
-        taxRuleRepository.saveAndFlush(taxRule);
-
-        // Get all the taxRuleList where paymentNumber does not contain DEFAULT_PAYMENT_NUMBER
-        defaultTaxRuleShouldNotBeFound("paymentNumber.doesNotContain=" + DEFAULT_PAYMENT_NUMBER);
-
-        // Get all the taxRuleList where paymentNumber does not contain UPDATED_PAYMENT_NUMBER
-        defaultTaxRuleShouldBeFound("paymentNumber.doesNotContain=" + UPDATED_PAYMENT_NUMBER);
-    }
-
-    @Test
-    @Transactional
-    void getAllTaxRulesByPaymentDateIsEqualToSomething() throws Exception {
-        // Initialize the database
-        taxRuleRepository.saveAndFlush(taxRule);
-
-        // Get all the taxRuleList where paymentDate equals to DEFAULT_PAYMENT_DATE
-        defaultTaxRuleShouldBeFound("paymentDate.equals=" + DEFAULT_PAYMENT_DATE);
-
-        // Get all the taxRuleList where paymentDate equals to UPDATED_PAYMENT_DATE
-        defaultTaxRuleShouldNotBeFound("paymentDate.equals=" + UPDATED_PAYMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllTaxRulesByPaymentDateIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        taxRuleRepository.saveAndFlush(taxRule);
-
-        // Get all the taxRuleList where paymentDate not equals to DEFAULT_PAYMENT_DATE
-        defaultTaxRuleShouldNotBeFound("paymentDate.notEquals=" + DEFAULT_PAYMENT_DATE);
-
-        // Get all the taxRuleList where paymentDate not equals to UPDATED_PAYMENT_DATE
-        defaultTaxRuleShouldBeFound("paymentDate.notEquals=" + UPDATED_PAYMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllTaxRulesByPaymentDateIsInShouldWork() throws Exception {
-        // Initialize the database
-        taxRuleRepository.saveAndFlush(taxRule);
-
-        // Get all the taxRuleList where paymentDate in DEFAULT_PAYMENT_DATE or UPDATED_PAYMENT_DATE
-        defaultTaxRuleShouldBeFound("paymentDate.in=" + DEFAULT_PAYMENT_DATE + "," + UPDATED_PAYMENT_DATE);
-
-        // Get all the taxRuleList where paymentDate equals to UPDATED_PAYMENT_DATE
-        defaultTaxRuleShouldNotBeFound("paymentDate.in=" + UPDATED_PAYMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllTaxRulesByPaymentDateIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        taxRuleRepository.saveAndFlush(taxRule);
-
-        // Get all the taxRuleList where paymentDate is not null
-        defaultTaxRuleShouldBeFound("paymentDate.specified=true");
-
-        // Get all the taxRuleList where paymentDate is null
-        defaultTaxRuleShouldNotBeFound("paymentDate.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllTaxRulesByPaymentDateIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        taxRuleRepository.saveAndFlush(taxRule);
-
-        // Get all the taxRuleList where paymentDate is greater than or equal to DEFAULT_PAYMENT_DATE
-        defaultTaxRuleShouldBeFound("paymentDate.greaterThanOrEqual=" + DEFAULT_PAYMENT_DATE);
-
-        // Get all the taxRuleList where paymentDate is greater than or equal to UPDATED_PAYMENT_DATE
-        defaultTaxRuleShouldNotBeFound("paymentDate.greaterThanOrEqual=" + UPDATED_PAYMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllTaxRulesByPaymentDateIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        taxRuleRepository.saveAndFlush(taxRule);
-
-        // Get all the taxRuleList where paymentDate is less than or equal to DEFAULT_PAYMENT_DATE
-        defaultTaxRuleShouldBeFound("paymentDate.lessThanOrEqual=" + DEFAULT_PAYMENT_DATE);
-
-        // Get all the taxRuleList where paymentDate is less than or equal to SMALLER_PAYMENT_DATE
-        defaultTaxRuleShouldNotBeFound("paymentDate.lessThanOrEqual=" + SMALLER_PAYMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllTaxRulesByPaymentDateIsLessThanSomething() throws Exception {
-        // Initialize the database
-        taxRuleRepository.saveAndFlush(taxRule);
-
-        // Get all the taxRuleList where paymentDate is less than DEFAULT_PAYMENT_DATE
-        defaultTaxRuleShouldNotBeFound("paymentDate.lessThan=" + DEFAULT_PAYMENT_DATE);
-
-        // Get all the taxRuleList where paymentDate is less than UPDATED_PAYMENT_DATE
-        defaultTaxRuleShouldBeFound("paymentDate.lessThan=" + UPDATED_PAYMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllTaxRulesByPaymentDateIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        taxRuleRepository.saveAndFlush(taxRule);
-
-        // Get all the taxRuleList where paymentDate is greater than DEFAULT_PAYMENT_DATE
-        defaultTaxRuleShouldNotBeFound("paymentDate.greaterThan=" + DEFAULT_PAYMENT_DATE);
-
-        // Get all the taxRuleList where paymentDate is greater than SMALLER_PAYMENT_DATE
-        defaultTaxRuleShouldBeFound("paymentDate.greaterThan=" + SMALLER_PAYMENT_DATE);
     }
 
     @Test
@@ -1362,8 +1125,6 @@ class TaxRuleResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(taxRule.getId().intValue())))
-            .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
-            .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].telcoExciseDuty").value(hasItem(DEFAULT_TELCO_EXCISE_DUTY.doubleValue())))
             .andExpect(jsonPath("$.[*].valueAddedTax").value(hasItem(DEFAULT_VALUE_ADDED_TAX.doubleValue())))
             .andExpect(jsonPath("$.[*].withholdingVAT").value(hasItem(DEFAULT_WITHHOLDING_VAT.doubleValue())))
@@ -1422,8 +1183,6 @@ class TaxRuleResourceIT {
         // Disconnect from session so that the updates on updatedTaxRule are not directly saved in db
         em.detach(updatedTaxRule);
         updatedTaxRule
-            .paymentNumber(UPDATED_PAYMENT_NUMBER)
-            .paymentDate(UPDATED_PAYMENT_DATE)
             .telcoExciseDuty(UPDATED_TELCO_EXCISE_DUTY)
             .valueAddedTax(UPDATED_VALUE_ADDED_TAX)
             .withholdingVAT(UPDATED_WITHHOLDING_VAT)
@@ -1446,8 +1205,6 @@ class TaxRuleResourceIT {
         List<TaxRule> taxRuleList = taxRuleRepository.findAll();
         assertThat(taxRuleList).hasSize(databaseSizeBeforeUpdate);
         TaxRule testTaxRule = taxRuleList.get(taxRuleList.size() - 1);
-        assertThat(testTaxRule.getPaymentNumber()).isEqualTo(UPDATED_PAYMENT_NUMBER);
-        assertThat(testTaxRule.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
         assertThat(testTaxRule.getTelcoExciseDuty()).isEqualTo(UPDATED_TELCO_EXCISE_DUTY);
         assertThat(testTaxRule.getValueAddedTax()).isEqualTo(UPDATED_VALUE_ADDED_TAX);
         assertThat(testTaxRule.getWithholdingVAT()).isEqualTo(UPDATED_WITHHOLDING_VAT);
@@ -1547,7 +1304,10 @@ class TaxRuleResourceIT {
         TaxRule partialUpdatedTaxRule = new TaxRule();
         partialUpdatedTaxRule.setId(taxRule.getId());
 
-        partialUpdatedTaxRule.paymentNumber(UPDATED_PAYMENT_NUMBER).paymentDate(UPDATED_PAYMENT_DATE).cateringLevy(UPDATED_CATERING_LEVY);
+        partialUpdatedTaxRule
+            .telcoExciseDuty(UPDATED_TELCO_EXCISE_DUTY)
+            .valueAddedTax(UPDATED_VALUE_ADDED_TAX)
+            .withholdingTaxImportedService(UPDATED_WITHHOLDING_TAX_IMPORTED_SERVICE);
 
         restTaxRuleMockMvc
             .perform(
@@ -1561,16 +1321,14 @@ class TaxRuleResourceIT {
         List<TaxRule> taxRuleList = taxRuleRepository.findAll();
         assertThat(taxRuleList).hasSize(databaseSizeBeforeUpdate);
         TaxRule testTaxRule = taxRuleList.get(taxRuleList.size() - 1);
-        assertThat(testTaxRule.getPaymentNumber()).isEqualTo(UPDATED_PAYMENT_NUMBER);
-        assertThat(testTaxRule.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
-        assertThat(testTaxRule.getTelcoExciseDuty()).isEqualTo(DEFAULT_TELCO_EXCISE_DUTY);
-        assertThat(testTaxRule.getValueAddedTax()).isEqualTo(DEFAULT_VALUE_ADDED_TAX);
+        assertThat(testTaxRule.getTelcoExciseDuty()).isEqualTo(UPDATED_TELCO_EXCISE_DUTY);
+        assertThat(testTaxRule.getValueAddedTax()).isEqualTo(UPDATED_VALUE_ADDED_TAX);
         assertThat(testTaxRule.getWithholdingVAT()).isEqualTo(DEFAULT_WITHHOLDING_VAT);
         assertThat(testTaxRule.getWithholdingTaxConsultancy()).isEqualTo(DEFAULT_WITHHOLDING_TAX_CONSULTANCY);
         assertThat(testTaxRule.getWithholdingTaxRent()).isEqualTo(DEFAULT_WITHHOLDING_TAX_RENT);
-        assertThat(testTaxRule.getCateringLevy()).isEqualTo(UPDATED_CATERING_LEVY);
+        assertThat(testTaxRule.getCateringLevy()).isEqualTo(DEFAULT_CATERING_LEVY);
         assertThat(testTaxRule.getServiceCharge()).isEqualTo(DEFAULT_SERVICE_CHARGE);
-        assertThat(testTaxRule.getWithholdingTaxImportedService()).isEqualTo(DEFAULT_WITHHOLDING_TAX_IMPORTED_SERVICE);
+        assertThat(testTaxRule.getWithholdingTaxImportedService()).isEqualTo(UPDATED_WITHHOLDING_TAX_IMPORTED_SERVICE);
     }
 
     @Test
@@ -1586,8 +1344,6 @@ class TaxRuleResourceIT {
         partialUpdatedTaxRule.setId(taxRule.getId());
 
         partialUpdatedTaxRule
-            .paymentNumber(UPDATED_PAYMENT_NUMBER)
-            .paymentDate(UPDATED_PAYMENT_DATE)
             .telcoExciseDuty(UPDATED_TELCO_EXCISE_DUTY)
             .valueAddedTax(UPDATED_VALUE_ADDED_TAX)
             .withholdingVAT(UPDATED_WITHHOLDING_VAT)
@@ -1609,8 +1365,6 @@ class TaxRuleResourceIT {
         List<TaxRule> taxRuleList = taxRuleRepository.findAll();
         assertThat(taxRuleList).hasSize(databaseSizeBeforeUpdate);
         TaxRule testTaxRule = taxRuleList.get(taxRuleList.size() - 1);
-        assertThat(testTaxRule.getPaymentNumber()).isEqualTo(UPDATED_PAYMENT_NUMBER);
-        assertThat(testTaxRule.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
         assertThat(testTaxRule.getTelcoExciseDuty()).isEqualTo(UPDATED_TELCO_EXCISE_DUTY);
         assertThat(testTaxRule.getValueAddedTax()).isEqualTo(UPDATED_VALUE_ADDED_TAX);
         assertThat(testTaxRule.getWithholdingVAT()).isEqualTo(UPDATED_WITHHOLDING_VAT);
@@ -1733,8 +1487,6 @@ class TaxRuleResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(taxRule.getId().intValue())))
-            .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
-            .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].telcoExciseDuty").value(hasItem(DEFAULT_TELCO_EXCISE_DUTY.doubleValue())))
             .andExpect(jsonPath("$.[*].valueAddedTax").value(hasItem(DEFAULT_VALUE_ADDED_TAX.doubleValue())))
             .andExpect(jsonPath("$.[*].withholdingVAT").value(hasItem(DEFAULT_WITHHOLDING_VAT.doubleValue())))

@@ -71,9 +71,7 @@ class TaxRuleGatlingTest extends Simulation {
             .post("/api/tax-rules")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
-                "paymentNumber":"SAMPLE_TEXT"
-                , "paymentDate":"2020-01-01T00:00:00.000Z"
-                , "telcoExciseDuty":"0"
+                "telcoExciseDuty":"0"
                 , "valueAddedTax":"0"
                 , "withholdingVAT":"0"
                 , "withholdingTaxConsultancy":"0"

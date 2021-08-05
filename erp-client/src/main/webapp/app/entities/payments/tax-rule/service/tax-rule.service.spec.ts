@@ -1,8 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import * as dayjs from 'dayjs';
 
-import { DATE_FORMAT } from 'app/config/input.constants';
 import { ITaxRule, TaxRule } from '../tax-rule.model';
 
 import { TaxRuleService } from './tax-rule.service';
@@ -13,7 +11,6 @@ describe('Service Tests', () => {
     let httpMock: HttpTestingController;
     let elemDefault: ITaxRule;
     let expectedResult: ITaxRule | ITaxRule[] | boolean | null;
-    let currentDate: dayjs.Dayjs;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -22,12 +19,9 @@ describe('Service Tests', () => {
       expectedResult = null;
       service = TestBed.inject(TaxRuleService);
       httpMock = TestBed.inject(HttpTestingController);
-      currentDate = dayjs();
 
       elemDefault = {
         id: 0,
-        paymentNumber: 'AAAAAAA',
-        paymentDate: currentDate,
         telcoExciseDuty: 0,
         valueAddedTax: 0,
         withholdingVAT: 0,
@@ -41,12 +35,7 @@ describe('Service Tests', () => {
 
     describe('Service methods', () => {
       it('should find an element', () => {
-        const returnedFromService = Object.assign(
-          {
-            paymentDate: currentDate.format(DATE_FORMAT),
-          },
-          elemDefault
-        );
+        const returnedFromService = Object.assign({}, elemDefault);
 
         service.find(123).subscribe(resp => (expectedResult = resp.body));
 
@@ -59,17 +48,11 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 0,
-            paymentDate: currentDate.format(DATE_FORMAT),
           },
           elemDefault
         );
 
-        const expected = Object.assign(
-          {
-            paymentDate: currentDate,
-          },
-          returnedFromService
-        );
+        const expected = Object.assign({}, returnedFromService);
 
         service.create(new TaxRule()).subscribe(resp => (expectedResult = resp.body));
 
@@ -82,8 +65,6 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 1,
-            paymentNumber: 'BBBBBB',
-            paymentDate: currentDate.format(DATE_FORMAT),
             telcoExciseDuty: 1,
             valueAddedTax: 1,
             withholdingVAT: 1,
@@ -96,12 +77,7 @@ describe('Service Tests', () => {
           elemDefault
         );
 
-        const expected = Object.assign(
-          {
-            paymentDate: currentDate,
-          },
-          returnedFromService
-        );
+        const expected = Object.assign({}, returnedFromService);
 
         service.update(expected).subscribe(resp => (expectedResult = resp.body));
 
@@ -113,11 +89,9 @@ describe('Service Tests', () => {
       it('should partial update a TaxRule', () => {
         const patchObject = Object.assign(
           {
-            paymentDate: currentDate.format(DATE_FORMAT),
             valueAddedTax: 1,
-            withholdingVAT: 1,
-            cateringLevy: 1,
-            serviceCharge: 1,
+            withholdingTaxConsultancy: 1,
+            withholdingTaxRent: 1,
             withholdingTaxImportedService: 1,
           },
           new TaxRule()
@@ -125,12 +99,7 @@ describe('Service Tests', () => {
 
         const returnedFromService = Object.assign(patchObject, elemDefault);
 
-        const expected = Object.assign(
-          {
-            paymentDate: currentDate,
-          },
-          returnedFromService
-        );
+        const expected = Object.assign({}, returnedFromService);
 
         service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
 
@@ -143,8 +112,6 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 1,
-            paymentNumber: 'BBBBBB',
-            paymentDate: currentDate.format(DATE_FORMAT),
             telcoExciseDuty: 1,
             valueAddedTax: 1,
             withholdingVAT: 1,
@@ -157,12 +124,7 @@ describe('Service Tests', () => {
           elemDefault
         );
 
-        const expected = Object.assign(
-          {
-            paymentDate: currentDate,
-          },
-          returnedFromService
-        );
+        const expected = Object.assign({}, returnedFromService);
 
         service.query().subscribe(resp => (expectedResult = resp.body));
 
@@ -209,7 +171,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique TaxRule to an array', () => {
-          const taxRuleArray: ITaxRule[] = [{ id: 123 }, { id: 456 }, { id: 68979 }];
+          const taxRuleArray: ITaxRule[] = [{ id: 123 }, { id: 456 }, { id: 97976 }];
           const taxRuleCollection: ITaxRule[] = [{ id: 123 }];
           expectedResult = service.addTaxRuleToCollectionIfMissing(taxRuleCollection, ...taxRuleArray);
           expect(expectedResult).toHaveLength(3);
