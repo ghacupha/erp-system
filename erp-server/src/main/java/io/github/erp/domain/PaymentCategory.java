@@ -44,6 +44,14 @@ public class PaymentCategory implements Serializable {
     @JsonIgnoreProperties(value = { "payment", "paymentCategory" }, allowSetters = true)
     private Set<PaymentCalculation> paymentCalculations = new HashSet<>();
 
+    @OneToMany(mappedBy = "paymentCategory")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = { "ownedInvoices", "dealers", "paymentCategory", "taxRule", "paymentCalculation", "paymentRequisition" },
+        allowSetters = true
+    )
+    private Set<Payment> payments = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -126,6 +134,37 @@ public class PaymentCategory implements Serializable {
             paymentCalculations.forEach(i -> i.setPaymentCategory(this));
         }
         this.paymentCalculations = paymentCalculations;
+    }
+
+    public Set<Payment> getPayments() {
+        return this.payments;
+    }
+
+    public PaymentCategory payments(Set<Payment> payments) {
+        this.setPayments(payments);
+        return this;
+    }
+
+    public PaymentCategory addPayment(Payment payment) {
+        this.payments.add(payment);
+        payment.setPaymentCategory(this);
+        return this;
+    }
+
+    public PaymentCategory removePayment(Payment payment) {
+        this.payments.remove(payment);
+        payment.setPaymentCategory(null);
+        return this;
+    }
+
+    public void setPayments(Set<Payment> payments) {
+        if (this.payments != null) {
+            this.payments.forEach(i -> i.setPaymentCategory(null));
+        }
+        if (payments != null) {
+            payments.forEach(i -> i.setPaymentCategory(this));
+        }
+        this.payments = payments;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

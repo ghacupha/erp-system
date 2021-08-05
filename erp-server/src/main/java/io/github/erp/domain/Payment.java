@@ -61,6 +61,10 @@ public class Payment implements Serializable {
     @JsonIgnoreProperties(value = { "payments", "paymentRequisitions" }, allowSetters = true)
     private Set<Dealer> dealers = new HashSet<>();
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "paymentCalculations", "payments" }, allowSetters = true)
+    private PaymentCategory paymentCategory;
+
     @JsonIgnoreProperties(value = { "payment" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
@@ -228,6 +232,19 @@ public class Payment implements Serializable {
             dealers.forEach(i -> i.addPayment(this));
         }
         this.dealers = dealers;
+    }
+
+    public PaymentCategory getPaymentCategory() {
+        return this.paymentCategory;
+    }
+
+    public Payment paymentCategory(PaymentCategory paymentCategory) {
+        this.setPaymentCategory(paymentCategory);
+        return this;
+    }
+
+    public void setPaymentCategory(PaymentCategory paymentCategory) {
+        this.paymentCategory = paymentCategory;
     }
 
     public TaxRule getTaxRule() {

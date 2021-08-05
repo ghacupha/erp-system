@@ -32,6 +32,9 @@
             <column name="conversion_rate" type="double">
                 <constraints nullable="false" />
             </column>
+            <column name="payment_category_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <column name="tax_rule_id" type="bigint">
                 <constraints nullable="true" unique="true" uniqueConstraintName="ux_payment__tax_rule_id" />
             </column>

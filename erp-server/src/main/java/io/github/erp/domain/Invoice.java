@@ -48,7 +48,7 @@ public class Invoice implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties(
-        value = { "ownedInvoices", "dealers", "taxRule", "paymentCalculation", "paymentRequisition" },
+        value = { "ownedInvoices", "dealers", "paymentCategory", "taxRule", "paymentCalculation", "paymentRequisition" },
         allowSetters = true
     )
     private Payment payment;

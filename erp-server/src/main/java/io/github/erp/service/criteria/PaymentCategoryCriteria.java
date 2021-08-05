@@ -52,6 +52,8 @@ public class PaymentCategoryCriteria implements Serializable, Criteria {
 
     private LongFilter paymentCalculationId;
 
+    private LongFilter paymentId;
+
     public PaymentCategoryCriteria() {}
 
     public PaymentCategoryCriteria(PaymentCategoryCriteria other) {
@@ -60,6 +62,7 @@ public class PaymentCategoryCriteria implements Serializable, Criteria {
         this.categoryDescription = other.categoryDescription == null ? null : other.categoryDescription.copy();
         this.categoryType = other.categoryType == null ? null : other.categoryType.copy();
         this.paymentCalculationId = other.paymentCalculationId == null ? null : other.paymentCalculationId.copy();
+        this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
     }
 
     @Override
@@ -142,6 +145,21 @@ public class PaymentCategoryCriteria implements Serializable, Criteria {
         this.paymentCalculationId = paymentCalculationId;
     }
 
+    public LongFilter getPaymentId() {
+        return paymentId;
+    }
+
+    public LongFilter paymentId() {
+        if (paymentId == null) {
+            paymentId = new LongFilter();
+        }
+        return paymentId;
+    }
+
+    public void setPaymentId(LongFilter paymentId) {
+        this.paymentId = paymentId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -156,13 +174,14 @@ public class PaymentCategoryCriteria implements Serializable, Criteria {
             Objects.equals(categoryName, that.categoryName) &&
             Objects.equals(categoryDescription, that.categoryDescription) &&
             Objects.equals(categoryType, that.categoryType) &&
-            Objects.equals(paymentCalculationId, that.paymentCalculationId)
+            Objects.equals(paymentCalculationId, that.paymentCalculationId) &&
+            Objects.equals(paymentId, that.paymentId)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, categoryName, categoryDescription, categoryType, paymentCalculationId);
+        return Objects.hash(id, categoryName, categoryDescription, categoryType, paymentCalculationId, paymentId);
     }
 
     // prettier-ignore
@@ -174,6 +193,7 @@ public class PaymentCategoryCriteria implements Serializable, Criteria {
             (categoryDescription != null ? "categoryDescription=" + categoryDescription + ", " : "") +
             (categoryType != null ? "categoryType=" + categoryType + ", " : "") +
             (paymentCalculationId != null ? "paymentCalculationId=" + paymentCalculationId + ", " : "") +
+            (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
             "}";
     }
 }
