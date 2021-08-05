@@ -3,15 +3,14 @@
   "clientRootFolder": "payments",
   "relationships": [
     {
-      "relationshipName": "payment",
-      "otherEntityName": "payment",
-      "relationshipType": "one-to-one",
-      "ownerSide": false,
+      "relationshipName": "paymentCalculation",
+      "otherEntityName": "paymentCalculation",
+      "relationshipType": "one-to-many",
       "otherEntityRelationshipName": "paymentCategory"
     },
     {
-      "relationshipName": "paymentCalculation",
-      "otherEntityName": "paymentCalculation",
+      "relationshipName": "payment",
+      "otherEntityName": "payment",
       "relationshipType": "one-to-many",
       "otherEntityRelationshipName": "paymentCategory"
     }
