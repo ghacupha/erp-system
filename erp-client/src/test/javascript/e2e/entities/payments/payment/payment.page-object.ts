@@ -37,8 +37,8 @@ export class PaymentUpdatePage {
   currencySelect = element(by.id('field_currency'));
   conversionRateInput = element(by.id('field_conversionRate'));
 
-  taxRuleSelect = element(by.id('field_taxRule'));
   paymentCategorySelect = element(by.id('field_paymentCategory'));
+  taxRuleSelect = element(by.id('field_taxRule'));
   paymentCalculationSelect = element(by.id('field_paymentCalculation'));
   paymentRequisitionSelect = element(by.id('field_paymentRequisition'));
 
@@ -106,22 +106,6 @@ export class PaymentUpdatePage {
     return await this.conversionRateInput.getAttribute('value');
   }
 
-  async taxRuleSelectLastOption(): Promise<void> {
-    await this.taxRuleSelect.all(by.tagName('option')).last().click();
-  }
-
-  async taxRuleSelectOption(option: string): Promise<void> {
-    await this.taxRuleSelect.sendKeys(option);
-  }
-
-  getTaxRuleSelect(): ElementFinder {
-    return this.taxRuleSelect;
-  }
-
-  async getTaxRuleSelectedOption(): Promise<string> {
-    return await this.taxRuleSelect.element(by.css('option:checked')).getText();
-  }
-
   async paymentCategorySelectLastOption(): Promise<void> {
     await this.paymentCategorySelect.all(by.tagName('option')).last().click();
   }
@@ -136,6 +120,22 @@ export class PaymentUpdatePage {
 
   async getPaymentCategorySelectedOption(): Promise<string> {
     return await this.paymentCategorySelect.element(by.css('option:checked')).getText();
+  }
+
+  async taxRuleSelectLastOption(): Promise<void> {
+    await this.taxRuleSelect.all(by.tagName('option')).last().click();
+  }
+
+  async taxRuleSelectOption(option: string): Promise<void> {
+    await this.taxRuleSelect.sendKeys(option);
+  }
+
+  getTaxRuleSelect(): ElementFinder {
+    return this.taxRuleSelect;
+  }
+
+  async getTaxRuleSelectedOption(): Promise<string> {
+    return await this.taxRuleSelect.element(by.css('option:checked')).getText();
   }
 
   async paymentCalculationSelectLastOption(): Promise<void> {

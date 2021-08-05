@@ -1,11 +1,7 @@
-import { browser, ExpectedConditions as ec /* , promise */ } from 'protractor';
+import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../../page-objects/jhi-page-objects';
 
-import {
-  PaymentComponentsPage,
-  /* PaymentDeleteDialog, */
-  PaymentUpdatePage,
-} from './payment.page-object';
+import { PaymentComponentsPage, PaymentDeleteDialog, PaymentUpdatePage } from './payment.page-object';
 
 const expect = chai.expect;
 
@@ -14,7 +10,7 @@ describe('Payment e2e test', () => {
   let signInPage: SignInPage;
   let paymentComponentsPage: PaymentComponentsPage;
   let paymentUpdatePage: PaymentUpdatePage;
-  /* let paymentDeleteDialog: PaymentDeleteDialog; */
+  let paymentDeleteDialog: PaymentDeleteDialog;
   const username = process.env.E2E_USERNAME ?? 'admin';
   const password = process.env.E2E_PASSWORD ?? 'admin';
 
@@ -41,42 +37,41 @@ describe('Payment e2e test', () => {
     await paymentUpdatePage.cancel();
   });
 
-  /* it('should create and save Payments', async () => {
-        const nbButtonsBeforeCreate = await paymentComponentsPage.countDeleteButtons();
+  it('should create and save Payments', async () => {
+    const nbButtonsBeforeCreate = await paymentComponentsPage.countDeleteButtons();
 
-        await paymentComponentsPage.clickOnCreateButton();
+    await paymentComponentsPage.clickOnCreateButton();
 
-        await promise.all([
-            paymentUpdatePage.setPaymentNumberInput('paymentNumber'),
-            paymentUpdatePage.setPaymentDateInput('2000-12-31'),
-            paymentUpdatePage.setPaymentAmountInput('5'),
-            paymentUpdatePage.setDescriptionInput('description'),
-            paymentUpdatePage.currencySelectLastOption(),
-            paymentUpdatePage.setConversionRateInput('5'),
-            paymentUpdatePage.taxRuleSelectLastOption(),
-            paymentUpdatePage.paymentCategorySelectLastOption(),
-            paymentUpdatePage.paymentCalculationSelectLastOption(),
-            paymentUpdatePage.paymentRequisitionSelectLastOption(),
-        ]);
+    await promise.all([
+      paymentUpdatePage.setPaymentNumberInput('paymentNumber'),
+      paymentUpdatePage.setPaymentDateInput('2000-12-31'),
+      paymentUpdatePage.setPaymentAmountInput('5'),
+      paymentUpdatePage.setDescriptionInput('description'),
+      paymentUpdatePage.currencySelectLastOption(),
+      paymentUpdatePage.setConversionRateInput('5'),
+      paymentUpdatePage.paymentCategorySelectLastOption(),
+      paymentUpdatePage.taxRuleSelectLastOption(),
+      paymentUpdatePage.paymentCalculationSelectLastOption(),
+      paymentUpdatePage.paymentRequisitionSelectLastOption(),
+    ]);
 
-        await paymentUpdatePage.save();
-        expect(await paymentUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
+    await paymentUpdatePage.save();
+    expect(await paymentUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
-        expect(await paymentComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
-    }); */
+    expect(await paymentComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
+  });
 
-  /* it('should delete last Payment', async () => {
-        const nbButtonsBeforeDelete = await paymentComponentsPage.countDeleteButtons();
-        await paymentComponentsPage.clickOnLastDeleteButton();
+  it('should delete last Payment', async () => {
+    const nbButtonsBeforeDelete = await paymentComponentsPage.countDeleteButtons();
+    await paymentComponentsPage.clickOnLastDeleteButton();
 
-        paymentDeleteDialog = new PaymentDeleteDialog();
-        expect(await paymentDeleteDialog.getDialogTitle())
-            .to.eq('Are you sure you want to delete this Payment?');
-        await paymentDeleteDialog.clickOnConfirmButton();
-        await browser.wait(ec.visibilityOf(paymentComponentsPage.title), 5000);
+    paymentDeleteDialog = new PaymentDeleteDialog();
+    expect(await paymentDeleteDialog.getDialogTitle()).to.eq('Are you sure you want to delete this Payment?');
+    await paymentDeleteDialog.clickOnConfirmButton();
+    await browser.wait(ec.visibilityOf(paymentComponentsPage.title), 5000);
 
-        expect(await paymentComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-    }); */
+    expect(await paymentComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
+  });
 
   after(async () => {
     await navBarPage.autoSignOut();
