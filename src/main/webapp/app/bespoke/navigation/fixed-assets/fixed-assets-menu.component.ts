@@ -1,18 +1,20 @@
 import {Component, OnInit} from "@angular/core";
-import {Account} from "../../core/auth/account.model";
-import {LoginService} from "../../login/login.service";
-import {AccountService} from "../../core/auth/account.service";
-import {ProfileService} from "../../layouts/profiles/profile.service";
+import {Account} from "../../../core/auth/account.model";
+import {LoginService} from "../../../login/login.service";
+import {AccountService} from "../../../core/auth/account.service";
+import {ProfileService} from "../../../layouts/profiles/profile.service";
 import {Router} from "@angular/router";
-import {VERSION} from "../../app.constants";
+import {BespokeNavigationService} from "../service/bespoke-navigation.service";
+import {VERSION} from "../../../app.constants";
 
 @Component({
-  selector: "gha-payments-menu",
-  templateUrl: './payment-menu.component.html'
+  selector: 'gha-fixed-assets-menu',
+  templateUrl: "./fixed-assets-menu.component.html"
 })
-export class PaymentMenuComponent implements OnInit {
+export class FixedAssetsMenuComponent implements OnInit {
   inProduction?: boolean;
-  isNavbarCollapsed = false;
+  // hidden by default
+  isNavbarCollapsed = true;
   openAPIEnabled?: boolean;
   version = '';
   account: Account | null = null;
@@ -21,11 +23,16 @@ export class PaymentMenuComponent implements OnInit {
     private loginService: LoginService,
     private accountService: AccountService,
     private profileService: ProfileService,
-    private router: Router
+    private router: Router,
+    private menuService: BespokeNavigationService
   ) {
     if (VERSION) {
       this.version = VERSION.toLowerCase().startsWith('v') ? VERSION : 'v' + VERSION;
     }
+
+    this.menuService.fixedAssetsMenuCollapseState().subscribe(state => {
+      this.isNavbarCollapsed = state;
+    });
   }
 
   ngOnInit(): void {
@@ -37,7 +44,8 @@ export class PaymentMenuComponent implements OnInit {
   }
 
   collapseNavbar(): void {
-    this.isNavbarCollapsed = true;
+    //this.isNavbarCollapsed = true;
+    this.menuService.collapseFixedAssetsMenu()
   }
 
   login(): void {
@@ -50,7 +58,7 @@ export class PaymentMenuComponent implements OnInit {
     this.router.navigate(['']);
   }
 
-  toggleNavbar(): void {
-    this.isNavbarCollapsed = !this.isNavbarCollapsed;
-  }
+  // toggleNavbar(): void {
+  //   this.isNavbarCollapsed = !this.isNavbarCollapsed;
+  // }
 }
