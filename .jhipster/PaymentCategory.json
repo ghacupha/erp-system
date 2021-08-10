@@ -1,0 +1,46 @@
+{
+  "fluentMethods": true,
+  "clientRootFolder": "payments",
+  "relationships": [
+    {
+      "relationshipName": "paymentCalculation",
+      "otherEntityName": "paymentCalculation",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "paymentCategory"
+    },
+    {
+      "relationshipName": "payment",
+      "otherEntityName": "payment",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "paymentCategory"
+    }
+  ],
+  "fields": [
+    {
+      "fieldName": "categoryName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "categoryDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "categoryType",
+      "fieldType": "CategoryTypes",
+      "fieldValues": "CATEGORY0,CATEGORY1,CATEGORY2,CATEGORY3,CATEGORY4,CATEGORY5,CATEGORY6,CATEGORY7,CATEGORY8,CATEGORY9,CATEGORY10,CATEGORY11,CATEGORY12,CATEGORY13,CATEGORY14,CATEGORY15,CATEGORY16,CATEGORY17",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "changelogDate": "20210723153046",
+  "dto": "mapstruct",
+  "searchEngine": "elasticsearch",
+  "service": "serviceImpl",
+  "entityTableName": "payment_category",
+  "databaseType": "sql",
+  "readOnly": false,
+  "jpaMetamodelFiltering": true,
+  "pagination": "pagination",
+  "microserviceName": "erpService",
+  "name": "PaymentCategory"
+}
