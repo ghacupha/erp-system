@@ -1,0 +1,92 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="gha-message-token-heading" data-cy="MessageTokenCreateUpdateHeading">Create or edit a Message Token</h2>
+
+      <div>
+        <gha-alert-error></gha-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_timeSent">Time Sent</label>
+          <input type="number" class="form-control" name="timeSent" id="field_timeSent" data-cy="timeSent" formControlName="timeSent" />
+          <div *ngIf="editForm.get('timeSent')!.invalid && (editForm.get('timeSent')!.dirty || editForm.get('timeSent')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('timeSent')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('timeSent')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_tokenValue">Token Value</label>
+          <input
+            type="text"
+            class="form-control"
+            name="tokenValue"
+            id="field_tokenValue"
+            data-cy="tokenValue"
+            formControlName="tokenValue"
+          />
+          <div *ngIf="editForm.get('tokenValue')!.invalid && (editForm.get('tokenValue')!.dirty || editForm.get('tokenValue')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('tokenValue')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_received">Received</label>
+          <input type="checkbox" class="form-check" name="received" id="field_received" data-cy="received" formControlName="received" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_actioned">Actioned</label>
+          <input type="checkbox" class="form-check" name="actioned" id="field_actioned" data-cy="actioned" formControlName="actioned" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_contentFullyEnqueued">Content Fully Enqueued</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="contentFullyEnqueued"
+            id="field_contentFullyEnqueued"
+            data-cy="contentFullyEnqueued"
+            formControlName="contentFullyEnqueued"
+          />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

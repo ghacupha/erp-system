@@ -1,0 +1,52 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="paymentCalculation">
+      <h2 data-cy="paymentCalculationDetailsHeading"><span>Payment Calculation</span></h2>
+
+      <hr />
+
+      <gha-alert-error></gha-alert-error>
+
+      <gha-alert></gha-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ paymentCalculation.id }}</span>
+        </dd>
+        <dt><span>Payment Expense</span></dt>
+        <dd>
+          <span>{{ paymentCalculation.paymentExpense }}</span>
+        </dd>
+        <dt><span>Withholding VAT</span></dt>
+        <dd>
+          <span>{{ paymentCalculation.withholdingVAT }}</span>
+        </dd>
+        <dt><span>Withholding Tax</span></dt>
+        <dd>
+          <span>{{ paymentCalculation.withholdingTax }}</span>
+        </dd>
+        <dt><span>Payment Amount</span></dt>
+        <dd>
+          <span>{{ paymentCalculation.paymentAmount }}</span>
+        </dd>
+        <dt><span>Payment Category</span></dt>
+        <dd>
+          <div *ngIf="paymentCalculation.paymentCategory">
+            <a [routerLink]="['/payment-category', paymentCalculation.paymentCategory?.id, 'view']">{{
+              paymentCalculation.paymentCategory?.id
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/payment-calculation', paymentCalculation.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>
