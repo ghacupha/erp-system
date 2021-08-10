@@ -138,6 +138,7 @@
     "jest-sonar-reporter": "2.0.0",
     "lint-staged": "11.0.0",
     "mocha": "8.2.1",
+    "ngx-logger": "^4.3.3",
     "prettier": "2.3.1",
     "prettier-plugin-java": "1.2.0",
     "prettier-plugin-packagejson": "2.2.11",

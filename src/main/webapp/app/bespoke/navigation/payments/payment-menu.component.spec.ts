@@ -1,14 +1,14 @@
-import {NavbarComponent} from "../../layouts/navbar/navbar.component";
+import {NavbarComponent} from "../../../layouts/navbar/navbar.component";
 import {ComponentFixture, TestBed, waitForAsync} from "@angular/core/testing";
-import {AccountService} from "../../core/auth/account.service";
-import {ProfileService} from "../../layouts/profiles/profile.service";
-import {Account} from "../../core/auth/account.model";
+import {AccountService} from "../../../core/auth/account.service";
+import {ProfileService} from "../../../layouts/profiles/profile.service";
+import {Account} from "../../../core/auth/account.model";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {NgxWebstorageModule} from "ngx-webstorage";
 import {Router} from "@angular/router";
-import {LoginService} from "../../login/login.service";
+import {LoginService} from "../../../login/login.service";
 import {of} from "rxjs";
-import {ProfileInfo} from "../../layouts/profiles/profile-info.model";
+import {ProfileInfo} from "../../../layouts/profiles/profile-info.model";
 
 describe('Component Tests', () => {
   describe('Navbar Component', () => {
