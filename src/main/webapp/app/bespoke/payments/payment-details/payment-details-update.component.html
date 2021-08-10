@@ -1,0 +1,219 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="gha-payment-heading" data-cy="PaymentCreateUpdateHeading">Create or edit a Payment</h2>
+
+      <div>
+        <gha-alert-error></gha-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_paymentNumber">Payment Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="paymentNumber"
+            id="field_paymentNumber"
+            data-cy="paymentNumber"
+            formControlName="paymentNumber"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_paymentDate">Payment Date</label>
+          <div class="input-group">
+            <input
+              id="field_paymentDate"
+              data-cy="paymentDate"
+              type="text"
+              class="form-control"
+              name="paymentDate"
+              ngbDatepicker
+              #paymentDateDp="ngbDatepicker"
+              formControlName="paymentDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="paymentDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_paymentAmount">Payment Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="paymentAmount"
+            id="field_paymentAmount"
+            data-cy="paymentAmount"
+            formControlName="paymentAmount"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_currency">Currency</label>
+          <select class="form-control" name="currency" formControlName="currency" id="field_currency" data-cy="currency">
+            <option [ngValue]="null"></option>
+            <option value="KES">KES</option>
+            <option value="USD">USD</option>
+            <option value="GBP">GBP</option>
+            <option value="EUR">EUR</option>
+            <option value="INR">INR</option>
+            <option value="ZAR">ZAR</option>
+            <option value="AED">AED</option>
+            <option value="CNY">CNY</option>
+            <option value="CHF">CHF</option>
+            <option value="UGX">UGX</option>
+            <option value="TZS">TZS</option>
+            <option value="JPY">JPY</option>
+            <option value="CAD">CAD</option>
+          </select>
+          <div *ngIf="editForm.get('currency')!.invalid && (editForm.get('currency')!.dirty || editForm.get('currency')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('currency')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_conversionRate">Conversion Rate</label>
+          <input
+            type="number"
+            class="form-control"
+            name="conversionRate"
+            id="field_conversionRate"
+            data-cy="conversionRate"
+            formControlName="conversionRate"
+          />
+          <div
+            *ngIf="
+              editForm.get('conversionRate')!.invalid && (editForm.get('conversionRate')!.dirty || editForm.get('conversionRate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('conversionRate')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('conversionRate')?.errors?.min">
+              This field should be at least 1.00.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('conversionRate')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_paymentCategory">Payment Category</label>
+          <select
+            class="form-control"
+            id="field_paymentCategory"
+            data-cy="paymentCategory"
+            name="paymentCategory"
+            formControlName="paymentCategory"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                paymentCategoryOption.id === editForm.get('paymentCategory')!.value?.id
+                  ? editForm.get('paymentCategory')!.value
+                  : paymentCategoryOption
+              "
+              *ngFor="let paymentCategoryOption of paymentCategoriesSharedCollection; trackBy: trackPaymentCategoryById"
+            >
+              {{ paymentCategoryOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_taxRule">Tax Rule</label>
+          <select class="form-control" id="field_taxRule" data-cy="taxRule" name="taxRule" formControlName="taxRule">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="taxRuleOption.id === editForm.get('taxRule')!.value?.id ? editForm.get('taxRule')!.value : taxRuleOption"
+              *ngFor="let taxRuleOption of taxRulesCollection; trackBy: trackTaxRuleById"
+            >
+              {{ taxRuleOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_paymentCalculation">Payment Calculation</label>
+          <select
+            class="form-control"
+            id="field_paymentCalculation"
+            data-cy="paymentCalculation"
+            name="paymentCalculation"
+            formControlName="paymentCalculation"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                paymentCalculationOption.id === editForm.get('paymentCalculation')!.value?.id
+                  ? editForm.get('paymentCalculation')!.value
+                  : paymentCalculationOption
+              "
+              *ngFor="let paymentCalculationOption of paymentCalculationsCollection; trackBy: trackPaymentCalculationById"
+            >
+              {{ paymentCalculationOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_paymentRequisition">Payment Requisition</label>
+          <select
+            class="form-control"
+            id="field_paymentRequisition"
+            data-cy="paymentRequisition"
+            name="paymentRequisition"
+            formControlName="paymentRequisition"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                paymentRequisitionOption.id === editForm.get('paymentRequisition')!.value?.id
+                  ? editForm.get('paymentRequisition')!.value
+                  : paymentRequisitionOption
+              "
+              *ngFor="let paymentRequisitionOption of paymentRequisitionsCollection; trackBy: trackPaymentRequisitionById"
+            >
+              {{ paymentRequisitionOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
