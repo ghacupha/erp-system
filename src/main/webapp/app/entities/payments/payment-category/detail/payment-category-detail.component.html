@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="paymentCategory">
+      <h2 data-cy="paymentCategoryDetailsHeading"><span>Payment Category</span></h2>
+
+      <hr />
+
+      <gha-alert-error></gha-alert-error>
+
+      <gha-alert></gha-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ paymentCategory.id }}</span>
+        </dd>
+        <dt><span>Category Name</span></dt>
+        <dd>
+          <span>{{ paymentCategory.categoryName }}</span>
+        </dd>
+        <dt><span>Category Description</span></dt>
+        <dd>
+          <span>{{ paymentCategory.categoryDescription }}</span>
+        </dd>
+        <dt><span>Category Type</span></dt>
+        <dd>
+          <span>{{ paymentCategory.categoryType }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/payment-category', paymentCategory.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>
