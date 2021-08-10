@@ -1,0 +1,38 @@
+{
+  "fluentMethods": true,
+  "clientRootFolder": "payments",
+  "relationships": [],
+  "fields": [
+    {
+      "fieldName": "taxName",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "taxDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "taxPercentage",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "taxReferenceType",
+      "fieldType": "taxReferenceTypes",
+      "fieldValues": "TELCO_EXCISE_DUTY,VALUE_ADDED_TAX,WITHHOLDING_VAT,WITHHOLDING_TAX_ON_CONSULTANCY,WITHHOLDING_TAX_ON_RENT,CATERING_LEVY,SERVICE_CHARGE,WITHHOLDING_TAX_ON_IMPORTED_SERVICE",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "changelogDate": "20210721174739",
+  "dto": "mapstruct",
+  "searchEngine": "elasticsearch",
+  "service": "serviceImpl",
+  "entityTableName": "tax_reference",
+  "databaseType": "sql",
+  "readOnly": false,
+  "jpaMetamodelFiltering": true,
+  "pagination": "pagination",
+  "microserviceName": "erpService",
+  "name": "TaxReference"
+}
