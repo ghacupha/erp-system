@@ -2,45 +2,54 @@
 version: '3.8'
 services:
   erpsystem-app:
-    image: erpsystem
+    image: ghacupha/erp-system:0.0.1-SNAPSHOT
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://erpsystem-postgresql:5432/erpSystem
-      - SPRING_LIQUIBASE_URL=jdbc:postgresql://erpsystem-postgresql:5432/erpSystem
+      #- SPRING_DATASOURCE_URL=jdbc:postgresql://erpsystem-postgresql:5432/erpSystem
+      - SPRING_DATASOURCE_URL=${LOCAL_PG_SERVER}/erpSystem
+      #- SPRING_LIQUIBASE_URL=jdbc:postgresql://erpsystem-postgresql:5432/erpSystem
+      - SPRING_LIQUIBASE_URL=${LOCAL_PG_SERVER}/erpSystem
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
-      - SPRING_ELASTICSEARCH_REST_URIS=http://erpsystem-elasticsearch:9200
+      # - SPRING_ELASTICSEARCH_REST_URIS=http://erpsystem-elasticsearch:9200
+      - SPRING_ELASTICSEARCH_REST_URIS=${SPRING_DATA_JEST_URI}
+      - LOCAL_PG_SERVER = ${LOCAL_PG_SERVER}
+      - PG_DATABASE_PROD_USER=${PG_DATABASE_PROD_USER}
+      - PG_DATABASE_PROD_PASSWORD=${PG_DATABASE_PROD_PASSWORD}
+      - SPRING_DATA_JEST_URI=${SPRING_DATA_JEST_URI}
+      - UPLOADS_SIZE=${UPLOADS_SIZE}
+      - LARGE_UPLOADS_SIZE=${LARGE_UPLOADS_SIZE}
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:8975:8975
-  erpsystem-postgresql:
-    image: postgres:13.3
-    # volumes:
-    #   - ~/volumes/jhipster/erpSystem/postgresql/:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=erpSystem
-      - POSTGRES_PASSWORD=
-      - POSTGRES_HOST_AUTH_METHOD=trust
-    # If you want to expose these ports outside your dev PC,
-    # remove the "127.0.0.1:" prefix
-    ports:
-      - 127.0.0.1:5432:5432
-  erpsystem-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
-    # volumes:
-    #   - ~/volumes/jhipster/erpSystem/elasticsearch/:/usr/share/elasticsearch/data/
-    # If you want to expose these ports outside your dev PC,
-    # remove the "127.0.0.1:" prefix
-    ports:
-      - 127.0.0.1:9200:9200
-      - 127.0.0.1:9300:9300
-    environment:
-      - 'ES_JAVA_OPTS=-Xms1024m -Xmx1024m'
-      - 'discovery.type=single-node'
+  #  erpsystem-postgresql:
+  #    image: postgres:13.3
+  #    # volumes:
+  #    #   - ~/volumes/jhipster/erpSystem/postgresql/:/var/lib/postgresql/data/
+  #    environment:
+  #      - POSTGRES_USER=erpSystem
+  #      - POSTGRES_PASSWORD=
+  #      - POSTGRES_HOST_AUTH_METHOD=trust
+  #    # If you want to expose these ports outside your dev PC,
+  #    # remove the "127.0.0.1:" prefix
+  #    ports:
+  #      - 127.0.0.1:5432:5432
+  #  erpsystem-elasticsearch:
+  #    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
+  #    # volumes:
+  #    #   - ~/volumes/jhipster/erpSystem/elasticsearch/:/usr/share/elasticsearch/data/
+  #    # If you want to expose these ports outside your dev PC,
+  #    # remove the "127.0.0.1:" prefix
+  #    ports:
+  #      - 127.0.0.1:9200:9200
+  #      - 127.0.0.1:9300:9300
+  #    environment:
+  #      - 'ES_JAVA_OPTS=-Xms1024m -Xmx1024m'
+  #      - 'discovery.type=single-node'
   jhipster-registry:
     image: jhipster/jhipster-registry:v6.8.0
     volumes:
@@ -52,8 +61,10 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=dev,api-docs
-      - SPRING_SECURITY_USER_PASSWORD=admin
-      - JHIPSTER_REGISTRY_PASSWORD=admin
+      #- SPRING_SECURITY_USER_PASSWORD=admin
+      - SPRING_SECURITY_USER_PASSWORD=${SPRING_SECURITY_USER_PASSWORD}
+      #- JHIPSTER_REGISTRY_PASSWORD=admin
+      - JHIPSTER_REGISTRY_PASSWORD=${JHIPSTER_REGISTRY_PASSWORD}
       - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
       - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config/localhost-config/
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
