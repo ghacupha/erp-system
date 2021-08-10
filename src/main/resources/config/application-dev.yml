@@ -53,9 +53,9 @@ spring:
       # it can be set to any label, branch or commit of the configuration source Git repository
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/erpSystem
-    username: erpSystem
-    password:
+    url: ${LOCAL_PG_SERVER}/erpSystem
+    username: ${PG_DATABASE_DEV_USER}
+    password: ${PG_DATABASE_DEV_PASSWORD}
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -64,7 +64,7 @@ spring:
   data:
   elasticsearch:
     rest:
-      uris: http://localhost:9200
+      uris: ${SPRING_DATA_JEST_URI}
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
