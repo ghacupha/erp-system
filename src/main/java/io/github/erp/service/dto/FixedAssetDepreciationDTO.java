@@ -1,6 +1,8 @@
 package io.github.erp.service.dto;
 
 import io.github.erp.domain.enumeration.DepreciationRegime;
+import io.github.erp.internal.framework.batch.HasIndex;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -9,7 +11,8 @@ import java.util.Objects;
 /**
  * A DTO for the {@link io.github.erp.domain.FixedAssetDepreciation} entity.
  */
-public class FixedAssetDepreciationDTO implements Serializable {
+// TODO Use internal models for this
+public class FixedAssetDepreciationDTO implements Serializable, HasIndex {
 
     private Long id;
 

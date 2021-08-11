@@ -1,5 +1,8 @@
 package io.github.erp.service.dto;
 
+import io.github.erp.internal.framework.batch.HasDataFile;
+import io.github.erp.internal.framework.batch.HasIndex;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -9,7 +12,8 @@ import javax.validation.constraints.*;
 /**
  * A DTO for the {@link io.github.erp.domain.FixedAssetAcquisition} entity.
  */
-public class FixedAssetAcquisitionDTO implements Serializable {
+// TODO Use internal models for this
+public class FixedAssetAcquisitionDTO implements Serializable, HasIndex {
 
     private Long id;
 
