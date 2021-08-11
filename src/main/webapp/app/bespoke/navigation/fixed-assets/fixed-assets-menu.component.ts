@@ -44,7 +44,7 @@ export class FixedAssetsMenuComponent implements OnInit {
   }
 
   collapseNavbar(): void {
-    //this.isNavbarCollapsed = true;
+    // this.isNavbarCollapsed = true;
     this.menuService.collapseFixedAssetsMenu()
   }
 
@@ -57,8 +57,4 @@ export class FixedAssetsMenuComponent implements OnInit {
     this.loginService.logout();
     this.router.navigate(['']);
   }
-
-  // toggleNavbar(): void {
-  //   this.isNavbarCollapsed = !this.isNavbarCollapsed;
-  // }
 }

@@ -1,4 +1,3 @@
-import {NavbarComponent} from "../../../layouts/navbar/navbar.component";
 import {ComponentFixture, TestBed, waitForAsync} from "@angular/core/testing";
 import {AccountService} from "../../../core/auth/account.service";
 import {ProfileService} from "../../../layouts/profiles/profile.service";
@@ -9,11 +8,13 @@ import {Router} from "@angular/router";
 import {LoginService} from "../../../login/login.service";
 import {of} from "rxjs";
 import {ProfileInfo} from "../../../layouts/profiles/profile-info.model";
+import {PaymentMenuComponent} from "./payment-menu.component";
+import {BespokeNavigationService} from "../service/bespoke-navigation.service";
 
 describe('Component Tests', () => {
   describe('Navbar Component', () => {
-    let comp: NavbarComponent;
-    let fixture: ComponentFixture<NavbarComponent>;
+    let comp: PaymentMenuComponent;
+    let fixture: ComponentFixture<PaymentMenuComponent>;
     let accountService: AccountService;
     let profileService: ProfileService;
     const account: Account = {
@@ -31,16 +32,16 @@ describe('Component Tests', () => {
       waitForAsync(() => {
         TestBed.configureTestingModule({
           imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot()],
-          declarations: [NavbarComponent],
-          providers: [Router, LoginService],
+          declarations: [PaymentMenuComponent],
+          providers: [Router, LoginService, BespokeNavigationService],
         })
-          .overrideTemplate(NavbarComponent, '')
+          .overrideTemplate(PaymentMenuComponent, '')
           .compileComponents();
       })
     );
 
     beforeEach(() => {
-      fixture = TestBed.createComponent(NavbarComponent);
+      fixture = TestBed.createComponent(PaymentMenuComponent);
       comp = fixture.componentInstance;
       accountService = TestBed.inject(AccountService);
       profileService = TestBed.inject(ProfileService);
