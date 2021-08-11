@@ -1,5 +1,7 @@
 package io.github.erp.service.dto;
 
+import io.github.erp.internal.framework.batch.HasDataFile;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -9,7 +11,8 @@ import javax.validation.constraints.*;
 /**
  * A DTO for the {@link io.github.erp.domain.FileUpload} entity.
  */
-public class FileUploadDTO implements Serializable {
+// TODO Use internal models for this
+public class FileUploadDTO implements Serializable, HasDataFile {
 
     private Long id;
 
