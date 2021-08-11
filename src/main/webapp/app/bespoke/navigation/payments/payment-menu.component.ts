@@ -44,7 +44,7 @@ export class PaymentMenuComponent implements OnInit {
   }
 
   collapseNavbar(): void {
-    //this.isNavbarCollapsed = true;
+    // this.isNavbarCollapsed = true;
     this.menuService.collapsePaymentsMenu();
   }
 
@@ -57,8 +57,4 @@ export class PaymentMenuComponent implements OnInit {
     this.loginService.logout();
     this.router.navigate(['']);
   }
-
-  // toggleNavbar(): void {
-  //   this.isNavbarCollapsed = !this.isNavbarCollapsed;
-  // }
 }
