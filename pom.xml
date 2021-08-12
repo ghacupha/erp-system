@@ -48,6 +48,7 @@
         <project.inceptionYear>2021</project.inceptionYear>
         <project.owner>Edwin Njeru</project.owner>
 
+        <maven.javadoc.skip>true</maven.javadoc.skip>
         <javadoc.doclint.opts>none</javadoc.doclint.opts>
 
         <!-- Dependency versions -->
