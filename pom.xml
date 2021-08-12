@@ -20,6 +20,9 @@
     </pluginRepositories>
 
     <!-- jhipster-needle-distribution-management -->
+    <configuration>
+        <arguments>-Dmaven.javadoc.skip=true</arguments>
+    </configuration>
 
     <properties>
         <!-- Build properties -->
@@ -97,6 +100,7 @@
         <moneta.version>1.4.2</moneta.version>
         <lombok.version>1.18.20</lombok.version>
         <poiji.version>1.20.0</poiji.version>
+        <hazelcast.version>4.2.2</hazelcast.version>
         <!-- jhipster-needle-maven-property -->
     </properties>
 
@@ -192,14 +196,17 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
+            <version>${hazelcast.version}</version>
         </dependency>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-hibernate53</artifactId>
+            <version>${hazelcast.version}</version>
         </dependency>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
+            <version>${hazelcast.version}</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
