@@ -21,7 +21,7 @@
     "authenticationType": "jwt",
     "packageName": "io.github.erp",
     "serverPort": "8975",
-    "cacheProvider": "hazelcast",
+    "cacheProvider": "ehcache",
     "enableHibernateCache": true,
     "databaseType": "sql",
     "devDatabaseType": "postgresql",
