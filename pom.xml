@@ -48,6 +48,8 @@
         <project.inceptionYear>2021</project.inceptionYear>
         <project.owner>Edwin Njeru</project.owner>
 
+        <javadoc.doclint.opts>none</javadoc.doclint.opts>
+
         <!-- Dependency versions -->
         <jhipster-dependencies.version>7.1.0</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
@@ -973,6 +975,32 @@
         </pluginManagement>
     </build>
     <profiles>
+        <profile>
+            <id>doclint-java8-disable</id>
+            <activation>
+                <jdk>[1.8,)</jdk>
+            </activation>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <configuration>
+                                    <id>attach-javadocs</id>
+                                    <goals>
+                                        <goal>jar</goal>
+                                    </goals>
+                                    <doclint>${javadoc.doclint.opts}</doclint>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>no-liquibase</id>
             <properties>
