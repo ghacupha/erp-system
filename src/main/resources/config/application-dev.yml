@@ -98,9 +98,9 @@ server:
 
 jhipster:
   cache: # Cache configuration
-    hazelcast: # Hazelcast distributed cache
-      time-to-live-seconds: 3600
-      backup-count: 1
+    ehcache: # Ehcache configuration
+      time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
+      max-entries: 100 # Number of objects in each cache entry
   registry:
     password: admin
   # CORS is only enabled by default with the "dev" profile

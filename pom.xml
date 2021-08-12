@@ -13,15 +13,13 @@
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->
-        <repository>
-            <id>repo1-maven2</id>
-            <url>https://repo1.maven.org/maven2/</url>
-        </repository>
     </repositories>
 
     <pluginRepositories>
         <!-- jhipster-needle-maven-plugin-repository -->
     </pluginRepositories>
+
+    <!-- jhipster-needle-distribution-management -->
 
     <properties>
         <!-- Build properties -->
@@ -99,7 +97,6 @@
         <moneta.version>1.4.2</moneta.version>
         <lombok.version>1.18.20</lombok.version>
         <poiji.version>1.20.0</poiji.version>
-        <hazelcast.version>4.2.2</hazelcast.version>
         <!-- jhipster-needle-maven-property -->
     </properties>
 
@@ -193,21 +190,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast</artifactId>
-            <version>${hazelcast.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-hibernate53</artifactId>
-            <version>${hazelcast.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-spring</artifactId>
-            <version>${hazelcast.version}</version>
-        </dependency>
-        <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-oas</artifactId>
         </dependency>
@@ -235,6 +217,14 @@
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jcache</artifactId>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -729,7 +719,7 @@
                             <image>adoptopenjdk:11-jre-hotspot</image>
                         </from>
                         <to>
-                            <image>${docker.image.prefix}/${project.artifactId}:${project.version}</image>
+                            <image>erpsystem:latest</image>
                         </to>
                         <container>
                             <entrypoint>
@@ -739,7 +729,6 @@
                             </entrypoint>
                             <ports>
                                 <port>8975</port>
-                                <port>5701/udp</port>
                             </ports>
                             <environment>
                                 <SPRING_OUTPUT_ANSI_ENABLED>ALWAYS</SPRING_OUTPUT_ANSI_ENABLED>
