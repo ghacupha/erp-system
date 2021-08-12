@@ -978,7 +978,7 @@
         <profile>
             <id>doclint-java8-disable</id>
             <activation>
-                <jdk>[1.8,)</jdk>
+                <activeByDefault>true</activeByDefault>
             </activation>
 
             <build>
@@ -993,6 +993,8 @@
                                     <goals>
                                         <goal>jar</goal>
                                     </goals>
+                                    <failOnError>false</failOnError>
+                                    <additionalparam>-Xdoclint:none</additionalparam>
                                     <doclint>${javadoc.doclint.opts}</doclint>
                                 </configuration>
                             </execution>
