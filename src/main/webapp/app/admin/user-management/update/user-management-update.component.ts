@@ -6,7 +6,7 @@ import { User } from '../user-management.model';
 import { UserManagementService } from '../service/user-management.service';
 
 @Component({
-  selector: 'gha-user-mgmt-update',
+  selector: 'jhi-user-mgmt-update',
   templateUrl: './user-management-update.component.html',
 })
 export class UserManagementUpdateComponent implements OnInit {

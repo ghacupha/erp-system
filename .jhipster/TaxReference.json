@@ -1,7 +1,16 @@
 {
   "fluentMethods": true,
   "clientRootFolder": "payments",
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "taxReference"
+    }
+  ],
   "fields": [
     {
       "fieldName": "taxName",

@@ -13,7 +13,16 @@
       "relationshipName": "dealer",
       "otherEntityName": "dealer",
       "relationshipType": "many-to-one",
-      "otherEntityField": "id"
+      "otherEntityField": "id",
+      "otherEntityRelationshipName": "paymentRequisition"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "paymentRequisition"
     }
   ],
   "fields": [

@@ -4,7 +4,7 @@ import { ConfigurationService } from './configuration.service';
 import { Bean, PropertySource } from './configuration.model';
 
 @Component({
-  selector: 'gha-configuration',
+  selector: 'jhi-configuration',
   templateUrl: './configuration.component.html',
 })
 export class ConfigurationComponent implements OnInit {

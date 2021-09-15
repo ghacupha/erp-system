@@ -15,7 +15,7 @@
       },
       "root": "",
       "sourceRoot": "src/main/webapp",
-      "prefix": "gha",
+      "prefix": "jhi",
       "architect": {
         "build": {
           "builder": "@angular-builders/custom-webpack:browser",
@@ -85,7 +85,6 @@
           "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
             "browserTarget": "erp-system:build:development",
-            "proxyConfig": "./webpack/proxy.conf.js",
             "port": 4200
           },
           "configurations": {
@@ -109,7 +108,6 @@
   },
   "defaultProject": "erp-system",
   "cli": {
-    "analytics": "8b321b68-ed95-4a79-9d32-2fd57d978e30",
     "packageManager": "npm"
   }
 }

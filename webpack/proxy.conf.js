@@ -1,5 +1,4 @@
-function setupProxy() {
-  const tls = process.env.TLS;
+function setupProxy({ tls }) {
   const conf = [
     {
       context: [
@@ -13,17 +12,17 @@ function setupProxy() {
         '/auth',
         '/health',
       ],
-      target: `http${tls ? 's' : ''}://localhost:8975`,
+      target: `http${tls ? 's' : ''}://localhost:8080`,
       secure: false,
       changeOrigin: tls,
     },
     {
       context: ['/websocket'],
-      target: 'ws://127.0.0.1:8975',
+      target: 'ws://127.0.0.1:8080',
       ws: true,
     },
   ];
   return conf;
 }
 
-module.exports = setupProxy();
+module.exports = setupProxy;

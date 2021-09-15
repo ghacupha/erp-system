@@ -11,7 +11,7 @@ import { Account } from 'app/core/auth/account.model';
 import { HasAnyAuthorityDirective } from './has-any-authority.directive';
 
 @Component({
-  template: ` <div *ghaHasAnyAuthority="'ROLE_ADMIN'" #content></div> `,
+  template: ` <div *jhiHasAnyAuthority="'ROLE_ADMIN'" #content></div> `,
 })
 class TestHasAnyAuthorityDirectiveComponent {
   @ViewChild('content', { static: false })
@@ -36,7 +36,7 @@ describe('HasAnyAuthorityDirective tests', () => {
     mockAccountService.getAuthenticationState = jest.fn(() => authenticationState.asObservable());
   });
 
-  describe('set ghaHasAnyAuthority', () => {
+  describe('set jhiHasAnyAuthority', () => {
     it('should show restricted content to user if user has required role', () => {
       // GIVEN
       mockAccountService.hasAnyAuthority = jest.fn(() => true);

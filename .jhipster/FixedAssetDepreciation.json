@@ -42,7 +42,16 @@
       "fieldType": "String"
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "fixedAssetDepreciation"
+    }
+  ],
   "service": "serviceImpl",
   "searchEngine": "elasticsearch",
   "dto": "mapstruct",
@@ -52,5 +61,7 @@
   "name": "FixedAssetDepreciation",
   "changelogDate": "20210323133701",
   "clientRootFolder": "assets",
-  "microserviceName": "erpService"
+  "microserviceName": "erpService",
+  "entityTableName": "fixed_asset_depreciation",
+  "databaseType": "sql"
 }

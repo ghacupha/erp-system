@@ -13,22 +13,22 @@
     </div>
   </h2>
 
-  <gha-alert-error></gha-alert-error>
+  <jhi-alert-error></jhi-alert-error>
 
-  <gha-alert></gha-alert>
+  <jhi-alert></jhi-alert>
 
   <div class="table-responsive" *ngIf="users">
     <table class="table table-striped" aria-describedby="user-management-page-heading">
       <thead>
-        <tr ghaSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)">
-          <th scope="col" ghaSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" ghaSortBy="login"><span>Login</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" ghaSortBy="email"><span>Email</span> <fa-icon icon="sort"></fa-icon></th>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition()">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="login"><span>Login</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="email"><span>Email</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
           <th scope="col"><span>Profiles</span></th>
-          <th scope="col" ghaSortBy="createdDate"><span>Created Date</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" ghaSortBy="lastModifiedBy"><span>Last Modified By</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" ghaSortBy="lastModifiedDate"><span>Last Modified Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="createdDate"><span>Created Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="lastModifiedBy"><span>Last Modified By</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="lastModifiedDate"><span>Last Modified Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -88,7 +88,7 @@
 
   <div *ngIf="users">
     <div class="row justify-content-center">
-      <gha-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></gha-item-count>
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
     </div>
 
     <div class="row justify-content-center">

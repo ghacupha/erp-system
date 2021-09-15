@@ -2,7 +2,7 @@
 version: '3.8'
 services:
   erpsystem-postgresql:
-    image: postgres:13.3
+    image: postgres:13.4
     # volumes:
     #   - ~/volumes/jhipster/erpSystem/postgresql/:/var/lib/postgresql/data/
     environment:

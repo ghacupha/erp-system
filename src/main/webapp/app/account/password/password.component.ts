@@ -7,7 +7,7 @@ import { Account } from 'app/core/auth/account.model';
 import { PasswordService } from './password.service';
 
 @Component({
-  selector: 'gha-password',
+  selector: 'jhi-password',
   templateUrl: './password.component.html',
 })
 export class PasswordComponent implements OnInit {

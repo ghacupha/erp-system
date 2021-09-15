@@ -4,7 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { PasswordResetInitService } from './password-reset-init.service';
 
 @Component({
-  selector: 'gha-password-reset-init',
+  selector: 'jhi-password-reset-init',
   templateUrl: './password-reset-init.component.html',
 })
 export class PasswordResetInitComponent implements AfterViewInit {

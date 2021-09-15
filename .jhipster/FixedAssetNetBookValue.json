@@ -42,7 +42,16 @@
       "fieldType": "String"
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "fixedAssetNetBookValue"
+    }
+  ],
   "service": "serviceImpl",
   "searchEngine": "elasticsearch",
   "dto": "mapstruct",
@@ -52,5 +61,7 @@
   "name": "FixedAssetNetBookValue",
   "changelogDate": "20210323123701",
   "clientRootFolder": "assets",
-  "microserviceName": "erpService"
+  "microserviceName": "erpService",
+  "entityTableName": "fixed_asset_net_book_value",
+  "databaseType": "sql"
 }
