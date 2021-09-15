@@ -1,0 +1,83 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="payment">
+      <h2 data-cy="paymentDetailsHeading"><span>Payment</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ payment.id }}</span>
+        </dd>
+        <dt><span>Payment Number</span></dt>
+        <dd>
+          <span>{{ payment.paymentNumber }}</span>
+        </dd>
+        <dt><span>Payment Date</span></dt>
+        <dd>
+          <span>{{ payment.paymentDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Payment Amount</span></dt>
+        <dd>
+          <span>{{ payment.paymentAmount }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ payment.description }}</span>
+        </dd>
+        <dt><span>Currency</span></dt>
+        <dd>
+          <span>{{ payment.currency }}</span>
+        </dd>
+        <dt><span>Conversion Rate</span></dt>
+        <dd>
+          <span>{{ payment.conversionRate }}</span>
+        </dd>
+        <dt><span>Payment Category</span></dt>
+        <dd>
+          <div *ngIf="payment.paymentCategory">
+            <a [routerLink]="['/payment-category', payment.paymentCategory?.id, 'view']">{{ payment.paymentCategory?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Tax Rule</span></dt>
+        <dd>
+          <div *ngIf="payment.taxRule">
+            <a [routerLink]="['/tax-rule', payment.taxRule?.id, 'view']">{{ payment.taxRule?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Payment Calculation</span></dt>
+        <dd>
+          <div *ngIf="payment.paymentCalculation">
+            <a [routerLink]="['/payment-calculation', payment.paymentCalculation?.id, 'view']">{{ payment.paymentCalculation?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Payment Requisition</span></dt>
+        <dd>
+          <div *ngIf="payment.paymentRequisition">
+            <a [routerLink]="['/payment-requisition', payment.paymentRequisition?.id, 'view']">{{ payment.paymentRequisition?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of payment.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/payment', payment.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

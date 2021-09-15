@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+    <!--
+        Added the constraints for entity PaymentCalculation.
+    -->
+    <changeSet id="20210721172450-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="payment_category_id"
+                                 baseTableName="payment_calculation"
+                                 constraintName="fk_payment_calculation__payment_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_category"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_calculation_id"
+                                 baseTableName="rel_payment_calculation__placeholder"
+                                 constraintName="fk_rel_payment_calculation__pla__payment_calculation_ff_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_calculation"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_payment_calculation__placeholder"
+                                 constraintName="fk_rel_payment_calculation__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+    </changeSet>
+</databaseChangeLog>
