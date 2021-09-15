@@ -13,7 +13,7 @@ import { TrackerService } from '../tracker/tracker.service';
 export class AccountService {
   private userIdentity: Account | null = null;
   private authenticationState = new ReplaySubject<Account | null>(1);
-  private accountCache$?: Observable<Account | null>;
+  private accountCache$?: Observable<Account> | null;
 
   constructor(
     private http: HttpClient,
@@ -30,6 +30,9 @@ export class AccountService {
   authenticate(identity: Account | null): void {
     this.userIdentity = identity;
     this.authenticationState.next(this.userIdentity);
+    if (!identity) {
+      this.accountCache$ = null;
+    }
     if (identity) {
       this.trackerService.connect();
     } else {
@@ -48,20 +51,17 @@ export class AccountService {
   }
 
   identity(force?: boolean): Observable<Account | null> {
-    if (!this.accountCache$ || force || !this.isAuthenticated()) {
+    if (!this.accountCache$ || force) {
       this.accountCache$ = this.fetch().pipe(
-        catchError(() => of(null)),
-        tap((account: Account | null) => {
+        tap((account: Account) => {
           this.authenticate(account);
 
-          if (account) {
-            this.navigateToStoredUrl();
-          }
+          this.navigateToStoredUrl();
         }),
         shareReplay()
       );
     }
-    return this.accountCache$;
+    return this.accountCache$.pipe(catchError(() => of(null)));
   }
 
   isAuthenticated(): boolean {

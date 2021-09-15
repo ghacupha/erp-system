@@ -47,7 +47,8 @@
       "relationshipName": "paymentCategory",
       "otherEntityName": "paymentCategory",
       "relationshipType": "many-to-one",
-      "otherEntityField": "id"
+      "otherEntityField": "id",
+      "otherEntityRelationshipName": "payment"
     },
     {
       "relationshipName": "taxRule",
@@ -74,6 +75,14 @@
       "otherEntityField": "id",
       "ownerSide": true,
       "id": false,
+      "otherEntityRelationshipName": "payment"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "id",
+      "ownerSide": true,
       "otherEntityRelationshipName": "payment"
     }
   ],

@@ -13,7 +13,16 @@
       "relationshipName": "paymentCategory",
       "otherEntityName": "paymentCategory",
       "relationshipType": "many-to-one",
-      "otherEntityField": "id"
+      "otherEntityField": "id",
+      "otherEntityRelationshipName": "paymentCalculation"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "paymentCalculation"
     }
   ],
   "fields": [

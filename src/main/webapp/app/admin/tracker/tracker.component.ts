@@ -5,7 +5,7 @@ import { TrackerService } from 'app/core/tracker/tracker.service';
 import { TrackerActivity } from 'app/core/tracker/tracker-activity.model';
 
 @Component({
-  selector: 'gha-tracker',
+  selector: 'jhi-tracker',
   templateUrl: './tracker.component.html',
 })
 export class TrackerComponent implements OnInit, OnDestroy {

@@ -11,8 +11,8 @@ import { SortDirective } from './sort.directive';
   template: `
     <table>
       <thead>
-        <tr ghaSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)">
-          <th ghaSortBy="name">ID<fa-icon [icon]="'sort'"></fa-icon></th>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition($event)">
+          <th jhiSortBy="name">ID<fa-icon *ngIf="sortAllowed" [icon]="'sort'"></fa-icon></th>
         </tr>
       </thead>
     </table>
@@ -21,6 +21,7 @@ import { SortDirective } from './sort.directive';
 class TestSortByDirectiveComponent {
   predicate?: string;
   ascending?: boolean;
+  sortAllowed = true;
   transition = jest.fn();
 
   constructor(library: FaIconLibrary) {
@@ -43,21 +44,6 @@ describe('Directive: SortByDirective', () => {
     tableHead = fixture.debugElement.query(By.directive(SortByDirective));
   });
 
-  it('should initialize predicate, order, icon when initial component predicate is _score', () => {
-    // GIVEN
-    component.predicate = '_score';
-    const sortByDirective = tableHead.injector.get(SortByDirective);
-
-    // WHEN
-    fixture.detectChanges();
-
-    // THEN
-    expect(sortByDirective.ghaSortBy).toEqual('name');
-    expect(component.predicate).toEqual('_score');
-    expect(sortByDirective.iconComponent?.icon).toEqual('sort');
-    expect(component.transition).toHaveBeenCalledTimes(0);
-  });
-
   it('should initialize predicate, order, icon when initial component predicate differs from column predicate', () => {
     // GIVEN
     component.predicate = 'id';
@@ -67,7 +53,7 @@ describe('Directive: SortByDirective', () => {
     fixture.detectChanges();
 
     // THEN
-    expect(sortByDirective.ghaSortBy).toEqual('name');
+    expect(sortByDirective.jhiSortBy).toEqual('name');
     expect(component.predicate).toEqual('id');
     expect(sortByDirective.iconComponent?.icon).toEqual('sort');
     expect(component.transition).toHaveBeenCalledTimes(0);
@@ -83,29 +69,10 @@ describe('Directive: SortByDirective', () => {
     fixture.detectChanges();
 
     // THEN
-    expect(sortByDirective.ghaSortBy).toEqual('name');
+    expect(sortByDirective.jhiSortBy).toEqual('name');
     expect(component.predicate).toEqual('name');
     expect(component.ascending).toEqual(true);
     expect(sortByDirective.iconComponent?.icon).toEqual(faSortUp.iconName);
-    expect(component.transition).toHaveBeenCalledTimes(0);
-  });
-
-  it('should initialize predicate, order, icon when initial component predicate is _score and user clicks on column header', () => {
-    // GIVEN
-    component.predicate = '_score';
-    component.ascending = true;
-    const sortByDirective = tableHead.injector.get(SortByDirective);
-
-    // WHEN
-    fixture.detectChanges();
-    tableHead.triggerEventHandler('click', null);
-    fixture.detectChanges();
-
-    // THEN
-    expect(sortByDirective.ghaSortBy).toEqual('name');
-    expect(component.predicate).toEqual('_score');
-    expect(component.ascending).toEqual(true);
-    expect(sortByDirective.iconComponent?.icon).toEqual('sort');
     expect(component.transition).toHaveBeenCalledTimes(0);
   });
 
@@ -125,6 +92,7 @@ describe('Directive: SortByDirective', () => {
     expect(component.ascending).toEqual(false);
     expect(sortByDirective.iconComponent?.icon).toEqual(faSortDown.iconName);
     expect(component.transition).toHaveBeenCalledTimes(1);
+    expect(component.transition).toHaveBeenCalledWith({ predicate: 'name', ascending: false });
   });
 
   it('should update component predicate, order, icon when user double clicks on column header', () => {
@@ -136,7 +104,6 @@ describe('Directive: SortByDirective', () => {
     // WHEN
     fixture.detectChanges();
 
-    // WHEN
     tableHead.triggerEventHandler('click', null);
     fixture.detectChanges();
 
@@ -148,5 +115,25 @@ describe('Directive: SortByDirective', () => {
     expect(component.ascending).toEqual(true);
     expect(sortByDirective.iconComponent?.icon).toEqual(faSortUp.iconName);
     expect(component.transition).toHaveBeenCalledTimes(2);
+    expect(component.transition).toHaveBeenNthCalledWith(1, { predicate: 'name', ascending: false });
+    expect(component.transition).toHaveBeenNthCalledWith(2, { predicate: 'name', ascending: true });
+  });
+
+  it('should not run sorting on click if sorting icon is hidden', () => {
+    // GIVEN
+    component.predicate = 'id';
+    component.ascending = false;
+    component.sortAllowed = false;
+
+    // WHEN
+    fixture.detectChanges();
+
+    tableHead.triggerEventHandler('click', null);
+    fixture.detectChanges();
+
+    // THEN
+    expect(component.predicate).toEqual('id');
+    expect(component.ascending).toEqual(false);
+    expect(component.transition).not.toHaveBeenCalled();
   });
 });

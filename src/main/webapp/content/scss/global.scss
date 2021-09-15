@@ -1,6 +1,6 @@
 @import 'bootstrap-variables';
 @import '~bootstrap/scss/functions';
-@import '~bootswatch/dist/lux/variables';
+@import '~bootswatch/dist/journal/variables';
 @import '~bootstrap/scss/variables';
 
 /* ==============================================================
@@ -78,7 +78,7 @@ Generic styles
 }
 
 .hand,
-[ghasortby] {
+[jhisortby] {
   cursor: pointer;
 }
 

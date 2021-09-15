@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { PasswordResetFinishService } from './password-reset-finish.service';
 
 @Component({
-  selector: 'gha-password-reset-finish',
+  selector: 'jhi-password-reset-finish',
   templateUrl: './password-reset-finish.component.html',
 })
 export class PasswordResetFinishComponent implements OnInit, AfterViewInit {

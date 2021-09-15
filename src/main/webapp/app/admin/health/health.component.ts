@@ -7,7 +7,7 @@ import { Health, HealthDetails, HealthStatus } from './health.model';
 import { HealthModalComponent } from './modal/health-modal.component';
 
 @Component({
-  selector: 'gha-health',
+  selector: 'jhi-health',
   templateUrl: './health.component.html',
 })
 export class HealthComponent implements OnInit {
@@ -22,9 +22,8 @@ export class HealthComponent implements OnInit {
   getBadgeClass(statusState: HealthStatus): string {
     if (statusState === 'UP') {
       return 'badge-success';
-    } else {
-      return 'badge-danger';
     }
+    return 'badge-danger';
   }
 
   refresh(): void {

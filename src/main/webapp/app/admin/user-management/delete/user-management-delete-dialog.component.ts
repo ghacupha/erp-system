@@ -5,7 +5,7 @@ import { User } from '../user-management.model';
 import { UserManagementService } from '../service/user-management.service';
 
 @Component({
-  selector: 'gha-user-mgmt-delete-dialog',
+  selector: 'jhi-user-mgmt-delete-dialog',
   templateUrl: './user-management-delete-dialog.component.html',
 })
 export class UserManagementDeleteDialogComponent {

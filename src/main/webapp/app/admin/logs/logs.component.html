@@ -8,9 +8,9 @@
 
   <table class="table table-sm table-striped table-bordered" aria-describedby="logs-page-heading">
     <thead>
-      <tr ghaSort [(predicate)]="orderProp" [(ascending)]="ascending" [callback]="filterAndSort.bind(this)">
-        <th ghaSortBy="name" scope="col"><span>Name</span> <fa-icon icon="sort"></fa-icon></th>
-        <th ghaSortBy="level" scope="col"><span>Level</span> <fa-icon icon="sort"></fa-icon></th>
+      <tr jhiSort [(predicate)]="orderProp" [(ascending)]="ascending" (sortChange)="filterAndSort()">
+        <th jhiSortBy="name" scope="col"><span>Name</span> <fa-icon icon="sort"></fa-icon></th>
+        <th jhiSortBy="level" scope="col"><span>Level</span> <fa-icon icon="sort"></fa-icon></th>
       </tr>
     </thead>
 

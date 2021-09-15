@@ -5,7 +5,7 @@ import { mergeMap } from 'rxjs/operators';
 import { ActivateService } from './activate.service';
 
 @Component({
-  selector: 'gha-activate',
+  selector: 'jhi-activate',
   templateUrl: './activate.component.html',
 })
 export class ActivateComponent implements OnInit {

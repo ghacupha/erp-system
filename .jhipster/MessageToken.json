@@ -28,7 +28,16 @@
       "fieldType": "Boolean"
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "messageToken"
+    }
+  ],
   "changelogDate": "20210414144655",
   "entityTableName": "message_token",
   "dto": "mapstruct",
@@ -39,5 +48,7 @@
   "readOnly": false,
   "embedded": false,
   "clientRootFolder": "files",
-  "microserviceName": "erpService"
+  "microserviceName": "erpService",
+  "searchEngine": "elasticsearch",
+  "databaseType": "sql"
 }

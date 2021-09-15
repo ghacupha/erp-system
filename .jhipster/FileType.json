@@ -27,10 +27,19 @@
       "fieldValues": "CURRENCY_LIST,FIXED_ASSET_ACQUISITION,FIXED_ASSET_DEPRECIATION,FIXED_ASSET_NBV"
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "fileType"
+    }
+  ],
   "changelogDate": "20210414144455",
   "entityTableName": "file_type",
-  "dto": "no",
+  "dto": "mapstruct",
   "pagination": "pagination",
   "service": "serviceClass",
   "jpaMetamodelFiltering": true,
@@ -38,5 +47,7 @@
   "readOnly": false,
   "embedded": false,
   "clientRootFolder": "files",
-  "microserviceName": "erpService"
+  "microserviceName": "erpService",
+  "searchEngine": "elasticsearch",
+  "databaseType": "sql"
 }

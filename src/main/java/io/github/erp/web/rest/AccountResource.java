@@ -7,7 +7,6 @@ import io.github.erp.service.MailService;
 import io.github.erp.service.UserService;
 import io.github.erp.service.dto.AdminUserDTO;
 import io.github.erp.service.dto.PasswordChangeDTO;
-import io.github.erp.service.dto.UserDTO;
 import io.github.erp.web.rest.errors.*;
 import io.github.erp.web.rest.vm.KeyAndPasswordVM;
 import io.github.erp.web.rest.vm.ManagedUserVM;

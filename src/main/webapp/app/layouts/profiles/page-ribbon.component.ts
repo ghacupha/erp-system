@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { ProfileService } from './profile.service';
 
 @Component({
-  selector: 'gha-page-ribbon',
+  selector: 'jhi-page-ribbon',
   template: `
     <div class="ribbon" *ngIf="ribbonEnv$ | async as ribbonEnv">
       <a href="">{{ ribbonEnv }}</a>

@@ -5,7 +5,7 @@ import { Router, ActivatedRouteSnapshot, NavigationEnd } from '@angular/router';
 import { AccountService } from 'app/core/auth/account.service';
 
 @Component({
-  selector: 'gha-main',
+  selector: 'jhi-main',
   templateUrl: './main.component.html',
 })
 export class MainComponent implements OnInit {
@@ -23,9 +23,9 @@ export class MainComponent implements OnInit {
   }
 
   private getPageTitle(routeSnapshot: ActivatedRouteSnapshot): string {
-    let title: string = routeSnapshot.data['pageTitle'] ?? '';
+    const title: string = routeSnapshot.data['pageTitle'] ?? '';
     if (routeSnapshot.firstChild) {
-      title = this.getPageTitle(routeSnapshot.firstChild) || title;
+      return this.getPageTitle(routeSnapshot.firstChild) || title;
     }
     return title;
   }

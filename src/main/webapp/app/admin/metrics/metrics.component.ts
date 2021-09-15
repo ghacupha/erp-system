@@ -5,7 +5,7 @@ import { MetricsService } from './metrics.service';
 import { Metrics, Thread } from './metrics.model';
 
 @Component({
-  selector: 'gha-metrics',
+  selector: 'jhi-metrics',
   templateUrl: './metrics.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
