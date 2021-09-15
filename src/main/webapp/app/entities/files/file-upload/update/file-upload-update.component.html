@@ -1,0 +1,203 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-file-upload-heading" data-cy="FileUploadCreateUpdateHeading">Create or edit a File Upload</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+          <div *ngIf="editForm.get('description')!.invalid && (editForm.get('description')!.dirty || editForm.get('description')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('description')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fileName">File Name</label>
+          <input type="text" class="form-control" name="fileName" id="field_fileName" data-cy="fileName" formControlName="fileName" />
+          <div *ngIf="editForm.get('fileName')!.invalid && (editForm.get('fileName')!.dirty || editForm.get('fileName')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('fileName')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_periodFrom">Period From</label>
+          <div class="input-group">
+            <input
+              id="field_periodFrom"
+              data-cy="periodFrom"
+              type="text"
+              class="form-control"
+              name="periodFrom"
+              ngbDatepicker
+              #periodFromDp="ngbDatepicker"
+              formControlName="periodFrom"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="periodFromDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_periodTo">Period To</label>
+          <div class="input-group">
+            <input
+              id="field_periodTo"
+              data-cy="periodTo"
+              type="text"
+              class="form-control"
+              name="periodTo"
+              ngbDatepicker
+              #periodToDp="ngbDatepicker"
+              formControlName="periodTo"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="periodToDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fileTypeId">File Type Id</label>
+          <input
+            type="number"
+            class="form-control"
+            name="fileTypeId"
+            id="field_fileTypeId"
+            data-cy="fileTypeId"
+            formControlName="fileTypeId"
+          />
+          <div *ngIf="editForm.get('fileTypeId')!.invalid && (editForm.get('fileTypeId')!.dirty || editForm.get('fileTypeId')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('fileTypeId')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('fileTypeId')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_dataFile">Data File</label>
+          <div>
+            <div *ngIf="editForm.get('dataFile')!.value" class="form-text text-danger clearfix">
+              <a class="pull-left" (click)="openFile(editForm.get('dataFile')!.value, editForm.get('dataFileContentType')!.value)">open</a
+              ><br />
+              <span class="pull-left"
+                >{{ editForm.get('dataFileContentType')!.value }}, {{ byteSize(editForm.get('dataFile')!.value) }}</span
+              >
+              <button
+                type="button"
+                (click)="editForm.patchValue({ dataFile: null }); editForm.patchValue({ dataFileContentType: null })"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input type="file" id="file_dataFile" data-cy="dataFile" (change)="setFileData($event, 'dataFile', false)" />
+          </div>
+          <input type="hidden" class="form-control" name="dataFile" id="field_dataFile" data-cy="dataFile" formControlName="dataFile" />
+          <input
+            type="hidden"
+            class="form-control"
+            name="dataFileContentType"
+            id="field_dataFileContentType"
+            formControlName="dataFileContentType"
+          />
+          <div *ngIf="editForm.get('dataFile')!.invalid && (editForm.get('dataFile')!.dirty || editForm.get('dataFile')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('dataFile')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_uploadSuccessful">Upload Successful</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="uploadSuccessful"
+            id="field_uploadSuccessful"
+            data-cy="uploadSuccessful"
+            formControlName="uploadSuccessful"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_uploadProcessed">Upload Processed</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="uploadProcessed"
+            id="field_uploadProcessed"
+            data-cy="uploadProcessed"
+            formControlName="uploadProcessed"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_uploadToken">Upload Token</label>
+          <input
+            type="text"
+            class="form-control"
+            name="uploadToken"
+            id="field_uploadToken"
+            data-cy="uploadToken"
+            formControlName="uploadToken"
+          />
+          <div
+            *ngIf="editForm.get('uploadToken')!.invalid && (editForm.get('uploadToken')!.dirty || editForm.get('uploadToken')!.touched)"
+          ></div>
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

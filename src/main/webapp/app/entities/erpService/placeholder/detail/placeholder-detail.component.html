@@ -1,0 +1,44 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="placeholder">
+      <h2 data-cy="placeholderDetailsHeading"><span>Placeholder</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ placeholder.id }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ placeholder.description }}</span>
+        </dd>
+        <dt><span>Token</span></dt>
+        <dd>
+          <span>{{ placeholder.token }}</span>
+        </dd>
+        <dt><span>Containing Placeholder</span></dt>
+        <dd>
+          <div *ngIf="placeholder.containingPlaceholder">
+            <a [routerLink]="['/placeholder', placeholder.containingPlaceholder?.id, 'view']">{{
+              placeholder.containingPlaceholder?.id
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/placeholder', placeholder.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

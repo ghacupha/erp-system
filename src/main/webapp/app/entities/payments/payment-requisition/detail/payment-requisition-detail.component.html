@@ -1,0 +1,53 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="paymentRequisition">
+      <h2 data-cy="paymentRequisitionDetailsHeading"><span>Payment Requisition</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ paymentRequisition.id }}</span>
+        </dd>
+        <dt><span>Invoiced Amount</span></dt>
+        <dd>
+          <span>{{ paymentRequisition.invoicedAmount }}</span>
+        </dd>
+        <dt><span>Disbursement Cost</span></dt>
+        <dd>
+          <span>{{ paymentRequisition.disbursementCost }}</span>
+        </dd>
+        <dt><span>Vatable Amount</span></dt>
+        <dd>
+          <span>{{ paymentRequisition.vatableAmount }}</span>
+        </dd>
+        <dt><span>Dealer</span></dt>
+        <dd>
+          <div *ngIf="paymentRequisition.dealer">
+            <a [routerLink]="['/dealer', paymentRequisition.dealer?.id, 'view']">{{ paymentRequisition.dealer?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of paymentRequisition.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/payment-requisition', paymentRequisition.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

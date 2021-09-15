@@ -129,5 +129,6 @@
   "readOnly": false,
   "jpaMetamodelFiltering": true,
   "pagination": "pagination",
-  "microserviceName": "erpService"
+  "microserviceName": "erpService",
+  "name": "Placeholder"
 }

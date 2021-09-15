@@ -1,0 +1,75 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="fixedAssetNetBookValue">
+      <h2 data-cy="fixedAssetNetBookValueDetailsHeading"><span>Fixed Asset Net Book Value</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ fixedAssetNetBookValue.id }}</span>
+        </dd>
+        <dt><span>Asset Number</span></dt>
+        <dd>
+          <span>{{ fixedAssetNetBookValue.assetNumber }}</span>
+        </dd>
+        <dt><span>Service Outlet Code</span></dt>
+        <dd>
+          <span>{{ fixedAssetNetBookValue.serviceOutletCode }}</span>
+        </dd>
+        <dt><span>Asset Tag</span></dt>
+        <dd>
+          <span>{{ fixedAssetNetBookValue.assetTag }}</span>
+        </dd>
+        <dt><span>Asset Description</span></dt>
+        <dd>
+          <span>{{ fixedAssetNetBookValue.assetDescription }}</span>
+        </dd>
+        <dt><span>Net Book Value Date</span></dt>
+        <dd>
+          <span>{{ fixedAssetNetBookValue.netBookValueDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Asset Category</span></dt>
+        <dd>
+          <span>{{ fixedAssetNetBookValue.assetCategory }}</span>
+        </dd>
+        <dt><span>Net Book Value</span></dt>
+        <dd>
+          <span>{{ fixedAssetNetBookValue.netBookValue }}</span>
+        </dd>
+        <dt><span>Depreciation Regime</span></dt>
+        <dd>
+          <span>{{ fixedAssetNetBookValue.depreciationRegime }}</span>
+        </dd>
+        <dt><span>File Upload Token</span></dt>
+        <dd>
+          <span>{{ fixedAssetNetBookValue.fileUploadToken }}</span>
+        </dd>
+        <dt><span>Compilation Token</span></dt>
+        <dd>
+          <span>{{ fixedAssetNetBookValue.compilationToken }}</span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of fixedAssetNetBookValue.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/fixed-asset-net-book-value', fixedAssetNetBookValue.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

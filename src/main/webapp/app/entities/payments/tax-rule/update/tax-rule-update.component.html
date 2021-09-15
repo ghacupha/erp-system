@@ -1,0 +1,147 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-tax-rule-heading" data-cy="TaxRuleCreateUpdateHeading">Create or edit a Tax Rule</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_telcoExciseDuty">Telco Excise Duty</label>
+          <input
+            type="number"
+            class="form-control"
+            name="telcoExciseDuty"
+            id="field_telcoExciseDuty"
+            data-cy="telcoExciseDuty"
+            formControlName="telcoExciseDuty"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_valueAddedTax">Value Added Tax</label>
+          <input
+            type="number"
+            class="form-control"
+            name="valueAddedTax"
+            id="field_valueAddedTax"
+            data-cy="valueAddedTax"
+            formControlName="valueAddedTax"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_withholdingVAT">Withholding VAT</label>
+          <input
+            type="number"
+            class="form-control"
+            name="withholdingVAT"
+            id="field_withholdingVAT"
+            data-cy="withholdingVAT"
+            formControlName="withholdingVAT"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_withholdingTaxConsultancy">Withholding Tax Consultancy</label>
+          <input
+            type="number"
+            class="form-control"
+            name="withholdingTaxConsultancy"
+            id="field_withholdingTaxConsultancy"
+            data-cy="withholdingTaxConsultancy"
+            formControlName="withholdingTaxConsultancy"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_withholdingTaxRent">Withholding Tax Rent</label>
+          <input
+            type="number"
+            class="form-control"
+            name="withholdingTaxRent"
+            id="field_withholdingTaxRent"
+            data-cy="withholdingTaxRent"
+            formControlName="withholdingTaxRent"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_cateringLevy">Catering Levy</label>
+          <input
+            type="number"
+            class="form-control"
+            name="cateringLevy"
+            id="field_cateringLevy"
+            data-cy="cateringLevy"
+            formControlName="cateringLevy"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_serviceCharge">Service Charge</label>
+          <input
+            type="number"
+            class="form-control"
+            name="serviceCharge"
+            id="field_serviceCharge"
+            data-cy="serviceCharge"
+            formControlName="serviceCharge"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_withholdingTaxImportedService">Withholding Tax Imported Service</label>
+          <input
+            type="number"
+            class="form-control"
+            name="withholdingTaxImportedService"
+            id="field_withholdingTaxImportedService"
+            data-cy="withholdingTaxImportedService"
+            formControlName="withholdingTaxImportedService"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
