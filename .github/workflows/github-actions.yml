@@ -46,10 +46,10 @@ jobs:
             - name: Package application
               run: npm run java:jar:prod
             - name: Login to Docker hub
-                uses: docker/login-action@v1
-                with:
-                  username: ${{ secrets.DOCKER_USERNAME }}
-                  password: ${{ secrets.DOCKER_PASSWORD }}
+              uses: docker/login-action@v1
+              with:
+                username: ${{ secrets.DOCKER_USERNAME }}
+                password: ${{ secrets.DOCKER_PASSWORD }}
             - name: Build image
               run: ./mvnw -ntp package jib:dockerBuild -Pprod -DskipTests
             - name: Publish image
