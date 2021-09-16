@@ -108,6 +108,7 @@
   },
   "defaultProject": "erp-system",
   "cli": {
+    "analytics": "e6140e57-b874-4c2a-9955-207c8f8919fe",
     "packageManager": "npm"
   }
 }
