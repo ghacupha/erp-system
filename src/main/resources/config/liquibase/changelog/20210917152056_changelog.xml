@@ -1,0 +1,87 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-2">
+        <addUniqueConstraint columnNames="dealer_name" constraintName="UC_DEALERDEALER_NAME_COL" tableName="dealer"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-3">
+        <addUniqueConstraint columnNames="file_type_name" constraintName="UC_FILE_TYPEFILE_TYPE_NAME_COL" tableName="file_type"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-4">
+        <addUniqueConstraint columnNames="file_name" constraintName="UC_FILE_UPLOADFILE_NAME_COL" tableName="file_upload"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-5">
+        <addUniqueConstraint columnNames="upload_token" constraintName="UC_FILE_UPLOADUPLOAD_TOKEN_COL" tableName="file_upload"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-6">
+        <addUniqueConstraint columnNames="asset_number" constraintName="UC_FIXED_ASSET_ACQUISITIONASSET_NUMBER_COL" tableName="fixed_asset_acquisition"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-7">
+        <addUniqueConstraint columnNames="invoice_number" constraintName="UC_INVOICEINVOICE_NUMBER_COL" tableName="invoice"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-8">
+        <addUniqueConstraint columnNames="email" constraintName="UC_JHI_USEREMAIL_COL" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-9">
+        <addUniqueConstraint columnNames="login" constraintName="UC_JHI_USERLOGIN_COL" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-10">
+        <addUniqueConstraint columnNames="category_type" constraintName="UC_PAYMENT_CATEGORYCATEGORY_TYPE_COL" tableName="payment_category"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-11">
+        <addUniqueConstraint columnNames="description" constraintName="UC_PLACEHOLDERDESCRIPTION_COL" tableName="placeholder"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-12">
+        <addUniqueConstraint columnNames="token" constraintName="UC_PLACEHOLDERTOKEN_COL" tableName="placeholder"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-13">
+        <addUniqueConstraint columnNames="tax_name" constraintName="UC_TAX_REFERENCETAX_NAME_COL" tableName="tax_reference"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-14">
+        <addUniqueConstraint columnNames="tax_reference_type" constraintName="UC_TAX_REFERENCETAX_REFERENCE_TYPE_COL" tableName="tax_reference"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-15">
+        <dropForeignKeyConstraint baseTableName="batch_job_execution_context" constraintName="job_exec_ctx_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-16">
+        <dropForeignKeyConstraint baseTableName="batch_job_execution_params" constraintName="job_exec_params_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-17">
+        <dropForeignKeyConstraint baseTableName="batch_step_execution" constraintName="job_execution_step_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-18">
+        <dropForeignKeyConstraint baseTableName="batch_job_execution" constraintName="job_instance_execution_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-19">
+        <dropForeignKeyConstraint baseTableName="batch_step_execution_context" constraintName="step_exec_ctx_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-20">
+        <dropTable tableName="batch_job_execution"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-21">
+        <dropTable tableName="batch_job_execution_context"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-22">
+        <dropTable tableName="batch_job_execution_params"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-23">
+        <dropTable tableName="batch_job_instance"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-24">
+        <dropTable tableName="batch_step_execution"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-25">
+        <dropTable tableName="batch_step_execution_context"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-26">
+        <dropSequence sequenceName="batch_job_execution_seq"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-27">
+        <dropSequence sequenceName="batch_job_seq"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-28">
+        <dropSequence sequenceName="batch_step_execution_seq"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1631892676344-1">
+        <alterSequence sequenceName="sequence_generator"/>
+    </changeSet>
+</databaseChangeLog>
