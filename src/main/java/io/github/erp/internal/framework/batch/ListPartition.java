@@ -66,6 +66,12 @@ public class ListPartition<T> {
             } catch (Exception e) {
                 // ? DO NOTHING?
                 // An error is quietly thrown, making the forProcessing list null
+                String errorMessage = "An error occurred while processing page # " + listPageNumber +
+                    " There remains " + (dataSize-processedDataSize) + " pending for processing, " +
+                    " and " + processedDataSize + " items have been processed so far. " +
+                    " Don't worry; life is hard. Check trace for further details, before killing the messenger.";
+
+                throw new RuntimeException(errorMessage, e);
             }
 
             processedDataSize = processedDataSize + forProcessing.size();
