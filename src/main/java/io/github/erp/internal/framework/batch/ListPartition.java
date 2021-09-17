@@ -17,7 +17,6 @@ package io.github.erp.internal.framework.batch;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 
@@ -62,7 +61,8 @@ public class ListPartition<T> {
             log.info("Getting page number : {}", listPageNumber +1);
 
             try {
-                forProcessing = ImmutableList.copyOf(Lists.partition(unProcessedItems, listPageSize).get(listPageNumber));
+                // todo replace forProcessing = ImmutableList.copyOf(Lists.partition(unProcessedItems, listPageSize).get(listPageNumber));
+                forProcessing = List.copyOf(Lists.partition(unProcessedItems, listPageSize).get(listPageNumber));
             } catch (Exception e) {
                 // ? DO NOTHING?
                 // An error is quietly thrown, making the forProcessing list null
@@ -73,7 +73,8 @@ public class ListPartition<T> {
             log.info("{} items enqueued for processing", processedDataSize);
         } else {
 
-            forProcessing = ImmutableList.of();
+            // todo replace forProcessing = ImmutableList.of();
+            forProcessing = List.of();
         }
         return forProcessing;
     }
