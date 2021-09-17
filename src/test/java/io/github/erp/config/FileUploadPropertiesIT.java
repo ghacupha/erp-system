@@ -24,7 +24,6 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.internal.framework.FileUploadsProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 /**
  * This is to test whether the file-upload configurations will be setup at startup

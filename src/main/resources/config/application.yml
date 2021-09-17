@@ -117,13 +117,13 @@ spring:
     execution:
       thread-name-prefix: erp-system-task-
       pool:
-        core-size: 2
+        core-size: 12
         max-size: 50
         queue-capacity: 10000
     scheduling:
       thread-name-prefix: erp-system-scheduling-
       pool:
-        size: 2
+        size: 12
   thymeleaf:
     mode: HTML
   output:

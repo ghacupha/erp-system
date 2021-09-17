@@ -17,6 +17,7 @@ package io.github.erp.internal.framework.batch;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.framework.util.TokenGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.JobInterruptedException;
@@ -63,8 +64,10 @@ public class DataDeletionStep<E> implements Step {
 
     @Override
     public String getName() {
-        log.debug("Creating batch step id : {} ...", stepName);
-        return step.getName();
+        TokenGenerator token = new TokenGenerator();
+        String newStepName = this.stepName + "_"+ token.generateBase64Token(16);
+        log.debug("Creating batch step id : {} ...", newStepName);
+        return newStepName;
     }
 
     @Override
