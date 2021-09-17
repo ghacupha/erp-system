@@ -51,6 +51,9 @@
         <!--<application.port>8979</application.port>-->
         <application.port>${env.ERP_SYSTEM_DEV_PORT}</application.port>
 
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+        <javadoc.doclint.opts>none</javadoc.doclint.opts>
+
         <!-- Dependency versions -->
         <jhipster-dependencies.version>7.2.0</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
