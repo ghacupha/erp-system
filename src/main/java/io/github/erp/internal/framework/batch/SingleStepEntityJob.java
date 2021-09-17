@@ -17,6 +17,7 @@ package io.github.erp.internal.framework.batch;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.framework.util.TokenGenerator;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
@@ -42,7 +43,8 @@ public class SingleStepEntityJob implements Job {
 
     @Override
     public String getName() {
-        return this.job.getName();
+        TokenGenerator token = new TokenGenerator();
+        return this.job.getName() + "_" + token.generateBase64Token(16);
     }
 
     @Override

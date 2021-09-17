@@ -17,6 +17,7 @@ package io.github.erp.internal.framework.batch;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.framework.util.TokenGenerator;
 import org.slf4j.Logger;
 import org.springframework.batch.core.JobInterruptedException;
 import org.springframework.batch.core.Step;
@@ -64,8 +65,10 @@ public class ReadFileStep<EVM, DTO> implements Step {
 
     @Override
     public String getName() {
-        log.debug("Creating read-file-step of id : {}", stepName);
-        return this.theStep.getName();
+        TokenGenerator token = new TokenGenerator();
+        String newStepName = this.stepName + "_"+ token.generateBase64Token(16);
+        log.debug("Creating read-file-step of id : {}", newStepName);
+        return newStepName;
     }
 
     @Override
