@@ -32,5 +32,5 @@ public interface HandlingService<H> {
      * @param payload The item being handled
      * @return
      */
-    void handle(H payload);
+    CompletableFuture<Boolean> handle(H payload);
 }

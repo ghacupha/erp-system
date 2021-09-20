@@ -65,18 +65,17 @@ public class FileNotificationHandlingService implements HandlingService<FileNoti
 
     @Override
     @Async
-    public void handle(FileNotification payload) {
+    public CompletableFuture<Boolean> handle(FileNotification payload) {
 
         CompletableFuture<Boolean> future = new CompletableFuture<>();
 
-        /*  taskExecutor.execute(() -> {
+          taskExecutor.execute(() -> {
             uploadSequence(payload);
             future.complete(true);
         });
 
-        return future;  */
-
-        uploadSequence(payload);
+        return future;
+        //  uploadSequence(payload);
     }
 
     private void uploadSequence(FileNotification payload) {
