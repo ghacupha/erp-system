@@ -62,17 +62,16 @@ public class FileDeletionHandlingService implements HandlingService<Long> {
      */
     @Override
     @Async
-    public void handle(final Long payload) {
+    public CompletableFuture<Boolean> handle(final Long payload) {
 
-        /* CompletableFuture<Boolean> future = new CompletableFuture<>();
+      CompletableFuture<Boolean> future = new CompletableFuture<>();
 
         taskExecutor.execute(() -> {
             deletionSequence(payload);
             future.complete(true);
         });
-        return future; */
-
-        deletionSequence(payload);
+        return future;
+        // deletionSequence(payload);
     }
 
     private void deletionSequence(Long payload) {
