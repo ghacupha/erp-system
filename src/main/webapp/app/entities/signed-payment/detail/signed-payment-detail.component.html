@@ -1,0 +1,66 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="signedPayment">
+      <h2 data-cy="signedPaymentDetailsHeading"><span>Signed Payment</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ signedPayment.id }}</span>
+        </dd>
+        <dt><span>Payment Category</span></dt>
+        <dd>
+          <span>{{ signedPayment.paymentCategory }}</span>
+        </dd>
+        <dt><span>Transaction Number</span></dt>
+        <dd>
+          <span>{{ signedPayment.transactionNumber }}</span>
+        </dd>
+        <dt><span>Transaction Date</span></dt>
+        <dd>
+          <span>{{ signedPayment.transactionDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Transaction Currency</span></dt>
+        <dd>
+          <span>{{ signedPayment.transactionCurrency }}</span>
+        </dd>
+        <dt><span>Transaction Amount</span></dt>
+        <dd>
+          <span>{{ signedPayment.transactionAmount }}</span>
+        </dd>
+        <dt><span>Beneficiary</span></dt>
+        <dd>
+          <span>{{ signedPayment.beneficiary }}</span>
+        </dd>
+        <dt><span>Payment Label</span></dt>
+        <dd>
+          <span *ngFor="let paymentLabel of signedPayment.paymentLabels; let last = last">
+            <a [routerLink]="['/payment-label', paymentLabel?.id, 'view']">{{ paymentLabel.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of signedPayment.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/signed-payment', signedPayment.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -59,8 +59,9 @@
       "TaxRule",
       "PaymentCategory",
       "Placeholder",
-      "PaymentLabel"
+      "PaymentLabel",
+      "SignedPayment"
     ],
-    "lastLiquibaseTimestamp": 1632148164000
+    "lastLiquibaseTimestamp": 1632149732000
   }
 }
