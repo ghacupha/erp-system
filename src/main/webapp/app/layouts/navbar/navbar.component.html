@@ -222,6 +222,18 @@
               <span>Placeholder</span>
             </a>
           </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="payment-label"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Payment Label</span>
+            </a>
+          </li>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
         </ul>
       </li>

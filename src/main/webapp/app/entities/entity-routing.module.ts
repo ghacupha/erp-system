@@ -86,6 +86,11 @@ import { RouterModule } from '@angular/router';
         data: { pageTitle: 'Placeholders' },
         loadChildren: () => import('./erpService/placeholder/placeholder.module').then(m => m.ErpServicePlaceholderModule),
       },
+      {
+        path: 'payment-label',
+        data: { pageTitle: 'PaymentLabels' },
+        loadChildren: () => import('./payment-label/payment-label.module').then(m => m.PaymentLabelModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],
