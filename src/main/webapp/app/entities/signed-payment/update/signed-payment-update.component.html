@@ -1,0 +1,237 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-signed-payment-heading" data-cy="SignedPaymentCreateUpdateHeading">Create or edit a Signed Payment</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_paymentCategory">Payment Category</label>
+          <select
+            class="form-control"
+            name="paymentCategory"
+            formControlName="paymentCategory"
+            id="field_paymentCategory"
+            data-cy="paymentCategory"
+          >
+            <option [ngValue]="null"></option>
+            <option value="UNDEFINED">UNDEFINED</option>
+            <option value="CATEGORY0">CATEGORY0</option>
+            <option value="CATEGORY1">CATEGORY1</option>
+            <option value="CATEGORY2">CATEGORY2</option>
+            <option value="CATEGORY3">CATEGORY3</option>
+            <option value="CATEGORY4">CATEGORY4</option>
+            <option value="CATEGORY5">CATEGORY5</option>
+            <option value="CATEGORY6">CATEGORY6</option>
+            <option value="CATEGORY7">CATEGORY7</option>
+            <option value="CATEGORY8">CATEGORY8</option>
+            <option value="CATEGORY9">CATEGORY9</option>
+            <option value="CATEGORY10">CATEGORY10</option>
+            <option value="CATEGORY11">CATEGORY11</option>
+            <option value="CATEGORY12">CATEGORY12</option>
+            <option value="CATEGORY13">CATEGORY13</option>
+            <option value="CATEGORY14">CATEGORY14</option>
+            <option value="CATEGORY15">CATEGORY15</option>
+            <option value="CATEGORY16">CATEGORY16</option>
+            <option value="CATEGORY17">CATEGORY17</option>
+          </select>
+          <div
+            *ngIf="
+              editForm.get('paymentCategory')!.invalid &&
+              (editForm.get('paymentCategory')!.dirty || editForm.get('paymentCategory')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('paymentCategory')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_transactionNumber">Transaction Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="transactionNumber"
+            id="field_transactionNumber"
+            data-cy="transactionNumber"
+            formControlName="transactionNumber"
+          />
+          <div
+            *ngIf="
+              editForm.get('transactionNumber')!.invalid &&
+              (editForm.get('transactionNumber')!.dirty || editForm.get('transactionNumber')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('transactionNumber')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_transactionDate">Transaction Date</label>
+          <div class="input-group">
+            <input
+              id="field_transactionDate"
+              data-cy="transactionDate"
+              type="text"
+              class="form-control"
+              name="transactionDate"
+              ngbDatepicker
+              #transactionDateDp="ngbDatepicker"
+              formControlName="transactionDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="transactionDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('transactionDate')!.invalid &&
+              (editForm.get('transactionDate')!.dirty || editForm.get('transactionDate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('transactionDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_transactionCurrency">Transaction Currency</label>
+          <select
+            class="form-control"
+            name="transactionCurrency"
+            formControlName="transactionCurrency"
+            id="field_transactionCurrency"
+            data-cy="transactionCurrency"
+          >
+            <option [ngValue]="null"></option>
+            <option value="KES">KES</option>
+            <option value="USD">USD</option>
+            <option value="GBP">GBP</option>
+            <option value="EUR">EUR</option>
+            <option value="INR">INR</option>
+            <option value="ZAR">ZAR</option>
+            <option value="AED">AED</option>
+            <option value="CNY">CNY</option>
+            <option value="CHF">CHF</option>
+            <option value="UGX">UGX</option>
+            <option value="TZS">TZS</option>
+            <option value="JPY">JPY</option>
+            <option value="CAD">CAD</option>
+          </select>
+          <div
+            *ngIf="
+              editForm.get('transactionCurrency')!.invalid &&
+              (editForm.get('transactionCurrency')!.dirty || editForm.get('transactionCurrency')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('transactionCurrency')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_transactionAmount">Transaction Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="transactionAmount"
+            id="field_transactionAmount"
+            data-cy="transactionAmount"
+            formControlName="transactionAmount"
+          />
+          <div
+            *ngIf="
+              editForm.get('transactionAmount')!.invalid &&
+              (editForm.get('transactionAmount')!.dirty || editForm.get('transactionAmount')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('transactionAmount')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('transactionAmount')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('transactionAmount')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_beneficiary">Beneficiary</label>
+          <input
+            type="text"
+            class="form-control"
+            name="beneficiary"
+            id="field_beneficiary"
+            data-cy="beneficiary"
+            formControlName="beneficiary"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="field_paymentLabels">Payment Label</label>
+          <select
+            class="form-control"
+            id="field_paymentLabels"
+            data-cy="paymentLabel"
+            multiple
+            name="paymentLabels"
+            formControlName="paymentLabels"
+          >
+            <option
+              [ngValue]="getSelectedPaymentLabel(paymentLabelOption, editForm.get('paymentLabels')!.value)"
+              *ngFor="let paymentLabelOption of paymentLabelsSharedCollection; trackBy: trackPaymentLabelById"
+            >
+              {{ paymentLabelOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

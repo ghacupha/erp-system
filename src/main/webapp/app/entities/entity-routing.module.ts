@@ -91,6 +91,11 @@ import { RouterModule } from '@angular/router';
         data: { pageTitle: 'PaymentLabels' },
         loadChildren: () => import('./payment-label/payment-label.module').then(m => m.PaymentLabelModule),
       },
+      {
+        path: 'signed-payment',
+        data: { pageTitle: 'SignedPayments' },
+        loadChildren: () => import('./signed-payment/signed-payment.module').then(m => m.SignedPaymentModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

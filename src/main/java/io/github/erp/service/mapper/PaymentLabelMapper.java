@@ -2,6 +2,7 @@ package io.github.erp.service.mapper;
 
 import io.github.erp.domain.*;
 import io.github.erp.service.dto.PaymentLabelDTO;
+import java.util.Set;
 import org.mapstruct.*;
 
 /**
@@ -11,6 +12,12 @@ import org.mapstruct.*;
 public interface PaymentLabelMapper extends EntityMapper<PaymentLabelDTO, PaymentLabel> {
     @Mapping(target = "containingPaymentLabel", source = "containingPaymentLabel", qualifiedByName = "description")
     PaymentLabelDTO toDto(PaymentLabel s);
+
+    @Named("descriptionSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "description", source = "description")
+    Set<PaymentLabelDTO> toDtoDescriptionSet(Set<PaymentLabel> paymentLabel);
 
     @Named("description")
     @BeanMapping(ignoreByDefault = true)

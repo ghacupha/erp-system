@@ -1,0 +1,150 @@
+package io.github.erp.service.dto;
+
+import io.github.erp.domain.enumeration.CategoryTypes;
+import io.github.erp.domain.enumeration.CurrencyTypes;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import javax.validation.constraints.*;
+
+/**
+ * A DTO for the {@link io.github.erp.domain.SignedPayment} entity.
+ */
+public class SignedPaymentDTO implements Serializable {
+
+    private Long id;
+
+    @NotNull
+    private CategoryTypes paymentCategory;
+
+    @NotNull
+    private String transactionNumber;
+
+    @NotNull
+    private LocalDate transactionDate;
+
+    @NotNull
+    private CurrencyTypes transactionCurrency;
+
+    @NotNull
+    @DecimalMin(value = "0")
+    private BigDecimal transactionAmount;
+
+    private String beneficiary;
+
+    private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
+
+    private Set<PlaceholderDTO> placeholders = new HashSet<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public CategoryTypes getPaymentCategory() {
+        return paymentCategory;
+    }
+
+    public void setPaymentCategory(CategoryTypes paymentCategory) {
+        this.paymentCategory = paymentCategory;
+    }
+
+    public String getTransactionNumber() {
+        return transactionNumber;
+    }
+
+    public void setTransactionNumber(String transactionNumber) {
+        this.transactionNumber = transactionNumber;
+    }
+
+    public LocalDate getTransactionDate() {
+        return transactionDate;
+    }
+
+    public void setTransactionDate(LocalDate transactionDate) {
+        this.transactionDate = transactionDate;
+    }
+
+    public CurrencyTypes getTransactionCurrency() {
+        return transactionCurrency;
+    }
+
+    public void setTransactionCurrency(CurrencyTypes transactionCurrency) {
+        this.transactionCurrency = transactionCurrency;
+    }
+
+    public BigDecimal getTransactionAmount() {
+        return transactionAmount;
+    }
+
+    public void setTransactionAmount(BigDecimal transactionAmount) {
+        this.transactionAmount = transactionAmount;
+    }
+
+    public String getBeneficiary() {
+        return beneficiary;
+    }
+
+    public void setBeneficiary(String beneficiary) {
+        this.beneficiary = beneficiary;
+    }
+
+    public Set<PaymentLabelDTO> getPaymentLabels() {
+        return paymentLabels;
+    }
+
+    public void setPaymentLabels(Set<PaymentLabelDTO> paymentLabels) {
+        this.paymentLabels = paymentLabels;
+    }
+
+    public Set<PlaceholderDTO> getPlaceholders() {
+        return placeholders;
+    }
+
+    public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
+        this.placeholders = placeholders;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof SignedPaymentDTO)) {
+            return false;
+        }
+
+        SignedPaymentDTO signedPaymentDTO = (SignedPaymentDTO) o;
+        if (this.id == null) {
+            return false;
+        }
+        return Objects.equals(this.id, signedPaymentDTO.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id);
+    }
+
+    // prettier-ignore
+    @Override
+    public String toString() {
+        return "SignedPaymentDTO{" +
+            "id=" + getId() +
+            ", paymentCategory='" + getPaymentCategory() + "'" +
+            ", transactionNumber='" + getTransactionNumber() + "'" +
+            ", transactionDate='" + getTransactionDate() + "'" +
+            ", transactionCurrency='" + getTransactionCurrency() + "'" +
+            ", transactionAmount=" + getTransactionAmount() +
+            ", beneficiary='" + getBeneficiary() + "'" +
+            ", paymentLabels=" + getPaymentLabels() +
+            ", placeholders=" + getPlaceholders() +
+            "}";
+    }
+}
