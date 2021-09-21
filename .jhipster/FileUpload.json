@@ -50,8 +50,7 @@
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",
       "otherEntityField": "description",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "fileUpload"
+      "ownerSide": true
     }
   ],
   "changelogDate": "20210414144555",

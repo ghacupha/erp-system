@@ -48,8 +48,7 @@
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",
       "otherEntityField": "description",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "fixedAssetDepreciation"
+      "ownerSide": true
     }
   ],
   "service": "serviceImpl",

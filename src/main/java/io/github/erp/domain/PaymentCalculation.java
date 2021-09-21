@@ -45,25 +45,12 @@ public class PaymentCalculation implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "payment_label_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = {
-            "containingPaymentLabel",
-            "placeholders",
-            "paymentCalculations",
-            "paymentCategories",
-            "paymentRequisitions",
-            "payments",
-            "invoices",
-            "dealers",
-            "signedPayments",
-        },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "containingPaymentLabel", "placeholders" }, allowSetters = true)
     private Set<PaymentLabel> paymentLabels = new HashSet<>();
 
     @JsonIgnoreProperties(
         value = {
-            "paymentLabels", "ownedInvoices", "dealers", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup",
+            "paymentLabels", "ownedInvoices", "dealer", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup",
         },
         allowSetters = true
     )
@@ -71,7 +58,7 @@ public class PaymentCalculation implements Serializable {
     private Payment payment;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "paymentLabels", "paymentCalculations", "payments", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "paymentLabels", "paymentCalculations", "placeholders" }, allowSetters = true)
     private PaymentCategory paymentCategory;
 
     @ManyToMany
@@ -81,26 +68,7 @@ public class PaymentCalculation implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "placeholder_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = {
-            "containingPlaceholder",
-            "dealers",
-            "fileTypes",
-            "fileUploads",
-            "fixedAssetAcquisitions",
-            "fixedAssetDepreciations",
-            "fixedAssetNetBookValues",
-            "invoices",
-            "messageTokens",
-            "payments",
-            "paymentCalculations",
-            "paymentRequisitions",
-            "paymentCategories",
-            "taxReferences",
-            "taxRules",
-        },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -185,13 +153,11 @@ public class PaymentCalculation implements Serializable {
 
     public PaymentCalculation addPaymentLabel(PaymentLabel paymentLabel) {
         this.paymentLabels.add(paymentLabel);
-        paymentLabel.getPaymentCalculations().add(this);
         return this;
     }
 
     public PaymentCalculation removePaymentLabel(PaymentLabel paymentLabel) {
         this.paymentLabels.remove(paymentLabel);
-        paymentLabel.getPaymentCalculations().remove(this);
         return this;
     }
 
@@ -242,13 +208,11 @@ public class PaymentCalculation implements Serializable {
 
     public PaymentCalculation addPlaceholder(Placeholder placeholder) {
         this.placeholders.add(placeholder);
-        placeholder.getPaymentCalculations().add(this);
         return this;
     }
 
     public PaymentCalculation removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
-        placeholder.getPaymentCalculations().remove(this);
         return this;
     }
 

@@ -59,10 +59,9 @@
         </dd>
         <dt><span>Dealer</span></dt>
         <dd>
-          <span *ngFor="let dealer of payment.dealers; let last = last">
-            <a [routerLink]="['/dealer', dealer?.id, 'view']">{{ dealer.dealerName }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
+          <div *ngIf="payment.dealer">
+            <a [routerLink]="['/dealer', payment.dealer?.id, 'view']">{{ payment.dealer?.dealerName }}</a>
+          </div>
         </dd>
         <dt><span>Payment Category</span></dt>
         <dd>

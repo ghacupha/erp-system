@@ -53,7 +53,7 @@ describe('Payment e2e test', () => {
       paymentUpdatePage.settlementCurrencySelectLastOption(),
       paymentUpdatePage.setConversionRateInput('5'),
       // paymentUpdatePage.paymentLabelSelectLastOption(),
-      // paymentUpdatePage.dealerSelectLastOption(),
+      paymentUpdatePage.dealerSelectLastOption(),
       paymentUpdatePage.paymentCategorySelectLastOption(),
       paymentUpdatePage.taxRuleSelectLastOption(),
       paymentUpdatePage.paymentCalculationSelectLastOption(),

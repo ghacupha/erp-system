@@ -49,26 +49,7 @@ public class TaxReference implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "placeholder_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = {
-            "containingPlaceholder",
-            "dealers",
-            "fileTypes",
-            "fileUploads",
-            "fixedAssetAcquisitions",
-            "fixedAssetDepreciations",
-            "fixedAssetNetBookValues",
-            "invoices",
-            "messageTokens",
-            "payments",
-            "paymentCalculations",
-            "paymentRequisitions",
-            "paymentCategories",
-            "taxReferences",
-            "taxRules",
-        },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -153,13 +134,11 @@ public class TaxReference implements Serializable {
 
     public TaxReference addPlaceholder(Placeholder placeholder) {
         this.placeholders.add(placeholder);
-        placeholder.getTaxReferences().add(this);
         return this;
     }
 
     public TaxReference removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
-        placeholder.getTaxReferences().remove(this);
         return this;
     }
 

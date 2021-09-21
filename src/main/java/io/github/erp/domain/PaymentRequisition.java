@@ -42,27 +42,11 @@ public class PaymentRequisition implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "payment_label_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = {
-            "containingPaymentLabel",
-            "placeholders",
-            "paymentCalculations",
-            "paymentCategories",
-            "paymentRequisitions",
-            "payments",
-            "invoices",
-            "dealers",
-            "signedPayments",
-        },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "containingPaymentLabel", "placeholders" }, allowSetters = true)
     private Set<PaymentLabel> paymentLabels = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(
-        value = { "paymentLabels", "dealerGroup", "payments", "paymentRequisitions", "placeholders" },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "paymentRequisitions", "placeholders" }, allowSetters = true)
     private Dealer dealer;
 
     @ManyToMany
@@ -72,26 +56,7 @@ public class PaymentRequisition implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "placeholder_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = {
-            "containingPlaceholder",
-            "dealers",
-            "fileTypes",
-            "fileUploads",
-            "fixedAssetAcquisitions",
-            "fixedAssetDepreciations",
-            "fixedAssetNetBookValues",
-            "invoices",
-            "messageTokens",
-            "payments",
-            "paymentCalculations",
-            "paymentRequisitions",
-            "paymentCategories",
-            "taxReferences",
-            "taxRules",
-        },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -163,13 +128,11 @@ public class PaymentRequisition implements Serializable {
 
     public PaymentRequisition addPaymentLabel(PaymentLabel paymentLabel) {
         this.paymentLabels.add(paymentLabel);
-        paymentLabel.getPaymentRequisitions().add(this);
         return this;
     }
 
     public PaymentRequisition removePaymentLabel(PaymentLabel paymentLabel) {
         this.paymentLabels.remove(paymentLabel);
-        paymentLabel.getPaymentRequisitions().remove(this);
         return this;
     }
 
@@ -201,13 +164,11 @@ public class PaymentRequisition implements Serializable {
 
     public PaymentRequisition addPlaceholder(Placeholder placeholder) {
         this.placeholders.add(placeholder);
-        placeholder.getPaymentRequisitions().add(this);
         return this;
     }
 
     public PaymentRequisition removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
-        placeholder.getPaymentRequisitions().remove(this);
         return this;
     }
 

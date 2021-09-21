@@ -54,8 +54,7 @@
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",
       "otherEntityField": "description",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "invoice"
+      "ownerSide": true
     }
   ],
   "service": "serviceImpl",

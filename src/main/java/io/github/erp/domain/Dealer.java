@@ -61,38 +61,12 @@ public class Dealer implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "payment_label_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = {
-            "containingPaymentLabel",
-            "placeholders",
-            "paymentCalculations",
-            "paymentCategories",
-            "paymentRequisitions",
-            "payments",
-            "invoices",
-            "dealers",
-            "signedPayments",
-        },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "containingPaymentLabel", "placeholders" }, allowSetters = true)
     private Set<PaymentLabel> paymentLabels = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(
-        value = { "paymentLabels", "dealerGroup", "payments", "paymentRequisitions", "placeholders" },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "paymentRequisitions", "placeholders" }, allowSetters = true)
     private Dealer dealerGroup;
-
-    @ManyToMany(mappedBy = "dealers")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = {
-            "paymentLabels", "ownedInvoices", "dealers", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup",
-        },
-        allowSetters = true
-    )
-    private Set<Payment> payments = new HashSet<>();
 
     @OneToMany(mappedBy = "dealer")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -106,26 +80,7 @@ public class Dealer implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "placeholder_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = {
-            "containingPlaceholder",
-            "dealers",
-            "fileTypes",
-            "fileUploads",
-            "fixedAssetAcquisitions",
-            "fixedAssetDepreciations",
-            "fixedAssetNetBookValues",
-            "invoices",
-            "messageTokens",
-            "payments",
-            "paymentCalculations",
-            "paymentRequisitions",
-            "paymentCategories",
-            "taxReferences",
-            "taxRules",
-        },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -275,13 +230,11 @@ public class Dealer implements Serializable {
 
     public Dealer addPaymentLabel(PaymentLabel paymentLabel) {
         this.paymentLabels.add(paymentLabel);
-        paymentLabel.getDealers().add(this);
         return this;
     }
 
     public Dealer removePaymentLabel(PaymentLabel paymentLabel) {
         this.paymentLabels.remove(paymentLabel);
-        paymentLabel.getDealers().remove(this);
         return this;
     }
 
@@ -295,37 +248,6 @@ public class Dealer implements Serializable {
 
     public Dealer dealerGroup(Dealer dealer) {
         this.setDealerGroup(dealer);
-        return this;
-    }
-
-    public Set<Payment> getPayments() {
-        return this.payments;
-    }
-
-    public void setPayments(Set<Payment> payments) {
-        if (this.payments != null) {
-            this.payments.forEach(i -> i.removeDealer(this));
-        }
-        if (payments != null) {
-            payments.forEach(i -> i.addDealer(this));
-        }
-        this.payments = payments;
-    }
-
-    public Dealer payments(Set<Payment> payments) {
-        this.setPayments(payments);
-        return this;
-    }
-
-    public Dealer addPayment(Payment payment) {
-        this.payments.add(payment);
-        payment.getDealers().add(this);
-        return this;
-    }
-
-    public Dealer removePayment(Payment payment) {
-        this.payments.remove(payment);
-        payment.getDealers().remove(this);
         return this;
     }
 
@@ -375,13 +297,11 @@ public class Dealer implements Serializable {
 
     public Dealer addPlaceholder(Placeholder placeholder) {
         this.placeholders.add(placeholder);
-        placeholder.getDealers().add(this);
         return this;
     }
 
     public Dealer removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
-        placeholder.getDealers().remove(this);
         return this;
     }
 

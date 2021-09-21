@@ -41,6 +41,9 @@
             <column name="conversion_rate" type="double">
                 <constraints nullable="false" />
             </column>
+            <column name="dealer_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <column name="payment_category_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -69,17 +72,6 @@
         </createTable>
 
         <addPrimaryKey columnNames="payment_id, payment_label_id" tableName="rel_payment__payment_label"/>
-
-        <createTable tableName="rel_payment__dealer">
-            <column name="dealer_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="payment_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <addPrimaryKey columnNames="payment_id, dealer_id" tableName="rel_payment__dealer"/>
 
         <createTable tableName="rel_payment__placeholder">
             <column name="placeholder_id" type="bigint">

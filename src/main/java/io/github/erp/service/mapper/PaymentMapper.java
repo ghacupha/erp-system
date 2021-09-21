@@ -2,7 +2,6 @@ package io.github.erp.service.mapper;
 
 import io.github.erp.domain.*;
 import io.github.erp.service.dto.PaymentDTO;
-import java.util.Set;
 import org.mapstruct.*;
 
 /**
@@ -21,7 +20,7 @@ import org.mapstruct.*;
 )
 public interface PaymentMapper extends EntityMapper<PaymentDTO, Payment> {
     @Mapping(target = "paymentLabels", source = "paymentLabels", qualifiedByName = "descriptionSet")
-    @Mapping(target = "dealers", source = "dealers", qualifiedByName = "dealerNameSet")
+    @Mapping(target = "dealer", source = "dealer", qualifiedByName = "dealerName")
     @Mapping(target = "paymentCategory", source = "paymentCategory", qualifiedByName = "categoryName")
     @Mapping(target = "taxRule", source = "taxRule", qualifiedByName = "id")
     @Mapping(target = "paymentCalculation", source = "paymentCalculation", qualifiedByName = "id")
@@ -35,7 +34,6 @@ public interface PaymentMapper extends EntityMapper<PaymentDTO, Payment> {
     PaymentDTO toDtoId(Payment payment);
 
     @Mapping(target = "removePaymentLabel", ignore = true)
-    @Mapping(target = "removeDealer", ignore = true)
     @Mapping(target = "removePlaceholder", ignore = true)
     Payment toEntity(PaymentDTO paymentDTO);
 }

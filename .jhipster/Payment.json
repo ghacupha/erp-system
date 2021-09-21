@@ -59,17 +59,14 @@
     {
       "relationshipName": "dealer",
       "otherEntityName": "dealer",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "dealerName",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "payment"
+      "relationshipType": "many-to-one",
+      "otherEntityField": "dealerName"
     },
     {
       "relationshipName": "paymentCategory",
       "otherEntityName": "paymentCategory",
       "relationshipType": "many-to-one",
-      "otherEntityField": "categoryName",
-      "otherEntityRelationshipName": "payment"
+      "otherEntityField": "categoryName"
     },
     {
       "relationshipName": "taxRule",
@@ -94,8 +91,7 @@
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",
       "otherEntityField": "description",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "payment"
+      "ownerSide": true
     },
     {
       "relationshipName": "paymentGroup",

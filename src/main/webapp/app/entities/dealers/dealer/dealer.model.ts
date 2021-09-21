@@ -1,5 +1,4 @@
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
-import { IPayment } from 'app/entities/payments/payment/payment.model';
 import { IPaymentRequisition } from 'app/entities/payments/payment-requisition/payment-requisition.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
@@ -16,7 +15,6 @@ export interface IDealer {
   bankersSwiftCode?: string | null;
   paymentLabels?: IPaymentLabel[] | null;
   dealerGroup?: IDealer | null;
-  payments?: IPayment[] | null;
   paymentRequisitions?: IPaymentRequisition[] | null;
   placeholders?: IPlaceholder[] | null;
 }
@@ -35,7 +33,6 @@ export class Dealer implements IDealer {
     public bankersSwiftCode?: string | null,
     public paymentLabels?: IPaymentLabel[] | null,
     public dealerGroup?: IDealer | null,
-    public payments?: IPayment[] | null,
     public paymentRequisitions?: IPaymentRequisition[] | null,
     public placeholders?: IPlaceholder[] | null
   ) {}

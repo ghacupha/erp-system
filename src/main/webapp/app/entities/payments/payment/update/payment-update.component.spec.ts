@@ -84,12 +84,12 @@ describe('Component Tests', () => {
 
       it('Should call Dealer query and add missing value', () => {
         const payment: IPayment = { id: 456 };
-        const dealers: IDealer[] = [{ id: 90172 }];
-        payment.dealers = dealers;
+        const dealer: IDealer = { id: 90172 };
+        payment.dealer = dealer;
 
         const dealerCollection: IDealer[] = [{ id: 41765 }];
         jest.spyOn(dealerService, 'query').mockReturnValue(of(new HttpResponse({ body: dealerCollection })));
-        const additionalDealers = [...dealers];
+        const additionalDealers = [dealer];
         const expectedCollection: IDealer[] = [...additionalDealers, ...dealerCollection];
         jest.spyOn(dealerService, 'addDealerToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -208,8 +208,8 @@ describe('Component Tests', () => {
         const payment: IPayment = { id: 456 };
         const paymentLabels: IPaymentLabel = { id: 75140 };
         payment.paymentLabels = [paymentLabels];
-        const dealers: IDealer = { id: 78923 };
-        payment.dealers = [dealers];
+        const dealer: IDealer = { id: 78923 };
+        payment.dealer = dealer;
         const paymentCategory: IPaymentCategory = { id: 45196 };
         payment.paymentCategory = paymentCategory;
         const taxRule: ITaxRule = { id: 2708 };
@@ -226,7 +226,7 @@ describe('Component Tests', () => {
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(payment));
         expect(comp.paymentLabelsSharedCollection).toContain(paymentLabels);
-        expect(comp.dealersSharedCollection).toContain(dealers);
+        expect(comp.dealersSharedCollection).toContain(dealer);
         expect(comp.paymentCategoriesSharedCollection).toContain(paymentCategory);
         expect(comp.taxRulesSharedCollection).toContain(taxRule);
         expect(comp.paymentCalculationsCollection).toContain(paymentCalculation);
@@ -379,32 +379,6 @@ describe('Component Tests', () => {
           const option = { id: 123 };
           const selected = { id: 456 };
           const result = comp.getSelectedPaymentLabel(option, [selected]);
-          expect(result === option).toEqual(true);
-          expect(result === selected).toEqual(false);
-        });
-      });
-
-      describe('getSelectedDealer', () => {
-        it('Should return option if no Dealer is selected', () => {
-          const option = { id: 123 };
-          const result = comp.getSelectedDealer(option);
-          expect(result === option).toEqual(true);
-        });
-
-        it('Should return selected Dealer for according option', () => {
-          const option = { id: 123 };
-          const selected = { id: 123 };
-          const selected2 = { id: 456 };
-          const result = comp.getSelectedDealer(option, [selected2, selected]);
-          expect(result === selected).toEqual(true);
-          expect(result === selected2).toEqual(false);
-          expect(result === option).toEqual(false);
-        });
-
-        it('Should return option if this Dealer is not selected', () => {
-          const option = { id: 123 };
-          const selected = { id: 456 };
-          const result = comp.getSelectedDealer(option, [selected]);
           expect(result === option).toEqual(true);
           expect(result === selected).toEqual(false);
         });

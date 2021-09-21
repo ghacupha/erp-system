@@ -48,8 +48,6 @@ public class DealerCriteria implements Serializable, Criteria {
 
     private LongFilter dealerGroupId;
 
-    private LongFilter paymentId;
-
     private LongFilter paymentRequisitionId;
 
     private LongFilter placeholderId;
@@ -71,7 +69,6 @@ public class DealerCriteria implements Serializable, Criteria {
         this.bankersSwiftCode = other.bankersSwiftCode == null ? null : other.bankersSwiftCode.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
         this.dealerGroupId = other.dealerGroupId == null ? null : other.dealerGroupId.copy();
-        this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
         this.paymentRequisitionId = other.paymentRequisitionId == null ? null : other.paymentRequisitionId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
@@ -262,21 +259,6 @@ public class DealerCriteria implements Serializable, Criteria {
         this.dealerGroupId = dealerGroupId;
     }
 
-    public LongFilter getPaymentId() {
-        return paymentId;
-    }
-
-    public LongFilter paymentId() {
-        if (paymentId == null) {
-            paymentId = new LongFilter();
-        }
-        return paymentId;
-    }
-
-    public void setPaymentId(LongFilter paymentId) {
-        this.paymentId = paymentId;
-    }
-
     public LongFilter getPaymentRequisitionId() {
         return paymentRequisitionId;
     }
@@ -337,7 +319,6 @@ public class DealerCriteria implements Serializable, Criteria {
             Objects.equals(bankersSwiftCode, that.bankersSwiftCode) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
             Objects.equals(dealerGroupId, that.dealerGroupId) &&
-            Objects.equals(paymentId, that.paymentId) &&
             Objects.equals(paymentRequisitionId, that.paymentRequisitionId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
@@ -359,7 +340,6 @@ public class DealerCriteria implements Serializable, Criteria {
             bankersSwiftCode,
             paymentLabelId,
             dealerGroupId,
-            paymentId,
             paymentRequisitionId,
             placeholderId,
             distinct
@@ -382,7 +362,6 @@ public class DealerCriteria implements Serializable, Criteria {
             (bankersSwiftCode != null ? "bankersSwiftCode=" + bankersSwiftCode + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
             (dealerGroupId != null ? "dealerGroupId=" + dealerGroupId + ", " : "") +
-            (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
             (paymentRequisitionId != null ? "paymentRequisitionId=" + paymentRequisitionId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

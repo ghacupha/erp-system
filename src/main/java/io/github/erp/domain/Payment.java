@@ -67,20 +67,7 @@ public class Payment implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "payment_label_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = {
-            "containingPaymentLabel",
-            "placeholders",
-            "paymentCalculations",
-            "paymentCategories",
-            "paymentRequisitions",
-            "payments",
-            "invoices",
-            "dealers",
-            "signedPayments",
-        },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "containingPaymentLabel", "placeholders" }, allowSetters = true)
     private Set<PaymentLabel> paymentLabels = new HashSet<>();
 
     @OneToMany(mappedBy = "payment")
@@ -88,21 +75,12 @@ public class Payment implements Serializable {
     @JsonIgnoreProperties(value = { "paymentLabels", "payment", "dealer", "placeholders" }, allowSetters = true)
     private Set<Invoice> ownedInvoices = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-        name = "rel_payment__dealer",
-        joinColumns = @JoinColumn(name = "payment_id"),
-        inverseJoinColumns = @JoinColumn(name = "dealer_id")
-    )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = { "paymentLabels", "dealerGroup", "payments", "paymentRequisitions", "placeholders" },
-        allowSetters = true
-    )
-    private Set<Dealer> dealers = new HashSet<>();
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "paymentRequisitions", "placeholders" }, allowSetters = true)
+    private Dealer dealer;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "paymentLabels", "paymentCalculations", "payments", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "paymentLabels", "paymentCalculations", "placeholders" }, allowSetters = true)
     private PaymentCategory paymentCategory;
 
     @ManyToOne
@@ -121,32 +99,13 @@ public class Payment implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "placeholder_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = {
-            "containingPlaceholder",
-            "dealers",
-            "fileTypes",
-            "fileUploads",
-            "fixedAssetAcquisitions",
-            "fixedAssetDepreciations",
-            "fixedAssetNetBookValues",
-            "invoices",
-            "messageTokens",
-            "payments",
-            "paymentCalculations",
-            "paymentRequisitions",
-            "paymentCategories",
-            "taxReferences",
-            "taxRules",
-        },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
 
     @ManyToOne
     @JsonIgnoreProperties(
         value = {
-            "paymentLabels", "ownedInvoices", "dealers", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup",
+            "paymentLabels", "ownedInvoices", "dealer", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup",
         },
         allowSetters = true
     )
@@ -299,13 +258,11 @@ public class Payment implements Serializable {
 
     public Payment addPaymentLabel(PaymentLabel paymentLabel) {
         this.paymentLabels.add(paymentLabel);
-        paymentLabel.getPayments().add(this);
         return this;
     }
 
     public Payment removePaymentLabel(PaymentLabel paymentLabel) {
         this.paymentLabels.remove(paymentLabel);
-        paymentLabel.getPayments().remove(this);
         return this;
     }
 
@@ -340,28 +297,16 @@ public class Payment implements Serializable {
         return this;
     }
 
-    public Set<Dealer> getDealers() {
-        return this.dealers;
+    public Dealer getDealer() {
+        return this.dealer;
     }
 
-    public void setDealers(Set<Dealer> dealers) {
-        this.dealers = dealers;
+    public void setDealer(Dealer dealer) {
+        this.dealer = dealer;
     }
 
-    public Payment dealers(Set<Dealer> dealers) {
-        this.setDealers(dealers);
-        return this;
-    }
-
-    public Payment addDealer(Dealer dealer) {
-        this.dealers.add(dealer);
-        dealer.getPayments().add(this);
-        return this;
-    }
-
-    public Payment removeDealer(Dealer dealer) {
-        this.dealers.remove(dealer);
-        dealer.getPayments().remove(this);
+    public Payment dealer(Dealer dealer) {
+        this.setDealer(dealer);
         return this;
     }
 
@@ -419,13 +364,11 @@ public class Payment implements Serializable {
 
     public Payment addPlaceholder(Placeholder placeholder) {
         this.placeholders.add(placeholder);
-        placeholder.getPayments().add(this);
         return this;
     }
 
     public Payment removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
-        placeholder.getPayments().remove(this);
         return this;
     }
 

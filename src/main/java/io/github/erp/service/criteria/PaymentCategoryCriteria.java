@@ -54,8 +54,6 @@ public class PaymentCategoryCriteria implements Serializable, Criteria {
 
     private LongFilter paymentCalculationId;
 
-    private LongFilter paymentId;
-
     private LongFilter placeholderId;
 
     private Boolean distinct;
@@ -69,7 +67,6 @@ public class PaymentCategoryCriteria implements Serializable, Criteria {
         this.categoryType = other.categoryType == null ? null : other.categoryType.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
         this.paymentCalculationId = other.paymentCalculationId == null ? null : other.paymentCalculationId.copy();
-        this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
     }
@@ -169,21 +166,6 @@ public class PaymentCategoryCriteria implements Serializable, Criteria {
         this.paymentCalculationId = paymentCalculationId;
     }
 
-    public LongFilter getPaymentId() {
-        return paymentId;
-    }
-
-    public LongFilter paymentId() {
-        if (paymentId == null) {
-            paymentId = new LongFilter();
-        }
-        return paymentId;
-    }
-
-    public void setPaymentId(LongFilter paymentId) {
-        this.paymentId = paymentId;
-    }
-
     public LongFilter getPlaceholderId() {
         return placeholderId;
     }
@@ -223,7 +205,6 @@ public class PaymentCategoryCriteria implements Serializable, Criteria {
             Objects.equals(categoryType, that.categoryType) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
             Objects.equals(paymentCalculationId, that.paymentCalculationId) &&
-            Objects.equals(paymentId, that.paymentId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -238,7 +219,6 @@ public class PaymentCategoryCriteria implements Serializable, Criteria {
             categoryType,
             paymentLabelId,
             paymentCalculationId,
-            paymentId,
             placeholderId,
             distinct
         );
@@ -254,7 +234,6 @@ public class PaymentCategoryCriteria implements Serializable, Criteria {
             (categoryType != null ? "categoryType=" + categoryType + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
             (paymentCalculationId != null ? "paymentCalculationId=" + paymentCalculationId + ", " : "") +
-            (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
