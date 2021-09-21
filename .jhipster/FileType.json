@@ -33,8 +33,7 @@
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",
       "otherEntityField": "description",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "fileType"
+      "ownerSide": true
     }
   ],
   "changelogDate": "20210414144455",

@@ -47,7 +47,7 @@ export class PaymentUpdateComponent implements OnInit {
     settlementCurrency: [null, [Validators.required]],
     conversionRate: [null, [Validators.required, Validators.min(1.0)]],
     paymentLabels: [],
-    dealers: [],
+    dealer: [],
     paymentCategory: [],
     taxRule: [],
     paymentCalculation: [],
@@ -128,17 +128,6 @@ export class PaymentUpdateComponent implements OnInit {
     return option;
   }
 
-  getSelectedDealer(option: IDealer, selectedVals?: IDealer[]): IDealer {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
     if (selectedVals) {
       for (const selectedVal of selectedVals) {
@@ -182,7 +171,7 @@ export class PaymentUpdateComponent implements OnInit {
       settlementCurrency: payment.settlementCurrency,
       conversionRate: payment.conversionRate,
       paymentLabels: payment.paymentLabels,
-      dealers: payment.dealers,
+      dealer: payment.dealer,
       paymentCategory: payment.paymentCategory,
       taxRule: payment.taxRule,
       paymentCalculation: payment.paymentCalculation,
@@ -194,10 +183,7 @@ export class PaymentUpdateComponent implements OnInit {
       this.paymentLabelsSharedCollection,
       ...(payment.paymentLabels ?? [])
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
-      this.dealersSharedCollection,
-      ...(payment.dealers ?? [])
-    );
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, payment.dealer);
     this.paymentCategoriesSharedCollection = this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
       this.paymentCategoriesSharedCollection,
       payment.paymentCategory
@@ -231,11 +217,7 @@ export class PaymentUpdateComponent implements OnInit {
     this.dealerService
       .query()
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
-      .pipe(
-        map((dealers: IDealer[]) =>
-          this.dealerService.addDealerToCollectionIfMissing(dealers, ...(this.editForm.get('dealers')!.value ?? []))
-        )
-      )
+      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('dealer')!.value)))
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
 
     this.paymentCategoryService
@@ -307,7 +289,7 @@ export class PaymentUpdateComponent implements OnInit {
       settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
       conversionRate: this.editForm.get(['conversionRate'])!.value,
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
-      dealers: this.editForm.get(['dealers'])!.value,
+      dealer: this.editForm.get(['dealer'])!.value,
       paymentCategory: this.editForm.get(['paymentCategory'])!.value,
       taxRule: this.editForm.get(['taxRule'])!.value,
       paymentCalculation: this.editForm.get(['paymentCalculation'])!.value,

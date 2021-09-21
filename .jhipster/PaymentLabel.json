@@ -22,57 +22,7 @@
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",
       "otherEntityField": "description",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "paymentLabel"
-    },
-    {
-      "relationshipName": "paymentCalculation",
-      "otherEntityName": "paymentCalculation",
-      "relationshipType": "many-to-many",
-      "ownerSide": false,
-      "otherEntityRelationshipName": "paymentLabel"
-    },
-    {
-      "relationshipName": "paymentCategory",
-      "otherEntityName": "paymentCategory",
-      "relationshipType": "many-to-many",
-      "ownerSide": false,
-      "otherEntityRelationshipName": "paymentLabel"
-    },
-    {
-      "relationshipName": "paymentRequisition",
-      "otherEntityName": "paymentRequisition",
-      "relationshipType": "many-to-many",
-      "ownerSide": false,
-      "otherEntityRelationshipName": "paymentLabel"
-    },
-    {
-      "relationshipName": "payment",
-      "otherEntityName": "payment",
-      "relationshipType": "many-to-many",
-      "ownerSide": false,
-      "otherEntityRelationshipName": "paymentLabel"
-    },
-    {
-      "relationshipName": "invoice",
-      "otherEntityName": "invoice",
-      "relationshipType": "many-to-many",
-      "ownerSide": false,
-      "otherEntityRelationshipName": "paymentLabel"
-    },
-    {
-      "relationshipName": "dealer",
-      "otherEntityName": "dealer",
-      "relationshipType": "many-to-many",
-      "ownerSide": false,
-      "otherEntityRelationshipName": "paymentLabel"
-    },
-    {
-      "relationshipName": "signedPayment",
-      "otherEntityName": "signedPayment",
-      "relationshipType": "many-to-many",
-      "ownerSide": false,
-      "otherEntityRelationshipName": "paymentLabel"
+      "ownerSide": true
     }
   ],
   "service": "serviceImpl",

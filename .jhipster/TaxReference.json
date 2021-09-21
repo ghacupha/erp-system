@@ -7,8 +7,7 @@
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",
       "otherEntityField": "description",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "taxReference"
+      "ownerSide": true
     }
   ],
   "fields": [

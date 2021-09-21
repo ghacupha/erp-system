@@ -54,20 +54,7 @@ public class SignedPayment implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "payment_label_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = {
-            "containingPaymentLabel",
-            "placeholders",
-            "paymentCalculations",
-            "paymentCategories",
-            "paymentRequisitions",
-            "payments",
-            "invoices",
-            "dealers",
-            "signedPayments",
-        },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "containingPaymentLabel", "placeholders" }, allowSetters = true)
     private Set<PaymentLabel> paymentLabels = new HashSet<>();
 
     @ManyToMany
@@ -77,14 +64,11 @@ public class SignedPayment implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "dealer_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = { "paymentLabels", "dealerGroup", "payments", "paymentRequisitions", "placeholders" },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "paymentRequisitions", "placeholders" }, allowSetters = true)
     private Set<Dealer> dealers = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "paymentLabels", "paymentCalculations", "payments", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "paymentLabels", "paymentCalculations", "placeholders" }, allowSetters = true)
     private PaymentCategory paymentCategory;
 
     @ManyToMany
@@ -94,26 +78,7 @@ public class SignedPayment implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "placeholder_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = {
-            "containingPlaceholder",
-            "dealers",
-            "fileTypes",
-            "fileUploads",
-            "fixedAssetAcquisitions",
-            "fixedAssetDepreciations",
-            "fixedAssetNetBookValues",
-            "invoices",
-            "messageTokens",
-            "payments",
-            "paymentCalculations",
-            "paymentRequisitions",
-            "paymentCategories",
-            "taxReferences",
-            "taxRules",
-        },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
 
     @ManyToOne
@@ -205,13 +170,11 @@ public class SignedPayment implements Serializable {
 
     public SignedPayment addPaymentLabel(PaymentLabel paymentLabel) {
         this.paymentLabels.add(paymentLabel);
-        paymentLabel.getSignedPayments().add(this);
         return this;
     }
 
     public SignedPayment removePaymentLabel(PaymentLabel paymentLabel) {
         this.paymentLabels.remove(paymentLabel);
-        paymentLabel.getSignedPayments().remove(this);
         return this;
     }
 

@@ -122,66 +122,6 @@ public class PaymentLabelQueryService extends QueryService<PaymentLabel> {
                         )
                     );
             }
-            if (criteria.getPaymentCalculationId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getPaymentCalculationId(),
-                            root -> root.join(PaymentLabel_.paymentCalculations, JoinType.LEFT).get(PaymentCalculation_.id)
-                        )
-                    );
-            }
-            if (criteria.getPaymentCategoryId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getPaymentCategoryId(),
-                            root -> root.join(PaymentLabel_.paymentCategories, JoinType.LEFT).get(PaymentCategory_.id)
-                        )
-                    );
-            }
-            if (criteria.getPaymentRequisitionId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getPaymentRequisitionId(),
-                            root -> root.join(PaymentLabel_.paymentRequisitions, JoinType.LEFT).get(PaymentRequisition_.id)
-                        )
-                    );
-            }
-            if (criteria.getPaymentId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getPaymentId(),
-                            root -> root.join(PaymentLabel_.payments, JoinType.LEFT).get(Payment_.id)
-                        )
-                    );
-            }
-            if (criteria.getInvoiceId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getInvoiceId(),
-                            root -> root.join(PaymentLabel_.invoices, JoinType.LEFT).get(Invoice_.id)
-                        )
-                    );
-            }
-            if (criteria.getDealerId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getDealerId(), root -> root.join(PaymentLabel_.dealers, JoinType.LEFT).get(Dealer_.id))
-                    );
-            }
-            if (criteria.getSignedPaymentId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getSignedPaymentId(),
-                            root -> root.join(PaymentLabel_.signedPayments, JoinType.LEFT).get(SignedPayment_.id)
-                        )
-                    );
-            }
         }
         return specification;
     }

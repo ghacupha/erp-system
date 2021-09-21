@@ -46,36 +46,13 @@ public class PaymentCategory implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "payment_label_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = {
-            "containingPaymentLabel",
-            "placeholders",
-            "paymentCalculations",
-            "paymentCategories",
-            "paymentRequisitions",
-            "payments",
-            "invoices",
-            "dealers",
-            "signedPayments",
-        },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "containingPaymentLabel", "placeholders" }, allowSetters = true)
     private Set<PaymentLabel> paymentLabels = new HashSet<>();
 
     @OneToMany(mappedBy = "paymentCategory")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "paymentLabels", "payment", "paymentCategory", "placeholders" }, allowSetters = true)
     private Set<PaymentCalculation> paymentCalculations = new HashSet<>();
-
-    @OneToMany(mappedBy = "paymentCategory")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = {
-            "paymentLabels", "ownedInvoices", "dealers", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup",
-        },
-        allowSetters = true
-    )
-    private Set<Payment> payments = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -84,26 +61,7 @@ public class PaymentCategory implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "placeholder_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = {
-            "containingPlaceholder",
-            "dealers",
-            "fileTypes",
-            "fileUploads",
-            "fixedAssetAcquisitions",
-            "fixedAssetDepreciations",
-            "fixedAssetNetBookValues",
-            "invoices",
-            "messageTokens",
-            "payments",
-            "paymentCalculations",
-            "paymentRequisitions",
-            "paymentCategories",
-            "taxReferences",
-            "taxRules",
-        },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -175,13 +133,11 @@ public class PaymentCategory implements Serializable {
 
     public PaymentCategory addPaymentLabel(PaymentLabel paymentLabel) {
         this.paymentLabels.add(paymentLabel);
-        paymentLabel.getPaymentCategories().add(this);
         return this;
     }
 
     public PaymentCategory removePaymentLabel(PaymentLabel paymentLabel) {
         this.paymentLabels.remove(paymentLabel);
-        paymentLabel.getPaymentCategories().remove(this);
         return this;
     }
 
@@ -216,37 +172,6 @@ public class PaymentCategory implements Serializable {
         return this;
     }
 
-    public Set<Payment> getPayments() {
-        return this.payments;
-    }
-
-    public void setPayments(Set<Payment> payments) {
-        if (this.payments != null) {
-            this.payments.forEach(i -> i.setPaymentCategory(null));
-        }
-        if (payments != null) {
-            payments.forEach(i -> i.setPaymentCategory(this));
-        }
-        this.payments = payments;
-    }
-
-    public PaymentCategory payments(Set<Payment> payments) {
-        this.setPayments(payments);
-        return this;
-    }
-
-    public PaymentCategory addPayment(Payment payment) {
-        this.payments.add(payment);
-        payment.setPaymentCategory(this);
-        return this;
-    }
-
-    public PaymentCategory removePayment(Payment payment) {
-        this.payments.remove(payment);
-        payment.setPaymentCategory(null);
-        return this;
-    }
-
     public Set<Placeholder> getPlaceholders() {
         return this.placeholders;
     }
@@ -262,13 +187,11 @@ public class PaymentCategory implements Serializable {
 
     public PaymentCategory addPlaceholder(Placeholder placeholder) {
         this.placeholders.add(placeholder);
-        placeholder.getPaymentCategories().add(this);
         return this;
     }
 
     public PaymentCategory removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
-        placeholder.getPaymentCategories().remove(this);
         return this;
     }
 

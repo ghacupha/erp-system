@@ -2,7 +2,6 @@ package io.github.erp.service.mapper;
 
 import io.github.erp.domain.*;
 import io.github.erp.service.dto.FileTypeDTO;
-import java.util.Set;
 import org.mapstruct.*;
 
 /**

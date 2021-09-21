@@ -21,7 +21,7 @@ export interface IPayment {
   conversionRate?: number;
   paymentLabels?: IPaymentLabel[] | null;
   ownedInvoices?: IInvoice[] | null;
-  dealers?: IDealer[] | null;
+  dealer?: IDealer | null;
   paymentCategory?: IPaymentCategory | null;
   taxRule?: ITaxRule | null;
   paymentCalculation?: IPaymentCalculation | null;
@@ -43,7 +43,7 @@ export class Payment implements IPayment {
     public conversionRate?: number,
     public paymentLabels?: IPaymentLabel[] | null,
     public ownedInvoices?: IInvoice[] | null,
-    public dealers?: IDealer[] | null,
+    public dealer?: IDealer | null,
     public paymentCategory?: IPaymentCategory | null,
     public taxRule?: ITaxRule | null,
     public paymentCalculation?: IPaymentCalculation | null,

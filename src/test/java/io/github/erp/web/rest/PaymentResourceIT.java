@@ -1236,7 +1236,7 @@ class PaymentResourceIT {
         }
         em.persist(dealer);
         em.flush();
-        payment.addDealer(dealer);
+        payment.setDealer(dealer);
         paymentRepository.saveAndFlush(payment);
         Long dealerId = dealer.getId();
 

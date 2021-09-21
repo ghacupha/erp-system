@@ -69,26 +69,7 @@ public class FileUpload implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "placeholder_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = {
-            "containingPlaceholder",
-            "dealers",
-            "fileTypes",
-            "fileUploads",
-            "fixedAssetAcquisitions",
-            "fixedAssetDepreciations",
-            "fixedAssetNetBookValues",
-            "invoices",
-            "messageTokens",
-            "payments",
-            "paymentCalculations",
-            "paymentRequisitions",
-            "paymentCategories",
-            "taxReferences",
-            "taxRules",
-        },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -251,13 +232,11 @@ public class FileUpload implements Serializable {
 
     public FileUpload addPlaceholder(Placeholder placeholder) {
         this.placeholders.add(placeholder);
-        placeholder.getFileUploads().add(this);
         return this;
     }
 
     public FileUpload removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
-        placeholder.getFileUploads().remove(this);
         return this;
     }
 
