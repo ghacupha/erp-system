@@ -1,0 +1,12 @@
+<div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
+  <ul  class="navbar-nav ml-auto">
+    <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
+        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a class="nav-link" routerLink="payment"  id="entity-menu">
+          <span>
+              <fa-icon icon="cash-register"></fa-icon>
+          </span>
+      </a>
+    </li>
+  </ul>
+</div>
