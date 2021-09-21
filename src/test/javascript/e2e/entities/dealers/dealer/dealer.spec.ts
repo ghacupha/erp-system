@@ -52,7 +52,8 @@ describe('Dealer e2e test', () => {
       dealerUpdatePage.setBankersNameInput('bankersName'),
       dealerUpdatePage.setBankersBranchInput('bankersBranch'),
       dealerUpdatePage.setBankersSwiftCodeInput('bankersSwiftCode'),
-      // dealerUpdatePage.paymentSelectLastOption(),
+      // dealerUpdatePage.paymentLabelSelectLastOption(),
+      dealerUpdatePage.dealerGroupSelectLastOption(),
       // dealerUpdatePage.placeholderSelectLastOption(),
     ]);
 

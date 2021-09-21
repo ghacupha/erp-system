@@ -29,6 +29,17 @@
 
     <changeSet id="20210723153046-1-relations" author="jhipster">
 
+        <createTable tableName="rel_payment_category__payment_label">
+            <column name="payment_label_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_category_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="payment_category_id, payment_label_id" tableName="rel_payment_category__payment_label"/>
+
         <createTable tableName="rel_payment_category__placeholder">
             <column name="placeholder_id" type="bigint">
                 <constraints nullable="false"/>

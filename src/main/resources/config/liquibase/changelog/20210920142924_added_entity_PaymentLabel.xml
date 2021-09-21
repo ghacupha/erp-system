@@ -27,6 +27,20 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="20210920142924-1-relations" author="jhipster">
+
+        <createTable tableName="rel_payment_label__placeholder">
+            <column name="placeholder_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_label_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="payment_label_id, placeholder_id" tableName="rel_payment_label__placeholder"/>
+    </changeSet>
+
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 
     <!--

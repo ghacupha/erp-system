@@ -49,12 +49,15 @@ public class TaxRule implements Serializable {
     @Column(name = "withholding_tax_imported_service")
     private Double withholdingTaxImportedService;
 
+    @OneToMany(mappedBy = "taxRule")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "ownedInvoices", "dealers", "paymentCategory", "taxRule", "paymentCalculation", "paymentRequisition", "placeholders" },
+        value = {
+            "paymentLabels", "ownedInvoices", "dealers", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup",
+        },
         allowSetters = true
     )
-    @OneToOne(mappedBy = "taxRule")
-    private Payment payment;
+    private Set<Payment> payments = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -204,22 +207,34 @@ public class TaxRule implements Serializable {
         this.withholdingTaxImportedService = withholdingTaxImportedService;
     }
 
-    public Payment getPayment() {
-        return this.payment;
+    public Set<Payment> getPayments() {
+        return this.payments;
     }
 
-    public void setPayment(Payment payment) {
-        if (this.payment != null) {
-            this.payment.setTaxRule(null);
+    public void setPayments(Set<Payment> payments) {
+        if (this.payments != null) {
+            this.payments.forEach(i -> i.setTaxRule(null));
         }
-        if (payment != null) {
-            payment.setTaxRule(this);
+        if (payments != null) {
+            payments.forEach(i -> i.setTaxRule(this));
         }
-        this.payment = payment;
+        this.payments = payments;
     }
 
-    public TaxRule payment(Payment payment) {
-        this.setPayment(payment);
+    public TaxRule payments(Set<Payment> payments) {
+        this.setPayments(payments);
+        return this;
+    }
+
+    public TaxRule addPayment(Payment payment) {
+        this.payments.add(payment);
+        payment.setTaxRule(this);
+        return this;
+    }
+
+    public TaxRule removePayment(Payment payment) {
+        this.payments.remove(payment);
+        payment.setTaxRule(null);
         return this;
     }
 

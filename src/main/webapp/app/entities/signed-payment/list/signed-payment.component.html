@@ -51,9 +51,6 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="paymentCategory">
-            <span>Payment Category</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
-          </th>
           <th scope="col" jhiSortBy="transactionNumber">
             <span>Transaction Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
@@ -62,7 +59,8 @@
             <span>Transaction Currency</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="transactionAmount"><span>Transaction Amount</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="beneficiary"><span>Beneficiary</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="paymentCategory.categoryName"><span>Payment Category</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="signedPaymentGroup.id"><span>Signed Payment Group</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -71,12 +69,24 @@
           <td>
             <a [routerLink]="['/signed-payment', signedPayment.id, 'view']">{{ signedPayment.id }}</a>
           </td>
-          <td>{{ signedPayment.paymentCategory }}</td>
           <td>{{ signedPayment.transactionNumber }}</td>
           <td>{{ signedPayment.transactionDate | formatMediumDate }}</td>
           <td>{{ signedPayment.transactionCurrency }}</td>
           <td>{{ signedPayment.transactionAmount }}</td>
-          <td>{{ signedPayment.beneficiary }}</td>
+          <td>
+            <div *ngIf="signedPayment.paymentCategory">
+              <a [routerLink]="['/payment-category', signedPayment.paymentCategory?.id, 'view']">{{
+                signedPayment.paymentCategory?.categoryName
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="signedPayment.signedPaymentGroup">
+              <a [routerLink]="['/signed-payment', signedPayment.signedPaymentGroup?.id, 'view']">{{
+                signedPayment.signedPaymentGroup?.id
+              }}</a>
+            </div>
+          </td>
           <td class="text-right">
             <div class="btn-group">
               <button

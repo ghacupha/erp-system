@@ -39,7 +39,7 @@
       "relationshipName": "placeholder",
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",
-      "otherEntityField": "id",
+      "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "fixedAssetAcquisition"
     }

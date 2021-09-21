@@ -7,6 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IPaymentCalculation, PaymentCalculation } from '../payment-calculation.model';
 import { PaymentCalculationService } from '../service/payment-calculation.service';
+import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
+import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
 import { IPaymentCategory } from 'app/entities/payments/payment-category/payment-category.model';
 import { PaymentCategoryService } from 'app/entities/payments/payment-category/service/payment-category.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
@@ -19,6 +21,7 @@ import { PlaceholderService } from 'app/entities/erpService/placeholder/service/
 export class PaymentCalculationUpdateComponent implements OnInit {
   isSaving = false;
 
+  paymentLabelsSharedCollection: IPaymentLabel[] = [];
   paymentCategoriesSharedCollection: IPaymentCategory[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
 
@@ -28,12 +31,14 @@ export class PaymentCalculationUpdateComponent implements OnInit {
     withholdingVAT: [],
     withholdingTax: [],
     paymentAmount: [],
+    paymentLabels: [],
     paymentCategory: [],
     placeholders: [],
   });
 
   constructor(
     protected paymentCalculationService: PaymentCalculationService,
+    protected paymentLabelService: PaymentLabelService,
     protected paymentCategoryService: PaymentCategoryService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
@@ -62,12 +67,27 @@ export class PaymentCalculationUpdateComponent implements OnInit {
     }
   }
 
+  trackPaymentLabelById(index: number, item: IPaymentLabel): number {
+    return item.id!;
+  }
+
   trackPaymentCategoryById(index: number, item: IPaymentCategory): number {
     return item.id!;
   }
 
   trackPlaceholderById(index: number, item: IPlaceholder): number {
     return item.id!;
+  }
+
+  getSelectedPaymentLabel(option: IPaymentLabel, selectedVals?: IPaymentLabel[]): IPaymentLabel {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
   }
 
   getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
@@ -107,10 +127,15 @@ export class PaymentCalculationUpdateComponent implements OnInit {
       withholdingVAT: paymentCalculation.withholdingVAT,
       withholdingTax: paymentCalculation.withholdingTax,
       paymentAmount: paymentCalculation.paymentAmount,
+      paymentLabels: paymentCalculation.paymentLabels,
       paymentCategory: paymentCalculation.paymentCategory,
       placeholders: paymentCalculation.placeholders,
     });
 
+    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
+      this.paymentLabelsSharedCollection,
+      ...(paymentCalculation.paymentLabels ?? [])
+    );
     this.paymentCategoriesSharedCollection = this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
       this.paymentCategoriesSharedCollection,
       paymentCalculation.paymentCategory
@@ -122,6 +147,16 @@ export class PaymentCalculationUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
+    this.paymentLabelService
+      .query()
+      .pipe(map((res: HttpResponse<IPaymentLabel[]>) => res.body ?? []))
+      .pipe(
+        map((paymentLabels: IPaymentLabel[]) =>
+          this.paymentLabelService.addPaymentLabelToCollectionIfMissing(paymentLabels, ...(this.editForm.get('paymentLabels')!.value ?? []))
+        )
+      )
+      .subscribe((paymentLabels: IPaymentLabel[]) => (this.paymentLabelsSharedCollection = paymentLabels));
+
     this.paymentCategoryService
       .query()
       .pipe(map((res: HttpResponse<IPaymentCategory[]>) => res.body ?? []))
@@ -154,6 +189,7 @@ export class PaymentCalculationUpdateComponent implements OnInit {
       withholdingVAT: this.editForm.get(['withholdingVAT'])!.value,
       withholdingTax: this.editForm.get(['withholdingTax'])!.value,
       paymentAmount: this.editForm.get(['paymentAmount'])!.value,
+      paymentLabels: this.editForm.get(['paymentLabels'])!.value,
       paymentCategory: this.editForm.get(['paymentCategory'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
     };

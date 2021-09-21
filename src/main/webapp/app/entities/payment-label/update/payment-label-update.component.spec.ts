@@ -9,6 +9,8 @@ import { of, Subject } from 'rxjs';
 
 import { PaymentLabelService } from '../service/payment-label.service';
 import { IPaymentLabel, PaymentLabel } from '../payment-label.model';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { PaymentLabelUpdateComponent } from './payment-label-update.component';
 
@@ -18,6 +20,7 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<PaymentLabelUpdateComponent>;
     let activatedRoute: ActivatedRoute;
     let paymentLabelService: PaymentLabelService;
+    let placeholderService: PlaceholderService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -31,6 +34,7 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(PaymentLabelUpdateComponent);
       activatedRoute = TestBed.inject(ActivatedRoute);
       paymentLabelService = TestBed.inject(PaymentLabelService);
+      placeholderService = TestBed.inject(PlaceholderService);
 
       comp = fixture.componentInstance;
     });
@@ -58,16 +62,41 @@ describe('Component Tests', () => {
         expect(comp.paymentLabelsSharedCollection).toEqual(expectedCollection);
       });
 
+      it('Should call Placeholder query and add missing value', () => {
+        const paymentLabel: IPaymentLabel = { id: 456 };
+        const placeholders: IPlaceholder[] = [{ id: 14078 }];
+        paymentLabel.placeholders = placeholders;
+
+        const placeholderCollection: IPlaceholder[] = [{ id: 52254 }];
+        jest.spyOn(placeholderService, 'query').mockReturnValue(of(new HttpResponse({ body: placeholderCollection })));
+        const additionalPlaceholders = [...placeholders];
+        const expectedCollection: IPlaceholder[] = [...additionalPlaceholders, ...placeholderCollection];
+        jest.spyOn(placeholderService, 'addPlaceholderToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+        activatedRoute.data = of({ paymentLabel });
+        comp.ngOnInit();
+
+        expect(placeholderService.query).toHaveBeenCalled();
+        expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+          placeholderCollection,
+          ...additionalPlaceholders
+        );
+        expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
+      });
+
       it('Should update editForm', () => {
         const paymentLabel: IPaymentLabel = { id: 456 };
         const containingPaymentLabel: IPaymentLabel = { id: 4866 };
         paymentLabel.containingPaymentLabel = containingPaymentLabel;
+        const placeholders: IPlaceholder = { id: 88585 };
+        paymentLabel.placeholders = [placeholders];
 
         activatedRoute.data = of({ paymentLabel });
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(paymentLabel));
         expect(comp.paymentLabelsSharedCollection).toContain(containingPaymentLabel);
+        expect(comp.placeholdersSharedCollection).toContain(placeholders);
       });
     });
 
@@ -141,6 +170,42 @@ describe('Component Tests', () => {
           const entity = { id: 123 };
           const trackResult = comp.trackPaymentLabelById(0, entity);
           expect(trackResult).toEqual(entity.id);
+        });
+      });
+
+      describe('trackPlaceholderById', () => {
+        it('Should return tracked Placeholder primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackPlaceholderById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
+      });
+    });
+
+    describe('Getting selected relationships', () => {
+      describe('getSelectedPlaceholder', () => {
+        it('Should return option if no Placeholder is selected', () => {
+          const option = { id: 123 };
+          const result = comp.getSelectedPlaceholder(option);
+          expect(result === option).toEqual(true);
+        });
+
+        it('Should return selected Placeholder for according option', () => {
+          const option = { id: 123 };
+          const selected = { id: 123 };
+          const selected2 = { id: 456 };
+          const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
+          expect(result === selected).toEqual(true);
+          expect(result === selected2).toEqual(false);
+          expect(result === option).toEqual(false);
+        });
+
+        it('Should return option if this Placeholder is not selected', () => {
+          const option = { id: 123 };
+          const selected = { id: 456 };
+          const result = comp.getSelectedPlaceholder(option, [selected]);
+          expect(result === option).toEqual(true);
+          expect(result === selected).toEqual(false);
         });
       });
     });

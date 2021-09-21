@@ -40,7 +40,8 @@ export class DealerUpdatePage {
   bankersBranchInput = element(by.id('field_bankersBranch'));
   bankersSwiftCodeInput = element(by.id('field_bankersSwiftCode'));
 
-  paymentSelect = element(by.id('field_payment'));
+  paymentLabelSelect = element(by.id('field_paymentLabel'));
+  dealerGroupSelect = element(by.id('field_dealerGroup'));
   placeholderSelect = element(by.id('field_placeholder'));
 
   async getPageTitle(): Promise<string> {
@@ -127,20 +128,36 @@ export class DealerUpdatePage {
     return await this.bankersSwiftCodeInput.getAttribute('value');
   }
 
-  async paymentSelectLastOption(): Promise<void> {
-    await this.paymentSelect.all(by.tagName('option')).last().click();
+  async paymentLabelSelectLastOption(): Promise<void> {
+    await this.paymentLabelSelect.all(by.tagName('option')).last().click();
   }
 
-  async paymentSelectOption(option: string): Promise<void> {
-    await this.paymentSelect.sendKeys(option);
+  async paymentLabelSelectOption(option: string): Promise<void> {
+    await this.paymentLabelSelect.sendKeys(option);
   }
 
-  getPaymentSelect(): ElementFinder {
-    return this.paymentSelect;
+  getPaymentLabelSelect(): ElementFinder {
+    return this.paymentLabelSelect;
   }
 
-  async getPaymentSelectedOption(): Promise<string> {
-    return await this.paymentSelect.element(by.css('option:checked')).getText();
+  async getPaymentLabelSelectedOption(): Promise<string> {
+    return await this.paymentLabelSelect.element(by.css('option:checked')).getText();
+  }
+
+  async dealerGroupSelectLastOption(): Promise<void> {
+    await this.dealerGroupSelect.all(by.tagName('option')).last().click();
+  }
+
+  async dealerGroupSelectOption(option: string): Promise<void> {
+    await this.dealerGroupSelect.sendKeys(option);
+  }
+
+  getDealerGroupSelect(): ElementFinder {
+    return this.dealerGroupSelect;
+  }
+
+  async getDealerGroupSelectedOption(): Promise<string> {
+    return await this.dealerGroupSelect.element(by.css('option:checked')).getText();
   }
 
   async placeholderSelectLastOption(): Promise<void> {

@@ -14,9 +14,6 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="payment_category" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
             <column name="transaction_number" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
@@ -29,7 +26,10 @@
             <column name="transaction_amount" type="decimal(21,2)">
                 <constraints nullable="false" />
             </column>
-            <column name="beneficiary" type="varchar(255)">
+            <column name="payment_category_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="signed_payment_group_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -48,6 +48,17 @@
         </createTable>
 
         <addPrimaryKey columnNames="signed_payment_id, payment_label_id" tableName="rel_signed_payment__payment_label"/>
+
+        <createTable tableName="rel_signed_payment__dealer">
+            <column name="dealer_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="signed_payment_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="signed_payment_id, dealer_id" tableName="rel_signed_payment__dealer"/>
 
         <createTable tableName="rel_signed_payment__placeholder">
             <column name="placeholder_id" type="bigint">
@@ -78,12 +89,10 @@
                   tableName="signed_payment"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
-            <column name="payment_category" type="string"/>
             <column name="transaction_number" type="string"/>
             <column name="transaction_date" type="date"/>
             <column name="transaction_currency" type="string"/>
             <column name="transaction_amount" type="numeric"/>
-            <column name="beneficiary" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

@@ -10,16 +10,23 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring", uses = {})
 public interface PlaceholderMapper extends EntityMapper<PlaceholderDTO, Placeholder> {
-    @Mapping(target = "containingPlaceholder", source = "containingPlaceholder", qualifiedByName = "id")
+    @Mapping(target = "containingPlaceholder", source = "containingPlaceholder", qualifiedByName = "description")
     PlaceholderDTO toDto(Placeholder s);
-
-    @Named("id")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    PlaceholderDTO toDtoId(Placeholder placeholder);
 
     @Named("idSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     Set<PlaceholderDTO> toDtoIdSet(Set<Placeholder> placeholder);
+
+    @Named("descriptionSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "description", source = "description")
+    Set<PlaceholderDTO> toDtoDescriptionSet(Set<Placeholder> placeholder);
+
+    @Named("description")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "description", source = "description")
+    PlaceholderDTO toDtoDescription(Placeholder placeholder);
 }

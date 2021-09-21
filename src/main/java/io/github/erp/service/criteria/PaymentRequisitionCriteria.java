@@ -33,7 +33,7 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter vatableAmount;
 
-    private LongFilter paymentId;
+    private LongFilter paymentLabelId;
 
     private LongFilter dealerId;
 
@@ -48,7 +48,7 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
         this.invoicedAmount = other.invoicedAmount == null ? null : other.invoicedAmount.copy();
         this.disbursementCost = other.disbursementCost == null ? null : other.disbursementCost.copy();
         this.vatableAmount = other.vatableAmount == null ? null : other.vatableAmount.copy();
-        this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
+        this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
         this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
@@ -119,19 +119,19 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
         this.vatableAmount = vatableAmount;
     }
 
-    public LongFilter getPaymentId() {
-        return paymentId;
+    public LongFilter getPaymentLabelId() {
+        return paymentLabelId;
     }
 
-    public LongFilter paymentId() {
-        if (paymentId == null) {
-            paymentId = new LongFilter();
+    public LongFilter paymentLabelId() {
+        if (paymentLabelId == null) {
+            paymentLabelId = new LongFilter();
         }
-        return paymentId;
+        return paymentLabelId;
     }
 
-    public void setPaymentId(LongFilter paymentId) {
-        this.paymentId = paymentId;
+    public void setPaymentLabelId(LongFilter paymentLabelId) {
+        this.paymentLabelId = paymentLabelId;
     }
 
     public LongFilter getDealerId() {
@@ -186,7 +186,7 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
             Objects.equals(invoicedAmount, that.invoicedAmount) &&
             Objects.equals(disbursementCost, that.disbursementCost) &&
             Objects.equals(vatableAmount, that.vatableAmount) &&
-            Objects.equals(paymentId, that.paymentId) &&
+            Objects.equals(paymentLabelId, that.paymentLabelId) &&
             Objects.equals(dealerId, that.dealerId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
@@ -195,7 +195,7 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, invoicedAmount, disbursementCost, vatableAmount, paymentId, dealerId, placeholderId, distinct);
+        return Objects.hash(id, invoicedAmount, disbursementCost, vatableAmount, paymentLabelId, dealerId, placeholderId, distinct);
     }
 
     // prettier-ignore
@@ -206,7 +206,7 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
             (invoicedAmount != null ? "invoicedAmount=" + invoicedAmount + ", " : "") +
             (disbursementCost != null ? "disbursementCost=" + disbursementCost + ", " : "") +
             (vatableAmount != null ? "vatableAmount=" + vatableAmount + ", " : "") +
-            (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
+            (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
             (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

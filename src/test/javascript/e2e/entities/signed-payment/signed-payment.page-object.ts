@@ -30,15 +30,16 @@ export class SignedPaymentUpdatePage {
   cancelButton = element(by.id('cancel-save'));
 
   idInput = element(by.id('field_id'));
-  paymentCategorySelect = element(by.id('field_paymentCategory'));
   transactionNumberInput = element(by.id('field_transactionNumber'));
   transactionDateInput = element(by.id('field_transactionDate'));
   transactionCurrencySelect = element(by.id('field_transactionCurrency'));
   transactionAmountInput = element(by.id('field_transactionAmount'));
-  beneficiaryInput = element(by.id('field_beneficiary'));
 
   paymentLabelSelect = element(by.id('field_paymentLabel'));
+  dealerSelect = element(by.id('field_dealer'));
+  paymentCategorySelect = element(by.id('field_paymentCategory'));
   placeholderSelect = element(by.id('field_placeholder'));
+  signedPaymentGroupSelect = element(by.id('field_signedPaymentGroup'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -50,18 +51,6 @@ export class SignedPaymentUpdatePage {
 
   async getIdInput(): Promise<string> {
     return await this.idInput.getAttribute('value');
-  }
-
-  async setPaymentCategorySelect(paymentCategory: string): Promise<void> {
-    await this.paymentCategorySelect.sendKeys(paymentCategory);
-  }
-
-  async getPaymentCategorySelect(): Promise<string> {
-    return await this.paymentCategorySelect.element(by.css('option:checked')).getText();
-  }
-
-  async paymentCategorySelectLastOption(): Promise<void> {
-    await this.paymentCategorySelect.all(by.tagName('option')).last().click();
   }
 
   async setTransactionNumberInput(transactionNumber: string): Promise<void> {
@@ -100,14 +89,6 @@ export class SignedPaymentUpdatePage {
     return await this.transactionAmountInput.getAttribute('value');
   }
 
-  async setBeneficiaryInput(beneficiary: string): Promise<void> {
-    await this.beneficiaryInput.sendKeys(beneficiary);
-  }
-
-  async getBeneficiaryInput(): Promise<string> {
-    return await this.beneficiaryInput.getAttribute('value');
-  }
-
   async paymentLabelSelectLastOption(): Promise<void> {
     await this.paymentLabelSelect.all(by.tagName('option')).last().click();
   }
@@ -124,6 +105,38 @@ export class SignedPaymentUpdatePage {
     return await this.paymentLabelSelect.element(by.css('option:checked')).getText();
   }
 
+  async dealerSelectLastOption(): Promise<void> {
+    await this.dealerSelect.all(by.tagName('option')).last().click();
+  }
+
+  async dealerSelectOption(option: string): Promise<void> {
+    await this.dealerSelect.sendKeys(option);
+  }
+
+  getDealerSelect(): ElementFinder {
+    return this.dealerSelect;
+  }
+
+  async getDealerSelectedOption(): Promise<string> {
+    return await this.dealerSelect.element(by.css('option:checked')).getText();
+  }
+
+  async paymentCategorySelectLastOption(): Promise<void> {
+    await this.paymentCategorySelect.all(by.tagName('option')).last().click();
+  }
+
+  async paymentCategorySelectOption(option: string): Promise<void> {
+    await this.paymentCategorySelect.sendKeys(option);
+  }
+
+  getPaymentCategorySelect(): ElementFinder {
+    return this.paymentCategorySelect;
+  }
+
+  async getPaymentCategorySelectedOption(): Promise<string> {
+    return await this.paymentCategorySelect.element(by.css('option:checked')).getText();
+  }
+
   async placeholderSelectLastOption(): Promise<void> {
     await this.placeholderSelect.all(by.tagName('option')).last().click();
   }
@@ -138,6 +151,22 @@ export class SignedPaymentUpdatePage {
 
   async getPlaceholderSelectedOption(): Promise<string> {
     return await this.placeholderSelect.element(by.css('option:checked')).getText();
+  }
+
+  async signedPaymentGroupSelectLastOption(): Promise<void> {
+    await this.signedPaymentGroupSelect.all(by.tagName('option')).last().click();
+  }
+
+  async signedPaymentGroupSelectOption(option: string): Promise<void> {
+    await this.signedPaymentGroupSelect.sendKeys(option);
+  }
+
+  getSignedPaymentGroupSelect(): ElementFinder {
+    return this.signedPaymentGroupSelect;
+  }
+
+  async getSignedPaymentGroupSelectedOption(): Promise<string> {
+    return await this.signedPaymentGroupSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

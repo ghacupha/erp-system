@@ -8,10 +8,11 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link PaymentCalculation} and its DTO {@link PaymentCalculationDTO}.
  */
-@Mapper(componentModel = "spring", uses = { PaymentCategoryMapper.class, PlaceholderMapper.class })
+@Mapper(componentModel = "spring", uses = { PaymentLabelMapper.class, PaymentCategoryMapper.class, PlaceholderMapper.class })
 public interface PaymentCalculationMapper extends EntityMapper<PaymentCalculationDTO, PaymentCalculation> {
+    @Mapping(target = "paymentLabels", source = "paymentLabels", qualifiedByName = "descriptionSet")
     @Mapping(target = "paymentCategory", source = "paymentCategory", qualifiedByName = "id")
-    @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "idSet")
+    @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     PaymentCalculationDTO toDto(PaymentCalculation s);
 
     @Named("id")
@@ -19,6 +20,7 @@ public interface PaymentCalculationMapper extends EntityMapper<PaymentCalculatio
     @Mapping(target = "id", source = "id")
     PaymentCalculationDTO toDtoId(PaymentCalculation paymentCalculation);
 
+    @Mapping(target = "removePaymentLabel", ignore = true)
     @Mapping(target = "removePlaceholder", ignore = true)
     PaymentCalculation toEntity(PaymentCalculationDTO paymentCalculationDTO);
 }

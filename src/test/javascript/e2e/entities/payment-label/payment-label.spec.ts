@@ -49,6 +49,7 @@ describe('PaymentLabel e2e test', () => {
       paymentLabelUpdatePage.setDescriptionInput('description'),
       paymentLabelUpdatePage.setCommentsInput('comments'),
       paymentLabelUpdatePage.containingPaymentLabelSelectLastOption(),
+      // paymentLabelUpdatePage.placeholderSelectLastOption(),
     ]);
 
     await paymentLabelUpdatePage.save();

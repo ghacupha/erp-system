@@ -8,6 +8,30 @@
     -->
     <changeSet id="20210627092712-2" author="jhipster">
 
+        <addForeignKeyConstraint baseColumnNames="payment_id"
+                                 baseTableName="rel_payment__payment_label"
+                                 constraintName="fk_rel_payment__payment_label__payment_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_label_id"
+                                 baseTableName="rel_payment__payment_label"
+                                 constraintName="fk_rel_payment__payment_label__payment_label_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_label"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_id"
+                                 baseTableName="rel_payment__dealer"
+                                 constraintName="fk_rel_payment__dealer__payment_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment"/>
+
+        <addForeignKeyConstraint baseColumnNames="dealer_id"
+                                 baseTableName="rel_payment__dealer"
+                                 constraintName="fk_rel_payment__dealer__dealer_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
         <addForeignKeyConstraint baseColumnNames="payment_category_id"
                                  baseTableName="payment"
                                  constraintName="fk_payment__payment_category_id"
@@ -26,12 +50,6 @@
                                  referencedColumnNames="id"
                                  referencedTableName="payment_calculation"/>
 
-        <addForeignKeyConstraint baseColumnNames="payment_requisition_id"
-                                 baseTableName="payment"
-                                 constraintName="fk_payment__payment_requisition_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="payment_requisition"/>
-
         <addForeignKeyConstraint baseColumnNames="payment_id"
                                  baseTableName="rel_payment__placeholder"
                                  constraintName="fk_rel_payment__placeholder__payment_id"
@@ -43,5 +61,11 @@
                                  constraintName="fk_rel_payment__placeholder__placeholder_id"
                                  referencedColumnNames="id"
                                  referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_group_id"
+                                 baseTableName="payment"
+                                 constraintName="fk_payment__payment_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment"/>
     </changeSet>
 </databaseChangeLog>

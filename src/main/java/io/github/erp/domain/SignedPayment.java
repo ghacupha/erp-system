@@ -1,7 +1,6 @@
 package io.github.erp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.github.erp.domain.enumeration.CategoryTypes;
 import io.github.erp.domain.enumeration.CurrencyTypes;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -31,11 +30,6 @@ public class SignedPayment implements Serializable {
     private Long id;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "payment_category", nullable = false)
-    private CategoryTypes paymentCategory;
-
-    @NotNull
     @Column(name = "transaction_number", nullable = false)
     private String transactionNumber;
 
@@ -53,9 +47,6 @@ public class SignedPayment implements Serializable {
     @Column(name = "transaction_amount", precision = 21, scale = 2, nullable = false)
     private BigDecimal transactionAmount;
 
-    @Column(name = "beneficiary")
-    private String beneficiary;
-
     @ManyToMany
     @JoinTable(
         name = "rel_signed_payment__payment_label",
@@ -63,8 +54,38 @@ public class SignedPayment implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "payment_label_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "containingPaymentLabel" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = {
+            "containingPaymentLabel",
+            "placeholders",
+            "paymentCalculations",
+            "paymentCategories",
+            "paymentRequisitions",
+            "payments",
+            "invoices",
+            "dealers",
+            "signedPayments",
+        },
+        allowSetters = true
+    )
     private Set<PaymentLabel> paymentLabels = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_signed_payment__dealer",
+        joinColumns = @JoinColumn(name = "signed_payment_id"),
+        inverseJoinColumns = @JoinColumn(name = "dealer_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = { "paymentLabels", "dealerGroup", "payments", "paymentRequisitions", "placeholders" },
+        allowSetters = true
+    )
+    private Set<Dealer> dealers = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "paymentLabels", "paymentCalculations", "payments", "placeholders" }, allowSetters = true)
+    private PaymentCategory paymentCategory;
 
     @ManyToMany
     @JoinTable(
@@ -95,6 +116,13 @@ public class SignedPayment implements Serializable {
     )
     private Set<Placeholder> placeholders = new HashSet<>();
 
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = { "paymentLabels", "dealers", "paymentCategory", "placeholders", "signedPaymentGroup" },
+        allowSetters = true
+    )
+    private SignedPayment signedPaymentGroup;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -108,19 +136,6 @@ public class SignedPayment implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public CategoryTypes getPaymentCategory() {
-        return this.paymentCategory;
-    }
-
-    public SignedPayment paymentCategory(CategoryTypes paymentCategory) {
-        this.setPaymentCategory(paymentCategory);
-        return this;
-    }
-
-    public void setPaymentCategory(CategoryTypes paymentCategory) {
-        this.paymentCategory = paymentCategory;
     }
 
     public String getTransactionNumber() {
@@ -175,19 +190,6 @@ public class SignedPayment implements Serializable {
         this.transactionAmount = transactionAmount;
     }
 
-    public String getBeneficiary() {
-        return this.beneficiary;
-    }
-
-    public SignedPayment beneficiary(String beneficiary) {
-        this.setBeneficiary(beneficiary);
-        return this;
-    }
-
-    public void setBeneficiary(String beneficiary) {
-        this.beneficiary = beneficiary;
-    }
-
     public Set<PaymentLabel> getPaymentLabels() {
         return this.paymentLabels;
     }
@@ -203,11 +205,49 @@ public class SignedPayment implements Serializable {
 
     public SignedPayment addPaymentLabel(PaymentLabel paymentLabel) {
         this.paymentLabels.add(paymentLabel);
+        paymentLabel.getSignedPayments().add(this);
         return this;
     }
 
     public SignedPayment removePaymentLabel(PaymentLabel paymentLabel) {
         this.paymentLabels.remove(paymentLabel);
+        paymentLabel.getSignedPayments().remove(this);
+        return this;
+    }
+
+    public Set<Dealer> getDealers() {
+        return this.dealers;
+    }
+
+    public void setDealers(Set<Dealer> dealers) {
+        this.dealers = dealers;
+    }
+
+    public SignedPayment dealers(Set<Dealer> dealers) {
+        this.setDealers(dealers);
+        return this;
+    }
+
+    public SignedPayment addDealer(Dealer dealer) {
+        this.dealers.add(dealer);
+        return this;
+    }
+
+    public SignedPayment removeDealer(Dealer dealer) {
+        this.dealers.remove(dealer);
+        return this;
+    }
+
+    public PaymentCategory getPaymentCategory() {
+        return this.paymentCategory;
+    }
+
+    public void setPaymentCategory(PaymentCategory paymentCategory) {
+        this.paymentCategory = paymentCategory;
+    }
+
+    public SignedPayment paymentCategory(PaymentCategory paymentCategory) {
+        this.setPaymentCategory(paymentCategory);
         return this;
     }
 
@@ -231,6 +271,19 @@ public class SignedPayment implements Serializable {
 
     public SignedPayment removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
+        return this;
+    }
+
+    public SignedPayment getSignedPaymentGroup() {
+        return this.signedPaymentGroup;
+    }
+
+    public void setSignedPaymentGroup(SignedPayment signedPayment) {
+        this.signedPaymentGroup = signedPayment;
+    }
+
+    public SignedPayment signedPaymentGroup(SignedPayment signedPayment) {
+        this.setSignedPaymentGroup(signedPayment);
         return this;
     }
 
@@ -258,12 +311,10 @@ public class SignedPayment implements Serializable {
     public String toString() {
         return "SignedPayment{" +
             "id=" + getId() +
-            ", paymentCategory='" + getPaymentCategory() + "'" +
             ", transactionNumber='" + getTransactionNumber() + "'" +
             ", transactionDate='" + getTransactionDate() + "'" +
             ", transactionCurrency='" + getTransactionCurrency() + "'" +
             ", transactionAmount=" + getTransactionAmount() +
-            ", beneficiary='" + getBeneficiary() + "'" +
             "}";
     }
 }

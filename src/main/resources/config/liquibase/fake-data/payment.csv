@@ -1,11 +1,11 @@
-id;payment_number;payment_date;payment_amount;description;currency;conversion_rate
-1;Soap killer;2021-06-27;79884;core Rustic;USD;10362
-2;harness Optimization;2021-06-27;74131;deploy;AED;76430
-3;hack;2021-06-26;96282;Alabama PNG Avon;CHF;13398
-4;Keyboard;2021-06-27;37440;Baby bandwidth;ZAR;29947
-5;Pre-emptive transmit Multi-channelled;2021-06-27;5290;haptic;ZAR;39372
-6;throughput Nigeria;2021-06-27;26102;Dynamic viral;EUR;93667
-7;generate Designer transmit;2021-06-27;86981;Guilder Nuevo;JPY;16005
-8;Music open-source;2021-06-26;33371;Awesome Metrics Azerbaijan;CHF;74324
-9;New incubate Beauty;2021-06-26;17239;Avon Virginia Lari;UGX;5045
-10;transmit reboot Borders;2021-06-26;15109;Parkway discrete;UGX;81036
+id;payment_number;payment_date;invoiced_amount;disbursement_cost;vatable_amount;payment_amount;description;settlement_currency;conversion_rate
+1;Soap killer;2021-06-27;79884;53272;30925;23184;Rustic Wooden;ZAR;33339
+2;Optimization lime deploy;2021-06-26;76430;31576;77152;11298;matrix;CNY;607
+3;PNG Avon Belarussian;2021-06-27;13643;12604;30137;37440;Baby bandwidth;ZAR;29947
+4;Pre-emptive transmit Multi-channelled;2021-06-27;5290;25313;79247;53725;Key;INR;94679
+5;Nigeria demand-driven Dynamic;2021-06-27;35696;53459;30005;93667;generate Designer transmit;GBP;86981
+6;Guilder Nuevo;2021-06-26;16005;42850;127;12429;open-source Kentucky;USD;55073
+7;Metrics Azerbaijan payment;2021-06-26;63696;45227;37111;57733;Beauty;CHF;17240
+8;Avon Virginia Lari;2021-06-26;5044;94315;77040;78411;reboot Borders deposit;AED;57059
+9;discrete transmit Chair;2021-06-26;10573;22516;48318;72942;Helena Malaysian;CNY;3914
+10;Coordinator;2021-06-27;7653;39367;58112;86736;Strategist EXE;GBP;73886

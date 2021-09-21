@@ -39,15 +39,40 @@ public class PaymentCategory implements Serializable {
     @Column(name = "category_type", nullable = false, unique = true)
     private CategoryTypes categoryType;
 
+    @ManyToMany
+    @JoinTable(
+        name = "rel_payment_category__payment_label",
+        joinColumns = @JoinColumn(name = "payment_category_id"),
+        inverseJoinColumns = @JoinColumn(name = "payment_label_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = {
+            "containingPaymentLabel",
+            "placeholders",
+            "paymentCalculations",
+            "paymentCategories",
+            "paymentRequisitions",
+            "payments",
+            "invoices",
+            "dealers",
+            "signedPayments",
+        },
+        allowSetters = true
+    )
+    private Set<PaymentLabel> paymentLabels = new HashSet<>();
+
     @OneToMany(mappedBy = "paymentCategory")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "payment", "paymentCategory", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "paymentLabels", "payment", "paymentCategory", "placeholders" }, allowSetters = true)
     private Set<PaymentCalculation> paymentCalculations = new HashSet<>();
 
     @OneToMany(mappedBy = "paymentCategory")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "ownedInvoices", "dealers", "paymentCategory", "taxRule", "paymentCalculation", "paymentRequisition", "placeholders" },
+        value = {
+            "paymentLabels", "ownedInvoices", "dealers", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup",
+        },
         allowSetters = true
     )
     private Set<Payment> payments = new HashSet<>();
@@ -133,6 +158,31 @@ public class PaymentCategory implements Serializable {
 
     public void setCategoryType(CategoryTypes categoryType) {
         this.categoryType = categoryType;
+    }
+
+    public Set<PaymentLabel> getPaymentLabels() {
+        return this.paymentLabels;
+    }
+
+    public void setPaymentLabels(Set<PaymentLabel> paymentLabels) {
+        this.paymentLabels = paymentLabels;
+    }
+
+    public PaymentCategory paymentLabels(Set<PaymentLabel> paymentLabels) {
+        this.setPaymentLabels(paymentLabels);
+        return this;
+    }
+
+    public PaymentCategory addPaymentLabel(PaymentLabel paymentLabel) {
+        this.paymentLabels.add(paymentLabel);
+        paymentLabel.getPaymentCategories().add(this);
+        return this;
+    }
+
+    public PaymentCategory removePaymentLabel(PaymentLabel paymentLabel) {
+        this.paymentLabels.remove(paymentLabel);
+        paymentLabel.getPaymentCategories().remove(this);
+        return this;
     }
 
     public Set<PaymentCalculation> getPaymentCalculations() {

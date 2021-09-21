@@ -11,6 +11,7 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Dealer;
 import io.github.erp.domain.Invoice;
 import io.github.erp.domain.Payment;
+import io.github.erp.domain.PaymentLabel;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.enumeration.CurrencyTypes;
 import io.github.erp.repository.InvoiceRepository;
@@ -755,6 +756,32 @@ class InvoiceResourceIT {
 
         // Get all the invoiceList where conversionRate is greater than SMALLER_CONVERSION_RATE
         defaultInvoiceShouldBeFound("conversionRate.greaterThan=" + SMALLER_CONVERSION_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByPaymentLabelIsEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+        PaymentLabel paymentLabel;
+        if (TestUtil.findAll(em, PaymentLabel.class).isEmpty()) {
+            paymentLabel = PaymentLabelResourceIT.createEntity(em);
+            em.persist(paymentLabel);
+            em.flush();
+        } else {
+            paymentLabel = TestUtil.findAll(em, PaymentLabel.class).get(0);
+        }
+        em.persist(paymentLabel);
+        em.flush();
+        invoice.addPaymentLabel(paymentLabel);
+        invoiceRepository.saveAndFlush(invoice);
+        Long paymentLabelId = paymentLabel.getId();
+
+        // Get all the invoiceList where paymentLabel equals to paymentLabelId
+        defaultInvoiceShouldBeFound("paymentLabelId.equals=" + paymentLabelId);
+
+        // Get all the invoiceList where paymentLabel equals to (paymentLabelId + 1)
+        defaultInvoiceShouldNotBeFound("paymentLabelId.equals=" + (paymentLabelId + 1));
     }
 
     @Test

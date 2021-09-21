@@ -35,6 +35,15 @@ public class Payment implements Serializable {
     @Column(name = "payment_date")
     private LocalDate paymentDate;
 
+    @Column(name = "invoiced_amount", precision = 21, scale = 2)
+    private BigDecimal invoicedAmount;
+
+    @Column(name = "disbursement_cost", precision = 21, scale = 2)
+    private BigDecimal disbursementCost;
+
+    @Column(name = "vatable_amount", precision = 21, scale = 2)
+    private BigDecimal vatableAmount;
+
     @Column(name = "payment_amount", precision = 21, scale = 2)
     private BigDecimal paymentAmount;
 
@@ -43,42 +52,67 @@ public class Payment implements Serializable {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "currency", nullable = false)
-    private CurrencyTypes currency;
+    @Column(name = "settlement_currency", nullable = false)
+    private CurrencyTypes settlementCurrency;
 
     @NotNull
     @DecimalMin(value = "1.00")
     @Column(name = "conversion_rate", nullable = false)
     private Double conversionRate;
 
+    @ManyToMany
+    @JoinTable(
+        name = "rel_payment__payment_label",
+        joinColumns = @JoinColumn(name = "payment_id"),
+        inverseJoinColumns = @JoinColumn(name = "payment_label_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = {
+            "containingPaymentLabel",
+            "placeholders",
+            "paymentCalculations",
+            "paymentCategories",
+            "paymentRequisitions",
+            "payments",
+            "invoices",
+            "dealers",
+            "signedPayments",
+        },
+        allowSetters = true
+    )
+    private Set<PaymentLabel> paymentLabels = new HashSet<>();
+
     @OneToMany(mappedBy = "payment")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "payment", "dealer", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "paymentLabels", "payment", "dealer", "placeholders" }, allowSetters = true)
     private Set<Invoice> ownedInvoices = new HashSet<>();
 
-    @ManyToMany(mappedBy = "payments")
+    @ManyToMany
+    @JoinTable(
+        name = "rel_payment__dealer",
+        joinColumns = @JoinColumn(name = "payment_id"),
+        inverseJoinColumns = @JoinColumn(name = "dealer_id")
+    )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "payments", "paymentRequisitions", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "paymentLabels", "dealerGroup", "payments", "paymentRequisitions", "placeholders" },
+        allowSetters = true
+    )
     private Set<Dealer> dealers = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "paymentCalculations", "payments", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "paymentLabels", "paymentCalculations", "payments", "placeholders" }, allowSetters = true)
     private PaymentCategory paymentCategory;
 
-    @JsonIgnoreProperties(value = { "payment", "placeholders" }, allowSetters = true)
-    @OneToOne
-    @JoinColumn(unique = true)
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "payments", "placeholders" }, allowSetters = true)
     private TaxRule taxRule;
 
-    @JsonIgnoreProperties(value = { "payment", "paymentCategory", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "paymentLabels", "payment", "paymentCategory", "placeholders" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
     private PaymentCalculation paymentCalculation;
-
-    @JsonIgnoreProperties(value = { "payment", "dealer", "placeholders" }, allowSetters = true)
-    @OneToOne
-    @JoinColumn(unique = true)
-    private PaymentRequisition paymentRequisition;
 
     @ManyToMany
     @JoinTable(
@@ -108,6 +142,15 @@ public class Payment implements Serializable {
         allowSetters = true
     )
     private Set<Placeholder> placeholders = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = {
+            "paymentLabels", "ownedInvoices", "dealers", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup",
+        },
+        allowSetters = true
+    )
+    private Payment paymentGroup;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -150,6 +193,45 @@ public class Payment implements Serializable {
         this.paymentDate = paymentDate;
     }
 
+    public BigDecimal getInvoicedAmount() {
+        return this.invoicedAmount;
+    }
+
+    public Payment invoicedAmount(BigDecimal invoicedAmount) {
+        this.setInvoicedAmount(invoicedAmount);
+        return this;
+    }
+
+    public void setInvoicedAmount(BigDecimal invoicedAmount) {
+        this.invoicedAmount = invoicedAmount;
+    }
+
+    public BigDecimal getDisbursementCost() {
+        return this.disbursementCost;
+    }
+
+    public Payment disbursementCost(BigDecimal disbursementCost) {
+        this.setDisbursementCost(disbursementCost);
+        return this;
+    }
+
+    public void setDisbursementCost(BigDecimal disbursementCost) {
+        this.disbursementCost = disbursementCost;
+    }
+
+    public BigDecimal getVatableAmount() {
+        return this.vatableAmount;
+    }
+
+    public Payment vatableAmount(BigDecimal vatableAmount) {
+        this.setVatableAmount(vatableAmount);
+        return this;
+    }
+
+    public void setVatableAmount(BigDecimal vatableAmount) {
+        this.vatableAmount = vatableAmount;
+    }
+
     public BigDecimal getPaymentAmount() {
         return this.paymentAmount;
     }
@@ -176,17 +258,17 @@ public class Payment implements Serializable {
         this.description = description;
     }
 
-    public CurrencyTypes getCurrency() {
-        return this.currency;
+    public CurrencyTypes getSettlementCurrency() {
+        return this.settlementCurrency;
     }
 
-    public Payment currency(CurrencyTypes currency) {
-        this.setCurrency(currency);
+    public Payment settlementCurrency(CurrencyTypes settlementCurrency) {
+        this.setSettlementCurrency(settlementCurrency);
         return this;
     }
 
-    public void setCurrency(CurrencyTypes currency) {
-        this.currency = currency;
+    public void setSettlementCurrency(CurrencyTypes settlementCurrency) {
+        this.settlementCurrency = settlementCurrency;
     }
 
     public Double getConversionRate() {
@@ -200,6 +282,31 @@ public class Payment implements Serializable {
 
     public void setConversionRate(Double conversionRate) {
         this.conversionRate = conversionRate;
+    }
+
+    public Set<PaymentLabel> getPaymentLabels() {
+        return this.paymentLabels;
+    }
+
+    public void setPaymentLabels(Set<PaymentLabel> paymentLabels) {
+        this.paymentLabels = paymentLabels;
+    }
+
+    public Payment paymentLabels(Set<PaymentLabel> paymentLabels) {
+        this.setPaymentLabels(paymentLabels);
+        return this;
+    }
+
+    public Payment addPaymentLabel(PaymentLabel paymentLabel) {
+        this.paymentLabels.add(paymentLabel);
+        paymentLabel.getPayments().add(this);
+        return this;
+    }
+
+    public Payment removePaymentLabel(PaymentLabel paymentLabel) {
+        this.paymentLabels.remove(paymentLabel);
+        paymentLabel.getPayments().remove(this);
+        return this;
     }
 
     public Set<Invoice> getOwnedInvoices() {
@@ -238,12 +345,6 @@ public class Payment implements Serializable {
     }
 
     public void setDealers(Set<Dealer> dealers) {
-        if (this.dealers != null) {
-            this.dealers.forEach(i -> i.removePayment(this));
-        }
-        if (dealers != null) {
-            dealers.forEach(i -> i.addPayment(this));
-        }
         this.dealers = dealers;
     }
 
@@ -303,19 +404,6 @@ public class Payment implements Serializable {
         return this;
     }
 
-    public PaymentRequisition getPaymentRequisition() {
-        return this.paymentRequisition;
-    }
-
-    public void setPaymentRequisition(PaymentRequisition paymentRequisition) {
-        this.paymentRequisition = paymentRequisition;
-    }
-
-    public Payment paymentRequisition(PaymentRequisition paymentRequisition) {
-        this.setPaymentRequisition(paymentRequisition);
-        return this;
-    }
-
     public Set<Placeholder> getPlaceholders() {
         return this.placeholders;
     }
@@ -338,6 +426,19 @@ public class Payment implements Serializable {
     public Payment removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
         placeholder.getPayments().remove(this);
+        return this;
+    }
+
+    public Payment getPaymentGroup() {
+        return this.paymentGroup;
+    }
+
+    public void setPaymentGroup(Payment payment) {
+        this.paymentGroup = payment;
+    }
+
+    public Payment paymentGroup(Payment payment) {
+        this.setPaymentGroup(payment);
         return this;
     }
 
@@ -367,9 +468,12 @@ public class Payment implements Serializable {
             "id=" + getId() +
             ", paymentNumber='" + getPaymentNumber() + "'" +
             ", paymentDate='" + getPaymentDate() + "'" +
+            ", invoicedAmount=" + getInvoicedAmount() +
+            ", disbursementCost=" + getDisbursementCost() +
+            ", vatableAmount=" + getVatableAmount() +
             ", paymentAmount=" + getPaymentAmount() +
             ", description='" + getDescription() + "'" +
-            ", currency='" + getCurrency() + "'" +
+            ", settlementCurrency='" + getSettlementCurrency() + "'" +
             ", conversionRate=" + getConversionRate() +
             "}";
     }

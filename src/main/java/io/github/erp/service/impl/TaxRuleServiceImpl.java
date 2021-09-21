@@ -8,11 +8,7 @@ import io.github.erp.repository.search.TaxRuleSearchRepository;
 import io.github.erp.service.TaxRuleService;
 import io.github.erp.service.dto.TaxRuleDTO;
 import io.github.erp.service.mapper.TaxRuleMapper;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -84,20 +80,6 @@ public class TaxRuleServiceImpl implements TaxRuleService {
 
     public Page<TaxRuleDTO> findAllWithEagerRelationships(Pageable pageable) {
         return taxRuleRepository.findAllWithEagerRelationships(pageable).map(taxRuleMapper::toDto);
-    }
-
-    /**
-     *  Get all the taxRules where Payment is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<TaxRuleDTO> findAllWherePaymentIsNull() {
-        log.debug("Request to get all taxRules where Payment is null");
-        return StreamSupport
-            .stream(taxRuleRepository.findAll().spliterator(), false)
-            .filter(taxRule -> taxRule.getPayment() == null)
-            .map(taxRuleMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override

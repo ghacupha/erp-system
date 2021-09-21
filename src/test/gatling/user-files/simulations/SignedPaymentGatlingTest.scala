@@ -71,12 +71,10 @@ class SignedPaymentGatlingTest extends Simulation {
             .post("/api/signed-payments")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
-                "paymentCategory":"UNDEFINED"
-                , "transactionNumber":"SAMPLE_TEXT"
+                "transactionNumber":"SAMPLE_TEXT"
                 , "transactionDate":"2020-01-01T00:00:00.000Z"
                 , "transactionCurrency":"KES"
                 , "transactionAmount":"0"
-                , "beneficiary":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_signedPayment_url"))).exitHereIfFailed

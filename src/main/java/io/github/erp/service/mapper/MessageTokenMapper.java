@@ -10,7 +10,7 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring", uses = { PlaceholderMapper.class })
 public interface MessageTokenMapper extends EntityMapper<MessageTokenDTO, MessageToken> {
-    @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "idSet")
+    @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     MessageTokenDTO toDto(MessageToken s);
 
     @Mapping(target = "removePlaceholder", ignore = true)

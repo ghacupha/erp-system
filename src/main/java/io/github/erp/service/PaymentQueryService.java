@@ -104,17 +104,35 @@ public class PaymentQueryService extends QueryService<Payment> {
             if (criteria.getPaymentDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getPaymentDate(), Payment_.paymentDate));
             }
+            if (criteria.getInvoicedAmount() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getInvoicedAmount(), Payment_.invoicedAmount));
+            }
+            if (criteria.getDisbursementCost() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDisbursementCost(), Payment_.disbursementCost));
+            }
+            if (criteria.getVatableAmount() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getVatableAmount(), Payment_.vatableAmount));
+            }
             if (criteria.getPaymentAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getPaymentAmount(), Payment_.paymentAmount));
             }
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), Payment_.description));
             }
-            if (criteria.getCurrency() != null) {
-                specification = specification.and(buildSpecification(criteria.getCurrency(), Payment_.currency));
+            if (criteria.getSettlementCurrency() != null) {
+                specification = specification.and(buildSpecification(criteria.getSettlementCurrency(), Payment_.settlementCurrency));
             }
             if (criteria.getConversionRate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getConversionRate(), Payment_.conversionRate));
+            }
+            if (criteria.getPaymentLabelId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPaymentLabelId(),
+                            root -> root.join(Payment_.paymentLabels, JoinType.LEFT).get(PaymentLabel_.id)
+                        )
+                    );
             }
             if (criteria.getOwnedInvoiceId() != null) {
                 specification =
@@ -155,21 +173,21 @@ public class PaymentQueryService extends QueryService<Payment> {
                         )
                     );
             }
-            if (criteria.getPaymentRequisitionId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getPaymentRequisitionId(),
-                            root -> root.join(Payment_.paymentRequisition, JoinType.LEFT).get(PaymentRequisition_.id)
-                        )
-                    );
-            }
             if (criteria.getPlaceholderId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
                             criteria.getPlaceholderId(),
                             root -> root.join(Payment_.placeholders, JoinType.LEFT).get(Placeholder_.id)
+                        )
+                    );
+            }
+            if (criteria.getPaymentGroupId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPaymentGroupId(),
+                            root -> root.join(Payment_.paymentGroup, JoinType.LEFT).get(Payment_.id)
                         )
                     );
             }

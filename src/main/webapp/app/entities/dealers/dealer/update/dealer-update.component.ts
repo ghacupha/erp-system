@@ -7,8 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IDealer, Dealer } from '../dealer.model';
 import { DealerService } from '../service/dealer.service';
-import { IPayment } from 'app/entities/payments/payment/payment.model';
-import { PaymentService } from 'app/entities/payments/payment/service/payment.service';
+import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
+import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
@@ -19,7 +19,8 @@ import { PlaceholderService } from 'app/entities/erpService/placeholder/service/
 export class DealerUpdateComponent implements OnInit {
   isSaving = false;
 
-  paymentsSharedCollection: IPayment[] = [];
+  paymentLabelsSharedCollection: IPaymentLabel[] = [];
+  dealersSharedCollection: IDealer[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
 
   editForm = this.fb.group({
@@ -33,13 +34,14 @@ export class DealerUpdateComponent implements OnInit {
     bankersName: [],
     bankersBranch: [],
     bankersSwiftCode: [],
-    payments: [],
+    paymentLabels: [],
+    dealerGroup: [],
     placeholders: [],
   });
 
   constructor(
     protected dealerService: DealerService,
-    protected paymentService: PaymentService,
+    protected paymentLabelService: PaymentLabelService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
@@ -67,7 +69,11 @@ export class DealerUpdateComponent implements OnInit {
     }
   }
 
-  trackPaymentById(index: number, item: IPayment): number {
+  trackPaymentLabelById(index: number, item: IPaymentLabel): number {
+    return item.id!;
+  }
+
+  trackDealerById(index: number, item: IDealer): number {
     return item.id!;
   }
 
@@ -75,7 +81,7 @@ export class DealerUpdateComponent implements OnInit {
     return item.id!;
   }
 
-  getSelectedPayment(option: IPayment, selectedVals?: IPayment[]): IPayment {
+  getSelectedPaymentLabel(option: IPaymentLabel, selectedVals?: IPaymentLabel[]): IPaymentLabel {
     if (selectedVals) {
       for (const selectedVal of selectedVals) {
         if (option.id === selectedVal.id) {
@@ -128,14 +134,16 @@ export class DealerUpdateComponent implements OnInit {
       bankersName: dealer.bankersName,
       bankersBranch: dealer.bankersBranch,
       bankersSwiftCode: dealer.bankersSwiftCode,
-      payments: dealer.payments,
+      paymentLabels: dealer.paymentLabels,
+      dealerGroup: dealer.dealerGroup,
       placeholders: dealer.placeholders,
     });
 
-    this.paymentsSharedCollection = this.paymentService.addPaymentToCollectionIfMissing(
-      this.paymentsSharedCollection,
-      ...(dealer.payments ?? [])
+    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
+      this.paymentLabelsSharedCollection,
+      ...(dealer.paymentLabels ?? [])
     );
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, dealer.dealerGroup);
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(dealer.placeholders ?? [])
@@ -143,15 +151,23 @@ export class DealerUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
-    this.paymentService
+    this.paymentLabelService
       .query()
-      .pipe(map((res: HttpResponse<IPayment[]>) => res.body ?? []))
+      .pipe(map((res: HttpResponse<IPaymentLabel[]>) => res.body ?? []))
       .pipe(
-        map((payments: IPayment[]) =>
-          this.paymentService.addPaymentToCollectionIfMissing(payments, ...(this.editForm.get('payments')!.value ?? []))
+        map((paymentLabels: IPaymentLabel[]) =>
+          this.paymentLabelService.addPaymentLabelToCollectionIfMissing(paymentLabels, ...(this.editForm.get('paymentLabels')!.value ?? []))
         )
       )
-      .subscribe((payments: IPayment[]) => (this.paymentsSharedCollection = payments));
+      .subscribe((paymentLabels: IPaymentLabel[]) => (this.paymentLabelsSharedCollection = paymentLabels));
+
+    this.dealerService
+      .query()
+      .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
+      .pipe(
+        map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('dealerGroup')!.value))
+      )
+      .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
 
     this.placeholderService
       .query()
@@ -177,7 +193,8 @@ export class DealerUpdateComponent implements OnInit {
       bankersName: this.editForm.get(['bankersName'])!.value,
       bankersBranch: this.editForm.get(['bankersBranch'])!.value,
       bankersSwiftCode: this.editForm.get(['bankersSwiftCode'])!.value,
-      payments: this.editForm.get(['payments'])!.value,
+      paymentLabels: this.editForm.get(['paymentLabels'])!.value,
+      dealerGroup: this.editForm.get(['dealerGroup'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
     };
   }

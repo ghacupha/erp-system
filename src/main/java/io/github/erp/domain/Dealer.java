@@ -56,20 +56,47 @@ public class Dealer implements Serializable {
 
     @ManyToMany
     @JoinTable(
-        name = "rel_dealer__payment",
+        name = "rel_dealer__payment_label",
         joinColumns = @JoinColumn(name = "dealer_id"),
-        inverseJoinColumns = @JoinColumn(name = "payment_id")
+        inverseJoinColumns = @JoinColumn(name = "payment_label_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "ownedInvoices", "dealers", "paymentCategory", "taxRule", "paymentCalculation", "paymentRequisition", "placeholders" },
+        value = {
+            "containingPaymentLabel",
+            "placeholders",
+            "paymentCalculations",
+            "paymentCategories",
+            "paymentRequisitions",
+            "payments",
+            "invoices",
+            "dealers",
+            "signedPayments",
+        },
+        allowSetters = true
+    )
+    private Set<PaymentLabel> paymentLabels = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = { "paymentLabels", "dealerGroup", "payments", "paymentRequisitions", "placeholders" },
+        allowSetters = true
+    )
+    private Dealer dealerGroup;
+
+    @ManyToMany(mappedBy = "dealers")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = {
+            "paymentLabels", "ownedInvoices", "dealers", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup",
+        },
         allowSetters = true
     )
     private Set<Payment> payments = new HashSet<>();
 
     @OneToMany(mappedBy = "dealer")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "payment", "dealer", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "paymentLabels", "dealer", "placeholders" }, allowSetters = true)
     private Set<PaymentRequisition> paymentRequisitions = new HashSet<>();
 
     @ManyToMany
@@ -233,11 +260,55 @@ public class Dealer implements Serializable {
         this.bankersSwiftCode = bankersSwiftCode;
     }
 
+    public Set<PaymentLabel> getPaymentLabels() {
+        return this.paymentLabels;
+    }
+
+    public void setPaymentLabels(Set<PaymentLabel> paymentLabels) {
+        this.paymentLabels = paymentLabels;
+    }
+
+    public Dealer paymentLabels(Set<PaymentLabel> paymentLabels) {
+        this.setPaymentLabels(paymentLabels);
+        return this;
+    }
+
+    public Dealer addPaymentLabel(PaymentLabel paymentLabel) {
+        this.paymentLabels.add(paymentLabel);
+        paymentLabel.getDealers().add(this);
+        return this;
+    }
+
+    public Dealer removePaymentLabel(PaymentLabel paymentLabel) {
+        this.paymentLabels.remove(paymentLabel);
+        paymentLabel.getDealers().remove(this);
+        return this;
+    }
+
+    public Dealer getDealerGroup() {
+        return this.dealerGroup;
+    }
+
+    public void setDealerGroup(Dealer dealer) {
+        this.dealerGroup = dealer;
+    }
+
+    public Dealer dealerGroup(Dealer dealer) {
+        this.setDealerGroup(dealer);
+        return this;
+    }
+
     public Set<Payment> getPayments() {
         return this.payments;
     }
 
     public void setPayments(Set<Payment> payments) {
+        if (this.payments != null) {
+            this.payments.forEach(i -> i.removeDealer(this));
+        }
+        if (payments != null) {
+            payments.forEach(i -> i.addDealer(this));
+        }
         this.payments = payments;
     }
 

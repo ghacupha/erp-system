@@ -8,7 +8,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Dealer;
+import io.github.erp.domain.Dealer;
 import io.github.erp.domain.Payment;
+import io.github.erp.domain.PaymentLabel;
 import io.github.erp.domain.PaymentRequisition;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.repository.DealerRepository;
@@ -1003,6 +1005,58 @@ class DealerResourceIT {
 
         // Get all the dealerList where bankersSwiftCode does not contain UPDATED_BANKERS_SWIFT_CODE
         defaultDealerShouldBeFound("bankersSwiftCode.doesNotContain=" + UPDATED_BANKERS_SWIFT_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDealersByPaymentLabelIsEqualToSomething() throws Exception {
+        // Initialize the database
+        dealerRepository.saveAndFlush(dealer);
+        PaymentLabel paymentLabel;
+        if (TestUtil.findAll(em, PaymentLabel.class).isEmpty()) {
+            paymentLabel = PaymentLabelResourceIT.createEntity(em);
+            em.persist(paymentLabel);
+            em.flush();
+        } else {
+            paymentLabel = TestUtil.findAll(em, PaymentLabel.class).get(0);
+        }
+        em.persist(paymentLabel);
+        em.flush();
+        dealer.addPaymentLabel(paymentLabel);
+        dealerRepository.saveAndFlush(dealer);
+        Long paymentLabelId = paymentLabel.getId();
+
+        // Get all the dealerList where paymentLabel equals to paymentLabelId
+        defaultDealerShouldBeFound("paymentLabelId.equals=" + paymentLabelId);
+
+        // Get all the dealerList where paymentLabel equals to (paymentLabelId + 1)
+        defaultDealerShouldNotBeFound("paymentLabelId.equals=" + (paymentLabelId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllDealersByDealerGroupIsEqualToSomething() throws Exception {
+        // Initialize the database
+        dealerRepository.saveAndFlush(dealer);
+        Dealer dealerGroup;
+        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
+            dealerGroup = DealerResourceIT.createEntity(em);
+            em.persist(dealerGroup);
+            em.flush();
+        } else {
+            dealerGroup = TestUtil.findAll(em, Dealer.class).get(0);
+        }
+        em.persist(dealerGroup);
+        em.flush();
+        dealer.setDealerGroup(dealerGroup);
+        dealerRepository.saveAndFlush(dealer);
+        Long dealerGroupId = dealerGroup.getId();
+
+        // Get all the dealerList where dealerGroup equals to dealerGroupId
+        defaultDealerShouldBeFound("dealerGroupId.equals=" + dealerGroupId);
+
+        // Get all the dealerList where dealerGroup equals to (dealerGroupId + 1)
+        defaultDealerShouldNotBeFound("dealerGroupId.equals=" + (dealerGroupId + 1));
     }
 
     @Test

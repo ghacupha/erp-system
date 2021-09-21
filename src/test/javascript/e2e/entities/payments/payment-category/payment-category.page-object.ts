@@ -34,6 +34,7 @@ export class PaymentCategoryUpdatePage {
   categoryDescriptionInput = element(by.id('field_categoryDescription'));
   categoryTypeSelect = element(by.id('field_categoryType'));
 
+  paymentLabelSelect = element(by.id('field_paymentLabel'));
   placeholderSelect = element(by.id('field_placeholder'));
 
   async getPageTitle(): Promise<string> {
@@ -74,6 +75,22 @@ export class PaymentCategoryUpdatePage {
 
   async categoryTypeSelectLastOption(): Promise<void> {
     await this.categoryTypeSelect.all(by.tagName('option')).last().click();
+  }
+
+  async paymentLabelSelectLastOption(): Promise<void> {
+    await this.paymentLabelSelect.all(by.tagName('option')).last().click();
+  }
+
+  async paymentLabelSelectOption(option: string): Promise<void> {
+    await this.paymentLabelSelect.sendKeys(option);
+  }
+
+  getPaymentLabelSelect(): ElementFinder {
+    return this.paymentLabelSelect;
+  }
+
+  async getPaymentLabelSelectedOption(): Promise<string> {
+    return await this.paymentLabelSelect.element(by.css('option:checked')).getText();
   }
 
   async placeholderSelectLastOption(): Promise<void> {

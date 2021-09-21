@@ -14,10 +14,6 @@
         <dd>
           <span>{{ signedPayment.id }}</span>
         </dd>
-        <dt><span>Payment Category</span></dt>
-        <dd>
-          <span>{{ signedPayment.paymentCategory }}</span>
-        </dd>
         <dt><span>Transaction Number</span></dt>
         <dd>
           <span>{{ signedPayment.transactionNumber }}</span>
@@ -34,10 +30,6 @@
         <dd>
           <span>{{ signedPayment.transactionAmount }}</span>
         </dd>
-        <dt><span>Beneficiary</span></dt>
-        <dd>
-          <span>{{ signedPayment.beneficiary }}</span>
-        </dd>
         <dt><span>Payment Label</span></dt>
         <dd>
           <span *ngFor="let paymentLabel of signedPayment.paymentLabels; let last = last">
@@ -45,12 +37,35 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
+        <dt><span>Dealer</span></dt>
+        <dd>
+          <span *ngFor="let dealer of signedPayment.dealers; let last = last">
+            <a [routerLink]="['/dealer', dealer?.id, 'view']">{{ dealer.dealerName }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Payment Category</span></dt>
+        <dd>
+          <div *ngIf="signedPayment.paymentCategory">
+            <a [routerLink]="['/payment-category', signedPayment.paymentCategory?.id, 'view']">{{
+              signedPayment.paymentCategory?.categoryName
+            }}</a>
+          </div>
+        </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of signedPayment.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.id }}</a
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
+        </dd>
+        <dt><span>Signed Payment Group</span></dt>
+        <dd>
+          <div *ngIf="signedPayment.signedPaymentGroup">
+            <a [routerLink]="['/signed-payment', signedPayment.signedPaymentGroup?.id, 'view']">{{
+              signedPayment.signedPaymentGroup?.id
+            }}</a>
+          </div>
         </dd>
       </dl>
 

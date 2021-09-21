@@ -7,6 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IInvoice, Invoice } from '../invoice.model';
 import { InvoiceService } from '../service/invoice.service';
+import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
+import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
 import { IPayment } from 'app/entities/payments/payment/payment.model';
 import { PaymentService } from 'app/entities/payments/payment/service/payment.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
@@ -21,6 +23,7 @@ import { PlaceholderService } from 'app/entities/erpService/placeholder/service/
 export class InvoiceUpdateComponent implements OnInit {
   isSaving = false;
 
+  paymentLabelsSharedCollection: IPaymentLabel[] = [];
   paymentsSharedCollection: IPayment[] = [];
   dealersSharedCollection: IDealer[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
@@ -32,6 +35,7 @@ export class InvoiceUpdateComponent implements OnInit {
     invoiceAmount: [],
     currency: [null, [Validators.required]],
     conversionRate: [null, [Validators.required, Validators.min(1.0)]],
+    paymentLabels: [],
     payment: [],
     dealer: [],
     placeholders: [],
@@ -39,6 +43,7 @@ export class InvoiceUpdateComponent implements OnInit {
 
   constructor(
     protected invoiceService: InvoiceService,
+    protected paymentLabelService: PaymentLabelService,
     protected paymentService: PaymentService,
     protected dealerService: DealerService,
     protected placeholderService: PlaceholderService,
@@ -68,6 +73,10 @@ export class InvoiceUpdateComponent implements OnInit {
     }
   }
 
+  trackPaymentLabelById(index: number, item: IPaymentLabel): number {
+    return item.id!;
+  }
+
   trackPaymentById(index: number, item: IPayment): number {
     return item.id!;
   }
@@ -78,6 +87,17 @@ export class InvoiceUpdateComponent implements OnInit {
 
   trackPlaceholderById(index: number, item: IPlaceholder): number {
     return item.id!;
+  }
+
+  getSelectedPaymentLabel(option: IPaymentLabel, selectedVals?: IPaymentLabel[]): IPaymentLabel {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
   }
 
   getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
@@ -118,11 +138,16 @@ export class InvoiceUpdateComponent implements OnInit {
       invoiceAmount: invoice.invoiceAmount,
       currency: invoice.currency,
       conversionRate: invoice.conversionRate,
+      paymentLabels: invoice.paymentLabels,
       payment: invoice.payment,
       dealer: invoice.dealer,
       placeholders: invoice.placeholders,
     });
 
+    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
+      this.paymentLabelsSharedCollection,
+      ...(invoice.paymentLabels ?? [])
+    );
     this.paymentsSharedCollection = this.paymentService.addPaymentToCollectionIfMissing(this.paymentsSharedCollection, invoice.payment);
     this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, invoice.dealer);
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -132,6 +157,16 @@ export class InvoiceUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
+    this.paymentLabelService
+      .query()
+      .pipe(map((res: HttpResponse<IPaymentLabel[]>) => res.body ?? []))
+      .pipe(
+        map((paymentLabels: IPaymentLabel[]) =>
+          this.paymentLabelService.addPaymentLabelToCollectionIfMissing(paymentLabels, ...(this.editForm.get('paymentLabels')!.value ?? []))
+        )
+      )
+      .subscribe((paymentLabels: IPaymentLabel[]) => (this.paymentLabelsSharedCollection = paymentLabels));
+
     this.paymentService
       .query()
       .pipe(map((res: HttpResponse<IPayment[]>) => res.body ?? []))
@@ -166,6 +201,7 @@ export class InvoiceUpdateComponent implements OnInit {
       invoiceAmount: this.editForm.get(['invoiceAmount'])!.value,
       currency: this.editForm.get(['currency'])!.value,
       conversionRate: this.editForm.get(['conversionRate'])!.value,
+      paymentLabels: this.editForm.get(['paymentLabels'])!.value,
       payment: this.editForm.get(['payment'])!.value,
       dealer: this.editForm.get(['dealer'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,

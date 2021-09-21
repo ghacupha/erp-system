@@ -34,6 +34,7 @@ export class PaymentLabelUpdatePage {
   commentsInput = element(by.id('field_comments'));
 
   containingPaymentLabelSelect = element(by.id('field_containingPaymentLabel'));
+  placeholderSelect = element(by.id('field_placeholder'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -77,6 +78,22 @@ export class PaymentLabelUpdatePage {
 
   async getContainingPaymentLabelSelectedOption(): Promise<string> {
     return await this.containingPaymentLabelSelect.element(by.css('option:checked')).getText();
+  }
+
+  async placeholderSelectLastOption(): Promise<void> {
+    await this.placeholderSelect.all(by.tagName('option')).last().click();
+  }
+
+  async placeholderSelectOption(option: string): Promise<void> {
+    await this.placeholderSelect.sendKeys(option);
+  }
+
+  getPlaceholderSelect(): ElementFinder {
+    return this.placeholderSelect;
+  }
+
+  async getPlaceholderSelectedOption(): Promise<string> {
+    return await this.placeholderSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

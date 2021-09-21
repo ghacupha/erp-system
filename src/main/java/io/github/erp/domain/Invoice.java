@@ -49,15 +49,43 @@ public class Invoice implements Serializable {
     @Column(name = "conversion_rate", nullable = false)
     private Double conversionRate;
 
+    @ManyToMany
+    @JoinTable(
+        name = "rel_invoice__payment_label",
+        joinColumns = @JoinColumn(name = "invoice_id"),
+        inverseJoinColumns = @JoinColumn(name = "payment_label_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = {
+            "containingPaymentLabel",
+            "placeholders",
+            "paymentCalculations",
+            "paymentCategories",
+            "paymentRequisitions",
+            "payments",
+            "invoices",
+            "dealers",
+            "signedPayments",
+        },
+        allowSetters = true
+    )
+    private Set<PaymentLabel> paymentLabels = new HashSet<>();
+
     @ManyToOne
     @JsonIgnoreProperties(
-        value = { "ownedInvoices", "dealers", "paymentCategory", "taxRule", "paymentCalculation", "paymentRequisition", "placeholders" },
+        value = {
+            "paymentLabels", "ownedInvoices", "dealers", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup",
+        },
         allowSetters = true
     )
     private Payment payment;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "payments", "paymentRequisitions", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "paymentLabels", "dealerGroup", "payments", "paymentRequisitions", "placeholders" },
+        allowSetters = true
+    )
     private Dealer dealer;
 
     @ManyToMany
@@ -167,6 +195,31 @@ public class Invoice implements Serializable {
 
     public void setConversionRate(Double conversionRate) {
         this.conversionRate = conversionRate;
+    }
+
+    public Set<PaymentLabel> getPaymentLabels() {
+        return this.paymentLabels;
+    }
+
+    public void setPaymentLabels(Set<PaymentLabel> paymentLabels) {
+        this.paymentLabels = paymentLabels;
+    }
+
+    public Invoice paymentLabels(Set<PaymentLabel> paymentLabels) {
+        this.setPaymentLabels(paymentLabels);
+        return this;
+    }
+
+    public Invoice addPaymentLabel(PaymentLabel paymentLabel) {
+        this.paymentLabels.add(paymentLabel);
+        paymentLabel.getInvoices().add(this);
+        return this;
+    }
+
+    public Invoice removePaymentLabel(PaymentLabel paymentLabel) {
+        this.paymentLabels.remove(paymentLabel);
+        paymentLabel.getInvoices().remove(this);
+        return this;
     }
 
     public Payment getPayment() {

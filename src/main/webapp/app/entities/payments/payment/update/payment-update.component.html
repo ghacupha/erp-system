@@ -45,6 +45,42 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_invoicedAmount">Invoiced Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="invoicedAmount"
+            id="field_invoicedAmount"
+            data-cy="invoicedAmount"
+            formControlName="invoicedAmount"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_disbursementCost">Disbursement Cost</label>
+          <input
+            type="number"
+            class="form-control"
+            name="disbursementCost"
+            id="field_disbursementCost"
+            data-cy="disbursementCost"
+            formControlName="disbursementCost"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_vatableAmount">Vatable Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="vatableAmount"
+            id="field_vatableAmount"
+            data-cy="vatableAmount"
+            formControlName="vatableAmount"
+          />
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_paymentAmount">Payment Amount</label>
           <input
             type="number"
@@ -69,8 +105,14 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_currency">Currency</label>
-          <select class="form-control" name="currency" formControlName="currency" id="field_currency" data-cy="currency">
+          <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
+          <select
+            class="form-control"
+            name="settlementCurrency"
+            formControlName="settlementCurrency"
+            id="field_settlementCurrency"
+            data-cy="settlementCurrency"
+          >
             <option [ngValue]="null"></option>
             <option value="KES">KES</option>
             <option value="USD">USD</option>
@@ -86,8 +128,15 @@
             <option value="JPY">JPY</option>
             <option value="CAD">CAD</option>
           </select>
-          <div *ngIf="editForm.get('currency')!.invalid && (editForm.get('currency')!.dirty || editForm.get('currency')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('currency')?.errors?.required"> This field is required. </small>
+          <div
+            *ngIf="
+              editForm.get('settlementCurrency')!.invalid &&
+              (editForm.get('settlementCurrency')!.dirty || editForm.get('settlementCurrency')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('settlementCurrency')?.errors?.required">
+              This field is required.
+            </small>
           </div>
         </div>
 
@@ -117,6 +166,37 @@
         </div>
 
         <div class="form-group">
+          <label for="field_paymentLabels">Payment Label</label>
+          <select
+            class="form-control"
+            id="field_paymentLabels"
+            data-cy="paymentLabel"
+            multiple
+            name="paymentLabels"
+            formControlName="paymentLabels"
+          >
+            <option
+              [ngValue]="getSelectedPaymentLabel(paymentLabelOption, editForm.get('paymentLabels')!.value)"
+              *ngFor="let paymentLabelOption of paymentLabelsSharedCollection; trackBy: trackPaymentLabelById"
+            >
+              {{ paymentLabelOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_dealers">Dealer</label>
+          <select class="form-control" id="field_dealers" data-cy="dealer" multiple name="dealers" formControlName="dealers">
+            <option
+              [ngValue]="getSelectedDealer(dealerOption, editForm.get('dealers')!.value)"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_paymentCategory">Payment Category</label>
           <select
             class="form-control"
@@ -134,7 +214,7 @@
               "
               *ngFor="let paymentCategoryOption of paymentCategoriesSharedCollection; trackBy: trackPaymentCategoryById"
             >
-              {{ paymentCategoryOption.id }}
+              {{ paymentCategoryOption.categoryName }}
             </option>
           </select>
         </div>
@@ -145,7 +225,7 @@
             <option [ngValue]="null"></option>
             <option
               [ngValue]="taxRuleOption.id === editForm.get('taxRule')!.value?.id ? editForm.get('taxRule')!.value : taxRuleOption"
-              *ngFor="let taxRuleOption of taxRulesCollection; trackBy: trackTaxRuleById"
+              *ngFor="let taxRuleOption of taxRulesSharedCollection; trackBy: trackTaxRuleById"
             >
               {{ taxRuleOption.id }}
             </option>
@@ -176,29 +256,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_paymentRequisition">Payment Requisition</label>
-          <select
-            class="form-control"
-            id="field_paymentRequisition"
-            data-cy="paymentRequisition"
-            name="paymentRequisition"
-            formControlName="paymentRequisition"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                paymentRequisitionOption.id === editForm.get('paymentRequisition')!.value?.id
-                  ? editForm.get('paymentRequisition')!.value
-                  : paymentRequisitionOption
-              "
-              *ngFor="let paymentRequisitionOption of paymentRequisitionsCollection; trackBy: trackPaymentRequisitionById"
-            >
-              {{ paymentRequisitionOption.id }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -212,7 +269,20 @@
               [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
               *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
             >
-              {{ placeholderOption.id }}
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_paymentGroup">Payment Group</label>
+          <select class="form-control" id="field_paymentGroup" data-cy="paymentGroup" name="paymentGroup" formControlName="paymentGroup">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="paymentOption.id === editForm.get('paymentGroup')!.value?.id ? editForm.get('paymentGroup')!.value : paymentOption"
+              *ngFor="let paymentOption of paymentsSharedCollection; trackBy: trackPaymentById"
+            >
+              {{ paymentOption.id }}
             </option>
           </select>
         </div>

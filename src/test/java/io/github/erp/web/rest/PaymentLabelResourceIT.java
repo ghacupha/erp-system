@@ -7,13 +7,23 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.Dealer;
+import io.github.erp.domain.Invoice;
+import io.github.erp.domain.Payment;
+import io.github.erp.domain.PaymentCalculation;
+import io.github.erp.domain.PaymentCategory;
 import io.github.erp.domain.PaymentLabel;
 import io.github.erp.domain.PaymentLabel;
+import io.github.erp.domain.PaymentRequisition;
+import io.github.erp.domain.Placeholder;
+import io.github.erp.domain.SignedPayment;
 import io.github.erp.repository.PaymentLabelRepository;
 import io.github.erp.repository.search.PaymentLabelSearchRepository;
+import io.github.erp.service.PaymentLabelService;
 import io.github.erp.service.criteria.PaymentLabelCriteria;
 import io.github.erp.service.dto.PaymentLabelDTO;
 import io.github.erp.service.mapper.PaymentLabelMapper;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -58,8 +68,14 @@ class PaymentLabelResourceIT {
     @Autowired
     private PaymentLabelRepository paymentLabelRepository;
 
+    @Mock
+    private PaymentLabelRepository paymentLabelRepositoryMock;
+
     @Autowired
     private PaymentLabelMapper paymentLabelMapper;
+
+    @Mock
+    private PaymentLabelService paymentLabelServiceMock;
 
     /**
      * This repository is mocked in the io.github.erp.repository.search test package.
@@ -185,6 +201,24 @@ class PaymentLabelResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentLabel.getId().intValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS)));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllPaymentLabelsWithEagerRelationshipsIsEnabled() throws Exception {
+        when(paymentLabelServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restPaymentLabelMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(paymentLabelServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllPaymentLabelsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(paymentLabelServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restPaymentLabelMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(paymentLabelServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -401,6 +435,214 @@ class PaymentLabelResourceIT {
 
         // Get all the paymentLabelList where containingPaymentLabel equals to (containingPaymentLabelId + 1)
         defaultPaymentLabelShouldNotBeFound("containingPaymentLabelId.equals=" + (containingPaymentLabelId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentLabelsByPlaceholderIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+        Placeholder placeholder;
+        if (TestUtil.findAll(em, Placeholder.class).isEmpty()) {
+            placeholder = PlaceholderResourceIT.createEntity(em);
+            em.persist(placeholder);
+            em.flush();
+        } else {
+            placeholder = TestUtil.findAll(em, Placeholder.class).get(0);
+        }
+        em.persist(placeholder);
+        em.flush();
+        paymentLabel.addPlaceholder(placeholder);
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+        Long placeholderId = placeholder.getId();
+
+        // Get all the paymentLabelList where placeholder equals to placeholderId
+        defaultPaymentLabelShouldBeFound("placeholderId.equals=" + placeholderId);
+
+        // Get all the paymentLabelList where placeholder equals to (placeholderId + 1)
+        defaultPaymentLabelShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentLabelsByPaymentCalculationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+        PaymentCalculation paymentCalculation;
+        if (TestUtil.findAll(em, PaymentCalculation.class).isEmpty()) {
+            paymentCalculation = PaymentCalculationResourceIT.createEntity(em);
+            em.persist(paymentCalculation);
+            em.flush();
+        } else {
+            paymentCalculation = TestUtil.findAll(em, PaymentCalculation.class).get(0);
+        }
+        em.persist(paymentCalculation);
+        em.flush();
+        paymentLabel.addPaymentCalculation(paymentCalculation);
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+        Long paymentCalculationId = paymentCalculation.getId();
+
+        // Get all the paymentLabelList where paymentCalculation equals to paymentCalculationId
+        defaultPaymentLabelShouldBeFound("paymentCalculationId.equals=" + paymentCalculationId);
+
+        // Get all the paymentLabelList where paymentCalculation equals to (paymentCalculationId + 1)
+        defaultPaymentLabelShouldNotBeFound("paymentCalculationId.equals=" + (paymentCalculationId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentLabelsByPaymentCategoryIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+        PaymentCategory paymentCategory;
+        if (TestUtil.findAll(em, PaymentCategory.class).isEmpty()) {
+            paymentCategory = PaymentCategoryResourceIT.createEntity(em);
+            em.persist(paymentCategory);
+            em.flush();
+        } else {
+            paymentCategory = TestUtil.findAll(em, PaymentCategory.class).get(0);
+        }
+        em.persist(paymentCategory);
+        em.flush();
+        paymentLabel.addPaymentCategory(paymentCategory);
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+        Long paymentCategoryId = paymentCategory.getId();
+
+        // Get all the paymentLabelList where paymentCategory equals to paymentCategoryId
+        defaultPaymentLabelShouldBeFound("paymentCategoryId.equals=" + paymentCategoryId);
+
+        // Get all the paymentLabelList where paymentCategory equals to (paymentCategoryId + 1)
+        defaultPaymentLabelShouldNotBeFound("paymentCategoryId.equals=" + (paymentCategoryId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentLabelsByPaymentRequisitionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+        PaymentRequisition paymentRequisition;
+        if (TestUtil.findAll(em, PaymentRequisition.class).isEmpty()) {
+            paymentRequisition = PaymentRequisitionResourceIT.createEntity(em);
+            em.persist(paymentRequisition);
+            em.flush();
+        } else {
+            paymentRequisition = TestUtil.findAll(em, PaymentRequisition.class).get(0);
+        }
+        em.persist(paymentRequisition);
+        em.flush();
+        paymentLabel.addPaymentRequisition(paymentRequisition);
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+        Long paymentRequisitionId = paymentRequisition.getId();
+
+        // Get all the paymentLabelList where paymentRequisition equals to paymentRequisitionId
+        defaultPaymentLabelShouldBeFound("paymentRequisitionId.equals=" + paymentRequisitionId);
+
+        // Get all the paymentLabelList where paymentRequisition equals to (paymentRequisitionId + 1)
+        defaultPaymentLabelShouldNotBeFound("paymentRequisitionId.equals=" + (paymentRequisitionId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentLabelsByPaymentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+        Payment payment;
+        if (TestUtil.findAll(em, Payment.class).isEmpty()) {
+            payment = PaymentResourceIT.createEntity(em);
+            em.persist(payment);
+            em.flush();
+        } else {
+            payment = TestUtil.findAll(em, Payment.class).get(0);
+        }
+        em.persist(payment);
+        em.flush();
+        paymentLabel.addPayment(payment);
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+        Long paymentId = payment.getId();
+
+        // Get all the paymentLabelList where payment equals to paymentId
+        defaultPaymentLabelShouldBeFound("paymentId.equals=" + paymentId);
+
+        // Get all the paymentLabelList where payment equals to (paymentId + 1)
+        defaultPaymentLabelShouldNotBeFound("paymentId.equals=" + (paymentId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentLabelsByInvoiceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+        Invoice invoice;
+        if (TestUtil.findAll(em, Invoice.class).isEmpty()) {
+            invoice = InvoiceResourceIT.createEntity(em);
+            em.persist(invoice);
+            em.flush();
+        } else {
+            invoice = TestUtil.findAll(em, Invoice.class).get(0);
+        }
+        em.persist(invoice);
+        em.flush();
+        paymentLabel.addInvoice(invoice);
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+        Long invoiceId = invoice.getId();
+
+        // Get all the paymentLabelList where invoice equals to invoiceId
+        defaultPaymentLabelShouldBeFound("invoiceId.equals=" + invoiceId);
+
+        // Get all the paymentLabelList where invoice equals to (invoiceId + 1)
+        defaultPaymentLabelShouldNotBeFound("invoiceId.equals=" + (invoiceId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentLabelsByDealerIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+        Dealer dealer;
+        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
+            dealer = DealerResourceIT.createEntity(em);
+            em.persist(dealer);
+            em.flush();
+        } else {
+            dealer = TestUtil.findAll(em, Dealer.class).get(0);
+        }
+        em.persist(dealer);
+        em.flush();
+        paymentLabel.addDealer(dealer);
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+        Long dealerId = dealer.getId();
+
+        // Get all the paymentLabelList where dealer equals to dealerId
+        defaultPaymentLabelShouldBeFound("dealerId.equals=" + dealerId);
+
+        // Get all the paymentLabelList where dealer equals to (dealerId + 1)
+        defaultPaymentLabelShouldNotBeFound("dealerId.equals=" + (dealerId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentLabelsBySignedPaymentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+        SignedPayment signedPayment;
+        if (TestUtil.findAll(em, SignedPayment.class).isEmpty()) {
+            signedPayment = SignedPaymentResourceIT.createEntity(em);
+            em.persist(signedPayment);
+            em.flush();
+        } else {
+            signedPayment = TestUtil.findAll(em, SignedPayment.class).get(0);
+        }
+        em.persist(signedPayment);
+        em.flush();
+        paymentLabel.addSignedPayment(signedPayment);
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+        Long signedPaymentId = signedPayment.getId();
+
+        // Get all the paymentLabelList where signedPayment equals to signedPaymentId
+        defaultPaymentLabelShouldBeFound("signedPaymentId.equals=" + signedPaymentId);
+
+        // Get all the paymentLabelList where signedPayment equals to (signedPaymentId + 1)
+        defaultPaymentLabelShouldNotBeFound("signedPaymentId.equals=" + (signedPaymentId + 1));
     }
 
     /**

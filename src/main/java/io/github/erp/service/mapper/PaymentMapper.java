@@ -11,19 +11,22 @@ import org.mapstruct.*;
 @Mapper(
     componentModel = "spring",
     uses = {
+        PaymentLabelMapper.class,
+        DealerMapper.class,
         PaymentCategoryMapper.class,
         TaxRuleMapper.class,
         PaymentCalculationMapper.class,
-        PaymentRequisitionMapper.class,
         PlaceholderMapper.class,
     }
 )
 public interface PaymentMapper extends EntityMapper<PaymentDTO, Payment> {
-    @Mapping(target = "paymentCategory", source = "paymentCategory", qualifiedByName = "id")
+    @Mapping(target = "paymentLabels", source = "paymentLabels", qualifiedByName = "descriptionSet")
+    @Mapping(target = "dealers", source = "dealers", qualifiedByName = "dealerNameSet")
+    @Mapping(target = "paymentCategory", source = "paymentCategory", qualifiedByName = "categoryName")
     @Mapping(target = "taxRule", source = "taxRule", qualifiedByName = "id")
     @Mapping(target = "paymentCalculation", source = "paymentCalculation", qualifiedByName = "id")
-    @Mapping(target = "paymentRequisition", source = "paymentRequisition", qualifiedByName = "id")
-    @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "idSet")
+    @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
+    @Mapping(target = "paymentGroup", source = "paymentGroup", qualifiedByName = "id")
     PaymentDTO toDto(Payment s);
 
     @Named("id")
@@ -31,11 +34,8 @@ public interface PaymentMapper extends EntityMapper<PaymentDTO, Payment> {
     @Mapping(target = "id", source = "id")
     PaymentDTO toDtoId(Payment payment);
 
-    @Named("idSet")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    Set<PaymentDTO> toDtoIdSet(Set<Payment> payment);
-
+    @Mapping(target = "removePaymentLabel", ignore = true)
+    @Mapping(target = "removeDealer", ignore = true)
     @Mapping(target = "removePlaceholder", ignore = true)
     Payment toEntity(PaymentDTO paymentDTO);
 }

@@ -1,7 +1,9 @@
 package io.github.erp.service.dto;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import javax.validation.constraints.*;
 
 /**
@@ -17,6 +19,8 @@ public class PaymentLabelDTO implements Serializable {
     private String comments;
 
     private PaymentLabelDTO containingPaymentLabel;
+
+    private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -50,6 +54,14 @@ public class PaymentLabelDTO implements Serializable {
         this.containingPaymentLabel = containingPaymentLabel;
     }
 
+    public Set<PlaceholderDTO> getPlaceholders() {
+        return placeholders;
+    }
+
+    public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
+        this.placeholders = placeholders;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -79,6 +91,7 @@ public class PaymentLabelDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", comments='" + getComments() + "'" +
             ", containingPaymentLabel=" + getContainingPaymentLabel() +
+            ", placeholders=" + getPlaceholders() +
             "}";
     }
 }

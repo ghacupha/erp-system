@@ -9,6 +9,8 @@ import { of, Subject } from 'rxjs';
 
 import { PaymentCategoryService } from '../service/payment-category.service';
 import { IPaymentCategory, PaymentCategory } from '../payment-category.model';
+import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
+import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
@@ -20,6 +22,7 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<PaymentCategoryUpdateComponent>;
     let activatedRoute: ActivatedRoute;
     let paymentCategoryService: PaymentCategoryService;
+    let paymentLabelService: PaymentLabelService;
     let placeholderService: PlaceholderService;
 
     beforeEach(() => {
@@ -34,12 +37,35 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(PaymentCategoryUpdateComponent);
       activatedRoute = TestBed.inject(ActivatedRoute);
       paymentCategoryService = TestBed.inject(PaymentCategoryService);
+      paymentLabelService = TestBed.inject(PaymentLabelService);
       placeholderService = TestBed.inject(PlaceholderService);
 
       comp = fixture.componentInstance;
     });
 
     describe('ngOnInit', () => {
+      it('Should call PaymentLabel query and add missing value', () => {
+        const paymentCategory: IPaymentCategory = { id: 456 };
+        const paymentLabels: IPaymentLabel[] = [{ id: 53046 }];
+        paymentCategory.paymentLabels = paymentLabels;
+
+        const paymentLabelCollection: IPaymentLabel[] = [{ id: 98183 }];
+        jest.spyOn(paymentLabelService, 'query').mockReturnValue(of(new HttpResponse({ body: paymentLabelCollection })));
+        const additionalPaymentLabels = [...paymentLabels];
+        const expectedCollection: IPaymentLabel[] = [...additionalPaymentLabels, ...paymentLabelCollection];
+        jest.spyOn(paymentLabelService, 'addPaymentLabelToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+        activatedRoute.data = of({ paymentCategory });
+        comp.ngOnInit();
+
+        expect(paymentLabelService.query).toHaveBeenCalled();
+        expect(paymentLabelService.addPaymentLabelToCollectionIfMissing).toHaveBeenCalledWith(
+          paymentLabelCollection,
+          ...additionalPaymentLabels
+        );
+        expect(comp.paymentLabelsSharedCollection).toEqual(expectedCollection);
+      });
+
       it('Should call Placeholder query and add missing value', () => {
         const paymentCategory: IPaymentCategory = { id: 456 };
         const placeholders: IPlaceholder[] = [{ id: 53772 }];
@@ -64,6 +90,8 @@ describe('Component Tests', () => {
 
       it('Should update editForm', () => {
         const paymentCategory: IPaymentCategory = { id: 456 };
+        const paymentLabels: IPaymentLabel = { id: 6150 };
+        paymentCategory.paymentLabels = [paymentLabels];
         const placeholders: IPlaceholder = { id: 45103 };
         paymentCategory.placeholders = [placeholders];
 
@@ -71,6 +99,7 @@ describe('Component Tests', () => {
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(paymentCategory));
+        expect(comp.paymentLabelsSharedCollection).toContain(paymentLabels);
         expect(comp.placeholdersSharedCollection).toContain(placeholders);
       });
     });
@@ -140,6 +169,14 @@ describe('Component Tests', () => {
     });
 
     describe('Tracking relationships identifiers', () => {
+      describe('trackPaymentLabelById', () => {
+        it('Should return tracked PaymentLabel primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackPaymentLabelById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
+      });
+
       describe('trackPlaceholderById', () => {
         it('Should return tracked Placeholder primary key', () => {
           const entity = { id: 123 };
@@ -150,6 +187,32 @@ describe('Component Tests', () => {
     });
 
     describe('Getting selected relationships', () => {
+      describe('getSelectedPaymentLabel', () => {
+        it('Should return option if no PaymentLabel is selected', () => {
+          const option = { id: 123 };
+          const result = comp.getSelectedPaymentLabel(option);
+          expect(result === option).toEqual(true);
+        });
+
+        it('Should return selected PaymentLabel for according option', () => {
+          const option = { id: 123 };
+          const selected = { id: 123 };
+          const selected2 = { id: 456 };
+          const result = comp.getSelectedPaymentLabel(option, [selected2, selected]);
+          expect(result === selected).toEqual(true);
+          expect(result === selected2).toEqual(false);
+          expect(result === option).toEqual(false);
+        });
+
+        it('Should return option if this PaymentLabel is not selected', () => {
+          const option = { id: 123 };
+          const selected = { id: 456 };
+          const result = comp.getSelectedPaymentLabel(option, [selected]);
+          expect(result === option).toEqual(true);
+          expect(result === selected).toEqual(false);
+        });
+      });
+
       describe('getSelectedPlaceholder', () => {
         it('Should return option if no Placeholder is selected', () => {
           const option = { id: 123 };

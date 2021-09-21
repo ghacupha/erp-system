@@ -32,6 +32,22 @@ public class PaymentLabelCriteria implements Serializable, Criteria {
 
     private LongFilter containingPaymentLabelId;
 
+    private LongFilter placeholderId;
+
+    private LongFilter paymentCalculationId;
+
+    private LongFilter paymentCategoryId;
+
+    private LongFilter paymentRequisitionId;
+
+    private LongFilter paymentId;
+
+    private LongFilter invoiceId;
+
+    private LongFilter dealerId;
+
+    private LongFilter signedPaymentId;
+
     private Boolean distinct;
 
     public PaymentLabelCriteria() {}
@@ -41,6 +57,14 @@ public class PaymentLabelCriteria implements Serializable, Criteria {
         this.description = other.description == null ? null : other.description.copy();
         this.comments = other.comments == null ? null : other.comments.copy();
         this.containingPaymentLabelId = other.containingPaymentLabelId == null ? null : other.containingPaymentLabelId.copy();
+        this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.paymentCalculationId = other.paymentCalculationId == null ? null : other.paymentCalculationId.copy();
+        this.paymentCategoryId = other.paymentCategoryId == null ? null : other.paymentCategoryId.copy();
+        this.paymentRequisitionId = other.paymentRequisitionId == null ? null : other.paymentRequisitionId.copy();
+        this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
+        this.invoiceId = other.invoiceId == null ? null : other.invoiceId.copy();
+        this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
+        this.signedPaymentId = other.signedPaymentId == null ? null : other.signedPaymentId.copy();
         this.distinct = other.distinct;
     }
 
@@ -109,6 +133,126 @@ public class PaymentLabelCriteria implements Serializable, Criteria {
         this.containingPaymentLabelId = containingPaymentLabelId;
     }
 
+    public LongFilter getPlaceholderId() {
+        return placeholderId;
+    }
+
+    public LongFilter placeholderId() {
+        if (placeholderId == null) {
+            placeholderId = new LongFilter();
+        }
+        return placeholderId;
+    }
+
+    public void setPlaceholderId(LongFilter placeholderId) {
+        this.placeholderId = placeholderId;
+    }
+
+    public LongFilter getPaymentCalculationId() {
+        return paymentCalculationId;
+    }
+
+    public LongFilter paymentCalculationId() {
+        if (paymentCalculationId == null) {
+            paymentCalculationId = new LongFilter();
+        }
+        return paymentCalculationId;
+    }
+
+    public void setPaymentCalculationId(LongFilter paymentCalculationId) {
+        this.paymentCalculationId = paymentCalculationId;
+    }
+
+    public LongFilter getPaymentCategoryId() {
+        return paymentCategoryId;
+    }
+
+    public LongFilter paymentCategoryId() {
+        if (paymentCategoryId == null) {
+            paymentCategoryId = new LongFilter();
+        }
+        return paymentCategoryId;
+    }
+
+    public void setPaymentCategoryId(LongFilter paymentCategoryId) {
+        this.paymentCategoryId = paymentCategoryId;
+    }
+
+    public LongFilter getPaymentRequisitionId() {
+        return paymentRequisitionId;
+    }
+
+    public LongFilter paymentRequisitionId() {
+        if (paymentRequisitionId == null) {
+            paymentRequisitionId = new LongFilter();
+        }
+        return paymentRequisitionId;
+    }
+
+    public void setPaymentRequisitionId(LongFilter paymentRequisitionId) {
+        this.paymentRequisitionId = paymentRequisitionId;
+    }
+
+    public LongFilter getPaymentId() {
+        return paymentId;
+    }
+
+    public LongFilter paymentId() {
+        if (paymentId == null) {
+            paymentId = new LongFilter();
+        }
+        return paymentId;
+    }
+
+    public void setPaymentId(LongFilter paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    public LongFilter getInvoiceId() {
+        return invoiceId;
+    }
+
+    public LongFilter invoiceId() {
+        if (invoiceId == null) {
+            invoiceId = new LongFilter();
+        }
+        return invoiceId;
+    }
+
+    public void setInvoiceId(LongFilter invoiceId) {
+        this.invoiceId = invoiceId;
+    }
+
+    public LongFilter getDealerId() {
+        return dealerId;
+    }
+
+    public LongFilter dealerId() {
+        if (dealerId == null) {
+            dealerId = new LongFilter();
+        }
+        return dealerId;
+    }
+
+    public void setDealerId(LongFilter dealerId) {
+        this.dealerId = dealerId;
+    }
+
+    public LongFilter getSignedPaymentId() {
+        return signedPaymentId;
+    }
+
+    public LongFilter signedPaymentId() {
+        if (signedPaymentId == null) {
+            signedPaymentId = new LongFilter();
+        }
+        return signedPaymentId;
+    }
+
+    public void setSignedPaymentId(LongFilter signedPaymentId) {
+        this.signedPaymentId = signedPaymentId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -131,13 +275,35 @@ public class PaymentLabelCriteria implements Serializable, Criteria {
             Objects.equals(description, that.description) &&
             Objects.equals(comments, that.comments) &&
             Objects.equals(containingPaymentLabelId, that.containingPaymentLabelId) &&
+            Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(paymentCalculationId, that.paymentCalculationId) &&
+            Objects.equals(paymentCategoryId, that.paymentCategoryId) &&
+            Objects.equals(paymentRequisitionId, that.paymentRequisitionId) &&
+            Objects.equals(paymentId, that.paymentId) &&
+            Objects.equals(invoiceId, that.invoiceId) &&
+            Objects.equals(dealerId, that.dealerId) &&
+            Objects.equals(signedPaymentId, that.signedPaymentId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, comments, containingPaymentLabelId, distinct);
+        return Objects.hash(
+            id,
+            description,
+            comments,
+            containingPaymentLabelId,
+            placeholderId,
+            paymentCalculationId,
+            paymentCategoryId,
+            paymentRequisitionId,
+            paymentId,
+            invoiceId,
+            dealerId,
+            signedPaymentId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -148,6 +314,14 @@ public class PaymentLabelCriteria implements Serializable, Criteria {
             (description != null ? "description=" + description + ", " : "") +
             (comments != null ? "comments=" + comments + ", " : "") +
             (containingPaymentLabelId != null ? "containingPaymentLabelId=" + containingPaymentLabelId + ", " : "") +
+            (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (paymentCalculationId != null ? "paymentCalculationId=" + paymentCalculationId + ", " : "") +
+            (paymentCategoryId != null ? "paymentCategoryId=" + paymentCategoryId + ", " : "") +
+            (paymentRequisitionId != null ? "paymentRequisitionId=" + paymentRequisitionId + ", " : "") +
+            (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
+            (invoiceId != null ? "invoiceId=" + invoiceId + ", " : "") +
+            (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
+            (signedPaymentId != null ? "signedPaymentId=" + signedPaymentId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

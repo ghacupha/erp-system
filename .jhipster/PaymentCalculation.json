@@ -3,6 +3,14 @@
   "clientRootFolder": "payments",
   "relationships": [
     {
+      "relationshipName": "paymentLabel",
+      "otherEntityName": "paymentLabel",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "paymentCalculation"
+    },
+    {
       "relationshipName": "payment",
       "otherEntityName": "payment",
       "relationshipType": "one-to-one",
@@ -20,7 +28,7 @@
       "relationshipName": "placeholder",
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",
-      "otherEntityField": "id",
+      "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "paymentCalculation"
     }

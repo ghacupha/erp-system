@@ -50,12 +50,18 @@
         <dd>
           <span>{{ dealer.bankersSwiftCode }}</span>
         </dd>
-        <dt><span>Payment</span></dt>
+        <dt><span>Payment Label</span></dt>
         <dd>
-          <span *ngFor="let payment of dealer.payments; let last = last">
-            <a [routerLink]="['/payment', payment?.id, 'view']">{{ payment.id }}</a
+          <span *ngFor="let paymentLabel of dealer.paymentLabels; let last = last">
+            <a [routerLink]="['/payment-label', paymentLabel?.id, 'view']">{{ paymentLabel.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
+        </dd>
+        <dt><span>Dealer Group</span></dt>
+        <dd>
+          <div *ngIf="dealer.dealerGroup">
+            <a [routerLink]="['/dealer', dealer.dealerGroup?.id, 'view']">{{ dealer.dealerGroup?.dealerName }}</a>
+          </div>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>

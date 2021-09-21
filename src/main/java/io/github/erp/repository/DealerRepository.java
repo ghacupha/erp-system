@@ -15,14 +15,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DealerRepository extends JpaRepository<Dealer, Long>, JpaSpecificationExecutor<Dealer> {
     @Query(
-        value = "select distinct dealer from Dealer dealer left join fetch dealer.payments left join fetch dealer.placeholders",
+        value = "select distinct dealer from Dealer dealer left join fetch dealer.paymentLabels left join fetch dealer.placeholders",
         countQuery = "select count(distinct dealer) from Dealer dealer"
     )
     Page<Dealer> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("select distinct dealer from Dealer dealer left join fetch dealer.payments left join fetch dealer.placeholders")
+    @Query("select distinct dealer from Dealer dealer left join fetch dealer.paymentLabels left join fetch dealer.placeholders")
     List<Dealer> findAllWithEagerRelationships();
 
-    @Query("select dealer from Dealer dealer left join fetch dealer.payments left join fetch dealer.placeholders where dealer.id =:id")
+    @Query("select dealer from Dealer dealer left join fetch dealer.paymentLabels left join fetch dealer.placeholders where dealer.id =:id")
     Optional<Dealer> findOneWithEagerRelationships(@Param("id") Long id);
 }

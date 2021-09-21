@@ -8,6 +8,18 @@
     -->
     <changeSet id="20210721173014-2" author="jhipster">
 
+        <addForeignKeyConstraint baseColumnNames="payment_requisition_id"
+                                 baseTableName="rel_payment_requisition__payment_label"
+                                 constraintName="fk_rel_payment_requisition__pay__payment_requisition_dd_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_requisition"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_label_id"
+                                 baseTableName="rel_payment_requisition__payment_label"
+                                 constraintName="fk_rel_payment_requisition__payment_label__payment_label_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_label"/>
+
         <addForeignKeyConstraint baseColumnNames="dealer_id"
                                  baseTableName="payment_requisition"
                                  constraintName="fk_payment_requisition__dealer_id"

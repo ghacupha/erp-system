@@ -130,7 +130,7 @@
               [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
               *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
             >
-              {{ placeholderOption.id }}
+              {{ placeholderOption.description }}
             </option>
           </select>
         </div>

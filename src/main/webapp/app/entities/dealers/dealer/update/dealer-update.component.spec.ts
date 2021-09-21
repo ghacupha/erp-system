@@ -9,8 +9,8 @@ import { of, Subject } from 'rxjs';
 
 import { DealerService } from '../service/dealer.service';
 import { IDealer, Dealer } from '../dealer.model';
-import { IPayment } from 'app/entities/payments/payment/payment.model';
-import { PaymentService } from 'app/entities/payments/payment/service/payment.service';
+import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
+import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
@@ -22,7 +22,7 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<DealerUpdateComponent>;
     let activatedRoute: ActivatedRoute;
     let dealerService: DealerService;
-    let paymentService: PaymentService;
+    let paymentLabelService: PaymentLabelService;
     let placeholderService: PlaceholderService;
 
     beforeEach(() => {
@@ -37,30 +37,52 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(DealerUpdateComponent);
       activatedRoute = TestBed.inject(ActivatedRoute);
       dealerService = TestBed.inject(DealerService);
-      paymentService = TestBed.inject(PaymentService);
+      paymentLabelService = TestBed.inject(PaymentLabelService);
       placeholderService = TestBed.inject(PlaceholderService);
 
       comp = fixture.componentInstance;
     });
 
     describe('ngOnInit', () => {
-      it('Should call Payment query and add missing value', () => {
+      it('Should call PaymentLabel query and add missing value', () => {
         const dealer: IDealer = { id: 456 };
-        const payments: IPayment[] = [{ id: 76966 }];
-        dealer.payments = payments;
+        const paymentLabels: IPaymentLabel[] = [{ id: 15656 }];
+        dealer.paymentLabels = paymentLabels;
 
-        const paymentCollection: IPayment[] = [{ id: 93722 }];
-        jest.spyOn(paymentService, 'query').mockReturnValue(of(new HttpResponse({ body: paymentCollection })));
-        const additionalPayments = [...payments];
-        const expectedCollection: IPayment[] = [...additionalPayments, ...paymentCollection];
-        jest.spyOn(paymentService, 'addPaymentToCollectionIfMissing').mockReturnValue(expectedCollection);
+        const paymentLabelCollection: IPaymentLabel[] = [{ id: 99173 }];
+        jest.spyOn(paymentLabelService, 'query').mockReturnValue(of(new HttpResponse({ body: paymentLabelCollection })));
+        const additionalPaymentLabels = [...paymentLabels];
+        const expectedCollection: IPaymentLabel[] = [...additionalPaymentLabels, ...paymentLabelCollection];
+        jest.spyOn(paymentLabelService, 'addPaymentLabelToCollectionIfMissing').mockReturnValue(expectedCollection);
 
         activatedRoute.data = of({ dealer });
         comp.ngOnInit();
 
-        expect(paymentService.query).toHaveBeenCalled();
-        expect(paymentService.addPaymentToCollectionIfMissing).toHaveBeenCalledWith(paymentCollection, ...additionalPayments);
-        expect(comp.paymentsSharedCollection).toEqual(expectedCollection);
+        expect(paymentLabelService.query).toHaveBeenCalled();
+        expect(paymentLabelService.addPaymentLabelToCollectionIfMissing).toHaveBeenCalledWith(
+          paymentLabelCollection,
+          ...additionalPaymentLabels
+        );
+        expect(comp.paymentLabelsSharedCollection).toEqual(expectedCollection);
+      });
+
+      it('Should call Dealer query and add missing value', () => {
+        const dealer: IDealer = { id: 456 };
+        const dealerGroup: IDealer = { id: 83539 };
+        dealer.dealerGroup = dealerGroup;
+
+        const dealerCollection: IDealer[] = [{ id: 17699 }];
+        jest.spyOn(dealerService, 'query').mockReturnValue(of(new HttpResponse({ body: dealerCollection })));
+        const additionalDealers = [dealerGroup];
+        const expectedCollection: IDealer[] = [...additionalDealers, ...dealerCollection];
+        jest.spyOn(dealerService, 'addDealerToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+        activatedRoute.data = of({ dealer });
+        comp.ngOnInit();
+
+        expect(dealerService.query).toHaveBeenCalled();
+        expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerCollection, ...additionalDealers);
+        expect(comp.dealersSharedCollection).toEqual(expectedCollection);
       });
 
       it('Should call Placeholder query and add missing value', () => {
@@ -87,8 +109,10 @@ describe('Component Tests', () => {
 
       it('Should update editForm', () => {
         const dealer: IDealer = { id: 456 };
-        const payments: IPayment = { id: 11178 };
-        dealer.payments = [payments];
+        const paymentLabels: IPaymentLabel = { id: 87715 };
+        dealer.paymentLabels = [paymentLabels];
+        const dealerGroup: IDealer = { id: 20298 };
+        dealer.dealerGroup = dealerGroup;
         const placeholders: IPlaceholder = { id: 94264 };
         dealer.placeholders = [placeholders];
 
@@ -96,7 +120,8 @@ describe('Component Tests', () => {
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(dealer));
-        expect(comp.paymentsSharedCollection).toContain(payments);
+        expect(comp.paymentLabelsSharedCollection).toContain(paymentLabels);
+        expect(comp.dealersSharedCollection).toContain(dealerGroup);
         expect(comp.placeholdersSharedCollection).toContain(placeholders);
       });
     });
@@ -166,10 +191,18 @@ describe('Component Tests', () => {
     });
 
     describe('Tracking relationships identifiers', () => {
-      describe('trackPaymentById', () => {
-        it('Should return tracked Payment primary key', () => {
+      describe('trackPaymentLabelById', () => {
+        it('Should return tracked PaymentLabel primary key', () => {
           const entity = { id: 123 };
-          const trackResult = comp.trackPaymentById(0, entity);
+          const trackResult = comp.trackPaymentLabelById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
+      });
+
+      describe('trackDealerById', () => {
+        it('Should return tracked Dealer primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackDealerById(0, entity);
           expect(trackResult).toEqual(entity.id);
         });
       });
@@ -184,27 +217,27 @@ describe('Component Tests', () => {
     });
 
     describe('Getting selected relationships', () => {
-      describe('getSelectedPayment', () => {
-        it('Should return option if no Payment is selected', () => {
+      describe('getSelectedPaymentLabel', () => {
+        it('Should return option if no PaymentLabel is selected', () => {
           const option = { id: 123 };
-          const result = comp.getSelectedPayment(option);
+          const result = comp.getSelectedPaymentLabel(option);
           expect(result === option).toEqual(true);
         });
 
-        it('Should return selected Payment for according option', () => {
+        it('Should return selected PaymentLabel for according option', () => {
           const option = { id: 123 };
           const selected = { id: 123 };
           const selected2 = { id: 456 };
-          const result = comp.getSelectedPayment(option, [selected2, selected]);
+          const result = comp.getSelectedPaymentLabel(option, [selected2, selected]);
           expect(result === selected).toEqual(true);
           expect(result === selected2).toEqual(false);
           expect(result === option).toEqual(false);
         });
 
-        it('Should return option if this Payment is not selected', () => {
+        it('Should return option if this PaymentLabel is not selected', () => {
           const option = { id: 123 };
           const selected = { id: 456 };
-          const result = comp.getSelectedPayment(option, [selected]);
+          const result = comp.getSelectedPaymentLabel(option, [selected]);
           expect(result === option).toEqual(true);
           expect(result === selected).toEqual(false);
         });

@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Dealer;
-import io.github.erp.domain.Payment;
+import io.github.erp.domain.PaymentLabel;
 import io.github.erp.domain.PaymentRequisition;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.repository.PaymentRequisitionRepository;
@@ -564,29 +564,28 @@ class PaymentRequisitionResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentRequisitionsByPaymentIsEqualToSomething() throws Exception {
+    void getAllPaymentRequisitionsByPaymentLabelIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentRequisitionRepository.saveAndFlush(paymentRequisition);
-        Payment payment;
-        if (TestUtil.findAll(em, Payment.class).isEmpty()) {
-            payment = PaymentResourceIT.createEntity(em);
-            em.persist(payment);
+        PaymentLabel paymentLabel;
+        if (TestUtil.findAll(em, PaymentLabel.class).isEmpty()) {
+            paymentLabel = PaymentLabelResourceIT.createEntity(em);
+            em.persist(paymentLabel);
             em.flush();
         } else {
-            payment = TestUtil.findAll(em, Payment.class).get(0);
+            paymentLabel = TestUtil.findAll(em, PaymentLabel.class).get(0);
         }
-        em.persist(payment);
+        em.persist(paymentLabel);
         em.flush();
-        paymentRequisition.setPayment(payment);
-        payment.setPaymentRequisition(paymentRequisition);
+        paymentRequisition.addPaymentLabel(paymentLabel);
         paymentRequisitionRepository.saveAndFlush(paymentRequisition);
-        Long paymentId = payment.getId();
+        Long paymentLabelId = paymentLabel.getId();
 
-        // Get all the paymentRequisitionList where payment equals to paymentId
-        defaultPaymentRequisitionShouldBeFound("paymentId.equals=" + paymentId);
+        // Get all the paymentRequisitionList where paymentLabel equals to paymentLabelId
+        defaultPaymentRequisitionShouldBeFound("paymentLabelId.equals=" + paymentLabelId);
 
-        // Get all the paymentRequisitionList where payment equals to (paymentId + 1)
-        defaultPaymentRequisitionShouldNotBeFound("paymentId.equals=" + (paymentId + 1));
+        // Get all the paymentRequisitionList where paymentLabel equals to (paymentLabelId + 1)
+        defaultPaymentRequisitionShouldNotBeFound("paymentLabelId.equals=" + (paymentLabelId + 1));
     }
 
     @Test

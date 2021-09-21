@@ -5,7 +5,7 @@
     {
       "relationshipName": "payment",
       "otherEntityName": "payment",
-      "relationshipType": "one-to-one",
+      "relationshipType": "one-to-many",
       "ownerSide": false,
       "otherEntityRelationshipName": "taxRule"
     },
@@ -13,7 +13,7 @@
       "relationshipName": "placeholder",
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",
-      "otherEntityField": "id",
+      "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "taxRule"
     }

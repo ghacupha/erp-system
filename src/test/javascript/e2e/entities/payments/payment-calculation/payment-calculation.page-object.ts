@@ -35,6 +35,7 @@ export class PaymentCalculationUpdatePage {
   withholdingTaxInput = element(by.id('field_withholdingTax'));
   paymentAmountInput = element(by.id('field_paymentAmount'));
 
+  paymentLabelSelect = element(by.id('field_paymentLabel'));
   paymentCategorySelect = element(by.id('field_paymentCategory'));
   placeholderSelect = element(by.id('field_placeholder'));
 
@@ -80,6 +81,22 @@ export class PaymentCalculationUpdatePage {
 
   async getPaymentAmountInput(): Promise<string> {
     return await this.paymentAmountInput.getAttribute('value');
+  }
+
+  async paymentLabelSelectLastOption(): Promise<void> {
+    await this.paymentLabelSelect.all(by.tagName('option')).last().click();
+  }
+
+  async paymentLabelSelectOption(option: string): Promise<void> {
+    await this.paymentLabelSelect.sendKeys(option);
+  }
+
+  getPaymentLabelSelect(): ElementFinder {
+    return this.paymentLabelSelect;
+  }
+
+  async getPaymentLabelSelectedOption(): Promise<string> {
+    return await this.paymentLabelSelect.element(by.css('option:checked')).getText();
   }
 
   async paymentCategorySelectLastOption(): Promise<void> {

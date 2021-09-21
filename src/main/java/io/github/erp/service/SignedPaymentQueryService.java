@@ -98,9 +98,6 @@ public class SignedPaymentQueryService extends QueryService<SignedPayment> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), SignedPayment_.id));
             }
-            if (criteria.getPaymentCategory() != null) {
-                specification = specification.and(buildSpecification(criteria.getPaymentCategory(), SignedPayment_.paymentCategory));
-            }
             if (criteria.getTransactionNumber() != null) {
                 specification =
                     specification.and(buildStringSpecification(criteria.getTransactionNumber(), SignedPayment_.transactionNumber));
@@ -116,9 +113,6 @@ public class SignedPaymentQueryService extends QueryService<SignedPayment> {
                 specification =
                     specification.and(buildRangeSpecification(criteria.getTransactionAmount(), SignedPayment_.transactionAmount));
             }
-            if (criteria.getBeneficiary() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getBeneficiary(), SignedPayment_.beneficiary));
-            }
             if (criteria.getPaymentLabelId() != null) {
                 specification =
                     specification.and(
@@ -128,12 +122,36 @@ public class SignedPaymentQueryService extends QueryService<SignedPayment> {
                         )
                     );
             }
+            if (criteria.getDealerId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getDealerId(), root -> root.join(SignedPayment_.dealers, JoinType.LEFT).get(Dealer_.id))
+                    );
+            }
+            if (criteria.getPaymentCategoryId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPaymentCategoryId(),
+                            root -> root.join(SignedPayment_.paymentCategory, JoinType.LEFT).get(PaymentCategory_.id)
+                        )
+                    );
+            }
             if (criteria.getPlaceholderId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
                             criteria.getPlaceholderId(),
                             root -> root.join(SignedPayment_.placeholders, JoinType.LEFT).get(Placeholder_.id)
+                        )
+                    );
+            }
+            if (criteria.getSignedPaymentGroupId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getSignedPaymentGroupId(),
+                            root -> root.join(SignedPayment_.signedPaymentGroup, JoinType.LEFT).get(SignedPayment_.id)
                         )
                     );
             }
