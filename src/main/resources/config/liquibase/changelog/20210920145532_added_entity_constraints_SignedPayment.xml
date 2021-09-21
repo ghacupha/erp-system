@@ -21,6 +21,24 @@
                                  referencedTableName="payment_label"/>
 
         <addForeignKeyConstraint baseColumnNames="signed_payment_id"
+                                 baseTableName="rel_signed_payment__dealer"
+                                 constraintName="fk_rel_signed_payment__dealer__signed_payment_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="signed_payment"/>
+
+        <addForeignKeyConstraint baseColumnNames="dealer_id"
+                                 baseTableName="rel_signed_payment__dealer"
+                                 constraintName="fk_rel_signed_payment__dealer__dealer_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_category_id"
+                                 baseTableName="signed_payment"
+                                 constraintName="fk_signed_payment__payment_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_category"/>
+
+        <addForeignKeyConstraint baseColumnNames="signed_payment_id"
                                  baseTableName="rel_signed_payment__placeholder"
                                  constraintName="fk_rel_signed_payment__placeholder__signed_payment_id"
                                  referencedColumnNames="id"
@@ -31,5 +49,11 @@
                                  constraintName="fk_rel_signed_payment__placeholder__placeholder_id"
                                  referencedColumnNames="id"
                                  referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="signed_payment_group_id"
+                                 baseTableName="signed_payment"
+                                 constraintName="fk_signed_payment__signed_payment_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="signed_payment"/>
     </changeSet>
 </databaseChangeLog>

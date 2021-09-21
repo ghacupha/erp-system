@@ -108,6 +108,15 @@ public class PaymentCategoryQueryService extends QueryService<PaymentCategory> {
             if (criteria.getCategoryType() != null) {
                 specification = specification.and(buildSpecification(criteria.getCategoryType(), PaymentCategory_.categoryType));
             }
+            if (criteria.getPaymentLabelId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPaymentLabelId(),
+                            root -> root.join(PaymentCategory_.paymentLabels, JoinType.LEFT).get(PaymentLabel_.id)
+                        )
+                    );
+            }
             if (criteria.getPaymentCalculationId() != null) {
                 specification =
                     specification.and(

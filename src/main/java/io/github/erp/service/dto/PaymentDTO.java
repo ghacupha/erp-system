@@ -20,16 +20,26 @@ public class PaymentDTO implements Serializable {
 
     private LocalDate paymentDate;
 
+    private BigDecimal invoicedAmount;
+
+    private BigDecimal disbursementCost;
+
+    private BigDecimal vatableAmount;
+
     private BigDecimal paymentAmount;
 
     private String description;
 
     @NotNull
-    private CurrencyTypes currency;
+    private CurrencyTypes settlementCurrency;
 
     @NotNull
     @DecimalMin(value = "1.00")
     private Double conversionRate;
+
+    private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
+
+    private Set<DealerDTO> dealers = new HashSet<>();
 
     private PaymentCategoryDTO paymentCategory;
 
@@ -37,9 +47,9 @@ public class PaymentDTO implements Serializable {
 
     private PaymentCalculationDTO paymentCalculation;
 
-    private PaymentRequisitionDTO paymentRequisition;
-
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
+
+    private PaymentDTO paymentGroup;
 
     public Long getId() {
         return id;
@@ -65,6 +75,30 @@ public class PaymentDTO implements Serializable {
         this.paymentDate = paymentDate;
     }
 
+    public BigDecimal getInvoicedAmount() {
+        return invoicedAmount;
+    }
+
+    public void setInvoicedAmount(BigDecimal invoicedAmount) {
+        this.invoicedAmount = invoicedAmount;
+    }
+
+    public BigDecimal getDisbursementCost() {
+        return disbursementCost;
+    }
+
+    public void setDisbursementCost(BigDecimal disbursementCost) {
+        this.disbursementCost = disbursementCost;
+    }
+
+    public BigDecimal getVatableAmount() {
+        return vatableAmount;
+    }
+
+    public void setVatableAmount(BigDecimal vatableAmount) {
+        this.vatableAmount = vatableAmount;
+    }
+
     public BigDecimal getPaymentAmount() {
         return paymentAmount;
     }
@@ -81,12 +115,12 @@ public class PaymentDTO implements Serializable {
         this.description = description;
     }
 
-    public CurrencyTypes getCurrency() {
-        return currency;
+    public CurrencyTypes getSettlementCurrency() {
+        return settlementCurrency;
     }
 
-    public void setCurrency(CurrencyTypes currency) {
-        this.currency = currency;
+    public void setSettlementCurrency(CurrencyTypes settlementCurrency) {
+        this.settlementCurrency = settlementCurrency;
     }
 
     public Double getConversionRate() {
@@ -95,6 +129,22 @@ public class PaymentDTO implements Serializable {
 
     public void setConversionRate(Double conversionRate) {
         this.conversionRate = conversionRate;
+    }
+
+    public Set<PaymentLabelDTO> getPaymentLabels() {
+        return paymentLabels;
+    }
+
+    public void setPaymentLabels(Set<PaymentLabelDTO> paymentLabels) {
+        this.paymentLabels = paymentLabels;
+    }
+
+    public Set<DealerDTO> getDealers() {
+        return dealers;
+    }
+
+    public void setDealers(Set<DealerDTO> dealers) {
+        this.dealers = dealers;
     }
 
     public PaymentCategoryDTO getPaymentCategory() {
@@ -121,20 +171,20 @@ public class PaymentDTO implements Serializable {
         this.paymentCalculation = paymentCalculation;
     }
 
-    public PaymentRequisitionDTO getPaymentRequisition() {
-        return paymentRequisition;
-    }
-
-    public void setPaymentRequisition(PaymentRequisitionDTO paymentRequisition) {
-        this.paymentRequisition = paymentRequisition;
-    }
-
     public Set<PlaceholderDTO> getPlaceholders() {
         return placeholders;
     }
 
     public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
         this.placeholders = placeholders;
+    }
+
+    public PaymentDTO getPaymentGroup() {
+        return paymentGroup;
+    }
+
+    public void setPaymentGroup(PaymentDTO paymentGroup) {
+        this.paymentGroup = paymentGroup;
     }
 
     @Override
@@ -165,15 +215,20 @@ public class PaymentDTO implements Serializable {
             "id=" + getId() +
             ", paymentNumber='" + getPaymentNumber() + "'" +
             ", paymentDate='" + getPaymentDate() + "'" +
+            ", invoicedAmount=" + getInvoicedAmount() +
+            ", disbursementCost=" + getDisbursementCost() +
+            ", vatableAmount=" + getVatableAmount() +
             ", paymentAmount=" + getPaymentAmount() +
             ", description='" + getDescription() + "'" +
-            ", currency='" + getCurrency() + "'" +
+            ", settlementCurrency='" + getSettlementCurrency() + "'" +
             ", conversionRate=" + getConversionRate() +
+            ", paymentLabels=" + getPaymentLabels() +
+            ", dealers=" + getDealers() +
             ", paymentCategory=" + getPaymentCategory() +
             ", taxRule=" + getTaxRule() +
             ", paymentCalculation=" + getPaymentCalculation() +
-            ", paymentRequisition=" + getPaymentRequisition() +
             ", placeholders=" + getPlaceholders() +
+            ", paymentGroup=" + getPaymentGroup() +
             "}";
     }
 }

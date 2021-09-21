@@ -15,14 +15,16 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, Long>, JpaSpecificationExecutor<Invoice> {
     @Query(
-        value = "select distinct invoice from Invoice invoice left join fetch invoice.placeholders",
+        value = "select distinct invoice from Invoice invoice left join fetch invoice.paymentLabels left join fetch invoice.placeholders",
         countQuery = "select count(distinct invoice) from Invoice invoice"
     )
     Page<Invoice> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("select distinct invoice from Invoice invoice left join fetch invoice.placeholders")
+    @Query("select distinct invoice from Invoice invoice left join fetch invoice.paymentLabels left join fetch invoice.placeholders")
     List<Invoice> findAllWithEagerRelationships();
 
-    @Query("select invoice from Invoice invoice left join fetch invoice.placeholders where invoice.id =:id")
+    @Query(
+        "select invoice from Invoice invoice left join fetch invoice.paymentLabels left join fetch invoice.placeholders where invoice.id =:id"
+    )
     Optional<Invoice> findOneWithEagerRelationships(@Param("id") Long id);
 }

@@ -41,6 +41,17 @@
 
     <changeSet id="20210627082202-1-relations" author="jhipster">
 
+        <createTable tableName="rel_invoice__payment_label">
+            <column name="payment_label_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="invoice_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="invoice_id, payment_label_id" tableName="rel_invoice__payment_label"/>
+
         <createTable tableName="rel_invoice__placeholder">
             <column name="placeholder_id" type="bigint">
                 <constraints nullable="false"/>

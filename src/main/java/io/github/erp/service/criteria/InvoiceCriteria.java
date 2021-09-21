@@ -56,6 +56,8 @@ public class InvoiceCriteria implements Serializable, Criteria {
 
     private DoubleFilter conversionRate;
 
+    private LongFilter paymentLabelId;
+
     private LongFilter paymentId;
 
     private LongFilter dealerId;
@@ -73,6 +75,7 @@ public class InvoiceCriteria implements Serializable, Criteria {
         this.invoiceAmount = other.invoiceAmount == null ? null : other.invoiceAmount.copy();
         this.currency = other.currency == null ? null : other.currency.copy();
         this.conversionRate = other.conversionRate == null ? null : other.conversionRate.copy();
+        this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
         this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
         this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
@@ -174,6 +177,21 @@ public class InvoiceCriteria implements Serializable, Criteria {
         this.conversionRate = conversionRate;
     }
 
+    public LongFilter getPaymentLabelId() {
+        return paymentLabelId;
+    }
+
+    public LongFilter paymentLabelId() {
+        if (paymentLabelId == null) {
+            paymentLabelId = new LongFilter();
+        }
+        return paymentLabelId;
+    }
+
+    public void setPaymentLabelId(LongFilter paymentLabelId) {
+        this.paymentLabelId = paymentLabelId;
+    }
+
     public LongFilter getPaymentId() {
         return paymentId;
     }
@@ -243,6 +261,7 @@ public class InvoiceCriteria implements Serializable, Criteria {
             Objects.equals(invoiceAmount, that.invoiceAmount) &&
             Objects.equals(currency, that.currency) &&
             Objects.equals(conversionRate, that.conversionRate) &&
+            Objects.equals(paymentLabelId, that.paymentLabelId) &&
             Objects.equals(paymentId, that.paymentId) &&
             Objects.equals(dealerId, that.dealerId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
@@ -259,6 +278,7 @@ public class InvoiceCriteria implements Serializable, Criteria {
             invoiceAmount,
             currency,
             conversionRate,
+            paymentLabelId,
             paymentId,
             dealerId,
             placeholderId,
@@ -276,6 +296,7 @@ public class InvoiceCriteria implements Serializable, Criteria {
             (invoiceAmount != null ? "invoiceAmount=" + invoiceAmount + ", " : "") +
             (currency != null ? "currency=" + currency + ", " : "") +
             (conversionRate != null ? "conversionRate=" + conversionRate + ", " : "") +
+            (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
             (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
             (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +

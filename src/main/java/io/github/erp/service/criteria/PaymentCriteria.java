@@ -50,13 +50,21 @@ public class PaymentCriteria implements Serializable, Criteria {
 
     private LocalDateFilter paymentDate;
 
+    private BigDecimalFilter invoicedAmount;
+
+    private BigDecimalFilter disbursementCost;
+
+    private BigDecimalFilter vatableAmount;
+
     private BigDecimalFilter paymentAmount;
 
     private StringFilter description;
 
-    private CurrencyTypesFilter currency;
+    private CurrencyTypesFilter settlementCurrency;
 
     private DoubleFilter conversionRate;
+
+    private LongFilter paymentLabelId;
 
     private LongFilter ownedInvoiceId;
 
@@ -68,9 +76,9 @@ public class PaymentCriteria implements Serializable, Criteria {
 
     private LongFilter paymentCalculationId;
 
-    private LongFilter paymentRequisitionId;
-
     private LongFilter placeholderId;
+
+    private LongFilter paymentGroupId;
 
     private Boolean distinct;
 
@@ -80,17 +88,21 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.paymentNumber = other.paymentNumber == null ? null : other.paymentNumber.copy();
         this.paymentDate = other.paymentDate == null ? null : other.paymentDate.copy();
+        this.invoicedAmount = other.invoicedAmount == null ? null : other.invoicedAmount.copy();
+        this.disbursementCost = other.disbursementCost == null ? null : other.disbursementCost.copy();
+        this.vatableAmount = other.vatableAmount == null ? null : other.vatableAmount.copy();
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
         this.description = other.description == null ? null : other.description.copy();
-        this.currency = other.currency == null ? null : other.currency.copy();
+        this.settlementCurrency = other.settlementCurrency == null ? null : other.settlementCurrency.copy();
         this.conversionRate = other.conversionRate == null ? null : other.conversionRate.copy();
+        this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
         this.ownedInvoiceId = other.ownedInvoiceId == null ? null : other.ownedInvoiceId.copy();
         this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
         this.paymentCategoryId = other.paymentCategoryId == null ? null : other.paymentCategoryId.copy();
         this.taxRuleId = other.taxRuleId == null ? null : other.taxRuleId.copy();
         this.paymentCalculationId = other.paymentCalculationId == null ? null : other.paymentCalculationId.copy();
-        this.paymentRequisitionId = other.paymentRequisitionId == null ? null : other.paymentRequisitionId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.paymentGroupId = other.paymentGroupId == null ? null : other.paymentGroupId.copy();
         this.distinct = other.distinct;
     }
 
@@ -144,6 +156,51 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.paymentDate = paymentDate;
     }
 
+    public BigDecimalFilter getInvoicedAmount() {
+        return invoicedAmount;
+    }
+
+    public BigDecimalFilter invoicedAmount() {
+        if (invoicedAmount == null) {
+            invoicedAmount = new BigDecimalFilter();
+        }
+        return invoicedAmount;
+    }
+
+    public void setInvoicedAmount(BigDecimalFilter invoicedAmount) {
+        this.invoicedAmount = invoicedAmount;
+    }
+
+    public BigDecimalFilter getDisbursementCost() {
+        return disbursementCost;
+    }
+
+    public BigDecimalFilter disbursementCost() {
+        if (disbursementCost == null) {
+            disbursementCost = new BigDecimalFilter();
+        }
+        return disbursementCost;
+    }
+
+    public void setDisbursementCost(BigDecimalFilter disbursementCost) {
+        this.disbursementCost = disbursementCost;
+    }
+
+    public BigDecimalFilter getVatableAmount() {
+        return vatableAmount;
+    }
+
+    public BigDecimalFilter vatableAmount() {
+        if (vatableAmount == null) {
+            vatableAmount = new BigDecimalFilter();
+        }
+        return vatableAmount;
+    }
+
+    public void setVatableAmount(BigDecimalFilter vatableAmount) {
+        this.vatableAmount = vatableAmount;
+    }
+
     public BigDecimalFilter getPaymentAmount() {
         return paymentAmount;
     }
@@ -174,19 +231,19 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.description = description;
     }
 
-    public CurrencyTypesFilter getCurrency() {
-        return currency;
+    public CurrencyTypesFilter getSettlementCurrency() {
+        return settlementCurrency;
     }
 
-    public CurrencyTypesFilter currency() {
-        if (currency == null) {
-            currency = new CurrencyTypesFilter();
+    public CurrencyTypesFilter settlementCurrency() {
+        if (settlementCurrency == null) {
+            settlementCurrency = new CurrencyTypesFilter();
         }
-        return currency;
+        return settlementCurrency;
     }
 
-    public void setCurrency(CurrencyTypesFilter currency) {
-        this.currency = currency;
+    public void setSettlementCurrency(CurrencyTypesFilter settlementCurrency) {
+        this.settlementCurrency = settlementCurrency;
     }
 
     public DoubleFilter getConversionRate() {
@@ -202,6 +259,21 @@ public class PaymentCriteria implements Serializable, Criteria {
 
     public void setConversionRate(DoubleFilter conversionRate) {
         this.conversionRate = conversionRate;
+    }
+
+    public LongFilter getPaymentLabelId() {
+        return paymentLabelId;
+    }
+
+    public LongFilter paymentLabelId() {
+        if (paymentLabelId == null) {
+            paymentLabelId = new LongFilter();
+        }
+        return paymentLabelId;
+    }
+
+    public void setPaymentLabelId(LongFilter paymentLabelId) {
+        this.paymentLabelId = paymentLabelId;
     }
 
     public LongFilter getOwnedInvoiceId() {
@@ -279,21 +351,6 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.paymentCalculationId = paymentCalculationId;
     }
 
-    public LongFilter getPaymentRequisitionId() {
-        return paymentRequisitionId;
-    }
-
-    public LongFilter paymentRequisitionId() {
-        if (paymentRequisitionId == null) {
-            paymentRequisitionId = new LongFilter();
-        }
-        return paymentRequisitionId;
-    }
-
-    public void setPaymentRequisitionId(LongFilter paymentRequisitionId) {
-        this.paymentRequisitionId = paymentRequisitionId;
-    }
-
     public LongFilter getPlaceholderId() {
         return placeholderId;
     }
@@ -307,6 +364,21 @@ public class PaymentCriteria implements Serializable, Criteria {
 
     public void setPlaceholderId(LongFilter placeholderId) {
         this.placeholderId = placeholderId;
+    }
+
+    public LongFilter getPaymentGroupId() {
+        return paymentGroupId;
+    }
+
+    public LongFilter paymentGroupId() {
+        if (paymentGroupId == null) {
+            paymentGroupId = new LongFilter();
+        }
+        return paymentGroupId;
+    }
+
+    public void setPaymentGroupId(LongFilter paymentGroupId) {
+        this.paymentGroupId = paymentGroupId;
     }
 
     public Boolean getDistinct() {
@@ -330,17 +402,21 @@ public class PaymentCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(paymentNumber, that.paymentNumber) &&
             Objects.equals(paymentDate, that.paymentDate) &&
+            Objects.equals(invoicedAmount, that.invoicedAmount) &&
+            Objects.equals(disbursementCost, that.disbursementCost) &&
+            Objects.equals(vatableAmount, that.vatableAmount) &&
             Objects.equals(paymentAmount, that.paymentAmount) &&
             Objects.equals(description, that.description) &&
-            Objects.equals(currency, that.currency) &&
+            Objects.equals(settlementCurrency, that.settlementCurrency) &&
             Objects.equals(conversionRate, that.conversionRate) &&
+            Objects.equals(paymentLabelId, that.paymentLabelId) &&
             Objects.equals(ownedInvoiceId, that.ownedInvoiceId) &&
             Objects.equals(dealerId, that.dealerId) &&
             Objects.equals(paymentCategoryId, that.paymentCategoryId) &&
             Objects.equals(taxRuleId, that.taxRuleId) &&
             Objects.equals(paymentCalculationId, that.paymentCalculationId) &&
-            Objects.equals(paymentRequisitionId, that.paymentRequisitionId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(paymentGroupId, that.paymentGroupId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -351,17 +427,21 @@ public class PaymentCriteria implements Serializable, Criteria {
             id,
             paymentNumber,
             paymentDate,
+            invoicedAmount,
+            disbursementCost,
+            vatableAmount,
             paymentAmount,
             description,
-            currency,
+            settlementCurrency,
             conversionRate,
+            paymentLabelId,
             ownedInvoiceId,
             dealerId,
             paymentCategoryId,
             taxRuleId,
             paymentCalculationId,
-            paymentRequisitionId,
             placeholderId,
+            paymentGroupId,
             distinct
         );
     }
@@ -373,17 +453,21 @@ public class PaymentCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (paymentNumber != null ? "paymentNumber=" + paymentNumber + ", " : "") +
             (paymentDate != null ? "paymentDate=" + paymentDate + ", " : "") +
+            (invoicedAmount != null ? "invoicedAmount=" + invoicedAmount + ", " : "") +
+            (disbursementCost != null ? "disbursementCost=" + disbursementCost + ", " : "") +
+            (vatableAmount != null ? "vatableAmount=" + vatableAmount + ", " : "") +
             (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
             (description != null ? "description=" + description + ", " : "") +
-            (currency != null ? "currency=" + currency + ", " : "") +
+            (settlementCurrency != null ? "settlementCurrency=" + settlementCurrency + ", " : "") +
             (conversionRate != null ? "conversionRate=" + conversionRate + ", " : "") +
+            (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
             (ownedInvoiceId != null ? "ownedInvoiceId=" + ownedInvoiceId + ", " : "") +
             (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             (paymentCategoryId != null ? "paymentCategoryId=" + paymentCategoryId + ", " : "") +
             (taxRuleId != null ? "taxRuleId=" + taxRuleId + ", " : "") +
             (paymentCalculationId != null ? "paymentCalculationId=" + paymentCalculationId + ", " : "") +
-            (paymentRequisitionId != null ? "paymentRequisitionId=" + paymentRequisitionId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (paymentGroupId != null ? "paymentGroupId=" + paymentGroupId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

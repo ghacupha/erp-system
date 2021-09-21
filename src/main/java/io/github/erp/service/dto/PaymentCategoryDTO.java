@@ -22,6 +22,8 @@ public class PaymentCategoryDTO implements Serializable {
     @NotNull
     private CategoryTypes categoryType;
 
+    private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
+
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     public Long getId() {
@@ -54,6 +56,14 @@ public class PaymentCategoryDTO implements Serializable {
 
     public void setCategoryType(CategoryTypes categoryType) {
         this.categoryType = categoryType;
+    }
+
+    public Set<PaymentLabelDTO> getPaymentLabels() {
+        return paymentLabels;
+    }
+
+    public void setPaymentLabels(Set<PaymentLabelDTO> paymentLabels) {
+        this.paymentLabels = paymentLabels;
     }
 
     public Set<PlaceholderDTO> getPlaceholders() {
@@ -93,6 +103,7 @@ public class PaymentCategoryDTO implements Serializable {
             ", categoryName='" + getCategoryName() + "'" +
             ", categoryDescription='" + getCategoryDescription() + "'" +
             ", categoryType='" + getCategoryType() + "'" +
+            ", paymentLabels=" + getPaymentLabels() +
             ", placeholders=" + getPlaceholders() +
             "}";
     }

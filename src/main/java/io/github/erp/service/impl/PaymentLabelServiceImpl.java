@@ -78,11 +78,15 @@ public class PaymentLabelServiceImpl implements PaymentLabelService {
         return paymentLabelRepository.findAll(pageable).map(paymentLabelMapper::toDto);
     }
 
+    public Page<PaymentLabelDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return paymentLabelRepository.findAllWithEagerRelationships(pageable).map(paymentLabelMapper::toDto);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<PaymentLabelDTO> findOne(Long id) {
         log.debug("Request to get PaymentLabel : {}", id);
-        return paymentLabelRepository.findById(id).map(paymentLabelMapper::toDto);
+        return paymentLabelRepository.findOneWithEagerRelationships(id).map(paymentLabelMapper::toDto);
     }
 
     @Override

@@ -19,6 +19,8 @@ public class PaymentRequisitionDTO implements Serializable {
 
     private BigDecimal vatableAmount;
 
+    private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
+
     private DealerDTO dealer;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
@@ -53,6 +55,14 @@ public class PaymentRequisitionDTO implements Serializable {
 
     public void setVatableAmount(BigDecimal vatableAmount) {
         this.vatableAmount = vatableAmount;
+    }
+
+    public Set<PaymentLabelDTO> getPaymentLabels() {
+        return paymentLabels;
+    }
+
+    public void setPaymentLabels(Set<PaymentLabelDTO> paymentLabels) {
+        this.paymentLabels = paymentLabels;
     }
 
     public DealerDTO getDealer() {
@@ -100,6 +110,7 @@ public class PaymentRequisitionDTO implements Serializable {
             ", invoicedAmount=" + getInvoicedAmount() +
             ", disbursementCost=" + getDisbursementCost() +
             ", vatableAmount=" + getVatableAmount() +
+            ", paymentLabels=" + getPaymentLabels() +
             ", dealer=" + getDealer() +
             ", placeholders=" + getPlaceholders() +
             "}";

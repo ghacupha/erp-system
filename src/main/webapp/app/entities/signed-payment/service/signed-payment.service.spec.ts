@@ -3,7 +3,6 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
-import { CategoryTypes } from 'app/entities/enumerations/category-types.model';
 import { CurrencyTypes } from 'app/entities/enumerations/currency-types.model';
 import { ISignedPayment, SignedPayment } from '../signed-payment.model';
 
@@ -28,12 +27,10 @@ describe('Service Tests', () => {
 
       elemDefault = {
         id: 0,
-        paymentCategory: CategoryTypes.UNDEFINED,
         transactionNumber: 'AAAAAAA',
         transactionDate: currentDate,
         transactionCurrency: CurrencyTypes.KES,
         transactionAmount: 0,
-        beneficiary: 'AAAAAAA',
       };
     });
 
@@ -80,12 +77,10 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 1,
-            paymentCategory: 'BBBBBB',
             transactionNumber: 'BBBBBB',
             transactionDate: currentDate.format(DATE_FORMAT),
             transactionCurrency: 'BBBBBB',
             transactionAmount: 1,
-            beneficiary: 'BBBBBB',
           },
           elemDefault
         );
@@ -107,10 +102,9 @@ describe('Service Tests', () => {
       it('should partial update a SignedPayment', () => {
         const patchObject = Object.assign(
           {
-            paymentCategory: 'BBBBBB',
             transactionNumber: 'BBBBBB',
             transactionDate: currentDate.format(DATE_FORMAT),
-            transactionAmount: 1,
+            transactionCurrency: 'BBBBBB',
           },
           new SignedPayment()
         );
@@ -135,12 +129,10 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 1,
-            paymentCategory: 'BBBBBB',
             transactionNumber: 'BBBBBB',
             transactionDate: currentDate.format(DATE_FORMAT),
             transactionCurrency: 'BBBBBB',
             transactionAmount: 1,
-            beneficiary: 'BBBBBB',
           },
           elemDefault
         );
@@ -197,7 +189,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique SignedPayment to an array', () => {
-          const signedPaymentArray: ISignedPayment[] = [{ id: 123 }, { id: 456 }, { id: 31101 }];
+          const signedPaymentArray: ISignedPayment[] = [{ id: 123 }, { id: 456 }, { id: 93972 }];
           const signedPaymentCollection: ISignedPayment[] = [{ id: 123 }];
           expectedResult = service.addSignedPaymentToCollectionIfMissing(signedPaymentCollection, ...signedPaymentArray);
           expect(expectedResult).toHaveLength(3);

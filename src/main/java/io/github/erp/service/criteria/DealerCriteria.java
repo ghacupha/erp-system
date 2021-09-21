@@ -44,6 +44,10 @@ public class DealerCriteria implements Serializable, Criteria {
 
     private StringFilter bankersSwiftCode;
 
+    private LongFilter paymentLabelId;
+
+    private LongFilter dealerGroupId;
+
     private LongFilter paymentId;
 
     private LongFilter paymentRequisitionId;
@@ -65,6 +69,8 @@ public class DealerCriteria implements Serializable, Criteria {
         this.bankersName = other.bankersName == null ? null : other.bankersName.copy();
         this.bankersBranch = other.bankersBranch == null ? null : other.bankersBranch.copy();
         this.bankersSwiftCode = other.bankersSwiftCode == null ? null : other.bankersSwiftCode.copy();
+        this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
+        this.dealerGroupId = other.dealerGroupId == null ? null : other.dealerGroupId.copy();
         this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
         this.paymentRequisitionId = other.paymentRequisitionId == null ? null : other.paymentRequisitionId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
@@ -226,6 +232,36 @@ public class DealerCriteria implements Serializable, Criteria {
         this.bankersSwiftCode = bankersSwiftCode;
     }
 
+    public LongFilter getPaymentLabelId() {
+        return paymentLabelId;
+    }
+
+    public LongFilter paymentLabelId() {
+        if (paymentLabelId == null) {
+            paymentLabelId = new LongFilter();
+        }
+        return paymentLabelId;
+    }
+
+    public void setPaymentLabelId(LongFilter paymentLabelId) {
+        this.paymentLabelId = paymentLabelId;
+    }
+
+    public LongFilter getDealerGroupId() {
+        return dealerGroupId;
+    }
+
+    public LongFilter dealerGroupId() {
+        if (dealerGroupId == null) {
+            dealerGroupId = new LongFilter();
+        }
+        return dealerGroupId;
+    }
+
+    public void setDealerGroupId(LongFilter dealerGroupId) {
+        this.dealerGroupId = dealerGroupId;
+    }
+
     public LongFilter getPaymentId() {
         return paymentId;
     }
@@ -299,6 +335,8 @@ public class DealerCriteria implements Serializable, Criteria {
             Objects.equals(bankersName, that.bankersName) &&
             Objects.equals(bankersBranch, that.bankersBranch) &&
             Objects.equals(bankersSwiftCode, that.bankersSwiftCode) &&
+            Objects.equals(paymentLabelId, that.paymentLabelId) &&
+            Objects.equals(dealerGroupId, that.dealerGroupId) &&
             Objects.equals(paymentId, that.paymentId) &&
             Objects.equals(paymentRequisitionId, that.paymentRequisitionId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
@@ -319,6 +357,8 @@ public class DealerCriteria implements Serializable, Criteria {
             bankersName,
             bankersBranch,
             bankersSwiftCode,
+            paymentLabelId,
+            dealerGroupId,
             paymentId,
             paymentRequisitionId,
             placeholderId,
@@ -340,6 +380,8 @@ public class DealerCriteria implements Serializable, Criteria {
             (bankersName != null ? "bankersName=" + bankersName + ", " : "") +
             (bankersBranch != null ? "bankersBranch=" + bankersBranch + ", " : "") +
             (bankersSwiftCode != null ? "bankersSwiftCode=" + bankersSwiftCode + ", " : "") +
+            (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
+            (dealerGroupId != null ? "dealerGroupId=" + dealerGroupId + ", " : "") +
             (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
             (paymentRequisitionId != null ? "paymentRequisitionId=" + paymentRequisitionId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +

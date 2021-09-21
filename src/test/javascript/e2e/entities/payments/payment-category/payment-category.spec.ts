@@ -49,6 +49,7 @@ describe('PaymentCategory e2e test', () => {
       paymentCategoryUpdatePage.setCategoryNameInput('categoryName'),
       paymentCategoryUpdatePage.setCategoryDescriptionInput('categoryDescription'),
       paymentCategoryUpdatePage.categoryTypeSelectLastOption(),
+      // paymentCategoryUpdatePage.paymentLabelSelectLastOption(),
       // paymentCategoryUpdatePage.placeholderSelectLastOption(),
     ]);
 

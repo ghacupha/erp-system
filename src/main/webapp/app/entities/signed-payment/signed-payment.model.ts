@@ -1,32 +1,35 @@
 import * as dayjs from 'dayjs';
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
+import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
+import { IPaymentCategory } from 'app/entities/payments/payment-category/payment-category.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { CategoryTypes } from 'app/entities/enumerations/category-types.model';
 import { CurrencyTypes } from 'app/entities/enumerations/currency-types.model';
 
 export interface ISignedPayment {
   id?: number;
-  paymentCategory?: CategoryTypes;
   transactionNumber?: string;
   transactionDate?: dayjs.Dayjs;
   transactionCurrency?: CurrencyTypes;
   transactionAmount?: number;
-  beneficiary?: string | null;
   paymentLabels?: IPaymentLabel[] | null;
+  dealers?: IDealer[] | null;
+  paymentCategory?: IPaymentCategory | null;
   placeholders?: IPlaceholder[] | null;
+  signedPaymentGroup?: ISignedPayment | null;
 }
 
 export class SignedPayment implements ISignedPayment {
   constructor(
     public id?: number,
-    public paymentCategory?: CategoryTypes,
     public transactionNumber?: string,
     public transactionDate?: dayjs.Dayjs,
     public transactionCurrency?: CurrencyTypes,
     public transactionAmount?: number,
-    public beneficiary?: string | null,
     public paymentLabels?: IPaymentLabel[] | null,
-    public placeholders?: IPlaceholder[] | null
+    public dealers?: IDealer[] | null,
+    public paymentCategory?: IPaymentCategory | null,
+    public placeholders?: IPlaceholder[] | null,
+    public signedPaymentGroup?: ISignedPayment | null
   ) {}
 }
 

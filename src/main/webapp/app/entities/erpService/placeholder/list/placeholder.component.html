@@ -53,7 +53,9 @@
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="token"><span>Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="containingPlaceholder.id"><span>Containing Placeholder</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="containingPlaceholder.description">
+            <span>Containing Placeholder</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -67,7 +69,7 @@
           <td>
             <div *ngIf="placeholder.containingPlaceholder">
               <a [routerLink]="['/placeholder', placeholder.containingPlaceholder?.id, 'view']">{{
-                placeholder.containingPlaceholder?.id
+                placeholder.containingPlaceholder?.description
               }}</a>
             </div>
           </td>

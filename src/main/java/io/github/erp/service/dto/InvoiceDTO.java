@@ -30,6 +30,8 @@ public class InvoiceDTO implements Serializable {
     @DecimalMin(value = "1.00")
     private Double conversionRate;
 
+    private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
+
     private PaymentDTO payment;
 
     private DealerDTO dealer;
@@ -82,6 +84,14 @@ public class InvoiceDTO implements Serializable {
 
     public void setConversionRate(Double conversionRate) {
         this.conversionRate = conversionRate;
+    }
+
+    public Set<PaymentLabelDTO> getPaymentLabels() {
+        return paymentLabels;
+    }
+
+    public void setPaymentLabels(Set<PaymentLabelDTO> paymentLabels) {
+        this.paymentLabels = paymentLabels;
     }
 
     public PaymentDTO getPayment() {
@@ -139,6 +149,7 @@ public class InvoiceDTO implements Serializable {
             ", invoiceAmount=" + getInvoiceAmount() +
             ", currency='" + getCurrency() + "'" +
             ", conversionRate=" + getConversionRate() +
+            ", paymentLabels=" + getPaymentLabels() +
             ", payment=" + getPayment() +
             ", dealer=" + getDealer() +
             ", placeholders=" + getPlaceholders() +

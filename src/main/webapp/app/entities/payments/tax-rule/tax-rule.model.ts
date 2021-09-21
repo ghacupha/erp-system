@@ -11,7 +11,7 @@ export interface ITaxRule {
   cateringLevy?: number | null;
   serviceCharge?: number | null;
   withholdingTaxImportedService?: number | null;
-  payment?: IPayment | null;
+  payments?: IPayment[] | null;
   placeholders?: IPlaceholder[] | null;
 }
 
@@ -26,7 +26,7 @@ export class TaxRule implements ITaxRule {
     public cateringLevy?: number | null,
     public serviceCharge?: number | null,
     public withholdingTaxImportedService?: number | null,
-    public payment?: IPayment | null,
+    public payments?: IPayment[] | null,
     public placeholders?: IPlaceholder[] | null
   ) {}
 }

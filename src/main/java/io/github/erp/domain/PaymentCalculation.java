@@ -38,15 +38,40 @@ public class PaymentCalculation implements Serializable {
     @Column(name = "payment_amount", precision = 21, scale = 2)
     private BigDecimal paymentAmount;
 
+    @ManyToMany
+    @JoinTable(
+        name = "rel_payment_calculation__payment_label",
+        joinColumns = @JoinColumn(name = "payment_calculation_id"),
+        inverseJoinColumns = @JoinColumn(name = "payment_label_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "ownedInvoices", "dealers", "paymentCategory", "taxRule", "paymentCalculation", "paymentRequisition", "placeholders" },
+        value = {
+            "containingPaymentLabel",
+            "placeholders",
+            "paymentCalculations",
+            "paymentCategories",
+            "paymentRequisitions",
+            "payments",
+            "invoices",
+            "dealers",
+            "signedPayments",
+        },
+        allowSetters = true
+    )
+    private Set<PaymentLabel> paymentLabels = new HashSet<>();
+
+    @JsonIgnoreProperties(
+        value = {
+            "paymentLabels", "ownedInvoices", "dealers", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup",
+        },
         allowSetters = true
     )
     @OneToOne(mappedBy = "paymentCalculation")
     private Payment payment;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "paymentCalculations", "payments", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "paymentLabels", "paymentCalculations", "payments", "placeholders" }, allowSetters = true)
     private PaymentCategory paymentCategory;
 
     @ManyToMany
@@ -143,6 +168,31 @@ public class PaymentCalculation implements Serializable {
 
     public void setPaymentAmount(BigDecimal paymentAmount) {
         this.paymentAmount = paymentAmount;
+    }
+
+    public Set<PaymentLabel> getPaymentLabels() {
+        return this.paymentLabels;
+    }
+
+    public void setPaymentLabels(Set<PaymentLabel> paymentLabels) {
+        this.paymentLabels = paymentLabels;
+    }
+
+    public PaymentCalculation paymentLabels(Set<PaymentLabel> paymentLabels) {
+        this.setPaymentLabels(paymentLabels);
+        return this;
+    }
+
+    public PaymentCalculation addPaymentLabel(PaymentLabel paymentLabel) {
+        this.paymentLabels.add(paymentLabel);
+        paymentLabel.getPaymentCalculations().add(this);
+        return this;
+    }
+
+    public PaymentCalculation removePaymentLabel(PaymentLabel paymentLabel) {
+        this.paymentLabels.remove(paymentLabel);
+        paymentLabel.getPaymentCalculations().remove(this);
+        return this;
     }
 
     public Payment getPayment() {

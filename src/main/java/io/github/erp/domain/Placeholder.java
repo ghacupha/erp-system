@@ -58,7 +58,10 @@ public class Placeholder implements Serializable {
 
     @ManyToMany(mappedBy = "placeholders")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "payments", "paymentRequisitions", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "paymentLabels", "dealerGroup", "payments", "paymentRequisitions", "placeholders" },
+        allowSetters = true
+    )
     private Set<Dealer> dealers = new HashSet<>();
 
     @ManyToMany(mappedBy = "placeholders")
@@ -88,7 +91,7 @@ public class Placeholder implements Serializable {
 
     @ManyToMany(mappedBy = "placeholders")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "payment", "dealer", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "paymentLabels", "payment", "dealer", "placeholders" }, allowSetters = true)
     private Set<Invoice> invoices = new HashSet<>();
 
     @ManyToMany(mappedBy = "placeholders")
@@ -99,24 +102,26 @@ public class Placeholder implements Serializable {
     @ManyToMany(mappedBy = "placeholders")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "ownedInvoices", "dealers", "paymentCategory", "taxRule", "paymentCalculation", "paymentRequisition", "placeholders" },
+        value = {
+            "paymentLabels", "ownedInvoices", "dealers", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup",
+        },
         allowSetters = true
     )
     private Set<Payment> payments = new HashSet<>();
 
     @ManyToMany(mappedBy = "placeholders")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "payment", "paymentCategory", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "paymentLabels", "payment", "paymentCategory", "placeholders" }, allowSetters = true)
     private Set<PaymentCalculation> paymentCalculations = new HashSet<>();
 
     @ManyToMany(mappedBy = "placeholders")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "payment", "dealer", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "paymentLabels", "dealer", "placeholders" }, allowSetters = true)
     private Set<PaymentRequisition> paymentRequisitions = new HashSet<>();
 
     @ManyToMany(mappedBy = "placeholders")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "paymentCalculations", "payments", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "paymentLabels", "paymentCalculations", "payments", "placeholders" }, allowSetters = true)
     private Set<PaymentCategory> paymentCategories = new HashSet<>();
 
     @ManyToMany(mappedBy = "placeholders")
@@ -126,7 +131,7 @@ public class Placeholder implements Serializable {
 
     @ManyToMany(mappedBy = "placeholders")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "payment", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "payments", "placeholders" }, allowSetters = true)
     private Set<TaxRule> taxRules = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

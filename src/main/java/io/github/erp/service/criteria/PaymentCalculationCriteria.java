@@ -35,6 +35,8 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter paymentAmount;
 
+    private LongFilter paymentLabelId;
+
     private LongFilter paymentId;
 
     private LongFilter paymentCategoryId;
@@ -51,6 +53,7 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
         this.withholdingVAT = other.withholdingVAT == null ? null : other.withholdingVAT.copy();
         this.withholdingTax = other.withholdingTax == null ? null : other.withholdingTax.copy();
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
+        this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
         this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
         this.paymentCategoryId = other.paymentCategoryId == null ? null : other.paymentCategoryId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
@@ -137,6 +140,21 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
         this.paymentAmount = paymentAmount;
     }
 
+    public LongFilter getPaymentLabelId() {
+        return paymentLabelId;
+    }
+
+    public LongFilter paymentLabelId() {
+        if (paymentLabelId == null) {
+            paymentLabelId = new LongFilter();
+        }
+        return paymentLabelId;
+    }
+
+    public void setPaymentLabelId(LongFilter paymentLabelId) {
+        this.paymentLabelId = paymentLabelId;
+    }
+
     public LongFilter getPaymentId() {
         return paymentId;
     }
@@ -205,6 +223,7 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
             Objects.equals(withholdingVAT, that.withholdingVAT) &&
             Objects.equals(withholdingTax, that.withholdingTax) &&
             Objects.equals(paymentAmount, that.paymentAmount) &&
+            Objects.equals(paymentLabelId, that.paymentLabelId) &&
             Objects.equals(paymentId, that.paymentId) &&
             Objects.equals(paymentCategoryId, that.paymentCategoryId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
@@ -220,6 +239,7 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
             withholdingVAT,
             withholdingTax,
             paymentAmount,
+            paymentLabelId,
             paymentId,
             paymentCategoryId,
             placeholderId,
@@ -236,6 +256,7 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
             (withholdingVAT != null ? "withholdingVAT=" + withholdingVAT + ", " : "") +
             (withholdingTax != null ? "withholdingTax=" + withholdingTax + ", " : "") +
             (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
+            (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
             (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
             (paymentCategoryId != null ? "paymentCategoryId=" + paymentCategoryId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +

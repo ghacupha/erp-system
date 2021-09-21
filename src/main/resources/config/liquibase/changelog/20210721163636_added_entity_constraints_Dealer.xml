@@ -9,16 +9,22 @@
     <changeSet id="20210721163636-2" author="jhipster">
 
         <addForeignKeyConstraint baseColumnNames="dealer_id"
-                                 baseTableName="rel_dealer__payment"
-                                 constraintName="fk_rel_dealer__payment__dealer_id"
+                                 baseTableName="rel_dealer__payment_label"
+                                 constraintName="fk_rel_dealer__payment_label__dealer_id"
                                  referencedColumnNames="id"
                                  referencedTableName="dealer"/>
 
-        <addForeignKeyConstraint baseColumnNames="payment_id"
-                                 baseTableName="rel_dealer__payment"
-                                 constraintName="fk_rel_dealer__payment__payment_id"
+        <addForeignKeyConstraint baseColumnNames="payment_label_id"
+                                 baseTableName="rel_dealer__payment_label"
+                                 constraintName="fk_rel_dealer__payment_label__payment_label_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="payment"/>
+                                 referencedTableName="payment_label"/>
+
+        <addForeignKeyConstraint baseColumnNames="dealer_group_id"
+                                 baseTableName="dealer"
+                                 constraintName="fk_dealer__dealer_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
 
         <addForeignKeyConstraint baseColumnNames="dealer_id"
                                  baseTableName="rel_dealer__placeholder"

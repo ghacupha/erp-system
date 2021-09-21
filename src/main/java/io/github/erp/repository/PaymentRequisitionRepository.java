@@ -16,16 +16,18 @@ import org.springframework.stereotype.Repository;
 public interface PaymentRequisitionRepository
     extends JpaRepository<PaymentRequisition, Long>, JpaSpecificationExecutor<PaymentRequisition> {
     @Query(
-        value = "select distinct paymentRequisition from PaymentRequisition paymentRequisition left join fetch paymentRequisition.placeholders",
+        value = "select distinct paymentRequisition from PaymentRequisition paymentRequisition left join fetch paymentRequisition.paymentLabels left join fetch paymentRequisition.placeholders",
         countQuery = "select count(distinct paymentRequisition) from PaymentRequisition paymentRequisition"
     )
     Page<PaymentRequisition> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("select distinct paymentRequisition from PaymentRequisition paymentRequisition left join fetch paymentRequisition.placeholders")
+    @Query(
+        "select distinct paymentRequisition from PaymentRequisition paymentRequisition left join fetch paymentRequisition.paymentLabels left join fetch paymentRequisition.placeholders"
+    )
     List<PaymentRequisition> findAllWithEagerRelationships();
 
     @Query(
-        "select paymentRequisition from PaymentRequisition paymentRequisition left join fetch paymentRequisition.placeholders where paymentRequisition.id =:id"
+        "select paymentRequisition from PaymentRequisition paymentRequisition left join fetch paymentRequisition.paymentLabels left join fetch paymentRequisition.placeholders where paymentRequisition.id =:id"
     )
     Optional<PaymentRequisition> findOneWithEagerRelationships(@Param("id") Long id);
 }

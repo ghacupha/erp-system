@@ -29,9 +29,12 @@ describe('Service Tests', () => {
         id: 0,
         paymentNumber: 'AAAAAAA',
         paymentDate: currentDate,
+        invoicedAmount: 0,
+        disbursementCost: 0,
+        vatableAmount: 0,
         paymentAmount: 0,
         description: 'AAAAAAA',
-        currency: CurrencyTypes.KES,
+        settlementCurrency: CurrencyTypes.KES,
         conversionRate: 0,
       };
     });
@@ -81,9 +84,12 @@ describe('Service Tests', () => {
             id: 1,
             paymentNumber: 'BBBBBB',
             paymentDate: currentDate.format(DATE_FORMAT),
+            invoicedAmount: 1,
+            disbursementCost: 1,
+            vatableAmount: 1,
             paymentAmount: 1,
             description: 'BBBBBB',
-            currency: 'BBBBBB',
+            settlementCurrency: 'BBBBBB',
             conversionRate: 1,
           },
           elemDefault
@@ -107,7 +113,8 @@ describe('Service Tests', () => {
         const patchObject = Object.assign(
           {
             paymentDate: currentDate.format(DATE_FORMAT),
-            currency: 'BBBBBB',
+            vatableAmount: 1,
+            paymentAmount: 1,
             conversionRate: 1,
           },
           new Payment()
@@ -135,9 +142,12 @@ describe('Service Tests', () => {
             id: 1,
             paymentNumber: 'BBBBBB',
             paymentDate: currentDate.format(DATE_FORMAT),
+            invoicedAmount: 1,
+            disbursementCost: 1,
+            vatableAmount: 1,
             paymentAmount: 1,
             description: 'BBBBBB',
-            currency: 'BBBBBB',
+            settlementCurrency: 'BBBBBB',
             conversionRate: 1,
           },
           elemDefault
@@ -195,7 +205,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique Payment to an array', () => {
-          const paymentArray: IPayment[] = [{ id: 123 }, { id: 456 }, { id: 4957 }];
+          const paymentArray: IPayment[] = [{ id: 123 }, { id: 456 }, { id: 15547 }];
           const paymentCollection: IPayment[] = [{ id: 123 }];
           expectedResult = service.addPaymentToCollectionIfMissing(paymentCollection, ...paymentArray);
           expect(expectedResult).toHaveLength(3);

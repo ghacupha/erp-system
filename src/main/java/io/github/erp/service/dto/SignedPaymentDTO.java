@@ -1,6 +1,5 @@
 package io.github.erp.service.dto;
 
-import io.github.erp.domain.enumeration.CategoryTypes;
 import io.github.erp.domain.enumeration.CurrencyTypes;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -18,9 +17,6 @@ public class SignedPaymentDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private CategoryTypes paymentCategory;
-
-    @NotNull
     private String transactionNumber;
 
     @NotNull
@@ -33,11 +29,15 @@ public class SignedPaymentDTO implements Serializable {
     @DecimalMin(value = "0")
     private BigDecimal transactionAmount;
 
-    private String beneficiary;
-
     private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
 
+    private Set<DealerDTO> dealers = new HashSet<>();
+
+    private PaymentCategoryDTO paymentCategory;
+
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
+
+    private SignedPaymentDTO signedPaymentGroup;
 
     public Long getId() {
         return id;
@@ -45,14 +45,6 @@ public class SignedPaymentDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public CategoryTypes getPaymentCategory() {
-        return paymentCategory;
-    }
-
-    public void setPaymentCategory(CategoryTypes paymentCategory) {
-        this.paymentCategory = paymentCategory;
     }
 
     public String getTransactionNumber() {
@@ -87,14 +79,6 @@ public class SignedPaymentDTO implements Serializable {
         this.transactionAmount = transactionAmount;
     }
 
-    public String getBeneficiary() {
-        return beneficiary;
-    }
-
-    public void setBeneficiary(String beneficiary) {
-        this.beneficiary = beneficiary;
-    }
-
     public Set<PaymentLabelDTO> getPaymentLabels() {
         return paymentLabels;
     }
@@ -103,12 +87,36 @@ public class SignedPaymentDTO implements Serializable {
         this.paymentLabels = paymentLabels;
     }
 
+    public Set<DealerDTO> getDealers() {
+        return dealers;
+    }
+
+    public void setDealers(Set<DealerDTO> dealers) {
+        this.dealers = dealers;
+    }
+
+    public PaymentCategoryDTO getPaymentCategory() {
+        return paymentCategory;
+    }
+
+    public void setPaymentCategory(PaymentCategoryDTO paymentCategory) {
+        this.paymentCategory = paymentCategory;
+    }
+
     public Set<PlaceholderDTO> getPlaceholders() {
         return placeholders;
     }
 
     public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
         this.placeholders = placeholders;
+    }
+
+    public SignedPaymentDTO getSignedPaymentGroup() {
+        return signedPaymentGroup;
+    }
+
+    public void setSignedPaymentGroup(SignedPaymentDTO signedPaymentGroup) {
+        this.signedPaymentGroup = signedPaymentGroup;
     }
 
     @Override
@@ -137,14 +145,15 @@ public class SignedPaymentDTO implements Serializable {
     public String toString() {
         return "SignedPaymentDTO{" +
             "id=" + getId() +
-            ", paymentCategory='" + getPaymentCategory() + "'" +
             ", transactionNumber='" + getTransactionNumber() + "'" +
             ", transactionDate='" + getTransactionDate() + "'" +
             ", transactionCurrency='" + getTransactionCurrency() + "'" +
             ", transactionAmount=" + getTransactionAmount() +
-            ", beneficiary='" + getBeneficiary() + "'" +
             ", paymentLabels=" + getPaymentLabels() +
+            ", dealers=" + getDealers() +
+            ", paymentCategory=" + getPaymentCategory() +
             ", placeholders=" + getPlaceholders() +
+            ", signedPaymentGroup=" + getSignedPaymentGroup() +
             "}";
     }
 }

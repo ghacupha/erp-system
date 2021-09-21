@@ -11,9 +11,10 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Dealer;
 import io.github.erp.domain.Invoice;
 import io.github.erp.domain.Payment;
+import io.github.erp.domain.Payment;
 import io.github.erp.domain.PaymentCalculation;
 import io.github.erp.domain.PaymentCategory;
-import io.github.erp.domain.PaymentRequisition;
+import io.github.erp.domain.PaymentLabel;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.TaxRule;
 import io.github.erp.domain.enumeration.CurrencyTypes;
@@ -62,6 +63,18 @@ class PaymentResourceIT {
     private static final LocalDate UPDATED_PAYMENT_DATE = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_PAYMENT_DATE = LocalDate.ofEpochDay(-1L);
 
+    private static final BigDecimal DEFAULT_INVOICED_AMOUNT = new BigDecimal(1);
+    private static final BigDecimal UPDATED_INVOICED_AMOUNT = new BigDecimal(2);
+    private static final BigDecimal SMALLER_INVOICED_AMOUNT = new BigDecimal(1 - 1);
+
+    private static final BigDecimal DEFAULT_DISBURSEMENT_COST = new BigDecimal(1);
+    private static final BigDecimal UPDATED_DISBURSEMENT_COST = new BigDecimal(2);
+    private static final BigDecimal SMALLER_DISBURSEMENT_COST = new BigDecimal(1 - 1);
+
+    private static final BigDecimal DEFAULT_VATABLE_AMOUNT = new BigDecimal(1);
+    private static final BigDecimal UPDATED_VATABLE_AMOUNT = new BigDecimal(2);
+    private static final BigDecimal SMALLER_VATABLE_AMOUNT = new BigDecimal(1 - 1);
+
     private static final BigDecimal DEFAULT_PAYMENT_AMOUNT = new BigDecimal(1);
     private static final BigDecimal UPDATED_PAYMENT_AMOUNT = new BigDecimal(2);
     private static final BigDecimal SMALLER_PAYMENT_AMOUNT = new BigDecimal(1 - 1);
@@ -69,8 +82,8 @@ class PaymentResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final CurrencyTypes DEFAULT_CURRENCY = CurrencyTypes.KES;
-    private static final CurrencyTypes UPDATED_CURRENCY = CurrencyTypes.USD;
+    private static final CurrencyTypes DEFAULT_SETTLEMENT_CURRENCY = CurrencyTypes.KES;
+    private static final CurrencyTypes UPDATED_SETTLEMENT_CURRENCY = CurrencyTypes.USD;
 
     private static final Double DEFAULT_CONVERSION_RATE = 1.00D;
     private static final Double UPDATED_CONVERSION_RATE = 2D;
@@ -121,9 +134,12 @@ class PaymentResourceIT {
         Payment payment = new Payment()
             .paymentNumber(DEFAULT_PAYMENT_NUMBER)
             .paymentDate(DEFAULT_PAYMENT_DATE)
+            .invoicedAmount(DEFAULT_INVOICED_AMOUNT)
+            .disbursementCost(DEFAULT_DISBURSEMENT_COST)
+            .vatableAmount(DEFAULT_VATABLE_AMOUNT)
             .paymentAmount(DEFAULT_PAYMENT_AMOUNT)
             .description(DEFAULT_DESCRIPTION)
-            .currency(DEFAULT_CURRENCY)
+            .settlementCurrency(DEFAULT_SETTLEMENT_CURRENCY)
             .conversionRate(DEFAULT_CONVERSION_RATE);
         return payment;
     }
@@ -138,9 +154,12 @@ class PaymentResourceIT {
         Payment payment = new Payment()
             .paymentNumber(UPDATED_PAYMENT_NUMBER)
             .paymentDate(UPDATED_PAYMENT_DATE)
+            .invoicedAmount(UPDATED_INVOICED_AMOUNT)
+            .disbursementCost(UPDATED_DISBURSEMENT_COST)
+            .vatableAmount(UPDATED_VATABLE_AMOUNT)
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
             .description(UPDATED_DESCRIPTION)
-            .currency(UPDATED_CURRENCY)
+            .settlementCurrency(UPDATED_SETTLEMENT_CURRENCY)
             .conversionRate(UPDATED_CONVERSION_RATE);
         return payment;
     }
@@ -166,9 +185,12 @@ class PaymentResourceIT {
         Payment testPayment = paymentList.get(paymentList.size() - 1);
         assertThat(testPayment.getPaymentNumber()).isEqualTo(DEFAULT_PAYMENT_NUMBER);
         assertThat(testPayment.getPaymentDate()).isEqualTo(DEFAULT_PAYMENT_DATE);
+        assertThat(testPayment.getInvoicedAmount()).isEqualByComparingTo(DEFAULT_INVOICED_AMOUNT);
+        assertThat(testPayment.getDisbursementCost()).isEqualByComparingTo(DEFAULT_DISBURSEMENT_COST);
+        assertThat(testPayment.getVatableAmount()).isEqualByComparingTo(DEFAULT_VATABLE_AMOUNT);
         assertThat(testPayment.getPaymentAmount()).isEqualByComparingTo(DEFAULT_PAYMENT_AMOUNT);
         assertThat(testPayment.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testPayment.getCurrency()).isEqualTo(DEFAULT_CURRENCY);
+        assertThat(testPayment.getSettlementCurrency()).isEqualTo(DEFAULT_SETTLEMENT_CURRENCY);
         assertThat(testPayment.getConversionRate()).isEqualTo(DEFAULT_CONVERSION_RATE);
 
         // Validate the Payment in Elasticsearch
@@ -199,10 +221,10 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void checkCurrencyIsRequired() throws Exception {
+    void checkSettlementCurrencyIsRequired() throws Exception {
         int databaseSizeBeforeTest = paymentRepository.findAll().size();
         // set the field null
-        payment.setCurrency(null);
+        payment.setSettlementCurrency(null);
 
         // Create the Payment, which fails.
         PaymentDTO paymentDTO = paymentMapper.toDto(payment);
@@ -247,9 +269,12 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(payment.getId().intValue())))
             .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
             .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
+            .andExpect(jsonPath("$.[*].invoicedAmount").value(hasItem(sameNumber(DEFAULT_INVOICED_AMOUNT))))
+            .andExpect(jsonPath("$.[*].disbursementCost").value(hasItem(sameNumber(DEFAULT_DISBURSEMENT_COST))))
+            .andExpect(jsonPath("$.[*].vatableAmount").value(hasItem(sameNumber(DEFAULT_VATABLE_AMOUNT))))
             .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].currency").value(hasItem(DEFAULT_CURRENCY.toString())))
+            .andExpect(jsonPath("$.[*].settlementCurrency").value(hasItem(DEFAULT_SETTLEMENT_CURRENCY.toString())))
             .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())));
     }
 
@@ -285,9 +310,12 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.id").value(payment.getId().intValue()))
             .andExpect(jsonPath("$.paymentNumber").value(DEFAULT_PAYMENT_NUMBER))
             .andExpect(jsonPath("$.paymentDate").value(DEFAULT_PAYMENT_DATE.toString()))
+            .andExpect(jsonPath("$.invoicedAmount").value(sameNumber(DEFAULT_INVOICED_AMOUNT)))
+            .andExpect(jsonPath("$.disbursementCost").value(sameNumber(DEFAULT_DISBURSEMENT_COST)))
+            .andExpect(jsonPath("$.vatableAmount").value(sameNumber(DEFAULT_VATABLE_AMOUNT)))
             .andExpect(jsonPath("$.paymentAmount").value(sameNumber(DEFAULT_PAYMENT_AMOUNT)))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.currency").value(DEFAULT_CURRENCY.toString()))
+            .andExpect(jsonPath("$.settlementCurrency").value(DEFAULT_SETTLEMENT_CURRENCY.toString()))
             .andExpect(jsonPath("$.conversionRate").value(DEFAULT_CONVERSION_RATE.doubleValue()));
     }
 
@@ -493,6 +521,318 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
+    void getAllPaymentsByInvoicedAmountIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where invoicedAmount equals to DEFAULT_INVOICED_AMOUNT
+        defaultPaymentShouldBeFound("invoicedAmount.equals=" + DEFAULT_INVOICED_AMOUNT);
+
+        // Get all the paymentList where invoicedAmount equals to UPDATED_INVOICED_AMOUNT
+        defaultPaymentShouldNotBeFound("invoicedAmount.equals=" + UPDATED_INVOICED_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByInvoicedAmountIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where invoicedAmount not equals to DEFAULT_INVOICED_AMOUNT
+        defaultPaymentShouldNotBeFound("invoicedAmount.notEquals=" + DEFAULT_INVOICED_AMOUNT);
+
+        // Get all the paymentList where invoicedAmount not equals to UPDATED_INVOICED_AMOUNT
+        defaultPaymentShouldBeFound("invoicedAmount.notEquals=" + UPDATED_INVOICED_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByInvoicedAmountIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where invoicedAmount in DEFAULT_INVOICED_AMOUNT or UPDATED_INVOICED_AMOUNT
+        defaultPaymentShouldBeFound("invoicedAmount.in=" + DEFAULT_INVOICED_AMOUNT + "," + UPDATED_INVOICED_AMOUNT);
+
+        // Get all the paymentList where invoicedAmount equals to UPDATED_INVOICED_AMOUNT
+        defaultPaymentShouldNotBeFound("invoicedAmount.in=" + UPDATED_INVOICED_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByInvoicedAmountIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where invoicedAmount is not null
+        defaultPaymentShouldBeFound("invoicedAmount.specified=true");
+
+        // Get all the paymentList where invoicedAmount is null
+        defaultPaymentShouldNotBeFound("invoicedAmount.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByInvoicedAmountIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where invoicedAmount is greater than or equal to DEFAULT_INVOICED_AMOUNT
+        defaultPaymentShouldBeFound("invoicedAmount.greaterThanOrEqual=" + DEFAULT_INVOICED_AMOUNT);
+
+        // Get all the paymentList where invoicedAmount is greater than or equal to UPDATED_INVOICED_AMOUNT
+        defaultPaymentShouldNotBeFound("invoicedAmount.greaterThanOrEqual=" + UPDATED_INVOICED_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByInvoicedAmountIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where invoicedAmount is less than or equal to DEFAULT_INVOICED_AMOUNT
+        defaultPaymentShouldBeFound("invoicedAmount.lessThanOrEqual=" + DEFAULT_INVOICED_AMOUNT);
+
+        // Get all the paymentList where invoicedAmount is less than or equal to SMALLER_INVOICED_AMOUNT
+        defaultPaymentShouldNotBeFound("invoicedAmount.lessThanOrEqual=" + SMALLER_INVOICED_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByInvoicedAmountIsLessThanSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where invoicedAmount is less than DEFAULT_INVOICED_AMOUNT
+        defaultPaymentShouldNotBeFound("invoicedAmount.lessThan=" + DEFAULT_INVOICED_AMOUNT);
+
+        // Get all the paymentList where invoicedAmount is less than UPDATED_INVOICED_AMOUNT
+        defaultPaymentShouldBeFound("invoicedAmount.lessThan=" + UPDATED_INVOICED_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByInvoicedAmountIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where invoicedAmount is greater than DEFAULT_INVOICED_AMOUNT
+        defaultPaymentShouldNotBeFound("invoicedAmount.greaterThan=" + DEFAULT_INVOICED_AMOUNT);
+
+        // Get all the paymentList where invoicedAmount is greater than SMALLER_INVOICED_AMOUNT
+        defaultPaymentShouldBeFound("invoicedAmount.greaterThan=" + SMALLER_INVOICED_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByDisbursementCostIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where disbursementCost equals to DEFAULT_DISBURSEMENT_COST
+        defaultPaymentShouldBeFound("disbursementCost.equals=" + DEFAULT_DISBURSEMENT_COST);
+
+        // Get all the paymentList where disbursementCost equals to UPDATED_DISBURSEMENT_COST
+        defaultPaymentShouldNotBeFound("disbursementCost.equals=" + UPDATED_DISBURSEMENT_COST);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByDisbursementCostIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where disbursementCost not equals to DEFAULT_DISBURSEMENT_COST
+        defaultPaymentShouldNotBeFound("disbursementCost.notEquals=" + DEFAULT_DISBURSEMENT_COST);
+
+        // Get all the paymentList where disbursementCost not equals to UPDATED_DISBURSEMENT_COST
+        defaultPaymentShouldBeFound("disbursementCost.notEquals=" + UPDATED_DISBURSEMENT_COST);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByDisbursementCostIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where disbursementCost in DEFAULT_DISBURSEMENT_COST or UPDATED_DISBURSEMENT_COST
+        defaultPaymentShouldBeFound("disbursementCost.in=" + DEFAULT_DISBURSEMENT_COST + "," + UPDATED_DISBURSEMENT_COST);
+
+        // Get all the paymentList where disbursementCost equals to UPDATED_DISBURSEMENT_COST
+        defaultPaymentShouldNotBeFound("disbursementCost.in=" + UPDATED_DISBURSEMENT_COST);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByDisbursementCostIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where disbursementCost is not null
+        defaultPaymentShouldBeFound("disbursementCost.specified=true");
+
+        // Get all the paymentList where disbursementCost is null
+        defaultPaymentShouldNotBeFound("disbursementCost.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByDisbursementCostIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where disbursementCost is greater than or equal to DEFAULT_DISBURSEMENT_COST
+        defaultPaymentShouldBeFound("disbursementCost.greaterThanOrEqual=" + DEFAULT_DISBURSEMENT_COST);
+
+        // Get all the paymentList where disbursementCost is greater than or equal to UPDATED_DISBURSEMENT_COST
+        defaultPaymentShouldNotBeFound("disbursementCost.greaterThanOrEqual=" + UPDATED_DISBURSEMENT_COST);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByDisbursementCostIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where disbursementCost is less than or equal to DEFAULT_DISBURSEMENT_COST
+        defaultPaymentShouldBeFound("disbursementCost.lessThanOrEqual=" + DEFAULT_DISBURSEMENT_COST);
+
+        // Get all the paymentList where disbursementCost is less than or equal to SMALLER_DISBURSEMENT_COST
+        defaultPaymentShouldNotBeFound("disbursementCost.lessThanOrEqual=" + SMALLER_DISBURSEMENT_COST);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByDisbursementCostIsLessThanSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where disbursementCost is less than DEFAULT_DISBURSEMENT_COST
+        defaultPaymentShouldNotBeFound("disbursementCost.lessThan=" + DEFAULT_DISBURSEMENT_COST);
+
+        // Get all the paymentList where disbursementCost is less than UPDATED_DISBURSEMENT_COST
+        defaultPaymentShouldBeFound("disbursementCost.lessThan=" + UPDATED_DISBURSEMENT_COST);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByDisbursementCostIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where disbursementCost is greater than DEFAULT_DISBURSEMENT_COST
+        defaultPaymentShouldNotBeFound("disbursementCost.greaterThan=" + DEFAULT_DISBURSEMENT_COST);
+
+        // Get all the paymentList where disbursementCost is greater than SMALLER_DISBURSEMENT_COST
+        defaultPaymentShouldBeFound("disbursementCost.greaterThan=" + SMALLER_DISBURSEMENT_COST);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByVatableAmountIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where vatableAmount equals to DEFAULT_VATABLE_AMOUNT
+        defaultPaymentShouldBeFound("vatableAmount.equals=" + DEFAULT_VATABLE_AMOUNT);
+
+        // Get all the paymentList where vatableAmount equals to UPDATED_VATABLE_AMOUNT
+        defaultPaymentShouldNotBeFound("vatableAmount.equals=" + UPDATED_VATABLE_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByVatableAmountIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where vatableAmount not equals to DEFAULT_VATABLE_AMOUNT
+        defaultPaymentShouldNotBeFound("vatableAmount.notEquals=" + DEFAULT_VATABLE_AMOUNT);
+
+        // Get all the paymentList where vatableAmount not equals to UPDATED_VATABLE_AMOUNT
+        defaultPaymentShouldBeFound("vatableAmount.notEquals=" + UPDATED_VATABLE_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByVatableAmountIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where vatableAmount in DEFAULT_VATABLE_AMOUNT or UPDATED_VATABLE_AMOUNT
+        defaultPaymentShouldBeFound("vatableAmount.in=" + DEFAULT_VATABLE_AMOUNT + "," + UPDATED_VATABLE_AMOUNT);
+
+        // Get all the paymentList where vatableAmount equals to UPDATED_VATABLE_AMOUNT
+        defaultPaymentShouldNotBeFound("vatableAmount.in=" + UPDATED_VATABLE_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByVatableAmountIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where vatableAmount is not null
+        defaultPaymentShouldBeFound("vatableAmount.specified=true");
+
+        // Get all the paymentList where vatableAmount is null
+        defaultPaymentShouldNotBeFound("vatableAmount.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByVatableAmountIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where vatableAmount is greater than or equal to DEFAULT_VATABLE_AMOUNT
+        defaultPaymentShouldBeFound("vatableAmount.greaterThanOrEqual=" + DEFAULT_VATABLE_AMOUNT);
+
+        // Get all the paymentList where vatableAmount is greater than or equal to UPDATED_VATABLE_AMOUNT
+        defaultPaymentShouldNotBeFound("vatableAmount.greaterThanOrEqual=" + UPDATED_VATABLE_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByVatableAmountIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where vatableAmount is less than or equal to DEFAULT_VATABLE_AMOUNT
+        defaultPaymentShouldBeFound("vatableAmount.lessThanOrEqual=" + DEFAULT_VATABLE_AMOUNT);
+
+        // Get all the paymentList where vatableAmount is less than or equal to SMALLER_VATABLE_AMOUNT
+        defaultPaymentShouldNotBeFound("vatableAmount.lessThanOrEqual=" + SMALLER_VATABLE_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByVatableAmountIsLessThanSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where vatableAmount is less than DEFAULT_VATABLE_AMOUNT
+        defaultPaymentShouldNotBeFound("vatableAmount.lessThan=" + DEFAULT_VATABLE_AMOUNT);
+
+        // Get all the paymentList where vatableAmount is less than UPDATED_VATABLE_AMOUNT
+        defaultPaymentShouldBeFound("vatableAmount.lessThan=" + UPDATED_VATABLE_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByVatableAmountIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where vatableAmount is greater than DEFAULT_VATABLE_AMOUNT
+        defaultPaymentShouldNotBeFound("vatableAmount.greaterThan=" + DEFAULT_VATABLE_AMOUNT);
+
+        // Get all the paymentList where vatableAmount is greater than SMALLER_VATABLE_AMOUNT
+        defaultPaymentShouldBeFound("vatableAmount.greaterThan=" + SMALLER_VATABLE_AMOUNT);
+    }
+
+    @Test
+    @Transactional
     void getAllPaymentsByPaymentAmountIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
@@ -675,54 +1015,54 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByCurrencyIsEqualToSomething() throws Exception {
+    void getAllPaymentsBySettlementCurrencyIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
-        // Get all the paymentList where currency equals to DEFAULT_CURRENCY
-        defaultPaymentShouldBeFound("currency.equals=" + DEFAULT_CURRENCY);
+        // Get all the paymentList where settlementCurrency equals to DEFAULT_SETTLEMENT_CURRENCY
+        defaultPaymentShouldBeFound("settlementCurrency.equals=" + DEFAULT_SETTLEMENT_CURRENCY);
 
-        // Get all the paymentList where currency equals to UPDATED_CURRENCY
-        defaultPaymentShouldNotBeFound("currency.equals=" + UPDATED_CURRENCY);
+        // Get all the paymentList where settlementCurrency equals to UPDATED_SETTLEMENT_CURRENCY
+        defaultPaymentShouldNotBeFound("settlementCurrency.equals=" + UPDATED_SETTLEMENT_CURRENCY);
     }
 
     @Test
     @Transactional
-    void getAllPaymentsByCurrencyIsNotEqualToSomething() throws Exception {
+    void getAllPaymentsBySettlementCurrencyIsNotEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
-        // Get all the paymentList where currency not equals to DEFAULT_CURRENCY
-        defaultPaymentShouldNotBeFound("currency.notEquals=" + DEFAULT_CURRENCY);
+        // Get all the paymentList where settlementCurrency not equals to DEFAULT_SETTLEMENT_CURRENCY
+        defaultPaymentShouldNotBeFound("settlementCurrency.notEquals=" + DEFAULT_SETTLEMENT_CURRENCY);
 
-        // Get all the paymentList where currency not equals to UPDATED_CURRENCY
-        defaultPaymentShouldBeFound("currency.notEquals=" + UPDATED_CURRENCY);
+        // Get all the paymentList where settlementCurrency not equals to UPDATED_SETTLEMENT_CURRENCY
+        defaultPaymentShouldBeFound("settlementCurrency.notEquals=" + UPDATED_SETTLEMENT_CURRENCY);
     }
 
     @Test
     @Transactional
-    void getAllPaymentsByCurrencyIsInShouldWork() throws Exception {
+    void getAllPaymentsBySettlementCurrencyIsInShouldWork() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
-        // Get all the paymentList where currency in DEFAULT_CURRENCY or UPDATED_CURRENCY
-        defaultPaymentShouldBeFound("currency.in=" + DEFAULT_CURRENCY + "," + UPDATED_CURRENCY);
+        // Get all the paymentList where settlementCurrency in DEFAULT_SETTLEMENT_CURRENCY or UPDATED_SETTLEMENT_CURRENCY
+        defaultPaymentShouldBeFound("settlementCurrency.in=" + DEFAULT_SETTLEMENT_CURRENCY + "," + UPDATED_SETTLEMENT_CURRENCY);
 
-        // Get all the paymentList where currency equals to UPDATED_CURRENCY
-        defaultPaymentShouldNotBeFound("currency.in=" + UPDATED_CURRENCY);
+        // Get all the paymentList where settlementCurrency equals to UPDATED_SETTLEMENT_CURRENCY
+        defaultPaymentShouldNotBeFound("settlementCurrency.in=" + UPDATED_SETTLEMENT_CURRENCY);
     }
 
     @Test
     @Transactional
-    void getAllPaymentsByCurrencyIsNullOrNotNull() throws Exception {
+    void getAllPaymentsBySettlementCurrencyIsNullOrNotNull() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
-        // Get all the paymentList where currency is not null
-        defaultPaymentShouldBeFound("currency.specified=true");
+        // Get all the paymentList where settlementCurrency is not null
+        defaultPaymentShouldBeFound("settlementCurrency.specified=true");
 
-        // Get all the paymentList where currency is null
-        defaultPaymentShouldNotBeFound("currency.specified=false");
+        // Get all the paymentList where settlementCurrency is null
+        defaultPaymentShouldNotBeFound("settlementCurrency.specified=false");
     }
 
     @Test
@@ -827,6 +1167,32 @@ class PaymentResourceIT {
 
         // Get all the paymentList where conversionRate is greater than SMALLER_CONVERSION_RATE
         defaultPaymentShouldBeFound("conversionRate.greaterThan=" + SMALLER_CONVERSION_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByPaymentLabelIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+        PaymentLabel paymentLabel;
+        if (TestUtil.findAll(em, PaymentLabel.class).isEmpty()) {
+            paymentLabel = PaymentLabelResourceIT.createEntity(em);
+            em.persist(paymentLabel);
+            em.flush();
+        } else {
+            paymentLabel = TestUtil.findAll(em, PaymentLabel.class).get(0);
+        }
+        em.persist(paymentLabel);
+        em.flush();
+        payment.addPaymentLabel(paymentLabel);
+        paymentRepository.saveAndFlush(payment);
+        Long paymentLabelId = paymentLabel.getId();
+
+        // Get all the paymentList where paymentLabel equals to paymentLabelId
+        defaultPaymentShouldBeFound("paymentLabelId.equals=" + paymentLabelId);
+
+        // Get all the paymentList where paymentLabel equals to (paymentLabelId + 1)
+        defaultPaymentShouldNotBeFound("paymentLabelId.equals=" + (paymentLabelId + 1));
     }
 
     @Test
@@ -961,32 +1327,6 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByPaymentRequisitionIsEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentRepository.saveAndFlush(payment);
-        PaymentRequisition paymentRequisition;
-        if (TestUtil.findAll(em, PaymentRequisition.class).isEmpty()) {
-            paymentRequisition = PaymentRequisitionResourceIT.createEntity(em);
-            em.persist(paymentRequisition);
-            em.flush();
-        } else {
-            paymentRequisition = TestUtil.findAll(em, PaymentRequisition.class).get(0);
-        }
-        em.persist(paymentRequisition);
-        em.flush();
-        payment.setPaymentRequisition(paymentRequisition);
-        paymentRepository.saveAndFlush(payment);
-        Long paymentRequisitionId = paymentRequisition.getId();
-
-        // Get all the paymentList where paymentRequisition equals to paymentRequisitionId
-        defaultPaymentShouldBeFound("paymentRequisitionId.equals=" + paymentRequisitionId);
-
-        // Get all the paymentList where paymentRequisition equals to (paymentRequisitionId + 1)
-        defaultPaymentShouldNotBeFound("paymentRequisitionId.equals=" + (paymentRequisitionId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllPaymentsByPlaceholderIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
@@ -1011,6 +1351,32 @@ class PaymentResourceIT {
         defaultPaymentShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllPaymentsByPaymentGroupIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+        Payment paymentGroup;
+        if (TestUtil.findAll(em, Payment.class).isEmpty()) {
+            paymentGroup = PaymentResourceIT.createEntity(em);
+            em.persist(paymentGroup);
+            em.flush();
+        } else {
+            paymentGroup = TestUtil.findAll(em, Payment.class).get(0);
+        }
+        em.persist(paymentGroup);
+        em.flush();
+        payment.setPaymentGroup(paymentGroup);
+        paymentRepository.saveAndFlush(payment);
+        Long paymentGroupId = paymentGroup.getId();
+
+        // Get all the paymentList where paymentGroup equals to paymentGroupId
+        defaultPaymentShouldBeFound("paymentGroupId.equals=" + paymentGroupId);
+
+        // Get all the paymentList where paymentGroup equals to (paymentGroupId + 1)
+        defaultPaymentShouldNotBeFound("paymentGroupId.equals=" + (paymentGroupId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1022,9 +1388,12 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(payment.getId().intValue())))
             .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
             .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
+            .andExpect(jsonPath("$.[*].invoicedAmount").value(hasItem(sameNumber(DEFAULT_INVOICED_AMOUNT))))
+            .andExpect(jsonPath("$.[*].disbursementCost").value(hasItem(sameNumber(DEFAULT_DISBURSEMENT_COST))))
+            .andExpect(jsonPath("$.[*].vatableAmount").value(hasItem(sameNumber(DEFAULT_VATABLE_AMOUNT))))
             .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].currency").value(hasItem(DEFAULT_CURRENCY.toString())))
+            .andExpect(jsonPath("$.[*].settlementCurrency").value(hasItem(DEFAULT_SETTLEMENT_CURRENCY.toString())))
             .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())));
 
         // Check, that the count call also returns 1
@@ -1076,9 +1445,12 @@ class PaymentResourceIT {
         updatedPayment
             .paymentNumber(UPDATED_PAYMENT_NUMBER)
             .paymentDate(UPDATED_PAYMENT_DATE)
+            .invoicedAmount(UPDATED_INVOICED_AMOUNT)
+            .disbursementCost(UPDATED_DISBURSEMENT_COST)
+            .vatableAmount(UPDATED_VATABLE_AMOUNT)
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
             .description(UPDATED_DESCRIPTION)
-            .currency(UPDATED_CURRENCY)
+            .settlementCurrency(UPDATED_SETTLEMENT_CURRENCY)
             .conversionRate(UPDATED_CONVERSION_RATE);
         PaymentDTO paymentDTO = paymentMapper.toDto(updatedPayment);
 
@@ -1096,9 +1468,12 @@ class PaymentResourceIT {
         Payment testPayment = paymentList.get(paymentList.size() - 1);
         assertThat(testPayment.getPaymentNumber()).isEqualTo(UPDATED_PAYMENT_NUMBER);
         assertThat(testPayment.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
+        assertThat(testPayment.getInvoicedAmount()).isEqualTo(UPDATED_INVOICED_AMOUNT);
+        assertThat(testPayment.getDisbursementCost()).isEqualTo(UPDATED_DISBURSEMENT_COST);
+        assertThat(testPayment.getVatableAmount()).isEqualTo(UPDATED_VATABLE_AMOUNT);
         assertThat(testPayment.getPaymentAmount()).isEqualTo(UPDATED_PAYMENT_AMOUNT);
         assertThat(testPayment.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testPayment.getCurrency()).isEqualTo(UPDATED_CURRENCY);
+        assertThat(testPayment.getSettlementCurrency()).isEqualTo(UPDATED_SETTLEMENT_CURRENCY);
         assertThat(testPayment.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
 
         // Validate the Payment in Elasticsearch
@@ -1191,7 +1566,7 @@ class PaymentResourceIT {
         Payment partialUpdatedPayment = new Payment();
         partialUpdatedPayment.setId(payment.getId());
 
-        partialUpdatedPayment.paymentDate(UPDATED_PAYMENT_DATE).currency(UPDATED_CURRENCY);
+        partialUpdatedPayment.paymentDate(UPDATED_PAYMENT_DATE).vatableAmount(UPDATED_VATABLE_AMOUNT).description(UPDATED_DESCRIPTION);
 
         restPaymentMockMvc
             .perform(
@@ -1207,9 +1582,12 @@ class PaymentResourceIT {
         Payment testPayment = paymentList.get(paymentList.size() - 1);
         assertThat(testPayment.getPaymentNumber()).isEqualTo(DEFAULT_PAYMENT_NUMBER);
         assertThat(testPayment.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
+        assertThat(testPayment.getInvoicedAmount()).isEqualByComparingTo(DEFAULT_INVOICED_AMOUNT);
+        assertThat(testPayment.getDisbursementCost()).isEqualByComparingTo(DEFAULT_DISBURSEMENT_COST);
+        assertThat(testPayment.getVatableAmount()).isEqualByComparingTo(UPDATED_VATABLE_AMOUNT);
         assertThat(testPayment.getPaymentAmount()).isEqualByComparingTo(DEFAULT_PAYMENT_AMOUNT);
-        assertThat(testPayment.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testPayment.getCurrency()).isEqualTo(UPDATED_CURRENCY);
+        assertThat(testPayment.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testPayment.getSettlementCurrency()).isEqualTo(DEFAULT_SETTLEMENT_CURRENCY);
         assertThat(testPayment.getConversionRate()).isEqualTo(DEFAULT_CONVERSION_RATE);
     }
 
@@ -1228,9 +1606,12 @@ class PaymentResourceIT {
         partialUpdatedPayment
             .paymentNumber(UPDATED_PAYMENT_NUMBER)
             .paymentDate(UPDATED_PAYMENT_DATE)
+            .invoicedAmount(UPDATED_INVOICED_AMOUNT)
+            .disbursementCost(UPDATED_DISBURSEMENT_COST)
+            .vatableAmount(UPDATED_VATABLE_AMOUNT)
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
             .description(UPDATED_DESCRIPTION)
-            .currency(UPDATED_CURRENCY)
+            .settlementCurrency(UPDATED_SETTLEMENT_CURRENCY)
             .conversionRate(UPDATED_CONVERSION_RATE);
 
         restPaymentMockMvc
@@ -1247,9 +1628,12 @@ class PaymentResourceIT {
         Payment testPayment = paymentList.get(paymentList.size() - 1);
         assertThat(testPayment.getPaymentNumber()).isEqualTo(UPDATED_PAYMENT_NUMBER);
         assertThat(testPayment.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
+        assertThat(testPayment.getInvoicedAmount()).isEqualByComparingTo(UPDATED_INVOICED_AMOUNT);
+        assertThat(testPayment.getDisbursementCost()).isEqualByComparingTo(UPDATED_DISBURSEMENT_COST);
+        assertThat(testPayment.getVatableAmount()).isEqualByComparingTo(UPDATED_VATABLE_AMOUNT);
         assertThat(testPayment.getPaymentAmount()).isEqualByComparingTo(UPDATED_PAYMENT_AMOUNT);
         assertThat(testPayment.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testPayment.getCurrency()).isEqualTo(UPDATED_CURRENCY);
+        assertThat(testPayment.getSettlementCurrency()).isEqualTo(UPDATED_SETTLEMENT_CURRENCY);
         assertThat(testPayment.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
     }
 
@@ -1367,9 +1751,12 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(payment.getId().intValue())))
             .andExpect(jsonPath("$.[*].paymentNumber").value(hasItem(DEFAULT_PAYMENT_NUMBER)))
             .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
+            .andExpect(jsonPath("$.[*].invoicedAmount").value(hasItem(sameNumber(DEFAULT_INVOICED_AMOUNT))))
+            .andExpect(jsonPath("$.[*].disbursementCost").value(hasItem(sameNumber(DEFAULT_DISBURSEMENT_COST))))
+            .andExpect(jsonPath("$.[*].vatableAmount").value(hasItem(sameNumber(DEFAULT_VATABLE_AMOUNT))))
             .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].currency").value(hasItem(DEFAULT_CURRENCY.toString())))
+            .andExpect(jsonPath("$.[*].settlementCurrency").value(hasItem(DEFAULT_SETTLEMENT_CURRENCY.toString())))
             .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())));
     }
 }

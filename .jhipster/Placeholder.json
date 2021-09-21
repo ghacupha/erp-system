@@ -6,7 +6,7 @@
       "relationshipName": "containingPlaceholder",
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-one",
-      "otherEntityField": "id",
+      "otherEntityField": "description",
       "otherEntityRelationshipName": "placeholder"
     },
     {

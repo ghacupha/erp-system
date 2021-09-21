@@ -1,4 +1,4 @@
-import { IPayment } from 'app/entities/payments/payment/payment.model';
+import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
@@ -7,7 +7,7 @@ export interface IPaymentRequisition {
   invoicedAmount?: number | null;
   disbursementCost?: number | null;
   vatableAmount?: number | null;
-  payment?: IPayment | null;
+  paymentLabels?: IPaymentLabel[] | null;
   dealer?: IDealer | null;
   placeholders?: IPlaceholder[] | null;
 }
@@ -18,7 +18,7 @@ export class PaymentRequisition implements IPaymentRequisition {
     public invoicedAmount?: number | null,
     public disbursementCost?: number | null,
     public vatableAmount?: number | null,
-    public payment?: IPayment | null,
+    public paymentLabels?: IPaymentLabel[] | null,
     public dealer?: IDealer | null,
     public placeholders?: IPlaceholder[] | null
   ) {}

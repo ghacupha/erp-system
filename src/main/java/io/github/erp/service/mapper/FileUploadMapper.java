@@ -10,7 +10,7 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring", uses = { PlaceholderMapper.class })
 public interface FileUploadMapper extends EntityMapper<FileUploadDTO, FileUpload> {
-    @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "idSet")
+    @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     FileUploadDTO toDto(FileUpload s);
 
     @Mapping(target = "removePlaceholder", ignore = true)

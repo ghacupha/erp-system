@@ -1,12 +1,6 @@
 {
   "fields": [
     {
-      "fieldName": "paymentCategory",
-      "fieldType": "CategoryTypes",
-      "fieldValues": "UNDEFINED,CATEGORY0,CATEGORY1,CATEGORY2,CATEGORY3,CATEGORY4,CATEGORY5,CATEGORY6,CATEGORY7,CATEGORY8,CATEGORY9,CATEGORY10,CATEGORY11,CATEGORY12,CATEGORY13,CATEGORY14,CATEGORY15,CATEGORY16,CATEGORY17",
-      "fieldValidateRules": ["required"]
-    },
-    {
       "fieldName": "transactionNumber",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
@@ -27,10 +21,6 @@
       "fieldType": "BigDecimal",
       "fieldValidateRules": ["required", "min"],
       "fieldValidateRulesMin": 0
-    },
-    {
-      "fieldName": "beneficiary",
-      "fieldType": "String"
     }
   ],
   "relationships": [
@@ -43,12 +33,33 @@
       "otherEntityRelationshipName": "signedPayment"
     },
     {
+      "relationshipName": "dealer",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "dealerName",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "signedPayment"
+    },
+    {
+      "relationshipName": "paymentCategory",
+      "otherEntityName": "paymentCategory",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "categoryName",
+      "otherEntityRelationshipName": "signedPayment"
+    },
+    {
       "relationshipName": "placeholder",
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",
-      "otherEntityField": "id",
+      "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "signedPayment"
+    },
+    {
+      "relationshipName": "signedPaymentGroup",
+      "otherEntityName": "signedPayment",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
     }
   ],
   "service": "serviceImpl",

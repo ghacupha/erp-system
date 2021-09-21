@@ -1,6 +1,5 @@
 package io.github.erp.service.criteria;
 
-import io.github.erp.domain.enumeration.CategoryTypes;
 import io.github.erp.domain.enumeration.CurrencyTypes;
 import java.io.Serializable;
 import java.util.Objects;
@@ -27,23 +26,6 @@ import tech.jhipster.service.filter.StringFilter;
 public class SignedPaymentCriteria implements Serializable, Criteria {
 
     /**
-     * Class for filtering CategoryTypes
-     */
-    public static class CategoryTypesFilter extends Filter<CategoryTypes> {
-
-        public CategoryTypesFilter() {}
-
-        public CategoryTypesFilter(CategoryTypesFilter filter) {
-            super(filter);
-        }
-
-        @Override
-        public CategoryTypesFilter copy() {
-            return new CategoryTypesFilter(this);
-        }
-    }
-
-    /**
      * Class for filtering CurrencyTypes
      */
     public static class CurrencyTypesFilter extends Filter<CurrencyTypes> {
@@ -64,8 +46,6 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private CategoryTypesFilter paymentCategory;
-
     private StringFilter transactionNumber;
 
     private LocalDateFilter transactionDate;
@@ -74,11 +54,15 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter transactionAmount;
 
-    private StringFilter beneficiary;
-
     private LongFilter paymentLabelId;
 
+    private LongFilter dealerId;
+
+    private LongFilter paymentCategoryId;
+
     private LongFilter placeholderId;
+
+    private LongFilter signedPaymentGroupId;
 
     private Boolean distinct;
 
@@ -86,14 +70,15 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
 
     public SignedPaymentCriteria(SignedPaymentCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.paymentCategory = other.paymentCategory == null ? null : other.paymentCategory.copy();
         this.transactionNumber = other.transactionNumber == null ? null : other.transactionNumber.copy();
         this.transactionDate = other.transactionDate == null ? null : other.transactionDate.copy();
         this.transactionCurrency = other.transactionCurrency == null ? null : other.transactionCurrency.copy();
         this.transactionAmount = other.transactionAmount == null ? null : other.transactionAmount.copy();
-        this.beneficiary = other.beneficiary == null ? null : other.beneficiary.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
+        this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
+        this.paymentCategoryId = other.paymentCategoryId == null ? null : other.paymentCategoryId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.signedPaymentGroupId = other.signedPaymentGroupId == null ? null : other.signedPaymentGroupId.copy();
         this.distinct = other.distinct;
     }
 
@@ -115,21 +100,6 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
-    }
-
-    public CategoryTypesFilter getPaymentCategory() {
-        return paymentCategory;
-    }
-
-    public CategoryTypesFilter paymentCategory() {
-        if (paymentCategory == null) {
-            paymentCategory = new CategoryTypesFilter();
-        }
-        return paymentCategory;
-    }
-
-    public void setPaymentCategory(CategoryTypesFilter paymentCategory) {
-        this.paymentCategory = paymentCategory;
     }
 
     public StringFilter getTransactionNumber() {
@@ -192,21 +162,6 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
         this.transactionAmount = transactionAmount;
     }
 
-    public StringFilter getBeneficiary() {
-        return beneficiary;
-    }
-
-    public StringFilter beneficiary() {
-        if (beneficiary == null) {
-            beneficiary = new StringFilter();
-        }
-        return beneficiary;
-    }
-
-    public void setBeneficiary(StringFilter beneficiary) {
-        this.beneficiary = beneficiary;
-    }
-
     public LongFilter getPaymentLabelId() {
         return paymentLabelId;
     }
@@ -222,6 +177,36 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
         this.paymentLabelId = paymentLabelId;
     }
 
+    public LongFilter getDealerId() {
+        return dealerId;
+    }
+
+    public LongFilter dealerId() {
+        if (dealerId == null) {
+            dealerId = new LongFilter();
+        }
+        return dealerId;
+    }
+
+    public void setDealerId(LongFilter dealerId) {
+        this.dealerId = dealerId;
+    }
+
+    public LongFilter getPaymentCategoryId() {
+        return paymentCategoryId;
+    }
+
+    public LongFilter paymentCategoryId() {
+        if (paymentCategoryId == null) {
+            paymentCategoryId = new LongFilter();
+        }
+        return paymentCategoryId;
+    }
+
+    public void setPaymentCategoryId(LongFilter paymentCategoryId) {
+        this.paymentCategoryId = paymentCategoryId;
+    }
+
     public LongFilter getPlaceholderId() {
         return placeholderId;
     }
@@ -235,6 +220,21 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
 
     public void setPlaceholderId(LongFilter placeholderId) {
         this.placeholderId = placeholderId;
+    }
+
+    public LongFilter getSignedPaymentGroupId() {
+        return signedPaymentGroupId;
+    }
+
+    public LongFilter signedPaymentGroupId() {
+        if (signedPaymentGroupId == null) {
+            signedPaymentGroupId = new LongFilter();
+        }
+        return signedPaymentGroupId;
+    }
+
+    public void setSignedPaymentGroupId(LongFilter signedPaymentGroupId) {
+        this.signedPaymentGroupId = signedPaymentGroupId;
     }
 
     public Boolean getDistinct() {
@@ -256,14 +256,15 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
         final SignedPaymentCriteria that = (SignedPaymentCriteria) o;
         return (
             Objects.equals(id, that.id) &&
-            Objects.equals(paymentCategory, that.paymentCategory) &&
             Objects.equals(transactionNumber, that.transactionNumber) &&
             Objects.equals(transactionDate, that.transactionDate) &&
             Objects.equals(transactionCurrency, that.transactionCurrency) &&
             Objects.equals(transactionAmount, that.transactionAmount) &&
-            Objects.equals(beneficiary, that.beneficiary) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
+            Objects.equals(dealerId, that.dealerId) &&
+            Objects.equals(paymentCategoryId, that.paymentCategoryId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(signedPaymentGroupId, that.signedPaymentGroupId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -272,14 +273,15 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
             id,
-            paymentCategory,
             transactionNumber,
             transactionDate,
             transactionCurrency,
             transactionAmount,
-            beneficiary,
             paymentLabelId,
+            dealerId,
+            paymentCategoryId,
             placeholderId,
+            signedPaymentGroupId,
             distinct
         );
     }
@@ -289,14 +291,15 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
     public String toString() {
         return "SignedPaymentCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
-            (paymentCategory != null ? "paymentCategory=" + paymentCategory + ", " : "") +
             (transactionNumber != null ? "transactionNumber=" + transactionNumber + ", " : "") +
             (transactionDate != null ? "transactionDate=" + transactionDate + ", " : "") +
             (transactionCurrency != null ? "transactionCurrency=" + transactionCurrency + ", " : "") +
             (transactionAmount != null ? "transactionAmount=" + transactionAmount + ", " : "") +
-            (beneficiary != null ? "beneficiary=" + beneficiary + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
+            (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
+            (paymentCategoryId != null ? "paymentCategoryId=" + paymentCategoryId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (signedPaymentGroupId != null ? "signedPaymentGroupId=" + signedPaymentGroupId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

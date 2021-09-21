@@ -10,7 +10,7 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring", uses = { PlaceholderMapper.class })
 public interface FixedAssetAcquisitionMapper extends EntityMapper<FixedAssetAcquisitionDTO, FixedAssetAcquisition> {
-    @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "idSet")
+    @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     FixedAssetAcquisitionDTO toDto(FixedAssetAcquisition s);
 
     @Mapping(target = "removePlaceholder", ignore = true)

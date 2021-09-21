@@ -9,6 +9,10 @@ import { ISignedPayment, SignedPayment } from '../signed-payment.model';
 import { SignedPaymentService } from '../service/signed-payment.service';
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
+import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
+import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
+import { IPaymentCategory } from 'app/entities/payments/payment-category/payment-category.model';
+import { PaymentCategoryService } from 'app/entities/payments/payment-category/service/payment-category.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
@@ -20,23 +24,29 @@ export class SignedPaymentUpdateComponent implements OnInit {
   isSaving = false;
 
   paymentLabelsSharedCollection: IPaymentLabel[] = [];
+  dealersSharedCollection: IDealer[] = [];
+  paymentCategoriesSharedCollection: IPaymentCategory[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
+  signedPaymentsSharedCollection: ISignedPayment[] = [];
 
   editForm = this.fb.group({
     id: [],
-    paymentCategory: [null, [Validators.required]],
     transactionNumber: [null, [Validators.required]],
     transactionDate: [null, [Validators.required]],
     transactionCurrency: [null, [Validators.required]],
     transactionAmount: [null, [Validators.required, Validators.min(0)]],
-    beneficiary: [],
     paymentLabels: [],
+    dealers: [],
+    paymentCategory: [],
     placeholders: [],
+    signedPaymentGroup: [],
   });
 
   constructor(
     protected signedPaymentService: SignedPaymentService,
     protected paymentLabelService: PaymentLabelService,
+    protected dealerService: DealerService,
+    protected paymentCategoryService: PaymentCategoryService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
@@ -68,11 +78,34 @@ export class SignedPaymentUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackDealerById(index: number, item: IDealer): number {
+    return item.id!;
+  }
+
+  trackPaymentCategoryById(index: number, item: IPaymentCategory): number {
+    return item.id!;
+  }
+
   trackPlaceholderById(index: number, item: IPlaceholder): number {
     return item.id!;
   }
 
+  trackSignedPaymentById(index: number, item: ISignedPayment): number {
+    return item.id!;
+  }
+
   getSelectedPaymentLabel(option: IPaymentLabel, selectedVals?: IPaymentLabel[]): IPaymentLabel {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedDealer(option: IDealer, selectedVals?: IDealer[]): IDealer {
     if (selectedVals) {
       for (const selectedVal of selectedVals) {
         if (option.id === selectedVal.id) {
@@ -116,23 +149,36 @@ export class SignedPaymentUpdateComponent implements OnInit {
   protected updateForm(signedPayment: ISignedPayment): void {
     this.editForm.patchValue({
       id: signedPayment.id,
-      paymentCategory: signedPayment.paymentCategory,
       transactionNumber: signedPayment.transactionNumber,
       transactionDate: signedPayment.transactionDate,
       transactionCurrency: signedPayment.transactionCurrency,
       transactionAmount: signedPayment.transactionAmount,
-      beneficiary: signedPayment.beneficiary,
       paymentLabels: signedPayment.paymentLabels,
+      dealers: signedPayment.dealers,
+      paymentCategory: signedPayment.paymentCategory,
       placeholders: signedPayment.placeholders,
+      signedPaymentGroup: signedPayment.signedPaymentGroup,
     });
 
     this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
       this.paymentLabelsSharedCollection,
       ...(signedPayment.paymentLabels ?? [])
     );
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+      this.dealersSharedCollection,
+      ...(signedPayment.dealers ?? [])
+    );
+    this.paymentCategoriesSharedCollection = this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
+      this.paymentCategoriesSharedCollection,
+      signedPayment.paymentCategory
+    );
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(signedPayment.placeholders ?? [])
+    );
+    this.signedPaymentsSharedCollection = this.signedPaymentService.addSignedPaymentToCollectionIfMissing(
+      this.signedPaymentsSharedCollection,
+      signedPayment.signedPaymentGroup
     );
   }
 
@@ -147,6 +193,29 @@ export class SignedPaymentUpdateComponent implements OnInit {
       )
       .subscribe((paymentLabels: IPaymentLabel[]) => (this.paymentLabelsSharedCollection = paymentLabels));
 
+    this.dealerService
+      .query()
+      .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
+      .pipe(
+        map((dealers: IDealer[]) =>
+          this.dealerService.addDealerToCollectionIfMissing(dealers, ...(this.editForm.get('dealers')!.value ?? []))
+        )
+      )
+      .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
+
+    this.paymentCategoryService
+      .query()
+      .pipe(map((res: HttpResponse<IPaymentCategory[]>) => res.body ?? []))
+      .pipe(
+        map((paymentCategories: IPaymentCategory[]) =>
+          this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
+            paymentCategories,
+            this.editForm.get('paymentCategory')!.value
+          )
+        )
+      )
+      .subscribe((paymentCategories: IPaymentCategory[]) => (this.paymentCategoriesSharedCollection = paymentCategories));
+
     this.placeholderService
       .query()
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
@@ -156,20 +225,31 @@ export class SignedPaymentUpdateComponent implements OnInit {
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
+
+    this.signedPaymentService
+      .query()
+      .pipe(map((res: HttpResponse<ISignedPayment[]>) => res.body ?? []))
+      .pipe(
+        map((signedPayments: ISignedPayment[]) =>
+          this.signedPaymentService.addSignedPaymentToCollectionIfMissing(signedPayments, this.editForm.get('signedPaymentGroup')!.value)
+        )
+      )
+      .subscribe((signedPayments: ISignedPayment[]) => (this.signedPaymentsSharedCollection = signedPayments));
   }
 
   protected createFromForm(): ISignedPayment {
     return {
       ...new SignedPayment(),
       id: this.editForm.get(['id'])!.value,
-      paymentCategory: this.editForm.get(['paymentCategory'])!.value,
       transactionNumber: this.editForm.get(['transactionNumber'])!.value,
       transactionDate: this.editForm.get(['transactionDate'])!.value,
       transactionCurrency: this.editForm.get(['transactionCurrency'])!.value,
       transactionAmount: this.editForm.get(['transactionAmount'])!.value,
-      beneficiary: this.editForm.get(['beneficiary'])!.value,
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
+      dealers: this.editForm.get(['dealers'])!.value,
+      paymentCategory: this.editForm.get(['paymentCategory'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
+      signedPaymentGroup: this.editForm.get(['signedPaymentGroup'])!.value,
     };
   }
 }

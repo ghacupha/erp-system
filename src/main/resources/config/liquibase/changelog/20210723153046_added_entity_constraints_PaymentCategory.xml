@@ -9,6 +9,18 @@
     <changeSet id="20210723153046-2" author="jhipster">
 
         <addForeignKeyConstraint baseColumnNames="payment_category_id"
+                                 baseTableName="rel_payment_category__payment_label"
+                                 constraintName="fk_rel_payment_category__payment_label__payment_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_category"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_label_id"
+                                 baseTableName="rel_payment_category__payment_label"
+                                 constraintName="fk_rel_payment_category__payment_label__payment_label_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_label"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_category_id"
                                  baseTableName="rel_payment_category__placeholder"
                                  constraintName="fk_rel_payment_category__placeholder__payment_category_id"
                                  referencedColumnNames="id"

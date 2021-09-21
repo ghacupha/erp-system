@@ -9,6 +9,8 @@ import { of, Subject } from 'rxjs';
 
 import { PaymentRequisitionService } from '../service/payment-requisition.service';
 import { IPaymentRequisition, PaymentRequisition } from '../payment-requisition.model';
+import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
+import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
@@ -22,6 +24,7 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<PaymentRequisitionUpdateComponent>;
     let activatedRoute: ActivatedRoute;
     let paymentRequisitionService: PaymentRequisitionService;
+    let paymentLabelService: PaymentLabelService;
     let dealerService: DealerService;
     let placeholderService: PlaceholderService;
 
@@ -37,6 +40,7 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(PaymentRequisitionUpdateComponent);
       activatedRoute = TestBed.inject(ActivatedRoute);
       paymentRequisitionService = TestBed.inject(PaymentRequisitionService);
+      paymentLabelService = TestBed.inject(PaymentLabelService);
       dealerService = TestBed.inject(DealerService);
       placeholderService = TestBed.inject(PlaceholderService);
 
@@ -44,6 +48,28 @@ describe('Component Tests', () => {
     });
 
     describe('ngOnInit', () => {
+      it('Should call PaymentLabel query and add missing value', () => {
+        const paymentRequisition: IPaymentRequisition = { id: 456 };
+        const paymentLabels: IPaymentLabel[] = [{ id: 32074 }];
+        paymentRequisition.paymentLabels = paymentLabels;
+
+        const paymentLabelCollection: IPaymentLabel[] = [{ id: 24191 }];
+        jest.spyOn(paymentLabelService, 'query').mockReturnValue(of(new HttpResponse({ body: paymentLabelCollection })));
+        const additionalPaymentLabels = [...paymentLabels];
+        const expectedCollection: IPaymentLabel[] = [...additionalPaymentLabels, ...paymentLabelCollection];
+        jest.spyOn(paymentLabelService, 'addPaymentLabelToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+        activatedRoute.data = of({ paymentRequisition });
+        comp.ngOnInit();
+
+        expect(paymentLabelService.query).toHaveBeenCalled();
+        expect(paymentLabelService.addPaymentLabelToCollectionIfMissing).toHaveBeenCalledWith(
+          paymentLabelCollection,
+          ...additionalPaymentLabels
+        );
+        expect(comp.paymentLabelsSharedCollection).toEqual(expectedCollection);
+      });
+
       it('Should call Dealer query and add missing value', () => {
         const paymentRequisition: IPaymentRequisition = { id: 456 };
         const dealer: IDealer = { id: 49433 };
@@ -87,6 +113,8 @@ describe('Component Tests', () => {
 
       it('Should update editForm', () => {
         const paymentRequisition: IPaymentRequisition = { id: 456 };
+        const paymentLabels: IPaymentLabel = { id: 7525 };
+        paymentRequisition.paymentLabels = [paymentLabels];
         const dealer: IDealer = { id: 84854 };
         paymentRequisition.dealer = dealer;
         const placeholders: IPlaceholder = { id: 85634 };
@@ -96,6 +124,7 @@ describe('Component Tests', () => {
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(paymentRequisition));
+        expect(comp.paymentLabelsSharedCollection).toContain(paymentLabels);
         expect(comp.dealersSharedCollection).toContain(dealer);
         expect(comp.placeholdersSharedCollection).toContain(placeholders);
       });
@@ -166,6 +195,14 @@ describe('Component Tests', () => {
     });
 
     describe('Tracking relationships identifiers', () => {
+      describe('trackPaymentLabelById', () => {
+        it('Should return tracked PaymentLabel primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackPaymentLabelById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
+      });
+
       describe('trackDealerById', () => {
         it('Should return tracked Dealer primary key', () => {
           const entity = { id: 123 };
@@ -184,6 +221,32 @@ describe('Component Tests', () => {
     });
 
     describe('Getting selected relationships', () => {
+      describe('getSelectedPaymentLabel', () => {
+        it('Should return option if no PaymentLabel is selected', () => {
+          const option = { id: 123 };
+          const result = comp.getSelectedPaymentLabel(option);
+          expect(result === option).toEqual(true);
+        });
+
+        it('Should return selected PaymentLabel for according option', () => {
+          const option = { id: 123 };
+          const selected = { id: 123 };
+          const selected2 = { id: 456 };
+          const result = comp.getSelectedPaymentLabel(option, [selected2, selected]);
+          expect(result === selected).toEqual(true);
+          expect(result === selected2).toEqual(false);
+          expect(result === option).toEqual(false);
+        });
+
+        it('Should return option if this PaymentLabel is not selected', () => {
+          const option = { id: 123 };
+          const selected = { id: 456 };
+          const result = comp.getSelectedPaymentLabel(option, [selected]);
+          expect(result === option).toEqual(true);
+          expect(result === selected).toEqual(false);
+        });
+      });
+
       describe('getSelectedPlaceholder', () => {
         it('Should return option if no Placeholder is selected', () => {
           const option = { id: 123 };

@@ -57,7 +57,7 @@
           <th scope="col" jhiSortBy="currency"><span>Currency</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="conversionRate"><span>Conversion Rate</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="payment.id"><span>Payment</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="dealer.id"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -78,7 +78,7 @@
           </td>
           <td>
             <div *ngIf="invoice.dealer">
-              <a [routerLink]="['/dealer', invoice.dealer?.id, 'view']">{{ invoice.dealer?.id }}</a>
+              <a [routerLink]="['/dealer', invoice.dealer?.id, 'view']">{{ invoice.dealer?.dealerName }}</a>
             </div>
           </td>
           <td class="text-right">

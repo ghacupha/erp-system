@@ -10,7 +10,7 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring", uses = { PlaceholderMapper.class })
 public interface TaxReferenceMapper extends EntityMapper<TaxReferenceDTO, TaxReference> {
-    @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "idSet")
+    @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     TaxReferenceDTO toDto(TaxReference s);
 
     @Mapping(target = "removePlaceholder", ignore = true)

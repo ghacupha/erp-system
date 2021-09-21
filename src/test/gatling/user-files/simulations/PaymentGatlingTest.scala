@@ -73,9 +73,12 @@ class PaymentGatlingTest extends Simulation {
             .body(StringBody("""{
                 "paymentNumber":"SAMPLE_TEXT"
                 , "paymentDate":"2020-01-01T00:00:00.000Z"
+                , "invoicedAmount":"0"
+                , "disbursementCost":"0"
+                , "vatableAmount":"0"
                 , "paymentAmount":"0"
                 , "description":"SAMPLE_TEXT"
-                , "currency":"KES"
+                , "settlementCurrency":"KES"
                 , "conversionRate":"0"
                 }""")).asJson
             .check(status.is(201))

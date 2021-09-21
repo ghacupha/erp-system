@@ -32,7 +32,9 @@ public class DealerDTO implements Serializable {
 
     private String bankersSwiftCode;
 
-    private Set<PaymentDTO> payments = new HashSet<>();
+    private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
+
+    private DealerDTO dealerGroup;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
@@ -116,12 +118,20 @@ public class DealerDTO implements Serializable {
         this.bankersSwiftCode = bankersSwiftCode;
     }
 
-    public Set<PaymentDTO> getPayments() {
-        return payments;
+    public Set<PaymentLabelDTO> getPaymentLabels() {
+        return paymentLabels;
     }
 
-    public void setPayments(Set<PaymentDTO> payments) {
-        this.payments = payments;
+    public void setPaymentLabels(Set<PaymentLabelDTO> paymentLabels) {
+        this.paymentLabels = paymentLabels;
+    }
+
+    public DealerDTO getDealerGroup() {
+        return dealerGroup;
+    }
+
+    public void setDealerGroup(DealerDTO dealerGroup) {
+        this.dealerGroup = dealerGroup;
     }
 
     public Set<PlaceholderDTO> getPlaceholders() {
@@ -167,7 +177,8 @@ public class DealerDTO implements Serializable {
             ", bankersName='" + getBankersName() + "'" +
             ", bankersBranch='" + getBankersBranch() + "'" +
             ", bankersSwiftCode='" + getBankersSwiftCode() + "'" +
-            ", payments=" + getPayments() +
+            ", paymentLabels=" + getPaymentLabels() +
+            ", dealerGroup=" + getDealerGroup() +
             ", placeholders=" + getPlaceholders() +
             "}";
     }

@@ -7,6 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IPaymentLabel, PaymentLabel } from '../payment-label.model';
 import { PaymentLabelService } from '../service/payment-label.service';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-payment-label-update',
@@ -16,15 +18,22 @@ export class PaymentLabelUpdateComponent implements OnInit {
   isSaving = false;
 
   paymentLabelsSharedCollection: IPaymentLabel[] = [];
+  placeholdersSharedCollection: IPlaceholder[] = [];
 
   editForm = this.fb.group({
     id: [],
     description: [null, [Validators.required]],
     comments: [],
     containingPaymentLabel: [],
+    placeholders: [],
   });
 
-  constructor(protected paymentLabelService: PaymentLabelService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
+  constructor(
+    protected paymentLabelService: PaymentLabelService,
+    protected placeholderService: PlaceholderService,
+    protected activatedRoute: ActivatedRoute,
+    protected fb: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ paymentLabel }) => {
@@ -52,6 +61,21 @@ export class PaymentLabelUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackPlaceholderById(index: number, item: IPlaceholder): number {
+    return item.id!;
+  }
+
+  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPaymentLabel>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -77,11 +101,16 @@ export class PaymentLabelUpdateComponent implements OnInit {
       description: paymentLabel.description,
       comments: paymentLabel.comments,
       containingPaymentLabel: paymentLabel.containingPaymentLabel,
+      placeholders: paymentLabel.placeholders,
     });
 
     this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
       this.paymentLabelsSharedCollection,
       paymentLabel.containingPaymentLabel
+    );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+      this.placeholdersSharedCollection,
+      ...(paymentLabel.placeholders ?? [])
     );
   }
 
@@ -95,6 +124,16 @@ export class PaymentLabelUpdateComponent implements OnInit {
         )
       )
       .subscribe((paymentLabels: IPaymentLabel[]) => (this.paymentLabelsSharedCollection = paymentLabels));
+
+    this.placeholderService
+      .query()
+      .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
+      .pipe(
+        map((placeholders: IPlaceholder[]) =>
+          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+        )
+      )
+      .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
   }
 
   protected createFromForm(): IPaymentLabel {
@@ -104,6 +143,7 @@ export class PaymentLabelUpdateComponent implements OnInit {
       description: this.editForm.get(['description'])!.value,
       comments: this.editForm.get(['comments'])!.value,
       containingPaymentLabel: this.editForm.get(['containingPaymentLabel'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value,
     };
   }
 }

@@ -11,6 +11,7 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Payment;
 import io.github.erp.domain.PaymentCalculation;
 import io.github.erp.domain.PaymentCategory;
+import io.github.erp.domain.PaymentLabel;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.repository.PaymentCalculationRepository;
 import io.github.erp.repository.search.PaymentCalculationSearchRepository;
@@ -673,6 +674,32 @@ class PaymentCalculationResourceIT {
 
         // Get all the paymentCalculationList where paymentAmount is greater than SMALLER_PAYMENT_AMOUNT
         defaultPaymentCalculationShouldBeFound("paymentAmount.greaterThan=" + SMALLER_PAYMENT_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCalculationsByPaymentLabelIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentCalculationRepository.saveAndFlush(paymentCalculation);
+        PaymentLabel paymentLabel;
+        if (TestUtil.findAll(em, PaymentLabel.class).isEmpty()) {
+            paymentLabel = PaymentLabelResourceIT.createEntity(em);
+            em.persist(paymentLabel);
+            em.flush();
+        } else {
+            paymentLabel = TestUtil.findAll(em, PaymentLabel.class).get(0);
+        }
+        em.persist(paymentLabel);
+        em.flush();
+        paymentCalculation.addPaymentLabel(paymentLabel);
+        paymentCalculationRepository.saveAndFlush(paymentCalculation);
+        Long paymentLabelId = paymentLabel.getId();
+
+        // Get all the paymentCalculationList where paymentLabel equals to paymentLabelId
+        defaultPaymentCalculationShouldBeFound("paymentLabelId.equals=" + paymentLabelId);
+
+        // Get all the paymentCalculationList where paymentLabel equals to (paymentLabelId + 1)
+        defaultPaymentCalculationShouldNotBeFound("paymentLabelId.equals=" + (paymentLabelId + 1));
     }
 
     @Test

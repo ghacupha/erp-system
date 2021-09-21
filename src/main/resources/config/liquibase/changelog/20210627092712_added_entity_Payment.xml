@@ -20,13 +20,22 @@
             <column name="payment_date" type="date">
                 <constraints nullable="true" />
             </column>
+            <column name="invoiced_amount" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="disbursement_cost" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="vatable_amount" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
             <column name="payment_amount" type="decimal(21,2)">
                 <constraints nullable="true" />
             </column>
             <column name="description" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="currency" type="varchar(255)">
+            <column name="settlement_currency" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
             <column name="conversion_rate" type="double">
@@ -36,19 +45,41 @@
                 <constraints nullable="true" />
             </column>
             <column name="tax_rule_id" type="bigint">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_payment__tax_rule_id" />
+                <constraints nullable="true" />
             </column>
             <column name="payment_calculation_id" type="bigint">
                 <constraints nullable="true" unique="true" uniqueConstraintName="ux_payment__payment_calculation_id" />
             </column>
-            <column name="payment_requisition_id" type="bigint">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_payment__payment_requisition_id" />
+            <column name="payment_group_id" type="bigint">
+                <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
 
     <changeSet id="20210627092712-1-relations" author="jhipster">
+
+        <createTable tableName="rel_payment__payment_label">
+            <column name="payment_label_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="payment_id, payment_label_id" tableName="rel_payment__payment_label"/>
+
+        <createTable tableName="rel_payment__dealer">
+            <column name="dealer_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="payment_id, dealer_id" tableName="rel_payment__dealer"/>
 
         <createTable tableName="rel_payment__placeholder">
             <column name="placeholder_id" type="bigint">
@@ -81,9 +112,12 @@
             <column name="id" type="numeric"/>
             <column name="payment_number" type="string"/>
             <column name="payment_date" type="date"/>
+            <column name="invoiced_amount" type="numeric"/>
+            <column name="disbursement_cost" type="numeric"/>
+            <column name="vatable_amount" type="numeric"/>
             <column name="payment_amount" type="numeric"/>
             <column name="description" type="string"/>
-            <column name="currency" type="string"/>
+            <column name="settlement_currency" type="string"/>
             <column name="conversion_rate" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>

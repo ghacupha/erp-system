@@ -78,7 +78,7 @@ export class SignedPaymentComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['paymentCategory', 'transactionNumber', 'transactionCurrency', 'beneficiary'].includes(this.predicate)) {
+    if (query && ['transactionNumber', 'transactionCurrency'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }

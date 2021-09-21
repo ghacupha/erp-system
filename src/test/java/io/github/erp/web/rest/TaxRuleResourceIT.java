@@ -1137,8 +1137,7 @@ class TaxRuleResourceIT {
         }
         em.persist(payment);
         em.flush();
-        taxRule.setPayment(payment);
-        payment.setTaxRule(taxRule);
+        taxRule.addPayment(payment);
         taxRuleRepository.saveAndFlush(taxRule);
         Long paymentId = payment.getId();
 

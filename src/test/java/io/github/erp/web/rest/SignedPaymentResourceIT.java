@@ -8,10 +8,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.Dealer;
+import io.github.erp.domain.PaymentCategory;
 import io.github.erp.domain.PaymentLabel;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.SignedPayment;
-import io.github.erp.domain.enumeration.CategoryTypes;
+import io.github.erp.domain.SignedPayment;
 import io.github.erp.domain.enumeration.CurrencyTypes;
 import io.github.erp.repository.SignedPaymentRepository;
 import io.github.erp.repository.search.SignedPaymentSearchRepository;
@@ -51,9 +53,6 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class SignedPaymentResourceIT {
 
-    private static final CategoryTypes DEFAULT_PAYMENT_CATEGORY = CategoryTypes.UNDEFINED;
-    private static final CategoryTypes UPDATED_PAYMENT_CATEGORY = CategoryTypes.CATEGORY0;
-
     private static final String DEFAULT_TRANSACTION_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_TRANSACTION_NUMBER = "BBBBBBBBBB";
 
@@ -67,9 +66,6 @@ class SignedPaymentResourceIT {
     private static final BigDecimal DEFAULT_TRANSACTION_AMOUNT = new BigDecimal(0);
     private static final BigDecimal UPDATED_TRANSACTION_AMOUNT = new BigDecimal(1);
     private static final BigDecimal SMALLER_TRANSACTION_AMOUNT = new BigDecimal(0 - 1);
-
-    private static final String DEFAULT_BENEFICIARY = "AAAAAAAAAA";
-    private static final String UPDATED_BENEFICIARY = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/signed-payments";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -114,12 +110,10 @@ class SignedPaymentResourceIT {
      */
     public static SignedPayment createEntity(EntityManager em) {
         SignedPayment signedPayment = new SignedPayment()
-            .paymentCategory(DEFAULT_PAYMENT_CATEGORY)
             .transactionNumber(DEFAULT_TRANSACTION_NUMBER)
             .transactionDate(DEFAULT_TRANSACTION_DATE)
             .transactionCurrency(DEFAULT_TRANSACTION_CURRENCY)
-            .transactionAmount(DEFAULT_TRANSACTION_AMOUNT)
-            .beneficiary(DEFAULT_BENEFICIARY);
+            .transactionAmount(DEFAULT_TRANSACTION_AMOUNT);
         return signedPayment;
     }
 
@@ -131,12 +125,10 @@ class SignedPaymentResourceIT {
      */
     public static SignedPayment createUpdatedEntity(EntityManager em) {
         SignedPayment signedPayment = new SignedPayment()
-            .paymentCategory(UPDATED_PAYMENT_CATEGORY)
             .transactionNumber(UPDATED_TRANSACTION_NUMBER)
             .transactionDate(UPDATED_TRANSACTION_DATE)
             .transactionCurrency(UPDATED_TRANSACTION_CURRENCY)
-            .transactionAmount(UPDATED_TRANSACTION_AMOUNT)
-            .beneficiary(UPDATED_BENEFICIARY);
+            .transactionAmount(UPDATED_TRANSACTION_AMOUNT);
         return signedPayment;
     }
 
@@ -161,12 +153,10 @@ class SignedPaymentResourceIT {
         List<SignedPayment> signedPaymentList = signedPaymentRepository.findAll();
         assertThat(signedPaymentList).hasSize(databaseSizeBeforeCreate + 1);
         SignedPayment testSignedPayment = signedPaymentList.get(signedPaymentList.size() - 1);
-        assertThat(testSignedPayment.getPaymentCategory()).isEqualTo(DEFAULT_PAYMENT_CATEGORY);
         assertThat(testSignedPayment.getTransactionNumber()).isEqualTo(DEFAULT_TRANSACTION_NUMBER);
         assertThat(testSignedPayment.getTransactionDate()).isEqualTo(DEFAULT_TRANSACTION_DATE);
         assertThat(testSignedPayment.getTransactionCurrency()).isEqualTo(DEFAULT_TRANSACTION_CURRENCY);
         assertThat(testSignedPayment.getTransactionAmount()).isEqualByComparingTo(DEFAULT_TRANSACTION_AMOUNT);
-        assertThat(testSignedPayment.getBeneficiary()).isEqualTo(DEFAULT_BENEFICIARY);
 
         // Validate the SignedPayment in Elasticsearch
         verify(mockSignedPaymentSearchRepository, times(1)).save(testSignedPayment);
@@ -194,26 +184,6 @@ class SignedPaymentResourceIT {
 
         // Validate the SignedPayment in Elasticsearch
         verify(mockSignedPaymentSearchRepository, times(0)).save(signedPayment);
-    }
-
-    @Test
-    @Transactional
-    void checkPaymentCategoryIsRequired() throws Exception {
-        int databaseSizeBeforeTest = signedPaymentRepository.findAll().size();
-        // set the field null
-        signedPayment.setPaymentCategory(null);
-
-        // Create the SignedPayment, which fails.
-        SignedPaymentDTO signedPaymentDTO = signedPaymentMapper.toDto(signedPayment);
-
-        restSignedPaymentMockMvc
-            .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(signedPaymentDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<SignedPayment> signedPaymentList = signedPaymentRepository.findAll();
-        assertThat(signedPaymentList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -308,12 +278,10 @@ class SignedPaymentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(signedPayment.getId().intValue())))
-            .andExpect(jsonPath("$.[*].paymentCategory").value(hasItem(DEFAULT_PAYMENT_CATEGORY.toString())))
             .andExpect(jsonPath("$.[*].transactionNumber").value(hasItem(DEFAULT_TRANSACTION_NUMBER)))
             .andExpect(jsonPath("$.[*].transactionDate").value(hasItem(DEFAULT_TRANSACTION_DATE.toString())))
             .andExpect(jsonPath("$.[*].transactionCurrency").value(hasItem(DEFAULT_TRANSACTION_CURRENCY.toString())))
-            .andExpect(jsonPath("$.[*].transactionAmount").value(hasItem(sameNumber(DEFAULT_TRANSACTION_AMOUNT))))
-            .andExpect(jsonPath("$.[*].beneficiary").value(hasItem(DEFAULT_BENEFICIARY)));
+            .andExpect(jsonPath("$.[*].transactionAmount").value(hasItem(sameNumber(DEFAULT_TRANSACTION_AMOUNT))));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -346,12 +314,10 @@ class SignedPaymentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(signedPayment.getId().intValue()))
-            .andExpect(jsonPath("$.paymentCategory").value(DEFAULT_PAYMENT_CATEGORY.toString()))
             .andExpect(jsonPath("$.transactionNumber").value(DEFAULT_TRANSACTION_NUMBER))
             .andExpect(jsonPath("$.transactionDate").value(DEFAULT_TRANSACTION_DATE.toString()))
             .andExpect(jsonPath("$.transactionCurrency").value(DEFAULT_TRANSACTION_CURRENCY.toString()))
-            .andExpect(jsonPath("$.transactionAmount").value(sameNumber(DEFAULT_TRANSACTION_AMOUNT)))
-            .andExpect(jsonPath("$.beneficiary").value(DEFAULT_BENEFICIARY));
+            .andExpect(jsonPath("$.transactionAmount").value(sameNumber(DEFAULT_TRANSACTION_AMOUNT)));
     }
 
     @Test
@@ -370,58 +336,6 @@ class SignedPaymentResourceIT {
 
         defaultSignedPaymentShouldBeFound("id.lessThanOrEqual=" + id);
         defaultSignedPaymentShouldNotBeFound("id.lessThan=" + id);
-    }
-
-    @Test
-    @Transactional
-    void getAllSignedPaymentsByPaymentCategoryIsEqualToSomething() throws Exception {
-        // Initialize the database
-        signedPaymentRepository.saveAndFlush(signedPayment);
-
-        // Get all the signedPaymentList where paymentCategory equals to DEFAULT_PAYMENT_CATEGORY
-        defaultSignedPaymentShouldBeFound("paymentCategory.equals=" + DEFAULT_PAYMENT_CATEGORY);
-
-        // Get all the signedPaymentList where paymentCategory equals to UPDATED_PAYMENT_CATEGORY
-        defaultSignedPaymentShouldNotBeFound("paymentCategory.equals=" + UPDATED_PAYMENT_CATEGORY);
-    }
-
-    @Test
-    @Transactional
-    void getAllSignedPaymentsByPaymentCategoryIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        signedPaymentRepository.saveAndFlush(signedPayment);
-
-        // Get all the signedPaymentList where paymentCategory not equals to DEFAULT_PAYMENT_CATEGORY
-        defaultSignedPaymentShouldNotBeFound("paymentCategory.notEquals=" + DEFAULT_PAYMENT_CATEGORY);
-
-        // Get all the signedPaymentList where paymentCategory not equals to UPDATED_PAYMENT_CATEGORY
-        defaultSignedPaymentShouldBeFound("paymentCategory.notEquals=" + UPDATED_PAYMENT_CATEGORY);
-    }
-
-    @Test
-    @Transactional
-    void getAllSignedPaymentsByPaymentCategoryIsInShouldWork() throws Exception {
-        // Initialize the database
-        signedPaymentRepository.saveAndFlush(signedPayment);
-
-        // Get all the signedPaymentList where paymentCategory in DEFAULT_PAYMENT_CATEGORY or UPDATED_PAYMENT_CATEGORY
-        defaultSignedPaymentShouldBeFound("paymentCategory.in=" + DEFAULT_PAYMENT_CATEGORY + "," + UPDATED_PAYMENT_CATEGORY);
-
-        // Get all the signedPaymentList where paymentCategory equals to UPDATED_PAYMENT_CATEGORY
-        defaultSignedPaymentShouldNotBeFound("paymentCategory.in=" + UPDATED_PAYMENT_CATEGORY);
-    }
-
-    @Test
-    @Transactional
-    void getAllSignedPaymentsByPaymentCategoryIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        signedPaymentRepository.saveAndFlush(signedPayment);
-
-        // Get all the signedPaymentList where paymentCategory is not null
-        defaultSignedPaymentShouldBeFound("paymentCategory.specified=true");
-
-        // Get all the signedPaymentList where paymentCategory is null
-        defaultSignedPaymentShouldNotBeFound("paymentCategory.specified=false");
     }
 
     @Test
@@ -764,84 +678,6 @@ class SignedPaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllSignedPaymentsByBeneficiaryIsEqualToSomething() throws Exception {
-        // Initialize the database
-        signedPaymentRepository.saveAndFlush(signedPayment);
-
-        // Get all the signedPaymentList where beneficiary equals to DEFAULT_BENEFICIARY
-        defaultSignedPaymentShouldBeFound("beneficiary.equals=" + DEFAULT_BENEFICIARY);
-
-        // Get all the signedPaymentList where beneficiary equals to UPDATED_BENEFICIARY
-        defaultSignedPaymentShouldNotBeFound("beneficiary.equals=" + UPDATED_BENEFICIARY);
-    }
-
-    @Test
-    @Transactional
-    void getAllSignedPaymentsByBeneficiaryIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        signedPaymentRepository.saveAndFlush(signedPayment);
-
-        // Get all the signedPaymentList where beneficiary not equals to DEFAULT_BENEFICIARY
-        defaultSignedPaymentShouldNotBeFound("beneficiary.notEquals=" + DEFAULT_BENEFICIARY);
-
-        // Get all the signedPaymentList where beneficiary not equals to UPDATED_BENEFICIARY
-        defaultSignedPaymentShouldBeFound("beneficiary.notEquals=" + UPDATED_BENEFICIARY);
-    }
-
-    @Test
-    @Transactional
-    void getAllSignedPaymentsByBeneficiaryIsInShouldWork() throws Exception {
-        // Initialize the database
-        signedPaymentRepository.saveAndFlush(signedPayment);
-
-        // Get all the signedPaymentList where beneficiary in DEFAULT_BENEFICIARY or UPDATED_BENEFICIARY
-        defaultSignedPaymentShouldBeFound("beneficiary.in=" + DEFAULT_BENEFICIARY + "," + UPDATED_BENEFICIARY);
-
-        // Get all the signedPaymentList where beneficiary equals to UPDATED_BENEFICIARY
-        defaultSignedPaymentShouldNotBeFound("beneficiary.in=" + UPDATED_BENEFICIARY);
-    }
-
-    @Test
-    @Transactional
-    void getAllSignedPaymentsByBeneficiaryIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        signedPaymentRepository.saveAndFlush(signedPayment);
-
-        // Get all the signedPaymentList where beneficiary is not null
-        defaultSignedPaymentShouldBeFound("beneficiary.specified=true");
-
-        // Get all the signedPaymentList where beneficiary is null
-        defaultSignedPaymentShouldNotBeFound("beneficiary.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllSignedPaymentsByBeneficiaryContainsSomething() throws Exception {
-        // Initialize the database
-        signedPaymentRepository.saveAndFlush(signedPayment);
-
-        // Get all the signedPaymentList where beneficiary contains DEFAULT_BENEFICIARY
-        defaultSignedPaymentShouldBeFound("beneficiary.contains=" + DEFAULT_BENEFICIARY);
-
-        // Get all the signedPaymentList where beneficiary contains UPDATED_BENEFICIARY
-        defaultSignedPaymentShouldNotBeFound("beneficiary.contains=" + UPDATED_BENEFICIARY);
-    }
-
-    @Test
-    @Transactional
-    void getAllSignedPaymentsByBeneficiaryNotContainsSomething() throws Exception {
-        // Initialize the database
-        signedPaymentRepository.saveAndFlush(signedPayment);
-
-        // Get all the signedPaymentList where beneficiary does not contain DEFAULT_BENEFICIARY
-        defaultSignedPaymentShouldNotBeFound("beneficiary.doesNotContain=" + DEFAULT_BENEFICIARY);
-
-        // Get all the signedPaymentList where beneficiary does not contain UPDATED_BENEFICIARY
-        defaultSignedPaymentShouldBeFound("beneficiary.doesNotContain=" + UPDATED_BENEFICIARY);
-    }
-
-    @Test
-    @Transactional
     void getAllSignedPaymentsByPaymentLabelIsEqualToSomething() throws Exception {
         // Initialize the database
         signedPaymentRepository.saveAndFlush(signedPayment);
@@ -864,6 +700,58 @@ class SignedPaymentResourceIT {
 
         // Get all the signedPaymentList where paymentLabel equals to (paymentLabelId + 1)
         defaultSignedPaymentShouldNotBeFound("paymentLabelId.equals=" + (paymentLabelId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllSignedPaymentsByDealerIsEqualToSomething() throws Exception {
+        // Initialize the database
+        signedPaymentRepository.saveAndFlush(signedPayment);
+        Dealer dealer;
+        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
+            dealer = DealerResourceIT.createEntity(em);
+            em.persist(dealer);
+            em.flush();
+        } else {
+            dealer = TestUtil.findAll(em, Dealer.class).get(0);
+        }
+        em.persist(dealer);
+        em.flush();
+        signedPayment.addDealer(dealer);
+        signedPaymentRepository.saveAndFlush(signedPayment);
+        Long dealerId = dealer.getId();
+
+        // Get all the signedPaymentList where dealer equals to dealerId
+        defaultSignedPaymentShouldBeFound("dealerId.equals=" + dealerId);
+
+        // Get all the signedPaymentList where dealer equals to (dealerId + 1)
+        defaultSignedPaymentShouldNotBeFound("dealerId.equals=" + (dealerId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllSignedPaymentsByPaymentCategoryIsEqualToSomething() throws Exception {
+        // Initialize the database
+        signedPaymentRepository.saveAndFlush(signedPayment);
+        PaymentCategory paymentCategory;
+        if (TestUtil.findAll(em, PaymentCategory.class).isEmpty()) {
+            paymentCategory = PaymentCategoryResourceIT.createEntity(em);
+            em.persist(paymentCategory);
+            em.flush();
+        } else {
+            paymentCategory = TestUtil.findAll(em, PaymentCategory.class).get(0);
+        }
+        em.persist(paymentCategory);
+        em.flush();
+        signedPayment.setPaymentCategory(paymentCategory);
+        signedPaymentRepository.saveAndFlush(signedPayment);
+        Long paymentCategoryId = paymentCategory.getId();
+
+        // Get all the signedPaymentList where paymentCategory equals to paymentCategoryId
+        defaultSignedPaymentShouldBeFound("paymentCategoryId.equals=" + paymentCategoryId);
+
+        // Get all the signedPaymentList where paymentCategory equals to (paymentCategoryId + 1)
+        defaultSignedPaymentShouldNotBeFound("paymentCategoryId.equals=" + (paymentCategoryId + 1));
     }
 
     @Test
@@ -892,6 +780,32 @@ class SignedPaymentResourceIT {
         defaultSignedPaymentShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllSignedPaymentsBySignedPaymentGroupIsEqualToSomething() throws Exception {
+        // Initialize the database
+        signedPaymentRepository.saveAndFlush(signedPayment);
+        SignedPayment signedPaymentGroup;
+        if (TestUtil.findAll(em, SignedPayment.class).isEmpty()) {
+            signedPaymentGroup = SignedPaymentResourceIT.createEntity(em);
+            em.persist(signedPaymentGroup);
+            em.flush();
+        } else {
+            signedPaymentGroup = TestUtil.findAll(em, SignedPayment.class).get(0);
+        }
+        em.persist(signedPaymentGroup);
+        em.flush();
+        signedPayment.setSignedPaymentGroup(signedPaymentGroup);
+        signedPaymentRepository.saveAndFlush(signedPayment);
+        Long signedPaymentGroupId = signedPaymentGroup.getId();
+
+        // Get all the signedPaymentList where signedPaymentGroup equals to signedPaymentGroupId
+        defaultSignedPaymentShouldBeFound("signedPaymentGroupId.equals=" + signedPaymentGroupId);
+
+        // Get all the signedPaymentList where signedPaymentGroup equals to (signedPaymentGroupId + 1)
+        defaultSignedPaymentShouldNotBeFound("signedPaymentGroupId.equals=" + (signedPaymentGroupId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -901,12 +815,10 @@ class SignedPaymentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(signedPayment.getId().intValue())))
-            .andExpect(jsonPath("$.[*].paymentCategory").value(hasItem(DEFAULT_PAYMENT_CATEGORY.toString())))
             .andExpect(jsonPath("$.[*].transactionNumber").value(hasItem(DEFAULT_TRANSACTION_NUMBER)))
             .andExpect(jsonPath("$.[*].transactionDate").value(hasItem(DEFAULT_TRANSACTION_DATE.toString())))
             .andExpect(jsonPath("$.[*].transactionCurrency").value(hasItem(DEFAULT_TRANSACTION_CURRENCY.toString())))
-            .andExpect(jsonPath("$.[*].transactionAmount").value(hasItem(sameNumber(DEFAULT_TRANSACTION_AMOUNT))))
-            .andExpect(jsonPath("$.[*].beneficiary").value(hasItem(DEFAULT_BENEFICIARY)));
+            .andExpect(jsonPath("$.[*].transactionAmount").value(hasItem(sameNumber(DEFAULT_TRANSACTION_AMOUNT))));
 
         // Check, that the count call also returns 1
         restSignedPaymentMockMvc
@@ -955,12 +867,10 @@ class SignedPaymentResourceIT {
         // Disconnect from session so that the updates on updatedSignedPayment are not directly saved in db
         em.detach(updatedSignedPayment);
         updatedSignedPayment
-            .paymentCategory(UPDATED_PAYMENT_CATEGORY)
             .transactionNumber(UPDATED_TRANSACTION_NUMBER)
             .transactionDate(UPDATED_TRANSACTION_DATE)
             .transactionCurrency(UPDATED_TRANSACTION_CURRENCY)
-            .transactionAmount(UPDATED_TRANSACTION_AMOUNT)
-            .beneficiary(UPDATED_BENEFICIARY);
+            .transactionAmount(UPDATED_TRANSACTION_AMOUNT);
         SignedPaymentDTO signedPaymentDTO = signedPaymentMapper.toDto(updatedSignedPayment);
 
         restSignedPaymentMockMvc
@@ -975,12 +885,10 @@ class SignedPaymentResourceIT {
         List<SignedPayment> signedPaymentList = signedPaymentRepository.findAll();
         assertThat(signedPaymentList).hasSize(databaseSizeBeforeUpdate);
         SignedPayment testSignedPayment = signedPaymentList.get(signedPaymentList.size() - 1);
-        assertThat(testSignedPayment.getPaymentCategory()).isEqualTo(UPDATED_PAYMENT_CATEGORY);
         assertThat(testSignedPayment.getTransactionNumber()).isEqualTo(UPDATED_TRANSACTION_NUMBER);
         assertThat(testSignedPayment.getTransactionDate()).isEqualTo(UPDATED_TRANSACTION_DATE);
         assertThat(testSignedPayment.getTransactionCurrency()).isEqualTo(UPDATED_TRANSACTION_CURRENCY);
         assertThat(testSignedPayment.getTransactionAmount()).isEqualTo(UPDATED_TRANSACTION_AMOUNT);
-        assertThat(testSignedPayment.getBeneficiary()).isEqualTo(UPDATED_BENEFICIARY);
 
         // Validate the SignedPayment in Elasticsearch
         verify(mockSignedPaymentSearchRepository).save(testSignedPayment);
@@ -1074,7 +982,7 @@ class SignedPaymentResourceIT {
         SignedPayment partialUpdatedSignedPayment = new SignedPayment();
         partialUpdatedSignedPayment.setId(signedPayment.getId());
 
-        partialUpdatedSignedPayment.transactionCurrency(UPDATED_TRANSACTION_CURRENCY).transactionAmount(UPDATED_TRANSACTION_AMOUNT);
+        partialUpdatedSignedPayment.transactionAmount(UPDATED_TRANSACTION_AMOUNT);
 
         restSignedPaymentMockMvc
             .perform(
@@ -1088,12 +996,10 @@ class SignedPaymentResourceIT {
         List<SignedPayment> signedPaymentList = signedPaymentRepository.findAll();
         assertThat(signedPaymentList).hasSize(databaseSizeBeforeUpdate);
         SignedPayment testSignedPayment = signedPaymentList.get(signedPaymentList.size() - 1);
-        assertThat(testSignedPayment.getPaymentCategory()).isEqualTo(DEFAULT_PAYMENT_CATEGORY);
         assertThat(testSignedPayment.getTransactionNumber()).isEqualTo(DEFAULT_TRANSACTION_NUMBER);
         assertThat(testSignedPayment.getTransactionDate()).isEqualTo(DEFAULT_TRANSACTION_DATE);
-        assertThat(testSignedPayment.getTransactionCurrency()).isEqualTo(UPDATED_TRANSACTION_CURRENCY);
+        assertThat(testSignedPayment.getTransactionCurrency()).isEqualTo(DEFAULT_TRANSACTION_CURRENCY);
         assertThat(testSignedPayment.getTransactionAmount()).isEqualByComparingTo(UPDATED_TRANSACTION_AMOUNT);
-        assertThat(testSignedPayment.getBeneficiary()).isEqualTo(DEFAULT_BENEFICIARY);
     }
 
     @Test
@@ -1109,12 +1015,10 @@ class SignedPaymentResourceIT {
         partialUpdatedSignedPayment.setId(signedPayment.getId());
 
         partialUpdatedSignedPayment
-            .paymentCategory(UPDATED_PAYMENT_CATEGORY)
             .transactionNumber(UPDATED_TRANSACTION_NUMBER)
             .transactionDate(UPDATED_TRANSACTION_DATE)
             .transactionCurrency(UPDATED_TRANSACTION_CURRENCY)
-            .transactionAmount(UPDATED_TRANSACTION_AMOUNT)
-            .beneficiary(UPDATED_BENEFICIARY);
+            .transactionAmount(UPDATED_TRANSACTION_AMOUNT);
 
         restSignedPaymentMockMvc
             .perform(
@@ -1128,12 +1032,10 @@ class SignedPaymentResourceIT {
         List<SignedPayment> signedPaymentList = signedPaymentRepository.findAll();
         assertThat(signedPaymentList).hasSize(databaseSizeBeforeUpdate);
         SignedPayment testSignedPayment = signedPaymentList.get(signedPaymentList.size() - 1);
-        assertThat(testSignedPayment.getPaymentCategory()).isEqualTo(UPDATED_PAYMENT_CATEGORY);
         assertThat(testSignedPayment.getTransactionNumber()).isEqualTo(UPDATED_TRANSACTION_NUMBER);
         assertThat(testSignedPayment.getTransactionDate()).isEqualTo(UPDATED_TRANSACTION_DATE);
         assertThat(testSignedPayment.getTransactionCurrency()).isEqualTo(UPDATED_TRANSACTION_CURRENCY);
         assertThat(testSignedPayment.getTransactionAmount()).isEqualByComparingTo(UPDATED_TRANSACTION_AMOUNT);
-        assertThat(testSignedPayment.getBeneficiary()).isEqualTo(UPDATED_BENEFICIARY);
     }
 
     @Test
@@ -1250,11 +1152,9 @@ class SignedPaymentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(signedPayment.getId().intValue())))
-            .andExpect(jsonPath("$.[*].paymentCategory").value(hasItem(DEFAULT_PAYMENT_CATEGORY.toString())))
             .andExpect(jsonPath("$.[*].transactionNumber").value(hasItem(DEFAULT_TRANSACTION_NUMBER)))
             .andExpect(jsonPath("$.[*].transactionDate").value(hasItem(DEFAULT_TRANSACTION_DATE.toString())))
             .andExpect(jsonPath("$.[*].transactionCurrency").value(hasItem(DEFAULT_TRANSACTION_CURRENCY.toString())))
-            .andExpect(jsonPath("$.[*].transactionAmount").value(hasItem(sameNumber(DEFAULT_TRANSACTION_AMOUNT))))
-            .andExpect(jsonPath("$.[*].beneficiary").value(hasItem(DEFAULT_BENEFICIARY)));
+            .andExpect(jsonPath("$.[*].transactionAmount").value(hasItem(sameNumber(DEFAULT_TRANSACTION_AMOUNT))));
     }
 }

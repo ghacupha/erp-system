@@ -26,7 +26,7 @@
         <dd>
           <div *ngIf="placeholder.containingPlaceholder">
             <a [routerLink]="['/placeholder', placeholder.containingPlaceholder?.id, 'view']">{{
-              placeholder.containingPlaceholder?.id
+              placeholder.containingPlaceholder?.description
             }}</a>
           </div>
         </dd>

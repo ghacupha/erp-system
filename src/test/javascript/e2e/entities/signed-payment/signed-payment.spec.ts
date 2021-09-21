@@ -46,14 +46,15 @@ describe('SignedPayment e2e test', () => {
     await signedPaymentComponentsPage.clickOnCreateButton();
 
     await promise.all([
-      signedPaymentUpdatePage.paymentCategorySelectLastOption(),
       signedPaymentUpdatePage.setTransactionNumberInput('transactionNumber'),
       signedPaymentUpdatePage.setTransactionDateInput('2000-12-31'),
       signedPaymentUpdatePage.transactionCurrencySelectLastOption(),
       signedPaymentUpdatePage.setTransactionAmountInput('5'),
-      signedPaymentUpdatePage.setBeneficiaryInput('beneficiary'),
       // signedPaymentUpdatePage.paymentLabelSelectLastOption(),
+      // signedPaymentUpdatePage.dealerSelectLastOption(),
+      signedPaymentUpdatePage.paymentCategorySelectLastOption(),
       // signedPaymentUpdatePage.placeholderSelectLastOption(),
+      signedPaymentUpdatePage.signedPaymentGroupSelectLastOption(),
     ]);
 
     await signedPaymentUpdatePage.save();

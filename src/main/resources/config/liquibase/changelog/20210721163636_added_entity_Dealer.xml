@@ -41,14 +41,17 @@
             <column name="bankers_swift_code" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="dealer_group_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
 
     <changeSet id="20210721163636-1-relations" author="jhipster">
 
-        <createTable tableName="rel_dealer__payment">
-            <column name="payment_id" type="bigint">
+        <createTable tableName="rel_dealer__payment_label">
+            <column name="payment_label_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="dealer_id" type="bigint">
@@ -56,7 +59,7 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="dealer_id, payment_id" tableName="rel_dealer__payment"/>
+        <addPrimaryKey columnNames="dealer_id, payment_label_id" tableName="rel_dealer__payment_label"/>
 
         <createTable tableName="rel_dealer__placeholder">
             <column name="placeholder_id" type="bigint">

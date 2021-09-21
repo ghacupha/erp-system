@@ -10,6 +10,7 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Payment;
 import io.github.erp.domain.PaymentCalculation;
 import io.github.erp.domain.PaymentCategory;
+import io.github.erp.domain.PaymentLabel;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.enumeration.CategoryTypes;
 import io.github.erp.repository.PaymentCategoryRepository;
@@ -488,6 +489,32 @@ class PaymentCategoryResourceIT {
 
         // Get all the paymentCategoryList where categoryType is null
         defaultPaymentCategoryShouldNotBeFound("categoryType.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCategoriesByPaymentLabelIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentCategoryRepository.saveAndFlush(paymentCategory);
+        PaymentLabel paymentLabel;
+        if (TestUtil.findAll(em, PaymentLabel.class).isEmpty()) {
+            paymentLabel = PaymentLabelResourceIT.createEntity(em);
+            em.persist(paymentLabel);
+            em.flush();
+        } else {
+            paymentLabel = TestUtil.findAll(em, PaymentLabel.class).get(0);
+        }
+        em.persist(paymentLabel);
+        em.flush();
+        paymentCategory.addPaymentLabel(paymentLabel);
+        paymentCategoryRepository.saveAndFlush(paymentCategory);
+        Long paymentLabelId = paymentLabel.getId();
+
+        // Get all the paymentCategoryList where paymentLabel equals to paymentLabelId
+        defaultPaymentCategoryShouldBeFound("paymentLabelId.equals=" + paymentLabelId);
+
+        // Get all the paymentCategoryList where paymentLabel equals to (paymentLabelId + 1)
+        defaultPaymentCategoryShouldNotBeFound("paymentLabelId.equals=" + (paymentLabelId + 1));
     }
 
     @Test

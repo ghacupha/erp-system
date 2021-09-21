@@ -129,7 +129,7 @@ public class TaxRuleQueryService extends QueryService<TaxRule> {
             if (criteria.getPaymentId() != null) {
                 specification =
                     specification.and(
-                        buildSpecification(criteria.getPaymentId(), root -> root.join(TaxRule_.payment, JoinType.LEFT).get(Payment_.id))
+                        buildSpecification(criteria.getPaymentId(), root -> root.join(TaxRule_.payments, JoinType.LEFT).get(Payment_.id))
                     );
             }
             if (criteria.getPlaceholderId() != null) {

@@ -13,5 +13,17 @@
                                  constraintName="fk_payment_label__containing_payment_label_id"
                                  referencedColumnNames="id"
                                  referencedTableName="payment_label"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_label_id"
+                                 baseTableName="rel_payment_label__placeholder"
+                                 constraintName="fk_rel_payment_label__placeholder__payment_label_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_label"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_payment_label__placeholder"
+                                 constraintName="fk_rel_payment_label__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
     </changeSet>
 </databaseChangeLog>

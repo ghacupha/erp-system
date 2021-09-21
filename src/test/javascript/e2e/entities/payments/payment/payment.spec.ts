@@ -45,15 +45,20 @@ describe('Payment e2e test', () => {
     await promise.all([
       paymentUpdatePage.setPaymentNumberInput('paymentNumber'),
       paymentUpdatePage.setPaymentDateInput('2000-12-31'),
+      paymentUpdatePage.setInvoicedAmountInput('5'),
+      paymentUpdatePage.setDisbursementCostInput('5'),
+      paymentUpdatePage.setVatableAmountInput('5'),
       paymentUpdatePage.setPaymentAmountInput('5'),
       paymentUpdatePage.setDescriptionInput('description'),
-      paymentUpdatePage.currencySelectLastOption(),
+      paymentUpdatePage.settlementCurrencySelectLastOption(),
       paymentUpdatePage.setConversionRateInput('5'),
+      // paymentUpdatePage.paymentLabelSelectLastOption(),
+      // paymentUpdatePage.dealerSelectLastOption(),
       paymentUpdatePage.paymentCategorySelectLastOption(),
       paymentUpdatePage.taxRuleSelectLastOption(),
       paymentUpdatePage.paymentCalculationSelectLastOption(),
-      paymentUpdatePage.paymentRequisitionSelectLastOption(),
       // paymentUpdatePage.placeholderSelectLastOption(),
+      paymentUpdatePage.paymentGroupSelectLastOption(),
     ]);
 
     await paymentUpdatePage.save();

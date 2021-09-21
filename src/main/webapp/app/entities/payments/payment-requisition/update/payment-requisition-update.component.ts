@@ -7,6 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IPaymentRequisition, PaymentRequisition } from '../payment-requisition.model';
 import { PaymentRequisitionService } from '../service/payment-requisition.service';
+import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
+import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
@@ -19,6 +21,7 @@ import { PlaceholderService } from 'app/entities/erpService/placeholder/service/
 export class PaymentRequisitionUpdateComponent implements OnInit {
   isSaving = false;
 
+  paymentLabelsSharedCollection: IPaymentLabel[] = [];
   dealersSharedCollection: IDealer[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
 
@@ -27,12 +30,14 @@ export class PaymentRequisitionUpdateComponent implements OnInit {
     invoicedAmount: [],
     disbursementCost: [],
     vatableAmount: [],
+    paymentLabels: [],
     dealer: [],
     placeholders: [],
   });
 
   constructor(
     protected paymentRequisitionService: PaymentRequisitionService,
+    protected paymentLabelService: PaymentLabelService,
     protected dealerService: DealerService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
@@ -61,12 +66,27 @@ export class PaymentRequisitionUpdateComponent implements OnInit {
     }
   }
 
+  trackPaymentLabelById(index: number, item: IPaymentLabel): number {
+    return item.id!;
+  }
+
   trackDealerById(index: number, item: IDealer): number {
     return item.id!;
   }
 
   trackPlaceholderById(index: number, item: IPlaceholder): number {
     return item.id!;
+  }
+
+  getSelectedPaymentLabel(option: IPaymentLabel, selectedVals?: IPaymentLabel[]): IPaymentLabel {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
   }
 
   getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
@@ -105,10 +125,15 @@ export class PaymentRequisitionUpdateComponent implements OnInit {
       invoicedAmount: paymentRequisition.invoicedAmount,
       disbursementCost: paymentRequisition.disbursementCost,
       vatableAmount: paymentRequisition.vatableAmount,
+      paymentLabels: paymentRequisition.paymentLabels,
       dealer: paymentRequisition.dealer,
       placeholders: paymentRequisition.placeholders,
     });
 
+    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
+      this.paymentLabelsSharedCollection,
+      ...(paymentRequisition.paymentLabels ?? [])
+    );
     this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
       this.dealersSharedCollection,
       paymentRequisition.dealer
@@ -120,6 +145,16 @@ export class PaymentRequisitionUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
+    this.paymentLabelService
+      .query()
+      .pipe(map((res: HttpResponse<IPaymentLabel[]>) => res.body ?? []))
+      .pipe(
+        map((paymentLabels: IPaymentLabel[]) =>
+          this.paymentLabelService.addPaymentLabelToCollectionIfMissing(paymentLabels, ...(this.editForm.get('paymentLabels')!.value ?? []))
+        )
+      )
+      .subscribe((paymentLabels: IPaymentLabel[]) => (this.paymentLabelsSharedCollection = paymentLabels));
+
     this.dealerService
       .query()
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
@@ -144,6 +179,7 @@ export class PaymentRequisitionUpdateComponent implements OnInit {
       invoicedAmount: this.editForm.get(['invoicedAmount'])!.value,
       disbursementCost: this.editForm.get(['disbursementCost'])!.value,
       vatableAmount: this.editForm.get(['vatableAmount'])!.value,
+      paymentLabels: this.editForm.get(['paymentLabels'])!.value,
       dealer: this.editForm.get(['dealer'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
     };

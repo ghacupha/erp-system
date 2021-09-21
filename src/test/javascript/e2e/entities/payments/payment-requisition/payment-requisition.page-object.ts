@@ -34,6 +34,7 @@ export class PaymentRequisitionUpdatePage {
   disbursementCostInput = element(by.id('field_disbursementCost'));
   vatableAmountInput = element(by.id('field_vatableAmount'));
 
+  paymentLabelSelect = element(by.id('field_paymentLabel'));
   dealerSelect = element(by.id('field_dealer'));
   placeholderSelect = element(by.id('field_placeholder'));
 
@@ -71,6 +72,22 @@ export class PaymentRequisitionUpdatePage {
 
   async getVatableAmountInput(): Promise<string> {
     return await this.vatableAmountInput.getAttribute('value');
+  }
+
+  async paymentLabelSelectLastOption(): Promise<void> {
+    await this.paymentLabelSelect.all(by.tagName('option')).last().click();
+  }
+
+  async paymentLabelSelectOption(option: string): Promise<void> {
+    await this.paymentLabelSelect.sendKeys(option);
+  }
+
+  getPaymentLabelSelect(): ElementFinder {
+    return this.paymentLabelSelect;
+  }
+
+  async getPaymentLabelSelectedOption(): Promise<string> {
+    return await this.paymentLabelSelect.element(by.css('option:checked')).getText();
   }
 
   async dealerSelectLastOption(): Promise<void> {
