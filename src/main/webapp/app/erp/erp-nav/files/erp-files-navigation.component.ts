@@ -10,7 +10,6 @@ import {LoginService} from "../../../login/login.service";
 @Component({
   selector: "jhi-erp-files-nav",
   templateUrl: "./erp-files-navigation.component.html",
-  styleUrls: ["../payment-navigation.scss"]
 })
 export class ErpFilesNavigationComponent implements OnInit {
   inProduction?: boolean;
