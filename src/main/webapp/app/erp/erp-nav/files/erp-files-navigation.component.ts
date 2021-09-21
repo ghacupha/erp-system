@@ -9,7 +9,7 @@ import {LoginService} from "../../../login/login.service";
 
 @Component({
   selector: "jhi-erp-files-nav",
-  templateUrl: "./payment-files-navigation.component.html",
+  templateUrl: "./erp-files-navigation.component.html",
   styleUrls: ["../payment-navigation.scss"]
 })
 export class ErpFilesNavigationComponent implements OnInit {
