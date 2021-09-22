@@ -1,0 +1,59 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="messageToken">
+      <h2 data-cy="messageTokenDetailsHeading"><span>Message Token</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ messageToken.id }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ messageToken.description }}</span>
+        </dd>
+        <dt><span>Time Sent</span></dt>
+        <dd>
+          <span>{{ messageToken.timeSent }}</span>
+        </dd>
+        <dt><span>Token Value</span></dt>
+        <dd>
+          <span>{{ messageToken.tokenValue }}</span>
+        </dd>
+        <dt><span>Received</span></dt>
+        <dd>
+          <span>{{ messageToken.received }}</span>
+        </dd>
+        <dt><span>Actioned</span></dt>
+        <dd>
+          <span>{{ messageToken.actioned }}</span>
+        </dd>
+        <dt><span>Content Fully Enqueued</span></dt>
+        <dd>
+          <span>{{ messageToken.contentFullyEnqueued }}</span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of messageToken.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/message-token', messageToken.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>
