@@ -7,10 +7,10 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IDealer, Dealer } from '../dealer.model';
 import { DealerService } from '../service/dealer.service';
-import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
-import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import {IPaymentLabel} from '../../../../erp/erp-pages/payment-label/payment-label.model';
+import {PaymentLabelService} from '../../../../erp/erp-pages/payment-label/service/payment-label.service';
 
 @Component({
   selector: 'jhi-dealer-update',

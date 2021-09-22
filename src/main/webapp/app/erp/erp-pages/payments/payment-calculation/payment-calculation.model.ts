@@ -1,7 +1,7 @@
-import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
-import { IPayment } from 'app/entities/payments/payment/payment.model';
-import { IPaymentCategory } from 'app/entities/payments/payment-category/payment-category.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import {IPaymentLabel} from '../../payment-label/payment-label.model';
+import {IPayment} from '../payment/payment.model';
+import {IPaymentCategory} from '../payment-category/payment-category.model';
+import {IPlaceholder} from '../../../../entities/erpService/placeholder/placeholder.model';
 
 export interface IPaymentCalculation {
   id?: number;

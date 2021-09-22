@@ -1,3 +1,5 @@
+import {PaymentLabelService} from "../../../../erp/erp-pages/payment-label/service/payment-label.service";
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,12 +11,11 @@ import { of, Subject } from 'rxjs';
 
 import { DealerService } from '../service/dealer.service';
 import { IDealer, Dealer } from '../dealer.model';
-import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
-import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { DealerUpdateComponent } from './dealer-update.component';
+import {IPaymentLabel} from '../../../../erp/erp-pages/payment-label/payment-label.model';
 
 describe('Component Tests', () => {
   describe('Dealer Management Update Component', () => {

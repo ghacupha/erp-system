@@ -1,12 +1,12 @@
 import * as dayjs from 'dayjs';
-import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
-import { IInvoice } from 'app/entities/payments/invoice/invoice.model';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { IPaymentCategory } from 'app/entities/payments/payment-category/payment-category.model';
-import { ITaxRule } from 'app/entities/payments/tax-rule/tax-rule.model';
-import { IPaymentCalculation } from 'app/entities/payments/payment-calculation/payment-calculation.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { CurrencyTypes } from 'app/entities/enumerations/currency-types.model';
+import {IPaymentLabel} from '../../payment-label/payment-label.model';
+import {IInvoice} from '../invoice/invoice.model';
+import {IDealer} from '../../../../entities/dealers/dealer/dealer.model';
+import {IPaymentCategory} from '../payment-category/payment-category.model';
+import {ITaxRule} from '../tax-rule/tax-rule.model';
+import {IPaymentCalculation} from '../payment-calculation/payment-calculation.model';
 
 export interface IPayment {
   id?: number;

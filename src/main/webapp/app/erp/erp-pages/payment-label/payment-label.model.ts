@@ -1,4 +1,4 @@
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import {IPlaceholder} from '../../../entities/erpService/placeholder/placeholder.model';
 
 export interface IPaymentLabel {
   id?: number;

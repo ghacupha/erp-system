@@ -7,14 +7,14 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IInvoice, Invoice } from '../invoice.model';
 import { InvoiceService } from '../service/invoice.service';
-import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
-import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
-import { IPayment } from 'app/entities/payments/payment/payment.model';
-import { PaymentService } from 'app/entities/payments/payment/service/payment.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import {IPaymentLabel} from '../../../payment-label/payment-label.model';
+import {IPayment} from '../../payment/payment.model';
+import {PaymentLabelService} from '../../../payment-label/service/payment-label.service';
+import {PaymentService} from '../../payment/service/payment.service';
 
 @Component({
   selector: 'jhi-invoice-update',

@@ -1,3 +1,5 @@
+import {PaymentLabelService} from "../../../payment-label/service/payment-label.service";
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,16 +11,15 @@ import { of, Subject } from 'rxjs';
 
 import { InvoiceService } from '../service/invoice.service';
 import { IInvoice, Invoice } from '../invoice.model';
-import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
-import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
-import { IPayment } from 'app/entities/payments/payment/payment.model';
-import { PaymentService } from 'app/entities/payments/payment/service/payment.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { InvoiceUpdateComponent } from './invoice-update.component';
+import {PaymentService} from "../../payment/service/payment.service";
+import {IPaymentLabel} from "../../../payment-label/payment-label.model";
+import {IPayment} from "../../payment/payment.model";
 
 describe('Component Tests', () => {
   describe('Invoice Management Update Component', () => {

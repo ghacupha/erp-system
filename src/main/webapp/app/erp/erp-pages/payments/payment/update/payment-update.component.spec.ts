@@ -1,3 +1,5 @@
+import {PaymentLabelService} from "../../../payment-label/service/payment-label.service";
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,20 +11,19 @@ import { of, Subject } from 'rxjs';
 
 import { PaymentService } from '../service/payment.service';
 import { IPayment, Payment } from '../payment.model';
-import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
-import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
-import { IPaymentCategory } from 'app/entities/payments/payment-category/payment-category.model';
-import { PaymentCategoryService } from 'app/entities/payments/payment-category/service/payment-category.service';
-import { ITaxRule } from 'app/entities/payments/tax-rule/tax-rule.model';
-import { TaxRuleService } from 'app/entities/payments/tax-rule/service/tax-rule.service';
-import { IPaymentCalculation } from 'app/entities/payments/payment-calculation/payment-calculation.model';
-import { PaymentCalculationService } from 'app/entities/payments/payment-calculation/service/payment-calculation.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { PaymentUpdateComponent } from './payment-update.component';
+import {PaymentCategoryService} from '../../payment-category/service/payment-category.service';
+import {TaxRuleService} from '../../tax-rule/service/tax-rule.service';
+import {PaymentCalculationService} from '../../payment-calculation/service/payment-calculation.service';
+import {IPaymentLabel} from '../../../payment-label/payment-label.model';
+import {IPaymentCategory} from '../../payment-category/payment-category.model';
+import {ITaxRule} from '../../tax-rule/tax-rule.model';
+import {IPaymentCalculation} from '../../payment-calculation/payment-calculation.model';
 
 describe('Component Tests', () => {
   describe('Payment Management Update Component', () => {
