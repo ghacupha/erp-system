@@ -25,6 +25,7 @@ services:
       - ERP_SYSTEM_PROD_MAIL_BASE_URL=${ERP_SYSTEM_PROD_MAIL_BASE_URL}
       - ERP_SYSTEM_DEV_MAIL_BASE_URL=${ERP_SYSTEM_DEV_MAIL_BASE_URL}
       - SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=${SECURITY_AUTHENTICATION_JWT_BASE64_SECRET}
+      - UPLOADS_SIZE=${UPLOADS_SIZE}
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
