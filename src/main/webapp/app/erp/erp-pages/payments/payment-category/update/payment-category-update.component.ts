@@ -7,10 +7,10 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IPaymentCategory, PaymentCategory } from '../payment-category.model';
 import { PaymentCategoryService } from '../service/payment-category.service';
-import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
-import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import {IPaymentLabel} from '../../../payment-label/payment-label.model';
+import {PaymentLabelService} from '../../../payment-label/service/payment-label.service';
 
 @Component({
   selector: 'jhi-payment-category-update',

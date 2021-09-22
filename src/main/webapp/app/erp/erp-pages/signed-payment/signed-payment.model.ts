@@ -1,9 +1,9 @@
 import * as dayjs from 'dayjs';
-import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { IPaymentCategory } from 'app/entities/payments/payment-category/payment-category.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { CurrencyTypes } from 'app/entities/enumerations/currency-types.model';
+import {IPaymentLabel} from '../payment-label/payment-label.model';
+import {IPaymentCategory} from '../payments/payment-category/payment-category.model';
 
 export interface ISignedPayment {
   id?: number;

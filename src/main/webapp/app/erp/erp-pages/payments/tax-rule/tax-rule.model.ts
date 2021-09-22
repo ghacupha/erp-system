@@ -1,5 +1,5 @@
-import { IPayment } from 'app/entities/payments/payment/payment.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import {IPayment} from '../payment/payment.model';
 
 export interface ITaxRule {
   id?: number;
