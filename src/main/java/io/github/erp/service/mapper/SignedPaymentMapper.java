@@ -13,7 +13,7 @@ import org.mapstruct.*;
 )
 public interface SignedPaymentMapper extends EntityMapper<SignedPaymentDTO, SignedPayment> {
     @Mapping(target = "paymentLabels", source = "paymentLabels", qualifiedByName = "descriptionSet")
-    @Mapping(target = "dealers", source = "dealers", qualifiedByName = "dealerNameSet")
+    @Mapping(target = "dealer", source = "dealer", qualifiedByName = "dealerName")
     @Mapping(target = "paymentCategory", source = "paymentCategory", qualifiedByName = "categoryName")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     @Mapping(target = "signedPaymentGroup", source = "signedPaymentGroup", qualifiedByName = "id")
@@ -25,7 +25,6 @@ public interface SignedPaymentMapper extends EntityMapper<SignedPaymentDTO, Sign
     SignedPaymentDTO toDtoId(SignedPayment signedPayment);
 
     @Mapping(target = "removePaymentLabel", ignore = true)
-    @Mapping(target = "removeDealer", ignore = true)
     @Mapping(target = "removePlaceholder", ignore = true)
     SignedPayment toEntity(SignedPaymentDTO signedPaymentDTO);
 }

@@ -15,18 +15,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SignedPaymentRepository extends JpaRepository<SignedPayment, Long>, JpaSpecificationExecutor<SignedPayment> {
     @Query(
-        value = "select distinct signedPayment from SignedPayment signedPayment left join fetch signedPayment.paymentLabels left join fetch signedPayment.dealers left join fetch signedPayment.placeholders",
+        value = "select distinct signedPayment from SignedPayment signedPayment left join fetch signedPayment.paymentLabels left join fetch signedPayment.placeholders",
         countQuery = "select count(distinct signedPayment) from SignedPayment signedPayment"
     )
     Page<SignedPayment> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct signedPayment from SignedPayment signedPayment left join fetch signedPayment.paymentLabels left join fetch signedPayment.dealers left join fetch signedPayment.placeholders"
+        "select distinct signedPayment from SignedPayment signedPayment left join fetch signedPayment.paymentLabels left join fetch signedPayment.placeholders"
     )
     List<SignedPayment> findAllWithEagerRelationships();
 
     @Query(
-        "select signedPayment from SignedPayment signedPayment left join fetch signedPayment.paymentLabels left join fetch signedPayment.dealers left join fetch signedPayment.placeholders where signedPayment.id =:id"
+        "select signedPayment from SignedPayment signedPayment left join fetch signedPayment.paymentLabels left join fetch signedPayment.placeholders where signedPayment.id =:id"
     )
     Optional<SignedPayment> findOneWithEagerRelationships(@Param("id") Long id);
 }

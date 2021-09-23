@@ -39,17 +39,16 @@
         </dd>
         <dt><span>Dealer</span></dt>
         <dd>
-          <span *ngFor="let dealer of signedPayment.dealers; let last = last">
-            <a [routerLink]="['/dealer', dealer?.id, 'view']">{{ dealer.dealerName }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
+          <div *ngIf="signedPayment.dealer">
+            <a [routerLink]="['/dealer', signedPayment.dealer?.id, 'view']">{{ signedPayment.dealer?.dealerName }}</a>
+          </div>
         </dd>
         <dt><span>Payment Category</span></dt>
         <dd>
           <div *ngIf="signedPayment.paymentCategory">
             <a [routerLink]="['/payment-category', signedPayment.paymentCategory?.id, 'view']">{{
               signedPayment.paymentCategory?.categoryName
-            }}</a>
+              }}</a>
           </div>
         </dd>
         <dt><span>Placeholder</span></dt>
@@ -64,7 +63,7 @@
           <div *ngIf="signedPayment.signedPaymentGroup">
             <a [routerLink]="['/signed-payment', signedPayment.signedPaymentGroup?.id, 'view']">{{
               signedPayment.signedPaymentGroup?.id
-            }}</a>
+              }}</a>
           </div>
         </dd>
       </dl>

@@ -12,6 +12,7 @@ import io.github.erp.domain.Dealer;
 import io.github.erp.domain.PaymentLabel;
 import io.github.erp.domain.PaymentRequisition;
 import io.github.erp.domain.Placeholder;
+import io.github.erp.domain.SignedPayment;
 import io.github.erp.repository.DealerRepository;
 import io.github.erp.repository.search.DealerSearchRepository;
 import io.github.erp.service.DealerService;
@@ -1082,6 +1083,32 @@ class DealerResourceIT {
 
         // Get all the dealerList where paymentRequisition equals to (paymentRequisitionId + 1)
         defaultDealerShouldNotBeFound("paymentRequisitionId.equals=" + (paymentRequisitionId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllDealersBySignedPaymentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        dealerRepository.saveAndFlush(dealer);
+        SignedPayment signedPayment;
+        if (TestUtil.findAll(em, SignedPayment.class).isEmpty()) {
+            signedPayment = SignedPaymentResourceIT.createEntity(em);
+            em.persist(signedPayment);
+            em.flush();
+        } else {
+            signedPayment = TestUtil.findAll(em, SignedPayment.class).get(0);
+        }
+        em.persist(signedPayment);
+        em.flush();
+        dealer.addSignedPayment(signedPayment);
+        dealerRepository.saveAndFlush(dealer);
+        Long signedPaymentId = signedPayment.getId();
+
+        // Get all the dealerList where signedPayment equals to signedPaymentId
+        defaultDealerShouldBeFound("signedPaymentId.equals=" + signedPaymentId);
+
+        // Get all the dealerList where signedPayment equals to (signedPaymentId + 1)
+        defaultDealerShouldNotBeFound("signedPaymentId.equals=" + (signedPaymentId + 1));
     }
 
     @Test

@@ -23,6 +23,12 @@
       "otherEntityRelationshipName": "dealer"
     },
     {
+      "relationshipName": "signedPayment",
+      "otherEntityName": "signedPayment",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "dealer"
+    },
+    {
       "relationshipName": "placeholder",
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",

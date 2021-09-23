@@ -31,7 +31,7 @@ public class SignedPaymentDTO implements Serializable {
 
     private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
 
-    private Set<DealerDTO> dealers = new HashSet<>();
+    private DealerDTO dealer;
 
     private PaymentCategoryDTO paymentCategory;
 
@@ -87,12 +87,12 @@ public class SignedPaymentDTO implements Serializable {
         this.paymentLabels = paymentLabels;
     }
 
-    public Set<DealerDTO> getDealers() {
-        return dealers;
+    public DealerDTO getDealer() {
+        return dealer;
     }
 
-    public void setDealers(Set<DealerDTO> dealers) {
-        this.dealers = dealers;
+    public void setDealer(DealerDTO dealer) {
+        this.dealer = dealer;
     }
 
     public PaymentCategoryDTO getPaymentCategory() {
@@ -150,7 +150,7 @@ public class SignedPaymentDTO implements Serializable {
             ", transactionCurrency='" + getTransactionCurrency() + "'" +
             ", transactionAmount=" + getTransactionAmount() +
             ", paymentLabels=" + getPaymentLabels() +
-            ", dealers=" + getDealers() +
+            ", dealer=" + getDealer() +
             ", paymentCategory=" + getPaymentCategory() +
             ", placeholders=" + getPlaceholders() +
             ", signedPaymentGroup=" + getSignedPaymentGroup() +

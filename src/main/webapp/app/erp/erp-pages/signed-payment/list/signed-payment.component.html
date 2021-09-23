@@ -49,73 +49,79 @@
   <div class="table-responsive" id="entities" *ngIf="signedPayments && signedPayments.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="transactionNumber">
-            <span>Transaction Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="transactionDate"><span>Transaction Date</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="transactionCurrency">
-            <span>Transaction Currency</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="transactionAmount"><span>Transaction Amount</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="paymentCategory.categoryName"><span>Payment Category</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="signedPaymentGroup.id"><span>Signed Payment Group</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col"></th>
-        </tr>
+      <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+        <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="transactionNumber">
+          <span>Transaction Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+        </th>
+        <th scope="col" jhiSortBy="transactionDate"><span>Transaction Date</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="transactionCurrency">
+          <span>Transaction Currency</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+        </th>
+        <th scope="col" jhiSortBy="transactionAmount"><span>Transaction Amount</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="paymentCategory.categoryName"><span>Payment Category</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="signedPaymentGroup.id"><span>Signed Payment Group</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col"></th>
+      </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let signedPayment of signedPayments; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/signed-payment', signedPayment.id, 'view']">{{ signedPayment.id }}</a>
-          </td>
-          <td>{{ signedPayment.transactionNumber }}</td>
-          <td>{{ signedPayment.transactionDate | formatMediumDate }}</td>
-          <td>{{ signedPayment.transactionCurrency }}</td>
-          <td>{{ signedPayment.transactionAmount }}</td>
-          <td>
-            <div *ngIf="signedPayment.paymentCategory">
-              <a [routerLink]="['/payment-category', signedPayment.paymentCategory?.id, 'view']">{{
-                signedPayment.paymentCategory?.categoryName
+      <tr *ngFor="let signedPayment of signedPayments; trackBy: trackId" data-cy="entityTable">
+        <td>
+          <a [routerLink]="['/signed-payment', signedPayment.id, 'view']">{{ signedPayment.id }}</a>
+        </td>
+        <td>{{ signedPayment.transactionNumber }}</td>
+        <td>{{ signedPayment.transactionDate | formatMediumDate }}</td>
+        <td>{{ signedPayment.transactionCurrency }}</td>
+        <td>{{ signedPayment.transactionAmount }}</td>
+        <td>
+          <div *ngIf="signedPayment.dealer">
+            <a [routerLink]="['/dealer', signedPayment.dealer?.id, 'view']">{{ signedPayment.dealer?.dealerName }}</a>
+          </div>
+        </td>
+        <td>
+          <div *ngIf="signedPayment.paymentCategory">
+            <a [routerLink]="['/payment-category', signedPayment.paymentCategory?.id, 'view']">{{
+              signedPayment.paymentCategory?.categoryName
               }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="signedPayment.signedPaymentGroup">
-              <a [routerLink]="['/signed-payment', signedPayment.signedPaymentGroup?.id, 'view']">{{
-                signedPayment.signedPaymentGroup?.id
+          </div>
+        </td>
+        <td>
+          <div *ngIf="signedPayment.signedPaymentGroup">
+            <a [routerLink]="['/signed-payment', signedPayment.signedPaymentGroup?.id, 'view']">{{
+              signedPayment.signedPaymentGroup?.id
               }}</a>
-            </div>
-          </td>
-          <td class="text-right">
-            <div class="btn-group">
-              <button
-                type="submit"
-                [routerLink]="['/signed-payment', signedPayment.id, 'view']"
-                class="btn btn-info btn-sm"
-                data-cy="entityDetailsButton"
-              >
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline">View</span>
-              </button>
+          </div>
+        </td>
+        <td class="text-right">
+          <div class="btn-group">
+            <button
+              type="submit"
+              [routerLink]="['/signed-payment', signedPayment.id, 'view']"
+              class="btn btn-info btn-sm"
+              data-cy="entityDetailsButton"
+            >
+              <fa-icon icon="eye"></fa-icon>
+              <span class="d-none d-md-inline">View</span>
+            </button>
 
-              <button
-                type="submit"
-                [routerLink]="['/signed-payment', signedPayment.id, 'edit']"
-                class="btn btn-primary btn-sm"
-                data-cy="entityEditButton"
-              >
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline">Edit</span>
-              </button>
+            <button
+              type="submit"
+              [routerLink]="['/signed-payment', signedPayment.id, 'edit']"
+              class="btn btn-primary btn-sm"
+              data-cy="entityEditButton"
+            >
+              <fa-icon icon="pencil-alt"></fa-icon>
+              <span class="d-none d-md-inline">Edit</span>
+            </button>
 
-              <button type="submit" (click)="delete(signedPayment)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline">Delete</span>
-              </button>
-            </div>
-          </td>
-        </tr>
+            <button type="submit" (click)="delete(signedPayment)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+              <fa-icon icon="times"></fa-icon>
+              <span class="d-none d-md-inline">Delete</span>
+            </button>
+          </div>
+        </td>
+      </tr>
       </tbody>
     </table>
   </div>

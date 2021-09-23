@@ -2,7 +2,6 @@ package io.github.erp.service.mapper;
 
 import io.github.erp.domain.*;
 import io.github.erp.service.dto.DealerDTO;
-import java.util.Set;
 import org.mapstruct.*;
 
 /**
@@ -29,10 +28,4 @@ public interface DealerMapper extends EntityMapper<DealerDTO, Dealer> {
     @Mapping(target = "id", source = "id")
     @Mapping(target = "dealerName", source = "dealerName")
     DealerDTO toDtoDealerName(Dealer dealer);
-
-    @Named("dealerNameSet")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "dealerName", source = "dealerName")
-    Set<DealerDTO> toDtoDealerNameSet(Set<Dealer> dealer);
 }
