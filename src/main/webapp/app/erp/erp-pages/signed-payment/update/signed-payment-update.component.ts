@@ -15,7 +15,6 @@ import {IPaymentLabel} from '../../payment-label/payment-label.model';
 import {IPaymentCategory} from '../../payments/payment-category/payment-category.model';
 import {PaymentLabelService} from '../../payment-label/service/payment-label.service';
 import {PaymentCategoryService} from '../../payments/payment-category/service/payment-category.service';
-import {NGXLogger} from "ngx-logger";
 
 @Component({
   selector: 'jhi-signed-payment-update',
