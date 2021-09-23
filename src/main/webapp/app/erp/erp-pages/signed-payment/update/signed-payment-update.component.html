@@ -62,7 +62,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_transactionCurrency">Transaction Currency</label>
           <select
             class="form-control"
@@ -86,6 +86,38 @@
             <option value="JPY">JPY</option>
             <option value="CAD">CAD</option>
           </select>
+          <div
+            *ngIf="
+              editForm.get('transactionCurrency')!.invalid &&
+              (editForm.get('transactionCurrency')!.dirty || editForm.get('transactionCurrency')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('transactionCurrency')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>-->
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_signedPaymentGroup">Currency</label>
+          <span
+            name="transactionCurrency"
+            data-cy="transactionCurrency"
+            >
+            <ng-select
+              class="form-control"
+              formControlName="transactionCurrency"
+              [items]="items"
+              bindLabel="transactionCurrency"
+              bindValue="transactionCurrency"
+              [virtualScroll]="true"
+              appendTo="body"
+              [searchable]="true"
+              [multiple]="false"
+              (select)="updateCurrency($event)"
+            >
+            </ng-select>
+          </span>
           <div
             *ngIf="
               editForm.get('transactionCurrency')!.invalid &&
