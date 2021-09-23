@@ -42,6 +42,26 @@ export class SignedPaymentUpdateComponent implements OnInit {
     signedPaymentGroup: [],
   });
 
+  items = [
+    "KES",
+    "USD",
+    "GBP",
+    "EUR",
+    "INR",
+    "ZAR",
+    "AED",
+    "CNY",
+    "CHF",
+    "UGX",
+    "TZS",
+    "JPY",
+    "CAD",
+  ];
+  selected = [
+    {id: 2, name: 'Node Js'},
+    {id: 8, name: 'ReactJs'}
+  ];
+
   constructor(
     protected signedPaymentService: SignedPaymentService,
     protected paymentLabelService: PaymentLabelService,
@@ -114,6 +134,10 @@ export class SignedPaymentUpdateComponent implements OnInit {
       }
     }
     return option;
+  }
+
+  updateCurrency($event: Event): void {
+    this.editForm.setValue({transactionCurrency: $event})
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ISignedPayment>>): void {
