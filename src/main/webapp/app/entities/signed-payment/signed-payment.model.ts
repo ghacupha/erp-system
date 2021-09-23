@@ -12,7 +12,7 @@ export interface ISignedPayment {
   transactionCurrency?: CurrencyTypes;
   transactionAmount?: number;
   paymentLabels?: IPaymentLabel[] | null;
-  dealers?: IDealer[] | null;
+  dealer?: IDealer | null;
   paymentCategory?: IPaymentCategory | null;
   placeholders?: IPlaceholder[] | null;
   signedPaymentGroup?: ISignedPayment | null;
@@ -26,7 +26,7 @@ export class SignedPayment implements ISignedPayment {
     public transactionCurrency?: CurrencyTypes,
     public transactionAmount?: number,
     public paymentLabels?: IPaymentLabel[] | null,
-    public dealers?: IDealer[] | null,
+    public dealer?: IDealer | null,
     public paymentCategory?: IPaymentCategory | null,
     public placeholders?: IPlaceholder[] | null,
     public signedPaymentGroup?: ISignedPayment | null

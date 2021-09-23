@@ -35,10 +35,8 @@
     {
       "relationshipName": "dealer",
       "otherEntityName": "dealer",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "dealerName",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "signedPayment"
+      "relationshipType": "many-to-one",
+      "otherEntityField": "dealerName"
     },
     {
       "relationshipName": "paymentCategory",

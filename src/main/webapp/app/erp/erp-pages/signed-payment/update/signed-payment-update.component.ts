@@ -36,7 +36,7 @@ export class SignedPaymentUpdateComponent implements OnInit {
     transactionCurrency: [null, [Validators.required]],
     transactionAmount: [null, [Validators.required, Validators.min(0)]],
     paymentLabels: [],
-    dealers: [],
+    dealer: [],
     paymentCategory: [],
     placeholders: [],
     signedPaymentGroup: [],
@@ -105,17 +105,6 @@ export class SignedPaymentUpdateComponent implements OnInit {
     return option;
   }
 
-  getSelectedDealer(option: IDealer, selectedVals?: IDealer[]): IDealer {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
     if (selectedVals) {
       for (const selectedVal of selectedVals) {
@@ -154,7 +143,7 @@ export class SignedPaymentUpdateComponent implements OnInit {
       transactionCurrency: signedPayment.transactionCurrency,
       transactionAmount: signedPayment.transactionAmount,
       paymentLabels: signedPayment.paymentLabels,
-      dealers: signedPayment.dealers,
+      dealer: signedPayment.dealer,
       paymentCategory: signedPayment.paymentCategory,
       placeholders: signedPayment.placeholders,
       signedPaymentGroup: signedPayment.signedPaymentGroup,
@@ -164,10 +153,7 @@ export class SignedPaymentUpdateComponent implements OnInit {
       this.paymentLabelsSharedCollection,
       ...(signedPayment.paymentLabels ?? [])
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
-      this.dealersSharedCollection,
-      ...(signedPayment.dealers ?? [])
-    );
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, signedPayment.dealer);
     this.paymentCategoriesSharedCollection = this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
       this.paymentCategoriesSharedCollection,
       signedPayment.paymentCategory
@@ -196,11 +182,7 @@ export class SignedPaymentUpdateComponent implements OnInit {
     this.dealerService
       .query()
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
-      .pipe(
-        map((dealers: IDealer[]) =>
-          this.dealerService.addDealerToCollectionIfMissing(dealers, ...(this.editForm.get('dealers')!.value ?? []))
-        )
-      )
+      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('dealer')!.value)))
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
 
     this.paymentCategoryService
@@ -246,10 +228,11 @@ export class SignedPaymentUpdateComponent implements OnInit {
       transactionCurrency: this.editForm.get(['transactionCurrency'])!.value,
       transactionAmount: this.editForm.get(['transactionAmount'])!.value,
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
-      dealers: this.editForm.get(['dealers'])!.value,
+      dealer: this.editForm.get(['dealer'])!.value,
       paymentCategory: this.editForm.get(['paymentCategory'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       signedPaymentGroup: this.editForm.get(['signedPaymentGroup'])!.value,
     };
   }
 }
+

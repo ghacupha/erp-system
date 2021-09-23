@@ -51,7 +51,7 @@ describe('SignedPayment e2e test', () => {
       signedPaymentUpdatePage.transactionCurrencySelectLastOption(),
       signedPaymentUpdatePage.setTransactionAmountInput('5'),
       // signedPaymentUpdatePage.paymentLabelSelectLastOption(),
-      // signedPaymentUpdatePage.dealerSelectLastOption(),
+      signedPaymentUpdatePage.dealerSelectLastOption(),
       signedPaymentUpdatePage.paymentCategorySelectLastOption(),
       // signedPaymentUpdatePage.placeholderSelectLastOption(),
       signedPaymentUpdatePage.signedPaymentGroupSelectLastOption(),

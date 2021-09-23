@@ -76,7 +76,10 @@ public class Payment implements Serializable {
     private Set<Invoice> ownedInvoices = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "paymentRequisitions", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "paymentLabels", "dealerGroup", "paymentRequisitions", "signedPayments", "placeholders" },
+        allowSetters = true
+    )
     private Dealer dealer;
 
     @ManyToOne

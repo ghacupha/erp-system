@@ -20,15 +20,9 @@
                                  referencedColumnNames="id"
                                  referencedTableName="payment_label"/>
 
-        <addForeignKeyConstraint baseColumnNames="signed_payment_id"
-                                 baseTableName="rel_signed_payment__dealer"
-                                 constraintName="fk_rel_signed_payment__dealer__signed_payment_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="signed_payment"/>
-
         <addForeignKeyConstraint baseColumnNames="dealer_id"
-                                 baseTableName="rel_signed_payment__dealer"
-                                 constraintName="fk_rel_signed_payment__dealer__dealer_id"
+                                 baseTableName="signed_payment"
+                                 constraintName="fk_signed_payment__dealer_id"
                                  referencedColumnNames="id"
                                  referencedTableName="dealer"/>
 

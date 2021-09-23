@@ -717,7 +717,7 @@ class SignedPaymentResourceIT {
         }
         em.persist(dealer);
         em.flush();
-        signedPayment.addDealer(dealer);
+        signedPayment.setDealer(dealer);
         signedPaymentRepository.saveAndFlush(signedPayment);
         Long dealerId = dealer.getId();
 

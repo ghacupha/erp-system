@@ -125,7 +125,7 @@ public class SignedPaymentQueryService extends QueryService<SignedPayment> {
             if (criteria.getDealerId() != null) {
                 specification =
                     specification.and(
-                        buildSpecification(criteria.getDealerId(), root -> root.join(SignedPayment_.dealers, JoinType.LEFT).get(Dealer_.id))
+                        buildSpecification(criteria.getDealerId(), root -> root.join(SignedPayment_.dealer, JoinType.LEFT).get(Dealer_.id))
                     );
             }
             if (criteria.getPaymentCategoryId() != null) {

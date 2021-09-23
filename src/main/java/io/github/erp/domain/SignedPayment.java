@@ -57,15 +57,12 @@ public class SignedPayment implements Serializable {
     @JsonIgnoreProperties(value = { "containingPaymentLabel", "placeholders" }, allowSetters = true)
     private Set<PaymentLabel> paymentLabels = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-        name = "rel_signed_payment__dealer",
-        joinColumns = @JoinColumn(name = "signed_payment_id"),
-        inverseJoinColumns = @JoinColumn(name = "dealer_id")
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = { "paymentLabels", "dealerGroup", "paymentRequisitions", "signedPayments", "placeholders" },
+        allowSetters = true
     )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "paymentRequisitions", "placeholders" }, allowSetters = true)
-    private Set<Dealer> dealers = new HashSet<>();
+    private Dealer dealer;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "paymentLabels", "paymentCalculations", "placeholders" }, allowSetters = true)
@@ -83,7 +80,7 @@ public class SignedPayment implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties(
-        value = { "paymentLabels", "dealers", "paymentCategory", "placeholders", "signedPaymentGroup" },
+        value = { "paymentLabels", "dealer", "paymentCategory", "placeholders", "signedPaymentGroup" },
         allowSetters = true
     )
     private SignedPayment signedPaymentGroup;
@@ -178,26 +175,16 @@ public class SignedPayment implements Serializable {
         return this;
     }
 
-    public Set<Dealer> getDealers() {
-        return this.dealers;
+    public Dealer getDealer() {
+        return this.dealer;
     }
 
-    public void setDealers(Set<Dealer> dealers) {
-        this.dealers = dealers;
+    public void setDealer(Dealer dealer) {
+        this.dealer = dealer;
     }
 
-    public SignedPayment dealers(Set<Dealer> dealers) {
-        this.setDealers(dealers);
-        return this;
-    }
-
-    public SignedPayment addDealer(Dealer dealer) {
-        this.dealers.add(dealer);
-        return this;
-    }
-
-    public SignedPayment removeDealer(Dealer dealer) {
-        this.dealers.remove(dealer);
+    public SignedPayment dealer(Dealer dealer) {
+        this.setDealer(dealer);
         return this;
     }
 
