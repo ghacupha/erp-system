@@ -35,9 +35,6 @@ import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
     HomeModule,
     ErpSystemModule,
     NgSelectModule,
-    LoggerModule.forRoot({
-      level: NgxLoggerLevel.DEBUG,
-    }),
     // jhipster-needle-angular-add-module JHipster will add new module here
     EntityRoutingModule,
     AppRoutingModule,
