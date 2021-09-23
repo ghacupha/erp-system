@@ -15,6 +15,7 @@ import {IPaymentLabel} from '../../payment-label/payment-label.model';
 import {IPaymentCategory} from '../../payments/payment-category/payment-category.model';
 import {PaymentLabelService} from '../../payment-label/service/payment-label.service';
 import {PaymentCategoryService} from '../../payments/payment-category/service/payment-category.service';
+import {NGXLogger} from "ngx-logger";
 
 @Component({
   selector: 'jhi-signed-payment-update',
@@ -42,7 +43,7 @@ export class SignedPaymentUpdateComponent implements OnInit {
     signedPaymentGroup: [],
   });
 
-  items = [
+  currencies = [
     "KES",
     "USD",
     "GBP",
@@ -57,10 +58,6 @@ export class SignedPaymentUpdateComponent implements OnInit {
     "JPY",
     "CAD",
   ];
-  selected = [
-    {id: 2, name: 'Node Js'},
-    {id: 8, name: 'ReactJs'}
-  ];
 
   constructor(
     protected signedPaymentService: SignedPaymentService,
@@ -69,7 +66,8 @@ export class SignedPaymentUpdateComponent implements OnInit {
     protected paymentCategoryService: PaymentCategoryService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected log: NGXLogger
   ) {}
 
   ngOnInit(): void {

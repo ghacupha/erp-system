@@ -1,31 +1,32 @@
-import { NgModule, LOCALE_ID } from '@angular/core';
-import { registerLocaleData } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import {LOCALE_ID, NgModule} from '@angular/core';
+import {registerLocaleData} from '@angular/common';
+import {HttpClientModule} from '@angular/common/http';
 import locale from '@angular/common/locales/en';
-import { BrowserModule, Title } from '@angular/platform-browser';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { NgxWebstorageModule } from 'ngx-webstorage';
+import {BrowserModule, Title} from '@angular/platform-browser';
+import {ServiceWorkerModule} from '@angular/service-worker';
+import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
+import {NgxWebstorageModule} from 'ngx-webstorage';
 import * as dayjs from 'dayjs';
-import { NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
+import {NgbDateAdapter, NgbDatepickerConfig} from '@ng-bootstrap/ng-bootstrap';
 
-import { ApplicationConfigService } from 'app/core/config/application-config.service';
+import {ApplicationConfigService} from 'app/core/config/application-config.service';
 import './config/dayjs';
-import { SharedModule } from 'app/shared/shared.module';
-import { AppRoutingModule } from './app-routing.module';
-import { HomeModule } from './home/home.module';
-import { EntityRoutingModule } from './entities/entity-routing.module';
+import {SharedModule} from 'app/shared/shared.module';
+import {AppRoutingModule} from './app-routing.module';
+import {HomeModule} from './home/home.module';
+import {EntityRoutingModule} from './entities/entity-routing.module';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
-import { NgbDateDayjsAdapter } from './config/datepicker-adapter';
-import { fontAwesomeIcons } from './config/font-awesome-icons';
-import { httpInterceptorProviders } from 'app/core/interceptor/index';
-import { MainComponent } from './layouts/main/main.component';
-import { NavbarComponent } from './layouts/navbar/navbar.component';
-import { FooterComponent } from './layouts/footer/footer.component';
-import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
-import { ErrorComponent } from './layouts/error/error.component';
+import {NgbDateDayjsAdapter} from './config/datepicker-adapter';
+import {fontAwesomeIcons} from './config/font-awesome-icons';
+import {httpInterceptorProviders} from 'app/core/interceptor/index';
+import {MainComponent} from './layouts/main/main.component';
+import {NavbarComponent} from './layouts/navbar/navbar.component';
+import {FooterComponent} from './layouts/footer/footer.component';
+import {PageRibbonComponent} from './layouts/profiles/page-ribbon.component';
+import {ErrorComponent} from './layouts/error/error.component';
 import {ErpSystemModule} from "./erp/erp-system.module";
 import {NgSelectModule} from "@ng-select/ng-select";
+import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
 
 @NgModule({
   imports: [
@@ -34,6 +35,9 @@ import {NgSelectModule} from "@ng-select/ng-select";
     HomeModule,
     ErpSystemModule,
     NgSelectModule,
+    LoggerModule.forRoot({
+      level: NgxLoggerLevel.DEBUG,
+    }),
     // jhipster-needle-angular-add-module JHipster will add new module here
     EntityRoutingModule,
     AppRoutingModule,
