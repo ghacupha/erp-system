@@ -67,7 +67,6 @@ export class SignedPaymentUpdateComponent implements OnInit {
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
-    protected log: NGXLogger
   ) {}
 
   ngOnInit(): void {
