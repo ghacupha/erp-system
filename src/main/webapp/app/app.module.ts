@@ -26,7 +26,6 @@ import {PageRibbonComponent} from './layouts/profiles/page-ribbon.component';
 import {ErrorComponent} from './layouts/error/error.component';
 import {ErpSystemModule} from "./erp/erp-system.module";
 import {NgSelectModule} from "@ng-select/ng-select";
-import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
 
 @NgModule({
   imports: [
