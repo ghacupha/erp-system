@@ -26,6 +26,8 @@ import {PageRibbonComponent} from './layouts/profiles/page-ribbon.component';
 import {ErrorComponent} from './layouts/error/error.component';
 import {ErpSystemModule} from "./erp/erp-system.module";
 import {NgSelectModule} from "@ng-select/ng-select";
+import {StoreModule} from "@ngrx/store";
+import {StoreDevtoolsModule} from "@ngrx/store-devtools";
 
 @NgModule({
   imports: [
@@ -34,6 +36,18 @@ import {NgSelectModule} from "@ng-select/ng-select";
     HomeModule,
     ErpSystemModule,
     NgSelectModule,
+    StoreModule.forRoot({}, {runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true,
+        strictStateSerializability: false,
+        strictActionSerializability: false,
+        strictActionWithinNgZone: true,
+        strictActionTypeUniqueness: true,
+      }}),
+    StoreDevtoolsModule.instrument({
+      name: 'ERP App States',
+      maxAge: 25, // Retains last 25 states
+    }),
     // jhipster-needle-angular-add-module JHipster will add new module here
     EntityRoutingModule,
     AppRoutingModule,
