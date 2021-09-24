@@ -19,6 +19,18 @@ import {PaymentLabelService} from '../../../payment-label/service/payment-label.
 import {PaymentCategoryService} from '../../payment-category/service/payment-category.service';
 import {TaxRuleService} from '../../tax-rule/service/tax-rule.service';
 import {PaymentCalculationService} from '../../payment-calculation/service/payment-calculation.service';
+import {select, Store} from "@ngrx/store";
+import {State} from "../../../../store/global-store.definition";
+import {
+  copyingPaymentStatus,
+  creatingPaymentStatus,
+  editingPaymentStatus, updateSelectedPayment
+} from "../../../../store/update-menu-status.selectors";
+import {
+  paymentCopyButtonClicked, paymentSaveButtonClicked,
+  paymentUpdateButtonClicked,
+  paymentUpdateCancelButtonClicked, paymentUpdateErrorHasOccurred
+} from "../../../../store/update-menu-status.actions";
 
 @Component({
   selector: 'jhi-payment-update',
@@ -34,6 +46,11 @@ export class PaymentUpdateComponent implements OnInit {
   paymentCalculationsCollection: IPaymentCalculation[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
   paymentsSharedCollection: IPayment[] = [];
+
+  selectedPayment: IPayment = {...new Payment()};
+  weAreCopyingAPayment = false;
+  weAreEditingAPayment = false;
+  weAreCreatingAPayment = false;
 
   editForm = this.fb.group({
     id: [],
@@ -64,8 +81,15 @@ export class PaymentUpdateComponent implements OnInit {
     protected paymentCalculationService: PaymentCalculationService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
-  ) {}
+    protected fb: FormBuilder,
+    protected store: Store<State>
+  ) {
+
+    this.store.pipe(select(copyingPaymentStatus)).subscribe(stat => this.weAreCopyingAPayment = stat);
+    this.store.pipe(select(editingPaymentStatus)).subscribe(stat => this.weAreEditingAPayment = stat);
+    this.store.pipe(select(creatingPaymentStatus)).subscribe(stat => this.weAreCreatingAPayment = stat);
+    this.store.pipe(select(updateSelectedPayment)).subscribe(pyt => this.selectedPayment = pyt);
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ payment }) => {
@@ -76,7 +100,19 @@ export class PaymentUpdateComponent implements OnInit {
   }
 
   previousState(): void {
+    this.store.dispatch(paymentUpdateCancelButtonClicked());
     window.history.back();
+  }
+
+  edit(): void {
+    this.save();
+    this.store.dispatch(paymentUpdateButtonClicked())
+  }
+
+  copy(): void {
+    this.isSaving = true;
+    const payment = this.copyFromForm();
+    this.subscribeToCopyResponse(this.paymentService.create(payment));
   }
 
   save(): void {
@@ -139,26 +175,7 @@ export class PaymentUpdateComponent implements OnInit {
     return option;
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IPayment>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
-  }
-
-  protected onSaveSuccess(): void {
-    this.previousState();
-  }
-
-  protected onSaveError(): void {
-    // Api for inheritance.
-  }
-
-  protected onSaveFinalize(): void {
-    this.isSaving = false;
-  }
-
-  protected updateForm(payment: IPayment): void {
+  updateForm(payment: IPayment): void {
     this.editForm.patchValue({
       id: payment.id,
       paymentNumber: payment.paymentNumber,
@@ -201,6 +218,42 @@ export class PaymentUpdateComponent implements OnInit {
       this.paymentsSharedCollection,
       payment.paymentGroup
     );
+  }
+
+  onSaveError(): void {
+    // Api for inheritance.
+    this.store.dispatch(paymentUpdateErrorHasOccurred());
+    this.isSaving = false;
+  }
+
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IPayment>>): void {
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
+  }
+
+  protected subscribeToCopyResponse(result: Observable<HttpResponse<IPayment>>): void {
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
+  }
+
+  protected onCopySuccess(): void {
+    this.isSaving = false;
+    this.store.dispatch(paymentCopyButtonClicked())
+    this.previousState();
+  }
+
+  protected onSaveSuccess(): void {
+    this.isSaving = false;
+    this.store.dispatch(paymentSaveButtonClicked())
+    this.previousState();
+  }
+
+  protected onSaveFinalize(): void {
+    this.isSaving = false;
   }
 
   protected loadRelationshipsOptions(): void {
@@ -276,6 +329,29 @@ export class PaymentUpdateComponent implements OnInit {
   }
 
   protected createFromForm(): IPayment {
+    return {
+      ...new Payment(),
+      id: this.editForm.get(['id'])!.value,
+      paymentNumber: this.editForm.get(['paymentNumber'])!.value,
+      paymentDate: this.editForm.get(['paymentDate'])!.value,
+      invoicedAmount: this.editForm.get(['invoicedAmount'])!.value,
+      disbursementCost: this.editForm.get(['disbursementCost'])!.value,
+      vatableAmount: this.editForm.get(['vatableAmount'])!.value,
+      paymentAmount: this.editForm.get(['paymentAmount'])!.value,
+      description: this.editForm.get(['description'])!.value,
+      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
+      conversionRate: this.editForm.get(['conversionRate'])!.value,
+      paymentLabels: this.editForm.get(['paymentLabels'])!.value,
+      dealer: this.editForm.get(['dealer'])!.value,
+      paymentCategory: this.editForm.get(['paymentCategory'])!.value,
+      taxRule: this.editForm.get(['taxRule'])!.value,
+      paymentCalculation: this.editForm.get(['paymentCalculation'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value,
+      paymentGroup: this.editForm.get(['paymentGroup'])!.value,
+    };
+  }
+
+  protected copyFromForm(): IPayment {
     return {
       ...new Payment(),
       id: this.editForm.get(['id'])!.value,
