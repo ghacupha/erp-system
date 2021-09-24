@@ -6,10 +6,10 @@ import { PaymentComponent } from '../list/payment.component';
 import { PaymentDetailComponent } from '../detail/payment-detail.component';
 import { PaymentUpdateComponent } from '../update/payment-update.component';
 import { PaymentRoutingResolveService } from './payment-routing-resolve.service';
-import {NewPaymentResolve} from "./new-payment-resolve.service";
-import {EditPaymentResolve} from "./edit-payment-resolve.service";
-import {CopyPaymentResolve} from "./copy-payment-resolve.service";
 import {Authority} from "../../../../../config/authority.constants";
+import {NewPaymentResolveService} from "./new-payment-resolve.service";
+import {EditPaymentResolveService} from "./edit-payment-resolve.service";
+import {CopyPaymentResolveService} from "./copy-payment-resolve.service";
 
 const paymentRoute: Routes = [
   {
@@ -33,7 +33,7 @@ const paymentRoute: Routes = [
     component: PaymentUpdateComponent,
     resolve: {
       // payment: PaymentRoutingResolveService,
-      payment: NewPaymentResolve,
+      payment: NewPaymentResolveService,
     },
     data: {
       authorities: [Authority.USER],
@@ -46,7 +46,7 @@ const paymentRoute: Routes = [
     component: PaymentUpdateComponent,
     resolve: {
       // payment: PaymentRoutingResolveService,
-      payment: EditPaymentResolve,
+      payment: EditPaymentResolveService,
     },
     data: {
       authorities: [Authority.USER],
@@ -59,7 +59,7 @@ const paymentRoute: Routes = [
     component: PaymentUpdateComponent,
     resolve: {
       // payment: PaymentRoutingResolveService,
-      payment: CopyPaymentResolve,
+      payment: CopyPaymentResolveService,
     },
     data: {
       authorities: [Authority.USER],

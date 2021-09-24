@@ -35,8 +35,9 @@ import java.util.List;
 /**
  * A service to index all payments during the application startup
  */
-@Transactional
-@Service
+// TODO Fix lazy init
+//@Service
+//@Transactional
 public class StartupPaymentsIndexingService extends AbtractStartUpIndexService implements ApplicationIndexingService, ApplicationListener<ApplicationReadyEvent> {
 
     private final PaymentSearchRepository paymentSearchRepository;

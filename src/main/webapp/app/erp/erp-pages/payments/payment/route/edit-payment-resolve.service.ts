@@ -14,7 +14,7 @@ import {HttpResponse} from "@angular/common/http";
  * Provides the edit form containing the entity to be edited pre-filled
  */
 @Injectable({ providedIn: 'root' })
-export class EditPaymentResolve implements Resolve<IPayment> {
+export class EditPaymentResolveService implements Resolve<IPayment> {
   constructor(
     private service: PaymentService,
     private router: Router,

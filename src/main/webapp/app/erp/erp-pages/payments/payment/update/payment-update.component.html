@@ -1,7 +1,13 @@
 <div class="row justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-payment-heading" data-cy="PaymentCreateUpdateHeading">Create or edit a Payment</h2>
+      <!--<h2 id="jhi-payment-heading" data-cy="PaymentCreateUpdateHeading">Create or edit a Payment</h2>-->
+
+      <h2 id="jhi-payment-heading" [hidden]="!weAreCreatingAPayment">New Payment</h2>
+
+      <h2 id="jhi-payment-heading-editing" [hidden]="!weAreEditingAPayment">Editing Payment: {{ selectedPayment.id }}</h2>
+
+      <h2 id="jhi-payment-heading-copying" [hidden]="!weAreCopyingAPayment">Copying Payment: {{ selectedPayment.id }}</h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>
@@ -290,7 +296,7 @@
       </div>
 
       <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+        <!--<button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
           <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
         </button>
 
@@ -302,7 +308,26 @@
           class="btn btn-primary"
         >
           <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
-        </button>
+        </button>-->
+
+        <div>
+          <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+            <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+          </button>
+
+          <button type="submit" id="copy-entity" [hidden]="!weAreCopyingAPayment" [disabled]="editForm.invalid || isSaving" class="btn btn-primary" (click)="copy()">
+            <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy</span>
+          </button>
+
+          <button type="submit" id="update-entity" [hidden]="!weAreEditingAPayment" [disabled]="editForm.invalid || isSaving" class="btn btn-primary" (click)="edit()">
+            <fa-icon icon="hdd"></fa-icon>&nbsp;<span>Update</span>
+          </button>
+
+          <button type="submit" id="save-entity" [hidden]="!weAreCreatingAPayment" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+            <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+          </button>
+        </div>
+
       </div>
     </form>
   </div>

@@ -118,7 +118,7 @@
                 data-cy="entityDetailsButton"
               >
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline">View</span>
+                <!--<span class="d-none d-md-inline">View</span>-->
               </button>
 
               <button
@@ -128,12 +128,20 @@
                 data-cy="entityEditButton"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline">Edit</span>
+                <!--<span class="d-none d-md-inline">Edit</span>-->
               </button>
+
+              <button type="submit"
+                      [routerLink]="['/payment', payment.id, 'copy']"
+                      class="btn btn-success btn-sm">
+                <fa-icon icon="copy"></fa-icon>
+                <!--<span class="d-none d-md-inline">Copy</span>-->
+              </button>
+
 
               <button type="submit" (click)="delete(payment)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline">Delete</span>
+                <!--<span class="d-none d-md-inline">Delete</span>-->
               </button>
             </div>
           </td>

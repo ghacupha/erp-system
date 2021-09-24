@@ -95,6 +95,20 @@
     "no-new-wrappers": "error",
     "object-shorthand": ["error", "always", { "avoidExplicitReturnArrows": true }],
     "radix": "error",
-    "spaced-comment": ["warn", "always"]
+    "spaced-comment": [
+      "error",
+      "always",
+      {
+        "line": {
+          "markers": ["/"],
+          "exceptions": ["-", "+", "/"]
+        },
+        "block": {
+          "markers": ["!"],
+          "exceptions": ["*", "/"],
+          "balanced": true
+        }
+      }
+    ]
   }
 }

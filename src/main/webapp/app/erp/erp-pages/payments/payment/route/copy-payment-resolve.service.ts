@@ -14,7 +14,7 @@ import {paymentCopyInitiated} from "../../../../store/update-menu-status.actions
  * Provides the update form containing the entity to be copied
  */
 @Injectable({ providedIn: 'root' })
-export class CopyPaymentResolve implements Resolve<IPayment> {
+export class CopyPaymentResolveService implements Resolve<IPayment> {
   constructor(
     private service: PaymentService,
     private router: Router,
