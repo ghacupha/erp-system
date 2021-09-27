@@ -73,6 +73,10 @@
                 <fa-icon icon="eye"></fa-icon>
               </button>
 
+              <button type="submit" [routerLink]="['/dealer', dealer.id, 'edit']" class="btn btn-secondary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="money-bill-wave-alt"></fa-icon>
+              </button>
+
               <button type="submit" [routerLink]="['/dealer', dealer.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
                 <fa-icon icon="pencil-alt"></fa-icon>
               </button>
