@@ -146,7 +146,7 @@ export class DealerComponent implements OnInit {
     this.page = page;
     this.ngbPaginationPage = this.page;
     if (navigate) {
-      this.router.navigate(['/dealer'], {
+      this.router.navigate(['payment/dealer'], {
         queryParams: {
           page: this.page,
           size: this.itemsPerPage,
