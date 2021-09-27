@@ -52,18 +52,6 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="dealerName"><span>Dealer Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="taxNumber"><span>Tax Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="postalAddress"><span>Postal Address</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="physicalAddress">
-            <span>Physical Address</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="accountName"><span>Account Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="accountNumber"><span>Account Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="bankersName"><span>Bankers Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="bankersBranch"><span>Bankers Branch</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="bankersSwiftCode">
-            <span>Bankers Swift Code</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
-          </th>
           <th scope="col" jhiSortBy="dealerGroup.dealerName"><span>Dealer Group</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -74,14 +62,6 @@
             <a [routerLink]="['/dealer', dealer.id, 'view']">{{ dealer.id }}</a>
           </td>
           <td>{{ dealer.dealerName }}</td>
-          <td>{{ dealer.taxNumber }}</td>
-          <td>{{ dealer.postalAddress }}</td>
-          <td>{{ dealer.physicalAddress }}</td>
-          <td>{{ dealer.accountName }}</td>
-          <td>{{ dealer.accountNumber }}</td>
-          <td>{{ dealer.bankersName }}</td>
-          <td>{{ dealer.bankersBranch }}</td>
-          <td>{{ dealer.bankersSwiftCode }}</td>
           <td>
             <div *ngIf="dealer.dealerGroup">
               <a [routerLink]="['/dealer', dealer.dealerGroup?.id, 'view']">{{ dealer.dealerGroup?.dealerName }}</a>
@@ -91,17 +71,14 @@
             <div class="btn-group">
               <button type="submit" [routerLink]="['/dealer', dealer.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline">View</span>
               </button>
 
               <button type="submit" [routerLink]="['/dealer', dealer.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline">Edit</span>
               </button>
 
               <button type="submit" (click)="delete(dealer)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline">Delete</span>
+                <fa-icon icon="trash"></fa-icon>
               </button>
             </div>
           </td>
