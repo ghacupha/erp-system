@@ -1,5 +1,5 @@
 
-import {paymentEditInitiated} from "../../../../store/update-menu-status.actions";
+import {paymentEditInitiated} from "../../../../store/actions/update-menu-status.actions";
 import {Injectable} from "@angular/core";
 import {ActivatedRouteSnapshot, Resolve, Router} from "@angular/router";
 import {IPayment, Payment} from "../payment.model";

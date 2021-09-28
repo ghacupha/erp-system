@@ -25,13 +25,13 @@ import {
   copyingPaymentStatus,
   creatingPaymentStatus,
   editingPaymentStatus, updateSelectedPayment
-} from "../../../../store/update-menu-status.selectors";
+} from "../../../../store/selectors/update-menu-status.selectors";
 import {
   paymentCopyButtonClicked, paymentSaveButtonClicked,
   paymentUpdateButtonClicked,
   paymentUpdateCancelButtonClicked, paymentUpdateErrorHasOccurred
-} from "../../../../store/update-menu-status.actions";
-import {dealerPaymentSelectedDealer, dealerPaymentStatus} from "../../../../store/dealer-workflows-status.selectors";
+} from "../../../../store/actions/update-menu-status.actions";
+import {dealerPaymentSelectedDealer, dealerPaymentStatus} from "../../../../store/selectors/dealer-workflows-status.selectors";
 import {Dealer} from "../../../dealers/dealer/dealer.model";
 
 @Component({

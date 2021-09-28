@@ -9,7 +9,7 @@ import { IDealer } from '../dealer.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { DealerService } from '../service/dealer.service';
 import { DealerDeleteDialogComponent } from '../delete/dealer-delete-dialog.component';
-import {payDealerButtonClicked, paymentToDealerInitiated} from "../../../../store/dealer-workflows-status.actions";
+import {payDealerButtonClicked} from "../../../../store/actions/dealer-workflows-status.actions";
 import {Store} from "@ngrx/store";
 import {State} from "../../../../store/global-store.definition";
 
