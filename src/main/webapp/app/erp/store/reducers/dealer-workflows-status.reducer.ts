@@ -5,7 +5,7 @@ import {
   payDealerButtonClicked,
   paymentToDealerCompleted,
   paymentToDealerInitiated
-} from '../dealer-workflows-status.actions';
+} from '../actions/dealer-workflows-status.actions';
 import {IPayment} from "../../erp-pages/payments/payment/payment.model";
 
 export const paymentToDealerWorkflowStateSelector = 'paymentToDealerWorkflows'

@@ -4,7 +4,7 @@ import {IPayment, Payment} from "../payment.model";
 import {Store} from "@ngrx/store";
 import {State} from "../../../../store/global-store.definition";
 import {Observable, of} from "rxjs";
-import {newPaymentButtonClicked} from "../../../../store/update-menu-status.actions";
+import {newPaymentButtonClicked} from "../../../../store/actions/update-menu-status.actions";
 import {
   DEEFAULT_CONVERSION_RATE,
   DEFAULT_CURRENCY,

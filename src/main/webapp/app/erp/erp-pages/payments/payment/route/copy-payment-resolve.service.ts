@@ -8,7 +8,7 @@ import {State} from "../../../../store/global-store.definition";
 import {EMPTY, Observable, of} from "rxjs";
 import {flatMap} from "rxjs/operators";
 import {HttpResponse} from "@angular/common/http";
-import {paymentCopyInitiated} from "../../../../store/update-menu-status.actions";
+import {paymentCopyInitiated} from "../../../../store/actions/update-menu-status.actions";
 
 /**
  * Provides the update form containing the entity to be copied

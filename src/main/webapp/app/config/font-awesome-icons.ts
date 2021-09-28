@@ -36,7 +36,7 @@ import {
   faUserPlus,
   faUsers,
   faUsersCog,
-  faWrench, faCashRegister, faBoxOpen, faCar, faCopy, faTrash, faMoneyCheckAlt, faMoneyBillWaveAlt, faHdd,
+  faWrench, faCashRegister, faBoxOpen, faCar, faCopy, faTrash, faMoneyBillWaveAlt, faHdd,
   // jhipster-needle-add-icon-import
 } from '@fortawesome/free-solid-svg-icons';
 
