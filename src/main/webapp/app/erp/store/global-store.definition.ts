@@ -16,10 +16,12 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import {PaymentsFormState} from "./update-menu-status.reducer";
+import {PaymentsFormState} from "./reducers/update-menu-status.reducer";
+import {DealerWorkflowState} from "./reducers/dealer-workflows-status.reducer";
 
 export interface State {
-  paymentsFormState: PaymentsFormState
+  paymentsFormState: PaymentsFormState,
+  dealerWorkflowState: DealerWorkflowState
 }
 
 export const initialState: State = {
@@ -28,5 +30,10 @@ export const initialState: State = {
     weAreCopying: false,
     weAreEditing: false,
     weAreCreating: false,
+  },
+  dealerWorkflowState: {
+    selectedDealer: {},
+    dealerPayment: {},
+    weArePayingADealer: false
   }
 }

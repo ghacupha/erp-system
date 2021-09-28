@@ -9,6 +9,9 @@ import { IDealer } from '../dealer.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { DealerService } from '../service/dealer.service';
 import { DealerDeleteDialogComponent } from '../delete/dealer-delete-dialog.component';
+import {payDealerButtonClicked, paymentToDealerInitiated} from "../../../../store/dealer-workflows-status.actions";
+import {Store} from "@ngrx/store";
+import {State} from "../../../../store/global-store.definition";
 
 @Component({
   selector: 'jhi-dealer',
@@ -29,7 +32,8 @@ export class DealerComponent implements OnInit {
     protected dealerService: DealerService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -118,6 +122,13 @@ export class DealerComponent implements OnInit {
     });
   }
 
+  payDealer(dealer: IDealer): void {
+
+    this.store.dispatch(payDealerButtonClicked({selectedDealer: dealer}))
+
+    this.router.navigate(['/payment/dealer']);
+  }
+
   protected sort(): string[] {
     const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
     if (this.predicate !== 'id') {
@@ -146,7 +157,7 @@ export class DealerComponent implements OnInit {
     this.page = page;
     this.ngbPaginationPage = this.page;
     if (navigate) {
-      this.router.navigate(['payment/dealer'], {
+      this.router.navigate(['list/payment/dealer'], {
         queryParams: {
           page: this.page,
           size: this.itemsPerPage,

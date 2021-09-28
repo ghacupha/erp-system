@@ -10,6 +10,7 @@ import {Authority} from "../../../../../config/authority.constants";
 import {NewPaymentResolveService} from "./new-payment-resolve.service";
 import {EditPaymentResolveService} from "./edit-payment-resolve.service";
 import {CopyPaymentResolveService} from "./copy-payment-resolve.service";
+import {DealerPaymentResolveService} from "./dealer-payment-resolve.service";
 
 const paymentRoute: Routes = [
   {
@@ -38,6 +39,18 @@ const paymentRoute: Routes = [
     data: {
       authorities: [Authority.USER],
       pageTitle: 'ERP| New Payment',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'dealer',
+    component: PaymentUpdateComponent,
+    resolve: {
+      payment: DealerPaymentResolveService,
+    },
+    data: {
+      authorities: [Authority.USER],
+      pageTitle: 'ERP| Pay Dealer',
     },
     canActivate: [UserRouteAccessService],
   },
