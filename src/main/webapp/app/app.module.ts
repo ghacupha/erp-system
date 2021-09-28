@@ -28,6 +28,8 @@ import {ErpSystemModule} from "./erp/erp-system.module";
 import {NgSelectModule} from "@ng-select/ng-select";
 import {StoreModule} from "@ngrx/store";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
+import * as fromDealerWorkflows from './erp/store/reducers/dealer-workflows-status.reducer';
+import * as fromPaymentUpdates from './erp/store/reducers/update-menu-status.reducer';
 
 @NgModule({
   imports: [
@@ -36,6 +38,8 @@ import {StoreDevtoolsModule} from "@ngrx/store-devtools";
     HomeModule,
     ErpSystemModule,
     NgSelectModule,
+    StoreModule.forFeature('paymentToDealerWorkflows', fromDealerWorkflows.dealerWorkflowStateReducer),
+    StoreModule.forFeature('paymentUpdateForm', fromPaymentUpdates.paymentUpdateStateReducer),
     StoreModule.forRoot({}, {runtimeChecks: {
         strictStateImmutability: true,
         strictActionImmutability: true,

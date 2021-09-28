@@ -9,6 +9,8 @@
 
       <h2 id="jhi-payment-heading-copying" [hidden]="!weAreCopyingAPayment">Copying Payment: {{ selectedPayment.id }}</h2>
 
+      <h2 id="jhi-dealer-payment-heading" [hidden]="!weArePayingADealer">Paying Dealer Id: {{ selectedDealer.id }}</h2>
+
       <div>
         <jhi-alert-error></jhi-alert-error>
 
@@ -324,6 +326,10 @@
           </button>
 
           <button type="submit" id="save-entity" [hidden]="!weAreCreatingAPayment" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+            <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+          </button>
+
+          <button type="submit" id="pay-dealer" [hidden]="!weArePayingADealer" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
             <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
           </button>
         </div>

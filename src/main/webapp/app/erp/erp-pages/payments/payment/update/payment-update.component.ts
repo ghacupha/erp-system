@@ -31,6 +31,8 @@ import {
   paymentUpdateButtonClicked,
   paymentUpdateCancelButtonClicked, paymentUpdateErrorHasOccurred
 } from "../../../../store/update-menu-status.actions";
+import {dealerPaymentSelectedDealer, dealerPaymentStatus} from "../../../../store/dealer-workflows-status.selectors";
+import {Dealer} from "../../../dealers/dealer/dealer.model";
 
 @Component({
   selector: 'jhi-payment-update',
@@ -51,6 +53,8 @@ export class PaymentUpdateComponent implements OnInit {
   weAreCopyingAPayment = false;
   weAreEditingAPayment = false;
   weAreCreatingAPayment = false;
+  weArePayingADealer = false;
+  selectedDealer: IDealer= {...new Dealer()}
 
   editForm = this.fb.group({
     id: [],
@@ -89,12 +93,13 @@ export class PaymentUpdateComponent implements OnInit {
     this.store.pipe(select(editingPaymentStatus)).subscribe(stat => this.weAreEditingAPayment = stat);
     this.store.pipe(select(creatingPaymentStatus)).subscribe(stat => this.weAreCreatingAPayment = stat);
     this.store.pipe(select(updateSelectedPayment)).subscribe(pyt => this.selectedPayment = pyt);
+    this.store.pipe(select(dealerPaymentStatus)).subscribe(payingDealer => this.weArePayingADealer = payingDealer);
+    this.store.pipe(select(dealerPaymentSelectedDealer)).subscribe(dealer => this.selectedDealer = dealer);
   }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ payment }) => {
-      this.updateForm(payment);
-
+      this.updateForm(payment, this.selectedDealer);
       this.loadRelationshipsOptions();
     });
   }
@@ -175,7 +180,7 @@ export class PaymentUpdateComponent implements OnInit {
     return option;
   }
 
-  updateForm(payment: IPayment): void {
+  updateForm(payment: IPayment, dealer: IDealer): void {
     this.editForm.patchValue({
       id: payment.id,
       paymentNumber: payment.paymentNumber,
@@ -188,7 +193,7 @@ export class PaymentUpdateComponent implements OnInit {
       settlementCurrency: payment.settlementCurrency,
       conversionRate: payment.conversionRate,
       paymentLabels: payment.paymentLabels,
-      dealer: payment.dealer,
+      dealer,
       paymentCategory: payment.paymentCategory,
       taxRule: payment.taxRule,
       paymentCalculation: payment.paymentCalculation,

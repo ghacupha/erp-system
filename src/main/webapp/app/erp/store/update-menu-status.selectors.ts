@@ -17,7 +17,7 @@
 ///
 
 import {createFeatureSelector, createSelector} from "@ngrx/store";
-import {paymentUpdateFormStateSelector} from "./update-menu-status.reducer";
+import {paymentUpdateFormStateSelector} from "./reducers/update-menu-status.reducer";
 import {State} from "./global-store.definition";
 
 export const paymentStatusFeatureSelector = createFeatureSelector<State>(paymentUpdateFormStateSelector);

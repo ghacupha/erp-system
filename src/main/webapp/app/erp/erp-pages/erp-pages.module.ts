@@ -66,7 +66,7 @@ import {RouterModule} from '@angular/router';
       loadChildren: () => import('./signed-payment/signed-payment.module').then(m => m.SignedPaymentModule),
     },
     {
-      path: 'payment/dealer',
+      path: 'list/payment/dealer',
       data: { pageTitle: 'ERP | Payment Dealers' },
       loadChildren: () => import('./dealers/dealer/dealer.module').then(m => m.ErpServiceDealerModule),
     },
