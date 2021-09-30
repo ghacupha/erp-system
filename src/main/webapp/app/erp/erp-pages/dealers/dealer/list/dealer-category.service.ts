@@ -1,12 +1,14 @@
 import {Injectable} from '@angular/core';
 import {IPayment} from '../../../payments/payment/payment.model';
 import {HttpResponse} from '@angular/common/http';
-import {paymentDealerCategoryAcquired} from '../../../../store/actions/dealer-workflows-status.actions';
+import {
+  payDealerButtonClicked,
+} from '../../../../store/actions/dealer-workflows-status.actions';
 import {PaymentService} from '../../../payments/payment/service/payment.service';
 import {IDealer} from '../dealer.model';
 import {Store} from '@ngrx/store';
 import {State} from '../../../../store/global-store.definition';
-import {IPaymentCategory} from "../../../payments/payment-category/payment-category.model";
+import {IPaymentCategory} from '../../../payments/payment-category/payment-category.model';
 
 @Injectable({ providedIn: 'root' })
 export class DealerCategoryService {
@@ -20,10 +22,12 @@ export class DealerCategoryService {
         if (pyts.body) {
           const cat: IPaymentCategory | null | undefined= pyts.body[pyts.body.length - 1].paymentCategory
           if (cat) {
-            this.store.dispatch(paymentDealerCategoryAcquired({
-              paymentDealerCategory: cat
-            }));
+            this.store.dispatch(payDealerButtonClicked({selectedDealer: dealer, paymentDealerCategory: cat}));
+
+            // let's conclude this business
+            return;
           }
+          this.store.dispatch(payDealerButtonClicked({selectedDealer: dealer, paymentDealerCategory: {}}));
         }
       }
     });
