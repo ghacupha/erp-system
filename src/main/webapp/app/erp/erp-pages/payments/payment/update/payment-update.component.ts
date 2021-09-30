@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -37,7 +37,6 @@ import {
   dealerPaymentStatus
 } from "../../../../store/selectors/dealer-workflows-status.selectors";
 import {Dealer} from "../../../dealers/dealer/dealer.model";
-import {paymentToDealerReset} from "../../../../store/actions/dealer-workflows-status.actions";
 
 @Component({
   selector: 'jhi-payment-update',

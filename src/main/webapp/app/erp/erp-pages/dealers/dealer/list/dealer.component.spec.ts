@@ -1,4 +1,4 @@
-import {MockStore} from "@ngrx/store/testing";
+import {MockStore, provideMockStore} from '@ngrx/store/testing';
 
 jest.mock('@angular/router');
 
@@ -11,6 +11,7 @@ import { of } from 'rxjs';
 import { DealerService } from '../service/dealer.service';
 
 import { DealerComponent } from './dealer.component';
+import {initialState} from '../../../../store/global-store.definition';
 
 describe('Component Tests', () => {
   describe('Dealer Management Component', () => {
@@ -41,6 +42,7 @@ describe('Component Tests', () => {
               snapshot: { queryParams: {} },
             },
           },
+          provideMockStore({initialState}),
         ],
       })
         .overrideTemplate(DealerComponent, '')
