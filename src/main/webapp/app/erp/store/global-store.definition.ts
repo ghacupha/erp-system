@@ -34,6 +34,7 @@ export const initialState: State = {
   dealerWorkflowState: {
     selectedDealer: {},
     dealerPayment: {},
+    paymentDealerCategory: {},
     weArePayingADealer: false
   }
 }

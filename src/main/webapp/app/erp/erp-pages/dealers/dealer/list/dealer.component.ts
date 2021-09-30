@@ -9,9 +9,12 @@ import { IDealer } from '../dealer.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { DealerService } from '../service/dealer.service';
 import { DealerDeleteDialogComponent } from '../delete/dealer-delete-dialog.component';
-import {payDealerButtonClicked} from "../../../../store/actions/dealer-workflows-status.actions";
-import {Store} from "@ngrx/store";
-import {State} from "../../../../store/global-store.definition";
+import {
+  payDealerButtonClicked,
+} from '../../../../store/actions/dealer-workflows-status.actions';
+import {Store} from '@ngrx/store';
+import {State} from '../../../../store/global-store.definition';
+import {DealerCategoryService} from './dealer-category.service';
 
 @Component({
   selector: 'jhi-dealer',
@@ -33,7 +36,8 @@ export class DealerComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
     protected modalService: NgbModal,
-    protected store: Store<State>
+    protected store: Store<State>,
+    protected dealerCategoryService: DealerCategoryService
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -123,9 +127,9 @@ export class DealerComponent implements OnInit {
   }
 
   payDealer(dealer: IDealer): void {
+    this.dealerCategoryService.getDealerCategory(dealer);
 
-    this.store.dispatch(payDealerButtonClicked({selectedDealer: dealer}))
-
+    this.store.dispatch(payDealerButtonClicked({selectedDealer: dealer}));
     this.router.navigate(['/payment/dealer']);
   }
 

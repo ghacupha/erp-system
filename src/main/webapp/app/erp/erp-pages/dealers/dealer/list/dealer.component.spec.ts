@@ -1,3 +1,5 @@
+import {MockStore} from "@ngrx/store/testing";
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -15,6 +17,7 @@ describe('Component Tests', () => {
     let comp: DealerComponent;
     let fixture: ComponentFixture<DealerComponent>;
     let service: DealerService;
+    let store: MockStore;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -46,6 +49,7 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(DealerComponent);
       comp = fixture.componentInstance;
       service = TestBed.inject(DealerService);
+      store = TestBed.inject(MockStore);
 
       const headers = new HttpHeaders().append('link', 'link;link');
       jest.spyOn(service, 'query').mockReturnValue(

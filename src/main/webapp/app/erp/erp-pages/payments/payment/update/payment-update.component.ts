@@ -31,7 +31,11 @@ import {
   paymentUpdateButtonClicked,
   paymentUpdateCancelButtonClicked, paymentUpdateErrorHasOccurred
 } from "../../../../store/actions/update-menu-status.actions";
-import {dealerPaymentSelectedDealer, dealerPaymentStatus} from "../../../../store/selectors/dealer-workflows-status.selectors";
+import {
+  dealerCategory,
+  dealerPaymentSelectedDealer,
+  dealerPaymentStatus
+} from "../../../../store/selectors/dealer-workflows-status.selectors";
 import {Dealer} from "../../../dealers/dealer/dealer.model";
 
 @Component({
@@ -54,7 +58,8 @@ export class PaymentUpdateComponent implements OnInit {
   weAreEditingAPayment = false;
   weAreCreatingAPayment = false;
   weArePayingADealer = false;
-  selectedDealer: IDealer= {...new Dealer()}
+  selectedDealer: IDealer= {...new Dealer()};
+  dealerCategory: IPaymentCategory = {};
 
   editForm = this.fb.group({
     id: [],
@@ -95,11 +100,20 @@ export class PaymentUpdateComponent implements OnInit {
     this.store.pipe(select(updateSelectedPayment)).subscribe(pyt => this.selectedPayment = pyt);
     this.store.pipe(select(dealerPaymentStatus)).subscribe(payingDealer => this.weArePayingADealer = payingDealer);
     this.store.pipe(select(dealerPaymentSelectedDealer)).subscribe(dealer => this.selectedDealer = dealer);
+    this.store.pipe(select(dealerCategory)).subscribe(category => {
+      if (category) {
+        this.dealerCategory = category;
+      }
+    });
   }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ payment }) => {
-      this.updateForm(payment, this.selectedDealer);
+      this.store.pipe(select(dealerCategory)).subscribe(category => {
+        if (category) {
+          this.updateForm(payment, this.selectedDealer, category);
+        }
+      });
       this.loadRelationshipsOptions();
     });
   }
@@ -180,7 +194,7 @@ export class PaymentUpdateComponent implements OnInit {
     return option;
   }
 
-  updateForm(payment: IPayment, dealer: IDealer): void {
+  updateForm(payment: IPayment, dealer: IDealer, category: IPaymentCategory): void {
     this.editForm.patchValue({
       id: payment.id,
       paymentNumber: payment.paymentNumber,
@@ -194,7 +208,7 @@ export class PaymentUpdateComponent implements OnInit {
       conversionRate: payment.conversionRate,
       paymentLabels: payment.paymentLabels,
       dealer,
-      paymentCategory: payment.paymentCategory,
+      category,
       taxRule: payment.taxRule,
       paymentCalculation: payment.paymentCalculation,
       placeholders: payment.placeholders,
