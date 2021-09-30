@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -37,6 +37,7 @@ import {
   dealerPaymentStatus
 } from "../../../../store/selectors/dealer-workflows-status.selectors";
 import {Dealer} from "../../../dealers/dealer/dealer.model";
+import {paymentToDealerReset} from "../../../../store/actions/dealer-workflows-status.actions";
 
 @Component({
   selector: 'jhi-payment-update',
@@ -109,13 +110,9 @@ export class PaymentUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ payment }) => {
-      this.store.pipe(select(dealerCategory)).subscribe(category => {
-        if (category) {
-          this.updateForm(payment, this.selectedDealer, category);
-        }
-      });
+      this.updateForm(payment, this.selectedDealer, this.dealerCategory);
       this.loadRelationshipsOptions();
-    });
+      });
   }
 
   previousState(): void {
@@ -194,7 +191,7 @@ export class PaymentUpdateComponent implements OnInit {
     return option;
   }
 
-  updateForm(payment: IPayment, dealer: IDealer, category: IPaymentCategory): void {
+  updateForm(payment: IPayment, dealer: IDealer, paymentCategory: IPaymentCategory): void {
     this.editForm.patchValue({
       id: payment.id,
       paymentNumber: payment.paymentNumber,
@@ -208,7 +205,7 @@ export class PaymentUpdateComponent implements OnInit {
       conversionRate: payment.conversionRate,
       paymentLabels: payment.paymentLabels,
       dealer,
-      category,
+      paymentCategory,
       taxRule: payment.taxRule,
       paymentCalculation: payment.paymentCalculation,
       placeholders: payment.placeholders,
