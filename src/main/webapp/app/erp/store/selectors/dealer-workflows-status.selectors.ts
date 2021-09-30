@@ -14,3 +14,8 @@ export const dealerPaymentStatus = createSelector(
   paymentToDealerWorkflows,
   state => state.dealerWorkflowState.weArePayingADealer
 );
+
+export const dealerCategory = createSelector(
+  paymentToDealerWorkflows,
+  state => state.dealerWorkflowState.paymentDealerCategory
+);
