@@ -4,7 +4,6 @@ import {initialState, State} from '../global-store.definition';
 import {
   payDealerButtonClicked, paymentDealerCategoryAcquired,
   paymentToDealerCompleted,
-  paymentToDealerInitiated
 } from '../actions/dealer-workflows-status.actions';
 import {IPayment} from "../../erp-pages/payments/payment/payment.model";
 import {IPaymentCategory} from "../../erp-pages/payments/payment-category/payment-category.model";
@@ -30,15 +29,6 @@ const _dealerWorkflowStateReducer= createReducer(
     }
    })),
 
-  on(paymentToDealerInitiated, (state, {dealerPayment}) => ({
-     ...state,
-    dealerWorkflowState: {
-       ...state.dealerWorkflowState,
-      dealerPayment,
-      weArePayingADealer: true
-    }
-   })),
-
   on(paymentToDealerCompleted, (state) => ({
     ...state,
     dealerWorkflowState: {
@@ -54,7 +44,7 @@ const _dealerWorkflowStateReducer= createReducer(
       ...state.dealerWorkflowState,
       selectedDealer: {},
       paymentDealerCategory,
-      weArePayingADealer: false
+      weArePayingADealer: true
     }
   })),
 );

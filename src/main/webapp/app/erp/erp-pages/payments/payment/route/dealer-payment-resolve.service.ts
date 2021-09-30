@@ -11,7 +11,6 @@ import {
   DEFAULT_INVOICE_AMOUNT,
   DEFAULT_TRANSACTION_AMOUNT, DEFAULT_VATABLE_AMOUNT
 } from '../default-values.constants';
-import {paymentToDealerInitiated} from '../../../../store/actions/dealer-workflows-status.actions';
 
 @Injectable({ providedIn: 'root' })
 export class DealerPaymentResolveService implements Resolve<IPayment> {
@@ -31,8 +30,6 @@ export class DealerPaymentResolveService implements Resolve<IPayment> {
       conversionRate: DEEFAULT_CONVERSION_RATE,
       description: DEFAULT_DESCRIPTION
     }
-
-    this.store.dispatch(paymentToDealerInitiated({dealerPayment: payment}))
 
     return of(payment);
   }
