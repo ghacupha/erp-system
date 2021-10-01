@@ -11,7 +11,10 @@ import { DealerService } from '../service/dealer.service';
 import { DealerDeleteDialogComponent } from '../delete/dealer-delete-dialog.component';
 import {Store} from '@ngrx/store';
 import {State} from '../../../../store/global-store.definition';
-import {DealerCategoryService} from './dealer-category.service';
+import {DealerCategoryService} from '../service/dealer-category.service';
+import {
+  dealerAcquiredForPayment, requisitionForDealerCategoryInitiated
+} from "../../../../store/actions/dealer-workflows-status.actions";
 
 @Component({
   selector: 'jhi-dealer',
@@ -124,9 +127,8 @@ export class DealerComponent implements OnInit {
   }
 
   payDealer(dealer: IDealer): void {
-    this.dealerCategoryService.getDealerCategory(dealer);
-
-    // this.store.dispatch(payDealerButtonClicked({selectedDealer: dealer}));
+    this.store.dispatch(dealerAcquiredForPayment({selectedDealer: dealer}));
+    this.store.dispatch(requisitionForDealerCategoryInitiated({selectedDealer: dealer}));
     this.router.navigate(['/payment/dealer']);
   }
 
