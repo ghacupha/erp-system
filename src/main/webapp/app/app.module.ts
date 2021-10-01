@@ -31,7 +31,6 @@ import {StoreDevtoolsModule} from "@ngrx/store-devtools";
 import * as fromDealerWorkflows from './erp/store/reducers/dealer-workflows-status.reducer';
 import * as fromPaymentUpdates from './erp/store/reducers/update-menu-status.reducer';
 import {EffectsModule} from "@ngrx/effects";
-import {DealerPaymentsEffects} from "./erp/store/dealer-payments.effects";
 
 @NgModule({
   imports: [
@@ -40,8 +39,7 @@ import {DealerPaymentsEffects} from "./erp/store/dealer-payments.effects";
     HomeModule,
     ErpSystemModule,
     NgSelectModule,
-    EffectsModule.forFeature([]),
-    EffectsModule.forRoot([DealerPaymentsEffects]),
+    EffectsModule.forRoot([]),
     StoreModule.forFeature('paymentToDealerWorkflows', fromDealerWorkflows.dealerWorkflowStateReducer),
     StoreModule.forFeature('paymentUpdateForm', fromPaymentUpdates.paymentUpdateStateReducer),
     StoreModule.forRoot({}, {runtimeChecks: {
