@@ -1,14 +1,15 @@
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {DealerCategoryService} from '../erp-pages/dealers/dealer/service/dealer-category.service';
-import {
-  dealerPaymentCategoryRequisitionFailed,
-  paymentCategoryAcquiredForPayment, requisitionForDealerCategoryInitiated
-} from './actions/dealer-workflows-status.actions';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs';
+import {
+  dealerPaymentCategoryRequisitionFailed,
+  paymentCategoryAcquiredForPayment,
+  requisitionForDealerCategoryInitiated
+} from "../../../../store/actions/dealer-workflows-status.actions";
+import {DealerCategoryService} from "./dealer-category.service";
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class DealerPaymentsEffects {
 
   paymentCategoryEffect$ = createEffect(() =>
