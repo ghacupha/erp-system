@@ -4,7 +4,7 @@
     "outDir": "./target/classes/static/",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "noImplicitReturns": true,
+    "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "skipLibCheck": true,

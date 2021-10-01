@@ -35,6 +35,7 @@ export const initialState: State = {
     selectedDealer: {},
     dealerPayment: {},
     paymentDealerCategory: {},
-    weArePayingADealer: false
+    weArePayingADealer: false,
+    errorMessage: '',
   }
 }
