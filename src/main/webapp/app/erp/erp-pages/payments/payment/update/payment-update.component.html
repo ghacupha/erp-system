@@ -183,6 +183,7 @@
             name="paymentLabels"
             formControlName="paymentLabels"
           >
+            <option [ngValue]="null"></option>
             <option
               [ngValue]="getSelectedPaymentLabel(paymentLabelOption, editForm.get('paymentLabels')!.value)"
               *ngFor="let paymentLabelOption of paymentLabelsSharedCollection; trackBy: trackPaymentLabelById"
