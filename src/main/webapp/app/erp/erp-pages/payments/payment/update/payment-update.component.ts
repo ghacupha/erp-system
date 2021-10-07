@@ -37,6 +37,10 @@ import {
   dealerPaymentStatus
 } from "../../../../store/selectors/dealer-workflows-status.selectors";
 import {Dealer} from "../../../dealers/dealer/dealer.model";
+import {
+  paymentToDealerCompleted,
+  paymentToDealerReset
+} from "../../../../store/actions/dealer-workflows-status.actions";
 
 @Component({
   selector: 'jhi-payment-update',
@@ -59,6 +63,8 @@ export class PaymentUpdateComponent implements OnInit {
   weAreCreatingAPayment = false;
   weArePayingADealer = false;
   selectedDealer: IDealer= {...new Dealer()};
+  // We emphatically should not create a new category like the dealer above
+  // TODO Get default category here
   dealerCategory: IPaymentCategory = {};
 
   editForm = this.fb.group({
@@ -116,6 +122,7 @@ export class PaymentUpdateComponent implements OnInit {
 
   previousState(): void {
     this.store.dispatch(paymentUpdateCancelButtonClicked());
+    this.store.dispatch(paymentToDealerReset());
     window.history.back();
   }
 
@@ -237,6 +244,7 @@ export class PaymentUpdateComponent implements OnInit {
 
   onSaveError(): void {
     // Api for inheritance.
+    this.store.dispatch(paymentToDealerReset());
     this.store.dispatch(paymentUpdateErrorHasOccurred());
     this.isSaving = false;
   }
@@ -268,6 +276,7 @@ export class PaymentUpdateComponent implements OnInit {
   }
 
   protected onSaveFinalize(): void {
+    this.store.dispatch(paymentToDealerCompleted());
     this.isSaving = false;
   }
 
