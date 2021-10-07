@@ -114,10 +114,14 @@ export class PaymentUpdateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ payment }) => {
-      this.updateForm(payment, this.selectedDealer, this.dealerCategory);
-      this.loadRelationshipsOptions();
+    if (this.weAreEditingAPayment) {
+      this.editFormUpdate(this.selectedPayment);
+    } else {
+      this.activatedRoute.data.subscribe(({payment}) => {
+        this.updateForm(payment, this.selectedDealer, this.dealerCategory);
       });
+    }
+    this.loadRelationshipsOptions();
   }
 
   previousState(): void {
@@ -212,6 +216,51 @@ export class PaymentUpdateComponent implements OnInit {
       paymentLabels: payment.paymentLabels,
       dealer,
       paymentCategory,
+      taxRule: payment.taxRule,
+      paymentCalculation: payment.paymentCalculation,
+      placeholders: payment.placeholders,
+      paymentGroup: payment.paymentGroup,
+    });
+
+    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
+      this.paymentLabelsSharedCollection,
+      ...(payment.paymentLabels ?? [])
+    );
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, payment.dealer);
+    this.paymentCategoriesSharedCollection = this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
+      this.paymentCategoriesSharedCollection,
+      payment.paymentCategory
+    );
+    this.taxRulesSharedCollection = this.taxRuleService.addTaxRuleToCollectionIfMissing(this.taxRulesSharedCollection, payment.taxRule);
+    this.paymentCalculationsCollection = this.paymentCalculationService.addPaymentCalculationToCollectionIfMissing(
+      this.paymentCalculationsCollection,
+      payment.paymentCalculation
+    );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+      this.placeholdersSharedCollection,
+      ...(payment.placeholders ?? [])
+    );
+    this.paymentsSharedCollection = this.paymentService.addPaymentToCollectionIfMissing(
+      this.paymentsSharedCollection,
+      payment.paymentGroup
+    );
+  }
+
+  editFormUpdate(payment: IPayment): void {
+    this.editForm.patchValue({
+      id: payment.id,
+      paymentNumber: payment.paymentNumber,
+      paymentDate: payment.paymentDate,
+      invoicedAmount: payment.invoicedAmount,
+      disbursementCost: payment.disbursementCost,
+      vatableAmount: payment.vatableAmount,
+      paymentAmount: payment.paymentAmount,
+      description: payment.description,
+      settlementCurrency: payment.settlementCurrency,
+      conversionRate: payment.conversionRate,
+      paymentLabels: payment.paymentLabels,
+      dealer: payment.dealer,
+      paymentCategory: payment.paymentCategory,
       taxRule: payment.taxRule,
       paymentCalculation: payment.paymentCalculation,
       placeholders: payment.placeholders,
