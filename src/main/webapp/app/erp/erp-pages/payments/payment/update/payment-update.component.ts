@@ -428,7 +428,6 @@ export class PaymentUpdateComponent implements OnInit {
   protected copyFromForm(): IPayment {
     return {
       ...new Payment(),
-      id: this.editForm.get(['id'])!.value,
       paymentNumber: this.editForm.get(['paymentNumber'])!.value,
       paymentDate: this.editForm.get(['paymentDate'])!.value,
       invoicedAmount: this.editForm.get(['invoicedAmount'])!.value,
