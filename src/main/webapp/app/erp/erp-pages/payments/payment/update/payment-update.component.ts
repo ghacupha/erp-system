@@ -29,7 +29,7 @@ import {
 import {
   paymentCopyButtonClicked, paymentSaveButtonClicked,
   paymentUpdateButtonClicked,
-  paymentUpdateCancelButtonClicked, paymentUpdateErrorHasOccurred
+  paymentUpdateCancelButtonClicked, paymentUpdateConcluded, paymentUpdateErrorHasOccurred
 } from "../../../../store/actions/update-menu-status.actions";
 import {
   dealerCategory,
@@ -114,7 +114,7 @@ export class PaymentUpdateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.weAreEditingAPayment) {
+    if (this.weAreEditingAPayment || this.weAreCopyingAPayment) {
       this.editFormUpdate(this.selectedPayment);
     } else {
       this.activatedRoute.data.subscribe(({payment}) => {
@@ -326,6 +326,7 @@ export class PaymentUpdateComponent implements OnInit {
 
   protected onSaveFinalize(): void {
     this.store.dispatch(paymentToDealerCompleted());
+    this.store.dispatch(paymentUpdateConcluded())
     this.isSaving = false;
   }
 
