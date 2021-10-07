@@ -24,7 +24,7 @@ import {
   paymentCopyButtonClicked,
   paymentCopyInitiated,
   paymentEditInitiated, paymentSaveButtonClicked,
-  paymentUpdateButtonClicked, paymentUpdateCancelButtonClicked, paymentUpdateErrorHasOccurred
+  paymentUpdateButtonClicked, paymentUpdateCancelButtonClicked, paymentUpdateConcluded, paymentUpdateErrorHasOccurred
 } from "../actions/update-menu-status.actions";
 
 export const paymentUpdateFormStateSelector = 'paymentUpdateForm';
@@ -71,6 +71,17 @@ const _paymentUpdateStateReducer = createReducer(
       ...state.paymentsFormState,
       selectedPayment: {},
       weAreEditing: false
+    }
+  })),
+
+  on(paymentUpdateConcluded, state => ({
+    ...state,
+    paymentsFormState: {
+      ...state.paymentsFormState,
+      selectedPayment: {},
+      weAreEditing: false,
+      weAreCopying: false,
+      weAreCreating: false
     }
   })),
 

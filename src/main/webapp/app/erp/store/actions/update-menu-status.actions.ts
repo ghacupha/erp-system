@@ -37,6 +37,10 @@ export const paymentUpdateButtonClicked = createAction(
   '[Payment Edit Form: Update Button] payment update button clicked'
 );
 
+export const paymentUpdateConcluded = createAction(
+  '[Payment Edit Form: Update or Copy Button] payment update concluded'
+);
+
 export const newPaymentButtonClicked = createAction(
   '[Payments New Button] new payment button clicked',
   props<{newPayment: IPayment}>()
