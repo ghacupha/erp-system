@@ -7,6 +7,7 @@ import io.github.erp.service.mapper.PaymentMapper;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ public class PaymentIndexingService   extends AbtractStartUpIndexService impleme
         this.searchRepository = searchRepository;
     }
 
+    @Async
     @Override
     public void index() {
         this.searchRepository.saveAll(

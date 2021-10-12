@@ -1,10 +1,7 @@
 package io.github.erp.erp;
 
 import com.google.common.collect.ImmutableList;
-import io.github.erp.repository.DealerRepository;
-import io.github.erp.repository.SignedPaymentRepository;
 import io.github.erp.repository.search.DealerSearchRepository;
-import io.github.erp.repository.search.SignedPaymentSearchRepository;
 import io.github.erp.service.DealerService;
 import io.github.erp.service.mapper.DealerMapper;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
