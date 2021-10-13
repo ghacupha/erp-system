@@ -11,7 +11,8 @@ import { InvoiceService } from '../service/invoice.service';
 import { InvoiceDeleteDialogComponent } from '../delete/invoice-delete-dialog.component';
 import {
   addPaymentToInvoiceButtonClicked,
-  recordInvoicePaymentButtonClicked
+  invoiceAcquiredForPaymentWithLabels,
+  invoiceAcquiredForPaymentWithPlaceholders,
 } from "../../../../store/actions/dealer-invoice-workflows-status.actions";
 import {State} from "../../../../store/global-store.definition";
 import {Store} from "@ngrx/store";
@@ -114,11 +115,18 @@ export class InvoiceComponent implements OnInit {
   }
 
   recordPayment(selectedInvoice: IInvoice): void {
-    // TODO Add placeholders, payment-labels, ownedInvoices in the store
     if (selectedInvoice.dealer) {
       this.store.dispatch(addPaymentToInvoiceButtonClicked({selectedInvoice, selectedDealer: selectedInvoice.dealer}));
     } else {
       this.store.dispatch(addPaymentToInvoiceButtonClicked({selectedInvoice, selectedDealer: {...new Dealer()}}));
+    }
+
+    if (selectedInvoice.paymentLabels) {
+      this.store.dispatch(invoiceAcquiredForPaymentWithLabels({paymentLabels: selectedInvoice.paymentLabels}));
+    }
+
+    if (selectedInvoice.placeholders) {
+      this.store.dispatch(invoiceAcquiredForPaymentWithPlaceholders({placeholders: selectedInvoice.placeholders}));
     }
 
     const paymentPath = 'payment/dealer/invoice';

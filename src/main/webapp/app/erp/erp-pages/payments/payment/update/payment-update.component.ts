@@ -41,7 +41,11 @@ import {
   paymentToDealerCompleted,
   paymentToDealerReset
 } from "../../../../store/actions/dealer-workflows-status.actions";
-import {dealerInvoiceSelectedDealer} from "../../../../store/selectors/dealer-invoice-worklows-status.actions";
+import {
+  dealerInvoicePaymentLabels,
+  dealerInvoicePaymentState, dealerInvoicePlaceholders,
+  dealerInvoiceSelectedDealer
+} from "../../../../store/selectors/dealer-invoice-worklows-status.selectors";
 
 @Component({
   selector: 'jhi-payment-update',
@@ -67,6 +71,10 @@ export class PaymentUpdateComponent implements OnInit {
   // We emphatically should not create a new category like the dealer above
   // TODO Get default category here
   dealerCategory: IPaymentCategory = {};
+
+  weArePayingAnInvoiceDealer = false;
+  paymentLabels: IPaymentLabel[] = [];
+  placeholders: IPlaceholder[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -115,12 +123,31 @@ export class PaymentUpdateComponent implements OnInit {
     this.store.select<IDealer>(dealerInvoiceSelectedDealer).subscribe(dealr => {
       this.selectedDealer = dealr;
     });
+
+    this.store.select<boolean>(dealerInvoicePaymentState).subscribe(state => {
+      this.weArePayingAnInvoiceDealer = state;
+
+      if (state) {
+
+        this.store.select<IPaymentLabel[]>(dealerInvoicePaymentLabels).subscribe(labels => {
+          this.paymentLabels = labels;
+        });
+
+        this.store.select<IPlaceholder[]>(dealerInvoicePlaceholders).subscribe(placeholders => {
+          this.placeholders = placeholders;
+        });
+      }
+    });
   }
 
   ngOnInit(): void {
     if (this.weAreEditingAPayment || this.weAreCopyingAPayment) {
       this.editFormUpdate(this.selectedPayment);
-    } else {
+    } else if (this.weArePayingAnInvoiceDealer) {
+      this.activatedRoute.data.subscribe(({payment}) => {
+        this.invoicePaymentUpdate(payment, this.selectedDealer, this.dealerCategory, this.paymentLabels, this.placeholders);
+      });
+    }else {
       this.activatedRoute.data.subscribe(({payment}) => {
         this.updateForm(payment, this.selectedDealer, this.dealerCategory);
       });
@@ -204,6 +231,53 @@ export class PaymentUpdateComponent implements OnInit {
     }
     return option;
   }
+
+  invoicePaymentUpdate(payment: IPayment, dealer: IDealer, paymentCategory: IPaymentCategory, paymentLabels: IPaymentLabel[], placeholders: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      id: payment.id,
+      paymentNumber: payment.paymentNumber,
+      paymentDate: payment.paymentDate,
+      invoicedAmount: payment.invoicedAmount,
+      disbursementCost: payment.disbursementCost,
+      vatableAmount: payment.vatableAmount,
+      paymentAmount: payment.paymentAmount,
+      description: payment.description,
+      settlementCurrency: payment.settlementCurrency,
+      conversionRate: payment.conversionRate,
+      paymentLabels: [...(dealer.paymentLabels ?? paymentLabels)],
+      dealer,
+      paymentCategory,
+      taxRule: payment.taxRule,
+      paymentCalculation: payment.paymentCalculation,
+      placeholders: [...(dealer.placeholders ?? placeholders)],
+      paymentGroup: payment.paymentGroup,
+    });
+
+    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
+      this.paymentLabelsSharedCollection,
+      ...(payment.paymentLabels ?? [])
+    );
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, payment.dealer);
+    this.paymentCategoriesSharedCollection = this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
+      this.paymentCategoriesSharedCollection,
+      payment.paymentCategory
+    );
+    this.taxRulesSharedCollection = this.taxRuleService.addTaxRuleToCollectionIfMissing(this.taxRulesSharedCollection, payment.taxRule);
+    this.paymentCalculationsCollection = this.paymentCalculationService.addPaymentCalculationToCollectionIfMissing(
+      this.paymentCalculationsCollection,
+      payment.paymentCalculation
+    );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+      this.placeholdersSharedCollection,
+      ...(payment.placeholders ?? [])
+    );
+    this.paymentsSharedCollection = this.paymentService.addPaymentToCollectionIfMissing(
+      this.paymentsSharedCollection,
+      payment.paymentGroup
+    );
+  }
+
+
 
   updateForm(payment: IPayment, dealer: IDealer, paymentCategory: IPaymentCategory): void {
     this.editForm.patchValue({

@@ -6,16 +6,14 @@ import {IPayment, Payment} from "../payment.model";
 import {Observable, of} from "rxjs";
 import {
   dealerInvoiceSelected, dealerInvoiceSelectedDealer,
-} from "../../../../store/selectors/dealer-invoice-worklows-status.actions";
+} from "../../../../store/selectors/dealer-invoice-worklows-status.selectors";
 import {IInvoice} from "../../invoice/invoice.model";
 import {
-  DEFAULT_CONVERSION_RATE,
-  DEFAULT_CURRENCY,
   DEFAULT_DATE, DEFAULT_DESCRIPTION, DEFAULT_DISBURSEMENT_COST,
-  DEFAULT_INVOICE_AMOUNT,
-  DEFAULT_TRANSACTION_AMOUNT, DEFAULT_VATABLE_AMOUNT
+  DEFAULT_VATABLE_AMOUNT
 } from "../default-values.constants";
 import {IDealer} from "../../../dealers/dealer/dealer.model";
+import {dealerAcquiredForInvoicedPayment} from "../../../../store/actions/dealer-invoice-workflows-status.actions";
 
 @Injectable({ providedIn: 'root' })
 export class DealerInvoicePaymentResolveService implements Resolve<IPayment>  {
@@ -46,7 +44,9 @@ export class DealerInvoicePaymentResolveService implements Resolve<IPayment>  {
         invoicedAmount: inv.invoiceAmount,
         settlementCurrency: inv.currency,
         conversionRate: inv.conversionRate,
-        paymentAmount: inv.invoiceAmount
+        paymentAmount: inv.invoiceAmount,
+        paymentLabels: [...(inv.paymentLabels ?? [])],
+        placeholders: [...(inv.placeholders ?? [])],
       }
     });
 
@@ -57,6 +57,13 @@ export class DealerInvoicePaymentResolveService implements Resolve<IPayment>  {
         dealer: dealr,
         paymentLabels: dealr.paymentLabels,
         placeholders: dealr.placeholders,
+      };
+
+      if (dealr.paymentLabels && dealr.placeholders) {
+        this.store.dispatch(dealerAcquiredForInvoicedPayment({
+          paymentLabels: dealr.paymentLabels,
+          placeholders: dealr.placeholders,
+        }));
       }
     });
 

@@ -43,6 +43,10 @@ export const initialState: State = {
   dealerInvoiceWorkflowState: {
     selectedDealer: {},
     selectedInvoice: {},
+    selectedPayment: {},
+    selectedInvoiceLabels: [],
+    selectedInvoicePlaceholders: [],
+    weArePayingAnInvoiceDealer: false,
     errorMessage: '',
   }
 }
