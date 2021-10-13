@@ -6,7 +6,7 @@ import {State} from "../../../../store/global-store.definition";
 import {Observable, of} from "rxjs";
 import {newPaymentButtonClicked} from "../../../../store/actions/update-menu-status.actions";
 import {
-  DEEFAULT_CONVERSION_RATE,
+  DEFAULT_CONVERSION_RATE,
   DEFAULT_CURRENCY,
   DEFAULT_DATE, DEFAULT_DESCRIPTION, DEFAULT_DISBURSEMENT_COST, DEFAULT_INVOICE_AMOUNT,
   DEFAULT_TRANSACTION_AMOUNT, DEFAULT_VATABLE_AMOUNT
@@ -35,7 +35,7 @@ export class NewPaymentResolveService implements Resolve<IPayment> {
       invoicedAmount: DEFAULT_INVOICE_AMOUNT,
       disbursementCost: DEFAULT_DISBURSEMENT_COST,
       vatableAmount: DEFAULT_VATABLE_AMOUNT,
-      conversionRate: DEEFAULT_CONVERSION_RATE,
+      conversionRate: DEFAULT_CONVERSION_RATE,
       description: DEFAULT_DESCRIPTION
     }
 
