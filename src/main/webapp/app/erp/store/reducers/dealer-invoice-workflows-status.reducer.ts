@@ -3,6 +3,7 @@ import {IInvoice} from "../../erp-pages/payments/invoice/invoice.model";
 import {Action, createReducer, on} from "@ngrx/store";
 import {initialState, State} from "../global-store.definition";
 import {
+  addPaymentToInvoiceButtonClicked,
   dealerInvoiceStateReset,
   recordDealerInvoiceButtonClicked, recordInvoicePaymentButtonClicked
 } from "../actions/dealer-invoice-workflows-status.actions";
@@ -31,6 +32,15 @@ const _dealerInvoiceWorkflowStateReducer= createReducer(
     dealerInvoiceWorkflowState: {
       ...state.dealerInvoiceWorkflowState,
       selectedInvoice,
+    }
+  })),
+
+  on(addPaymentToInvoiceButtonClicked, (state, {selectedInvoice, selectedDealer}) => ({
+    ...state,
+    dealerInvoiceWorkflowState: {
+      ...state.dealerInvoiceWorkflowState,
+      selectedInvoice,
+      selectedDealer,
     }
   })),
 
