@@ -11,6 +11,7 @@ import {NewPaymentResolveService} from "./new-payment-resolve.service";
 import {EditPaymentResolveService} from "./edit-payment-resolve.service";
 import {CopyPaymentResolveService} from "./copy-payment-resolve.service";
 import {DealerPaymentResolveService} from "./dealer-payment-resolve.service";
+import {DealerInvoicePaymentResolveService} from "./dealer-invoice-payment-resolve.service";
 
 const paymentRoute: Routes = [
   {
@@ -47,6 +48,18 @@ const paymentRoute: Routes = [
     component: PaymentUpdateComponent,
     resolve: {
       payment: DealerPaymentResolveService,
+    },
+    data: {
+      authorities: [Authority.USER],
+      pageTitle: 'ERP| Pay Dealer',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'dealer/invoice',
+    component: PaymentUpdateComponent,
+    resolve: {
+      payment: DealerInvoicePaymentResolveService,
     },
     data: {
       authorities: [Authority.USER],

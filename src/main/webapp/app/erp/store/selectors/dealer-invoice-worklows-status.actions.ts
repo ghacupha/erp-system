@@ -8,3 +8,8 @@ export const dealerInvoiceSelectedDealer = createSelector(
   dealerInvoiceWorkflows,
   state => state.dealerInvoiceWorkflowState.selectedDealer
 );
+
+export const dealerInvoiceSelected = createSelector(
+  dealerInvoiceWorkflows,
+  state => state.dealerInvoiceWorkflowState.selectedInvoice
+);

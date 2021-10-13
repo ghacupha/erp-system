@@ -4,7 +4,7 @@ import {Action, createReducer, on} from "@ngrx/store";
 import {initialState, State} from "../global-store.definition";
 import {
   dealerInvoiceStateReset,
-  recordDealerInvoiceButtonClicked
+  recordDealerInvoiceButtonClicked, recordInvoicePaymentButtonClicked
 } from "../actions/dealer-invoice-workflows-status.actions";
 
 export const dealerInvoiceWorkflowStateSelector = 'recordDealerInvoiceWorkflows'
@@ -26,11 +26,20 @@ const _dealerInvoiceWorkflowStateReducer= createReducer(
     }
   })),
 
+  on(recordInvoicePaymentButtonClicked, (state, {selectedInvoice}) => ({
+    ...state,
+    dealerInvoiceWorkflowState: {
+      ...state.dealerInvoiceWorkflowState,
+      selectedInvoice,
+    }
+  })),
+
   on(dealerInvoiceStateReset, state => ({
     ...state,
     dealerInvoiceWorkflowState: {
       ...state.dealerInvoiceWorkflowState,
       selectedDealer: {},
+      selectedInvoice: {},
       errorMessage: '',
     }
   })),
