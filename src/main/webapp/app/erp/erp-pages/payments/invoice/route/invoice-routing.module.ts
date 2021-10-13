@@ -6,6 +6,7 @@ import { InvoiceComponent } from '../list/invoice.component';
 import { InvoiceDetailComponent } from '../detail/invoice-detail.component';
 import { InvoiceUpdateComponent } from '../update/invoice-update.component';
 import { InvoiceRoutingResolveService } from './invoice-routing-resolve.service';
+import {DealerInvoiceRoutingResolveService} from "./dealer-invoice-routing-resolve.service";
 
 const invoiceRoute: Routes = [
   {
@@ -29,6 +30,14 @@ const invoiceRoute: Routes = [
     component: InvoiceUpdateComponent,
     resolve: {
       invoice: InvoiceRoutingResolveService,
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'dealer',
+    component: InvoiceUpdateComponent,
+    resolve: {
+      invoice: DealerInvoiceRoutingResolveService,
     },
     canActivate: [UserRouteAccessService],
   },
