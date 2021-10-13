@@ -19,7 +19,7 @@ import {RouterModule} from '@angular/router';
       loadChildren: () => import('./files/message-token/message-token.module').then(m => m.ErpServiceMessageTokenModule),
     },
     {
-      path: 'invoice',
+      path: 'erp/invoice',
       data: { pageTitle: 'ERP | Invoices' },
       loadChildren: () => import('./payments/invoice/invoice.module').then(m => m.ErpServiceInvoiceModule),
     },
