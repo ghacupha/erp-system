@@ -7,7 +7,7 @@ import {select, Store} from "@ngrx/store";
 import {State} from "../../../../store/global-store.definition";
 import {DEFAULT_CONVERSION_RATE, DEFAULT_CURRENCY} from "../../payment/default-values.constants";
 import {IDealer} from "../../../dealers/dealer/dealer.model";
-import {dealerInvoiceSelectedDealer} from "../../../../store/selectors/dealer-invoice-worklows-status.actions";
+import {dealerInvoiceSelectedDealer} from "../../../../store/selectors/dealer-invoice-worklows-status.selectors";
 
 @Injectable({ providedIn: 'root' })
 export class DealerInvoiceRoutingResolveService implements Resolve<IInvoice>  {
