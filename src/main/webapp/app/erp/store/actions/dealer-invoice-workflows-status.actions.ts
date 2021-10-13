@@ -16,5 +16,13 @@ export const recordInvoicePaymentButtonClicked = createAction(
   }>()
 );
 
+export const addPaymentToInvoiceButtonClicked = createAction(
+  '[Invoice List] add payment to invoice button clicked',
+  props<{
+    selectedInvoice: IInvoice,
+    selectedDealer: IDealer,
+  }>()
+);
+
 export const dealerInvoiceStateReset = createAction(
   '[System] dealer invoice state has been reset');
