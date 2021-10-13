@@ -73,6 +73,16 @@ export class InvoiceUpdateComponent implements OnInit {
     }
   }
 
+  recordPayment(): void {
+    this.isSaving = true;
+    const invoice = this.createFromForm();
+    if (invoice.id !== undefined) {
+      this.subscribeToRecordPaymentResponse(this.invoiceService.update(invoice));
+    } else {
+      this.subscribeToRecordPaymentResponse(this.invoiceService.create(invoice));
+    }
+  }
+
   trackPaymentLabelById(index: number, item: IPaymentLabel): number {
     return item.id!;
   }
@@ -109,6 +119,20 @@ export class InvoiceUpdateComponent implements OnInit {
       }
     }
     return option;
+  }
+
+  protected subscribeToRecordPaymentResponse(result: Observable<HttpResponse<IInvoice>>): void {
+    // TODO DISPATCH THE NEW INVOICE TO STORE
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
+      // TODO () => this.navigateToPayment(),
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
+  }
+
+  protected navigateToPayment(): void {
+    const paymentPath = '';
+    // TODO this.router.navigate();
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IInvoice>>): void {
