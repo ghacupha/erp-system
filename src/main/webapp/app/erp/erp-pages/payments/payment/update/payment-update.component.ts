@@ -41,6 +41,7 @@ import {
   paymentToDealerCompleted,
   paymentToDealerReset
 } from "../../../../store/actions/dealer-workflows-status.actions";
+import {dealerInvoiceSelectedDealer} from "../../../../store/selectors/dealer-invoice-worklows-status.actions";
 
 @Component({
   selector: 'jhi-payment-update',
@@ -110,6 +111,9 @@ export class PaymentUpdateComponent implements OnInit {
       if (category) {
         this.dealerCategory = category;
       }
+    });
+    this.store.select<IDealer>(dealerInvoiceSelectedDealer).subscribe(dealr => {
+      this.selectedDealer = dealr;
     });
   }
 
