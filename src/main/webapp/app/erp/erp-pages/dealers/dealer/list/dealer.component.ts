@@ -15,6 +15,7 @@ import {DealerCategoryService} from '../service/dealer-category.service';
 import {
   dealerAcquiredForPayment, requisitionForDealerCategoryInitiated
 } from "../../../../store/actions/dealer-workflows-status.actions";
+import {recordDealerInvoiceButtonClicked} from "../../../../store/actions/dealer-invoice-workflows-status.actions";
 
 @Component({
   selector: 'jhi-dealer',
@@ -130,6 +131,14 @@ export class DealerComponent implements OnInit {
     this.store.dispatch(dealerAcquiredForPayment({selectedDealer: dealer}));
     this.store.dispatch(requisitionForDealerCategoryInitiated({selectedDealer: dealer}));
     this.router.navigate(['/payment/dealer']);
+  }
+
+  recordDealerInvoice(selectedDealer: IDealer): string {
+    const path = '/erp/invoice/dealer';
+
+    this.store.dispatch(recordDealerInvoiceButtonClicked({selectedDealer}))
+    this.router.navigate([path])
+    return path
   }
 
   protected sort(): string[] {

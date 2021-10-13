@@ -74,6 +74,10 @@
               </button>
 
               <!-- <button type="submit" [routerLink]="['/payment', dealer.id, 'dealer']" class="btn btn-secondary btn-sm" data-cy="entityPaymentButton">-->
+              <button type="submit" (click)="recordDealerInvoice(dealer)" class="btn btn-secondary btn-sm" data-cy="entityPaymentButton">
+                <fa-icon icon="book-open"></fa-icon>
+              </button>
+
               <button type="submit" (click)="payDealer(dealer)" class="btn btn-secondary btn-sm" data-cy="entityPaymentButton">
                 <fa-icon icon="money-bill-wave-alt"></fa-icon>
               </button>
