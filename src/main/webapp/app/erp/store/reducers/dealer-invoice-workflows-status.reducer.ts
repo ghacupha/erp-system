@@ -10,7 +10,7 @@ import {
   invoiceAcquiredForPaymentWithPlaceholders,
   paymentToInvoiceDealerConcluded,
   recordDealerInvoiceButtonClicked,
-  recordInvoicePaymentButtonClicked,
+  recordInvoicePaymentButtonClicked, selectedInvoiceForUpdateAcquired, selectedInvoiceUpdatedRequisitioned,
   selectedInvoiceUpdatedWithPaymentSuccessfully,
   selectedInvoiceUpdateWithPaymentErrored
 } from "../actions/dealer-invoice-workflows-status.actions";
@@ -93,9 +93,9 @@ const _dealerInvoiceWorkflowStateReducer= createReducer(
       ...state,
       dealerInvoiceWorkflowState: {
         ...state.dealerInvoiceWorkflowState,
-        selectedDealer: {},
+        // TODO REMOVE this after invoice update selectedDealer: {},
         // TODO REMOVE this after invoice update selectedInvoice: {},
-        weArePayingAnInvoiceDealer: false,
+        // TODO REMOVE this after invoice update weArePayingAnInvoiceDealer: false,
         // TODO REMOVE this after invoice update selectedPayment: {},
         selectedInvoiceLabels: [],
         selectedInvoicePlaceholders: [],
@@ -109,6 +109,18 @@ const _dealerInvoiceWorkflowStateReducer= createReducer(
         ...state.dealerInvoiceWorkflowState,
         selectedPayment: {},
         selectedInvoice: {},
+      }
+    })),
+
+    on(selectedInvoiceUpdatedRequisitioned, state => ({
+      ...state,
+    })),
+
+    on(selectedInvoiceForUpdateAcquired, (state, {acquiredInvoice}) => ({
+      ...state,
+      dealerInvoiceWorkflowState: {
+        ...state.dealerInvoiceWorkflowState,
+        selectedInvoice: acquiredInvoice,
       }
     })),
 
