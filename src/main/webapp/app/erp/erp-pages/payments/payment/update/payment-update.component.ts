@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
@@ -49,8 +49,9 @@ import {
 import {IInvoice, Invoice} from "../../invoice/invoice.model";
 import {
   dealerInvoiceStateReset,
-  paymentToInvoiceDealerConcluded, selectedInvoiceUpdatedWithPayment
+  paymentToInvoiceDealerConcluded, selectedInvoiceUpdatedRequisitioned,
 } from "../../../../store/actions/dealer-invoice-workflows-status.actions";
+import {InvoiceService} from "../../invoice/service/invoice.service";
 
 @Component({
   selector: 'jhi-payment-update',
@@ -112,7 +113,9 @@ export class PaymentUpdateComponent implements OnInit {
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
-    protected store: Store<State>
+    protected store: Store<State>,
+    protected invoiceService: InvoiceService,
+    protected router: Router
   ) {
 
     this.store.pipe(select(copyingPaymentStatus)).subscribe(stat => this.weAreCopyingAPayment = stat);
@@ -145,6 +148,7 @@ export class PaymentUpdateComponent implements OnInit {
       }
     });
 
+    // TODO CHECK THIS SELECTOR IS WORKING
     this.store.select<IInvoice>(dealerInvoiceSelected).subscribe(inv => {
       this.selectedInvoice = inv;
     });
@@ -198,16 +202,16 @@ export class PaymentUpdateComponent implements OnInit {
     this.isSaving = false;
     result.subscribe(res => {
       this.store.dispatch(paymentSaveButtonClicked());
-      // TODO Update invoice
+
       this.selectedInvoice = {
         ...this.selectedInvoice,
         payment: res.body,
       };
 
-      // todo create an effect to update selected invoice
-      this.store.dispatch(selectedInvoiceUpdatedWithPayment({selectedInvoice: this.selectedInvoice}));
+      this.invoiceService.update(this.selectedInvoice).subscribe( invoice => {
+        this.router.navigate(['/erp/invoice', invoice.body?.id, 'view']);
+      });
     });
-    this.previousState();
   }
 
   edit(): void {

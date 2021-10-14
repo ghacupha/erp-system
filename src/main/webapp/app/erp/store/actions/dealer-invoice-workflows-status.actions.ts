@@ -50,9 +50,14 @@ export const dealerInvoiceStateReset = createAction(
 export const paymentToInvoiceDealerConcluded = createAction(
   '[Payment-Update-Form] payment to invoice dealer concluded');
 
-export const selectedInvoiceUpdatedWithPayment = createAction(
+export const selectedInvoiceUpdatedRequisitioned = createAction(
   '[Payment-Update-Form] selected invoice updated with payment',
-  props<{selectedInvoice: IInvoice}>()
+  props<{selectedInvoiceId: number}>()
+);
+
+export const selectedInvoiceForUpdateAcquired = createAction(
+  '[Dealer-Invoice-Workflow-Effects] selected invoice for update acquired',
+  props<{acquiredInvoice: IInvoice}>()
 );
 
 export const selectedInvoiceUpdatedWithPaymentSuccessfully = createAction(

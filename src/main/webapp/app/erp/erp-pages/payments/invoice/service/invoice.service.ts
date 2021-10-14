@@ -10,16 +10,32 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
 import {IInvoice, getInvoiceIdentifier, Invoice} from '../invoice.model';
+import {Store} from "@ngrx/store";
+import {State} from "../../../../store/global-store.definition";
+import {
+  dealerInvoiceSelectedPayment
+} from "../../../../store/selectors/dealer-invoice-worklows-status.selectors";
+import {IPayment, Payment} from "../../payment/payment.model";
 
 export type EntityResponseType = HttpResponse<IInvoice>;
 export type EntityArrayResponseType = HttpResponse<IInvoice[]>;
 
 @Injectable({ providedIn: 'root' })
 export class InvoiceService {
+  selectedPayment: IPayment = {...new Payment()}
+
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/invoices');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/invoices');
 
-  constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
+  constructor(
+    protected http: HttpClient,
+    protected applicationConfigService: ApplicationConfigService,
+    protected store: Store<State>) {
+
+    this.store.select<IPayment>(dealerInvoiceSelectedPayment).subscribe(pyt => {
+      this.selectedPayment = pyt;
+    });
+  }
 
   create(invoice: IInvoice): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(invoice);
@@ -33,6 +49,23 @@ export class InvoiceService {
     return this.http
       .put<IInvoice>(`${this.resourceUrl}/${getInvoiceIdentifier(invoice) as number}`, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  updateWithPayment(acquiredInvoice: IInvoice): Observable<IInvoice> {
+
+    // Update the payment in the invoice
+    acquiredInvoice = {
+      ...acquiredInvoice,
+      payment: this.selectedPayment,
+    }
+
+    this.update(acquiredInvoice).subscribe(res => {
+      if (res.body) {
+        return of(res.body)
+      }
+    });
+
+    return of(acquiredInvoice)
   }
 
   partialUpdate(invoice: IInvoice): Observable<EntityResponseType> {
