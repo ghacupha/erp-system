@@ -201,7 +201,11 @@ export class PaymentUpdateComponent implements OnInit {
   onInvoiceDealerUpdateSuccess(result: Observable<HttpResponse<IPayment>>): void {
     this.isSaving = false;
     result.subscribe(res => {
-      this.store.dispatch(paymentSaveButtonClicked());
+
+      // TODO prevent payment duplication
+      if (!this.weArePayingAnInvoiceDealer) {
+        this.store.dispatch(paymentSaveButtonClicked());
+      }
 
       this.selectedInvoice = {
         ...this.selectedInvoice,
@@ -456,11 +460,12 @@ export class PaymentUpdateComponent implements OnInit {
   }
 
   protected onSaveFinalize(): void {
-    this.store.dispatch(paymentToDealerCompleted());
-    this.store.dispatch(paymentUpdateConcluded())
     // TODO conclude payment to invoiceDealer
     if (this.weArePayingAnInvoiceDealer) {
       this.store.dispatch(paymentToInvoiceDealerConcluded())
+    } else {
+      this.store.dispatch(paymentToDealerCompleted());
+      this.store.dispatch(paymentUpdateConcluded());
     }
     this.isSaving = false;
   }
