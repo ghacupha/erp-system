@@ -6,10 +6,15 @@ import * as fromDealerWorkflows from "./reducers/dealer-workflows-status.reducer
 import * as fromPaymentUpdates from "./reducers/update-menu-status.reducer";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
 import {DealerPaymentsEffects} from "../erp-pages/dealers/dealer/service/dealer-payments.effects";
+import {DealerInvoiceWorkflowEffects} from "./effects/dealer-invoice-workflow.effects";
 
 @NgModule({
   imports: [
-    EffectsModule.forRoot([DealerPaymentsEffects]),
+    EffectsModule.forRoot([]),
+    EffectsModule.forFeature([
+      DealerInvoiceWorkflowEffects,
+      DealerPaymentsEffects
+    ]),
     StoreModule.forFeature('recordDealerInvoiceWorkflows', fromDealerInvoiceWorkflows.dealerInvoiceWorkflowStateReducer),
     StoreModule.forFeature('paymentToDealerWorkflows', fromDealerWorkflows.dealerWorkflowStateReducer),
     StoreModule.forFeature('paymentUpdateForm', fromPaymentUpdates.paymentUpdateStateReducer),
