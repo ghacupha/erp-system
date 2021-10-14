@@ -46,3 +46,20 @@ export const invoiceAcquiredForPaymentWithPlaceholders = createAction(
 
 export const dealerInvoiceStateReset = createAction(
   '[System] dealer invoice state has been reset');
+
+export const paymentToInvoiceDealerConcluded = createAction(
+  '[Payment-Update-Form] payment to invoice dealer concluded');
+
+export const selectedInvoiceUpdatedWithPayment = createAction(
+  '[Payment-Update-Form] selected invoice updated with payment',
+  props<{selectedInvoice: IInvoice}>()
+);
+
+export const selectedInvoiceUpdatedWithPaymentSuccessfully = createAction(
+  '[Dealer-Invoice-Workflows-Effects : dealerInvoiceUpdateEffect] selected invoice updated with payment successfully',
+);
+
+export const selectedInvoiceUpdateWithPaymentErrored = createAction(
+  '[Dealer-Invoice-Workflows-Effects : dealerInvoiceUpdateEffect] selected invoice update with payment error',
+  props<{error: string}>()
+);

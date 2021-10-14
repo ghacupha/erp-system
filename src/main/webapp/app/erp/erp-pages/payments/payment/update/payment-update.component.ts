@@ -43,9 +43,14 @@ import {
 } from "../../../../store/actions/dealer-workflows-status.actions";
 import {
   dealerInvoicePaymentLabels,
-  dealerInvoicePaymentState, dealerInvoicePlaceholders,
+  dealerInvoicePaymentState, dealerInvoicePlaceholders, dealerInvoiceSelected,
   dealerInvoiceSelectedDealer
 } from "../../../../store/selectors/dealer-invoice-worklows-status.selectors";
+import {IInvoice, Invoice} from "../../invoice/invoice.model";
+import {
+  dealerInvoiceStateReset,
+  paymentToInvoiceDealerConcluded, selectedInvoiceUpdatedWithPayment
+} from "../../../../store/actions/dealer-invoice-workflows-status.actions";
 
 @Component({
   selector: 'jhi-payment-update',
@@ -75,6 +80,7 @@ export class PaymentUpdateComponent implements OnInit {
   weArePayingAnInvoiceDealer = false;
   paymentLabels: IPaymentLabel[] = [];
   placeholders: IPlaceholder[] = [];
+  selectedInvoice: IInvoice = {...new Invoice()};
 
   editForm = this.fb.group({
     id: [],
@@ -138,6 +144,10 @@ export class PaymentUpdateComponent implements OnInit {
         });
       }
     });
+
+    this.store.select<IInvoice>(dealerInvoiceSelected).subscribe(inv => {
+      this.selectedInvoice = inv;
+    });
   }
 
   ngOnInit(): void {
@@ -158,7 +168,46 @@ export class PaymentUpdateComponent implements OnInit {
   previousState(): void {
     this.store.dispatch(paymentUpdateCancelButtonClicked());
     this.store.dispatch(paymentToDealerReset());
+    this.store.dispatch(dealerInvoiceStateReset())
     window.history.back();
+  }
+
+  addInvoiceDealer(): void {
+    this.isSaving = true;
+    const payment = this.createFromForm();
+
+    // TODO DISPATCH NEWLY CREATED PAYMENT TO UPDATE THE INVOICE
+    // TODO CLEANUP THE STATE
+
+    if (payment.id !== undefined) {
+      this.subscribeToInvoiceDealerUpdate(this.paymentService.update(payment));
+    } else {
+      this.subscribeToInvoiceDealerUpdate(this.paymentService.create(payment));
+    }
+
+  }
+
+  subscribeToInvoiceDealerUpdate(result: Observable<HttpResponse<IPayment>>): void {
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
+      () => this.onInvoiceDealerUpdateSuccess(result),
+      () => this.onSaveError()
+    );
+  }
+
+  onInvoiceDealerUpdateSuccess(result: Observable<HttpResponse<IPayment>>): void {
+    this.isSaving = false;
+    result.subscribe(res => {
+      this.store.dispatch(paymentSaveButtonClicked());
+      // TODO Update invoice
+      this.selectedInvoice = {
+        ...this.selectedInvoice,
+        payment: res.body,
+      };
+
+      // todo create an effect to update selected invoice
+      this.store.dispatch(selectedInvoiceUpdatedWithPayment({selectedInvoice: this.selectedInvoice}));
+    });
+    this.previousState();
   }
 
   edit(): void {
@@ -405,6 +454,10 @@ export class PaymentUpdateComponent implements OnInit {
   protected onSaveFinalize(): void {
     this.store.dispatch(paymentToDealerCompleted());
     this.store.dispatch(paymentUpdateConcluded())
+    // TODO conclude payment to invoiceDealer
+    if (this.weArePayingAnInvoiceDealer) {
+      this.store.dispatch(paymentToInvoiceDealerConcluded())
+    }
     this.isSaving = false;
   }
 

@@ -161,7 +161,7 @@ export class InvoiceComponent implements OnInit {
     this.page = page;
     this.ngbPaginationPage = this.page;
     if (navigate) {
-      this.router.navigate(['/invoice'], {
+      this.router.navigate(['/erp/invoice'], {
         queryParams: {
           page: this.page,
           size: this.itemsPerPage,
