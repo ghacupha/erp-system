@@ -27,6 +27,7 @@ import {ErrorComponent} from './layouts/error/error.component';
 import {ErpSystemModule} from "./erp/erp-system.module";
 import {NgSelectModule} from "@ng-select/ng-select";
 import {ErpStoreModule} from "./erp/store/erp-store.module";
+import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
 
 @NgModule({
   imports: [
@@ -39,6 +40,7 @@ import {ErpStoreModule} from "./erp/store/erp-store.module";
     // jhipster-needle-angular-add-module JHipster will add new module here
     EntityRoutingModule,
     AppRoutingModule,
+    LoggerModule.forRoot({serverLoggingUrl: '/api/logs', level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.DEBUG}),
     // Set this to true to enable service worker (PWA)
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
     HttpClientModule,

@@ -49,9 +49,10 @@ import {
 import {IInvoice, Invoice} from "../../invoice/invoice.model";
 import {
   dealerInvoiceStateReset,
-  paymentToInvoiceDealerConcluded, selectedInvoiceUpdatedRequisitioned,
+  paymentToInvoiceDealerConcluded,
 } from "../../../../store/actions/dealer-invoice-workflows-status.actions";
 import {InvoiceService} from "../../invoice/service/invoice.service";
+import {NGXLogger} from "ngx-logger";
 
 @Component({
   selector: 'jhi-payment-update',
@@ -115,7 +116,8 @@ export class PaymentUpdateComponent implements OnInit {
     protected fb: FormBuilder,
     protected store: Store<State>,
     protected invoiceService: InvoiceService,
-    protected router: Router
+    protected router: Router,
+    protected log: NGXLogger
   ) {
 
     this.store.pipe(select(copyingPaymentStatus)).subscribe(stat => this.weAreCopyingAPayment = stat);
@@ -179,6 +181,8 @@ export class PaymentUpdateComponent implements OnInit {
   addInvoiceDealer(): void {
     this.isSaving = true;
     const payment = this.createFromForm();
+
+    this.log.debug(`Payment created ID: ${payment.paymentNumber}, DATED: ${payment.paymentDate?.format()}`);
 
     // TODO DISPATCH NEWLY CREATED PAYMENT TO UPDATE THE INVOICE
     // TODO CLEANUP THE STATE

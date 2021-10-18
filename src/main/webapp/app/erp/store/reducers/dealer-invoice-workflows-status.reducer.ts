@@ -95,7 +95,7 @@ const _dealerInvoiceWorkflowStateReducer= createReducer(
         ...state.dealerInvoiceWorkflowState,
         // TODO REMOVE this after invoice update selectedDealer: {},
         // TODO REMOVE this after invoice update selectedInvoice: {},
-        // TODO REMOVE this after invoice update weArePayingAnInvoiceDealer: false,
+        weArePayingAnInvoiceDealer: false,
         // TODO REMOVE this after invoice update selectedPayment: {},
         selectedInvoiceLabels: [],
         selectedInvoicePlaceholders: [],

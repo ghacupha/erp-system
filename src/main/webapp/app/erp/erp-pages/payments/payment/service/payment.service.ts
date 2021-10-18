@@ -10,6 +10,7 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
 import { IPayment, getPaymentIdentifier } from '../payment.model';
+import {NGXLogger} from "ngx-logger";
 
 export type EntityResponseType = HttpResponse<IPayment>;
 export type EntityArrayResponseType = HttpResponse<IPayment[]>;
@@ -19,10 +20,15 @@ export class PaymentService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/payments');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/payments');
 
-  constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
+  constructor(
+    protected http: HttpClient,
+    protected applicationConfigService: ApplicationConfigService,
+    protected log: NGXLogger
+    ) {}
 
   create(payment: IPayment): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(payment);
+    this.log.debug(`Request to create payment id: ${copy.paymentNumber}, dated: ${copy.paymentDate}`);
     return this.http
       .post<IPayment>(this.resourceUrl, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
