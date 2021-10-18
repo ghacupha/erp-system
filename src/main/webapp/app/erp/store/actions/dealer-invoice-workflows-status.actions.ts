@@ -12,7 +12,7 @@ export const recordDealerInvoiceButtonClicked = createAction(
 );
 
 export const dealerInvoicePaymentWorkflowCancelled = createAction(
-  '[Invoice Update: Cancel BUtton] dealerInvoicePaymentWorkflowCancelled',
+  '[Invoice Update: Cancel Button] dealerInvoicePaymentWorkflowCancelled',
 );
 
 export const recordInvoicePaymentButtonClicked = createAction(
