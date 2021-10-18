@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
 import { InvoiceDetailComponent } from './invoice-detail.component';
+import {provideMockStore} from "@ngrx/store/testing";
+import {initialState} from "../../../../store/global-store.definition";
 
 describe('Component Tests', () => {
   describe('Invoice Management Detail Component', () => {
@@ -13,6 +15,7 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         declarations: [InvoiceDetailComponent],
         providers: [
+          provideMockStore({initialState}),
           {
             provide: ActivatedRoute,
             useValue: { data: of({ invoice: { id: 123 } }) },

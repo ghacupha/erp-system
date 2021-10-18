@@ -6,7 +6,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {HttpResponse} from '@angular/common/http';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {FormBuilder} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {of, Subject} from 'rxjs';
 
 import {PaymentService} from '../service/payment.service';
@@ -25,6 +25,7 @@ import {ITaxRule} from '../../tax-rule/tax-rule.model';
 import {IPaymentCalculation} from '../../payment-calculation/payment-calculation.model';
 import {initialState} from '../../../../store/global-store.definition';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
+import {LoggerTestingModule} from "ngx-logger/testing";
 
 describe('Component Tests', () => {
   describe('Payment Management Update Component', () => {
@@ -42,9 +43,10 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [HttpClientTestingModule, LoggerTestingModule],
         declarations: [PaymentUpdateComponent],
         providers: [
+          Router,
           FormBuilder,
           ActivatedRoute,
           provideMockStore({initialState})

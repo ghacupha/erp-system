@@ -1,3 +1,5 @@
+import {LoggerTestingModule} from "ngx-logger/testing";
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -18,7 +20,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [HttpClientTestingModule, LoggerTestingModule],
         declarations: [PaymentComponent],
         providers: [
           Router,

@@ -1,3 +1,5 @@
+import {provideMockStore} from "@ngrx/store/testing";
+
 jest.mock('@ng-bootstrap/ng-bootstrap');
 
 import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
@@ -9,6 +11,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { InvoiceService } from '../service/invoice.service';
 
 import { InvoiceDeleteDialogComponent } from './invoice-delete-dialog.component';
+import {initialState} from "../../../../store/global-store.definition";
 
 describe('Component Tests', () => {
   describe('Invoice Management Delete Component', () => {
@@ -21,7 +24,7 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
         declarations: [InvoiceDeleteDialogComponent],
-        providers: [NgbActiveModal],
+        providers: [NgbActiveModal, provideMockStore({initialState})],
       })
         .overrideTemplate(InvoiceDeleteDialogComponent, '')
         .compileComponents();

@@ -12,6 +12,7 @@ import { DealerService } from '../service/dealer.service';
 
 import { DealerComponent } from './dealer.component';
 import {initialState} from '../../../../store/global-store.definition';
+import {LoggerTestingModule} from "ngx-logger/testing";
 
 describe('Component Tests', () => {
   describe('Dealer Management Component', () => {
@@ -22,7 +23,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [HttpClientTestingModule, LoggerTestingModule],
         declarations: [DealerComponent],
         providers: [
           Router,

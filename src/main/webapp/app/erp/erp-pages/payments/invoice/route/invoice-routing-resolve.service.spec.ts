@@ -1,3 +1,5 @@
+import {provideMockStore} from "@ngrx/store/testing";
+
 jest.mock('@angular/router');
 
 import { TestBed } from '@angular/core/testing';
@@ -10,6 +12,7 @@ import { IInvoice, Invoice } from '../invoice.model';
 import { InvoiceService } from '../service/invoice.service';
 
 import { InvoiceRoutingResolveService } from './invoice-routing-resolve.service';
+import {initialState} from "../../../../store/global-store.definition";
 
 describe('Service Tests', () => {
   describe('Invoice routing resolve service', () => {
@@ -22,7 +25,7 @@ describe('Service Tests', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
-        providers: [Router, ActivatedRouteSnapshot],
+        providers: [Router, ActivatedRouteSnapshot, provideMockStore({initialState})],
       });
       mockRouter = TestBed.inject(Router);
       mockActivatedRouteSnapshot = TestBed.inject(ActivatedRouteSnapshot);

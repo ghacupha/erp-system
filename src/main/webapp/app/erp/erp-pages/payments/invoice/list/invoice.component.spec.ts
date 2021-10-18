@@ -1,3 +1,5 @@
+import {provideMockStore} from "@ngrx/store/testing";
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,6 +11,7 @@ import { of } from 'rxjs';
 import { InvoiceService } from '../service/invoice.service';
 
 import { InvoiceComponent } from './invoice.component';
+import {initialState} from "../../../../store/global-store.definition";
 
 describe('Component Tests', () => {
   describe('Invoice Management Component', () => {
@@ -22,6 +25,7 @@ describe('Component Tests', () => {
         declarations: [InvoiceComponent],
         providers: [
           Router,
+          provideMockStore({initialState}),
           {
             provide: ActivatedRoute,
             useValue: {
