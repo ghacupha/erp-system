@@ -6,7 +6,7 @@ export const dealerInvoiceWorkflows = createFeatureSelector<State>(dealerInvoice
 
 export const dealerInvoiceSelectedDealer = createSelector(
   dealerInvoiceWorkflows,
-  state => state.dealerInvoiceWorkflowState.selectedDealer
+  state => state.dealerInvoiceWorkflowState.invoiceDealer
 );
 
 export const dealerInvoiceSelected = createSelector(
@@ -16,7 +16,7 @@ export const dealerInvoiceSelected = createSelector(
 
 export const dealerInvoiceSelectedPayment = createSelector(
   dealerInvoiceWorkflows,
-  state => state.dealerInvoiceWorkflowState.selectedPayment
+  state => state.dealerInvoiceWorkflowState.invoicePayment
 );
 
 export const dealerInvoicePaymentLabels = createSelector(
