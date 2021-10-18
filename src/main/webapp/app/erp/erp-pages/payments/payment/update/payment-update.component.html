@@ -5,13 +5,13 @@
 
       <h2 id="jhi-payment-heading" [hidden]="!weAreCreatingAPayment">New Payment</h2>
 
-      <h2 id="jhi-payment-heading-editing" [hidden]="!weAreEditingAPayment">Editing Payment: {{ selectedPayment.paymentNumber }}; {{ selectedPayment.paymentDate }}</h2>
+      <h2 id="jhi-payment-heading-editing" [hidden]="!weAreEditingAPayment">Editing Payment: {{ selectedPayment.paymentNumber }}; {{ selectedPayment.paymentDate | formatMediumDate  }}</h2>
 
-      <h2 id="jhi-payment-heading-copying" [hidden]="!weAreCopyingAPayment">Copying Payment: {{ selectedPayment.paymentNumber }}; {{ selectedPayment.paymentDate }}</h2>
+      <h2 id="jhi-payment-heading-copying" [hidden]="!weAreCopyingAPayment">Copying Payment: {{ selectedPayment.paymentNumber }}; {{ selectedPayment.paymentDate | formatMediumDate  }}</h2>
 
       <h2 id="jhi-dealer-payment-heading" [hidden]="!weArePayingADealer">Paying: {{ selectedDealer.dealerName }}</h2>
 
-      <h2 id="jhi-invoice-dealer-payment-heading" [hidden]="!weArePayingAnInvoiceDealer">Paying: {{ selectedDealer.dealerName }} Invoice #: {{ selectedInvoice.invoiceNumber }} </h2>
+      <h2 id="jhi-invoice-dealer-payment-heading" [hidden]="!weArePayingAnInvoiceDealer">Paying: {{ invoiceDealer.dealerName }} Invoice #: {{ selectedInvoice.invoiceNumber }} </h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>

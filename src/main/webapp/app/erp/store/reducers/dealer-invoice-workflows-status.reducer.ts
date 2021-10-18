@@ -21,9 +21,9 @@ import {IPlaceholder} from "../../../entities/erpService/placeholder/placeholder
 export const dealerInvoiceWorkflowStateSelector = 'recordDealerInvoiceWorkflows'
 
 export interface DealerInvoiceWorkflowState {
-  selectedDealer: IDealer,
+  invoiceDealer: IDealer,
   selectedInvoice: IInvoice,
-  selectedPayment: IPayment,
+  invoicePayment: IPayment,
   selectedInvoiceLabels: IPaymentLabel[],
   selectedInvoicePlaceholders: IPlaceholder[],
   weArePayingAnInvoiceDealer: boolean,
@@ -93,10 +93,10 @@ const _dealerInvoiceWorkflowStateReducer= createReducer(
       ...state,
       dealerInvoiceWorkflowState: {
         ...state.dealerInvoiceWorkflowState,
-        // TODO REMOVE this after invoice update selectedDealer: {},
-        // TODO REMOVE this after invoice update selectedInvoice: {},
+        invoiceDealer: {},
+        selectedInvoice: {},
         weArePayingAnInvoiceDealer: false,
-        // TODO REMOVE this after invoice update selectedPayment: {},
+        invoicePayment: {},
         selectedInvoiceLabels: [],
         selectedInvoicePlaceholders: [],
         errorMessage: '',

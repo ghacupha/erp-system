@@ -83,6 +83,7 @@ export class PaymentUpdateComponent implements OnInit {
   paymentLabels: IPaymentLabel[] = [];
   placeholders: IPlaceholder[] = [];
   selectedInvoice: IInvoice = {...new Invoice()};
+  invoiceDealer: IDealer= {...new Dealer()};
 
   editForm = this.fb.group({
     id: [],
@@ -132,7 +133,7 @@ export class PaymentUpdateComponent implements OnInit {
       }
     });
     this.store.select<IDealer>(dealerInvoiceSelectedDealer).subscribe(dealr => {
-      this.selectedDealer = dealr;
+      this.invoiceDealer = dealr;
     });
 
     this.store.select<boolean>(dealerInvoicePaymentState).subscribe(state => {
@@ -150,7 +151,6 @@ export class PaymentUpdateComponent implements OnInit {
       }
     });
 
-    // TODO CHECK THIS SELECTOR IS WORKING
     this.store.select<IInvoice>(dealerInvoiceSelected).subscribe(inv => {
       this.selectedInvoice = inv;
     });
@@ -161,7 +161,7 @@ export class PaymentUpdateComponent implements OnInit {
       this.editFormUpdate(this.selectedPayment);
     } else if (this.weArePayingAnInvoiceDealer) {
       this.activatedRoute.data.subscribe(({payment}) => {
-        this.invoicePaymentUpdate(payment, this.selectedDealer, this.dealerCategory, this.paymentLabels, this.placeholders);
+        this.invoicePaymentUpdate(payment, this.invoiceDealer, this.dealerCategory, this.paymentLabels, this.placeholders);
       });
     }else {
       this.activatedRoute.data.subscribe(({payment}) => {
@@ -184,9 +184,6 @@ export class PaymentUpdateComponent implements OnInit {
 
     this.log.debug(`[PAYMENT-UPDATE: #addInvoiceDealer]Payment created ID: ${payment.paymentNumber}, DATED: ${payment.paymentDate?.format()}`);
 
-    // TODO DISPATCH NEWLY CREATED PAYMENT TO UPDATE THE INVOICE
-    // TODO CLEANUP THE STATE
-
     if (payment.id !== undefined) {
       this.subscribeToInvoiceDealerUpdate(this.paymentService.update(payment));
     } else {
@@ -206,7 +203,6 @@ export class PaymentUpdateComponent implements OnInit {
     this.isSaving = false;
     result.subscribe(res => {
 
-      // TODO prevent payment duplication
       if (!this.weArePayingAnInvoiceDealer) {
         this.store.dispatch(paymentSaveButtonClicked());
       }
