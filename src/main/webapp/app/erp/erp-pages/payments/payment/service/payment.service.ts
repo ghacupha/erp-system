@@ -28,7 +28,7 @@ export class PaymentService {
 
   create(payment: IPayment): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(payment);
-    this.log.debug(`Request to create payment id: ${copy.paymentNumber}, dated: ${copy.paymentDate}`);
+    this.log.debug(`[PAYMENT-SERVICE #create]Request to create payment id: ${copy.paymentNumber}, dated: ${copy.paymentDate}`);
     return this.http
       .post<IPayment>(this.resourceUrl, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
