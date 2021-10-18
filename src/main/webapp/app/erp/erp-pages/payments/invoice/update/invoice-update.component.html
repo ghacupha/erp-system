@@ -1,7 +1,9 @@
 <div class="row justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-invoice-heading" data-cy="InvoiceCreateUpdateHeading">Create or edit a Invoice</h2>
+      <h2 id="jhi-invoice-heading" data-cy="InvoiceCreateUpdateHeading" [hidden]="weArePayingAnInvoiceDealer">Create or edit a Invoice</h2>
+
+      <h2 id="jhi-invoice-dealer-heading" data-cy="InvoiceCreateInvoiceUpdateHeading" [hidden]="!weArePayingAnInvoiceDealer">Create Invoice for {{ storedDealer.dealerName }} </h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>

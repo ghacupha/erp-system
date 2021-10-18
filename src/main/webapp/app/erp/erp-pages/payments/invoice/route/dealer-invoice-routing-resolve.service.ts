@@ -16,7 +16,7 @@ export class DealerInvoiceRoutingResolveService implements Resolve<IInvoice>  {
 
   resolve(): Observable<IInvoice> | Observable<never> {
 
-    const invoiceDealer: Observable<IDealer> = this.store.pipe(select(dealerInvoiceSelectedDealer)).pipe()
+    const invoiceDealer: Observable<IDealer> = this.store.pipe(select(dealerInvoiceSelectedDealer)).pipe();
 
     let invoice = {
       ...new Invoice(),
@@ -31,7 +31,7 @@ export class DealerInvoiceRoutingResolveService implements Resolve<IInvoice>  {
         paymentLabels: dealer.paymentLabels,
         placeholders: dealer.placeholders,
       }
-    })
+    });
 
     return of(invoice);
   }

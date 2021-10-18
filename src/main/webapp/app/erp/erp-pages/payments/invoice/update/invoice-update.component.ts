@@ -7,17 +7,21 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IInvoice, Invoice } from '../invoice.model';
 import { InvoiceService } from '../service/invoice.service';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import {IPaymentLabel} from '../../../payment-label/payment-label.model';
 import {IPayment} from '../../payment/payment.model';
 import {PaymentLabelService} from '../../../payment-label/service/payment-label.service';
 import {PaymentService} from '../../payment/service/payment.service';
-import {Store} from "@ngrx/store";
+import {select, Store} from "@ngrx/store";
 import {State} from "../../../../store/global-store.definition";
 import {recordInvoicePaymentButtonClicked} from "../../../../store/actions/dealer-invoice-workflows-status.actions";
+import {Dealer, IDealer} from "../../../dealers/dealer/dealer.model";
+import {DealerService} from "../../../dealers/dealer/service/dealer.service";
+import {
+  dealerInvoicePaymentState,
+  dealerInvoiceSelectedDealer
+} from "../../../../store/selectors/dealer-invoice-worklows-status.selectors";
 
 @Component({
   selector: 'jhi-invoice-update',
@@ -44,6 +48,9 @@ export class InvoiceUpdateComponent implements OnInit {
     placeholders: [],
   });
 
+  weArePayingAnInvoiceDealer = false;
+  storedDealer: IDealer = {...new Dealer()}
+
   constructor(
     protected invoiceService: InvoiceService,
     protected paymentLabelService: PaymentLabelService,
@@ -54,14 +61,27 @@ export class InvoiceUpdateComponent implements OnInit {
     protected fb: FormBuilder,
     protected router: Router,
     protected store: Store<State>
-  ) {}
+  ) {
+    this.store.pipe(select(dealerInvoicePaymentState)).subscribe(payingDealer => this.weArePayingAnInvoiceDealer = payingDealer);
+
+    this.store.select<IDealer>(dealerInvoiceSelectedDealer).subscribe(dealer => {
+      this.storedDealer = dealer;
+    });
+  }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ invoice }) => {
-      this.updateForm(invoice);
 
-      this.loadRelationshipsOptions();
-    });
+    if (this.weArePayingAnInvoiceDealer) {
+      this.activatedRoute.data.subscribe(({invoice}) => {
+        this.updateFormWithStoredDealer(invoice, this.storedDealer);
+      });
+    } else {
+      this.activatedRoute.data.subscribe(({invoice}) => {
+        this.updateForm(invoice);
+      });
+    }
+
+    this.loadRelationshipsOptions();
   }
 
   previousState(): void {
@@ -162,6 +182,32 @@ export class InvoiceUpdateComponent implements OnInit {
 
   protected onSaveFinalize(): void {
     this.isSaving = false;
+  }
+
+  protected updateFormWithStoredDealer(invoice: IInvoice, storedDealer: IDealer): void {
+    this.editForm.patchValue({
+      id: invoice.id,
+      invoiceNumber: invoice.invoiceNumber,
+      invoiceDate: invoice.invoiceDate,
+      invoiceAmount: invoice.invoiceAmount,
+      currency: invoice.currency,
+      conversionRate: invoice.conversionRate,
+      paymentLabels: storedDealer.paymentLabels,
+      payment: invoice.payment,
+      dealer: storedDealer,
+      placeholders: storedDealer.placeholders,
+    });
+
+    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
+      this.paymentLabelsSharedCollection,
+      ...(invoice.paymentLabels ?? [])
+    );
+    this.paymentsSharedCollection = this.paymentService.addPaymentToCollectionIfMissing(this.paymentsSharedCollection, invoice.payment);
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, invoice.dealer);
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+      this.placeholdersSharedCollection,
+      ...(invoice.placeholders ?? [])
+    );
   }
 
   protected updateForm(invoice: IInvoice): void {

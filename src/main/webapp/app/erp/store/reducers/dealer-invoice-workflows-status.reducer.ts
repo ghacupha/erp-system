@@ -37,7 +37,7 @@ const _dealerInvoiceWorkflowStateReducer= createReducer(
       ...state,
       dealerInvoiceWorkflowState: {
         ...state.dealerInvoiceWorkflowState,
-        selectedDealer,
+        invoiceDealer: selectedDealer,
         weArePayingAnInvoiceDealer: true,
       }
     })),
@@ -56,7 +56,7 @@ const _dealerInvoiceWorkflowStateReducer= createReducer(
       dealerInvoiceWorkflowState: {
         ...state.dealerInvoiceWorkflowState,
         selectedInvoice,
-        selectedDealer,
+        invoiceDealer: selectedDealer,
         weArePayingAnInvoiceDealer: true
       }
     })),
@@ -136,7 +136,7 @@ const _dealerInvoiceWorkflowStateReducer= createReducer(
       ...state,
       dealerInvoiceWorkflowState: {
         ...state.dealerInvoiceWorkflowState,
-        selectedDealer: {},
+        invoiceDealer: {},
         selectedInvoice: {},
         weArePayingAnInvoiceDealer: false,
         selectedPayment: {},
