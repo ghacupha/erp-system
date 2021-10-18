@@ -11,6 +11,10 @@ export const recordDealerInvoiceButtonClicked = createAction(
   }>()
 );
 
+export const dealerInvoicePaymentWorkflowCancelled = createAction(
+  '[Invoice Update: Cancel BUtton] dealerInvoicePaymentWorkflowCancelled',
+);
+
 export const recordInvoicePaymentButtonClicked = createAction(
   '[Invoice Update Form] record invoice payment button clicked',
   props<{

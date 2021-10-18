@@ -4,13 +4,15 @@ import {Action, createReducer, on} from "@ngrx/store";
 import {initialState, State} from "../global-store.definition";
 import {
   addPaymentToInvoiceButtonClicked,
-  dealerAcquiredForInvoicedPayment,
+  dealerAcquiredForInvoicedPayment, dealerInvoicePaymentWorkflowCancelled,
   dealerInvoiceStateReset,
   invoiceAcquiredForPaymentWithLabels,
   invoiceAcquiredForPaymentWithPlaceholders,
   paymentToInvoiceDealerConcluded,
   recordDealerInvoiceButtonClicked,
-  recordInvoicePaymentButtonClicked, selectedInvoiceForUpdateAcquired, selectedInvoiceUpdatedRequisitioned,
+  recordInvoicePaymentButtonClicked,
+  selectedInvoiceForUpdateAcquired,
+  selectedInvoiceUpdatedRequisitioned,
   selectedInvoiceUpdatedWithPaymentSuccessfully,
   selectedInvoiceUpdateWithPaymentErrored
 } from "../actions/dealer-invoice-workflows-status.actions";
@@ -48,6 +50,20 @@ const _dealerInvoiceWorkflowStateReducer= createReducer(
         ...state.dealerInvoiceWorkflowState,
         selectedInvoice,
         weArePayingAnInvoiceDealer: true
+      }
+    })),
+
+    on(dealerInvoicePaymentWorkflowCancelled, (state) => ({
+      ...state,
+      dealerInvoiceWorkflowState: {
+        ...state.dealerInvoiceWorkflowState,
+        selectedInvoice: {},
+        invoiceDealer: {},
+        weArePayingAnInvoiceDealer: false,
+        invoicePayment: {},
+        selectedInvoiceLabels: [],
+        selectedInvoicePlaceholders: [],
+        errorMessage: '',
       }
     })),
 
