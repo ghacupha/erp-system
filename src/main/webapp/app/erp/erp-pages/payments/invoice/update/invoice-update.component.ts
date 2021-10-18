@@ -15,7 +15,10 @@ import {PaymentLabelService} from '../../../payment-label/service/payment-label.
 import {PaymentService} from '../../payment/service/payment.service';
 import {select, Store} from "@ngrx/store";
 import {State} from "../../../../store/global-store.definition";
-import {recordInvoicePaymentButtonClicked} from "../../../../store/actions/dealer-invoice-workflows-status.actions";
+import {
+  dealerInvoicePaymentWorkflowCancelled,
+  recordInvoicePaymentButtonClicked
+} from "../../../../store/actions/dealer-invoice-workflows-status.actions";
 import {Dealer, IDealer} from "../../../dealers/dealer/dealer.model";
 import {DealerService} from "../../../dealers/dealer/service/dealer.service";
 import {
@@ -85,6 +88,7 @@ export class InvoiceUpdateComponent implements OnInit {
   }
 
   previousState(): void {
+    this.store.dispatch(dealerInvoicePaymentWorkflowCancelled());
     window.history.back();
   }
 
