@@ -1,3 +1,5 @@
+import {LoggerTestingModule} from "ngx-logger/testing";
+
 jest.mock('@angular/router');
 
 import { TestBed } from '@angular/core/testing';
@@ -21,7 +23,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [HttpClientTestingModule, LoggerTestingModule],
         providers: [Router, ActivatedRouteSnapshot],
       });
       mockRouter = TestBed.inject(Router);

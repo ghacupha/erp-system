@@ -49,7 +49,6 @@ import {
 import {IInvoice, Invoice} from "../../invoice/invoice.model";
 import {
   dealerInvoiceStateReset,
-  paymentToInvoiceDealerConcluded,
 } from "../../../../store/actions/dealer-invoice-workflows-status.actions";
 import {InvoiceService} from "../../invoice/service/invoice.service";
 import {NGXLogger} from "ngx-logger";

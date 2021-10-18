@@ -7,6 +7,8 @@ import { CurrencyTypes } from 'app/entities/enumerations/currency-types.model';
 import { IInvoice, Invoice } from '../invoice.model';
 
 import { InvoiceService } from './invoice.service';
+import {MockStore, provideMockStore} from "@ngrx/store/testing";
+import {initialState} from "../../../../store/global-store.definition";
 
 describe('Service Tests', () => {
   describe('Invoice Service', () => {
@@ -15,15 +17,18 @@ describe('Service Tests', () => {
     let elemDefault: IInvoice;
     let expectedResult: IInvoice | IInvoice[] | boolean | null;
     let currentDate: dayjs.Dayjs;
+    let store: MockStore
 
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
+        providers: [provideMockStore({initialState})]
       });
       expectedResult = null;
       service = TestBed.inject(InvoiceService);
       httpMock = TestBed.inject(HttpTestingController);
       currentDate = dayjs();
+      store = TestBed.inject(MockStore);
 
       elemDefault = {
         id: 0,

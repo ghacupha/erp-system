@@ -1,3 +1,5 @@
+import {LoggerTestingModule} from "ngx-logger/testing";
+
 jest.mock('@ng-bootstrap/ng-bootstrap');
 
 import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
@@ -19,7 +21,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [HttpClientTestingModule, LoggerTestingModule],
         declarations: [PaymentDeleteDialogComponent],
         providers: [NgbActiveModal],
       })

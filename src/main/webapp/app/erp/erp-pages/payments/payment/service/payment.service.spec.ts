@@ -7,6 +7,7 @@ import { CurrencyTypes } from 'app/entities/enumerations/currency-types.model';
 import { IPayment, Payment } from '../payment.model';
 
 import { PaymentService } from './payment.service';
+import {LoggerTestingModule} from "ngx-logger/testing";
 
 describe('Service Tests', () => {
   describe('Payment Service', () => {
@@ -18,7 +19,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [HttpClientTestingModule, LoggerTestingModule],
       });
       expectedResult = null;
       service = TestBed.inject(PaymentService);
