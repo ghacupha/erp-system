@@ -182,7 +182,7 @@ export class PaymentUpdateComponent implements OnInit {
     this.isSaving = true;
     const payment = this.createFromForm();
 
-    this.log.debug(`Payment created ID: ${payment.paymentNumber}, DATED: ${payment.paymentDate?.format()}`);
+    this.log.debug(`[PAYMENT-UPDATE: #addInvoiceDealer]Payment created ID: ${payment.paymentNumber}, DATED: ${payment.paymentDate?.format()}`);
 
     // TODO DISPATCH NEWLY CREATED PAYMENT TO UPDATE THE INVOICE
     // TODO CLEANUP THE STATE
