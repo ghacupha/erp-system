@@ -16,6 +16,7 @@ import {
   dealerAcquiredForPayment, requisitionForDealerCategoryInitiated
 } from "../../../../store/actions/dealer-workflows-status.actions";
 import {recordDealerInvoiceButtonClicked} from "../../../../store/actions/dealer-invoice-workflows-status.actions";
+import {NGXLogger} from "ngx-logger";
 
 @Component({
   selector: 'jhi-dealer',
@@ -38,7 +39,8 @@ export class DealerComponent implements OnInit {
     protected router: Router,
     protected modalService: NgbModal,
     protected store: Store<State>,
-    protected dealerCategoryService: DealerCategoryService
+    protected dealerCategoryService: DealerCategoryService,
+    protected log: NGXLogger
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -135,6 +137,8 @@ export class DealerComponent implements OnInit {
 
   recordDealerInvoice(selectedDealer: IDealer): string {
     const path = '/erp/invoice/dealer';
+
+    this.log.debug(`Commencing record of dealer's invoice on path: ${path} for dealer: ${selectedDealer.dealerName}`);
 
     this.store.dispatch(recordDealerInvoiceButtonClicked({selectedDealer}))
     this.router.navigate([path])
