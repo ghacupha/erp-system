@@ -140,7 +140,7 @@
               [ngValue]="paymentOption.id === editForm.get('payment')!.value?.id ? editForm.get('payment')!.value : paymentOption"
               *ngFor="let paymentOption of paymentsSharedCollection; trackBy: trackPaymentById"
             >
-              {{ paymentOption.id }}
+              {{ paymentOption.id }} {{ paymentOption.paymentNumber }} {{ paymentOption.paymentDate | formatMediumDate }}
             </option>
           </select>
         </div>
