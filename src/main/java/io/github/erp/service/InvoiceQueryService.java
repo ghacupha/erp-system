@@ -122,18 +122,6 @@ public class InvoiceQueryService extends QueryService<Invoice> {
                         )
                     );
             }
-            if (criteria.getPaymentId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getPaymentId(), root -> root.join(Invoice_.payment, JoinType.LEFT).get(Payment_.id))
-                    );
-            }
-            if (criteria.getDealerId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getDealerId(), root -> root.join(Invoice_.dealer, JoinType.LEFT).get(Dealer_.id))
-                    );
-            }
             if (criteria.getPlaceholderId() != null) {
                 specification =
                     specification.and(

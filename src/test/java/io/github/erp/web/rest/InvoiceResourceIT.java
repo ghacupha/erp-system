@@ -8,9 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.Dealer;
 import io.github.erp.domain.Invoice;
-import io.github.erp.domain.Payment;
 import io.github.erp.domain.PaymentLabel;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.enumeration.CurrencyTypes;
@@ -782,58 +780,6 @@ class InvoiceResourceIT {
 
         // Get all the invoiceList where paymentLabel equals to (paymentLabelId + 1)
         defaultInvoiceShouldNotBeFound("paymentLabelId.equals=" + (paymentLabelId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllInvoicesByPaymentIsEqualToSomething() throws Exception {
-        // Initialize the database
-        invoiceRepository.saveAndFlush(invoice);
-        Payment payment;
-        if (TestUtil.findAll(em, Payment.class).isEmpty()) {
-            payment = PaymentResourceIT.createEntity(em);
-            em.persist(payment);
-            em.flush();
-        } else {
-            payment = TestUtil.findAll(em, Payment.class).get(0);
-        }
-        em.persist(payment);
-        em.flush();
-        invoice.setPayment(payment);
-        invoiceRepository.saveAndFlush(invoice);
-        Long paymentId = payment.getId();
-
-        // Get all the invoiceList where payment equals to paymentId
-        defaultInvoiceShouldBeFound("paymentId.equals=" + paymentId);
-
-        // Get all the invoiceList where payment equals to (paymentId + 1)
-        defaultInvoiceShouldNotBeFound("paymentId.equals=" + (paymentId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllInvoicesByDealerIsEqualToSomething() throws Exception {
-        // Initialize the database
-        invoiceRepository.saveAndFlush(invoice);
-        Dealer dealer;
-        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            dealer = DealerResourceIT.createEntity(em);
-            em.persist(dealer);
-            em.flush();
-        } else {
-            dealer = TestUtil.findAll(em, Dealer.class).get(0);
-        }
-        em.persist(dealer);
-        em.flush();
-        invoice.setDealer(dealer);
-        invoiceRepository.saveAndFlush(invoice);
-        Long dealerId = dealer.getId();
-
-        // Get all the invoiceList where dealer equals to dealerId
-        defaultInvoiceShouldBeFound("dealerId.equals=" + dealerId);
-
-        // Get all the invoiceList where dealer equals to (dealerId + 1)
-        defaultInvoiceShouldNotBeFound("dealerId.equals=" + (dealerId + 1));
     }
 
     @Test

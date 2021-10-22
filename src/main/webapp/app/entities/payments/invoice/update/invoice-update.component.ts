@@ -9,10 +9,6 @@ import { IInvoice, Invoice } from '../invoice.model';
 import { InvoiceService } from '../service/invoice.service';
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
-import { IPayment } from 'app/entities/payments/payment/payment.model';
-import { PaymentService } from 'app/entities/payments/payment/service/payment.service';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
@@ -24,8 +20,6 @@ export class InvoiceUpdateComponent implements OnInit {
   isSaving = false;
 
   paymentLabelsSharedCollection: IPaymentLabel[] = [];
-  paymentsSharedCollection: IPayment[] = [];
-  dealersSharedCollection: IDealer[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
 
   editForm = this.fb.group({
@@ -36,16 +30,12 @@ export class InvoiceUpdateComponent implements OnInit {
     currency: [null, [Validators.required]],
     conversionRate: [null, [Validators.required, Validators.min(1.0)]],
     paymentLabels: [],
-    payment: [],
-    dealer: [],
     placeholders: [],
   });
 
   constructor(
     protected invoiceService: InvoiceService,
     protected paymentLabelService: PaymentLabelService,
-    protected paymentService: PaymentService,
-    protected dealerService: DealerService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
@@ -74,14 +64,6 @@ export class InvoiceUpdateComponent implements OnInit {
   }
 
   trackPaymentLabelById(index: number, item: IPaymentLabel): number {
-    return item.id!;
-  }
-
-  trackPaymentById(index: number, item: IPayment): number {
-    return item.id!;
-  }
-
-  trackDealerById(index: number, item: IDealer): number {
     return item.id!;
   }
 
@@ -139,8 +121,6 @@ export class InvoiceUpdateComponent implements OnInit {
       currency: invoice.currency,
       conversionRate: invoice.conversionRate,
       paymentLabels: invoice.paymentLabels,
-      payment: invoice.payment,
-      dealer: invoice.dealer,
       placeholders: invoice.placeholders,
     });
 
@@ -148,8 +128,6 @@ export class InvoiceUpdateComponent implements OnInit {
       this.paymentLabelsSharedCollection,
       ...(invoice.paymentLabels ?? [])
     );
-    this.paymentsSharedCollection = this.paymentService.addPaymentToCollectionIfMissing(this.paymentsSharedCollection, invoice.payment);
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, invoice.dealer);
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(invoice.placeholders ?? [])
@@ -166,20 +144,6 @@ export class InvoiceUpdateComponent implements OnInit {
         )
       )
       .subscribe((paymentLabels: IPaymentLabel[]) => (this.paymentLabelsSharedCollection = paymentLabels));
-
-    this.paymentService
-      .query()
-      .pipe(map((res: HttpResponse<IPayment[]>) => res.body ?? []))
-      .pipe(
-        map((payments: IPayment[]) => this.paymentService.addPaymentToCollectionIfMissing(payments, this.editForm.get('payment')!.value))
-      )
-      .subscribe((payments: IPayment[]) => (this.paymentsSharedCollection = payments));
-
-    this.dealerService
-      .query()
-      .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
-      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('dealer')!.value)))
-      .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
 
     this.placeholderService
       .query()
@@ -202,8 +166,6 @@ export class InvoiceUpdateComponent implements OnInit {
       currency: this.editForm.get(['currency'])!.value,
       conversionRate: this.editForm.get(['conversionRate'])!.value,
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
-      payment: this.editForm.get(['payment'])!.value,
-      dealer: this.editForm.get(['dealer'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
     };
   }

@@ -29,12 +29,6 @@
             <column name="conversion_rate" type="double">
                 <constraints nullable="false" />
             </column>
-            <column name="payment_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-            <column name="dealer_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>

@@ -56,8 +56,6 @@
           <th scope="col" jhiSortBy="invoiceAmount"><span>Invoice Amount</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="currency"><span>Currency</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="conversionRate"><span>Conversion Rate</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="payment.id"><span>Payment</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -71,16 +69,6 @@
           <td>{{ invoice.invoiceAmount }}</td>
           <td>{{ invoice.currency }}</td>
           <td>{{ invoice.conversionRate }}</td>
-          <td>
-            <div *ngIf="invoice.payment">
-              <a [routerLink]="['/payment', invoice.payment?.id, 'view']">{{ invoice.payment?.id }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="invoice.dealer">
-              <a [routerLink]="['/dealer', invoice.dealer?.id, 'view']">{{ invoice.dealer?.dealerName }}</a>
-            </div>
-          </td>
           <td class="text-right">
             <div class="btn-group">
               <button

@@ -32,10 +32,6 @@ public class InvoiceDTO implements Serializable {
 
     private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
 
-    private PaymentDTO payment;
-
-    private DealerDTO dealer;
-
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     public Long getId() {
@@ -94,22 +90,6 @@ public class InvoiceDTO implements Serializable {
         this.paymentLabels = paymentLabels;
     }
 
-    public PaymentDTO getPayment() {
-        return payment;
-    }
-
-    public void setPayment(PaymentDTO payment) {
-        this.payment = payment;
-    }
-
-    public DealerDTO getDealer() {
-        return dealer;
-    }
-
-    public void setDealer(DealerDTO dealer) {
-        this.dealer = dealer;
-    }
-
     public Set<PlaceholderDTO> getPlaceholders() {
         return placeholders;
     }
@@ -150,8 +130,6 @@ public class InvoiceDTO implements Serializable {
             ", currency='" + getCurrency() + "'" +
             ", conversionRate=" + getConversionRate() +
             ", paymentLabels=" + getPaymentLabels() +
-            ", payment=" + getPayment() +
-            ", dealer=" + getDealer() +
             ", placeholders=" + getPlaceholders() +
             "}";
     }
