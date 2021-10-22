@@ -36,20 +36,6 @@
       "otherEntityRelationshipName": "invoice"
     },
     {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "payment",
-      "otherEntityRelationshipName": "ownedInvoice",
-      "relationshipName": "payment",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipName": "dealer",
-      "otherEntityName": "dealer",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "dealerName",
-      "otherEntityRelationshipName": "invoice"
-    },
-    {
       "relationshipName": "placeholder",
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",

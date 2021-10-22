@@ -49,8 +49,6 @@ describe('Invoice e2e test', () => {
       invoiceUpdatePage.currencySelectLastOption(),
       invoiceUpdatePage.setConversionRateInput('5'),
       // invoiceUpdatePage.paymentLabelSelectLastOption(),
-      invoiceUpdatePage.paymentSelectLastOption(),
-      invoiceUpdatePage.dealerSelectLastOption(),
       // invoiceUpdatePage.placeholderSelectLastOption(),
     ]);
 

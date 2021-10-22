@@ -20,18 +20,6 @@
                                  referencedColumnNames="id"
                                  referencedTableName="payment_label"/>
 
-        <addForeignKeyConstraint baseColumnNames="payment_id"
-                                 baseTableName="invoice"
-                                 constraintName="fk_invoice__payment_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="payment"/>
-
-        <addForeignKeyConstraint baseColumnNames="dealer_id"
-                                 baseTableName="invoice"
-                                 constraintName="fk_invoice__dealer_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="dealer"/>
-
         <addForeignKeyConstraint baseColumnNames="invoice_id"
                                  baseTableName="rel_invoice__placeholder"
                                  constraintName="fk_rel_invoice__placeholder__invoice_id"

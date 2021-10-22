@@ -59,20 +59,6 @@ public class Invoice implements Serializable {
     @JsonIgnoreProperties(value = { "containingPaymentLabel", "placeholders" }, allowSetters = true)
     private Set<PaymentLabel> paymentLabels = new HashSet<>();
 
-    @ManyToOne
-    @JsonIgnoreProperties(
-        value = { "paymentLabels", "dealer", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup" },
-        allowSetters = true
-    )
-    private Payment payment;
-
-    @ManyToOne
-    @JsonIgnoreProperties(
-        value = { "paymentLabels", "dealerGroup", "paymentRequisitions", "signedPayments", "placeholders" },
-        allowSetters = true
-    )
-    private Dealer dealer;
-
     @ManyToMany
     @JoinTable(
         name = "rel_invoice__placeholder",
@@ -183,32 +169,6 @@ public class Invoice implements Serializable {
 
     public Invoice removePaymentLabel(PaymentLabel paymentLabel) {
         this.paymentLabels.remove(paymentLabel);
-        return this;
-    }
-
-    public Payment getPayment() {
-        return this.payment;
-    }
-
-    public void setPayment(Payment payment) {
-        this.payment = payment;
-    }
-
-    public Invoice payment(Payment payment) {
-        this.setPayment(payment);
-        return this;
-    }
-
-    public Dealer getDealer() {
-        return this.dealer;
-    }
-
-    public void setDealer(Dealer dealer) {
-        this.dealer = dealer;
-    }
-
-    public Invoice dealer(Dealer dealer) {
-        this.setDealer(dealer);
         return this;
     }
 

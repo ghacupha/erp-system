@@ -37,8 +37,6 @@ export class InvoiceUpdatePage {
   conversionRateInput = element(by.id('field_conversionRate'));
 
   paymentLabelSelect = element(by.id('field_paymentLabel'));
-  paymentSelect = element(by.id('field_payment'));
-  dealerSelect = element(by.id('field_dealer'));
   placeholderSelect = element(by.id('field_placeholder'));
 
   async getPageTitle(): Promise<string> {
@@ -111,38 +109,6 @@ export class InvoiceUpdatePage {
 
   async getPaymentLabelSelectedOption(): Promise<string> {
     return await this.paymentLabelSelect.element(by.css('option:checked')).getText();
-  }
-
-  async paymentSelectLastOption(): Promise<void> {
-    await this.paymentSelect.all(by.tagName('option')).last().click();
-  }
-
-  async paymentSelectOption(option: string): Promise<void> {
-    await this.paymentSelect.sendKeys(option);
-  }
-
-  getPaymentSelect(): ElementFinder {
-    return this.paymentSelect;
-  }
-
-  async getPaymentSelectedOption(): Promise<string> {
-    return await this.paymentSelect.element(by.css('option:checked')).getText();
-  }
-
-  async dealerSelectLastOption(): Promise<void> {
-    await this.dealerSelect.all(by.tagName('option')).last().click();
-  }
-
-  async dealerSelectOption(option: string): Promise<void> {
-    await this.dealerSelect.sendKeys(option);
-  }
-
-  getDealerSelect(): ElementFinder {
-    return this.dealerSelect;
-  }
-
-  async getDealerSelectedOption(): Promise<string> {
-    return await this.dealerSelect.element(by.css('option:checked')).getText();
   }
 
   async placeholderSelectLastOption(): Promise<void> {
