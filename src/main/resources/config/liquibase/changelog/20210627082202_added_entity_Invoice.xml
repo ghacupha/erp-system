@@ -29,6 +29,12 @@
             <column name="conversion_rate" type="double">
                 <constraints nullable="false" />
             </column>
+            <column name="payment_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="dealer_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
@@ -80,6 +86,8 @@
             <column name="invoice_amount" type="numeric"/>
             <column name="currency" type="string"/>
             <column name="conversion_rate" type="numeric"/>
+            <column name="payment_id" type="numeric"/>
+            <column name="dealer_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

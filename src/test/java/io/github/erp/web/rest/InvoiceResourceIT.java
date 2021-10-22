@@ -68,6 +68,14 @@ class InvoiceResourceIT {
     private static final Double UPDATED_CONVERSION_RATE = 2D;
     private static final Double SMALLER_CONVERSION_RATE = 1.00D - 1D;
 
+    private static final Long DEFAULT_PAYMENT_ID = 1L;
+    private static final Long UPDATED_PAYMENT_ID = 2L;
+    private static final Long SMALLER_PAYMENT_ID = 1L - 1L;
+
+    private static final Long DEFAULT_DEALER_ID = 1L;
+    private static final Long UPDATED_DEALER_ID = 2L;
+    private static final Long SMALLER_DEALER_ID = 1L - 1L;
+
     private static final String ENTITY_API_URL = "/api/invoices";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/invoices";
@@ -115,7 +123,9 @@ class InvoiceResourceIT {
             .invoiceDate(DEFAULT_INVOICE_DATE)
             .invoiceAmount(DEFAULT_INVOICE_AMOUNT)
             .currency(DEFAULT_CURRENCY)
-            .conversionRate(DEFAULT_CONVERSION_RATE);
+            .conversionRate(DEFAULT_CONVERSION_RATE)
+            .paymentId(DEFAULT_PAYMENT_ID)
+            .dealerId(DEFAULT_DEALER_ID);
         return invoice;
     }
 
@@ -131,7 +141,9 @@ class InvoiceResourceIT {
             .invoiceDate(UPDATED_INVOICE_DATE)
             .invoiceAmount(UPDATED_INVOICE_AMOUNT)
             .currency(UPDATED_CURRENCY)
-            .conversionRate(UPDATED_CONVERSION_RATE);
+            .conversionRate(UPDATED_CONVERSION_RATE)
+            .paymentId(UPDATED_PAYMENT_ID)
+            .dealerId(UPDATED_DEALER_ID);
         return invoice;
     }
 
@@ -159,6 +171,8 @@ class InvoiceResourceIT {
         assertThat(testInvoice.getInvoiceAmount()).isEqualByComparingTo(DEFAULT_INVOICE_AMOUNT);
         assertThat(testInvoice.getCurrency()).isEqualTo(DEFAULT_CURRENCY);
         assertThat(testInvoice.getConversionRate()).isEqualTo(DEFAULT_CONVERSION_RATE);
+        assertThat(testInvoice.getPaymentId()).isEqualTo(DEFAULT_PAYMENT_ID);
+        assertThat(testInvoice.getDealerId()).isEqualTo(DEFAULT_DEALER_ID);
 
         // Validate the Invoice in Elasticsearch
         verify(mockInvoiceSearchRepository, times(1)).save(testInvoice);
@@ -256,7 +270,9 @@ class InvoiceResourceIT {
             .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())))
             .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(sameNumber(DEFAULT_INVOICE_AMOUNT))))
             .andExpect(jsonPath("$.[*].currency").value(hasItem(DEFAULT_CURRENCY.toString())))
-            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())));
+            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())))
+            .andExpect(jsonPath("$.[*].paymentId").value(hasItem(DEFAULT_PAYMENT_ID.intValue())))
+            .andExpect(jsonPath("$.[*].dealerId").value(hasItem(DEFAULT_DEALER_ID.intValue())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -293,7 +309,9 @@ class InvoiceResourceIT {
             .andExpect(jsonPath("$.invoiceDate").value(DEFAULT_INVOICE_DATE.toString()))
             .andExpect(jsonPath("$.invoiceAmount").value(sameNumber(DEFAULT_INVOICE_AMOUNT)))
             .andExpect(jsonPath("$.currency").value(DEFAULT_CURRENCY.toString()))
-            .andExpect(jsonPath("$.conversionRate").value(DEFAULT_CONVERSION_RATE.doubleValue()));
+            .andExpect(jsonPath("$.conversionRate").value(DEFAULT_CONVERSION_RATE.doubleValue()))
+            .andExpect(jsonPath("$.paymentId").value(DEFAULT_PAYMENT_ID.intValue()))
+            .andExpect(jsonPath("$.dealerId").value(DEFAULT_DEALER_ID.intValue()));
     }
 
     @Test
@@ -758,6 +776,214 @@ class InvoiceResourceIT {
 
     @Test
     @Transactional
+    void getAllInvoicesByPaymentIdIsEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where paymentId equals to DEFAULT_PAYMENT_ID
+        defaultInvoiceShouldBeFound("paymentId.equals=" + DEFAULT_PAYMENT_ID);
+
+        // Get all the invoiceList where paymentId equals to UPDATED_PAYMENT_ID
+        defaultInvoiceShouldNotBeFound("paymentId.equals=" + UPDATED_PAYMENT_ID);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByPaymentIdIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where paymentId not equals to DEFAULT_PAYMENT_ID
+        defaultInvoiceShouldNotBeFound("paymentId.notEquals=" + DEFAULT_PAYMENT_ID);
+
+        // Get all the invoiceList where paymentId not equals to UPDATED_PAYMENT_ID
+        defaultInvoiceShouldBeFound("paymentId.notEquals=" + UPDATED_PAYMENT_ID);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByPaymentIdIsInShouldWork() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where paymentId in DEFAULT_PAYMENT_ID or UPDATED_PAYMENT_ID
+        defaultInvoiceShouldBeFound("paymentId.in=" + DEFAULT_PAYMENT_ID + "," + UPDATED_PAYMENT_ID);
+
+        // Get all the invoiceList where paymentId equals to UPDATED_PAYMENT_ID
+        defaultInvoiceShouldNotBeFound("paymentId.in=" + UPDATED_PAYMENT_ID);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByPaymentIdIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where paymentId is not null
+        defaultInvoiceShouldBeFound("paymentId.specified=true");
+
+        // Get all the invoiceList where paymentId is null
+        defaultInvoiceShouldNotBeFound("paymentId.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByPaymentIdIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where paymentId is greater than or equal to DEFAULT_PAYMENT_ID
+        defaultInvoiceShouldBeFound("paymentId.greaterThanOrEqual=" + DEFAULT_PAYMENT_ID);
+
+        // Get all the invoiceList where paymentId is greater than or equal to UPDATED_PAYMENT_ID
+        defaultInvoiceShouldNotBeFound("paymentId.greaterThanOrEqual=" + UPDATED_PAYMENT_ID);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByPaymentIdIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where paymentId is less than or equal to DEFAULT_PAYMENT_ID
+        defaultInvoiceShouldBeFound("paymentId.lessThanOrEqual=" + DEFAULT_PAYMENT_ID);
+
+        // Get all the invoiceList where paymentId is less than or equal to SMALLER_PAYMENT_ID
+        defaultInvoiceShouldNotBeFound("paymentId.lessThanOrEqual=" + SMALLER_PAYMENT_ID);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByPaymentIdIsLessThanSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where paymentId is less than DEFAULT_PAYMENT_ID
+        defaultInvoiceShouldNotBeFound("paymentId.lessThan=" + DEFAULT_PAYMENT_ID);
+
+        // Get all the invoiceList where paymentId is less than UPDATED_PAYMENT_ID
+        defaultInvoiceShouldBeFound("paymentId.lessThan=" + UPDATED_PAYMENT_ID);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByPaymentIdIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where paymentId is greater than DEFAULT_PAYMENT_ID
+        defaultInvoiceShouldNotBeFound("paymentId.greaterThan=" + DEFAULT_PAYMENT_ID);
+
+        // Get all the invoiceList where paymentId is greater than SMALLER_PAYMENT_ID
+        defaultInvoiceShouldBeFound("paymentId.greaterThan=" + SMALLER_PAYMENT_ID);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByDealerIdIsEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where dealerId equals to DEFAULT_DEALER_ID
+        defaultInvoiceShouldBeFound("dealerId.equals=" + DEFAULT_DEALER_ID);
+
+        // Get all the invoiceList where dealerId equals to UPDATED_DEALER_ID
+        defaultInvoiceShouldNotBeFound("dealerId.equals=" + UPDATED_DEALER_ID);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByDealerIdIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where dealerId not equals to DEFAULT_DEALER_ID
+        defaultInvoiceShouldNotBeFound("dealerId.notEquals=" + DEFAULT_DEALER_ID);
+
+        // Get all the invoiceList where dealerId not equals to UPDATED_DEALER_ID
+        defaultInvoiceShouldBeFound("dealerId.notEquals=" + UPDATED_DEALER_ID);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByDealerIdIsInShouldWork() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where dealerId in DEFAULT_DEALER_ID or UPDATED_DEALER_ID
+        defaultInvoiceShouldBeFound("dealerId.in=" + DEFAULT_DEALER_ID + "," + UPDATED_DEALER_ID);
+
+        // Get all the invoiceList where dealerId equals to UPDATED_DEALER_ID
+        defaultInvoiceShouldNotBeFound("dealerId.in=" + UPDATED_DEALER_ID);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByDealerIdIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where dealerId is not null
+        defaultInvoiceShouldBeFound("dealerId.specified=true");
+
+        // Get all the invoiceList where dealerId is null
+        defaultInvoiceShouldNotBeFound("dealerId.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByDealerIdIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where dealerId is greater than or equal to DEFAULT_DEALER_ID
+        defaultInvoiceShouldBeFound("dealerId.greaterThanOrEqual=" + DEFAULT_DEALER_ID);
+
+        // Get all the invoiceList where dealerId is greater than or equal to UPDATED_DEALER_ID
+        defaultInvoiceShouldNotBeFound("dealerId.greaterThanOrEqual=" + UPDATED_DEALER_ID);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByDealerIdIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where dealerId is less than or equal to DEFAULT_DEALER_ID
+        defaultInvoiceShouldBeFound("dealerId.lessThanOrEqual=" + DEFAULT_DEALER_ID);
+
+        // Get all the invoiceList where dealerId is less than or equal to SMALLER_DEALER_ID
+        defaultInvoiceShouldNotBeFound("dealerId.lessThanOrEqual=" + SMALLER_DEALER_ID);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByDealerIdIsLessThanSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where dealerId is less than DEFAULT_DEALER_ID
+        defaultInvoiceShouldNotBeFound("dealerId.lessThan=" + DEFAULT_DEALER_ID);
+
+        // Get all the invoiceList where dealerId is less than UPDATED_DEALER_ID
+        defaultInvoiceShouldBeFound("dealerId.lessThan=" + UPDATED_DEALER_ID);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByDealerIdIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where dealerId is greater than DEFAULT_DEALER_ID
+        defaultInvoiceShouldNotBeFound("dealerId.greaterThan=" + DEFAULT_DEALER_ID);
+
+        // Get all the invoiceList where dealerId is greater than SMALLER_DEALER_ID
+        defaultInvoiceShouldBeFound("dealerId.greaterThan=" + SMALLER_DEALER_ID);
+    }
+
+    @Test
+    @Transactional
     void getAllInvoicesByPaymentLabelIsEqualToSomething() throws Exception {
         // Initialize the database
         invoiceRepository.saveAndFlush(invoice);
@@ -821,7 +1047,9 @@ class InvoiceResourceIT {
             .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())))
             .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(sameNumber(DEFAULT_INVOICE_AMOUNT))))
             .andExpect(jsonPath("$.[*].currency").value(hasItem(DEFAULT_CURRENCY.toString())))
-            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())));
+            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())))
+            .andExpect(jsonPath("$.[*].paymentId").value(hasItem(DEFAULT_PAYMENT_ID.intValue())))
+            .andExpect(jsonPath("$.[*].dealerId").value(hasItem(DEFAULT_DEALER_ID.intValue())));
 
         // Check, that the count call also returns 1
         restInvoiceMockMvc
@@ -874,7 +1102,9 @@ class InvoiceResourceIT {
             .invoiceDate(UPDATED_INVOICE_DATE)
             .invoiceAmount(UPDATED_INVOICE_AMOUNT)
             .currency(UPDATED_CURRENCY)
-            .conversionRate(UPDATED_CONVERSION_RATE);
+            .conversionRate(UPDATED_CONVERSION_RATE)
+            .paymentId(UPDATED_PAYMENT_ID)
+            .dealerId(UPDATED_DEALER_ID);
         InvoiceDTO invoiceDTO = invoiceMapper.toDto(updatedInvoice);
 
         restInvoiceMockMvc
@@ -894,6 +1124,8 @@ class InvoiceResourceIT {
         assertThat(testInvoice.getInvoiceAmount()).isEqualTo(UPDATED_INVOICE_AMOUNT);
         assertThat(testInvoice.getCurrency()).isEqualTo(UPDATED_CURRENCY);
         assertThat(testInvoice.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
+        assertThat(testInvoice.getPaymentId()).isEqualTo(UPDATED_PAYMENT_ID);
+        assertThat(testInvoice.getDealerId()).isEqualTo(UPDATED_DEALER_ID);
 
         // Validate the Invoice in Elasticsearch
         verify(mockInvoiceSearchRepository).save(testInvoice);
@@ -1004,6 +1236,8 @@ class InvoiceResourceIT {
         assertThat(testInvoice.getInvoiceAmount()).isEqualByComparingTo(UPDATED_INVOICE_AMOUNT);
         assertThat(testInvoice.getCurrency()).isEqualTo(UPDATED_CURRENCY);
         assertThat(testInvoice.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
+        assertThat(testInvoice.getPaymentId()).isEqualTo(DEFAULT_PAYMENT_ID);
+        assertThat(testInvoice.getDealerId()).isEqualTo(DEFAULT_DEALER_ID);
     }
 
     @Test
@@ -1023,7 +1257,9 @@ class InvoiceResourceIT {
             .invoiceDate(UPDATED_INVOICE_DATE)
             .invoiceAmount(UPDATED_INVOICE_AMOUNT)
             .currency(UPDATED_CURRENCY)
-            .conversionRate(UPDATED_CONVERSION_RATE);
+            .conversionRate(UPDATED_CONVERSION_RATE)
+            .paymentId(UPDATED_PAYMENT_ID)
+            .dealerId(UPDATED_DEALER_ID);
 
         restInvoiceMockMvc
             .perform(
@@ -1042,6 +1278,8 @@ class InvoiceResourceIT {
         assertThat(testInvoice.getInvoiceAmount()).isEqualByComparingTo(UPDATED_INVOICE_AMOUNT);
         assertThat(testInvoice.getCurrency()).isEqualTo(UPDATED_CURRENCY);
         assertThat(testInvoice.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
+        assertThat(testInvoice.getPaymentId()).isEqualTo(UPDATED_PAYMENT_ID);
+        assertThat(testInvoice.getDealerId()).isEqualTo(UPDATED_DEALER_ID);
     }
 
     @Test
@@ -1160,6 +1398,8 @@ class InvoiceResourceIT {
             .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())))
             .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(sameNumber(DEFAULT_INVOICE_AMOUNT))))
             .andExpect(jsonPath("$.[*].currency").value(hasItem(DEFAULT_CURRENCY.toString())))
-            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())));
+            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())))
+            .andExpect(jsonPath("$.[*].paymentId").value(hasItem(DEFAULT_PAYMENT_ID.intValue())))
+            .andExpect(jsonPath("$.[*].dealerId").value(hasItem(DEFAULT_DEALER_ID.intValue())));
     }
 }

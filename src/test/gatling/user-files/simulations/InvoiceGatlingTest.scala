@@ -76,6 +76,8 @@ class InvoiceGatlingTest extends Simulation {
                 , "invoiceAmount":"0"
                 , "currency":"KES"
                 , "conversionRate":"0"
+                , "paymentId":"0"
+                , "dealerId":"0"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_invoice_url"))).exitHereIfFailed

@@ -1,11 +1,11 @@
-id;invoice_number;invoice_date;invoice_amount;currency;conversion_rate
-1;Texas Focused;2021-06-27;15184;ZAR;46752
-2;Chief;2021-06-27;21030;TZS;74773
-3;model Australia;2021-06-26;94375;CNY;76728
-4;Unbranded SDR Consultant;2021-06-26;6307;EUR;77772
-5;Virginia Florida;2021-06-26;8068;INR;1913
-6;sticky program 1080p;2021-06-27;36763;USD;41434
-7;Court Assistant Account;2021-06-26;84021;TZS;82892
-8;Buckinghamshire strategic Krona;2021-06-26;92472;GBP;31719
-9;Dynamic Fresh;2021-06-26;33894;GBP;26945
-10;Maine;2021-06-27;32278;JPY;11255
+id;invoice_number;invoice_date;invoice_amount;currency;conversion_rate;payment_id;dealer_id
+1;Texas Focused;2021-06-27;15184;ZAR;46752;5801;89234
+2;Idaho calculating model;2021-06-26;5148;TZS;75071;94375;58419
+3;bypassing national Frozen;2021-06-26;38331;KES;29320;77772;59283
+4;Central Soap;2021-06-27;31806;KES;68011;36325;20522
+5;program 1080p Horizontal;2021-06-26;95348;ZAR;11018;70258;97394
+6;Rubber Legacy transmitting;2021-06-26;76843;CAD;35535;16111;32340
+7;visualize Dynamic iterate;2021-06-27;13945;JPY;6085;99574;33894
+8;attitude-oriented;2021-06-26;93655;EUR;32278;88319;11254
+9;customized hub;2021-06-26;72584;CAD;88985;85804;7138
+10;Awesome Salad compressing;2021-06-26;66616;GBP;79389;1051;18331

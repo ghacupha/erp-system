@@ -35,6 +35,8 @@ export class InvoiceUpdatePage {
   invoiceAmountInput = element(by.id('field_invoiceAmount'));
   currencySelect = element(by.id('field_currency'));
   conversionRateInput = element(by.id('field_conversionRate'));
+  paymentIdInput = element(by.id('field_paymentId'));
+  dealerIdInput = element(by.id('field_dealerId'));
 
   paymentLabelSelect = element(by.id('field_paymentLabel'));
   placeholderSelect = element(by.id('field_placeholder'));
@@ -93,6 +95,22 @@ export class InvoiceUpdatePage {
 
   async getConversionRateInput(): Promise<string> {
     return await this.conversionRateInput.getAttribute('value');
+  }
+
+  async setPaymentIdInput(paymentId: string): Promise<void> {
+    await this.paymentIdInput.sendKeys(paymentId);
+  }
+
+  async getPaymentIdInput(): Promise<string> {
+    return await this.paymentIdInput.getAttribute('value');
+  }
+
+  async setDealerIdInput(dealerId: string): Promise<void> {
+    await this.dealerIdInput.sendKeys(dealerId);
+  }
+
+  async getDealerIdInput(): Promise<string> {
+    return await this.dealerIdInput.getAttribute('value');
   }
 
   async paymentLabelSelectLastOption(): Promise<void> {

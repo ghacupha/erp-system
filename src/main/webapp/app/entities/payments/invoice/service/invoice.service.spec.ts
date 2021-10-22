@@ -32,6 +32,8 @@ describe('Service Tests', () => {
         invoiceAmount: 0,
         currency: CurrencyTypes.KES,
         conversionRate: 0,
+        paymentId: 0,
+        dealerId: 0,
       };
     });
 
@@ -83,6 +85,8 @@ describe('Service Tests', () => {
             invoiceAmount: 1,
             currency: 'BBBBBB',
             conversionRate: 1,
+            paymentId: 1,
+            dealerId: 1,
           },
           elemDefault
         );
@@ -107,6 +111,7 @@ describe('Service Tests', () => {
             invoiceDate: currentDate.format(DATE_FORMAT),
             invoiceAmount: 1,
             currency: 'BBBBBB',
+            paymentId: 1,
           },
           new Invoice()
         );
@@ -136,6 +141,8 @@ describe('Service Tests', () => {
             invoiceAmount: 1,
             currency: 'BBBBBB',
             conversionRate: 1,
+            paymentId: 1,
+            dealerId: 1,
           },
           elemDefault
         );
@@ -192,7 +199,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique Invoice to an array', () => {
-          const invoiceArray: IInvoice[] = [{ id: 123 }, { id: 456 }, { id: 95170 }];
+          const invoiceArray: IInvoice[] = [{ id: 123 }, { id: 456 }, { id: 61298 }];
           const invoiceCollection: IInvoice[] = [{ id: 123 }];
           expectedResult = service.addInvoiceToCollectionIfMissing(invoiceCollection, ...invoiceArray);
           expect(expectedResult).toHaveLength(3);
