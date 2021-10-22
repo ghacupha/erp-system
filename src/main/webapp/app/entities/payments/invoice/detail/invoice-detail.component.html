@@ -34,6 +34,14 @@
         <dd>
           <span>{{ invoice.conversionRate }}</span>
         </dd>
+        <dt><span>Payment Id</span></dt>
+        <dd>
+          <span>{{ invoice.paymentId }}</span>
+        </dd>
+        <dt><span>Dealer Id</span></dt>
+        <dd>
+          <span>{{ invoice.dealerId }}</span>
+        </dd>
         <dt><span>Payment Label</span></dt>
         <dd>
           <span *ngFor="let paymentLabel of invoice.paymentLabels; let last = last">

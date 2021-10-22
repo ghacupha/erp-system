@@ -49,6 +49,12 @@ public class Invoice implements Serializable {
     @Column(name = "conversion_rate", nullable = false)
     private Double conversionRate;
 
+    @Column(name = "payment_id")
+    private Long paymentId;
+
+    @Column(name = "dealer_id")
+    private Long dealerId;
+
     @ManyToMany
     @JoinTable(
         name = "rel_invoice__payment_label",
@@ -149,6 +155,32 @@ public class Invoice implements Serializable {
         this.conversionRate = conversionRate;
     }
 
+    public Long getPaymentId() {
+        return this.paymentId;
+    }
+
+    public Invoice paymentId(Long paymentId) {
+        this.setPaymentId(paymentId);
+        return this;
+    }
+
+    public void setPaymentId(Long paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    public Long getDealerId() {
+        return this.dealerId;
+    }
+
+    public Invoice dealerId(Long dealerId) {
+        this.setDealerId(dealerId);
+        return this;
+    }
+
+    public void setDealerId(Long dealerId) {
+        this.dealerId = dealerId;
+    }
+
     public Set<PaymentLabel> getPaymentLabels() {
         return this.paymentLabels;
     }
@@ -224,6 +256,8 @@ public class Invoice implements Serializable {
             ", invoiceAmount=" + getInvoiceAmount() +
             ", currency='" + getCurrency() + "'" +
             ", conversionRate=" + getConversionRate() +
+            ", paymentId=" + getPaymentId() +
+            ", dealerId=" + getDealerId() +
             "}";
     }
 }

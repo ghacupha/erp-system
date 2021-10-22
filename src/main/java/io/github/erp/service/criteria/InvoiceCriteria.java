@@ -56,6 +56,10 @@ public class InvoiceCriteria implements Serializable, Criteria {
 
     private DoubleFilter conversionRate;
 
+    private LongFilter paymentId;
+
+    private LongFilter dealerId;
+
     private LongFilter paymentLabelId;
 
     private LongFilter placeholderId;
@@ -71,6 +75,8 @@ public class InvoiceCriteria implements Serializable, Criteria {
         this.invoiceAmount = other.invoiceAmount == null ? null : other.invoiceAmount.copy();
         this.currency = other.currency == null ? null : other.currency.copy();
         this.conversionRate = other.conversionRate == null ? null : other.conversionRate.copy();
+        this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
+        this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
@@ -171,6 +177,36 @@ public class InvoiceCriteria implements Serializable, Criteria {
         this.conversionRate = conversionRate;
     }
 
+    public LongFilter getPaymentId() {
+        return paymentId;
+    }
+
+    public LongFilter paymentId() {
+        if (paymentId == null) {
+            paymentId = new LongFilter();
+        }
+        return paymentId;
+    }
+
+    public void setPaymentId(LongFilter paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    public LongFilter getDealerId() {
+        return dealerId;
+    }
+
+    public LongFilter dealerId() {
+        if (dealerId == null) {
+            dealerId = new LongFilter();
+        }
+        return dealerId;
+    }
+
+    public void setDealerId(LongFilter dealerId) {
+        this.dealerId = dealerId;
+    }
+
     public LongFilter getPaymentLabelId() {
         return paymentLabelId;
     }
@@ -225,6 +261,8 @@ public class InvoiceCriteria implements Serializable, Criteria {
             Objects.equals(invoiceAmount, that.invoiceAmount) &&
             Objects.equals(currency, that.currency) &&
             Objects.equals(conversionRate, that.conversionRate) &&
+            Objects.equals(paymentId, that.paymentId) &&
+            Objects.equals(dealerId, that.dealerId) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
@@ -240,6 +278,8 @@ public class InvoiceCriteria implements Serializable, Criteria {
             invoiceAmount,
             currency,
             conversionRate,
+            paymentId,
+            dealerId,
             paymentLabelId,
             placeholderId,
             distinct
@@ -256,6 +296,8 @@ public class InvoiceCriteria implements Serializable, Criteria {
             (invoiceAmount != null ? "invoiceAmount=" + invoiceAmount + ", " : "") +
             (currency != null ? "currency=" + currency + ", " : "") +
             (conversionRate != null ? "conversionRate=" + conversionRate + ", " : "") +
+            (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
+            (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
