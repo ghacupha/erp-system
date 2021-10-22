@@ -66,8 +66,6 @@ public class PaymentCriteria implements Serializable, Criteria {
 
     private LongFilter paymentLabelId;
 
-    private LongFilter ownedInvoiceId;
-
     private LongFilter dealerId;
 
     private LongFilter paymentCategoryId;
@@ -96,7 +94,6 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.settlementCurrency = other.settlementCurrency == null ? null : other.settlementCurrency.copy();
         this.conversionRate = other.conversionRate == null ? null : other.conversionRate.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
-        this.ownedInvoiceId = other.ownedInvoiceId == null ? null : other.ownedInvoiceId.copy();
         this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
         this.paymentCategoryId = other.paymentCategoryId == null ? null : other.paymentCategoryId.copy();
         this.taxRuleId = other.taxRuleId == null ? null : other.taxRuleId.copy();
@@ -276,21 +273,6 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.paymentLabelId = paymentLabelId;
     }
 
-    public LongFilter getOwnedInvoiceId() {
-        return ownedInvoiceId;
-    }
-
-    public LongFilter ownedInvoiceId() {
-        if (ownedInvoiceId == null) {
-            ownedInvoiceId = new LongFilter();
-        }
-        return ownedInvoiceId;
-    }
-
-    public void setOwnedInvoiceId(LongFilter ownedInvoiceId) {
-        this.ownedInvoiceId = ownedInvoiceId;
-    }
-
     public LongFilter getDealerId() {
         return dealerId;
     }
@@ -410,7 +392,6 @@ public class PaymentCriteria implements Serializable, Criteria {
             Objects.equals(settlementCurrency, that.settlementCurrency) &&
             Objects.equals(conversionRate, that.conversionRate) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
-            Objects.equals(ownedInvoiceId, that.ownedInvoiceId) &&
             Objects.equals(dealerId, that.dealerId) &&
             Objects.equals(paymentCategoryId, that.paymentCategoryId) &&
             Objects.equals(taxRuleId, that.taxRuleId) &&
@@ -435,7 +416,6 @@ public class PaymentCriteria implements Serializable, Criteria {
             settlementCurrency,
             conversionRate,
             paymentLabelId,
-            ownedInvoiceId,
             dealerId,
             paymentCategoryId,
             taxRuleId,
@@ -461,7 +441,6 @@ public class PaymentCriteria implements Serializable, Criteria {
             (settlementCurrency != null ? "settlementCurrency=" + settlementCurrency + ", " : "") +
             (conversionRate != null ? "conversionRate=" + conversionRate + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
-            (ownedInvoiceId != null ? "ownedInvoiceId=" + ownedInvoiceId + ", " : "") +
             (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             (paymentCategoryId != null ? "paymentCategoryId=" + paymentCategoryId + ", " : "") +
             (taxRuleId != null ? "taxRuleId=" + taxRuleId + ", " : "") +

@@ -52,9 +52,7 @@ public class TaxRule implements Serializable {
     @OneToMany(mappedBy = "taxRule")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = {
-            "paymentLabels", "ownedInvoices", "dealer", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup",
-        },
+        value = { "paymentLabels", "dealer", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup" },
         allowSetters = true
     )
     private Set<Payment> payments = new HashSet<>();

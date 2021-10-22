@@ -49,9 +49,7 @@ public class PaymentCalculation implements Serializable {
     private Set<PaymentLabel> paymentLabels = new HashSet<>();
 
     @JsonIgnoreProperties(
-        value = {
-            "paymentLabels", "ownedInvoices", "dealer", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup",
-        },
+        value = { "paymentLabels", "dealer", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup" },
         allowSetters = true
     )
     @OneToOne(mappedBy = "paymentCalculation")
