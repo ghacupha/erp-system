@@ -51,12 +51,6 @@
       "otherEntityRelationshipName": "payment"
     },
     {
-      "relationshipType": "one-to-many",
-      "otherEntityName": "invoice",
-      "otherEntityRelationshipName": "payment",
-      "relationshipName": "ownedInvoice"
-    },
-    {
       "relationshipName": "dealer",
       "otherEntityName": "dealer",
       "relationshipType": "many-to-one",

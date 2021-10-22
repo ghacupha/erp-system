@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Dealer;
-import io.github.erp.domain.Invoice;
 import io.github.erp.domain.Payment;
 import io.github.erp.domain.Payment;
 import io.github.erp.domain.PaymentCalculation;
@@ -1193,32 +1192,6 @@ class PaymentResourceIT {
 
         // Get all the paymentList where paymentLabel equals to (paymentLabelId + 1)
         defaultPaymentShouldNotBeFound("paymentLabelId.equals=" + (paymentLabelId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentsByOwnedInvoiceIsEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentRepository.saveAndFlush(payment);
-        Invoice ownedInvoice;
-        if (TestUtil.findAll(em, Invoice.class).isEmpty()) {
-            ownedInvoice = InvoiceResourceIT.createEntity(em);
-            em.persist(ownedInvoice);
-            em.flush();
-        } else {
-            ownedInvoice = TestUtil.findAll(em, Invoice.class).get(0);
-        }
-        em.persist(ownedInvoice);
-        em.flush();
-        payment.addOwnedInvoice(ownedInvoice);
-        paymentRepository.saveAndFlush(payment);
-        Long ownedInvoiceId = ownedInvoice.getId();
-
-        // Get all the paymentList where ownedInvoice equals to ownedInvoiceId
-        defaultPaymentShouldBeFound("ownedInvoiceId.equals=" + ownedInvoiceId);
-
-        // Get all the paymentList where ownedInvoice equals to (ownedInvoiceId + 1)
-        defaultPaymentShouldNotBeFound("ownedInvoiceId.equals=" + (ownedInvoiceId + 1));
     }
 
     @Test

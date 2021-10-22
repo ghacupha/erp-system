@@ -70,11 +70,6 @@ public class Payment implements Serializable {
     @JsonIgnoreProperties(value = { "containingPaymentLabel", "placeholders" }, allowSetters = true)
     private Set<PaymentLabel> paymentLabels = new HashSet<>();
 
-    @OneToMany(mappedBy = "payment")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "paymentLabels", "payment", "dealer", "placeholders" }, allowSetters = true)
-    private Set<Invoice> ownedInvoices = new HashSet<>();
-
     @ManyToOne
     @JsonIgnoreProperties(
         value = { "paymentLabels", "dealerGroup", "paymentRequisitions", "signedPayments", "placeholders" },
@@ -107,9 +102,7 @@ public class Payment implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties(
-        value = {
-            "paymentLabels", "ownedInvoices", "dealer", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup",
-        },
+        value = { "paymentLabels", "dealer", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup" },
         allowSetters = true
     )
     private Payment paymentGroup;
@@ -266,37 +259,6 @@ public class Payment implements Serializable {
 
     public Payment removePaymentLabel(PaymentLabel paymentLabel) {
         this.paymentLabels.remove(paymentLabel);
-        return this;
-    }
-
-    public Set<Invoice> getOwnedInvoices() {
-        return this.ownedInvoices;
-    }
-
-    public void setOwnedInvoices(Set<Invoice> invoices) {
-        if (this.ownedInvoices != null) {
-            this.ownedInvoices.forEach(i -> i.setPayment(null));
-        }
-        if (invoices != null) {
-            invoices.forEach(i -> i.setPayment(this));
-        }
-        this.ownedInvoices = invoices;
-    }
-
-    public Payment ownedInvoices(Set<Invoice> invoices) {
-        this.setOwnedInvoices(invoices);
-        return this;
-    }
-
-    public Payment addOwnedInvoice(Invoice invoice) {
-        this.ownedInvoices.add(invoice);
-        invoice.setPayment(this);
-        return this;
-    }
-
-    public Payment removeOwnedInvoice(Invoice invoice) {
-        this.ownedInvoices.remove(invoice);
-        invoice.setPayment(null);
         return this;
     }
 
