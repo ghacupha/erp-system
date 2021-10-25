@@ -129,7 +129,7 @@ export class PaymentRequisitionComponent implements OnInit {
     this.page = page;
     this.ngbPaginationPage = this.page;
     if (navigate) {
-      this.router.navigate(['/payment-requisition'], {
+      this.router.navigate(['/erp/payment-requisition'], {
         queryParams: {
           page: this.page,
           size: this.itemsPerPage,

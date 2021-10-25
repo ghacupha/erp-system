@@ -133,7 +133,7 @@ export class SignedPaymentComponent implements OnInit {
     this.page = page;
     this.ngbPaginationPage = this.page;
     if (navigate) {
-      this.router.navigate(['/signed-payment'], {
+      this.router.navigate(['/erp/signed-payment'], {
         queryParams: {
           page: this.page,
           size: this.itemsPerPage,

@@ -133,7 +133,7 @@ export class PaymentCategoryComponent implements OnInit {
     this.page = page;
     this.ngbPaginationPage = this.page;
     if (navigate) {
-      this.router.navigate(['/payment-category'], {
+      this.router.navigate(['/erp/payment-category'], {
         queryParams: {
           page: this.page,
           size: this.itemsPerPage,

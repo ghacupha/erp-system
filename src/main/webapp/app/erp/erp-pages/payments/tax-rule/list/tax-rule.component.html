@@ -12,7 +12,7 @@
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-tax-rule"
-        [routerLink]="['/tax-rule/new']"
+        [routerLink]="['/erp/tax-rule/new']"
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Tax Rule </span>
@@ -69,7 +69,7 @@
       <tbody>
         <tr *ngFor="let taxRule of taxRules; trackBy: trackId" data-cy="entityTable">
           <td>
-            <a [routerLink]="['/tax-rule', taxRule.id, 'view']">{{ taxRule.id }}</a>
+            <a [routerLink]="['/erp/tax-rule', taxRule.id, 'view']">{{ taxRule.id }}</a>
           </td>
           <td>{{ taxRule.telcoExciseDuty }}</td>
           <td>{{ taxRule.valueAddedTax }}</td>
@@ -83,7 +83,7 @@
             <div class="btn-group">
               <button
                 type="submit"
-                [routerLink]="['/tax-rule', taxRule.id, 'view']"
+                [routerLink]="['/erp/tax-rule', taxRule.id, 'view']"
                 class="btn btn-info btn-sm"
                 data-cy="entityDetailsButton"
               >
@@ -93,7 +93,7 @@
 
               <button
                 type="submit"
-                [routerLink]="['/tax-rule', taxRule.id, 'edit']"
+                [routerLink]="['/erp/tax-rule', taxRule.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >

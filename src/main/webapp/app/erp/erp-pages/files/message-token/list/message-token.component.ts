@@ -133,7 +133,7 @@ export class MessageTokenComponent implements OnInit {
     this.page = page;
     this.ngbPaginationPage = this.page;
     if (navigate) {
-      this.router.navigate(['/message-token'], {
+      this.router.navigate(['/erp/message-token'], {
         queryParams: {
           page: this.page,
           size: this.itemsPerPage,

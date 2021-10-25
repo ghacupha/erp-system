@@ -12,7 +12,7 @@
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-message-token"
-        [routerLink]="['/message-token/new']"
+        [routerLink]="['/erp/message-token/new']"
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Message Token </span>
@@ -63,7 +63,7 @@
       <tbody>
         <tr *ngFor="let messageToken of messageTokens; trackBy: trackId" data-cy="entityTable">
           <td>
-            <a [routerLink]="['/message-token', messageToken.id, 'view']">{{ messageToken.id }}</a>
+            <a [routerLink]="['/erp/message-token', messageToken.id, 'view']">{{ messageToken.id }}</a>
           </td>
           <td>{{ messageToken.description }}</td>
           <td>{{ messageToken.timeSent }}</td>
@@ -75,7 +75,7 @@
             <div class="btn-group">
               <button
                 type="submit"
-                [routerLink]="['/message-token', messageToken.id, 'view']"
+                [routerLink]="['/erp/message-token', messageToken.id, 'view']"
                 class="btn btn-info btn-sm"
                 data-cy="entityDetailsButton"
               >
@@ -85,7 +85,7 @@
 
               <button
                 type="submit"
-                [routerLink]="['/message-token', messageToken.id, 'edit']"
+                [routerLink]="['/erp/message-token', messageToken.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >

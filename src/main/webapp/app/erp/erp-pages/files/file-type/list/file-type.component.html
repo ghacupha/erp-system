@@ -12,7 +12,7 @@
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-file-type"
-        [routerLink]="['/file-type/new']"
+        [routerLink]="['/erp/file-type/new']"
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new File Type </span>
@@ -78,7 +78,7 @@
             <div class="btn-group">
               <button
                 type="submit"
-                [routerLink]="['/file-type', fileType.id, 'view']"
+                [routerLink]="['/erp/file-type', fileType.id, 'view']"
                 class="btn btn-info btn-sm"
                 data-cy="entityDetailsButton"
               >
@@ -88,7 +88,7 @@
 
               <button
                 type="submit"
-                [routerLink]="['/file-type', fileType.id, 'edit']"
+                [routerLink]="['/erp/file-type', fileType.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >

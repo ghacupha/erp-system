@@ -129,7 +129,7 @@ export class PaymentCalculationComponent implements OnInit {
     this.page = page;
     this.ngbPaginationPage = this.page;
     if (navigate) {
-      this.router.navigate(['/payment-calculation'], {
+      this.router.navigate(['/erp/payment-calculation'], {
         queryParams: {
           page: this.page,
           size: this.itemsPerPage,

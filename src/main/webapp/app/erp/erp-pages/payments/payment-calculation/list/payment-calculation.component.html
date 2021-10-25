@@ -12,7 +12,7 @@
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-payment-calculation"
-        [routerLink]="['/payment-calculation/new']"
+        [routerLink]="['/erp/payment-calculation/new']"
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Payment Calculation </span>
@@ -62,7 +62,7 @@
       <tbody>
         <tr *ngFor="let paymentCalculation of paymentCalculations; trackBy: trackId" data-cy="entityTable">
           <td>
-            <a [routerLink]="['/payment-calculation', paymentCalculation.id, 'view']">{{ paymentCalculation.id }}</a>
+            <a [routerLink]="['/erp/payment-calculation', paymentCalculation.id, 'view']">{{ paymentCalculation.id }}</a>
           </td>
           <td>{{ paymentCalculation.paymentExpense }}</td>
           <td>{{ paymentCalculation.withholdingVAT }}</td>
@@ -70,7 +70,7 @@
           <td>{{ paymentCalculation.paymentAmount }}</td>
           <td>
             <div *ngIf="paymentCalculation.paymentCategory">
-              <a [routerLink]="['/payment-category', paymentCalculation.paymentCategory?.id, 'view']">{{
+              <a [routerLink]="['/erp/payment-category', paymentCalculation.paymentCategory?.id, 'view']">{{
                 paymentCalculation.paymentCategory?.id
               }}</a>
             </div>
@@ -79,7 +79,7 @@
             <div class="btn-group">
               <button
                 type="submit"
-                [routerLink]="['/payment-calculation', paymentCalculation.id, 'view']"
+                [routerLink]="['/erp/payment-calculation', paymentCalculation.id, 'view']"
                 class="btn btn-info btn-sm"
                 data-cy="entityDetailsButton"
               >
@@ -89,7 +89,7 @@
 
               <button
                 type="submit"
-                [routerLink]="['/payment-calculation', paymentCalculation.id, 'edit']"
+                [routerLink]="['/erp/payment-calculation', paymentCalculation.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >

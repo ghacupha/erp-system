@@ -12,7 +12,7 @@
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-tax-reference"
-        [routerLink]="['/tax-reference/new']"
+        [routerLink]="['/erp/tax-reference/new']"
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Tax Reference </span>
@@ -65,7 +65,7 @@
       <tbody>
         <tr *ngFor="let taxReference of taxReferences; trackBy: trackId" data-cy="entityTable">
           <td>
-            <a [routerLink]="['/tax-reference', taxReference.id, 'view']">{{ taxReference.id }}</a>
+            <a [routerLink]="['/erp/tax-reference', taxReference.id, 'view']">{{ taxReference.id }}</a>
           </td>
           <td>{{ taxReference.taxName }}</td>
           <td>{{ taxReference.taxDescription }}</td>
@@ -75,7 +75,7 @@
             <div class="btn-group">
               <button
                 type="submit"
-                [routerLink]="['/tax-reference', taxReference.id, 'view']"
+                [routerLink]="['/erp/tax-reference', taxReference.id, 'view']"
                 class="btn btn-info btn-sm"
                 data-cy="entityDetailsButton"
               >
@@ -85,7 +85,7 @@
 
               <button
                 type="submit"
-                [routerLink]="['/tax-reference', taxReference.id, 'edit']"
+                [routerLink]="['/erp/tax-reference', taxReference.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >

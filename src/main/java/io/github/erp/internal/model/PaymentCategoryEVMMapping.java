@@ -6,4 +6,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface PaymentCategoryEVMMapping extends Mapping<PaymentCategoryEVM, PaymentCategoryDTO> {
+
+    
+
 }

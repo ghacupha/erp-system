@@ -133,7 +133,7 @@ export class TaxReferenceComponent implements OnInit {
     this.page = page;
     this.ngbPaginationPage = this.page;
     if (navigate) {
-      this.router.navigate(['/tax-reference'], {
+      this.router.navigate(['/erp/tax-reference'], {
         queryParams: {
           page: this.page,
           size: this.itemsPerPage,
