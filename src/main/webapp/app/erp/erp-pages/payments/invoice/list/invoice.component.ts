@@ -9,14 +9,8 @@ import { IInvoice } from '../invoice.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { InvoiceService } from '../service/invoice.service';
 import { InvoiceDeleteDialogComponent } from '../delete/invoice-delete-dialog.component';
-import {
-  addPaymentToInvoiceButtonClicked,
-  invoiceAcquiredForPaymentWithLabels,
-  invoiceAcquiredForPaymentWithPlaceholders,
-} from "../../../../store/actions/dealer-invoice-workflows-status.actions";
 import {State} from "../../../../store/global-store.definition";
 import {Store} from "@ngrx/store";
-import {Dealer} from "../../../dealers/dealer/dealer.model";
 
 @Component({
   selector: 'jhi-invoice',
@@ -114,9 +108,9 @@ export class InvoiceComponent implements OnInit {
     });
   }
 
-  recordPayment(selectedInvoice: IInvoice): void {
-    if (selectedInvoice.dealer) {
-      this.store.dispatch(addPaymentToInvoiceButtonClicked({selectedInvoice, selectedDealer: selectedInvoice.dealer}));
+  /* recordPayment(selectedInvoice: IInvoice): void {
+    if (selectedInvoice.dealerId) {
+      this.store.dispatch(addPaymentToInvoiceButtonClicked({selectedInvoice, selectedDealer: selectedInvoice.dealerId}));
     } else {
       this.store.dispatch(addPaymentToInvoiceButtonClicked({selectedInvoice, selectedDealer: {...new Dealer()}}));
     }
@@ -131,7 +125,7 @@ export class InvoiceComponent implements OnInit {
 
     const paymentPath = 'payment/dealer/invoice';
     this.router.navigate([paymentPath]);
-  }
+  } */
 
   protected sort(): string[] {
     const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
