@@ -8,6 +8,14 @@
     {
       "fieldName": "comments",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "fileUploadToken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "String"
     }
   ],
   "relationships": [

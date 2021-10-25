@@ -21,6 +21,14 @@
       "fieldName": "token",
       "fieldType": "String",
       "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "fileUploadToken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "String"
     }
   ],
   "changelogDate": "20210823115335",
