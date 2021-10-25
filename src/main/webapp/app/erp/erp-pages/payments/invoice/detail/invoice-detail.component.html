@@ -34,24 +34,20 @@
         <dd>
           <span>{{ invoice.conversionRate }}</span>
         </dd>
+        <dt><span>Payment Id</span></dt>
+        <dd>
+          <span>{{ invoice.paymentId }}</span>
+        </dd>
+        <dt><span>Dealer Id</span></dt>
+        <dd>
+          <span>{{ invoice.dealerId }}</span>
+        </dd>
         <dt><span>Payment Label</span></dt>
         <dd>
           <span *ngFor="let paymentLabel of invoice.paymentLabels; let last = last">
             <a [routerLink]="['/payment-label', paymentLabel?.id, 'view']">{{ paymentLabel.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
-        </dd>
-        <dt><span>Payment</span></dt>
-        <dd>
-          <div *ngIf="invoice.payment">
-            <a [routerLink]="['/payment', invoice.payment?.id, 'view']">{{ invoice.payment?.id }}</a>
-          </div>
-        </dd>
-        <dt><span>Dealer</span></dt>
-        <dd>
-          <div *ngIf="invoice.dealer">
-            <a [routerLink]="['/dealer', invoice.dealer?.id, 'view']">{{ invoice.dealer?.dealerName }}</a>
-          </div>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>

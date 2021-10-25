@@ -208,7 +208,7 @@ export class PaymentUpdateComponent implements OnInit {
 
       this.selectedInvoice = {
         ...this.selectedInvoice,
-        payment: res.body,
+        paymentId: res.body?.id,
       };
 
       this.invoiceService.update(this.selectedInvoice).subscribe( invoice => {

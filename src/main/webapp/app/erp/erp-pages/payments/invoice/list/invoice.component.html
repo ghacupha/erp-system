@@ -12,7 +12,7 @@
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-invoice"
-        [routerLink]="['/erp/invoice/new']"
+        [routerLink]="['/invoice/new']"
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Invoice </span>
@@ -49,72 +49,59 @@
   <div class="table-responsive" id="entities" *ngIf="invoices && invoices.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="invoiceNumber"><span>Invoice Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="invoiceDate"><span>Invoice Date</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="invoiceAmount"><span>Invoice Amount</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="currency"><span>Currency</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="conversionRate"><span>Conversion Rate</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="payment.id"><span>Payment</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col"></th>
-        </tr>
+      <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+        <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="invoiceNumber"><span>Invoice Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="invoiceDate"><span>Invoice Date</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="invoiceAmount"><span>Invoice Amount</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="currency"><span>Currency</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="conversionRate"><span>Conversion Rate</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="paymentId"><span>Payment Id</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="dealerId"><span>Dealer Id</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col"></th>
+      </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let invoice of invoices; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/invoice', invoice.id, 'view']">{{ invoice.id }}</a>
-          </td>
-          <td>{{ invoice.invoiceNumber }}</td>
-          <td>{{ invoice.invoiceDate | formatMediumDate }}</td>
-          <td>{{ invoice.invoiceAmount }}</td>
-          <td>{{ invoice.currency }}</td>
-          <td>{{ invoice.conversionRate }}</td>
-          <td>
-            <div *ngIf="invoice.payment">
-              <a [routerLink]="['/payment', invoice.payment?.id, 'view']">{{ invoice.payment?.id }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="invoice.dealer">
-              <a [routerLink]="['/dealer', invoice.dealer?.id, 'view']">{{ invoice.dealer?.dealerName }}</a>
-            </div>
-          </td>
-          <td class="text-right">
-            <div class="btn-group">
-              <button
-                type="submit"
-                [routerLink]="['/erp/invoice', invoice.id, 'view']"
-                class="btn btn-info btn-sm"
-                data-cy="entityDetailsButton"
-              >
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline">View</span>
-              </button>
+      <tr *ngFor="let invoice of invoices; trackBy: trackId" data-cy="entityTable">
+        <td>
+          <a [routerLink]="['/invoice', invoice.id, 'view']">{{ invoice.id }}</a>
+        </td>
+        <td>{{ invoice.invoiceNumber }}</td>
+        <td>{{ invoice.invoiceDate | formatMediumDate }}</td>
+        <td>{{ invoice.invoiceAmount }}</td>
+        <td>{{ invoice.currency }}</td>
+        <td>{{ invoice.conversionRate }}</td>
+        <td>{{ invoice.paymentId }}</td>
+        <td>{{ invoice.dealerId }}</td>
+        <td class="text-right">
+          <div class="btn-group">
+            <button
+              type="submit"
+              [routerLink]="['/invoice', invoice.id, 'view']"
+              class="btn btn-info btn-sm"
+              data-cy="entityDetailsButton"
+            >
+              <fa-icon icon="eye"></fa-icon>
+              <span class="d-none d-md-inline">View</span>
+            </button>
 
-              <button type="submit" (click)="recordPayment(invoice)" class="btn btn-secondary btn-sm" data-cy="entityDealerInvoiceButton">
-                <fa-icon icon="book-open"></fa-icon>
-                <span class="d-none d-md-inline"> + Payment</span>
-              </button>
+            <button
+              type="submit"
+              [routerLink]="['/invoice', invoice.id, 'edit']"
+              class="btn btn-primary btn-sm"
+              data-cy="entityEditButton"
+            >
+              <fa-icon icon="pencil-alt"></fa-icon>
+              <span class="d-none d-md-inline">Edit</span>
+            </button>
 
-              <button
-                type="submit"
-                [routerLink]="['/erp/invoice', invoice.id, 'edit']"
-                class="btn btn-primary btn-sm"
-                data-cy="entityEditButton"
-              >
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline">Edit</span>
-              </button>
-
-              <button type="submit" (click)="delete(invoice)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline">Delete</span>
-              </button>
-            </div>
-          </td>
-        </tr>
+            <button type="submit" (click)="delete(invoice)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+              <fa-icon icon="times"></fa-icon>
+              <span class="d-none d-md-inline">Delete</span>
+            </button>
+          </div>
+        </td>
+      </tr>
       </tbody>
     </table>
   </div>

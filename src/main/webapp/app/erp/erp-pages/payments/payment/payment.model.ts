@@ -2,7 +2,6 @@ import * as dayjs from 'dayjs';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { CurrencyTypes } from 'app/entities/enumerations/currency-types.model';
 import {IPaymentLabel} from '../../payment-label/payment-label.model';
-import {IInvoice} from '../invoice/invoice.model';
 import {IDealer} from '../../../../entities/dealers/dealer/dealer.model';
 import {IPaymentCategory} from '../payment-category/payment-category.model';
 import {ITaxRule} from '../tax-rule/tax-rule.model';
@@ -20,7 +19,6 @@ export interface IPayment {
   settlementCurrency?: CurrencyTypes;
   conversionRate?: number;
   paymentLabels?: IPaymentLabel[] | null;
-  ownedInvoices?: IInvoice[] | null;
   dealer?: IDealer | null;
   paymentCategory?: IPaymentCategory | null;
   taxRule?: ITaxRule | null;
@@ -42,7 +40,6 @@ export class Payment implements IPayment {
     public settlementCurrency?: CurrencyTypes,
     public conversionRate?: number,
     public paymentLabels?: IPaymentLabel[] | null,
-    public ownedInvoices?: IInvoice[] | null,
     public dealer?: IDealer | null,
     public paymentCategory?: IPaymentCategory | null,
     public taxRule?: ITaxRule | null,

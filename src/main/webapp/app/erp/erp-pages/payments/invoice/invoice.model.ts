@@ -1,9 +1,7 @@
 import * as dayjs from 'dayjs';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { CurrencyTypes } from 'app/entities/enumerations/currency-types.model';
 import {IPaymentLabel} from "../../payment-label/payment-label.model";
-import {IPayment} from "../payment/payment.model";
 
 export interface IInvoice {
   id?: number;
@@ -13,8 +11,8 @@ export interface IInvoice {
   currency?: CurrencyTypes;
   conversionRate?: number;
   paymentLabels?: IPaymentLabel[] | null;
-  payment?: IPayment | null;
-  dealer?: IDealer | null;
+  paymentId?: number | null;
+  dealerId?: number | null;
   placeholders?: IPlaceholder[] | null;
 }
 
@@ -27,8 +25,8 @@ export class Invoice implements IInvoice {
     public currency?: CurrencyTypes,
     public conversionRate?: number,
     public paymentLabels?: IPaymentLabel[] | null,
-    public payment?: IPayment | null,
-    public dealer?: IDealer | null,
+    public paymentId?: number | null,
+    public dealerId?: number | null,
     public placeholders?: IPlaceholder[] | null
   ) {}
 }
