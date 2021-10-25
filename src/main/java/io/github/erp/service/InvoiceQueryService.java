@@ -119,6 +119,12 @@ public class InvoiceQueryService extends QueryService<Invoice> {
             if (criteria.getDealerId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDealerId(), Invoice_.dealerId));
             }
+            if (criteria.getFileUploadToken() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getFileUploadToken(), Invoice_.fileUploadToken));
+            }
+            if (criteria.getCompilationToken() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getCompilationToken(), Invoice_.compilationToken));
+            }
             if (criteria.getPaymentLabelId() != null) {
                 specification =
                     specification.and(

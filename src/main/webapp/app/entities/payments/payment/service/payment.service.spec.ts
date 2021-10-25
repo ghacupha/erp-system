@@ -36,6 +36,8 @@ describe('Service Tests', () => {
         description: 'AAAAAAA',
         settlementCurrency: CurrencyTypes.KES,
         conversionRate: 0,
+        fileUploadToken: 'AAAAAAA',
+        compilationToken: 'AAAAAAA',
       };
     });
 
@@ -91,6 +93,8 @@ describe('Service Tests', () => {
             description: 'BBBBBB',
             settlementCurrency: 'BBBBBB',
             conversionRate: 1,
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -149,6 +153,8 @@ describe('Service Tests', () => {
             description: 'BBBBBB',
             settlementCurrency: 'BBBBBB',
             conversionRate: 1,
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -205,7 +211,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique Payment to an array', () => {
-          const paymentArray: IPayment[] = [{ id: 123 }, { id: 456 }, { id: 15547 }];
+          const paymentArray: IPayment[] = [{ id: 123 }, { id: 456 }, { id: 98671 }];
           const paymentCollection: IPayment[] = [{ id: 123 }];
           expectedResult = service.addPaymentToCollectionIfMissing(paymentCollection, ...paymentArray);
           expect(expectedResult).toHaveLength(3);

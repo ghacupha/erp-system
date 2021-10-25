@@ -55,6 +55,12 @@ public class Invoice implements Serializable {
     @Column(name = "dealer_id")
     private Long dealerId;
 
+    @Column(name = "file_upload_token")
+    private String fileUploadToken;
+
+    @Column(name = "compilation_token")
+    private String compilationToken;
+
     @ManyToMany
     @JoinTable(
         name = "rel_invoice__payment_label",
@@ -181,6 +187,32 @@ public class Invoice implements Serializable {
         this.dealerId = dealerId;
     }
 
+    public String getFileUploadToken() {
+        return this.fileUploadToken;
+    }
+
+    public Invoice fileUploadToken(String fileUploadToken) {
+        this.setFileUploadToken(fileUploadToken);
+        return this;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return this.compilationToken;
+    }
+
+    public Invoice compilationToken(String compilationToken) {
+        this.setCompilationToken(compilationToken);
+        return this;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public Set<PaymentLabel> getPaymentLabels() {
         return this.paymentLabels;
     }
@@ -258,6 +290,8 @@ public class Invoice implements Serializable {
             ", conversionRate=" + getConversionRate() +
             ", paymentId=" + getPaymentId() +
             ", dealerId=" + getDealerId() +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             "}";
     }
 }

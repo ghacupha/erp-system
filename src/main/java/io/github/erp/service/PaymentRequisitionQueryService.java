@@ -109,6 +109,14 @@ public class PaymentRequisitionQueryService extends QueryService<PaymentRequisit
             if (criteria.getVatableAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getVatableAmount(), PaymentRequisition_.vatableAmount));
             }
+            if (criteria.getFileUploadToken() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getFileUploadToken(), PaymentRequisition_.fileUploadToken));
+            }
+            if (criteria.getCompilationToken() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getCompilationToken(), PaymentRequisition_.compilationToken));
+            }
             if (criteria.getPaymentLabelId() != null) {
                 specification =
                     specification.and(

@@ -18,6 +18,10 @@ public class PaymentLabelDTO implements Serializable {
 
     private String comments;
 
+    private String fileUploadToken;
+
+    private String compilationToken;
+
     private PaymentLabelDTO containingPaymentLabel;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
@@ -44,6 +48,22 @@ public class PaymentLabelDTO implements Serializable {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public String getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return compilationToken;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
     }
 
     public PaymentLabelDTO getContainingPaymentLabel() {
@@ -90,6 +110,8 @@ public class PaymentLabelDTO implements Serializable {
             "id=" + getId() +
             ", description='" + getDescription() + "'" +
             ", comments='" + getComments() + "'" +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             ", containingPaymentLabel=" + getContainingPaymentLabel() +
             ", placeholders=" + getPlaceholders() +
             "}";

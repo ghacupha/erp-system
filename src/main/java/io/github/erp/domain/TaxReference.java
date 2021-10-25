@@ -42,6 +42,12 @@ public class TaxReference implements Serializable {
     @Column(name = "tax_reference_type", nullable = false, unique = true)
     private taxReferenceTypes taxReferenceType;
 
+    @Column(name = "file_upload_token")
+    private String fileUploadToken;
+
+    @Column(name = "compilation_token")
+    private String compilationToken;
+
     @ManyToMany
     @JoinTable(
         name = "rel_tax_reference__placeholder",
@@ -119,6 +125,32 @@ public class TaxReference implements Serializable {
         this.taxReferenceType = taxReferenceType;
     }
 
+    public String getFileUploadToken() {
+        return this.fileUploadToken;
+    }
+
+    public TaxReference fileUploadToken(String fileUploadToken) {
+        this.setFileUploadToken(fileUploadToken);
+        return this;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return this.compilationToken;
+    }
+
+    public TaxReference compilationToken(String compilationToken) {
+        this.setCompilationToken(compilationToken);
+        return this;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public Set<Placeholder> getPlaceholders() {
         return this.placeholders;
     }
@@ -170,6 +202,8 @@ public class TaxReference implements Serializable {
             ", taxDescription='" + getTaxDescription() + "'" +
             ", taxPercentage=" + getTaxPercentage() +
             ", taxReferenceType='" + getTaxReferenceType() + "'" +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             "}";
     }
 }

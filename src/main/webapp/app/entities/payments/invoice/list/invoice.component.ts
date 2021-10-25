@@ -78,7 +78,7 @@ export class InvoiceComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['invoiceNumber', 'currency'].includes(this.predicate)) {
+    if (query && ['invoiceNumber', 'currency', 'fileUploadToken', 'compilationToken'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }

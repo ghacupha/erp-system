@@ -54,6 +54,12 @@
           <th scope="col" jhiSortBy="invoicedAmount"><span>Invoiced Amount</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="disbursementCost"><span>Disbursement Cost</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="vatableAmount"><span>Vatable Amount</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fileUploadToken">
+            <span>File Upload Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="compilationToken">
+            <span>Compilation Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="dealer.id"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -66,6 +72,8 @@
           <td>{{ paymentRequisition.invoicedAmount }}</td>
           <td>{{ paymentRequisition.disbursementCost }}</td>
           <td>{{ paymentRequisition.vatableAmount }}</td>
+          <td>{{ paymentRequisition.fileUploadToken }}</td>
+          <td>{{ paymentRequisition.compilationToken }}</td>
           <td>
             <div *ngIf="paymentRequisition.dealer">
               <a [routerLink]="['/dealer', paymentRequisition.dealer?.id, 'view']">{{ paymentRequisition.dealer?.id }}</a>

@@ -30,6 +30,14 @@
         <dd>
           <span>{{ paymentCalculation.paymentAmount }}</span>
         </dd>
+        <dt><span>File Upload Token</span></dt>
+        <dd>
+          <span>{{ paymentCalculation.fileUploadToken }}</span>
+        </dd>
+        <dt><span>Compilation Token</span></dt>
+        <dd>
+          <span>{{ paymentCalculation.compilationToken }}</span>
+        </dd>
         <dt><span>Payment Label</span></dt>
         <dd>
           <span *ngFor="let paymentLabel of paymentCalculation.paymentLabels; let last = last">

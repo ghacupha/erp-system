@@ -32,6 +32,8 @@ export class PaymentLabelUpdatePage {
   idInput = element(by.id('field_id'));
   descriptionInput = element(by.id('field_description'));
   commentsInput = element(by.id('field_comments'));
+  fileUploadTokenInput = element(by.id('field_fileUploadToken'));
+  compilationTokenInput = element(by.id('field_compilationToken'));
 
   containingPaymentLabelSelect = element(by.id('field_containingPaymentLabel'));
   placeholderSelect = element(by.id('field_placeholder'));
@@ -62,6 +64,22 @@ export class PaymentLabelUpdatePage {
 
   async getCommentsInput(): Promise<string> {
     return await this.commentsInput.getAttribute('value');
+  }
+
+  async setFileUploadTokenInput(fileUploadToken: string): Promise<void> {
+    await this.fileUploadTokenInput.sendKeys(fileUploadToken);
+  }
+
+  async getFileUploadTokenInput(): Promise<string> {
+    return await this.fileUploadTokenInput.getAttribute('value');
+  }
+
+  async setCompilationTokenInput(compilationToken: string): Promise<void> {
+    await this.compilationTokenInput.sendKeys(compilationToken);
+  }
+
+  async getCompilationTokenInput(): Promise<string> {
+    return await this.compilationTokenInput.getAttribute('value');
   }
 
   async containingPaymentLabelSelectLastOption(): Promise<void> {

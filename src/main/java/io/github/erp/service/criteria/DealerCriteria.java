@@ -44,6 +44,10 @@ public class DealerCriteria implements Serializable, Criteria {
 
     private StringFilter bankersSwiftCode;
 
+    private StringFilter fileUploadToken;
+
+    private StringFilter compilationToken;
+
     private LongFilter paymentLabelId;
 
     private LongFilter dealerGroupId;
@@ -69,6 +73,8 @@ public class DealerCriteria implements Serializable, Criteria {
         this.bankersName = other.bankersName == null ? null : other.bankersName.copy();
         this.bankersBranch = other.bankersBranch == null ? null : other.bankersBranch.copy();
         this.bankersSwiftCode = other.bankersSwiftCode == null ? null : other.bankersSwiftCode.copy();
+        this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
+        this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
         this.dealerGroupId = other.dealerGroupId == null ? null : other.dealerGroupId.copy();
         this.paymentRequisitionId = other.paymentRequisitionId == null ? null : other.paymentRequisitionId.copy();
@@ -232,6 +238,36 @@ public class DealerCriteria implements Serializable, Criteria {
         this.bankersSwiftCode = bankersSwiftCode;
     }
 
+    public StringFilter getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public StringFilter fileUploadToken() {
+        if (fileUploadToken == null) {
+            fileUploadToken = new StringFilter();
+        }
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(StringFilter fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public StringFilter getCompilationToken() {
+        return compilationToken;
+    }
+
+    public StringFilter compilationToken() {
+        if (compilationToken == null) {
+            compilationToken = new StringFilter();
+        }
+        return compilationToken;
+    }
+
+    public void setCompilationToken(StringFilter compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public LongFilter getPaymentLabelId() {
         return paymentLabelId;
     }
@@ -335,6 +371,8 @@ public class DealerCriteria implements Serializable, Criteria {
             Objects.equals(bankersName, that.bankersName) &&
             Objects.equals(bankersBranch, that.bankersBranch) &&
             Objects.equals(bankersSwiftCode, that.bankersSwiftCode) &&
+            Objects.equals(fileUploadToken, that.fileUploadToken) &&
+            Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
             Objects.equals(dealerGroupId, that.dealerGroupId) &&
             Objects.equals(paymentRequisitionId, that.paymentRequisitionId) &&
@@ -357,6 +395,8 @@ public class DealerCriteria implements Serializable, Criteria {
             bankersName,
             bankersBranch,
             bankersSwiftCode,
+            fileUploadToken,
+            compilationToken,
             paymentLabelId,
             dealerGroupId,
             paymentRequisitionId,
@@ -380,6 +420,8 @@ public class DealerCriteria implements Serializable, Criteria {
             (bankersName != null ? "bankersName=" + bankersName + ", " : "") +
             (bankersBranch != null ? "bankersBranch=" + bankersBranch + ", " : "") +
             (bankersSwiftCode != null ? "bankersSwiftCode=" + bankersSwiftCode + ", " : "") +
+            (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +
+            (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
             (dealerGroupId != null ? "dealerGroupId=" + dealerGroupId + ", " : "") +
             (paymentRequisitionId != null ? "paymentRequisitionId=" + paymentRequisitionId + ", " : "") +

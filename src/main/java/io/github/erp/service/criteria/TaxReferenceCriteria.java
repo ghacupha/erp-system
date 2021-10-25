@@ -52,6 +52,10 @@ public class TaxReferenceCriteria implements Serializable, Criteria {
 
     private taxReferenceTypesFilter taxReferenceType;
 
+    private StringFilter fileUploadToken;
+
+    private StringFilter compilationToken;
+
     private LongFilter placeholderId;
 
     private Boolean distinct;
@@ -64,6 +68,8 @@ public class TaxReferenceCriteria implements Serializable, Criteria {
         this.taxDescription = other.taxDescription == null ? null : other.taxDescription.copy();
         this.taxPercentage = other.taxPercentage == null ? null : other.taxPercentage.copy();
         this.taxReferenceType = other.taxReferenceType == null ? null : other.taxReferenceType.copy();
+        this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
+        this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
     }
@@ -148,6 +154,36 @@ public class TaxReferenceCriteria implements Serializable, Criteria {
         this.taxReferenceType = taxReferenceType;
     }
 
+    public StringFilter getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public StringFilter fileUploadToken() {
+        if (fileUploadToken == null) {
+            fileUploadToken = new StringFilter();
+        }
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(StringFilter fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public StringFilter getCompilationToken() {
+        return compilationToken;
+    }
+
+    public StringFilter compilationToken() {
+        if (compilationToken == null) {
+            compilationToken = new StringFilter();
+        }
+        return compilationToken;
+    }
+
+    public void setCompilationToken(StringFilter compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public LongFilter getPlaceholderId() {
         return placeholderId;
     }
@@ -186,6 +222,8 @@ public class TaxReferenceCriteria implements Serializable, Criteria {
             Objects.equals(taxDescription, that.taxDescription) &&
             Objects.equals(taxPercentage, that.taxPercentage) &&
             Objects.equals(taxReferenceType, that.taxReferenceType) &&
+            Objects.equals(fileUploadToken, that.fileUploadToken) &&
+            Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -193,7 +231,17 @@ public class TaxReferenceCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, taxName, taxDescription, taxPercentage, taxReferenceType, placeholderId, distinct);
+        return Objects.hash(
+            id,
+            taxName,
+            taxDescription,
+            taxPercentage,
+            taxReferenceType,
+            fileUploadToken,
+            compilationToken,
+            placeholderId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -205,6 +253,8 @@ public class TaxReferenceCriteria implements Serializable, Criteria {
             (taxDescription != null ? "taxDescription=" + taxDescription + ", " : "") +
             (taxPercentage != null ? "taxPercentage=" + taxPercentage + ", " : "") +
             (taxReferenceType != null ? "taxReferenceType=" + taxReferenceType + ", " : "") +
+            (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +
+            (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

@@ -104,6 +104,12 @@ public class PaymentLabelQueryService extends QueryService<PaymentLabel> {
             if (criteria.getComments() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getComments(), PaymentLabel_.comments));
             }
+            if (criteria.getFileUploadToken() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getFileUploadToken(), PaymentLabel_.fileUploadToken));
+            }
+            if (criteria.getCompilationToken() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getCompilationToken(), PaymentLabel_.compilationToken));
+            }
             if (criteria.getContainingPaymentLabelId() != null) {
                 specification =
                     specification.and(

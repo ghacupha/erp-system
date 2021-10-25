@@ -110,6 +110,12 @@ public class TaxReferenceQueryService extends QueryService<TaxReference> {
             if (criteria.getTaxReferenceType() != null) {
                 specification = specification.and(buildSpecification(criteria.getTaxReferenceType(), TaxReference_.taxReferenceType));
             }
+            if (criteria.getFileUploadToken() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getFileUploadToken(), TaxReference_.fileUploadToken));
+            }
+            if (criteria.getCompilationToken() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getCompilationToken(), TaxReference_.compilationToken));
+            }
             if (criteria.getPlaceholderId() != null) {
                 specification =
                     specification.and(

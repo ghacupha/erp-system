@@ -7,6 +7,8 @@ export interface ITaxReference {
   taxDescription?: string | null;
   taxPercentage?: number;
   taxReferenceType?: taxReferenceTypes;
+  fileUploadToken?: string | null;
+  compilationToken?: string | null;
   placeholders?: IPlaceholder[] | null;
 }
 
@@ -17,6 +19,8 @@ export class TaxReference implements ITaxReference {
     public taxDescription?: string | null,
     public taxPercentage?: number,
     public taxReferenceType?: taxReferenceTypes,
+    public fileUploadToken?: string | null,
+    public compilationToken?: string | null,
     public placeholders?: IPlaceholder[] | null
   ) {}
 }

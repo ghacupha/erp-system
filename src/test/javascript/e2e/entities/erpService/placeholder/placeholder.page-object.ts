@@ -32,6 +32,8 @@ export class PlaceholderUpdatePage {
   idInput = element(by.id('field_id'));
   descriptionInput = element(by.id('field_description'));
   tokenInput = element(by.id('field_token'));
+  fileUploadTokenInput = element(by.id('field_fileUploadToken'));
+  compilationTokenInput = element(by.id('field_compilationToken'));
 
   containingPlaceholderSelect = element(by.id('field_containingPlaceholder'));
 
@@ -61,6 +63,22 @@ export class PlaceholderUpdatePage {
 
   async getTokenInput(): Promise<string> {
     return await this.tokenInput.getAttribute('value');
+  }
+
+  async setFileUploadTokenInput(fileUploadToken: string): Promise<void> {
+    await this.fileUploadTokenInput.sendKeys(fileUploadToken);
+  }
+
+  async getFileUploadTokenInput(): Promise<string> {
+    return await this.fileUploadTokenInput.getAttribute('value');
+  }
+
+  async setCompilationTokenInput(compilationToken: string): Promise<void> {
+    await this.compilationTokenInput.sendKeys(compilationToken);
+  }
+
+  async getCompilationTokenInput(): Promise<string> {
+    return await this.compilationTokenInput.getAttribute('value');
   }
 
   async containingPlaceholderSelectLastOption(): Promise<void> {

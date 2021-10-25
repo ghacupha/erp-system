@@ -58,6 +58,12 @@ class TaxReferenceResourceIT {
     private static final taxReferenceTypes DEFAULT_TAX_REFERENCE_TYPE = taxReferenceTypes.TELCO_EXCISE_DUTY;
     private static final taxReferenceTypes UPDATED_TAX_REFERENCE_TYPE = taxReferenceTypes.VALUE_ADDED_TAX;
 
+    private static final String DEFAULT_FILE_UPLOAD_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_FILE_UPLOAD_TOKEN = "BBBBBBBBBB";
+
+    private static final String DEFAULT_COMPILATION_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_COMPILATION_TOKEN = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/tax-references";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/tax-references";
@@ -104,7 +110,9 @@ class TaxReferenceResourceIT {
             .taxName(DEFAULT_TAX_NAME)
             .taxDescription(DEFAULT_TAX_DESCRIPTION)
             .taxPercentage(DEFAULT_TAX_PERCENTAGE)
-            .taxReferenceType(DEFAULT_TAX_REFERENCE_TYPE);
+            .taxReferenceType(DEFAULT_TAX_REFERENCE_TYPE)
+            .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
+            .compilationToken(DEFAULT_COMPILATION_TOKEN);
         return taxReference;
     }
 
@@ -119,7 +127,9 @@ class TaxReferenceResourceIT {
             .taxName(UPDATED_TAX_NAME)
             .taxDescription(UPDATED_TAX_DESCRIPTION)
             .taxPercentage(UPDATED_TAX_PERCENTAGE)
-            .taxReferenceType(UPDATED_TAX_REFERENCE_TYPE);
+            .taxReferenceType(UPDATED_TAX_REFERENCE_TYPE)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         return taxReference;
     }
 
@@ -148,6 +158,8 @@ class TaxReferenceResourceIT {
         assertThat(testTaxReference.getTaxDescription()).isEqualTo(DEFAULT_TAX_DESCRIPTION);
         assertThat(testTaxReference.getTaxPercentage()).isEqualTo(DEFAULT_TAX_PERCENTAGE);
         assertThat(testTaxReference.getTaxReferenceType()).isEqualTo(DEFAULT_TAX_REFERENCE_TYPE);
+        assertThat(testTaxReference.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
+        assertThat(testTaxReference.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
 
         // Validate the TaxReference in Elasticsearch
         verify(mockTaxReferenceSearchRepository, times(1)).save(testTaxReference);
@@ -232,7 +244,9 @@ class TaxReferenceResourceIT {
             .andExpect(jsonPath("$.[*].taxName").value(hasItem(DEFAULT_TAX_NAME)))
             .andExpect(jsonPath("$.[*].taxDescription").value(hasItem(DEFAULT_TAX_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].taxPercentage").value(hasItem(DEFAULT_TAX_PERCENTAGE.doubleValue())))
-            .andExpect(jsonPath("$.[*].taxReferenceType").value(hasItem(DEFAULT_TAX_REFERENCE_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].taxReferenceType").value(hasItem(DEFAULT_TAX_REFERENCE_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -268,7 +282,9 @@ class TaxReferenceResourceIT {
             .andExpect(jsonPath("$.taxName").value(DEFAULT_TAX_NAME))
             .andExpect(jsonPath("$.taxDescription").value(DEFAULT_TAX_DESCRIPTION))
             .andExpect(jsonPath("$.taxPercentage").value(DEFAULT_TAX_PERCENTAGE.doubleValue()))
-            .andExpect(jsonPath("$.taxReferenceType").value(DEFAULT_TAX_REFERENCE_TYPE.toString()));
+            .andExpect(jsonPath("$.taxReferenceType").value(DEFAULT_TAX_REFERENCE_TYPE.toString()))
+            .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
+            .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN));
     }
 
     @Test
@@ -603,6 +619,162 @@ class TaxReferenceResourceIT {
 
     @Test
     @Transactional
+    void getAllTaxReferencesByFileUploadTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        taxReferenceRepository.saveAndFlush(taxReference);
+
+        // Get all the taxReferenceList where fileUploadToken equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultTaxReferenceShouldBeFound("fileUploadToken.equals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the taxReferenceList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultTaxReferenceShouldNotBeFound("fileUploadToken.equals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxReferencesByFileUploadTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        taxReferenceRepository.saveAndFlush(taxReference);
+
+        // Get all the taxReferenceList where fileUploadToken not equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultTaxReferenceShouldNotBeFound("fileUploadToken.notEquals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the taxReferenceList where fileUploadToken not equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultTaxReferenceShouldBeFound("fileUploadToken.notEquals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxReferencesByFileUploadTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        taxReferenceRepository.saveAndFlush(taxReference);
+
+        // Get all the taxReferenceList where fileUploadToken in DEFAULT_FILE_UPLOAD_TOKEN or UPDATED_FILE_UPLOAD_TOKEN
+        defaultTaxReferenceShouldBeFound("fileUploadToken.in=" + DEFAULT_FILE_UPLOAD_TOKEN + "," + UPDATED_FILE_UPLOAD_TOKEN);
+
+        // Get all the taxReferenceList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultTaxReferenceShouldNotBeFound("fileUploadToken.in=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxReferencesByFileUploadTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        taxReferenceRepository.saveAndFlush(taxReference);
+
+        // Get all the taxReferenceList where fileUploadToken is not null
+        defaultTaxReferenceShouldBeFound("fileUploadToken.specified=true");
+
+        // Get all the taxReferenceList where fileUploadToken is null
+        defaultTaxReferenceShouldNotBeFound("fileUploadToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxReferencesByFileUploadTokenContainsSomething() throws Exception {
+        // Initialize the database
+        taxReferenceRepository.saveAndFlush(taxReference);
+
+        // Get all the taxReferenceList where fileUploadToken contains DEFAULT_FILE_UPLOAD_TOKEN
+        defaultTaxReferenceShouldBeFound("fileUploadToken.contains=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the taxReferenceList where fileUploadToken contains UPDATED_FILE_UPLOAD_TOKEN
+        defaultTaxReferenceShouldNotBeFound("fileUploadToken.contains=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxReferencesByFileUploadTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        taxReferenceRepository.saveAndFlush(taxReference);
+
+        // Get all the taxReferenceList where fileUploadToken does not contain DEFAULT_FILE_UPLOAD_TOKEN
+        defaultTaxReferenceShouldNotBeFound("fileUploadToken.doesNotContain=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the taxReferenceList where fileUploadToken does not contain UPDATED_FILE_UPLOAD_TOKEN
+        defaultTaxReferenceShouldBeFound("fileUploadToken.doesNotContain=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxReferencesByCompilationTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        taxReferenceRepository.saveAndFlush(taxReference);
+
+        // Get all the taxReferenceList where compilationToken equals to DEFAULT_COMPILATION_TOKEN
+        defaultTaxReferenceShouldBeFound("compilationToken.equals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the taxReferenceList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultTaxReferenceShouldNotBeFound("compilationToken.equals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxReferencesByCompilationTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        taxReferenceRepository.saveAndFlush(taxReference);
+
+        // Get all the taxReferenceList where compilationToken not equals to DEFAULT_COMPILATION_TOKEN
+        defaultTaxReferenceShouldNotBeFound("compilationToken.notEquals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the taxReferenceList where compilationToken not equals to UPDATED_COMPILATION_TOKEN
+        defaultTaxReferenceShouldBeFound("compilationToken.notEquals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxReferencesByCompilationTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        taxReferenceRepository.saveAndFlush(taxReference);
+
+        // Get all the taxReferenceList where compilationToken in DEFAULT_COMPILATION_TOKEN or UPDATED_COMPILATION_TOKEN
+        defaultTaxReferenceShouldBeFound("compilationToken.in=" + DEFAULT_COMPILATION_TOKEN + "," + UPDATED_COMPILATION_TOKEN);
+
+        // Get all the taxReferenceList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultTaxReferenceShouldNotBeFound("compilationToken.in=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxReferencesByCompilationTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        taxReferenceRepository.saveAndFlush(taxReference);
+
+        // Get all the taxReferenceList where compilationToken is not null
+        defaultTaxReferenceShouldBeFound("compilationToken.specified=true");
+
+        // Get all the taxReferenceList where compilationToken is null
+        defaultTaxReferenceShouldNotBeFound("compilationToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxReferencesByCompilationTokenContainsSomething() throws Exception {
+        // Initialize the database
+        taxReferenceRepository.saveAndFlush(taxReference);
+
+        // Get all the taxReferenceList where compilationToken contains DEFAULT_COMPILATION_TOKEN
+        defaultTaxReferenceShouldBeFound("compilationToken.contains=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the taxReferenceList where compilationToken contains UPDATED_COMPILATION_TOKEN
+        defaultTaxReferenceShouldNotBeFound("compilationToken.contains=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxReferencesByCompilationTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        taxReferenceRepository.saveAndFlush(taxReference);
+
+        // Get all the taxReferenceList where compilationToken does not contain DEFAULT_COMPILATION_TOKEN
+        defaultTaxReferenceShouldNotBeFound("compilationToken.doesNotContain=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the taxReferenceList where compilationToken does not contain UPDATED_COMPILATION_TOKEN
+        defaultTaxReferenceShouldBeFound("compilationToken.doesNotContain=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
     void getAllTaxReferencesByPlaceholderIsEqualToSomething() throws Exception {
         // Initialize the database
         taxReferenceRepository.saveAndFlush(taxReference);
@@ -639,7 +811,9 @@ class TaxReferenceResourceIT {
             .andExpect(jsonPath("$.[*].taxName").value(hasItem(DEFAULT_TAX_NAME)))
             .andExpect(jsonPath("$.[*].taxDescription").value(hasItem(DEFAULT_TAX_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].taxPercentage").value(hasItem(DEFAULT_TAX_PERCENTAGE.doubleValue())))
-            .andExpect(jsonPath("$.[*].taxReferenceType").value(hasItem(DEFAULT_TAX_REFERENCE_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].taxReferenceType").value(hasItem(DEFAULT_TAX_REFERENCE_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
 
         // Check, that the count call also returns 1
         restTaxReferenceMockMvc
@@ -691,7 +865,9 @@ class TaxReferenceResourceIT {
             .taxName(UPDATED_TAX_NAME)
             .taxDescription(UPDATED_TAX_DESCRIPTION)
             .taxPercentage(UPDATED_TAX_PERCENTAGE)
-            .taxReferenceType(UPDATED_TAX_REFERENCE_TYPE);
+            .taxReferenceType(UPDATED_TAX_REFERENCE_TYPE)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         TaxReferenceDTO taxReferenceDTO = taxReferenceMapper.toDto(updatedTaxReference);
 
         restTaxReferenceMockMvc
@@ -710,6 +886,8 @@ class TaxReferenceResourceIT {
         assertThat(testTaxReference.getTaxDescription()).isEqualTo(UPDATED_TAX_DESCRIPTION);
         assertThat(testTaxReference.getTaxPercentage()).isEqualTo(UPDATED_TAX_PERCENTAGE);
         assertThat(testTaxReference.getTaxReferenceType()).isEqualTo(UPDATED_TAX_REFERENCE_TYPE);
+        assertThat(testTaxReference.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testTaxReference.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
 
         // Validate the TaxReference in Elasticsearch
         verify(mockTaxReferenceSearchRepository).save(testTaxReference);
@@ -803,7 +981,10 @@ class TaxReferenceResourceIT {
         TaxReference partialUpdatedTaxReference = new TaxReference();
         partialUpdatedTaxReference.setId(taxReference.getId());
 
-        partialUpdatedTaxReference.taxPercentage(UPDATED_TAX_PERCENTAGE);
+        partialUpdatedTaxReference
+            .taxPercentage(UPDATED_TAX_PERCENTAGE)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
 
         restTaxReferenceMockMvc
             .perform(
@@ -821,6 +1002,8 @@ class TaxReferenceResourceIT {
         assertThat(testTaxReference.getTaxDescription()).isEqualTo(DEFAULT_TAX_DESCRIPTION);
         assertThat(testTaxReference.getTaxPercentage()).isEqualTo(UPDATED_TAX_PERCENTAGE);
         assertThat(testTaxReference.getTaxReferenceType()).isEqualTo(DEFAULT_TAX_REFERENCE_TYPE);
+        assertThat(testTaxReference.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testTaxReference.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
 
     @Test
@@ -839,7 +1022,9 @@ class TaxReferenceResourceIT {
             .taxName(UPDATED_TAX_NAME)
             .taxDescription(UPDATED_TAX_DESCRIPTION)
             .taxPercentage(UPDATED_TAX_PERCENTAGE)
-            .taxReferenceType(UPDATED_TAX_REFERENCE_TYPE);
+            .taxReferenceType(UPDATED_TAX_REFERENCE_TYPE)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
 
         restTaxReferenceMockMvc
             .perform(
@@ -857,6 +1042,8 @@ class TaxReferenceResourceIT {
         assertThat(testTaxReference.getTaxDescription()).isEqualTo(UPDATED_TAX_DESCRIPTION);
         assertThat(testTaxReference.getTaxPercentage()).isEqualTo(UPDATED_TAX_PERCENTAGE);
         assertThat(testTaxReference.getTaxReferenceType()).isEqualTo(UPDATED_TAX_REFERENCE_TYPE);
+        assertThat(testTaxReference.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testTaxReference.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
 
     @Test
@@ -976,6 +1163,8 @@ class TaxReferenceResourceIT {
             .andExpect(jsonPath("$.[*].taxName").value(hasItem(DEFAULT_TAX_NAME)))
             .andExpect(jsonPath("$.[*].taxDescription").value(hasItem(DEFAULT_TAX_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].taxPercentage").value(hasItem(DEFAULT_TAX_PERCENTAGE.doubleValue())))
-            .andExpect(jsonPath("$.[*].taxReferenceType").value(hasItem(DEFAULT_TAX_REFERENCE_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].taxReferenceType").value(hasItem(DEFAULT_TAX_REFERENCE_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 }

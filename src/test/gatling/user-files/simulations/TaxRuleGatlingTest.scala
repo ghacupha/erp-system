@@ -79,6 +79,8 @@ class TaxRuleGatlingTest extends Simulation {
                 , "cateringLevy":"0"
                 , "serviceCharge":"0"
                 , "withholdingTaxImportedService":"0"
+                , "fileUploadToken":"SAMPLE_TEXT"
+                , "compilationToken":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_taxRule_url"))).exitHereIfFailed

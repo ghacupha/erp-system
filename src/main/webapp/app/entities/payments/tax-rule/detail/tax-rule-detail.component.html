@@ -46,6 +46,14 @@
         <dd>
           <span>{{ taxRule.withholdingTaxImportedService }}</span>
         </dd>
+        <dt><span>File Upload Token</span></dt>
+        <dd>
+          <span>{{ taxRule.fileUploadToken }}</span>
+        </dd>
+        <dt><span>Compilation Token</span></dt>
+        <dd>
+          <span>{{ taxRule.compilationToken }}</span>
+        </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of taxRule.placeholders; let last = last">

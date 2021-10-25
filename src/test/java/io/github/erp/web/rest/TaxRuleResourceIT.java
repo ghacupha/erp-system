@@ -77,6 +77,12 @@ class TaxRuleResourceIT {
     private static final Double UPDATED_WITHHOLDING_TAX_IMPORTED_SERVICE = 2D;
     private static final Double SMALLER_WITHHOLDING_TAX_IMPORTED_SERVICE = 1D - 1D;
 
+    private static final String DEFAULT_FILE_UPLOAD_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_FILE_UPLOAD_TOKEN = "BBBBBBBBBB";
+
+    private static final String DEFAULT_COMPILATION_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_COMPILATION_TOKEN = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/tax-rules";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/tax-rules";
@@ -127,7 +133,9 @@ class TaxRuleResourceIT {
             .withholdingTaxRent(DEFAULT_WITHHOLDING_TAX_RENT)
             .cateringLevy(DEFAULT_CATERING_LEVY)
             .serviceCharge(DEFAULT_SERVICE_CHARGE)
-            .withholdingTaxImportedService(DEFAULT_WITHHOLDING_TAX_IMPORTED_SERVICE);
+            .withholdingTaxImportedService(DEFAULT_WITHHOLDING_TAX_IMPORTED_SERVICE)
+            .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
+            .compilationToken(DEFAULT_COMPILATION_TOKEN);
         return taxRule;
     }
 
@@ -146,7 +154,9 @@ class TaxRuleResourceIT {
             .withholdingTaxRent(UPDATED_WITHHOLDING_TAX_RENT)
             .cateringLevy(UPDATED_CATERING_LEVY)
             .serviceCharge(UPDATED_SERVICE_CHARGE)
-            .withholdingTaxImportedService(UPDATED_WITHHOLDING_TAX_IMPORTED_SERVICE);
+            .withholdingTaxImportedService(UPDATED_WITHHOLDING_TAX_IMPORTED_SERVICE)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         return taxRule;
     }
 
@@ -177,6 +187,8 @@ class TaxRuleResourceIT {
         assertThat(testTaxRule.getCateringLevy()).isEqualTo(DEFAULT_CATERING_LEVY);
         assertThat(testTaxRule.getServiceCharge()).isEqualTo(DEFAULT_SERVICE_CHARGE);
         assertThat(testTaxRule.getWithholdingTaxImportedService()).isEqualTo(DEFAULT_WITHHOLDING_TAX_IMPORTED_SERVICE);
+        assertThat(testTaxRule.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
+        assertThat(testTaxRule.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
 
         // Validate the TaxRule in Elasticsearch
         verify(mockTaxRuleSearchRepository, times(1)).save(testTaxRule);
@@ -225,7 +237,9 @@ class TaxRuleResourceIT {
             .andExpect(jsonPath("$.[*].serviceCharge").value(hasItem(DEFAULT_SERVICE_CHARGE.doubleValue())))
             .andExpect(
                 jsonPath("$.[*].withholdingTaxImportedService").value(hasItem(DEFAULT_WITHHOLDING_TAX_IMPORTED_SERVICE.doubleValue()))
-            );
+            )
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -265,7 +279,9 @@ class TaxRuleResourceIT {
             .andExpect(jsonPath("$.withholdingTaxRent").value(DEFAULT_WITHHOLDING_TAX_RENT.doubleValue()))
             .andExpect(jsonPath("$.cateringLevy").value(DEFAULT_CATERING_LEVY.doubleValue()))
             .andExpect(jsonPath("$.serviceCharge").value(DEFAULT_SERVICE_CHARGE.doubleValue()))
-            .andExpect(jsonPath("$.withholdingTaxImportedService").value(DEFAULT_WITHHOLDING_TAX_IMPORTED_SERVICE.doubleValue()));
+            .andExpect(jsonPath("$.withholdingTaxImportedService").value(DEFAULT_WITHHOLDING_TAX_IMPORTED_SERVICE.doubleValue()))
+            .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
+            .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN));
     }
 
     @Test
@@ -1124,6 +1140,162 @@ class TaxRuleResourceIT {
 
     @Test
     @Transactional
+    void getAllTaxRulesByFileUploadTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        taxRuleRepository.saveAndFlush(taxRule);
+
+        // Get all the taxRuleList where fileUploadToken equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultTaxRuleShouldBeFound("fileUploadToken.equals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the taxRuleList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultTaxRuleShouldNotBeFound("fileUploadToken.equals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxRulesByFileUploadTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        taxRuleRepository.saveAndFlush(taxRule);
+
+        // Get all the taxRuleList where fileUploadToken not equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultTaxRuleShouldNotBeFound("fileUploadToken.notEquals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the taxRuleList where fileUploadToken not equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultTaxRuleShouldBeFound("fileUploadToken.notEquals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxRulesByFileUploadTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        taxRuleRepository.saveAndFlush(taxRule);
+
+        // Get all the taxRuleList where fileUploadToken in DEFAULT_FILE_UPLOAD_TOKEN or UPDATED_FILE_UPLOAD_TOKEN
+        defaultTaxRuleShouldBeFound("fileUploadToken.in=" + DEFAULT_FILE_UPLOAD_TOKEN + "," + UPDATED_FILE_UPLOAD_TOKEN);
+
+        // Get all the taxRuleList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultTaxRuleShouldNotBeFound("fileUploadToken.in=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxRulesByFileUploadTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        taxRuleRepository.saveAndFlush(taxRule);
+
+        // Get all the taxRuleList where fileUploadToken is not null
+        defaultTaxRuleShouldBeFound("fileUploadToken.specified=true");
+
+        // Get all the taxRuleList where fileUploadToken is null
+        defaultTaxRuleShouldNotBeFound("fileUploadToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxRulesByFileUploadTokenContainsSomething() throws Exception {
+        // Initialize the database
+        taxRuleRepository.saveAndFlush(taxRule);
+
+        // Get all the taxRuleList where fileUploadToken contains DEFAULT_FILE_UPLOAD_TOKEN
+        defaultTaxRuleShouldBeFound("fileUploadToken.contains=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the taxRuleList where fileUploadToken contains UPDATED_FILE_UPLOAD_TOKEN
+        defaultTaxRuleShouldNotBeFound("fileUploadToken.contains=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxRulesByFileUploadTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        taxRuleRepository.saveAndFlush(taxRule);
+
+        // Get all the taxRuleList where fileUploadToken does not contain DEFAULT_FILE_UPLOAD_TOKEN
+        defaultTaxRuleShouldNotBeFound("fileUploadToken.doesNotContain=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the taxRuleList where fileUploadToken does not contain UPDATED_FILE_UPLOAD_TOKEN
+        defaultTaxRuleShouldBeFound("fileUploadToken.doesNotContain=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxRulesByCompilationTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        taxRuleRepository.saveAndFlush(taxRule);
+
+        // Get all the taxRuleList where compilationToken equals to DEFAULT_COMPILATION_TOKEN
+        defaultTaxRuleShouldBeFound("compilationToken.equals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the taxRuleList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultTaxRuleShouldNotBeFound("compilationToken.equals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxRulesByCompilationTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        taxRuleRepository.saveAndFlush(taxRule);
+
+        // Get all the taxRuleList where compilationToken not equals to DEFAULT_COMPILATION_TOKEN
+        defaultTaxRuleShouldNotBeFound("compilationToken.notEquals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the taxRuleList where compilationToken not equals to UPDATED_COMPILATION_TOKEN
+        defaultTaxRuleShouldBeFound("compilationToken.notEquals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxRulesByCompilationTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        taxRuleRepository.saveAndFlush(taxRule);
+
+        // Get all the taxRuleList where compilationToken in DEFAULT_COMPILATION_TOKEN or UPDATED_COMPILATION_TOKEN
+        defaultTaxRuleShouldBeFound("compilationToken.in=" + DEFAULT_COMPILATION_TOKEN + "," + UPDATED_COMPILATION_TOKEN);
+
+        // Get all the taxRuleList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultTaxRuleShouldNotBeFound("compilationToken.in=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxRulesByCompilationTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        taxRuleRepository.saveAndFlush(taxRule);
+
+        // Get all the taxRuleList where compilationToken is not null
+        defaultTaxRuleShouldBeFound("compilationToken.specified=true");
+
+        // Get all the taxRuleList where compilationToken is null
+        defaultTaxRuleShouldNotBeFound("compilationToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxRulesByCompilationTokenContainsSomething() throws Exception {
+        // Initialize the database
+        taxRuleRepository.saveAndFlush(taxRule);
+
+        // Get all the taxRuleList where compilationToken contains DEFAULT_COMPILATION_TOKEN
+        defaultTaxRuleShouldBeFound("compilationToken.contains=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the taxRuleList where compilationToken contains UPDATED_COMPILATION_TOKEN
+        defaultTaxRuleShouldNotBeFound("compilationToken.contains=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllTaxRulesByCompilationTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        taxRuleRepository.saveAndFlush(taxRule);
+
+        // Get all the taxRuleList where compilationToken does not contain DEFAULT_COMPILATION_TOKEN
+        defaultTaxRuleShouldNotBeFound("compilationToken.doesNotContain=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the taxRuleList where compilationToken does not contain UPDATED_COMPILATION_TOKEN
+        defaultTaxRuleShouldBeFound("compilationToken.doesNotContain=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
     void getAllTaxRulesByPaymentIsEqualToSomething() throws Exception {
         // Initialize the database
         taxRuleRepository.saveAndFlush(taxRule);
@@ -1192,7 +1364,9 @@ class TaxRuleResourceIT {
             .andExpect(jsonPath("$.[*].serviceCharge").value(hasItem(DEFAULT_SERVICE_CHARGE.doubleValue())))
             .andExpect(
                 jsonPath("$.[*].withholdingTaxImportedService").value(hasItem(DEFAULT_WITHHOLDING_TAX_IMPORTED_SERVICE.doubleValue()))
-            );
+            )
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
 
         // Check, that the count call also returns 1
         restTaxRuleMockMvc
@@ -1248,7 +1422,9 @@ class TaxRuleResourceIT {
             .withholdingTaxRent(UPDATED_WITHHOLDING_TAX_RENT)
             .cateringLevy(UPDATED_CATERING_LEVY)
             .serviceCharge(UPDATED_SERVICE_CHARGE)
-            .withholdingTaxImportedService(UPDATED_WITHHOLDING_TAX_IMPORTED_SERVICE);
+            .withholdingTaxImportedService(UPDATED_WITHHOLDING_TAX_IMPORTED_SERVICE)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         TaxRuleDTO taxRuleDTO = taxRuleMapper.toDto(updatedTaxRule);
 
         restTaxRuleMockMvc
@@ -1271,6 +1447,8 @@ class TaxRuleResourceIT {
         assertThat(testTaxRule.getCateringLevy()).isEqualTo(UPDATED_CATERING_LEVY);
         assertThat(testTaxRule.getServiceCharge()).isEqualTo(UPDATED_SERVICE_CHARGE);
         assertThat(testTaxRule.getWithholdingTaxImportedService()).isEqualTo(UPDATED_WITHHOLDING_TAX_IMPORTED_SERVICE);
+        assertThat(testTaxRule.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testTaxRule.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
 
         // Validate the TaxRule in Elasticsearch
         verify(mockTaxRuleSearchRepository).save(testTaxRule);
@@ -1387,6 +1565,8 @@ class TaxRuleResourceIT {
         assertThat(testTaxRule.getCateringLevy()).isEqualTo(DEFAULT_CATERING_LEVY);
         assertThat(testTaxRule.getServiceCharge()).isEqualTo(DEFAULT_SERVICE_CHARGE);
         assertThat(testTaxRule.getWithholdingTaxImportedService()).isEqualTo(UPDATED_WITHHOLDING_TAX_IMPORTED_SERVICE);
+        assertThat(testTaxRule.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
+        assertThat(testTaxRule.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
     }
 
     @Test
@@ -1409,7 +1589,9 @@ class TaxRuleResourceIT {
             .withholdingTaxRent(UPDATED_WITHHOLDING_TAX_RENT)
             .cateringLevy(UPDATED_CATERING_LEVY)
             .serviceCharge(UPDATED_SERVICE_CHARGE)
-            .withholdingTaxImportedService(UPDATED_WITHHOLDING_TAX_IMPORTED_SERVICE);
+            .withholdingTaxImportedService(UPDATED_WITHHOLDING_TAX_IMPORTED_SERVICE)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
 
         restTaxRuleMockMvc
             .perform(
@@ -1431,6 +1613,8 @@ class TaxRuleResourceIT {
         assertThat(testTaxRule.getCateringLevy()).isEqualTo(UPDATED_CATERING_LEVY);
         assertThat(testTaxRule.getServiceCharge()).isEqualTo(UPDATED_SERVICE_CHARGE);
         assertThat(testTaxRule.getWithholdingTaxImportedService()).isEqualTo(UPDATED_WITHHOLDING_TAX_IMPORTED_SERVICE);
+        assertThat(testTaxRule.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testTaxRule.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
 
     @Test
@@ -1554,6 +1738,8 @@ class TaxRuleResourceIT {
             .andExpect(jsonPath("$.[*].serviceCharge").value(hasItem(DEFAULT_SERVICE_CHARGE.doubleValue())))
             .andExpect(
                 jsonPath("$.[*].withholdingTaxImportedService").value(hasItem(DEFAULT_WITHHOLDING_TAX_IMPORTED_SERVICE.doubleValue()))
-            );
+            )
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 }

@@ -75,6 +75,8 @@ class PaymentCalculationGatlingTest extends Simulation {
                 , "withholdingVAT":"0"
                 , "withholdingTax":"0"
                 , "paymentAmount":"0"
+                , "fileUploadToken":"SAMPLE_TEXT"
+                , "compilationToken":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_paymentCalculation_url"))).exitHereIfFailed

@@ -26,6 +26,14 @@
         <dd>
           <span>{{ paymentRequisition.vatableAmount }}</span>
         </dd>
+        <dt><span>File Upload Token</span></dt>
+        <dd>
+          <span>{{ paymentRequisition.fileUploadToken }}</span>
+        </dd>
+        <dt><span>Compilation Token</span></dt>
+        <dd>
+          <span>{{ paymentRequisition.compilationToken }}</span>
+        </dd>
         <dt><span>Payment Label</span></dt>
         <dd>
           <span *ngFor="let paymentLabel of paymentRequisition.paymentLabels; let last = last">

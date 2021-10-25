@@ -80,6 +80,8 @@ class PaymentGatlingTest extends Simulation {
                 , "description":"SAMPLE_TEXT"
                 , "settlementCurrency":"KES"
                 , "conversionRate":"0"
+                , "fileUploadToken":"SAMPLE_TEXT"
+                , "compilationToken":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_payment_url"))).exitHereIfFailed

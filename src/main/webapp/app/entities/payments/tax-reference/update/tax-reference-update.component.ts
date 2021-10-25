@@ -25,6 +25,8 @@ export class TaxReferenceUpdateComponent implements OnInit {
     taxDescription: [],
     taxPercentage: [null, [Validators.required]],
     taxReferenceType: [null, [Validators.required]],
+    fileUploadToken: [],
+    compilationToken: [],
     placeholders: [],
   });
 
@@ -98,6 +100,8 @@ export class TaxReferenceUpdateComponent implements OnInit {
       taxDescription: taxReference.taxDescription,
       taxPercentage: taxReference.taxPercentage,
       taxReferenceType: taxReference.taxReferenceType,
+      fileUploadToken: taxReference.fileUploadToken,
+      compilationToken: taxReference.compilationToken,
       placeholders: taxReference.placeholders,
     });
 
@@ -127,6 +131,8 @@ export class TaxReferenceUpdateComponent implements OnInit {
       taxDescription: this.editForm.get(['taxDescription'])!.value,
       taxPercentage: this.editForm.get(['taxPercentage'])!.value,
       taxReferenceType: this.editForm.get(['taxReferenceType'])!.value,
+      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
+      compilationToken: this.editForm.get(['compilationToken'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
     };
   }

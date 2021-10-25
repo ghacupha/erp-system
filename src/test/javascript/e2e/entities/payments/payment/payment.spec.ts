@@ -52,6 +52,8 @@ describe('Payment e2e test', () => {
       paymentUpdatePage.setDescriptionInput('description'),
       paymentUpdatePage.settlementCurrencySelectLastOption(),
       paymentUpdatePage.setConversionRateInput('5'),
+      paymentUpdatePage.setFileUploadTokenInput('fileUploadToken'),
+      paymentUpdatePage.setCompilationTokenInput('compilationToken'),
       // paymentUpdatePage.paymentLabelSelectLastOption(),
       paymentUpdatePage.dealerSelectLastOption(),
       paymentUpdatePage.paymentCategorySelectLastOption(),

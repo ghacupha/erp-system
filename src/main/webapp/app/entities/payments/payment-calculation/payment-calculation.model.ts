@@ -9,6 +9,8 @@ export interface IPaymentCalculation {
   withholdingVAT?: number | null;
   withholdingTax?: number | null;
   paymentAmount?: number | null;
+  fileUploadToken?: string | null;
+  compilationToken?: string | null;
   paymentLabels?: IPaymentLabel[] | null;
   payment?: IPayment | null;
   paymentCategory?: IPaymentCategory | null;
@@ -22,6 +24,8 @@ export class PaymentCalculation implements IPaymentCalculation {
     public withholdingVAT?: number | null,
     public withholdingTax?: number | null,
     public paymentAmount?: number | null,
+    public fileUploadToken?: string | null,
+    public compilationToken?: string | null,
     public paymentLabels?: IPaymentLabel[] | null,
     public payment?: IPayment | null,
     public paymentCategory?: IPaymentCategory | null,

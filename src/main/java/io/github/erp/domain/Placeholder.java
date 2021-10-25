@@ -31,6 +31,12 @@ public class Placeholder implements Serializable {
     @Column(name = "token", unique = true)
     private String token;
 
+    @Column(name = "file_upload_token")
+    private String fileUploadToken;
+
+    @Column(name = "compilation_token")
+    private String compilationToken;
+
     @ManyToOne
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Placeholder containingPlaceholder;
@@ -76,6 +82,32 @@ public class Placeholder implements Serializable {
         this.token = token;
     }
 
+    public String getFileUploadToken() {
+        return this.fileUploadToken;
+    }
+
+    public Placeholder fileUploadToken(String fileUploadToken) {
+        this.setFileUploadToken(fileUploadToken);
+        return this;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return this.compilationToken;
+    }
+
+    public Placeholder compilationToken(String compilationToken) {
+        this.setCompilationToken(compilationToken);
+        return this;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public Placeholder getContainingPlaceholder() {
         return this.containingPlaceholder;
     }
@@ -115,6 +147,8 @@ public class Placeholder implements Serializable {
             "id=" + getId() +
             ", description='" + getDescription() + "'" +
             ", token='" + getToken() + "'" +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             "}";
     }
 }

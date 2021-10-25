@@ -55,6 +55,12 @@
           <th scope="col" jhiSortBy="withholdingVAT"><span>Withholding VAT</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="withholdingTax"><span>Withholding Tax</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentAmount"><span>Payment Amount</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fileUploadToken">
+            <span>File Upload Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="compilationToken">
+            <span>Compilation Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="paymentCategory.id"><span>Payment Category</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -68,6 +74,8 @@
           <td>{{ paymentCalculation.withholdingVAT }}</td>
           <td>{{ paymentCalculation.withholdingTax }}</td>
           <td>{{ paymentCalculation.paymentAmount }}</td>
+          <td>{{ paymentCalculation.fileUploadToken }}</td>
+          <td>{{ paymentCalculation.compilationToken }}</td>
           <td>
             <div *ngIf="paymentCalculation.paymentCategory">
               <a [routerLink]="['/payment-category', paymentCalculation.paymentCategory?.id, 'view']">{{

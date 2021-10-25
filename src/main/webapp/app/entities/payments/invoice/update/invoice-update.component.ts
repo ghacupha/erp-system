@@ -31,6 +31,8 @@ export class InvoiceUpdateComponent implements OnInit {
     conversionRate: [null, [Validators.required, Validators.min(1.0)]],
     paymentId: [],
     dealerId: [],
+    fileUploadToken: [],
+    compilationToken: [],
     paymentLabels: [],
     placeholders: [],
   });
@@ -124,6 +126,8 @@ export class InvoiceUpdateComponent implements OnInit {
       conversionRate: invoice.conversionRate,
       paymentId: invoice.paymentId,
       dealerId: invoice.dealerId,
+      fileUploadToken: invoice.fileUploadToken,
+      compilationToken: invoice.compilationToken,
       paymentLabels: invoice.paymentLabels,
       placeholders: invoice.placeholders,
     });
@@ -171,6 +175,8 @@ export class InvoiceUpdateComponent implements OnInit {
       conversionRate: this.editForm.get(['conversionRate'])!.value,
       paymentId: this.editForm.get(['paymentId'])!.value,
       dealerId: this.editForm.get(['dealerId'])!.value,
+      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
+      compilationToken: this.editForm.get(['compilationToken'])!.value,
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
     };

@@ -126,6 +126,12 @@ public class TaxRuleQueryService extends QueryService<TaxRule> {
                         buildRangeSpecification(criteria.getWithholdingTaxImportedService(), TaxRule_.withholdingTaxImportedService)
                     );
             }
+            if (criteria.getFileUploadToken() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getFileUploadToken(), TaxRule_.fileUploadToken));
+            }
+            if (criteria.getCompilationToken() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getCompilationToken(), TaxRule_.compilationToken));
+            }
             if (criteria.getPaymentId() != null) {
                 specification =
                     specification.and(

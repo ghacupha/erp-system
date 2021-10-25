@@ -76,6 +76,12 @@ class InvoiceResourceIT {
     private static final Long UPDATED_DEALER_ID = 2L;
     private static final Long SMALLER_DEALER_ID = 1L - 1L;
 
+    private static final String DEFAULT_FILE_UPLOAD_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_FILE_UPLOAD_TOKEN = "BBBBBBBBBB";
+
+    private static final String DEFAULT_COMPILATION_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_COMPILATION_TOKEN = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/invoices";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/invoices";
@@ -125,7 +131,9 @@ class InvoiceResourceIT {
             .currency(DEFAULT_CURRENCY)
             .conversionRate(DEFAULT_CONVERSION_RATE)
             .paymentId(DEFAULT_PAYMENT_ID)
-            .dealerId(DEFAULT_DEALER_ID);
+            .dealerId(DEFAULT_DEALER_ID)
+            .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
+            .compilationToken(DEFAULT_COMPILATION_TOKEN);
         return invoice;
     }
 
@@ -143,7 +151,9 @@ class InvoiceResourceIT {
             .currency(UPDATED_CURRENCY)
             .conversionRate(UPDATED_CONVERSION_RATE)
             .paymentId(UPDATED_PAYMENT_ID)
-            .dealerId(UPDATED_DEALER_ID);
+            .dealerId(UPDATED_DEALER_ID)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         return invoice;
     }
 
@@ -173,6 +183,8 @@ class InvoiceResourceIT {
         assertThat(testInvoice.getConversionRate()).isEqualTo(DEFAULT_CONVERSION_RATE);
         assertThat(testInvoice.getPaymentId()).isEqualTo(DEFAULT_PAYMENT_ID);
         assertThat(testInvoice.getDealerId()).isEqualTo(DEFAULT_DEALER_ID);
+        assertThat(testInvoice.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
+        assertThat(testInvoice.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
 
         // Validate the Invoice in Elasticsearch
         verify(mockInvoiceSearchRepository, times(1)).save(testInvoice);
@@ -272,7 +284,9 @@ class InvoiceResourceIT {
             .andExpect(jsonPath("$.[*].currency").value(hasItem(DEFAULT_CURRENCY.toString())))
             .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())))
             .andExpect(jsonPath("$.[*].paymentId").value(hasItem(DEFAULT_PAYMENT_ID.intValue())))
-            .andExpect(jsonPath("$.[*].dealerId").value(hasItem(DEFAULT_DEALER_ID.intValue())));
+            .andExpect(jsonPath("$.[*].dealerId").value(hasItem(DEFAULT_DEALER_ID.intValue())))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -311,7 +325,9 @@ class InvoiceResourceIT {
             .andExpect(jsonPath("$.currency").value(DEFAULT_CURRENCY.toString()))
             .andExpect(jsonPath("$.conversionRate").value(DEFAULT_CONVERSION_RATE.doubleValue()))
             .andExpect(jsonPath("$.paymentId").value(DEFAULT_PAYMENT_ID.intValue()))
-            .andExpect(jsonPath("$.dealerId").value(DEFAULT_DEALER_ID.intValue()));
+            .andExpect(jsonPath("$.dealerId").value(DEFAULT_DEALER_ID.intValue()))
+            .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
+            .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN));
     }
 
     @Test
@@ -984,6 +1000,162 @@ class InvoiceResourceIT {
 
     @Test
     @Transactional
+    void getAllInvoicesByFileUploadTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where fileUploadToken equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultInvoiceShouldBeFound("fileUploadToken.equals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the invoiceList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultInvoiceShouldNotBeFound("fileUploadToken.equals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByFileUploadTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where fileUploadToken not equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultInvoiceShouldNotBeFound("fileUploadToken.notEquals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the invoiceList where fileUploadToken not equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultInvoiceShouldBeFound("fileUploadToken.notEquals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByFileUploadTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where fileUploadToken in DEFAULT_FILE_UPLOAD_TOKEN or UPDATED_FILE_UPLOAD_TOKEN
+        defaultInvoiceShouldBeFound("fileUploadToken.in=" + DEFAULT_FILE_UPLOAD_TOKEN + "," + UPDATED_FILE_UPLOAD_TOKEN);
+
+        // Get all the invoiceList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultInvoiceShouldNotBeFound("fileUploadToken.in=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByFileUploadTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where fileUploadToken is not null
+        defaultInvoiceShouldBeFound("fileUploadToken.specified=true");
+
+        // Get all the invoiceList where fileUploadToken is null
+        defaultInvoiceShouldNotBeFound("fileUploadToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByFileUploadTokenContainsSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where fileUploadToken contains DEFAULT_FILE_UPLOAD_TOKEN
+        defaultInvoiceShouldBeFound("fileUploadToken.contains=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the invoiceList where fileUploadToken contains UPDATED_FILE_UPLOAD_TOKEN
+        defaultInvoiceShouldNotBeFound("fileUploadToken.contains=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByFileUploadTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where fileUploadToken does not contain DEFAULT_FILE_UPLOAD_TOKEN
+        defaultInvoiceShouldNotBeFound("fileUploadToken.doesNotContain=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the invoiceList where fileUploadToken does not contain UPDATED_FILE_UPLOAD_TOKEN
+        defaultInvoiceShouldBeFound("fileUploadToken.doesNotContain=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByCompilationTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where compilationToken equals to DEFAULT_COMPILATION_TOKEN
+        defaultInvoiceShouldBeFound("compilationToken.equals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the invoiceList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultInvoiceShouldNotBeFound("compilationToken.equals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByCompilationTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where compilationToken not equals to DEFAULT_COMPILATION_TOKEN
+        defaultInvoiceShouldNotBeFound("compilationToken.notEquals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the invoiceList where compilationToken not equals to UPDATED_COMPILATION_TOKEN
+        defaultInvoiceShouldBeFound("compilationToken.notEquals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByCompilationTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where compilationToken in DEFAULT_COMPILATION_TOKEN or UPDATED_COMPILATION_TOKEN
+        defaultInvoiceShouldBeFound("compilationToken.in=" + DEFAULT_COMPILATION_TOKEN + "," + UPDATED_COMPILATION_TOKEN);
+
+        // Get all the invoiceList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultInvoiceShouldNotBeFound("compilationToken.in=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByCompilationTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where compilationToken is not null
+        defaultInvoiceShouldBeFound("compilationToken.specified=true");
+
+        // Get all the invoiceList where compilationToken is null
+        defaultInvoiceShouldNotBeFound("compilationToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByCompilationTokenContainsSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where compilationToken contains DEFAULT_COMPILATION_TOKEN
+        defaultInvoiceShouldBeFound("compilationToken.contains=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the invoiceList where compilationToken contains UPDATED_COMPILATION_TOKEN
+        defaultInvoiceShouldNotBeFound("compilationToken.contains=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllInvoicesByCompilationTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        invoiceRepository.saveAndFlush(invoice);
+
+        // Get all the invoiceList where compilationToken does not contain DEFAULT_COMPILATION_TOKEN
+        defaultInvoiceShouldNotBeFound("compilationToken.doesNotContain=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the invoiceList where compilationToken does not contain UPDATED_COMPILATION_TOKEN
+        defaultInvoiceShouldBeFound("compilationToken.doesNotContain=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
     void getAllInvoicesByPaymentLabelIsEqualToSomething() throws Exception {
         // Initialize the database
         invoiceRepository.saveAndFlush(invoice);
@@ -1049,7 +1221,9 @@ class InvoiceResourceIT {
             .andExpect(jsonPath("$.[*].currency").value(hasItem(DEFAULT_CURRENCY.toString())))
             .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())))
             .andExpect(jsonPath("$.[*].paymentId").value(hasItem(DEFAULT_PAYMENT_ID.intValue())))
-            .andExpect(jsonPath("$.[*].dealerId").value(hasItem(DEFAULT_DEALER_ID.intValue())));
+            .andExpect(jsonPath("$.[*].dealerId").value(hasItem(DEFAULT_DEALER_ID.intValue())))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
 
         // Check, that the count call also returns 1
         restInvoiceMockMvc
@@ -1104,7 +1278,9 @@ class InvoiceResourceIT {
             .currency(UPDATED_CURRENCY)
             .conversionRate(UPDATED_CONVERSION_RATE)
             .paymentId(UPDATED_PAYMENT_ID)
-            .dealerId(UPDATED_DEALER_ID);
+            .dealerId(UPDATED_DEALER_ID)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         InvoiceDTO invoiceDTO = invoiceMapper.toDto(updatedInvoice);
 
         restInvoiceMockMvc
@@ -1126,6 +1302,8 @@ class InvoiceResourceIT {
         assertThat(testInvoice.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
         assertThat(testInvoice.getPaymentId()).isEqualTo(UPDATED_PAYMENT_ID);
         assertThat(testInvoice.getDealerId()).isEqualTo(UPDATED_DEALER_ID);
+        assertThat(testInvoice.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testInvoice.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
 
         // Validate the Invoice in Elasticsearch
         verify(mockInvoiceSearchRepository).save(testInvoice);
@@ -1217,7 +1395,11 @@ class InvoiceResourceIT {
         Invoice partialUpdatedInvoice = new Invoice();
         partialUpdatedInvoice.setId(invoice.getId());
 
-        partialUpdatedInvoice.invoiceAmount(UPDATED_INVOICE_AMOUNT).currency(UPDATED_CURRENCY).conversionRate(UPDATED_CONVERSION_RATE);
+        partialUpdatedInvoice
+            .invoiceAmount(UPDATED_INVOICE_AMOUNT)
+            .currency(UPDATED_CURRENCY)
+            .conversionRate(UPDATED_CONVERSION_RATE)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
 
         restInvoiceMockMvc
             .perform(
@@ -1238,6 +1420,8 @@ class InvoiceResourceIT {
         assertThat(testInvoice.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
         assertThat(testInvoice.getPaymentId()).isEqualTo(DEFAULT_PAYMENT_ID);
         assertThat(testInvoice.getDealerId()).isEqualTo(DEFAULT_DEALER_ID);
+        assertThat(testInvoice.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
+        assertThat(testInvoice.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
 
     @Test
@@ -1259,7 +1443,9 @@ class InvoiceResourceIT {
             .currency(UPDATED_CURRENCY)
             .conversionRate(UPDATED_CONVERSION_RATE)
             .paymentId(UPDATED_PAYMENT_ID)
-            .dealerId(UPDATED_DEALER_ID);
+            .dealerId(UPDATED_DEALER_ID)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
 
         restInvoiceMockMvc
             .perform(
@@ -1280,6 +1466,8 @@ class InvoiceResourceIT {
         assertThat(testInvoice.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
         assertThat(testInvoice.getPaymentId()).isEqualTo(UPDATED_PAYMENT_ID);
         assertThat(testInvoice.getDealerId()).isEqualTo(UPDATED_DEALER_ID);
+        assertThat(testInvoice.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testInvoice.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
 
     @Test
@@ -1400,6 +1588,8 @@ class InvoiceResourceIT {
             .andExpect(jsonPath("$.[*].currency").value(hasItem(DEFAULT_CURRENCY.toString())))
             .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())))
             .andExpect(jsonPath("$.[*].paymentId").value(hasItem(DEFAULT_PAYMENT_ID.intValue())))
-            .andExpect(jsonPath("$.[*].dealerId").value(hasItem(DEFAULT_DEALER_ID.intValue())));
+            .andExpect(jsonPath("$.[*].dealerId").value(hasItem(DEFAULT_DEALER_ID.intValue())))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 }

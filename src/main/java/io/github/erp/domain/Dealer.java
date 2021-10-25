@@ -54,6 +54,12 @@ public class Dealer implements Serializable {
     @Column(name = "bankers_swift_code")
     private String bankersSwiftCode;
 
+    @Column(name = "file_upload_token")
+    private String fileUploadToken;
+
+    @Column(name = "compilation_token")
+    private String compilationToken;
+
     @ManyToMany
     @JoinTable(
         name = "rel_dealer__payment_label",
@@ -226,6 +232,32 @@ public class Dealer implements Serializable {
         this.bankersSwiftCode = bankersSwiftCode;
     }
 
+    public String getFileUploadToken() {
+        return this.fileUploadToken;
+    }
+
+    public Dealer fileUploadToken(String fileUploadToken) {
+        this.setFileUploadToken(fileUploadToken);
+        return this;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return this.compilationToken;
+    }
+
+    public Dealer compilationToken(String compilationToken) {
+        this.setCompilationToken(compilationToken);
+        return this;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public Set<PaymentLabel> getPaymentLabels() {
         return this.paymentLabels;
     }
@@ -380,6 +412,8 @@ public class Dealer implements Serializable {
             ", bankersName='" + getBankersName() + "'" +
             ", bankersBranch='" + getBankersBranch() + "'" +
             ", bankersSwiftCode='" + getBankersSwiftCode() + "'" +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             "}";
     }
 }

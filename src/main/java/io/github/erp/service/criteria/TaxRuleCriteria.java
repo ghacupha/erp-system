@@ -42,6 +42,10 @@ public class TaxRuleCriteria implements Serializable, Criteria {
 
     private DoubleFilter withholdingTaxImportedService;
 
+    private StringFilter fileUploadToken;
+
+    private StringFilter compilationToken;
+
     private LongFilter paymentId;
 
     private LongFilter placeholderId;
@@ -61,6 +65,8 @@ public class TaxRuleCriteria implements Serializable, Criteria {
         this.serviceCharge = other.serviceCharge == null ? null : other.serviceCharge.copy();
         this.withholdingTaxImportedService =
             other.withholdingTaxImportedService == null ? null : other.withholdingTaxImportedService.copy();
+        this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
+        this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
@@ -206,6 +212,36 @@ public class TaxRuleCriteria implements Serializable, Criteria {
         this.withholdingTaxImportedService = withholdingTaxImportedService;
     }
 
+    public StringFilter getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public StringFilter fileUploadToken() {
+        if (fileUploadToken == null) {
+            fileUploadToken = new StringFilter();
+        }
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(StringFilter fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public StringFilter getCompilationToken() {
+        return compilationToken;
+    }
+
+    public StringFilter compilationToken() {
+        if (compilationToken == null) {
+            compilationToken = new StringFilter();
+        }
+        return compilationToken;
+    }
+
+    public void setCompilationToken(StringFilter compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public LongFilter getPaymentId() {
         return paymentId;
     }
@@ -263,6 +299,8 @@ public class TaxRuleCriteria implements Serializable, Criteria {
             Objects.equals(cateringLevy, that.cateringLevy) &&
             Objects.equals(serviceCharge, that.serviceCharge) &&
             Objects.equals(withholdingTaxImportedService, that.withholdingTaxImportedService) &&
+            Objects.equals(fileUploadToken, that.fileUploadToken) &&
+            Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(paymentId, that.paymentId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
@@ -281,6 +319,8 @@ public class TaxRuleCriteria implements Serializable, Criteria {
             cateringLevy,
             serviceCharge,
             withholdingTaxImportedService,
+            fileUploadToken,
+            compilationToken,
             paymentId,
             placeholderId,
             distinct
@@ -300,6 +340,8 @@ public class TaxRuleCriteria implements Serializable, Criteria {
             (cateringLevy != null ? "cateringLevy=" + cateringLevy + ", " : "") +
             (serviceCharge != null ? "serviceCharge=" + serviceCharge + ", " : "") +
             (withholdingTaxImportedService != null ? "withholdingTaxImportedService=" + withholdingTaxImportedService + ", " : "") +
+            (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +
+            (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

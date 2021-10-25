@@ -18,6 +18,8 @@ export interface IPayment {
   description?: string | null;
   settlementCurrency?: CurrencyTypes;
   conversionRate?: number;
+  fileUploadToken?: string | null;
+  compilationToken?: string | null;
   paymentLabels?: IPaymentLabel[] | null;
   dealer?: IDealer | null;
   paymentCategory?: IPaymentCategory | null;
@@ -39,6 +41,8 @@ export class Payment implements IPayment {
     public description?: string | null,
     public settlementCurrency?: CurrencyTypes,
     public conversionRate?: number,
+    public fileUploadToken?: string | null,
+    public compilationToken?: string | null,
     public paymentLabels?: IPaymentLabel[] | null,
     public dealer?: IDealer | null,
     public paymentCategory?: IPaymentCategory | null,

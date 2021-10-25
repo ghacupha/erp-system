@@ -78,7 +78,7 @@ export class PlaceholderComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['description', 'token'].includes(this.predicate)) {
+    if (query && ['description', 'token', 'fileUploadToken', 'compilationToken'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }

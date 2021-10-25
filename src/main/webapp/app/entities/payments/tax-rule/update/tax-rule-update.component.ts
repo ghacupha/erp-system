@@ -29,6 +29,8 @@ export class TaxRuleUpdateComponent implements OnInit {
     cateringLevy: [],
     serviceCharge: [],
     withholdingTaxImportedService: [],
+    fileUploadToken: [],
+    compilationToken: [],
     placeholders: [],
   });
 
@@ -106,6 +108,8 @@ export class TaxRuleUpdateComponent implements OnInit {
       cateringLevy: taxRule.cateringLevy,
       serviceCharge: taxRule.serviceCharge,
       withholdingTaxImportedService: taxRule.withholdingTaxImportedService,
+      fileUploadToken: taxRule.fileUploadToken,
+      compilationToken: taxRule.compilationToken,
       placeholders: taxRule.placeholders,
     });
 
@@ -139,6 +143,8 @@ export class TaxRuleUpdateComponent implements OnInit {
       cateringLevy: this.editForm.get(['cateringLevy'])!.value,
       serviceCharge: this.editForm.get(['serviceCharge'])!.value,
       withholdingTaxImportedService: this.editForm.get(['withholdingTaxImportedService'])!.value,
+      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
+      compilationToken: this.editForm.get(['compilationToken'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
     };
   }

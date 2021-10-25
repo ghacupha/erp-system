@@ -34,6 +34,8 @@ export class SignedPaymentUpdatePage {
   transactionDateInput = element(by.id('field_transactionDate'));
   transactionCurrencySelect = element(by.id('field_transactionCurrency'));
   transactionAmountInput = element(by.id('field_transactionAmount'));
+  fileUploadTokenInput = element(by.id('field_fileUploadToken'));
+  compilationTokenInput = element(by.id('field_compilationToken'));
 
   paymentLabelSelect = element(by.id('field_paymentLabel'));
   dealerSelect = element(by.id('field_dealer'));
@@ -87,6 +89,22 @@ export class SignedPaymentUpdatePage {
 
   async getTransactionAmountInput(): Promise<string> {
     return await this.transactionAmountInput.getAttribute('value');
+  }
+
+  async setFileUploadTokenInput(fileUploadToken: string): Promise<void> {
+    await this.fileUploadTokenInput.sendKeys(fileUploadToken);
+  }
+
+  async getFileUploadTokenInput(): Promise<string> {
+    return await this.fileUploadTokenInput.getAttribute('value');
+  }
+
+  async setCompilationTokenInput(compilationToken: string): Promise<void> {
+    await this.compilationTokenInput.sendKeys(compilationToken);
+  }
+
+  async getCompilationTokenInput(): Promise<string> {
+    return await this.compilationTokenInput.getAttribute('value');
   }
 
   async paymentLabelSelectLastOption(): Promise<void> {

@@ -24,6 +24,8 @@ describe('Service Tests', () => {
         id: 0,
         description: 'AAAAAAA',
         comments: 'AAAAAAA',
+        fileUploadToken: 'AAAAAAA',
+        compilationToken: 'AAAAAAA',
       };
     });
 
@@ -61,6 +63,8 @@ describe('Service Tests', () => {
             id: 1,
             description: 'BBBBBB',
             comments: 'BBBBBB',
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -100,6 +104,8 @@ describe('Service Tests', () => {
             id: 1,
             description: 'BBBBBB',
             comments: 'BBBBBB',
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -151,7 +157,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique PaymentLabel to an array', () => {
-          const paymentLabelArray: IPaymentLabel[] = [{ id: 123 }, { id: 456 }, { id: 1914 }];
+          const paymentLabelArray: IPaymentLabel[] = [{ id: 123 }, { id: 456 }, { id: 99546 }];
           const paymentLabelCollection: IPaymentLabel[] = [{ id: 123 }];
           expectedResult = service.addPaymentLabelToCollectionIfMissing(paymentLabelCollection, ...paymentLabelArray);
           expect(expectedResult).toHaveLength(3);

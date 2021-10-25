@@ -51,6 +51,12 @@ class PaymentLabelResourceIT {
     private static final String DEFAULT_COMMENTS = "AAAAAAAAAA";
     private static final String UPDATED_COMMENTS = "BBBBBBBBBB";
 
+    private static final String DEFAULT_FILE_UPLOAD_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_FILE_UPLOAD_TOKEN = "BBBBBBBBBB";
+
+    private static final String DEFAULT_COMPILATION_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_COMPILATION_TOKEN = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/payment-labels";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/payment-labels";
@@ -93,7 +99,11 @@ class PaymentLabelResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static PaymentLabel createEntity(EntityManager em) {
-        PaymentLabel paymentLabel = new PaymentLabel().description(DEFAULT_DESCRIPTION).comments(DEFAULT_COMMENTS);
+        PaymentLabel paymentLabel = new PaymentLabel()
+            .description(DEFAULT_DESCRIPTION)
+            .comments(DEFAULT_COMMENTS)
+            .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
+            .compilationToken(DEFAULT_COMPILATION_TOKEN);
         return paymentLabel;
     }
 
@@ -104,7 +114,11 @@ class PaymentLabelResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static PaymentLabel createUpdatedEntity(EntityManager em) {
-        PaymentLabel paymentLabel = new PaymentLabel().description(UPDATED_DESCRIPTION).comments(UPDATED_COMMENTS);
+        PaymentLabel paymentLabel = new PaymentLabel()
+            .description(UPDATED_DESCRIPTION)
+            .comments(UPDATED_COMMENTS)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         return paymentLabel;
     }
 
@@ -131,6 +145,8 @@ class PaymentLabelResourceIT {
         PaymentLabel testPaymentLabel = paymentLabelList.get(paymentLabelList.size() - 1);
         assertThat(testPaymentLabel.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testPaymentLabel.getComments()).isEqualTo(DEFAULT_COMMENTS);
+        assertThat(testPaymentLabel.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
+        assertThat(testPaymentLabel.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
 
         // Validate the PaymentLabel in Elasticsearch
         verify(mockPaymentLabelSearchRepository, times(1)).save(testPaymentLabel);
@@ -193,7 +209,9 @@ class PaymentLabelResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentLabel.getId().intValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS)));
+            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS)))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -227,7 +245,9 @@ class PaymentLabelResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(paymentLabel.getId().intValue()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.comments").value(DEFAULT_COMMENTS));
+            .andExpect(jsonPath("$.comments").value(DEFAULT_COMMENTS))
+            .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
+            .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN));
     }
 
     @Test
@@ -406,6 +426,162 @@ class PaymentLabelResourceIT {
 
     @Test
     @Transactional
+    void getAllPaymentLabelsByFileUploadTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+
+        // Get all the paymentLabelList where fileUploadToken equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPaymentLabelShouldBeFound("fileUploadToken.equals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentLabelList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentLabelShouldNotBeFound("fileUploadToken.equals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentLabelsByFileUploadTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+
+        // Get all the paymentLabelList where fileUploadToken not equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPaymentLabelShouldNotBeFound("fileUploadToken.notEquals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentLabelList where fileUploadToken not equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentLabelShouldBeFound("fileUploadToken.notEquals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentLabelsByFileUploadTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+
+        // Get all the paymentLabelList where fileUploadToken in DEFAULT_FILE_UPLOAD_TOKEN or UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentLabelShouldBeFound("fileUploadToken.in=" + DEFAULT_FILE_UPLOAD_TOKEN + "," + UPDATED_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentLabelList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentLabelShouldNotBeFound("fileUploadToken.in=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentLabelsByFileUploadTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+
+        // Get all the paymentLabelList where fileUploadToken is not null
+        defaultPaymentLabelShouldBeFound("fileUploadToken.specified=true");
+
+        // Get all the paymentLabelList where fileUploadToken is null
+        defaultPaymentLabelShouldNotBeFound("fileUploadToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentLabelsByFileUploadTokenContainsSomething() throws Exception {
+        // Initialize the database
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+
+        // Get all the paymentLabelList where fileUploadToken contains DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPaymentLabelShouldBeFound("fileUploadToken.contains=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentLabelList where fileUploadToken contains UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentLabelShouldNotBeFound("fileUploadToken.contains=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentLabelsByFileUploadTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+
+        // Get all the paymentLabelList where fileUploadToken does not contain DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPaymentLabelShouldNotBeFound("fileUploadToken.doesNotContain=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentLabelList where fileUploadToken does not contain UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentLabelShouldBeFound("fileUploadToken.doesNotContain=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentLabelsByCompilationTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+
+        // Get all the paymentLabelList where compilationToken equals to DEFAULT_COMPILATION_TOKEN
+        defaultPaymentLabelShouldBeFound("compilationToken.equals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the paymentLabelList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultPaymentLabelShouldNotBeFound("compilationToken.equals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentLabelsByCompilationTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+
+        // Get all the paymentLabelList where compilationToken not equals to DEFAULT_COMPILATION_TOKEN
+        defaultPaymentLabelShouldNotBeFound("compilationToken.notEquals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the paymentLabelList where compilationToken not equals to UPDATED_COMPILATION_TOKEN
+        defaultPaymentLabelShouldBeFound("compilationToken.notEquals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentLabelsByCompilationTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+
+        // Get all the paymentLabelList where compilationToken in DEFAULT_COMPILATION_TOKEN or UPDATED_COMPILATION_TOKEN
+        defaultPaymentLabelShouldBeFound("compilationToken.in=" + DEFAULT_COMPILATION_TOKEN + "," + UPDATED_COMPILATION_TOKEN);
+
+        // Get all the paymentLabelList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultPaymentLabelShouldNotBeFound("compilationToken.in=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentLabelsByCompilationTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+
+        // Get all the paymentLabelList where compilationToken is not null
+        defaultPaymentLabelShouldBeFound("compilationToken.specified=true");
+
+        // Get all the paymentLabelList where compilationToken is null
+        defaultPaymentLabelShouldNotBeFound("compilationToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentLabelsByCompilationTokenContainsSomething() throws Exception {
+        // Initialize the database
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+
+        // Get all the paymentLabelList where compilationToken contains DEFAULT_COMPILATION_TOKEN
+        defaultPaymentLabelShouldBeFound("compilationToken.contains=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the paymentLabelList where compilationToken contains UPDATED_COMPILATION_TOKEN
+        defaultPaymentLabelShouldNotBeFound("compilationToken.contains=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentLabelsByCompilationTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        paymentLabelRepository.saveAndFlush(paymentLabel);
+
+        // Get all the paymentLabelList where compilationToken does not contain DEFAULT_COMPILATION_TOKEN
+        defaultPaymentLabelShouldNotBeFound("compilationToken.doesNotContain=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the paymentLabelList where compilationToken does not contain UPDATED_COMPILATION_TOKEN
+        defaultPaymentLabelShouldBeFound("compilationToken.doesNotContain=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
     void getAllPaymentLabelsByContainingPaymentLabelIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentLabelRepository.saveAndFlush(paymentLabel);
@@ -466,7 +642,9 @@ class PaymentLabelResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentLabel.getId().intValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS)));
+            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS)))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
 
         // Check, that the count call also returns 1
         restPaymentLabelMockMvc
@@ -514,7 +692,11 @@ class PaymentLabelResourceIT {
         PaymentLabel updatedPaymentLabel = paymentLabelRepository.findById(paymentLabel.getId()).get();
         // Disconnect from session so that the updates on updatedPaymentLabel are not directly saved in db
         em.detach(updatedPaymentLabel);
-        updatedPaymentLabel.description(UPDATED_DESCRIPTION).comments(UPDATED_COMMENTS);
+        updatedPaymentLabel
+            .description(UPDATED_DESCRIPTION)
+            .comments(UPDATED_COMMENTS)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         PaymentLabelDTO paymentLabelDTO = paymentLabelMapper.toDto(updatedPaymentLabel);
 
         restPaymentLabelMockMvc
@@ -531,6 +713,8 @@ class PaymentLabelResourceIT {
         PaymentLabel testPaymentLabel = paymentLabelList.get(paymentLabelList.size() - 1);
         assertThat(testPaymentLabel.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testPaymentLabel.getComments()).isEqualTo(UPDATED_COMMENTS);
+        assertThat(testPaymentLabel.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testPaymentLabel.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
 
         // Validate the PaymentLabel in Elasticsearch
         verify(mockPaymentLabelSearchRepository).save(testPaymentLabel);
@@ -624,7 +808,7 @@ class PaymentLabelResourceIT {
         PaymentLabel partialUpdatedPaymentLabel = new PaymentLabel();
         partialUpdatedPaymentLabel.setId(paymentLabel.getId());
 
-        partialUpdatedPaymentLabel.description(UPDATED_DESCRIPTION);
+        partialUpdatedPaymentLabel.description(UPDATED_DESCRIPTION).fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN);
 
         restPaymentLabelMockMvc
             .perform(
@@ -640,6 +824,8 @@ class PaymentLabelResourceIT {
         PaymentLabel testPaymentLabel = paymentLabelList.get(paymentLabelList.size() - 1);
         assertThat(testPaymentLabel.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testPaymentLabel.getComments()).isEqualTo(DEFAULT_COMMENTS);
+        assertThat(testPaymentLabel.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testPaymentLabel.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
     }
 
     @Test
@@ -654,7 +840,11 @@ class PaymentLabelResourceIT {
         PaymentLabel partialUpdatedPaymentLabel = new PaymentLabel();
         partialUpdatedPaymentLabel.setId(paymentLabel.getId());
 
-        partialUpdatedPaymentLabel.description(UPDATED_DESCRIPTION).comments(UPDATED_COMMENTS);
+        partialUpdatedPaymentLabel
+            .description(UPDATED_DESCRIPTION)
+            .comments(UPDATED_COMMENTS)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
 
         restPaymentLabelMockMvc
             .perform(
@@ -670,6 +860,8 @@ class PaymentLabelResourceIT {
         PaymentLabel testPaymentLabel = paymentLabelList.get(paymentLabelList.size() - 1);
         assertThat(testPaymentLabel.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testPaymentLabel.getComments()).isEqualTo(UPDATED_COMMENTS);
+        assertThat(testPaymentLabel.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testPaymentLabel.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
 
     @Test
@@ -787,6 +979,8 @@ class PaymentLabelResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentLabel.getId().intValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS)));
+            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS)))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 }

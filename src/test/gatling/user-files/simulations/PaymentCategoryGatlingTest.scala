@@ -74,6 +74,8 @@ class PaymentCategoryGatlingTest extends Simulation {
                 "categoryName":"SAMPLE_TEXT"
                 , "categoryDescription":"SAMPLE_TEXT"
                 , "categoryType":"UNDEFINED"
+                , "fileUploadToken":"SAMPLE_TEXT"
+                , "compilationToken":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_paymentCategory_url"))).exitHereIfFailed

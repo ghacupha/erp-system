@@ -34,6 +34,8 @@ describe('Service Tests', () => {
         conversionRate: 0,
         paymentId: 0,
         dealerId: 0,
+        fileUploadToken: 'AAAAAAA',
+        compilationToken: 'AAAAAAA',
       };
     });
 
@@ -87,6 +89,8 @@ describe('Service Tests', () => {
             conversionRate: 1,
             paymentId: 1,
             dealerId: 1,
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -112,6 +116,7 @@ describe('Service Tests', () => {
             invoiceAmount: 1,
             currency: 'BBBBBB',
             paymentId: 1,
+            fileUploadToken: 'BBBBBB',
           },
           new Invoice()
         );
@@ -143,6 +148,8 @@ describe('Service Tests', () => {
             conversionRate: 1,
             paymentId: 1,
             dealerId: 1,
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -199,7 +206,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique Invoice to an array', () => {
-          const invoiceArray: IInvoice[] = [{ id: 123 }, { id: 456 }, { id: 61298 }];
+          const invoiceArray: IInvoice[] = [{ id: 123 }, { id: 456 }, { id: 94046 }];
           const invoiceCollection: IInvoice[] = [{ id: 123 }];
           expectedResult = service.addInvoiceToCollectionIfMissing(invoiceCollection, ...invoiceArray);
           expect(expectedResult).toHaveLength(3);

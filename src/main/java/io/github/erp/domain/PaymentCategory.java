@@ -39,6 +39,12 @@ public class PaymentCategory implements Serializable {
     @Column(name = "category_type", nullable = false, unique = true)
     private CategoryTypes categoryType;
 
+    @Column(name = "file_upload_token")
+    private String fileUploadToken;
+
+    @Column(name = "compilation_token")
+    private String compilationToken;
+
     @ManyToMany
     @JoinTable(
         name = "rel_payment_category__payment_label",
@@ -116,6 +122,32 @@ public class PaymentCategory implements Serializable {
 
     public void setCategoryType(CategoryTypes categoryType) {
         this.categoryType = categoryType;
+    }
+
+    public String getFileUploadToken() {
+        return this.fileUploadToken;
+    }
+
+    public PaymentCategory fileUploadToken(String fileUploadToken) {
+        this.setFileUploadToken(fileUploadToken);
+        return this;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return this.compilationToken;
+    }
+
+    public PaymentCategory compilationToken(String compilationToken) {
+        this.setCompilationToken(compilationToken);
+        return this;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
     }
 
     public Set<PaymentLabel> getPaymentLabels() {
@@ -222,6 +254,8 @@ public class PaymentCategory implements Serializable {
             ", categoryName='" + getCategoryName() + "'" +
             ", categoryDescription='" + getCategoryDescription() + "'" +
             ", categoryType='" + getCategoryType() + "'" +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             "}";
     }
 }

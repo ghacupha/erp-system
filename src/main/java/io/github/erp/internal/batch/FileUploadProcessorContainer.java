@@ -62,6 +62,22 @@ public class FileUploadProcessorContainer {
     @Qualifier("fixedAssetNetBookValueListDeletionJob")
     private Job fixedAssetNetBookValueListDeletionJob;
 
+    @Autowired
+    @Qualifier("paymentLabelListPersistenceJob")
+    private Job paymentLabelListPersistenceJob;
+
+    @Autowired
+    @Qualifier("paymentLabelListDeletionJob")
+    private Job paymentLabelListDeletionJob;
+
+    @Autowired
+    @Qualifier("paymentCategoryListPersistenceJob")
+    private Job paymentCategoryListPersistenceJob;
+
+    @Autowired
+    @Qualifier("paymentCategoryListDeletionJob")
+    private Job paymentCategoryListDeletionJob;
+
     @Bean("fileUploadProcessorChain")
     public FileUploadProcessorChain fileUploadProcessorChain() {
 
@@ -71,6 +87,8 @@ public class FileUploadProcessorContainer {
         theChain.addProcessor(new BatchSupportedFileUploadProcessor(jobLauncher, fixedAssetAcquisitionListPersistenceJob, FIXED_ASSET_ACQUISITION));
         theChain.addProcessor(new BatchSupportedFileUploadProcessor(jobLauncher, fixedAssetDepreciationListPersistenceJob, FIXED_ASSET_DEPRECIATION));
         theChain.addProcessor(new BatchSupportedFileUploadProcessor(jobLauncher, fixedAssetNetBookValueListPersistenceJob, FIXED_ASSET_NBV));
+        theChain.addProcessor(new BatchSupportedFileUploadProcessor(jobLauncher, paymentLabelListPersistenceJob, PAYMENT_LABEL));
+        theChain.addProcessor(new BatchSupportedFileUploadProcessor(jobLauncher, paymentCategoryListPersistenceJob, PAYMENT_CATEGORY));
         return theChain;
     }
 
@@ -82,6 +100,8 @@ public class FileUploadProcessorContainer {
         theChain.addProcessor(new BatchSupportedFileUploadProcessor(jobLauncher, fixedAssetAcquisitionListDeletionJob, FIXED_ASSET_ACQUISITION));
         theChain.addProcessor(new BatchSupportedFileUploadProcessor(jobLauncher, fixedAssetDepreciationListDeletionJob, FIXED_ASSET_DEPRECIATION));
         theChain.addProcessor(new BatchSupportedFileUploadProcessor(jobLauncher, fixedAssetNetBookValueListDeletionJob, FIXED_ASSET_NBV));
+        theChain.addProcessor(new BatchSupportedFileUploadProcessor(jobLauncher, paymentLabelListDeletionJob, PAYMENT_LABEL));
+        theChain.addProcessor(new BatchSupportedFileUploadProcessor(jobLauncher, paymentCategoryListDeletionJob, PAYMENT_CATEGORY));
 
         return theChain;
     }

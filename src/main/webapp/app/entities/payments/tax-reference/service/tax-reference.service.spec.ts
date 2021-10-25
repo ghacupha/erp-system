@@ -27,6 +27,8 @@ describe('Service Tests', () => {
         taxDescription: 'AAAAAAA',
         taxPercentage: 0,
         taxReferenceType: taxReferenceTypes.TELCO_EXCISE_DUTY,
+        fileUploadToken: 'AAAAAAA',
+        compilationToken: 'AAAAAAA',
       };
     });
 
@@ -66,6 +68,8 @@ describe('Service Tests', () => {
             taxDescription: 'BBBBBB',
             taxPercentage: 1,
             taxReferenceType: 'BBBBBB',
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -85,6 +89,8 @@ describe('Service Tests', () => {
             taxName: 'BBBBBB',
             taxDescription: 'BBBBBB',
             taxPercentage: 1,
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           new TaxReference()
         );
@@ -108,6 +114,8 @@ describe('Service Tests', () => {
             taxDescription: 'BBBBBB',
             taxPercentage: 1,
             taxReferenceType: 'BBBBBB',
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -159,7 +167,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique TaxReference to an array', () => {
-          const taxReferenceArray: ITaxReference[] = [{ id: 123 }, { id: 456 }, { id: 74369 }];
+          const taxReferenceArray: ITaxReference[] = [{ id: 123 }, { id: 456 }, { id: 20129 }];
           const taxReferenceCollection: ITaxReference[] = [{ id: 123 }];
           expectedResult = service.addTaxReferenceToCollectionIfMissing(taxReferenceCollection, ...taxReferenceArray);
           expect(expectedResult).toHaveLength(3);

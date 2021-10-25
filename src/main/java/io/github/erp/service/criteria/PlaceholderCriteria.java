@@ -30,6 +30,10 @@ public class PlaceholderCriteria implements Serializable, Criteria {
 
     private StringFilter token;
 
+    private StringFilter fileUploadToken;
+
+    private StringFilter compilationToken;
+
     private LongFilter containingPlaceholderId;
 
     private Boolean distinct;
@@ -40,6 +44,8 @@ public class PlaceholderCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.token = other.token == null ? null : other.token.copy();
+        this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
+        this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.containingPlaceholderId = other.containingPlaceholderId == null ? null : other.containingPlaceholderId.copy();
         this.distinct = other.distinct;
     }
@@ -94,6 +100,36 @@ public class PlaceholderCriteria implements Serializable, Criteria {
         this.token = token;
     }
 
+    public StringFilter getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public StringFilter fileUploadToken() {
+        if (fileUploadToken == null) {
+            fileUploadToken = new StringFilter();
+        }
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(StringFilter fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public StringFilter getCompilationToken() {
+        return compilationToken;
+    }
+
+    public StringFilter compilationToken() {
+        if (compilationToken == null) {
+            compilationToken = new StringFilter();
+        }
+        return compilationToken;
+    }
+
+    public void setCompilationToken(StringFilter compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public LongFilter getContainingPlaceholderId() {
         return containingPlaceholderId;
     }
@@ -130,6 +166,8 @@ public class PlaceholderCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(description, that.description) &&
             Objects.equals(token, that.token) &&
+            Objects.equals(fileUploadToken, that.fileUploadToken) &&
+            Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(containingPlaceholderId, that.containingPlaceholderId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -137,7 +175,7 @@ public class PlaceholderCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, token, containingPlaceholderId, distinct);
+        return Objects.hash(id, description, token, fileUploadToken, compilationToken, containingPlaceholderId, distinct);
     }
 
     // prettier-ignore
@@ -147,6 +185,8 @@ public class PlaceholderCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (description != null ? "description=" + description + ", " : "") +
             (token != null ? "token=" + token + ", " : "") +
+            (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +
+            (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (containingPlaceholderId != null ? "containingPlaceholderId=" + containingPlaceholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

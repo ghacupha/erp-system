@@ -78,7 +78,7 @@ export class PaymentLabelComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['description', 'comments'].includes(this.predicate)) {
+    if (query && ['description', 'comments', 'fileUploadToken', 'compilationToken'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }

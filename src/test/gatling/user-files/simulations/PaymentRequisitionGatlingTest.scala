@@ -74,6 +74,8 @@ class PaymentRequisitionGatlingTest extends Simulation {
                 "invoicedAmount":"0"
                 , "disbursementCost":"0"
                 , "vatableAmount":"0"
+                , "fileUploadToken":"SAMPLE_TEXT"
+                , "compilationToken":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_paymentRequisition_url"))).exitHereIfFailed

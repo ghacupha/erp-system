@@ -53,6 +53,8 @@ describe('PaymentRequisition e2e test', () => {
       paymentRequisitionUpdatePage.setInvoicedAmountInput('5'),
       paymentRequisitionUpdatePage.setDisbursementCostInput('5'),
       paymentRequisitionUpdatePage.setVatableAmountInput('5'),
+      paymentRequisitionUpdatePage.setFileUploadTokenInput('fileUploadToken'),
+      paymentRequisitionUpdatePage.setCompilationTokenInput('compilationToken'),
       // paymentRequisitionUpdatePage.paymentLabelSelectLastOption(),
       paymentRequisitionUpdatePage.dealerSelectLastOption(),
       // paymentRequisitionUpdatePage.placeholderSelectLastOption(),

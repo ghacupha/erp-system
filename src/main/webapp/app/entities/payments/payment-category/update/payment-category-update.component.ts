@@ -27,6 +27,8 @@ export class PaymentCategoryUpdateComponent implements OnInit {
     categoryName: [null, [Validators.required]],
     categoryDescription: [],
     categoryType: [null, [Validators.required]],
+    fileUploadToken: [],
+    compilationToken: [],
     paymentLabels: [],
     placeholders: [],
   });
@@ -116,6 +118,8 @@ export class PaymentCategoryUpdateComponent implements OnInit {
       categoryName: paymentCategory.categoryName,
       categoryDescription: paymentCategory.categoryDescription,
       categoryType: paymentCategory.categoryType,
+      fileUploadToken: paymentCategory.fileUploadToken,
+      compilationToken: paymentCategory.compilationToken,
       paymentLabels: paymentCategory.paymentLabels,
       placeholders: paymentCategory.placeholders,
     });
@@ -159,6 +163,8 @@ export class PaymentCategoryUpdateComponent implements OnInit {
       categoryName: this.editForm.get(['categoryName'])!.value,
       categoryDescription: this.editForm.get(['categoryDescription'])!.value,
       categoryType: this.editForm.get(['categoryType'])!.value,
+      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
+      compilationToken: this.editForm.get(['compilationToken'])!.value,
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
     };

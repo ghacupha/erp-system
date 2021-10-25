@@ -121,6 +121,12 @@ public class DealerQueryService extends QueryService<Dealer> {
             if (criteria.getBankersSwiftCode() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getBankersSwiftCode(), Dealer_.bankersSwiftCode));
             }
+            if (criteria.getFileUploadToken() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getFileUploadToken(), Dealer_.fileUploadToken));
+            }
+            if (criteria.getCompilationToken() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getCompilationToken(), Dealer_.compilationToken));
+            }
             if (criteria.getPaymentLabelId() != null) {
                 specification =
                     specification.and(

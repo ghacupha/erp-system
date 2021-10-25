@@ -30,6 +30,8 @@ describe('Service Tests', () => {
         cateringLevy: 0,
         serviceCharge: 0,
         withholdingTaxImportedService: 0,
+        fileUploadToken: 'AAAAAAA',
+        compilationToken: 'AAAAAAA',
       };
     });
 
@@ -73,6 +75,8 @@ describe('Service Tests', () => {
             cateringLevy: 1,
             serviceCharge: 1,
             withholdingTaxImportedService: 1,
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -93,6 +97,8 @@ describe('Service Tests', () => {
             withholdingTaxConsultancy: 1,
             withholdingTaxRent: 1,
             withholdingTaxImportedService: 1,
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           new TaxRule()
         );
@@ -120,6 +126,8 @@ describe('Service Tests', () => {
             cateringLevy: 1,
             serviceCharge: 1,
             withholdingTaxImportedService: 1,
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -171,7 +179,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique TaxRule to an array', () => {
-          const taxRuleArray: ITaxRule[] = [{ id: 123 }, { id: 456 }, { id: 97976 }];
+          const taxRuleArray: ITaxRule[] = [{ id: 123 }, { id: 456 }, { id: 68979 }];
           const taxRuleCollection: ITaxRule[] = [{ id: 123 }];
           expectedResult = service.addTaxRuleToCollectionIfMissing(taxRuleCollection, ...taxRuleArray);
           expect(expectedResult).toHaveLength(3);

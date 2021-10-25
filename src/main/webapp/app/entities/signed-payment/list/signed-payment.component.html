@@ -59,6 +59,12 @@
             <span>Transaction Currency</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="transactionAmount"><span>Transaction Amount</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fileUploadToken">
+            <span>File Upload Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="compilationToken">
+            <span>Compilation Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentCategory.categoryName"><span>Payment Category</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="signedPaymentGroup.id"><span>Signed Payment Group</span> <fa-icon icon="sort"></fa-icon></th>
@@ -74,6 +80,8 @@
           <td>{{ signedPayment.transactionDate | formatMediumDate }}</td>
           <td>{{ signedPayment.transactionCurrency }}</td>
           <td>{{ signedPayment.transactionAmount }}</td>
+          <td>{{ signedPayment.fileUploadToken }}</td>
+          <td>{{ signedPayment.compilationToken }}</td>
           <td>
             <div *ngIf="signedPayment.dealer">
               <a [routerLink]="['/dealer', signedPayment.dealer?.id, 'view']">{{ signedPayment.dealer?.dealerName }}</a>

@@ -35,6 +35,10 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter paymentAmount;
 
+    private StringFilter fileUploadToken;
+
+    private StringFilter compilationToken;
+
     private LongFilter paymentLabelId;
 
     private LongFilter paymentId;
@@ -53,6 +57,8 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
         this.withholdingVAT = other.withholdingVAT == null ? null : other.withholdingVAT.copy();
         this.withholdingTax = other.withholdingTax == null ? null : other.withholdingTax.copy();
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
+        this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
+        this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
         this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
         this.paymentCategoryId = other.paymentCategoryId == null ? null : other.paymentCategoryId.copy();
@@ -140,6 +146,36 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
         this.paymentAmount = paymentAmount;
     }
 
+    public StringFilter getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public StringFilter fileUploadToken() {
+        if (fileUploadToken == null) {
+            fileUploadToken = new StringFilter();
+        }
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(StringFilter fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public StringFilter getCompilationToken() {
+        return compilationToken;
+    }
+
+    public StringFilter compilationToken() {
+        if (compilationToken == null) {
+            compilationToken = new StringFilter();
+        }
+        return compilationToken;
+    }
+
+    public void setCompilationToken(StringFilter compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public LongFilter getPaymentLabelId() {
         return paymentLabelId;
     }
@@ -223,6 +259,8 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
             Objects.equals(withholdingVAT, that.withholdingVAT) &&
             Objects.equals(withholdingTax, that.withholdingTax) &&
             Objects.equals(paymentAmount, that.paymentAmount) &&
+            Objects.equals(fileUploadToken, that.fileUploadToken) &&
+            Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
             Objects.equals(paymentId, that.paymentId) &&
             Objects.equals(paymentCategoryId, that.paymentCategoryId) &&
@@ -239,6 +277,8 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
             withholdingVAT,
             withholdingTax,
             paymentAmount,
+            fileUploadToken,
+            compilationToken,
             paymentLabelId,
             paymentId,
             paymentCategoryId,
@@ -256,6 +296,8 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
             (withholdingVAT != null ? "withholdingVAT=" + withholdingVAT + ", " : "") +
             (withholdingTax != null ? "withholdingTax=" + withholdingTax + ", " : "") +
             (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
+            (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +
+            (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
             (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
             (paymentCategoryId != null ? "paymentCategoryId=" + paymentCategoryId + ", " : "") +

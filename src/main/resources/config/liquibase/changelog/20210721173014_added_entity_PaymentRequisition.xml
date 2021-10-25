@@ -23,6 +23,12 @@
             <column name="vatable_amount" type="decimal(21,2)">
                 <constraints nullable="true" />
             </column>
+            <column name="file_upload_token" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="compilation_token" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="dealer_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -75,6 +81,8 @@
             <column name="invoiced_amount" type="numeric"/>
             <column name="disbursement_cost" type="numeric"/>
             <column name="vatable_amount" type="numeric"/>
+            <column name="file_upload_token" type="string"/>
+            <column name="compilation_token" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

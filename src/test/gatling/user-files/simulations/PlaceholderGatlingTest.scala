@@ -73,6 +73,8 @@ class PlaceholderGatlingTest extends Simulation {
             .body(StringBody("""{
                 "description":"SAMPLE_TEXT"
                 , "token":"SAMPLE_TEXT"
+                , "fileUploadToken":"SAMPLE_TEXT"
+                , "compilationToken":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_placeholder_url"))).exitHereIfFailed

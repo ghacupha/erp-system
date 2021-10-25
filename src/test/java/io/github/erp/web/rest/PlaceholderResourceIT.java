@@ -48,6 +48,12 @@ class PlaceholderResourceIT {
     private static final String DEFAULT_TOKEN = "AAAAAAAAAA";
     private static final String UPDATED_TOKEN = "BBBBBBBBBB";
 
+    private static final String DEFAULT_FILE_UPLOAD_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_FILE_UPLOAD_TOKEN = "BBBBBBBBBB";
+
+    private static final String DEFAULT_COMPILATION_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_COMPILATION_TOKEN = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/placeholders";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/placeholders";
@@ -84,7 +90,11 @@ class PlaceholderResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Placeholder createEntity(EntityManager em) {
-        Placeholder placeholder = new Placeholder().description(DEFAULT_DESCRIPTION).token(DEFAULT_TOKEN);
+        Placeholder placeholder = new Placeholder()
+            .description(DEFAULT_DESCRIPTION)
+            .token(DEFAULT_TOKEN)
+            .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
+            .compilationToken(DEFAULT_COMPILATION_TOKEN);
         return placeholder;
     }
 
@@ -95,7 +105,11 @@ class PlaceholderResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Placeholder createUpdatedEntity(EntityManager em) {
-        Placeholder placeholder = new Placeholder().description(UPDATED_DESCRIPTION).token(UPDATED_TOKEN);
+        Placeholder placeholder = new Placeholder()
+            .description(UPDATED_DESCRIPTION)
+            .token(UPDATED_TOKEN)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         return placeholder;
     }
 
@@ -122,6 +136,8 @@ class PlaceholderResourceIT {
         Placeholder testPlaceholder = placeholderList.get(placeholderList.size() - 1);
         assertThat(testPlaceholder.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testPlaceholder.getToken()).isEqualTo(DEFAULT_TOKEN);
+        assertThat(testPlaceholder.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
+        assertThat(testPlaceholder.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
 
         // Validate the Placeholder in Elasticsearch
         verify(mockPlaceholderSearchRepository, times(1)).save(testPlaceholder);
@@ -184,7 +200,9 @@ class PlaceholderResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(placeholder.getId().intValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].token").value(hasItem(DEFAULT_TOKEN)));
+            .andExpect(jsonPath("$.[*].token").value(hasItem(DEFAULT_TOKEN)))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 
     @Test
@@ -200,7 +218,9 @@ class PlaceholderResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(placeholder.getId().intValue()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.token").value(DEFAULT_TOKEN));
+            .andExpect(jsonPath("$.token").value(DEFAULT_TOKEN))
+            .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
+            .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN));
     }
 
     @Test
@@ -379,6 +399,162 @@ class PlaceholderResourceIT {
 
     @Test
     @Transactional
+    void getAllPlaceholdersByFileUploadTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        placeholderRepository.saveAndFlush(placeholder);
+
+        // Get all the placeholderList where fileUploadToken equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPlaceholderShouldBeFound("fileUploadToken.equals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the placeholderList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPlaceholderShouldNotBeFound("fileUploadToken.equals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPlaceholdersByFileUploadTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        placeholderRepository.saveAndFlush(placeholder);
+
+        // Get all the placeholderList where fileUploadToken not equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPlaceholderShouldNotBeFound("fileUploadToken.notEquals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the placeholderList where fileUploadToken not equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPlaceholderShouldBeFound("fileUploadToken.notEquals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPlaceholdersByFileUploadTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        placeholderRepository.saveAndFlush(placeholder);
+
+        // Get all the placeholderList where fileUploadToken in DEFAULT_FILE_UPLOAD_TOKEN or UPDATED_FILE_UPLOAD_TOKEN
+        defaultPlaceholderShouldBeFound("fileUploadToken.in=" + DEFAULT_FILE_UPLOAD_TOKEN + "," + UPDATED_FILE_UPLOAD_TOKEN);
+
+        // Get all the placeholderList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPlaceholderShouldNotBeFound("fileUploadToken.in=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPlaceholdersByFileUploadTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        placeholderRepository.saveAndFlush(placeholder);
+
+        // Get all the placeholderList where fileUploadToken is not null
+        defaultPlaceholderShouldBeFound("fileUploadToken.specified=true");
+
+        // Get all the placeholderList where fileUploadToken is null
+        defaultPlaceholderShouldNotBeFound("fileUploadToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPlaceholdersByFileUploadTokenContainsSomething() throws Exception {
+        // Initialize the database
+        placeholderRepository.saveAndFlush(placeholder);
+
+        // Get all the placeholderList where fileUploadToken contains DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPlaceholderShouldBeFound("fileUploadToken.contains=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the placeholderList where fileUploadToken contains UPDATED_FILE_UPLOAD_TOKEN
+        defaultPlaceholderShouldNotBeFound("fileUploadToken.contains=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPlaceholdersByFileUploadTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        placeholderRepository.saveAndFlush(placeholder);
+
+        // Get all the placeholderList where fileUploadToken does not contain DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPlaceholderShouldNotBeFound("fileUploadToken.doesNotContain=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the placeholderList where fileUploadToken does not contain UPDATED_FILE_UPLOAD_TOKEN
+        defaultPlaceholderShouldBeFound("fileUploadToken.doesNotContain=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPlaceholdersByCompilationTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        placeholderRepository.saveAndFlush(placeholder);
+
+        // Get all the placeholderList where compilationToken equals to DEFAULT_COMPILATION_TOKEN
+        defaultPlaceholderShouldBeFound("compilationToken.equals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the placeholderList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultPlaceholderShouldNotBeFound("compilationToken.equals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPlaceholdersByCompilationTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        placeholderRepository.saveAndFlush(placeholder);
+
+        // Get all the placeholderList where compilationToken not equals to DEFAULT_COMPILATION_TOKEN
+        defaultPlaceholderShouldNotBeFound("compilationToken.notEquals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the placeholderList where compilationToken not equals to UPDATED_COMPILATION_TOKEN
+        defaultPlaceholderShouldBeFound("compilationToken.notEquals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPlaceholdersByCompilationTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        placeholderRepository.saveAndFlush(placeholder);
+
+        // Get all the placeholderList where compilationToken in DEFAULT_COMPILATION_TOKEN or UPDATED_COMPILATION_TOKEN
+        defaultPlaceholderShouldBeFound("compilationToken.in=" + DEFAULT_COMPILATION_TOKEN + "," + UPDATED_COMPILATION_TOKEN);
+
+        // Get all the placeholderList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultPlaceholderShouldNotBeFound("compilationToken.in=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPlaceholdersByCompilationTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        placeholderRepository.saveAndFlush(placeholder);
+
+        // Get all the placeholderList where compilationToken is not null
+        defaultPlaceholderShouldBeFound("compilationToken.specified=true");
+
+        // Get all the placeholderList where compilationToken is null
+        defaultPlaceholderShouldNotBeFound("compilationToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPlaceholdersByCompilationTokenContainsSomething() throws Exception {
+        // Initialize the database
+        placeholderRepository.saveAndFlush(placeholder);
+
+        // Get all the placeholderList where compilationToken contains DEFAULT_COMPILATION_TOKEN
+        defaultPlaceholderShouldBeFound("compilationToken.contains=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the placeholderList where compilationToken contains UPDATED_COMPILATION_TOKEN
+        defaultPlaceholderShouldNotBeFound("compilationToken.contains=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPlaceholdersByCompilationTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        placeholderRepository.saveAndFlush(placeholder);
+
+        // Get all the placeholderList where compilationToken does not contain DEFAULT_COMPILATION_TOKEN
+        defaultPlaceholderShouldNotBeFound("compilationToken.doesNotContain=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the placeholderList where compilationToken does not contain UPDATED_COMPILATION_TOKEN
+        defaultPlaceholderShouldBeFound("compilationToken.doesNotContain=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
     void getAllPlaceholdersByContainingPlaceholderIsEqualToSomething() throws Exception {
         // Initialize the database
         placeholderRepository.saveAndFlush(placeholder);
@@ -413,7 +589,9 @@ class PlaceholderResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(placeholder.getId().intValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].token").value(hasItem(DEFAULT_TOKEN)));
+            .andExpect(jsonPath("$.[*].token").value(hasItem(DEFAULT_TOKEN)))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
 
         // Check, that the count call also returns 1
         restPlaceholderMockMvc
@@ -461,7 +639,11 @@ class PlaceholderResourceIT {
         Placeholder updatedPlaceholder = placeholderRepository.findById(placeholder.getId()).get();
         // Disconnect from session so that the updates on updatedPlaceholder are not directly saved in db
         em.detach(updatedPlaceholder);
-        updatedPlaceholder.description(UPDATED_DESCRIPTION).token(UPDATED_TOKEN);
+        updatedPlaceholder
+            .description(UPDATED_DESCRIPTION)
+            .token(UPDATED_TOKEN)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         PlaceholderDTO placeholderDTO = placeholderMapper.toDto(updatedPlaceholder);
 
         restPlaceholderMockMvc
@@ -478,6 +660,8 @@ class PlaceholderResourceIT {
         Placeholder testPlaceholder = placeholderList.get(placeholderList.size() - 1);
         assertThat(testPlaceholder.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testPlaceholder.getToken()).isEqualTo(UPDATED_TOKEN);
+        assertThat(testPlaceholder.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testPlaceholder.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
 
         // Validate the Placeholder in Elasticsearch
         verify(mockPlaceholderSearchRepository).save(testPlaceholder);
@@ -585,6 +769,8 @@ class PlaceholderResourceIT {
         Placeholder testPlaceholder = placeholderList.get(placeholderList.size() - 1);
         assertThat(testPlaceholder.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testPlaceholder.getToken()).isEqualTo(DEFAULT_TOKEN);
+        assertThat(testPlaceholder.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
+        assertThat(testPlaceholder.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
     }
 
     @Test
@@ -599,7 +785,11 @@ class PlaceholderResourceIT {
         Placeholder partialUpdatedPlaceholder = new Placeholder();
         partialUpdatedPlaceholder.setId(placeholder.getId());
 
-        partialUpdatedPlaceholder.description(UPDATED_DESCRIPTION).token(UPDATED_TOKEN);
+        partialUpdatedPlaceholder
+            .description(UPDATED_DESCRIPTION)
+            .token(UPDATED_TOKEN)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
 
         restPlaceholderMockMvc
             .perform(
@@ -615,6 +805,8 @@ class PlaceholderResourceIT {
         Placeholder testPlaceholder = placeholderList.get(placeholderList.size() - 1);
         assertThat(testPlaceholder.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testPlaceholder.getToken()).isEqualTo(UPDATED_TOKEN);
+        assertThat(testPlaceholder.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testPlaceholder.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
 
     @Test
@@ -730,6 +922,8 @@ class PlaceholderResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(placeholder.getId().intValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].token").value(hasItem(DEFAULT_TOKEN)));
+            .andExpect(jsonPath("$.[*].token").value(hasItem(DEFAULT_TOKEN)))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 }

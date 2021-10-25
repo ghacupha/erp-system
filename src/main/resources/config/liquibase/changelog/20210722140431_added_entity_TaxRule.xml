@@ -38,6 +38,12 @@
             <column name="withholding_tax_imported_service" type="double">
                 <constraints nullable="true" />
             </column>
+            <column name="file_upload_token" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="compilation_token" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
@@ -81,6 +87,8 @@
             <column name="catering_levy" type="numeric"/>
             <column name="service_charge" type="numeric"/>
             <column name="withholding_tax_imported_service" type="numeric"/>
+            <column name="file_upload_token" type="string"/>
+            <column name="compilation_token" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

@@ -12,6 +12,8 @@ export interface IInvoice {
   conversionRate?: number;
   paymentId?: number | null;
   dealerId?: number | null;
+  fileUploadToken?: string | null;
+  compilationToken?: string | null;
   paymentLabels?: IPaymentLabel[] | null;
   placeholders?: IPlaceholder[] | null;
 }
@@ -26,6 +28,8 @@ export class Invoice implements IInvoice {
     public conversionRate?: number,
     public paymentId?: number | null,
     public dealerId?: number | null,
+    public fileUploadToken?: string | null,
+    public compilationToken?: string | null,
     public paymentLabels?: IPaymentLabel[] | null,
     public placeholders?: IPlaceholder[] | null
   ) {}

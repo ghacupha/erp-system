@@ -65,6 +65,12 @@ class PaymentCalculationResourceIT {
     private static final BigDecimal UPDATED_PAYMENT_AMOUNT = new BigDecimal(2);
     private static final BigDecimal SMALLER_PAYMENT_AMOUNT = new BigDecimal(1 - 1);
 
+    private static final String DEFAULT_FILE_UPLOAD_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_FILE_UPLOAD_TOKEN = "BBBBBBBBBB";
+
+    private static final String DEFAULT_COMPILATION_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_COMPILATION_TOKEN = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/payment-calculations";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/payment-calculations";
@@ -111,7 +117,9 @@ class PaymentCalculationResourceIT {
             .paymentExpense(DEFAULT_PAYMENT_EXPENSE)
             .withholdingVAT(DEFAULT_WITHHOLDING_VAT)
             .withholdingTax(DEFAULT_WITHHOLDING_TAX)
-            .paymentAmount(DEFAULT_PAYMENT_AMOUNT);
+            .paymentAmount(DEFAULT_PAYMENT_AMOUNT)
+            .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
+            .compilationToken(DEFAULT_COMPILATION_TOKEN);
         return paymentCalculation;
     }
 
@@ -126,7 +134,9 @@ class PaymentCalculationResourceIT {
             .paymentExpense(UPDATED_PAYMENT_EXPENSE)
             .withholdingVAT(UPDATED_WITHHOLDING_VAT)
             .withholdingTax(UPDATED_WITHHOLDING_TAX)
-            .paymentAmount(UPDATED_PAYMENT_AMOUNT);
+            .paymentAmount(UPDATED_PAYMENT_AMOUNT)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         return paymentCalculation;
     }
 
@@ -157,6 +167,8 @@ class PaymentCalculationResourceIT {
         assertThat(testPaymentCalculation.getWithholdingVAT()).isEqualByComparingTo(DEFAULT_WITHHOLDING_VAT);
         assertThat(testPaymentCalculation.getWithholdingTax()).isEqualByComparingTo(DEFAULT_WITHHOLDING_TAX);
         assertThat(testPaymentCalculation.getPaymentAmount()).isEqualByComparingTo(DEFAULT_PAYMENT_AMOUNT);
+        assertThat(testPaymentCalculation.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
+        assertThat(testPaymentCalculation.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
 
         // Validate the PaymentCalculation in Elasticsearch
         verify(mockPaymentCalculationSearchRepository, times(1)).save(testPaymentCalculation);
@@ -203,7 +215,9 @@ class PaymentCalculationResourceIT {
             .andExpect(jsonPath("$.[*].paymentExpense").value(hasItem(sameNumber(DEFAULT_PAYMENT_EXPENSE))))
             .andExpect(jsonPath("$.[*].withholdingVAT").value(hasItem(sameNumber(DEFAULT_WITHHOLDING_VAT))))
             .andExpect(jsonPath("$.[*].withholdingTax").value(hasItem(sameNumber(DEFAULT_WITHHOLDING_TAX))))
-            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))));
+            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -239,7 +253,9 @@ class PaymentCalculationResourceIT {
             .andExpect(jsonPath("$.paymentExpense").value(sameNumber(DEFAULT_PAYMENT_EXPENSE)))
             .andExpect(jsonPath("$.withholdingVAT").value(sameNumber(DEFAULT_WITHHOLDING_VAT)))
             .andExpect(jsonPath("$.withholdingTax").value(sameNumber(DEFAULT_WITHHOLDING_TAX)))
-            .andExpect(jsonPath("$.paymentAmount").value(sameNumber(DEFAULT_PAYMENT_AMOUNT)));
+            .andExpect(jsonPath("$.paymentAmount").value(sameNumber(DEFAULT_PAYMENT_AMOUNT)))
+            .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
+            .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN));
     }
 
     @Test
@@ -678,6 +694,162 @@ class PaymentCalculationResourceIT {
 
     @Test
     @Transactional
+    void getAllPaymentCalculationsByFileUploadTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentCalculationRepository.saveAndFlush(paymentCalculation);
+
+        // Get all the paymentCalculationList where fileUploadToken equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPaymentCalculationShouldBeFound("fileUploadToken.equals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentCalculationList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentCalculationShouldNotBeFound("fileUploadToken.equals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCalculationsByFileUploadTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentCalculationRepository.saveAndFlush(paymentCalculation);
+
+        // Get all the paymentCalculationList where fileUploadToken not equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPaymentCalculationShouldNotBeFound("fileUploadToken.notEquals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentCalculationList where fileUploadToken not equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentCalculationShouldBeFound("fileUploadToken.notEquals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCalculationsByFileUploadTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentCalculationRepository.saveAndFlush(paymentCalculation);
+
+        // Get all the paymentCalculationList where fileUploadToken in DEFAULT_FILE_UPLOAD_TOKEN or UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentCalculationShouldBeFound("fileUploadToken.in=" + DEFAULT_FILE_UPLOAD_TOKEN + "," + UPDATED_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentCalculationList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentCalculationShouldNotBeFound("fileUploadToken.in=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCalculationsByFileUploadTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentCalculationRepository.saveAndFlush(paymentCalculation);
+
+        // Get all the paymentCalculationList where fileUploadToken is not null
+        defaultPaymentCalculationShouldBeFound("fileUploadToken.specified=true");
+
+        // Get all the paymentCalculationList where fileUploadToken is null
+        defaultPaymentCalculationShouldNotBeFound("fileUploadToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCalculationsByFileUploadTokenContainsSomething() throws Exception {
+        // Initialize the database
+        paymentCalculationRepository.saveAndFlush(paymentCalculation);
+
+        // Get all the paymentCalculationList where fileUploadToken contains DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPaymentCalculationShouldBeFound("fileUploadToken.contains=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentCalculationList where fileUploadToken contains UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentCalculationShouldNotBeFound("fileUploadToken.contains=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCalculationsByFileUploadTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        paymentCalculationRepository.saveAndFlush(paymentCalculation);
+
+        // Get all the paymentCalculationList where fileUploadToken does not contain DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPaymentCalculationShouldNotBeFound("fileUploadToken.doesNotContain=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentCalculationList where fileUploadToken does not contain UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentCalculationShouldBeFound("fileUploadToken.doesNotContain=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCalculationsByCompilationTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentCalculationRepository.saveAndFlush(paymentCalculation);
+
+        // Get all the paymentCalculationList where compilationToken equals to DEFAULT_COMPILATION_TOKEN
+        defaultPaymentCalculationShouldBeFound("compilationToken.equals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the paymentCalculationList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultPaymentCalculationShouldNotBeFound("compilationToken.equals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCalculationsByCompilationTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentCalculationRepository.saveAndFlush(paymentCalculation);
+
+        // Get all the paymentCalculationList where compilationToken not equals to DEFAULT_COMPILATION_TOKEN
+        defaultPaymentCalculationShouldNotBeFound("compilationToken.notEquals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the paymentCalculationList where compilationToken not equals to UPDATED_COMPILATION_TOKEN
+        defaultPaymentCalculationShouldBeFound("compilationToken.notEquals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCalculationsByCompilationTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentCalculationRepository.saveAndFlush(paymentCalculation);
+
+        // Get all the paymentCalculationList where compilationToken in DEFAULT_COMPILATION_TOKEN or UPDATED_COMPILATION_TOKEN
+        defaultPaymentCalculationShouldBeFound("compilationToken.in=" + DEFAULT_COMPILATION_TOKEN + "," + UPDATED_COMPILATION_TOKEN);
+
+        // Get all the paymentCalculationList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultPaymentCalculationShouldNotBeFound("compilationToken.in=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCalculationsByCompilationTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentCalculationRepository.saveAndFlush(paymentCalculation);
+
+        // Get all the paymentCalculationList where compilationToken is not null
+        defaultPaymentCalculationShouldBeFound("compilationToken.specified=true");
+
+        // Get all the paymentCalculationList where compilationToken is null
+        defaultPaymentCalculationShouldNotBeFound("compilationToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCalculationsByCompilationTokenContainsSomething() throws Exception {
+        // Initialize the database
+        paymentCalculationRepository.saveAndFlush(paymentCalculation);
+
+        // Get all the paymentCalculationList where compilationToken contains DEFAULT_COMPILATION_TOKEN
+        defaultPaymentCalculationShouldBeFound("compilationToken.contains=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the paymentCalculationList where compilationToken contains UPDATED_COMPILATION_TOKEN
+        defaultPaymentCalculationShouldNotBeFound("compilationToken.contains=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCalculationsByCompilationTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        paymentCalculationRepository.saveAndFlush(paymentCalculation);
+
+        // Get all the paymentCalculationList where compilationToken does not contain DEFAULT_COMPILATION_TOKEN
+        defaultPaymentCalculationShouldNotBeFound("compilationToken.doesNotContain=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the paymentCalculationList where compilationToken does not contain UPDATED_COMPILATION_TOKEN
+        defaultPaymentCalculationShouldBeFound("compilationToken.doesNotContain=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
     void getAllPaymentCalculationsByPaymentLabelIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentCalculationRepository.saveAndFlush(paymentCalculation);
@@ -793,7 +965,9 @@ class PaymentCalculationResourceIT {
             .andExpect(jsonPath("$.[*].paymentExpense").value(hasItem(sameNumber(DEFAULT_PAYMENT_EXPENSE))))
             .andExpect(jsonPath("$.[*].withholdingVAT").value(hasItem(sameNumber(DEFAULT_WITHHOLDING_VAT))))
             .andExpect(jsonPath("$.[*].withholdingTax").value(hasItem(sameNumber(DEFAULT_WITHHOLDING_TAX))))
-            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))));
+            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
 
         // Check, that the count call also returns 1
         restPaymentCalculationMockMvc
@@ -845,7 +1019,9 @@ class PaymentCalculationResourceIT {
             .paymentExpense(UPDATED_PAYMENT_EXPENSE)
             .withholdingVAT(UPDATED_WITHHOLDING_VAT)
             .withholdingTax(UPDATED_WITHHOLDING_TAX)
-            .paymentAmount(UPDATED_PAYMENT_AMOUNT);
+            .paymentAmount(UPDATED_PAYMENT_AMOUNT)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         PaymentCalculationDTO paymentCalculationDTO = paymentCalculationMapper.toDto(updatedPaymentCalculation);
 
         restPaymentCalculationMockMvc
@@ -864,6 +1040,8 @@ class PaymentCalculationResourceIT {
         assertThat(testPaymentCalculation.getWithholdingVAT()).isEqualTo(UPDATED_WITHHOLDING_VAT);
         assertThat(testPaymentCalculation.getWithholdingTax()).isEqualTo(UPDATED_WITHHOLDING_TAX);
         assertThat(testPaymentCalculation.getPaymentAmount()).isEqualTo(UPDATED_PAYMENT_AMOUNT);
+        assertThat(testPaymentCalculation.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testPaymentCalculation.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
 
         // Validate the PaymentCalculation in Elasticsearch
         verify(mockPaymentCalculationSearchRepository).save(testPaymentCalculation);
@@ -977,6 +1155,8 @@ class PaymentCalculationResourceIT {
         assertThat(testPaymentCalculation.getWithholdingVAT()).isEqualByComparingTo(DEFAULT_WITHHOLDING_VAT);
         assertThat(testPaymentCalculation.getWithholdingTax()).isEqualByComparingTo(DEFAULT_WITHHOLDING_TAX);
         assertThat(testPaymentCalculation.getPaymentAmount()).isEqualByComparingTo(DEFAULT_PAYMENT_AMOUNT);
+        assertThat(testPaymentCalculation.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
+        assertThat(testPaymentCalculation.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
     }
 
     @Test
@@ -995,7 +1175,9 @@ class PaymentCalculationResourceIT {
             .paymentExpense(UPDATED_PAYMENT_EXPENSE)
             .withholdingVAT(UPDATED_WITHHOLDING_VAT)
             .withholdingTax(UPDATED_WITHHOLDING_TAX)
-            .paymentAmount(UPDATED_PAYMENT_AMOUNT);
+            .paymentAmount(UPDATED_PAYMENT_AMOUNT)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
 
         restPaymentCalculationMockMvc
             .perform(
@@ -1013,6 +1195,8 @@ class PaymentCalculationResourceIT {
         assertThat(testPaymentCalculation.getWithholdingVAT()).isEqualByComparingTo(UPDATED_WITHHOLDING_VAT);
         assertThat(testPaymentCalculation.getWithholdingTax()).isEqualByComparingTo(UPDATED_WITHHOLDING_TAX);
         assertThat(testPaymentCalculation.getPaymentAmount()).isEqualByComparingTo(UPDATED_PAYMENT_AMOUNT);
+        assertThat(testPaymentCalculation.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testPaymentCalculation.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
 
     @Test
@@ -1132,6 +1316,8 @@ class PaymentCalculationResourceIT {
             .andExpect(jsonPath("$.[*].paymentExpense").value(hasItem(sameNumber(DEFAULT_PAYMENT_EXPENSE))))
             .andExpect(jsonPath("$.[*].withholdingVAT").value(hasItem(sameNumber(DEFAULT_WITHHOLDING_VAT))))
             .andExpect(jsonPath("$.[*].withholdingTax").value(hasItem(sameNumber(DEFAULT_WITHHOLDING_TAX))))
-            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))));
+            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 }

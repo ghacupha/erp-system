@@ -30,6 +30,10 @@ public class PaymentLabelCriteria implements Serializable, Criteria {
 
     private StringFilter comments;
 
+    private StringFilter fileUploadToken;
+
+    private StringFilter compilationToken;
+
     private LongFilter containingPaymentLabelId;
 
     private LongFilter placeholderId;
@@ -42,6 +46,8 @@ public class PaymentLabelCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.comments = other.comments == null ? null : other.comments.copy();
+        this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
+        this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.containingPaymentLabelId = other.containingPaymentLabelId == null ? null : other.containingPaymentLabelId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
@@ -97,6 +103,36 @@ public class PaymentLabelCriteria implements Serializable, Criteria {
         this.comments = comments;
     }
 
+    public StringFilter getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public StringFilter fileUploadToken() {
+        if (fileUploadToken == null) {
+            fileUploadToken = new StringFilter();
+        }
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(StringFilter fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public StringFilter getCompilationToken() {
+        return compilationToken;
+    }
+
+    public StringFilter compilationToken() {
+        if (compilationToken == null) {
+            compilationToken = new StringFilter();
+        }
+        return compilationToken;
+    }
+
+    public void setCompilationToken(StringFilter compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public LongFilter getContainingPaymentLabelId() {
         return containingPaymentLabelId;
     }
@@ -148,6 +184,8 @@ public class PaymentLabelCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(description, that.description) &&
             Objects.equals(comments, that.comments) &&
+            Objects.equals(fileUploadToken, that.fileUploadToken) &&
+            Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(containingPaymentLabelId, that.containingPaymentLabelId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
@@ -156,7 +194,16 @@ public class PaymentLabelCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, comments, containingPaymentLabelId, placeholderId, distinct);
+        return Objects.hash(
+            id,
+            description,
+            comments,
+            fileUploadToken,
+            compilationToken,
+            containingPaymentLabelId,
+            placeholderId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -166,6 +213,8 @@ public class PaymentLabelCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (description != null ? "description=" + description + ", " : "") +
             (comments != null ? "comments=" + comments + ", " : "") +
+            (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +
+            (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (containingPaymentLabelId != null ? "containingPaymentLabelId=" + containingPaymentLabelId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

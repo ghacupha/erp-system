@@ -26,6 +26,8 @@ describe('Service Tests', () => {
         categoryName: 'AAAAAAA',
         categoryDescription: 'AAAAAAA',
         categoryType: CategoryTypes.UNDEFINED,
+        fileUploadToken: 'AAAAAAA',
+        compilationToken: 'AAAAAAA',
       };
     });
 
@@ -64,6 +66,8 @@ describe('Service Tests', () => {
             categoryName: 'BBBBBB',
             categoryDescription: 'BBBBBB',
             categoryType: 'BBBBBB',
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -83,6 +87,7 @@ describe('Service Tests', () => {
             categoryName: 'BBBBBB',
             categoryDescription: 'BBBBBB',
             categoryType: 'BBBBBB',
+            fileUploadToken: 'BBBBBB',
           },
           new PaymentCategory()
         );
@@ -105,6 +110,8 @@ describe('Service Tests', () => {
             categoryName: 'BBBBBB',
             categoryDescription: 'BBBBBB',
             categoryType: 'BBBBBB',
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -156,7 +163,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique PaymentCategory to an array', () => {
-          const paymentCategoryArray: IPaymentCategory[] = [{ id: 123 }, { id: 456 }, { id: 96297 }];
+          const paymentCategoryArray: IPaymentCategory[] = [{ id: 123 }, { id: 456 }, { id: 88706 }];
           const paymentCategoryCollection: IPaymentCategory[] = [{ id: 123 }];
           expectedResult = service.addPaymentCategoryToCollectionIfMissing(paymentCategoryCollection, ...paymentCategoryArray);
           expect(expectedResult).toHaveLength(3);

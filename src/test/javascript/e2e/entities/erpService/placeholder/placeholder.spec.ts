@@ -48,6 +48,8 @@ describe('Placeholder e2e test', () => {
     await promise.all([
       placeholderUpdatePage.setDescriptionInput('description'),
       placeholderUpdatePage.setTokenInput('token'),
+      placeholderUpdatePage.setFileUploadTokenInput('fileUploadToken'),
+      placeholderUpdatePage.setCompilationTokenInput('compilationToken'),
       placeholderUpdatePage.containingPlaceholderSelectLastOption(),
     ]);
 

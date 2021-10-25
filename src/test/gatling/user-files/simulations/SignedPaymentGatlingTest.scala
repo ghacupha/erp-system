@@ -75,6 +75,8 @@ class SignedPaymentGatlingTest extends Simulation {
                 , "transactionDate":"2020-01-01T00:00:00.000Z"
                 , "transactionCurrency":"KES"
                 , "transactionAmount":"0"
+                , "fileUploadToken":"SAMPLE_TEXT"
+                , "compilationToken":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_signedPayment_url"))).exitHereIfFailed

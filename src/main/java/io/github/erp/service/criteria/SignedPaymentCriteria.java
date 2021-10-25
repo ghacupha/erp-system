@@ -54,6 +54,10 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter transactionAmount;
 
+    private StringFilter fileUploadToken;
+
+    private StringFilter compilationToken;
+
     private LongFilter paymentLabelId;
 
     private LongFilter dealerId;
@@ -74,6 +78,8 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
         this.transactionDate = other.transactionDate == null ? null : other.transactionDate.copy();
         this.transactionCurrency = other.transactionCurrency == null ? null : other.transactionCurrency.copy();
         this.transactionAmount = other.transactionAmount == null ? null : other.transactionAmount.copy();
+        this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
+        this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
         this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
         this.paymentCategoryId = other.paymentCategoryId == null ? null : other.paymentCategoryId.copy();
@@ -160,6 +166,36 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
 
     public void setTransactionAmount(BigDecimalFilter transactionAmount) {
         this.transactionAmount = transactionAmount;
+    }
+
+    public StringFilter getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public StringFilter fileUploadToken() {
+        if (fileUploadToken == null) {
+            fileUploadToken = new StringFilter();
+        }
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(StringFilter fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public StringFilter getCompilationToken() {
+        return compilationToken;
+    }
+
+    public StringFilter compilationToken() {
+        if (compilationToken == null) {
+            compilationToken = new StringFilter();
+        }
+        return compilationToken;
+    }
+
+    public void setCompilationToken(StringFilter compilationToken) {
+        this.compilationToken = compilationToken;
     }
 
     public LongFilter getPaymentLabelId() {
@@ -260,6 +296,8 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
             Objects.equals(transactionDate, that.transactionDate) &&
             Objects.equals(transactionCurrency, that.transactionCurrency) &&
             Objects.equals(transactionAmount, that.transactionAmount) &&
+            Objects.equals(fileUploadToken, that.fileUploadToken) &&
+            Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
             Objects.equals(dealerId, that.dealerId) &&
             Objects.equals(paymentCategoryId, that.paymentCategoryId) &&
@@ -277,6 +315,8 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
             transactionDate,
             transactionCurrency,
             transactionAmount,
+            fileUploadToken,
+            compilationToken,
             paymentLabelId,
             dealerId,
             paymentCategoryId,
@@ -295,6 +335,8 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
             (transactionDate != null ? "transactionDate=" + transactionDate + ", " : "") +
             (transactionCurrency != null ? "transactionCurrency=" + transactionCurrency + ", " : "") +
             (transactionAmount != null ? "transactionAmount=" + transactionAmount + ", " : "") +
+            (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +
+            (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
             (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             (paymentCategoryId != null ? "paymentCategoryId=" + paymentCategoryId + ", " : "") +

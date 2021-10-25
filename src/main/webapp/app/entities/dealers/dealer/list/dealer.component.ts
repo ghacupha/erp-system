@@ -90,6 +90,8 @@ export class DealerComponent implements OnInit {
         'bankersName',
         'bankersBranch',
         'bankersSwiftCode',
+        'fileUploadToken',
+        'compilationToken',
       ].includes(this.predicate)
     ) {
       this.predicate = 'id';

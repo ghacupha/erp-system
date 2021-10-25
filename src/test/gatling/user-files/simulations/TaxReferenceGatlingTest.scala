@@ -75,6 +75,8 @@ class TaxReferenceGatlingTest extends Simulation {
                 , "taxDescription":"SAMPLE_TEXT"
                 , "taxPercentage":"0"
                 , "taxReferenceType":"TELCO_EXCISE_DUTY"
+                , "fileUploadToken":"SAMPLE_TEXT"
+                , "compilationToken":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_taxReference_url"))).exitHereIfFailed
