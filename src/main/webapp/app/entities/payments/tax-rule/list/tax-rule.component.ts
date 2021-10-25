@@ -78,6 +78,10 @@ export class TaxRuleComponent implements OnInit {
   }
 
   search(query: string): void {
+    if (query && ['fileUploadToken', 'compilationToken'].includes(this.predicate)) {
+      this.predicate = 'id';
+      this.ascending = true;
+    }
     this.currentSearch = query;
     this.loadPage(1);
   }

@@ -113,6 +113,13 @@ public class SignedPaymentQueryService extends QueryService<SignedPayment> {
                 specification =
                     specification.and(buildRangeSpecification(criteria.getTransactionAmount(), SignedPayment_.transactionAmount));
             }
+            if (criteria.getFileUploadToken() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getFileUploadToken(), SignedPayment_.fileUploadToken));
+            }
+            if (criteria.getCompilationToken() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getCompilationToken(), SignedPayment_.compilationToken));
+            }
             if (criteria.getPaymentLabelId() != null) {
                 specification =
                     specification.and(

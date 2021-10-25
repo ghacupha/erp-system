@@ -38,6 +38,8 @@ export class TaxRuleUpdatePage {
   cateringLevyInput = element(by.id('field_cateringLevy'));
   serviceChargeInput = element(by.id('field_serviceCharge'));
   withholdingTaxImportedServiceInput = element(by.id('field_withholdingTaxImportedService'));
+  fileUploadTokenInput = element(by.id('field_fileUploadToken'));
+  compilationTokenInput = element(by.id('field_compilationToken'));
 
   placeholderSelect = element(by.id('field_placeholder'));
 
@@ -115,6 +117,22 @@ export class TaxRuleUpdatePage {
 
   async getWithholdingTaxImportedServiceInput(): Promise<string> {
     return await this.withholdingTaxImportedServiceInput.getAttribute('value');
+  }
+
+  async setFileUploadTokenInput(fileUploadToken: string): Promise<void> {
+    await this.fileUploadTokenInput.sendKeys(fileUploadToken);
+  }
+
+  async getFileUploadTokenInput(): Promise<string> {
+    return await this.fileUploadTokenInput.getAttribute('value');
+  }
+
+  async setCompilationTokenInput(compilationToken: string): Promise<void> {
+    await this.compilationTokenInput.sendKeys(compilationToken);
+  }
+
+  async getCompilationTokenInput(): Promise<string> {
+    return await this.compilationTokenInput.getAttribute('value');
   }
 
   async placeholderSelectLastOption(): Promise<void> {

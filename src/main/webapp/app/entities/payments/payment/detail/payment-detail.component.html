@@ -50,6 +50,14 @@
         <dd>
           <span>{{ payment.conversionRate }}</span>
         </dd>
+        <dt><span>File Upload Token</span></dt>
+        <dd>
+          <span>{{ payment.fileUploadToken }}</span>
+        </dd>
+        <dt><span>Compilation Token</span></dt>
+        <dd>
+          <span>{{ payment.compilationToken }}</span>
+        </dd>
         <dt><span>Payment Label</span></dt>
         <dd>
           <span *ngFor="let paymentLabel of payment.paymentLabels; let last = last">

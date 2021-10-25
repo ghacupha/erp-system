@@ -50,6 +50,8 @@ describe('SignedPayment e2e test', () => {
       signedPaymentUpdatePage.setTransactionDateInput('2000-12-31'),
       signedPaymentUpdatePage.transactionCurrencySelectLastOption(),
       signedPaymentUpdatePage.setTransactionAmountInput('5'),
+      signedPaymentUpdatePage.setFileUploadTokenInput('fileUploadToken'),
+      signedPaymentUpdatePage.setCompilationTokenInput('compilationToken'),
       // signedPaymentUpdatePage.paymentLabelSelectLastOption(),
       signedPaymentUpdatePage.dealerSelectLastOption(),
       signedPaymentUpdatePage.paymentCategorySelectLastOption(),

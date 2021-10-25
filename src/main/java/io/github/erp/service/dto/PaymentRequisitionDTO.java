@@ -19,6 +19,10 @@ public class PaymentRequisitionDTO implements Serializable {
 
     private BigDecimal vatableAmount;
 
+    private String fileUploadToken;
+
+    private String compilationToken;
+
     private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
 
     private DealerDTO dealer;
@@ -55,6 +59,22 @@ public class PaymentRequisitionDTO implements Serializable {
 
     public void setVatableAmount(BigDecimal vatableAmount) {
         this.vatableAmount = vatableAmount;
+    }
+
+    public String getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return compilationToken;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
     }
 
     public Set<PaymentLabelDTO> getPaymentLabels() {
@@ -110,6 +130,8 @@ public class PaymentRequisitionDTO implements Serializable {
             ", invoicedAmount=" + getInvoicedAmount() +
             ", disbursementCost=" + getDisbursementCost() +
             ", vatableAmount=" + getVatableAmount() +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             ", paymentLabels=" + getPaymentLabels() +
             ", dealer=" + getDealer() +
             ", placeholders=" + getPlaceholders() +

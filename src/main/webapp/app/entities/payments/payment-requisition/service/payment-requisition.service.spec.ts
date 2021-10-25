@@ -25,6 +25,8 @@ describe('Service Tests', () => {
         invoicedAmount: 0,
         disbursementCost: 0,
         vatableAmount: 0,
+        fileUploadToken: 'AAAAAAA',
+        compilationToken: 'AAAAAAA',
       };
     });
 
@@ -63,6 +65,8 @@ describe('Service Tests', () => {
             invoicedAmount: 1,
             disbursementCost: 1,
             vatableAmount: 1,
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -82,6 +86,8 @@ describe('Service Tests', () => {
             invoicedAmount: 1,
             disbursementCost: 1,
             vatableAmount: 1,
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           new PaymentRequisition()
         );
@@ -104,6 +110,8 @@ describe('Service Tests', () => {
             invoicedAmount: 1,
             disbursementCost: 1,
             vatableAmount: 1,
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -155,7 +163,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique PaymentRequisition to an array', () => {
-          const paymentRequisitionArray: IPaymentRequisition[] = [{ id: 123 }, { id: 456 }, { id: 80448 }];
+          const paymentRequisitionArray: IPaymentRequisition[] = [{ id: 123 }, { id: 456 }, { id: 92675 }];
           const paymentRequisitionCollection: IPaymentRequisition[] = [{ id: 123 }];
           expectedResult = service.addPaymentRequisitionToCollectionIfMissing(paymentRequisitionCollection, ...paymentRequisitionArray);
           expect(expectedResult).toHaveLength(3);

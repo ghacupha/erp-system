@@ -26,6 +26,8 @@ describe('Service Tests', () => {
         withholdingVAT: 0,
         withholdingTax: 0,
         paymentAmount: 0,
+        fileUploadToken: 'AAAAAAA',
+        compilationToken: 'AAAAAAA',
       };
     });
 
@@ -65,6 +67,8 @@ describe('Service Tests', () => {
             withholdingVAT: 1,
             withholdingTax: 1,
             paymentAmount: 1,
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -83,6 +87,8 @@ describe('Service Tests', () => {
           {
             withholdingVAT: 1,
             withholdingTax: 1,
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           new PaymentCalculation()
         );
@@ -106,6 +112,8 @@ describe('Service Tests', () => {
             withholdingVAT: 1,
             withholdingTax: 1,
             paymentAmount: 1,
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -157,7 +165,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique PaymentCalculation to an array', () => {
-          const paymentCalculationArray: IPaymentCalculation[] = [{ id: 123 }, { id: 456 }, { id: 52541 }];
+          const paymentCalculationArray: IPaymentCalculation[] = [{ id: 123 }, { id: 456 }, { id: 13521 }];
           const paymentCalculationCollection: IPaymentCalculation[] = [{ id: 123 }];
           expectedResult = service.addPaymentCalculationToCollectionIfMissing(paymentCalculationCollection, ...paymentCalculationArray);
           expect(expectedResult).toHaveLength(3);

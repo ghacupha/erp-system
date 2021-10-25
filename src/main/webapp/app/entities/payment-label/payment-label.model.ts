@@ -4,6 +4,8 @@ export interface IPaymentLabel {
   id?: number;
   description?: string;
   comments?: string | null;
+  fileUploadToken?: string | null;
+  compilationToken?: string | null;
   containingPaymentLabel?: IPaymentLabel | null;
   placeholders?: IPlaceholder[] | null;
 }
@@ -13,6 +15,8 @@ export class PaymentLabel implements IPaymentLabel {
     public id?: number,
     public description?: string,
     public comments?: string | null,
+    public fileUploadToken?: string | null,
+    public compilationToken?: string | null,
     public containingPaymentLabel?: IPaymentLabel | null,
     public placeholders?: IPlaceholder[] | null
   ) {}

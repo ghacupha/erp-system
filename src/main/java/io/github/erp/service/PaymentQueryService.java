@@ -125,6 +125,12 @@ public class PaymentQueryService extends QueryService<Payment> {
             if (criteria.getConversionRate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getConversionRate(), Payment_.conversionRate));
             }
+            if (criteria.getFileUploadToken() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getFileUploadToken(), Payment_.fileUploadToken));
+            }
+            if (criteria.getCompilationToken() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getCompilationToken(), Payment_.compilationToken));
+            }
             if (criteria.getPaymentLabelId() != null) {
                 specification =
                     specification.and(

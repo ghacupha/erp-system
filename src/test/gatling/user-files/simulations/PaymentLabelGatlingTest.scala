@@ -73,6 +73,8 @@ class PaymentLabelGatlingTest extends Simulation {
             .body(StringBody("""{
                 "description":"SAMPLE_TEXT"
                 , "comments":"SAMPLE_TEXT"
+                , "fileUploadToken":"SAMPLE_TEXT"
+                , "compilationToken":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_paymentLabel_url"))).exitHereIfFailed

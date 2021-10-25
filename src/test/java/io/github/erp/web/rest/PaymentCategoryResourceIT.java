@@ -56,6 +56,12 @@ class PaymentCategoryResourceIT {
     private static final CategoryTypes DEFAULT_CATEGORY_TYPE = CategoryTypes.UNDEFINED;
     private static final CategoryTypes UPDATED_CATEGORY_TYPE = CategoryTypes.CATEGORY0;
 
+    private static final String DEFAULT_FILE_UPLOAD_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_FILE_UPLOAD_TOKEN = "BBBBBBBBBB";
+
+    private static final String DEFAULT_COMPILATION_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_COMPILATION_TOKEN = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/payment-categories";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/payment-categories";
@@ -101,7 +107,9 @@ class PaymentCategoryResourceIT {
         PaymentCategory paymentCategory = new PaymentCategory()
             .categoryName(DEFAULT_CATEGORY_NAME)
             .categoryDescription(DEFAULT_CATEGORY_DESCRIPTION)
-            .categoryType(DEFAULT_CATEGORY_TYPE);
+            .categoryType(DEFAULT_CATEGORY_TYPE)
+            .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
+            .compilationToken(DEFAULT_COMPILATION_TOKEN);
         return paymentCategory;
     }
 
@@ -115,7 +123,9 @@ class PaymentCategoryResourceIT {
         PaymentCategory paymentCategory = new PaymentCategory()
             .categoryName(UPDATED_CATEGORY_NAME)
             .categoryDescription(UPDATED_CATEGORY_DESCRIPTION)
-            .categoryType(UPDATED_CATEGORY_TYPE);
+            .categoryType(UPDATED_CATEGORY_TYPE)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         return paymentCategory;
     }
 
@@ -143,6 +153,8 @@ class PaymentCategoryResourceIT {
         assertThat(testPaymentCategory.getCategoryName()).isEqualTo(DEFAULT_CATEGORY_NAME);
         assertThat(testPaymentCategory.getCategoryDescription()).isEqualTo(DEFAULT_CATEGORY_DESCRIPTION);
         assertThat(testPaymentCategory.getCategoryType()).isEqualTo(DEFAULT_CATEGORY_TYPE);
+        assertThat(testPaymentCategory.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
+        assertThat(testPaymentCategory.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
 
         // Validate the PaymentCategory in Elasticsearch
         verify(mockPaymentCategorySearchRepository, times(1)).save(testPaymentCategory);
@@ -226,7 +238,9 @@ class PaymentCategoryResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentCategory.getId().intValue())))
             .andExpect(jsonPath("$.[*].categoryName").value(hasItem(DEFAULT_CATEGORY_NAME)))
             .andExpect(jsonPath("$.[*].categoryDescription").value(hasItem(DEFAULT_CATEGORY_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].categoryType").value(hasItem(DEFAULT_CATEGORY_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].categoryType").value(hasItem(DEFAULT_CATEGORY_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -261,7 +275,9 @@ class PaymentCategoryResourceIT {
             .andExpect(jsonPath("$.id").value(paymentCategory.getId().intValue()))
             .andExpect(jsonPath("$.categoryName").value(DEFAULT_CATEGORY_NAME))
             .andExpect(jsonPath("$.categoryDescription").value(DEFAULT_CATEGORY_DESCRIPTION))
-            .andExpect(jsonPath("$.categoryType").value(DEFAULT_CATEGORY_TYPE.toString()));
+            .andExpect(jsonPath("$.categoryType").value(DEFAULT_CATEGORY_TYPE.toString()))
+            .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
+            .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN));
     }
 
     @Test
@@ -492,6 +508,162 @@ class PaymentCategoryResourceIT {
 
     @Test
     @Transactional
+    void getAllPaymentCategoriesByFileUploadTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentCategoryRepository.saveAndFlush(paymentCategory);
+
+        // Get all the paymentCategoryList where fileUploadToken equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPaymentCategoryShouldBeFound("fileUploadToken.equals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentCategoryList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentCategoryShouldNotBeFound("fileUploadToken.equals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCategoriesByFileUploadTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentCategoryRepository.saveAndFlush(paymentCategory);
+
+        // Get all the paymentCategoryList where fileUploadToken not equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPaymentCategoryShouldNotBeFound("fileUploadToken.notEquals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentCategoryList where fileUploadToken not equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentCategoryShouldBeFound("fileUploadToken.notEquals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCategoriesByFileUploadTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentCategoryRepository.saveAndFlush(paymentCategory);
+
+        // Get all the paymentCategoryList where fileUploadToken in DEFAULT_FILE_UPLOAD_TOKEN or UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentCategoryShouldBeFound("fileUploadToken.in=" + DEFAULT_FILE_UPLOAD_TOKEN + "," + UPDATED_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentCategoryList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentCategoryShouldNotBeFound("fileUploadToken.in=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCategoriesByFileUploadTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentCategoryRepository.saveAndFlush(paymentCategory);
+
+        // Get all the paymentCategoryList where fileUploadToken is not null
+        defaultPaymentCategoryShouldBeFound("fileUploadToken.specified=true");
+
+        // Get all the paymentCategoryList where fileUploadToken is null
+        defaultPaymentCategoryShouldNotBeFound("fileUploadToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCategoriesByFileUploadTokenContainsSomething() throws Exception {
+        // Initialize the database
+        paymentCategoryRepository.saveAndFlush(paymentCategory);
+
+        // Get all the paymentCategoryList where fileUploadToken contains DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPaymentCategoryShouldBeFound("fileUploadToken.contains=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentCategoryList where fileUploadToken contains UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentCategoryShouldNotBeFound("fileUploadToken.contains=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCategoriesByFileUploadTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        paymentCategoryRepository.saveAndFlush(paymentCategory);
+
+        // Get all the paymentCategoryList where fileUploadToken does not contain DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPaymentCategoryShouldNotBeFound("fileUploadToken.doesNotContain=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentCategoryList where fileUploadToken does not contain UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentCategoryShouldBeFound("fileUploadToken.doesNotContain=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCategoriesByCompilationTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentCategoryRepository.saveAndFlush(paymentCategory);
+
+        // Get all the paymentCategoryList where compilationToken equals to DEFAULT_COMPILATION_TOKEN
+        defaultPaymentCategoryShouldBeFound("compilationToken.equals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the paymentCategoryList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultPaymentCategoryShouldNotBeFound("compilationToken.equals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCategoriesByCompilationTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentCategoryRepository.saveAndFlush(paymentCategory);
+
+        // Get all the paymentCategoryList where compilationToken not equals to DEFAULT_COMPILATION_TOKEN
+        defaultPaymentCategoryShouldNotBeFound("compilationToken.notEquals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the paymentCategoryList where compilationToken not equals to UPDATED_COMPILATION_TOKEN
+        defaultPaymentCategoryShouldBeFound("compilationToken.notEquals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCategoriesByCompilationTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentCategoryRepository.saveAndFlush(paymentCategory);
+
+        // Get all the paymentCategoryList where compilationToken in DEFAULT_COMPILATION_TOKEN or UPDATED_COMPILATION_TOKEN
+        defaultPaymentCategoryShouldBeFound("compilationToken.in=" + DEFAULT_COMPILATION_TOKEN + "," + UPDATED_COMPILATION_TOKEN);
+
+        // Get all the paymentCategoryList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultPaymentCategoryShouldNotBeFound("compilationToken.in=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCategoriesByCompilationTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentCategoryRepository.saveAndFlush(paymentCategory);
+
+        // Get all the paymentCategoryList where compilationToken is not null
+        defaultPaymentCategoryShouldBeFound("compilationToken.specified=true");
+
+        // Get all the paymentCategoryList where compilationToken is null
+        defaultPaymentCategoryShouldNotBeFound("compilationToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCategoriesByCompilationTokenContainsSomething() throws Exception {
+        // Initialize the database
+        paymentCategoryRepository.saveAndFlush(paymentCategory);
+
+        // Get all the paymentCategoryList where compilationToken contains DEFAULT_COMPILATION_TOKEN
+        defaultPaymentCategoryShouldBeFound("compilationToken.contains=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the paymentCategoryList where compilationToken contains UPDATED_COMPILATION_TOKEN
+        defaultPaymentCategoryShouldNotBeFound("compilationToken.contains=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentCategoriesByCompilationTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        paymentCategoryRepository.saveAndFlush(paymentCategory);
+
+        // Get all the paymentCategoryList where compilationToken does not contain DEFAULT_COMPILATION_TOKEN
+        defaultPaymentCategoryShouldNotBeFound("compilationToken.doesNotContain=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the paymentCategoryList where compilationToken does not contain UPDATED_COMPILATION_TOKEN
+        defaultPaymentCategoryShouldBeFound("compilationToken.doesNotContain=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
     void getAllPaymentCategoriesByPaymentLabelIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentCategoryRepository.saveAndFlush(paymentCategory);
@@ -579,7 +751,9 @@ class PaymentCategoryResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentCategory.getId().intValue())))
             .andExpect(jsonPath("$.[*].categoryName").value(hasItem(DEFAULT_CATEGORY_NAME)))
             .andExpect(jsonPath("$.[*].categoryDescription").value(hasItem(DEFAULT_CATEGORY_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].categoryType").value(hasItem(DEFAULT_CATEGORY_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].categoryType").value(hasItem(DEFAULT_CATEGORY_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
 
         // Check, that the count call also returns 1
         restPaymentCategoryMockMvc
@@ -630,7 +804,9 @@ class PaymentCategoryResourceIT {
         updatedPaymentCategory
             .categoryName(UPDATED_CATEGORY_NAME)
             .categoryDescription(UPDATED_CATEGORY_DESCRIPTION)
-            .categoryType(UPDATED_CATEGORY_TYPE);
+            .categoryType(UPDATED_CATEGORY_TYPE)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         PaymentCategoryDTO paymentCategoryDTO = paymentCategoryMapper.toDto(updatedPaymentCategory);
 
         restPaymentCategoryMockMvc
@@ -648,6 +824,8 @@ class PaymentCategoryResourceIT {
         assertThat(testPaymentCategory.getCategoryName()).isEqualTo(UPDATED_CATEGORY_NAME);
         assertThat(testPaymentCategory.getCategoryDescription()).isEqualTo(UPDATED_CATEGORY_DESCRIPTION);
         assertThat(testPaymentCategory.getCategoryType()).isEqualTo(UPDATED_CATEGORY_TYPE);
+        assertThat(testPaymentCategory.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testPaymentCategory.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
 
         // Validate the PaymentCategory in Elasticsearch
         verify(mockPaymentCategorySearchRepository).save(testPaymentCategory);
@@ -744,7 +922,8 @@ class PaymentCategoryResourceIT {
         partialUpdatedPaymentCategory
             .categoryName(UPDATED_CATEGORY_NAME)
             .categoryDescription(UPDATED_CATEGORY_DESCRIPTION)
-            .categoryType(UPDATED_CATEGORY_TYPE);
+            .categoryType(UPDATED_CATEGORY_TYPE)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN);
 
         restPaymentCategoryMockMvc
             .perform(
@@ -761,6 +940,8 @@ class PaymentCategoryResourceIT {
         assertThat(testPaymentCategory.getCategoryName()).isEqualTo(UPDATED_CATEGORY_NAME);
         assertThat(testPaymentCategory.getCategoryDescription()).isEqualTo(UPDATED_CATEGORY_DESCRIPTION);
         assertThat(testPaymentCategory.getCategoryType()).isEqualTo(UPDATED_CATEGORY_TYPE);
+        assertThat(testPaymentCategory.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testPaymentCategory.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
     }
 
     @Test
@@ -778,7 +959,9 @@ class PaymentCategoryResourceIT {
         partialUpdatedPaymentCategory
             .categoryName(UPDATED_CATEGORY_NAME)
             .categoryDescription(UPDATED_CATEGORY_DESCRIPTION)
-            .categoryType(UPDATED_CATEGORY_TYPE);
+            .categoryType(UPDATED_CATEGORY_TYPE)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
 
         restPaymentCategoryMockMvc
             .perform(
@@ -795,6 +978,8 @@ class PaymentCategoryResourceIT {
         assertThat(testPaymentCategory.getCategoryName()).isEqualTo(UPDATED_CATEGORY_NAME);
         assertThat(testPaymentCategory.getCategoryDescription()).isEqualTo(UPDATED_CATEGORY_DESCRIPTION);
         assertThat(testPaymentCategory.getCategoryType()).isEqualTo(UPDATED_CATEGORY_TYPE);
+        assertThat(testPaymentCategory.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testPaymentCategory.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
 
     @Test
@@ -913,6 +1098,8 @@ class PaymentCategoryResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentCategory.getId().intValue())))
             .andExpect(jsonPath("$.[*].categoryName").value(hasItem(DEFAULT_CATEGORY_NAME)))
             .andExpect(jsonPath("$.[*].categoryDescription").value(hasItem(DEFAULT_CATEGORY_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].categoryType").value(hasItem(DEFAULT_CATEGORY_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].categoryType").value(hasItem(DEFAULT_CATEGORY_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 }

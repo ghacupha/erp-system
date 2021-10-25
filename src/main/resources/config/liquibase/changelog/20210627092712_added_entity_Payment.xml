@@ -41,6 +41,12 @@
             <column name="conversion_rate" type="double">
                 <constraints nullable="false" />
             </column>
+            <column name="file_upload_token" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="compilation_token" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="dealer_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -111,6 +117,8 @@
             <column name="description" type="string"/>
             <column name="settlement_currency" type="string"/>
             <column name="conversion_rate" type="numeric"/>
+            <column name="file_upload_token" type="string"/>
+            <column name="compilation_token" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

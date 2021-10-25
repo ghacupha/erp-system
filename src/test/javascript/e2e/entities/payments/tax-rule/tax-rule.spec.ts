@@ -51,6 +51,8 @@ describe('TaxRule e2e test', () => {
       taxRuleUpdatePage.setCateringLevyInput('5'),
       taxRuleUpdatePage.setServiceChargeInput('5'),
       taxRuleUpdatePage.setWithholdingTaxImportedServiceInput('5'),
+      taxRuleUpdatePage.setFileUploadTokenInput('fileUploadToken'),
+      taxRuleUpdatePage.setCompilationTokenInput('compilationToken'),
       // taxRuleUpdatePage.placeholderSelectLastOption(),
     ]);
 

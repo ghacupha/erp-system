@@ -53,6 +53,12 @@
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="token"><span>Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fileUploadToken">
+            <span>File Upload Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="compilationToken">
+            <span>Compilation Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="containingPlaceholder.description">
             <span>Containing Placeholder</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -66,6 +72,8 @@
           </td>
           <td>{{ placeholder.description }}</td>
           <td>{{ placeholder.token }}</td>
+          <td>{{ placeholder.fileUploadToken }}</td>
+          <td>{{ placeholder.compilationToken }}</td>
           <td>
             <div *ngIf="placeholder.containingPlaceholder">
               <a [routerLink]="['/placeholder', placeholder.containingPlaceholder?.id, 'view']">{{

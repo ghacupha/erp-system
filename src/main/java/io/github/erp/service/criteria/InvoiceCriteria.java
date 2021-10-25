@@ -60,6 +60,10 @@ public class InvoiceCriteria implements Serializable, Criteria {
 
     private LongFilter dealerId;
 
+    private StringFilter fileUploadToken;
+
+    private StringFilter compilationToken;
+
     private LongFilter paymentLabelId;
 
     private LongFilter placeholderId;
@@ -77,6 +81,8 @@ public class InvoiceCriteria implements Serializable, Criteria {
         this.conversionRate = other.conversionRate == null ? null : other.conversionRate.copy();
         this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
         this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
+        this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
+        this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
@@ -207,6 +213,36 @@ public class InvoiceCriteria implements Serializable, Criteria {
         this.dealerId = dealerId;
     }
 
+    public StringFilter getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public StringFilter fileUploadToken() {
+        if (fileUploadToken == null) {
+            fileUploadToken = new StringFilter();
+        }
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(StringFilter fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public StringFilter getCompilationToken() {
+        return compilationToken;
+    }
+
+    public StringFilter compilationToken() {
+        if (compilationToken == null) {
+            compilationToken = new StringFilter();
+        }
+        return compilationToken;
+    }
+
+    public void setCompilationToken(StringFilter compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public LongFilter getPaymentLabelId() {
         return paymentLabelId;
     }
@@ -263,6 +299,8 @@ public class InvoiceCriteria implements Serializable, Criteria {
             Objects.equals(conversionRate, that.conversionRate) &&
             Objects.equals(paymentId, that.paymentId) &&
             Objects.equals(dealerId, that.dealerId) &&
+            Objects.equals(fileUploadToken, that.fileUploadToken) &&
+            Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
@@ -280,6 +318,8 @@ public class InvoiceCriteria implements Serializable, Criteria {
             conversionRate,
             paymentId,
             dealerId,
+            fileUploadToken,
+            compilationToken,
             paymentLabelId,
             placeholderId,
             distinct
@@ -298,6 +338,8 @@ public class InvoiceCriteria implements Serializable, Criteria {
             (conversionRate != null ? "conversionRate=" + conversionRate + ", " : "") +
             (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
             (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
+            (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +
+            (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

@@ -24,6 +24,8 @@ describe('Service Tests', () => {
         id: 0,
         description: 'AAAAAAA',
         token: 'AAAAAAA',
+        fileUploadToken: 'AAAAAAA',
+        compilationToken: 'AAAAAAA',
       };
     });
 
@@ -61,6 +63,8 @@ describe('Service Tests', () => {
             id: 1,
             description: 'BBBBBB',
             token: 'BBBBBB',
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -79,6 +83,7 @@ describe('Service Tests', () => {
           {
             description: 'BBBBBB',
             token: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           new Placeholder()
         );
@@ -100,6 +105,8 @@ describe('Service Tests', () => {
             id: 1,
             description: 'BBBBBB',
             token: 'BBBBBB',
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -151,7 +158,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique Placeholder to an array', () => {
-          const placeholderArray: IPlaceholder[] = [{ id: 123 }, { id: 456 }, { id: 31255 }];
+          const placeholderArray: IPlaceholder[] = [{ id: 123 }, { id: 456 }, { id: 86039 }];
           const placeholderCollection: IPlaceholder[] = [{ id: 123 }];
           expectedResult = service.addPlaceholderToCollectionIfMissing(placeholderCollection, ...placeholderArray);
           expect(expectedResult).toHaveLength(3);

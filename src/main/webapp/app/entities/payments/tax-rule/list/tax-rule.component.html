@@ -63,6 +63,12 @@
           <th scope="col" jhiSortBy="withholdingTaxImportedService">
             <span>Withholding Tax Imported Service</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="fileUploadToken">
+            <span>File Upload Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="compilationToken">
+            <span>Compilation Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -79,6 +85,8 @@
           <td>{{ taxRule.cateringLevy }}</td>
           <td>{{ taxRule.serviceCharge }}</td>
           <td>{{ taxRule.withholdingTaxImportedService }}</td>
+          <td>{{ taxRule.fileUploadToken }}</td>
+          <td>{{ taxRule.compilationToken }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button

@@ -78,7 +78,7 @@ export class PaymentCategoryComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['categoryName', 'categoryDescription', 'categoryType'].includes(this.predicate)) {
+    if (query && ['categoryName', 'categoryDescription', 'categoryType', 'fileUploadToken', 'compilationToken'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }

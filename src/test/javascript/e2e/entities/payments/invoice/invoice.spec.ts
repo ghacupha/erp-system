@@ -50,6 +50,8 @@ describe('Invoice e2e test', () => {
       invoiceUpdatePage.setConversionRateInput('5'),
       invoiceUpdatePage.setPaymentIdInput('5'),
       invoiceUpdatePage.setDealerIdInput('5'),
+      invoiceUpdatePage.setFileUploadTokenInput('fileUploadToken'),
+      invoiceUpdatePage.setCompilationTokenInput('compilationToken'),
       // invoiceUpdatePage.paymentLabelSelectLastOption(),
       // invoiceUpdatePage.placeholderSelectLastOption(),
     ]);

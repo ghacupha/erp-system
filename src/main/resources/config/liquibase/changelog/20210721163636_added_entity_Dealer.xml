@@ -41,6 +41,12 @@
             <column name="bankers_swift_code" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="file_upload_token" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="compilation_token" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="dealer_group_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -99,6 +105,8 @@
             <column name="bankers_name" type="string"/>
             <column name="bankers_branch" type="string"/>
             <column name="bankers_swift_code" type="string"/>
+            <column name="file_upload_token" type="string"/>
+            <column name="compilation_token" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

@@ -59,6 +59,12 @@
           <th scope="col" jhiSortBy="taxReferenceType">
             <span>Tax Reference Type</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="fileUploadToken">
+            <span>File Upload Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="compilationToken">
+            <span>Compilation Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -71,6 +77,8 @@
           <td>{{ taxReference.taxDescription }}</td>
           <td>{{ taxReference.taxPercentage }}</td>
           <td>{{ taxReference.taxReferenceType }}</td>
+          <td>{{ taxReference.fileUploadToken }}</td>
+          <td>{{ taxReference.compilationToken }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button

@@ -26,6 +26,14 @@
         <dd>
           <span>{{ paymentCategory.categoryType }}</span>
         </dd>
+        <dt><span>File Upload Token</span></dt>
+        <dd>
+          <span>{{ paymentCategory.fileUploadToken }}</span>
+        </dd>
+        <dt><span>Compilation Token</span></dt>
+        <dd>
+          <span>{{ paymentCategory.compilationToken }}</span>
+        </dd>
         <dt><span>Payment Label</span></dt>
         <dd>
           <span *ngFor="let paymentLabel of paymentCategory.paymentLabels; let last = last">

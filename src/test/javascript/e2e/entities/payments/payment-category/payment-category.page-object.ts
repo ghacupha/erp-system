@@ -33,6 +33,8 @@ export class PaymentCategoryUpdatePage {
   categoryNameInput = element(by.id('field_categoryName'));
   categoryDescriptionInput = element(by.id('field_categoryDescription'));
   categoryTypeSelect = element(by.id('field_categoryType'));
+  fileUploadTokenInput = element(by.id('field_fileUploadToken'));
+  compilationTokenInput = element(by.id('field_compilationToken'));
 
   paymentLabelSelect = element(by.id('field_paymentLabel'));
   placeholderSelect = element(by.id('field_placeholder'));
@@ -75,6 +77,22 @@ export class PaymentCategoryUpdatePage {
 
   async categoryTypeSelectLastOption(): Promise<void> {
     await this.categoryTypeSelect.all(by.tagName('option')).last().click();
+  }
+
+  async setFileUploadTokenInput(fileUploadToken: string): Promise<void> {
+    await this.fileUploadTokenInput.sendKeys(fileUploadToken);
+  }
+
+  async getFileUploadTokenInput(): Promise<string> {
+    return await this.fileUploadTokenInput.getAttribute('value');
+  }
+
+  async setCompilationTokenInput(compilationToken: string): Promise<void> {
+    await this.compilationTokenInput.sendKeys(compilationToken);
+  }
+
+  async getCompilationTokenInput(): Promise<string> {
+    return await this.compilationTokenInput.getAttribute('value');
   }
 
   async paymentLabelSelectLastOption(): Promise<void> {

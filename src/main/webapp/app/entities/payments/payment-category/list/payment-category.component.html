@@ -56,6 +56,12 @@
             <span>Category Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="categoryType"><span>Category Type</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fileUploadToken">
+            <span>File Upload Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="compilationToken">
+            <span>Compilation Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -67,6 +73,8 @@
           <td>{{ paymentCategory.categoryName }}</td>
           <td>{{ paymentCategory.categoryDescription }}</td>
           <td>{{ paymentCategory.categoryType }}</td>
+          <td>{{ paymentCategory.fileUploadToken }}</td>
+          <td>{{ paymentCategory.compilationToken }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button

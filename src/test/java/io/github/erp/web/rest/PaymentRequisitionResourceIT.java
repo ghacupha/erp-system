@@ -60,6 +60,12 @@ class PaymentRequisitionResourceIT {
     private static final BigDecimal UPDATED_VATABLE_AMOUNT = new BigDecimal(2);
     private static final BigDecimal SMALLER_VATABLE_AMOUNT = new BigDecimal(1 - 1);
 
+    private static final String DEFAULT_FILE_UPLOAD_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_FILE_UPLOAD_TOKEN = "BBBBBBBBBB";
+
+    private static final String DEFAULT_COMPILATION_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_COMPILATION_TOKEN = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/payment-requisitions";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/payment-requisitions";
@@ -105,7 +111,9 @@ class PaymentRequisitionResourceIT {
         PaymentRequisition paymentRequisition = new PaymentRequisition()
             .invoicedAmount(DEFAULT_INVOICED_AMOUNT)
             .disbursementCost(DEFAULT_DISBURSEMENT_COST)
-            .vatableAmount(DEFAULT_VATABLE_AMOUNT);
+            .vatableAmount(DEFAULT_VATABLE_AMOUNT)
+            .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
+            .compilationToken(DEFAULT_COMPILATION_TOKEN);
         return paymentRequisition;
     }
 
@@ -119,7 +127,9 @@ class PaymentRequisitionResourceIT {
         PaymentRequisition paymentRequisition = new PaymentRequisition()
             .invoicedAmount(UPDATED_INVOICED_AMOUNT)
             .disbursementCost(UPDATED_DISBURSEMENT_COST)
-            .vatableAmount(UPDATED_VATABLE_AMOUNT);
+            .vatableAmount(UPDATED_VATABLE_AMOUNT)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         return paymentRequisition;
     }
 
@@ -149,6 +159,8 @@ class PaymentRequisitionResourceIT {
         assertThat(testPaymentRequisition.getInvoicedAmount()).isEqualByComparingTo(DEFAULT_INVOICED_AMOUNT);
         assertThat(testPaymentRequisition.getDisbursementCost()).isEqualByComparingTo(DEFAULT_DISBURSEMENT_COST);
         assertThat(testPaymentRequisition.getVatableAmount()).isEqualByComparingTo(DEFAULT_VATABLE_AMOUNT);
+        assertThat(testPaymentRequisition.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
+        assertThat(testPaymentRequisition.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
 
         // Validate the PaymentRequisition in Elasticsearch
         verify(mockPaymentRequisitionSearchRepository, times(1)).save(testPaymentRequisition);
@@ -194,7 +206,9 @@ class PaymentRequisitionResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentRequisition.getId().intValue())))
             .andExpect(jsonPath("$.[*].invoicedAmount").value(hasItem(sameNumber(DEFAULT_INVOICED_AMOUNT))))
             .andExpect(jsonPath("$.[*].disbursementCost").value(hasItem(sameNumber(DEFAULT_DISBURSEMENT_COST))))
-            .andExpect(jsonPath("$.[*].vatableAmount").value(hasItem(sameNumber(DEFAULT_VATABLE_AMOUNT))));
+            .andExpect(jsonPath("$.[*].vatableAmount").value(hasItem(sameNumber(DEFAULT_VATABLE_AMOUNT))))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -229,7 +243,9 @@ class PaymentRequisitionResourceIT {
             .andExpect(jsonPath("$.id").value(paymentRequisition.getId().intValue()))
             .andExpect(jsonPath("$.invoicedAmount").value(sameNumber(DEFAULT_INVOICED_AMOUNT)))
             .andExpect(jsonPath("$.disbursementCost").value(sameNumber(DEFAULT_DISBURSEMENT_COST)))
-            .andExpect(jsonPath("$.vatableAmount").value(sameNumber(DEFAULT_VATABLE_AMOUNT)));
+            .andExpect(jsonPath("$.vatableAmount").value(sameNumber(DEFAULT_VATABLE_AMOUNT)))
+            .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
+            .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN));
     }
 
     @Test
@@ -564,6 +580,162 @@ class PaymentRequisitionResourceIT {
 
     @Test
     @Transactional
+    void getAllPaymentRequisitionsByFileUploadTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where fileUploadToken equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPaymentRequisitionShouldBeFound("fileUploadToken.equals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentRequisitionList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentRequisitionShouldNotBeFound("fileUploadToken.equals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByFileUploadTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where fileUploadToken not equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPaymentRequisitionShouldNotBeFound("fileUploadToken.notEquals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentRequisitionList where fileUploadToken not equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentRequisitionShouldBeFound("fileUploadToken.notEquals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByFileUploadTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where fileUploadToken in DEFAULT_FILE_UPLOAD_TOKEN or UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentRequisitionShouldBeFound("fileUploadToken.in=" + DEFAULT_FILE_UPLOAD_TOKEN + "," + UPDATED_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentRequisitionList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentRequisitionShouldNotBeFound("fileUploadToken.in=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByFileUploadTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where fileUploadToken is not null
+        defaultPaymentRequisitionShouldBeFound("fileUploadToken.specified=true");
+
+        // Get all the paymentRequisitionList where fileUploadToken is null
+        defaultPaymentRequisitionShouldNotBeFound("fileUploadToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByFileUploadTokenContainsSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where fileUploadToken contains DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPaymentRequisitionShouldBeFound("fileUploadToken.contains=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentRequisitionList where fileUploadToken contains UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentRequisitionShouldNotBeFound("fileUploadToken.contains=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByFileUploadTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where fileUploadToken does not contain DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPaymentRequisitionShouldNotBeFound("fileUploadToken.doesNotContain=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentRequisitionList where fileUploadToken does not contain UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentRequisitionShouldBeFound("fileUploadToken.doesNotContain=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByCompilationTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where compilationToken equals to DEFAULT_COMPILATION_TOKEN
+        defaultPaymentRequisitionShouldBeFound("compilationToken.equals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the paymentRequisitionList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultPaymentRequisitionShouldNotBeFound("compilationToken.equals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByCompilationTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where compilationToken not equals to DEFAULT_COMPILATION_TOKEN
+        defaultPaymentRequisitionShouldNotBeFound("compilationToken.notEquals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the paymentRequisitionList where compilationToken not equals to UPDATED_COMPILATION_TOKEN
+        defaultPaymentRequisitionShouldBeFound("compilationToken.notEquals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByCompilationTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where compilationToken in DEFAULT_COMPILATION_TOKEN or UPDATED_COMPILATION_TOKEN
+        defaultPaymentRequisitionShouldBeFound("compilationToken.in=" + DEFAULT_COMPILATION_TOKEN + "," + UPDATED_COMPILATION_TOKEN);
+
+        // Get all the paymentRequisitionList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultPaymentRequisitionShouldNotBeFound("compilationToken.in=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByCompilationTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where compilationToken is not null
+        defaultPaymentRequisitionShouldBeFound("compilationToken.specified=true");
+
+        // Get all the paymentRequisitionList where compilationToken is null
+        defaultPaymentRequisitionShouldNotBeFound("compilationToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByCompilationTokenContainsSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where compilationToken contains DEFAULT_COMPILATION_TOKEN
+        defaultPaymentRequisitionShouldBeFound("compilationToken.contains=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the paymentRequisitionList where compilationToken contains UPDATED_COMPILATION_TOKEN
+        defaultPaymentRequisitionShouldNotBeFound("compilationToken.contains=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByCompilationTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where compilationToken does not contain DEFAULT_COMPILATION_TOKEN
+        defaultPaymentRequisitionShouldNotBeFound("compilationToken.doesNotContain=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the paymentRequisitionList where compilationToken does not contain UPDATED_COMPILATION_TOKEN
+        defaultPaymentRequisitionShouldBeFound("compilationToken.doesNotContain=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
     void getAllPaymentRequisitionsByPaymentLabelIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentRequisitionRepository.saveAndFlush(paymentRequisition);
@@ -651,7 +823,9 @@ class PaymentRequisitionResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentRequisition.getId().intValue())))
             .andExpect(jsonPath("$.[*].invoicedAmount").value(hasItem(sameNumber(DEFAULT_INVOICED_AMOUNT))))
             .andExpect(jsonPath("$.[*].disbursementCost").value(hasItem(sameNumber(DEFAULT_DISBURSEMENT_COST))))
-            .andExpect(jsonPath("$.[*].vatableAmount").value(hasItem(sameNumber(DEFAULT_VATABLE_AMOUNT))));
+            .andExpect(jsonPath("$.[*].vatableAmount").value(hasItem(sameNumber(DEFAULT_VATABLE_AMOUNT))))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
 
         // Check, that the count call also returns 1
         restPaymentRequisitionMockMvc
@@ -702,7 +876,9 @@ class PaymentRequisitionResourceIT {
         updatedPaymentRequisition
             .invoicedAmount(UPDATED_INVOICED_AMOUNT)
             .disbursementCost(UPDATED_DISBURSEMENT_COST)
-            .vatableAmount(UPDATED_VATABLE_AMOUNT);
+            .vatableAmount(UPDATED_VATABLE_AMOUNT)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         PaymentRequisitionDTO paymentRequisitionDTO = paymentRequisitionMapper.toDto(updatedPaymentRequisition);
 
         restPaymentRequisitionMockMvc
@@ -720,6 +896,8 @@ class PaymentRequisitionResourceIT {
         assertThat(testPaymentRequisition.getInvoicedAmount()).isEqualTo(UPDATED_INVOICED_AMOUNT);
         assertThat(testPaymentRequisition.getDisbursementCost()).isEqualTo(UPDATED_DISBURSEMENT_COST);
         assertThat(testPaymentRequisition.getVatableAmount()).isEqualTo(UPDATED_VATABLE_AMOUNT);
+        assertThat(testPaymentRequisition.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testPaymentRequisition.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
 
         // Validate the PaymentRequisition in Elasticsearch
         verify(mockPaymentRequisitionSearchRepository).save(testPaymentRequisition);
@@ -818,7 +996,9 @@ class PaymentRequisitionResourceIT {
         partialUpdatedPaymentRequisition
             .invoicedAmount(UPDATED_INVOICED_AMOUNT)
             .disbursementCost(UPDATED_DISBURSEMENT_COST)
-            .vatableAmount(UPDATED_VATABLE_AMOUNT);
+            .vatableAmount(UPDATED_VATABLE_AMOUNT)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
 
         restPaymentRequisitionMockMvc
             .perform(
@@ -835,6 +1015,8 @@ class PaymentRequisitionResourceIT {
         assertThat(testPaymentRequisition.getInvoicedAmount()).isEqualByComparingTo(UPDATED_INVOICED_AMOUNT);
         assertThat(testPaymentRequisition.getDisbursementCost()).isEqualByComparingTo(UPDATED_DISBURSEMENT_COST);
         assertThat(testPaymentRequisition.getVatableAmount()).isEqualByComparingTo(UPDATED_VATABLE_AMOUNT);
+        assertThat(testPaymentRequisition.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testPaymentRequisition.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
 
     @Test
@@ -852,7 +1034,9 @@ class PaymentRequisitionResourceIT {
         partialUpdatedPaymentRequisition
             .invoicedAmount(UPDATED_INVOICED_AMOUNT)
             .disbursementCost(UPDATED_DISBURSEMENT_COST)
-            .vatableAmount(UPDATED_VATABLE_AMOUNT);
+            .vatableAmount(UPDATED_VATABLE_AMOUNT)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
 
         restPaymentRequisitionMockMvc
             .perform(
@@ -869,6 +1053,8 @@ class PaymentRequisitionResourceIT {
         assertThat(testPaymentRequisition.getInvoicedAmount()).isEqualByComparingTo(UPDATED_INVOICED_AMOUNT);
         assertThat(testPaymentRequisition.getDisbursementCost()).isEqualByComparingTo(UPDATED_DISBURSEMENT_COST);
         assertThat(testPaymentRequisition.getVatableAmount()).isEqualByComparingTo(UPDATED_VATABLE_AMOUNT);
+        assertThat(testPaymentRequisition.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testPaymentRequisition.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
 
     @Test
@@ -987,6 +1173,8 @@ class PaymentRequisitionResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentRequisition.getId().intValue())))
             .andExpect(jsonPath("$.[*].invoicedAmount").value(hasItem(sameNumber(DEFAULT_INVOICED_AMOUNT))))
             .andExpect(jsonPath("$.[*].disbursementCost").value(hasItem(sameNumber(DEFAULT_DISBURSEMENT_COST))))
-            .andExpect(jsonPath("$.[*].vatableAmount").value(hasItem(sameNumber(DEFAULT_VATABLE_AMOUNT))));
+            .andExpect(jsonPath("$.[*].vatableAmount").value(hasItem(sameNumber(DEFAULT_VATABLE_AMOUNT))))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 }

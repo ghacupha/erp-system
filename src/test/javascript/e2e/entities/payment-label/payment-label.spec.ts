@@ -48,6 +48,8 @@ describe('PaymentLabel e2e test', () => {
     await promise.all([
       paymentLabelUpdatePage.setDescriptionInput('description'),
       paymentLabelUpdatePage.setCommentsInput('comments'),
+      paymentLabelUpdatePage.setFileUploadTokenInput('fileUploadToken'),
+      paymentLabelUpdatePage.setCompilationTokenInput('compilationToken'),
       paymentLabelUpdatePage.containingPaymentLabelSelectLastOption(),
       // paymentLabelUpdatePage.placeholderSelectLastOption(),
     ]);

@@ -33,6 +33,12 @@ public class PaymentLabel implements Serializable {
     @Column(name = "comments")
     private String comments;
 
+    @Column(name = "file_upload_token")
+    private String fileUploadToken;
+
+    @Column(name = "compilation_token")
+    private String compilationToken;
+
     @ManyToOne
     @JsonIgnoreProperties(value = { "containingPaymentLabel", "placeholders" }, allowSetters = true)
     private PaymentLabel containingPaymentLabel;
@@ -86,6 +92,32 @@ public class PaymentLabel implements Serializable {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public String getFileUploadToken() {
+        return this.fileUploadToken;
+    }
+
+    public PaymentLabel fileUploadToken(String fileUploadToken) {
+        this.setFileUploadToken(fileUploadToken);
+        return this;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return this.compilationToken;
+    }
+
+    public PaymentLabel compilationToken(String compilationToken) {
+        this.setCompilationToken(compilationToken);
+        return this;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
     }
 
     public PaymentLabel getContainingPaymentLabel() {
@@ -150,6 +182,8 @@ public class PaymentLabel implements Serializable {
             "id=" + getId() +
             ", description='" + getDescription() + "'" +
             ", comments='" + getComments() + "'" +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             "}";
     }
 }

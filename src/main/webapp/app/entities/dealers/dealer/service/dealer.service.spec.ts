@@ -31,6 +31,8 @@ describe('Service Tests', () => {
         bankersName: 'AAAAAAA',
         bankersBranch: 'AAAAAAA',
         bankersSwiftCode: 'AAAAAAA',
+        fileUploadToken: 'AAAAAAA',
+        compilationToken: 'AAAAAAA',
       };
     });
 
@@ -75,6 +77,8 @@ describe('Service Tests', () => {
             bankersName: 'BBBBBB',
             bankersBranch: 'BBBBBB',
             bankersSwiftCode: 'BBBBBB',
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -124,6 +128,8 @@ describe('Service Tests', () => {
             bankersName: 'BBBBBB',
             bankersBranch: 'BBBBBB',
             bankersSwiftCode: 'BBBBBB',
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -175,7 +181,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique Dealer to an array', () => {
-          const dealerArray: IDealer[] = [{ id: 123 }, { id: 456 }, { id: 39180 }];
+          const dealerArray: IDealer[] = [{ id: 123 }, { id: 456 }, { id: 88743 }];
           const dealerCollection: IDealer[] = [{ id: 123 }];
           expectedResult = service.addDealerToCollectionIfMissing(dealerCollection, ...dealerArray);
           expect(expectedResult).toHaveLength(3);

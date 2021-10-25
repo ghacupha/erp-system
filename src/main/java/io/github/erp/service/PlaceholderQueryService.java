@@ -104,6 +104,12 @@ public class PlaceholderQueryService extends QueryService<Placeholder> {
             if (criteria.getToken() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getToken(), Placeholder_.token));
             }
+            if (criteria.getFileUploadToken() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getFileUploadToken(), Placeholder_.fileUploadToken));
+            }
+            if (criteria.getCompilationToken() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getCompilationToken(), Placeholder_.compilationToken));
+            }
             if (criteria.getContainingPlaceholderId() != null) {
                 specification =
                     specification.and(

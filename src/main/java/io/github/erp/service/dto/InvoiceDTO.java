@@ -34,6 +34,10 @@ public class InvoiceDTO implements Serializable {
 
     private Long dealerId;
 
+    private String fileUploadToken;
+
+    private String compilationToken;
+
     private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
@@ -102,6 +106,22 @@ public class InvoiceDTO implements Serializable {
         this.dealerId = dealerId;
     }
 
+    public String getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return compilationToken;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public Set<PaymentLabelDTO> getPaymentLabels() {
         return paymentLabels;
     }
@@ -151,6 +171,8 @@ public class InvoiceDTO implements Serializable {
             ", conversionRate=" + getConversionRate() +
             ", paymentId=" + getPaymentId() +
             ", dealerId=" + getDealerId() +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             ", paymentLabels=" + getPaymentLabels() +
             ", placeholders=" + getPlaceholders() +
             "}";

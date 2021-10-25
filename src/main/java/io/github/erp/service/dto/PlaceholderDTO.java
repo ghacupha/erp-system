@@ -16,6 +16,10 @@ public class PlaceholderDTO implements Serializable {
 
     private String token;
 
+    private String fileUploadToken;
+
+    private String compilationToken;
+
     private PlaceholderDTO containingPlaceholder;
 
     public Long getId() {
@@ -40,6 +44,22 @@ public class PlaceholderDTO implements Serializable {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return compilationToken;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
     }
 
     public PlaceholderDTO getContainingPlaceholder() {
@@ -78,6 +98,8 @@ public class PlaceholderDTO implements Serializable {
             "id=" + getId() +
             ", description='" + getDescription() + "'" +
             ", token='" + getToken() + "'" +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             ", containingPlaceholder=" + getContainingPlaceholder() +
             "}";
     }

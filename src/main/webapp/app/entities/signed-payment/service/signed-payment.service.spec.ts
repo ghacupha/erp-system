@@ -31,6 +31,8 @@ describe('Service Tests', () => {
         transactionDate: currentDate,
         transactionCurrency: CurrencyTypes.KES,
         transactionAmount: 0,
+        fileUploadToken: 'AAAAAAA',
+        compilationToken: 'AAAAAAA',
       };
     });
 
@@ -81,6 +83,8 @@ describe('Service Tests', () => {
             transactionDate: currentDate.format(DATE_FORMAT),
             transactionCurrency: 'BBBBBB',
             transactionAmount: 1,
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -105,6 +109,7 @@ describe('Service Tests', () => {
             transactionNumber: 'BBBBBB',
             transactionDate: currentDate.format(DATE_FORMAT),
             transactionCurrency: 'BBBBBB',
+            fileUploadToken: 'BBBBBB',
           },
           new SignedPayment()
         );
@@ -133,6 +138,8 @@ describe('Service Tests', () => {
             transactionDate: currentDate.format(DATE_FORMAT),
             transactionCurrency: 'BBBBBB',
             transactionAmount: 1,
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -189,7 +196,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique SignedPayment to an array', () => {
-          const signedPaymentArray: ISignedPayment[] = [{ id: 123 }, { id: 456 }, { id: 93972 }];
+          const signedPaymentArray: ISignedPayment[] = [{ id: 123 }, { id: 456 }, { id: 31101 }];
           const signedPaymentCollection: ISignedPayment[] = [{ id: 123 }];
           expectedResult = service.addSignedPaymentToCollectionIfMissing(signedPaymentCollection, ...signedPaymentArray);
           expect(expectedResult).toHaveLength(3);

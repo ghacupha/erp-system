@@ -88,6 +88,12 @@ class PaymentResourceIT {
     private static final Double UPDATED_CONVERSION_RATE = 2D;
     private static final Double SMALLER_CONVERSION_RATE = 1.00D - 1D;
 
+    private static final String DEFAULT_FILE_UPLOAD_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_FILE_UPLOAD_TOKEN = "BBBBBBBBBB";
+
+    private static final String DEFAULT_COMPILATION_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_COMPILATION_TOKEN = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/payments";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/payments";
@@ -139,7 +145,9 @@ class PaymentResourceIT {
             .paymentAmount(DEFAULT_PAYMENT_AMOUNT)
             .description(DEFAULT_DESCRIPTION)
             .settlementCurrency(DEFAULT_SETTLEMENT_CURRENCY)
-            .conversionRate(DEFAULT_CONVERSION_RATE);
+            .conversionRate(DEFAULT_CONVERSION_RATE)
+            .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
+            .compilationToken(DEFAULT_COMPILATION_TOKEN);
         return payment;
     }
 
@@ -159,7 +167,9 @@ class PaymentResourceIT {
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
             .description(UPDATED_DESCRIPTION)
             .settlementCurrency(UPDATED_SETTLEMENT_CURRENCY)
-            .conversionRate(UPDATED_CONVERSION_RATE);
+            .conversionRate(UPDATED_CONVERSION_RATE)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         return payment;
     }
 
@@ -191,6 +201,8 @@ class PaymentResourceIT {
         assertThat(testPayment.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testPayment.getSettlementCurrency()).isEqualTo(DEFAULT_SETTLEMENT_CURRENCY);
         assertThat(testPayment.getConversionRate()).isEqualTo(DEFAULT_CONVERSION_RATE);
+        assertThat(testPayment.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
+        assertThat(testPayment.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
 
         // Validate the Payment in Elasticsearch
         verify(mockPaymentSearchRepository, times(1)).save(testPayment);
@@ -274,7 +286,9 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].settlementCurrency").value(hasItem(DEFAULT_SETTLEMENT_CURRENCY.toString())))
-            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())));
+            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -315,7 +329,9 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.paymentAmount").value(sameNumber(DEFAULT_PAYMENT_AMOUNT)))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.settlementCurrency").value(DEFAULT_SETTLEMENT_CURRENCY.toString()))
-            .andExpect(jsonPath("$.conversionRate").value(DEFAULT_CONVERSION_RATE.doubleValue()));
+            .andExpect(jsonPath("$.conversionRate").value(DEFAULT_CONVERSION_RATE.doubleValue()))
+            .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
+            .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN));
     }
 
     @Test
@@ -1170,6 +1186,162 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
+    void getAllPaymentsByFileUploadTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where fileUploadToken equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPaymentShouldBeFound("fileUploadToken.equals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentShouldNotBeFound("fileUploadToken.equals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByFileUploadTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where fileUploadToken not equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPaymentShouldNotBeFound("fileUploadToken.notEquals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentList where fileUploadToken not equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentShouldBeFound("fileUploadToken.notEquals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByFileUploadTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where fileUploadToken in DEFAULT_FILE_UPLOAD_TOKEN or UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentShouldBeFound("fileUploadToken.in=" + DEFAULT_FILE_UPLOAD_TOKEN + "," + UPDATED_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentShouldNotBeFound("fileUploadToken.in=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByFileUploadTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where fileUploadToken is not null
+        defaultPaymentShouldBeFound("fileUploadToken.specified=true");
+
+        // Get all the paymentList where fileUploadToken is null
+        defaultPaymentShouldNotBeFound("fileUploadToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByFileUploadTokenContainsSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where fileUploadToken contains DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPaymentShouldBeFound("fileUploadToken.contains=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentList where fileUploadToken contains UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentShouldNotBeFound("fileUploadToken.contains=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByFileUploadTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where fileUploadToken does not contain DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPaymentShouldNotBeFound("fileUploadToken.doesNotContain=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the paymentList where fileUploadToken does not contain UPDATED_FILE_UPLOAD_TOKEN
+        defaultPaymentShouldBeFound("fileUploadToken.doesNotContain=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByCompilationTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where compilationToken equals to DEFAULT_COMPILATION_TOKEN
+        defaultPaymentShouldBeFound("compilationToken.equals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the paymentList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultPaymentShouldNotBeFound("compilationToken.equals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByCompilationTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where compilationToken not equals to DEFAULT_COMPILATION_TOKEN
+        defaultPaymentShouldNotBeFound("compilationToken.notEquals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the paymentList where compilationToken not equals to UPDATED_COMPILATION_TOKEN
+        defaultPaymentShouldBeFound("compilationToken.notEquals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByCompilationTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where compilationToken in DEFAULT_COMPILATION_TOKEN or UPDATED_COMPILATION_TOKEN
+        defaultPaymentShouldBeFound("compilationToken.in=" + DEFAULT_COMPILATION_TOKEN + "," + UPDATED_COMPILATION_TOKEN);
+
+        // Get all the paymentList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultPaymentShouldNotBeFound("compilationToken.in=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByCompilationTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where compilationToken is not null
+        defaultPaymentShouldBeFound("compilationToken.specified=true");
+
+        // Get all the paymentList where compilationToken is null
+        defaultPaymentShouldNotBeFound("compilationToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByCompilationTokenContainsSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where compilationToken contains DEFAULT_COMPILATION_TOKEN
+        defaultPaymentShouldBeFound("compilationToken.contains=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the paymentList where compilationToken contains UPDATED_COMPILATION_TOKEN
+        defaultPaymentShouldNotBeFound("compilationToken.contains=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByCompilationTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where compilationToken does not contain DEFAULT_COMPILATION_TOKEN
+        defaultPaymentShouldNotBeFound("compilationToken.doesNotContain=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the paymentList where compilationToken does not contain UPDATED_COMPILATION_TOKEN
+        defaultPaymentShouldBeFound("compilationToken.doesNotContain=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
     void getAllPaymentsByPaymentLabelIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
@@ -1367,7 +1539,9 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].settlementCurrency").value(hasItem(DEFAULT_SETTLEMENT_CURRENCY.toString())))
-            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())));
+            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
 
         // Check, that the count call also returns 1
         restPaymentMockMvc
@@ -1424,7 +1598,9 @@ class PaymentResourceIT {
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
             .description(UPDATED_DESCRIPTION)
             .settlementCurrency(UPDATED_SETTLEMENT_CURRENCY)
-            .conversionRate(UPDATED_CONVERSION_RATE);
+            .conversionRate(UPDATED_CONVERSION_RATE)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         PaymentDTO paymentDTO = paymentMapper.toDto(updatedPayment);
 
         restPaymentMockMvc
@@ -1448,6 +1624,8 @@ class PaymentResourceIT {
         assertThat(testPayment.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testPayment.getSettlementCurrency()).isEqualTo(UPDATED_SETTLEMENT_CURRENCY);
         assertThat(testPayment.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
+        assertThat(testPayment.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testPayment.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
 
         // Validate the Payment in Elasticsearch
         verify(mockPaymentSearchRepository).save(testPayment);
@@ -1539,7 +1717,11 @@ class PaymentResourceIT {
         Payment partialUpdatedPayment = new Payment();
         partialUpdatedPayment.setId(payment.getId());
 
-        partialUpdatedPayment.paymentDate(UPDATED_PAYMENT_DATE).vatableAmount(UPDATED_VATABLE_AMOUNT).description(UPDATED_DESCRIPTION);
+        partialUpdatedPayment
+            .paymentDate(UPDATED_PAYMENT_DATE)
+            .vatableAmount(UPDATED_VATABLE_AMOUNT)
+            .description(UPDATED_DESCRIPTION)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN);
 
         restPaymentMockMvc
             .perform(
@@ -1562,6 +1744,8 @@ class PaymentResourceIT {
         assertThat(testPayment.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testPayment.getSettlementCurrency()).isEqualTo(DEFAULT_SETTLEMENT_CURRENCY);
         assertThat(testPayment.getConversionRate()).isEqualTo(DEFAULT_CONVERSION_RATE);
+        assertThat(testPayment.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testPayment.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
     }
 
     @Test
@@ -1585,7 +1769,9 @@ class PaymentResourceIT {
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
             .description(UPDATED_DESCRIPTION)
             .settlementCurrency(UPDATED_SETTLEMENT_CURRENCY)
-            .conversionRate(UPDATED_CONVERSION_RATE);
+            .conversionRate(UPDATED_CONVERSION_RATE)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
 
         restPaymentMockMvc
             .perform(
@@ -1608,6 +1794,8 @@ class PaymentResourceIT {
         assertThat(testPayment.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testPayment.getSettlementCurrency()).isEqualTo(UPDATED_SETTLEMENT_CURRENCY);
         assertThat(testPayment.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
+        assertThat(testPayment.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testPayment.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
 
     @Test
@@ -1730,6 +1918,8 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].settlementCurrency").value(hasItem(DEFAULT_SETTLEMENT_CURRENCY.toString())))
-            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())));
+            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 }

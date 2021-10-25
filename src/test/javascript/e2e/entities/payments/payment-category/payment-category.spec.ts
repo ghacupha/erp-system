@@ -49,6 +49,8 @@ describe('PaymentCategory e2e test', () => {
       paymentCategoryUpdatePage.setCategoryNameInput('categoryName'),
       paymentCategoryUpdatePage.setCategoryDescriptionInput('categoryDescription'),
       paymentCategoryUpdatePage.categoryTypeSelectLastOption(),
+      paymentCategoryUpdatePage.setFileUploadTokenInput('fileUploadToken'),
+      paymentCategoryUpdatePage.setCompilationTokenInput('compilationToken'),
       // paymentCategoryUpdatePage.paymentLabelSelectLastOption(),
       // paymentCategoryUpdatePage.placeholderSelectLastOption(),
     ]);

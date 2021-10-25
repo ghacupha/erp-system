@@ -24,6 +24,8 @@ export class PaymentLabelUpdateComponent implements OnInit {
     id: [],
     description: [null, [Validators.required]],
     comments: [],
+    fileUploadToken: [],
+    compilationToken: [],
     containingPaymentLabel: [],
     placeholders: [],
   });
@@ -100,6 +102,8 @@ export class PaymentLabelUpdateComponent implements OnInit {
       id: paymentLabel.id,
       description: paymentLabel.description,
       comments: paymentLabel.comments,
+      fileUploadToken: paymentLabel.fileUploadToken,
+      compilationToken: paymentLabel.compilationToken,
       containingPaymentLabel: paymentLabel.containingPaymentLabel,
       placeholders: paymentLabel.placeholders,
     });
@@ -142,6 +146,8 @@ export class PaymentLabelUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       description: this.editForm.get(['description'])!.value,
       comments: this.editForm.get(['comments'])!.value,
+      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
+      compilationToken: this.editForm.get(['compilationToken'])!.value,
       containingPaymentLabel: this.editForm.get(['containingPaymentLabel'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
     };

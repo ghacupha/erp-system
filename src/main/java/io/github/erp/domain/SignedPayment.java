@@ -47,6 +47,12 @@ public class SignedPayment implements Serializable {
     @Column(name = "transaction_amount", precision = 21, scale = 2, nullable = false)
     private BigDecimal transactionAmount;
 
+    @Column(name = "file_upload_token")
+    private String fileUploadToken;
+
+    @Column(name = "compilation_token")
+    private String compilationToken;
+
     @ManyToMany
     @JoinTable(
         name = "rel_signed_payment__payment_label",
@@ -150,6 +156,32 @@ public class SignedPayment implements Serializable {
 
     public void setTransactionAmount(BigDecimal transactionAmount) {
         this.transactionAmount = transactionAmount;
+    }
+
+    public String getFileUploadToken() {
+        return this.fileUploadToken;
+    }
+
+    public SignedPayment fileUploadToken(String fileUploadToken) {
+        this.setFileUploadToken(fileUploadToken);
+        return this;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return this.compilationToken;
+    }
+
+    public SignedPayment compilationToken(String compilationToken) {
+        this.setCompilationToken(compilationToken);
+        return this;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
     }
 
     public Set<PaymentLabel> getPaymentLabels() {
@@ -265,6 +297,8 @@ public class SignedPayment implements Serializable {
             ", transactionDate='" + getTransactionDate() + "'" +
             ", transactionCurrency='" + getTransactionCurrency() + "'" +
             ", transactionAmount=" + getTransactionAmount() +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             "}";
     }
 }

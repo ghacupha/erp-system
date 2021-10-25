@@ -28,6 +28,10 @@ public class TaxRuleDTO implements Serializable {
 
     private Double withholdingTaxImportedService;
 
+    private String fileUploadToken;
+
+    private String compilationToken;
+
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     public Long getId() {
@@ -102,6 +106,22 @@ public class TaxRuleDTO implements Serializable {
         this.withholdingTaxImportedService = withholdingTaxImportedService;
     }
 
+    public String getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return compilationToken;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public Set<PlaceholderDTO> getPlaceholders() {
         return placeholders;
     }
@@ -144,6 +164,8 @@ public class TaxRuleDTO implements Serializable {
             ", cateringLevy=" + getCateringLevy() +
             ", serviceCharge=" + getServiceCharge() +
             ", withholdingTaxImportedService=" + getWithholdingTaxImportedService() +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             ", placeholders=" + getPlaceholders() +
             "}";
     }

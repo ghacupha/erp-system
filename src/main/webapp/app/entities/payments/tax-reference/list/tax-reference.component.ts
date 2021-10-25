@@ -78,7 +78,7 @@ export class TaxReferenceComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['taxName', 'taxDescription', 'taxReferenceType'].includes(this.predicate)) {
+    if (query && ['taxName', 'taxDescription', 'taxReferenceType', 'fileUploadToken', 'compilationToken'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }

@@ -29,6 +29,10 @@ public class SignedPaymentDTO implements Serializable {
     @DecimalMin(value = "0")
     private BigDecimal transactionAmount;
 
+    private String fileUploadToken;
+
+    private String compilationToken;
+
     private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
 
     private DealerDTO dealer;
@@ -77,6 +81,22 @@ public class SignedPaymentDTO implements Serializable {
 
     public void setTransactionAmount(BigDecimal transactionAmount) {
         this.transactionAmount = transactionAmount;
+    }
+
+    public String getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return compilationToken;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
     }
 
     public Set<PaymentLabelDTO> getPaymentLabels() {
@@ -149,6 +169,8 @@ public class SignedPaymentDTO implements Serializable {
             ", transactionDate='" + getTransactionDate() + "'" +
             ", transactionCurrency='" + getTransactionCurrency() + "'" +
             ", transactionAmount=" + getTransactionAmount() +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             ", paymentLabels=" + getPaymentLabels() +
             ", dealer=" + getDealer() +
             ", paymentCategory=" + getPaymentCategory() +

@@ -54,6 +54,8 @@ describe('PaymentCalculation e2e test', () => {
       paymentCalculationUpdatePage.setWithholdingVATInput('5'),
       paymentCalculationUpdatePage.setWithholdingTaxInput('5'),
       paymentCalculationUpdatePage.setPaymentAmountInput('5'),
+      paymentCalculationUpdatePage.setFileUploadTokenInput('fileUploadToken'),
+      paymentCalculationUpdatePage.setCompilationTokenInput('compilationToken'),
       // paymentCalculationUpdatePage.paymentLabelSelectLastOption(),
       paymentCalculationUpdatePage.paymentCategorySelectLastOption(),
       // paymentCalculationUpdatePage.placeholderSelectLastOption(),

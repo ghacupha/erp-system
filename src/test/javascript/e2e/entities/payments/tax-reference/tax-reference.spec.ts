@@ -50,6 +50,8 @@ describe('TaxReference e2e test', () => {
       taxReferenceUpdatePage.setTaxDescriptionInput('taxDescription'),
       taxReferenceUpdatePage.setTaxPercentageInput('5'),
       taxReferenceUpdatePage.taxReferenceTypeSelectLastOption(),
+      taxReferenceUpdatePage.setFileUploadTokenInput('fileUploadToken'),
+      taxReferenceUpdatePage.setCompilationTokenInput('compilationToken'),
       // taxReferenceUpdatePage.placeholderSelectLastOption(),
     ]);
 

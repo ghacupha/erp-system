@@ -34,6 +34,8 @@ export class PaymentCalculationUpdatePage {
   withholdingVATInput = element(by.id('field_withholdingVAT'));
   withholdingTaxInput = element(by.id('field_withholdingTax'));
   paymentAmountInput = element(by.id('field_paymentAmount'));
+  fileUploadTokenInput = element(by.id('field_fileUploadToken'));
+  compilationTokenInput = element(by.id('field_compilationToken'));
 
   paymentLabelSelect = element(by.id('field_paymentLabel'));
   paymentCategorySelect = element(by.id('field_paymentCategory'));
@@ -81,6 +83,22 @@ export class PaymentCalculationUpdatePage {
 
   async getPaymentAmountInput(): Promise<string> {
     return await this.paymentAmountInput.getAttribute('value');
+  }
+
+  async setFileUploadTokenInput(fileUploadToken: string): Promise<void> {
+    await this.fileUploadTokenInput.sendKeys(fileUploadToken);
+  }
+
+  async getFileUploadTokenInput(): Promise<string> {
+    return await this.fileUploadTokenInput.getAttribute('value');
+  }
+
+  async setCompilationTokenInput(compilationToken: string): Promise<void> {
+    await this.compilationTokenInput.sendKeys(compilationToken);
+  }
+
+  async getCompilationTokenInput(): Promise<string> {
+    return await this.compilationTokenInput.getAttribute('value');
   }
 
   async paymentLabelSelectLastOption(): Promise<void> {

@@ -24,6 +24,10 @@ public class TaxReferenceDTO implements Serializable {
     @NotNull
     private taxReferenceTypes taxReferenceType;
 
+    private String fileUploadToken;
+
+    private String compilationToken;
+
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     public Long getId() {
@@ -66,6 +70,22 @@ public class TaxReferenceDTO implements Serializable {
         this.taxReferenceType = taxReferenceType;
     }
 
+    public String getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return compilationToken;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public Set<PlaceholderDTO> getPlaceholders() {
         return placeholders;
     }
@@ -104,6 +124,8 @@ public class TaxReferenceDTO implements Serializable {
             ", taxDescription='" + getTaxDescription() + "'" +
             ", taxPercentage=" + getTaxPercentage() +
             ", taxReferenceType='" + getTaxReferenceType() + "'" +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             ", placeholders=" + getPlaceholders() +
             "}";
     }

@@ -37,6 +37,10 @@ public class PaymentDTO implements Serializable {
     @DecimalMin(value = "1.00")
     private Double conversionRate;
 
+    private String fileUploadToken;
+
+    private String compilationToken;
+
     private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
 
     private DealerDTO dealer;
@@ -131,6 +135,22 @@ public class PaymentDTO implements Serializable {
         this.conversionRate = conversionRate;
     }
 
+    public String getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return compilationToken;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public Set<PaymentLabelDTO> getPaymentLabels() {
         return paymentLabels;
     }
@@ -222,6 +242,8 @@ public class PaymentDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", settlementCurrency='" + getSettlementCurrency() + "'" +
             ", conversionRate=" + getConversionRate() +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             ", paymentLabels=" + getPaymentLabels() +
             ", dealer=" + getDealer() +
             ", paymentCategory=" + getPaymentCategory() +

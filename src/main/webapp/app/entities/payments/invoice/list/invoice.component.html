@@ -58,6 +58,12 @@
           <th scope="col" jhiSortBy="conversionRate"><span>Conversion Rate</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentId"><span>Payment Id</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="dealerId"><span>Dealer Id</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fileUploadToken">
+            <span>File Upload Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="compilationToken">
+            <span>Compilation Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -73,6 +79,8 @@
           <td>{{ invoice.conversionRate }}</td>
           <td>{{ invoice.paymentId }}</td>
           <td>{{ invoice.dealerId }}</td>
+          <td>{{ invoice.fileUploadToken }}</td>
+          <td>{{ invoice.compilationToken }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button

@@ -49,6 +49,12 @@ public class TaxRule implements Serializable {
     @Column(name = "withholding_tax_imported_service")
     private Double withholdingTaxImportedService;
 
+    @Column(name = "file_upload_token")
+    private String fileUploadToken;
+
+    @Column(name = "compilation_token")
+    private String compilationToken;
+
     @OneToMany(mappedBy = "taxRule")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
@@ -186,6 +192,32 @@ public class TaxRule implements Serializable {
         this.withholdingTaxImportedService = withholdingTaxImportedService;
     }
 
+    public String getFileUploadToken() {
+        return this.fileUploadToken;
+    }
+
+    public TaxRule fileUploadToken(String fileUploadToken) {
+        this.setFileUploadToken(fileUploadToken);
+        return this;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return this.compilationToken;
+    }
+
+    public TaxRule compilationToken(String compilationToken) {
+        this.setCompilationToken(compilationToken);
+        return this;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public Set<Payment> getPayments() {
         return this.payments;
     }
@@ -272,6 +304,8 @@ public class TaxRule implements Serializable {
             ", cateringLevy=" + getCateringLevy() +
             ", serviceCharge=" + getServiceCharge() +
             ", withholdingTaxImportedService=" + getWithholdingTaxImportedService() +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             "}";
     }
 }

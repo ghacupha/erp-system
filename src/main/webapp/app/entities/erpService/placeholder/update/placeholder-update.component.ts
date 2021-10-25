@@ -21,6 +21,8 @@ export class PlaceholderUpdateComponent implements OnInit {
     id: [],
     description: [null, [Validators.required]],
     token: [null, []],
+    fileUploadToken: [],
+    compilationToken: [],
     containingPlaceholder: [],
   });
 
@@ -76,6 +78,8 @@ export class PlaceholderUpdateComponent implements OnInit {
       id: placeholder.id,
       description: placeholder.description,
       token: placeholder.token,
+      fileUploadToken: placeholder.fileUploadToken,
+      compilationToken: placeholder.compilationToken,
       containingPlaceholder: placeholder.containingPlaceholder,
     });
 
@@ -103,6 +107,8 @@ export class PlaceholderUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       description: this.editForm.get(['description'])!.value,
       token: this.editForm.get(['token'])!.value,
+      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
+      compilationToken: this.editForm.get(['compilationToken'])!.value,
       containingPlaceholder: this.editForm.get(['containingPlaceholder'])!.value,
     };
   }

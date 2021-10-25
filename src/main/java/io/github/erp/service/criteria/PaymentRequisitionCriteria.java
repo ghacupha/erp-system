@@ -33,6 +33,10 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter vatableAmount;
 
+    private StringFilter fileUploadToken;
+
+    private StringFilter compilationToken;
+
     private LongFilter paymentLabelId;
 
     private LongFilter dealerId;
@@ -48,6 +52,8 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
         this.invoicedAmount = other.invoicedAmount == null ? null : other.invoicedAmount.copy();
         this.disbursementCost = other.disbursementCost == null ? null : other.disbursementCost.copy();
         this.vatableAmount = other.vatableAmount == null ? null : other.vatableAmount.copy();
+        this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
+        this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
         this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
@@ -119,6 +125,36 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
         this.vatableAmount = vatableAmount;
     }
 
+    public StringFilter getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public StringFilter fileUploadToken() {
+        if (fileUploadToken == null) {
+            fileUploadToken = new StringFilter();
+        }
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(StringFilter fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public StringFilter getCompilationToken() {
+        return compilationToken;
+    }
+
+    public StringFilter compilationToken() {
+        if (compilationToken == null) {
+            compilationToken = new StringFilter();
+        }
+        return compilationToken;
+    }
+
+    public void setCompilationToken(StringFilter compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public LongFilter getPaymentLabelId() {
         return paymentLabelId;
     }
@@ -186,6 +222,8 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
             Objects.equals(invoicedAmount, that.invoicedAmount) &&
             Objects.equals(disbursementCost, that.disbursementCost) &&
             Objects.equals(vatableAmount, that.vatableAmount) &&
+            Objects.equals(fileUploadToken, that.fileUploadToken) &&
+            Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
             Objects.equals(dealerId, that.dealerId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
@@ -195,7 +233,18 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, invoicedAmount, disbursementCost, vatableAmount, paymentLabelId, dealerId, placeholderId, distinct);
+        return Objects.hash(
+            id,
+            invoicedAmount,
+            disbursementCost,
+            vatableAmount,
+            fileUploadToken,
+            compilationToken,
+            paymentLabelId,
+            dealerId,
+            placeholderId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -206,6 +255,8 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
             (invoicedAmount != null ? "invoicedAmount=" + invoicedAmount + ", " : "") +
             (disbursementCost != null ? "disbursementCost=" + disbursementCost + ", " : "") +
             (vatableAmount != null ? "vatableAmount=" + vatableAmount + ", " : "") +
+            (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +
+            (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
             (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +

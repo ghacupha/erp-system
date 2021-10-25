@@ -22,6 +22,10 @@ public class PaymentCategoryDTO implements Serializable {
     @NotNull
     private CategoryTypes categoryType;
 
+    private String fileUploadToken;
+
+    private String compilationToken;
+
     private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
@@ -56,6 +60,22 @@ public class PaymentCategoryDTO implements Serializable {
 
     public void setCategoryType(CategoryTypes categoryType) {
         this.categoryType = categoryType;
+    }
+
+    public String getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return compilationToken;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
     }
 
     public Set<PaymentLabelDTO> getPaymentLabels() {
@@ -103,6 +123,8 @@ public class PaymentCategoryDTO implements Serializable {
             ", categoryName='" + getCategoryName() + "'" +
             ", categoryDescription='" + getCategoryDescription() + "'" +
             ", categoryType='" + getCategoryType() + "'" +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             ", paymentLabels=" + getPaymentLabels() +
             ", placeholders=" + getPlaceholders() +
             "}";

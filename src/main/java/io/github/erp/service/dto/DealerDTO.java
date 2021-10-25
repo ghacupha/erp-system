@@ -32,6 +32,10 @@ public class DealerDTO implements Serializable {
 
     private String bankersSwiftCode;
 
+    private String fileUploadToken;
+
+    private String compilationToken;
+
     private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
 
     private DealerDTO dealerGroup;
@@ -118,6 +122,22 @@ public class DealerDTO implements Serializable {
         this.bankersSwiftCode = bankersSwiftCode;
     }
 
+    public String getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return compilationToken;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public Set<PaymentLabelDTO> getPaymentLabels() {
         return paymentLabels;
     }
@@ -177,6 +197,8 @@ public class DealerDTO implements Serializable {
             ", bankersName='" + getBankersName() + "'" +
             ", bankersBranch='" + getBankersBranch() + "'" +
             ", bankersSwiftCode='" + getBankersSwiftCode() + "'" +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             ", paymentLabels=" + getPaymentLabels() +
             ", dealerGroup=" + getDealerGroup() +
             ", placeholders=" + getPlaceholders() +

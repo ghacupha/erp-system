@@ -14,6 +14,8 @@ export interface IDealer {
   bankersName?: string | null;
   bankersBranch?: string | null;
   bankersSwiftCode?: string | null;
+  fileUploadToken?: string | null;
+  compilationToken?: string | null;
   paymentLabels?: IPaymentLabel[] | null;
   dealerGroup?: IDealer | null;
   paymentRequisitions?: IPaymentRequisition[] | null;
@@ -33,6 +35,8 @@ export class Dealer implements IDealer {
     public bankersName?: string | null,
     public bankersBranch?: string | null,
     public bankersSwiftCode?: string | null,
+    public fileUploadToken?: string | null,
+    public compilationToken?: string | null,
     public paymentLabels?: IPaymentLabel[] | null,
     public dealerGroup?: IDealer | null,
     public paymentRequisitions?: IPaymentRequisition[] | null,

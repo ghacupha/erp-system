@@ -34,6 +34,8 @@ export class TaxReferenceUpdatePage {
   taxDescriptionInput = element(by.id('field_taxDescription'));
   taxPercentageInput = element(by.id('field_taxPercentage'));
   taxReferenceTypeSelect = element(by.id('field_taxReferenceType'));
+  fileUploadTokenInput = element(by.id('field_fileUploadToken'));
+  compilationTokenInput = element(by.id('field_compilationToken'));
 
   placeholderSelect = element(by.id('field_placeholder'));
 
@@ -83,6 +85,22 @@ export class TaxReferenceUpdatePage {
 
   async taxReferenceTypeSelectLastOption(): Promise<void> {
     await this.taxReferenceTypeSelect.all(by.tagName('option')).last().click();
+  }
+
+  async setFileUploadTokenInput(fileUploadToken: string): Promise<void> {
+    await this.fileUploadTokenInput.sendKeys(fileUploadToken);
+  }
+
+  async getFileUploadTokenInput(): Promise<string> {
+    return await this.fileUploadTokenInput.getAttribute('value');
+  }
+
+  async setCompilationTokenInput(compilationToken: string): Promise<void> {
+    await this.compilationTokenInput.sendKeys(compilationToken);
+  }
+
+  async getCompilationTokenInput(): Promise<string> {
+    return await this.compilationTokenInput.getAttribute('value');
   }
 
   async placeholderSelectLastOption(): Promise<void> {

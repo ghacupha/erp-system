@@ -11,6 +11,8 @@ export interface ISignedPayment {
   transactionDate?: dayjs.Dayjs;
   transactionCurrency?: CurrencyTypes;
   transactionAmount?: number;
+  fileUploadToken?: string | null;
+  compilationToken?: string | null;
   paymentLabels?: IPaymentLabel[] | null;
   dealer?: IDealer | null;
   paymentCategory?: IPaymentCategory | null;
@@ -25,6 +27,8 @@ export class SignedPayment implements ISignedPayment {
     public transactionDate?: dayjs.Dayjs,
     public transactionCurrency?: CurrencyTypes,
     public transactionAmount?: number,
+    public fileUploadToken?: string | null,
+    public compilationToken?: string | null,
     public paymentLabels?: IPaymentLabel[] | null,
     public dealer?: IDealer | null,
     public paymentCategory?: IPaymentCategory | null,

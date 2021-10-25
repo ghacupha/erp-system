@@ -75,6 +75,12 @@ class DealerResourceIT {
     private static final String DEFAULT_BANKERS_SWIFT_CODE = "AAAAAAAAAA";
     private static final String UPDATED_BANKERS_SWIFT_CODE = "BBBBBBBBBB";
 
+    private static final String DEFAULT_FILE_UPLOAD_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_FILE_UPLOAD_TOKEN = "BBBBBBBBBB";
+
+    private static final String DEFAULT_COMPILATION_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_COMPILATION_TOKEN = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/dealers";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/dealers";
@@ -126,7 +132,9 @@ class DealerResourceIT {
             .accountNumber(DEFAULT_ACCOUNT_NUMBER)
             .bankersName(DEFAULT_BANKERS_NAME)
             .bankersBranch(DEFAULT_BANKERS_BRANCH)
-            .bankersSwiftCode(DEFAULT_BANKERS_SWIFT_CODE);
+            .bankersSwiftCode(DEFAULT_BANKERS_SWIFT_CODE)
+            .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
+            .compilationToken(DEFAULT_COMPILATION_TOKEN);
         return dealer;
     }
 
@@ -146,7 +154,9 @@ class DealerResourceIT {
             .accountNumber(UPDATED_ACCOUNT_NUMBER)
             .bankersName(UPDATED_BANKERS_NAME)
             .bankersBranch(UPDATED_BANKERS_BRANCH)
-            .bankersSwiftCode(UPDATED_BANKERS_SWIFT_CODE);
+            .bankersSwiftCode(UPDATED_BANKERS_SWIFT_CODE)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         return dealer;
     }
 
@@ -178,6 +188,8 @@ class DealerResourceIT {
         assertThat(testDealer.getBankersName()).isEqualTo(DEFAULT_BANKERS_NAME);
         assertThat(testDealer.getBankersBranch()).isEqualTo(DEFAULT_BANKERS_BRANCH);
         assertThat(testDealer.getBankersSwiftCode()).isEqualTo(DEFAULT_BANKERS_SWIFT_CODE);
+        assertThat(testDealer.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
+        assertThat(testDealer.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
 
         // Validate the Dealer in Elasticsearch
         verify(mockDealerSearchRepository, times(1)).save(testDealer);
@@ -243,7 +255,9 @@ class DealerResourceIT {
             .andExpect(jsonPath("$.[*].accountNumber").value(hasItem(DEFAULT_ACCOUNT_NUMBER)))
             .andExpect(jsonPath("$.[*].bankersName").value(hasItem(DEFAULT_BANKERS_NAME)))
             .andExpect(jsonPath("$.[*].bankersBranch").value(hasItem(DEFAULT_BANKERS_BRANCH)))
-            .andExpect(jsonPath("$.[*].bankersSwiftCode").value(hasItem(DEFAULT_BANKERS_SWIFT_CODE)));
+            .andExpect(jsonPath("$.[*].bankersSwiftCode").value(hasItem(DEFAULT_BANKERS_SWIFT_CODE)))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -284,7 +298,9 @@ class DealerResourceIT {
             .andExpect(jsonPath("$.accountNumber").value(DEFAULT_ACCOUNT_NUMBER))
             .andExpect(jsonPath("$.bankersName").value(DEFAULT_BANKERS_NAME))
             .andExpect(jsonPath("$.bankersBranch").value(DEFAULT_BANKERS_BRANCH))
-            .andExpect(jsonPath("$.bankersSwiftCode").value(DEFAULT_BANKERS_SWIFT_CODE));
+            .andExpect(jsonPath("$.bankersSwiftCode").value(DEFAULT_BANKERS_SWIFT_CODE))
+            .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
+            .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN));
     }
 
     @Test
@@ -1009,6 +1025,162 @@ class DealerResourceIT {
 
     @Test
     @Transactional
+    void getAllDealersByFileUploadTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        dealerRepository.saveAndFlush(dealer);
+
+        // Get all the dealerList where fileUploadToken equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultDealerShouldBeFound("fileUploadToken.equals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the dealerList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultDealerShouldNotBeFound("fileUploadToken.equals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDealersByFileUploadTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        dealerRepository.saveAndFlush(dealer);
+
+        // Get all the dealerList where fileUploadToken not equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultDealerShouldNotBeFound("fileUploadToken.notEquals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the dealerList where fileUploadToken not equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultDealerShouldBeFound("fileUploadToken.notEquals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDealersByFileUploadTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        dealerRepository.saveAndFlush(dealer);
+
+        // Get all the dealerList where fileUploadToken in DEFAULT_FILE_UPLOAD_TOKEN or UPDATED_FILE_UPLOAD_TOKEN
+        defaultDealerShouldBeFound("fileUploadToken.in=" + DEFAULT_FILE_UPLOAD_TOKEN + "," + UPDATED_FILE_UPLOAD_TOKEN);
+
+        // Get all the dealerList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultDealerShouldNotBeFound("fileUploadToken.in=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDealersByFileUploadTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        dealerRepository.saveAndFlush(dealer);
+
+        // Get all the dealerList where fileUploadToken is not null
+        defaultDealerShouldBeFound("fileUploadToken.specified=true");
+
+        // Get all the dealerList where fileUploadToken is null
+        defaultDealerShouldNotBeFound("fileUploadToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDealersByFileUploadTokenContainsSomething() throws Exception {
+        // Initialize the database
+        dealerRepository.saveAndFlush(dealer);
+
+        // Get all the dealerList where fileUploadToken contains DEFAULT_FILE_UPLOAD_TOKEN
+        defaultDealerShouldBeFound("fileUploadToken.contains=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the dealerList where fileUploadToken contains UPDATED_FILE_UPLOAD_TOKEN
+        defaultDealerShouldNotBeFound("fileUploadToken.contains=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDealersByFileUploadTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        dealerRepository.saveAndFlush(dealer);
+
+        // Get all the dealerList where fileUploadToken does not contain DEFAULT_FILE_UPLOAD_TOKEN
+        defaultDealerShouldNotBeFound("fileUploadToken.doesNotContain=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the dealerList where fileUploadToken does not contain UPDATED_FILE_UPLOAD_TOKEN
+        defaultDealerShouldBeFound("fileUploadToken.doesNotContain=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDealersByCompilationTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        dealerRepository.saveAndFlush(dealer);
+
+        // Get all the dealerList where compilationToken equals to DEFAULT_COMPILATION_TOKEN
+        defaultDealerShouldBeFound("compilationToken.equals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the dealerList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultDealerShouldNotBeFound("compilationToken.equals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDealersByCompilationTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        dealerRepository.saveAndFlush(dealer);
+
+        // Get all the dealerList where compilationToken not equals to DEFAULT_COMPILATION_TOKEN
+        defaultDealerShouldNotBeFound("compilationToken.notEquals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the dealerList where compilationToken not equals to UPDATED_COMPILATION_TOKEN
+        defaultDealerShouldBeFound("compilationToken.notEquals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDealersByCompilationTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        dealerRepository.saveAndFlush(dealer);
+
+        // Get all the dealerList where compilationToken in DEFAULT_COMPILATION_TOKEN or UPDATED_COMPILATION_TOKEN
+        defaultDealerShouldBeFound("compilationToken.in=" + DEFAULT_COMPILATION_TOKEN + "," + UPDATED_COMPILATION_TOKEN);
+
+        // Get all the dealerList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultDealerShouldNotBeFound("compilationToken.in=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDealersByCompilationTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        dealerRepository.saveAndFlush(dealer);
+
+        // Get all the dealerList where compilationToken is not null
+        defaultDealerShouldBeFound("compilationToken.specified=true");
+
+        // Get all the dealerList where compilationToken is null
+        defaultDealerShouldNotBeFound("compilationToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDealersByCompilationTokenContainsSomething() throws Exception {
+        // Initialize the database
+        dealerRepository.saveAndFlush(dealer);
+
+        // Get all the dealerList where compilationToken contains DEFAULT_COMPILATION_TOKEN
+        defaultDealerShouldBeFound("compilationToken.contains=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the dealerList where compilationToken contains UPDATED_COMPILATION_TOKEN
+        defaultDealerShouldNotBeFound("compilationToken.contains=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDealersByCompilationTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        dealerRepository.saveAndFlush(dealer);
+
+        // Get all the dealerList where compilationToken does not contain DEFAULT_COMPILATION_TOKEN
+        defaultDealerShouldNotBeFound("compilationToken.doesNotContain=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the dealerList where compilationToken does not contain UPDATED_COMPILATION_TOKEN
+        defaultDealerShouldBeFound("compilationToken.doesNotContain=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
     void getAllDealersByPaymentLabelIsEqualToSomething() throws Exception {
         // Initialize the database
         dealerRepository.saveAndFlush(dealer);
@@ -1154,7 +1326,9 @@ class DealerResourceIT {
             .andExpect(jsonPath("$.[*].accountNumber").value(hasItem(DEFAULT_ACCOUNT_NUMBER)))
             .andExpect(jsonPath("$.[*].bankersName").value(hasItem(DEFAULT_BANKERS_NAME)))
             .andExpect(jsonPath("$.[*].bankersBranch").value(hasItem(DEFAULT_BANKERS_BRANCH)))
-            .andExpect(jsonPath("$.[*].bankersSwiftCode").value(hasItem(DEFAULT_BANKERS_SWIFT_CODE)));
+            .andExpect(jsonPath("$.[*].bankersSwiftCode").value(hasItem(DEFAULT_BANKERS_SWIFT_CODE)))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
 
         // Check, that the count call also returns 1
         restDealerMockMvc
@@ -1211,7 +1385,9 @@ class DealerResourceIT {
             .accountNumber(UPDATED_ACCOUNT_NUMBER)
             .bankersName(UPDATED_BANKERS_NAME)
             .bankersBranch(UPDATED_BANKERS_BRANCH)
-            .bankersSwiftCode(UPDATED_BANKERS_SWIFT_CODE);
+            .bankersSwiftCode(UPDATED_BANKERS_SWIFT_CODE)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         DealerDTO dealerDTO = dealerMapper.toDto(updatedDealer);
 
         restDealerMockMvc
@@ -1235,6 +1411,8 @@ class DealerResourceIT {
         assertThat(testDealer.getBankersName()).isEqualTo(UPDATED_BANKERS_NAME);
         assertThat(testDealer.getBankersBranch()).isEqualTo(UPDATED_BANKERS_BRANCH);
         assertThat(testDealer.getBankersSwiftCode()).isEqualTo(UPDATED_BANKERS_SWIFT_CODE);
+        assertThat(testDealer.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testDealer.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
 
         // Validate the Dealer in Elasticsearch
         verify(mockDealerSearchRepository).save(testDealer);
@@ -1332,7 +1510,8 @@ class DealerResourceIT {
             .accountName(UPDATED_ACCOUNT_NAME)
             .accountNumber(UPDATED_ACCOUNT_NUMBER)
             .bankersBranch(UPDATED_BANKERS_BRANCH)
-            .bankersSwiftCode(UPDATED_BANKERS_SWIFT_CODE);
+            .bankersSwiftCode(UPDATED_BANKERS_SWIFT_CODE)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
 
         restDealerMockMvc
             .perform(
@@ -1355,6 +1534,8 @@ class DealerResourceIT {
         assertThat(testDealer.getBankersName()).isEqualTo(DEFAULT_BANKERS_NAME);
         assertThat(testDealer.getBankersBranch()).isEqualTo(UPDATED_BANKERS_BRANCH);
         assertThat(testDealer.getBankersSwiftCode()).isEqualTo(UPDATED_BANKERS_SWIFT_CODE);
+        assertThat(testDealer.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
+        assertThat(testDealer.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
 
     @Test
@@ -1378,7 +1559,9 @@ class DealerResourceIT {
             .accountNumber(UPDATED_ACCOUNT_NUMBER)
             .bankersName(UPDATED_BANKERS_NAME)
             .bankersBranch(UPDATED_BANKERS_BRANCH)
-            .bankersSwiftCode(UPDATED_BANKERS_SWIFT_CODE);
+            .bankersSwiftCode(UPDATED_BANKERS_SWIFT_CODE)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
 
         restDealerMockMvc
             .perform(
@@ -1401,6 +1584,8 @@ class DealerResourceIT {
         assertThat(testDealer.getBankersName()).isEqualTo(UPDATED_BANKERS_NAME);
         assertThat(testDealer.getBankersBranch()).isEqualTo(UPDATED_BANKERS_BRANCH);
         assertThat(testDealer.getBankersSwiftCode()).isEqualTo(UPDATED_BANKERS_SWIFT_CODE);
+        assertThat(testDealer.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testDealer.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
 
     @Test
@@ -1523,6 +1708,8 @@ class DealerResourceIT {
             .andExpect(jsonPath("$.[*].accountNumber").value(hasItem(DEFAULT_ACCOUNT_NUMBER)))
             .andExpect(jsonPath("$.[*].bankersName").value(hasItem(DEFAULT_BANKERS_NAME)))
             .andExpect(jsonPath("$.[*].bankersBranch").value(hasItem(DEFAULT_BANKERS_BRANCH)))
-            .andExpect(jsonPath("$.[*].bankersSwiftCode").value(hasItem(DEFAULT_BANKERS_SWIFT_CODE)));
+            .andExpect(jsonPath("$.[*].bankersSwiftCode").value(hasItem(DEFAULT_BANKERS_SWIFT_CODE)))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 }
