@@ -17,9 +17,7 @@ package io.github.erp.internal.framework.excel;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.internal.model.FixedAssetAcquisitionEVM;
-import io.github.erp.internal.model.FixedAssetDepreciationEVM;
-import io.github.erp.internal.model.FixedAssetNetBookValueEVM;
+import io.github.erp.internal.model.*;
 import io.github.erp.internal.service.ExcelDeserializerContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -122,6 +120,50 @@ public class ExcelFileUtilsTest {
                         .assetCategory("ASSET_CATEGORY " + index)
                         .netBookValue(1.1 + i)
                         .depreciationRegime("DEPRECIATION REGIME " + index)
+                        .build()
+                );
+        }
+    }
+
+    @Test
+    public void paymentLabelListFile() throws Exception {
+        ExcelFileDeserializer<PaymentLabelEVM> deserializer = container.paymentLabelExcelFileDeserializer();
+
+        List<PaymentLabelEVM> evms = deserializer.deserialize(toBytes(readFile("paymentLabel.xlsx")));
+
+        assertThat(evms.size()).isEqualTo(13);
+
+        for (int i = 0; i < 13; i++) {
+            String index = String.valueOf(i + 1);
+            assertThat(evms.get(i))
+                .isEqualTo(
+                    PaymentLabelEVM
+                        .builder()
+                        .rowIndex((long) (i + 1))
+                        .description("paymentDescription" + index)
+                        .comments("paymentComment" + index)
+                        .build()
+                );
+        }
+    }
+    @Test
+    public void paymentCategoryListFile() throws Exception {
+        ExcelFileDeserializer<PaymentCategoryEVM> deserializer = container.paymentCategoryExcelFileDeserializer();
+
+        List<PaymentCategoryEVM> evms = deserializer.deserialize(toBytes(readFile("paymentCategory.xlsx")));
+
+        assertThat(evms.size()).isEqualTo(13);
+
+        for (int i = 0; i < 13; i++) {
+            String index = String.valueOf(i + 1);
+            assertThat(evms.get(i))
+                .isEqualTo(
+                    PaymentCategoryEVM
+                        .builder()
+                        .rowIndex((long) (i + 1))
+                        .categoryName("categoryName" + index)
+                        .categoryDescription("categoryDescription" + index)
+                        .categoryType("categoryType" + index)
                         .build()
                 );
         }
