@@ -19,9 +19,7 @@ package io.github.erp.internal.service;
  */
 import io.github.erp.internal.framework.excel.DefaultExcelFileDeserializer;
 import io.github.erp.internal.framework.excel.ExcelFileDeserializer;
-import io.github.erp.internal.model.FixedAssetAcquisitionEVM;
-import io.github.erp.internal.model.FixedAssetDepreciationEVM;
-import io.github.erp.internal.model.FixedAssetNetBookValueEVM;
+import io.github.erp.internal.model.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -46,5 +44,15 @@ public class ExcelDeserializerContainer {
     @Bean("fixedAssetNetBookValueExcelFileDeserializer")
     public ExcelFileDeserializer<FixedAssetNetBookValueEVM> fixedAssetNetBookValueExcelFileDeserializer() {
         return excelFile -> new DefaultExcelFileDeserializer<>(FixedAssetNetBookValueEVM.class, getDefaultPoijiOptions()).deserialize(excelFile);
+    }
+
+    @Bean("paymentLabelExcelFileDeserializer")
+    public ExcelFileDeserializer<PaymentLabelEVM> paymentLabelExcelFileDeserializer() {
+        return excelFile -> new DefaultExcelFileDeserializer<>(PaymentLabelEVM.class, getDefaultPoijiOptions()).deserialize(excelFile);
+    }
+
+    @Bean("paymentCategoryExcelFileDeserializer")
+    public ExcelFileDeserializer<PaymentCategoryEVM> paymentCategoryExcelFileDeserializer() {
+        return excelFile -> new DefaultExcelFileDeserializer<>(PaymentCategoryEVM.class, getDefaultPoijiOptions()).deserialize(excelFile);
     }
 }
