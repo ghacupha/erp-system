@@ -11,6 +11,9 @@ import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.mo
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import {IPaymentLabel} from '../../../payment-label/payment-label.model';
 import {PaymentLabelService} from '../../../payment-label/service/payment-label.service';
+import {Store} from "@ngrx/store";
+import {State} from "../../../../store/global-store.definition";
+import {dealerInvoiceStateReset} from "../../../../store/actions/dealer-invoice-workflows-status.actions";
 
 @Component({
   selector: 'jhi-invoice-update',
@@ -40,7 +43,8 @@ export class InvoiceUpdateComponent implements OnInit {
     protected paymentLabelService: PaymentLabelService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected store: Store<State>
   ) {}
 
   ngOnInit(): void {
@@ -111,6 +115,8 @@ export class InvoiceUpdateComponent implements OnInit {
   }
 
   protected onSaveFinalize(): void {
+    // TODO Amend accordingly if need be to update payment in this progression
+    this.store.dispatch(dealerInvoiceStateReset());
     this.isSaving = false;
   }
 
