@@ -73,6 +73,14 @@
     {
       "fieldName": "bankersSwiftCode",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "fileUploadToken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "String"
     }
   ],
   "changelogDate": "20210721163636",

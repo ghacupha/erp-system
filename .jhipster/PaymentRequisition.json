@@ -37,6 +37,14 @@
     {
       "fieldName": "vatableAmount",
       "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "fileUploadToken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "String"
     }
   ],
   "changelogDate": "20210721173014",

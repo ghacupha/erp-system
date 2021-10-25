@@ -32,6 +32,14 @@
     {
       "fieldName": "dealerId",
       "fieldType": "Long"
+    },
+    {
+      "fieldName": "fileUploadToken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "String"
     }
   ],
   "relationships": [

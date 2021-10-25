@@ -30,6 +30,14 @@
       "fieldType": "taxReferenceTypes",
       "fieldValues": "TELCO_EXCISE_DUTY,VALUE_ADDED_TAX,WITHHOLDING_VAT,WITHHOLDING_TAX_ON_CONSULTANCY,WITHHOLDING_TAX_ON_RENT,CATERING_LEVY,SERVICE_CHARGE,WITHHOLDING_TAX_ON_IMPORTED_SERVICE",
       "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "fileUploadToken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "String"
     }
   ],
   "changelogDate": "20210721174739",

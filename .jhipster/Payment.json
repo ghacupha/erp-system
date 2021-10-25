@@ -39,6 +39,14 @@
       "fieldType": "Double",
       "fieldValidateRules": ["required", "min"],
       "fieldValidateRulesMin": "1.00"
+    },
+    {
+      "fieldName": "fileUploadToken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "String"
     }
   ],
   "relationships": [

@@ -49,6 +49,14 @@
     {
       "fieldName": "withholdingTaxImportedService",
       "fieldType": "Double"
+    },
+    {
+      "fieldName": "fileUploadToken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "String"
     }
   ],
   "changelogDate": "20210722140431",
