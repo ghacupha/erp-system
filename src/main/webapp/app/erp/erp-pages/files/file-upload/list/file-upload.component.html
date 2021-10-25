@@ -12,7 +12,7 @@
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-file-upload"
-        [routerLink]="['/file-upload/new']"
+        [routerLink]="['/erp/file-upload/new']"
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new File Upload </span>
@@ -66,7 +66,7 @@
       <tbody>
         <tr *ngFor="let fileUpload of fileUploads; trackBy: trackId" data-cy="entityTable">
           <td>
-            <a [routerLink]="['/file-upload', fileUpload.id, 'view']">{{ fileUpload.id }}</a>
+            <a [routerLink]="['/erp/file-upload', fileUpload.id, 'view']">{{ fileUpload.id }}</a>
           </td>
           <td>{{ fileUpload.description }}</td>
           <td>{{ fileUpload.fileName }}</td>
@@ -84,7 +84,7 @@
             <div class="btn-group">
               <button
                 type="submit"
-                [routerLink]="['/file-upload', fileUpload.id, 'view']"
+                [routerLink]="['/erp/file-upload', fileUpload.id, 'view']"
                 class="btn btn-info btn-sm"
                 data-cy="entityDetailsButton"
               >
@@ -94,7 +94,7 @@
 
               <button
                 type="submit"
-                [routerLink]="['/file-upload', fileUpload.id, 'edit']"
+                [routerLink]="['/erp/file-upload', fileUpload.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >

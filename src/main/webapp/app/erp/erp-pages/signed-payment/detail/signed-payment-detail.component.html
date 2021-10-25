@@ -33,20 +33,20 @@
         <dt><span>Payment Label</span></dt>
         <dd>
           <span *ngFor="let paymentLabel of signedPayment.paymentLabels; let last = last">
-            <a [routerLink]="['/payment-label', paymentLabel?.id, 'view']">{{ paymentLabel.description }}</a
+            <a [routerLink]="['/erp/payment-label', paymentLabel?.id, 'view']">{{ paymentLabel.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Dealer</span></dt>
         <dd>
           <div *ngIf="signedPayment.dealer">
-            <a [routerLink]="['/dealer', signedPayment.dealer?.id, 'view']">{{ signedPayment.dealer?.dealerName }}</a>
+            <a [routerLink]="['/erp/dealer', signedPayment.dealer?.id, 'view']">{{ signedPayment.dealer?.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Payment Category</span></dt>
         <dd>
           <div *ngIf="signedPayment.paymentCategory">
-            <a [routerLink]="['/payment-category', signedPayment.paymentCategory?.id, 'view']">{{
+            <a [routerLink]="['/erp/payment-category', signedPayment.paymentCategory?.id, 'view']">{{
               signedPayment.paymentCategory?.categoryName
               }}</a>
           </div>
@@ -54,14 +54,14 @@
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of signedPayment.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/erp/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Signed Payment Group</span></dt>
         <dd>
           <div *ngIf="signedPayment.signedPaymentGroup">
-            <a [routerLink]="['/signed-payment', signedPayment.signedPaymentGroup?.id, 'view']">{{
+            <a [routerLink]="['/erp/signed-payment', signedPayment.signedPaymentGroup?.id, 'view']">{{
               signedPayment.signedPaymentGroup?.id
               }}</a>
           </div>
@@ -72,7 +72,7 @@
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
       </button>
 
-      <button type="button" [routerLink]="['/signed-payment', signedPayment.id, 'edit']" class="btn btn-primary">
+      <button type="button" [routerLink]="['/erp/signed-payment', signedPayment.id, 'edit']" class="btn btn-primary">
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
       </button>
     </div>

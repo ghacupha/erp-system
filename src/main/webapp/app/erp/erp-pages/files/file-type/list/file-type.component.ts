@@ -143,7 +143,7 @@ export class FileTypeComponent implements OnInit {
     this.page = page;
     this.ngbPaginationPage = this.page;
     if (navigate) {
-      this.router.navigate(['/file-type'], {
+      this.router.navigate(['erp/file-type'], {
         queryParams: {
           page: this.page,
           size: this.itemsPerPage,

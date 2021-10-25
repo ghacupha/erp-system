@@ -12,7 +12,7 @@
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-payment-label"
-        [routerLink]="['/payment-label/new']"
+        [routerLink]="['/erp/payment-label/new']"
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Payment Label </span>
@@ -62,13 +62,13 @@
       <tbody>
         <tr *ngFor="let paymentLabel of paymentLabels; trackBy: trackId" data-cy="entityTable">
           <td>
-            <a [routerLink]="['/payment-label', paymentLabel.id, 'view']">{{ paymentLabel.id }}</a>
+            <a [routerLink]="['/erp/payment-label', paymentLabel.id, 'view']">{{ paymentLabel.id }}</a>
           </td>
           <td>{{ paymentLabel.description }}</td>
           <td>{{ paymentLabel.comments }}</td>
           <td>
             <div *ngIf="paymentLabel.containingPaymentLabel">
-              <a [routerLink]="['/payment-label', paymentLabel.containingPaymentLabel?.id, 'view']">{{
+              <a [routerLink]="['/erp/payment-label', paymentLabel.containingPaymentLabel?.id, 'view']">{{
                 paymentLabel.containingPaymentLabel?.description
               }}</a>
             </div>
@@ -77,7 +77,7 @@
             <div class="btn-group">
               <button
                 type="submit"
-                [routerLink]="['/payment-label', paymentLabel.id, 'view']"
+                [routerLink]="['/erp/payment-label', paymentLabel.id, 'view']"
                 class="btn btn-info btn-sm"
                 data-cy="entityDetailsButton"
               >
@@ -87,7 +87,7 @@
 
               <button
                 type="submit"
-                [routerLink]="['/payment-label', paymentLabel.id, 'edit']"
+                [routerLink]="['/erp/payment-label', paymentLabel.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >

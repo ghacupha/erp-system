@@ -49,7 +49,7 @@
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of taxRule.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/erp/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
@@ -59,7 +59,7 @@
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
       </button>
 
-      <button type="button" [routerLink]="['/tax-rule', taxRule.id, 'edit']" class="btn btn-primary">
+      <button type="button" [routerLink]="['/erp/tax-rule', taxRule.id, 'edit']" class="btn btn-primary">
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
       </button>
     </div>

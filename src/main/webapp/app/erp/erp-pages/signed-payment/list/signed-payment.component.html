@@ -12,7 +12,7 @@
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-signed-payment"
-        [routerLink]="['/signed-payment/new']"
+        [routerLink]="['/erp/signed-payment/new']"
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Signed Payment </span>
@@ -68,7 +68,7 @@
       <tbody>
       <tr *ngFor="let signedPayment of signedPayments; trackBy: trackId" data-cy="entityTable">
         <td>
-          <a [routerLink]="['/signed-payment', signedPayment.id, 'view']">{{ signedPayment.id }}</a>
+          <a [routerLink]="['/erp/signed-payment', signedPayment.id, 'view']">{{ signedPayment.id }}</a>
         </td>
         <td>{{ signedPayment.transactionNumber }}</td>
         <td>{{ signedPayment.transactionDate | formatMediumDate }}</td>
@@ -76,19 +76,19 @@
         <td>{{ signedPayment.transactionAmount }}</td>
         <td>
           <div *ngIf="signedPayment.dealer">
-            <a [routerLink]="['/dealer', signedPayment.dealer?.id, 'view']">{{ signedPayment.dealer?.dealerName }}</a>
+            <a [routerLink]="['/erp/dealer', signedPayment.dealer?.id, 'view']">{{ signedPayment.dealer?.dealerName }}</a>
           </div>
         </td>
         <td>
           <div *ngIf="signedPayment.paymentCategory">
-            <a [routerLink]="['/payment-category', signedPayment.paymentCategory?.id, 'view']">{{
+            <a [routerLink]="['/erp/payment-category', signedPayment.paymentCategory?.id, 'view']">{{
               signedPayment.paymentCategory?.categoryName
               }}</a>
           </div>
         </td>
         <td>
           <div *ngIf="signedPayment.signedPaymentGroup">
-            <a [routerLink]="['/signed-payment', signedPayment.signedPaymentGroup?.id, 'view']">{{
+            <a [routerLink]="['/erp/signed-payment', signedPayment.signedPaymentGroup?.id, 'view']">{{
               signedPayment.signedPaymentGroup?.id
               }}</a>
           </div>
@@ -97,7 +97,7 @@
           <div class="btn-group">
             <button
               type="submit"
-              [routerLink]="['/signed-payment', signedPayment.id, 'view']"
+              [routerLink]="['/erp/signed-payment', signedPayment.id, 'view']"
               class="btn btn-info btn-sm"
               data-cy="entityDetailsButton"
             >
@@ -107,7 +107,7 @@
 
             <button
               type="submit"
-              [routerLink]="['/signed-payment', signedPayment.id, 'edit']"
+              [routerLink]="['/erp/signed-payment', signedPayment.id, 'edit']"
               class="btn btn-primary btn-sm"
               data-cy="entityEditButton"
             >

@@ -133,7 +133,7 @@ export class PaymentLabelComponent implements OnInit {
     this.page = page;
     this.ngbPaginationPage = this.page;
     if (navigate) {
-      this.router.navigate(['/payment-label'], {
+      this.router.navigate(['/erp/payment-label'], {
         queryParams: {
           page: this.page,
           size: this.itemsPerPage,

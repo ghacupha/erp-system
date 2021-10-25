@@ -143,7 +143,7 @@ export class FileUploadComponent implements OnInit {
     this.page = page;
     this.ngbPaginationPage = this.page;
     if (navigate) {
-      this.router.navigate(['/file-upload'], {
+      this.router.navigate(['/erp/file-upload'], {
         queryParams: {
           page: this.page,
           size: this.itemsPerPage,

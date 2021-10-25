@@ -12,7 +12,7 @@
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-payment"
-        [routerLink]="['/payment/new']"
+        [routerLink]="['/erp/payment/new']"
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Payment </span>
@@ -73,7 +73,7 @@
       <tbody>
         <tr *ngFor="let payment of payments; trackBy: trackId" data-cy="entityTable">
           <td>
-            <a [routerLink]="['/payment', payment.id, 'view']">{{ payment.id }}</a>
+            <a [routerLink]="['/erp/payment', payment.id, 'view']">{{ payment.id }}</a>
           </td>
           <td>{{ payment.paymentNumber }}</td>
           <td>{{ payment.paymentDate | formatMediumDate }}</td>
@@ -86,34 +86,34 @@
           <td>{{ payment.conversionRate }}</td>
           <td>
             <div *ngIf="payment.dealer">
-              <a [routerLink]="['/dealer', payment.dealer?.id, 'view']">{{ payment.dealer?.dealerName }}</a>
+              <a [routerLink]="['/erp/dealer', payment.dealer?.id, 'view']">{{ payment.dealer?.dealerName }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="payment.paymentCategory">
-              <a [routerLink]="['/payment-category', payment.paymentCategory?.id, 'view']">{{ payment.paymentCategory?.categoryName }}</a>
+              <a [routerLink]="['/erp/payment-category', payment.paymentCategory?.id, 'view']">{{ payment.paymentCategory?.categoryName }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="payment.taxRule">
-              <a [routerLink]="['/tax-rule', payment.taxRule?.id, 'view']">{{ payment.taxRule?.id }}</a>
+              <a [routerLink]="['/erp/tax-rule', payment.taxRule?.id, 'view']">{{ payment.taxRule?.id }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="payment.paymentCalculation">
-              <a [routerLink]="['/payment-calculation', payment.paymentCalculation?.id, 'view']">{{ payment.paymentCalculation?.id }}</a>
+              <a [routerLink]="['/erp/payment-calculation', payment.paymentCalculation?.id, 'view']">{{ payment.paymentCalculation?.id }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="payment.paymentGroup">
-              <a [routerLink]="['/payment', payment.paymentGroup?.id, 'view']">{{ payment.paymentGroup?.id }}</a>
+              <a [routerLink]="['/erp/payment', payment.paymentGroup?.id, 'view']">{{ payment.paymentGroup?.id }}</a>
             </div>
           </td>
           <td class="text-right">
             <div class="btn-group">
               <button
                 type="submit"
-                [routerLink]="['/payment', payment.id, 'view']"
+                [routerLink]="['/erp/payment', payment.id, 'view']"
                 class="btn btn-info btn-sm"
                 data-cy="entityDetailsButton"
               >
@@ -123,7 +123,7 @@
 
               <button
                 type="submit"
-                [routerLink]="['/payment', payment.id, 'edit']"
+                [routerLink]="['/erp/payment', payment.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >
@@ -132,7 +132,7 @@
               </button>
 
               <button type="submit"
-                      [routerLink]="['/payment', payment.id, 'copy']"
+                      [routerLink]="['/erp/payment', payment.id, 'copy']"
                       class="btn btn-success btn-sm">
                 <fa-icon icon="copy"></fa-icon>
                 <!--<span class="d-none d-md-inline">Copy</span>-->

@@ -12,7 +12,7 @@
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-payment-category"
-        [routerLink]="['/payment-category/new']"
+        [routerLink]="['/erp/payment-category/new']"
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Payment Category </span>
@@ -62,7 +62,7 @@
       <tbody>
         <tr *ngFor="let paymentCategory of paymentCategories; trackBy: trackId" data-cy="entityTable">
           <td>
-            <a [routerLink]="['/payment-category', paymentCategory.id, 'view']">{{ paymentCategory.id }}</a>
+            <a [routerLink]="['/erp/payment-category', paymentCategory.id, 'view']">{{ paymentCategory.id }}</a>
           </td>
           <td>{{ paymentCategory.categoryName }}</td>
           <td>{{ paymentCategory.categoryDescription }}</td>
@@ -71,7 +71,7 @@
             <div class="btn-group">
               <button
                 type="submit"
-                [routerLink]="['/payment-category', paymentCategory.id, 'view']"
+                [routerLink]="['/erp/payment-category', paymentCategory.id, 'view']"
                 class="btn btn-info btn-sm"
                 data-cy="entityDetailsButton"
               >
@@ -81,7 +81,7 @@
 
               <button
                 type="submit"
-                [routerLink]="['/payment-category', paymentCategory.id, 'edit']"
+                [routerLink]="['/erp/payment-category', paymentCategory.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >

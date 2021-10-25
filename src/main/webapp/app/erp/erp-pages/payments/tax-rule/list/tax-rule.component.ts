@@ -129,7 +129,7 @@ export class TaxRuleComponent implements OnInit {
     this.page = page;
     this.ngbPaginationPage = this.page;
     if (navigate) {
-      this.router.navigate(['/tax-rule'], {
+      this.router.navigate(['/erp/tax-rule'], {
         queryParams: {
           page: this.page,
           size: this.itemsPerPage,

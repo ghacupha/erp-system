@@ -4,17 +4,17 @@ import {RouterModule} from '@angular/router';
 @NgModule({
   imports: [RouterModule.forChild([
     {
-      path: 'file-type',
+      path: 'erp/file-type',
       data: { pageTitle: 'ERP | File Types' },
       loadChildren: () => import('./files/file-type/file-type.module').then(m => m.ErpServiceFileTypeModule),
     },
     {
-      path: 'file-upload',
+      path: 'erp/file-upload',
       data: { pageTitle: 'ERP | File Uploads' },
       loadChildren: () => import('./files/file-upload/file-upload.module').then(m => m.ErpServiceFileUploadModule),
     },
     {
-      path: 'message-token',
+      path: 'erp/message-token',
       data: { pageTitle: 'ERP | Message Tokens' },
       loadChildren: () => import('./files/message-token/message-token.module').then(m => m.ErpServiceMessageTokenModule),
     },
