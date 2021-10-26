@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
@@ -13,7 +13,11 @@ import {IPaymentLabel} from '../../../payment-label/payment-label.model';
 import {PaymentLabelService} from '../../../payment-label/service/payment-label.service';
 import {Store} from "@ngrx/store";
 import {State} from "../../../../store/global-store.definition";
-import {dealerInvoiceStateReset} from "../../../../store/actions/dealer-invoice-workflows-status.actions";
+import {
+  dealerInvoicePaymentWorkflowCancelled,
+  dealerInvoiceStateReset,
+  recordInvoicePaymentButtonClicked
+} from "../../../../store/actions/dealer-invoice-workflows-status.actions";
 
 @Component({
   selector: 'jhi-invoice-update',
@@ -44,7 +48,8 @@ export class InvoiceUpdateComponent implements OnInit {
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
-    protected store: Store<State>
+    protected store: Store<State>,
+    protected router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -56,6 +61,7 @@ export class InvoiceUpdateComponent implements OnInit {
   }
 
   previousState(): void {
+    this.store.dispatch(dealerInvoicePaymentWorkflowCancelled());
     window.history.back();
   }
 
@@ -97,6 +103,35 @@ export class InvoiceUpdateComponent implements OnInit {
       }
     }
     return option;
+  }
+
+  recordPayment(): void {
+    this.isSaving = true;
+    const invoice = this.createFromForm();
+    if (invoice.id !== undefined) {
+      this.subscribeToRecordPaymentResponse(this.invoiceService.update(invoice));
+    } else {
+      this.subscribeToRecordPaymentResponse(this.invoiceService.create(invoice));
+    }
+  }
+
+  protected subscribeToRecordPaymentResponse(result: Observable<HttpResponse<IInvoice>>): void {
+
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
+      (res: HttpResponse<IInvoice>) => this.navigateToPayment(res),
+      () => this.onSaveError()
+    );
+  }
+
+  protected navigateToPayment(res: HttpResponse<IInvoice>): void {
+
+    // TODO Add placeholders, payment-labels, ownedInvoices in the store
+    if (res.body) {
+      this.store.dispatch(recordInvoicePaymentButtonClicked({selectedInvoice: res.body}));
+    }
+
+    const paymentPath = 'payment/dealer/invoice';
+    this.router.navigate([paymentPath]);
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IInvoice>>): void {
