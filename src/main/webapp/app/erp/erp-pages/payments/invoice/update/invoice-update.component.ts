@@ -15,7 +15,6 @@ import {Store} from "@ngrx/store";
 import {State} from "../../../../store/global-store.definition";
 import {
   dealerInvoicePaymentWorkflowCancelled,
-  dealerInvoiceStateReset,
   recordInvoicePaymentButtonClicked
 } from "../../../../store/actions/dealer-invoice-workflows-status.actions";
 
@@ -151,7 +150,7 @@ export class InvoiceUpdateComponent implements OnInit {
 
   protected onSaveFinalize(): void {
     // TODO Amend accordingly if need be to update payment in this progression
-    this.store.dispatch(dealerInvoiceStateReset());
+    // this.store.dispatch(dealerInvoiceStateReset());
     this.isSaving = false;
   }
 
