@@ -17,6 +17,7 @@ describe('Service Tests', () => {
     let elemDefault: IInvoice;
     let expectedResult: IInvoice | IInvoice[] | boolean | null;
     let currentDate: dayjs.Dayjs;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let store: MockStore
 
     beforeEach(() => {

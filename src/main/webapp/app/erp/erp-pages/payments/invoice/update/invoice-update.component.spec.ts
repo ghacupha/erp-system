@@ -11,19 +11,14 @@ import { of, Subject } from 'rxjs';
 
 import { InvoiceService } from '../service/invoice.service';
 import { IInvoice, Invoice } from '../invoice.model';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { InvoiceUpdateComponent } from './invoice-update.component';
-import {PaymentService} from "../../payment/service/payment.service";
 import {IPaymentLabel} from "../../../payment-label/payment-label.model";
-import {IPayment} from "../../payment/payment.model";
 import {MockStore, provideMockStore} from "@ngrx/store/testing";
 import {initialState} from "../../../../store/global-store.definition";
 import {LoggerTestingModule} from "ngx-logger/testing";
-import {RouterTestingModule} from "@angular/router/testing";
 
 describe('Component Tests', () => {
   describe('Invoice Management Update Component', () => {
@@ -32,9 +27,8 @@ describe('Component Tests', () => {
     let activatedRoute: ActivatedRoute;
     let invoiceService: InvoiceService;
     let paymentLabelService: PaymentLabelService;
-    let paymentService: PaymentService;
-    let dealerService: DealerService;
     let placeholderService: PlaceholderService;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let store: MockStore;
 
     beforeEach(() => {
@@ -50,10 +44,7 @@ describe('Component Tests', () => {
       activatedRoute = TestBed.inject(ActivatedRoute);
       invoiceService = TestBed.inject(InvoiceService);
       paymentLabelService = TestBed.inject(PaymentLabelService);
-      paymentService = TestBed.inject(PaymentService);
-      dealerService = TestBed.inject(DealerService);
       placeholderService = TestBed.inject(PlaceholderService);
-      store = TestBed.inject(MockStore);
 
       comp = fixture.componentInstance;
     });
@@ -79,44 +70,6 @@ describe('Component Tests', () => {
           ...additionalPaymentLabels
         );
         expect(comp.paymentLabelsSharedCollection).toEqual(expectedCollection);
-      });
-
-      it('Should call Payment query and add missing value', () => {
-        const invoice: IInvoice = { id: 456 };
-        const payment: IPayment = { id: 60128 };
-        invoice.payment = payment;
-
-        const paymentCollection: IPayment[] = [{ id: 44880 }];
-        jest.spyOn(paymentService, 'query').mockReturnValue(of(new HttpResponse({ body: paymentCollection })));
-        const additionalPayments = [payment];
-        const expectedCollection: IPayment[] = [...additionalPayments, ...paymentCollection];
-        jest.spyOn(paymentService, 'addPaymentToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-        activatedRoute.data = of({ invoice });
-        comp.ngOnInit();
-
-        expect(paymentService.query).toHaveBeenCalled();
-        expect(paymentService.addPaymentToCollectionIfMissing).toHaveBeenCalledWith(paymentCollection, ...additionalPayments);
-        expect(comp.paymentsSharedCollection).toEqual(expectedCollection);
-      });
-
-      it('Should call Dealer query and add missing value', () => {
-        const invoice: IInvoice = { id: 456 };
-        const dealer: IDealer = { id: 43784 };
-        invoice.dealer = dealer;
-
-        const dealerCollection: IDealer[] = [{ id: 44641 }];
-        jest.spyOn(dealerService, 'query').mockReturnValue(of(new HttpResponse({ body: dealerCollection })));
-        const additionalDealers = [dealer];
-        const expectedCollection: IDealer[] = [...additionalDealers, ...dealerCollection];
-        jest.spyOn(dealerService, 'addDealerToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-        activatedRoute.data = of({ invoice });
-        comp.ngOnInit();
-
-        // expect(dealerService.query).toHaveBeenCalled();
-        // expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerCollection, ...additionalDealers);
-        // expect(comp.dealersSharedCollection).toEqual(expectedCollection);
       });
 
       it('Should call Placeholder query and add missing value', () => {
@@ -145,10 +98,6 @@ describe('Component Tests', () => {
         const invoice: IInvoice = { id: 456 };
         const paymentLabels: IPaymentLabel = { id: 47078 };
         invoice.paymentLabels = [paymentLabels];
-        const payment: IPayment = { id: 33941 };
-        invoice.payment = payment;
-        const dealer: IDealer = { id: 74624 };
-        invoice.dealer = dealer;
         const placeholders: IPlaceholder = { id: 79504 };
         invoice.placeholders = [placeholders];
 
@@ -157,8 +106,6 @@ describe('Component Tests', () => {
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(invoice));
         expect(comp.paymentLabelsSharedCollection).toContain(paymentLabels);
-        expect(comp.paymentsSharedCollection).toContain(payment);
-        expect(comp.dealersSharedCollection).toContain(dealer);
         expect(comp.placeholdersSharedCollection).toContain(placeholders);
       });
     });
@@ -232,22 +179,6 @@ describe('Component Tests', () => {
         it('Should return tracked PaymentLabel primary key', () => {
           const entity = { id: 123 };
           const trackResult = comp.trackPaymentLabelById(0, entity);
-          expect(trackResult).toEqual(entity.id);
-        });
-      });
-
-      describe('trackPaymentById', () => {
-        it('Should return tracked Payment primary key', () => {
-          const entity = { id: 123 };
-          const trackResult = comp.trackPaymentById(0, entity);
-          expect(trackResult).toEqual(entity.id);
-        });
-      });
-
-      describe('trackDealerById', () => {
-        it('Should return tracked Dealer primary key', () => {
-          const entity = { id: 123 };
-          const trackResult = comp.trackDealerById(0, entity);
           expect(trackResult).toEqual(entity.id);
         });
       });

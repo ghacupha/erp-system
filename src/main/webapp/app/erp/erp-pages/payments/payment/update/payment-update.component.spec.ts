@@ -11,7 +11,6 @@ import {of, Subject} from 'rxjs';
 
 import {PaymentService} from '../service/payment.service';
 import {IPayment, Payment} from '../payment.model';
-import {DealerService} from 'app/entities/dealers/dealer/service/dealer.service';
 import {IPlaceholder} from 'app/entities/erpService/placeholder/placeholder.model';
 import {PlaceholderService} from 'app/entities/erpService/placeholder/service/placeholder.service';
 
@@ -34,7 +33,6 @@ describe('Component Tests', () => {
     let activatedRoute: ActivatedRoute;
     let paymentService: PaymentService;
     let paymentLabelService: PaymentLabelService;
-    let dealerService: DealerService;
     let paymentCategoryService: PaymentCategoryService;
     let taxRuleService: TaxRuleService;
     let paymentCalculationService: PaymentCalculationService;
@@ -59,11 +57,11 @@ describe('Component Tests', () => {
       activatedRoute = TestBed.inject(ActivatedRoute);
       paymentService = TestBed.inject(PaymentService);
       paymentLabelService = TestBed.inject(PaymentLabelService);
-      dealerService = TestBed.inject(DealerService);
       paymentCategoryService = TestBed.inject(PaymentCategoryService);
       taxRuleService = TestBed.inject(TaxRuleService);
       paymentCalculationService = TestBed.inject(PaymentCalculationService);
       placeholderService = TestBed.inject(PlaceholderService);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       store = TestBed.inject(MockStore);
 
       comp = fixture.componentInstance;
@@ -91,25 +89,6 @@ describe('Component Tests', () => {
         );
         expect(comp.paymentLabelsSharedCollection).toEqual(expectedCollection);
       });
-
-      // it('Should call Dealer query and add missing value', () => {
-      //   const payment: IPayment = {id: 456};
-      //   const dealer: IDealer = {id: 90172};
-      //   payment.dealer = dealer;
-      //
-      //   const dealerCollection: IDealer[] = [{id: 41765}];
-      //   jest.spyOn(dealerService, 'query').mockReturnValue(of(new HttpResponse({body: dealerCollection})));
-      //   const additionalDealers = [dealer];
-      //   const expectedCollection: IDealer[] = [...additionalDealers, ...dealerCollection];
-      //   jest.spyOn(dealerService, 'addDealerToCollectionIfMissing').mockReturnValue(expectedCollection);
-      //
-      //   activatedRoute.data = of({payment});
-      //   comp.ngOnInit();
-      //
-      //   expect(dealerService.query).toHaveBeenCalled();
-      //   expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerCollection, ...additionalDealers);
-      //   expect(comp.dealersSharedCollection).toEqual(expectedCollection);
-      // });
 
       it('Should call PaymentCategory query and add missing value', () => {
         const payment: IPayment = {id: 456};
