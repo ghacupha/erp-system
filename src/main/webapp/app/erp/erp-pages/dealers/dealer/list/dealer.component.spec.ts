@@ -52,6 +52,7 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(DealerComponent);
       comp = fixture.componentInstance;
       service = TestBed.inject(DealerService);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       store = TestBed.inject(MockStore);
 
       const headers = new HttpHeaders().append('link', 'link;link');
