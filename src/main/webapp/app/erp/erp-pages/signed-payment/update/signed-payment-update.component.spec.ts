@@ -1,5 +1,3 @@
-import {PaymentLabelService} from "../../payment-label/service/payment-label.service";
-
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -11,15 +9,14 @@ import { of, Subject } from 'rxjs';
 
 import { SignedPaymentService } from '../service/signed-payment.service';
 import { ISignedPayment, SignedPayment } from '../signed-payment.model';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
+import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
+import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
+import { IPaymentCategory } from 'app/entities/payments/payment-category/payment-category.model';
+import { PaymentCategoryService } from 'app/entities/payments/payment-category/service/payment-category.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { SignedPaymentUpdateComponent } from './signed-payment-update.component';
-import {PaymentCategoryService} from '../../payments/payment-category/service/payment-category.service';
-import {IPaymentLabel} from '../../payment-label/payment-label.model';
-import {IPaymentCategory} from '../../payments/payment-category/payment-category.model';
 
 describe('Component Tests', () => {
   describe('SignedPayment Management Update Component', () => {
@@ -28,7 +25,6 @@ describe('Component Tests', () => {
     let activatedRoute: ActivatedRoute;
     let signedPaymentService: SignedPaymentService;
     let paymentLabelService: PaymentLabelService;
-    let dealerService: DealerService;
     let paymentCategoryService: PaymentCategoryService;
     let placeholderService: PlaceholderService;
 
@@ -45,7 +41,6 @@ describe('Component Tests', () => {
       activatedRoute = TestBed.inject(ActivatedRoute);
       signedPaymentService = TestBed.inject(SignedPaymentService);
       paymentLabelService = TestBed.inject(PaymentLabelService);
-      dealerService = TestBed.inject(DealerService);
       paymentCategoryService = TestBed.inject(PaymentCategoryService);
       placeholderService = TestBed.inject(PlaceholderService);
 
@@ -73,25 +68,6 @@ describe('Component Tests', () => {
           ...additionalPaymentLabels
         );
         expect(comp.paymentLabelsSharedCollection).toEqual(expectedCollection);
-      });
-
-      it('Should call Dealer query and add missing value', () => {
-        const signedPayment: ISignedPayment = { id: 456 };
-        const dealer: IDealer = { id: 5585 };
-        signedPayment.dealer = dealer;
-
-        const dealerCollection: IDealer[] = [{ id: 84792 }];
-        jest.spyOn(dealerService, 'query').mockReturnValue(of(new HttpResponse({ body: dealerCollection })));
-        const additionalDealers = [dealer];
-        const expectedCollection: IDealer[] = [...additionalDealers, ...dealerCollection];
-        jest.spyOn(dealerService, 'addDealerToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-        activatedRoute.data = of({ signedPayment });
-        comp.ngOnInit();
-
-        expect(dealerService.query).toHaveBeenCalled();
-        expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerCollection, ...additionalDealers);
-        expect(comp.dealersSharedCollection).toEqual(expectedCollection);
       });
 
       it('Should call PaymentCategory query and add missing value', () => {
@@ -164,8 +140,6 @@ describe('Component Tests', () => {
         const signedPayment: ISignedPayment = { id: 456 };
         const paymentLabels: IPaymentLabel = { id: 61040 };
         signedPayment.paymentLabels = [paymentLabels];
-        const dealer: IDealer = { id: 7943 };
-        signedPayment.dealer = dealer;
         const paymentCategory: IPaymentCategory = { id: 84241 };
         signedPayment.paymentCategory = paymentCategory;
         const placeholders: IPlaceholder = { id: 24907 };
@@ -178,7 +152,6 @@ describe('Component Tests', () => {
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(signedPayment));
         expect(comp.paymentLabelsSharedCollection).toContain(paymentLabels);
-        expect(comp.dealersSharedCollection).toContain(dealer);
         expect(comp.paymentCategoriesSharedCollection).toContain(paymentCategory);
         expect(comp.placeholdersSharedCollection).toContain(placeholders);
         expect(comp.signedPaymentsSharedCollection).toContain(signedPaymentGroup);
@@ -254,14 +227,6 @@ describe('Component Tests', () => {
         it('Should return tracked PaymentLabel primary key', () => {
           const entity = { id: 123 };
           const trackResult = comp.trackPaymentLabelById(0, entity);
-          expect(trackResult).toEqual(entity.id);
-        });
-      });
-
-      describe('trackDealerById', () => {
-        it('Should return tracked Dealer primary key', () => {
-          const entity = { id: 123 };
-          const trackResult = comp.trackDealerById(0, entity);
           expect(trackResult).toEqual(entity.id);
         });
       });

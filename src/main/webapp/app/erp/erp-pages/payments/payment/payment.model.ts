@@ -1,11 +1,8 @@
 import * as dayjs from 'dayjs';
+import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
+import { IPaymentCategory } from 'app/entities/payments/payment-category/payment-category.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { CurrencyTypes } from 'app/entities/enumerations/currency-types.model';
-import {IPaymentLabel} from '../../payment-label/payment-label.model';
-import {IDealer} from '../../../../entities/dealers/dealer/dealer.model';
-import {IPaymentCategory} from '../payment-category/payment-category.model';
-import {ITaxRule} from '../tax-rule/tax-rule.model';
-import {IPaymentCalculation} from '../payment-calculation/payment-calculation.model';
 
 export interface IPayment {
   id?: number;
@@ -17,12 +14,11 @@ export interface IPayment {
   paymentAmount?: number | null;
   description?: string | null;
   settlementCurrency?: CurrencyTypes;
-  conversionRate?: number;
+  dealerId?: number | null;
+  fileUploadToken?: string | null;
+  compilationToken?: string | null;
   paymentLabels?: IPaymentLabel[] | null;
-  dealer?: IDealer | null;
   paymentCategory?: IPaymentCategory | null;
-  taxRule?: ITaxRule | null;
-  paymentCalculation?: IPaymentCalculation | null;
   placeholders?: IPlaceholder[] | null;
   paymentGroup?: IPayment | null;
 }
@@ -38,12 +34,11 @@ export class Payment implements IPayment {
     public paymentAmount?: number | null,
     public description?: string | null,
     public settlementCurrency?: CurrencyTypes,
-    public conversionRate?: number,
+    public dealerId?: number | null,
+    public fileUploadToken?: string | null,
+    public compilationToken?: string | null,
     public paymentLabels?: IPaymentLabel[] | null,
-    public dealer?: IDealer | null,
     public paymentCategory?: IPaymentCategory | null,
-    public taxRule?: ITaxRule | null,
-    public paymentCalculation?: IPaymentCalculation | null,
     public placeholders?: IPlaceholder[] | null,
     public paymentGroup?: IPayment | null
   ) {}
