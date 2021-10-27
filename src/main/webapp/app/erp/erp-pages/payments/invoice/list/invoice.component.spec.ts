@@ -1,4 +1,4 @@
-import {provideMockStore} from "@ngrx/store/testing";
+import {MockStore, provideMockStore} from "@ngrx/store/testing";
 
 jest.mock('@angular/router');
 
@@ -12,16 +12,18 @@ import { InvoiceService } from '../service/invoice.service';
 
 import { InvoiceComponent } from './invoice.component';
 import {initialState} from "../../../../store/global-store.definition";
+import {LoggerTestingModule} from "ngx-logger/testing";
 
 describe('Component Tests', () => {
   describe('Invoice Management Component', () => {
     let comp: InvoiceComponent;
     let fixture: ComponentFixture<InvoiceComponent>;
     let service: InvoiceService;
+    let store: MockStore;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [HttpClientTestingModule, LoggerTestingModule],
         declarations: [InvoiceComponent],
         providers: [
           Router,
@@ -50,6 +52,8 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(InvoiceComponent);
       comp = fixture.componentInstance;
       service = TestBed.inject(InvoiceService);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      store = TestBed.inject(MockStore);
 
       const headers = new HttpHeaders().append('link', 'link;link');
       jest.spyOn(service, 'query').mockReturnValue(
@@ -103,3 +107,4 @@ describe('Component Tests', () => {
     });
   });
 });
+
