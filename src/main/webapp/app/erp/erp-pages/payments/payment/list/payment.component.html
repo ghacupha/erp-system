@@ -111,7 +111,11 @@
         <td>{{ payment.paymentAmount }}</td>
         <td>{{ payment.description }}</td>
         <td>{{ payment.settlementCurrency }}</td>
-        <td>{{ payment.dealerId }}</td>
+        <td>
+          <a [routerLink]="['/erp/dealer', payment.dealerId, 'view']">
+           {{ payment.dealerId }}
+          </a>
+        </td>
         <!--<td>{{ payment.fileUploadToken }}</td>
         <td>{{ payment.compilationToken }}</td>-->
         <td>
