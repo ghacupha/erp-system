@@ -54,8 +54,6 @@ public class InvoiceCriteria implements Serializable, Criteria {
 
     private CurrencyTypesFilter currency;
 
-    private DoubleFilter conversionRate;
-
     private LongFilter paymentId;
 
     private LongFilter dealerId;
@@ -78,7 +76,6 @@ public class InvoiceCriteria implements Serializable, Criteria {
         this.invoiceDate = other.invoiceDate == null ? null : other.invoiceDate.copy();
         this.invoiceAmount = other.invoiceAmount == null ? null : other.invoiceAmount.copy();
         this.currency = other.currency == null ? null : other.currency.copy();
-        this.conversionRate = other.conversionRate == null ? null : other.conversionRate.copy();
         this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
         this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
         this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
@@ -166,21 +163,6 @@ public class InvoiceCriteria implements Serializable, Criteria {
 
     public void setCurrency(CurrencyTypesFilter currency) {
         this.currency = currency;
-    }
-
-    public DoubleFilter getConversionRate() {
-        return conversionRate;
-    }
-
-    public DoubleFilter conversionRate() {
-        if (conversionRate == null) {
-            conversionRate = new DoubleFilter();
-        }
-        return conversionRate;
-    }
-
-    public void setConversionRate(DoubleFilter conversionRate) {
-        this.conversionRate = conversionRate;
     }
 
     public LongFilter getPaymentId() {
@@ -296,7 +278,6 @@ public class InvoiceCriteria implements Serializable, Criteria {
             Objects.equals(invoiceDate, that.invoiceDate) &&
             Objects.equals(invoiceAmount, that.invoiceAmount) &&
             Objects.equals(currency, that.currency) &&
-            Objects.equals(conversionRate, that.conversionRate) &&
             Objects.equals(paymentId, that.paymentId) &&
             Objects.equals(dealerId, that.dealerId) &&
             Objects.equals(fileUploadToken, that.fileUploadToken) &&
@@ -315,7 +296,6 @@ public class InvoiceCriteria implements Serializable, Criteria {
             invoiceDate,
             invoiceAmount,
             currency,
-            conversionRate,
             paymentId,
             dealerId,
             fileUploadToken,
@@ -335,7 +315,6 @@ public class InvoiceCriteria implements Serializable, Criteria {
             (invoiceDate != null ? "invoiceDate=" + invoiceDate + ", " : "") +
             (invoiceAmount != null ? "invoiceAmount=" + invoiceAmount + ", " : "") +
             (currency != null ? "currency=" + currency + ", " : "") +
-            (conversionRate != null ? "conversionRate=" + conversionRate + ", " : "") +
             (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
             (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +

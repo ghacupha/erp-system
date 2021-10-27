@@ -26,10 +26,6 @@ public class InvoiceDTO implements Serializable {
     @NotNull
     private CurrencyTypes currency;
 
-    @NotNull
-    @DecimalMin(value = "1.00")
-    private Double conversionRate;
-
     private Long paymentId;
 
     private Long dealerId;
@@ -80,14 +76,6 @@ public class InvoiceDTO implements Serializable {
 
     public void setCurrency(CurrencyTypes currency) {
         this.currency = currency;
-    }
-
-    public Double getConversionRate() {
-        return conversionRate;
-    }
-
-    public void setConversionRate(Double conversionRate) {
-        this.conversionRate = conversionRate;
     }
 
     public Long getPaymentId() {
@@ -168,7 +156,6 @@ public class InvoiceDTO implements Serializable {
             ", invoiceDate='" + getInvoiceDate() + "'" +
             ", invoiceAmount=" + getInvoiceAmount() +
             ", currency='" + getCurrency() + "'" +
-            ", conversionRate=" + getConversionRate() +
             ", paymentId=" + getPaymentId() +
             ", dealerId=" + getDealerId() +
             ", fileUploadToken='" + getFileUploadToken() + "'" +

@@ -22,10 +22,6 @@ public class PaymentDTO implements Serializable {
 
     private BigDecimal invoicedAmount;
 
-    private BigDecimal disbursementCost;
-
-    private BigDecimal vatableAmount;
-
     private BigDecimal paymentAmount;
 
     private String description;
@@ -77,22 +73,6 @@ public class PaymentDTO implements Serializable {
 
     public void setInvoicedAmount(BigDecimal invoicedAmount) {
         this.invoicedAmount = invoicedAmount;
-    }
-
-    public BigDecimal getDisbursementCost() {
-        return disbursementCost;
-    }
-
-    public void setDisbursementCost(BigDecimal disbursementCost) {
-        this.disbursementCost = disbursementCost;
-    }
-
-    public BigDecimal getVatableAmount() {
-        return vatableAmount;
-    }
-
-    public void setVatableAmount(BigDecimal vatableAmount) {
-        this.vatableAmount = vatableAmount;
     }
 
     public BigDecimal getPaymentAmount() {
@@ -204,8 +184,6 @@ public class PaymentDTO implements Serializable {
             ", paymentNumber='" + getPaymentNumber() + "'" +
             ", paymentDate='" + getPaymentDate() + "'" +
             ", invoicedAmount=" + getInvoicedAmount() +
-            ", disbursementCost=" + getDisbursementCost() +
-            ", vatableAmount=" + getVatableAmount() +
             ", paymentAmount=" + getPaymentAmount() +
             ", description='" + getDescription() + "'" +
             ", settlementCurrency='" + getSettlementCurrency() + "'" +

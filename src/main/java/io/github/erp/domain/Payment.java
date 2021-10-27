@@ -38,12 +38,6 @@ public class Payment implements Serializable {
     @Column(name = "invoiced_amount", precision = 21, scale = 2)
     private BigDecimal invoicedAmount;
 
-    @Column(name = "disbursement_cost", precision = 21, scale = 2)
-    private BigDecimal disbursementCost;
-
-    @Column(name = "vatable_amount", precision = 21, scale = 2)
-    private BigDecimal vatableAmount;
-
     @Column(name = "payment_amount", precision = 21, scale = 2)
     private BigDecimal paymentAmount;
 
@@ -144,32 +138,6 @@ public class Payment implements Serializable {
 
     public void setInvoicedAmount(BigDecimal invoicedAmount) {
         this.invoicedAmount = invoicedAmount;
-    }
-
-    public BigDecimal getDisbursementCost() {
-        return this.disbursementCost;
-    }
-
-    public Payment disbursementCost(BigDecimal disbursementCost) {
-        this.setDisbursementCost(disbursementCost);
-        return this;
-    }
-
-    public void setDisbursementCost(BigDecimal disbursementCost) {
-        this.disbursementCost = disbursementCost;
-    }
-
-    public BigDecimal getVatableAmount() {
-        return this.vatableAmount;
-    }
-
-    public Payment vatableAmount(BigDecimal vatableAmount) {
-        this.setVatableAmount(vatableAmount);
-        return this;
-    }
-
-    public void setVatableAmount(BigDecimal vatableAmount) {
-        this.vatableAmount = vatableAmount;
     }
 
     public BigDecimal getPaymentAmount() {
@@ -349,8 +317,6 @@ public class Payment implements Serializable {
             ", paymentNumber='" + getPaymentNumber() + "'" +
             ", paymentDate='" + getPaymentDate() + "'" +
             ", invoicedAmount=" + getInvoicedAmount() +
-            ", disbursementCost=" + getDisbursementCost() +
-            ", vatableAmount=" + getVatableAmount() +
             ", paymentAmount=" + getPaymentAmount() +
             ", description='" + getDescription() + "'" +
             ", settlementCurrency='" + getSettlementCurrency() + "'" +

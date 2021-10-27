@@ -110,9 +110,6 @@ public class InvoiceQueryService extends QueryService<Invoice> {
             if (criteria.getCurrency() != null) {
                 specification = specification.and(buildSpecification(criteria.getCurrency(), Invoice_.currency));
             }
-            if (criteria.getConversionRate() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getConversionRate(), Invoice_.conversionRate));
-            }
             if (criteria.getPaymentId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getPaymentId(), Invoice_.paymentId));
             }

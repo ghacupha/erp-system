@@ -74,8 +74,6 @@ class PaymentGatlingTest extends Simulation {
                 "paymentNumber":"SAMPLE_TEXT"
                 , "paymentDate":"2020-01-01T00:00:00.000Z"
                 , "invoicedAmount":"0"
-                , "disbursementCost":"0"
-                , "vatableAmount":"0"
                 , "paymentAmount":"0"
                 , "description":"SAMPLE_TEXT"
                 , "settlementCurrency":"KES"

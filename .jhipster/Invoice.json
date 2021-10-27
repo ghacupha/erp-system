@@ -20,12 +20,6 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "conversionRate",
-      "fieldType": "Double",
-      "fieldValidateRules": ["required", "min"],
-      "fieldValidateRulesMin": "1.00"
-    },
-    {
       "fieldName": "paymentId",
       "fieldType": "Long"
     },

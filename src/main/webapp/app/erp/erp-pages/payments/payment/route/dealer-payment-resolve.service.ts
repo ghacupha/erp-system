@@ -8,10 +8,8 @@ import {
   DEFAULT_CURRENCY,
   DEFAULT_DATE,
   DEFAULT_DESCRIPTION,
-  DEFAULT_DISBURSEMENT_COST,
   DEFAULT_INVOICE_AMOUNT,
   DEFAULT_TRANSACTION_AMOUNT,
-  DEFAULT_VATABLE_AMOUNT
 } from '../default-values.constants';
 
 @Injectable({ providedIn: 'root' })
@@ -27,8 +25,6 @@ export class DealerPaymentResolveService implements Resolve<IPayment> {
       settlementCurrency: DEFAULT_CURRENCY,
       paymentAmount: DEFAULT_TRANSACTION_AMOUNT,
       invoicedAmount: DEFAULT_INVOICE_AMOUNT,
-      disbursementCost: DEFAULT_DISBURSEMENT_COST,
-      vatableAmount: DEFAULT_VATABLE_AMOUNT,
       description: DEFAULT_DESCRIPTION
     }
 

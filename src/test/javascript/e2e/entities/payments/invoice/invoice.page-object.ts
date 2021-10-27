@@ -34,7 +34,6 @@ export class InvoiceUpdatePage {
   invoiceDateInput = element(by.id('field_invoiceDate'));
   invoiceAmountInput = element(by.id('field_invoiceAmount'));
   currencySelect = element(by.id('field_currency'));
-  conversionRateInput = element(by.id('field_conversionRate'));
   paymentIdInput = element(by.id('field_paymentId'));
   dealerIdInput = element(by.id('field_dealerId'));
   fileUploadTokenInput = element(by.id('field_fileUploadToken'));
@@ -89,14 +88,6 @@ export class InvoiceUpdatePage {
 
   async currencySelectLastOption(): Promise<void> {
     await this.currencySelect.all(by.tagName('option')).last().click();
-  }
-
-  async setConversionRateInput(conversionRate: string): Promise<void> {
-    await this.conversionRateInput.sendKeys(conversionRate);
-  }
-
-  async getConversionRateInput(): Promise<string> {
-    return await this.conversionRateInput.getAttribute('value');
   }
 
   async setPaymentIdInput(paymentId: string): Promise<void> {

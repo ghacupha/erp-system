@@ -44,11 +44,6 @@ public class Invoice implements Serializable {
     @Column(name = "currency", nullable = false)
     private CurrencyTypes currency;
 
-    @NotNull
-    @DecimalMin(value = "1.00")
-    @Column(name = "conversion_rate", nullable = false)
-    private Double conversionRate;
-
     @Column(name = "payment_id")
     private Long paymentId;
 
@@ -146,19 +141,6 @@ public class Invoice implements Serializable {
 
     public void setCurrency(CurrencyTypes currency) {
         this.currency = currency;
-    }
-
-    public Double getConversionRate() {
-        return this.conversionRate;
-    }
-
-    public Invoice conversionRate(Double conversionRate) {
-        this.setConversionRate(conversionRate);
-        return this;
-    }
-
-    public void setConversionRate(Double conversionRate) {
-        this.conversionRate = conversionRate;
     }
 
     public Long getPaymentId() {
@@ -287,7 +269,6 @@ public class Invoice implements Serializable {
             ", invoiceDate='" + getInvoiceDate() + "'" +
             ", invoiceAmount=" + getInvoiceAmount() +
             ", currency='" + getCurrency() + "'" +
-            ", conversionRate=" + getConversionRate() +
             ", paymentId=" + getPaymentId() +
             ", dealerId=" + getDealerId() +
             ", fileUploadToken='" + getFileUploadToken() + "'" +

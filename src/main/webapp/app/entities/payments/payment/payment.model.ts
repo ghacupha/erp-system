@@ -9,8 +9,6 @@ export interface IPayment {
   paymentNumber?: string | null;
   paymentDate?: dayjs.Dayjs | null;
   invoicedAmount?: number | null;
-  disbursementCost?: number | null;
-  vatableAmount?: number | null;
   paymentAmount?: number | null;
   description?: string | null;
   settlementCurrency?: CurrencyTypes;
@@ -29,8 +27,6 @@ export class Payment implements IPayment {
     public paymentNumber?: string | null,
     public paymentDate?: dayjs.Dayjs | null,
     public invoicedAmount?: number | null,
-    public disbursementCost?: number | null,
-    public vatableAmount?: number | null,
     public paymentAmount?: number | null,
     public description?: string | null,
     public settlementCurrency?: CurrencyTypes,

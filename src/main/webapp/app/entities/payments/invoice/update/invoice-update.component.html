@@ -87,31 +87,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_conversionRate">Conversion Rate</label>
-          <input
-            type="number"
-            class="form-control"
-            name="conversionRate"
-            id="field_conversionRate"
-            data-cy="conversionRate"
-            formControlName="conversionRate"
-          />
-          <div
-            *ngIf="
-              editForm.get('conversionRate')!.invalid && (editForm.get('conversionRate')!.dirty || editForm.get('conversionRate')!.touched)
-            "
-          >
-            <small class="form-text text-danger" *ngIf="editForm.get('conversionRate')?.errors?.required"> This field is required. </small>
-            <small class="form-text text-danger" *ngIf="editForm.get('conversionRate')?.errors?.min">
-              This field should be at least 1.00.
-            </small>
-            <small class="form-text text-danger" [hidden]="!editForm.get('conversionRate')?.errors?.number">
-              This field should be a number.
-            </small>
-          </div>
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" for="field_paymentId">Payment Id</label>
           <input type="number" class="form-control" name="paymentId" id="field_paymentId" data-cy="paymentId" formControlName="paymentId" />
         </div>
