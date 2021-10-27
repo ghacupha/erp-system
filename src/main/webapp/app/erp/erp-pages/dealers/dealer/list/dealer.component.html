@@ -12,7 +12,7 @@
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-dealer"
-        [routerLink]="['/list/payment/dealer/new']"
+        [routerLink]="['/erp/dealer/new']"
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Dealer </span>
@@ -59,17 +59,17 @@
       <tbody>
         <tr *ngFor="let dealer of dealers; trackBy: trackId" data-cy="entityTable">
           <td>
-            <a [routerLink]="['/dealer', dealer.id, 'view']">{{ dealer.id }}</a>
+            <a [routerLink]="['/erp/dealer', dealer.id, 'view']">{{ dealer.id }}</a>
           </td>
           <td>{{ dealer.dealerName }}</td>
           <td>
             <div *ngIf="dealer.dealerGroup">
-              <a [routerLink]="['/dealer', dealer.dealerGroup?.id, 'view']">{{ dealer.dealerGroup?.dealerName }}</a>
+              <a [routerLink]="['/erp/dealer', dealer.dealerGroup?.id, 'view']">{{ dealer.dealerGroup?.dealerName }}</a>
             </div>
           </td>
           <td class="text-right">
             <div class="btn-group">
-              <button type="submit" [routerLink]="['/dealer', dealer.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+              <button type="submit" [routerLink]="['/erp/dealer', dealer.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                 <fa-icon icon="eye"></fa-icon>
               </button>
 
@@ -82,7 +82,7 @@
                 <fa-icon icon="money-bill-wave-alt"></fa-icon>
               </button>
 
-              <button type="submit" [routerLink]="['/dealer', dealer.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+              <button type="submit" [routerLink]="['/erp/dealer', dealer.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
                 <fa-icon icon="pencil-alt"></fa-icon>
               </button>
 
