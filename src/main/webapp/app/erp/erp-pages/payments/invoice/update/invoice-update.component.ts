@@ -106,7 +106,7 @@ export class InvoiceUpdateComponent implements OnInit {
 
   recordPayment(): void {
     this.isSaving = true;
-    const invoice = this.createFromForm();
+    const invoice = this.recordInvoiceFromForm();
     if (invoice.id !== undefined) {
       this.subscribeToRecordPaymentResponse(this.invoiceService.update(invoice));
     } else {
@@ -129,7 +129,7 @@ export class InvoiceUpdateComponent implements OnInit {
       this.store.dispatch(recordInvoicePaymentButtonClicked({selectedInvoice: res.body}));
     }
 
-    const paymentPath = 'payment/dealer/invoice';
+    const paymentPath = 'erp/payment/dealer/invoice';
     this.router.navigate([paymentPath]);
   }
 
@@ -204,6 +204,20 @@ export class InvoiceUpdateComponent implements OnInit {
     return {
       ...new Invoice(),
       id: this.editForm.get(['id'])!.value,
+      invoiceNumber: this.editForm.get(['invoiceNumber'])!.value,
+      invoiceDate: this.editForm.get(['invoiceDate'])!.value,
+      invoiceAmount: this.editForm.get(['invoiceAmount'])!.value,
+      currency: this.editForm.get(['currency'])!.value,
+      conversionRate: this.editForm.get(['conversionRate'])!.value,
+      paymentId: this.editForm.get(['paymentId'])!.value,
+      dealerId: this.editForm.get(['dealerId'])!.value,
+      paymentLabels: this.editForm.get(['paymentLabels'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value,
+    };
+  }
+  protected recordInvoiceFromForm(): IInvoice {
+    return {
+      ...new Invoice(),
       invoiceNumber: this.editForm.get(['invoiceNumber'])!.value,
       invoiceDate: this.editForm.get(['invoiceDate'])!.value,
       invoiceAmount: this.editForm.get(['invoiceAmount'])!.value,

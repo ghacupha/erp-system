@@ -24,12 +24,16 @@ import {State} from "../../../../store/global-store.definition";
 import {
   copyingPaymentStatus,
   creatingPaymentStatus,
-  editingPaymentStatus, updateSelectedPayment
+  editingPaymentStatus,
+  updateSelectedPayment
 } from "../../../../store/selectors/update-menu-status.selectors";
 import {
-  paymentCopyButtonClicked, paymentSaveButtonClicked,
+  paymentCopyButtonClicked,
+  paymentSaveButtonClicked,
   paymentUpdateButtonClicked,
-  paymentUpdateCancelButtonClicked, paymentUpdateConcluded, paymentUpdateErrorHasOccurred
+  paymentUpdateCancelButtonClicked,
+  paymentUpdateConcluded,
+  paymentUpdateErrorHasOccurred
 } from "../../../../store/actions/update-menu-status.actions";
 import {
   dealerCategory,
@@ -43,7 +47,9 @@ import {
 } from "../../../../store/actions/dealer-workflows-status.actions";
 import {
   dealerInvoicePaymentLabels,
-  dealerInvoicePaymentState, dealerInvoicePlaceholders, dealerInvoiceSelected,
+  dealerInvoicePaymentState,
+  dealerInvoicePlaceholders,
+  dealerInvoiceSelected,
   dealerInvoiceSelectedDealer
 } from "../../../../store/selectors/dealer-invoice-worklows-status.selectors";
 import {IInvoice, Invoice} from "../../invoice/invoice.model";
@@ -455,11 +461,11 @@ export class PaymentUpdateComponent implements OnInit {
       )
       .subscribe((paymentLabels: IPaymentLabel[]) => (this.paymentLabelsSharedCollection = paymentLabels));
 
-    this.dealerService
-      .query()
-      .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
-      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('dealer')!.value)))
-      .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
+    // this.dealerService
+    //   .query()
+    //   .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
+    //   .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('dealer')!.value)))
+    //   .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
 
     this.paymentCategoryService
       .query()
@@ -474,26 +480,26 @@ export class PaymentUpdateComponent implements OnInit {
       )
       .subscribe((paymentCategories: IPaymentCategory[]) => (this.paymentCategoriesSharedCollection = paymentCategories));
 
-    this.taxRuleService
-      .query()
-      .pipe(map((res: HttpResponse<ITaxRule[]>) => res.body ?? []))
-      .pipe(
-        map((taxRules: ITaxRule[]) => this.taxRuleService.addTaxRuleToCollectionIfMissing(taxRules, this.editForm.get('taxRule')!.value))
-      )
-      .subscribe((taxRules: ITaxRule[]) => (this.taxRulesSharedCollection = taxRules));
+    // this.taxRuleService
+    //   .query()
+    //   .pipe(map((res: HttpResponse<ITaxRule[]>) => res.body ?? []))
+    //   .pipe(
+    //     map((taxRules: ITaxRule[]) => this.taxRuleService.addTaxRuleToCollectionIfMissing(taxRules, this.editForm.get('taxRule')!.value))
+    //   )
+    //   .subscribe((taxRules: ITaxRule[]) => (this.taxRulesSharedCollection = taxRules));
 
-    this.paymentCalculationService
-      .query({ 'paymentId.specified': 'false' })
-      .pipe(map((res: HttpResponse<IPaymentCalculation[]>) => res.body ?? []))
-      .pipe(
-        map((paymentCalculations: IPaymentCalculation[]) =>
-          this.paymentCalculationService.addPaymentCalculationToCollectionIfMissing(
-            paymentCalculations,
-            this.editForm.get('paymentCalculation')!.value
-          )
-        )
-      )
-      .subscribe((paymentCalculations: IPaymentCalculation[]) => (this.paymentCalculationsCollection = paymentCalculations));
+    // this.paymentCalculationService
+    //   .query({ 'paymentId.specified': 'false' })
+    //   .pipe(map((res: HttpResponse<IPaymentCalculation[]>) => res.body ?? []))
+    //   .pipe(
+    //     map((paymentCalculations: IPaymentCalculation[]) =>
+    //       this.paymentCalculationService.addPaymentCalculationToCollectionIfMissing(
+    //         paymentCalculations,
+    //         this.editForm.get('paymentCalculation')!.value
+    //       )
+    //     )
+    //   )
+    //   .subscribe((paymentCalculations: IPaymentCalculation[]) => (this.paymentCalculationsCollection = paymentCalculations));
 
     this.placeholderService
       .query()
@@ -541,7 +547,6 @@ export class PaymentUpdateComponent implements OnInit {
   protected copyFromForm(): IPayment {
     return {
       ...new Payment(),
-      id: this.editForm.get(['id'])!.value,
       paymentNumber: this.editForm.get(['paymentNumber'])!.value,
       paymentDate: this.editForm.get(['paymentDate'])!.value,
       invoicedAmount: this.editForm.get(['invoicedAmount'])!.value,

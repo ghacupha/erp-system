@@ -9,6 +9,7 @@ import { IInvoice, Invoice } from '../invoice.model';
 import { InvoiceService } from './invoice.service';
 import {MockStore, provideMockStore} from "@ngrx/store/testing";
 import {initialState} from "../../../../store/global-store.definition";
+import {LoggerTestingModule} from "ngx-logger/testing";
 
 describe('Service Tests', () => {
   describe('Invoice Service', () => {
@@ -21,7 +22,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [HttpClientTestingModule, LoggerTestingModule],
         providers: [provideMockStore({initialState})]
       });
       expectedResult = null;

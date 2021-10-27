@@ -16,6 +16,7 @@ import {
   dealerInvoiceSelectedPayment
 } from "../../../../store/selectors/dealer-invoice-worklows-status.selectors";
 import {IPayment, Payment} from "../../payment/payment.model";
+import {NGXLogger} from "ngx-logger";
 
 export type EntityResponseType = HttpResponse<IInvoice>;
 export type EntityArrayResponseType = HttpResponse<IInvoice[]>;
@@ -30,6 +31,7 @@ export class InvoiceService {
   constructor(
     protected http: HttpClient,
     protected applicationConfigService: ApplicationConfigService,
+    protected log: NGXLogger,
     protected store: Store<State>) {
 
     this.store.select<IPayment>(dealerInvoiceSelectedPayment).subscribe(pyt => {
@@ -39,6 +41,7 @@ export class InvoiceService {
 
   create(invoice: IInvoice): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(invoice);
+    this.log.info(`POST request for ${copy}`)
     return this.http
       .post<IInvoice>(this.resourceUrl, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
@@ -46,6 +49,7 @@ export class InvoiceService {
 
   update(invoice: IInvoice): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(invoice);
+    this.log.info(`PUT request for ${copy}`)
     return this.http
       .put<IInvoice>(`${this.resourceUrl}/${getInvoiceIdentifier(invoice) as number}`, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
