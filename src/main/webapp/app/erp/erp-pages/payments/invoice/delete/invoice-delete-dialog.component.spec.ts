@@ -1,4 +1,4 @@
-import {provideMockStore} from "@ngrx/store/testing";
+import {MockStore, provideMockStore} from "@ngrx/store/testing";
 
 jest.mock('@ng-bootstrap/ng-bootstrap');
 
@@ -12,6 +12,7 @@ import { InvoiceService } from '../service/invoice.service';
 
 import { InvoiceDeleteDialogComponent } from './invoice-delete-dialog.component';
 import {initialState} from "../../../../store/global-store.definition";
+import {LoggerTestingModule} from "ngx-logger/testing";
 
 describe('Component Tests', () => {
   describe('Invoice Management Delete Component', () => {
@@ -19,10 +20,11 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<InvoiceDeleteDialogComponent>;
     let service: InvoiceService;
     let mockActiveModal: NgbActiveModal;
+    let store: MockStore;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [HttpClientTestingModule, LoggerTestingModule],
         declarations: [InvoiceDeleteDialogComponent],
         providers: [NgbActiveModal, provideMockStore({initialState})],
       })
@@ -32,6 +34,8 @@ describe('Component Tests', () => {
       comp = fixture.componentInstance;
       service = TestBed.inject(InvoiceService);
       mockActiveModal = TestBed.inject(NgbActiveModal);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      store = TestBed.inject(MockStore);
     });
 
     describe('confirmDelete', () => {

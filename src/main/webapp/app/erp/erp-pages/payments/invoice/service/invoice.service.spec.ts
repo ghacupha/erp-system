@@ -38,7 +38,10 @@ describe('Service Tests', () => {
         invoiceDate: currentDate,
         invoiceAmount: 0,
         currency: CurrencyTypes.KES,
-        conversionRate: 0,
+        paymentId: 0,
+        dealerId: 0,
+        fileUploadToken: 'AAAAAAA',
+        compilationToken: 'AAAAAAA',
       };
     });
 
@@ -89,7 +92,10 @@ describe('Service Tests', () => {
             invoiceDate: currentDate.format(DATE_FORMAT),
             invoiceAmount: 1,
             currency: 'BBBBBB',
-            conversionRate: 1,
+            paymentId: 1,
+            dealerId: 1,
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -114,6 +120,8 @@ describe('Service Tests', () => {
             invoiceDate: currentDate.format(DATE_FORMAT),
             invoiceAmount: 1,
             currency: 'BBBBBB',
+            dealerId: 1,
+            compilationToken: 'BBBBBB',
           },
           new Invoice()
         );
@@ -142,7 +150,10 @@ describe('Service Tests', () => {
             invoiceDate: currentDate.format(DATE_FORMAT),
             invoiceAmount: 1,
             currency: 'BBBBBB',
-            conversionRate: 1,
+            paymentId: 1,
+            dealerId: 1,
+            fileUploadToken: 'BBBBBB',
+            compilationToken: 'BBBBBB',
           },
           elemDefault
         );
@@ -199,7 +210,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique Invoice to an array', () => {
-          const invoiceArray: IInvoice[] = [{ id: 123 }, { id: 456 }, { id: 95170 }];
+          const invoiceArray: IInvoice[] = [{ id: 123 }, { id: 456 }, { id: 2990 }];
           const invoiceCollection: IInvoice[] = [{ id: 123 }];
           expectedResult = service.addInvoiceToCollectionIfMissing(invoiceCollection, ...invoiceArray);
           expect(expectedResult).toHaveLength(3);

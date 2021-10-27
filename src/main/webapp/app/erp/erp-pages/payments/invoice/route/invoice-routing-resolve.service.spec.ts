@@ -13,6 +13,7 @@ import { InvoiceService } from '../service/invoice.service';
 
 import { InvoiceRoutingResolveService } from './invoice-routing-resolve.service';
 import {initialState} from "../../../../store/global-store.definition";
+import {LoggerTestingModule} from "ngx-logger/testing";
 
 describe('Service Tests', () => {
   describe('Invoice routing resolve service', () => {
@@ -24,7 +25,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [HttpClientTestingModule, LoggerTestingModule],
         providers: [Router, ActivatedRouteSnapshot, provideMockStore({initialState})],
       });
       mockRouter = TestBed.inject(Router);
