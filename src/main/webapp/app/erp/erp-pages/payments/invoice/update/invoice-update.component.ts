@@ -123,7 +123,6 @@ export class InvoiceUpdateComponent implements OnInit {
   }
 
   protected navigateToPayment(res: HttpResponse<IInvoice>): void {
-
     // TODO Add placeholders, payment-labels, ownedInvoices in the store
     if (res.body) {
       this.store.dispatch(recordInvoicePaymentButtonClicked({selectedInvoice: res.body}));
@@ -161,7 +160,7 @@ export class InvoiceUpdateComponent implements OnInit {
       invoiceDate: invoice.invoiceDate,
       invoiceAmount: invoice.invoiceAmount,
       currency: invoice.currency,
-      conversionRate: invoice.conversionRate,
+      // conversionRate: invoice.conversionRate,
       paymentId: invoice.paymentId,
       dealerId: invoice.dealerId,
       paymentLabels: invoice.paymentLabels,
@@ -208,7 +207,7 @@ export class InvoiceUpdateComponent implements OnInit {
       invoiceDate: this.editForm.get(['invoiceDate'])!.value,
       invoiceAmount: this.editForm.get(['invoiceAmount'])!.value,
       currency: this.editForm.get(['currency'])!.value,
-      conversionRate: this.editForm.get(['conversionRate'])!.value,
+      // conversionRate: this.editForm.get(['conversionRate'])!.value,
       paymentId: this.editForm.get(['paymentId'])!.value,
       dealerId: this.editForm.get(['dealerId'])!.value,
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
@@ -222,7 +221,7 @@ export class InvoiceUpdateComponent implements OnInit {
       invoiceDate: this.editForm.get(['invoiceDate'])!.value,
       invoiceAmount: this.editForm.get(['invoiceAmount'])!.value,
       currency: this.editForm.get(['currency'])!.value,
-      conversionRate: this.editForm.get(['conversionRate'])!.value,
+      // conversionRate: this.editForm.get(['conversionRate'])!.value,
       paymentId: this.editForm.get(['paymentId'])!.value,
       dealerId: this.editForm.get(['dealerId'])!.value,
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,

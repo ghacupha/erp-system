@@ -23,12 +23,6 @@
             <column name="invoiced_amount" type="decimal(21,2)">
                 <constraints nullable="true" />
             </column>
-            <column name="disbursement_cost" type="decimal(21,2)">
-                <constraints nullable="true" />
-            </column>
-            <column name="vatable_amount" type="decimal(21,2)">
-                <constraints nullable="true" />
-            </column>
             <column name="payment_amount" type="decimal(21,2)">
                 <constraints nullable="true" />
             </column>
@@ -102,8 +96,6 @@
             <column name="payment_number" type="string"/>
             <column name="payment_date" type="date"/>
             <column name="invoiced_amount" type="numeric"/>
-            <column name="disbursement_cost" type="numeric"/>
-            <column name="vatable_amount" type="numeric"/>
             <column name="payment_amount" type="numeric"/>
             <column name="description" type="string"/>
             <column name="settlement_currency" type="string"/>

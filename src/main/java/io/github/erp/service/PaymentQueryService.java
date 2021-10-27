@@ -107,12 +107,6 @@ public class PaymentQueryService extends QueryService<Payment> {
             if (criteria.getInvoicedAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getInvoicedAmount(), Payment_.invoicedAmount));
             }
-            if (criteria.getDisbursementCost() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getDisbursementCost(), Payment_.disbursementCost));
-            }
-            if (criteria.getVatableAmount() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getVatableAmount(), Payment_.vatableAmount));
-            }
             if (criteria.getPaymentAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getPaymentAmount(), Payment_.paymentAmount));
             }

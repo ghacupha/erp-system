@@ -64,10 +64,6 @@ class InvoiceResourceIT {
     private static final CurrencyTypes DEFAULT_CURRENCY = CurrencyTypes.KES;
     private static final CurrencyTypes UPDATED_CURRENCY = CurrencyTypes.USD;
 
-    private static final Double DEFAULT_CONVERSION_RATE = 1.00D;
-    private static final Double UPDATED_CONVERSION_RATE = 2D;
-    private static final Double SMALLER_CONVERSION_RATE = 1.00D - 1D;
-
     private static final Long DEFAULT_PAYMENT_ID = 1L;
     private static final Long UPDATED_PAYMENT_ID = 2L;
     private static final Long SMALLER_PAYMENT_ID = 1L - 1L;
@@ -129,7 +125,6 @@ class InvoiceResourceIT {
             .invoiceDate(DEFAULT_INVOICE_DATE)
             .invoiceAmount(DEFAULT_INVOICE_AMOUNT)
             .currency(DEFAULT_CURRENCY)
-            .conversionRate(DEFAULT_CONVERSION_RATE)
             .paymentId(DEFAULT_PAYMENT_ID)
             .dealerId(DEFAULT_DEALER_ID)
             .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
@@ -149,7 +144,6 @@ class InvoiceResourceIT {
             .invoiceDate(UPDATED_INVOICE_DATE)
             .invoiceAmount(UPDATED_INVOICE_AMOUNT)
             .currency(UPDATED_CURRENCY)
-            .conversionRate(UPDATED_CONVERSION_RATE)
             .paymentId(UPDATED_PAYMENT_ID)
             .dealerId(UPDATED_DEALER_ID)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
@@ -180,7 +174,6 @@ class InvoiceResourceIT {
         assertThat(testInvoice.getInvoiceDate()).isEqualTo(DEFAULT_INVOICE_DATE);
         assertThat(testInvoice.getInvoiceAmount()).isEqualByComparingTo(DEFAULT_INVOICE_AMOUNT);
         assertThat(testInvoice.getCurrency()).isEqualTo(DEFAULT_CURRENCY);
-        assertThat(testInvoice.getConversionRate()).isEqualTo(DEFAULT_CONVERSION_RATE);
         assertThat(testInvoice.getPaymentId()).isEqualTo(DEFAULT_PAYMENT_ID);
         assertThat(testInvoice.getDealerId()).isEqualTo(DEFAULT_DEALER_ID);
         assertThat(testInvoice.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
@@ -250,24 +243,6 @@ class InvoiceResourceIT {
 
     @Test
     @Transactional
-    void checkConversionRateIsRequired() throws Exception {
-        int databaseSizeBeforeTest = invoiceRepository.findAll().size();
-        // set the field null
-        invoice.setConversionRate(null);
-
-        // Create the Invoice, which fails.
-        InvoiceDTO invoiceDTO = invoiceMapper.toDto(invoice);
-
-        restInvoiceMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(invoiceDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Invoice> invoiceList = invoiceRepository.findAll();
-        assertThat(invoiceList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllInvoices() throws Exception {
         // Initialize the database
         invoiceRepository.saveAndFlush(invoice);
@@ -282,7 +257,6 @@ class InvoiceResourceIT {
             .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())))
             .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(sameNumber(DEFAULT_INVOICE_AMOUNT))))
             .andExpect(jsonPath("$.[*].currency").value(hasItem(DEFAULT_CURRENCY.toString())))
-            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())))
             .andExpect(jsonPath("$.[*].paymentId").value(hasItem(DEFAULT_PAYMENT_ID.intValue())))
             .andExpect(jsonPath("$.[*].dealerId").value(hasItem(DEFAULT_DEALER_ID.intValue())))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
@@ -323,7 +297,6 @@ class InvoiceResourceIT {
             .andExpect(jsonPath("$.invoiceDate").value(DEFAULT_INVOICE_DATE.toString()))
             .andExpect(jsonPath("$.invoiceAmount").value(sameNumber(DEFAULT_INVOICE_AMOUNT)))
             .andExpect(jsonPath("$.currency").value(DEFAULT_CURRENCY.toString()))
-            .andExpect(jsonPath("$.conversionRate").value(DEFAULT_CONVERSION_RATE.doubleValue()))
             .andExpect(jsonPath("$.paymentId").value(DEFAULT_PAYMENT_ID.intValue()))
             .andExpect(jsonPath("$.dealerId").value(DEFAULT_DEALER_ID.intValue()))
             .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
@@ -684,110 +657,6 @@ class InvoiceResourceIT {
 
         // Get all the invoiceList where currency is null
         defaultInvoiceShouldNotBeFound("currency.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllInvoicesByConversionRateIsEqualToSomething() throws Exception {
-        // Initialize the database
-        invoiceRepository.saveAndFlush(invoice);
-
-        // Get all the invoiceList where conversionRate equals to DEFAULT_CONVERSION_RATE
-        defaultInvoiceShouldBeFound("conversionRate.equals=" + DEFAULT_CONVERSION_RATE);
-
-        // Get all the invoiceList where conversionRate equals to UPDATED_CONVERSION_RATE
-        defaultInvoiceShouldNotBeFound("conversionRate.equals=" + UPDATED_CONVERSION_RATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllInvoicesByConversionRateIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        invoiceRepository.saveAndFlush(invoice);
-
-        // Get all the invoiceList where conversionRate not equals to DEFAULT_CONVERSION_RATE
-        defaultInvoiceShouldNotBeFound("conversionRate.notEquals=" + DEFAULT_CONVERSION_RATE);
-
-        // Get all the invoiceList where conversionRate not equals to UPDATED_CONVERSION_RATE
-        defaultInvoiceShouldBeFound("conversionRate.notEquals=" + UPDATED_CONVERSION_RATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllInvoicesByConversionRateIsInShouldWork() throws Exception {
-        // Initialize the database
-        invoiceRepository.saveAndFlush(invoice);
-
-        // Get all the invoiceList where conversionRate in DEFAULT_CONVERSION_RATE or UPDATED_CONVERSION_RATE
-        defaultInvoiceShouldBeFound("conversionRate.in=" + DEFAULT_CONVERSION_RATE + "," + UPDATED_CONVERSION_RATE);
-
-        // Get all the invoiceList where conversionRate equals to UPDATED_CONVERSION_RATE
-        defaultInvoiceShouldNotBeFound("conversionRate.in=" + UPDATED_CONVERSION_RATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllInvoicesByConversionRateIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        invoiceRepository.saveAndFlush(invoice);
-
-        // Get all the invoiceList where conversionRate is not null
-        defaultInvoiceShouldBeFound("conversionRate.specified=true");
-
-        // Get all the invoiceList where conversionRate is null
-        defaultInvoiceShouldNotBeFound("conversionRate.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllInvoicesByConversionRateIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        invoiceRepository.saveAndFlush(invoice);
-
-        // Get all the invoiceList where conversionRate is greater than or equal to DEFAULT_CONVERSION_RATE
-        defaultInvoiceShouldBeFound("conversionRate.greaterThanOrEqual=" + DEFAULT_CONVERSION_RATE);
-
-        // Get all the invoiceList where conversionRate is greater than or equal to UPDATED_CONVERSION_RATE
-        defaultInvoiceShouldNotBeFound("conversionRate.greaterThanOrEqual=" + UPDATED_CONVERSION_RATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllInvoicesByConversionRateIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        invoiceRepository.saveAndFlush(invoice);
-
-        // Get all the invoiceList where conversionRate is less than or equal to DEFAULT_CONVERSION_RATE
-        defaultInvoiceShouldBeFound("conversionRate.lessThanOrEqual=" + DEFAULT_CONVERSION_RATE);
-
-        // Get all the invoiceList where conversionRate is less than or equal to SMALLER_CONVERSION_RATE
-        defaultInvoiceShouldNotBeFound("conversionRate.lessThanOrEqual=" + SMALLER_CONVERSION_RATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllInvoicesByConversionRateIsLessThanSomething() throws Exception {
-        // Initialize the database
-        invoiceRepository.saveAndFlush(invoice);
-
-        // Get all the invoiceList where conversionRate is less than DEFAULT_CONVERSION_RATE
-        defaultInvoiceShouldNotBeFound("conversionRate.lessThan=" + DEFAULT_CONVERSION_RATE);
-
-        // Get all the invoiceList where conversionRate is less than UPDATED_CONVERSION_RATE
-        defaultInvoiceShouldBeFound("conversionRate.lessThan=" + UPDATED_CONVERSION_RATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllInvoicesByConversionRateIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        invoiceRepository.saveAndFlush(invoice);
-
-        // Get all the invoiceList where conversionRate is greater than DEFAULT_CONVERSION_RATE
-        defaultInvoiceShouldNotBeFound("conversionRate.greaterThan=" + DEFAULT_CONVERSION_RATE);
-
-        // Get all the invoiceList where conversionRate is greater than SMALLER_CONVERSION_RATE
-        defaultInvoiceShouldBeFound("conversionRate.greaterThan=" + SMALLER_CONVERSION_RATE);
     }
 
     @Test
@@ -1219,7 +1088,6 @@ class InvoiceResourceIT {
             .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())))
             .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(sameNumber(DEFAULT_INVOICE_AMOUNT))))
             .andExpect(jsonPath("$.[*].currency").value(hasItem(DEFAULT_CURRENCY.toString())))
-            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())))
             .andExpect(jsonPath("$.[*].paymentId").value(hasItem(DEFAULT_PAYMENT_ID.intValue())))
             .andExpect(jsonPath("$.[*].dealerId").value(hasItem(DEFAULT_DEALER_ID.intValue())))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
@@ -1276,7 +1144,6 @@ class InvoiceResourceIT {
             .invoiceDate(UPDATED_INVOICE_DATE)
             .invoiceAmount(UPDATED_INVOICE_AMOUNT)
             .currency(UPDATED_CURRENCY)
-            .conversionRate(UPDATED_CONVERSION_RATE)
             .paymentId(UPDATED_PAYMENT_ID)
             .dealerId(UPDATED_DEALER_ID)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
@@ -1299,7 +1166,6 @@ class InvoiceResourceIT {
         assertThat(testInvoice.getInvoiceDate()).isEqualTo(UPDATED_INVOICE_DATE);
         assertThat(testInvoice.getInvoiceAmount()).isEqualTo(UPDATED_INVOICE_AMOUNT);
         assertThat(testInvoice.getCurrency()).isEqualTo(UPDATED_CURRENCY);
-        assertThat(testInvoice.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
         assertThat(testInvoice.getPaymentId()).isEqualTo(UPDATED_PAYMENT_ID);
         assertThat(testInvoice.getDealerId()).isEqualTo(UPDATED_DEALER_ID);
         assertThat(testInvoice.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
@@ -1395,11 +1261,7 @@ class InvoiceResourceIT {
         Invoice partialUpdatedInvoice = new Invoice();
         partialUpdatedInvoice.setId(invoice.getId());
 
-        partialUpdatedInvoice
-            .invoiceAmount(UPDATED_INVOICE_AMOUNT)
-            .currency(UPDATED_CURRENCY)
-            .conversionRate(UPDATED_CONVERSION_RATE)
-            .compilationToken(UPDATED_COMPILATION_TOKEN);
+        partialUpdatedInvoice.invoiceAmount(UPDATED_INVOICE_AMOUNT).currency(UPDATED_CURRENCY).paymentId(UPDATED_PAYMENT_ID);
 
         restInvoiceMockMvc
             .perform(
@@ -1417,11 +1279,10 @@ class InvoiceResourceIT {
         assertThat(testInvoice.getInvoiceDate()).isEqualTo(DEFAULT_INVOICE_DATE);
         assertThat(testInvoice.getInvoiceAmount()).isEqualByComparingTo(UPDATED_INVOICE_AMOUNT);
         assertThat(testInvoice.getCurrency()).isEqualTo(UPDATED_CURRENCY);
-        assertThat(testInvoice.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
-        assertThat(testInvoice.getPaymentId()).isEqualTo(DEFAULT_PAYMENT_ID);
+        assertThat(testInvoice.getPaymentId()).isEqualTo(UPDATED_PAYMENT_ID);
         assertThat(testInvoice.getDealerId()).isEqualTo(DEFAULT_DEALER_ID);
         assertThat(testInvoice.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
-        assertThat(testInvoice.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
+        assertThat(testInvoice.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
     }
 
     @Test
@@ -1441,7 +1302,6 @@ class InvoiceResourceIT {
             .invoiceDate(UPDATED_INVOICE_DATE)
             .invoiceAmount(UPDATED_INVOICE_AMOUNT)
             .currency(UPDATED_CURRENCY)
-            .conversionRate(UPDATED_CONVERSION_RATE)
             .paymentId(UPDATED_PAYMENT_ID)
             .dealerId(UPDATED_DEALER_ID)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
@@ -1463,7 +1323,6 @@ class InvoiceResourceIT {
         assertThat(testInvoice.getInvoiceDate()).isEqualTo(UPDATED_INVOICE_DATE);
         assertThat(testInvoice.getInvoiceAmount()).isEqualByComparingTo(UPDATED_INVOICE_AMOUNT);
         assertThat(testInvoice.getCurrency()).isEqualTo(UPDATED_CURRENCY);
-        assertThat(testInvoice.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
         assertThat(testInvoice.getPaymentId()).isEqualTo(UPDATED_PAYMENT_ID);
         assertThat(testInvoice.getDealerId()).isEqualTo(UPDATED_DEALER_ID);
         assertThat(testInvoice.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
@@ -1586,7 +1445,6 @@ class InvoiceResourceIT {
             .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())))
             .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(sameNumber(DEFAULT_INVOICE_AMOUNT))))
             .andExpect(jsonPath("$.[*].currency").value(hasItem(DEFAULT_CURRENCY.toString())))
-            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())))
             .andExpect(jsonPath("$.[*].paymentId").value(hasItem(DEFAULT_PAYMENT_ID.intValue())))
             .andExpect(jsonPath("$.[*].dealerId").value(hasItem(DEFAULT_DEALER_ID.intValue())))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))

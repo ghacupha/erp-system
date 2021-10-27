@@ -55,7 +55,6 @@
           <th scope="col" jhiSortBy="invoiceDate"><span>Invoice Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="invoiceAmount"><span>Invoice Amount</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="currency"><span>Currency</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="conversionRate"><span>Conversion Rate</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentId"><span>Payment Id</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="dealerId"><span>Dealer Id</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="fileUploadToken">
@@ -76,7 +75,6 @@
           <td>{{ invoice.invoiceDate | formatMediumDate }}</td>
           <td>{{ invoice.invoiceAmount }}</td>
           <td>{{ invoice.currency }}</td>
-          <td>{{ invoice.conversionRate }}</td>
           <td>{{ invoice.paymentId }}</td>
           <td>{{ invoice.dealerId }}</td>
           <td>{{ invoice.fileUploadToken }}</td>

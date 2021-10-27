@@ -5,12 +5,13 @@ import {Resolve} from "@angular/router";
 import {IPayment, Payment} from "../payment.model";
 import {Observable, of} from "rxjs";
 import {
-  dealerInvoiceSelected, dealerInvoiceSelectedDealer,
+  dealerInvoiceSelected,
+  dealerInvoiceSelectedDealer,
 } from "../../../../store/selectors/dealer-invoice-worklows-status.selectors";
 import {IInvoice} from "../../invoice/invoice.model";
 import {
-  DEFAULT_DATE, DEFAULT_DESCRIPTION, DEFAULT_DISBURSEMENT_COST,
-  DEFAULT_VATABLE_AMOUNT
+  DEFAULT_DATE,
+  DEFAULT_DESCRIPTION,
 } from "../default-values.constants";
 import {IDealer} from "../../../dealers/dealer/dealer.model";
 import {dealerAcquiredForInvoicedPayment} from "../../../../store/actions/dealer-invoice-workflows-status.actions";
@@ -26,8 +27,6 @@ export class DealerInvoicePaymentResolveService implements Resolve<IPayment>  {
     let payment: IPayment = {
       ...new Payment(),
       paymentDate: DEFAULT_DATE,
-      disbursementCost: DEFAULT_DISBURSEMENT_COST,
-      vatableAmount: DEFAULT_VATABLE_AMOUNT,
       description: DEFAULT_DESCRIPTION
     };
 

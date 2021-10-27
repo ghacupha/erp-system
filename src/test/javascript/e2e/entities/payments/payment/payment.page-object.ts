@@ -33,8 +33,6 @@ export class PaymentUpdatePage {
   paymentNumberInput = element(by.id('field_paymentNumber'));
   paymentDateInput = element(by.id('field_paymentDate'));
   invoicedAmountInput = element(by.id('field_invoicedAmount'));
-  disbursementCostInput = element(by.id('field_disbursementCost'));
-  vatableAmountInput = element(by.id('field_vatableAmount'));
   paymentAmountInput = element(by.id('field_paymentAmount'));
   descriptionInput = element(by.id('field_description'));
   settlementCurrencySelect = element(by.id('field_settlementCurrency'));
@@ -81,22 +79,6 @@ export class PaymentUpdatePage {
 
   async getInvoicedAmountInput(): Promise<string> {
     return await this.invoicedAmountInput.getAttribute('value');
-  }
-
-  async setDisbursementCostInput(disbursementCost: string): Promise<void> {
-    await this.disbursementCostInput.sendKeys(disbursementCost);
-  }
-
-  async getDisbursementCostInput(): Promise<string> {
-    return await this.disbursementCostInput.getAttribute('value');
-  }
-
-  async setVatableAmountInput(vatableAmount: string): Promise<void> {
-    await this.vatableAmountInput.sendKeys(vatableAmount);
-  }
-
-  async getVatableAmountInput(): Promise<string> {
-    return await this.vatableAmountInput.getAttribute('value');
   }
 
   async setPaymentAmountInput(paymentAmount: string): Promise<void> {

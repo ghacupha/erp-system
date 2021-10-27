@@ -26,14 +26,14 @@
         <dd>
           <span>{{ payment.invoicedAmount }}</span>
         </dd>
-        <dt><span>Disbursement Cost</span></dt>
+        <!--<dt><span>Disbursement Cost</span></dt>
         <dd>
           <span>{{ payment.disbursementCost }}</span>
         </dd>
         <dt><span>Vatable Amount</span></dt>
         <dd>
           <span>{{ payment.vatableAmount }}</span>
-        </dd>
+        </dd>-->
         <dt><span>Payment Amount</span></dt>
         <dd>
           <span>{{ payment.paymentAmount }}</span>
@@ -48,7 +48,11 @@
         </dd>
         <dt><span>Dealer Id</span></dt>
         <dd>
-          <span>{{ payment.dealerId }}</span>
+          <span>
+            <a [routerLink]="['/erp/dealer', payment.dealerId, 'view']">
+             {{ payment.dealerId }}
+            </a>
+          </span>
         </dd>
         <dt><span>File Upload Token</span></dt>
         <dd>

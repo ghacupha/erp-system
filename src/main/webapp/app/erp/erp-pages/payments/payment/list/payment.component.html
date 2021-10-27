@@ -62,12 +62,12 @@
         <th scope="col" jhiSortBy="invoicedAmount"><span>Invoiced Amount</span>
           <fa-icon icon="sort"></fa-icon>
         </th>
-        <th scope="col" jhiSortBy="disbursementCost"><span>Disbursement Cost</span>
+        <!--<th scope="col" jhiSortBy="disbursementCost"><span>Disbursement Cost</span>
           <fa-icon icon="sort"></fa-icon>
         </th>
         <th scope="col" jhiSortBy="vatableAmount"><span>Vatable Amount</span>
           <fa-icon icon="sort"></fa-icon>
-        </th>
+        </th>-->
         <th scope="col" jhiSortBy="paymentAmount"><span>Payment Amount</span>
           <fa-icon icon="sort"></fa-icon>
         </th>
@@ -106,8 +106,8 @@
         <td>{{ payment.paymentNumber }}</td>
         <td>{{ payment.paymentDate | formatMediumDate }}</td>
         <td>{{ payment.invoicedAmount }}</td>
-        <td>{{ payment.disbursementCost }}</td>
-        <td>{{ payment.vatableAmount }}</td>
+        <!--<td>{{ payment.disbursementCost }}</td>
+        <td>{{ payment.vatableAmount }}</td>-->
         <td>{{ payment.paymentAmount }}</td>
         <td>{{ payment.description }}</td>
         <td>{{ payment.settlementCurrency }}</td>

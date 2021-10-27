@@ -52,10 +52,6 @@ public class PaymentCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter invoicedAmount;
 
-    private BigDecimalFilter disbursementCost;
-
-    private BigDecimalFilter vatableAmount;
-
     private BigDecimalFilter paymentAmount;
 
     private StringFilter description;
@@ -85,8 +81,6 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.paymentNumber = other.paymentNumber == null ? null : other.paymentNumber.copy();
         this.paymentDate = other.paymentDate == null ? null : other.paymentDate.copy();
         this.invoicedAmount = other.invoicedAmount == null ? null : other.invoicedAmount.copy();
-        this.disbursementCost = other.disbursementCost == null ? null : other.disbursementCost.copy();
-        this.vatableAmount = other.vatableAmount == null ? null : other.vatableAmount.copy();
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.settlementCurrency = other.settlementCurrency == null ? null : other.settlementCurrency.copy();
@@ -163,36 +157,6 @@ public class PaymentCriteria implements Serializable, Criteria {
 
     public void setInvoicedAmount(BigDecimalFilter invoicedAmount) {
         this.invoicedAmount = invoicedAmount;
-    }
-
-    public BigDecimalFilter getDisbursementCost() {
-        return disbursementCost;
-    }
-
-    public BigDecimalFilter disbursementCost() {
-        if (disbursementCost == null) {
-            disbursementCost = new BigDecimalFilter();
-        }
-        return disbursementCost;
-    }
-
-    public void setDisbursementCost(BigDecimalFilter disbursementCost) {
-        this.disbursementCost = disbursementCost;
-    }
-
-    public BigDecimalFilter getVatableAmount() {
-        return vatableAmount;
-    }
-
-    public BigDecimalFilter vatableAmount() {
-        if (vatableAmount == null) {
-            vatableAmount = new BigDecimalFilter();
-        }
-        return vatableAmount;
-    }
-
-    public void setVatableAmount(BigDecimalFilter vatableAmount) {
-        this.vatableAmount = vatableAmount;
     }
 
     public BigDecimalFilter getPaymentAmount() {
@@ -367,8 +331,6 @@ public class PaymentCriteria implements Serializable, Criteria {
             Objects.equals(paymentNumber, that.paymentNumber) &&
             Objects.equals(paymentDate, that.paymentDate) &&
             Objects.equals(invoicedAmount, that.invoicedAmount) &&
-            Objects.equals(disbursementCost, that.disbursementCost) &&
-            Objects.equals(vatableAmount, that.vatableAmount) &&
             Objects.equals(paymentAmount, that.paymentAmount) &&
             Objects.equals(description, that.description) &&
             Objects.equals(settlementCurrency, that.settlementCurrency) &&
@@ -390,8 +352,6 @@ public class PaymentCriteria implements Serializable, Criteria {
             paymentNumber,
             paymentDate,
             invoicedAmount,
-            disbursementCost,
-            vatableAmount,
             paymentAmount,
             description,
             settlementCurrency,
@@ -414,8 +374,6 @@ public class PaymentCriteria implements Serializable, Criteria {
             (paymentNumber != null ? "paymentNumber=" + paymentNumber + ", " : "") +
             (paymentDate != null ? "paymentDate=" + paymentDate + ", " : "") +
             (invoicedAmount != null ? "invoicedAmount=" + invoicedAmount + ", " : "") +
-            (disbursementCost != null ? "disbursementCost=" + disbursementCost + ", " : "") +
-            (vatableAmount != null ? "vatableAmount=" + vatableAmount + ", " : "") +
             (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
             (description != null ? "description=" + description + ", " : "") +
             (settlementCurrency != null ? "settlementCurrency=" + settlementCurrency + ", " : "") +
