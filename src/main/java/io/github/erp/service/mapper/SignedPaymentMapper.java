@@ -7,13 +7,9 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link SignedPayment} and its DTO {@link SignedPaymentDTO}.
  */
-@Mapper(
-    componentModel = "spring",
-    uses = { PaymentLabelMapper.class, DealerMapper.class, PaymentCategoryMapper.class, PlaceholderMapper.class }
-)
+@Mapper(componentModel = "spring", uses = { PaymentLabelMapper.class, PaymentCategoryMapper.class, PlaceholderMapper.class })
 public interface SignedPaymentMapper extends EntityMapper<SignedPaymentDTO, SignedPayment> {
     @Mapping(target = "paymentLabels", source = "paymentLabels", qualifiedByName = "descriptionSet")
-    @Mapping(target = "dealer", source = "dealer", qualifiedByName = "dealerName")
     @Mapping(target = "paymentCategory", source = "paymentCategory", qualifiedByName = "categoryName")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     @Mapping(target = "signedPaymentGroup", source = "signedPaymentGroup", qualifiedByName = "id")

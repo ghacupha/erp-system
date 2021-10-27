@@ -11,13 +11,6 @@
       "otherEntityRelationshipName": "paymentCalculation"
     },
     {
-      "relationshipName": "payment",
-      "otherEntityName": "payment",
-      "relationshipType": "one-to-one",
-      "ownerSide": false,
-      "otherEntityRelationshipName": "paymentCalculation"
-    },
-    {
       "relationshipName": "paymentCategory",
       "otherEntityName": "paymentCategory",
       "relationshipType": "many-to-one",

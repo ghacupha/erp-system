@@ -23,6 +23,10 @@
       "fieldValidateRulesMin": 0
     },
     {
+      "fieldName": "dealerName",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "fileUploadToken",
       "fieldType": "String"
     },
@@ -39,12 +43,6 @@
       "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "signedPayment"
-    },
-    {
-      "relationshipName": "dealer",
-      "otherEntityName": "dealer",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "dealerName"
     },
     {
       "relationshipName": "paymentCategory",

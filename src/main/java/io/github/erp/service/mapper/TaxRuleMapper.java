@@ -12,11 +12,6 @@ public interface TaxRuleMapper extends EntityMapper<TaxRuleDTO, TaxRule> {
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     TaxRuleDTO toDto(TaxRule s);
 
-    @Named("id")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    TaxRuleDTO toDtoId(TaxRule taxRule);
-
     @Mapping(target = "removePlaceholder", ignore = true)
     TaxRule toEntity(TaxRuleDTO taxRuleDTO);
 }

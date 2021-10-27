@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.Payment;
 import io.github.erp.domain.PaymentCalculation;
 import io.github.erp.domain.PaymentCategory;
 import io.github.erp.domain.PaymentLabel;
@@ -872,33 +871,6 @@ class PaymentCalculationResourceIT {
 
         // Get all the paymentCalculationList where paymentLabel equals to (paymentLabelId + 1)
         defaultPaymentCalculationShouldNotBeFound("paymentLabelId.equals=" + (paymentLabelId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentCalculationsByPaymentIsEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-        Payment payment;
-        if (TestUtil.findAll(em, Payment.class).isEmpty()) {
-            payment = PaymentResourceIT.createEntity(em);
-            em.persist(payment);
-            em.flush();
-        } else {
-            payment = TestUtil.findAll(em, Payment.class).get(0);
-        }
-        em.persist(payment);
-        em.flush();
-        paymentCalculation.setPayment(payment);
-        payment.setPaymentCalculation(paymentCalculation);
-        paymentCalculationRepository.saveAndFlush(paymentCalculation);
-        Long paymentId = payment.getId();
-
-        // Get all the paymentCalculationList where payment equals to paymentId
-        defaultPaymentCalculationShouldBeFound("paymentId.equals=" + paymentId);
-
-        // Get all the paymentCalculationList where payment equals to (paymentId + 1)
-        defaultPaymentCalculationShouldNotBeFound("paymentId.equals=" + (paymentId + 1));
     }
 
     @Test

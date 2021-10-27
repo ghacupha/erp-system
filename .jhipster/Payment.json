@@ -35,10 +35,8 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "conversionRate",
-      "fieldType": "Double",
-      "fieldValidateRules": ["required", "min"],
-      "fieldValidateRulesMin": "1.00"
+      "fieldName": "dealerId",
+      "fieldType": "Long"
     },
     {
       "fieldName": "fileUploadToken",
@@ -59,34 +57,10 @@
       "otherEntityRelationshipName": "payment"
     },
     {
-      "relationshipName": "dealer",
-      "otherEntityName": "dealer",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "dealerName"
-    },
-    {
       "relationshipName": "paymentCategory",
       "otherEntityName": "paymentCategory",
       "relationshipType": "many-to-one",
       "otherEntityField": "categoryName"
-    },
-    {
-      "relationshipName": "taxRule",
-      "otherEntityName": "taxRule",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "id",
-      "ownerSide": true,
-      "useJPADerivedIdentifier": false,
-      "otherEntityRelationshipName": "payment"
-    },
-    {
-      "relationshipName": "paymentCalculation",
-      "otherEntityName": "paymentCalculation",
-      "relationshipType": "one-to-one",
-      "otherEntityField": "id",
-      "ownerSide": true,
-      "useJPADerivedIdentifier": false,
-      "otherEntityRelationshipName": "payment"
     },
     {
       "relationshipName": "placeholder",

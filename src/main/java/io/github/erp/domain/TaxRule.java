@@ -55,14 +55,6 @@ public class TaxRule implements Serializable {
     @Column(name = "compilation_token")
     private String compilationToken;
 
-    @OneToMany(mappedBy = "taxRule")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = { "paymentLabels", "dealer", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup" },
-        allowSetters = true
-    )
-    private Set<Payment> payments = new HashSet<>();
-
     @ManyToMany
     @JoinTable(
         name = "rel_tax_rule__placeholder",
@@ -216,37 +208,6 @@ public class TaxRule implements Serializable {
 
     public void setCompilationToken(String compilationToken) {
         this.compilationToken = compilationToken;
-    }
-
-    public Set<Payment> getPayments() {
-        return this.payments;
-    }
-
-    public void setPayments(Set<Payment> payments) {
-        if (this.payments != null) {
-            this.payments.forEach(i -> i.setTaxRule(null));
-        }
-        if (payments != null) {
-            payments.forEach(i -> i.setTaxRule(this));
-        }
-        this.payments = payments;
-    }
-
-    public TaxRule payments(Set<Payment> payments) {
-        this.setPayments(payments);
-        return this;
-    }
-
-    public TaxRule addPayment(Payment payment) {
-        this.payments.add(payment);
-        payment.setTaxRule(this);
-        return this;
-    }
-
-    public TaxRule removePayment(Payment payment) {
-        this.payments.remove(payment);
-        payment.setTaxRule(null);
-        return this;
     }
 
     public Set<Placeholder> getPlaceholders() {

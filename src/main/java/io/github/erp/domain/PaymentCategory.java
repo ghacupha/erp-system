@@ -57,7 +57,7 @@ public class PaymentCategory implements Serializable {
 
     @OneToMany(mappedBy = "paymentCategory")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "paymentLabels", "payment", "paymentCategory", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "paymentLabels", "paymentCategory", "placeholders" }, allowSetters = true)
     private Set<PaymentCalculation> paymentCalculations = new HashSet<>();
 
     @ManyToMany

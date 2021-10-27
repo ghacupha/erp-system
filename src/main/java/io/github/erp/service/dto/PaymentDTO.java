@@ -33,9 +33,7 @@ public class PaymentDTO implements Serializable {
     @NotNull
     private CurrencyTypes settlementCurrency;
 
-    @NotNull
-    @DecimalMin(value = "1.00")
-    private Double conversionRate;
+    private Long dealerId;
 
     private String fileUploadToken;
 
@@ -43,13 +41,7 @@ public class PaymentDTO implements Serializable {
 
     private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
 
-    private DealerDTO dealer;
-
     private PaymentCategoryDTO paymentCategory;
-
-    private TaxRuleDTO taxRule;
-
-    private PaymentCalculationDTO paymentCalculation;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
@@ -127,12 +119,12 @@ public class PaymentDTO implements Serializable {
         this.settlementCurrency = settlementCurrency;
     }
 
-    public Double getConversionRate() {
-        return conversionRate;
+    public Long getDealerId() {
+        return dealerId;
     }
 
-    public void setConversionRate(Double conversionRate) {
-        this.conversionRate = conversionRate;
+    public void setDealerId(Long dealerId) {
+        this.dealerId = dealerId;
     }
 
     public String getFileUploadToken() {
@@ -159,36 +151,12 @@ public class PaymentDTO implements Serializable {
         this.paymentLabels = paymentLabels;
     }
 
-    public DealerDTO getDealer() {
-        return dealer;
-    }
-
-    public void setDealer(DealerDTO dealer) {
-        this.dealer = dealer;
-    }
-
     public PaymentCategoryDTO getPaymentCategory() {
         return paymentCategory;
     }
 
     public void setPaymentCategory(PaymentCategoryDTO paymentCategory) {
         this.paymentCategory = paymentCategory;
-    }
-
-    public TaxRuleDTO getTaxRule() {
-        return taxRule;
-    }
-
-    public void setTaxRule(TaxRuleDTO taxRule) {
-        this.taxRule = taxRule;
-    }
-
-    public PaymentCalculationDTO getPaymentCalculation() {
-        return paymentCalculation;
-    }
-
-    public void setPaymentCalculation(PaymentCalculationDTO paymentCalculation) {
-        this.paymentCalculation = paymentCalculation;
     }
 
     public Set<PlaceholderDTO> getPlaceholders() {
@@ -241,14 +209,11 @@ public class PaymentDTO implements Serializable {
             ", paymentAmount=" + getPaymentAmount() +
             ", description='" + getDescription() + "'" +
             ", settlementCurrency='" + getSettlementCurrency() + "'" +
-            ", conversionRate=" + getConversionRate() +
+            ", dealerId=" + getDealerId() +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
             ", paymentLabels=" + getPaymentLabels() +
-            ", dealer=" + getDealer() +
             ", paymentCategory=" + getPaymentCategory() +
-            ", taxRule=" + getTaxRule() +
-            ", paymentCalculation=" + getPaymentCalculation() +
             ", placeholders=" + getPlaceholders() +
             ", paymentGroup=" + getPaymentGroup() +
             "}";

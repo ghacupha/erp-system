@@ -55,10 +55,8 @@ public class Payment implements Serializable {
     @Column(name = "settlement_currency", nullable = false)
     private CurrencyTypes settlementCurrency;
 
-    @NotNull
-    @DecimalMin(value = "1.00")
-    @Column(name = "conversion_rate", nullable = false)
-    private Double conversionRate;
+    @Column(name = "dealer_id")
+    private Long dealerId;
 
     @Column(name = "file_upload_token")
     private String fileUploadToken;
@@ -77,24 +75,8 @@ public class Payment implements Serializable {
     private Set<PaymentLabel> paymentLabels = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(
-        value = { "paymentLabels", "dealerGroup", "paymentRequisitions", "signedPayments", "placeholders" },
-        allowSetters = true
-    )
-    private Dealer dealer;
-
-    @ManyToOne
     @JsonIgnoreProperties(value = { "paymentLabels", "paymentCalculations", "placeholders" }, allowSetters = true)
     private PaymentCategory paymentCategory;
-
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "payments", "placeholders" }, allowSetters = true)
-    private TaxRule taxRule;
-
-    @JsonIgnoreProperties(value = { "paymentLabels", "payment", "paymentCategory", "placeholders" }, allowSetters = true)
-    @OneToOne
-    @JoinColumn(unique = true)
-    private PaymentCalculation paymentCalculation;
 
     @ManyToMany
     @JoinTable(
@@ -107,10 +89,7 @@ public class Payment implements Serializable {
     private Set<Placeholder> placeholders = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(
-        value = { "paymentLabels", "dealer", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup" },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "paymentLabels", "paymentCategory", "placeholders", "paymentGroup" }, allowSetters = true)
     private Payment paymentGroup;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -232,17 +211,17 @@ public class Payment implements Serializable {
         this.settlementCurrency = settlementCurrency;
     }
 
-    public Double getConversionRate() {
-        return this.conversionRate;
+    public Long getDealerId() {
+        return this.dealerId;
     }
 
-    public Payment conversionRate(Double conversionRate) {
-        this.setConversionRate(conversionRate);
+    public Payment dealerId(Long dealerId) {
+        this.setDealerId(dealerId);
         return this;
     }
 
-    public void setConversionRate(Double conversionRate) {
-        this.conversionRate = conversionRate;
+    public void setDealerId(Long dealerId) {
+        this.dealerId = dealerId;
     }
 
     public String getFileUploadToken() {
@@ -294,19 +273,6 @@ public class Payment implements Serializable {
         return this;
     }
 
-    public Dealer getDealer() {
-        return this.dealer;
-    }
-
-    public void setDealer(Dealer dealer) {
-        this.dealer = dealer;
-    }
-
-    public Payment dealer(Dealer dealer) {
-        this.setDealer(dealer);
-        return this;
-    }
-
     public PaymentCategory getPaymentCategory() {
         return this.paymentCategory;
     }
@@ -317,32 +283,6 @@ public class Payment implements Serializable {
 
     public Payment paymentCategory(PaymentCategory paymentCategory) {
         this.setPaymentCategory(paymentCategory);
-        return this;
-    }
-
-    public TaxRule getTaxRule() {
-        return this.taxRule;
-    }
-
-    public void setTaxRule(TaxRule taxRule) {
-        this.taxRule = taxRule;
-    }
-
-    public Payment taxRule(TaxRule taxRule) {
-        this.setTaxRule(taxRule);
-        return this;
-    }
-
-    public PaymentCalculation getPaymentCalculation() {
-        return this.paymentCalculation;
-    }
-
-    public void setPaymentCalculation(PaymentCalculation paymentCalculation) {
-        this.paymentCalculation = paymentCalculation;
-    }
-
-    public Payment paymentCalculation(PaymentCalculation paymentCalculation) {
-        this.setPaymentCalculation(paymentCalculation);
         return this;
     }
 
@@ -414,7 +354,7 @@ public class Payment implements Serializable {
             ", paymentAmount=" + getPaymentAmount() +
             ", description='" + getDescription() + "'" +
             ", settlementCurrency='" + getSettlementCurrency() + "'" +
-            ", conversionRate=" + getConversionRate() +
+            ", dealerId=" + getDealerId() +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
             "}";

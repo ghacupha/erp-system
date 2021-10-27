@@ -26,13 +26,13 @@
             <column name="transaction_amount" type="decimal(21,2)">
                 <constraints nullable="false" />
             </column>
+            <column name="dealer_name" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="file_upload_token" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="compilation_token" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="dealer_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <column name="payment_category_id" type="bigint">
@@ -91,6 +91,7 @@
             <column name="transaction_date" type="date"/>
             <column name="transaction_currency" type="string"/>
             <column name="transaction_amount" type="numeric"/>
+            <column name="dealer_name" type="string"/>
             <column name="file_upload_token" type="string"/>
             <column name="compilation_token" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->

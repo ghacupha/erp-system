@@ -154,15 +154,6 @@ public class DealerQueryService extends QueryService<Dealer> {
                         )
                     );
             }
-            if (criteria.getSignedPaymentId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getSignedPaymentId(),
-                            root -> root.join(Dealer_.signedPayments, JoinType.LEFT).get(SignedPayment_.id)
-                        )
-                    );
-            }
             if (criteria.getPlaceholderId() != null) {
                 specification =
                     specification.and(

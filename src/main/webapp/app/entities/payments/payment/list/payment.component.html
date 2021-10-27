@@ -61,17 +61,14 @@
           <th scope="col" jhiSortBy="settlementCurrency">
             <span>Settlement Currency</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="conversionRate"><span>Conversion Rate</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="dealerId"><span>Dealer Id</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="fileUploadToken">
             <span>File Upload Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="compilationToken">
             <span>Compilation Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentCategory.categoryName"><span>Payment Category</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="taxRule.id"><span>Tax Rule</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="paymentCalculation.id"><span>Payment Calculation</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentGroup.id"><span>Payment Group</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -89,27 +86,12 @@
           <td>{{ payment.paymentAmount }}</td>
           <td>{{ payment.description }}</td>
           <td>{{ payment.settlementCurrency }}</td>
-          <td>{{ payment.conversionRate }}</td>
+          <td>{{ payment.dealerId }}</td>
           <td>{{ payment.fileUploadToken }}</td>
           <td>{{ payment.compilationToken }}</td>
           <td>
-            <div *ngIf="payment.dealer">
-              <a [routerLink]="['/dealer', payment.dealer?.id, 'view']">{{ payment.dealer?.dealerName }}</a>
-            </div>
-          </td>
-          <td>
             <div *ngIf="payment.paymentCategory">
               <a [routerLink]="['/payment-category', payment.paymentCategory?.id, 'view']">{{ payment.paymentCategory?.categoryName }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="payment.taxRule">
-              <a [routerLink]="['/tax-rule', payment.taxRule?.id, 'view']">{{ payment.taxRule?.id }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="payment.paymentCalculation">
-              <a [routerLink]="['/payment-calculation', payment.paymentCalculation?.id, 'view']">{{ payment.paymentCalculation?.id }}</a>
             </div>
           </td>
           <td>

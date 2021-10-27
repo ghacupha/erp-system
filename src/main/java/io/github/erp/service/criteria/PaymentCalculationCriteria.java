@@ -41,8 +41,6 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
 
     private LongFilter paymentLabelId;
 
-    private LongFilter paymentId;
-
     private LongFilter paymentCategoryId;
 
     private LongFilter placeholderId;
@@ -60,7 +58,6 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
         this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
         this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
-        this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
         this.paymentCategoryId = other.paymentCategoryId == null ? null : other.paymentCategoryId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
@@ -191,21 +188,6 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
         this.paymentLabelId = paymentLabelId;
     }
 
-    public LongFilter getPaymentId() {
-        return paymentId;
-    }
-
-    public LongFilter paymentId() {
-        if (paymentId == null) {
-            paymentId = new LongFilter();
-        }
-        return paymentId;
-    }
-
-    public void setPaymentId(LongFilter paymentId) {
-        this.paymentId = paymentId;
-    }
-
     public LongFilter getPaymentCategoryId() {
         return paymentCategoryId;
     }
@@ -262,7 +244,6 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
             Objects.equals(fileUploadToken, that.fileUploadToken) &&
             Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
-            Objects.equals(paymentId, that.paymentId) &&
             Objects.equals(paymentCategoryId, that.paymentCategoryId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
@@ -280,7 +261,6 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
             fileUploadToken,
             compilationToken,
             paymentLabelId,
-            paymentId,
             paymentCategoryId,
             placeholderId,
             distinct
@@ -299,7 +279,6 @@ public class PaymentCalculationCriteria implements Serializable, Criteria {
             (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +
             (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
-            (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
             (paymentCategoryId != null ? "paymentCategoryId=" + paymentCategoryId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

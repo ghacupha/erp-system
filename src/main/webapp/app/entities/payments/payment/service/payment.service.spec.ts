@@ -35,7 +35,7 @@ describe('Service Tests', () => {
         paymentAmount: 0,
         description: 'AAAAAAA',
         settlementCurrency: CurrencyTypes.KES,
-        conversionRate: 0,
+        dealerId: 0,
         fileUploadToken: 'AAAAAAA',
         compilationToken: 'AAAAAAA',
       };
@@ -92,7 +92,7 @@ describe('Service Tests', () => {
             paymentAmount: 1,
             description: 'BBBBBB',
             settlementCurrency: 'BBBBBB',
-            conversionRate: 1,
+            dealerId: 1,
             fileUploadToken: 'BBBBBB',
             compilationToken: 'BBBBBB',
           },
@@ -119,7 +119,7 @@ describe('Service Tests', () => {
             paymentDate: currentDate.format(DATE_FORMAT),
             vatableAmount: 1,
             paymentAmount: 1,
-            conversionRate: 1,
+            dealerId: 1,
           },
           new Payment()
         );
@@ -152,7 +152,7 @@ describe('Service Tests', () => {
             paymentAmount: 1,
             description: 'BBBBBB',
             settlementCurrency: 'BBBBBB',
-            conversionRate: 1,
+            dealerId: 1,
             fileUploadToken: 'BBBBBB',
             compilationToken: 'BBBBBB',
           },

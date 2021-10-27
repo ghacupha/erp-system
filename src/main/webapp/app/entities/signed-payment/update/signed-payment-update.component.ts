@@ -9,8 +9,6 @@ import { ISignedPayment, SignedPayment } from '../signed-payment.model';
 import { SignedPaymentService } from '../service/signed-payment.service';
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 import { IPaymentCategory } from 'app/entities/payments/payment-category/payment-category.model';
 import { PaymentCategoryService } from 'app/entities/payments/payment-category/service/payment-category.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
@@ -24,7 +22,6 @@ export class SignedPaymentUpdateComponent implements OnInit {
   isSaving = false;
 
   paymentLabelsSharedCollection: IPaymentLabel[] = [];
-  dealersSharedCollection: IDealer[] = [];
   paymentCategoriesSharedCollection: IPaymentCategory[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
   signedPaymentsSharedCollection: ISignedPayment[] = [];
@@ -35,10 +32,10 @@ export class SignedPaymentUpdateComponent implements OnInit {
     transactionDate: [null, [Validators.required]],
     transactionCurrency: [null, [Validators.required]],
     transactionAmount: [null, [Validators.required, Validators.min(0)]],
+    dealerName: [],
     fileUploadToken: [],
     compilationToken: [],
     paymentLabels: [],
-    dealer: [],
     paymentCategory: [],
     placeholders: [],
     signedPaymentGroup: [],
@@ -47,7 +44,6 @@ export class SignedPaymentUpdateComponent implements OnInit {
   constructor(
     protected signedPaymentService: SignedPaymentService,
     protected paymentLabelService: PaymentLabelService,
-    protected dealerService: DealerService,
     protected paymentCategoryService: PaymentCategoryService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
@@ -77,10 +73,6 @@ export class SignedPaymentUpdateComponent implements OnInit {
   }
 
   trackPaymentLabelById(index: number, item: IPaymentLabel): number {
-    return item.id!;
-  }
-
-  trackDealerById(index: number, item: IDealer): number {
     return item.id!;
   }
 
@@ -144,10 +136,10 @@ export class SignedPaymentUpdateComponent implements OnInit {
       transactionDate: signedPayment.transactionDate,
       transactionCurrency: signedPayment.transactionCurrency,
       transactionAmount: signedPayment.transactionAmount,
+      dealerName: signedPayment.dealerName,
       fileUploadToken: signedPayment.fileUploadToken,
       compilationToken: signedPayment.compilationToken,
       paymentLabels: signedPayment.paymentLabels,
-      dealer: signedPayment.dealer,
       paymentCategory: signedPayment.paymentCategory,
       placeholders: signedPayment.placeholders,
       signedPaymentGroup: signedPayment.signedPaymentGroup,
@@ -157,7 +149,6 @@ export class SignedPaymentUpdateComponent implements OnInit {
       this.paymentLabelsSharedCollection,
       ...(signedPayment.paymentLabels ?? [])
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, signedPayment.dealer);
     this.paymentCategoriesSharedCollection = this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
       this.paymentCategoriesSharedCollection,
       signedPayment.paymentCategory
@@ -182,12 +173,6 @@ export class SignedPaymentUpdateComponent implements OnInit {
         )
       )
       .subscribe((paymentLabels: IPaymentLabel[]) => (this.paymentLabelsSharedCollection = paymentLabels));
-
-    this.dealerService
-      .query()
-      .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
-      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('dealer')!.value)))
-      .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
 
     this.paymentCategoryService
       .query()
@@ -231,10 +216,10 @@ export class SignedPaymentUpdateComponent implements OnInit {
       transactionDate: this.editForm.get(['transactionDate'])!.value,
       transactionCurrency: this.editForm.get(['transactionCurrency'])!.value,
       transactionAmount: this.editForm.get(['transactionAmount'])!.value,
+      dealerName: this.editForm.get(['dealerName'])!.value,
       fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
       compilationToken: this.editForm.get(['compilationToken'])!.value,
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
-      dealer: this.editForm.get(['dealer'])!.value,
       paymentCategory: this.editForm.get(['paymentCategory'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       signedPaymentGroup: this.editForm.get(['signedPaymentGroup'])!.value,

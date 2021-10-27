@@ -46,9 +46,9 @@
         <dd>
           <span>{{ payment.settlementCurrency }}</span>
         </dd>
-        <dt><span>Conversion Rate</span></dt>
+        <dt><span>Dealer Id</span></dt>
         <dd>
-          <span>{{ payment.conversionRate }}</span>
+          <span>{{ payment.dealerId }}</span>
         </dd>
         <dt><span>File Upload Token</span></dt>
         <dd>
@@ -65,28 +65,10 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
-        <dt><span>Dealer</span></dt>
-        <dd>
-          <div *ngIf="payment.dealer">
-            <a [routerLink]="['/dealer', payment.dealer?.id, 'view']">{{ payment.dealer?.dealerName }}</a>
-          </div>
-        </dd>
         <dt><span>Payment Category</span></dt>
         <dd>
           <div *ngIf="payment.paymentCategory">
             <a [routerLink]="['/payment-category', payment.paymentCategory?.id, 'view']">{{ payment.paymentCategory?.categoryName }}</a>
-          </div>
-        </dd>
-        <dt><span>Tax Rule</span></dt>
-        <dd>
-          <div *ngIf="payment.taxRule">
-            <a [routerLink]="['/tax-rule', payment.taxRule?.id, 'view']">{{ payment.taxRule?.id }}</a>
-          </div>
-        </dd>
-        <dt><span>Payment Calculation</span></dt>
-        <dd>
-          <div *ngIf="payment.paymentCalculation">
-            <a [routerLink]="['/payment-calculation', payment.paymentCalculation?.id, 'view']">{{ payment.paymentCalculation?.id }}</a>
           </div>
         </dd>
         <dt><span>Placeholder</span></dt>

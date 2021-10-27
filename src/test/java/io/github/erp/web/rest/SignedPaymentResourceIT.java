@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.Dealer;
 import io.github.erp.domain.PaymentCategory;
 import io.github.erp.domain.PaymentLabel;
 import io.github.erp.domain.Placeholder;
@@ -67,6 +66,9 @@ class SignedPaymentResourceIT {
     private static final BigDecimal UPDATED_TRANSACTION_AMOUNT = new BigDecimal(1);
     private static final BigDecimal SMALLER_TRANSACTION_AMOUNT = new BigDecimal(0 - 1);
 
+    private static final String DEFAULT_DEALER_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_DEALER_NAME = "BBBBBBBBBB";
+
     private static final String DEFAULT_FILE_UPLOAD_TOKEN = "AAAAAAAAAA";
     private static final String UPDATED_FILE_UPLOAD_TOKEN = "BBBBBBBBBB";
 
@@ -120,6 +122,7 @@ class SignedPaymentResourceIT {
             .transactionDate(DEFAULT_TRANSACTION_DATE)
             .transactionCurrency(DEFAULT_TRANSACTION_CURRENCY)
             .transactionAmount(DEFAULT_TRANSACTION_AMOUNT)
+            .dealerName(DEFAULT_DEALER_NAME)
             .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
             .compilationToken(DEFAULT_COMPILATION_TOKEN);
         return signedPayment;
@@ -137,6 +140,7 @@ class SignedPaymentResourceIT {
             .transactionDate(UPDATED_TRANSACTION_DATE)
             .transactionCurrency(UPDATED_TRANSACTION_CURRENCY)
             .transactionAmount(UPDATED_TRANSACTION_AMOUNT)
+            .dealerName(UPDATED_DEALER_NAME)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
             .compilationToken(UPDATED_COMPILATION_TOKEN);
         return signedPayment;
@@ -167,6 +171,7 @@ class SignedPaymentResourceIT {
         assertThat(testSignedPayment.getTransactionDate()).isEqualTo(DEFAULT_TRANSACTION_DATE);
         assertThat(testSignedPayment.getTransactionCurrency()).isEqualTo(DEFAULT_TRANSACTION_CURRENCY);
         assertThat(testSignedPayment.getTransactionAmount()).isEqualByComparingTo(DEFAULT_TRANSACTION_AMOUNT);
+        assertThat(testSignedPayment.getDealerName()).isEqualTo(DEFAULT_DEALER_NAME);
         assertThat(testSignedPayment.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
         assertThat(testSignedPayment.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
 
@@ -294,6 +299,7 @@ class SignedPaymentResourceIT {
             .andExpect(jsonPath("$.[*].transactionDate").value(hasItem(DEFAULT_TRANSACTION_DATE.toString())))
             .andExpect(jsonPath("$.[*].transactionCurrency").value(hasItem(DEFAULT_TRANSACTION_CURRENCY.toString())))
             .andExpect(jsonPath("$.[*].transactionAmount").value(hasItem(sameNumber(DEFAULT_TRANSACTION_AMOUNT))))
+            .andExpect(jsonPath("$.[*].dealerName").value(hasItem(DEFAULT_DEALER_NAME)))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
             .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
@@ -332,6 +338,7 @@ class SignedPaymentResourceIT {
             .andExpect(jsonPath("$.transactionDate").value(DEFAULT_TRANSACTION_DATE.toString()))
             .andExpect(jsonPath("$.transactionCurrency").value(DEFAULT_TRANSACTION_CURRENCY.toString()))
             .andExpect(jsonPath("$.transactionAmount").value(sameNumber(DEFAULT_TRANSACTION_AMOUNT)))
+            .andExpect(jsonPath("$.dealerName").value(DEFAULT_DEALER_NAME))
             .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
             .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN));
     }
@@ -694,6 +701,84 @@ class SignedPaymentResourceIT {
 
     @Test
     @Transactional
+    void getAllSignedPaymentsByDealerNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        signedPaymentRepository.saveAndFlush(signedPayment);
+
+        // Get all the signedPaymentList where dealerName equals to DEFAULT_DEALER_NAME
+        defaultSignedPaymentShouldBeFound("dealerName.equals=" + DEFAULT_DEALER_NAME);
+
+        // Get all the signedPaymentList where dealerName equals to UPDATED_DEALER_NAME
+        defaultSignedPaymentShouldNotBeFound("dealerName.equals=" + UPDATED_DEALER_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllSignedPaymentsByDealerNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        signedPaymentRepository.saveAndFlush(signedPayment);
+
+        // Get all the signedPaymentList where dealerName not equals to DEFAULT_DEALER_NAME
+        defaultSignedPaymentShouldNotBeFound("dealerName.notEquals=" + DEFAULT_DEALER_NAME);
+
+        // Get all the signedPaymentList where dealerName not equals to UPDATED_DEALER_NAME
+        defaultSignedPaymentShouldBeFound("dealerName.notEquals=" + UPDATED_DEALER_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllSignedPaymentsByDealerNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        signedPaymentRepository.saveAndFlush(signedPayment);
+
+        // Get all the signedPaymentList where dealerName in DEFAULT_DEALER_NAME or UPDATED_DEALER_NAME
+        defaultSignedPaymentShouldBeFound("dealerName.in=" + DEFAULT_DEALER_NAME + "," + UPDATED_DEALER_NAME);
+
+        // Get all the signedPaymentList where dealerName equals to UPDATED_DEALER_NAME
+        defaultSignedPaymentShouldNotBeFound("dealerName.in=" + UPDATED_DEALER_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllSignedPaymentsByDealerNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        signedPaymentRepository.saveAndFlush(signedPayment);
+
+        // Get all the signedPaymentList where dealerName is not null
+        defaultSignedPaymentShouldBeFound("dealerName.specified=true");
+
+        // Get all the signedPaymentList where dealerName is null
+        defaultSignedPaymentShouldNotBeFound("dealerName.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllSignedPaymentsByDealerNameContainsSomething() throws Exception {
+        // Initialize the database
+        signedPaymentRepository.saveAndFlush(signedPayment);
+
+        // Get all the signedPaymentList where dealerName contains DEFAULT_DEALER_NAME
+        defaultSignedPaymentShouldBeFound("dealerName.contains=" + DEFAULT_DEALER_NAME);
+
+        // Get all the signedPaymentList where dealerName contains UPDATED_DEALER_NAME
+        defaultSignedPaymentShouldNotBeFound("dealerName.contains=" + UPDATED_DEALER_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllSignedPaymentsByDealerNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        signedPaymentRepository.saveAndFlush(signedPayment);
+
+        // Get all the signedPaymentList where dealerName does not contain DEFAULT_DEALER_NAME
+        defaultSignedPaymentShouldNotBeFound("dealerName.doesNotContain=" + DEFAULT_DEALER_NAME);
+
+        // Get all the signedPaymentList where dealerName does not contain UPDATED_DEALER_NAME
+        defaultSignedPaymentShouldBeFound("dealerName.doesNotContain=" + UPDATED_DEALER_NAME);
+    }
+
+    @Test
+    @Transactional
     void getAllSignedPaymentsByFileUploadTokenIsEqualToSomething() throws Exception {
         // Initialize the database
         signedPaymentRepository.saveAndFlush(signedPayment);
@@ -876,32 +961,6 @@ class SignedPaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllSignedPaymentsByDealerIsEqualToSomething() throws Exception {
-        // Initialize the database
-        signedPaymentRepository.saveAndFlush(signedPayment);
-        Dealer dealer;
-        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            dealer = DealerResourceIT.createEntity(em);
-            em.persist(dealer);
-            em.flush();
-        } else {
-            dealer = TestUtil.findAll(em, Dealer.class).get(0);
-        }
-        em.persist(dealer);
-        em.flush();
-        signedPayment.setDealer(dealer);
-        signedPaymentRepository.saveAndFlush(signedPayment);
-        Long dealerId = dealer.getId();
-
-        // Get all the signedPaymentList where dealer equals to dealerId
-        defaultSignedPaymentShouldBeFound("dealerId.equals=" + dealerId);
-
-        // Get all the signedPaymentList where dealer equals to (dealerId + 1)
-        defaultSignedPaymentShouldNotBeFound("dealerId.equals=" + (dealerId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllSignedPaymentsByPaymentCategoryIsEqualToSomething() throws Exception {
         // Initialize the database
         signedPaymentRepository.saveAndFlush(signedPayment);
@@ -991,6 +1050,7 @@ class SignedPaymentResourceIT {
             .andExpect(jsonPath("$.[*].transactionDate").value(hasItem(DEFAULT_TRANSACTION_DATE.toString())))
             .andExpect(jsonPath("$.[*].transactionCurrency").value(hasItem(DEFAULT_TRANSACTION_CURRENCY.toString())))
             .andExpect(jsonPath("$.[*].transactionAmount").value(hasItem(sameNumber(DEFAULT_TRANSACTION_AMOUNT))))
+            .andExpect(jsonPath("$.[*].dealerName").value(hasItem(DEFAULT_DEALER_NAME)))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
             .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
 
@@ -1045,6 +1105,7 @@ class SignedPaymentResourceIT {
             .transactionDate(UPDATED_TRANSACTION_DATE)
             .transactionCurrency(UPDATED_TRANSACTION_CURRENCY)
             .transactionAmount(UPDATED_TRANSACTION_AMOUNT)
+            .dealerName(UPDATED_DEALER_NAME)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
             .compilationToken(UPDATED_COMPILATION_TOKEN);
         SignedPaymentDTO signedPaymentDTO = signedPaymentMapper.toDto(updatedSignedPayment);
@@ -1065,6 +1126,7 @@ class SignedPaymentResourceIT {
         assertThat(testSignedPayment.getTransactionDate()).isEqualTo(UPDATED_TRANSACTION_DATE);
         assertThat(testSignedPayment.getTransactionCurrency()).isEqualTo(UPDATED_TRANSACTION_CURRENCY);
         assertThat(testSignedPayment.getTransactionAmount()).isEqualTo(UPDATED_TRANSACTION_AMOUNT);
+        assertThat(testSignedPayment.getDealerName()).isEqualTo(UPDATED_DEALER_NAME);
         assertThat(testSignedPayment.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
         assertThat(testSignedPayment.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
 
@@ -1160,7 +1222,7 @@ class SignedPaymentResourceIT {
         SignedPayment partialUpdatedSignedPayment = new SignedPayment();
         partialUpdatedSignedPayment.setId(signedPayment.getId());
 
-        partialUpdatedSignedPayment.transactionAmount(UPDATED_TRANSACTION_AMOUNT).fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN);
+        partialUpdatedSignedPayment.transactionAmount(UPDATED_TRANSACTION_AMOUNT).dealerName(UPDATED_DEALER_NAME);
 
         restSignedPaymentMockMvc
             .perform(
@@ -1178,7 +1240,8 @@ class SignedPaymentResourceIT {
         assertThat(testSignedPayment.getTransactionDate()).isEqualTo(DEFAULT_TRANSACTION_DATE);
         assertThat(testSignedPayment.getTransactionCurrency()).isEqualTo(DEFAULT_TRANSACTION_CURRENCY);
         assertThat(testSignedPayment.getTransactionAmount()).isEqualByComparingTo(UPDATED_TRANSACTION_AMOUNT);
-        assertThat(testSignedPayment.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testSignedPayment.getDealerName()).isEqualTo(UPDATED_DEALER_NAME);
+        assertThat(testSignedPayment.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
         assertThat(testSignedPayment.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
     }
 
@@ -1199,6 +1262,7 @@ class SignedPaymentResourceIT {
             .transactionDate(UPDATED_TRANSACTION_DATE)
             .transactionCurrency(UPDATED_TRANSACTION_CURRENCY)
             .transactionAmount(UPDATED_TRANSACTION_AMOUNT)
+            .dealerName(UPDATED_DEALER_NAME)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
             .compilationToken(UPDATED_COMPILATION_TOKEN);
 
@@ -1218,6 +1282,7 @@ class SignedPaymentResourceIT {
         assertThat(testSignedPayment.getTransactionDate()).isEqualTo(UPDATED_TRANSACTION_DATE);
         assertThat(testSignedPayment.getTransactionCurrency()).isEqualTo(UPDATED_TRANSACTION_CURRENCY);
         assertThat(testSignedPayment.getTransactionAmount()).isEqualByComparingTo(UPDATED_TRANSACTION_AMOUNT);
+        assertThat(testSignedPayment.getDealerName()).isEqualTo(UPDATED_DEALER_NAME);
         assertThat(testSignedPayment.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
         assertThat(testSignedPayment.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
@@ -1340,6 +1405,7 @@ class SignedPaymentResourceIT {
             .andExpect(jsonPath("$.[*].transactionDate").value(hasItem(DEFAULT_TRANSACTION_DATE.toString())))
             .andExpect(jsonPath("$.[*].transactionCurrency").value(hasItem(DEFAULT_TRANSACTION_CURRENCY.toString())))
             .andExpect(jsonPath("$.[*].transactionAmount").value(hasItem(sameNumber(DEFAULT_TRANSACTION_AMOUNT))))
+            .andExpect(jsonPath("$.[*].dealerName").value(hasItem(DEFAULT_DEALER_NAME)))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
             .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }

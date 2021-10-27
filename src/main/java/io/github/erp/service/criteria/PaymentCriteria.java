@@ -62,7 +62,7 @@ public class PaymentCriteria implements Serializable, Criteria {
 
     private CurrencyTypesFilter settlementCurrency;
 
-    private DoubleFilter conversionRate;
+    private LongFilter dealerId;
 
     private StringFilter fileUploadToken;
 
@@ -70,13 +70,7 @@ public class PaymentCriteria implements Serializable, Criteria {
 
     private LongFilter paymentLabelId;
 
-    private LongFilter dealerId;
-
     private LongFilter paymentCategoryId;
-
-    private LongFilter taxRuleId;
-
-    private LongFilter paymentCalculationId;
 
     private LongFilter placeholderId;
 
@@ -96,14 +90,11 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.settlementCurrency = other.settlementCurrency == null ? null : other.settlementCurrency.copy();
-        this.conversionRate = other.conversionRate == null ? null : other.conversionRate.copy();
+        this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
         this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
         this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
-        this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
         this.paymentCategoryId = other.paymentCategoryId == null ? null : other.paymentCategoryId.copy();
-        this.taxRuleId = other.taxRuleId == null ? null : other.taxRuleId.copy();
-        this.paymentCalculationId = other.paymentCalculationId == null ? null : other.paymentCalculationId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.paymentGroupId = other.paymentGroupId == null ? null : other.paymentGroupId.copy();
         this.distinct = other.distinct;
@@ -249,19 +240,19 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.settlementCurrency = settlementCurrency;
     }
 
-    public DoubleFilter getConversionRate() {
-        return conversionRate;
+    public LongFilter getDealerId() {
+        return dealerId;
     }
 
-    public DoubleFilter conversionRate() {
-        if (conversionRate == null) {
-            conversionRate = new DoubleFilter();
+    public LongFilter dealerId() {
+        if (dealerId == null) {
+            dealerId = new LongFilter();
         }
-        return conversionRate;
+        return dealerId;
     }
 
-    public void setConversionRate(DoubleFilter conversionRate) {
-        this.conversionRate = conversionRate;
+    public void setDealerId(LongFilter dealerId) {
+        this.dealerId = dealerId;
     }
 
     public StringFilter getFileUploadToken() {
@@ -309,21 +300,6 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.paymentLabelId = paymentLabelId;
     }
 
-    public LongFilter getDealerId() {
-        return dealerId;
-    }
-
-    public LongFilter dealerId() {
-        if (dealerId == null) {
-            dealerId = new LongFilter();
-        }
-        return dealerId;
-    }
-
-    public void setDealerId(LongFilter dealerId) {
-        this.dealerId = dealerId;
-    }
-
     public LongFilter getPaymentCategoryId() {
         return paymentCategoryId;
     }
@@ -337,36 +313,6 @@ public class PaymentCriteria implements Serializable, Criteria {
 
     public void setPaymentCategoryId(LongFilter paymentCategoryId) {
         this.paymentCategoryId = paymentCategoryId;
-    }
-
-    public LongFilter getTaxRuleId() {
-        return taxRuleId;
-    }
-
-    public LongFilter taxRuleId() {
-        if (taxRuleId == null) {
-            taxRuleId = new LongFilter();
-        }
-        return taxRuleId;
-    }
-
-    public void setTaxRuleId(LongFilter taxRuleId) {
-        this.taxRuleId = taxRuleId;
-    }
-
-    public LongFilter getPaymentCalculationId() {
-        return paymentCalculationId;
-    }
-
-    public LongFilter paymentCalculationId() {
-        if (paymentCalculationId == null) {
-            paymentCalculationId = new LongFilter();
-        }
-        return paymentCalculationId;
-    }
-
-    public void setPaymentCalculationId(LongFilter paymentCalculationId) {
-        this.paymentCalculationId = paymentCalculationId;
     }
 
     public LongFilter getPlaceholderId() {
@@ -426,14 +372,11 @@ public class PaymentCriteria implements Serializable, Criteria {
             Objects.equals(paymentAmount, that.paymentAmount) &&
             Objects.equals(description, that.description) &&
             Objects.equals(settlementCurrency, that.settlementCurrency) &&
-            Objects.equals(conversionRate, that.conversionRate) &&
+            Objects.equals(dealerId, that.dealerId) &&
             Objects.equals(fileUploadToken, that.fileUploadToken) &&
             Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
-            Objects.equals(dealerId, that.dealerId) &&
             Objects.equals(paymentCategoryId, that.paymentCategoryId) &&
-            Objects.equals(taxRuleId, that.taxRuleId) &&
-            Objects.equals(paymentCalculationId, that.paymentCalculationId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(paymentGroupId, that.paymentGroupId) &&
             Objects.equals(distinct, that.distinct)
@@ -452,14 +395,11 @@ public class PaymentCriteria implements Serializable, Criteria {
             paymentAmount,
             description,
             settlementCurrency,
-            conversionRate,
+            dealerId,
             fileUploadToken,
             compilationToken,
             paymentLabelId,
-            dealerId,
             paymentCategoryId,
-            taxRuleId,
-            paymentCalculationId,
             placeholderId,
             paymentGroupId,
             distinct
@@ -479,14 +419,11 @@ public class PaymentCriteria implements Serializable, Criteria {
             (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
             (description != null ? "description=" + description + ", " : "") +
             (settlementCurrency != null ? "settlementCurrency=" + settlementCurrency + ", " : "") +
-            (conversionRate != null ? "conversionRate=" + conversionRate + ", " : "") +
+            (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +
             (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
-            (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             (paymentCategoryId != null ? "paymentCategoryId=" + paymentCategoryId + ", " : "") +
-            (taxRuleId != null ? "taxRuleId=" + taxRuleId + ", " : "") +
-            (paymentCalculationId != null ? "paymentCalculationId=" + paymentCalculationId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (paymentGroupId != null ? "paymentGroupId=" + paymentGroupId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

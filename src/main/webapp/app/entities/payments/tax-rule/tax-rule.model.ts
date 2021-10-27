@@ -1,4 +1,3 @@
-import { IPayment } from 'app/entities/payments/payment/payment.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
 export interface ITaxRule {
@@ -13,7 +12,6 @@ export interface ITaxRule {
   withholdingTaxImportedService?: number | null;
   fileUploadToken?: string | null;
   compilationToken?: string | null;
-  payments?: IPayment[] | null;
   placeholders?: IPlaceholder[] | null;
 }
 
@@ -30,7 +28,6 @@ export class TaxRule implements ITaxRule {
     public withholdingTaxImportedService?: number | null,
     public fileUploadToken?: string | null,
     public compilationToken?: string | null,
-    public payments?: IPayment[] | null,
     public placeholders?: IPlaceholder[] | null
   ) {}
 }

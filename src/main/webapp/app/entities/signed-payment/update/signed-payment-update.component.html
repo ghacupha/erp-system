@@ -127,6 +127,18 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_dealerName">Dealer Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="dealerName"
+            id="field_dealerName"
+            data-cy="dealerName"
+            formControlName="dealerName"
+          />
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_fileUploadToken">File Upload Token</label>
           <input
             type="text"
@@ -165,19 +177,6 @@
               *ngFor="let paymentLabelOption of paymentLabelsSharedCollection; trackBy: trackPaymentLabelById"
             >
               {{ paymentLabelOption.description }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_dealer">Dealer</label>
-          <select class="form-control" id="field_dealer" data-cy="dealer" name="dealer" formControlName="dealer">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('dealer')!.value?.id ? editForm.get('dealer')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
             </option>
           </select>
         </div>
