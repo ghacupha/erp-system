@@ -43,7 +43,6 @@ export class DealerInvoicePaymentResolveService implements Resolve<IPayment>  {
         ...payment,
         invoicedAmount: inv.invoiceAmount,
         settlementCurrency: inv.currency,
-        conversionRate: inv.conversionRate,
         paymentAmount: inv.invoiceAmount,
         paymentLabels: [...(inv.paymentLabels ?? [])],
         placeholders: [...(inv.placeholders ?? [])],
@@ -54,7 +53,7 @@ export class DealerInvoicePaymentResolveService implements Resolve<IPayment>  {
     dealer.subscribe(dealr => {
       payment = {
         ...payment,
-        dealer: dealr,
+        dealerId: dealr.id,
         paymentLabels: dealr.paymentLabels,
         placeholders: dealr.placeholders,
       };

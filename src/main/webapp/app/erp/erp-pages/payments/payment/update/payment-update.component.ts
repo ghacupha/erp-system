@@ -94,12 +94,11 @@ export class PaymentUpdateComponent implements OnInit {
     paymentAmount: [],
     description: [],
     settlementCurrency: [null, [Validators.required]],
-    conversionRate: [null, [Validators.required, Validators.min(1.0)]],
+    dealerId: [],
+    fileUploadToken: [],
+    compilationToken: [],
     paymentLabels: [],
-    dealer: [],
     paymentCategory: [],
-    taxRule: [],
-    paymentCalculation: [],
     placeholders: [],
     paymentGroup: [],
   });
@@ -299,29 +298,22 @@ export class PaymentUpdateComponent implements OnInit {
       paymentAmount: payment.paymentAmount,
       description: payment.description,
       settlementCurrency: payment.settlementCurrency,
-      conversionRate: payment.conversionRate,
       paymentLabels: [...(dealer.paymentLabels ?? paymentLabels)],
-      dealer,
+      dealerId: dealer.id,
       paymentCategory,
-      taxRule: payment.taxRule,
-      paymentCalculation: payment.paymentCalculation,
       placeholders: [...(dealer.placeholders ?? placeholders)],
       paymentGroup: payment.paymentGroup,
+      fileUploadToken: payment.fileUploadToken,
+      compilationToken: payment.compilationToken,
     });
 
     this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
       this.paymentLabelsSharedCollection,
       ...(payment.paymentLabels ?? [])
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, payment.dealer);
     this.paymentCategoriesSharedCollection = this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
       this.paymentCategoriesSharedCollection,
       payment.paymentCategory
-    );
-    this.taxRulesSharedCollection = this.taxRuleService.addTaxRuleToCollectionIfMissing(this.taxRulesSharedCollection, payment.taxRule);
-    this.paymentCalculationsCollection = this.paymentCalculationService.addPaymentCalculationToCollectionIfMissing(
-      this.paymentCalculationsCollection,
-      payment.paymentCalculation
     );
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
@@ -346,29 +338,22 @@ export class PaymentUpdateComponent implements OnInit {
       paymentAmount: payment.paymentAmount,
       description: payment.description,
       settlementCurrency: payment.settlementCurrency,
-      conversionRate: payment.conversionRate,
       paymentLabels: payment.paymentLabels,
-      dealer,
+      dealerId: dealer.id,
       paymentCategory,
-      taxRule: payment.taxRule,
-      paymentCalculation: payment.paymentCalculation,
       placeholders: payment.placeholders,
       paymentGroup: payment.paymentGroup,
+      fileUploadToken: payment.fileUploadToken,
+      compilationToken: payment.compilationToken,
     });
 
     this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
       this.paymentLabelsSharedCollection,
       ...(payment.paymentLabels ?? [])
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, payment.dealer);
     this.paymentCategoriesSharedCollection = this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
       this.paymentCategoriesSharedCollection,
       payment.paymentCategory
-    );
-    this.taxRulesSharedCollection = this.taxRuleService.addTaxRuleToCollectionIfMissing(this.taxRulesSharedCollection, payment.taxRule);
-    this.paymentCalculationsCollection = this.paymentCalculationService.addPaymentCalculationToCollectionIfMissing(
-      this.paymentCalculationsCollection,
-      payment.paymentCalculation
     );
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
@@ -391,12 +376,11 @@ export class PaymentUpdateComponent implements OnInit {
       paymentAmount: payment.paymentAmount,
       description: payment.description,
       settlementCurrency: payment.settlementCurrency,
-      conversionRate: payment.conversionRate,
+      dealerId: payment.dealerId,
+      fileUploadToken: payment.fileUploadToken,
+      compilationToken: payment.compilationToken,
       paymentLabels: payment.paymentLabels,
-      dealer: payment.dealer,
       paymentCategory: payment.paymentCategory,
-      taxRule: payment.taxRule,
-      paymentCalculation: payment.paymentCalculation,
       placeholders: payment.placeholders,
       paymentGroup: payment.paymentGroup,
     });
@@ -405,15 +389,9 @@ export class PaymentUpdateComponent implements OnInit {
       this.paymentLabelsSharedCollection,
       ...(payment.paymentLabels ?? [])
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, payment.dealer);
     this.paymentCategoriesSharedCollection = this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
       this.paymentCategoriesSharedCollection,
       payment.paymentCategory
-    );
-    this.taxRulesSharedCollection = this.taxRuleService.addTaxRuleToCollectionIfMissing(this.taxRulesSharedCollection, payment.taxRule);
-    this.paymentCalculationsCollection = this.paymentCalculationService.addPaymentCalculationToCollectionIfMissing(
-      this.paymentCalculationsCollection,
-      payment.paymentCalculation
     );
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
@@ -550,12 +528,11 @@ export class PaymentUpdateComponent implements OnInit {
       paymentAmount: this.editForm.get(['paymentAmount'])!.value,
       description: this.editForm.get(['description'])!.value,
       settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
-      conversionRate: this.editForm.get(['conversionRate'])!.value,
+      dealerId: this.editForm.get(['dealerId'])!.value,
+      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
+      compilationToken: this.editForm.get(['compilationToken'])!.value,
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
-      dealer: this.editForm.get(['dealer'])!.value,
       paymentCategory: this.editForm.get(['paymentCategory'])!.value,
-      taxRule: this.editForm.get(['taxRule'])!.value,
-      paymentCalculation: this.editForm.get(['paymentCalculation'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       paymentGroup: this.editForm.get(['paymentGroup'])!.value,
     };
@@ -564,6 +541,7 @@ export class PaymentUpdateComponent implements OnInit {
   protected copyFromForm(): IPayment {
     return {
       ...new Payment(),
+      id: this.editForm.get(['id'])!.value,
       paymentNumber: this.editForm.get(['paymentNumber'])!.value,
       paymentDate: this.editForm.get(['paymentDate'])!.value,
       invoicedAmount: this.editForm.get(['invoicedAmount'])!.value,
@@ -572,12 +550,11 @@ export class PaymentUpdateComponent implements OnInit {
       paymentAmount: this.editForm.get(['paymentAmount'])!.value,
       description: this.editForm.get(['description'])!.value,
       settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
-      conversionRate: this.editForm.get(['conversionRate'])!.value,
+      dealerId: this.editForm.get(['dealerId'])!.value,
+      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
+      compilationToken: this.editForm.get(['compilationToken'])!.value,
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
-      dealer: this.editForm.get(['dealer'])!.value,
       paymentCategory: this.editForm.get(['paymentCategory'])!.value,
-      taxRule: this.editForm.get(['taxRule'])!.value,
-      paymentCalculation: this.editForm.get(['paymentCalculation'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       paymentGroup: this.editForm.get(['paymentGroup'])!.value,
     };
