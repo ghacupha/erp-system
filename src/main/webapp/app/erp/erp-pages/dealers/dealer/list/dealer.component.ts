@@ -132,7 +132,7 @@ export class DealerComponent implements OnInit {
   payDealer(dealer: IDealer): void {
     this.store.dispatch(dealerAcquiredForPayment({selectedDealer: dealer}));
     this.store.dispatch(requisitionForDealerCategoryInitiated({selectedDealer: dealer}));
-    this.router.navigate(['/payment/dealer']);
+    this.router.navigate(['/erp/payment/dealer']);
   }
 
   recordDealerInvoice(selectedDealer: IDealer): string {
