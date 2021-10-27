@@ -30,6 +30,10 @@
         <dd>
           <span>{{ signedPayment.transactionAmount }}</span>
         </dd>
+        <dt><span>Dealer Name</span></dt>
+        <dd>
+          <span>{{ signedPayment.dealerName }}</span>
+        </dd>
         <dt><span>File Upload Token</span></dt>
         <dd>
           <span>{{ signedPayment.fileUploadToken }}</span>
@@ -44,12 +48,6 @@
             <a [routerLink]="['/payment-label', paymentLabel?.id, 'view']">{{ paymentLabel.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
-        </dd>
-        <dt><span>Dealer</span></dt>
-        <dd>
-          <div *ngIf="signedPayment.dealer">
-            <a [routerLink]="['/dealer', signedPayment.dealer?.id, 'view']">{{ signedPayment.dealer?.dealerName }}</a>
-          </div>
         </dd>
         <dt><span>Payment Category</span></dt>
         <dd>

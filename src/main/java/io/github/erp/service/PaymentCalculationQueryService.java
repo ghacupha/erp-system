@@ -130,15 +130,6 @@ public class PaymentCalculationQueryService extends QueryService<PaymentCalculat
                         )
                     );
             }
-            if (criteria.getPaymentId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getPaymentId(),
-                            root -> root.join(PaymentCalculation_.payment, JoinType.LEFT).get(Payment_.id)
-                        )
-                    );
-            }
             if (criteria.getPaymentCategoryId() != null) {
                 specification =
                     specification.and(

@@ -3,13 +3,6 @@
   "clientRootFolder": "payments",
   "relationships": [
     {
-      "relationshipName": "payment",
-      "otherEntityName": "payment",
-      "relationshipType": "one-to-many",
-      "ownerSide": false,
-      "otherEntityRelationshipName": "taxRule"
-    },
-    {
       "relationshipName": "placeholder",
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",

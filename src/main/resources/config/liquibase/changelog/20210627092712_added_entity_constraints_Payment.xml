@@ -20,29 +20,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="payment_label"/>
 
-        <addForeignKeyConstraint baseColumnNames="dealer_id"
-                                 baseTableName="payment"
-                                 constraintName="fk_payment__dealer_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="dealer"/>
-
         <addForeignKeyConstraint baseColumnNames="payment_category_id"
                                  baseTableName="payment"
                                  constraintName="fk_payment__payment_category_id"
                                  referencedColumnNames="id"
                                  referencedTableName="payment_category"/>
-
-        <addForeignKeyConstraint baseColumnNames="tax_rule_id"
-                                 baseTableName="payment"
-                                 constraintName="fk_payment__tax_rule_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="tax_rule"/>
-
-        <addForeignKeyConstraint baseColumnNames="payment_calculation_id"
-                                 baseTableName="payment"
-                                 constraintName="fk_payment__payment_calculation_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="payment_calculation"/>
 
         <addForeignKeyConstraint baseColumnNames="payment_id"
                                  baseTableName="rel_payment__placeholder"

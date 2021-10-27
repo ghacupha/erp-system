@@ -29,13 +29,13 @@ public class SignedPaymentDTO implements Serializable {
     @DecimalMin(value = "0")
     private BigDecimal transactionAmount;
 
+    private String dealerName;
+
     private String fileUploadToken;
 
     private String compilationToken;
 
     private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
-
-    private DealerDTO dealer;
 
     private PaymentCategoryDTO paymentCategory;
 
@@ -83,6 +83,14 @@ public class SignedPaymentDTO implements Serializable {
         this.transactionAmount = transactionAmount;
     }
 
+    public String getDealerName() {
+        return dealerName;
+    }
+
+    public void setDealerName(String dealerName) {
+        this.dealerName = dealerName;
+    }
+
     public String getFileUploadToken() {
         return fileUploadToken;
     }
@@ -105,14 +113,6 @@ public class SignedPaymentDTO implements Serializable {
 
     public void setPaymentLabels(Set<PaymentLabelDTO> paymentLabels) {
         this.paymentLabels = paymentLabels;
-    }
-
-    public DealerDTO getDealer() {
-        return dealer;
-    }
-
-    public void setDealer(DealerDTO dealer) {
-        this.dealer = dealer;
     }
 
     public PaymentCategoryDTO getPaymentCategory() {
@@ -169,10 +169,10 @@ public class SignedPaymentDTO implements Serializable {
             ", transactionDate='" + getTransactionDate() + "'" +
             ", transactionCurrency='" + getTransactionCurrency() + "'" +
             ", transactionAmount=" + getTransactionAmount() +
+            ", dealerName='" + getDealerName() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
             ", paymentLabels=" + getPaymentLabels() +
-            ", dealer=" + getDealer() +
             ", paymentCategory=" + getPaymentCategory() +
             ", placeholders=" + getPlaceholders() +
             ", signedPaymentGroup=" + getSignedPaymentGroup() +

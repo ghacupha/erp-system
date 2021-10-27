@@ -8,11 +8,7 @@ import io.github.erp.repository.search.PaymentCalculationSearchRepository;
 import io.github.erp.service.PaymentCalculationService;
 import io.github.erp.service.dto.PaymentCalculationDTO;
 import io.github.erp.service.mapper.PaymentCalculationMapper;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -84,20 +80,6 @@ public class PaymentCalculationServiceImpl implements PaymentCalculationService 
 
     public Page<PaymentCalculationDTO> findAllWithEagerRelationships(Pageable pageable) {
         return paymentCalculationRepository.findAllWithEagerRelationships(pageable).map(paymentCalculationMapper::toDto);
-    }
-
-    /**
-     *  Get all the paymentCalculations where Payment is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<PaymentCalculationDTO> findAllWherePaymentIsNull() {
-        log.debug("Request to get all paymentCalculations where Payment is null");
-        return StreamSupport
-            .stream(paymentCalculationRepository.findAll().spliterator(), false)
-            .filter(paymentCalculation -> paymentCalculation.getPayment() == null)
-            .map(paymentCalculationMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override

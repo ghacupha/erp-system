@@ -122,8 +122,8 @@ public class PaymentQueryService extends QueryService<Payment> {
             if (criteria.getSettlementCurrency() != null) {
                 specification = specification.and(buildSpecification(criteria.getSettlementCurrency(), Payment_.settlementCurrency));
             }
-            if (criteria.getConversionRate() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getConversionRate(), Payment_.conversionRate));
+            if (criteria.getDealerId() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDealerId(), Payment_.dealerId));
             }
             if (criteria.getFileUploadToken() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getFileUploadToken(), Payment_.fileUploadToken));
@@ -140,33 +140,12 @@ public class PaymentQueryService extends QueryService<Payment> {
                         )
                     );
             }
-            if (criteria.getDealerId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getDealerId(), root -> root.join(Payment_.dealer, JoinType.LEFT).get(Dealer_.id))
-                    );
-            }
             if (criteria.getPaymentCategoryId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
                             criteria.getPaymentCategoryId(),
                             root -> root.join(Payment_.paymentCategory, JoinType.LEFT).get(PaymentCategory_.id)
-                        )
-                    );
-            }
-            if (criteria.getTaxRuleId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getTaxRuleId(), root -> root.join(Payment_.taxRule, JoinType.LEFT).get(TaxRule_.id))
-                    );
-            }
-            if (criteria.getPaymentCalculationId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getPaymentCalculationId(),
-                            root -> root.join(Payment_.paymentCalculation, JoinType.LEFT).get(PaymentCalculation_.id)
                         )
                     );
             }

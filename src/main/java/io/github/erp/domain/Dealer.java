@@ -71,24 +71,13 @@ public class Dealer implements Serializable {
     private Set<PaymentLabel> paymentLabels = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(
-        value = { "paymentLabels", "dealerGroup", "paymentRequisitions", "signedPayments", "placeholders" },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "paymentRequisitions", "placeholders" }, allowSetters = true)
     private Dealer dealerGroup;
 
     @OneToMany(mappedBy = "dealer")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "paymentLabels", "dealer", "placeholders" }, allowSetters = true)
     private Set<PaymentRequisition> paymentRequisitions = new HashSet<>();
-
-    @OneToMany(mappedBy = "dealer")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = { "paymentLabels", "dealer", "paymentCategory", "placeholders", "signedPaymentGroup" },
-        allowSetters = true
-    )
-    private Set<SignedPayment> signedPayments = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -322,37 +311,6 @@ public class Dealer implements Serializable {
     public Dealer removePaymentRequisition(PaymentRequisition paymentRequisition) {
         this.paymentRequisitions.remove(paymentRequisition);
         paymentRequisition.setDealer(null);
-        return this;
-    }
-
-    public Set<SignedPayment> getSignedPayments() {
-        return this.signedPayments;
-    }
-
-    public void setSignedPayments(Set<SignedPayment> signedPayments) {
-        if (this.signedPayments != null) {
-            this.signedPayments.forEach(i -> i.setDealer(null));
-        }
-        if (signedPayments != null) {
-            signedPayments.forEach(i -> i.setDealer(this));
-        }
-        this.signedPayments = signedPayments;
-    }
-
-    public Dealer signedPayments(Set<SignedPayment> signedPayments) {
-        this.setSignedPayments(signedPayments);
-        return this;
-    }
-
-    public Dealer addSignedPayment(SignedPayment signedPayment) {
-        this.signedPayments.add(signedPayment);
-        signedPayment.setDealer(this);
-        return this;
-    }
-
-    public Dealer removeSignedPayment(SignedPayment signedPayment) {
-        this.signedPayments.remove(signedPayment);
-        signedPayment.setDealer(null);
         return this;
     }
 

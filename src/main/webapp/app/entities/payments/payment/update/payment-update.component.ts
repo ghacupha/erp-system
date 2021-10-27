@@ -9,14 +9,8 @@ import { IPayment, Payment } from '../payment.model';
 import { PaymentService } from '../service/payment.service';
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 import { IPaymentCategory } from 'app/entities/payments/payment-category/payment-category.model';
 import { PaymentCategoryService } from 'app/entities/payments/payment-category/service/payment-category.service';
-import { ITaxRule } from 'app/entities/payments/tax-rule/tax-rule.model';
-import { TaxRuleService } from 'app/entities/payments/tax-rule/service/tax-rule.service';
-import { IPaymentCalculation } from 'app/entities/payments/payment-calculation/payment-calculation.model';
-import { PaymentCalculationService } from 'app/entities/payments/payment-calculation/service/payment-calculation.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
@@ -28,10 +22,7 @@ export class PaymentUpdateComponent implements OnInit {
   isSaving = false;
 
   paymentLabelsSharedCollection: IPaymentLabel[] = [];
-  dealersSharedCollection: IDealer[] = [];
   paymentCategoriesSharedCollection: IPaymentCategory[] = [];
-  taxRulesSharedCollection: ITaxRule[] = [];
-  paymentCalculationsCollection: IPaymentCalculation[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
   paymentsSharedCollection: IPayment[] = [];
 
@@ -45,14 +36,11 @@ export class PaymentUpdateComponent implements OnInit {
     paymentAmount: [],
     description: [],
     settlementCurrency: [null, [Validators.required]],
-    conversionRate: [null, [Validators.required, Validators.min(1.0)]],
+    dealerId: [],
     fileUploadToken: [],
     compilationToken: [],
     paymentLabels: [],
-    dealer: [],
     paymentCategory: [],
-    taxRule: [],
-    paymentCalculation: [],
     placeholders: [],
     paymentGroup: [],
   });
@@ -60,10 +48,7 @@ export class PaymentUpdateComponent implements OnInit {
   constructor(
     protected paymentService: PaymentService,
     protected paymentLabelService: PaymentLabelService,
-    protected dealerService: DealerService,
     protected paymentCategoryService: PaymentCategoryService,
-    protected taxRuleService: TaxRuleService,
-    protected paymentCalculationService: PaymentCalculationService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
@@ -95,19 +80,7 @@ export class PaymentUpdateComponent implements OnInit {
     return item.id!;
   }
 
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
   trackPaymentCategoryById(index: number, item: IPaymentCategory): number {
-    return item.id!;
-  }
-
-  trackTaxRuleById(index: number, item: ITaxRule): number {
-    return item.id!;
-  }
-
-  trackPaymentCalculationById(index: number, item: IPaymentCalculation): number {
     return item.id!;
   }
 
@@ -171,14 +144,11 @@ export class PaymentUpdateComponent implements OnInit {
       paymentAmount: payment.paymentAmount,
       description: payment.description,
       settlementCurrency: payment.settlementCurrency,
-      conversionRate: payment.conversionRate,
+      dealerId: payment.dealerId,
       fileUploadToken: payment.fileUploadToken,
       compilationToken: payment.compilationToken,
       paymentLabels: payment.paymentLabels,
-      dealer: payment.dealer,
       paymentCategory: payment.paymentCategory,
-      taxRule: payment.taxRule,
-      paymentCalculation: payment.paymentCalculation,
       placeholders: payment.placeholders,
       paymentGroup: payment.paymentGroup,
     });
@@ -187,15 +157,9 @@ export class PaymentUpdateComponent implements OnInit {
       this.paymentLabelsSharedCollection,
       ...(payment.paymentLabels ?? [])
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, payment.dealer);
     this.paymentCategoriesSharedCollection = this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
       this.paymentCategoriesSharedCollection,
       payment.paymentCategory
-    );
-    this.taxRulesSharedCollection = this.taxRuleService.addTaxRuleToCollectionIfMissing(this.taxRulesSharedCollection, payment.taxRule);
-    this.paymentCalculationsCollection = this.paymentCalculationService.addPaymentCalculationToCollectionIfMissing(
-      this.paymentCalculationsCollection,
-      payment.paymentCalculation
     );
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
@@ -218,12 +182,6 @@ export class PaymentUpdateComponent implements OnInit {
       )
       .subscribe((paymentLabels: IPaymentLabel[]) => (this.paymentLabelsSharedCollection = paymentLabels));
 
-    this.dealerService
-      .query()
-      .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
-      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('dealer')!.value)))
-      .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
-
     this.paymentCategoryService
       .query()
       .pipe(map((res: HttpResponse<IPaymentCategory[]>) => res.body ?? []))
@@ -236,27 +194,6 @@ export class PaymentUpdateComponent implements OnInit {
         )
       )
       .subscribe((paymentCategories: IPaymentCategory[]) => (this.paymentCategoriesSharedCollection = paymentCategories));
-
-    this.taxRuleService
-      .query()
-      .pipe(map((res: HttpResponse<ITaxRule[]>) => res.body ?? []))
-      .pipe(
-        map((taxRules: ITaxRule[]) => this.taxRuleService.addTaxRuleToCollectionIfMissing(taxRules, this.editForm.get('taxRule')!.value))
-      )
-      .subscribe((taxRules: ITaxRule[]) => (this.taxRulesSharedCollection = taxRules));
-
-    this.paymentCalculationService
-      .query({ 'paymentId.specified': 'false' })
-      .pipe(map((res: HttpResponse<IPaymentCalculation[]>) => res.body ?? []))
-      .pipe(
-        map((paymentCalculations: IPaymentCalculation[]) =>
-          this.paymentCalculationService.addPaymentCalculationToCollectionIfMissing(
-            paymentCalculations,
-            this.editForm.get('paymentCalculation')!.value
-          )
-        )
-      )
-      .subscribe((paymentCalculations: IPaymentCalculation[]) => (this.paymentCalculationsCollection = paymentCalculations));
 
     this.placeholderService
       .query()
@@ -291,14 +228,11 @@ export class PaymentUpdateComponent implements OnInit {
       paymentAmount: this.editForm.get(['paymentAmount'])!.value,
       description: this.editForm.get(['description'])!.value,
       settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
-      conversionRate: this.editForm.get(['conversionRate'])!.value,
+      dealerId: this.editForm.get(['dealerId'])!.value,
       fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
       compilationToken: this.editForm.get(['compilationToken'])!.value,
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
-      dealer: this.editForm.get(['dealer'])!.value,
       paymentCategory: this.editForm.get(['paymentCategory'])!.value,
-      taxRule: this.editForm.get(['taxRule'])!.value,
-      paymentCalculation: this.editForm.get(['paymentCalculation'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       paymentGroup: this.editForm.get(['paymentGroup'])!.value,
     };

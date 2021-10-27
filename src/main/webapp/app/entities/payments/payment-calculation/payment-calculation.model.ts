@@ -1,5 +1,4 @@
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
-import { IPayment } from 'app/entities/payments/payment/payment.model';
 import { IPaymentCategory } from 'app/entities/payments/payment-category/payment-category.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
@@ -12,7 +11,6 @@ export interface IPaymentCalculation {
   fileUploadToken?: string | null;
   compilationToken?: string | null;
   paymentLabels?: IPaymentLabel[] | null;
-  payment?: IPayment | null;
   paymentCategory?: IPaymentCategory | null;
   placeholders?: IPlaceholder[] | null;
 }
@@ -27,7 +25,6 @@ export class PaymentCalculation implements IPaymentCalculation {
     public fileUploadToken?: string | null,
     public compilationToken?: string | null,
     public paymentLabels?: IPaymentLabel[] | null,
-    public payment?: IPayment | null,
     public paymentCategory?: IPaymentCategory | null,
     public placeholders?: IPlaceholder[] | null
   ) {}

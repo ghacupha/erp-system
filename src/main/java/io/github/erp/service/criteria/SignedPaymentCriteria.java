@@ -54,13 +54,13 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter transactionAmount;
 
+    private StringFilter dealerName;
+
     private StringFilter fileUploadToken;
 
     private StringFilter compilationToken;
 
     private LongFilter paymentLabelId;
-
-    private LongFilter dealerId;
 
     private LongFilter paymentCategoryId;
 
@@ -78,10 +78,10 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
         this.transactionDate = other.transactionDate == null ? null : other.transactionDate.copy();
         this.transactionCurrency = other.transactionCurrency == null ? null : other.transactionCurrency.copy();
         this.transactionAmount = other.transactionAmount == null ? null : other.transactionAmount.copy();
+        this.dealerName = other.dealerName == null ? null : other.dealerName.copy();
         this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
         this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
-        this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
         this.paymentCategoryId = other.paymentCategoryId == null ? null : other.paymentCategoryId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.signedPaymentGroupId = other.signedPaymentGroupId == null ? null : other.signedPaymentGroupId.copy();
@@ -168,6 +168,21 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
         this.transactionAmount = transactionAmount;
     }
 
+    public StringFilter getDealerName() {
+        return dealerName;
+    }
+
+    public StringFilter dealerName() {
+        if (dealerName == null) {
+            dealerName = new StringFilter();
+        }
+        return dealerName;
+    }
+
+    public void setDealerName(StringFilter dealerName) {
+        this.dealerName = dealerName;
+    }
+
     public StringFilter getFileUploadToken() {
         return fileUploadToken;
     }
@@ -211,21 +226,6 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
 
     public void setPaymentLabelId(LongFilter paymentLabelId) {
         this.paymentLabelId = paymentLabelId;
-    }
-
-    public LongFilter getDealerId() {
-        return dealerId;
-    }
-
-    public LongFilter dealerId() {
-        if (dealerId == null) {
-            dealerId = new LongFilter();
-        }
-        return dealerId;
-    }
-
-    public void setDealerId(LongFilter dealerId) {
-        this.dealerId = dealerId;
     }
 
     public LongFilter getPaymentCategoryId() {
@@ -296,10 +296,10 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
             Objects.equals(transactionDate, that.transactionDate) &&
             Objects.equals(transactionCurrency, that.transactionCurrency) &&
             Objects.equals(transactionAmount, that.transactionAmount) &&
+            Objects.equals(dealerName, that.dealerName) &&
             Objects.equals(fileUploadToken, that.fileUploadToken) &&
             Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
-            Objects.equals(dealerId, that.dealerId) &&
             Objects.equals(paymentCategoryId, that.paymentCategoryId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(signedPaymentGroupId, that.signedPaymentGroupId) &&
@@ -315,10 +315,10 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
             transactionDate,
             transactionCurrency,
             transactionAmount,
+            dealerName,
             fileUploadToken,
             compilationToken,
             paymentLabelId,
-            dealerId,
             paymentCategoryId,
             placeholderId,
             signedPaymentGroupId,
@@ -335,10 +335,10 @@ public class SignedPaymentCriteria implements Serializable, Criteria {
             (transactionDate != null ? "transactionDate=" + transactionDate + ", " : "") +
             (transactionCurrency != null ? "transactionCurrency=" + transactionCurrency + ", " : "") +
             (transactionAmount != null ? "transactionAmount=" + transactionAmount + ", " : "") +
+            (dealerName != null ? "dealerName=" + dealerName + ", " : "") +
             (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +
             (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
-            (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             (paymentCategoryId != null ? "paymentCategoryId=" + paymentCategoryId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (signedPaymentGroupId != null ? "signedPaymentGroupId=" + signedPaymentGroupId + ", " : "") +

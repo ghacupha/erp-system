@@ -141,28 +141,8 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_conversionRate">Conversion Rate</label>
-          <input
-            type="number"
-            class="form-control"
-            name="conversionRate"
-            id="field_conversionRate"
-            data-cy="conversionRate"
-            formControlName="conversionRate"
-          />
-          <div
-            *ngIf="
-              editForm.get('conversionRate')!.invalid && (editForm.get('conversionRate')!.dirty || editForm.get('conversionRate')!.touched)
-            "
-          >
-            <small class="form-text text-danger" *ngIf="editForm.get('conversionRate')?.errors?.required"> This field is required. </small>
-            <small class="form-text text-danger" *ngIf="editForm.get('conversionRate')?.errors?.min">
-              This field should be at least 1.00.
-            </small>
-            <small class="form-text text-danger" [hidden]="!editForm.get('conversionRate')?.errors?.number">
-              This field should be a number.
-            </small>
-          </div>
+          <label class="form-control-label" for="field_dealerId">Dealer Id</label>
+          <input type="number" class="form-control" name="dealerId" id="field_dealerId" data-cy="dealerId" formControlName="dealerId" />
         </div>
 
         <div class="form-group">
@@ -209,19 +189,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_dealer">Dealer</label>
-          <select class="form-control" id="field_dealer" data-cy="dealer" name="dealer" formControlName="dealer">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('dealer')!.value?.id ? editForm.get('dealer')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" for="field_paymentCategory">Payment Category</label>
           <select
             class="form-control"
@@ -240,42 +207,6 @@
               *ngFor="let paymentCategoryOption of paymentCategoriesSharedCollection; trackBy: trackPaymentCategoryById"
             >
               {{ paymentCategoryOption.categoryName }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_taxRule">Tax Rule</label>
-          <select class="form-control" id="field_taxRule" data-cy="taxRule" name="taxRule" formControlName="taxRule">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="taxRuleOption.id === editForm.get('taxRule')!.value?.id ? editForm.get('taxRule')!.value : taxRuleOption"
-              *ngFor="let taxRuleOption of taxRulesSharedCollection; trackBy: trackTaxRuleById"
-            >
-              {{ taxRuleOption.id }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_paymentCalculation">Payment Calculation</label>
-          <select
-            class="form-control"
-            id="field_paymentCalculation"
-            data-cy="paymentCalculation"
-            name="paymentCalculation"
-            formControlName="paymentCalculation"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                paymentCalculationOption.id === editForm.get('paymentCalculation')!.value?.id
-                  ? editForm.get('paymentCalculation')!.value
-                  : paymentCalculationOption
-              "
-              *ngFor="let paymentCalculationOption of paymentCalculationsCollection; trackBy: trackPaymentCalculationById"
-            >
-              {{ paymentCalculationOption.id }}
             </option>
           </select>
         </div>

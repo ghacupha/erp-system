@@ -34,11 +34,11 @@ export class SignedPaymentUpdatePage {
   transactionDateInput = element(by.id('field_transactionDate'));
   transactionCurrencySelect = element(by.id('field_transactionCurrency'));
   transactionAmountInput = element(by.id('field_transactionAmount'));
+  dealerNameInput = element(by.id('field_dealerName'));
   fileUploadTokenInput = element(by.id('field_fileUploadToken'));
   compilationTokenInput = element(by.id('field_compilationToken'));
 
   paymentLabelSelect = element(by.id('field_paymentLabel'));
-  dealerSelect = element(by.id('field_dealer'));
   paymentCategorySelect = element(by.id('field_paymentCategory'));
   placeholderSelect = element(by.id('field_placeholder'));
   signedPaymentGroupSelect = element(by.id('field_signedPaymentGroup'));
@@ -91,6 +91,14 @@ export class SignedPaymentUpdatePage {
     return await this.transactionAmountInput.getAttribute('value');
   }
 
+  async setDealerNameInput(dealerName: string): Promise<void> {
+    await this.dealerNameInput.sendKeys(dealerName);
+  }
+
+  async getDealerNameInput(): Promise<string> {
+    return await this.dealerNameInput.getAttribute('value');
+  }
+
   async setFileUploadTokenInput(fileUploadToken: string): Promise<void> {
     await this.fileUploadTokenInput.sendKeys(fileUploadToken);
   }
@@ -121,22 +129,6 @@ export class SignedPaymentUpdatePage {
 
   async getPaymentLabelSelectedOption(): Promise<string> {
     return await this.paymentLabelSelect.element(by.css('option:checked')).getText();
-  }
-
-  async dealerSelectLastOption(): Promise<void> {
-    await this.dealerSelect.all(by.tagName('option')).last().click();
-  }
-
-  async dealerSelectOption(option: string): Promise<void> {
-    await this.dealerSelect.sendKeys(option);
-  }
-
-  getDealerSelect(): ElementFinder {
-    return this.dealerSelect;
-  }
-
-  async getDealerSelectedOption(): Promise<string> {
-    return await this.dealerSelect.element(by.css('option:checked')).getText();
   }
 
   async paymentCategorySelectLastOption(): Promise<void> {

@@ -113,6 +113,9 @@ public class SignedPaymentQueryService extends QueryService<SignedPayment> {
                 specification =
                     specification.and(buildRangeSpecification(criteria.getTransactionAmount(), SignedPayment_.transactionAmount));
             }
+            if (criteria.getDealerName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDealerName(), SignedPayment_.dealerName));
+            }
             if (criteria.getFileUploadToken() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getFileUploadToken(), SignedPayment_.fileUploadToken));
             }
@@ -127,12 +130,6 @@ public class SignedPaymentQueryService extends QueryService<SignedPayment> {
                             criteria.getPaymentLabelId(),
                             root -> root.join(SignedPayment_.paymentLabels, JoinType.LEFT).get(PaymentLabel_.id)
                         )
-                    );
-            }
-            if (criteria.getDealerId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getDealerId(), root -> root.join(SignedPayment_.dealer, JoinType.LEFT).get(Dealer_.id))
                     );
             }
             if (criteria.getPaymentCategoryId() != null) {

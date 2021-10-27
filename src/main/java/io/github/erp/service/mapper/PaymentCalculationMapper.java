@@ -14,11 +14,6 @@ public interface PaymentCalculationMapper extends EntityMapper<PaymentCalculatio
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     PaymentCalculationDTO toDto(PaymentCalculation s);
 
-    @Named("id")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    PaymentCalculationDTO toDtoId(PaymentCalculation paymentCalculation);
-
     @Mapping(target = "removePaymentLabel", ignore = true)
     @Mapping(target = "removePlaceholder", ignore = true)
     PaymentCalculation toEntity(PaymentCalculationDTO paymentCalculationDTO);

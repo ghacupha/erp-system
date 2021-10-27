@@ -54,13 +54,6 @@ public class PaymentCalculation implements Serializable {
     @JsonIgnoreProperties(value = { "containingPaymentLabel", "placeholders" }, allowSetters = true)
     private Set<PaymentLabel> paymentLabels = new HashSet<>();
 
-    @JsonIgnoreProperties(
-        value = { "paymentLabels", "dealer", "paymentCategory", "taxRule", "paymentCalculation", "placeholders", "paymentGroup" },
-        allowSetters = true
-    )
-    @OneToOne(mappedBy = "paymentCalculation")
-    private Payment payment;
-
     @ManyToOne
     @JsonIgnoreProperties(value = { "paymentLabels", "paymentCalculations", "placeholders" }, allowSetters = true)
     private PaymentCategory paymentCategory;
@@ -188,25 +181,6 @@ public class PaymentCalculation implements Serializable {
 
     public PaymentCalculation removePaymentLabel(PaymentLabel paymentLabel) {
         this.paymentLabels.remove(paymentLabel);
-        return this;
-    }
-
-    public Payment getPayment() {
-        return this.payment;
-    }
-
-    public void setPayment(Payment payment) {
-        if (this.payment != null) {
-            this.payment.setPaymentCalculation(null);
-        }
-        if (payment != null) {
-            payment.setPaymentCalculation(this);
-        }
-        this.payment = payment;
-    }
-
-    public PaymentCalculation payment(Payment payment) {
-        this.setPayment(payment);
         return this;
     }
 

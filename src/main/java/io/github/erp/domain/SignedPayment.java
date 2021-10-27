@@ -47,6 +47,9 @@ public class SignedPayment implements Serializable {
     @Column(name = "transaction_amount", precision = 21, scale = 2, nullable = false)
     private BigDecimal transactionAmount;
 
+    @Column(name = "dealer_name")
+    private String dealerName;
+
     @Column(name = "file_upload_token")
     private String fileUploadToken;
 
@@ -64,13 +67,6 @@ public class SignedPayment implements Serializable {
     private Set<PaymentLabel> paymentLabels = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(
-        value = { "paymentLabels", "dealerGroup", "paymentRequisitions", "signedPayments", "placeholders" },
-        allowSetters = true
-    )
-    private Dealer dealer;
-
-    @ManyToOne
     @JsonIgnoreProperties(value = { "paymentLabels", "paymentCalculations", "placeholders" }, allowSetters = true)
     private PaymentCategory paymentCategory;
 
@@ -85,10 +81,7 @@ public class SignedPayment implements Serializable {
     private Set<Placeholder> placeholders = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(
-        value = { "paymentLabels", "dealer", "paymentCategory", "placeholders", "signedPaymentGroup" },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "paymentLabels", "paymentCategory", "placeholders", "signedPaymentGroup" }, allowSetters = true)
     private SignedPayment signedPaymentGroup;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -158,6 +151,19 @@ public class SignedPayment implements Serializable {
         this.transactionAmount = transactionAmount;
     }
 
+    public String getDealerName() {
+        return this.dealerName;
+    }
+
+    public SignedPayment dealerName(String dealerName) {
+        this.setDealerName(dealerName);
+        return this;
+    }
+
+    public void setDealerName(String dealerName) {
+        this.dealerName = dealerName;
+    }
+
     public String getFileUploadToken() {
         return this.fileUploadToken;
     }
@@ -204,19 +210,6 @@ public class SignedPayment implements Serializable {
 
     public SignedPayment removePaymentLabel(PaymentLabel paymentLabel) {
         this.paymentLabels.remove(paymentLabel);
-        return this;
-    }
-
-    public Dealer getDealer() {
-        return this.dealer;
-    }
-
-    public void setDealer(Dealer dealer) {
-        this.dealer = dealer;
-    }
-
-    public SignedPayment dealer(Dealer dealer) {
-        this.setDealer(dealer);
         return this;
     }
 
@@ -297,6 +290,7 @@ public class SignedPayment implements Serializable {
             ", transactionDate='" + getTransactionDate() + "'" +
             ", transactionCurrency='" + getTransactionCurrency() + "'" +
             ", transactionAmount=" + getTransactionAmount() +
+            ", dealerName='" + getDealerName() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
             "}";

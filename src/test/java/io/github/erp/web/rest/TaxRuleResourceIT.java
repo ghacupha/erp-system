@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.Payment;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.TaxRule;
 import io.github.erp.repository.TaxRuleRepository;
@@ -1292,32 +1291,6 @@ class TaxRuleResourceIT {
 
         // Get all the taxRuleList where compilationToken does not contain UPDATED_COMPILATION_TOKEN
         defaultTaxRuleShouldBeFound("compilationToken.doesNotContain=" + UPDATED_COMPILATION_TOKEN);
-    }
-
-    @Test
-    @Transactional
-    void getAllTaxRulesByPaymentIsEqualToSomething() throws Exception {
-        // Initialize the database
-        taxRuleRepository.saveAndFlush(taxRule);
-        Payment payment;
-        if (TestUtil.findAll(em, Payment.class).isEmpty()) {
-            payment = PaymentResourceIT.createEntity(em);
-            em.persist(payment);
-            em.flush();
-        } else {
-            payment = TestUtil.findAll(em, Payment.class).get(0);
-        }
-        em.persist(payment);
-        em.flush();
-        taxRule.addPayment(payment);
-        taxRuleRepository.saveAndFlush(taxRule);
-        Long paymentId = payment.getId();
-
-        // Get all the taxRuleList where payment equals to paymentId
-        defaultTaxRuleShouldBeFound("paymentId.equals=" + paymentId);
-
-        // Get all the taxRuleList where payment equals to (paymentId + 1)
-        defaultTaxRuleShouldNotBeFound("paymentId.equals=" + (paymentId + 1));
     }
 
     @Test
