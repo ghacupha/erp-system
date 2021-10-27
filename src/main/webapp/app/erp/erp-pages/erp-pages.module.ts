@@ -24,44 +24,44 @@ import {RouterModule} from '@angular/router';
       loadChildren: () => import('./payments/invoice/invoice.module').then(m => m.ErpServiceInvoiceModule),
     },
     {
-      path: 'payment',
+      path: 'erp/payment',
       data: { pageTitle: 'ERP | Payments' },
       loadChildren: () => import('./payments/payment/payment.module').then(m => m.ErpServicePaymentModule),
     },
     {
-      path: 'payment-calculation',
+      path: 'erp/payment-calculation',
       data: { pageTitle: 'ERP | PaymentCalculations' },
       loadChildren: () =>
         import('./payments/payment-calculation/payment-calculation.module').then(m => m.ErpServicePaymentCalculationModule),
     },
     {
-      path: 'payment-requisition',
+      path: 'erp/payment-requisition',
       data: { pageTitle: 'ERP | PaymentRequisitions' },
       loadChildren: () =>
         import('./payments/payment-requisition/payment-requisition.module').then(m => m.ErpServicePaymentRequisitionModule),
     },
     {
-      path: 'tax-reference',
+      path: 'erp/tax-reference',
       data: { pageTitle: 'ERP | Tax Ref' },
       loadChildren: () => import('./payments/tax-reference/tax-reference.module').then(m => m.ErpServiceTaxReferenceModule),
     },
     {
-      path: 'tax-rule',
+      path: 'erp/tax-rule',
       data: { pageTitle: 'ERP | Tax Rules' },
       loadChildren: () => import('./payments/tax-rule/tax-rule.module').then(m => m.ErpServiceTaxRuleModule),
     },
     {
-      path: 'payment-category',
+      path: 'erp/payment-category',
       data: { pageTitle: 'ERP | Payment Categories' },
       loadChildren: () => import('./payments/payment-category/payment-category.module').then(m => m.ErpServicePaymentCategoryModule),
     },
     {
-      path: 'payment-label',
+      path: 'erp/payment-label',
       data: { pageTitle: 'ERP | Payment Labels' },
       loadChildren: () => import('./payment-label/payment-label.module').then(m => m.PaymentLabelModule),
     },
     {
-      path: 'signed-payment',
+      path: 'erp/signed-payment',
       data: { pageTitle: 'ERP | Signed Payments' },
       loadChildren: () => import('./signed-payment/signed-payment.module').then(m => m.SignedPaymentModule),
     },
