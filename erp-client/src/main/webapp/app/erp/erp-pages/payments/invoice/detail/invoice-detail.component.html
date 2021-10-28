@@ -1,0 +1,78 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="invoice">
+      <h2 data-cy="invoiceDetailsHeading"><span>Invoice</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ invoice.id }}</span>
+        </dd>
+        <dt><span>Invoice Number</span></dt>
+        <dd>
+          <span>{{ invoice.invoiceNumber }}</span>
+        </dd>
+        <dt><span>Invoice Date</span></dt>
+        <dd>
+          <span>{{ invoice.invoiceDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Invoice Amount</span></dt>
+        <dd>
+          <span>{{ invoice.invoiceAmount }}</span>
+        </dd>
+        <dt><span>Currency</span></dt>
+        <dd>
+          <span>{{ invoice.currency }}</span>
+        </dd>
+        <!--<dt><span>Conversion Rate</span></dt>-->
+        <!--<dd>
+          <span>{{ invoice.conversionRate }}</span>
+        </dd>-->
+        <dt><span>Payment Id</span></dt>
+        <dd>
+          <span>
+            <a [routerLink]="['/erp/payment', invoice?.paymentId, 'view']">
+             {{ invoice.paymentId }}
+            </a>
+          </span>
+        </dd>
+        <dt><span>Dealer Id</span></dt>
+        <dd>
+          <span>
+            <a [routerLink]="['/erp/dealer', invoice?.dealerId, 'view']">
+             {{ invoice.dealerId }}
+            </a>
+          </span>
+        </dd>
+        <dt><span>Payment Label</span></dt>
+        <dd>
+          <span *ngFor="let paymentLabel of invoice.paymentLabels; let last = last">
+            <a [routerLink]="['/erp/payment-label', paymentLabel?.id, 'view']">{{ paymentLabel.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of invoice.placeholders; let last = last">
+            <a [routerLink]="['/erp/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/erp/invoice', invoice.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>
