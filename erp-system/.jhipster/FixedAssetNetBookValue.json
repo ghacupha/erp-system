@@ -1,0 +1,66 @@
+{
+  "fields": [
+    {
+      "fieldName": "assetNumber",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "serviceOutletCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assetTag",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assetDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "netBookValueDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "assetCategory",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "netBookValue",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "depreciationRegime",
+      "fieldType": "DepreciationRegime",
+      "fieldValues": "STRAIGHT_LINE_BASIS,DECLINING_BALANCE_BASIS"
+    },
+    {
+      "fieldName": "fileUploadToken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true
+    }
+  ],
+  "service": "serviceImpl",
+  "searchEngine": "elasticsearch",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "FixedAssetNetBookValue",
+  "changelogDate": "20210323123701",
+  "clientRootFolder": "assets",
+  "microserviceName": "erpService",
+  "entityTableName": "fixed_asset_net_book_value",
+  "databaseType": "sql"
+}

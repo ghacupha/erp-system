@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity FixedAssetDepreciation.
+    -->
+    <changeSet id="20210323133701-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="fixed_asset_depreciation_id"
+                                 baseTableName="rel_fixed_asset_depreciation__placeholder"
+                                 constraintName="fk_rel_fixed_asset_depreciation__fixed_asset_depreciation_97_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="fixed_asset_depreciation"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_fixed_asset_depreciation__placeholder"
+                                 constraintName="fk_rel_fixed_asset_depreciation__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+    </changeSet>
+</databaseChangeLog>
