@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+    <!--
+        Added the constraints for entity FileUpload.
+    -->
+    <changeSet id="20210414144555-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="file_upload_id"
+                                 baseTableName="rel_file_upload__placeholder"
+                                 constraintName="fk_rel_file_upload__placeholder__file_upload_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="file_upload"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_file_upload__placeholder"
+                                 constraintName="fk_rel_file_upload__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+    </changeSet>
+</databaseChangeLog>
