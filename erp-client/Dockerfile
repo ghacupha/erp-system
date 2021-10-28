@@ -35,6 +35,6 @@ RUN npm run build --prod
 # Stage 2
 FROM nginx
 COPY src/main/docker/nginx/nginx-default.conf /etc/nginx/conf.d/default.conf
-COPY --from=compile-image /opt/app/build/resources/main/static /usr/share/nginx/html
+COPY --from=compile-image /opt/app/target/classes/static /usr/share/nginx/html
 
 CMD ["nginx", "-g", "daemon off;"]
