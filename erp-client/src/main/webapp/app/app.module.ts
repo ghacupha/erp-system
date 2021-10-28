@@ -24,12 +24,20 @@ import { NavbarComponent } from './layouts/navbar/navbar.component';
 import { FooterComponent } from './layouts/footer/footer.component';
 import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ErrorComponent } from './layouts/error/error.component';
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
+import { ErpStoreModule } from './erp/store/erp-store.module';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { ErpSystemModule } from './erp/erp-system.module';
 
 @NgModule({
   imports: [
     BrowserModule,
     SharedModule,
     HomeModule,
+    ErpSystemModule,
+    NgSelectModule,
+    ErpStoreModule,
+    LoggerModule.forRoot({serverLoggingUrl: '/api/logs', level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.ERROR}),
     // jhipster-needle-angular-add-module JHipster will add new module here
     EntityRoutingModule,
     AppRoutingModule,

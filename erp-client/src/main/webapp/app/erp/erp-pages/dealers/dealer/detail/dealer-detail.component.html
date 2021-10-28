@@ -1,0 +1,84 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="dealer">
+      <h2 data-cy="dealerDetailsHeading"><span>Dealer</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ dealer.id }}</span>
+        </dd>
+        <dt><span>Dealer Name</span></dt>
+        <dd>
+          <span>{{ dealer.dealerName }}</span>
+        </dd>
+        <dt><span>Tax Number</span></dt>
+        <dd>
+          <span>{{ dealer.taxNumber }}</span>
+        </dd>
+        <dt><span>Postal Address</span></dt>
+        <dd>
+          <span>{{ dealer.postalAddress }}</span>
+        </dd>
+        <dt><span>Physical Address</span></dt>
+        <dd>
+          <span>{{ dealer.physicalAddress }}</span>
+        </dd>
+        <dt><span>Account Name</span></dt>
+        <dd>
+          <span>{{ dealer.accountName }}</span>
+        </dd>
+        <dt><span>Account Number</span></dt>
+        <dd>
+          <span>{{ dealer.accountNumber }}</span>
+        </dd>
+        <dt><span>Bankers Name</span></dt>
+        <dd>
+          <span>{{ dealer.bankersName }}</span>
+        </dd>
+        <dt><span>Bankers Branch</span></dt>
+        <dd>
+          <span>{{ dealer.bankersBranch }}</span>
+        </dd>
+        <dt><span>Bankers Swift Code</span></dt>
+        <dd>
+          <span>{{ dealer.bankersSwiftCode }}</span>
+        </dd>
+        <dt><span>Payment Label</span></dt>
+        <dd>
+          <span *ngFor="let paymentLabel of dealer.paymentLabels; let last = last">
+            <a [routerLink]="['/erp/payment-label', paymentLabel?.id, 'view']">{{ paymentLabel.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Dealer Group</span></dt>
+        <dd>
+          <div *ngIf="dealer.dealerGroup">
+            <a [routerLink]="['/erp/dealer', dealer.dealerGroup?.id, 'view']">{{ dealer.dealerGroup?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of dealer.placeholders; let last = last">
+            <a [routerLink]="['/erp/placeholder', placeholder?.id, 'view']">{{ placeholder.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/erp/dealer', dealer.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

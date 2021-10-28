@@ -1,0 +1,127 @@
+<div>
+  <h2 id="page-heading" data-cy="FileTypeHeading">
+    <span>File Types</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-file-type"
+        [routerLink]="['/erp/file-type/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down"> Create a new File Type </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <form name="searchForm" class="form-inline">
+        <div class="input-group w-100 mt-3">
+          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+
+          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+            <fa-icon icon="search"></fa-icon>
+          </button>
+
+          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="fileTypes?.length === 0">
+    <span>No fileTypes found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="fileTypes && fileTypes.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fileTypeName"><span>File Type Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fileMediumType">
+            <span>File Medium Type</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fileTemplate"><span>File Template</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fileType"><span>File Type</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let fileType of fileTypes; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/file-type', fileType.id, 'view']">{{ fileType.id }}</a>
+          </td>
+          <td>{{ fileType.fileTypeName }}</td>
+          <td>{{ fileType.fileMediumType }}</td>
+          <td>{{ fileType.description }}</td>
+          <td>
+            <a *ngIf="fileType.fileTemplate" (click)="openFile(fileType.fileTemplate, fileType.fileTemplateContentType)">open</a>
+            <span *ngIf="fileType.fileTemplate">{{ fileType.fileTemplateContentType }}, {{ byteSize(fileType.fileTemplate) }}</span>
+          </td>
+          <td>{{ fileType.fileType }}</td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/erp/file-type', fileType.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/erp/file-type', fileType.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(fileType)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="fileTypes && fileTypes.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>
