@@ -17,7 +17,7 @@
 #
 
 # Stage 1
-FROM node:10-alpine AS compile-image
+FROM node:14.18-alpine3.12 AS compile-image
 
 WORKDIR /opt/app
 # Enable the line below for local dev behind proxy
