@@ -21,4 +21,4 @@ services:
   erp-client:
     image: ghacupha/erp-client:0.0.1-SNAPSHOT
     ports:
-      - 8978:80
+      - 8981:80
