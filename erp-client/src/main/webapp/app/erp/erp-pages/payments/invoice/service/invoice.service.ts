@@ -67,9 +67,10 @@ export class InvoiceService {
       if (res.body) {
         return of(res.body)
       }
+      return of(acquiredInvoice);
     });
 
-    return of(acquiredInvoice)
+    return of(acquiredInvoice);
   }
 
   partialUpdate(invoice: IInvoice): Observable<EntityResponseType> {

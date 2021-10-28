@@ -27,6 +27,7 @@ export class DealerCategoryService {
           }
         }
       }
+      return EMPTY;
     });
     return EMPTY;
   }
