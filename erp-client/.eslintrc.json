@@ -80,6 +80,7 @@
     "@typescript-eslint/prefer-nullish-coalescing": "error",
     "@typescript-eslint/prefer-optional-chain": "error",
     "@typescript-eslint/unbound-method": "off",
+    "@typescript-eslint/restrict-template-expressions": "off",
     "arrow-body-style": "error",
     "curly": "error",
     "eqeqeq": ["error", "always", { "null": "ignore" }],
@@ -93,6 +94,20 @@
     "no-new-wrappers": "error",
     "object-shorthand": ["error", "always", { "avoidExplicitReturnArrows": true }],
     "radix": "error",
-    "spaced-comment": ["warn", "always"]
+    "spaced-comment": [
+      "error",
+      "always",
+      {
+        "line": {
+          "markers": ["/"],
+          "exceptions": ["-", "+", "/"]
+        },
+        "block": {
+          "markers": ["!"],
+          "exceptions": ["*", "/"],
+          "balanced": true
+        }
+      }
+    ]
   }
 }
