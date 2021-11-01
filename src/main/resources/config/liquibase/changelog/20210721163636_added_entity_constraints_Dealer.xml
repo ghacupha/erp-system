@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+    <!--
+        Added the constraints for entity Dealer.
+    -->
+    <changeSet id="20210721163636-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="dealer_id"
+                                 baseTableName="rel_dealer__payment_label"
+                                 constraintName="fk_rel_dealer__payment_label__dealer_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_label_id"
+                                 baseTableName="rel_dealer__payment_label"
+                                 constraintName="fk_rel_dealer__payment_label__payment_label_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_label"/>
+
+        <addForeignKeyConstraint baseColumnNames="dealer_group_id"
+                                 baseTableName="dealer"
+                                 constraintName="fk_dealer__dealer_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="dealer_id"
+                                 baseTableName="rel_dealer__placeholder"
+                                 constraintName="fk_rel_dealer__placeholder__dealer_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_dealer__placeholder"
+                                 constraintName="fk_rel_dealer__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+    </changeSet>
+</databaseChangeLog>
