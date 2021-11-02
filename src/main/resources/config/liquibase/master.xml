@@ -2,7 +2,7 @@
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
 
     <property name="now" value="now()" dbms="h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
@@ -30,9 +30,9 @@
     <include file="config/liquibase/changelog/20210722140431_added_entity_TaxRule.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210723153046_added_entity_PaymentCategory.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210823115335_added_entity_Placeholder.xml" relativeToChangelogFile="false"/>
-<!--    <include file="config/liquibase/changelog/20210414144226_added_springbatch_schema.xml" relativeToChangelogFile="false"/>-->
     <include file="config/liquibase/changelog/20210920142924_added_entity_PaymentLabel.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210920145532_added_entity_SignedPayment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210414144226_added_spring_batch_schema.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>

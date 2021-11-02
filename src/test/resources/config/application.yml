@@ -57,13 +57,13 @@ spring:
     basename: i18n/messages
   task:
     execution:
-      thread-name-prefix: erp-task-
+      thread-name-prefix: erp-system-task-
       pool:
         core-size: 1
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: erp-scheduling-
+      thread-name-prefix: erp-system-scheduling-
       pool:
         size: 1
   thymeleaf:
