@@ -152,7 +152,7 @@ jhipster:
     name: 'erpSystemApp'
   # By default CORS is disabled. Uncomment to enable.
   cors:
-     allowed-origins: "http://localhost:8100,http://localhost:9000,http://localhost:8981"
+     allowed-origins: 'http://localhost:8100,https://localhost:8100,http://localhost:9000,https://localhost:9000,https://localhost:8981,http://localhost:8981'
      allowed-methods: "*"
      allowed-headers: "*"
      exposed-headers: "Origin,X-Requested-With,Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params"
