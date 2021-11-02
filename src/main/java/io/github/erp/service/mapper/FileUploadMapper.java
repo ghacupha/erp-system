@@ -1,6 +1,6 @@
 package io.github.erp.service.mapper;
 
-import io.github.erp.domain.*;
+import io.github.erp.domain.FileUpload;
 import io.github.erp.service.dto.FileUploadDTO;
 import org.mapstruct.*;
 

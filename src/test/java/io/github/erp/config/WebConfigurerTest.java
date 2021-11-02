@@ -1,6 +1,5 @@
 package io.github.erp.config;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -10,12 +9,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.io.File;
 import java.util.*;
 import javax.servlet.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.env.MockEnvironment;
 import org.springframework.mock.web.MockServletContext;
@@ -61,19 +58,6 @@ class WebConfigurerTest {
         env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT);
 
         assertThatCode(() -> webConfigurer.onStartup(servletContext)).doesNotThrowAnyException();
-    }
-
-    @Test
-    void shouldCustomizeServletContainer() {
-        env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION);
-        UndertowServletWebServerFactory container = new UndertowServletWebServerFactory();
-        webConfigurer.customize(container);
-        assertThat(container.getMimeMappings().get("abs")).isEqualTo("audio/x-mpeg");
-        assertThat(container.getMimeMappings().get("html")).isEqualTo("text/html");
-        assertThat(container.getMimeMappings().get("json")).isEqualTo("application/json");
-        if (container.getDocumentRoot() != null) {
-            assertThat(container.getDocumentRoot()).isEqualTo(new File("target/classes/static/"));
-        }
     }
 
     @Test

@@ -43,6 +43,7 @@ spring:
     database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
   elasticsearch:
     rest:
+      # uris: http://localhost:9200
       uris: ${SPRING_DATA_JEST_URI}
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
@@ -88,7 +89,7 @@ server:
   shutdown: graceful # see https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-graceful-shutdown
   compression:
     enabled: true
-    mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
+    mime-types: text/html,text/xml,text/plain,text/css,application/javascript,application/json,image/svg+xml
     min-response-size: 1024
 
 # ===================================================================
@@ -113,6 +114,7 @@ jhipster:
         # - In the JHipster Registry (which includes a Spring Cloud Config server)
         # - In a separate `application-prod.yml` file, in the same folder as your executable JAR file
         # - In the `JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET` environment variable
+        # base64-secret: ZWMyYzI1MmU3Mzg1ZTU4ZjFmOTIzYjEzOWZkZWU1MWZhNGY4ZTA3ZTEwYmYxMzczOGE3NDZiZjNkMDE3NjNiYTBmMTE0ODBiYTcyZDI0ZTcyNmU5OTA2NGY4NDUwZGEyMWQwYThmMTgxNWJiMjQ2OGQ0NmIxMTQwNTE0MGFkNzA=
         base64-secret: ${SECURITY_AUTHENTICATION_JWT_BASE64_SECRET}
         # Token is valid 24 hours
         token-validity-in-seconds: 86400

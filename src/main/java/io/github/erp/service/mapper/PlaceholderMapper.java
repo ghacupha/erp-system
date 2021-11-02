@@ -1,6 +1,6 @@
 package io.github.erp.service.mapper;
 
-import io.github.erp.domain.*;
+import io.github.erp.domain.Placeholder;
 import io.github.erp.service.dto.PlaceholderDTO;
 import java.util.Set;
 import org.mapstruct.*;

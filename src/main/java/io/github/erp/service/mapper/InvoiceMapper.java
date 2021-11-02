@@ -1,6 +1,6 @@
 package io.github.erp.service.mapper;
 
-import io.github.erp.domain.*;
+import io.github.erp.domain.Invoice;
 import io.github.erp.service.dto.InvoiceDTO;
 import org.mapstruct.*;
 

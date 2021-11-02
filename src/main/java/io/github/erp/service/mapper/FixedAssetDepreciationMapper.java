@@ -1,6 +1,6 @@
 package io.github.erp.service.mapper;
 
-import io.github.erp.domain.*;
+import io.github.erp.domain.FixedAssetDepreciation;
 import io.github.erp.service.dto.FixedAssetDepreciationDTO;
 import org.mapstruct.*;
 

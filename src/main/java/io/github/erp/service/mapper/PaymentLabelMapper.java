@@ -1,6 +1,6 @@
 package io.github.erp.service.mapper;
 
-import io.github.erp.domain.*;
+import io.github.erp.domain.PaymentLabel;
 import io.github.erp.service.dto.PaymentLabelDTO;
 import java.util.Set;
 import org.mapstruct.*;
