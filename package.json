@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "description": "Description for erpSystem",
-  "license": "UNLICENSED",
+  "license": "GPLv3",
   "scripts": {
     "app:start": "./mvnw",
     "backend:build-cache": "./mvnw dependency:go-offline",
