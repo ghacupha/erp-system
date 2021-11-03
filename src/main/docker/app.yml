@@ -32,8 +32,8 @@ services:
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
-      #- 127.0.0.1:8980:8980
-      - 8977:8977
+      - 8980:8980
+      #- 8977:8977
 #  erpsystem-postgresql:
 #    image: postgres:13.4
 #    # volumes:
