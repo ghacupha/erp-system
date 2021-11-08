@@ -2,7 +2,6 @@ package io.github.erp.internal.model;
 
 import com.poiji.annotation.ExcelCell;
 import com.poiji.annotation.ExcelRow;
-import io.github.erp.domain.enumeration.CurrencyTypes;
 import io.github.erp.internal.framework.ExcelViewModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
