@@ -1,7 +1,8 @@
-package io.github.erp.internal.model;
+package io.github.erp.internal.model.mapping;
 
 import io.github.erp.domain.enumeration.CategoryTypes;
 import io.github.erp.internal.framework.Mapping;
+import io.github.erp.internal.model.PaymentCategoryEVM;
 import io.github.erp.service.dto.PaymentCategoryDTO;
 import org.mapstruct.Mapper;
 

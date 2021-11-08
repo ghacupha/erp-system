@@ -1,4 +1,4 @@
-package io.github.erp.internal.model;
+package io.github.erp.internal.model.mapping;
 
 /*-
  * ERP System - ERP data management platform
@@ -17,16 +17,19 @@ package io.github.erp.internal.model;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.internal.framework.MapUtils;
 import io.github.erp.internal.framework.Mapping;
-import io.github.erp.service.dto.FixedAssetAcquisitionDTO;
+import io.github.erp.internal.model.FixedAssetAcquisitionBEO;
+import io.github.erp.internal.model.FixedAssetAcquisitionEVM;
 import org.mapstruct.Mapper;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Mapper(componentModel = "spring", uses = {})
-public interface FixedAssetAcquisitionEVMMapping extends Mapping<FixedAssetAcquisitionEVM, FixedAssetAcquisitionDTO> {
+@Mapper(componentModel = "spring")
+public interface AssetAcquisitionBatchEntityMapping extends Mapping<FixedAssetAcquisitionEVM, FixedAssetAcquisitionBEO> {
+
     @org.mapstruct.Mapping(target = "purchaseDate", source = "purchaseDate")
     default LocalDate dateStringToLocalDate(String dateString) {
         return MapUtils.dateStringToLocalDate(dateString);

@@ -1,4 +1,4 @@
-package io.github.erp.internal.model;
+package io.github.erp.internal.model.mapping;
 
 /*-
  * ERP System - ERP data management platform
@@ -20,6 +20,7 @@ package io.github.erp.internal.model;
 import io.github.erp.domain.enumeration.DepreciationRegime;
 import io.github.erp.internal.framework.MapUtils;
 import io.github.erp.internal.framework.Mapping;
+import io.github.erp.internal.model.FixedAssetDepreciationEVM;
 import io.github.erp.service.dto.FixedAssetDepreciationDTO;
 import org.mapstruct.Mapper;
 

@@ -1,4 +1,4 @@
-package io.github.erp.internal.model;
+package io.github.erp.internal.model.mapping;
 
 /*-
  * ERP System - ERP data management platform
@@ -18,33 +18,46 @@ package io.github.erp.internal.model;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.domain.enumeration.DepreciationRegime;
 import io.github.erp.internal.framework.MapUtils;
 import io.github.erp.internal.framework.Mapping;
+import io.github.erp.internal.model.FixedAssetDepreciationBEO;
+import io.github.erp.internal.model.FixedAssetDepreciationEVM;
 import org.mapstruct.Mapper;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Mapper(componentModel = "spring")
-public interface AssetAcquisitionBatchEntityMapping extends Mapping<FixedAssetAcquisitionEVM, FixedAssetAcquisitionBEO> {
+public interface AssetDepreciationBatchEntityMapping extends Mapping<FixedAssetDepreciationEVM, FixedAssetDepreciationBEO> {
 
-    @org.mapstruct.Mapping(target = "purchaseDate", source = "purchaseDate")
+    @org.mapstruct.Mapping(target = "depreciationDate", source = "depreciationDate")
     default LocalDate dateStringToLocalDate(String dateString) {
         return MapUtils.dateStringToLocalDate(dateString);
     }
 
-    @org.mapstruct.Mapping(target = "purchaseDate", source = "purchaseDate")
+    @org.mapstruct.Mapping(target = "depreciationDate", source = "depreciationDate")
     default String localDateToDateString(LocalDate localDateValue) {
         return MapUtils.localDateToDateString(localDateValue);
     }
 
-    @org.mapstruct.Mapping(target = "purchasePrice", source = "purchasePrice")
+    @org.mapstruct.Mapping(target = "depreciationAmount", source = "depreciationAmount")
     default BigDecimal toBigDecimalValue(Double doubleValue) {
         return MapUtils.doubleToBigDecimal(doubleValue);
     }
 
-    @org.mapstruct.Mapping(target = "purchasePrice", source = "purchasePrice")
+    @org.mapstruct.Mapping(target = "depreciationAmount", source = "depreciationAmount")
     default Double toDoubleValue(BigDecimal bigDecimalValue) {
         return MapUtils.bigDecimalToDouble(bigDecimalValue);
+    }
+
+    @org.mapstruct.Mapping(target = "depreciationRegime", source = "depreciationRegime")
+    default DepreciationRegime toEnumeratedValue(String depreciationRegimeDesignation) {
+        return DepreciationRegimeMapUtils.depreciationRegime(depreciationRegimeDesignation);
+    }
+
+    @org.mapstruct.Mapping(target = "depreciationRegime", source = "depreciationRegime")
+    default String toStringEnumeratedValue(DepreciationRegime depreciationRegimeEnum) {
+        return DepreciationRegimeMapUtils.depreciationRegime(depreciationRegimeEnum);
     }
 }

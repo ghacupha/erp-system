@@ -1,4 +1,4 @@
-package io.github.erp.internal.model;
+package io.github.erp.internal.model.mapping;
 
 /*-
  * ERP System - ERP data management platform
@@ -17,17 +17,18 @@ package io.github.erp.internal.model;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.domain.enumeration.DepreciationRegime;
 import io.github.erp.internal.framework.MapUtils;
 import io.github.erp.internal.framework.Mapping;
+import io.github.erp.internal.model.FixedAssetNetBookValueEVM;
+import io.github.erp.service.dto.FixedAssetNetBookValueDTO;
 import org.mapstruct.Mapper;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Mapper(componentModel = "spring")
-public interface NetBookValueBatchEntityMapping extends Mapping<FixedAssetNetBookValueEVM, FixedAssetNetBookValueBEO> {
+public interface FixedAssetNetBookValueEVMMapping extends Mapping<FixedAssetNetBookValueEVM, FixedAssetNetBookValueDTO> {
 
     @org.mapstruct.Mapping(target = "netBookValueDate", source = "netBookValueDate")
     default LocalDate dateStringToLocalDate(String dateString) {
