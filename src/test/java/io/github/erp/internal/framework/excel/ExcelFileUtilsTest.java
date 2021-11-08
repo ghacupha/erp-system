@@ -17,6 +17,7 @@ package io.github.erp.internal.framework.excel;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import com.poiji.annotation.ExcelCell;
 import io.github.erp.internal.model.*;
 import io.github.erp.internal.service.ExcelDeserializerContainer;
 import org.junit.jupiter.api.BeforeEach;
@@ -164,6 +165,106 @@ public class ExcelFileUtilsTest {
                         .categoryName("categoryName" + index)
                         .categoryDescription("categoryDescription" + index)
                         .categoryType("categoryType" + index)
+                        .build()
+                );
+        }
+    }
+    @Test
+    public void paymentListFile() throws Exception {
+        ExcelFileDeserializer<PaymentEVM> deserializer = container.paymentExcelFileDeserializer();
+
+        List<PaymentEVM> evms = deserializer.deserialize(toBytes(readFile("payment.xlsx")));
+
+        assertThat(evms.size()).isEqualTo(13);
+
+        for (int i = 0; i < 13; i++) {
+            String index = String.valueOf(i + 1);
+            assertThat(evms.get(i))
+                .isEqualTo(
+                    PaymentEVM
+                        .builder()
+                        .rowIndex((long) (i + 1))
+                        .paymentNumber("paymentNumber" + index)
+                        .paymentDate(DATETIME_FORMATTER.format(of(2021, 1, 1).plusDays(Long.parseLong(index)).minusDays(1L)))
+                        .invoicedAmount(1.1 + i)
+                        .paymentAmount(1.1 + i)
+                        .description("description" + index)
+                        .settlementCurrency("settlementCurrency" + index)
+                        .build()
+                );
+        }
+    }
+    @Test
+    public void signedPaymentListFile() throws Exception {
+        ExcelFileDeserializer<SignedPaymentEVM> deserializer = container.signedPaymentExcelFileDeserializer();
+
+        List<SignedPaymentEVM> evms = deserializer.deserialize(toBytes(readFile("signedPayment.xlsx")));
+
+        assertThat(evms.size()).isEqualTo(13);
+
+        for (int i = 0; i < 13; i++) {
+            String index = String.valueOf(i + 1);
+            assertThat(evms.get(i))
+                .isEqualTo(
+                    SignedPaymentEVM
+                        .builder()
+                        .rowIndex((long) (i + 1))
+                        .transactionNumber("transactionNumber" + index)
+                        .transactionDate(DATETIME_FORMATTER.format(of(2021, 1, 1).plusDays(Long.parseLong(index)).minusDays(1L)))
+                        .transactionCurrency("transactionCurrency" + index)
+                        .transactionAmount(1.1 + i)
+                        .dealerName("dealerName" + index)
+                        .build()
+                );
+        }
+    }
+    @Test
+    public void dealersListFile() throws Exception {
+        ExcelFileDeserializer<DealerEVM> deserializer = container.dealerExcelFileDeserializer();
+
+        List<DealerEVM> evms = deserializer.deserialize(toBytes(readFile("dealer.xlsx")));
+
+        assertThat(evms.size()).isEqualTo(13);
+
+        for (int i = 0; i < 13; i++) {
+            String index = String.valueOf(i + 1);
+            assertThat(evms.get(i))
+                .isEqualTo(
+                    DealerEVM
+                        .builder()
+                        .rowIndex((long) (i + 1))
+                        .dealerName("dealerName" + index)
+                        .taxNumber("taxNumber" + index)
+                        .postalAddress("postalAddress" + index)
+                        .physicalAddress("physicalAddress" + index)
+                        .accountName("accountName" + index)
+                        .accountNumber("accountNumber" + index)
+                        .bankersName("bankersName" + index)
+                        .bankersBranch("bankersBranch" + index)
+                        .bankersSwiftCode("bankersSwiftCode" + index)
+                        .build()
+                );
+        }
+    }
+    @Test
+    public void invoiceListFile() throws Exception {
+        ExcelFileDeserializer<InvoiceEVM> deserializer = container.invoiceExcelFileDeserializer();
+
+        List<InvoiceEVM> evms = deserializer.deserialize(toBytes(readFile("invoice.xlsx")));
+
+        assertThat(evms.size()).isEqualTo(13);
+
+        for (int i = 0; i < 13; i++) {
+            String index = String.valueOf(i + 1);
+            assertThat(evms.get(i))
+                .isEqualTo(
+                    InvoiceEVM
+                        .builder()
+                        .rowIndex((long) (i + 1))
+                        .invoiceNumber("invoiceNumber" + index)
+                        .invoiceDate(DATETIME_FORMATTER.format(of(2021, 1, 1).plusDays(Long.parseLong(index)).minusDays(1L)))
+                        .invoiceAmount(1.1 + i)
+                        .currency("currency" + index)
                         .build()
                 );
         }
