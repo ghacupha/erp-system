@@ -19,7 +19,7 @@ package io.github.erp.internal.service;
  */
 import io.github.erp.internal.framework.batch.BatchPersistentFileUploadService;
 import io.github.erp.internal.framework.batch.HasDataFile;
-import io.github.erp.internal.model.FileUploadHasDataFileMapping;
+import io.github.erp.internal.model.mapping.FileUploadHasDataFileMapping;
 import io.github.erp.service.FileUploadService;
 import org.springframework.stereotype.Service;
 

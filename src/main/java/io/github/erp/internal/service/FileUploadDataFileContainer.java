@@ -20,7 +20,7 @@ package io.github.erp.internal.service;
 
 import io.github.erp.internal.framework.service.DataFileContainer;
 import io.github.erp.internal.framework.model.FileUploadHasDataFile;
-import io.github.erp.internal.model.FileUploadHasDataFileMapping;
+import io.github.erp.internal.model.mapping.FileUploadHasDataFileMapping;
 import io.github.erp.service.FileUploadService;
 import org.springframework.stereotype.Service;
 

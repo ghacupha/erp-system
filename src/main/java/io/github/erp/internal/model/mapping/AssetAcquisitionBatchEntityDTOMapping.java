@@ -1,4 +1,4 @@
-package io.github.erp.internal.model;
+package io.github.erp.internal.model.mapping;
 
 /*-
  * ERP System - ERP data management platform
@@ -19,6 +19,7 @@ package io.github.erp.internal.model;
  */
 
 import io.github.erp.internal.framework.Mapping;
+import io.github.erp.internal.model.FixedAssetAcquisitionBEO;
 import io.github.erp.service.dto.FixedAssetAcquisitionDTO;
 import org.mapstruct.Mapper;
 

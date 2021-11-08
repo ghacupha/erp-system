@@ -17,7 +17,7 @@ package io.github.erp.internal.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.internal.model.AssetDepreciationBatchEntityDTOMapping;
+import io.github.erp.internal.model.mapping.AssetDepreciationBatchEntityDTOMapping;
 import io.github.erp.internal.model.FixedAssetDepreciationBEO;
 import tech.jhipster.service.filter.StringFilter;
 import io.github.erp.internal.framework.service.DeletionUploadService;
