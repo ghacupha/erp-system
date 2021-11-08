@@ -55,4 +55,24 @@ public class ExcelDeserializerContainer {
     public ExcelFileDeserializer<PaymentCategoryEVM> paymentCategoryExcelFileDeserializer() {
         return excelFile -> new DefaultExcelFileDeserializer<>(PaymentCategoryEVM.class, getDefaultPoijiOptions()).deserialize(excelFile);
     }
+
+    @Bean("paymentExcelFileDeserializer")
+    public ExcelFileDeserializer<PaymentEVM> paymentExcelFileDeserializer() {
+        return excelFile -> new DefaultExcelFileDeserializer<>(PaymentEVM.class, getDefaultPoijiOptions()).deserialize(excelFile);
+    }
+
+    @Bean("dealerExcelFileDeserializer")
+    public ExcelFileDeserializer<DealerEVM> dealerExcelFileDeserializer() {
+        return excelFile -> new DefaultExcelFileDeserializer<>(DealerEVM.class, getDefaultPoijiOptions()).deserialize(excelFile);
+    }
+
+    @Bean("signedPaymentExcelFileDeserializer")
+    public ExcelFileDeserializer<SignedPaymentEVM> signedPaymentExcelFileDeserializer() {
+        return excelFile -> new DefaultExcelFileDeserializer<>(SignedPaymentEVM.class, getDefaultPoijiOptions()).deserialize(excelFile);
+    }
+
+    @Bean("invoiceExcelFileDeserializer")
+    public ExcelFileDeserializer<InvoiceEVM> invoiceExcelFileDeserializer() {
+        return excelFile -> new DefaultExcelFileDeserializer<>(InvoiceEVM.class, getDefaultPoijiOptions()).deserialize(excelFile);
+    }
 }

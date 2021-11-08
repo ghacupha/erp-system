@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.SerializationUtils;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Data
 @Builder
@@ -27,13 +25,13 @@ public class InvoiceEVM implements Serializable, ExcelViewModel<InvoiceEVM> {
     private String invoiceNumber;
 
     @ExcelCell(1)
-    private LocalDate invoiceDate;
+    private String invoiceDate;
 
     @ExcelCell(2)
-    private BigDecimal invoiceAmount;
+    private double invoiceAmount;
 
     @ExcelCell(3)
-    private CurrencyTypes currency;
+    private String currency;
 
     private String fileUploadToken;
 
