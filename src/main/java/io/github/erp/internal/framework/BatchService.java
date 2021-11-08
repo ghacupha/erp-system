@@ -42,6 +42,7 @@ public interface BatchService<T> {
      * The above call only persists entities to the relations db repository
      * for efficiency sake.
      * Therefore to have it all in an index one needs to call this function
+     * It is implemented as void to allow the client to optionally forego is not found necessary
      * @param entities
      * @return
      */
