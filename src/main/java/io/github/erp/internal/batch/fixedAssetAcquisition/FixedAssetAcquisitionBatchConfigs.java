@@ -205,11 +205,13 @@ public class FixedAssetAcquisitionBatchConfigs {
     }
 
     @Bean(DELETION_PROCESSOR_NAME)
+    @JobScope
     public ItemProcessor<List<Long>, List<FixedAssetAcquisition>> deletionProcessor() {
         return new EntityDeletionProcessor<>(fixedAssetAcquisitionDeletionService);
     }
 
     @Bean(DELETION_WRITER_NAME)
+    @JobScope
     public ItemWriter<? super List<FixedAssetAcquisition>> deletionWriter() {
         return deletables -> {};
     }
