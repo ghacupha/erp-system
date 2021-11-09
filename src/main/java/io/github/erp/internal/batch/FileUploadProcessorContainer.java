@@ -94,6 +94,22 @@ public class FileUploadProcessorContainer {
     @Qualifier("dealerListDeletionJob")
     private Job dealerListDeletionJob;
 
+    @Autowired
+    @Qualifier("signedPaymentListPersistenceJob")
+    private Job signedPaymentListPersistenceJob;
+
+    @Autowired
+    @Qualifier("signedPaymentListDeletionJob")
+    private Job signedPaymentListDeletionJob;
+
+    @Autowired
+    @Qualifier("invoiceListPersistenceJob")
+    private Job invoiceListPersistenceJob;
+
+    @Autowired
+    @Qualifier("invoiceListDeletionJob")
+    private Job invoiceListDeletionJob;
+
     @Bean("fileUploadProcessorChain")
     public FileUploadProcessorChain fileUploadProcessorChain() {
 
@@ -107,6 +123,8 @@ public class FileUploadProcessorContainer {
         theChain.addProcessor(new BatchSupportedFileUploadProcessor(jobLauncher, paymentCategoryListPersistenceJob, PAYMENT_CATEGORY));
         theChain.addProcessor(new BatchSupportedFileUploadProcessor(jobLauncher, paymentListPersistenceJob, PAYMENT));
         theChain.addProcessor(new BatchSupportedFileUploadProcessor(jobLauncher, dealerListPersistenceJob, DEALER));
+        theChain.addProcessor(new BatchSupportedFileUploadProcessor(jobLauncher, signedPaymentListPersistenceJob, SIGNED_PAYMENT));
+        theChain.addProcessor(new BatchSupportedFileUploadProcessor(jobLauncher, invoiceListPersistenceJob, INVOICE));
         return theChain;
     }
 
@@ -122,6 +140,8 @@ public class FileUploadProcessorContainer {
         theChain.addProcessor(new BatchSupportedFileUploadProcessor(jobLauncher, paymentCategoryListDeletionJob, PAYMENT_CATEGORY));
         theChain.addProcessor(new BatchSupportedFileUploadProcessor(jobLauncher, paymentListDeletionJob, PAYMENT));
         theChain.addProcessor(new BatchSupportedFileUploadProcessor(jobLauncher, dealerListDeletionJob, DEALER));
+        theChain.addProcessor(new BatchSupportedFileUploadProcessor(jobLauncher, signedPaymentListDeletionJob, SIGNED_PAYMENT));
+        theChain.addProcessor(new BatchSupportedFileUploadProcessor(jobLauncher, invoiceListDeletionJob, INVOICE));
 
         return theChain;
     }
