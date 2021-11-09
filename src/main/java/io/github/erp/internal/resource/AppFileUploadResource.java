@@ -48,7 +48,7 @@ import java.util.Objects;
 @RequestMapping("/api/app")
 public class AppFileUploadResource implements IFileUploadResource {
 
-    private static final String ENTITY_NAME = "granularGranularFileUpload";
+    private static final String ENTITY_NAME = "erpAppFileUpload";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
