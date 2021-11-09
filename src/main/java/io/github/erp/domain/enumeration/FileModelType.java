@@ -10,4 +10,8 @@ public enum FileModelType {
     FIXED_ASSET_NBV,
     PAYMENT_LABEL,
     PAYMENT_CATEGORY,
+    PAYMENT,
+    DEALER,
+    SIGNED_PAYMENT,
+    INVOICE,
 }
