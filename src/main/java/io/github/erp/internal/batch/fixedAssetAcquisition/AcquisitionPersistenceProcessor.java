@@ -9,6 +9,9 @@ import org.springframework.lang.NonNull;
 
 import java.util.List;
 
+/**
+ * List processor implementation that also adds additional data to the output, i.e. the file-processing-token
+ */
 public class AcquisitionPersistenceProcessor implements ListProcessor<FixedAssetAcquisitionEVM, FixedAssetAcquisitionDTO> {
 
     private final Mapping<FixedAssetAcquisitionEVM, FixedAssetAcquisitionDTO> mapping;
