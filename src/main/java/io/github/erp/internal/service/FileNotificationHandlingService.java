@@ -35,8 +35,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
+// import java.util.concurrent.CompletableFuture;
+// import java.util.concurrent.Executor;
 
 import static io.github.erp.internal.framework.AppConstants.PROCESSED_TOKENS;
 
@@ -53,29 +53,30 @@ public class FileNotificationHandlingService implements HandlingService<FileNoti
     private final TokenPersistenceService<MessageTokenDTO, MessageToken> messageTokenService;
     private final FileUploadPersistenceService<FileUploadDTO> fileUploadService;
     private final FileUploadProcessorChain fileUploadProcessorChain;
-    private final Executor taskExecutor;
 
-    public FileNotificationHandlingService(TokenGenerator tokenGenerator, TokenPersistenceService<MessageTokenDTO, MessageToken> messageTokenService, FileUploadPersistenceService<FileUploadDTO> fileUploadService, FileUploadProcessorChain fileUploadProcessorChain, @Qualifier("taskExecutor")  Executor taskExecutor) {
+    public FileNotificationHandlingService(TokenGenerator tokenGenerator,
+                                           TokenPersistenceService<MessageTokenDTO, MessageToken> messageTokenService,
+                                           FileUploadPersistenceService<FileUploadDTO> fileUploadService,
+                                           @Qualifier("fileUploadProcessorChain") FileUploadProcessorChain fileUploadProcessorChain ) {
         this.tokenGenerator = tokenGenerator;
         this.messageTokenService = messageTokenService;
         this.fileUploadService = fileUploadService;
         this.fileUploadProcessorChain = fileUploadProcessorChain;
-        this.taskExecutor = taskExecutor;
     }
 
     @Override
     @Async
-    public CompletableFuture<Boolean> handle(FileNotification payload) {
+    public void handle(FileNotification payload) {
 
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        // CompletableFuture<Boolean> future = new CompletableFuture<>();
 
-          taskExecutor.execute(() -> {
-            uploadSequence(payload);
-            future.complete(true);
-        });
+        // taskExecutor.execute(() -> {
+        //    uploadSequence(payload);
+        //    future.complete(true);
+        // });
 
-        return future;
-        //  uploadSequence(payload);
+        // return future;
+        uploadSequence(payload);
     }
 
     private void uploadSequence(FileNotification payload) {
