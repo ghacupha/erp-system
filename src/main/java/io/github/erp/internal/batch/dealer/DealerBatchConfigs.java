@@ -27,6 +27,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -99,7 +100,7 @@ public class DealerBatchConfigs {
     private DataFileContainer<FileUploadHasDataFile> dataFileContainer;
 
     @Bean(PERSISTENCE_READER_NAME)
-    @JobScope
+    @StepScope
     public EntityItemsReader<DealerEVM> listItemReader(
         @Value("#{jobParameters['fileId']}") long fileId
     ) {
@@ -107,7 +108,7 @@ public class DealerBatchConfigs {
     }
 
     @Bean(PERSISTENCE_PROCESSOR_NAME)
-    @JobScope
+    @StepScope
     public ItemProcessor<List<DealerEVM>, List<DealerDTO>> listItemsProcessor(
         @Value("#{jobParameters['messageToken']}") String jobUploadToken
     ) {
@@ -116,12 +117,13 @@ public class DealerBatchConfigs {
     }
 
     @Bean(PERSISTENCE_WRITER_NAME)
-    @JobScope
+    @StepScope
     public EntityListItemsWriter<DealerDTO> listItemsWriter() {
         return new EntityListItemsWriter<>(batchService);
     }
 
     @Bean(READ_FILE_STEP_NAME)
+    @JobScope
     public Step readFile() {
         return new ReadFileStep<>(
             READ_FILE_STEP_NAME,
@@ -145,6 +147,7 @@ public class DealerBatchConfigs {
 
     // deleteDealerListFromFile step
     @Bean(DELETION_STEP_NAME)
+    @JobScope
     public Step deleteEntityListFromFile() {
         return new DataDeletionStep<>(
             stepBuilderFactory,
@@ -158,17 +161,19 @@ public class DealerBatchConfigs {
 
 
     @Bean(DELETION_READER_NAME)
-    @JobScope
+    @StepScope
     public ItemReader<List<Long>> deletionReader(@Value("#{jobParameters['fileId']}") long fileId) {
         return new EntityItemsDeletionReader(fileId, fileUploadDeletionService, fileUploadsProperties, dataFileContainer);
     }
 
     @Bean(DELETION_PROCESSOR_NAME)
+    @StepScope
     public ItemProcessor<List<Long>, List<Dealer>> deletionProcessor() {
         return new EntityDeletionProcessor<>(dealerDeletionService);
     }
 
     @Bean(DELETION_WRITER_NAME)
+    @StepScope
     public ItemWriter<? super List<Dealer>> deletionWriter() {
         return deletables -> {};
     }
