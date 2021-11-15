@@ -1,27 +1,28 @@
-package io.github.erp.internal.batch.dealer;
+package io.github.erp.internal.batch.signedPayment;
 
 import com.google.common.collect.ImmutableList;
 import io.github.erp.internal.framework.batch.ListProcessor;
 import io.github.erp.internal.framework.Mapping;
-import io.github.erp.internal.model.DealerEVM;
-import io.github.erp.service.dto.DealerDTO;
+import io.github.erp.internal.model.SignedPaymentEVM;
+import io.github.erp.service.dto.SignedPaymentDTO;
 import org.springframework.lang.NonNull;
 
 import java.util.List;
 
-public class DealerPersistenceProcessor implements ListProcessor<DealerEVM, DealerDTO> {
+public class SignedPaymentPersistenceProcessor implements ListProcessor<SignedPaymentEVM, SignedPaymentDTO> {
 
-    private final Mapping<DealerEVM, DealerDTO> mapping;
+
+    private final Mapping<SignedPaymentEVM, SignedPaymentDTO> mapping;
     private final String uploadToken;
 
     @org.jetbrains.annotations.Contract(pure = true)
-    public DealerPersistenceProcessor(Mapping<DealerEVM, DealerDTO> mapping, String uploadToken) {
+    public SignedPaymentPersistenceProcessor(Mapping<SignedPaymentEVM, SignedPaymentDTO> mapping, String uploadToken) {
         this.mapping = mapping;
         this.uploadToken = uploadToken;
     }
 
     @Override
-    public List<DealerDTO> process(@NonNull List<DealerEVM> evms) throws Exception {
+    public List<SignedPaymentDTO> process(@NonNull List<SignedPaymentEVM> evms) throws Exception {
         return evms.stream().map(mapping::toValue2).peek(d -> d.setFileUploadToken(uploadToken)).collect(ImmutableList.toImmutableList());
     }
 }
