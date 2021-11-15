@@ -27,8 +27,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
+// import java.util.concurrent.CompletableFuture;
+// import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -40,38 +40,30 @@ public class FileDeletionHandlingService implements HandlingService<Long> {
     private final FileUploadService fileUploadService;
 
     private final FileUploadProcessorChain fileUploadDeletionProcessorChain;
-    private final Executor taskExecutor;
 
     public FileDeletionHandlingService(
-        final FileTypeService fileTypeService,
-        final FileUploadService fileUploadService,
-        final @Qualifier("fileUploadDeletionProcessorChain")
-            FileUploadProcessorChain fileUploadDeletionProcessorChain,
-        @Qualifier("taskExecutor") Executor taskExecutor) {
+        FileTypeService fileTypeService,
+        FileUploadService fileUploadService,
+        @Qualifier("fileUploadDeletionProcessorChain")
+            FileUploadProcessorChain fileUploadDeletionProcessorChain ) {
         this.fileTypeService = fileTypeService;
         this.fileUploadService = fileUploadService;
         this.fileUploadDeletionProcessorChain = fileUploadDeletionProcessorChain;
-        this.taskExecutor = taskExecutor;
     }
 
-    /**
-     * Returns an instance of this after handling the payload issued
-     *
-     * @param payload The item being handled
-     * @return
-     */
     @Override
     @Async
-    public CompletableFuture<Boolean> handle(final Long payload) {
+    public void handle(final Long payload) {
 
-      CompletableFuture<Boolean> future = new CompletableFuture<>();
+        // CompletableFuture<Boolean> future = new CompletableFuture<>();
 
-        taskExecutor.execute(() -> {
-            deletionSequence(payload);
-            future.complete(true);
-        });
-        return future;
-        // deletionSequence(payload);
+        // taskExecutor.execute(() -> {
+        //     deletionSequence(payload);
+        //     future.complete(true);
+        // });
+        // return future;
+
+        deletionSequence(payload);
     }
 
     private void deletionSequence(Long payload) {
