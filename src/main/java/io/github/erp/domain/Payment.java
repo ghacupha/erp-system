@@ -49,6 +49,13 @@ public class Payment implements Serializable {
     @Column(name = "settlement_currency", nullable = false)
     private CurrencyTypes settlementCurrency;
 
+    @Lob
+    @Column(name = "calculation_file")
+    private byte[] calculationFile;
+
+    @Column(name = "calculation_file_content_type")
+    private String calculationFileContentType;
+
     @Column(name = "dealer_id")
     private Long dealerId;
 
@@ -177,6 +184,32 @@ public class Payment implements Serializable {
 
     public void setSettlementCurrency(CurrencyTypes settlementCurrency) {
         this.settlementCurrency = settlementCurrency;
+    }
+
+    public byte[] getCalculationFile() {
+        return this.calculationFile;
+    }
+
+    public Payment calculationFile(byte[] calculationFile) {
+        this.setCalculationFile(calculationFile);
+        return this;
+    }
+
+    public void setCalculationFile(byte[] calculationFile) {
+        this.calculationFile = calculationFile;
+    }
+
+    public String getCalculationFileContentType() {
+        return this.calculationFileContentType;
+    }
+
+    public Payment calculationFileContentType(String calculationFileContentType) {
+        this.calculationFileContentType = calculationFileContentType;
+        return this;
+    }
+
+    public void setCalculationFileContentType(String calculationFileContentType) {
+        this.calculationFileContentType = calculationFileContentType;
     }
 
     public Long getDealerId() {
@@ -320,6 +353,8 @@ public class Payment implements Serializable {
             ", paymentAmount=" + getPaymentAmount() +
             ", description='" + getDescription() + "'" +
             ", settlementCurrency='" + getSettlementCurrency() + "'" +
+            ", calculationFile='" + getCalculationFile() + "'" +
+            ", calculationFileContentType='" + getCalculationFileContentType() + "'" +
             ", dealerId=" + getDealerId() +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +

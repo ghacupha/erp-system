@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.Lob;
 import javax.validation.constraints.*;
 
 /**
@@ -29,6 +30,10 @@ public class PaymentDTO implements Serializable {
     @NotNull
     private CurrencyTypes settlementCurrency;
 
+    @Lob
+    private byte[] calculationFile;
+
+    private String calculationFileContentType;
     private Long dealerId;
 
     private String fileUploadToken;
@@ -97,6 +102,22 @@ public class PaymentDTO implements Serializable {
 
     public void setSettlementCurrency(CurrencyTypes settlementCurrency) {
         this.settlementCurrency = settlementCurrency;
+    }
+
+    public byte[] getCalculationFile() {
+        return calculationFile;
+    }
+
+    public void setCalculationFile(byte[] calculationFile) {
+        this.calculationFile = calculationFile;
+    }
+
+    public String getCalculationFileContentType() {
+        return calculationFileContentType;
+    }
+
+    public void setCalculationFileContentType(String calculationFileContentType) {
+        this.calculationFileContentType = calculationFileContentType;
     }
 
     public Long getDealerId() {
@@ -187,6 +208,7 @@ public class PaymentDTO implements Serializable {
             ", paymentAmount=" + getPaymentAmount() +
             ", description='" + getDescription() + "'" +
             ", settlementCurrency='" + getSettlementCurrency() + "'" +
+            ", calculationFile='" + getCalculationFile() + "'" +
             ", dealerId=" + getDealerId() +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +

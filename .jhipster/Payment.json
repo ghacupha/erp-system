@@ -27,6 +27,11 @@
       "fieldValidateRules": ["required"]
     },
     {
+      "fieldName": "calculationFile",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
       "fieldName": "dealerId",
       "fieldType": "Long"
     },

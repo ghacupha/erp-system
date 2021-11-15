@@ -28,6 +28,8 @@ public class FileTypeDTO implements Serializable {
     private byte[] fileTemplate;
 
     private String fileTemplateContentType;
+
+    @NotNull
     private FileModelType fileType;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();

@@ -17,7 +17,7 @@ class PaymentGatlingTest extends Simulation {
     // Log failed HTTP requests
     //context.getLogger("io.gatling.http").setLevel(Level.valueOf("DEBUG"))
 
-    val baseURL = Option(System.getProperty("baseURL")) getOrElse """http://localhost:8980"""
+    val baseURL = Option(System.getProperty("baseURL")) getOrElse """http://localhost:8977"""
 
     val httpConf = http
         .baseUrl(baseURL)
@@ -77,6 +77,7 @@ class PaymentGatlingTest extends Simulation {
                 , "paymentAmount":"0"
                 , "description":"SAMPLE_TEXT"
                 , "settlementCurrency":"KES"
+                , "calculationFile":null
                 , "dealerId":"0"
                 , "fileUploadToken":"SAMPLE_TEXT"
                 , "compilationToken":"SAMPLE_TEXT"
