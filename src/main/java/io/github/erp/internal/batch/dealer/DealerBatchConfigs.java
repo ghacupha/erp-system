@@ -1,19 +1,10 @@
 package io.github.erp.internal.batch.dealer;
 
-import com.google.common.collect.ImmutableList;
 import io.github.erp.domain.Dealer;
 import io.github.erp.internal.framework.BatchService;
 import io.github.erp.internal.framework.FileUploadsProperties;
 import io.github.erp.internal.framework.Mapping;
-import io.github.erp.internal.framework.batch.BatchPersistentFileUploadService;
-import io.github.erp.internal.framework.batch.DataDeletionStep;
-import io.github.erp.internal.framework.batch.DeletionService;
-import io.github.erp.internal.framework.batch.EntityDeletionProcessor;
-import io.github.erp.internal.framework.batch.EntityItemsDeletionReader;
-import io.github.erp.internal.framework.batch.EntityItemsReader;
-import io.github.erp.internal.framework.batch.EntityListItemsWriter;
-import io.github.erp.internal.framework.batch.ReadFileStep;
-import io.github.erp.internal.framework.batch.SingleStepEntityJob;
+import io.github.erp.internal.framework.batch.*;
 import io.github.erp.internal.framework.excel.ExcelFileDeserializer;
 import io.github.erp.internal.framework.model.FileUploadHasDataFile;
 import io.github.erp.internal.framework.service.DataFileContainer;
@@ -101,19 +92,14 @@ public class DealerBatchConfigs {
 
     @Bean(PERSISTENCE_READER_NAME)
     @StepScope
-    public EntityItemsReader<DealerEVM> listItemReader(
-        @Value("#{jobParameters['fileId']}") long fileId
-    ) {
+    public EntityItemsReader<DealerEVM> listItemReader(@Value("#{jobParameters['fileId']}") long fileId ) {
         return new EntityItemsReader<>(dealerDeserializer, fileUploadService, fileId, fileUploadsProperties);
     }
 
     @Bean(PERSISTENCE_PROCESSOR_NAME)
     @StepScope
-    public ItemProcessor<List<DealerEVM>, List<DealerDTO>> listItemsProcessor(
-        @Value("#{jobParameters['messageToken']}") String jobUploadToken
-    ) {
-        return evms ->
-            evms.stream().map(mapping::toValue2).peek(d -> d.setFileUploadToken(jobUploadToken)).collect(ImmutableList.toImmutableList());
+    public ItemProcessor<List<DealerEVM>, List<DealerDTO>> listItemsProcessor(@Value("#{jobParameters['messageToken']}") String jobUploadToken) {
+        return new DealerPersistenceProcessor(mapping, jobUploadToken);
     }
 
     @Bean(PERSISTENCE_WRITER_NAME)
@@ -145,7 +131,6 @@ public class DealerBatchConfigs {
         return new SingleStepEntityJob(DELETION_JOB_NAME, deletionJobListener, deleteEntityListFromFile(), jobBuilderFactory);
     }
 
-    // deleteDealerListFromFile step
     @Bean(DELETION_STEP_NAME)
     @JobScope
     public Step deleteEntityListFromFile() {
@@ -175,6 +160,6 @@ public class DealerBatchConfigs {
     @Bean(DELETION_WRITER_NAME)
     @StepScope
     public ItemWriter<? super List<Dealer>> deletionWriter() {
-        return deletables -> {};
+        return new NoOpsItemWriter<>();
     }
 }
