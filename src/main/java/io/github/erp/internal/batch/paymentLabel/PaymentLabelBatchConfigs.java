@@ -1,6 +1,5 @@
 package io.github.erp.internal.batch.paymentLabel;
 
-import com.google.common.collect.ImmutableList;
 import io.github.erp.domain.PaymentLabel;
 import io.github.erp.internal.framework.BatchService;
 import io.github.erp.internal.framework.FileUploadsProperties;
@@ -12,6 +11,7 @@ import io.github.erp.internal.framework.batch.EntityDeletionProcessor;
 import io.github.erp.internal.framework.batch.EntityItemsDeletionReader;
 import io.github.erp.internal.framework.batch.EntityItemsReader;
 import io.github.erp.internal.framework.batch.EntityListItemsWriter;
+import io.github.erp.internal.framework.batch.NoOpsItemWriter;
 import io.github.erp.internal.framework.batch.ReadFileStep;
 import io.github.erp.internal.framework.batch.SingleStepEntityJob;
 import io.github.erp.internal.framework.excel.ExcelFileDeserializer;
@@ -27,6 +27,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -99,29 +100,25 @@ public class PaymentLabelBatchConfigs {
     private DataFileContainer<FileUploadHasDataFile> dataFileContainer;
 
     @Bean(PERSISTENCE_READER_NAME)
-    @JobScope
-    public EntityItemsReader<PaymentLabelEVM> listItemReader(
-        @Value("#{jobParameters['fileId']}") long fileId
-    ) {
+    @StepScope
+    public EntityItemsReader<PaymentLabelEVM> listItemReader(@Value("#{jobParameters['fileId']}") long fileId ) {
         return new EntityItemsReader<>(paymentLabelDeserializer, fileUploadService, fileId, fileUploadsProperties);
     }
 
     @Bean(PERSISTENCE_PROCESSOR_NAME)
-    @JobScope
-    public ItemProcessor<List<PaymentLabelEVM>, List<PaymentLabelDTO>> listItemsProcessor(
-        @Value("#{jobParameters['messageToken']}") String jobUploadToken
-    ) {
-        return evms ->
-            evms.stream().map(mapping::toValue2).peek(d -> d.setFileUploadToken(jobUploadToken)).collect(ImmutableList.toImmutableList());
+    @StepScope
+    public ItemProcessor<List<PaymentLabelEVM>, List<PaymentLabelDTO>> listItemsProcessor(@Value("#{jobParameters['messageToken']}") String jobUploadToken) {
+        return new PaymentLabelPersistenceProcessor(mapping, jobUploadToken);
     }
 
     @Bean(PERSISTENCE_WRITER_NAME)
-    @JobScope
+    @StepScope
     public EntityListItemsWriter<PaymentLabelDTO> listItemsWriter() {
         return new EntityListItemsWriter<>(batchService);
     }
 
     @Bean(READ_FILE_STEP_NAME)
+    @JobScope
     public Step readFile() {
         return new ReadFileStep<>(
             READ_FILE_STEP_NAME,
@@ -143,8 +140,8 @@ public class PaymentLabelBatchConfigs {
         return new SingleStepEntityJob(DELETION_JOB_NAME, deletionJobListener, deleteEntityListFromFile(), jobBuilderFactory);
     }
 
-    // deletePaymentLabelListFromFile step
     @Bean(DELETION_STEP_NAME)
+    @JobScope
     public Step deleteEntityListFromFile() {
         return new DataDeletionStep<>(
             stepBuilderFactory,
@@ -158,18 +155,20 @@ public class PaymentLabelBatchConfigs {
 
 
     @Bean(DELETION_READER_NAME)
-    @JobScope
+    @StepScope
     public ItemReader<List<Long>> deletionReader(@Value("#{jobParameters['fileId']}") long fileId) {
         return new EntityItemsDeletionReader(fileId, fileUploadDeletionService, fileUploadsProperties, dataFileContainer);
     }
 
     @Bean(DELETION_PROCESSOR_NAME)
+    @StepScope
     public ItemProcessor<List<Long>, List<PaymentLabel>> deletionProcessor() {
         return new EntityDeletionProcessor<>(paymentLabelDeletionService);
     }
 
     @Bean(DELETION_WRITER_NAME)
+    @StepScope
     public ItemWriter<? super List<PaymentLabel>> deletionWriter() {
-        return deletables -> {};
+        return new NoOpsItemWriter<>();
     }
 }

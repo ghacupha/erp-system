@@ -35,7 +35,6 @@
  */
 package io.github.erp.internal.batch.fixedAssetAcquisition;
 
-import com.google.common.collect.ImmutableList;
 import io.github.erp.domain.FixedAssetAcquisition;
 import io.github.erp.internal.framework.BatchService;
 import io.github.erp.internal.framework.FileUploadsProperties;
@@ -47,6 +46,7 @@ import io.github.erp.internal.framework.batch.EntityDeletionProcessor;
 import io.github.erp.internal.framework.batch.EntityItemsDeletionReader;
 import io.github.erp.internal.framework.batch.EntityItemsReader;
 import io.github.erp.internal.framework.batch.EntityListItemsWriter;
+import io.github.erp.internal.framework.batch.NoOpsItemWriter;
 import io.github.erp.internal.framework.batch.ReadFileStep;
 import io.github.erp.internal.framework.batch.SingleStepEntityJob;
 import io.github.erp.internal.framework.excel.ExcelFileDeserializer;
@@ -62,6 +62,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -140,29 +141,25 @@ public class FixedAssetAcquisitionBatchConfigs {
     private DataFileContainer<FileUploadHasDataFile> dataFileContainer;
 
     @Bean(PERSISTENCE_READER_NAME)
-    @JobScope
-    public EntityItemsReader<FixedAssetAcquisitionEVM> listItemReader(
-        @Value("#{jobParameters['fileId']}") long fileId
-    ) {
+    @StepScope
+    public EntityItemsReader<FixedAssetAcquisitionEVM> listItemReader(@Value("#{jobParameters['fileId']}") long fileId) {
         return new EntityItemsReader<>(fixedAssetAcquisitionDeserializer, fileUploadService, fileId, fileUploadsProperties);
     }
 
     @Bean(PERSISTENCE_PROCESSOR_NAME)
-    @JobScope
-    public ItemProcessor<List<FixedAssetAcquisitionEVM>, List<FixedAssetAcquisitionDTO>> listItemsProcessor(
-        @Value("#{jobParameters['messageToken']}") String jobUploadToken
-    ) {
-        return evms ->
-            evms.stream().map(mapping::toValue2).peek(d -> d.setFileUploadToken(jobUploadToken)).collect(ImmutableList.toImmutableList());
+    @StepScope
+    public ItemProcessor<List<FixedAssetAcquisitionEVM>, List<FixedAssetAcquisitionDTO>> listItemsProcessor(@Value("#{jobParameters['messageToken']}") String jobUploadToken) {
+        return new FixedAssetAcquisitionPersistenceProcessor(mapping, jobUploadToken);
     }
 
     @Bean(PERSISTENCE_WRITER_NAME)
-    @JobScope
+    @StepScope
     public EntityListItemsWriter<FixedAssetAcquisitionDTO> listItemsWriter() {
         return new EntityListItemsWriter<>(batchService);
     }
 
     @Bean(READ_FILE_STEP_NAME)
+    @JobScope
     public Step readFile() {
         return new ReadFileStep<>(
             READ_FILE_STEP_NAME,
@@ -184,8 +181,8 @@ public class FixedAssetAcquisitionBatchConfigs {
         return new SingleStepEntityJob(DELETION_JOB_NAME, deletionJobListener, deleteEntityListFromFile(), jobBuilderFactory);
     }
 
-    // deleteFixedAssetAcquisitionListFromFile step
     @Bean(DELETION_STEP_NAME)
+    @JobScope
     public Step deleteEntityListFromFile() {
         return new DataDeletionStep<>(
             stepBuilderFactory,
@@ -197,22 +194,21 @@ public class FixedAssetAcquisitionBatchConfigs {
     }
 
 
-
     @Bean(DELETION_READER_NAME)
-    @JobScope
+    @StepScope
     public ItemReader<List<Long>> deletionReader(@Value("#{jobParameters['fileId']}") long fileId) {
         return new EntityItemsDeletionReader(fileId, fileUploadDeletionService, fileUploadsProperties, dataFileContainer);
     }
 
     @Bean(DELETION_PROCESSOR_NAME)
-    @JobScope
+    @StepScope
     public ItemProcessor<List<Long>, List<FixedAssetAcquisition>> deletionProcessor() {
         return new EntityDeletionProcessor<>(fixedAssetAcquisitionDeletionService);
     }
 
     @Bean(DELETION_WRITER_NAME)
-    @JobScope
+    @StepScope
     public ItemWriter<? super List<FixedAssetAcquisition>> deletionWriter() {
-        return deletables -> {};
+        return new NoOpsItemWriter<>();
     }
 }

@@ -12,14 +12,14 @@ import java.util.List;
 /**
  * List processor implementation that also adds additional data to the output, i.e. the file-processing-token
  */
-public class FANetBookValuePersistenceProcessor implements ListProcessor<FixedAssetNetBookValueEVM, FixedAssetNetBookValueDTO> {
+public class FixedAssetNetBookValuePersistenceProcessor implements ListProcessor<FixedAssetNetBookValueEVM, FixedAssetNetBookValueDTO> {
 
 
     private final Mapping<FixedAssetNetBookValueEVM, FixedAssetNetBookValueDTO> mapping;
     private final String uploadToken;
 
     @org.jetbrains.annotations.Contract(pure = true)
-    public FANetBookValuePersistenceProcessor(Mapping<FixedAssetNetBookValueEVM, FixedAssetNetBookValueDTO> mapping, String uploadToken) {
+    public FixedAssetNetBookValuePersistenceProcessor(Mapping<FixedAssetNetBookValueEVM, FixedAssetNetBookValueDTO> mapping, String uploadToken) {
         this.mapping = mapping;
         this.uploadToken = uploadToken;
     }
