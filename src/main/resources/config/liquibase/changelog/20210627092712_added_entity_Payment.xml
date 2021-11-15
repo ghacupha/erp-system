@@ -32,6 +32,12 @@
             <column name="settlement_currency" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
+            <column name="calculation_file" type="longblob">
+                <constraints nullable="true" />
+            </column>
+            <column name="calculation_file_content_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="dealer_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -99,6 +105,8 @@
             <column name="payment_amount" type="numeric"/>
             <column name="description" type="string"/>
             <column name="settlement_currency" type="string"/>
+            <column name="calculation_file" type="blob"/>
+            <column name="calculation_file_content_type" type="string"/>
             <column name="dealer_id" type="numeric"/>
             <column name="file_upload_token" type="string"/>
             <column name="compilation_token" type="string"/>

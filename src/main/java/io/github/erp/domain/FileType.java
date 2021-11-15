@@ -47,8 +47,9 @@ public class FileType implements Serializable {
     @Column(name = "file_template_content_type")
     private String fileTemplateContentType;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "file_type")
+    @Column(name = "file_type", nullable = false, unique = true)
     private FileModelType fileType;
 
     @ManyToMany

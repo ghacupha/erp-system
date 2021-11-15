@@ -223,6 +223,24 @@ class FileTypeResourceIT {
 
     @Test
     @Transactional
+    void checkFileTypeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = fileTypeRepository.findAll().size();
+        // set the field null
+        fileType.setFileType(null);
+
+        // Create the FileType, which fails.
+        FileTypeDTO fileTypeDTO = fileTypeMapper.toDto(fileType);
+
+        restFileTypeMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(fileTypeDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<FileType> fileTypeList = fileTypeRepository.findAll();
+        assertThat(fileTypeList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllFileTypes() throws Exception {
         // Initialize the database
         fileTypeRepository.saveAndFlush(fileType);

@@ -42,6 +42,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 /**
  * Integration tests for the {@link PaymentResource} REST controller.
@@ -72,6 +73,11 @@ class PaymentResourceIT {
 
     private static final CurrencyTypes DEFAULT_SETTLEMENT_CURRENCY = CurrencyTypes.KES;
     private static final CurrencyTypes UPDATED_SETTLEMENT_CURRENCY = CurrencyTypes.USD;
+
+    private static final byte[] DEFAULT_CALCULATION_FILE = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_CALCULATION_FILE = TestUtil.createByteArray(1, "1");
+    private static final String DEFAULT_CALCULATION_FILE_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_CALCULATION_FILE_CONTENT_TYPE = "image/png";
 
     private static final Long DEFAULT_DEALER_ID = 1L;
     private static final Long UPDATED_DEALER_ID = 2L;
@@ -132,6 +138,8 @@ class PaymentResourceIT {
             .paymentAmount(DEFAULT_PAYMENT_AMOUNT)
             .description(DEFAULT_DESCRIPTION)
             .settlementCurrency(DEFAULT_SETTLEMENT_CURRENCY)
+            .calculationFile(DEFAULT_CALCULATION_FILE)
+            .calculationFileContentType(DEFAULT_CALCULATION_FILE_CONTENT_TYPE)
             .dealerId(DEFAULT_DEALER_ID)
             .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
             .compilationToken(DEFAULT_COMPILATION_TOKEN);
@@ -152,6 +160,8 @@ class PaymentResourceIT {
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
             .description(UPDATED_DESCRIPTION)
             .settlementCurrency(UPDATED_SETTLEMENT_CURRENCY)
+            .calculationFile(UPDATED_CALCULATION_FILE)
+            .calculationFileContentType(UPDATED_CALCULATION_FILE_CONTENT_TYPE)
             .dealerId(UPDATED_DEALER_ID)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
             .compilationToken(UPDATED_COMPILATION_TOKEN);
@@ -183,6 +193,8 @@ class PaymentResourceIT {
         assertThat(testPayment.getPaymentAmount()).isEqualByComparingTo(DEFAULT_PAYMENT_AMOUNT);
         assertThat(testPayment.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testPayment.getSettlementCurrency()).isEqualTo(DEFAULT_SETTLEMENT_CURRENCY);
+        assertThat(testPayment.getCalculationFile()).isEqualTo(DEFAULT_CALCULATION_FILE);
+        assertThat(testPayment.getCalculationFileContentType()).isEqualTo(DEFAULT_CALCULATION_FILE_CONTENT_TYPE);
         assertThat(testPayment.getDealerId()).isEqualTo(DEFAULT_DEALER_ID);
         assertThat(testPayment.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
         assertThat(testPayment.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
@@ -249,6 +261,8 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].settlementCurrency").value(hasItem(DEFAULT_SETTLEMENT_CURRENCY.toString())))
+            .andExpect(jsonPath("$.[*].calculationFileContentType").value(hasItem(DEFAULT_CALCULATION_FILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].calculationFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_CALCULATION_FILE))))
             .andExpect(jsonPath("$.[*].dealerId").value(hasItem(DEFAULT_DEALER_ID.intValue())))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
             .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
@@ -290,6 +304,8 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.paymentAmount").value(sameNumber(DEFAULT_PAYMENT_AMOUNT)))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.settlementCurrency").value(DEFAULT_SETTLEMENT_CURRENCY.toString()))
+            .andExpect(jsonPath("$.calculationFileContentType").value(DEFAULT_CALCULATION_FILE_CONTENT_TYPE))
+            .andExpect(jsonPath("$.calculationFile").value(Base64Utils.encodeToString(DEFAULT_CALCULATION_FILE)))
             .andExpect(jsonPath("$.dealerId").value(DEFAULT_DEALER_ID.intValue()))
             .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
             .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN));
@@ -1212,6 +1228,8 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].settlementCurrency").value(hasItem(DEFAULT_SETTLEMENT_CURRENCY.toString())))
+            .andExpect(jsonPath("$.[*].calculationFileContentType").value(hasItem(DEFAULT_CALCULATION_FILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].calculationFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_CALCULATION_FILE))))
             .andExpect(jsonPath("$.[*].dealerId").value(hasItem(DEFAULT_DEALER_ID.intValue())))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
             .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
@@ -1269,6 +1287,8 @@ class PaymentResourceIT {
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
             .description(UPDATED_DESCRIPTION)
             .settlementCurrency(UPDATED_SETTLEMENT_CURRENCY)
+            .calculationFile(UPDATED_CALCULATION_FILE)
+            .calculationFileContentType(UPDATED_CALCULATION_FILE_CONTENT_TYPE)
             .dealerId(UPDATED_DEALER_ID)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
             .compilationToken(UPDATED_COMPILATION_TOKEN);
@@ -1292,6 +1312,8 @@ class PaymentResourceIT {
         assertThat(testPayment.getPaymentAmount()).isEqualTo(UPDATED_PAYMENT_AMOUNT);
         assertThat(testPayment.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testPayment.getSettlementCurrency()).isEqualTo(UPDATED_SETTLEMENT_CURRENCY);
+        assertThat(testPayment.getCalculationFile()).isEqualTo(UPDATED_CALCULATION_FILE);
+        assertThat(testPayment.getCalculationFileContentType()).isEqualTo(UPDATED_CALCULATION_FILE_CONTENT_TYPE);
         assertThat(testPayment.getDealerId()).isEqualTo(UPDATED_DEALER_ID);
         assertThat(testPayment.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
         assertThat(testPayment.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
@@ -1386,7 +1408,12 @@ class PaymentResourceIT {
         Payment partialUpdatedPayment = new Payment();
         partialUpdatedPayment.setId(payment.getId());
 
-        partialUpdatedPayment.paymentDate(UPDATED_PAYMENT_DATE).description(UPDATED_DESCRIPTION).dealerId(UPDATED_DEALER_ID);
+        partialUpdatedPayment
+            .paymentDate(UPDATED_PAYMENT_DATE)
+            .description(UPDATED_DESCRIPTION)
+            .calculationFile(UPDATED_CALCULATION_FILE)
+            .calculationFileContentType(UPDATED_CALCULATION_FILE_CONTENT_TYPE)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
 
         restPaymentMockMvc
             .perform(
@@ -1406,9 +1433,11 @@ class PaymentResourceIT {
         assertThat(testPayment.getPaymentAmount()).isEqualByComparingTo(DEFAULT_PAYMENT_AMOUNT);
         assertThat(testPayment.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testPayment.getSettlementCurrency()).isEqualTo(DEFAULT_SETTLEMENT_CURRENCY);
-        assertThat(testPayment.getDealerId()).isEqualTo(UPDATED_DEALER_ID);
+        assertThat(testPayment.getCalculationFile()).isEqualTo(UPDATED_CALCULATION_FILE);
+        assertThat(testPayment.getCalculationFileContentType()).isEqualTo(UPDATED_CALCULATION_FILE_CONTENT_TYPE);
+        assertThat(testPayment.getDealerId()).isEqualTo(DEFAULT_DEALER_ID);
         assertThat(testPayment.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
-        assertThat(testPayment.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
+        assertThat(testPayment.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
 
     @Test
@@ -1430,6 +1459,8 @@ class PaymentResourceIT {
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
             .description(UPDATED_DESCRIPTION)
             .settlementCurrency(UPDATED_SETTLEMENT_CURRENCY)
+            .calculationFile(UPDATED_CALCULATION_FILE)
+            .calculationFileContentType(UPDATED_CALCULATION_FILE_CONTENT_TYPE)
             .dealerId(UPDATED_DEALER_ID)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
             .compilationToken(UPDATED_COMPILATION_TOKEN);
@@ -1452,6 +1483,8 @@ class PaymentResourceIT {
         assertThat(testPayment.getPaymentAmount()).isEqualByComparingTo(UPDATED_PAYMENT_AMOUNT);
         assertThat(testPayment.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testPayment.getSettlementCurrency()).isEqualTo(UPDATED_SETTLEMENT_CURRENCY);
+        assertThat(testPayment.getCalculationFile()).isEqualTo(UPDATED_CALCULATION_FILE);
+        assertThat(testPayment.getCalculationFileContentType()).isEqualTo(UPDATED_CALCULATION_FILE_CONTENT_TYPE);
         assertThat(testPayment.getDealerId()).isEqualTo(UPDATED_DEALER_ID);
         assertThat(testPayment.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
         assertThat(testPayment.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
@@ -1575,6 +1608,8 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].settlementCurrency").value(hasItem(DEFAULT_SETTLEMENT_CURRENCY.toString())))
+            .andExpect(jsonPath("$.[*].calculationFileContentType").value(hasItem(DEFAULT_CALCULATION_FILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].calculationFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_CALCULATION_FILE))))
             .andExpect(jsonPath("$.[*].dealerId").value(hasItem(DEFAULT_DEALER_ID.intValue())))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
             .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
