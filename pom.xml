@@ -98,6 +98,7 @@
         <guava.version>30.1.1-jre</guava.version>
         <lombok.version>1.18.12</lombok.version>
         <poiji.version>3.0.0</poiji.version>
+        <jetbrains-annotations.version>23.0.0</jetbrains-annotations.version>
         <!-- jhipster-needle-maven-property -->
     </properties>
 
@@ -139,7 +140,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
+            <version>${jetbrains-annotations.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
