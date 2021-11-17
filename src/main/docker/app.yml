@@ -5,7 +5,7 @@ services:
   erpsystem-app:
     image: ghacupha/erp-system:0.0.1-SNAPSHOT
     volumes:
-      - ~/volumes/erpSystem/logs/:/usr/share/erpSystem/logs/
+      - ./logs/:/logs/
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
