@@ -82,6 +82,9 @@ class PaymentResourceIT {
     private static final String DEFAULT_DEALER_NAME = "AAAAAAAAAA";
     private static final String UPDATED_DEALER_NAME = "BBBBBBBBBB";
 
+    private static final String DEFAULT_PURCHASE_ORDER_NUMBER = "AAAAAAAAAA";
+    private static final String UPDATED_PURCHASE_ORDER_NUMBER = "BBBBBBBBBB";
+
     private static final String DEFAULT_FILE_UPLOAD_TOKEN = "AAAAAAAAAA";
     private static final String UPDATED_FILE_UPLOAD_TOKEN = "BBBBBBBBBB";
 
@@ -140,6 +143,7 @@ class PaymentResourceIT {
             .calculationFile(DEFAULT_CALCULATION_FILE)
             .calculationFileContentType(DEFAULT_CALCULATION_FILE_CONTENT_TYPE)
             .dealerName(DEFAULT_DEALER_NAME)
+            .purchaseOrderNumber(DEFAULT_PURCHASE_ORDER_NUMBER)
             .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
             .compilationToken(DEFAULT_COMPILATION_TOKEN);
         return payment;
@@ -162,6 +166,7 @@ class PaymentResourceIT {
             .calculationFile(UPDATED_CALCULATION_FILE)
             .calculationFileContentType(UPDATED_CALCULATION_FILE_CONTENT_TYPE)
             .dealerName(UPDATED_DEALER_NAME)
+            .purchaseOrderNumber(UPDATED_PURCHASE_ORDER_NUMBER)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
             .compilationToken(UPDATED_COMPILATION_TOKEN);
         return payment;
@@ -195,6 +200,7 @@ class PaymentResourceIT {
         assertThat(testPayment.getCalculationFile()).isEqualTo(DEFAULT_CALCULATION_FILE);
         assertThat(testPayment.getCalculationFileContentType()).isEqualTo(DEFAULT_CALCULATION_FILE_CONTENT_TYPE);
         assertThat(testPayment.getDealerName()).isEqualTo(DEFAULT_DEALER_NAME);
+        assertThat(testPayment.getPurchaseOrderNumber()).isEqualTo(DEFAULT_PURCHASE_ORDER_NUMBER);
         assertThat(testPayment.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
         assertThat(testPayment.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
 
@@ -263,6 +269,7 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].calculationFileContentType").value(hasItem(DEFAULT_CALCULATION_FILE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].calculationFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_CALCULATION_FILE))))
             .andExpect(jsonPath("$.[*].dealerName").value(hasItem(DEFAULT_DEALER_NAME)))
+            .andExpect(jsonPath("$.[*].purchaseOrderNumber").value(hasItem(DEFAULT_PURCHASE_ORDER_NUMBER)))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
             .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
@@ -306,6 +313,7 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.calculationFileContentType").value(DEFAULT_CALCULATION_FILE_CONTENT_TYPE))
             .andExpect(jsonPath("$.calculationFile").value(Base64Utils.encodeToString(DEFAULT_CALCULATION_FILE)))
             .andExpect(jsonPath("$.dealerName").value(DEFAULT_DEALER_NAME))
+            .andExpect(jsonPath("$.purchaseOrderNumber").value(DEFAULT_PURCHASE_ORDER_NUMBER))
             .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
             .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN));
     }
@@ -928,6 +936,84 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
+    void getAllPaymentsByPurchaseOrderNumberIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where purchaseOrderNumber equals to DEFAULT_PURCHASE_ORDER_NUMBER
+        defaultPaymentShouldBeFound("purchaseOrderNumber.equals=" + DEFAULT_PURCHASE_ORDER_NUMBER);
+
+        // Get all the paymentList where purchaseOrderNumber equals to UPDATED_PURCHASE_ORDER_NUMBER
+        defaultPaymentShouldNotBeFound("purchaseOrderNumber.equals=" + UPDATED_PURCHASE_ORDER_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByPurchaseOrderNumberIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where purchaseOrderNumber not equals to DEFAULT_PURCHASE_ORDER_NUMBER
+        defaultPaymentShouldNotBeFound("purchaseOrderNumber.notEquals=" + DEFAULT_PURCHASE_ORDER_NUMBER);
+
+        // Get all the paymentList where purchaseOrderNumber not equals to UPDATED_PURCHASE_ORDER_NUMBER
+        defaultPaymentShouldBeFound("purchaseOrderNumber.notEquals=" + UPDATED_PURCHASE_ORDER_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByPurchaseOrderNumberIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where purchaseOrderNumber in DEFAULT_PURCHASE_ORDER_NUMBER or UPDATED_PURCHASE_ORDER_NUMBER
+        defaultPaymentShouldBeFound("purchaseOrderNumber.in=" + DEFAULT_PURCHASE_ORDER_NUMBER + "," + UPDATED_PURCHASE_ORDER_NUMBER);
+
+        // Get all the paymentList where purchaseOrderNumber equals to UPDATED_PURCHASE_ORDER_NUMBER
+        defaultPaymentShouldNotBeFound("purchaseOrderNumber.in=" + UPDATED_PURCHASE_ORDER_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByPurchaseOrderNumberIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where purchaseOrderNumber is not null
+        defaultPaymentShouldBeFound("purchaseOrderNumber.specified=true");
+
+        // Get all the paymentList where purchaseOrderNumber is null
+        defaultPaymentShouldNotBeFound("purchaseOrderNumber.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByPurchaseOrderNumberContainsSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where purchaseOrderNumber contains DEFAULT_PURCHASE_ORDER_NUMBER
+        defaultPaymentShouldBeFound("purchaseOrderNumber.contains=" + DEFAULT_PURCHASE_ORDER_NUMBER);
+
+        // Get all the paymentList where purchaseOrderNumber contains UPDATED_PURCHASE_ORDER_NUMBER
+        defaultPaymentShouldNotBeFound("purchaseOrderNumber.contains=" + UPDATED_PURCHASE_ORDER_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentsByPurchaseOrderNumberNotContainsSomething() throws Exception {
+        // Initialize the database
+        paymentRepository.saveAndFlush(payment);
+
+        // Get all the paymentList where purchaseOrderNumber does not contain DEFAULT_PURCHASE_ORDER_NUMBER
+        defaultPaymentShouldNotBeFound("purchaseOrderNumber.doesNotContain=" + DEFAULT_PURCHASE_ORDER_NUMBER);
+
+        // Get all the paymentList where purchaseOrderNumber does not contain UPDATED_PURCHASE_ORDER_NUMBER
+        defaultPaymentShouldBeFound("purchaseOrderNumber.doesNotContain=" + UPDATED_PURCHASE_ORDER_NUMBER);
+    }
+
+    @Test
+    @Transactional
     void getAllPaymentsByFileUploadTokenIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
@@ -1204,6 +1290,7 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].calculationFileContentType").value(hasItem(DEFAULT_CALCULATION_FILE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].calculationFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_CALCULATION_FILE))))
             .andExpect(jsonPath("$.[*].dealerName").value(hasItem(DEFAULT_DEALER_NAME)))
+            .andExpect(jsonPath("$.[*].purchaseOrderNumber").value(hasItem(DEFAULT_PURCHASE_ORDER_NUMBER)))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
             .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
 
@@ -1263,6 +1350,7 @@ class PaymentResourceIT {
             .calculationFile(UPDATED_CALCULATION_FILE)
             .calculationFileContentType(UPDATED_CALCULATION_FILE_CONTENT_TYPE)
             .dealerName(UPDATED_DEALER_NAME)
+            .purchaseOrderNumber(UPDATED_PURCHASE_ORDER_NUMBER)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
             .compilationToken(UPDATED_COMPILATION_TOKEN);
         PaymentDTO paymentDTO = paymentMapper.toDto(updatedPayment);
@@ -1288,6 +1376,7 @@ class PaymentResourceIT {
         assertThat(testPayment.getCalculationFile()).isEqualTo(UPDATED_CALCULATION_FILE);
         assertThat(testPayment.getCalculationFileContentType()).isEqualTo(UPDATED_CALCULATION_FILE_CONTENT_TYPE);
         assertThat(testPayment.getDealerName()).isEqualTo(UPDATED_DEALER_NAME);
+        assertThat(testPayment.getPurchaseOrderNumber()).isEqualTo(UPDATED_PURCHASE_ORDER_NUMBER);
         assertThat(testPayment.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
         assertThat(testPayment.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
 
@@ -1386,7 +1475,7 @@ class PaymentResourceIT {
             .description(UPDATED_DESCRIPTION)
             .calculationFile(UPDATED_CALCULATION_FILE)
             .calculationFileContentType(UPDATED_CALCULATION_FILE_CONTENT_TYPE)
-            .compilationToken(UPDATED_COMPILATION_TOKEN);
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN);
 
         restPaymentMockMvc
             .perform(
@@ -1409,8 +1498,9 @@ class PaymentResourceIT {
         assertThat(testPayment.getCalculationFile()).isEqualTo(UPDATED_CALCULATION_FILE);
         assertThat(testPayment.getCalculationFileContentType()).isEqualTo(UPDATED_CALCULATION_FILE_CONTENT_TYPE);
         assertThat(testPayment.getDealerName()).isEqualTo(DEFAULT_DEALER_NAME);
-        assertThat(testPayment.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
-        assertThat(testPayment.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
+        assertThat(testPayment.getPurchaseOrderNumber()).isEqualTo(DEFAULT_PURCHASE_ORDER_NUMBER);
+        assertThat(testPayment.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testPayment.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
     }
 
     @Test
@@ -1435,6 +1525,7 @@ class PaymentResourceIT {
             .calculationFile(UPDATED_CALCULATION_FILE)
             .calculationFileContentType(UPDATED_CALCULATION_FILE_CONTENT_TYPE)
             .dealerName(UPDATED_DEALER_NAME)
+            .purchaseOrderNumber(UPDATED_PURCHASE_ORDER_NUMBER)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
             .compilationToken(UPDATED_COMPILATION_TOKEN);
 
@@ -1459,6 +1550,7 @@ class PaymentResourceIT {
         assertThat(testPayment.getCalculationFile()).isEqualTo(UPDATED_CALCULATION_FILE);
         assertThat(testPayment.getCalculationFileContentType()).isEqualTo(UPDATED_CALCULATION_FILE_CONTENT_TYPE);
         assertThat(testPayment.getDealerName()).isEqualTo(UPDATED_DEALER_NAME);
+        assertThat(testPayment.getPurchaseOrderNumber()).isEqualTo(UPDATED_PURCHASE_ORDER_NUMBER);
         assertThat(testPayment.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
         assertThat(testPayment.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
@@ -1584,6 +1676,7 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].calculationFileContentType").value(hasItem(DEFAULT_CALCULATION_FILE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].calculationFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_CALCULATION_FILE))))
             .andExpect(jsonPath("$.[*].dealerName").value(hasItem(DEFAULT_DEALER_NAME)))
+            .andExpect(jsonPath("$.[*].purchaseOrderNumber").value(hasItem(DEFAULT_PURCHASE_ORDER_NUMBER)))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
             .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }

@@ -36,6 +36,8 @@ public class PaymentDTO implements Serializable {
     private String calculationFileContentType;
     private String dealerName;
 
+    private String purchaseOrderNumber;
+
     private String fileUploadToken;
 
     private String compilationToken;
@@ -128,6 +130,14 @@ public class PaymentDTO implements Serializable {
         this.dealerName = dealerName;
     }
 
+    public String getPurchaseOrderNumber() {
+        return purchaseOrderNumber;
+    }
+
+    public void setPurchaseOrderNumber(String purchaseOrderNumber) {
+        this.purchaseOrderNumber = purchaseOrderNumber;
+    }
+
     public String getFileUploadToken() {
         return fileUploadToken;
     }
@@ -210,6 +220,7 @@ public class PaymentDTO implements Serializable {
             ", settlementCurrency='" + getSettlementCurrency() + "'" +
             ", calculationFile='" + getCalculationFile() + "'" +
             ", dealerName='" + getDealerName() + "'" +
+            ", purchaseOrderNumber='" + getPurchaseOrderNumber() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
             ", paymentLabels=" + getPaymentLabels() +

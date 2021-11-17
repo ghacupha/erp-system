@@ -164,6 +164,7 @@ public class ExcelFileUtilsIT {
                         .description("description" + index)
                         .settlementCurrency("settlementCurrency" + index)
                         .dealerName("dealerName" + index)
+                        .purchaseOrderNumber("purchaseOrderNumber" + index)
                         .build()
                 );
         }
