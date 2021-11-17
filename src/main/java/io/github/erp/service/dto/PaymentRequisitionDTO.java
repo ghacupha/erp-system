@@ -2,6 +2,7 @@ package io.github.erp.service.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -13,19 +14,27 @@ public class PaymentRequisitionDTO implements Serializable {
 
     private Long id;
 
+    private LocalDate receptionDate;
+
+    private String dealerName;
+
+    private String briefDescription;
+
+    private String requisitionNumber;
+
     private BigDecimal invoicedAmount;
 
     private BigDecimal disbursementCost;
 
-    private BigDecimal vatableAmount;
+    private BigDecimal taxableAmount;
+
+    private Boolean requisitionProcessed;
 
     private String fileUploadToken;
 
     private String compilationToken;
 
     private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
-
-    private DealerDTO dealer;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
@@ -35,6 +44,38 @@ public class PaymentRequisitionDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public LocalDate getReceptionDate() {
+        return receptionDate;
+    }
+
+    public void setReceptionDate(LocalDate receptionDate) {
+        this.receptionDate = receptionDate;
+    }
+
+    public String getDealerName() {
+        return dealerName;
+    }
+
+    public void setDealerName(String dealerName) {
+        this.dealerName = dealerName;
+    }
+
+    public String getBriefDescription() {
+        return briefDescription;
+    }
+
+    public void setBriefDescription(String briefDescription) {
+        this.briefDescription = briefDescription;
+    }
+
+    public String getRequisitionNumber() {
+        return requisitionNumber;
+    }
+
+    public void setRequisitionNumber(String requisitionNumber) {
+        this.requisitionNumber = requisitionNumber;
     }
 
     public BigDecimal getInvoicedAmount() {
@@ -53,12 +94,20 @@ public class PaymentRequisitionDTO implements Serializable {
         this.disbursementCost = disbursementCost;
     }
 
-    public BigDecimal getVatableAmount() {
-        return vatableAmount;
+    public BigDecimal getTaxableAmount() {
+        return taxableAmount;
     }
 
-    public void setVatableAmount(BigDecimal vatableAmount) {
-        this.vatableAmount = vatableAmount;
+    public void setTaxableAmount(BigDecimal taxableAmount) {
+        this.taxableAmount = taxableAmount;
+    }
+
+    public Boolean getRequisitionProcessed() {
+        return requisitionProcessed;
+    }
+
+    public void setRequisitionProcessed(Boolean requisitionProcessed) {
+        this.requisitionProcessed = requisitionProcessed;
     }
 
     public String getFileUploadToken() {
@@ -83,14 +132,6 @@ public class PaymentRequisitionDTO implements Serializable {
 
     public void setPaymentLabels(Set<PaymentLabelDTO> paymentLabels) {
         this.paymentLabels = paymentLabels;
-    }
-
-    public DealerDTO getDealer() {
-        return dealer;
-    }
-
-    public void setDealer(DealerDTO dealer) {
-        this.dealer = dealer;
     }
 
     public Set<PlaceholderDTO> getPlaceholders() {
@@ -127,13 +168,17 @@ public class PaymentRequisitionDTO implements Serializable {
     public String toString() {
         return "PaymentRequisitionDTO{" +
             "id=" + getId() +
+            ", receptionDate='" + getReceptionDate() + "'" +
+            ", dealerName='" + getDealerName() + "'" +
+            ", briefDescription='" + getBriefDescription() + "'" +
+            ", requisitionNumber='" + getRequisitionNumber() + "'" +
             ", invoicedAmount=" + getInvoicedAmount() +
             ", disbursementCost=" + getDisbursementCost() +
-            ", vatableAmount=" + getVatableAmount() +
+            ", taxableAmount=" + getTaxableAmount() +
+            ", requisitionProcessed='" + getRequisitionProcessed() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
             ", paymentLabels=" + getPaymentLabels() +
-            ", dealer=" + getDealer() +
             ", placeholders=" + getPlaceholders() +
             "}";
     }

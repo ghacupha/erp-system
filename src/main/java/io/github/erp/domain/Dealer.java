@@ -71,13 +71,8 @@ public class Dealer implements Serializable {
     private Set<PaymentLabel> paymentLabels = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "paymentRequisitions", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "placeholders" }, allowSetters = true)
     private Dealer dealerGroup;
-
-    @OneToMany(mappedBy = "dealer")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "paymentLabels", "dealer", "placeholders" }, allowSetters = true)
-    private Set<PaymentRequisition> paymentRequisitions = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -280,37 +275,6 @@ public class Dealer implements Serializable {
 
     public Dealer dealerGroup(Dealer dealer) {
         this.setDealerGroup(dealer);
-        return this;
-    }
-
-    public Set<PaymentRequisition> getPaymentRequisitions() {
-        return this.paymentRequisitions;
-    }
-
-    public void setPaymentRequisitions(Set<PaymentRequisition> paymentRequisitions) {
-        if (this.paymentRequisitions != null) {
-            this.paymentRequisitions.forEach(i -> i.setDealer(null));
-        }
-        if (paymentRequisitions != null) {
-            paymentRequisitions.forEach(i -> i.setDealer(this));
-        }
-        this.paymentRequisitions = paymentRequisitions;
-    }
-
-    public Dealer paymentRequisitions(Set<PaymentRequisition> paymentRequisitions) {
-        this.setPaymentRequisitions(paymentRequisitions);
-        return this;
-    }
-
-    public Dealer addPaymentRequisition(PaymentRequisition paymentRequisition) {
-        this.paymentRequisitions.add(paymentRequisition);
-        paymentRequisition.setDealer(this);
-        return this;
-    }
-
-    public Dealer removePaymentRequisition(PaymentRequisition paymentRequisition) {
-        this.paymentRequisitions.remove(paymentRequisition);
-        paymentRequisition.setDealer(null);
         return this;
     }
 

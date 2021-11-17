@@ -14,11 +14,6 @@ public interface DealerMapper extends EntityMapper<DealerDTO, Dealer> {
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "idSet")
     DealerDTO toDto(Dealer s);
 
-    @Named("id")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    DealerDTO toDtoId(Dealer dealer);
-
     @Mapping(target = "removePaymentLabel", ignore = true)
     @Mapping(target = "removePlaceholder", ignore = true)
     Dealer toEntity(DealerDTO dealerDTO);

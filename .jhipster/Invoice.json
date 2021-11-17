@@ -20,12 +20,12 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "paymentId",
-      "fieldType": "Long"
+      "fieldName": "paymentReference",
+      "fieldType": "String"
     },
     {
-      "fieldName": "dealerId",
-      "fieldType": "Long"
+      "fieldName": "dealerName",
+      "fieldType": "String"
     },
     {
       "fieldName": "fileUploadToken",

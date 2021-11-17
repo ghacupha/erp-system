@@ -44,11 +44,11 @@ public class Invoice implements Serializable {
     @Column(name = "currency", nullable = false)
     private CurrencyTypes currency;
 
-    @Column(name = "payment_id")
-    private Long paymentId;
+    @Column(name = "payment_reference")
+    private String paymentReference;
 
-    @Column(name = "dealer_id")
-    private Long dealerId;
+    @Column(name = "dealer_name")
+    private String dealerName;
 
     @Column(name = "file_upload_token")
     private String fileUploadToken;
@@ -143,30 +143,30 @@ public class Invoice implements Serializable {
         this.currency = currency;
     }
 
-    public Long getPaymentId() {
-        return this.paymentId;
+    public String getPaymentReference() {
+        return this.paymentReference;
     }
 
-    public Invoice paymentId(Long paymentId) {
-        this.setPaymentId(paymentId);
+    public Invoice paymentReference(String paymentReference) {
+        this.setPaymentReference(paymentReference);
         return this;
     }
 
-    public void setPaymentId(Long paymentId) {
-        this.paymentId = paymentId;
+    public void setPaymentReference(String paymentReference) {
+        this.paymentReference = paymentReference;
     }
 
-    public Long getDealerId() {
-        return this.dealerId;
+    public String getDealerName() {
+        return this.dealerName;
     }
 
-    public Invoice dealerId(Long dealerId) {
-        this.setDealerId(dealerId);
+    public Invoice dealerName(String dealerName) {
+        this.setDealerName(dealerName);
         return this;
     }
 
-    public void setDealerId(Long dealerId) {
-        this.dealerId = dealerId;
+    public void setDealerName(String dealerName) {
+        this.dealerName = dealerName;
     }
 
     public String getFileUploadToken() {
@@ -269,8 +269,8 @@ public class Invoice implements Serializable {
             ", invoiceDate='" + getInvoiceDate() + "'" +
             ", invoiceAmount=" + getInvoiceAmount() +
             ", currency='" + getCurrency() + "'" +
-            ", paymentId=" + getPaymentId() +
-            ", dealerId=" + getDealerId() +
+            ", paymentReference='" + getPaymentReference() + "'" +
+            ", dealerName='" + getDealerName() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
             "}";

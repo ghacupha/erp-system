@@ -75,8 +75,8 @@ class InvoiceGatlingTest extends Simulation {
                 , "invoiceDate":"2020-01-01T00:00:00.000Z"
                 , "invoiceAmount":"0"
                 , "currency":"KES"
-                , "paymentId":"0"
-                , "dealerId":"0"
+                , "paymentReference":"SAMPLE_TEXT"
+                , "dealerName":"SAMPLE_TEXT"
                 , "fileUploadToken":"SAMPLE_TEXT"
                 , "compilationToken":"SAMPLE_TEXT"
                 }""")).asJson

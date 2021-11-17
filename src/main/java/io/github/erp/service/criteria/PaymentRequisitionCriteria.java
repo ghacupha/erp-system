@@ -9,6 +9,7 @@ import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
+import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 
@@ -27,19 +28,27 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
+    private LocalDateFilter receptionDate;
+
+    private StringFilter dealerName;
+
+    private StringFilter briefDescription;
+
+    private StringFilter requisitionNumber;
+
     private BigDecimalFilter invoicedAmount;
 
     private BigDecimalFilter disbursementCost;
 
-    private BigDecimalFilter vatableAmount;
+    private BigDecimalFilter taxableAmount;
+
+    private BooleanFilter requisitionProcessed;
 
     private StringFilter fileUploadToken;
 
     private StringFilter compilationToken;
 
     private LongFilter paymentLabelId;
-
-    private LongFilter dealerId;
 
     private LongFilter placeholderId;
 
@@ -49,13 +58,17 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
 
     public PaymentRequisitionCriteria(PaymentRequisitionCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.receptionDate = other.receptionDate == null ? null : other.receptionDate.copy();
+        this.dealerName = other.dealerName == null ? null : other.dealerName.copy();
+        this.briefDescription = other.briefDescription == null ? null : other.briefDescription.copy();
+        this.requisitionNumber = other.requisitionNumber == null ? null : other.requisitionNumber.copy();
         this.invoicedAmount = other.invoicedAmount == null ? null : other.invoicedAmount.copy();
         this.disbursementCost = other.disbursementCost == null ? null : other.disbursementCost.copy();
-        this.vatableAmount = other.vatableAmount == null ? null : other.vatableAmount.copy();
+        this.taxableAmount = other.taxableAmount == null ? null : other.taxableAmount.copy();
+        this.requisitionProcessed = other.requisitionProcessed == null ? null : other.requisitionProcessed.copy();
         this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
         this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
-        this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
     }
@@ -78,6 +91,66 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public LocalDateFilter getReceptionDate() {
+        return receptionDate;
+    }
+
+    public LocalDateFilter receptionDate() {
+        if (receptionDate == null) {
+            receptionDate = new LocalDateFilter();
+        }
+        return receptionDate;
+    }
+
+    public void setReceptionDate(LocalDateFilter receptionDate) {
+        this.receptionDate = receptionDate;
+    }
+
+    public StringFilter getDealerName() {
+        return dealerName;
+    }
+
+    public StringFilter dealerName() {
+        if (dealerName == null) {
+            dealerName = new StringFilter();
+        }
+        return dealerName;
+    }
+
+    public void setDealerName(StringFilter dealerName) {
+        this.dealerName = dealerName;
+    }
+
+    public StringFilter getBriefDescription() {
+        return briefDescription;
+    }
+
+    public StringFilter briefDescription() {
+        if (briefDescription == null) {
+            briefDescription = new StringFilter();
+        }
+        return briefDescription;
+    }
+
+    public void setBriefDescription(StringFilter briefDescription) {
+        this.briefDescription = briefDescription;
+    }
+
+    public StringFilter getRequisitionNumber() {
+        return requisitionNumber;
+    }
+
+    public StringFilter requisitionNumber() {
+        if (requisitionNumber == null) {
+            requisitionNumber = new StringFilter();
+        }
+        return requisitionNumber;
+    }
+
+    public void setRequisitionNumber(StringFilter requisitionNumber) {
+        this.requisitionNumber = requisitionNumber;
     }
 
     public BigDecimalFilter getInvoicedAmount() {
@@ -110,19 +183,34 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
         this.disbursementCost = disbursementCost;
     }
 
-    public BigDecimalFilter getVatableAmount() {
-        return vatableAmount;
+    public BigDecimalFilter getTaxableAmount() {
+        return taxableAmount;
     }
 
-    public BigDecimalFilter vatableAmount() {
-        if (vatableAmount == null) {
-            vatableAmount = new BigDecimalFilter();
+    public BigDecimalFilter taxableAmount() {
+        if (taxableAmount == null) {
+            taxableAmount = new BigDecimalFilter();
         }
-        return vatableAmount;
+        return taxableAmount;
     }
 
-    public void setVatableAmount(BigDecimalFilter vatableAmount) {
-        this.vatableAmount = vatableAmount;
+    public void setTaxableAmount(BigDecimalFilter taxableAmount) {
+        this.taxableAmount = taxableAmount;
+    }
+
+    public BooleanFilter getRequisitionProcessed() {
+        return requisitionProcessed;
+    }
+
+    public BooleanFilter requisitionProcessed() {
+        if (requisitionProcessed == null) {
+            requisitionProcessed = new BooleanFilter();
+        }
+        return requisitionProcessed;
+    }
+
+    public void setRequisitionProcessed(BooleanFilter requisitionProcessed) {
+        this.requisitionProcessed = requisitionProcessed;
     }
 
     public StringFilter getFileUploadToken() {
@@ -170,21 +258,6 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
         this.paymentLabelId = paymentLabelId;
     }
 
-    public LongFilter getDealerId() {
-        return dealerId;
-    }
-
-    public LongFilter dealerId() {
-        if (dealerId == null) {
-            dealerId = new LongFilter();
-        }
-        return dealerId;
-    }
-
-    public void setDealerId(LongFilter dealerId) {
-        this.dealerId = dealerId;
-    }
-
     public LongFilter getPlaceholderId() {
         return placeholderId;
     }
@@ -219,13 +292,17 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
         final PaymentRequisitionCriteria that = (PaymentRequisitionCriteria) o;
         return (
             Objects.equals(id, that.id) &&
+            Objects.equals(receptionDate, that.receptionDate) &&
+            Objects.equals(dealerName, that.dealerName) &&
+            Objects.equals(briefDescription, that.briefDescription) &&
+            Objects.equals(requisitionNumber, that.requisitionNumber) &&
             Objects.equals(invoicedAmount, that.invoicedAmount) &&
             Objects.equals(disbursementCost, that.disbursementCost) &&
-            Objects.equals(vatableAmount, that.vatableAmount) &&
+            Objects.equals(taxableAmount, that.taxableAmount) &&
+            Objects.equals(requisitionProcessed, that.requisitionProcessed) &&
             Objects.equals(fileUploadToken, that.fileUploadToken) &&
             Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
-            Objects.equals(dealerId, that.dealerId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -235,13 +312,17 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
             id,
+            receptionDate,
+            dealerName,
+            briefDescription,
+            requisitionNumber,
             invoicedAmount,
             disbursementCost,
-            vatableAmount,
+            taxableAmount,
+            requisitionProcessed,
             fileUploadToken,
             compilationToken,
             paymentLabelId,
-            dealerId,
             placeholderId,
             distinct
         );
@@ -252,13 +333,17 @@ public class PaymentRequisitionCriteria implements Serializable, Criteria {
     public String toString() {
         return "PaymentRequisitionCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
+            (receptionDate != null ? "receptionDate=" + receptionDate + ", " : "") +
+            (dealerName != null ? "dealerName=" + dealerName + ", " : "") +
+            (briefDescription != null ? "briefDescription=" + briefDescription + ", " : "") +
+            (requisitionNumber != null ? "requisitionNumber=" + requisitionNumber + ", " : "") +
             (invoicedAmount != null ? "invoicedAmount=" + invoicedAmount + ", " : "") +
             (disbursementCost != null ? "disbursementCost=" + disbursementCost + ", " : "") +
-            (vatableAmount != null ? "vatableAmount=" + vatableAmount + ", " : "") +
+            (taxableAmount != null ? "taxableAmount=" + taxableAmount + ", " : "") +
+            (requisitionProcessed != null ? "requisitionProcessed=" + requisitionProcessed + ", " : "") +
             (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +
             (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
-            (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

@@ -3,6 +3,7 @@ package io.github.erp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -26,14 +27,29 @@ public class PaymentRequisition implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "reception_date")
+    private LocalDate receptionDate;
+
+    @Column(name = "dealer_name")
+    private String dealerName;
+
+    @Column(name = "brief_description")
+    private String briefDescription;
+
+    @Column(name = "requisition_number")
+    private String requisitionNumber;
+
     @Column(name = "invoiced_amount", precision = 21, scale = 2)
     private BigDecimal invoicedAmount;
 
     @Column(name = "disbursement_cost", precision = 21, scale = 2)
     private BigDecimal disbursementCost;
 
-    @Column(name = "vatable_amount", precision = 21, scale = 2)
-    private BigDecimal vatableAmount;
+    @Column(name = "taxable_amount", precision = 21, scale = 2)
+    private BigDecimal taxableAmount;
+
+    @Column(name = "requisition_processed")
+    private Boolean requisitionProcessed;
 
     @Column(name = "file_upload_token")
     private String fileUploadToken;
@@ -50,10 +66,6 @@ public class PaymentRequisition implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "containingPaymentLabel", "placeholders" }, allowSetters = true)
     private Set<PaymentLabel> paymentLabels = new HashSet<>();
-
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "paymentRequisitions", "placeholders" }, allowSetters = true)
-    private Dealer dealer;
 
     @ManyToMany
     @JoinTable(
@@ -78,6 +90,58 @@ public class PaymentRequisition implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public LocalDate getReceptionDate() {
+        return this.receptionDate;
+    }
+
+    public PaymentRequisition receptionDate(LocalDate receptionDate) {
+        this.setReceptionDate(receptionDate);
+        return this;
+    }
+
+    public void setReceptionDate(LocalDate receptionDate) {
+        this.receptionDate = receptionDate;
+    }
+
+    public String getDealerName() {
+        return this.dealerName;
+    }
+
+    public PaymentRequisition dealerName(String dealerName) {
+        this.setDealerName(dealerName);
+        return this;
+    }
+
+    public void setDealerName(String dealerName) {
+        this.dealerName = dealerName;
+    }
+
+    public String getBriefDescription() {
+        return this.briefDescription;
+    }
+
+    public PaymentRequisition briefDescription(String briefDescription) {
+        this.setBriefDescription(briefDescription);
+        return this;
+    }
+
+    public void setBriefDescription(String briefDescription) {
+        this.briefDescription = briefDescription;
+    }
+
+    public String getRequisitionNumber() {
+        return this.requisitionNumber;
+    }
+
+    public PaymentRequisition requisitionNumber(String requisitionNumber) {
+        this.setRequisitionNumber(requisitionNumber);
+        return this;
+    }
+
+    public void setRequisitionNumber(String requisitionNumber) {
+        this.requisitionNumber = requisitionNumber;
     }
 
     public BigDecimal getInvoicedAmount() {
@@ -106,17 +170,30 @@ public class PaymentRequisition implements Serializable {
         this.disbursementCost = disbursementCost;
     }
 
-    public BigDecimal getVatableAmount() {
-        return this.vatableAmount;
+    public BigDecimal getTaxableAmount() {
+        return this.taxableAmount;
     }
 
-    public PaymentRequisition vatableAmount(BigDecimal vatableAmount) {
-        this.setVatableAmount(vatableAmount);
+    public PaymentRequisition taxableAmount(BigDecimal taxableAmount) {
+        this.setTaxableAmount(taxableAmount);
         return this;
     }
 
-    public void setVatableAmount(BigDecimal vatableAmount) {
-        this.vatableAmount = vatableAmount;
+    public void setTaxableAmount(BigDecimal taxableAmount) {
+        this.taxableAmount = taxableAmount;
+    }
+
+    public Boolean getRequisitionProcessed() {
+        return this.requisitionProcessed;
+    }
+
+    public PaymentRequisition requisitionProcessed(Boolean requisitionProcessed) {
+        this.setRequisitionProcessed(requisitionProcessed);
+        return this;
+    }
+
+    public void setRequisitionProcessed(Boolean requisitionProcessed) {
+        this.requisitionProcessed = requisitionProcessed;
     }
 
     public String getFileUploadToken() {
@@ -168,19 +245,6 @@ public class PaymentRequisition implements Serializable {
         return this;
     }
 
-    public Dealer getDealer() {
-        return this.dealer;
-    }
-
-    public void setDealer(Dealer dealer) {
-        this.dealer = dealer;
-    }
-
-    public PaymentRequisition dealer(Dealer dealer) {
-        this.setDealer(dealer);
-        return this;
-    }
-
     public Set<Placeholder> getPlaceholders() {
         return this.placeholders;
     }
@@ -228,9 +292,14 @@ public class PaymentRequisition implements Serializable {
     public String toString() {
         return "PaymentRequisition{" +
             "id=" + getId() +
+            ", receptionDate='" + getReceptionDate() + "'" +
+            ", dealerName='" + getDealerName() + "'" +
+            ", briefDescription='" + getBriefDescription() + "'" +
+            ", requisitionNumber='" + getRequisitionNumber() + "'" +
             ", invoicedAmount=" + getInvoicedAmount() +
             ", disbursementCost=" + getDisbursementCost() +
-            ", vatableAmount=" + getVatableAmount() +
+            ", taxableAmount=" + getTaxableAmount() +
+            ", requisitionProcessed='" + getRequisitionProcessed() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
             "}";

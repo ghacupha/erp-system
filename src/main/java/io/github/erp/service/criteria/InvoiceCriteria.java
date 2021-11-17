@@ -54,9 +54,9 @@ public class InvoiceCriteria implements Serializable, Criteria {
 
     private CurrencyTypesFilter currency;
 
-    private LongFilter paymentId;
+    private StringFilter paymentReference;
 
-    private LongFilter dealerId;
+    private StringFilter dealerName;
 
     private StringFilter fileUploadToken;
 
@@ -76,8 +76,8 @@ public class InvoiceCriteria implements Serializable, Criteria {
         this.invoiceDate = other.invoiceDate == null ? null : other.invoiceDate.copy();
         this.invoiceAmount = other.invoiceAmount == null ? null : other.invoiceAmount.copy();
         this.currency = other.currency == null ? null : other.currency.copy();
-        this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
-        this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
+        this.paymentReference = other.paymentReference == null ? null : other.paymentReference.copy();
+        this.dealerName = other.dealerName == null ? null : other.dealerName.copy();
         this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
         this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
@@ -165,34 +165,34 @@ public class InvoiceCriteria implements Serializable, Criteria {
         this.currency = currency;
     }
 
-    public LongFilter getPaymentId() {
-        return paymentId;
+    public StringFilter getPaymentReference() {
+        return paymentReference;
     }
 
-    public LongFilter paymentId() {
-        if (paymentId == null) {
-            paymentId = new LongFilter();
+    public StringFilter paymentReference() {
+        if (paymentReference == null) {
+            paymentReference = new StringFilter();
         }
-        return paymentId;
+        return paymentReference;
     }
 
-    public void setPaymentId(LongFilter paymentId) {
-        this.paymentId = paymentId;
+    public void setPaymentReference(StringFilter paymentReference) {
+        this.paymentReference = paymentReference;
     }
 
-    public LongFilter getDealerId() {
-        return dealerId;
+    public StringFilter getDealerName() {
+        return dealerName;
     }
 
-    public LongFilter dealerId() {
-        if (dealerId == null) {
-            dealerId = new LongFilter();
+    public StringFilter dealerName() {
+        if (dealerName == null) {
+            dealerName = new StringFilter();
         }
-        return dealerId;
+        return dealerName;
     }
 
-    public void setDealerId(LongFilter dealerId) {
-        this.dealerId = dealerId;
+    public void setDealerName(StringFilter dealerName) {
+        this.dealerName = dealerName;
     }
 
     public StringFilter getFileUploadToken() {
@@ -278,8 +278,8 @@ public class InvoiceCriteria implements Serializable, Criteria {
             Objects.equals(invoiceDate, that.invoiceDate) &&
             Objects.equals(invoiceAmount, that.invoiceAmount) &&
             Objects.equals(currency, that.currency) &&
-            Objects.equals(paymentId, that.paymentId) &&
-            Objects.equals(dealerId, that.dealerId) &&
+            Objects.equals(paymentReference, that.paymentReference) &&
+            Objects.equals(dealerName, that.dealerName) &&
             Objects.equals(fileUploadToken, that.fileUploadToken) &&
             Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
@@ -296,8 +296,8 @@ public class InvoiceCriteria implements Serializable, Criteria {
             invoiceDate,
             invoiceAmount,
             currency,
-            paymentId,
-            dealerId,
+            paymentReference,
+            dealerName,
             fileUploadToken,
             compilationToken,
             paymentLabelId,
@@ -315,8 +315,8 @@ public class InvoiceCriteria implements Serializable, Criteria {
             (invoiceDate != null ? "invoiceDate=" + invoiceDate + ", " : "") +
             (invoiceAmount != null ? "invoiceAmount=" + invoiceAmount + ", " : "") +
             (currency != null ? "currency=" + currency + ", " : "") +
-            (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
-            (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
+            (paymentReference != null ? "paymentReference=" + paymentReference + ", " : "") +
+            (dealerName != null ? "dealerName=" + dealerName + ", " : "") +
             (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +
             (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +

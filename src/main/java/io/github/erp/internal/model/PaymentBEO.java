@@ -36,7 +36,7 @@ public class PaymentBEO implements BatchEntity {
 
     private CurrencyTypes settlementCurrency;
 
-    private Long dealerId;
+    private String dealerName;
 
     private String fileUploadToken;
 
