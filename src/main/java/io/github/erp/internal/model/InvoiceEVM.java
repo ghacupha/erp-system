@@ -32,6 +32,12 @@ public class InvoiceEVM implements Serializable, ExcelViewModel<InvoiceEVM> {
     @ExcelCell(3)
     private String currency;
 
+    @ExcelCell(4)
+    private String paymentReference;
+
+    @ExcelCell(5)
+    private String dealerName;
+
     private String fileUploadToken;
 
     @Override

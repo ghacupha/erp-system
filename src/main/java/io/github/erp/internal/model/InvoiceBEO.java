@@ -34,9 +34,9 @@ public class InvoiceBEO implements BatchEntity {
     @NotNull
     private CurrencyTypes currency;
 
-    private Long paymentId;
+    private String paymentReference;
 
-    private Long dealerId;
+    private String dealerName;
 
     private String fileUploadToken;
 

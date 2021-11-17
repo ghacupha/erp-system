@@ -266,6 +266,8 @@ public class ExcelFileUtilsTest {
                         .invoiceDate(DATETIME_FORMATTER.format(of(2021, 1, 1).plusDays(Long.parseLong(index)).minusDays(1L)))
                         .invoiceAmount(1.1 + i)
                         .currency("currency" + index)
+                        .paymentReference("paymentReference" + index)
+                        .dealerName("dealerName" + index)
                         .build()
                 );
         }
