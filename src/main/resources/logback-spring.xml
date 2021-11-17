@@ -21,9 +21,9 @@
         <appender-ref ref="FILE"/>
     </appender>
 
-    <!--<root level="${logging.level.root}">
+    <root level="${logging.level.root}">
         <appender-ref ref="ASYNC"/>
-    </root>-->
+    </root>
 
     <logger name="javax.activation" level="WARN"/>
     <logger name="javax.mail" level="WARN"/>
