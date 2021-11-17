@@ -60,6 +60,8 @@ public class PaymentCriteria implements Serializable, Criteria {
 
     private StringFilter dealerName;
 
+    private StringFilter purchaseOrderNumber;
+
     private StringFilter fileUploadToken;
 
     private StringFilter compilationToken;
@@ -85,6 +87,7 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.description = other.description == null ? null : other.description.copy();
         this.settlementCurrency = other.settlementCurrency == null ? null : other.settlementCurrency.copy();
         this.dealerName = other.dealerName == null ? null : other.dealerName.copy();
+        this.purchaseOrderNumber = other.purchaseOrderNumber == null ? null : other.purchaseOrderNumber.copy();
         this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
         this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
@@ -219,6 +222,21 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.dealerName = dealerName;
     }
 
+    public StringFilter getPurchaseOrderNumber() {
+        return purchaseOrderNumber;
+    }
+
+    public StringFilter purchaseOrderNumber() {
+        if (purchaseOrderNumber == null) {
+            purchaseOrderNumber = new StringFilter();
+        }
+        return purchaseOrderNumber;
+    }
+
+    public void setPurchaseOrderNumber(StringFilter purchaseOrderNumber) {
+        this.purchaseOrderNumber = purchaseOrderNumber;
+    }
+
     public StringFilter getFileUploadToken() {
         return fileUploadToken;
     }
@@ -335,6 +353,7 @@ public class PaymentCriteria implements Serializable, Criteria {
             Objects.equals(description, that.description) &&
             Objects.equals(settlementCurrency, that.settlementCurrency) &&
             Objects.equals(dealerName, that.dealerName) &&
+            Objects.equals(purchaseOrderNumber, that.purchaseOrderNumber) &&
             Objects.equals(fileUploadToken, that.fileUploadToken) &&
             Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
@@ -356,6 +375,7 @@ public class PaymentCriteria implements Serializable, Criteria {
             description,
             settlementCurrency,
             dealerName,
+            purchaseOrderNumber,
             fileUploadToken,
             compilationToken,
             paymentLabelId,
@@ -378,6 +398,7 @@ public class PaymentCriteria implements Serializable, Criteria {
             (description != null ? "description=" + description + ", " : "") +
             (settlementCurrency != null ? "settlementCurrency=" + settlementCurrency + ", " : "") +
             (dealerName != null ? "dealerName=" + dealerName + ", " : "") +
+            (purchaseOrderNumber != null ? "purchaseOrderNumber=" + purchaseOrderNumber + ", " : "") +
             (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +
             (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +

@@ -59,6 +59,9 @@ public class Payment implements Serializable {
     @Column(name = "dealer_name")
     private String dealerName;
 
+    @Column(name = "purchase_order_number")
+    private String purchaseOrderNumber;
+
     @Column(name = "file_upload_token")
     private String fileUploadToken;
 
@@ -225,6 +228,19 @@ public class Payment implements Serializable {
         this.dealerName = dealerName;
     }
 
+    public String getPurchaseOrderNumber() {
+        return this.purchaseOrderNumber;
+    }
+
+    public Payment purchaseOrderNumber(String purchaseOrderNumber) {
+        this.setPurchaseOrderNumber(purchaseOrderNumber);
+        return this;
+    }
+
+    public void setPurchaseOrderNumber(String purchaseOrderNumber) {
+        this.purchaseOrderNumber = purchaseOrderNumber;
+    }
+
     public String getFileUploadToken() {
         return this.fileUploadToken;
     }
@@ -356,6 +372,7 @@ public class Payment implements Serializable {
             ", calculationFile='" + getCalculationFile() + "'" +
             ", calculationFileContentType='" + getCalculationFileContentType() + "'" +
             ", dealerName='" + getDealerName() + "'" +
+            ", purchaseOrderNumber='" + getPurchaseOrderNumber() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
             "}";

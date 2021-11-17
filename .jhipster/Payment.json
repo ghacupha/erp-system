@@ -36,6 +36,10 @@
       "fieldType": "String"
     },
     {
+      "fieldName": "purchaseOrderNumber",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "fileUploadToken",
       "fieldType": "String"
     },

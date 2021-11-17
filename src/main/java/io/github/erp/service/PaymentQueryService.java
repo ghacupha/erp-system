@@ -119,6 +119,10 @@ public class PaymentQueryService extends QueryService<Payment> {
             if (criteria.getDealerName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDealerName(), Payment_.dealerName));
             }
+            if (criteria.getPurchaseOrderNumber() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getPurchaseOrderNumber(), Payment_.purchaseOrderNumber));
+            }
             if (criteria.getFileUploadToken() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getFileUploadToken(), Payment_.fileUploadToken));
             }

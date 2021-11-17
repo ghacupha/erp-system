@@ -38,6 +38,8 @@ public class PaymentBEO implements BatchEntity {
 
     private String dealerName;
 
+    private String purchaseOrderNumber;
+
     private String fileUploadToken;
 
     private String compilationToken;
