@@ -52,8 +52,6 @@ public class DealerCriteria implements Serializable, Criteria {
 
     private LongFilter dealerGroupId;
 
-    private LongFilter paymentRequisitionId;
-
     private LongFilter placeholderId;
 
     private Boolean distinct;
@@ -75,7 +73,6 @@ public class DealerCriteria implements Serializable, Criteria {
         this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
         this.dealerGroupId = other.dealerGroupId == null ? null : other.dealerGroupId.copy();
-        this.paymentRequisitionId = other.paymentRequisitionId == null ? null : other.paymentRequisitionId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
     }
@@ -295,21 +292,6 @@ public class DealerCriteria implements Serializable, Criteria {
         this.dealerGroupId = dealerGroupId;
     }
 
-    public LongFilter getPaymentRequisitionId() {
-        return paymentRequisitionId;
-    }
-
-    public LongFilter paymentRequisitionId() {
-        if (paymentRequisitionId == null) {
-            paymentRequisitionId = new LongFilter();
-        }
-        return paymentRequisitionId;
-    }
-
-    public void setPaymentRequisitionId(LongFilter paymentRequisitionId) {
-        this.paymentRequisitionId = paymentRequisitionId;
-    }
-
     public LongFilter getPlaceholderId() {
         return placeholderId;
     }
@@ -357,7 +339,6 @@ public class DealerCriteria implements Serializable, Criteria {
             Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
             Objects.equals(dealerGroupId, that.dealerGroupId) &&
-            Objects.equals(paymentRequisitionId, that.paymentRequisitionId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -380,7 +361,6 @@ public class DealerCriteria implements Serializable, Criteria {
             compilationToken,
             paymentLabelId,
             dealerGroupId,
-            paymentRequisitionId,
             placeholderId,
             distinct
         );
@@ -404,7 +384,6 @@ public class DealerCriteria implements Serializable, Criteria {
             (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
             (dealerGroupId != null ? "dealerGroupId=" + dealerGroupId + ", " : "") +
-            (paymentRequisitionId != null ? "paymentRequisitionId=" + paymentRequisitionId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

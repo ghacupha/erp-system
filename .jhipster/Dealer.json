@@ -17,12 +17,6 @@
       "otherEntityField": "dealerName"
     },
     {
-      "relationshipName": "paymentRequisition",
-      "otherEntityName": "paymentRequisition",
-      "relationshipType": "one-to-many",
-      "otherEntityRelationshipName": "dealer"
-    },
-    {
       "relationshipName": "placeholder",
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",

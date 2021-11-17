@@ -98,6 +98,20 @@ public class PaymentRequisitionQueryService extends QueryService<PaymentRequisit
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), PaymentRequisition_.id));
             }
+            if (criteria.getReceptionDate() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getReceptionDate(), PaymentRequisition_.receptionDate));
+            }
+            if (criteria.getDealerName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDealerName(), PaymentRequisition_.dealerName));
+            }
+            if (criteria.getBriefDescription() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getBriefDescription(), PaymentRequisition_.briefDescription));
+            }
+            if (criteria.getRequisitionNumber() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getRequisitionNumber(), PaymentRequisition_.requisitionNumber));
+            }
             if (criteria.getInvoicedAmount() != null) {
                 specification =
                     specification.and(buildRangeSpecification(criteria.getInvoicedAmount(), PaymentRequisition_.invoicedAmount));
@@ -106,8 +120,12 @@ public class PaymentRequisitionQueryService extends QueryService<PaymentRequisit
                 specification =
                     specification.and(buildRangeSpecification(criteria.getDisbursementCost(), PaymentRequisition_.disbursementCost));
             }
-            if (criteria.getVatableAmount() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getVatableAmount(), PaymentRequisition_.vatableAmount));
+            if (criteria.getTaxableAmount() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getTaxableAmount(), PaymentRequisition_.taxableAmount));
+            }
+            if (criteria.getRequisitionProcessed() != null) {
+                specification =
+                    specification.and(buildSpecification(criteria.getRequisitionProcessed(), PaymentRequisition_.requisitionProcessed));
             }
             if (criteria.getFileUploadToken() != null) {
                 specification =
@@ -123,15 +141,6 @@ public class PaymentRequisitionQueryService extends QueryService<PaymentRequisit
                         buildSpecification(
                             criteria.getPaymentLabelId(),
                             root -> root.join(PaymentRequisition_.paymentLabels, JoinType.LEFT).get(PaymentLabel_.id)
-                        )
-                    );
-            }
-            if (criteria.getDealerId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getDealerId(),
-                            root -> root.join(PaymentRequisition_.dealer, JoinType.LEFT).get(Dealer_.id)
                         )
                     );
             }

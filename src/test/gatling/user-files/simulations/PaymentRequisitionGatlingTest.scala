@@ -71,9 +71,14 @@ class PaymentRequisitionGatlingTest extends Simulation {
             .post("/api/payment-requisitions")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
-                "invoicedAmount":"0"
+                "receptionDate":"2020-01-01T00:00:00.000Z"
+                , "dealerName":"SAMPLE_TEXT"
+                , "briefDescription":"SAMPLE_TEXT"
+                , "requisitionNumber":"SAMPLE_TEXT"
+                , "invoicedAmount":"0"
                 , "disbursementCost":"0"
-                , "vatableAmount":"0"
+                , "taxableAmount":"0"
+                , "requisitionProcessed":null
                 , "fileUploadToken":"SAMPLE_TEXT"
                 , "compilationToken":"SAMPLE_TEXT"
                 }""")).asJson

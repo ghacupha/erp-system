@@ -78,7 +78,7 @@ class PaymentGatlingTest extends Simulation {
                 , "description":"SAMPLE_TEXT"
                 , "settlementCurrency":"KES"
                 , "calculationFile":null
-                , "dealerId":"0"
+                , "dealerName":"SAMPLE_TEXT"
                 , "fileUploadToken":"SAMPLE_TEXT"
                 , "compilationToken":"SAMPLE_TEXT"
                 }""")).asJson

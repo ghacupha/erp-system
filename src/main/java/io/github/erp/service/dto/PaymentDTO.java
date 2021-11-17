@@ -34,7 +34,7 @@ public class PaymentDTO implements Serializable {
     private byte[] calculationFile;
 
     private String calculationFileContentType;
-    private Long dealerId;
+    private String dealerName;
 
     private String fileUploadToken;
 
@@ -120,12 +120,12 @@ public class PaymentDTO implements Serializable {
         this.calculationFileContentType = calculationFileContentType;
     }
 
-    public Long getDealerId() {
-        return dealerId;
+    public String getDealerName() {
+        return dealerName;
     }
 
-    public void setDealerId(Long dealerId) {
-        this.dealerId = dealerId;
+    public void setDealerName(String dealerName) {
+        this.dealerName = dealerName;
     }
 
     public String getFileUploadToken() {
@@ -209,7 +209,7 @@ public class PaymentDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", settlementCurrency='" + getSettlementCurrency() + "'" +
             ", calculationFile='" + getCalculationFile() + "'" +
-            ", dealerId=" + getDealerId() +
+            ", dealerName='" + getDealerName() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
             ", paymentLabels=" + getPaymentLabels() +

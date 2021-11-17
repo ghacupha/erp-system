@@ -32,8 +32,8 @@
       "fieldTypeBlobContent": "any"
     },
     {
-      "fieldName": "dealerId",
-      "fieldType": "Long"
+      "fieldName": "dealerName",
+      "fieldType": "String"
     },
     {
       "fieldName": "fileUploadToken",

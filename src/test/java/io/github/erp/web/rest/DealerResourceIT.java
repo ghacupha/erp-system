@@ -10,7 +10,6 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Dealer;
 import io.github.erp.domain.Dealer;
 import io.github.erp.domain.PaymentLabel;
-import io.github.erp.domain.PaymentRequisition;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.repository.DealerRepository;
 import io.github.erp.repository.search.DealerSearchRepository;
@@ -1228,32 +1227,6 @@ class DealerResourceIT {
 
         // Get all the dealerList where dealerGroup equals to (dealerGroupId + 1)
         defaultDealerShouldNotBeFound("dealerGroupId.equals=" + (dealerGroupId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllDealersByPaymentRequisitionIsEqualToSomething() throws Exception {
-        // Initialize the database
-        dealerRepository.saveAndFlush(dealer);
-        PaymentRequisition paymentRequisition;
-        if (TestUtil.findAll(em, PaymentRequisition.class).isEmpty()) {
-            paymentRequisition = PaymentRequisitionResourceIT.createEntity(em);
-            em.persist(paymentRequisition);
-            em.flush();
-        } else {
-            paymentRequisition = TestUtil.findAll(em, PaymentRequisition.class).get(0);
-        }
-        em.persist(paymentRequisition);
-        em.flush();
-        dealer.addPaymentRequisition(paymentRequisition);
-        dealerRepository.saveAndFlush(dealer);
-        Long paymentRequisitionId = paymentRequisition.getId();
-
-        // Get all the dealerList where paymentRequisition equals to paymentRequisitionId
-        defaultDealerShouldBeFound("paymentRequisitionId.equals=" + paymentRequisitionId);
-
-        // Get all the dealerList where paymentRequisition equals to (paymentRequisitionId + 1)
-        defaultDealerShouldNotBeFound("paymentRequisitionId.equals=" + (paymentRequisitionId + 1));
     }
 
     @Test

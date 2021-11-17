@@ -11,13 +11,6 @@
       "otherEntityRelationshipName": "paymentRequisition"
     },
     {
-      "relationshipName": "dealer",
-      "otherEntityName": "dealer",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "id",
-      "otherEntityRelationshipName": "paymentRequisition"
-    },
-    {
       "relationshipName": "placeholder",
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",
@@ -27,6 +20,22 @@
   ],
   "fields": [
     {
+      "fieldName": "receptionDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "dealerName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "briefDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "requisitionNumber",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "invoicedAmount",
       "fieldType": "BigDecimal"
     },
@@ -35,8 +44,12 @@
       "fieldType": "BigDecimal"
     },
     {
-      "fieldName": "vatableAmount",
+      "fieldName": "taxableAmount",
       "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "requisitionProcessed",
+      "fieldType": "Boolean"
     },
     {
       "fieldName": "fileUploadToken",

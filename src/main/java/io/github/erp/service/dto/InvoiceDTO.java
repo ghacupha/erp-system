@@ -26,9 +26,9 @@ public class InvoiceDTO implements Serializable {
     @NotNull
     private CurrencyTypes currency;
 
-    private Long paymentId;
+    private String paymentReference;
 
-    private Long dealerId;
+    private String dealerName;
 
     private String fileUploadToken;
 
@@ -78,20 +78,20 @@ public class InvoiceDTO implements Serializable {
         this.currency = currency;
     }
 
-    public Long getPaymentId() {
-        return paymentId;
+    public String getPaymentReference() {
+        return paymentReference;
     }
 
-    public void setPaymentId(Long paymentId) {
-        this.paymentId = paymentId;
+    public void setPaymentReference(String paymentReference) {
+        this.paymentReference = paymentReference;
     }
 
-    public Long getDealerId() {
-        return dealerId;
+    public String getDealerName() {
+        return dealerName;
     }
 
-    public void setDealerId(Long dealerId) {
-        this.dealerId = dealerId;
+    public void setDealerName(String dealerName) {
+        this.dealerName = dealerName;
     }
 
     public String getFileUploadToken() {
@@ -156,8 +156,8 @@ public class InvoiceDTO implements Serializable {
             ", invoiceDate='" + getInvoiceDate() + "'" +
             ", invoiceAmount=" + getInvoiceAmount() +
             ", currency='" + getCurrency() + "'" +
-            ", paymentId=" + getPaymentId() +
-            ", dealerId=" + getDealerId() +
+            ", paymentReference='" + getPaymentReference() + "'" +
+            ", dealerName='" + getDealerName() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
             ", paymentLabels=" + getPaymentLabels() +

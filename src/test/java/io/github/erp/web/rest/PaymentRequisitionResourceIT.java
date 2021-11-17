@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.Dealer;
 import io.github.erp.domain.PaymentLabel;
 import io.github.erp.domain.PaymentRequisition;
 import io.github.erp.domain.Placeholder;
@@ -19,6 +18,8 @@ import io.github.erp.service.criteria.PaymentRequisitionCriteria;
 import io.github.erp.service.dto.PaymentRequisitionDTO;
 import io.github.erp.service.mapper.PaymentRequisitionMapper;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -48,6 +49,19 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class PaymentRequisitionResourceIT {
 
+    private static final LocalDate DEFAULT_RECEPTION_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_RECEPTION_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_RECEPTION_DATE = LocalDate.ofEpochDay(-1L);
+
+    private static final String DEFAULT_DEALER_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_DEALER_NAME = "BBBBBBBBBB";
+
+    private static final String DEFAULT_BRIEF_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_BRIEF_DESCRIPTION = "BBBBBBBBBB";
+
+    private static final String DEFAULT_REQUISITION_NUMBER = "AAAAAAAAAA";
+    private static final String UPDATED_REQUISITION_NUMBER = "BBBBBBBBBB";
+
     private static final BigDecimal DEFAULT_INVOICED_AMOUNT = new BigDecimal(1);
     private static final BigDecimal UPDATED_INVOICED_AMOUNT = new BigDecimal(2);
     private static final BigDecimal SMALLER_INVOICED_AMOUNT = new BigDecimal(1 - 1);
@@ -56,9 +70,12 @@ class PaymentRequisitionResourceIT {
     private static final BigDecimal UPDATED_DISBURSEMENT_COST = new BigDecimal(2);
     private static final BigDecimal SMALLER_DISBURSEMENT_COST = new BigDecimal(1 - 1);
 
-    private static final BigDecimal DEFAULT_VATABLE_AMOUNT = new BigDecimal(1);
-    private static final BigDecimal UPDATED_VATABLE_AMOUNT = new BigDecimal(2);
-    private static final BigDecimal SMALLER_VATABLE_AMOUNT = new BigDecimal(1 - 1);
+    private static final BigDecimal DEFAULT_TAXABLE_AMOUNT = new BigDecimal(1);
+    private static final BigDecimal UPDATED_TAXABLE_AMOUNT = new BigDecimal(2);
+    private static final BigDecimal SMALLER_TAXABLE_AMOUNT = new BigDecimal(1 - 1);
+
+    private static final Boolean DEFAULT_REQUISITION_PROCESSED = false;
+    private static final Boolean UPDATED_REQUISITION_PROCESSED = true;
 
     private static final String DEFAULT_FILE_UPLOAD_TOKEN = "AAAAAAAAAA";
     private static final String UPDATED_FILE_UPLOAD_TOKEN = "BBBBBBBBBB";
@@ -109,9 +126,14 @@ class PaymentRequisitionResourceIT {
      */
     public static PaymentRequisition createEntity(EntityManager em) {
         PaymentRequisition paymentRequisition = new PaymentRequisition()
+            .receptionDate(DEFAULT_RECEPTION_DATE)
+            .dealerName(DEFAULT_DEALER_NAME)
+            .briefDescription(DEFAULT_BRIEF_DESCRIPTION)
+            .requisitionNumber(DEFAULT_REQUISITION_NUMBER)
             .invoicedAmount(DEFAULT_INVOICED_AMOUNT)
             .disbursementCost(DEFAULT_DISBURSEMENT_COST)
-            .vatableAmount(DEFAULT_VATABLE_AMOUNT)
+            .taxableAmount(DEFAULT_TAXABLE_AMOUNT)
+            .requisitionProcessed(DEFAULT_REQUISITION_PROCESSED)
             .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
             .compilationToken(DEFAULT_COMPILATION_TOKEN);
         return paymentRequisition;
@@ -125,9 +147,14 @@ class PaymentRequisitionResourceIT {
      */
     public static PaymentRequisition createUpdatedEntity(EntityManager em) {
         PaymentRequisition paymentRequisition = new PaymentRequisition()
+            .receptionDate(UPDATED_RECEPTION_DATE)
+            .dealerName(UPDATED_DEALER_NAME)
+            .briefDescription(UPDATED_BRIEF_DESCRIPTION)
+            .requisitionNumber(UPDATED_REQUISITION_NUMBER)
             .invoicedAmount(UPDATED_INVOICED_AMOUNT)
             .disbursementCost(UPDATED_DISBURSEMENT_COST)
-            .vatableAmount(UPDATED_VATABLE_AMOUNT)
+            .taxableAmount(UPDATED_TAXABLE_AMOUNT)
+            .requisitionProcessed(UPDATED_REQUISITION_PROCESSED)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
             .compilationToken(UPDATED_COMPILATION_TOKEN);
         return paymentRequisition;
@@ -156,9 +183,14 @@ class PaymentRequisitionResourceIT {
         List<PaymentRequisition> paymentRequisitionList = paymentRequisitionRepository.findAll();
         assertThat(paymentRequisitionList).hasSize(databaseSizeBeforeCreate + 1);
         PaymentRequisition testPaymentRequisition = paymentRequisitionList.get(paymentRequisitionList.size() - 1);
+        assertThat(testPaymentRequisition.getReceptionDate()).isEqualTo(DEFAULT_RECEPTION_DATE);
+        assertThat(testPaymentRequisition.getDealerName()).isEqualTo(DEFAULT_DEALER_NAME);
+        assertThat(testPaymentRequisition.getBriefDescription()).isEqualTo(DEFAULT_BRIEF_DESCRIPTION);
+        assertThat(testPaymentRequisition.getRequisitionNumber()).isEqualTo(DEFAULT_REQUISITION_NUMBER);
         assertThat(testPaymentRequisition.getInvoicedAmount()).isEqualByComparingTo(DEFAULT_INVOICED_AMOUNT);
         assertThat(testPaymentRequisition.getDisbursementCost()).isEqualByComparingTo(DEFAULT_DISBURSEMENT_COST);
-        assertThat(testPaymentRequisition.getVatableAmount()).isEqualByComparingTo(DEFAULT_VATABLE_AMOUNT);
+        assertThat(testPaymentRequisition.getTaxableAmount()).isEqualByComparingTo(DEFAULT_TAXABLE_AMOUNT);
+        assertThat(testPaymentRequisition.getRequisitionProcessed()).isEqualTo(DEFAULT_REQUISITION_PROCESSED);
         assertThat(testPaymentRequisition.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
         assertThat(testPaymentRequisition.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
 
@@ -204,9 +236,14 @@ class PaymentRequisitionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentRequisition.getId().intValue())))
+            .andExpect(jsonPath("$.[*].receptionDate").value(hasItem(DEFAULT_RECEPTION_DATE.toString())))
+            .andExpect(jsonPath("$.[*].dealerName").value(hasItem(DEFAULT_DEALER_NAME)))
+            .andExpect(jsonPath("$.[*].briefDescription").value(hasItem(DEFAULT_BRIEF_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].requisitionNumber").value(hasItem(DEFAULT_REQUISITION_NUMBER)))
             .andExpect(jsonPath("$.[*].invoicedAmount").value(hasItem(sameNumber(DEFAULT_INVOICED_AMOUNT))))
             .andExpect(jsonPath("$.[*].disbursementCost").value(hasItem(sameNumber(DEFAULT_DISBURSEMENT_COST))))
-            .andExpect(jsonPath("$.[*].vatableAmount").value(hasItem(sameNumber(DEFAULT_VATABLE_AMOUNT))))
+            .andExpect(jsonPath("$.[*].taxableAmount").value(hasItem(sameNumber(DEFAULT_TAXABLE_AMOUNT))))
+            .andExpect(jsonPath("$.[*].requisitionProcessed").value(hasItem(DEFAULT_REQUISITION_PROCESSED.booleanValue())))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
             .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
@@ -241,9 +278,14 @@ class PaymentRequisitionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(paymentRequisition.getId().intValue()))
+            .andExpect(jsonPath("$.receptionDate").value(DEFAULT_RECEPTION_DATE.toString()))
+            .andExpect(jsonPath("$.dealerName").value(DEFAULT_DEALER_NAME))
+            .andExpect(jsonPath("$.briefDescription").value(DEFAULT_BRIEF_DESCRIPTION))
+            .andExpect(jsonPath("$.requisitionNumber").value(DEFAULT_REQUISITION_NUMBER))
             .andExpect(jsonPath("$.invoicedAmount").value(sameNumber(DEFAULT_INVOICED_AMOUNT)))
             .andExpect(jsonPath("$.disbursementCost").value(sameNumber(DEFAULT_DISBURSEMENT_COST)))
-            .andExpect(jsonPath("$.vatableAmount").value(sameNumber(DEFAULT_VATABLE_AMOUNT)))
+            .andExpect(jsonPath("$.taxableAmount").value(sameNumber(DEFAULT_TAXABLE_AMOUNT)))
+            .andExpect(jsonPath("$.requisitionProcessed").value(DEFAULT_REQUISITION_PROCESSED.booleanValue()))
             .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
             .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN));
     }
@@ -264,6 +306,344 @@ class PaymentRequisitionResourceIT {
 
         defaultPaymentRequisitionShouldBeFound("id.lessThanOrEqual=" + id);
         defaultPaymentRequisitionShouldNotBeFound("id.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByReceptionDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where receptionDate equals to DEFAULT_RECEPTION_DATE
+        defaultPaymentRequisitionShouldBeFound("receptionDate.equals=" + DEFAULT_RECEPTION_DATE);
+
+        // Get all the paymentRequisitionList where receptionDate equals to UPDATED_RECEPTION_DATE
+        defaultPaymentRequisitionShouldNotBeFound("receptionDate.equals=" + UPDATED_RECEPTION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByReceptionDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where receptionDate not equals to DEFAULT_RECEPTION_DATE
+        defaultPaymentRequisitionShouldNotBeFound("receptionDate.notEquals=" + DEFAULT_RECEPTION_DATE);
+
+        // Get all the paymentRequisitionList where receptionDate not equals to UPDATED_RECEPTION_DATE
+        defaultPaymentRequisitionShouldBeFound("receptionDate.notEquals=" + UPDATED_RECEPTION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByReceptionDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where receptionDate in DEFAULT_RECEPTION_DATE or UPDATED_RECEPTION_DATE
+        defaultPaymentRequisitionShouldBeFound("receptionDate.in=" + DEFAULT_RECEPTION_DATE + "," + UPDATED_RECEPTION_DATE);
+
+        // Get all the paymentRequisitionList where receptionDate equals to UPDATED_RECEPTION_DATE
+        defaultPaymentRequisitionShouldNotBeFound("receptionDate.in=" + UPDATED_RECEPTION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByReceptionDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where receptionDate is not null
+        defaultPaymentRequisitionShouldBeFound("receptionDate.specified=true");
+
+        // Get all the paymentRequisitionList where receptionDate is null
+        defaultPaymentRequisitionShouldNotBeFound("receptionDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByReceptionDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where receptionDate is greater than or equal to DEFAULT_RECEPTION_DATE
+        defaultPaymentRequisitionShouldBeFound("receptionDate.greaterThanOrEqual=" + DEFAULT_RECEPTION_DATE);
+
+        // Get all the paymentRequisitionList where receptionDate is greater than or equal to UPDATED_RECEPTION_DATE
+        defaultPaymentRequisitionShouldNotBeFound("receptionDate.greaterThanOrEqual=" + UPDATED_RECEPTION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByReceptionDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where receptionDate is less than or equal to DEFAULT_RECEPTION_DATE
+        defaultPaymentRequisitionShouldBeFound("receptionDate.lessThanOrEqual=" + DEFAULT_RECEPTION_DATE);
+
+        // Get all the paymentRequisitionList where receptionDate is less than or equal to SMALLER_RECEPTION_DATE
+        defaultPaymentRequisitionShouldNotBeFound("receptionDate.lessThanOrEqual=" + SMALLER_RECEPTION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByReceptionDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where receptionDate is less than DEFAULT_RECEPTION_DATE
+        defaultPaymentRequisitionShouldNotBeFound("receptionDate.lessThan=" + DEFAULT_RECEPTION_DATE);
+
+        // Get all the paymentRequisitionList where receptionDate is less than UPDATED_RECEPTION_DATE
+        defaultPaymentRequisitionShouldBeFound("receptionDate.lessThan=" + UPDATED_RECEPTION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByReceptionDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where receptionDate is greater than DEFAULT_RECEPTION_DATE
+        defaultPaymentRequisitionShouldNotBeFound("receptionDate.greaterThan=" + DEFAULT_RECEPTION_DATE);
+
+        // Get all the paymentRequisitionList where receptionDate is greater than SMALLER_RECEPTION_DATE
+        defaultPaymentRequisitionShouldBeFound("receptionDate.greaterThan=" + SMALLER_RECEPTION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByDealerNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where dealerName equals to DEFAULT_DEALER_NAME
+        defaultPaymentRequisitionShouldBeFound("dealerName.equals=" + DEFAULT_DEALER_NAME);
+
+        // Get all the paymentRequisitionList where dealerName equals to UPDATED_DEALER_NAME
+        defaultPaymentRequisitionShouldNotBeFound("dealerName.equals=" + UPDATED_DEALER_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByDealerNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where dealerName not equals to DEFAULT_DEALER_NAME
+        defaultPaymentRequisitionShouldNotBeFound("dealerName.notEquals=" + DEFAULT_DEALER_NAME);
+
+        // Get all the paymentRequisitionList where dealerName not equals to UPDATED_DEALER_NAME
+        defaultPaymentRequisitionShouldBeFound("dealerName.notEquals=" + UPDATED_DEALER_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByDealerNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where dealerName in DEFAULT_DEALER_NAME or UPDATED_DEALER_NAME
+        defaultPaymentRequisitionShouldBeFound("dealerName.in=" + DEFAULT_DEALER_NAME + "," + UPDATED_DEALER_NAME);
+
+        // Get all the paymentRequisitionList where dealerName equals to UPDATED_DEALER_NAME
+        defaultPaymentRequisitionShouldNotBeFound("dealerName.in=" + UPDATED_DEALER_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByDealerNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where dealerName is not null
+        defaultPaymentRequisitionShouldBeFound("dealerName.specified=true");
+
+        // Get all the paymentRequisitionList where dealerName is null
+        defaultPaymentRequisitionShouldNotBeFound("dealerName.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByDealerNameContainsSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where dealerName contains DEFAULT_DEALER_NAME
+        defaultPaymentRequisitionShouldBeFound("dealerName.contains=" + DEFAULT_DEALER_NAME);
+
+        // Get all the paymentRequisitionList where dealerName contains UPDATED_DEALER_NAME
+        defaultPaymentRequisitionShouldNotBeFound("dealerName.contains=" + UPDATED_DEALER_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByDealerNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where dealerName does not contain DEFAULT_DEALER_NAME
+        defaultPaymentRequisitionShouldNotBeFound("dealerName.doesNotContain=" + DEFAULT_DEALER_NAME);
+
+        // Get all the paymentRequisitionList where dealerName does not contain UPDATED_DEALER_NAME
+        defaultPaymentRequisitionShouldBeFound("dealerName.doesNotContain=" + UPDATED_DEALER_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByBriefDescriptionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where briefDescription equals to DEFAULT_BRIEF_DESCRIPTION
+        defaultPaymentRequisitionShouldBeFound("briefDescription.equals=" + DEFAULT_BRIEF_DESCRIPTION);
+
+        // Get all the paymentRequisitionList where briefDescription equals to UPDATED_BRIEF_DESCRIPTION
+        defaultPaymentRequisitionShouldNotBeFound("briefDescription.equals=" + UPDATED_BRIEF_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByBriefDescriptionIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where briefDescription not equals to DEFAULT_BRIEF_DESCRIPTION
+        defaultPaymentRequisitionShouldNotBeFound("briefDescription.notEquals=" + DEFAULT_BRIEF_DESCRIPTION);
+
+        // Get all the paymentRequisitionList where briefDescription not equals to UPDATED_BRIEF_DESCRIPTION
+        defaultPaymentRequisitionShouldBeFound("briefDescription.notEquals=" + UPDATED_BRIEF_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByBriefDescriptionIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where briefDescription in DEFAULT_BRIEF_DESCRIPTION or UPDATED_BRIEF_DESCRIPTION
+        defaultPaymentRequisitionShouldBeFound("briefDescription.in=" + DEFAULT_BRIEF_DESCRIPTION + "," + UPDATED_BRIEF_DESCRIPTION);
+
+        // Get all the paymentRequisitionList where briefDescription equals to UPDATED_BRIEF_DESCRIPTION
+        defaultPaymentRequisitionShouldNotBeFound("briefDescription.in=" + UPDATED_BRIEF_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByBriefDescriptionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where briefDescription is not null
+        defaultPaymentRequisitionShouldBeFound("briefDescription.specified=true");
+
+        // Get all the paymentRequisitionList where briefDescription is null
+        defaultPaymentRequisitionShouldNotBeFound("briefDescription.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByBriefDescriptionContainsSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where briefDescription contains DEFAULT_BRIEF_DESCRIPTION
+        defaultPaymentRequisitionShouldBeFound("briefDescription.contains=" + DEFAULT_BRIEF_DESCRIPTION);
+
+        // Get all the paymentRequisitionList where briefDescription contains UPDATED_BRIEF_DESCRIPTION
+        defaultPaymentRequisitionShouldNotBeFound("briefDescription.contains=" + UPDATED_BRIEF_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByBriefDescriptionNotContainsSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where briefDescription does not contain DEFAULT_BRIEF_DESCRIPTION
+        defaultPaymentRequisitionShouldNotBeFound("briefDescription.doesNotContain=" + DEFAULT_BRIEF_DESCRIPTION);
+
+        // Get all the paymentRequisitionList where briefDescription does not contain UPDATED_BRIEF_DESCRIPTION
+        defaultPaymentRequisitionShouldBeFound("briefDescription.doesNotContain=" + UPDATED_BRIEF_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByRequisitionNumberIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where requisitionNumber equals to DEFAULT_REQUISITION_NUMBER
+        defaultPaymentRequisitionShouldBeFound("requisitionNumber.equals=" + DEFAULT_REQUISITION_NUMBER);
+
+        // Get all the paymentRequisitionList where requisitionNumber equals to UPDATED_REQUISITION_NUMBER
+        defaultPaymentRequisitionShouldNotBeFound("requisitionNumber.equals=" + UPDATED_REQUISITION_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByRequisitionNumberIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where requisitionNumber not equals to DEFAULT_REQUISITION_NUMBER
+        defaultPaymentRequisitionShouldNotBeFound("requisitionNumber.notEquals=" + DEFAULT_REQUISITION_NUMBER);
+
+        // Get all the paymentRequisitionList where requisitionNumber not equals to UPDATED_REQUISITION_NUMBER
+        defaultPaymentRequisitionShouldBeFound("requisitionNumber.notEquals=" + UPDATED_REQUISITION_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByRequisitionNumberIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where requisitionNumber in DEFAULT_REQUISITION_NUMBER or UPDATED_REQUISITION_NUMBER
+        defaultPaymentRequisitionShouldBeFound("requisitionNumber.in=" + DEFAULT_REQUISITION_NUMBER + "," + UPDATED_REQUISITION_NUMBER);
+
+        // Get all the paymentRequisitionList where requisitionNumber equals to UPDATED_REQUISITION_NUMBER
+        defaultPaymentRequisitionShouldNotBeFound("requisitionNumber.in=" + UPDATED_REQUISITION_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByRequisitionNumberIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where requisitionNumber is not null
+        defaultPaymentRequisitionShouldBeFound("requisitionNumber.specified=true");
+
+        // Get all the paymentRequisitionList where requisitionNumber is null
+        defaultPaymentRequisitionShouldNotBeFound("requisitionNumber.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByRequisitionNumberContainsSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where requisitionNumber contains DEFAULT_REQUISITION_NUMBER
+        defaultPaymentRequisitionShouldBeFound("requisitionNumber.contains=" + DEFAULT_REQUISITION_NUMBER);
+
+        // Get all the paymentRequisitionList where requisitionNumber contains UPDATED_REQUISITION_NUMBER
+        defaultPaymentRequisitionShouldNotBeFound("requisitionNumber.contains=" + UPDATED_REQUISITION_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByRequisitionNumberNotContainsSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where requisitionNumber does not contain DEFAULT_REQUISITION_NUMBER
+        defaultPaymentRequisitionShouldNotBeFound("requisitionNumber.doesNotContain=" + DEFAULT_REQUISITION_NUMBER);
+
+        // Get all the paymentRequisitionList where requisitionNumber does not contain UPDATED_REQUISITION_NUMBER
+        defaultPaymentRequisitionShouldBeFound("requisitionNumber.doesNotContain=" + UPDATED_REQUISITION_NUMBER);
     }
 
     @Test
@@ -476,106 +856,160 @@ class PaymentRequisitionResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentRequisitionsByVatableAmountIsEqualToSomething() throws Exception {
+    void getAllPaymentRequisitionsByTaxableAmountIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentRequisitionRepository.saveAndFlush(paymentRequisition);
 
-        // Get all the paymentRequisitionList where vatableAmount equals to DEFAULT_VATABLE_AMOUNT
-        defaultPaymentRequisitionShouldBeFound("vatableAmount.equals=" + DEFAULT_VATABLE_AMOUNT);
+        // Get all the paymentRequisitionList where taxableAmount equals to DEFAULT_TAXABLE_AMOUNT
+        defaultPaymentRequisitionShouldBeFound("taxableAmount.equals=" + DEFAULT_TAXABLE_AMOUNT);
 
-        // Get all the paymentRequisitionList where vatableAmount equals to UPDATED_VATABLE_AMOUNT
-        defaultPaymentRequisitionShouldNotBeFound("vatableAmount.equals=" + UPDATED_VATABLE_AMOUNT);
+        // Get all the paymentRequisitionList where taxableAmount equals to UPDATED_TAXABLE_AMOUNT
+        defaultPaymentRequisitionShouldNotBeFound("taxableAmount.equals=" + UPDATED_TAXABLE_AMOUNT);
     }
 
     @Test
     @Transactional
-    void getAllPaymentRequisitionsByVatableAmountIsNotEqualToSomething() throws Exception {
+    void getAllPaymentRequisitionsByTaxableAmountIsNotEqualToSomething() throws Exception {
         // Initialize the database
         paymentRequisitionRepository.saveAndFlush(paymentRequisition);
 
-        // Get all the paymentRequisitionList where vatableAmount not equals to DEFAULT_VATABLE_AMOUNT
-        defaultPaymentRequisitionShouldNotBeFound("vatableAmount.notEquals=" + DEFAULT_VATABLE_AMOUNT);
+        // Get all the paymentRequisitionList where taxableAmount not equals to DEFAULT_TAXABLE_AMOUNT
+        defaultPaymentRequisitionShouldNotBeFound("taxableAmount.notEquals=" + DEFAULT_TAXABLE_AMOUNT);
 
-        // Get all the paymentRequisitionList where vatableAmount not equals to UPDATED_VATABLE_AMOUNT
-        defaultPaymentRequisitionShouldBeFound("vatableAmount.notEquals=" + UPDATED_VATABLE_AMOUNT);
+        // Get all the paymentRequisitionList where taxableAmount not equals to UPDATED_TAXABLE_AMOUNT
+        defaultPaymentRequisitionShouldBeFound("taxableAmount.notEquals=" + UPDATED_TAXABLE_AMOUNT);
     }
 
     @Test
     @Transactional
-    void getAllPaymentRequisitionsByVatableAmountIsInShouldWork() throws Exception {
+    void getAllPaymentRequisitionsByTaxableAmountIsInShouldWork() throws Exception {
         // Initialize the database
         paymentRequisitionRepository.saveAndFlush(paymentRequisition);
 
-        // Get all the paymentRequisitionList where vatableAmount in DEFAULT_VATABLE_AMOUNT or UPDATED_VATABLE_AMOUNT
-        defaultPaymentRequisitionShouldBeFound("vatableAmount.in=" + DEFAULT_VATABLE_AMOUNT + "," + UPDATED_VATABLE_AMOUNT);
+        // Get all the paymentRequisitionList where taxableAmount in DEFAULT_TAXABLE_AMOUNT or UPDATED_TAXABLE_AMOUNT
+        defaultPaymentRequisitionShouldBeFound("taxableAmount.in=" + DEFAULT_TAXABLE_AMOUNT + "," + UPDATED_TAXABLE_AMOUNT);
 
-        // Get all the paymentRequisitionList where vatableAmount equals to UPDATED_VATABLE_AMOUNT
-        defaultPaymentRequisitionShouldNotBeFound("vatableAmount.in=" + UPDATED_VATABLE_AMOUNT);
+        // Get all the paymentRequisitionList where taxableAmount equals to UPDATED_TAXABLE_AMOUNT
+        defaultPaymentRequisitionShouldNotBeFound("taxableAmount.in=" + UPDATED_TAXABLE_AMOUNT);
     }
 
     @Test
     @Transactional
-    void getAllPaymentRequisitionsByVatableAmountIsNullOrNotNull() throws Exception {
+    void getAllPaymentRequisitionsByTaxableAmountIsNullOrNotNull() throws Exception {
         // Initialize the database
         paymentRequisitionRepository.saveAndFlush(paymentRequisition);
 
-        // Get all the paymentRequisitionList where vatableAmount is not null
-        defaultPaymentRequisitionShouldBeFound("vatableAmount.specified=true");
+        // Get all the paymentRequisitionList where taxableAmount is not null
+        defaultPaymentRequisitionShouldBeFound("taxableAmount.specified=true");
 
-        // Get all the paymentRequisitionList where vatableAmount is null
-        defaultPaymentRequisitionShouldNotBeFound("vatableAmount.specified=false");
+        // Get all the paymentRequisitionList where taxableAmount is null
+        defaultPaymentRequisitionShouldNotBeFound("taxableAmount.specified=false");
     }
 
     @Test
     @Transactional
-    void getAllPaymentRequisitionsByVatableAmountIsGreaterThanOrEqualToSomething() throws Exception {
+    void getAllPaymentRequisitionsByTaxableAmountIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         paymentRequisitionRepository.saveAndFlush(paymentRequisition);
 
-        // Get all the paymentRequisitionList where vatableAmount is greater than or equal to DEFAULT_VATABLE_AMOUNT
-        defaultPaymentRequisitionShouldBeFound("vatableAmount.greaterThanOrEqual=" + DEFAULT_VATABLE_AMOUNT);
+        // Get all the paymentRequisitionList where taxableAmount is greater than or equal to DEFAULT_TAXABLE_AMOUNT
+        defaultPaymentRequisitionShouldBeFound("taxableAmount.greaterThanOrEqual=" + DEFAULT_TAXABLE_AMOUNT);
 
-        // Get all the paymentRequisitionList where vatableAmount is greater than or equal to UPDATED_VATABLE_AMOUNT
-        defaultPaymentRequisitionShouldNotBeFound("vatableAmount.greaterThanOrEqual=" + UPDATED_VATABLE_AMOUNT);
+        // Get all the paymentRequisitionList where taxableAmount is greater than or equal to UPDATED_TAXABLE_AMOUNT
+        defaultPaymentRequisitionShouldNotBeFound("taxableAmount.greaterThanOrEqual=" + UPDATED_TAXABLE_AMOUNT);
     }
 
     @Test
     @Transactional
-    void getAllPaymentRequisitionsByVatableAmountIsLessThanOrEqualToSomething() throws Exception {
+    void getAllPaymentRequisitionsByTaxableAmountIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
         paymentRequisitionRepository.saveAndFlush(paymentRequisition);
 
-        // Get all the paymentRequisitionList where vatableAmount is less than or equal to DEFAULT_VATABLE_AMOUNT
-        defaultPaymentRequisitionShouldBeFound("vatableAmount.lessThanOrEqual=" + DEFAULT_VATABLE_AMOUNT);
+        // Get all the paymentRequisitionList where taxableAmount is less than or equal to DEFAULT_TAXABLE_AMOUNT
+        defaultPaymentRequisitionShouldBeFound("taxableAmount.lessThanOrEqual=" + DEFAULT_TAXABLE_AMOUNT);
 
-        // Get all the paymentRequisitionList where vatableAmount is less than or equal to SMALLER_VATABLE_AMOUNT
-        defaultPaymentRequisitionShouldNotBeFound("vatableAmount.lessThanOrEqual=" + SMALLER_VATABLE_AMOUNT);
+        // Get all the paymentRequisitionList where taxableAmount is less than or equal to SMALLER_TAXABLE_AMOUNT
+        defaultPaymentRequisitionShouldNotBeFound("taxableAmount.lessThanOrEqual=" + SMALLER_TAXABLE_AMOUNT);
     }
 
     @Test
     @Transactional
-    void getAllPaymentRequisitionsByVatableAmountIsLessThanSomething() throws Exception {
+    void getAllPaymentRequisitionsByTaxableAmountIsLessThanSomething() throws Exception {
         // Initialize the database
         paymentRequisitionRepository.saveAndFlush(paymentRequisition);
 
-        // Get all the paymentRequisitionList where vatableAmount is less than DEFAULT_VATABLE_AMOUNT
-        defaultPaymentRequisitionShouldNotBeFound("vatableAmount.lessThan=" + DEFAULT_VATABLE_AMOUNT);
+        // Get all the paymentRequisitionList where taxableAmount is less than DEFAULT_TAXABLE_AMOUNT
+        defaultPaymentRequisitionShouldNotBeFound("taxableAmount.lessThan=" + DEFAULT_TAXABLE_AMOUNT);
 
-        // Get all the paymentRequisitionList where vatableAmount is less than UPDATED_VATABLE_AMOUNT
-        defaultPaymentRequisitionShouldBeFound("vatableAmount.lessThan=" + UPDATED_VATABLE_AMOUNT);
+        // Get all the paymentRequisitionList where taxableAmount is less than UPDATED_TAXABLE_AMOUNT
+        defaultPaymentRequisitionShouldBeFound("taxableAmount.lessThan=" + UPDATED_TAXABLE_AMOUNT);
     }
 
     @Test
     @Transactional
-    void getAllPaymentRequisitionsByVatableAmountIsGreaterThanSomething() throws Exception {
+    void getAllPaymentRequisitionsByTaxableAmountIsGreaterThanSomething() throws Exception {
         // Initialize the database
         paymentRequisitionRepository.saveAndFlush(paymentRequisition);
 
-        // Get all the paymentRequisitionList where vatableAmount is greater than DEFAULT_VATABLE_AMOUNT
-        defaultPaymentRequisitionShouldNotBeFound("vatableAmount.greaterThan=" + DEFAULT_VATABLE_AMOUNT);
+        // Get all the paymentRequisitionList where taxableAmount is greater than DEFAULT_TAXABLE_AMOUNT
+        defaultPaymentRequisitionShouldNotBeFound("taxableAmount.greaterThan=" + DEFAULT_TAXABLE_AMOUNT);
 
-        // Get all the paymentRequisitionList where vatableAmount is greater than SMALLER_VATABLE_AMOUNT
-        defaultPaymentRequisitionShouldBeFound("vatableAmount.greaterThan=" + SMALLER_VATABLE_AMOUNT);
+        // Get all the paymentRequisitionList where taxableAmount is greater than SMALLER_TAXABLE_AMOUNT
+        defaultPaymentRequisitionShouldBeFound("taxableAmount.greaterThan=" + SMALLER_TAXABLE_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByRequisitionProcessedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where requisitionProcessed equals to DEFAULT_REQUISITION_PROCESSED
+        defaultPaymentRequisitionShouldBeFound("requisitionProcessed.equals=" + DEFAULT_REQUISITION_PROCESSED);
+
+        // Get all the paymentRequisitionList where requisitionProcessed equals to UPDATED_REQUISITION_PROCESSED
+        defaultPaymentRequisitionShouldNotBeFound("requisitionProcessed.equals=" + UPDATED_REQUISITION_PROCESSED);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByRequisitionProcessedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where requisitionProcessed not equals to DEFAULT_REQUISITION_PROCESSED
+        defaultPaymentRequisitionShouldNotBeFound("requisitionProcessed.notEquals=" + DEFAULT_REQUISITION_PROCESSED);
+
+        // Get all the paymentRequisitionList where requisitionProcessed not equals to UPDATED_REQUISITION_PROCESSED
+        defaultPaymentRequisitionShouldBeFound("requisitionProcessed.notEquals=" + UPDATED_REQUISITION_PROCESSED);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByRequisitionProcessedIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where requisitionProcessed in DEFAULT_REQUISITION_PROCESSED or UPDATED_REQUISITION_PROCESSED
+        defaultPaymentRequisitionShouldBeFound(
+            "requisitionProcessed.in=" + DEFAULT_REQUISITION_PROCESSED + "," + UPDATED_REQUISITION_PROCESSED
+        );
+
+        // Get all the paymentRequisitionList where requisitionProcessed equals to UPDATED_REQUISITION_PROCESSED
+        defaultPaymentRequisitionShouldNotBeFound("requisitionProcessed.in=" + UPDATED_REQUISITION_PROCESSED);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentRequisitionsByRequisitionProcessedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
+
+        // Get all the paymentRequisitionList where requisitionProcessed is not null
+        defaultPaymentRequisitionShouldBeFound("requisitionProcessed.specified=true");
+
+        // Get all the paymentRequisitionList where requisitionProcessed is null
+        defaultPaymentRequisitionShouldNotBeFound("requisitionProcessed.specified=false");
     }
 
     @Test
@@ -762,32 +1196,6 @@ class PaymentRequisitionResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentRequisitionsByDealerIsEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
-        Dealer dealer;
-        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            dealer = DealerResourceIT.createEntity(em);
-            em.persist(dealer);
-            em.flush();
-        } else {
-            dealer = TestUtil.findAll(em, Dealer.class).get(0);
-        }
-        em.persist(dealer);
-        em.flush();
-        paymentRequisition.setDealer(dealer);
-        paymentRequisitionRepository.saveAndFlush(paymentRequisition);
-        Long dealerId = dealer.getId();
-
-        // Get all the paymentRequisitionList where dealer equals to dealerId
-        defaultPaymentRequisitionShouldBeFound("dealerId.equals=" + dealerId);
-
-        // Get all the paymentRequisitionList where dealer equals to (dealerId + 1)
-        defaultPaymentRequisitionShouldNotBeFound("dealerId.equals=" + (dealerId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllPaymentRequisitionsByPlaceholderIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentRequisitionRepository.saveAndFlush(paymentRequisition);
@@ -821,9 +1229,14 @@ class PaymentRequisitionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentRequisition.getId().intValue())))
+            .andExpect(jsonPath("$.[*].receptionDate").value(hasItem(DEFAULT_RECEPTION_DATE.toString())))
+            .andExpect(jsonPath("$.[*].dealerName").value(hasItem(DEFAULT_DEALER_NAME)))
+            .andExpect(jsonPath("$.[*].briefDescription").value(hasItem(DEFAULT_BRIEF_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].requisitionNumber").value(hasItem(DEFAULT_REQUISITION_NUMBER)))
             .andExpect(jsonPath("$.[*].invoicedAmount").value(hasItem(sameNumber(DEFAULT_INVOICED_AMOUNT))))
             .andExpect(jsonPath("$.[*].disbursementCost").value(hasItem(sameNumber(DEFAULT_DISBURSEMENT_COST))))
-            .andExpect(jsonPath("$.[*].vatableAmount").value(hasItem(sameNumber(DEFAULT_VATABLE_AMOUNT))))
+            .andExpect(jsonPath("$.[*].taxableAmount").value(hasItem(sameNumber(DEFAULT_TAXABLE_AMOUNT))))
+            .andExpect(jsonPath("$.[*].requisitionProcessed").value(hasItem(DEFAULT_REQUISITION_PROCESSED.booleanValue())))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
             .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
 
@@ -874,9 +1287,14 @@ class PaymentRequisitionResourceIT {
         // Disconnect from session so that the updates on updatedPaymentRequisition are not directly saved in db
         em.detach(updatedPaymentRequisition);
         updatedPaymentRequisition
+            .receptionDate(UPDATED_RECEPTION_DATE)
+            .dealerName(UPDATED_DEALER_NAME)
+            .briefDescription(UPDATED_BRIEF_DESCRIPTION)
+            .requisitionNumber(UPDATED_REQUISITION_NUMBER)
             .invoicedAmount(UPDATED_INVOICED_AMOUNT)
             .disbursementCost(UPDATED_DISBURSEMENT_COST)
-            .vatableAmount(UPDATED_VATABLE_AMOUNT)
+            .taxableAmount(UPDATED_TAXABLE_AMOUNT)
+            .requisitionProcessed(UPDATED_REQUISITION_PROCESSED)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
             .compilationToken(UPDATED_COMPILATION_TOKEN);
         PaymentRequisitionDTO paymentRequisitionDTO = paymentRequisitionMapper.toDto(updatedPaymentRequisition);
@@ -893,9 +1311,14 @@ class PaymentRequisitionResourceIT {
         List<PaymentRequisition> paymentRequisitionList = paymentRequisitionRepository.findAll();
         assertThat(paymentRequisitionList).hasSize(databaseSizeBeforeUpdate);
         PaymentRequisition testPaymentRequisition = paymentRequisitionList.get(paymentRequisitionList.size() - 1);
+        assertThat(testPaymentRequisition.getReceptionDate()).isEqualTo(UPDATED_RECEPTION_DATE);
+        assertThat(testPaymentRequisition.getDealerName()).isEqualTo(UPDATED_DEALER_NAME);
+        assertThat(testPaymentRequisition.getBriefDescription()).isEqualTo(UPDATED_BRIEF_DESCRIPTION);
+        assertThat(testPaymentRequisition.getRequisitionNumber()).isEqualTo(UPDATED_REQUISITION_NUMBER);
         assertThat(testPaymentRequisition.getInvoicedAmount()).isEqualTo(UPDATED_INVOICED_AMOUNT);
         assertThat(testPaymentRequisition.getDisbursementCost()).isEqualTo(UPDATED_DISBURSEMENT_COST);
-        assertThat(testPaymentRequisition.getVatableAmount()).isEqualTo(UPDATED_VATABLE_AMOUNT);
+        assertThat(testPaymentRequisition.getTaxableAmount()).isEqualTo(UPDATED_TAXABLE_AMOUNT);
+        assertThat(testPaymentRequisition.getRequisitionProcessed()).isEqualTo(UPDATED_REQUISITION_PROCESSED);
         assertThat(testPaymentRequisition.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
         assertThat(testPaymentRequisition.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
 
@@ -994,11 +1417,14 @@ class PaymentRequisitionResourceIT {
         partialUpdatedPaymentRequisition.setId(paymentRequisition.getId());
 
         partialUpdatedPaymentRequisition
+            .receptionDate(UPDATED_RECEPTION_DATE)
+            .dealerName(UPDATED_DEALER_NAME)
+            .briefDescription(UPDATED_BRIEF_DESCRIPTION)
+            .requisitionNumber(UPDATED_REQUISITION_NUMBER)
             .invoicedAmount(UPDATED_INVOICED_AMOUNT)
             .disbursementCost(UPDATED_DISBURSEMENT_COST)
-            .vatableAmount(UPDATED_VATABLE_AMOUNT)
-            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
-            .compilationToken(UPDATED_COMPILATION_TOKEN);
+            .requisitionProcessed(UPDATED_REQUISITION_PROCESSED)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN);
 
         restPaymentRequisitionMockMvc
             .perform(
@@ -1012,11 +1438,16 @@ class PaymentRequisitionResourceIT {
         List<PaymentRequisition> paymentRequisitionList = paymentRequisitionRepository.findAll();
         assertThat(paymentRequisitionList).hasSize(databaseSizeBeforeUpdate);
         PaymentRequisition testPaymentRequisition = paymentRequisitionList.get(paymentRequisitionList.size() - 1);
+        assertThat(testPaymentRequisition.getReceptionDate()).isEqualTo(UPDATED_RECEPTION_DATE);
+        assertThat(testPaymentRequisition.getDealerName()).isEqualTo(UPDATED_DEALER_NAME);
+        assertThat(testPaymentRequisition.getBriefDescription()).isEqualTo(UPDATED_BRIEF_DESCRIPTION);
+        assertThat(testPaymentRequisition.getRequisitionNumber()).isEqualTo(UPDATED_REQUISITION_NUMBER);
         assertThat(testPaymentRequisition.getInvoicedAmount()).isEqualByComparingTo(UPDATED_INVOICED_AMOUNT);
         assertThat(testPaymentRequisition.getDisbursementCost()).isEqualByComparingTo(UPDATED_DISBURSEMENT_COST);
-        assertThat(testPaymentRequisition.getVatableAmount()).isEqualByComparingTo(UPDATED_VATABLE_AMOUNT);
+        assertThat(testPaymentRequisition.getTaxableAmount()).isEqualByComparingTo(DEFAULT_TAXABLE_AMOUNT);
+        assertThat(testPaymentRequisition.getRequisitionProcessed()).isEqualTo(UPDATED_REQUISITION_PROCESSED);
         assertThat(testPaymentRequisition.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
-        assertThat(testPaymentRequisition.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
+        assertThat(testPaymentRequisition.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
     }
 
     @Test
@@ -1032,9 +1463,14 @@ class PaymentRequisitionResourceIT {
         partialUpdatedPaymentRequisition.setId(paymentRequisition.getId());
 
         partialUpdatedPaymentRequisition
+            .receptionDate(UPDATED_RECEPTION_DATE)
+            .dealerName(UPDATED_DEALER_NAME)
+            .briefDescription(UPDATED_BRIEF_DESCRIPTION)
+            .requisitionNumber(UPDATED_REQUISITION_NUMBER)
             .invoicedAmount(UPDATED_INVOICED_AMOUNT)
             .disbursementCost(UPDATED_DISBURSEMENT_COST)
-            .vatableAmount(UPDATED_VATABLE_AMOUNT)
+            .taxableAmount(UPDATED_TAXABLE_AMOUNT)
+            .requisitionProcessed(UPDATED_REQUISITION_PROCESSED)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
             .compilationToken(UPDATED_COMPILATION_TOKEN);
 
@@ -1050,9 +1486,14 @@ class PaymentRequisitionResourceIT {
         List<PaymentRequisition> paymentRequisitionList = paymentRequisitionRepository.findAll();
         assertThat(paymentRequisitionList).hasSize(databaseSizeBeforeUpdate);
         PaymentRequisition testPaymentRequisition = paymentRequisitionList.get(paymentRequisitionList.size() - 1);
+        assertThat(testPaymentRequisition.getReceptionDate()).isEqualTo(UPDATED_RECEPTION_DATE);
+        assertThat(testPaymentRequisition.getDealerName()).isEqualTo(UPDATED_DEALER_NAME);
+        assertThat(testPaymentRequisition.getBriefDescription()).isEqualTo(UPDATED_BRIEF_DESCRIPTION);
+        assertThat(testPaymentRequisition.getRequisitionNumber()).isEqualTo(UPDATED_REQUISITION_NUMBER);
         assertThat(testPaymentRequisition.getInvoicedAmount()).isEqualByComparingTo(UPDATED_INVOICED_AMOUNT);
         assertThat(testPaymentRequisition.getDisbursementCost()).isEqualByComparingTo(UPDATED_DISBURSEMENT_COST);
-        assertThat(testPaymentRequisition.getVatableAmount()).isEqualByComparingTo(UPDATED_VATABLE_AMOUNT);
+        assertThat(testPaymentRequisition.getTaxableAmount()).isEqualByComparingTo(UPDATED_TAXABLE_AMOUNT);
+        assertThat(testPaymentRequisition.getRequisitionProcessed()).isEqualTo(UPDATED_REQUISITION_PROCESSED);
         assertThat(testPaymentRequisition.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
         assertThat(testPaymentRequisition.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
@@ -1171,9 +1612,14 @@ class PaymentRequisitionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentRequisition.getId().intValue())))
+            .andExpect(jsonPath("$.[*].receptionDate").value(hasItem(DEFAULT_RECEPTION_DATE.toString())))
+            .andExpect(jsonPath("$.[*].dealerName").value(hasItem(DEFAULT_DEALER_NAME)))
+            .andExpect(jsonPath("$.[*].briefDescription").value(hasItem(DEFAULT_BRIEF_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].requisitionNumber").value(hasItem(DEFAULT_REQUISITION_NUMBER)))
             .andExpect(jsonPath("$.[*].invoicedAmount").value(hasItem(sameNumber(DEFAULT_INVOICED_AMOUNT))))
             .andExpect(jsonPath("$.[*].disbursementCost").value(hasItem(sameNumber(DEFAULT_DISBURSEMENT_COST))))
-            .andExpect(jsonPath("$.[*].vatableAmount").value(hasItem(sameNumber(DEFAULT_VATABLE_AMOUNT))))
+            .andExpect(jsonPath("$.[*].taxableAmount").value(hasItem(sameNumber(DEFAULT_TAXABLE_AMOUNT))))
+            .andExpect(jsonPath("$.[*].requisitionProcessed").value(hasItem(DEFAULT_REQUISITION_PROCESSED.booleanValue())))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
             .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }

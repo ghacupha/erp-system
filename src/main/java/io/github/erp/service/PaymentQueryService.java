@@ -116,8 +116,8 @@ public class PaymentQueryService extends QueryService<Payment> {
             if (criteria.getSettlementCurrency() != null) {
                 specification = specification.and(buildSpecification(criteria.getSettlementCurrency(), Payment_.settlementCurrency));
             }
-            if (criteria.getDealerId() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getDealerId(), Payment_.dealerId));
+            if (criteria.getDealerName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDealerName(), Payment_.dealerName));
             }
             if (criteria.getFileUploadToken() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getFileUploadToken(), Payment_.fileUploadToken));

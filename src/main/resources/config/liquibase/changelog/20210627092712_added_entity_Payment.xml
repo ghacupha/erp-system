@@ -38,7 +38,7 @@
             <column name="calculation_file_content_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="dealer_id" type="bigint">
+            <column name="dealer_name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="file_upload_token" type="varchar(255)">
@@ -107,7 +107,7 @@
             <column name="settlement_currency" type="string"/>
             <column name="calculation_file" type="blob"/>
             <column name="calculation_file_content_type" type="string"/>
-            <column name="dealer_id" type="numeric"/>
+            <column name="dealer_name" type="string"/>
             <column name="file_upload_token" type="string"/>
             <column name="compilation_token" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->

@@ -79,9 +79,8 @@ class PaymentResourceIT {
     private static final String DEFAULT_CALCULATION_FILE_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_CALCULATION_FILE_CONTENT_TYPE = "image/png";
 
-    private static final Long DEFAULT_DEALER_ID = 1L;
-    private static final Long UPDATED_DEALER_ID = 2L;
-    private static final Long SMALLER_DEALER_ID = 1L - 1L;
+    private static final String DEFAULT_DEALER_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_DEALER_NAME = "BBBBBBBBBB";
 
     private static final String DEFAULT_FILE_UPLOAD_TOKEN = "AAAAAAAAAA";
     private static final String UPDATED_FILE_UPLOAD_TOKEN = "BBBBBBBBBB";
@@ -140,7 +139,7 @@ class PaymentResourceIT {
             .settlementCurrency(DEFAULT_SETTLEMENT_CURRENCY)
             .calculationFile(DEFAULT_CALCULATION_FILE)
             .calculationFileContentType(DEFAULT_CALCULATION_FILE_CONTENT_TYPE)
-            .dealerId(DEFAULT_DEALER_ID)
+            .dealerName(DEFAULT_DEALER_NAME)
             .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
             .compilationToken(DEFAULT_COMPILATION_TOKEN);
         return payment;
@@ -162,7 +161,7 @@ class PaymentResourceIT {
             .settlementCurrency(UPDATED_SETTLEMENT_CURRENCY)
             .calculationFile(UPDATED_CALCULATION_FILE)
             .calculationFileContentType(UPDATED_CALCULATION_FILE_CONTENT_TYPE)
-            .dealerId(UPDATED_DEALER_ID)
+            .dealerName(UPDATED_DEALER_NAME)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
             .compilationToken(UPDATED_COMPILATION_TOKEN);
         return payment;
@@ -195,7 +194,7 @@ class PaymentResourceIT {
         assertThat(testPayment.getSettlementCurrency()).isEqualTo(DEFAULT_SETTLEMENT_CURRENCY);
         assertThat(testPayment.getCalculationFile()).isEqualTo(DEFAULT_CALCULATION_FILE);
         assertThat(testPayment.getCalculationFileContentType()).isEqualTo(DEFAULT_CALCULATION_FILE_CONTENT_TYPE);
-        assertThat(testPayment.getDealerId()).isEqualTo(DEFAULT_DEALER_ID);
+        assertThat(testPayment.getDealerName()).isEqualTo(DEFAULT_DEALER_NAME);
         assertThat(testPayment.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
         assertThat(testPayment.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
 
@@ -263,7 +262,7 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].settlementCurrency").value(hasItem(DEFAULT_SETTLEMENT_CURRENCY.toString())))
             .andExpect(jsonPath("$.[*].calculationFileContentType").value(hasItem(DEFAULT_CALCULATION_FILE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].calculationFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_CALCULATION_FILE))))
-            .andExpect(jsonPath("$.[*].dealerId").value(hasItem(DEFAULT_DEALER_ID.intValue())))
+            .andExpect(jsonPath("$.[*].dealerName").value(hasItem(DEFAULT_DEALER_NAME)))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
             .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
@@ -306,7 +305,7 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.settlementCurrency").value(DEFAULT_SETTLEMENT_CURRENCY.toString()))
             .andExpect(jsonPath("$.calculationFileContentType").value(DEFAULT_CALCULATION_FILE_CONTENT_TYPE))
             .andExpect(jsonPath("$.calculationFile").value(Base64Utils.encodeToString(DEFAULT_CALCULATION_FILE)))
-            .andExpect(jsonPath("$.dealerId").value(DEFAULT_DEALER_ID.intValue()))
+            .andExpect(jsonPath("$.dealerName").value(DEFAULT_DEALER_NAME))
             .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
             .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN));
     }
@@ -851,106 +850,80 @@ class PaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentsByDealerIdIsEqualToSomething() throws Exception {
+    void getAllPaymentsByDealerNameIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
-        // Get all the paymentList where dealerId equals to DEFAULT_DEALER_ID
-        defaultPaymentShouldBeFound("dealerId.equals=" + DEFAULT_DEALER_ID);
+        // Get all the paymentList where dealerName equals to DEFAULT_DEALER_NAME
+        defaultPaymentShouldBeFound("dealerName.equals=" + DEFAULT_DEALER_NAME);
 
-        // Get all the paymentList where dealerId equals to UPDATED_DEALER_ID
-        defaultPaymentShouldNotBeFound("dealerId.equals=" + UPDATED_DEALER_ID);
+        // Get all the paymentList where dealerName equals to UPDATED_DEALER_NAME
+        defaultPaymentShouldNotBeFound("dealerName.equals=" + UPDATED_DEALER_NAME);
     }
 
     @Test
     @Transactional
-    void getAllPaymentsByDealerIdIsNotEqualToSomething() throws Exception {
+    void getAllPaymentsByDealerNameIsNotEqualToSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
-        // Get all the paymentList where dealerId not equals to DEFAULT_DEALER_ID
-        defaultPaymentShouldNotBeFound("dealerId.notEquals=" + DEFAULT_DEALER_ID);
+        // Get all the paymentList where dealerName not equals to DEFAULT_DEALER_NAME
+        defaultPaymentShouldNotBeFound("dealerName.notEquals=" + DEFAULT_DEALER_NAME);
 
-        // Get all the paymentList where dealerId not equals to UPDATED_DEALER_ID
-        defaultPaymentShouldBeFound("dealerId.notEquals=" + UPDATED_DEALER_ID);
+        // Get all the paymentList where dealerName not equals to UPDATED_DEALER_NAME
+        defaultPaymentShouldBeFound("dealerName.notEquals=" + UPDATED_DEALER_NAME);
     }
 
     @Test
     @Transactional
-    void getAllPaymentsByDealerIdIsInShouldWork() throws Exception {
+    void getAllPaymentsByDealerNameIsInShouldWork() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
-        // Get all the paymentList where dealerId in DEFAULT_DEALER_ID or UPDATED_DEALER_ID
-        defaultPaymentShouldBeFound("dealerId.in=" + DEFAULT_DEALER_ID + "," + UPDATED_DEALER_ID);
+        // Get all the paymentList where dealerName in DEFAULT_DEALER_NAME or UPDATED_DEALER_NAME
+        defaultPaymentShouldBeFound("dealerName.in=" + DEFAULT_DEALER_NAME + "," + UPDATED_DEALER_NAME);
 
-        // Get all the paymentList where dealerId equals to UPDATED_DEALER_ID
-        defaultPaymentShouldNotBeFound("dealerId.in=" + UPDATED_DEALER_ID);
+        // Get all the paymentList where dealerName equals to UPDATED_DEALER_NAME
+        defaultPaymentShouldNotBeFound("dealerName.in=" + UPDATED_DEALER_NAME);
     }
 
     @Test
     @Transactional
-    void getAllPaymentsByDealerIdIsNullOrNotNull() throws Exception {
+    void getAllPaymentsByDealerNameIsNullOrNotNull() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
-        // Get all the paymentList where dealerId is not null
-        defaultPaymentShouldBeFound("dealerId.specified=true");
+        // Get all the paymentList where dealerName is not null
+        defaultPaymentShouldBeFound("dealerName.specified=true");
 
-        // Get all the paymentList where dealerId is null
-        defaultPaymentShouldNotBeFound("dealerId.specified=false");
+        // Get all the paymentList where dealerName is null
+        defaultPaymentShouldNotBeFound("dealerName.specified=false");
     }
 
     @Test
     @Transactional
-    void getAllPaymentsByDealerIdIsGreaterThanOrEqualToSomething() throws Exception {
+    void getAllPaymentsByDealerNameContainsSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
-        // Get all the paymentList where dealerId is greater than or equal to DEFAULT_DEALER_ID
-        defaultPaymentShouldBeFound("dealerId.greaterThanOrEqual=" + DEFAULT_DEALER_ID);
+        // Get all the paymentList where dealerName contains DEFAULT_DEALER_NAME
+        defaultPaymentShouldBeFound("dealerName.contains=" + DEFAULT_DEALER_NAME);
 
-        // Get all the paymentList where dealerId is greater than or equal to UPDATED_DEALER_ID
-        defaultPaymentShouldNotBeFound("dealerId.greaterThanOrEqual=" + UPDATED_DEALER_ID);
+        // Get all the paymentList where dealerName contains UPDATED_DEALER_NAME
+        defaultPaymentShouldNotBeFound("dealerName.contains=" + UPDATED_DEALER_NAME);
     }
 
     @Test
     @Transactional
-    void getAllPaymentsByDealerIdIsLessThanOrEqualToSomething() throws Exception {
+    void getAllPaymentsByDealerNameNotContainsSomething() throws Exception {
         // Initialize the database
         paymentRepository.saveAndFlush(payment);
 
-        // Get all the paymentList where dealerId is less than or equal to DEFAULT_DEALER_ID
-        defaultPaymentShouldBeFound("dealerId.lessThanOrEqual=" + DEFAULT_DEALER_ID);
+        // Get all the paymentList where dealerName does not contain DEFAULT_DEALER_NAME
+        defaultPaymentShouldNotBeFound("dealerName.doesNotContain=" + DEFAULT_DEALER_NAME);
 
-        // Get all the paymentList where dealerId is less than or equal to SMALLER_DEALER_ID
-        defaultPaymentShouldNotBeFound("dealerId.lessThanOrEqual=" + SMALLER_DEALER_ID);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentsByDealerIdIsLessThanSomething() throws Exception {
-        // Initialize the database
-        paymentRepository.saveAndFlush(payment);
-
-        // Get all the paymentList where dealerId is less than DEFAULT_DEALER_ID
-        defaultPaymentShouldNotBeFound("dealerId.lessThan=" + DEFAULT_DEALER_ID);
-
-        // Get all the paymentList where dealerId is less than UPDATED_DEALER_ID
-        defaultPaymentShouldBeFound("dealerId.lessThan=" + UPDATED_DEALER_ID);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentsByDealerIdIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        paymentRepository.saveAndFlush(payment);
-
-        // Get all the paymentList where dealerId is greater than DEFAULT_DEALER_ID
-        defaultPaymentShouldNotBeFound("dealerId.greaterThan=" + DEFAULT_DEALER_ID);
-
-        // Get all the paymentList where dealerId is greater than SMALLER_DEALER_ID
-        defaultPaymentShouldBeFound("dealerId.greaterThan=" + SMALLER_DEALER_ID);
+        // Get all the paymentList where dealerName does not contain UPDATED_DEALER_NAME
+        defaultPaymentShouldBeFound("dealerName.doesNotContain=" + UPDATED_DEALER_NAME);
     }
 
     @Test
@@ -1230,7 +1203,7 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].settlementCurrency").value(hasItem(DEFAULT_SETTLEMENT_CURRENCY.toString())))
             .andExpect(jsonPath("$.[*].calculationFileContentType").value(hasItem(DEFAULT_CALCULATION_FILE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].calculationFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_CALCULATION_FILE))))
-            .andExpect(jsonPath("$.[*].dealerId").value(hasItem(DEFAULT_DEALER_ID.intValue())))
+            .andExpect(jsonPath("$.[*].dealerName").value(hasItem(DEFAULT_DEALER_NAME)))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
             .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
 
@@ -1289,7 +1262,7 @@ class PaymentResourceIT {
             .settlementCurrency(UPDATED_SETTLEMENT_CURRENCY)
             .calculationFile(UPDATED_CALCULATION_FILE)
             .calculationFileContentType(UPDATED_CALCULATION_FILE_CONTENT_TYPE)
-            .dealerId(UPDATED_DEALER_ID)
+            .dealerName(UPDATED_DEALER_NAME)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
             .compilationToken(UPDATED_COMPILATION_TOKEN);
         PaymentDTO paymentDTO = paymentMapper.toDto(updatedPayment);
@@ -1314,7 +1287,7 @@ class PaymentResourceIT {
         assertThat(testPayment.getSettlementCurrency()).isEqualTo(UPDATED_SETTLEMENT_CURRENCY);
         assertThat(testPayment.getCalculationFile()).isEqualTo(UPDATED_CALCULATION_FILE);
         assertThat(testPayment.getCalculationFileContentType()).isEqualTo(UPDATED_CALCULATION_FILE_CONTENT_TYPE);
-        assertThat(testPayment.getDealerId()).isEqualTo(UPDATED_DEALER_ID);
+        assertThat(testPayment.getDealerName()).isEqualTo(UPDATED_DEALER_NAME);
         assertThat(testPayment.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
         assertThat(testPayment.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
 
@@ -1435,7 +1408,7 @@ class PaymentResourceIT {
         assertThat(testPayment.getSettlementCurrency()).isEqualTo(DEFAULT_SETTLEMENT_CURRENCY);
         assertThat(testPayment.getCalculationFile()).isEqualTo(UPDATED_CALCULATION_FILE);
         assertThat(testPayment.getCalculationFileContentType()).isEqualTo(UPDATED_CALCULATION_FILE_CONTENT_TYPE);
-        assertThat(testPayment.getDealerId()).isEqualTo(DEFAULT_DEALER_ID);
+        assertThat(testPayment.getDealerName()).isEqualTo(DEFAULT_DEALER_NAME);
         assertThat(testPayment.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
         assertThat(testPayment.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
@@ -1461,7 +1434,7 @@ class PaymentResourceIT {
             .settlementCurrency(UPDATED_SETTLEMENT_CURRENCY)
             .calculationFile(UPDATED_CALCULATION_FILE)
             .calculationFileContentType(UPDATED_CALCULATION_FILE_CONTENT_TYPE)
-            .dealerId(UPDATED_DEALER_ID)
+            .dealerName(UPDATED_DEALER_NAME)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
             .compilationToken(UPDATED_COMPILATION_TOKEN);
 
@@ -1485,7 +1458,7 @@ class PaymentResourceIT {
         assertThat(testPayment.getSettlementCurrency()).isEqualTo(UPDATED_SETTLEMENT_CURRENCY);
         assertThat(testPayment.getCalculationFile()).isEqualTo(UPDATED_CALCULATION_FILE);
         assertThat(testPayment.getCalculationFileContentType()).isEqualTo(UPDATED_CALCULATION_FILE_CONTENT_TYPE);
-        assertThat(testPayment.getDealerId()).isEqualTo(UPDATED_DEALER_ID);
+        assertThat(testPayment.getDealerName()).isEqualTo(UPDATED_DEALER_NAME);
         assertThat(testPayment.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
         assertThat(testPayment.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
@@ -1610,7 +1583,7 @@ class PaymentResourceIT {
             .andExpect(jsonPath("$.[*].settlementCurrency").value(hasItem(DEFAULT_SETTLEMENT_CURRENCY.toString())))
             .andExpect(jsonPath("$.[*].calculationFileContentType").value(hasItem(DEFAULT_CALCULATION_FILE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].calculationFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_CALCULATION_FILE))))
-            .andExpect(jsonPath("$.[*].dealerId").value(hasItem(DEFAULT_DEALER_ID.intValue())))
+            .andExpect(jsonPath("$.[*].dealerName").value(hasItem(DEFAULT_DEALER_NAME)))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
             .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }

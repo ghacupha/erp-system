@@ -56,8 +56,8 @@ public class Payment implements Serializable {
     @Column(name = "calculation_file_content_type")
     private String calculationFileContentType;
 
-    @Column(name = "dealer_id")
-    private Long dealerId;
+    @Column(name = "dealer_name")
+    private String dealerName;
 
     @Column(name = "file_upload_token")
     private String fileUploadToken;
@@ -212,17 +212,17 @@ public class Payment implements Serializable {
         this.calculationFileContentType = calculationFileContentType;
     }
 
-    public Long getDealerId() {
-        return this.dealerId;
+    public String getDealerName() {
+        return this.dealerName;
     }
 
-    public Payment dealerId(Long dealerId) {
-        this.setDealerId(dealerId);
+    public Payment dealerName(String dealerName) {
+        this.setDealerName(dealerName);
         return this;
     }
 
-    public void setDealerId(Long dealerId) {
-        this.dealerId = dealerId;
+    public void setDealerName(String dealerName) {
+        this.dealerName = dealerName;
     }
 
     public String getFileUploadToken() {
@@ -355,7 +355,7 @@ public class Payment implements Serializable {
             ", settlementCurrency='" + getSettlementCurrency() + "'" +
             ", calculationFile='" + getCalculationFile() + "'" +
             ", calculationFileContentType='" + getCalculationFileContentType() + "'" +
-            ", dealerId=" + getDealerId() +
+            ", dealerName='" + getDealerName() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
             "}";

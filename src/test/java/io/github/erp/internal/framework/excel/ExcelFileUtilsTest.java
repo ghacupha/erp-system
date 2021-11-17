@@ -190,6 +190,7 @@ public class ExcelFileUtilsTest {
                         .paymentAmount(1.1 + i)
                         .description("description" + index)
                         .settlementCurrency("settlementCurrency" + index)
+                        .dealerName("dealerName" + index)
                         .build()
                 );
         }

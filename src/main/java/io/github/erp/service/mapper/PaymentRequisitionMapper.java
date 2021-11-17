@@ -7,10 +7,9 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link PaymentRequisition} and its DTO {@link PaymentRequisitionDTO}.
  */
-@Mapper(componentModel = "spring", uses = { PaymentLabelMapper.class, DealerMapper.class, PlaceholderMapper.class })
+@Mapper(componentModel = "spring", uses = { PaymentLabelMapper.class, PlaceholderMapper.class })
 public interface PaymentRequisitionMapper extends EntityMapper<PaymentRequisitionDTO, PaymentRequisition> {
     @Mapping(target = "paymentLabels", source = "paymentLabels", qualifiedByName = "descriptionSet")
-    @Mapping(target = "dealer", source = "dealer", qualifiedByName = "id")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     PaymentRequisitionDTO toDto(PaymentRequisition s);
 

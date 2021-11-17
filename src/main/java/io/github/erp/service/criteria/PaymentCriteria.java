@@ -58,7 +58,7 @@ public class PaymentCriteria implements Serializable, Criteria {
 
     private CurrencyTypesFilter settlementCurrency;
 
-    private LongFilter dealerId;
+    private StringFilter dealerName;
 
     private StringFilter fileUploadToken;
 
@@ -84,7 +84,7 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.settlementCurrency = other.settlementCurrency == null ? null : other.settlementCurrency.copy();
-        this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
+        this.dealerName = other.dealerName == null ? null : other.dealerName.copy();
         this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
         this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
@@ -204,19 +204,19 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.settlementCurrency = settlementCurrency;
     }
 
-    public LongFilter getDealerId() {
-        return dealerId;
+    public StringFilter getDealerName() {
+        return dealerName;
     }
 
-    public LongFilter dealerId() {
-        if (dealerId == null) {
-            dealerId = new LongFilter();
+    public StringFilter dealerName() {
+        if (dealerName == null) {
+            dealerName = new StringFilter();
         }
-        return dealerId;
+        return dealerName;
     }
 
-    public void setDealerId(LongFilter dealerId) {
-        this.dealerId = dealerId;
+    public void setDealerName(StringFilter dealerName) {
+        this.dealerName = dealerName;
     }
 
     public StringFilter getFileUploadToken() {
@@ -334,7 +334,7 @@ public class PaymentCriteria implements Serializable, Criteria {
             Objects.equals(paymentAmount, that.paymentAmount) &&
             Objects.equals(description, that.description) &&
             Objects.equals(settlementCurrency, that.settlementCurrency) &&
-            Objects.equals(dealerId, that.dealerId) &&
+            Objects.equals(dealerName, that.dealerName) &&
             Objects.equals(fileUploadToken, that.fileUploadToken) &&
             Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
@@ -355,7 +355,7 @@ public class PaymentCriteria implements Serializable, Criteria {
             paymentAmount,
             description,
             settlementCurrency,
-            dealerId,
+            dealerName,
             fileUploadToken,
             compilationToken,
             paymentLabelId,
@@ -377,7 +377,7 @@ public class PaymentCriteria implements Serializable, Criteria {
             (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
             (description != null ? "description=" + description + ", " : "") +
             (settlementCurrency != null ? "settlementCurrency=" + settlementCurrency + ", " : "") +
-            (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
+            (dealerName != null ? "dealerName=" + dealerName + ", " : "") +
             (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +
             (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +

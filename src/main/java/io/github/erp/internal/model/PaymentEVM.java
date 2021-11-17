@@ -38,6 +38,9 @@ public class PaymentEVM implements Serializable, ExcelViewModel<PaymentEVM> {
     @ExcelCell(5)
     private String settlementCurrency;
 
+    @ExcelCell(6)
+    private String dealerName;
+
     private String fileUploadToken;
 
     @Override
