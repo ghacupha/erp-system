@@ -53,6 +53,12 @@ class SettlementCurrencyResourceIT {
     private static final String DEFAULT_COUNTRY = "AAAAAAAAAA";
     private static final String UPDATED_COUNTRY = "BBBBBBBBBB";
 
+    private static final String DEFAULT_FILE_UPLOAD_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_FILE_UPLOAD_TOKEN = "BBBBBBBBBB";
+
+    private static final String DEFAULT_COMPILATION_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_COMPILATION_TOKEN = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/settlement-currencies";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/settlement-currencies";
@@ -98,7 +104,9 @@ class SettlementCurrencyResourceIT {
         SettlementCurrency settlementCurrency = new SettlementCurrency()
             .iso4217CurrencyCode(DEFAULT_ISO_4217_CURRENCY_CODE)
             .currencyName(DEFAULT_CURRENCY_NAME)
-            .country(DEFAULT_COUNTRY);
+            .country(DEFAULT_COUNTRY)
+            .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
+            .compilationToken(DEFAULT_COMPILATION_TOKEN);
         return settlementCurrency;
     }
 
@@ -112,7 +120,9 @@ class SettlementCurrencyResourceIT {
         SettlementCurrency settlementCurrency = new SettlementCurrency()
             .iso4217CurrencyCode(UPDATED_ISO_4217_CURRENCY_CODE)
             .currencyName(UPDATED_CURRENCY_NAME)
-            .country(UPDATED_COUNTRY);
+            .country(UPDATED_COUNTRY)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         return settlementCurrency;
     }
 
@@ -142,6 +152,8 @@ class SettlementCurrencyResourceIT {
         assertThat(testSettlementCurrency.getIso4217CurrencyCode()).isEqualTo(DEFAULT_ISO_4217_CURRENCY_CODE);
         assertThat(testSettlementCurrency.getCurrencyName()).isEqualTo(DEFAULT_CURRENCY_NAME);
         assertThat(testSettlementCurrency.getCountry()).isEqualTo(DEFAULT_COUNTRY);
+        assertThat(testSettlementCurrency.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
+        assertThat(testSettlementCurrency.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
 
         // Validate the SettlementCurrency in Elasticsearch
         verify(mockSettlementCurrencySearchRepository, times(1)).save(testSettlementCurrency);
@@ -253,7 +265,9 @@ class SettlementCurrencyResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(settlementCurrency.getId().intValue())))
             .andExpect(jsonPath("$.[*].iso4217CurrencyCode").value(hasItem(DEFAULT_ISO_4217_CURRENCY_CODE)))
             .andExpect(jsonPath("$.[*].currencyName").value(hasItem(DEFAULT_CURRENCY_NAME)))
-            .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY)));
+            .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY)))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -288,7 +302,9 @@ class SettlementCurrencyResourceIT {
             .andExpect(jsonPath("$.id").value(settlementCurrency.getId().intValue()))
             .andExpect(jsonPath("$.iso4217CurrencyCode").value(DEFAULT_ISO_4217_CURRENCY_CODE))
             .andExpect(jsonPath("$.currencyName").value(DEFAULT_CURRENCY_NAME))
-            .andExpect(jsonPath("$.country").value(DEFAULT_COUNTRY));
+            .andExpect(jsonPath("$.country").value(DEFAULT_COUNTRY))
+            .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
+            .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN));
     }
 
     @Test
@@ -547,6 +563,162 @@ class SettlementCurrencyResourceIT {
 
     @Test
     @Transactional
+    void getAllSettlementCurrenciesByFileUploadTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        settlementCurrencyRepository.saveAndFlush(settlementCurrency);
+
+        // Get all the settlementCurrencyList where fileUploadToken equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultSettlementCurrencyShouldBeFound("fileUploadToken.equals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the settlementCurrencyList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultSettlementCurrencyShouldNotBeFound("fileUploadToken.equals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllSettlementCurrenciesByFileUploadTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        settlementCurrencyRepository.saveAndFlush(settlementCurrency);
+
+        // Get all the settlementCurrencyList where fileUploadToken not equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultSettlementCurrencyShouldNotBeFound("fileUploadToken.notEquals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the settlementCurrencyList where fileUploadToken not equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultSettlementCurrencyShouldBeFound("fileUploadToken.notEquals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllSettlementCurrenciesByFileUploadTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        settlementCurrencyRepository.saveAndFlush(settlementCurrency);
+
+        // Get all the settlementCurrencyList where fileUploadToken in DEFAULT_FILE_UPLOAD_TOKEN or UPDATED_FILE_UPLOAD_TOKEN
+        defaultSettlementCurrencyShouldBeFound("fileUploadToken.in=" + DEFAULT_FILE_UPLOAD_TOKEN + "," + UPDATED_FILE_UPLOAD_TOKEN);
+
+        // Get all the settlementCurrencyList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultSettlementCurrencyShouldNotBeFound("fileUploadToken.in=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllSettlementCurrenciesByFileUploadTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        settlementCurrencyRepository.saveAndFlush(settlementCurrency);
+
+        // Get all the settlementCurrencyList where fileUploadToken is not null
+        defaultSettlementCurrencyShouldBeFound("fileUploadToken.specified=true");
+
+        // Get all the settlementCurrencyList where fileUploadToken is null
+        defaultSettlementCurrencyShouldNotBeFound("fileUploadToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllSettlementCurrenciesByFileUploadTokenContainsSomething() throws Exception {
+        // Initialize the database
+        settlementCurrencyRepository.saveAndFlush(settlementCurrency);
+
+        // Get all the settlementCurrencyList where fileUploadToken contains DEFAULT_FILE_UPLOAD_TOKEN
+        defaultSettlementCurrencyShouldBeFound("fileUploadToken.contains=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the settlementCurrencyList where fileUploadToken contains UPDATED_FILE_UPLOAD_TOKEN
+        defaultSettlementCurrencyShouldNotBeFound("fileUploadToken.contains=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllSettlementCurrenciesByFileUploadTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        settlementCurrencyRepository.saveAndFlush(settlementCurrency);
+
+        // Get all the settlementCurrencyList where fileUploadToken does not contain DEFAULT_FILE_UPLOAD_TOKEN
+        defaultSettlementCurrencyShouldNotBeFound("fileUploadToken.doesNotContain=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the settlementCurrencyList where fileUploadToken does not contain UPDATED_FILE_UPLOAD_TOKEN
+        defaultSettlementCurrencyShouldBeFound("fileUploadToken.doesNotContain=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllSettlementCurrenciesByCompilationTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        settlementCurrencyRepository.saveAndFlush(settlementCurrency);
+
+        // Get all the settlementCurrencyList where compilationToken equals to DEFAULT_COMPILATION_TOKEN
+        defaultSettlementCurrencyShouldBeFound("compilationToken.equals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the settlementCurrencyList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultSettlementCurrencyShouldNotBeFound("compilationToken.equals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllSettlementCurrenciesByCompilationTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        settlementCurrencyRepository.saveAndFlush(settlementCurrency);
+
+        // Get all the settlementCurrencyList where compilationToken not equals to DEFAULT_COMPILATION_TOKEN
+        defaultSettlementCurrencyShouldNotBeFound("compilationToken.notEquals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the settlementCurrencyList where compilationToken not equals to UPDATED_COMPILATION_TOKEN
+        defaultSettlementCurrencyShouldBeFound("compilationToken.notEquals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllSettlementCurrenciesByCompilationTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        settlementCurrencyRepository.saveAndFlush(settlementCurrency);
+
+        // Get all the settlementCurrencyList where compilationToken in DEFAULT_COMPILATION_TOKEN or UPDATED_COMPILATION_TOKEN
+        defaultSettlementCurrencyShouldBeFound("compilationToken.in=" + DEFAULT_COMPILATION_TOKEN + "," + UPDATED_COMPILATION_TOKEN);
+
+        // Get all the settlementCurrencyList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultSettlementCurrencyShouldNotBeFound("compilationToken.in=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllSettlementCurrenciesByCompilationTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        settlementCurrencyRepository.saveAndFlush(settlementCurrency);
+
+        // Get all the settlementCurrencyList where compilationToken is not null
+        defaultSettlementCurrencyShouldBeFound("compilationToken.specified=true");
+
+        // Get all the settlementCurrencyList where compilationToken is null
+        defaultSettlementCurrencyShouldNotBeFound("compilationToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllSettlementCurrenciesByCompilationTokenContainsSomething() throws Exception {
+        // Initialize the database
+        settlementCurrencyRepository.saveAndFlush(settlementCurrency);
+
+        // Get all the settlementCurrencyList where compilationToken contains DEFAULT_COMPILATION_TOKEN
+        defaultSettlementCurrencyShouldBeFound("compilationToken.contains=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the settlementCurrencyList where compilationToken contains UPDATED_COMPILATION_TOKEN
+        defaultSettlementCurrencyShouldNotBeFound("compilationToken.contains=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllSettlementCurrenciesByCompilationTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        settlementCurrencyRepository.saveAndFlush(settlementCurrency);
+
+        // Get all the settlementCurrencyList where compilationToken does not contain DEFAULT_COMPILATION_TOKEN
+        defaultSettlementCurrencyShouldNotBeFound("compilationToken.doesNotContain=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the settlementCurrencyList where compilationToken does not contain UPDATED_COMPILATION_TOKEN
+        defaultSettlementCurrencyShouldBeFound("compilationToken.doesNotContain=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
     void getAllSettlementCurrenciesByPlaceholderIsEqualToSomething() throws Exception {
         // Initialize the database
         settlementCurrencyRepository.saveAndFlush(settlementCurrency);
@@ -582,7 +754,9 @@ class SettlementCurrencyResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(settlementCurrency.getId().intValue())))
             .andExpect(jsonPath("$.[*].iso4217CurrencyCode").value(hasItem(DEFAULT_ISO_4217_CURRENCY_CODE)))
             .andExpect(jsonPath("$.[*].currencyName").value(hasItem(DEFAULT_CURRENCY_NAME)))
-            .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY)));
+            .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY)))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
 
         // Check, that the count call also returns 1
         restSettlementCurrencyMockMvc
@@ -633,7 +807,9 @@ class SettlementCurrencyResourceIT {
         updatedSettlementCurrency
             .iso4217CurrencyCode(UPDATED_ISO_4217_CURRENCY_CODE)
             .currencyName(UPDATED_CURRENCY_NAME)
-            .country(UPDATED_COUNTRY);
+            .country(UPDATED_COUNTRY)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         SettlementCurrencyDTO settlementCurrencyDTO = settlementCurrencyMapper.toDto(updatedSettlementCurrency);
 
         restSettlementCurrencyMockMvc
@@ -651,6 +827,8 @@ class SettlementCurrencyResourceIT {
         assertThat(testSettlementCurrency.getIso4217CurrencyCode()).isEqualTo(UPDATED_ISO_4217_CURRENCY_CODE);
         assertThat(testSettlementCurrency.getCurrencyName()).isEqualTo(UPDATED_CURRENCY_NAME);
         assertThat(testSettlementCurrency.getCountry()).isEqualTo(UPDATED_COUNTRY);
+        assertThat(testSettlementCurrency.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testSettlementCurrency.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
 
         // Validate the SettlementCurrency in Elasticsearch
         verify(mockSettlementCurrencySearchRepository).save(testSettlementCurrency);
@@ -746,7 +924,10 @@ class SettlementCurrencyResourceIT {
         SettlementCurrency partialUpdatedSettlementCurrency = new SettlementCurrency();
         partialUpdatedSettlementCurrency.setId(settlementCurrency.getId());
 
-        partialUpdatedSettlementCurrency.iso4217CurrencyCode(UPDATED_ISO_4217_CURRENCY_CODE).currencyName(UPDATED_CURRENCY_NAME);
+        partialUpdatedSettlementCurrency
+            .iso4217CurrencyCode(UPDATED_ISO_4217_CURRENCY_CODE)
+            .currencyName(UPDATED_CURRENCY_NAME)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN);
 
         restSettlementCurrencyMockMvc
             .perform(
@@ -763,6 +944,8 @@ class SettlementCurrencyResourceIT {
         assertThat(testSettlementCurrency.getIso4217CurrencyCode()).isEqualTo(UPDATED_ISO_4217_CURRENCY_CODE);
         assertThat(testSettlementCurrency.getCurrencyName()).isEqualTo(UPDATED_CURRENCY_NAME);
         assertThat(testSettlementCurrency.getCountry()).isEqualTo(DEFAULT_COUNTRY);
+        assertThat(testSettlementCurrency.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testSettlementCurrency.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
     }
 
     @Test
@@ -780,7 +963,9 @@ class SettlementCurrencyResourceIT {
         partialUpdatedSettlementCurrency
             .iso4217CurrencyCode(UPDATED_ISO_4217_CURRENCY_CODE)
             .currencyName(UPDATED_CURRENCY_NAME)
-            .country(UPDATED_COUNTRY);
+            .country(UPDATED_COUNTRY)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
 
         restSettlementCurrencyMockMvc
             .perform(
@@ -797,6 +982,8 @@ class SettlementCurrencyResourceIT {
         assertThat(testSettlementCurrency.getIso4217CurrencyCode()).isEqualTo(UPDATED_ISO_4217_CURRENCY_CODE);
         assertThat(testSettlementCurrency.getCurrencyName()).isEqualTo(UPDATED_CURRENCY_NAME);
         assertThat(testSettlementCurrency.getCountry()).isEqualTo(UPDATED_COUNTRY);
+        assertThat(testSettlementCurrency.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testSettlementCurrency.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
 
     @Test
@@ -915,6 +1102,8 @@ class SettlementCurrencyResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(settlementCurrency.getId().intValue())))
             .andExpect(jsonPath("$.[*].iso4217CurrencyCode").value(hasItem(DEFAULT_ISO_4217_CURRENCY_CODE)))
             .andExpect(jsonPath("$.[*].currencyName").value(hasItem(DEFAULT_CURRENCY_NAME)))
-            .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY)));
+            .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY)))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 }

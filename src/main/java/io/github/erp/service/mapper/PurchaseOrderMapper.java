@@ -2,6 +2,7 @@ package io.github.erp.service.mapper;
 
 import io.github.erp.domain.PurchaseOrder;
 import io.github.erp.service.dto.PurchaseOrderDTO;
+import java.util.Set;
 import org.mapstruct.*;
 
 /**
@@ -18,4 +19,10 @@ public interface PurchaseOrderMapper extends EntityMapper<PurchaseOrderDTO, Purc
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removeSignatories", ignore = true)
     PurchaseOrder toEntity(PurchaseOrderDTO purchaseOrderDTO);
+
+    @Named("purchaseOrderNumberSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "purchaseOrderNumber", source = "purchaseOrderNumber")
+    Set<PurchaseOrderDTO> toDtoPurchaseOrderNumberSet(Set<PurchaseOrder> purchaseOrder);
 }

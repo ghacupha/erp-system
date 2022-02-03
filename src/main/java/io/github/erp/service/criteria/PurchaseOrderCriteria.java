@@ -38,6 +38,10 @@ public class PurchaseOrderCriteria implements Serializable, Criteria {
 
     private StringFilter notes;
 
+    private StringFilter fileUploadToken;
+
+    private StringFilter compilationToken;
+
     private LongFilter settlementCurrencyId;
 
     private LongFilter placeholderId;
@@ -57,6 +61,8 @@ public class PurchaseOrderCriteria implements Serializable, Criteria {
         this.purchaseOrderAmount = other.purchaseOrderAmount == null ? null : other.purchaseOrderAmount.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.notes = other.notes == null ? null : other.notes.copy();
+        this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
+        this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.signatoriesId = other.signatoriesId == null ? null : other.signatoriesId.copy();
@@ -159,6 +165,36 @@ public class PurchaseOrderCriteria implements Serializable, Criteria {
         this.notes = notes;
     }
 
+    public StringFilter getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public StringFilter fileUploadToken() {
+        if (fileUploadToken == null) {
+            fileUploadToken = new StringFilter();
+        }
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(StringFilter fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public StringFilter getCompilationToken() {
+        return compilationToken;
+    }
+
+    public StringFilter compilationToken() {
+        if (compilationToken == null) {
+            compilationToken = new StringFilter();
+        }
+        return compilationToken;
+    }
+
+    public void setCompilationToken(StringFilter compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public LongFilter getSettlementCurrencyId() {
         return settlementCurrencyId;
     }
@@ -243,6 +279,8 @@ public class PurchaseOrderCriteria implements Serializable, Criteria {
             Objects.equals(purchaseOrderAmount, that.purchaseOrderAmount) &&
             Objects.equals(description, that.description) &&
             Objects.equals(notes, that.notes) &&
+            Objects.equals(fileUploadToken, that.fileUploadToken) &&
+            Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(signatoriesId, that.signatoriesId) &&
@@ -260,6 +298,8 @@ public class PurchaseOrderCriteria implements Serializable, Criteria {
             purchaseOrderAmount,
             description,
             notes,
+            fileUploadToken,
+            compilationToken,
             settlementCurrencyId,
             placeholderId,
             signatoriesId,
@@ -278,6 +318,8 @@ public class PurchaseOrderCriteria implements Serializable, Criteria {
             (purchaseOrderAmount != null ? "purchaseOrderAmount=" + purchaseOrderAmount + ", " : "") +
             (description != null ? "description=" + description + ", " : "") +
             (notes != null ? "notes=" + notes + ", " : "") +
+            (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +
+            (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (signatoriesId != null ? "signatoriesId=" + signatoriesId + ", " : "") +

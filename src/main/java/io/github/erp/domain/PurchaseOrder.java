@@ -44,6 +44,12 @@ public class PurchaseOrder implements Serializable {
     @Column(name = "notes")
     private String notes;
 
+    @Column(name = "file_upload_token")
+    private String fileUploadToken;
+
+    @Column(name = "compilation_token")
+    private String compilationToken;
+
     @ManyToOne
     @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
     private SettlementCurrency settlementCurrency;
@@ -153,6 +159,32 @@ public class PurchaseOrder implements Serializable {
         this.notes = notes;
     }
 
+    public String getFileUploadToken() {
+        return this.fileUploadToken;
+    }
+
+    public PurchaseOrder fileUploadToken(String fileUploadToken) {
+        this.setFileUploadToken(fileUploadToken);
+        return this;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return this.compilationToken;
+    }
+
+    public PurchaseOrder compilationToken(String compilationToken) {
+        this.setCompilationToken(compilationToken);
+        return this;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public SettlementCurrency getSettlementCurrency() {
         return this.settlementCurrency;
     }
@@ -254,6 +286,8 @@ public class PurchaseOrder implements Serializable {
             ", purchaseOrderAmount=" + getPurchaseOrderAmount() +
             ", description='" + getDescription() + "'" +
             ", notes='" + getNotes() + "'" +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             "}";
     }
 }

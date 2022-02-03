@@ -1,11 +1,11 @@
-id;iso_4217_currency_code;currency_name;country
-1;dis;Swedish Krona;Grenada
-2;Sol;Dalasi;Timor-Leste
-3;sen;Kenyan Shilling;Georgia
-4;Chi;Ethiopian Birr;Falkland Islands (Malvinas)
-5;Wis;Falkland Islands Pound;Yemen
-6;Acc;Codes specifically reserved for testing purposes;Burkina Faso
-7;Ana;Malaysian Ringgit;Azerbaijan
-8;e-e;Manat;Gambia
-9;Mya;Sudanese Pound;Afghanistan
-10;Gam;Namibia Dollar;Nepal
+id;iso_4217_currency_code;currency_name;country;file_upload_token;compilation_token
+1;dis;Swedish Krona;Grenada;Solutions;XSS
+2;pin;Liberian Dollar;Indonesia;Delaware;Intranet Extended Wisconsin
+3;Arc;Belize Dollar;Netherlands;blue Granite Avon;Home grey
+4;vir;Ouguiya;Myanmar;Chair;Borders Shoes Hat
+5;Pla;Balboa;Holy See (Vatican City State);methodologies Cheese;Shoes Bedfordshire protocol
+6;par;Bond Markets Units European Composite Unit (EURCO);British Indian Ocean Territory (Chagos Archipelago);Garden navigate;collaborative Mouse Computers
+7;Fan;Tugrik;Belize;synthesize;Switchable
+8;Tas;Dalasi;Nigeria;Director navigating;payment compressing Lake
+9;Sho;Taka;Azerbaijan;Soft;Berkshire Cotton Sleek
+10;Buc;Syrian Pound;Cook Islands;Regional Greens;fuchsia virtual

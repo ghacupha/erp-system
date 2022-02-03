@@ -26,6 +26,10 @@ public class PurchaseOrderDTO implements Serializable {
 
     private String notes;
 
+    private String fileUploadToken;
+
+    private String compilationToken;
+
     private SettlementCurrencyDTO settlementCurrency;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
@@ -80,6 +84,22 @@ public class PurchaseOrderDTO implements Serializable {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return compilationToken;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
     }
 
     public SettlementCurrencyDTO getSettlementCurrency() {
@@ -145,6 +165,8 @@ public class PurchaseOrderDTO implements Serializable {
             ", purchaseOrderAmount=" + getPurchaseOrderAmount() +
             ", description='" + getDescription() + "'" +
             ", notes='" + getNotes() + "'" +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             ", settlementCurrency=" + getSettlementCurrency() +
             ", placeholders=" + getPlaceholders() +
             ", signatories=" + getSignatories() +

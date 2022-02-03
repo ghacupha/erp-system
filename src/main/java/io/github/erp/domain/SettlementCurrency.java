@@ -39,6 +39,12 @@ public class SettlementCurrency implements Serializable {
     @Column(name = "country", nullable = false, unique = true)
     private String country;
 
+    @Column(name = "file_upload_token")
+    private String fileUploadToken;
+
+    @Column(name = "compilation_token")
+    private String compilationToken;
+
     @ManyToMany
     @JoinTable(
         name = "rel_settlement_currency__placeholder",
@@ -103,6 +109,32 @@ public class SettlementCurrency implements Serializable {
         this.country = country;
     }
 
+    public String getFileUploadToken() {
+        return this.fileUploadToken;
+    }
+
+    public SettlementCurrency fileUploadToken(String fileUploadToken) {
+        this.setFileUploadToken(fileUploadToken);
+        return this;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return this.compilationToken;
+    }
+
+    public SettlementCurrency compilationToken(String compilationToken) {
+        this.setCompilationToken(compilationToken);
+        return this;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public Set<Placeholder> getPlaceholders() {
         return this.placeholders;
     }
@@ -153,6 +185,8 @@ public class SettlementCurrency implements Serializable {
             ", iso4217CurrencyCode='" + getIso4217CurrencyCode() + "'" +
             ", currencyName='" + getCurrencyName() + "'" +
             ", country='" + getCountry() + "'" +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             "}";
     }
 }

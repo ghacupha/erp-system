@@ -23,6 +23,10 @@ public class SettlementCurrencyDTO implements Serializable {
     @NotNull
     private String country;
 
+    private String fileUploadToken;
+
+    private String compilationToken;
+
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     public Long getId() {
@@ -55,6 +59,22 @@ public class SettlementCurrencyDTO implements Serializable {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getFileUploadToken() {
+        return fileUploadToken;
+    }
+
+    public void setFileUploadToken(String fileUploadToken) {
+        this.fileUploadToken = fileUploadToken;
+    }
+
+    public String getCompilationToken() {
+        return compilationToken;
+    }
+
+    public void setCompilationToken(String compilationToken) {
+        this.compilationToken = compilationToken;
     }
 
     public Set<PlaceholderDTO> getPlaceholders() {
@@ -94,6 +114,8 @@ public class SettlementCurrencyDTO implements Serializable {
             ", iso4217CurrencyCode='" + getIso4217CurrencyCode() + "'" +
             ", currencyName='" + getCurrencyName() + "'" +
             ", country='" + getCountry() + "'" +
+            ", fileUploadToken='" + getFileUploadToken() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             ", placeholders=" + getPlaceholders() +
             "}";
     }

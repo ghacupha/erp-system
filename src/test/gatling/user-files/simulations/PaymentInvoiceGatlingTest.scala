@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.duration._
 
 /**
- * Performance test for the SettlementCurrency entity.
+ * Performance test for the PaymentInvoice entity.
  */
-class SettlementCurrencyGatlingTest extends Simulation {
+class PaymentInvoiceGatlingTest extends Simulation {
 
     val context: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
     // Log all HTTP requests
@@ -43,7 +43,7 @@ class SettlementCurrencyGatlingTest extends Simulation {
         "Authorization" -> "${access_token}"
     )
 
-    val scn = scenario("Test the SettlementCurrency entity")
+    val scn = scenario("Test the PaymentInvoice entity")
         .exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headers_http)
@@ -62,32 +62,34 @@ class SettlementCurrencyGatlingTest extends Simulation {
         .check(status.is(200)))
         .pause(10)
         .repeat(2) {
-            exec(http("Get all settlementCurrencies")
-            .get("/api/settlement-currencies")
+            exec(http("Get all paymentInvoices")
+            .get("/api/payment-invoices")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
-            .exec(http("Create new settlementCurrency")
-            .post("/api/settlement-currencies")
+            .exec(http("Create new paymentInvoice")
+            .post("/api/payment-invoices")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
-                "iso4217CurrencyCode":"SAMPLE_TEXT"
-                , "currencyName":"SAMPLE_TEXT"
-                , "country":"SAMPLE_TEXT"
+                "invoiceNumber":"SAMPLE_TEXT"
+                , "invoiceDate":"2020-01-01T00:00:00.000Z"
+                , "invoiceAmount":"0"
+                , "paymentReference":"SAMPLE_TEXT"
+                , "dealerName":"SAMPLE_TEXT"
                 , "fileUploadToken":"SAMPLE_TEXT"
                 , "compilationToken":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
-            .check(headerRegex("Location", "(.*)").saveAs("new_settlementCurrency_url"))).exitHereIfFailed
+            .check(headerRegex("Location", "(.*)").saveAs("new_paymentInvoice_url"))).exitHereIfFailed
             .pause(10)
             .repeat(5) {
-                exec(http("Get created settlementCurrency")
-                .get("${new_settlementCurrency_url}")
+                exec(http("Get created paymentInvoice")
+                .get("${new_paymentInvoice_url}")
                 .headers(headers_http_authenticated))
                 .pause(10)
             }
-            .exec(http("Delete created settlementCurrency")
-            .delete("${new_settlementCurrency_url}")
+            .exec(http("Delete created paymentInvoice")
+            .delete("${new_paymentInvoice_url}")
             .headers(headers_http_authenticated))
             .pause(10)
         }
