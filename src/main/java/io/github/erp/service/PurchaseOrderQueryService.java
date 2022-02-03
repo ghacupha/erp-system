@@ -116,6 +116,13 @@ public class PurchaseOrderQueryService extends QueryService<PurchaseOrder> {
             if (criteria.getNotes() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getNotes(), PurchaseOrder_.notes));
             }
+            if (criteria.getFileUploadToken() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getFileUploadToken(), PurchaseOrder_.fileUploadToken));
+            }
+            if (criteria.getCompilationToken() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getCompilationToken(), PurchaseOrder_.compilationToken));
+            }
             if (criteria.getSettlementCurrencyId() != null) {
                 specification =
                     specification.and(

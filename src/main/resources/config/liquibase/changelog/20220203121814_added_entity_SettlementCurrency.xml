@@ -23,6 +23,12 @@
             <column name="country" type="varchar(255)">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_settlement_currency__country" />
             </column>
+            <column name="file_upload_token" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="compilation_token" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
@@ -61,6 +67,8 @@
             <column name="iso_4217_currency_code" type="string"/>
             <column name="currency_name" type="string"/>
             <column name="country" type="string"/>
+            <column name="file_upload_token" type="string"/>
+            <column name="compilation_token" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

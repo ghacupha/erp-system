@@ -67,6 +67,12 @@ class PurchaseOrderResourceIT {
     private static final String DEFAULT_NOTES = "AAAAAAAAAA";
     private static final String UPDATED_NOTES = "BBBBBBBBBB";
 
+    private static final String DEFAULT_FILE_UPLOAD_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_FILE_UPLOAD_TOKEN = "BBBBBBBBBB";
+
+    private static final String DEFAULT_COMPILATION_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_COMPILATION_TOKEN = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/purchase-orders";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/purchase-orders";
@@ -114,7 +120,9 @@ class PurchaseOrderResourceIT {
             .purchaseOrderDate(DEFAULT_PURCHASE_ORDER_DATE)
             .purchaseOrderAmount(DEFAULT_PURCHASE_ORDER_AMOUNT)
             .description(DEFAULT_DESCRIPTION)
-            .notes(DEFAULT_NOTES);
+            .notes(DEFAULT_NOTES)
+            .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
+            .compilationToken(DEFAULT_COMPILATION_TOKEN);
         // Add required entity
         Dealer dealer;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
@@ -140,7 +148,9 @@ class PurchaseOrderResourceIT {
             .purchaseOrderDate(UPDATED_PURCHASE_ORDER_DATE)
             .purchaseOrderAmount(UPDATED_PURCHASE_ORDER_AMOUNT)
             .description(UPDATED_DESCRIPTION)
-            .notes(UPDATED_NOTES);
+            .notes(UPDATED_NOTES)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         // Add required entity
         Dealer dealer;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
@@ -180,6 +190,8 @@ class PurchaseOrderResourceIT {
         assertThat(testPurchaseOrder.getPurchaseOrderAmount()).isEqualByComparingTo(DEFAULT_PURCHASE_ORDER_AMOUNT);
         assertThat(testPurchaseOrder.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testPurchaseOrder.getNotes()).isEqualTo(DEFAULT_NOTES);
+        assertThat(testPurchaseOrder.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
+        assertThat(testPurchaseOrder.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
 
         // Validate the PurchaseOrder in Elasticsearch
         verify(mockPurchaseOrderSearchRepository, times(1)).save(testPurchaseOrder);
@@ -245,7 +257,9 @@ class PurchaseOrderResourceIT {
             .andExpect(jsonPath("$.[*].purchaseOrderDate").value(hasItem(DEFAULT_PURCHASE_ORDER_DATE.toString())))
             .andExpect(jsonPath("$.[*].purchaseOrderAmount").value(hasItem(sameNumber(DEFAULT_PURCHASE_ORDER_AMOUNT))))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES)));
+            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES)))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -282,7 +296,9 @@ class PurchaseOrderResourceIT {
             .andExpect(jsonPath("$.purchaseOrderDate").value(DEFAULT_PURCHASE_ORDER_DATE.toString()))
             .andExpect(jsonPath("$.purchaseOrderAmount").value(sameNumber(DEFAULT_PURCHASE_ORDER_AMOUNT)))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.notes").value(DEFAULT_NOTES));
+            .andExpect(jsonPath("$.notes").value(DEFAULT_NOTES))
+            .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
+            .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN));
     }
 
     @Test
@@ -747,6 +763,162 @@ class PurchaseOrderResourceIT {
 
     @Test
     @Transactional
+    void getAllPurchaseOrdersByFileUploadTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        purchaseOrderRepository.saveAndFlush(purchaseOrder);
+
+        // Get all the purchaseOrderList where fileUploadToken equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPurchaseOrderShouldBeFound("fileUploadToken.equals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the purchaseOrderList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPurchaseOrderShouldNotBeFound("fileUploadToken.equals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPurchaseOrdersByFileUploadTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        purchaseOrderRepository.saveAndFlush(purchaseOrder);
+
+        // Get all the purchaseOrderList where fileUploadToken not equals to DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPurchaseOrderShouldNotBeFound("fileUploadToken.notEquals=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the purchaseOrderList where fileUploadToken not equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPurchaseOrderShouldBeFound("fileUploadToken.notEquals=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPurchaseOrdersByFileUploadTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        purchaseOrderRepository.saveAndFlush(purchaseOrder);
+
+        // Get all the purchaseOrderList where fileUploadToken in DEFAULT_FILE_UPLOAD_TOKEN or UPDATED_FILE_UPLOAD_TOKEN
+        defaultPurchaseOrderShouldBeFound("fileUploadToken.in=" + DEFAULT_FILE_UPLOAD_TOKEN + "," + UPDATED_FILE_UPLOAD_TOKEN);
+
+        // Get all the purchaseOrderList where fileUploadToken equals to UPDATED_FILE_UPLOAD_TOKEN
+        defaultPurchaseOrderShouldNotBeFound("fileUploadToken.in=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPurchaseOrdersByFileUploadTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        purchaseOrderRepository.saveAndFlush(purchaseOrder);
+
+        // Get all the purchaseOrderList where fileUploadToken is not null
+        defaultPurchaseOrderShouldBeFound("fileUploadToken.specified=true");
+
+        // Get all the purchaseOrderList where fileUploadToken is null
+        defaultPurchaseOrderShouldNotBeFound("fileUploadToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPurchaseOrdersByFileUploadTokenContainsSomething() throws Exception {
+        // Initialize the database
+        purchaseOrderRepository.saveAndFlush(purchaseOrder);
+
+        // Get all the purchaseOrderList where fileUploadToken contains DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPurchaseOrderShouldBeFound("fileUploadToken.contains=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the purchaseOrderList where fileUploadToken contains UPDATED_FILE_UPLOAD_TOKEN
+        defaultPurchaseOrderShouldNotBeFound("fileUploadToken.contains=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPurchaseOrdersByFileUploadTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        purchaseOrderRepository.saveAndFlush(purchaseOrder);
+
+        // Get all the purchaseOrderList where fileUploadToken does not contain DEFAULT_FILE_UPLOAD_TOKEN
+        defaultPurchaseOrderShouldNotBeFound("fileUploadToken.doesNotContain=" + DEFAULT_FILE_UPLOAD_TOKEN);
+
+        // Get all the purchaseOrderList where fileUploadToken does not contain UPDATED_FILE_UPLOAD_TOKEN
+        defaultPurchaseOrderShouldBeFound("fileUploadToken.doesNotContain=" + UPDATED_FILE_UPLOAD_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPurchaseOrdersByCompilationTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        purchaseOrderRepository.saveAndFlush(purchaseOrder);
+
+        // Get all the purchaseOrderList where compilationToken equals to DEFAULT_COMPILATION_TOKEN
+        defaultPurchaseOrderShouldBeFound("compilationToken.equals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the purchaseOrderList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultPurchaseOrderShouldNotBeFound("compilationToken.equals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPurchaseOrdersByCompilationTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        purchaseOrderRepository.saveAndFlush(purchaseOrder);
+
+        // Get all the purchaseOrderList where compilationToken not equals to DEFAULT_COMPILATION_TOKEN
+        defaultPurchaseOrderShouldNotBeFound("compilationToken.notEquals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the purchaseOrderList where compilationToken not equals to UPDATED_COMPILATION_TOKEN
+        defaultPurchaseOrderShouldBeFound("compilationToken.notEquals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPurchaseOrdersByCompilationTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        purchaseOrderRepository.saveAndFlush(purchaseOrder);
+
+        // Get all the purchaseOrderList where compilationToken in DEFAULT_COMPILATION_TOKEN or UPDATED_COMPILATION_TOKEN
+        defaultPurchaseOrderShouldBeFound("compilationToken.in=" + DEFAULT_COMPILATION_TOKEN + "," + UPDATED_COMPILATION_TOKEN);
+
+        // Get all the purchaseOrderList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultPurchaseOrderShouldNotBeFound("compilationToken.in=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPurchaseOrdersByCompilationTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        purchaseOrderRepository.saveAndFlush(purchaseOrder);
+
+        // Get all the purchaseOrderList where compilationToken is not null
+        defaultPurchaseOrderShouldBeFound("compilationToken.specified=true");
+
+        // Get all the purchaseOrderList where compilationToken is null
+        defaultPurchaseOrderShouldNotBeFound("compilationToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPurchaseOrdersByCompilationTokenContainsSomething() throws Exception {
+        // Initialize the database
+        purchaseOrderRepository.saveAndFlush(purchaseOrder);
+
+        // Get all the purchaseOrderList where compilationToken contains DEFAULT_COMPILATION_TOKEN
+        defaultPurchaseOrderShouldBeFound("compilationToken.contains=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the purchaseOrderList where compilationToken contains UPDATED_COMPILATION_TOKEN
+        defaultPurchaseOrderShouldNotBeFound("compilationToken.contains=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPurchaseOrdersByCompilationTokenNotContainsSomething() throws Exception {
+        // Initialize the database
+        purchaseOrderRepository.saveAndFlush(purchaseOrder);
+
+        // Get all the purchaseOrderList where compilationToken does not contain DEFAULT_COMPILATION_TOKEN
+        defaultPurchaseOrderShouldNotBeFound("compilationToken.doesNotContain=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the purchaseOrderList where compilationToken does not contain UPDATED_COMPILATION_TOKEN
+        defaultPurchaseOrderShouldBeFound("compilationToken.doesNotContain=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
     void getAllPurchaseOrdersBySettlementCurrencyIsEqualToSomething() throws Exception {
         // Initialize the database
         purchaseOrderRepository.saveAndFlush(purchaseOrder);
@@ -862,7 +1034,9 @@ class PurchaseOrderResourceIT {
             .andExpect(jsonPath("$.[*].purchaseOrderDate").value(hasItem(DEFAULT_PURCHASE_ORDER_DATE.toString())))
             .andExpect(jsonPath("$.[*].purchaseOrderAmount").value(hasItem(sameNumber(DEFAULT_PURCHASE_ORDER_AMOUNT))))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES)));
+            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES)))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
 
         // Check, that the count call also returns 1
         restPurchaseOrderMockMvc
@@ -915,7 +1089,9 @@ class PurchaseOrderResourceIT {
             .purchaseOrderDate(UPDATED_PURCHASE_ORDER_DATE)
             .purchaseOrderAmount(UPDATED_PURCHASE_ORDER_AMOUNT)
             .description(UPDATED_DESCRIPTION)
-            .notes(UPDATED_NOTES);
+            .notes(UPDATED_NOTES)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         PurchaseOrderDTO purchaseOrderDTO = purchaseOrderMapper.toDto(updatedPurchaseOrder);
 
         restPurchaseOrderMockMvc
@@ -935,6 +1111,8 @@ class PurchaseOrderResourceIT {
         assertThat(testPurchaseOrder.getPurchaseOrderAmount()).isEqualTo(UPDATED_PURCHASE_ORDER_AMOUNT);
         assertThat(testPurchaseOrder.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testPurchaseOrder.getNotes()).isEqualTo(UPDATED_NOTES);
+        assertThat(testPurchaseOrder.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testPurchaseOrder.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
 
         // Validate the PurchaseOrder in Elasticsearch
         verify(mockPurchaseOrderSearchRepository).save(testPurchaseOrder);
@@ -1028,7 +1206,10 @@ class PurchaseOrderResourceIT {
         PurchaseOrder partialUpdatedPurchaseOrder = new PurchaseOrder();
         partialUpdatedPurchaseOrder.setId(purchaseOrder.getId());
 
-        partialUpdatedPurchaseOrder.purchaseOrderAmount(UPDATED_PURCHASE_ORDER_AMOUNT).notes(UPDATED_NOTES);
+        partialUpdatedPurchaseOrder
+            .purchaseOrderAmount(UPDATED_PURCHASE_ORDER_AMOUNT)
+            .notes(UPDATED_NOTES)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN);
 
         restPurchaseOrderMockMvc
             .perform(
@@ -1047,6 +1228,8 @@ class PurchaseOrderResourceIT {
         assertThat(testPurchaseOrder.getPurchaseOrderAmount()).isEqualByComparingTo(UPDATED_PURCHASE_ORDER_AMOUNT);
         assertThat(testPurchaseOrder.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testPurchaseOrder.getNotes()).isEqualTo(UPDATED_NOTES);
+        assertThat(testPurchaseOrder.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testPurchaseOrder.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
     }
 
     @Test
@@ -1066,7 +1249,9 @@ class PurchaseOrderResourceIT {
             .purchaseOrderDate(UPDATED_PURCHASE_ORDER_DATE)
             .purchaseOrderAmount(UPDATED_PURCHASE_ORDER_AMOUNT)
             .description(UPDATED_DESCRIPTION)
-            .notes(UPDATED_NOTES);
+            .notes(UPDATED_NOTES)
+            .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
 
         restPurchaseOrderMockMvc
             .perform(
@@ -1085,6 +1270,8 @@ class PurchaseOrderResourceIT {
         assertThat(testPurchaseOrder.getPurchaseOrderAmount()).isEqualByComparingTo(UPDATED_PURCHASE_ORDER_AMOUNT);
         assertThat(testPurchaseOrder.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testPurchaseOrder.getNotes()).isEqualTo(UPDATED_NOTES);
+        assertThat(testPurchaseOrder.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
+        assertThat(testPurchaseOrder.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
 
     @Test
@@ -1205,6 +1392,8 @@ class PurchaseOrderResourceIT {
             .andExpect(jsonPath("$.[*].purchaseOrderDate").value(hasItem(DEFAULT_PURCHASE_ORDER_DATE.toString())))
             .andExpect(jsonPath("$.[*].purchaseOrderAmount").value(hasItem(sameNumber(DEFAULT_PURCHASE_ORDER_AMOUNT))))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES)));
+            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES)))
+            .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
     }
 }

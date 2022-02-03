@@ -76,6 +76,8 @@ class PurchaseOrderGatlingTest extends Simulation {
                 , "purchaseOrderAmount":"0"
                 , "description":"SAMPLE_TEXT"
                 , "notes":"SAMPLE_TEXT"
+                , "fileUploadToken":"SAMPLE_TEXT"
+                , "compilationToken":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_purchaseOrder_url"))).exitHereIfFailed

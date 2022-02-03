@@ -62,8 +62,9 @@
       "PaymentLabel",
       "SignedPayment",
       "SettlementCurrency",
-      "PurchaseOrder"
+      "PurchaseOrder",
+      "PaymentInvoice"
     ],
-    "lastLiquibaseTimestamp": 1643891879000
+    "lastLiquibaseTimestamp": 1643893045000
   }
 }
