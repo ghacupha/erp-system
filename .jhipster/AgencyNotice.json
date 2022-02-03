@@ -1,0 +1,58 @@
+{
+  "fields": [
+    {
+      "fieldName": "referenceNumber",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "referenceDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "taxCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assessmentAmount",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "agencyStatus",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "correspondents",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "dealerName",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "agencyNotice"
+    },
+    {
+      "relationshipName": "settlementCurrency",
+      "otherEntityName": "settlementCurrency",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "iso4217CurrencyCode"
+    },
+    {
+      "relationshipName": "assessor",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "dealerName"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "AgencyNotice",
+  "changelogDate": "20220203144916"
+}
