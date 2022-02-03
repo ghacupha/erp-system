@@ -2,6 +2,7 @@ package io.github.erp.service.mapper;
 
 import io.github.erp.domain.PaymentInvoice;
 import io.github.erp.service.dto.PaymentInvoiceDTO;
+import java.util.Set;
 import org.mapstruct.*;
 
 /**
@@ -22,4 +23,10 @@ public interface PaymentInvoiceMapper extends EntityMapper<PaymentInvoiceDTO, Pa
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removePaymentLabel", ignore = true)
     PaymentInvoice toEntity(PaymentInvoiceDTO paymentInvoiceDTO);
+
+    @Named("invoiceNumberSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "invoiceNumber", source = "invoiceNumber")
+    Set<PaymentInvoiceDTO> toDtoInvoiceNumberSet(Set<PaymentInvoice> paymentInvoice);
 }
