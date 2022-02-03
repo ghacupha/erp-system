@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity AgencyNotice.
+    -->
+    <changeSet id="20220203144916-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="agency_notice_id"
+                                 baseTableName="rel_agency_notice__correspondents"
+                                 constraintName="fk_rel_agency_notice__correspondents__agency_notice_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="agency_notice"/>
+
+        <addForeignKeyConstraint baseColumnNames="correspondents_id"
+                                 baseTableName="rel_agency_notice__correspondents"
+                                 constraintName="fk_rel_agency_notice__correspondents__correspondents_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="settlement_currency_id"
+                                 baseTableName="agency_notice"
+                                 constraintName="fk_agency_notice__settlement_currency_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="settlement_currency"/>
+
+        <addForeignKeyConstraint baseColumnNames="assessor_id"
+                                 baseTableName="agency_notice"
+                                 constraintName="fk_agency_notice__assessor_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+    </changeSet>
+</databaseChangeLog>

@@ -64,8 +64,9 @@
       "SettlementCurrency",
       "PurchaseOrder",
       "PaymentInvoice",
-      "Settlement"
+      "Settlement",
+      "AgencyNotice"
     ],
-    "lastLiquibaseTimestamp": 1643894023000
+    "lastLiquibaseTimestamp": 1643899756000
   }
 }
