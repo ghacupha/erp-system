@@ -33,6 +33,7 @@
     <include file="config/liquibase/changelog/20210920142924_added_entity_PaymentLabel.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210920145532_added_entity_SignedPayment.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210414144226_added_spring_batch_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220203121814_added_entity_SettlementCurrency.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
@@ -51,6 +52,7 @@
     <include file="config/liquibase/changelog/20210823115335_added_entity_constraints_Placeholder.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210920142924_added_entity_constraints_PaymentLabel.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210920145532_added_entity_constraints_SignedPayment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220203121814_added_entity_constraints_SettlementCurrency.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

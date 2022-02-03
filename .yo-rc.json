@@ -60,8 +60,9 @@
       "PaymentCategory",
       "Placeholder",
       "PaymentLabel",
-      "SignedPayment"
+      "SignedPayment",
+      "SettlementCurrency"
     ],
-    "lastLiquibaseTimestamp": 1632149732000
+    "lastLiquibaseTimestamp": 1643890694000
   }
 }
