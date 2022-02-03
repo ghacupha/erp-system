@@ -1,0 +1,64 @@
+{
+  "fields": [
+    {
+      "fieldName": "purchaseOrderNumber",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "purchaseOrderDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "purchaseOrderAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "notes",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "settlementCurrency",
+      "otherEntityName": "settlementCurrency",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "iso4217CurrencyCode"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "purchaseOrder"
+    },
+    {
+      "relationshipName": "signatories",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "dealerName",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "purchaseOrder"
+    },
+    {
+      "relationshipName": "vendor",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "dealerName",
+      "otherEntityRelationshipName": "purchaseOrder"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "PurchaseOrder",
+  "changelogDate": "20220203123759"
+}
