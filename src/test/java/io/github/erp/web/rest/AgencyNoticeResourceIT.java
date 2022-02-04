@@ -11,6 +11,7 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.domain.AgencyNotice;
 import io.github.erp.domain.Dealer;
 import io.github.erp.domain.SettlementCurrency;
+import io.github.erp.domain.enumeration.AgencyStatusType;
 import io.github.erp.repository.AgencyNoticeRepository;
 import io.github.erp.repository.search.AgencyNoticeSearchRepository;
 import io.github.erp.service.AgencyNoticeService;
@@ -63,8 +64,8 @@ class AgencyNoticeResourceIT {
     private static final BigDecimal UPDATED_ASSESSMENT_AMOUNT = new BigDecimal(2);
     private static final BigDecimal SMALLER_ASSESSMENT_AMOUNT = new BigDecimal(1 - 1);
 
-    private static final Boolean DEFAULT_AGENCY_STATUS = false;
-    private static final Boolean UPDATED_AGENCY_STATUS = true;
+    private static final AgencyStatusType DEFAULT_AGENCY_STATUS = AgencyStatusType.CLEARED;
+    private static final AgencyStatusType UPDATED_AGENCY_STATUS = AgencyStatusType.NOT_CLEARED;
 
     private static final String ENTITY_API_URL = "/api/agency-notices";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -304,7 +305,7 @@ class AgencyNoticeResourceIT {
             .andExpect(jsonPath("$.[*].referenceDate").value(hasItem(DEFAULT_REFERENCE_DATE.toString())))
             .andExpect(jsonPath("$.[*].taxCode").value(hasItem(DEFAULT_TAX_CODE)))
             .andExpect(jsonPath("$.[*].assessmentAmount").value(hasItem(sameNumber(DEFAULT_ASSESSMENT_AMOUNT))))
-            .andExpect(jsonPath("$.[*].agencyStatus").value(hasItem(DEFAULT_AGENCY_STATUS.booleanValue())));
+            .andExpect(jsonPath("$.[*].agencyStatus").value(hasItem(DEFAULT_AGENCY_STATUS.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -341,7 +342,7 @@ class AgencyNoticeResourceIT {
             .andExpect(jsonPath("$.referenceDate").value(DEFAULT_REFERENCE_DATE.toString()))
             .andExpect(jsonPath("$.taxCode").value(DEFAULT_TAX_CODE))
             .andExpect(jsonPath("$.assessmentAmount").value(sameNumber(DEFAULT_ASSESSMENT_AMOUNT)))
-            .andExpect(jsonPath("$.agencyStatus").value(DEFAULT_AGENCY_STATUS.booleanValue()));
+            .andExpect(jsonPath("$.agencyStatus").value(DEFAULT_AGENCY_STATUS.toString()));
     }
 
     @Test
@@ -869,7 +870,7 @@ class AgencyNoticeResourceIT {
             .andExpect(jsonPath("$.[*].referenceDate").value(hasItem(DEFAULT_REFERENCE_DATE.toString())))
             .andExpect(jsonPath("$.[*].taxCode").value(hasItem(DEFAULT_TAX_CODE)))
             .andExpect(jsonPath("$.[*].assessmentAmount").value(hasItem(sameNumber(DEFAULT_ASSESSMENT_AMOUNT))))
-            .andExpect(jsonPath("$.[*].agencyStatus").value(hasItem(DEFAULT_AGENCY_STATUS.booleanValue())));
+            .andExpect(jsonPath("$.[*].agencyStatus").value(hasItem(DEFAULT_AGENCY_STATUS.toString())));
 
         // Check, that the count call also returns 1
         restAgencyNoticeMockMvc
@@ -1215,6 +1216,6 @@ class AgencyNoticeResourceIT {
             .andExpect(jsonPath("$.[*].referenceDate").value(hasItem(DEFAULT_REFERENCE_DATE.toString())))
             .andExpect(jsonPath("$.[*].taxCode").value(hasItem(DEFAULT_TAX_CODE)))
             .andExpect(jsonPath("$.[*].assessmentAmount").value(hasItem(sameNumber(DEFAULT_ASSESSMENT_AMOUNT))))
-            .andExpect(jsonPath("$.[*].agencyStatus").value(hasItem(DEFAULT_AGENCY_STATUS.booleanValue())));
+            .andExpect(jsonPath("$.[*].agencyStatus").value(hasItem(DEFAULT_AGENCY_STATUS.toString())));
     }
 }

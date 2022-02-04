@@ -1,5 +1,6 @@
 package io.github.erp.service.criteria;
 
+import io.github.erp.domain.enumeration.AgencyStatusType;
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -24,6 +25,23 @@ import tech.jhipster.service.filter.StringFilter;
  */
 public class AgencyNoticeCriteria implements Serializable, Criteria {
 
+    /**
+     * Class for filtering AgencyStatusType
+     */
+    public static class AgencyStatusTypeFilter extends Filter<AgencyStatusType> {
+
+        public AgencyStatusTypeFilter() {}
+
+        public AgencyStatusTypeFilter(AgencyStatusTypeFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public AgencyStatusTypeFilter copy() {
+            return new AgencyStatusTypeFilter(this);
+        }
+    }
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
@@ -36,7 +54,7 @@ public class AgencyNoticeCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter assessmentAmount;
 
-    private BooleanFilter agencyStatus;
+    private AgencyStatusTypeFilter agencyStatus;
 
     private LongFilter correspondentsId;
 
@@ -141,18 +159,18 @@ public class AgencyNoticeCriteria implements Serializable, Criteria {
         this.assessmentAmount = assessmentAmount;
     }
 
-    public BooleanFilter getAgencyStatus() {
+    public AgencyStatusTypeFilter getAgencyStatus() {
         return agencyStatus;
     }
 
-    public BooleanFilter agencyStatus() {
+    public AgencyStatusTypeFilter agencyStatus() {
         if (agencyStatus == null) {
-            agencyStatus = new BooleanFilter();
+            agencyStatus = new AgencyStatusTypeFilter();
         }
         return agencyStatus;
     }
 
-    public void setAgencyStatus(BooleanFilter agencyStatus) {
+    public void setAgencyStatus(AgencyStatusTypeFilter agencyStatus) {
         this.agencyStatus = agencyStatus;
     }
 

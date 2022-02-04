@@ -1,5 +1,6 @@
 package io.github.erp.service.dto;
 
+import io.github.erp.domain.enumeration.AgencyStatusType;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -26,7 +27,7 @@ public class AgencyNoticeDTO implements Serializable {
     private BigDecimal assessmentAmount;
 
     @NotNull
-    private Boolean agencyStatus;
+    private AgencyStatusType agencyStatus;
 
     private Set<DealerDTO> correspondents = new HashSet<>();
 
@@ -74,11 +75,11 @@ public class AgencyNoticeDTO implements Serializable {
         this.assessmentAmount = assessmentAmount;
     }
 
-    public Boolean getAgencyStatus() {
+    public AgencyStatusType getAgencyStatus() {
         return agencyStatus;
     }
 
-    public void setAgencyStatus(Boolean agencyStatus) {
+    public void setAgencyStatus(AgencyStatusType agencyStatus) {
         this.agencyStatus = agencyStatus;
     }
 

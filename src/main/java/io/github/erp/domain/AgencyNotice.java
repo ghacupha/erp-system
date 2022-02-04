@@ -1,6 +1,7 @@
 package io.github.erp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.github.erp.domain.enumeration.AgencyStatusType;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -43,8 +44,9 @@ public class AgencyNotice implements Serializable {
     private BigDecimal assessmentAmount;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "agency_status", nullable = false)
-    private Boolean agencyStatus;
+    private AgencyStatusType agencyStatus;
 
     @ManyToMany
     @JoinTable(
@@ -133,16 +135,16 @@ public class AgencyNotice implements Serializable {
         this.assessmentAmount = assessmentAmount;
     }
 
-    public Boolean getAgencyStatus() {
+    public AgencyStatusType getAgencyStatus() {
         return this.agencyStatus;
     }
 
-    public AgencyNotice agencyStatus(Boolean agencyStatus) {
+    public AgencyNotice agencyStatus(AgencyStatusType agencyStatus) {
         this.setAgencyStatus(agencyStatus);
         return this;
     }
 
-    public void setAgencyStatus(Boolean agencyStatus) {
+    public void setAgencyStatus(AgencyStatusType agencyStatus) {
         this.agencyStatus = agencyStatus;
     }
 

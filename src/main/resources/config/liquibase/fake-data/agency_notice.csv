@@ -1,11 +1,11 @@
 id;reference_number;reference_date;tax_code;assessment_amount;agency_status;settlement_currency_id;assessor_id
-1;logistical Qatar;2022-02-03;granular;32089;true;1;1
-2;Fish cyan Market;2022-02-03;EXE;71702;true;2;2
-3;Motorway;2022-02-03;Granite primary;61022;false;3;3
-4;Web Cotton pixel;2022-02-02;Gloves Liechtenstein Account;57431;false;4;4
-5;algorithm infomediaries action-items;2022-02-03;SCSI bus;52591;true;5;5
-6;Intelligent digital;2022-02-02;redundant;55251;false;6;6
-7;Implemented Accountability;2022-02-02;Massachusetts Freeway;39252;true;7;7
-8;Director;2022-02-03;compressing Kuwait gold;23686;true;8;8
-9;Internal Account South;2022-02-02;ivory;7308;true;9;9
-10;SMTP groupware Refined;2022-02-03;Computer Haven;42531;true;10;10
+1;logistical Qatar;2022-02-03;granular;32089;NOT_CLEARED;1;1
+2;Fish cyan Market;2022-02-03;EXE;71702;NOT_CLEARED;2;2
+3;Motorway;2022-02-03;Granite primary;61022;CLEARED;3;3
+4;Web Cotton pixel;2022-02-02;Gloves Liechtenstein Account;57431;CLEARED;4;4
+5;algorithm infomediaries action-items;2022-02-03;SCSI bus;52591;NOT_CLEARED;5;5
+6;Intelligent digital;2022-02-02;redundant;55251;CLEARED;6;6
+7;Implemented Accountability;2022-02-02;Massachusetts Freeway;39252;NOT_CLEARED;7;7
+8;Director;2022-02-03;compressing Kuwait gold;23686;NOT_CLEARED;8;8
+9;Internal Account South;2022-02-02;ivory;7308;NOT_CLEARED;9;9
+10;SMTP groupware Refined;2022-02-03;Computer Haven;42531;NOT_CLEARED;10;10
