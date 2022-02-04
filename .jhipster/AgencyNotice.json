@@ -20,7 +20,8 @@
     },
     {
       "fieldName": "agencyStatus",
-      "fieldType": "Boolean",
+      "fieldType": "AgencyStatusType",
+      "fieldValues": "CLEARED,NOT_CLEARED",
       "fieldValidateRules": ["required"]
     }
   ],

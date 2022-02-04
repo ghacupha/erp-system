@@ -26,7 +26,7 @@
             <column name="assessment_amount" type="decimal(21,2)">
                 <constraints nullable="false" />
             </column>
-            <column name="agency_status" type="boolean">
+            <column name="agency_status" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
             <column name="settlement_currency_id" type="bigint">
@@ -74,7 +74,7 @@
             <column name="reference_date" type="date"/>
             <column name="tax_code" type="string"/>
             <column name="assessment_amount" type="numeric"/>
-            <column name="agency_status" type="boolean"/>
+            <column name="agency_status" type="string"/>
             <column name="settlement_currency_id" type="numeric"/>
             <column name="assessor_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
