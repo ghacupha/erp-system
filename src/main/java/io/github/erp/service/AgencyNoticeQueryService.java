@@ -140,6 +140,15 @@ public class AgencyNoticeQueryService extends QueryService<AgencyNotice> {
                         )
                     );
             }
+            if (criteria.getPlaceholderId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPlaceholderId(),
+                            root -> root.join(AgencyNotice_.placeholders, JoinType.LEFT).get(Placeholder_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

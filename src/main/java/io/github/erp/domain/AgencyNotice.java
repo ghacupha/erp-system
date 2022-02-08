@@ -68,6 +68,16 @@ public class AgencyNotice implements Serializable {
     @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "placeholders" }, allowSetters = true)
     private Dealer assessor;
 
+    @ManyToMany
+    @JoinTable(
+        name = "rel_agency_notice__placeholder",
+        joinColumns = @JoinColumn(name = "agency_notice_id"),
+        inverseJoinColumns = @JoinColumn(name = "placeholder_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
+    private Set<Placeholder> placeholders = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -194,6 +204,29 @@ public class AgencyNotice implements Serializable {
 
     public AgencyNotice assessor(Dealer dealer) {
         this.setAssessor(dealer);
+        return this;
+    }
+
+    public Set<Placeholder> getPlaceholders() {
+        return this.placeholders;
+    }
+
+    public void setPlaceholders(Set<Placeholder> placeholders) {
+        this.placeholders = placeholders;
+    }
+
+    public AgencyNotice placeholders(Set<Placeholder> placeholders) {
+        this.setPlaceholders(placeholders);
+        return this;
+    }
+
+    public AgencyNotice addPlaceholder(Placeholder placeholder) {
+        this.placeholders.add(placeholder);
+        return this;
+    }
+
+    public AgencyNotice removePlaceholder(Placeholder placeholder) {
+        this.placeholders.remove(placeholder);
         return this;
     }
 
