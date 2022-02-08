@@ -62,6 +62,8 @@ public class AgencyNoticeCriteria implements Serializable, Criteria {
 
     private LongFilter assessorId;
 
+    private LongFilter placeholderId;
+
     private Boolean distinct;
 
     public AgencyNoticeCriteria() {}
@@ -76,6 +78,7 @@ public class AgencyNoticeCriteria implements Serializable, Criteria {
         this.correspondentsId = other.correspondentsId == null ? null : other.correspondentsId.copy();
         this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
         this.assessorId = other.assessorId == null ? null : other.assessorId.copy();
+        this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
     }
 
@@ -219,6 +222,21 @@ public class AgencyNoticeCriteria implements Serializable, Criteria {
         this.assessorId = assessorId;
     }
 
+    public LongFilter getPlaceholderId() {
+        return placeholderId;
+    }
+
+    public LongFilter placeholderId() {
+        if (placeholderId == null) {
+            placeholderId = new LongFilter();
+        }
+        return placeholderId;
+    }
+
+    public void setPlaceholderId(LongFilter placeholderId) {
+        this.placeholderId = placeholderId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -246,6 +264,7 @@ public class AgencyNoticeCriteria implements Serializable, Criteria {
             Objects.equals(correspondentsId, that.correspondentsId) &&
             Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
             Objects.equals(assessorId, that.assessorId) &&
+            Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -262,6 +281,7 @@ public class AgencyNoticeCriteria implements Serializable, Criteria {
             correspondentsId,
             settlementCurrencyId,
             assessorId,
+            placeholderId,
             distinct
         );
     }
@@ -279,6 +299,7 @@ public class AgencyNoticeCriteria implements Serializable, Criteria {
             (correspondentsId != null ? "correspondentsId=" + correspondentsId + ", " : "") +
             (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
             (assessorId != null ? "assessorId=" + assessorId + ", " : "") +
+            (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

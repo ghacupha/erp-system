@@ -31,5 +31,17 @@
                                  constraintName="fk_agency_notice__assessor_id"
                                  referencedColumnNames="id"
                                  referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="agency_notice_id"
+                                 baseTableName="rel_agency_notice__placeholder"
+                                 constraintName="fk_rel_agency_notice__placeholder__agency_notice_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="agency_notice"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_agency_notice__placeholder"
+                                 constraintName="fk_rel_agency_notice__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
     </changeSet>
 </databaseChangeLog>

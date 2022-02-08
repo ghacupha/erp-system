@@ -51,6 +51,17 @@
         </createTable>
 
         <addPrimaryKey columnNames="agency_notice_id, correspondents_id" tableName="rel_agency_notice__correspondents"/>
+
+        <createTable tableName="rel_agency_notice__placeholder">
+            <column name="placeholder_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="agency_notice_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="agency_notice_id, placeholder_id" tableName="rel_agency_notice__placeholder"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->

@@ -15,14 +15,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AgencyNoticeRepository extends JpaRepository<AgencyNotice, Long>, JpaSpecificationExecutor<AgencyNotice> {
     @Query(
-        value = "select distinct agencyNotice from AgencyNotice agencyNotice left join fetch agencyNotice.correspondents",
+        value = "select distinct agencyNotice from AgencyNotice agencyNotice left join fetch agencyNotice.correspondents left join fetch agencyNotice.placeholders",
         countQuery = "select count(distinct agencyNotice) from AgencyNotice agencyNotice"
     )
     Page<AgencyNotice> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("select distinct agencyNotice from AgencyNotice agencyNotice left join fetch agencyNotice.correspondents")
+    @Query(
+        "select distinct agencyNotice from AgencyNotice agencyNotice left join fetch agencyNotice.correspondents left join fetch agencyNotice.placeholders"
+    )
     List<AgencyNotice> findAllWithEagerRelationships();
 
-    @Query("select agencyNotice from AgencyNotice agencyNotice left join fetch agencyNotice.correspondents where agencyNotice.id =:id")
+    @Query(
+        "select agencyNotice from AgencyNotice agencyNotice left join fetch agencyNotice.correspondents left join fetch agencyNotice.placeholders where agencyNotice.id =:id"
+    )
     Optional<AgencyNotice> findOneWithEagerRelationships(@Param("id") Long id);
 }

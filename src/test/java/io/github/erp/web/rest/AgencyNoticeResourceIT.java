@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.AgencyNotice;
 import io.github.erp.domain.Dealer;
+import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.SettlementCurrency;
 import io.github.erp.domain.enumeration.AgencyStatusType;
 import io.github.erp.repository.AgencyNoticeRepository;
@@ -855,6 +856,32 @@ class AgencyNoticeResourceIT {
 
         // Get all the agencyNoticeList where assessor equals to (assessorId + 1)
         defaultAgencyNoticeShouldNotBeFound("assessorId.equals=" + (assessorId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllAgencyNoticesByPlaceholderIsEqualToSomething() throws Exception {
+        // Initialize the database
+        agencyNoticeRepository.saveAndFlush(agencyNotice);
+        Placeholder placeholder;
+        if (TestUtil.findAll(em, Placeholder.class).isEmpty()) {
+            placeholder = PlaceholderResourceIT.createEntity(em);
+            em.persist(placeholder);
+            em.flush();
+        } else {
+            placeholder = TestUtil.findAll(em, Placeholder.class).get(0);
+        }
+        em.persist(placeholder);
+        em.flush();
+        agencyNotice.addPlaceholder(placeholder);
+        agencyNoticeRepository.saveAndFlush(agencyNotice);
+        Long placeholderId = placeholder.getId();
+
+        // Get all the agencyNoticeList where placeholder equals to placeholderId
+        defaultAgencyNoticeShouldBeFound("placeholderId.equals=" + placeholderId);
+
+        // Get all the agencyNoticeList where placeholder equals to (placeholderId + 1)
+        defaultAgencyNoticeShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
     }
 
     /**

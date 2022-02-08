@@ -35,6 +35,8 @@ public class AgencyNoticeDTO implements Serializable {
 
     private DealerDTO assessor;
 
+    private Set<PlaceholderDTO> placeholders = new HashSet<>();
+
     public Long getId() {
         return id;
     }
@@ -107,6 +109,14 @@ public class AgencyNoticeDTO implements Serializable {
         this.assessor = assessor;
     }
 
+    public Set<PlaceholderDTO> getPlaceholders() {
+        return placeholders;
+    }
+
+    public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
+        this.placeholders = placeholders;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -141,6 +151,7 @@ public class AgencyNoticeDTO implements Serializable {
             ", correspondents=" + getCorrespondents() +
             ", settlementCurrency=" + getSettlementCurrency() +
             ", assessor=" + getAssessor() +
+            ", placeholders=" + getPlaceholders() +
             "}";
     }
 }
