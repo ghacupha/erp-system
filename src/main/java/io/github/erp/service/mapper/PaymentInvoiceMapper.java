@@ -10,13 +10,16 @@ import org.mapstruct.*;
  */
 @Mapper(
     componentModel = "spring",
-    uses = { PurchaseOrderMapper.class, PlaceholderMapper.class, PaymentLabelMapper.class, SettlementCurrencyMapper.class }
+    uses = {
+        PurchaseOrderMapper.class, PlaceholderMapper.class, PaymentLabelMapper.class, SettlementCurrencyMapper.class, DealerMapper.class,
+    }
 )
 public interface PaymentInvoiceMapper extends EntityMapper<PaymentInvoiceDTO, PaymentInvoice> {
     @Mapping(target = "purchaseOrders", source = "purchaseOrders", qualifiedByName = "purchaseOrderNumberSet")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     @Mapping(target = "paymentLabels", source = "paymentLabels", qualifiedByName = "descriptionSet")
     @Mapping(target = "settlementCurrency", source = "settlementCurrency", qualifiedByName = "iso4217CurrencyCode")
+    @Mapping(target = "biller", source = "biller", qualifiedByName = "dealerName")
     PaymentInvoiceDTO toDto(PaymentInvoice s);
 
     @Mapping(target = "removePurchaseOrder", ignore = true)

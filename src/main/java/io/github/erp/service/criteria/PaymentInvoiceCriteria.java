@@ -34,10 +34,6 @@ public class PaymentInvoiceCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter invoiceAmount;
 
-    private StringFilter paymentReference;
-
-    private StringFilter dealerName;
-
     private StringFilter fileUploadToken;
 
     private StringFilter compilationToken;
@@ -50,6 +46,8 @@ public class PaymentInvoiceCriteria implements Serializable, Criteria {
 
     private LongFilter settlementCurrencyId;
 
+    private LongFilter billerId;
+
     private Boolean distinct;
 
     public PaymentInvoiceCriteria() {}
@@ -59,14 +57,13 @@ public class PaymentInvoiceCriteria implements Serializable, Criteria {
         this.invoiceNumber = other.invoiceNumber == null ? null : other.invoiceNumber.copy();
         this.invoiceDate = other.invoiceDate == null ? null : other.invoiceDate.copy();
         this.invoiceAmount = other.invoiceAmount == null ? null : other.invoiceAmount.copy();
-        this.paymentReference = other.paymentReference == null ? null : other.paymentReference.copy();
-        this.dealerName = other.dealerName == null ? null : other.dealerName.copy();
         this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
         this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.purchaseOrderId = other.purchaseOrderId == null ? null : other.purchaseOrderId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
         this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
+        this.billerId = other.billerId == null ? null : other.billerId.copy();
         this.distinct = other.distinct;
     }
 
@@ -133,36 +130,6 @@ public class PaymentInvoiceCriteria implements Serializable, Criteria {
 
     public void setInvoiceAmount(BigDecimalFilter invoiceAmount) {
         this.invoiceAmount = invoiceAmount;
-    }
-
-    public StringFilter getPaymentReference() {
-        return paymentReference;
-    }
-
-    public StringFilter paymentReference() {
-        if (paymentReference == null) {
-            paymentReference = new StringFilter();
-        }
-        return paymentReference;
-    }
-
-    public void setPaymentReference(StringFilter paymentReference) {
-        this.paymentReference = paymentReference;
-    }
-
-    public StringFilter getDealerName() {
-        return dealerName;
-    }
-
-    public StringFilter dealerName() {
-        if (dealerName == null) {
-            dealerName = new StringFilter();
-        }
-        return dealerName;
-    }
-
-    public void setDealerName(StringFilter dealerName) {
-        this.dealerName = dealerName;
     }
 
     public StringFilter getFileUploadToken() {
@@ -255,6 +222,21 @@ public class PaymentInvoiceCriteria implements Serializable, Criteria {
         this.settlementCurrencyId = settlementCurrencyId;
     }
 
+    public LongFilter getBillerId() {
+        return billerId;
+    }
+
+    public LongFilter billerId() {
+        if (billerId == null) {
+            billerId = new LongFilter();
+        }
+        return billerId;
+    }
+
+    public void setBillerId(LongFilter billerId) {
+        this.billerId = billerId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -277,14 +259,13 @@ public class PaymentInvoiceCriteria implements Serializable, Criteria {
             Objects.equals(invoiceNumber, that.invoiceNumber) &&
             Objects.equals(invoiceDate, that.invoiceDate) &&
             Objects.equals(invoiceAmount, that.invoiceAmount) &&
-            Objects.equals(paymentReference, that.paymentReference) &&
-            Objects.equals(dealerName, that.dealerName) &&
             Objects.equals(fileUploadToken, that.fileUploadToken) &&
             Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(purchaseOrderId, that.purchaseOrderId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
             Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
+            Objects.equals(billerId, that.billerId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -296,14 +277,13 @@ public class PaymentInvoiceCriteria implements Serializable, Criteria {
             invoiceNumber,
             invoiceDate,
             invoiceAmount,
-            paymentReference,
-            dealerName,
             fileUploadToken,
             compilationToken,
             purchaseOrderId,
             placeholderId,
             paymentLabelId,
             settlementCurrencyId,
+            billerId,
             distinct
         );
     }
@@ -316,14 +296,13 @@ public class PaymentInvoiceCriteria implements Serializable, Criteria {
             (invoiceNumber != null ? "invoiceNumber=" + invoiceNumber + ", " : "") +
             (invoiceDate != null ? "invoiceDate=" + invoiceDate + ", " : "") +
             (invoiceAmount != null ? "invoiceAmount=" + invoiceAmount + ", " : "") +
-            (paymentReference != null ? "paymentReference=" + paymentReference + ", " : "") +
-            (dealerName != null ? "dealerName=" + dealerName + ", " : "") +
             (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +
             (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (purchaseOrderId != null ? "purchaseOrderId=" + purchaseOrderId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
             (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
+            (billerId != null ? "billerId=" + billerId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

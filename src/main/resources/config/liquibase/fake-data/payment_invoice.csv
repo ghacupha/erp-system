@@ -1,11 +1,11 @@
-id;invoice_number;invoice_date;invoice_amount;payment_reference;dealer_name;file_upload_token;compilation_token;settlement_currency_id
-1;time-frame IB;2022-02-03;3759;Algeria Borders Steel;Idaho;e-services cross-platform;Via;1
-2;copying technologies Tunisia;2022-02-02;73192;maximized Texas;Regional synthesizing;systemic Arizona;deposit;2
-3;synthesizing Fresh Table;2022-02-02;67526;copy technologies quantifying;Account Electronics Home;Legacy Peso Gloves;virtual;3
-4;Rustic content-based;2022-02-02;27948;drive architecture;multi-byte e-commerce;Computer;Tuna Towels Assistant;4
-5;dynamic;2022-02-02;30717;architectures quantifying;withdrawal;payment Cuban;Avon;5
-6;Dinar Mexico incentivize;2022-02-03;18330;deposit Operations Licensed;XSS withdrawal Burundi;optical Wyoming turquoise;copying;6
-7;Plastic;2022-02-03;61707;Mali;Fort Response;Forges synergies Home;incentivize UIC-Franc;7
-8;Bedfordshire Handcrafted;2022-02-03;37954;Tuna Granite;transmitting;Factors Shoes;Barthelemy;8
-9;Rupee synergistic Borders;2022-02-03;14133;invoice Metical Dale;payment hack Games;Cambridgeshire;payment Kansas;9
-10;microchip;2022-02-03;72857;Gorgeous;Account;ROI Account array;Integration;10
+id;invoice_number;invoice_date;invoice_amount;file_upload_token;compilation_token;settlement_currency_id;biller_id
+1;time-frame IB;2022-02-03;3759;Algeria Borders Steel;Idaho;1;1
+2;e-services cross-platform;2022-02-03;47965;SCSI viral web-readiness;monitor ROI Towels;2;2
+3;Valley;2022-02-02;83102;connect FTP Incredible;optical bandwidth-monitored Officer;3;3
+4;SMTP copy technologies;2022-02-02;64969;calculate Solutions Borders;circuit;4;4
+5;Peso Gloves Secured;2022-02-02;53781;Table;content-based;5;5
+6;motivating Wisconsin Sleek;2022-02-02;61108;e-commerce Devolved;hacking Games;6;6
+7;Assistant Shirt;2022-02-03;47404;Islands (customarily;Forges payment;7;7
+8;blue Avon Quality;2022-02-02;59096;interface withdrawal;deposit Operations Licensed;8;8
+9;XSS withdrawal Burundi;2022-02-02;77862;interfaces teal panel;bi-directional;9;9
+10;Administrator Awesome;2022-02-03;56848;mobile background;Devolved Grocery;10;10
