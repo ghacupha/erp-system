@@ -38,12 +38,6 @@ public class PaymentInvoice implements Serializable {
     @Column(name = "invoice_amount", precision = 21, scale = 2)
     private BigDecimal invoiceAmount;
 
-    @Column(name = "payment_reference")
-    private String paymentReference;
-
-    @Column(name = "dealer_name")
-    private String dealerName;
-
     @Column(name = "file_upload_token")
     private String fileUploadToken;
 
@@ -84,6 +78,11 @@ public class PaymentInvoice implements Serializable {
     @NotNull
     @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
     private SettlementCurrency settlementCurrency;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "placeholders" }, allowSetters = true)
+    private Dealer biller;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -137,32 +136,6 @@ public class PaymentInvoice implements Serializable {
 
     public void setInvoiceAmount(BigDecimal invoiceAmount) {
         this.invoiceAmount = invoiceAmount;
-    }
-
-    public String getPaymentReference() {
-        return this.paymentReference;
-    }
-
-    public PaymentInvoice paymentReference(String paymentReference) {
-        this.setPaymentReference(paymentReference);
-        return this;
-    }
-
-    public void setPaymentReference(String paymentReference) {
-        this.paymentReference = paymentReference;
-    }
-
-    public String getDealerName() {
-        return this.dealerName;
-    }
-
-    public PaymentInvoice dealerName(String dealerName) {
-        this.setDealerName(dealerName);
-        return this;
-    }
-
-    public void setDealerName(String dealerName) {
-        this.dealerName = dealerName;
     }
 
     public String getFileUploadToken() {
@@ -273,6 +246,19 @@ public class PaymentInvoice implements Serializable {
         return this;
     }
 
+    public Dealer getBiller() {
+        return this.biller;
+    }
+
+    public void setBiller(Dealer dealer) {
+        this.biller = dealer;
+    }
+
+    public PaymentInvoice biller(Dealer dealer) {
+        this.setBiller(dealer);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -300,8 +286,6 @@ public class PaymentInvoice implements Serializable {
             ", invoiceNumber='" + getInvoiceNumber() + "'" +
             ", invoiceDate='" + getInvoiceDate() + "'" +
             ", invoiceAmount=" + getInvoiceAmount() +
-            ", paymentReference='" + getPaymentReference() + "'" +
-            ", dealerName='" + getDealerName() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
             "}";

@@ -22,10 +22,6 @@ public class PaymentInvoiceDTO implements Serializable {
 
     private BigDecimal invoiceAmount;
 
-    private String paymentReference;
-
-    private String dealerName;
-
     private String fileUploadToken;
 
     private String compilationToken;
@@ -37,6 +33,8 @@ public class PaymentInvoiceDTO implements Serializable {
     private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
 
     private SettlementCurrencyDTO settlementCurrency;
+
+    private DealerDTO biller;
 
     public Long getId() {
         return id;
@@ -68,22 +66,6 @@ public class PaymentInvoiceDTO implements Serializable {
 
     public void setInvoiceAmount(BigDecimal invoiceAmount) {
         this.invoiceAmount = invoiceAmount;
-    }
-
-    public String getPaymentReference() {
-        return paymentReference;
-    }
-
-    public void setPaymentReference(String paymentReference) {
-        this.paymentReference = paymentReference;
-    }
-
-    public String getDealerName() {
-        return dealerName;
-    }
-
-    public void setDealerName(String dealerName) {
-        this.dealerName = dealerName;
     }
 
     public String getFileUploadToken() {
@@ -134,6 +116,14 @@ public class PaymentInvoiceDTO implements Serializable {
         this.settlementCurrency = settlementCurrency;
     }
 
+    public DealerDTO getBiller() {
+        return biller;
+    }
+
+    public void setBiller(DealerDTO biller) {
+        this.biller = biller;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -163,14 +153,13 @@ public class PaymentInvoiceDTO implements Serializable {
             ", invoiceNumber='" + getInvoiceNumber() + "'" +
             ", invoiceDate='" + getInvoiceDate() + "'" +
             ", invoiceAmount=" + getInvoiceAmount() +
-            ", paymentReference='" + getPaymentReference() + "'" +
-            ", dealerName='" + getDealerName() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
             ", purchaseOrders=" + getPurchaseOrders() +
             ", placeholders=" + getPlaceholders() +
             ", paymentLabels=" + getPaymentLabels() +
             ", settlementCurrency=" + getSettlementCurrency() +
+            ", biller=" + getBiller() +
             "}";
     }
 }

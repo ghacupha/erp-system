@@ -114,7 +114,10 @@ public class Settlement implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "payment_invoice_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "purchaseOrders", "placeholders", "paymentLabels", "settlementCurrency" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "purchaseOrders", "placeholders", "paymentLabels", "settlementCurrency", "biller" },
+        allowSetters = true
+    )
     private Set<PaymentInvoice> paymentInvoices = new HashSet<>();
 
     @ManyToMany

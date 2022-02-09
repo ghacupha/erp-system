@@ -107,13 +107,6 @@ public class PaymentInvoiceQueryService extends QueryService<PaymentInvoice> {
             if (criteria.getInvoiceAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getInvoiceAmount(), PaymentInvoice_.invoiceAmount));
             }
-            if (criteria.getPaymentReference() != null) {
-                specification =
-                    specification.and(buildStringSpecification(criteria.getPaymentReference(), PaymentInvoice_.paymentReference));
-            }
-            if (criteria.getDealerName() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getDealerName(), PaymentInvoice_.dealerName));
-            }
             if (criteria.getFileUploadToken() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getFileUploadToken(), PaymentInvoice_.fileUploadToken));
             }
@@ -155,6 +148,12 @@ public class PaymentInvoiceQueryService extends QueryService<PaymentInvoice> {
                             criteria.getSettlementCurrencyId(),
                             root -> root.join(PaymentInvoice_.settlementCurrency, JoinType.LEFT).get(SettlementCurrency_.id)
                         )
+                    );
+            }
+            if (criteria.getBillerId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getBillerId(), root -> root.join(PaymentInvoice_.biller, JoinType.LEFT).get(Dealer_.id))
                     );
             }
         }
