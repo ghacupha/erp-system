@@ -32,7 +32,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * REST controller for managing {@link io.github.erp.domain.PaymentCalculation}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/payments")
 public class PaymentCalculationResource {
 
     private final Logger log = LoggerFactory.getLogger(PaymentCalculationResource.class);

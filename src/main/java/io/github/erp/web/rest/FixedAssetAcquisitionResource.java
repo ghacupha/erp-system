@@ -34,7 +34,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * REST controller for managing {@link io.github.erp.domain.FixedAssetAcquisition}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/fixed-asset")
 public class FixedAssetAcquisitionResource {
 
     private final Logger log = LoggerFactory.getLogger(FixedAssetAcquisitionResource.class);

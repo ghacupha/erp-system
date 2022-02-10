@@ -34,7 +34,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * REST controller for managing {@link io.github.erp.domain.SettlementCurrency}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/payments")
 public class SettlementCurrencyResource {
 
     private final Logger log = LoggerFactory.getLogger(SettlementCurrencyResource.class);
