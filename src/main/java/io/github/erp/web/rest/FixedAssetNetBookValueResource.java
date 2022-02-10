@@ -32,7 +32,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * REST controller for managing {@link io.github.erp.domain.FixedAssetNetBookValue}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/fixed-asset")
 public class FixedAssetNetBookValueResource {
 
     private final Logger log = LoggerFactory.getLogger(FixedAssetNetBookValueResource.class);

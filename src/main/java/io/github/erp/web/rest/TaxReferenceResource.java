@@ -34,7 +34,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * REST controller for managing {@link io.github.erp.domain.TaxReference}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/taxes")
 public class TaxReferenceResource {
 
     private final Logger log = LoggerFactory.getLogger(TaxReferenceResource.class);

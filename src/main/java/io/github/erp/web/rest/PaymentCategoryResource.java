@@ -34,7 +34,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * REST controller for managing {@link io.github.erp.domain.PaymentCategory}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/payments")
 public class PaymentCategoryResource {
 
     private final Logger log = LoggerFactory.getLogger(PaymentCategoryResource.class);

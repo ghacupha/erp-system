@@ -34,7 +34,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * REST controller for managing {@link io.github.erp.domain.AgencyNotice}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/taxes")
 public class AgencyNoticeResource {
 
     private final Logger log = LoggerFactory.getLogger(AgencyNoticeResource.class);

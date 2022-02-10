@@ -34,7 +34,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * REST controller for managing {@link io.github.erp.domain.FileType}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/files")
 public class FileTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(FileTypeResource.class);

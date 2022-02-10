@@ -32,7 +32,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * REST controller for managing {@link io.github.erp.domain.TaxRule}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/taxes")
 public class TaxRuleResource {
 
     private final Logger log = LoggerFactory.getLogger(TaxRuleResource.class);
