@@ -1,7 +1,8 @@
 package io.github.erp.config;
 
-import io.github.erp.security.*;
-import io.github.erp.security.jwt.*;
+import io.github.erp.security.AuthoritiesConstants;
+import io.github.erp.security.jwt.JWTConfigurer;
+import io.github.erp.security.jwt.TokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
@@ -86,6 +87,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/fixed-asset/**").hasAuthority(AuthoritiesConstants.FIXED_ASSETS_USER)
             .antMatchers("/api/files/**").hasAuthority(AuthoritiesConstants.DBA)
+            .antMatchers("/api/dev/**").hasAuthority(AuthoritiesConstants.DEV)
             .antMatchers("/api/payments/**").hasAuthority(AuthoritiesConstants.PAYMENTS_USER)
             .antMatchers("/api/taxes/**").hasAuthority(AuthoritiesConstants.TAX_MODULE_USER)
             .antMatchers("/api/**").authenticated()

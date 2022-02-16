@@ -4,7 +4,7 @@ import io.github.erp.domain.enumeration.AgencyStatusType;
 import java.io.Serializable;
 import java.util.Objects;
 
-import io.github.erp.erp.resources.AgencyNoticeResource;
+import io.github.erp.web.rest.api.AgencyNoticeResource;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.BigDecimalFilter;
 import tech.jhipster.service.filter.Filter;
@@ -48,8 +48,6 @@ public class AgencyNoticeCriteria implements Serializable, Criteria {
 
     private LocalDateFilter referenceDate;
 
-    private StringFilter taxCode;
-
     private BigDecimalFilter assessmentAmount;
 
     private AgencyStatusTypeFilter agencyStatus;
@@ -70,7 +68,6 @@ public class AgencyNoticeCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.referenceNumber = other.referenceNumber == null ? null : other.referenceNumber.copy();
         this.referenceDate = other.referenceDate == null ? null : other.referenceDate.copy();
-        this.taxCode = other.taxCode == null ? null : other.taxCode.copy();
         this.assessmentAmount = other.assessmentAmount == null ? null : other.assessmentAmount.copy();
         this.agencyStatus = other.agencyStatus == null ? null : other.agencyStatus.copy();
         this.correspondentsId = other.correspondentsId == null ? null : other.correspondentsId.copy();
@@ -128,21 +125,6 @@ public class AgencyNoticeCriteria implements Serializable, Criteria {
 
     public void setReferenceDate(LocalDateFilter referenceDate) {
         this.referenceDate = referenceDate;
-    }
-
-    public StringFilter getTaxCode() {
-        return taxCode;
-    }
-
-    public StringFilter taxCode() {
-        if (taxCode == null) {
-            taxCode = new StringFilter();
-        }
-        return taxCode;
-    }
-
-    public void setTaxCode(StringFilter taxCode) {
-        this.taxCode = taxCode;
     }
 
     public BigDecimalFilter getAssessmentAmount() {
@@ -256,7 +238,6 @@ public class AgencyNoticeCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(referenceNumber, that.referenceNumber) &&
             Objects.equals(referenceDate, that.referenceDate) &&
-            Objects.equals(taxCode, that.taxCode) &&
             Objects.equals(assessmentAmount, that.assessmentAmount) &&
             Objects.equals(agencyStatus, that.agencyStatus) &&
             Objects.equals(correspondentsId, that.correspondentsId) &&
@@ -273,7 +254,6 @@ public class AgencyNoticeCriteria implements Serializable, Criteria {
             id,
             referenceNumber,
             referenceDate,
-            taxCode,
             assessmentAmount,
             agencyStatus,
             correspondentsId,
@@ -291,7 +271,6 @@ public class AgencyNoticeCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (referenceNumber != null ? "referenceNumber=" + referenceNumber + ", " : "") +
             (referenceDate != null ? "referenceDate=" + referenceDate + ", " : "") +
-            (taxCode != null ? "taxCode=" + taxCode + ", " : "") +
             (assessmentAmount != null ? "assessmentAmount=" + assessmentAmount + ", " : "") +
             (agencyStatus != null ? "agencyStatus=" + agencyStatus + ", " : "") +
             (correspondentsId != null ? "correspondentsId=" + correspondentsId + ", " : "") +

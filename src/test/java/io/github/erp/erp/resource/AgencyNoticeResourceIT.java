@@ -13,7 +13,6 @@ import io.github.erp.domain.Dealer;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.SettlementCurrency;
 import io.github.erp.domain.enumeration.AgencyStatusType;
-import io.github.erp.erp.resources.AgencyNoticeResource;
 import io.github.erp.repository.AgencyNoticeRepository;
 import io.github.erp.repository.search.AgencyNoticeSearchRepository;
 import io.github.erp.service.AgencyNoticeService;
@@ -43,9 +42,10 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 /**
- * Integration tests for the {@link AgencyNoticeResource} REST controller.
+ * Integration tests for the AgencyNoticeResource REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -60,15 +60,17 @@ class AgencyNoticeResourceIT {
     private static final LocalDate UPDATED_REFERENCE_DATE = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_REFERENCE_DATE = LocalDate.ofEpochDay(-1L);
 
-    private static final String DEFAULT_TAX_CODE = "AAAAAAAAAA";
-    private static final String UPDATED_TAX_CODE = "BBBBBBBBBB";
-
     private static final BigDecimal DEFAULT_ASSESSMENT_AMOUNT = new BigDecimal(1);
     private static final BigDecimal UPDATED_ASSESSMENT_AMOUNT = new BigDecimal(2);
     private static final BigDecimal SMALLER_ASSESSMENT_AMOUNT = new BigDecimal(1 - 1);
 
     private static final AgencyStatusType DEFAULT_AGENCY_STATUS = AgencyStatusType.CLEARED;
     private static final AgencyStatusType UPDATED_AGENCY_STATUS = AgencyStatusType.NOT_CLEARED;
+
+    private static final byte[] DEFAULT_ASSESSMENT_NOTICE = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_ASSESSMENT_NOTICE = TestUtil.createByteArray(1, "1");
+    private static final String DEFAULT_ASSESSMENT_NOTICE_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_ASSESSMENT_NOTICE_CONTENT_TYPE = "image/png";
 
     private static final String ENTITY_API_URL = "/api/taxes/agency-notices";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -115,29 +117,10 @@ class AgencyNoticeResourceIT {
         AgencyNotice agencyNotice = new AgencyNotice()
             .referenceNumber(DEFAULT_REFERENCE_NUMBER)
             .referenceDate(DEFAULT_REFERENCE_DATE)
-            .taxCode(DEFAULT_TAX_CODE)
             .assessmentAmount(DEFAULT_ASSESSMENT_AMOUNT)
-            .agencyStatus(DEFAULT_AGENCY_STATUS);
-        // Add required entity
-        SettlementCurrency settlementCurrency;
-        if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
-            settlementCurrency = SettlementCurrencyResourceIT.createEntity(em);
-            em.persist(settlementCurrency);
-            em.flush();
-        } else {
-            settlementCurrency = TestUtil.findAll(em, SettlementCurrency.class).get(0);
-        }
-        agencyNotice.setSettlementCurrency(settlementCurrency);
-        // Add required entity
-        Dealer dealer;
-        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            dealer = DealerResourceIT.createEntity(em);
-            em.persist(dealer);
-            em.flush();
-        } else {
-            dealer = TestUtil.findAll(em, Dealer.class).get(0);
-        }
-        agencyNotice.setAssessor(dealer);
+            .agencyStatus(DEFAULT_AGENCY_STATUS)
+            .assessmentNotice(DEFAULT_ASSESSMENT_NOTICE)
+            .assessmentNoticeContentType(DEFAULT_ASSESSMENT_NOTICE_CONTENT_TYPE);
         return agencyNotice;
     }
 
@@ -151,29 +134,10 @@ class AgencyNoticeResourceIT {
         AgencyNotice agencyNotice = new AgencyNotice()
             .referenceNumber(UPDATED_REFERENCE_NUMBER)
             .referenceDate(UPDATED_REFERENCE_DATE)
-            .taxCode(UPDATED_TAX_CODE)
             .assessmentAmount(UPDATED_ASSESSMENT_AMOUNT)
-            .agencyStatus(UPDATED_AGENCY_STATUS);
-        // Add required entity
-        SettlementCurrency settlementCurrency;
-        if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
-            settlementCurrency = SettlementCurrencyResourceIT.createUpdatedEntity(em);
-            em.persist(settlementCurrency);
-            em.flush();
-        } else {
-            settlementCurrency = TestUtil.findAll(em, SettlementCurrency.class).get(0);
-        }
-        agencyNotice.setSettlementCurrency(settlementCurrency);
-        // Add required entity
-        Dealer dealer;
-        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            dealer = DealerResourceIT.createUpdatedEntity(em);
-            em.persist(dealer);
-            em.flush();
-        } else {
-            dealer = TestUtil.findAll(em, Dealer.class).get(0);
-        }
-        agencyNotice.setAssessor(dealer);
+            .agencyStatus(UPDATED_AGENCY_STATUS)
+            .assessmentNotice(UPDATED_ASSESSMENT_NOTICE)
+            .assessmentNoticeContentType(UPDATED_ASSESSMENT_NOTICE_CONTENT_TYPE);
         return agencyNotice;
     }
 
@@ -200,9 +164,10 @@ class AgencyNoticeResourceIT {
         AgencyNotice testAgencyNotice = agencyNoticeList.get(agencyNoticeList.size() - 1);
         assertThat(testAgencyNotice.getReferenceNumber()).isEqualTo(DEFAULT_REFERENCE_NUMBER);
         assertThat(testAgencyNotice.getReferenceDate()).isEqualTo(DEFAULT_REFERENCE_DATE);
-        assertThat(testAgencyNotice.getTaxCode()).isEqualTo(DEFAULT_TAX_CODE);
         assertThat(testAgencyNotice.getAssessmentAmount()).isEqualByComparingTo(DEFAULT_ASSESSMENT_AMOUNT);
         assertThat(testAgencyNotice.getAgencyStatus()).isEqualTo(DEFAULT_AGENCY_STATUS);
+        assertThat(testAgencyNotice.getAssessmentNotice()).isEqualTo(DEFAULT_ASSESSMENT_NOTICE);
+        assertThat(testAgencyNotice.getAssessmentNoticeContentType()).isEqualTo(DEFAULT_ASSESSMENT_NOTICE_CONTENT_TYPE);
 
         // Validate the AgencyNotice in Elasticsearch
         verify(mockAgencyNoticeSearchRepository, times(1)).save(testAgencyNotice);
@@ -306,9 +271,10 @@ class AgencyNoticeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(agencyNotice.getId().intValue())))
             .andExpect(jsonPath("$.[*].referenceNumber").value(hasItem(DEFAULT_REFERENCE_NUMBER)))
             .andExpect(jsonPath("$.[*].referenceDate").value(hasItem(DEFAULT_REFERENCE_DATE.toString())))
-            .andExpect(jsonPath("$.[*].taxCode").value(hasItem(DEFAULT_TAX_CODE)))
             .andExpect(jsonPath("$.[*].assessmentAmount").value(hasItem(sameNumber(DEFAULT_ASSESSMENT_AMOUNT))))
-            .andExpect(jsonPath("$.[*].agencyStatus").value(hasItem(DEFAULT_AGENCY_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].agencyStatus").value(hasItem(DEFAULT_AGENCY_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].assessmentNoticeContentType").value(hasItem(DEFAULT_ASSESSMENT_NOTICE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].assessmentNotice").value(hasItem(Base64Utils.encodeToString(DEFAULT_ASSESSMENT_NOTICE))));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -343,9 +309,10 @@ class AgencyNoticeResourceIT {
             .andExpect(jsonPath("$.id").value(agencyNotice.getId().intValue()))
             .andExpect(jsonPath("$.referenceNumber").value(DEFAULT_REFERENCE_NUMBER))
             .andExpect(jsonPath("$.referenceDate").value(DEFAULT_REFERENCE_DATE.toString()))
-            .andExpect(jsonPath("$.taxCode").value(DEFAULT_TAX_CODE))
             .andExpect(jsonPath("$.assessmentAmount").value(sameNumber(DEFAULT_ASSESSMENT_AMOUNT)))
-            .andExpect(jsonPath("$.agencyStatus").value(DEFAULT_AGENCY_STATUS.toString()));
+            .andExpect(jsonPath("$.agencyStatus").value(DEFAULT_AGENCY_STATUS.toString()))
+            .andExpect(jsonPath("$.assessmentNoticeContentType").value(DEFAULT_ASSESSMENT_NOTICE_CONTENT_TYPE))
+            .andExpect(jsonPath("$.assessmentNotice").value(Base64Utils.encodeToString(DEFAULT_ASSESSMENT_NOTICE)));
     }
 
     @Test
@@ -546,84 +513,6 @@ class AgencyNoticeResourceIT {
 
         // Get all the agencyNoticeList where referenceDate is greater than SMALLER_REFERENCE_DATE
         defaultAgencyNoticeShouldBeFound("referenceDate.greaterThan=" + SMALLER_REFERENCE_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllAgencyNoticesByTaxCodeIsEqualToSomething() throws Exception {
-        // Initialize the database
-        agencyNoticeRepository.saveAndFlush(agencyNotice);
-
-        // Get all the agencyNoticeList where taxCode equals to DEFAULT_TAX_CODE
-        defaultAgencyNoticeShouldBeFound("taxCode.equals=" + DEFAULT_TAX_CODE);
-
-        // Get all the agencyNoticeList where taxCode equals to UPDATED_TAX_CODE
-        defaultAgencyNoticeShouldNotBeFound("taxCode.equals=" + UPDATED_TAX_CODE);
-    }
-
-    @Test
-    @Transactional
-    void getAllAgencyNoticesByTaxCodeIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        agencyNoticeRepository.saveAndFlush(agencyNotice);
-
-        // Get all the agencyNoticeList where taxCode not equals to DEFAULT_TAX_CODE
-        defaultAgencyNoticeShouldNotBeFound("taxCode.notEquals=" + DEFAULT_TAX_CODE);
-
-        // Get all the agencyNoticeList where taxCode not equals to UPDATED_TAX_CODE
-        defaultAgencyNoticeShouldBeFound("taxCode.notEquals=" + UPDATED_TAX_CODE);
-    }
-
-    @Test
-    @Transactional
-    void getAllAgencyNoticesByTaxCodeIsInShouldWork() throws Exception {
-        // Initialize the database
-        agencyNoticeRepository.saveAndFlush(agencyNotice);
-
-        // Get all the agencyNoticeList where taxCode in DEFAULT_TAX_CODE or UPDATED_TAX_CODE
-        defaultAgencyNoticeShouldBeFound("taxCode.in=" + DEFAULT_TAX_CODE + "," + UPDATED_TAX_CODE);
-
-        // Get all the agencyNoticeList where taxCode equals to UPDATED_TAX_CODE
-        defaultAgencyNoticeShouldNotBeFound("taxCode.in=" + UPDATED_TAX_CODE);
-    }
-
-    @Test
-    @Transactional
-    void getAllAgencyNoticesByTaxCodeIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        agencyNoticeRepository.saveAndFlush(agencyNotice);
-
-        // Get all the agencyNoticeList where taxCode is not null
-        defaultAgencyNoticeShouldBeFound("taxCode.specified=true");
-
-        // Get all the agencyNoticeList where taxCode is null
-        defaultAgencyNoticeShouldNotBeFound("taxCode.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllAgencyNoticesByTaxCodeContainsSomething() throws Exception {
-        // Initialize the database
-        agencyNoticeRepository.saveAndFlush(agencyNotice);
-
-        // Get all the agencyNoticeList where taxCode contains DEFAULT_TAX_CODE
-        defaultAgencyNoticeShouldBeFound("taxCode.contains=" + DEFAULT_TAX_CODE);
-
-        // Get all the agencyNoticeList where taxCode contains UPDATED_TAX_CODE
-        defaultAgencyNoticeShouldNotBeFound("taxCode.contains=" + UPDATED_TAX_CODE);
-    }
-
-    @Test
-    @Transactional
-    void getAllAgencyNoticesByTaxCodeNotContainsSomething() throws Exception {
-        // Initialize the database
-        agencyNoticeRepository.saveAndFlush(agencyNotice);
-
-        // Get all the agencyNoticeList where taxCode does not contain DEFAULT_TAX_CODE
-        defaultAgencyNoticeShouldNotBeFound("taxCode.doesNotContain=" + DEFAULT_TAX_CODE);
-
-        // Get all the agencyNoticeList where taxCode does not contain UPDATED_TAX_CODE
-        defaultAgencyNoticeShouldBeFound("taxCode.doesNotContain=" + UPDATED_TAX_CODE);
     }
 
     @Test
@@ -897,9 +786,10 @@ class AgencyNoticeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(agencyNotice.getId().intValue())))
             .andExpect(jsonPath("$.[*].referenceNumber").value(hasItem(DEFAULT_REFERENCE_NUMBER)))
             .andExpect(jsonPath("$.[*].referenceDate").value(hasItem(DEFAULT_REFERENCE_DATE.toString())))
-            .andExpect(jsonPath("$.[*].taxCode").value(hasItem(DEFAULT_TAX_CODE)))
             .andExpect(jsonPath("$.[*].assessmentAmount").value(hasItem(sameNumber(DEFAULT_ASSESSMENT_AMOUNT))))
-            .andExpect(jsonPath("$.[*].agencyStatus").value(hasItem(DEFAULT_AGENCY_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].agencyStatus").value(hasItem(DEFAULT_AGENCY_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].assessmentNoticeContentType").value(hasItem(DEFAULT_ASSESSMENT_NOTICE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].assessmentNotice").value(hasItem(Base64Utils.encodeToString(DEFAULT_ASSESSMENT_NOTICE))));
 
         // Check, that the count call also returns 1
         restAgencyNoticeMockMvc
@@ -950,9 +840,10 @@ class AgencyNoticeResourceIT {
         updatedAgencyNotice
             .referenceNumber(UPDATED_REFERENCE_NUMBER)
             .referenceDate(UPDATED_REFERENCE_DATE)
-            .taxCode(UPDATED_TAX_CODE)
             .assessmentAmount(UPDATED_ASSESSMENT_AMOUNT)
-            .agencyStatus(UPDATED_AGENCY_STATUS);
+            .agencyStatus(UPDATED_AGENCY_STATUS)
+            .assessmentNotice(UPDATED_ASSESSMENT_NOTICE)
+            .assessmentNoticeContentType(UPDATED_ASSESSMENT_NOTICE_CONTENT_TYPE);
         AgencyNoticeDTO agencyNoticeDTO = agencyNoticeMapper.toDto(updatedAgencyNotice);
 
         restAgencyNoticeMockMvc
@@ -969,9 +860,10 @@ class AgencyNoticeResourceIT {
         AgencyNotice testAgencyNotice = agencyNoticeList.get(agencyNoticeList.size() - 1);
         assertThat(testAgencyNotice.getReferenceNumber()).isEqualTo(UPDATED_REFERENCE_NUMBER);
         assertThat(testAgencyNotice.getReferenceDate()).isEqualTo(UPDATED_REFERENCE_DATE);
-        assertThat(testAgencyNotice.getTaxCode()).isEqualTo(UPDATED_TAX_CODE);
         assertThat(testAgencyNotice.getAssessmentAmount()).isEqualTo(UPDATED_ASSESSMENT_AMOUNT);
         assertThat(testAgencyNotice.getAgencyStatus()).isEqualTo(UPDATED_AGENCY_STATUS);
+        assertThat(testAgencyNotice.getAssessmentNotice()).isEqualTo(UPDATED_ASSESSMENT_NOTICE);
+        assertThat(testAgencyNotice.getAssessmentNoticeContentType()).isEqualTo(UPDATED_ASSESSMENT_NOTICE_CONTENT_TYPE);
 
         // Validate the AgencyNotice in Elasticsearch
         verify(mockAgencyNoticeSearchRepository).save(testAgencyNotice);
@@ -1066,9 +958,10 @@ class AgencyNoticeResourceIT {
         partialUpdatedAgencyNotice.setId(agencyNotice.getId());
 
         partialUpdatedAgencyNotice
-            .taxCode(UPDATED_TAX_CODE)
             .assessmentAmount(UPDATED_ASSESSMENT_AMOUNT)
-            .agencyStatus(UPDATED_AGENCY_STATUS);
+            .agencyStatus(UPDATED_AGENCY_STATUS)
+            .assessmentNotice(UPDATED_ASSESSMENT_NOTICE)
+            .assessmentNoticeContentType(UPDATED_ASSESSMENT_NOTICE_CONTENT_TYPE);
 
         restAgencyNoticeMockMvc
             .perform(
@@ -1084,9 +977,10 @@ class AgencyNoticeResourceIT {
         AgencyNotice testAgencyNotice = agencyNoticeList.get(agencyNoticeList.size() - 1);
         assertThat(testAgencyNotice.getReferenceNumber()).isEqualTo(DEFAULT_REFERENCE_NUMBER);
         assertThat(testAgencyNotice.getReferenceDate()).isEqualTo(DEFAULT_REFERENCE_DATE);
-        assertThat(testAgencyNotice.getTaxCode()).isEqualTo(UPDATED_TAX_CODE);
         assertThat(testAgencyNotice.getAssessmentAmount()).isEqualByComparingTo(UPDATED_ASSESSMENT_AMOUNT);
         assertThat(testAgencyNotice.getAgencyStatus()).isEqualTo(UPDATED_AGENCY_STATUS);
+        assertThat(testAgencyNotice.getAssessmentNotice()).isEqualTo(UPDATED_ASSESSMENT_NOTICE);
+        assertThat(testAgencyNotice.getAssessmentNoticeContentType()).isEqualTo(UPDATED_ASSESSMENT_NOTICE_CONTENT_TYPE);
     }
 
     @Test
@@ -1104,9 +998,10 @@ class AgencyNoticeResourceIT {
         partialUpdatedAgencyNotice
             .referenceNumber(UPDATED_REFERENCE_NUMBER)
             .referenceDate(UPDATED_REFERENCE_DATE)
-            .taxCode(UPDATED_TAX_CODE)
             .assessmentAmount(UPDATED_ASSESSMENT_AMOUNT)
-            .agencyStatus(UPDATED_AGENCY_STATUS);
+            .agencyStatus(UPDATED_AGENCY_STATUS)
+            .assessmentNotice(UPDATED_ASSESSMENT_NOTICE)
+            .assessmentNoticeContentType(UPDATED_ASSESSMENT_NOTICE_CONTENT_TYPE);
 
         restAgencyNoticeMockMvc
             .perform(
@@ -1122,9 +1017,10 @@ class AgencyNoticeResourceIT {
         AgencyNotice testAgencyNotice = agencyNoticeList.get(agencyNoticeList.size() - 1);
         assertThat(testAgencyNotice.getReferenceNumber()).isEqualTo(UPDATED_REFERENCE_NUMBER);
         assertThat(testAgencyNotice.getReferenceDate()).isEqualTo(UPDATED_REFERENCE_DATE);
-        assertThat(testAgencyNotice.getTaxCode()).isEqualTo(UPDATED_TAX_CODE);
         assertThat(testAgencyNotice.getAssessmentAmount()).isEqualByComparingTo(UPDATED_ASSESSMENT_AMOUNT);
         assertThat(testAgencyNotice.getAgencyStatus()).isEqualTo(UPDATED_AGENCY_STATUS);
+        assertThat(testAgencyNotice.getAssessmentNotice()).isEqualTo(UPDATED_ASSESSMENT_NOTICE);
+        assertThat(testAgencyNotice.getAssessmentNoticeContentType()).isEqualTo(UPDATED_ASSESSMENT_NOTICE_CONTENT_TYPE);
     }
 
     @Test
@@ -1243,8 +1139,9 @@ class AgencyNoticeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(agencyNotice.getId().intValue())))
             .andExpect(jsonPath("$.[*].referenceNumber").value(hasItem(DEFAULT_REFERENCE_NUMBER)))
             .andExpect(jsonPath("$.[*].referenceDate").value(hasItem(DEFAULT_REFERENCE_DATE.toString())))
-            .andExpect(jsonPath("$.[*].taxCode").value(hasItem(DEFAULT_TAX_CODE)))
             .andExpect(jsonPath("$.[*].assessmentAmount").value(hasItem(sameNumber(DEFAULT_ASSESSMENT_AMOUNT))))
-            .andExpect(jsonPath("$.[*].agencyStatus").value(hasItem(DEFAULT_AGENCY_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].agencyStatus").value(hasItem(DEFAULT_AGENCY_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].assessmentNoticeContentType").value(hasItem(DEFAULT_ASSESSMENT_NOTICE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].assessmentNotice").value(hasItem(Base64Utils.encodeToString(DEFAULT_ASSESSMENT_NOTICE))));
     }
 }

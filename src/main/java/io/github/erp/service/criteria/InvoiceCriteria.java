@@ -4,7 +4,7 @@ import io.github.erp.domain.enumeration.CurrencyTypes;
 import java.io.Serializable;
 import java.util.Objects;
 
-import io.github.erp.erp.resources.InvoiceResource;
+import io.github.erp.web.rest.api.InvoiceResource;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.BigDecimalFilter;
 import tech.jhipster.service.filter.Filter;

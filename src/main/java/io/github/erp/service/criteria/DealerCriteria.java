@@ -3,7 +3,7 @@ package io.github.erp.service.criteria;
 import java.io.Serializable;
 import java.util.Objects;
 
-import io.github.erp.erp.resources.DealerResource;
+import io.github.erp.web.rest.api.DealerResource;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.LongFilter;
@@ -27,6 +27,14 @@ public class DealerCriteria implements Serializable, Criteria {
     private StringFilter dealerName;
 
     private StringFilter taxNumber;
+
+    private StringFilter identificationDocumentNumber;
+
+    private StringFilter organizationName;
+
+    private StringFilter department;
+
+    private StringFilter position;
 
     private StringFilter postalAddress;
 
@@ -60,6 +68,10 @@ public class DealerCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.dealerName = other.dealerName == null ? null : other.dealerName.copy();
         this.taxNumber = other.taxNumber == null ? null : other.taxNumber.copy();
+        this.identificationDocumentNumber = other.identificationDocumentNumber == null ? null : other.identificationDocumentNumber.copy();
+        this.organizationName = other.organizationName == null ? null : other.organizationName.copy();
+        this.department = other.department == null ? null : other.department.copy();
+        this.position = other.position == null ? null : other.position.copy();
         this.postalAddress = other.postalAddress == null ? null : other.postalAddress.copy();
         this.physicalAddress = other.physicalAddress == null ? null : other.physicalAddress.copy();
         this.accountName = other.accountName == null ? null : other.accountName.copy();
@@ -123,6 +135,66 @@ public class DealerCriteria implements Serializable, Criteria {
 
     public void setTaxNumber(StringFilter taxNumber) {
         this.taxNumber = taxNumber;
+    }
+
+    public StringFilter getIdentificationDocumentNumber() {
+        return identificationDocumentNumber;
+    }
+
+    public StringFilter identificationDocumentNumber() {
+        if (identificationDocumentNumber == null) {
+            identificationDocumentNumber = new StringFilter();
+        }
+        return identificationDocumentNumber;
+    }
+
+    public void setIdentificationDocumentNumber(StringFilter identificationDocumentNumber) {
+        this.identificationDocumentNumber = identificationDocumentNumber;
+    }
+
+    public StringFilter getOrganizationName() {
+        return organizationName;
+    }
+
+    public StringFilter organizationName() {
+        if (organizationName == null) {
+            organizationName = new StringFilter();
+        }
+        return organizationName;
+    }
+
+    public void setOrganizationName(StringFilter organizationName) {
+        this.organizationName = organizationName;
+    }
+
+    public StringFilter getDepartment() {
+        return department;
+    }
+
+    public StringFilter department() {
+        if (department == null) {
+            department = new StringFilter();
+        }
+        return department;
+    }
+
+    public void setDepartment(StringFilter department) {
+        this.department = department;
+    }
+
+    public StringFilter getPosition() {
+        return position;
+    }
+
+    public StringFilter position() {
+        if (position == null) {
+            position = new StringFilter();
+        }
+        return position;
+    }
+
+    public void setPosition(StringFilter position) {
+        this.position = position;
     }
 
     public StringFilter getPostalAddress() {
@@ -326,6 +398,10 @@ public class DealerCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(dealerName, that.dealerName) &&
             Objects.equals(taxNumber, that.taxNumber) &&
+            Objects.equals(identificationDocumentNumber, that.identificationDocumentNumber) &&
+            Objects.equals(organizationName, that.organizationName) &&
+            Objects.equals(department, that.department) &&
+            Objects.equals(position, that.position) &&
             Objects.equals(postalAddress, that.postalAddress) &&
             Objects.equals(physicalAddress, that.physicalAddress) &&
             Objects.equals(accountName, that.accountName) &&
@@ -348,6 +424,10 @@ public class DealerCriteria implements Serializable, Criteria {
             id,
             dealerName,
             taxNumber,
+            identificationDocumentNumber,
+            organizationName,
+            department,
+            position,
             postalAddress,
             physicalAddress,
             accountName,
@@ -371,6 +451,10 @@ public class DealerCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (dealerName != null ? "dealerName=" + dealerName + ", " : "") +
             (taxNumber != null ? "taxNumber=" + taxNumber + ", " : "") +
+            (identificationDocumentNumber != null ? "identificationDocumentNumber=" + identificationDocumentNumber + ", " : "") +
+            (organizationName != null ? "organizationName=" + organizationName + ", " : "") +
+            (department != null ? "department=" + department + ", " : "") +
+            (position != null ? "position=" + position + ", " : "") +
             (postalAddress != null ? "postalAddress=" + postalAddress + ", " : "") +
             (physicalAddress != null ? "physicalAddress=" + physicalAddress + ", " : "") +
             (accountName != null ? "accountName=" + accountName + ", " : "") +

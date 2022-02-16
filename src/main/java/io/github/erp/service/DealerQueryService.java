@@ -100,6 +100,21 @@ public class DealerQueryService extends QueryService<Dealer> {
             if (criteria.getTaxNumber() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getTaxNumber(), Dealer_.taxNumber));
             }
+            if (criteria.getIdentificationDocumentNumber() != null) {
+                specification =
+                    specification.and(
+                        buildStringSpecification(criteria.getIdentificationDocumentNumber(), Dealer_.identificationDocumentNumber)
+                    );
+            }
+            if (criteria.getOrganizationName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getOrganizationName(), Dealer_.organizationName));
+            }
+            if (criteria.getDepartment() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDepartment(), Dealer_.department));
+            }
+            if (criteria.getPosition() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getPosition(), Dealer_.position));
+            }
             if (criteria.getPostalAddress() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPostalAddress(), Dealer_.postalAddress));
             }

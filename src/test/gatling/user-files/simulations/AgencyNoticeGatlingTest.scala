@@ -73,9 +73,9 @@ class AgencyNoticeGatlingTest extends Simulation {
             .body(StringBody("""{
                 "referenceNumber":"SAMPLE_TEXT"
                 , "referenceDate":"2020-01-01T00:00:00.000Z"
-                , "taxCode":"SAMPLE_TEXT"
                 , "assessmentAmount":"0"
                 , "agencyStatus":"CLEARED"
+                , "assessmentNotice":null
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_agencyNotice_url"))).exitHereIfFailed

@@ -104,9 +104,6 @@ public class AgencyNoticeQueryService extends QueryService<AgencyNotice> {
             if (criteria.getReferenceDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getReferenceDate(), AgencyNotice_.referenceDate));
             }
-            if (criteria.getTaxCode() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getTaxCode(), AgencyNotice_.taxCode));
-            }
             if (criteria.getAssessmentAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getAssessmentAmount(), AgencyNotice_.assessmentAmount));
             }

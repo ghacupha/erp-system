@@ -20,6 +20,18 @@
             <column name="tax_number" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="identification_document_number" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="organization_name" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="department" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="position" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="postal_address" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -98,6 +110,10 @@
             <column name="id" type="numeric"/>
             <column name="dealer_name" type="string"/>
             <column name="tax_number" type="string"/>
+            <column name="identification_document_number" type="string"/>
+            <column name="organization_name" type="string"/>
+            <column name="department" type="string"/>
+            <column name="position" type="string"/>
             <column name="postal_address" type="string"/>
             <column name="physical_address" type="string"/>
             <column name="account_name" type="string"/>

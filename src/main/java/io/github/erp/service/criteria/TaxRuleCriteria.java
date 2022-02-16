@@ -3,7 +3,7 @@ package io.github.erp.service.criteria;
 import java.io.Serializable;
 import java.util.Objects;
 
-import io.github.erp.erp.resources.TaxRuleResource;
+import io.github.erp.web.rest.api.TaxRuleResource;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;

@@ -4,7 +4,7 @@ import io.github.erp.domain.enumeration.CategoryTypes;
 import java.io.Serializable;
 import java.util.Objects;
 
-import io.github.erp.erp.resources.PaymentCategoryResource;
+import io.github.erp.web.rest.api.PaymentCategoryResource;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.LongFilter;
