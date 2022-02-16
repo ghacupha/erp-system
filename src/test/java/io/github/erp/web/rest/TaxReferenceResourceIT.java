@@ -42,7 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"TAX_MODULE_USER"})
 class TaxReferenceResourceIT {
 
     private static final String DEFAULT_TAX_NAME = "AAAAAAAAAA";
@@ -64,9 +64,9 @@ class TaxReferenceResourceIT {
     private static final String DEFAULT_COMPILATION_TOKEN = "AAAAAAAAAA";
     private static final String UPDATED_COMPILATION_TOKEN = "BBBBBBBBBB";
 
-    private static final String ENTITY_API_URL = "/api/tax-references";
+    private static final String ENTITY_API_URL = "/api/taxes/tax-references";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/tax-references";
+    private static final String ENTITY_SEARCH_API_URL = "/api/taxes/_search/tax-references";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

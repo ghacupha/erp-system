@@ -13,7 +13,7 @@ public final class AuthoritiesConstants {
 
     public static final String DEV = "ROLE_DEV";
 
-        public static final String DBA = "ROLE_DBA";
+    public static final String DBA = "ROLE_DBA";
 
     public static final String PAYMENTS_USER = "ROLE_PAYMENTS_USER";
 

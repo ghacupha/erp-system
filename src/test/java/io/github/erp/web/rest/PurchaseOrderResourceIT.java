@@ -47,7 +47,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"PAYMENTS_USER"})
 class PurchaseOrderResourceIT {
 
     private static final String DEFAULT_PURCHASE_ORDER_NUMBER = "AAAAAAAAAA";
@@ -73,9 +73,9 @@ class PurchaseOrderResourceIT {
     private static final String DEFAULT_COMPILATION_TOKEN = "AAAAAAAAAA";
     private static final String UPDATED_COMPILATION_TOKEN = "BBBBBBBBBB";
 
-    private static final String ENTITY_API_URL = "/api/purchase-orders";
+    private static final String ENTITY_API_URL = "/api/payments/purchase-orders";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/purchase-orders";
+    private static final String ENTITY_SEARCH_API_URL = "/api/payments/_search/purchase-orders";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
