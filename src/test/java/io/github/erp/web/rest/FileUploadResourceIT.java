@@ -44,7 +44,7 @@ import org.springframework.util.Base64Utils;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"DBA"})
 class FileUploadResourceIT {
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
@@ -79,9 +79,9 @@ class FileUploadResourceIT {
     private static final String DEFAULT_UPLOAD_TOKEN = "AAAAAAAAAA";
     private static final String UPDATED_UPLOAD_TOKEN = "BBBBBBBBBB";
 
-    private static final String ENTITY_API_URL = "/api/file-uploads";
+    private static final String ENTITY_API_URL = "/api/files/file-uploads";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/file-uploads";
+    private static final String ENTITY_SEARCH_API_URL = "/api/files/_search/file-uploads";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

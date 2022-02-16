@@ -46,7 +46,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"FIXED_ASSETS_USER"})
 class FixedAssetNetBookValueResourceIT {
 
     private static final Long DEFAULT_ASSET_NUMBER = 1L;
@@ -82,9 +82,9 @@ class FixedAssetNetBookValueResourceIT {
     private static final String DEFAULT_COMPILATION_TOKEN = "AAAAAAAAAA";
     private static final String UPDATED_COMPILATION_TOKEN = "BBBBBBBBBB";
 
-    private static final String ENTITY_API_URL = "/api/fixed-asset-net-book-values";
+    private static final String ENTITY_API_URL = "/api/fixed-asset/fixed-asset-net-book-values";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/fixed-asset-net-book-values";
+    private static final String ENTITY_SEARCH_API_URL = "/api/fixed-asset/_search/fixed-asset-net-book-values";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

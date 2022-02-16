@@ -55,7 +55,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"DBA"})
 class FileUploadDataFileContainerIT {
 
 
@@ -180,7 +180,7 @@ class FileUploadDataFileContainerIT {
         int databaseSizeBeforeCreate = fileUploadRepository.findAll().size();
         // Create the FileUpload
         FileUploadDTO fileUploadDTO = fileUploadMapper.toDto(fileUpload);
-        restFileUploadMockMvc.perform(post("/api/file-uploads")
+        restFileUploadMockMvc.perform(post("/api/files/file-uploads")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(fileUploadDTO)))
             .andExpect(status().isCreated());

@@ -41,7 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"DBA"})
 class MessageTokenResourceIT {
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
@@ -63,9 +63,9 @@ class MessageTokenResourceIT {
     private static final Boolean DEFAULT_CONTENT_FULLY_ENQUEUED = false;
     private static final Boolean UPDATED_CONTENT_FULLY_ENQUEUED = true;
 
-    private static final String ENTITY_API_URL = "/api/message-tokens";
+    private static final String ENTITY_API_URL = "/api/files/message-tokens";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/message-tokens";
+    private static final String ENTITY_SEARCH_API_URL = "/api/files/_search/message-tokens";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

@@ -44,7 +44,7 @@ import org.springframework.util.Base64Utils;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"DBA"})
 class FileTypeResourceIT {
 
     private static final String DEFAULT_FILE_TYPE_NAME = "AAAAAAAAAA";
@@ -64,9 +64,9 @@ class FileTypeResourceIT {
     private static final FileModelType DEFAULT_FILE_TYPE = FileModelType.CURRENCY_LIST;
     private static final FileModelType UPDATED_FILE_TYPE = FileModelType.FIXED_ASSET_ACQUISITION;
 
-    private static final String ENTITY_API_URL = "/api/file-types";
+    private static final String ENTITY_API_URL = "/api/files/file-types";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/file-types";
+    private static final String ENTITY_SEARCH_API_URL = "/api/files/_search/file-types";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

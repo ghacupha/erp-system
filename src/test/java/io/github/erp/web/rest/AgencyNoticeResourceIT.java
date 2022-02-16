@@ -48,7 +48,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"TAX_MODULE_USER"})
 class AgencyNoticeResourceIT {
 
     private static final String DEFAULT_REFERENCE_NUMBER = "AAAAAAAAAA";
@@ -68,9 +68,9 @@ class AgencyNoticeResourceIT {
     private static final AgencyStatusType DEFAULT_AGENCY_STATUS = AgencyStatusType.CLEARED;
     private static final AgencyStatusType UPDATED_AGENCY_STATUS = AgencyStatusType.NOT_CLEARED;
 
-    private static final String ENTITY_API_URL = "/api/agency-notices";
+    private static final String ENTITY_API_URL = "/api/taxes/agency-notices";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/agency-notices";
+    private static final String ENTITY_SEARCH_API_URL = "/api/taxes/_search/agency-notices";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
