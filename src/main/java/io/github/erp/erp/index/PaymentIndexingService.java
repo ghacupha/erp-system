@@ -1,9 +1,9 @@
-package io.github.erp.erp;
+package io.github.erp.erp.index;
 
 import com.google.common.collect.ImmutableList;
-import io.github.erp.repository.search.PaymentCategorySearchRepository;
-import io.github.erp.service.PaymentCategoryService;
-import io.github.erp.service.mapper.PaymentCategoryMapper;
+import io.github.erp.repository.search.PaymentSearchRepository;
+import io.github.erp.service.PaymentService;
+import io.github.erp.service.mapper.PaymentMapper;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.data.domain.Pageable;
@@ -13,14 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class PaymentCategoryIndexingService extends AbtractStartUpIndexService implements ApplicationIndexingService, ApplicationListener<ApplicationReadyEvent> {
+public class PaymentIndexingService   extends AbtractStartUpIndexService implements ApplicationIndexingService, ApplicationListener<ApplicationReadyEvent> {
 
+    private final PaymentService service;
+    private final PaymentMapper mapper;
+    private final PaymentSearchRepository searchRepository;
 
-    private final PaymentCategoryService service;
-    private final PaymentCategoryMapper mapper;
-    private final PaymentCategorySearchRepository searchRepository;
-
-    public PaymentCategoryIndexingService(PaymentCategoryService service, PaymentCategoryMapper mapper, PaymentCategorySearchRepository searchRepository) {
+    public PaymentIndexingService(PaymentService service, PaymentMapper mapper, PaymentSearchRepository searchRepository) {
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

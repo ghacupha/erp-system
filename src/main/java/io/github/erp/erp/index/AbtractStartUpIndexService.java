@@ -1,4 +1,4 @@
-package io.github.erp.erp;
+package io.github.erp.erp.index;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
