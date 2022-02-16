@@ -19,7 +19,7 @@ package io.github.erp.internal.resource.decorator;
  */
 import io.github.erp.service.criteria.FileUploadCriteria;
 import io.github.erp.service.dto.FileUploadDTO;
-import io.github.erp.web.rest.FileUploadResource;
+import io.github.erp.erp.resources.FileUploadResource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
