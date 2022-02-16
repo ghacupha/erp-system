@@ -2,20 +2,18 @@ package io.github.erp.service.criteria;
 
 import java.io.Serializable;
 import java.util.Objects;
+
+import io.github.erp.erp.resources.SettlementResource;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.BigDecimalFilter;
-import tech.jhipster.service.filter.BooleanFilter;
-import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
-import tech.jhipster.service.filter.FloatFilter;
-import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 
 /**
  * Criteria class for the {@link io.github.erp.domain.Settlement} entity. This class is used
- * in {@link io.github.erp.web.rest.SettlementResource} to receive all the possible filtering options from
+ * in {@link SettlementResource} to receive all the possible filtering options from
  * the Http GET request parameters.
  * For example the following could be a valid request:
  * {@code /settlements?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
