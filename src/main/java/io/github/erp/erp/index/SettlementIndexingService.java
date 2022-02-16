@@ -1,4 +1,4 @@
-package io.github.erp.erp;
+package io.github.erp.erp.index;
 
 import com.google.common.collect.ImmutableList;
 import io.github.erp.repository.search.SettlementSearchRepository;

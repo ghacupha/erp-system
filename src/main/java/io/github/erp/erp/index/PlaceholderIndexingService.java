@@ -1,9 +1,9 @@
-package io.github.erp.erp;
+package io.github.erp.erp.index;
 
 import com.google.common.collect.ImmutableList;
-import io.github.erp.repository.search.SignedPaymentSearchRepository;
-import io.github.erp.service.SignedPaymentService;
-import io.github.erp.service.mapper.SignedPaymentMapper;
+import io.github.erp.repository.search.PlaceholderSearchRepository;
+import io.github.erp.service.PlaceholderService;
+import io.github.erp.service.mapper.PlaceholderMapper;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.data.domain.Pageable;
@@ -11,18 +11,17 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 @Transactional
-public class SignedPaymentsIndexingService extends AbtractStartUpIndexService implements ApplicationIndexingService, ApplicationListener<ApplicationReadyEvent> {
+public class PlaceholderIndexingService extends AbtractStartUpIndexService implements ApplicationIndexingService, ApplicationListener<ApplicationReadyEvent> {
 
-    private final SignedPaymentMapper mapper;
-    private final SignedPaymentService service;
-    private final SignedPaymentSearchRepository searchRepository;
+    private final PlaceholderService service;
+    private final PlaceholderMapper mapper;
+    private final PlaceholderSearchRepository searchRepository;
 
-    public SignedPaymentsIndexingService(SignedPaymentMapper mapper, SignedPaymentService service, SignedPaymentSearchRepository searchRepository) {
-        this.mapper = mapper;
+    public PlaceholderIndexingService(PlaceholderService service, PlaceholderMapper mapper, PlaceholderSearchRepository searchRepository) {
         this.service = service;
+        this.mapper = mapper;
         this.searchRepository = searchRepository;
     }
 
