@@ -73,6 +73,10 @@ class DealerGatlingTest extends Simulation {
             .body(StringBody("""{
                 "dealerName":"SAMPLE_TEXT"
                 , "taxNumber":"SAMPLE_TEXT"
+                , "identificationDocumentNumber":"SAMPLE_TEXT"
+                , "organizationName":"SAMPLE_TEXT"
+                , "department":"SAMPLE_TEXT"
+                , "position":"SAMPLE_TEXT"
                 , "postalAddress":"SAMPLE_TEXT"
                 , "physicalAddress":"SAMPLE_TEXT"
                 , "accountName":"SAMPLE_TEXT"

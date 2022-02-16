@@ -20,20 +20,23 @@
             <column name="reference_date" type="date">
                 <constraints nullable="true" />
             </column>
-            <column name="tax_code" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="assessment_amount" type="decimal(21,2)">
                 <constraints nullable="false" />
             </column>
             <column name="agency_status" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
+            <column name="assessment_notice" type="longblob">
+                <constraints nullable="true" />
+            </column>
+            <column name="assessment_notice_content_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="settlement_currency_id" type="bigint">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
             </column>
             <column name="assessor_id" type="bigint">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
@@ -83,11 +86,10 @@
             <column name="id" type="numeric"/>
             <column name="reference_number" type="string"/>
             <column name="reference_date" type="date"/>
-            <column name="tax_code" type="string"/>
             <column name="assessment_amount" type="numeric"/>
             <column name="agency_status" type="string"/>
-            <column name="settlement_currency_id" type="numeric"/>
-            <column name="assessor_id" type="numeric"/>
+            <column name="assessment_notice" type="blob"/>
+            <column name="assessment_notice_content_type" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

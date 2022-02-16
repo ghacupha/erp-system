@@ -3,7 +3,7 @@ package io.github.erp.service.criteria;
 import java.io.Serializable;
 import java.util.Objects;
 
-import io.github.erp.erp.resources.FixedAssetAcquisitionResource;
+import io.github.erp.web.rest.api.FixedAssetAcquisitionResource;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.BigDecimalFilter;
 import tech.jhipster.service.filter.Filter;

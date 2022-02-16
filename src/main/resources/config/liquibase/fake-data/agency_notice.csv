@@ -1,11 +1,11 @@
-id;reference_number;reference_date;tax_code;assessment_amount;agency_status;settlement_currency_id;assessor_id
-1;logistical Qatar;2022-02-03;granular;32089;NOT_CLEARED;1;1
-2;Fish cyan Market;2022-02-03;EXE;71702;NOT_CLEARED;2;2
-3;Motorway;2022-02-03;Granite primary;61022;CLEARED;3;3
-4;Web Cotton pixel;2022-02-02;Gloves Liechtenstein Account;57431;CLEARED;4;4
-5;algorithm infomediaries action-items;2022-02-03;SCSI bus;52591;NOT_CLEARED;5;5
-6;Intelligent digital;2022-02-02;redundant;55251;CLEARED;6;6
-7;Implemented Accountability;2022-02-02;Massachusetts Freeway;39252;NOT_CLEARED;7;7
-8;Director;2022-02-03;compressing Kuwait gold;23686;NOT_CLEARED;8;8
-9;Internal Account South;2022-02-02;ivory;7308;NOT_CLEARED;9;9
-10;SMTP groupware Refined;2022-02-03;Computer Haven;42531;NOT_CLEARED;10;10
+id;reference_number;reference_date;assessment_amount;agency_status;assessment_notice;assessment_notice_content_type
+1;logistical Qatar;2022-02-03;5988;CLEARED;../fake-data/blob/hipster.png;image/png
+2;e-services;2022-02-02;4028;CLEARED;../fake-data/blob/hipster.png;image/png
+3;feed ADP;2022-02-03;56729;CLEARED;../fake-data/blob/hipster.png;image/png
+4;EXE;2022-02-02;52780;CLEARED;../fake-data/blob/hipster.png;image/png
+5;Bedfordshire Connecticut;2022-02-03;78116;CLEARED;../fake-data/blob/hipster.png;image/png
+6;Account Web;2022-02-03;4279;CLEARED;../fake-data/blob/hipster.png;image/png
+7;repurpose;2022-02-03;77559;NOT_CLEARED;../fake-data/blob/hipster.png;image/png
+8;Assistant;2022-02-02;53106;NOT_CLEARED;../fake-data/blob/hipster.png;image/png
+9;Account Michigan;2022-02-03;3119;CLEARED;../fake-data/blob/hipster.png;image/png
+10;Moldovan viral;2022-02-03;85296;NOT_CLEARED;../fake-data/blob/hipster.png;image/png

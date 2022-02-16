@@ -18,6 +18,14 @@ public class DealerDTO implements Serializable {
 
     private String taxNumber;
 
+    private String identificationDocumentNumber;
+
+    private String organizationName;
+
+    private String department;
+
+    private String position;
+
     private String postalAddress;
 
     private String physicalAddress;
@@ -64,6 +72,38 @@ public class DealerDTO implements Serializable {
 
     public void setTaxNumber(String taxNumber) {
         this.taxNumber = taxNumber;
+    }
+
+    public String getIdentificationDocumentNumber() {
+        return identificationDocumentNumber;
+    }
+
+    public void setIdentificationDocumentNumber(String identificationDocumentNumber) {
+        this.identificationDocumentNumber = identificationDocumentNumber;
+    }
+
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public String getPostalAddress() {
@@ -190,6 +230,10 @@ public class DealerDTO implements Serializable {
             "id=" + getId() +
             ", dealerName='" + getDealerName() + "'" +
             ", taxNumber='" + getTaxNumber() + "'" +
+            ", identificationDocumentNumber='" + getIdentificationDocumentNumber() + "'" +
+            ", organizationName='" + getOrganizationName() + "'" +
+            ", department='" + getDepartment() + "'" +
+            ", position='" + getPosition() + "'" +
             ", postalAddress='" + getPostalAddress() + "'" +
             ", physicalAddress='" + getPhysicalAddress() + "'" +
             ", accountName='" + getAccountName() + "'" +

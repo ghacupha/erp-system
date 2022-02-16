@@ -35,6 +35,22 @@
       "fieldType": "String"
     },
     {
+      "fieldName": "identificationDocumentNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "organizationName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "department",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "position",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "postalAddress",
       "fieldType": "String"
     },

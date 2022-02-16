@@ -10,10 +10,6 @@
       "fieldType": "LocalDate"
     },
     {
-      "fieldName": "taxCode",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "assessmentAmount",
       "fieldType": "BigDecimal",
       "fieldValidateRules": ["required"]
@@ -23,6 +19,11 @@
       "fieldType": "AgencyStatusType",
       "fieldValues": "CLEARED,NOT_CLEARED",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "assessmentNotice",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
     }
   ],
   "relationships": [
@@ -38,14 +39,12 @@
       "relationshipName": "settlementCurrency",
       "otherEntityName": "settlementCurrency",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
       "otherEntityField": "iso4217CurrencyCode"
     },
     {
       "relationshipName": "assessor",
       "otherEntityName": "dealer",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
       "otherEntityField": "dealerName"
     },
     {

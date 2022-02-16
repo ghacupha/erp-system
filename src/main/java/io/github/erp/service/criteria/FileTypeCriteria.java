@@ -5,7 +5,7 @@ import io.github.erp.domain.enumeration.FileModelType;
 import java.io.Serializable;
 import java.util.Objects;
 
-import io.github.erp.erp.resources.FileTypeResource;
+import io.github.erp.web.rest.api.FileTypeResource;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.LongFilter;

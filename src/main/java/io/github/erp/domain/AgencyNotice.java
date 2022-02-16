@@ -36,9 +36,6 @@ public class AgencyNotice implements Serializable {
     @Column(name = "reference_date")
     private LocalDate referenceDate;
 
-    @Column(name = "tax_code")
-    private String taxCode;
-
     @NotNull
     @Column(name = "assessment_amount", precision = 21, scale = 2, nullable = false)
     private BigDecimal assessmentAmount;
@@ -47,6 +44,13 @@ public class AgencyNotice implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "agency_status", nullable = false)
     private AgencyStatusType agencyStatus;
+
+    @Lob
+    @Column(name = "assessment_notice")
+    private byte[] assessmentNotice;
+
+    @Column(name = "assessment_notice_content_type")
+    private String assessmentNoticeContentType;
 
     @ManyToMany
     @JoinTable(
@@ -58,13 +62,11 @@ public class AgencyNotice implements Serializable {
     @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "placeholders" }, allowSetters = true)
     private Set<Dealer> correspondents = new HashSet<>();
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
     private SettlementCurrency settlementCurrency;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "placeholders" }, allowSetters = true)
     private Dealer assessor;
 
@@ -119,19 +121,6 @@ public class AgencyNotice implements Serializable {
         this.referenceDate = referenceDate;
     }
 
-    public String getTaxCode() {
-        return this.taxCode;
-    }
-
-    public AgencyNotice taxCode(String taxCode) {
-        this.setTaxCode(taxCode);
-        return this;
-    }
-
-    public void setTaxCode(String taxCode) {
-        this.taxCode = taxCode;
-    }
-
     public BigDecimal getAssessmentAmount() {
         return this.assessmentAmount;
     }
@@ -156,6 +145,32 @@ public class AgencyNotice implements Serializable {
 
     public void setAgencyStatus(AgencyStatusType agencyStatus) {
         this.agencyStatus = agencyStatus;
+    }
+
+    public byte[] getAssessmentNotice() {
+        return this.assessmentNotice;
+    }
+
+    public AgencyNotice assessmentNotice(byte[] assessmentNotice) {
+        this.setAssessmentNotice(assessmentNotice);
+        return this;
+    }
+
+    public void setAssessmentNotice(byte[] assessmentNotice) {
+        this.assessmentNotice = assessmentNotice;
+    }
+
+    public String getAssessmentNoticeContentType() {
+        return this.assessmentNoticeContentType;
+    }
+
+    public AgencyNotice assessmentNoticeContentType(String assessmentNoticeContentType) {
+        this.assessmentNoticeContentType = assessmentNoticeContentType;
+        return this;
+    }
+
+    public void setAssessmentNoticeContentType(String assessmentNoticeContentType) {
+        this.assessmentNoticeContentType = assessmentNoticeContentType;
     }
 
     public Set<Dealer> getCorrespondents() {
@@ -256,9 +271,10 @@ public class AgencyNotice implements Serializable {
             "id=" + getId() +
             ", referenceNumber='" + getReferenceNumber() + "'" +
             ", referenceDate='" + getReferenceDate() + "'" +
-            ", taxCode='" + getTaxCode() + "'" +
             ", assessmentAmount=" + getAssessmentAmount() +
             ", agencyStatus='" + getAgencyStatus() + "'" +
+            ", assessmentNotice='" + getAssessmentNotice() + "'" +
+            ", assessmentNoticeContentType='" + getAssessmentNoticeContentType() + "'" +
             "}";
     }
 }

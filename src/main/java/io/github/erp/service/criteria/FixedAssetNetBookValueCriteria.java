@@ -4,7 +4,7 @@ import io.github.erp.domain.enumeration.DepreciationRegime;
 import java.io.Serializable;
 import java.util.Objects;
 
-import io.github.erp.erp.resources.FixedAssetNetBookValueResource;
+import io.github.erp.web.rest.api.FixedAssetNetBookValueResource;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.BigDecimalFilter;
 import tech.jhipster.service.filter.Filter;

@@ -33,6 +33,18 @@ public class Dealer implements Serializable {
     @Column(name = "tax_number")
     private String taxNumber;
 
+    @Column(name = "identification_document_number")
+    private String identificationDocumentNumber;
+
+    @Column(name = "organization_name")
+    private String organizationName;
+
+    @Column(name = "department")
+    private String department;
+
+    @Column(name = "position")
+    private String position;
+
     @Column(name = "postal_address")
     private String postalAddress;
 
@@ -123,6 +135,58 @@ public class Dealer implements Serializable {
 
     public void setTaxNumber(String taxNumber) {
         this.taxNumber = taxNumber;
+    }
+
+    public String getIdentificationDocumentNumber() {
+        return this.identificationDocumentNumber;
+    }
+
+    public Dealer identificationDocumentNumber(String identificationDocumentNumber) {
+        this.setIdentificationDocumentNumber(identificationDocumentNumber);
+        return this;
+    }
+
+    public void setIdentificationDocumentNumber(String identificationDocumentNumber) {
+        this.identificationDocumentNumber = identificationDocumentNumber;
+    }
+
+    public String getOrganizationName() {
+        return this.organizationName;
+    }
+
+    public Dealer organizationName(String organizationName) {
+        this.setOrganizationName(organizationName);
+        return this;
+    }
+
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
+    }
+
+    public String getDepartment() {
+        return this.department;
+    }
+
+    public Dealer department(String department) {
+        this.setDepartment(department);
+        return this;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getPosition() {
+        return this.position;
+    }
+
+    public Dealer position(String position) {
+        this.setPosition(position);
+        return this;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public String getPostalAddress() {
@@ -327,6 +391,10 @@ public class Dealer implements Serializable {
             "id=" + getId() +
             ", dealerName='" + getDealerName() + "'" +
             ", taxNumber='" + getTaxNumber() + "'" +
+            ", identificationDocumentNumber='" + getIdentificationDocumentNumber() + "'" +
+            ", organizationName='" + getOrganizationName() + "'" +
+            ", department='" + getDepartment() + "'" +
+            ", position='" + getPosition() + "'" +
             ", postalAddress='" + getPostalAddress() + "'" +
             ", physicalAddress='" + getPhysicalAddress() + "'" +
             ", accountName='" + getAccountName() + "'" +

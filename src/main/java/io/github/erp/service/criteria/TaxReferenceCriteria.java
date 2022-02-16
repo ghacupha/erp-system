@@ -4,7 +4,7 @@ import io.github.erp.domain.enumeration.taxReferenceTypes;
 import java.io.Serializable;
 import java.util.Objects;
 
-import io.github.erp.erp.resources.TaxReferenceResource;
+import io.github.erp.web.rest.api.TaxReferenceResource;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;

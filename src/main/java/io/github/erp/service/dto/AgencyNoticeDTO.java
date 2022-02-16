@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.Lob;
 import javax.validation.constraints.*;
 
 /**
@@ -21,14 +22,16 @@ public class AgencyNoticeDTO implements Serializable {
 
     private LocalDate referenceDate;
 
-    private String taxCode;
-
     @NotNull
     private BigDecimal assessmentAmount;
 
     @NotNull
     private AgencyStatusType agencyStatus;
 
+    @Lob
+    private byte[] assessmentNotice;
+
+    private String assessmentNoticeContentType;
     private Set<DealerDTO> correspondents = new HashSet<>();
 
     private SettlementCurrencyDTO settlementCurrency;
@@ -61,14 +64,6 @@ public class AgencyNoticeDTO implements Serializable {
         this.referenceDate = referenceDate;
     }
 
-    public String getTaxCode() {
-        return taxCode;
-    }
-
-    public void setTaxCode(String taxCode) {
-        this.taxCode = taxCode;
-    }
-
     public BigDecimal getAssessmentAmount() {
         return assessmentAmount;
     }
@@ -83,6 +78,22 @@ public class AgencyNoticeDTO implements Serializable {
 
     public void setAgencyStatus(AgencyStatusType agencyStatus) {
         this.agencyStatus = agencyStatus;
+    }
+
+    public byte[] getAssessmentNotice() {
+        return assessmentNotice;
+    }
+
+    public void setAssessmentNotice(byte[] assessmentNotice) {
+        this.assessmentNotice = assessmentNotice;
+    }
+
+    public String getAssessmentNoticeContentType() {
+        return assessmentNoticeContentType;
+    }
+
+    public void setAssessmentNoticeContentType(String assessmentNoticeContentType) {
+        this.assessmentNoticeContentType = assessmentNoticeContentType;
     }
 
     public Set<DealerDTO> getCorrespondents() {
@@ -145,9 +156,9 @@ public class AgencyNoticeDTO implements Serializable {
             "id=" + getId() +
             ", referenceNumber='" + getReferenceNumber() + "'" +
             ", referenceDate='" + getReferenceDate() + "'" +
-            ", taxCode='" + getTaxCode() + "'" +
             ", assessmentAmount=" + getAssessmentAmount() +
             ", agencyStatus='" + getAgencyStatus() + "'" +
+            ", assessmentNotice='" + getAssessmentNotice() + "'" +
             ", correspondents=" + getCorrespondents() +
             ", settlementCurrency=" + getSettlementCurrency() +
             ", assessor=" + getAssessor() +
