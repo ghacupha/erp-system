@@ -14,4 +14,10 @@ public interface DepreciationMethodMapper extends EntityMapper<DepreciationMetho
 
     @Mapping(target = "removePlaceholder", ignore = true)
     DepreciationMethod toEntity(DepreciationMethodDTO depreciationMethodDTO);
+
+    @Named("depreciationMethodName")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "depreciationMethodName", source = "depreciationMethodName")
+    DepreciationMethodDTO toDtoDepreciationMethodName(DepreciationMethod depreciationMethod);
 }

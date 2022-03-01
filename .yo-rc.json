@@ -66,8 +66,14 @@
       "PaymentInvoice",
       "Settlement",
       "AgencyNotice",
-      "DepreciationMethod"
+      "DepreciationMethod",
+      "AssetCategory",
+      "BankBranchCode",
+      "OutletStatus",
+      "OutletType",
+      "CountyCode",
+      "ServiceOutlet"
     ],
-    "lastLiquibaseTimestamp": 1646130305000
+    "lastLiquibaseTimestamp": 1646141363000
   }
 }
