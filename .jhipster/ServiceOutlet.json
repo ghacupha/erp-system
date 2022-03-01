@@ -1,0 +1,93 @@
+{
+  "fields": [
+    {
+      "fieldName": "outletCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "outletName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "town",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "parliamentaryConstituency",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "gpsCoordinates",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "outletOpeningDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "regulatorApprovalDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "outletClosureDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "dateLastModified",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "licenseFeePayable",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "serviceOutlet"
+    },
+    {
+      "relationshipName": "bankCode",
+      "otherEntityName": "bankBranchCode",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "branchCode"
+    },
+    {
+      "relationshipName": "outletType",
+      "otherEntityName": "outletType",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "outletType"
+    },
+    {
+      "relationshipName": "outletStatus",
+      "otherEntityName": "outletStatus",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "branchStatusType"
+    },
+    {
+      "relationshipName": "countyName",
+      "otherEntityName": "countyCode",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "countyName"
+    },
+    {
+      "relationshipName": "subCountyName",
+      "otherEntityName": "countyCode",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "subCountyName"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "infinite-scroll",
+  "name": "ServiceOutlet",
+  "changelogDate": "20220301132923"
+}
