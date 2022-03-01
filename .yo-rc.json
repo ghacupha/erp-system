@@ -65,8 +65,9 @@
       "PurchaseOrder",
       "PaymentInvoice",
       "Settlement",
-      "AgencyNotice"
+      "AgencyNotice",
+      "DepreciationMethod"
     ],
-    "lastLiquibaseTimestamp": 1643899756000
+    "lastLiquibaseTimestamp": 1646130305000
   }
 }
