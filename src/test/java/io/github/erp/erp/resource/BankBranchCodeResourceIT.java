@@ -42,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"GRANULAR_REPORTS_USER"})
 class BankBranchCodeResourceIT {
 
     private static final String DEFAULT_BANK_CODE = "AAAAAAAAAA";
@@ -60,9 +60,9 @@ class BankBranchCodeResourceIT {
     private static final String DEFAULT_NOTES = "AAAAAAAAAA";
     private static final String UPDATED_NOTES = "BBBBBBBBBB";
 
-    private static final String ENTITY_API_URL = "/api/bank-branch-codes";
+    private static final String ENTITY_API_URL = "/api/granular-data/bank-branch-codes";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/bank-branch-codes";
+    private static final String ENTITY_SEARCH_API_URL = "/api/granular-data/_search/bank-branch-codes";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

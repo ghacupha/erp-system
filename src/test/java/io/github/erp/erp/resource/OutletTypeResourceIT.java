@@ -42,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"GRANULAR_REPORTS_USER"})
 class OutletTypeResourceIT {
 
     private static final String DEFAULT_OUTLET_TYPE_CODE = "AAAAAAAAAA";
@@ -54,9 +54,9 @@ class OutletTypeResourceIT {
     private static final String DEFAULT_OUTLET_TYPE_DETAILS = "AAAAAAAAAA";
     private static final String UPDATED_OUTLET_TYPE_DETAILS = "BBBBBBBBBB";
 
-    private static final String ENTITY_API_URL = "/api/outlet-types";
+    private static final String ENTITY_API_URL = "/api/granular-data/outlet-types";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/outlet-types";
+    private static final String ENTITY_SEARCH_API_URL = "/api/granular-data/_search/outlet-types";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
