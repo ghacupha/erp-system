@@ -37,12 +37,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link CountyCodeResource} REST controller.
+ * Integration tests for the CountyCodeResource REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"GRANULAR_REPORTS_USER"})
 class CountyCodeResourceIT {
 
     private static final Integer DEFAULT_COUNTY_CODE = 1;
@@ -59,9 +59,9 @@ class CountyCodeResourceIT {
     private static final String DEFAULT_SUB_COUNTY_NAME = "AAAAAAAAAA";
     private static final String UPDATED_SUB_COUNTY_NAME = "BBBBBBBBBB";
 
-    private static final String ENTITY_API_URL = "/api/county-codes";
+    private static final String ENTITY_API_URL = "/api/granular-data/county-codes";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/county-codes";
+    private static final String ENTITY_SEARCH_API_URL = "/api/granular-data/_search/county-codes";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

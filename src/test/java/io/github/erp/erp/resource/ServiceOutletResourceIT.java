@@ -45,7 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"GRANULAR_REPORTS_USER"})
 class ServiceOutletResourceIT {
 
     private static final String DEFAULT_OUTLET_CODE = "AAAAAAAAAA";
@@ -83,9 +83,9 @@ class ServiceOutletResourceIT {
     private static final BigDecimal UPDATED_LICENSE_FEE_PAYABLE = new BigDecimal(2);
     private static final BigDecimal SMALLER_LICENSE_FEE_PAYABLE = new BigDecimal(1 - 1);
 
-    private static final String ENTITY_API_URL = "/api/service-outlets";
+    private static final String ENTITY_API_URL = "/api/granular-data/service-outlets";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/service-outlets";
+    private static final String ENTITY_SEARCH_API_URL = "/api/granular-data/_search/service-outlets";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
