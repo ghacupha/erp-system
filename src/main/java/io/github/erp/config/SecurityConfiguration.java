@@ -90,6 +90,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/dev/**").hasAuthority(AuthoritiesConstants.DEV)
             .antMatchers("/api/payments/**").hasAuthority(AuthoritiesConstants.PAYMENTS_USER)
             .antMatchers("/api/taxes/**").hasAuthority(AuthoritiesConstants.TAX_MODULE_USER)
+            .antMatchers("/api/granular-data/**").hasAuthority(AuthoritiesConstants.GRANULAR_REPORTS_USER)
             .antMatchers("/api/**").authenticated()
             .antMatchers("/websocket/**").authenticated()
             .antMatchers("/management/health").permitAll()

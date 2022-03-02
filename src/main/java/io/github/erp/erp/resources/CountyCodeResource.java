@@ -31,7 +31,7 @@ import java.util.Optional;
  * REST controller for managing {@link io.github.erp.domain.CountyCode}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/granular-data")
 public class CountyCodeResource {
 
     private final Logger log = LoggerFactory.getLogger(CountyCodeResource.class);
