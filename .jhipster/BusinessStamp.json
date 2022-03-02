@@ -1,0 +1,40 @@
+{
+  "fields": [
+    {
+      "fieldName": "stampDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "purpose",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "details",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "stampHolder",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "dealerName"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "businessStamp"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "BusinessStamp",
+  "changelogDate": "20220302141615"
+}
