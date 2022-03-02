@@ -31,7 +31,7 @@ import java.util.Optional;
  * REST controller for managing {@link io.github.erp.domain.BankBranchCode}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/granular-data")
 public class BankBranchCodeResource {
 
     private final Logger log = LoggerFactory.getLogger(BankBranchCodeResource.class);

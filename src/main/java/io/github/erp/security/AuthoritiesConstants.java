@@ -23,5 +23,7 @@ public final class AuthoritiesConstants {
 
     public static final String PREPAYMENTS_MODULE_USER = "ROLE_PREPAYMENTS_MODULE_USER";
 
+    public static final String GRANULAR_REPORTS_USER = "ROLE_GRANULAR_REPORTS_USER";
+
     private AuthoritiesConstants() {}
 }

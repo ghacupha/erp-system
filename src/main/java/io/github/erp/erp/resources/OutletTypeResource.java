@@ -31,7 +31,7 @@ import java.util.Optional;
  * REST controller for managing {@link io.github.erp.domain.OutletType}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/granular-data")
 public class OutletTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(OutletTypeResource.class);
