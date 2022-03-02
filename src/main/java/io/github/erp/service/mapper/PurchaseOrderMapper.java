@@ -20,6 +20,12 @@ public interface PurchaseOrderMapper extends EntityMapper<PurchaseOrderDTO, Purc
     @Mapping(target = "removeSignatories", ignore = true)
     PurchaseOrder toEntity(PurchaseOrderDTO purchaseOrderDTO);
 
+    @Named("purchaseOrderNumber")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "purchaseOrderNumber", source = "purchaseOrderNumber")
+    PurchaseOrderDTO toDtoPurchaseOrderNumber(PurchaseOrder purchaseOrder);
+
     @Named("purchaseOrderNumberSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

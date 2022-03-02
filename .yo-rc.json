@@ -72,8 +72,10 @@
       "OutletStatus",
       "OutletType",
       "CountyCode",
-      "ServiceOutlet"
+      "ServiceOutlet",
+      "BusinessStamp",
+      "DeliveryNote"
     ],
-    "lastLiquibaseTimestamp": 1646141363000
+    "lastLiquibaseTimestamp": 1646236728000
   }
 }
