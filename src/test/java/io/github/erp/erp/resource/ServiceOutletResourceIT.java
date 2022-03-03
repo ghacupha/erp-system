@@ -45,7 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser(roles = {"GRANULAR_REPORTS_USER"})
+@WithMockUser(roles = {"GRANULAR_REPORTS_USER","FIXED_ASSETS_USER"})
 class ServiceOutletResourceIT {
 
     private static final String DEFAULT_OUTLET_CODE = "AAAAAAAAAA";

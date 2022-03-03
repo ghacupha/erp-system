@@ -49,7 +49,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser(roles = {"PAYMENTS_USER"})
+@WithMockUser(roles = {"PAYMENTS_USER", "FIXED_ASSETS_USER"})
 class PurchaseOrderResourceIT {
 
     private static final String DEFAULT_PURCHASE_ORDER_NUMBER = "AAAAAAAAAA";
