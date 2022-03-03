@@ -48,7 +48,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser(roles = {"PAYMENTS_USER"})
+@WithMockUser(roles = {"PAYMENTS_USER", "FIXED_ASSETS_USER"})
 class PaymentRequisitionResourceIT {
 
     private static final LocalDate DEFAULT_RECEPTION_DATE = LocalDate.ofEpochDay(0L);

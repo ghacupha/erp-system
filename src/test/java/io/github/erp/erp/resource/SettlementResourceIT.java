@@ -53,7 +53,7 @@ import org.springframework.util.Base64Utils;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser(roles = {"PAYMENTS_USER"})
+@WithMockUser(roles = {"PAYMENTS_USER", "FIXED_ASSETS_USER"})
 class SettlementResourceIT {
 
     private static final String DEFAULT_PAYMENT_NUMBER = "AAAAAAAAAA";

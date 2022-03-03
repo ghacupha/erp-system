@@ -45,7 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser(roles = {"PAYMENTS_USER"})
+@WithMockUser(roles = {"PAYMENTS_USER", "FIXED_ASSETS_USER"})
 class BusinessStampResourceIT {
 
     private static final LocalDate DEFAULT_STAMP_DATE = LocalDate.ofEpochDay(0L);
