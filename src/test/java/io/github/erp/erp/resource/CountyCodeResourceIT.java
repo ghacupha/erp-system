@@ -43,6 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"GRANULAR_REPORTS_USER"})
+public
 class CountyCodeResourceIT {
 
     private static final Integer DEFAULT_COUNTY_CODE = 1;

@@ -30,8 +30,8 @@ import java.util.Optional;
 /**
  * REST controller for managing {@link io.github.erp.domain.BusinessStamp}.
  */
-@RestController
-@RequestMapping("/api")
+@RestController("DevBusinessStampResource")
+@RequestMapping("/api/dev")
 public class BusinessStampResource {
 
     private final Logger log = LoggerFactory.getLogger(BusinessStampResource.class);
