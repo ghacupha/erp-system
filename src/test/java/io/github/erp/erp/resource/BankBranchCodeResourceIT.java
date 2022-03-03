@@ -43,6 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"GRANULAR_REPORTS_USER"})
+public
 class BankBranchCodeResourceIT {
 
     private static final String DEFAULT_BANK_CODE = "AAAAAAAAAA";

@@ -30,8 +30,8 @@ import java.util.Optional;
 /**
  * REST controller for managing {@link io.github.erp.domain.ServiceOutlet}.
  */
-@RestController
-@RequestMapping("/api")
+@RestController("DevServiceOutletResource")
+@RequestMapping("/api/dev")
 public class ServiceOutletResource {
 
     private final Logger log = LoggerFactory.getLogger(ServiceOutletResource.class);
