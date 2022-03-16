@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.Lob;
 import javax.validation.constraints.*;
 
 /**
@@ -21,6 +22,9 @@ public class PaymentLabelDTO implements Serializable {
     private String fileUploadToken;
 
     private String compilationToken;
+
+    @Lob
+    private String remarks;
 
     private PaymentLabelDTO containingPaymentLabel;
 
@@ -64,6 +68,14 @@ public class PaymentLabelDTO implements Serializable {
 
     public void setCompilationToken(String compilationToken) {
         this.compilationToken = compilationToken;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
     public PaymentLabelDTO getContainingPaymentLabel() {
@@ -112,6 +124,7 @@ public class PaymentLabelDTO implements Serializable {
             ", comments='" + getComments() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
+            ", remarks='" + getRemarks() + "'" +
             ", containingPaymentLabel=" + getContainingPaymentLabel() +
             ", placeholders=" + getPlaceholders() +
             "}";

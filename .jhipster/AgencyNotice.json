@@ -62,5 +62,6 @@
   "readOnly": false,
   "pagination": "pagination",
   "name": "AgencyNotice",
-  "changelogDate": "20220203144916"
+  "changelogDate": "20220203144916",
+  "incrementalChangelog": false
 }

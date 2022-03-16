@@ -90,5 +90,6 @@
   "microserviceName": "erpService",
   "clientRootFolder": "payments",
   "databaseType": "sql",
-  "searchEngine": "elasticsearch"
+  "searchEngine": "elasticsearch",
+  "incrementalChangelog": false
 }

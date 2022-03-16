@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
 
 /**
  * A Dealer.
@@ -71,6 +72,11 @@ public class Dealer implements Serializable {
 
     @Column(name = "compilation_token")
     private String compilationToken;
+
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Column(name = "remarks")
+    private String remarks;
 
     @ManyToMany
     @JoinTable(
@@ -306,6 +312,19 @@ public class Dealer implements Serializable {
         this.compilationToken = compilationToken;
     }
 
+    public String getRemarks() {
+        return this.remarks;
+    }
+
+    public Dealer remarks(String remarks) {
+        this.setRemarks(remarks);
+        return this;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
     public Set<PaymentLabel> getPaymentLabels() {
         return this.paymentLabels;
     }
@@ -404,6 +423,7 @@ public class Dealer implements Serializable {
             ", bankersSwiftCode='" + getBankersSwiftCode() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
+            ", remarks='" + getRemarks() + "'" +
             "}";
     }
 }

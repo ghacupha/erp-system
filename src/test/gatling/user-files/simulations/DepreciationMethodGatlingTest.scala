@@ -74,6 +74,7 @@ class DepreciationMethodGatlingTest extends Simulation {
                 "depreciationMethodName":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
                 , "depreciationType":"STRAIGHT_LINE"
+                , "remarks":null
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_depreciationMethod_url"))).exitHereIfFailed

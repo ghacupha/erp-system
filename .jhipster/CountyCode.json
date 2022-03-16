@@ -37,5 +37,6 @@
   "readOnly": false,
   "pagination": "infinite-scroll",
   "name": "CountyCode",
-  "changelogDate": "20220301131552"
+  "changelogDate": "20220301131552",
+  "incrementalChangelog": false
 }

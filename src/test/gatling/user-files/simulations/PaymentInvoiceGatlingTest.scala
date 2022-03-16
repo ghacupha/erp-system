@@ -76,6 +76,7 @@ class PaymentInvoiceGatlingTest extends Simulation {
                 , "invoiceAmount":"0"
                 , "fileUploadToken":"SAMPLE_TEXT"
                 , "compilationToken":"SAMPLE_TEXT"
+                , "remarks":null
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_paymentInvoice_url"))).exitHereIfFailed

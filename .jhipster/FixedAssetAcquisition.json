@@ -54,5 +54,6 @@
   "clientRootFolder": "assets",
   "microserviceName": "erpService",
   "entityTableName": "fixed_asset_acquisition",
-  "databaseType": "sql"
+  "databaseType": "sql",
+  "incrementalChangelog": false
 }

@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
 
 /**
  * A DeliveryNote.
@@ -43,6 +44,11 @@ public class DeliveryNote implements Serializable {
 
     @Column(name = "quantity")
     private Integer quantity;
+
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Column(name = "remarks")
+    private String remarks;
 
     @ManyToMany
     @JoinTable(
@@ -166,6 +172,19 @@ public class DeliveryNote implements Serializable {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getRemarks() {
+        return this.remarks;
+    }
+
+    public DeliveryNote remarks(String remarks) {
+        this.setRemarks(remarks);
+        return this;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
     public Set<Placeholder> getPlaceholders() {
@@ -305,6 +324,7 @@ public class DeliveryNote implements Serializable {
             ", description='" + getDescription() + "'" +
             ", serialNumber='" + getSerialNumber() + "'" +
             ", quantity=" + getQuantity() +
+            ", remarks='" + getRemarks() + "'" +
             "}";
     }
 }

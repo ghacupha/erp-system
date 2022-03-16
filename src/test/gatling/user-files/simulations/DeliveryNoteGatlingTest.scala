@@ -76,6 +76,7 @@ class DeliveryNoteGatlingTest extends Simulation {
                 , "description":"SAMPLE_TEXT"
                 , "serialNumber":"SAMPLE_TEXT"
                 , "quantity":"0"
+                , "remarks":null
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_deliveryNote_url"))).exitHereIfFailed

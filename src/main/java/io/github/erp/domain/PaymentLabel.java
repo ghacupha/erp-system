@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
 
 /**
  * A PaymentLabel.
@@ -38,6 +39,11 @@ public class PaymentLabel implements Serializable {
 
     @Column(name = "compilation_token")
     private String compilationToken;
+
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Column(name = "remarks")
+    private String remarks;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "containingPaymentLabel", "placeholders" }, allowSetters = true)
@@ -120,6 +126,19 @@ public class PaymentLabel implements Serializable {
         this.compilationToken = compilationToken;
     }
 
+    public String getRemarks() {
+        return this.remarks;
+    }
+
+    public PaymentLabel remarks(String remarks) {
+        this.setRemarks(remarks);
+        return this;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
     public PaymentLabel getContainingPaymentLabel() {
         return this.containingPaymentLabel;
     }
@@ -184,6 +203,7 @@ public class PaymentLabel implements Serializable {
             ", comments='" + getComments() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
+            ", remarks='" + getRemarks() + "'" +
             "}";
     }
 }

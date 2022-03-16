@@ -74,6 +74,7 @@ class BusinessStampGatlingTest extends Simulation {
                 "stampDate":"2020-01-01T00:00:00.000Z"
                 , "purpose":"SAMPLE_TEXT"
                 , "details":"SAMPLE_TEXT"
+                , "remarks":null
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_businessStamp_url"))).exitHereIfFailed

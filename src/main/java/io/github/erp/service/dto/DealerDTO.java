@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.Lob;
 import javax.validation.constraints.*;
 
 /**
@@ -43,6 +44,9 @@ public class DealerDTO implements Serializable {
     private String fileUploadToken;
 
     private String compilationToken;
+
+    @Lob
+    private String remarks;
 
     private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
 
@@ -178,6 +182,14 @@ public class DealerDTO implements Serializable {
         this.compilationToken = compilationToken;
     }
 
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
     public Set<PaymentLabelDTO> getPaymentLabels() {
         return paymentLabels;
     }
@@ -243,6 +255,7 @@ public class DealerDTO implements Serializable {
             ", bankersSwiftCode='" + getBankersSwiftCode() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
+            ", remarks='" + getRemarks() + "'" +
             ", paymentLabels=" + getPaymentLabels() +
             ", dealerGroup=" + getDealerGroup() +
             ", placeholders=" + getPlaceholders() +

@@ -41,5 +41,6 @@
   "jpaMetamodelFiltering": true,
   "pagination": "pagination",
   "microserviceName": "erpService",
-  "name": "Placeholder"
+  "name": "Placeholder",
+  "incrementalChangelog": false
 }

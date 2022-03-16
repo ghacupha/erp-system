@@ -20,6 +20,11 @@
     {
       "fieldName": "compilationToken",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "remarks",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
     }
   ],
   "relationships": [
@@ -68,5 +73,6 @@
   "readOnly": false,
   "pagination": "pagination",
   "name": "PaymentInvoice",
-  "changelogDate": "20220203125725"
+  "changelogDate": "20220203125725",
+  "incrementalChangelog": false
 }

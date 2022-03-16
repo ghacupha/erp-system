@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.Lob;
 import javax.validation.constraints.*;
 
 /**
@@ -25,6 +26,9 @@ public class PaymentInvoiceDTO implements Serializable {
     private String fileUploadToken;
 
     private String compilationToken;
+
+    @Lob
+    private String remarks;
 
     private Set<PurchaseOrderDTO> purchaseOrders = new HashSet<>();
 
@@ -82,6 +86,14 @@ public class PaymentInvoiceDTO implements Serializable {
 
     public void setCompilationToken(String compilationToken) {
         this.compilationToken = compilationToken;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
     public Set<PurchaseOrderDTO> getPurchaseOrders() {
@@ -155,6 +167,7 @@ public class PaymentInvoiceDTO implements Serializable {
             ", invoiceAmount=" + getInvoiceAmount() +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
+            ", remarks='" + getRemarks() + "'" +
             ", purchaseOrders=" + getPurchaseOrders() +
             ", placeholders=" + getPlaceholders() +
             ", paymentLabels=" + getPaymentLabels() +

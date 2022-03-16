@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
 
 /**
  * A AssetCategory.
@@ -35,6 +36,11 @@ public class AssetCategory implements Serializable {
 
     @Column(name = "notes")
     private String notes;
+
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Column(name = "remarks")
+    private String remarks;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -105,6 +111,19 @@ public class AssetCategory implements Serializable {
         this.notes = notes;
     }
 
+    public String getRemarks() {
+        return this.remarks;
+    }
+
+    public AssetCategory remarks(String remarks) {
+        this.setRemarks(remarks);
+        return this;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
     public DepreciationMethod getDepreciationMethod() {
         return this.depreciationMethod;
     }
@@ -168,6 +187,7 @@ public class AssetCategory implements Serializable {
             ", assetCategoryName='" + getAssetCategoryName() + "'" +
             ", description='" + getDescription() + "'" +
             ", notes='" + getNotes() + "'" +
+            ", remarks='" + getRemarks() + "'" +
             "}";
     }
 }

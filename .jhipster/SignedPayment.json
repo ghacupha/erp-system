@@ -71,5 +71,6 @@
   "readOnly": false,
   "pagination": "pagination",
   "name": "SignedPayment",
-  "changelogDate": "20210920145532"
+  "changelogDate": "20210920145532",
+  "incrementalChangelog": false
 }

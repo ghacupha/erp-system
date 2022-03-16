@@ -32,5 +32,6 @@
   "readOnly": false,
   "pagination": "pagination",
   "name": "OutletStatus",
-  "changelogDate": "20220301113030"
+  "changelogDate": "20220301113030",
+  "incrementalChangelog": false
 }

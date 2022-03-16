@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.Lob;
 import javax.validation.constraints.*;
 
 /**
@@ -29,6 +30,9 @@ public class PurchaseOrderDTO implements Serializable {
     private String fileUploadToken;
 
     private String compilationToken;
+
+    @Lob
+    private String remarks;
 
     private SettlementCurrencyDTO settlementCurrency;
 
@@ -102,6 +106,14 @@ public class PurchaseOrderDTO implements Serializable {
         this.compilationToken = compilationToken;
     }
 
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
     public SettlementCurrencyDTO getSettlementCurrency() {
         return settlementCurrency;
     }
@@ -167,6 +179,7 @@ public class PurchaseOrderDTO implements Serializable {
             ", notes='" + getNotes() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
+            ", remarks='" + getRemarks() + "'" +
             ", settlementCurrency=" + getSettlementCurrency() +
             ", placeholders=" + getPlaceholders() +
             ", signatories=" + getSignatories() +

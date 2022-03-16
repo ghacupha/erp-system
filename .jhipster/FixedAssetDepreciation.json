@@ -62,5 +62,6 @@
   "clientRootFolder": "assets",
   "microserviceName": "erpService",
   "entityTableName": "fixed_asset_depreciation",
-  "databaseType": "sql"
+  "databaseType": "sql",
+  "incrementalChangelog": false
 }

@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
 
 /**
  * A PaymentInvoice.
@@ -43,6 +44,11 @@ public class PaymentInvoice implements Serializable {
 
     @Column(name = "compilation_token")
     private String compilationToken;
+
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Column(name = "remarks")
+    private String remarks;
 
     @ManyToMany
     @JoinTable(
@@ -162,6 +168,19 @@ public class PaymentInvoice implements Serializable {
 
     public void setCompilationToken(String compilationToken) {
         this.compilationToken = compilationToken;
+    }
+
+    public String getRemarks() {
+        return this.remarks;
+    }
+
+    public PaymentInvoice remarks(String remarks) {
+        this.setRemarks(remarks);
+        return this;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
     public Set<PurchaseOrder> getPurchaseOrders() {
@@ -288,6 +307,7 @@ public class PaymentInvoice implements Serializable {
             ", invoiceAmount=" + getInvoiceAmount() +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
+            ", remarks='" + getRemarks() + "'" +
             "}";
     }
 }

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.Lob;
 import javax.validation.constraints.*;
 
 /**
@@ -21,6 +22,9 @@ public class DepreciationMethodDTO implements Serializable {
 
     @NotNull
     private DepreciationTypes depreciationType;
+
+    @Lob
+    private String remarks;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
@@ -54,6 +58,14 @@ public class DepreciationMethodDTO implements Serializable {
 
     public void setDepreciationType(DepreciationTypes depreciationType) {
         this.depreciationType = depreciationType;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
     public Set<PlaceholderDTO> getPlaceholders() {
@@ -93,6 +105,7 @@ public class DepreciationMethodDTO implements Serializable {
             ", depreciationMethodName='" + getDepreciationMethodName() + "'" +
             ", description='" + getDescription() + "'" +
             ", depreciationType='" + getDepreciationType() + "'" +
+            ", remarks='" + getRemarks() + "'" +
             ", placeholders=" + getPlaceholders() +
             "}";
     }

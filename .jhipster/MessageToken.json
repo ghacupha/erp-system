@@ -49,5 +49,6 @@
   "clientRootFolder": "files",
   "microserviceName": "erpService",
   "searchEngine": "elasticsearch",
-  "databaseType": "sql"
+  "databaseType": "sql",
+  "incrementalChangelog": false
 }

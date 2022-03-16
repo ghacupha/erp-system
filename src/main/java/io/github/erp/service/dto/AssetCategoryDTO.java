@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.Lob;
 import javax.validation.constraints.*;
 
 /**
@@ -19,6 +20,9 @@ public class AssetCategoryDTO implements Serializable {
     private String description;
 
     private String notes;
+
+    @Lob
+    private String remarks;
 
     private DepreciationMethodDTO depreciationMethod;
 
@@ -54,6 +58,14 @@ public class AssetCategoryDTO implements Serializable {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
     public DepreciationMethodDTO getDepreciationMethod() {
@@ -101,6 +113,7 @@ public class AssetCategoryDTO implements Serializable {
             ", assetCategoryName='" + getAssetCategoryName() + "'" +
             ", description='" + getDescription() + "'" +
             ", notes='" + getNotes() + "'" +
+            ", remarks='" + getRemarks() + "'" +
             ", depreciationMethod=" + getDepreciationMethod() +
             ", placeholders=" + getPlaceholders() +
             "}";
