@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
 
 /**
  * A Settlement.
@@ -55,6 +56,11 @@ public class Settlement implements Serializable {
 
     @Column(name = "compilation_token")
     private String compilationToken;
+
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Column(name = "remarks")
+    private String remarks;
 
     @ManyToMany
     @JoinTable(
@@ -262,6 +268,19 @@ public class Settlement implements Serializable {
         this.compilationToken = compilationToken;
     }
 
+    public String getRemarks() {
+        return this.remarks;
+    }
+
+    public Settlement remarks(String remarks) {
+        this.setRemarks(remarks);
+        return this;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
     public Set<Placeholder> getPlaceholders() {
         return this.placeholders;
     }
@@ -439,6 +458,7 @@ public class Settlement implements Serializable {
             ", calculationFileContentType='" + getCalculationFileContentType() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
+            ", remarks='" + getRemarks() + "'" +
             "}";
     }
 }

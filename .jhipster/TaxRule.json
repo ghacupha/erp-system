@@ -62,5 +62,6 @@
   "jpaMetamodelFiltering": true,
   "pagination": "pagination",
   "microserviceName": "erpService",
-  "name": "TaxRule"
+  "name": "TaxRule",
+  "incrementalChangelog": false
 }

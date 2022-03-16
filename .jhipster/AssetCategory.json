@@ -12,6 +12,11 @@
     {
       "fieldName": "notes",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "remarks",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
     }
   ],
   "relationships": [
@@ -37,5 +42,6 @@
   "readOnly": false,
   "pagination": "infinite-scroll",
   "name": "AssetCategory",
-  "changelogDate": "20220301105946"
+  "changelogDate": "20220301105946",
+  "incrementalChangelog": false
 }

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.Lob;
 import javax.validation.constraints.*;
 
 /**
@@ -25,6 +26,9 @@ public class DeliveryNoteDTO implements Serializable {
     private String serialNumber;
 
     private Integer quantity;
+
+    @Lob
+    private String remarks;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
@@ -84,6 +88,14 @@ public class DeliveryNoteDTO implements Serializable {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
     public Set<PlaceholderDTO> getPlaceholders() {
@@ -165,6 +177,7 @@ public class DeliveryNoteDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", serialNumber='" + getSerialNumber() + "'" +
             ", quantity=" + getQuantity() +
+            ", remarks='" + getRemarks() + "'" +
             ", placeholders=" + getPlaceholders() +
             ", receivedBy=" + getReceivedBy() +
             ", deliveryStamps=" + getDeliveryStamps() +

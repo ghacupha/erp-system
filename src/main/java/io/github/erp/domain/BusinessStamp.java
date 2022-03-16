@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
 
 /**
  * A BusinessStamp.
@@ -35,6 +36,11 @@ public class BusinessStamp implements Serializable {
 
     @Column(name = "details")
     private String details;
+
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Column(name = "remarks")
+    private String remarks;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -105,6 +111,19 @@ public class BusinessStamp implements Serializable {
         this.details = details;
     }
 
+    public String getRemarks() {
+        return this.remarks;
+    }
+
+    public BusinessStamp remarks(String remarks) {
+        this.setRemarks(remarks);
+        return this;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
     public Dealer getStampHolder() {
         return this.stampHolder;
     }
@@ -168,6 +187,7 @@ public class BusinessStamp implements Serializable {
             ", stampDate='" + getStampDate() + "'" +
             ", purpose='" + getPurpose() + "'" +
             ", details='" + getDetails() + "'" +
+            ", remarks='" + getRemarks() + "'" +
             "}";
     }
 }

@@ -86,6 +86,7 @@ class DealerGatlingTest extends Simulation {
                 , "bankersSwiftCode":"SAMPLE_TEXT"
                 , "fileUploadToken":"SAMPLE_TEXT"
                 , "compilationToken":"SAMPLE_TEXT"
+                , "remarks":null
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_dealer_url"))).exitHereIfFailed

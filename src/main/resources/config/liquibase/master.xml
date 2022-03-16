@@ -81,4 +81,5 @@
     <include file="config/liquibase/changelog/20220302155848_added_entity_constraints_DeliveryNote.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20220316132103_added_remarks_column_changelog.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

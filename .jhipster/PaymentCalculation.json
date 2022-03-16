@@ -61,5 +61,6 @@
   "jpaMetamodelFiltering": true,
   "pagination": "pagination",
   "microserviceName": "erpService",
-  "name": "PaymentCalculation"
+  "name": "PaymentCalculation",
+  "incrementalChangelog": false
 }

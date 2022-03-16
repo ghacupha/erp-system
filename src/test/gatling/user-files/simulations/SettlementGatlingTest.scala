@@ -79,6 +79,7 @@ class SettlementGatlingTest extends Simulation {
                 , "calculationFile":null
                 , "fileUploadToken":"SAMPLE_TEXT"
                 , "compilationToken":"SAMPLE_TEXT"
+                , "remarks":null
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_settlement_url"))).exitHereIfFailed

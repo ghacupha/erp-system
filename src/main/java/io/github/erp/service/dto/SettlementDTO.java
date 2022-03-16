@@ -34,6 +34,9 @@ public class SettlementDTO implements Serializable {
 
     private String compilationToken;
 
+    @Lob
+    private String remarks;
+
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     private SettlementCurrencyDTO settlementCurrency;
@@ -128,6 +131,14 @@ public class SettlementDTO implements Serializable {
 
     public void setCompilationToken(String compilationToken) {
         this.compilationToken = compilationToken;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
     public Set<PlaceholderDTO> getPlaceholders() {
@@ -228,6 +239,7 @@ public class SettlementDTO implements Serializable {
             ", calculationFile='" + getCalculationFile() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
+            ", remarks='" + getRemarks() + "'" +
             ", placeholders=" + getPlaceholders() +
             ", settlementCurrency=" + getSettlementCurrency() +
             ", paymentLabels=" + getPaymentLabels() +

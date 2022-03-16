@@ -89,5 +89,6 @@
   "readOnly": false,
   "pagination": "infinite-scroll",
   "name": "ServiceOutlet",
-  "changelogDate": "20220301132923"
+  "changelogDate": "20220301132923",
+  "incrementalChangelog": false
 }

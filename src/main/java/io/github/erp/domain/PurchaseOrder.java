@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
 
 /**
  * A PurchaseOrder.
@@ -49,6 +50,11 @@ public class PurchaseOrder implements Serializable {
 
     @Column(name = "compilation_token")
     private String compilationToken;
+
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Column(name = "remarks")
+    private String remarks;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
@@ -185,6 +191,19 @@ public class PurchaseOrder implements Serializable {
         this.compilationToken = compilationToken;
     }
 
+    public String getRemarks() {
+        return this.remarks;
+    }
+
+    public PurchaseOrder remarks(String remarks) {
+        this.setRemarks(remarks);
+        return this;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
     public SettlementCurrency getSettlementCurrency() {
         return this.settlementCurrency;
     }
@@ -288,6 +307,7 @@ public class PurchaseOrder implements Serializable {
             ", notes='" + getNotes() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
+            ", remarks='" + getRemarks() + "'" +
             "}";
     }
 }

@@ -39,5 +39,6 @@
   "readOnly": false,
   "pagination": "infinite-scroll",
   "name": "BankBranchCode",
-  "changelogDate": "20220301112455"
+  "changelogDate": "20220301112455",
+  "incrementalChangelog": false
 }

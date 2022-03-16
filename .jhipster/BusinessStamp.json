@@ -11,6 +11,11 @@
     {
       "fieldName": "details",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "remarks",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
     }
   ],
   "relationships": [
@@ -36,5 +41,6 @@
   "readOnly": false,
   "pagination": "pagination",
   "name": "BusinessStamp",
-  "changelogDate": "20220302141615"
+  "changelogDate": "20220302141615",
+  "incrementalChangelog": false
 }

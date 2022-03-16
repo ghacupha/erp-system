@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.Lob;
 import javax.validation.constraints.*;
 
 /**
@@ -19,6 +20,9 @@ public class BusinessStampDTO implements Serializable {
     private String purpose;
 
     private String details;
+
+    @Lob
+    private String remarks;
 
     private DealerDTO stampHolder;
 
@@ -54,6 +58,14 @@ public class BusinessStampDTO implements Serializable {
 
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
     public DealerDTO getStampHolder() {
@@ -101,6 +113,7 @@ public class BusinessStampDTO implements Serializable {
             ", stampDate='" + getStampDate() + "'" +
             ", purpose='" + getPurpose() + "'" +
             ", details='" + getDetails() + "'" +
+            ", remarks='" + getRemarks() + "'" +
             ", stampHolder=" + getStampHolder() +
             ", placeholders=" + getPlaceholders() +
             "}";

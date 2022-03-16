@@ -21,6 +21,11 @@
     {
       "fieldName": "quantity",
       "fieldType": "Integer"
+    },
+    {
+      "fieldName": "remarks",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
     }
   ],
   "relationships": [
@@ -75,5 +80,6 @@
   "readOnly": false,
   "pagination": "pagination",
   "name": "DeliveryNote",
-  "changelogDate": "20220302155848"
+  "changelogDate": "20220302155848",
+  "incrementalChangelog": false
 }

@@ -42,6 +42,7 @@
     "devServerPort": 4200,
     "clientPackageManager": "npm",
     "enableGradleEnterprise": false,
+    "incrementalChangelog": true,
     "languages": ["en", "fr"],
     "entities": [
       "FixedAssetAcquisition",

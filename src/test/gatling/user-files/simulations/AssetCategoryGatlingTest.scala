@@ -74,6 +74,7 @@ class AssetCategoryGatlingTest extends Simulation {
                 "assetCategoryName":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
                 , "notes":"SAMPLE_TEXT"
+                , "remarks":null
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_assetCategory_url"))).exitHereIfFailed

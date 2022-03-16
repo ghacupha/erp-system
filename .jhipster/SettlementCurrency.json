@@ -43,5 +43,6 @@
   "pagination": "pagination",
   "name": "SettlementCurrency",
   "changelogDate": "20220203121814",
-  "searchEngine": "elasticsearch"
+  "searchEngine": "elasticsearch",
+  "incrementalChangelog": false
 }
