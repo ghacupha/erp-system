@@ -1,11 +1,11 @@
-id;invoice_number;invoice_date;invoice_amount;file_upload_token;compilation_token;settlement_currency_id;biller_id
-1;time-frame IB;2022-02-03;3759;Algeria Borders Steel;Idaho;1;1
-2;e-services cross-platform;2022-02-03;47965;SCSI viral web-readiness;monitor ROI Towels;2;2
-3;Valley;2022-02-02;83102;connect FTP Incredible;optical bandwidth-monitored Officer;3;3
-4;SMTP copy technologies;2022-02-02;64969;calculate Solutions Borders;circuit;4;4
-5;Peso Gloves Secured;2022-02-02;53781;Table;content-based;5;5
-6;motivating Wisconsin Sleek;2022-02-02;61108;e-commerce Devolved;hacking Games;6;6
-7;Assistant Shirt;2022-02-03;47404;Islands (customarily;Forges payment;7;7
-8;blue Avon Quality;2022-02-02;59096;interface withdrawal;deposit Operations Licensed;8;8
-9;XSS withdrawal Burundi;2022-02-02;77862;interfaces teal panel;bi-directional;9;9
-10;Administrator Awesome;2022-02-03;56848;mobile background;Devolved Grocery;10;10
+id;invoice_number;invoice_date;invoice_amount;file_upload_token;compilation_token;remarks;settlement_currency_id;biller_id
+1;time-frame IB;2022-02-03;3759;Algeria Borders Steel;Idaho;../fake-data/blob/hipster.txt;1;1
+2;e-services cross-platform;2022-02-03;47965;SCSI viral web-readiness;monitor ROI Towels;../fake-data/blob/hipster.txt;2;2
+3;Valley;2022-02-02;83102;connect FTP Incredible;optical bandwidth-monitored Officer;../fake-data/blob/hipster.txt;3;3
+4;SMTP copy technologies;2022-02-02;64969;calculate Solutions Borders;circuit;../fake-data/blob/hipster.txt;4;4
+5;Peso Gloves Secured;2022-02-02;53781;Table;content-based;../fake-data/blob/hipster.txt;5;5
+6;motivating Wisconsin Sleek;2022-02-02;61108;e-commerce Devolved;hacking Games;../fake-data/blob/hipster.txt;6;6
+7;Assistant Shirt;2022-02-03;47404;Islands (customarily;Forges payment;../fake-data/blob/hipster.txt;7;7
+8;blue Avon Quality;2022-02-02;59096;interface withdrawal;deposit Operations Licensed;../fake-data/blob/hipster.txt;8;8
+9;XSS withdrawal Burundi;2022-02-02;77862;interfaces teal panel;bi-directional;../fake-data/blob/hipster.txt;9;9
+10;Administrator Awesome;2022-02-03;56848;mobile background;Devolved Grocery;../fake-data/blob/hipster.txt;10;10

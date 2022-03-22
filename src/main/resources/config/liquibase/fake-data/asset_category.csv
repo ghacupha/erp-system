@@ -1,11 +1,11 @@
-id;asset_category_name;description;notes;depreciation_method_id
-1;green Garden;supply-chains Cambridgeshire AGP;Account Bedfordshire HDD;1
-2;parse Buckinghamshire;incubate Cambridgeshire;Shilling Security Bond;2
-3;withdrawal Liaison;auxiliary primary;Belarus enterprise Architect;3
-4;Fish bus Investment;Shoes GB;program multi-tasking yellow;4
-5;Leu channels auxiliary;Data Loan Mill;payment Frozen Camp;5
-6;Legacy;Handcrafted teal synthesizing;Georgia transmitter explicit;6
-7;experiences;payment;Senior PCI;7
-8;global deposit;Senior;bypass Curve;8
-9;Table Plastic;alarm Washington Washington;calculating extend;9
-10;attitude Cambridgeshire task-force;e-business system;Hat;10
+id;asset_category_name;description;notes;remarks;depreciation_method_id
+1;green Garden;supply-chains Cambridgeshire AGP;Account Bedfordshire HDD;../fake-data/blob/hipster.txt;1
+2;parse Buckinghamshire;incubate Cambridgeshire;Shilling Security Bond;../fake-data/blob/hipster.txt;2
+3;withdrawal Liaison;auxiliary primary;Belarus enterprise Architect;../fake-data/blob/hipster.txt;3
+4;Fish bus Investment;Shoes GB;program multi-tasking yellow;../fake-data/blob/hipster.txt;4
+5;Leu channels auxiliary;Data Loan Mill;payment Frozen Camp;../fake-data/blob/hipster.txt;5
+6;Legacy;Handcrafted teal synthesizing;Georgia transmitter explicit;../fake-data/blob/hipster.txt;6
+7;experiences;payment;Senior PCI;../fake-data/blob/hipster.txt;7
+8;global deposit;Senior;bypass Curve;../fake-data/blob/hipster.txt;8
+9;Table Plastic;alarm Washington Washington;calculating extend;../fake-data/blob/hipster.txt;9
+10;attitude Cambridgeshire task-force;e-business system;Hat;../fake-data/blob/hipster.txt;10
