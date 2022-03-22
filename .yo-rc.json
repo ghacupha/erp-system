@@ -42,7 +42,7 @@
     "devServerPort": 4200,
     "clientPackageManager": "npm",
     "enableGradleEnterprise": false,
-    "incrementalChangelog": true,
+    "incrementalChangelog": false,
     "languages": ["en", "fr"],
     "entities": [
       "FixedAssetAcquisition",
@@ -75,7 +75,9 @@
       "CountyCode",
       "ServiceOutlet",
       "BusinessStamp",
-      "DeliveryNote"
+      "DeliveryNote",
+      "JobSheet",
+      "CreditNote"
     ],
     "lastLiquibaseTimestamp": 1646236728000
   }

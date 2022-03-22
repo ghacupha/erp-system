@@ -47,6 +47,8 @@
     <include file="config/liquibase/changelog/20220301132923_added_entity_ServiceOutlet.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220302141615_added_entity_BusinessStamp.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220302155848_added_entity_DeliveryNote.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220320084318_added_entity_JobSheet.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220320133125_added_entity_CreditNote.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
@@ -79,6 +81,8 @@
     <include file="config/liquibase/changelog/20220301132923_added_entity_constraints_ServiceOutlet.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220302141615_added_entity_constraints_BusinessStamp.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220302155848_added_entity_constraints_DeliveryNote.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220320084318_added_entity_constraints_JobSheet.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220320133125_added_entity_constraints_CreditNote.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
     <include file="config/liquibase/changelog/20220316132103_added_remarks_column_changelog.xml" relativeToChangelogFile="false"/>
