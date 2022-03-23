@@ -2,7 +2,7 @@
   "name": "erp-system",
   "version": "0.0.0",
   "private": true,
-  "description": "Description for erpSystem",
+  "description": "Back-end for the ERP System",
   "license": "GPLv3",
   "scripts": {
     "app:start": "./mvnw",
