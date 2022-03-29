@@ -1,11 +1,11 @@
-id;iso_4217_currency_code;currency_name;country;file_upload_token;compilation_token
-1;dis;Swedish Krona;Grenada;Solutions;XSS
-2;pin;Liberian Dollar;Indonesia;Delaware;Intranet Extended Wisconsin
-3;Arc;Belize Dollar;Netherlands;blue Granite Avon;Home grey
-4;vir;Ouguiya;Myanmar;Chair;Borders Shoes Hat
-5;Pla;Balboa;Holy See (Vatican City State);methodologies Cheese;Shoes Bedfordshire protocol
-6;par;Bond Markets Units European Composite Unit (EURCO);British Indian Ocean Territory (Chagos Archipelago);Garden navigate;collaborative Mouse Computers
-7;Fan;Tugrik;Belize;synthesize;Switchable
-8;Tas;Dalasi;Nigeria;Director navigating;payment compressing Lake
-9;Sho;Taka;Azerbaijan;Soft;Berkshire Cotton Sleek
-10;Buc;Syrian Pound;Cook Islands;Regional Greens;fuchsia virtual
+id;iso_4217_currency_code;currency_name;country;numeric_code;minor_unit;file_upload_token;compilation_token
+1;dis;Swedish Krona;Grenada;Solutions;XSS;pink withdrawal;monetize Chips
+2;Ore;Zambian Kwacha;Japan;Rubber blue;Cambridgeshire;tan;Intelligent virtual
+3;Sav;Sudanese Pound;Afghanistan;Games interfaces seamless;Orchestrator Michigan;Cheese GB;Bedfordshire protocol Switchable
+4;Dir;Argentine Peso;Guinea;navigate National;Mouse Computers deposit;Configuration Belize synthesize;Switchable
+5;Tas;Dalasi;Nigeria;Director navigating;payment compressing Lake;Shoes optimize Kroon;Cheese
+6;Ber;Baht;Liechtenstein;Estate solutions unleash;Regional Greens;fuchsia virtual;Electronics Corporate
+7;pro;New Zealand Dollar;Republic of Korea;Electronics;Rupee;neutral invoice;next-generation
+8;pay;Guarani;Saint Vincent and the Grenadines;Specialist;Gorgeous Virtual Ringgit;Producer model;efficient Wooden
+9;cor;Swiss Franc;Guinea-Bissau;Applications matrix;Plastic e-services Configurable;Grocery;Reunion synthesize
+10;Chi;Moldovan Leu;Liechtenstein;Senior metrics Health;core Regional Peso;RAM Wooden;invoice Paradigm Manat

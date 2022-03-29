@@ -74,6 +74,8 @@ class SettlementCurrencyGatlingTest extends Simulation {
                 "iso4217CurrencyCode":"SAMPLE_TEXT"
                 , "currencyName":"SAMPLE_TEXT"
                 , "country":"SAMPLE_TEXT"
+                , "numericCode":"SAMPLE_TEXT"
+                , "minorUnit":"SAMPLE_TEXT"
                 , "fileUploadToken":"SAMPLE_TEXT"
                 , "compilationToken":"SAMPLE_TEXT"
                 }""")).asJson

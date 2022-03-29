@@ -10,12 +10,20 @@
     {
       "fieldName": "currencyName",
       "fieldType": "String",
-      "fieldValidateRules": ["required", "unique"]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "country",
       "fieldType": "String",
-      "fieldValidateRules": ["required", "unique"]
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "numericCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "minorUnit",
+      "fieldType": "String"
     },
     {
       "fieldName": "fileUploadToken",

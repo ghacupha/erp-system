@@ -23,6 +23,10 @@ public class SettlementCurrencyDTO implements Serializable {
     @NotNull
     private String country;
 
+    private String numericCode;
+
+    private String minorUnit;
+
     private String fileUploadToken;
 
     private String compilationToken;
@@ -59,6 +63,22 @@ public class SettlementCurrencyDTO implements Serializable {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getNumericCode() {
+        return numericCode;
+    }
+
+    public void setNumericCode(String numericCode) {
+        this.numericCode = numericCode;
+    }
+
+    public String getMinorUnit() {
+        return minorUnit;
+    }
+
+    public void setMinorUnit(String minorUnit) {
+        this.minorUnit = minorUnit;
     }
 
     public String getFileUploadToken() {
@@ -114,6 +134,8 @@ public class SettlementCurrencyDTO implements Serializable {
             ", iso4217CurrencyCode='" + getIso4217CurrencyCode() + "'" +
             ", currencyName='" + getCurrencyName() + "'" +
             ", country='" + getCountry() + "'" +
+            ", numericCode='" + getNumericCode() + "'" +
+            ", minorUnit='" + getMinorUnit() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
             ", placeholders=" + getPlaceholders() +

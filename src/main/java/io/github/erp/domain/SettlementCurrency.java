@@ -32,12 +32,18 @@ public class SettlementCurrency implements Serializable {
     private String iso4217CurrencyCode;
 
     @NotNull
-    @Column(name = "currency_name", nullable = false, unique = true)
+    @Column(name = "currency_name", nullable = false)
     private String currencyName;
 
     @NotNull
-    @Column(name = "country", nullable = false, unique = true)
+    @Column(name = "country", nullable = false)
     private String country;
+
+    @Column(name = "numeric_code")
+    private String numericCode;
+
+    @Column(name = "minor_unit")
+    private String minorUnit;
 
     @Column(name = "file_upload_token")
     private String fileUploadToken;
@@ -107,6 +113,32 @@ public class SettlementCurrency implements Serializable {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getNumericCode() {
+        return this.numericCode;
+    }
+
+    public SettlementCurrency numericCode(String numericCode) {
+        this.setNumericCode(numericCode);
+        return this;
+    }
+
+    public void setNumericCode(String numericCode) {
+        this.numericCode = numericCode;
+    }
+
+    public String getMinorUnit() {
+        return this.minorUnit;
+    }
+
+    public SettlementCurrency minorUnit(String minorUnit) {
+        this.setMinorUnit(minorUnit);
+        return this;
+    }
+
+    public void setMinorUnit(String minorUnit) {
+        this.minorUnit = minorUnit;
     }
 
     public String getFileUploadToken() {
@@ -185,6 +217,8 @@ public class SettlementCurrency implements Serializable {
             ", iso4217CurrencyCode='" + getIso4217CurrencyCode() + "'" +
             ", currencyName='" + getCurrencyName() + "'" +
             ", country='" + getCountry() + "'" +
+            ", numericCode='" + getNumericCode() + "'" +
+            ", minorUnit='" + getMinorUnit() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
             "}";
