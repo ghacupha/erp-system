@@ -32,6 +32,10 @@ public class SettlementCurrencyCriteria implements Serializable, Criteria {
 
     private StringFilter country;
 
+    private StringFilter numericCode;
+
+    private StringFilter minorUnit;
+
     private StringFilter fileUploadToken;
 
     private StringFilter compilationToken;
@@ -47,6 +51,8 @@ public class SettlementCurrencyCriteria implements Serializable, Criteria {
         this.iso4217CurrencyCode = other.iso4217CurrencyCode == null ? null : other.iso4217CurrencyCode.copy();
         this.currencyName = other.currencyName == null ? null : other.currencyName.copy();
         this.country = other.country == null ? null : other.country.copy();
+        this.numericCode = other.numericCode == null ? null : other.numericCode.copy();
+        this.minorUnit = other.minorUnit == null ? null : other.minorUnit.copy();
         this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
         this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
@@ -118,6 +124,36 @@ public class SettlementCurrencyCriteria implements Serializable, Criteria {
         this.country = country;
     }
 
+    public StringFilter getNumericCode() {
+        return numericCode;
+    }
+
+    public StringFilter numericCode() {
+        if (numericCode == null) {
+            numericCode = new StringFilter();
+        }
+        return numericCode;
+    }
+
+    public void setNumericCode(StringFilter numericCode) {
+        this.numericCode = numericCode;
+    }
+
+    public StringFilter getMinorUnit() {
+        return minorUnit;
+    }
+
+    public StringFilter minorUnit() {
+        if (minorUnit == null) {
+            minorUnit = new StringFilter();
+        }
+        return minorUnit;
+    }
+
+    public void setMinorUnit(StringFilter minorUnit) {
+        this.minorUnit = minorUnit;
+    }
+
     public StringFilter getFileUploadToken() {
         return fileUploadToken;
     }
@@ -185,6 +221,8 @@ public class SettlementCurrencyCriteria implements Serializable, Criteria {
             Objects.equals(iso4217CurrencyCode, that.iso4217CurrencyCode) &&
             Objects.equals(currencyName, that.currencyName) &&
             Objects.equals(country, that.country) &&
+            Objects.equals(numericCode, that.numericCode) &&
+            Objects.equals(minorUnit, that.minorUnit) &&
             Objects.equals(fileUploadToken, that.fileUploadToken) &&
             Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(placeholderId, that.placeholderId) &&
@@ -194,7 +232,18 @@ public class SettlementCurrencyCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, iso4217CurrencyCode, currencyName, country, fileUploadToken, compilationToken, placeholderId, distinct);
+        return Objects.hash(
+            id,
+            iso4217CurrencyCode,
+            currencyName,
+            country,
+            numericCode,
+            minorUnit,
+            fileUploadToken,
+            compilationToken,
+            placeholderId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -205,6 +254,8 @@ public class SettlementCurrencyCriteria implements Serializable, Criteria {
             (iso4217CurrencyCode != null ? "iso4217CurrencyCode=" + iso4217CurrencyCode + ", " : "") +
             (currencyName != null ? "currencyName=" + currencyName + ", " : "") +
             (country != null ? "country=" + country + ", " : "") +
+            (numericCode != null ? "numericCode=" + numericCode + ", " : "") +
+            (minorUnit != null ? "minorUnit=" + minorUnit + ", " : "") +
             (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +
             (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +

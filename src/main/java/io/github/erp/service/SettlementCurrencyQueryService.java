@@ -108,6 +108,12 @@ public class SettlementCurrencyQueryService extends QueryService<SettlementCurre
             if (criteria.getCountry() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getCountry(), SettlementCurrency_.country));
             }
+            if (criteria.getNumericCode() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getNumericCode(), SettlementCurrency_.numericCode));
+            }
+            if (criteria.getMinorUnit() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getMinorUnit(), SettlementCurrency_.minorUnit));
+            }
             if (criteria.getFileUploadToken() != null) {
                 specification =
                     specification.and(buildStringSpecification(criteria.getFileUploadToken(), SettlementCurrency_.fileUploadToken));
