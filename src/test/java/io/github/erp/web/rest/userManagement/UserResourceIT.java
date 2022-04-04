@@ -1,4 +1,4 @@
-package io.github.erp.web.rest;
+package io.github.erp.web.rest.userManagement;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -13,8 +13,9 @@ import io.github.erp.repository.UserRepository;
 import io.github.erp.repository.search.UserSearchRepository;
 import io.github.erp.security.AuthoritiesConstants;
 import io.github.erp.service.dto.AdminUserDTO;
-import io.github.erp.service.dto.UserDTO;
 import io.github.erp.service.mapper.UserMapper;
+import io.github.erp.web.rest.TestUtil;
+import io.github.erp.web.rest.userManagement.UserResource;
 import io.github.erp.web.rest.vm.ManagedUserVM;
 import java.time.Instant;
 import java.util.*;

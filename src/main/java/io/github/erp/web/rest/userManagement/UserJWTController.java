@@ -1,4 +1,4 @@
-package io.github.erp.web.rest;
+package io.github.erp.web.rest.userManagement;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.erp.security.jwt.JWTFilter;

@@ -1,4 +1,4 @@
-package io.github.erp.web.rest;
+package io.github.erp.web.rest.userManagement;
 
 import io.github.erp.domain.User;
 import io.github.erp.repository.UserRepository;
