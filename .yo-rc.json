@@ -77,8 +77,9 @@
       "BusinessStamp",
       "DeliveryNote",
       "JobSheet",
-      "CreditNote"
+      "CreditNote",
+      "CustomerIDDocumentType"
     ],
-    "lastLiquibaseTimestamp": 1646236728000
+    "lastLiquibaseTimestamp": 1649079769000
   }
 }

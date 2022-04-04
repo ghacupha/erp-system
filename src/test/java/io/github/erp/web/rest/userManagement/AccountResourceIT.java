@@ -1,6 +1,6 @@
-package io.github.erp.web.rest;
+package io.github.erp.web.rest.userManagement;
 
-import static io.github.erp.web.rest.AccountResourceIT.TEST_USER_LOGIN;
+import static io.github.erp.web.rest.userManagement.AccountResourceIT.TEST_USER_LOGIN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -14,7 +14,8 @@ import io.github.erp.security.AuthoritiesConstants;
 import io.github.erp.service.UserService;
 import io.github.erp.service.dto.AdminUserDTO;
 import io.github.erp.service.dto.PasswordChangeDTO;
-import io.github.erp.service.dto.UserDTO;
+import io.github.erp.web.rest.TestUtil;
+import io.github.erp.web.rest.WithUnauthenticatedMockUser;
 import io.github.erp.web.rest.vm.KeyAndPasswordVM;
 import io.github.erp.web.rest.vm.ManagedUserVM;
 import java.time.Instant;

@@ -1,6 +1,4 @@
-package io.github.erp.web.rest;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
+package io.github.erp.web.rest.userManagement;
 
 import io.github.erp.config.Constants;
 import io.github.erp.domain.User;
@@ -16,8 +14,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.Collections;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import org.slf4j.Logger;

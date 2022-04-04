@@ -1,4 +1,4 @@
-package io.github.erp.web.rest;
+package io.github.erp.web.rest.userManagement;
 
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.is;
@@ -12,6 +12,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.User;
 import io.github.erp.repository.UserRepository;
+import io.github.erp.web.rest.TestUtil;
+import io.github.erp.web.rest.userManagement.UserJWTController;
 import io.github.erp.web.rest.vm.LoginVM;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

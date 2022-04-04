@@ -1,6 +1,4 @@
-package io.github.erp.web.rest;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
+package io.github.erp.web.rest.userManagement;
 
 import io.github.erp.repository.search.UserSearchRepository;
 import io.github.erp.service.UserService;

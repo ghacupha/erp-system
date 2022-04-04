@@ -1,4 +1,4 @@
-package io.github.erp.web.rest;
+package io.github.erp.web.rest.userManagement;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
@@ -11,6 +11,7 @@ import io.github.erp.repository.UserRepository;
 import io.github.erp.repository.search.UserSearchRepository;
 import io.github.erp.security.AuthoritiesConstants;
 import javax.persistence.EntityManager;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
