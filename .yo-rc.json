@@ -80,8 +80,9 @@
       "CreditNote",
       "CustomerIDDocumentType",
       "InstitutionCode",
-      "MfbBranchCode"
+      "MfbBranchCode",
+      "IsoCountryCode"
     ],
-    "lastLiquibaseTimestamp": 1649243034000
+    "lastLiquibaseTimestamp": 1649250064000
   }
 }
