@@ -78,8 +78,9 @@
       "DeliveryNote",
       "JobSheet",
       "CreditNote",
-      "CustomerIDDocumentType"
+      "CustomerIDDocumentType",
+      "InstitutionCode"
     ],
-    "lastLiquibaseTimestamp": 1649079769000
+    "lastLiquibaseTimestamp": 1649232053000
   }
 }
