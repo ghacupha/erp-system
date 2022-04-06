@@ -79,8 +79,9 @@
       "JobSheet",
       "CreditNote",
       "CustomerIDDocumentType",
-      "InstitutionCode"
+      "InstitutionCode",
+      "MfbBranchCode"
     ],
-    "lastLiquibaseTimestamp": 1649232053000
+    "lastLiquibaseTimestamp": 1649243034000
   }
 }
