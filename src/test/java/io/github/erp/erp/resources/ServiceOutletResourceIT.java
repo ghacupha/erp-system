@@ -1,10 +1,7 @@
-package io.github.erp.web.rest.api;
+package io.github.erp.erp.resources;
 
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
-import io.github.erp.erp.resources.BankBranchCodeResourceIT;
-import io.github.erp.erp.resources.CountyCodeResourceIT;
-import io.github.erp.erp.resources.OutletTypeResourceIT;
 import io.github.erp.repository.ServiceOutletRepository;
 import io.github.erp.repository.search.ServiceOutletSearchRepository;
 import io.github.erp.service.ServiceOutletService;
@@ -43,12 +40,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link ServiceOutletResource} REST controller.
+ * Integration tests for the ServiceOutletResource REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser(roles = {"DEV"})
+@WithMockUser(roles = {"GRANULAR_REPORTS_USER","FIXED_ASSETS_USER"})
 class ServiceOutletResourceIT {
 
     private static final String DEFAULT_OUTLET_CODE = "AAAAAAAAAA";
@@ -86,9 +83,9 @@ class ServiceOutletResourceIT {
     private static final BigDecimal UPDATED_LICENSE_FEE_PAYABLE = new BigDecimal(2);
     private static final BigDecimal SMALLER_LICENSE_FEE_PAYABLE = new BigDecimal(1 - 1);
 
-    private static final String ENTITY_API_URL = "/api/dev/service-outlets";
+    private static final String ENTITY_API_URL = "/api/granular-data/service-outlets";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/dev/_search/service-outlets";
+    private static final String ENTITY_SEARCH_API_URL = "/api/granular-data/_search/service-outlets";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
