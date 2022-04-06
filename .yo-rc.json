@@ -81,8 +81,9 @@
       "CustomerIDDocumentType",
       "InstitutionCode",
       "MfbBranchCode",
-      "IsoCountryCode"
+      "IsoCountryCode",
+      "SubCountyCode"
     ],
-    "lastLiquibaseTimestamp": 1649250064000
+    "lastLiquibaseTimestamp": 1649252436000
   }
 }
