@@ -1,5 +1,10 @@
 {
-  "name": "FileUpload",
+  "changelogDate": "20210414144555",
+  "clientRootFolder": "files",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "file_upload",
   "fields": [
     {
       "fieldName": "description",
@@ -44,27 +49,22 @@
       "fieldValidateRules": ["unique"]
     }
   ],
+  "fluentMethods": true,
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "erpService",
+  "name": "FileUpload",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
-      "ownerSide": true
+      "otherEntityName": "placeholder",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "changelogDate": "20210414144555",
-  "entityTableName": "file_upload",
-  "dto": "mapstruct",
-  "pagination": "pagination",
-  "service": "serviceImpl",
-  "jpaMetamodelFiltering": true,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "clientRootFolder": "files",
-  "microserviceName": "erpService",
   "searchEngine": "elasticsearch",
-  "databaseType": "sql",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

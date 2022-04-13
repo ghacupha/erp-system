@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220203144916",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "referenceNumber",
@@ -17,8 +19,8 @@
     {
       "fieldName": "agencyStatus",
       "fieldType": "AgencyStatusType",
-      "fieldValues": "CLEARED,NOT_CLEARED",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required"],
+      "fieldValues": "CLEARED,NOT_CLEARED"
     },
     {
       "fieldName": "assessmentNotice",
@@ -26,42 +28,40 @@
       "fieldTypeBlobContent": "any"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "AgencyNotice",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "correspondents",
-      "otherEntityName": "dealer",
-      "relationshipType": "many-to-many",
       "otherEntityField": "dealerName",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "agencyNotice"
-    },
-    {
-      "relationshipName": "settlementCurrency",
-      "otherEntityName": "settlementCurrency",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "iso4217CurrencyCode"
-    },
-    {
-      "relationshipName": "assessor",
       "otherEntityName": "dealer",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "dealerName"
+      "otherEntityRelationshipName": "agencyNotice",
+      "ownerSide": true,
+      "relationshipName": "correspondents",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
+      "otherEntityField": "iso4217CurrencyCode",
+      "otherEntityName": "settlementCurrency",
+      "relationshipName": "settlementCurrency",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "assessor",
+      "relationshipType": "many-to-one"
+    },
+    {
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "agencyNotice",
       "ownerSide": true,
-      "otherEntityRelationshipName": "agencyNotice"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "AgencyNotice",
-  "changelogDate": "20220203144916",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

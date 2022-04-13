@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220302155848",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "deliveryNoteNumber",
@@ -28,58 +30,56 @@
       "fieldTypeBlobContent": "text"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "DeliveryNote",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "deliveryNote",
       "ownerSide": true,
-      "otherEntityRelationshipName": "deliveryNote"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "receivedBy",
-      "otherEntityName": "dealer",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "dealerName"
-    },
-    {
-      "relationshipName": "deliveryStamps",
-      "otherEntityName": "businessStamp",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "details",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "deliveryNote"
-    },
-    {
-      "relationshipName": "purchaseOrder",
-      "otherEntityName": "purchaseOrder",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "purchaseOrderNumber"
-    },
-    {
-      "relationshipName": "supplier",
-      "otherEntityName": "dealer",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "dealerName"
-    },
-    {
-      "relationshipName": "signatories",
-      "otherEntityName": "dealer",
-      "relationshipType": "many-to-many",
       "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "receivedBy",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "details",
+      "otherEntityName": "businessStamp",
+      "otherEntityRelationshipName": "deliveryNote",
       "ownerSide": true,
-      "otherEntityRelationshipName": "deliveryNote"
+      "relationshipName": "deliveryStamps",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "purchaseOrderNumber",
+      "otherEntityName": "purchaseOrder",
+      "relationshipName": "purchaseOrder",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "supplier",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "otherEntityRelationshipName": "deliveryNote",
+      "ownerSide": true,
+      "relationshipName": "signatories",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "DeliveryNote",
-  "changelogDate": "20220302155848",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

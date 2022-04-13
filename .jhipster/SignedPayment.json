@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20210920145532",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "transactionNumber",
@@ -13,8 +15,8 @@
     {
       "fieldName": "transactionCurrency",
       "fieldType": "CurrencyTypes",
-      "fieldValues": "KES,USD,GBP,EUR,INR,ZAR,AED,CNY,CHF,UGX,TZS,JPY,CAD",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required"],
+      "fieldValues": "KES,USD,GBP,EUR,INR,ZAR,AED,CNY,CHF,UGX,TZS,JPY,CAD"
     },
     {
       "fieldName": "transactionAmount",
@@ -35,42 +37,40 @@
       "fieldType": "String"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "SignedPayment",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "paymentLabel",
+      "otherEntityField": "description",
       "otherEntityName": "paymentLabel",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "description",
+      "otherEntityRelationshipName": "signedPayment",
       "ownerSide": true,
-      "otherEntityRelationshipName": "signedPayment"
+      "relationshipName": "paymentLabel",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "paymentCategory",
-      "otherEntityName": "paymentCategory",
-      "relationshipType": "many-to-one",
       "otherEntityField": "categoryName",
-      "otherEntityRelationshipName": "signedPayment"
+      "otherEntityName": "paymentCategory",
+      "otherEntityRelationshipName": "signedPayment",
+      "relationshipName": "paymentCategory",
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
-      "ownerSide": true
+      "otherEntityName": "placeholder",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "signedPaymentGroup",
+      "otherEntityField": "id",
       "otherEntityName": "signedPayment",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "id"
+      "relationshipName": "signedPaymentGroup",
+      "relationshipType": "many-to-one"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "SignedPayment",
-  "changelogDate": "20210920145532",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

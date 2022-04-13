@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220301113744",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "outletTypeCode",
@@ -15,22 +17,20 @@
       "fieldType": "String"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "OutletType",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "outletType",
       "ownerSide": true,
-      "otherEntityRelationshipName": "outletType"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "OutletType",
-  "changelogDate": "20220301113744",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220203131343",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "paymentNumber",
@@ -39,73 +41,71 @@
       "fieldTypeBlobContent": "text"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "Settlement",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
+      "otherEntityField": "description",
       "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "description",
+      "otherEntityRelationshipName": "settlement",
       "ownerSide": true,
-      "otherEntityRelationshipName": "settlement"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "settlementCurrency",
+      "otherEntityField": "iso4217CurrencyCode",
       "otherEntityName": "settlementCurrency",
+      "relationshipName": "settlementCurrency",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "iso4217CurrencyCode"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "paymentLabel",
-      "otherEntityName": "paymentLabel",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "paymentLabel",
+      "otherEntityRelationshipName": "settlement",
       "ownerSide": true,
-      "otherEntityRelationshipName": "settlement"
+      "relationshipName": "paymentLabel",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "paymentCategory",
+      "otherEntityField": "categoryName",
       "otherEntityName": "paymentCategory",
+      "relationshipName": "paymentCategory",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "categoryName"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "groupSettlement",
+      "otherEntityField": "id",
       "otherEntityName": "settlement",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "id"
+      "relationshipName": "groupSettlement",
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "biller",
-      "otherEntityName": "dealer",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "dealerName"
-    },
-    {
-      "relationshipName": "paymentInvoice",
-      "otherEntityName": "paymentInvoice",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "invoiceNumber",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "settlement"
-    },
-    {
-      "relationshipName": "signatories",
-      "otherEntityName": "dealer",
-      "relationshipType": "many-to-many",
       "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "biller",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "invoiceNumber",
+      "otherEntityName": "paymentInvoice",
+      "otherEntityRelationshipName": "settlement",
       "ownerSide": true,
-      "otherEntityRelationshipName": "settlement"
+      "relationshipName": "paymentInvoice",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "otherEntityRelationshipName": "settlement",
+      "ownerSide": true,
+      "relationshipName": "signatories",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "Settlement",
-  "changelogDate": "20220203131343",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

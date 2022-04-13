@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220301113030",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "branchStatusTypeCode",
@@ -8,30 +10,28 @@
     {
       "fieldName": "branchStatusType",
       "fieldType": "BranchStatusType",
-      "fieldValues": "ACTIVE,INACTIVE,CLOSED",
-      "fieldValidateRules": ["required", "unique"]
+      "fieldValidateRules": ["required", "unique"],
+      "fieldValues": "ACTIVE,INACTIVE,CLOSED"
     },
     {
       "fieldName": "branchStatusTypeDescription",
       "fieldType": "String"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "OutletStatus",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "outletStatus",
       "ownerSide": true,
-      "otherEntityRelationshipName": "outletStatus"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "OutletStatus",
-  "changelogDate": "20220301113030",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220406130104",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "countryCode",
@@ -9,22 +11,20 @@
       "fieldType": "String"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "IsoCountryCode",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "isoCountryCode",
       "ownerSide": true,
-      "otherEntityRelationshipName": "isoCountryCode"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "infinite-scroll",
-  "name": "IsoCountryCode",
-  "changelogDate": "20220406130104",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

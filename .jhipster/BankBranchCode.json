@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220301112455",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "bankCode",
@@ -23,22 +25,20 @@
       "fieldType": "String"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "BankBranchCode",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "bankBranchCode",
       "ownerSide": true,
-      "otherEntityRelationshipName": "bankBranchCode"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "infinite-scroll",
-  "name": "BankBranchCode",
-  "changelogDate": "20220301112455",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

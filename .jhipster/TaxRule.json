@@ -1,15 +1,9 @@
 {
-  "fluentMethods": true,
+  "changelogDate": "20210722140431",
   "clientRootFolder": "payments",
-  "relationships": [
-    {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "description",
-      "ownerSide": true
-    }
-  ],
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "entityTableName": "tax_rule",
   "fields": [
     {
       "fieldName": "telcoExciseDuty",
@@ -52,16 +46,22 @@
       "fieldType": "String"
     }
   ],
-  "changelogDate": "20210722140431",
-  "dto": "mapstruct",
-  "searchEngine": "elasticsearch",
-  "service": "serviceImpl",
-  "entityTableName": "tax_rule",
-  "databaseType": "sql",
-  "readOnly": false,
+  "fluentMethods": true,
+  "incrementalChangelog": false,
   "jpaMetamodelFiltering": true,
-  "pagination": "pagination",
   "microserviceName": "erpService",
   "name": "TaxRule",
-  "incrementalChangelog": false
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "elasticsearch",
+  "service": "serviceImpl"
 }

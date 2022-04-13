@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220406134036",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "countyCode",
@@ -17,22 +19,20 @@
       "fieldType": "String"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "SubCountyCode",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "subCountyCode",
       "ownerSide": true,
-      "otherEntityRelationshipName": "subCountyCode"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "SubCountyCode",
-  "changelogDate": "20220406134036",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

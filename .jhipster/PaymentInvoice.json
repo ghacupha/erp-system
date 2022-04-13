@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220203125725",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "invoiceNumber",
@@ -27,52 +29,50 @@
       "fieldTypeBlobContent": "text"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "PaymentInvoice",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "purchaseOrder",
-      "otherEntityName": "purchaseOrder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "purchaseOrderNumber",
+      "otherEntityName": "purchaseOrder",
+      "otherEntityRelationshipName": "paymentInvoice",
       "ownerSide": true,
-      "otherEntityRelationshipName": "paymentInvoice"
+      "relationshipName": "purchaseOrder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "placeholder",
+      "otherEntityField": "description",
       "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "description",
+      "otherEntityRelationshipName": "paymentInvoice",
       "ownerSide": true,
-      "otherEntityRelationshipName": "paymentInvoice"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "paymentLabel",
+      "otherEntityField": "description",
       "otherEntityName": "paymentLabel",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "description",
+      "otherEntityRelationshipName": "paymentInvoice",
       "ownerSide": true,
-      "otherEntityRelationshipName": "paymentInvoice"
+      "relationshipName": "paymentLabel",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "settlementCurrency",
+      "otherEntityField": "iso4217CurrencyCode",
       "otherEntityName": "settlementCurrency",
+      "relationshipName": "settlementCurrency",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "iso4217CurrencyCode"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "biller",
+      "otherEntityField": "dealerName",
       "otherEntityName": "dealer",
+      "relationshipName": "biller",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "dealerName"
+      "relationshipValidateRules": ["required"]
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "PaymentInvoice",
-  "changelogDate": "20220203125725",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

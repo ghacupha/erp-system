@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <!--
+        Added the constraints for entity AssetRegistration.
+    -->
+    <changeSet id="20220413150618-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="asset_registration_id"
+                                 baseTableName="rel_asset_registration__placeholder"
+                                 constraintName="fk_rel_asset_registration__placeholder__asset_registration_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_registration"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_asset_registration__placeholder"
+                                 constraintName="fk_rel_asset_registration__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_registration_id"
+                                 baseTableName="rel_asset_registration__payment_invoices"
+                                 constraintName="fk_rel_asset_registration__paym__asset_registration_ee_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_registration"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_invoices_id"
+                                 baseTableName="rel_asset_registration__payment_invoices"
+                                 constraintName="fk_rel_asset_registration__paym__payment_invoices_b8_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_invoice"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_registration_id"
+                                 baseTableName="rel_asset_registration__service_outlet"
+                                 constraintName="fk_rel_asset_registration__serv__asset_registration_00_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_registration"/>
+
+        <addForeignKeyConstraint baseColumnNames="service_outlet_id"
+                                 baseTableName="rel_asset_registration__service_outlet"
+                                 constraintName="fk_rel_asset_registration__service_outlet__service_outlet_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="service_outlet"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_registration_id"
+                                 baseTableName="rel_asset_registration__settlement"
+                                 constraintName="fk_rel_asset_registration__settlement__asset_registration_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_registration"/>
+
+        <addForeignKeyConstraint baseColumnNames="settlement_id"
+                                 baseTableName="rel_asset_registration__settlement"
+                                 constraintName="fk_rel_asset_registration__settlement__settlement_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="settlement"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_category_id"
+                                 baseTableName="asset_registration"
+                                 constraintName="fk_asset_registration__asset_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_category"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_registration_id"
+                                 baseTableName="rel_asset_registration__purchase_order"
+                                 constraintName="fk_rel_asset_registration__purc__asset_registration_54_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_registration"/>
+
+        <addForeignKeyConstraint baseColumnNames="purchase_order_id"
+                                 baseTableName="rel_asset_registration__purchase_order"
+                                 constraintName="fk_rel_asset_registration__purchase_order__purchase_order_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="purchase_order"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_registration_id"
+                                 baseTableName="rel_asset_registration__delivery_note"
+                                 constraintName="fk_rel_asset_registration__deli__asset_registration_18_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_registration"/>
+
+        <addForeignKeyConstraint baseColumnNames="delivery_note_id"
+                                 baseTableName="rel_asset_registration__delivery_note"
+                                 constraintName="fk_rel_asset_registration__delivery_note__delivery_note_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="delivery_note"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_registration_id"
+                                 baseTableName="rel_asset_registration__job_sheet"
+                                 constraintName="fk_rel_asset_registration__job_sheet__asset_registration_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_registration"/>
+
+        <addForeignKeyConstraint baseColumnNames="job_sheet_id"
+                                 baseTableName="rel_asset_registration__job_sheet"
+                                 constraintName="fk_rel_asset_registration__job_sheet__job_sheet_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="job_sheet"/>
+
+        <addForeignKeyConstraint baseColumnNames="dealer_id"
+                                 baseTableName="asset_registration"
+                                 constraintName="fk_asset_registration__dealer_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_registration_id"
+                                 baseTableName="rel_asset_registration__designated_users"
+                                 constraintName="fk_rel_asset_registration__desi__asset_registration_dc_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_registration"/>
+
+        <addForeignKeyConstraint baseColumnNames="designated_users_id"
+                                 baseTableName="rel_asset_registration__designated_users"
+                                 constraintName="fk_rel_asset_registration__desi__designated_users_6f_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+    </changeSet>
+</databaseChangeLog>

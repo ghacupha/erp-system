@@ -2,6 +2,7 @@ package io.github.erp.service.mapper;
 
 import io.github.erp.domain.JobSheet;
 import io.github.erp.service.dto.JobSheetDTO;
+import java.util.Set;
 import org.mapstruct.*;
 
 /**
@@ -25,4 +26,10 @@ public interface JobSheetMapper extends EntityMapper<JobSheetDTO, JobSheet> {
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removePaymentLabel", ignore = true)
     JobSheet toEntity(JobSheetDTO jobSheetDTO);
+
+    @Named("serialNumberSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "serialNumber", source = "serialNumber")
+    Set<JobSheetDTO> toDtoSerialNumberSet(Set<JobSheet> jobSheet);
 }

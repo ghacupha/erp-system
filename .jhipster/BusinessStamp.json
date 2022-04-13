@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220302141615",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "stampDate",
@@ -18,29 +20,27 @@
       "fieldTypeBlobContent": "text"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "BusinessStamp",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "stampHolder",
+      "otherEntityField": "dealerName",
       "otherEntityName": "dealer",
+      "relationshipName": "stampHolder",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "dealerName"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "businessStamp",
       "ownerSide": true,
-      "otherEntityRelationshipName": "businessStamp"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "BusinessStamp",
-  "changelogDate": "20220302141615",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

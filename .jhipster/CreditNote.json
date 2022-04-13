@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220320133125",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "creditNumber",
@@ -21,46 +23,44 @@
       "fieldTypeBlobContent": "text"
     }
   ],
+  "incrementalChangelog": true,
+  "jpaMetamodelFiltering": true,
+  "name": "CreditNote",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "purchaseOrders",
-      "otherEntityName": "purchaseOrder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "purchaseOrderNumber",
+      "otherEntityName": "purchaseOrder",
+      "otherEntityRelationshipName": "creditNote",
       "ownerSide": true,
-      "otherEntityRelationshipName": "creditNote"
+      "relationshipName": "purchaseOrders",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "invoices",
-      "otherEntityName": "paymentInvoice",
-      "relationshipType": "many-to-many",
       "otherEntityField": "invoiceNumber",
+      "otherEntityName": "paymentInvoice",
+      "otherEntityRelationshipName": "creditNote",
       "ownerSide": true,
-      "otherEntityRelationshipName": "creditNote"
+      "relationshipName": "invoices",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "paymentLabel",
+      "otherEntityField": "description",
       "otherEntityName": "paymentLabel",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "description",
+      "otherEntityRelationshipName": "creditNote",
       "ownerSide": true,
-      "otherEntityRelationshipName": "creditNote"
+      "relationshipName": "paymentLabel",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "creditNote",
       "ownerSide": true,
-      "otherEntityRelationshipName": "creditNote"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "CreditNote",
-  "changelogDate": "20220320133125",
-  "incrementalChangelog": true
+  "service": "serviceImpl"
 }

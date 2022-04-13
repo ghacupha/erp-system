@@ -1,5 +1,10 @@
 {
-  "name": "FileType",
+  "changelogDate": "20210414144455",
+  "clientRootFolder": "files",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "file_type",
   "fields": [
     {
       "fieldName": "fileTypeName",
@@ -9,8 +14,8 @@
     {
       "fieldName": "fileMediumType",
       "fieldType": "FileMediumTypes",
-      "fieldValues": "EXCEL,EXCEL_XLS,EXCEL_XLSX,EXCEL_XLSB,EXCEL_CSV,EXCEL_XML,PDF,POWERPOINT,DOC,TEXT,JSON,HTML5",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required"],
+      "fieldValues": "EXCEL,EXCEL_XLS,EXCEL_XLSX,EXCEL_XLSB,EXCEL_CSV,EXCEL_XML,PDF,POWERPOINT,DOC,TEXT,JSON,HTML5"
     },
     {
       "fieldName": "description",
@@ -24,31 +29,26 @@
     {
       "fieldName": "fileType",
       "fieldType": "FileModelType",
-      "fieldValues": "CURRENCY_LIST,FIXED_ASSET_ACQUISITION,FIXED_ASSET_DEPRECIATION,FIXED_ASSET_NBV,PAYMENT_LABEL,PAYMENT_CATEGORY,PAYMENT,DEALER,SIGNED_PAYMENT,INVOICE,",
-      "fieldValidateRules": ["required", "unique"]
+      "fieldValidateRules": ["required", "unique"],
+      "fieldValues": "CURRENCY_LIST,FIXED_ASSET_ACQUISITION,FIXED_ASSET_DEPRECIATION,FIXED_ASSET_NBV,PAYMENT_LABEL,PAYMENT_CATEGORY,PAYMENT,DEALER,SIGNED_PAYMENT,INVOICE,"
     }
   ],
+  "fluentMethods": true,
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "erpService",
+  "name": "FileType",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
-      "ownerSide": true
+      "otherEntityName": "placeholder",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "changelogDate": "20210414144455",
-  "entityTableName": "file_type",
-  "dto": "mapstruct",
-  "pagination": "pagination",
-  "service": "serviceClass",
-  "jpaMetamodelFiltering": true,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "clientRootFolder": "files",
-  "microserviceName": "erpService",
   "searchEngine": "elasticsearch",
-  "databaseType": "sql",
-  "incrementalChangelog": false
+  "service": "serviceClass"
 }

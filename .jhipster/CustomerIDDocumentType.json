@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220404134249",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "documentCode",
@@ -15,22 +17,20 @@
       "fieldType": "String"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "CustomerIDDocumentType",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "customerIDDocumentType",
       "ownerSide": true,
-      "otherEntityRelationshipName": "customerIDDocumentType"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "CustomerIDDocumentType",
-  "changelogDate": "20220404134249",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

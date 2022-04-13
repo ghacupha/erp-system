@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20210920142924",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "description",
@@ -23,27 +25,25 @@
       "fieldTypeBlobContent": "text"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "PaymentLabel",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "containingPaymentLabel",
+      "otherEntityField": "description",
       "otherEntityName": "paymentLabel",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "description"
+      "relationshipName": "containingPaymentLabel",
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
-      "ownerSide": true
+      "otherEntityName": "placeholder",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "PaymentLabel",
-  "changelogDate": "20210920142924",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

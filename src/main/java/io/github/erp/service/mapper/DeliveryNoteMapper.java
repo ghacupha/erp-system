@@ -2,6 +2,7 @@ package io.github.erp.service.mapper;
 
 import io.github.erp.domain.DeliveryNote;
 import io.github.erp.service.dto.DeliveryNoteDTO;
+import java.util.Set;
 import org.mapstruct.*;
 
 /**
@@ -24,4 +25,10 @@ public interface DeliveryNoteMapper extends EntityMapper<DeliveryNoteDTO, Delive
     @Mapping(target = "removeDeliveryStamps", ignore = true)
     @Mapping(target = "removeSignatories", ignore = true)
     DeliveryNote toEntity(DeliveryNoteDTO deliveryNoteDTO);
+
+    @Named("deliveryNoteNumberSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "deliveryNoteNumber", source = "deliveryNoteNumber")
+    Set<DeliveryNoteDTO> toDtoDeliveryNoteNumberSet(Set<DeliveryNote> deliveryNote);
 }

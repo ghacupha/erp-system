@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220301132923",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "outletCode",
@@ -43,52 +45,50 @@
       "fieldType": "BigDecimal"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "ServiceOutlet",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "serviceOutlet",
       "ownerSide": true,
-      "otherEntityRelationshipName": "serviceOutlet"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "bankCode",
+      "otherEntityField": "branchCode",
       "otherEntityName": "bankBranchCode",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "branchCode"
+      "relationshipName": "bankCode",
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "outletType",
+      "otherEntityField": "outletType",
       "otherEntityName": "outletType",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "outletType"
+      "relationshipName": "outletType",
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "outletStatus",
+      "otherEntityField": "branchStatusType",
       "otherEntityName": "outletStatus",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "branchStatusType"
+      "relationshipName": "outletStatus",
+      "relationshipType": "many-to-one"
     },
     {
+      "otherEntityField": "countyName",
+      "otherEntityName": "countyCode",
       "relationshipName": "countyName",
-      "otherEntityName": "countyCode",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "countyName"
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "subCountyName",
+      "otherEntityField": "subCountyName",
       "otherEntityName": "countyCode",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "subCountyName"
+      "relationshipName": "subCountyName",
+      "relationshipType": "many-to-one"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "infinite-scroll",
-  "name": "ServiceOutlet",
-  "changelogDate": "20220301132923",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }
