@@ -1,0 +1,433 @@
+package io.github.erp.domain;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.*;
+import javax.validation.constraints.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+/**
+ * A WorkInProgressRegistration.
+ */
+@Entity
+@Table(name = "work_in_progress_registration")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "workinprogressregistration")
+public class WorkInProgressRegistration implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
+    @Column(name = "id")
+    private Long id;
+
+    @NotNull
+    @Column(name = "sequence_number", nullable = false, unique = true)
+    private String sequenceNumber;
+
+    @Column(name = "particulars")
+    private String particulars;
+
+    @Column(name = "instalment_amount", precision = 21, scale = 2)
+    private BigDecimal instalmentAmount;
+
+    @Lob
+    @Column(name = "comments")
+    private byte[] comments;
+
+    @Column(name = "comments_content_type")
+    private String commentsContentType;
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_work_in_progress_registration__placeholder",
+        joinColumns = @JoinColumn(name = "work_in_progress_registration_id"),
+        inverseJoinColumns = @JoinColumn(name = "placeholder_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
+    private Set<Placeholder> placeholders = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_work_in_progress_registration__payment_invoices",
+        joinColumns = @JoinColumn(name = "work_in_progress_registration_id"),
+        inverseJoinColumns = @JoinColumn(name = "payment_invoices_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = { "purchaseOrders", "placeholders", "paymentLabels", "settlementCurrency", "biller" },
+        allowSetters = true
+    )
+    private Set<PaymentInvoice> paymentInvoices = new HashSet<>();
+
+    @ManyToMany
+    @NotNull
+    @JoinTable(
+        name = "rel_work_in_progress_registration__service_outlet",
+        joinColumns = @JoinColumn(name = "work_in_progress_registration_id"),
+        inverseJoinColumns = @JoinColumn(name = "service_outlet_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = { "placeholders", "bankCode", "outletType", "outletStatus", "countyName", "subCountyName" },
+        allowSetters = true
+    )
+    private Set<ServiceOutlet> serviceOutlets = new HashSet<>();
+
+    @ManyToMany
+    @NotNull
+    @JoinTable(
+        name = "rel_work_in_progress_registration__settlement",
+        joinColumns = @JoinColumn(name = "work_in_progress_registration_id"),
+        inverseJoinColumns = @JoinColumn(name = "settlement_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = {
+            "placeholders",
+            "settlementCurrency",
+            "paymentLabels",
+            "paymentCategory",
+            "groupSettlement",
+            "biller",
+            "paymentInvoices",
+            "signatories",
+        },
+        allowSetters = true
+    )
+    private Set<Settlement> settlements = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_work_in_progress_registration__purchase_order",
+        joinColumns = @JoinColumn(name = "work_in_progress_registration_id"),
+        inverseJoinColumns = @JoinColumn(name = "purchase_order_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "settlementCurrency", "placeholders", "signatories", "vendor" }, allowSetters = true)
+    private Set<PurchaseOrder> purchaseOrders = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_work_in_progress_registration__delivery_note",
+        joinColumns = @JoinColumn(name = "work_in_progress_registration_id"),
+        inverseJoinColumns = @JoinColumn(name = "delivery_note_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = { "placeholders", "receivedBy", "deliveryStamps", "purchaseOrder", "supplier", "signatories" },
+        allowSetters = true
+    )
+    private Set<DeliveryNote> deliveryNotes = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_work_in_progress_registration__job_sheet",
+        joinColumns = @JoinColumn(name = "work_in_progress_registration_id"),
+        inverseJoinColumns = @JoinColumn(name = "job_sheet_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = { "biller", "signatories", "contactPerson", "businessStamps", "placeholders", "paymentLabels" },
+        allowSetters = true
+    )
+    private Set<JobSheet> jobSheets = new HashSet<>();
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "placeholders" }, allowSetters = true)
+    private Dealer dealer;
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public WorkInProgressRegistration id(Long id) {
+        this.setId(id);
+        return this;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getSequenceNumber() {
+        return this.sequenceNumber;
+    }
+
+    public WorkInProgressRegistration sequenceNumber(String sequenceNumber) {
+        this.setSequenceNumber(sequenceNumber);
+        return this;
+    }
+
+    public void setSequenceNumber(String sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+
+    public String getParticulars() {
+        return this.particulars;
+    }
+
+    public WorkInProgressRegistration particulars(String particulars) {
+        this.setParticulars(particulars);
+        return this;
+    }
+
+    public void setParticulars(String particulars) {
+        this.particulars = particulars;
+    }
+
+    public BigDecimal getInstalmentAmount() {
+        return this.instalmentAmount;
+    }
+
+    public WorkInProgressRegistration instalmentAmount(BigDecimal instalmentAmount) {
+        this.setInstalmentAmount(instalmentAmount);
+        return this;
+    }
+
+    public void setInstalmentAmount(BigDecimal instalmentAmount) {
+        this.instalmentAmount = instalmentAmount;
+    }
+
+    public byte[] getComments() {
+        return this.comments;
+    }
+
+    public WorkInProgressRegistration comments(byte[] comments) {
+        this.setComments(comments);
+        return this;
+    }
+
+    public void setComments(byte[] comments) {
+        this.comments = comments;
+    }
+
+    public String getCommentsContentType() {
+        return this.commentsContentType;
+    }
+
+    public WorkInProgressRegistration commentsContentType(String commentsContentType) {
+        this.commentsContentType = commentsContentType;
+        return this;
+    }
+
+    public void setCommentsContentType(String commentsContentType) {
+        this.commentsContentType = commentsContentType;
+    }
+
+    public Set<Placeholder> getPlaceholders() {
+        return this.placeholders;
+    }
+
+    public void setPlaceholders(Set<Placeholder> placeholders) {
+        this.placeholders = placeholders;
+    }
+
+    public WorkInProgressRegistration placeholders(Set<Placeholder> placeholders) {
+        this.setPlaceholders(placeholders);
+        return this;
+    }
+
+    public WorkInProgressRegistration addPlaceholder(Placeholder placeholder) {
+        this.placeholders.add(placeholder);
+        return this;
+    }
+
+    public WorkInProgressRegistration removePlaceholder(Placeholder placeholder) {
+        this.placeholders.remove(placeholder);
+        return this;
+    }
+
+    public Set<PaymentInvoice> getPaymentInvoices() {
+        return this.paymentInvoices;
+    }
+
+    public void setPaymentInvoices(Set<PaymentInvoice> paymentInvoices) {
+        this.paymentInvoices = paymentInvoices;
+    }
+
+    public WorkInProgressRegistration paymentInvoices(Set<PaymentInvoice> paymentInvoices) {
+        this.setPaymentInvoices(paymentInvoices);
+        return this;
+    }
+
+    public WorkInProgressRegistration addPaymentInvoices(PaymentInvoice paymentInvoice) {
+        this.paymentInvoices.add(paymentInvoice);
+        return this;
+    }
+
+    public WorkInProgressRegistration removePaymentInvoices(PaymentInvoice paymentInvoice) {
+        this.paymentInvoices.remove(paymentInvoice);
+        return this;
+    }
+
+    public Set<ServiceOutlet> getServiceOutlets() {
+        return this.serviceOutlets;
+    }
+
+    public void setServiceOutlets(Set<ServiceOutlet> serviceOutlets) {
+        this.serviceOutlets = serviceOutlets;
+    }
+
+    public WorkInProgressRegistration serviceOutlets(Set<ServiceOutlet> serviceOutlets) {
+        this.setServiceOutlets(serviceOutlets);
+        return this;
+    }
+
+    public WorkInProgressRegistration addServiceOutlet(ServiceOutlet serviceOutlet) {
+        this.serviceOutlets.add(serviceOutlet);
+        return this;
+    }
+
+    public WorkInProgressRegistration removeServiceOutlet(ServiceOutlet serviceOutlet) {
+        this.serviceOutlets.remove(serviceOutlet);
+        return this;
+    }
+
+    public Set<Settlement> getSettlements() {
+        return this.settlements;
+    }
+
+    public void setSettlements(Set<Settlement> settlements) {
+        this.settlements = settlements;
+    }
+
+    public WorkInProgressRegistration settlements(Set<Settlement> settlements) {
+        this.setSettlements(settlements);
+        return this;
+    }
+
+    public WorkInProgressRegistration addSettlement(Settlement settlement) {
+        this.settlements.add(settlement);
+        return this;
+    }
+
+    public WorkInProgressRegistration removeSettlement(Settlement settlement) {
+        this.settlements.remove(settlement);
+        return this;
+    }
+
+    public Set<PurchaseOrder> getPurchaseOrders() {
+        return this.purchaseOrders;
+    }
+
+    public void setPurchaseOrders(Set<PurchaseOrder> purchaseOrders) {
+        this.purchaseOrders = purchaseOrders;
+    }
+
+    public WorkInProgressRegistration purchaseOrders(Set<PurchaseOrder> purchaseOrders) {
+        this.setPurchaseOrders(purchaseOrders);
+        return this;
+    }
+
+    public WorkInProgressRegistration addPurchaseOrder(PurchaseOrder purchaseOrder) {
+        this.purchaseOrders.add(purchaseOrder);
+        return this;
+    }
+
+    public WorkInProgressRegistration removePurchaseOrder(PurchaseOrder purchaseOrder) {
+        this.purchaseOrders.remove(purchaseOrder);
+        return this;
+    }
+
+    public Set<DeliveryNote> getDeliveryNotes() {
+        return this.deliveryNotes;
+    }
+
+    public void setDeliveryNotes(Set<DeliveryNote> deliveryNotes) {
+        this.deliveryNotes = deliveryNotes;
+    }
+
+    public WorkInProgressRegistration deliveryNotes(Set<DeliveryNote> deliveryNotes) {
+        this.setDeliveryNotes(deliveryNotes);
+        return this;
+    }
+
+    public WorkInProgressRegistration addDeliveryNote(DeliveryNote deliveryNote) {
+        this.deliveryNotes.add(deliveryNote);
+        return this;
+    }
+
+    public WorkInProgressRegistration removeDeliveryNote(DeliveryNote deliveryNote) {
+        this.deliveryNotes.remove(deliveryNote);
+        return this;
+    }
+
+    public Set<JobSheet> getJobSheets() {
+        return this.jobSheets;
+    }
+
+    public void setJobSheets(Set<JobSheet> jobSheets) {
+        this.jobSheets = jobSheets;
+    }
+
+    public WorkInProgressRegistration jobSheets(Set<JobSheet> jobSheets) {
+        this.setJobSheets(jobSheets);
+        return this;
+    }
+
+    public WorkInProgressRegistration addJobSheet(JobSheet jobSheet) {
+        this.jobSheets.add(jobSheet);
+        return this;
+    }
+
+    public WorkInProgressRegistration removeJobSheet(JobSheet jobSheet) {
+        this.jobSheets.remove(jobSheet);
+        return this;
+    }
+
+    public Dealer getDealer() {
+        return this.dealer;
+    }
+
+    public void setDealer(Dealer dealer) {
+        this.dealer = dealer;
+    }
+
+    public WorkInProgressRegistration dealer(Dealer dealer) {
+        this.setDealer(dealer);
+        return this;
+    }
+
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof WorkInProgressRegistration)) {
+            return false;
+        }
+        return id != null && id.equals(((WorkInProgressRegistration) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
+    }
+
+    // prettier-ignore
+    @Override
+    public String toString() {
+        return "WorkInProgressRegistration{" +
+            "id=" + getId() +
+            ", sequenceNumber='" + getSequenceNumber() + "'" +
+            ", particulars='" + getParticulars() + "'" +
+            ", instalmentAmount=" + getInstalmentAmount() +
+            ", comments='" + getComments() + "'" +
+            ", commentsContentType='" + getCommentsContentType() + "'" +
+            "}";
+    }
+}
