@@ -1,4 +1,9 @@
 {
+  "changelogDate": "20210323133701",
+  "clientRootFolder": "assets",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "entityTableName": "fixed_asset_depreciation",
   "fields": [
     {
       "fieldName": "assetNumber",
@@ -42,26 +47,21 @@
       "fieldType": "String"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "erpService",
+  "name": "FixedAssetDepreciation",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
-      "ownerSide": true
+      "otherEntityName": "placeholder",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
   "searchEngine": "elasticsearch",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "FixedAssetDepreciation",
-  "changelogDate": "20210323133701",
-  "clientRootFolder": "assets",
-  "microserviceName": "erpService",
-  "entityTableName": "fixed_asset_depreciation",
-  "databaseType": "sql",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

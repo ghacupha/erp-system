@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220301102505",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "depreciationMethodName",
@@ -12,8 +14,8 @@
     {
       "fieldName": "depreciationType",
       "fieldType": "DepreciationTypes",
-      "fieldValues": "STRAIGHT_LINE,DECLINING_BALANCE",
-      "fieldValidateRules": ["required", "unique"]
+      "fieldValidateRules": ["required", "unique"],
+      "fieldValues": "STRAIGHT_LINE,DECLINING_BALANCE"
     },
     {
       "fieldName": "remarks",
@@ -21,22 +23,20 @@
       "fieldTypeBlobContent": "text"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "DepreciationMethod",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "depreciationMethod",
       "ownerSide": true,
-      "otherEntityRelationshipName": "depreciationMethod"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "DepreciationMethod",
-  "changelogDate": "20220301102505",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

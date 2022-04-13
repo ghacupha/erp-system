@@ -1,16 +1,9 @@
 {
-  "fluentMethods": true,
+  "changelogDate": "20210823115335",
   "clientRootFolder": "erpService",
-  "relationships": [
-    {
-      "relationshipName": "containingPlaceholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "description",
-      "otherEntityRelationshipName": "placeholder",
-      "ownerSide": true
-    }
-  ],
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "entityTableName": "placeholder",
   "fields": [
     {
       "fieldName": "description",
@@ -31,16 +24,23 @@
       "fieldType": "String"
     }
   ],
-  "changelogDate": "20210823115335",
-  "dto": "mapstruct",
-  "searchEngine": "elasticsearch",
-  "service": "serviceImpl",
-  "entityTableName": "placeholder",
-  "databaseType": "sql",
-  "readOnly": false,
+  "fluentMethods": true,
+  "incrementalChangelog": false,
   "jpaMetamodelFiltering": true,
-  "pagination": "pagination",
   "microserviceName": "erpService",
   "name": "Placeholder",
-  "incrementalChangelog": false
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "placeholder",
+      "ownerSide": true,
+      "relationshipName": "containingPlaceholder",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "elasticsearch",
+  "service": "serviceImpl"
 }

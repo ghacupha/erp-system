@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220301105946",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "assetCategoryName",
@@ -19,29 +21,27 @@
       "fieldTypeBlobContent": "text"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "AssetCategory",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "depreciationMethod",
+      "otherEntityField": "depreciationMethodName",
       "otherEntityName": "depreciationMethod",
+      "relationshipName": "depreciationMethod",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "depreciationMethodName"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "assetCategory",
       "ownerSide": true,
-      "otherEntityRelationshipName": "assetCategory"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "infinite-scroll",
-  "name": "AssetCategory",
-  "changelogDate": "20220301105946",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

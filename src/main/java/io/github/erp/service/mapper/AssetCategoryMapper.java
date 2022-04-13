@@ -15,4 +15,10 @@ public interface AssetCategoryMapper extends EntityMapper<AssetCategoryDTO, Asse
 
     @Mapping(target = "removePlaceholder", ignore = true)
     AssetCategory toEntity(AssetCategoryDTO assetCategoryDTO);
+
+    @Named("assetCategoryName")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "assetCategoryName", source = "assetCategoryName")
+    AssetCategoryDTO toDtoAssetCategoryName(AssetCategory assetCategory);
 }

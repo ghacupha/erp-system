@@ -1,15 +1,9 @@
 {
-  "fluentMethods": true,
+  "changelogDate": "20210721174739",
   "clientRootFolder": "payments",
-  "relationships": [
-    {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "description",
-      "ownerSide": true
-    }
-  ],
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "entityTableName": "tax_reference",
   "fields": [
     {
       "fieldName": "taxName",
@@ -28,8 +22,8 @@
     {
       "fieldName": "taxReferenceType",
       "fieldType": "taxReferenceTypes",
-      "fieldValues": "TELCO_EXCISE_DUTY,VALUE_ADDED_TAX,WITHHOLDING_VAT,WITHHOLDING_TAX_ON_CONSULTANCY,WITHHOLDING_TAX_ON_RENT,CATERING_LEVY,SERVICE_CHARGE,WITHHOLDING_TAX_ON_IMPORTED_SERVICE",
-      "fieldValidateRules": ["required", "unique"]
+      "fieldValidateRules": ["required", "unique"],
+      "fieldValues": "TELCO_EXCISE_DUTY,VALUE_ADDED_TAX,WITHHOLDING_VAT,WITHHOLDING_TAX_ON_CONSULTANCY,WITHHOLDING_TAX_ON_RENT,CATERING_LEVY,SERVICE_CHARGE,WITHHOLDING_TAX_ON_IMPORTED_SERVICE"
     },
     {
       "fieldName": "fileUploadToken",
@@ -40,16 +34,22 @@
       "fieldType": "String"
     }
   ],
-  "changelogDate": "20210721174739",
-  "dto": "mapstruct",
-  "searchEngine": "elasticsearch",
-  "service": "serviceImpl",
-  "entityTableName": "tax_reference",
-  "databaseType": "sql",
-  "readOnly": false,
+  "fluentMethods": true,
+  "incrementalChangelog": false,
   "jpaMetamodelFiltering": true,
-  "pagination": "pagination",
   "microserviceName": "erpService",
   "name": "TaxReference",
-  "incrementalChangelog": false
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "elasticsearch",
+  "service": "serviceImpl"
 }

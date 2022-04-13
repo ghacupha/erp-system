@@ -2,6 +2,7 @@ package io.github.erp.service.mapper;
 
 import io.github.erp.domain.ServiceOutlet;
 import io.github.erp.service.dto.ServiceOutletDTO;
+import java.util.Set;
 import org.mapstruct.*;
 
 /**
@@ -22,4 +23,10 @@ public interface ServiceOutletMapper extends EntityMapper<ServiceOutletDTO, Serv
 
     @Mapping(target = "removePlaceholder", ignore = true)
     ServiceOutlet toEntity(ServiceOutletDTO serviceOutletDTO);
+
+    @Named("outletCodeSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "outletCode", source = "outletCode")
+    Set<ServiceOutletDTO> toDtoOutletCodeSet(Set<ServiceOutlet> serviceOutlet);
 }

@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220406080053",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "institutionCode",
@@ -23,22 +25,20 @@
       "fieldType": "String"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "InstitutionCode",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "institutionCode",
       "ownerSide": true,
-      "otherEntityRelationshipName": "institutionCode"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "InstitutionCode",
-  "changelogDate": "20220406080053",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220203123759",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "purchaseOrderNumber",
@@ -35,44 +37,42 @@
       "fieldTypeBlobContent": "text"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "PurchaseOrder",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "settlementCurrency",
+      "otherEntityField": "iso4217CurrencyCode",
       "otherEntityName": "settlementCurrency",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "iso4217CurrencyCode"
+      "relationshipName": "settlementCurrency",
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "purchaseOrder",
       "ownerSide": true,
-      "otherEntityRelationshipName": "purchaseOrder"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "otherEntityRelationshipName": "purchaseOrder",
+      "ownerSide": true,
       "relationshipName": "signatories",
-      "otherEntityName": "dealer",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "dealerName",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "purchaseOrder"
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "vendor",
-      "otherEntityName": "dealer",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
       "otherEntityField": "dealerName",
-      "otherEntityRelationshipName": "purchaseOrder"
+      "otherEntityName": "dealer",
+      "otherEntityRelationshipName": "purchaseOrder",
+      "relationshipName": "vendor",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "PurchaseOrder",
-  "changelogDate": "20220203123759",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

@@ -1,30 +1,9 @@
 {
-  "fluentMethods": true,
+  "changelogDate": "20210721172450",
   "clientRootFolder": "payments",
-  "relationships": [
-    {
-      "relationshipName": "paymentLabel",
-      "otherEntityName": "paymentLabel",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "description",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "paymentCalculation"
-    },
-    {
-      "relationshipName": "paymentCategory",
-      "otherEntityName": "paymentCategory",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "id",
-      "otherEntityRelationshipName": "paymentCalculation"
-    },
-    {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "description",
-      "ownerSide": true
-    }
-  ],
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "entityTableName": "payment_calculation",
   "fields": [
     {
       "fieldName": "paymentExpense",
@@ -51,16 +30,37 @@
       "fieldType": "String"
     }
   ],
-  "changelogDate": "20210721172450",
-  "dto": "mapstruct",
-  "searchEngine": "elasticsearch",
-  "service": "serviceImpl",
-  "entityTableName": "payment_calculation",
-  "databaseType": "sql",
-  "readOnly": false,
+  "fluentMethods": true,
+  "incrementalChangelog": false,
   "jpaMetamodelFiltering": true,
-  "pagination": "pagination",
   "microserviceName": "erpService",
   "name": "PaymentCalculation",
-  "incrementalChangelog": false
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "paymentLabel",
+      "otherEntityRelationshipName": "paymentCalculation",
+      "ownerSide": true,
+      "relationshipName": "paymentLabel",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "paymentCategory",
+      "otherEntityRelationshipName": "paymentCalculation",
+      "relationshipName": "paymentCategory",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "elasticsearch",
+  "service": "serviceImpl"
 }

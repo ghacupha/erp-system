@@ -1,5 +1,10 @@
 {
-  "name": "MessageToken",
+  "changelogDate": "20210414144655",
+  "clientRootFolder": "files",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "message_token",
   "fields": [
     {
       "fieldName": "description",
@@ -28,27 +33,22 @@
       "fieldType": "Boolean"
     }
   ],
+  "fluentMethods": true,
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "erpService",
+  "name": "MessageToken",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
-      "ownerSide": true
+      "otherEntityName": "placeholder",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "changelogDate": "20210414144655",
-  "entityTableName": "message_token",
-  "dto": "mapstruct",
-  "pagination": "pagination",
-  "service": "serviceImpl",
-  "jpaMetamodelFiltering": true,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "clientRootFolder": "files",
-  "microserviceName": "erpService",
   "searchEngine": "elasticsearch",
-  "databaseType": "sql",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }
