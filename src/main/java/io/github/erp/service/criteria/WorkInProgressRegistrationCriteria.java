@@ -2,38 +2,34 @@ package io.github.erp.service.criteria;
 
 import java.io.Serializable;
 import java.util.Objects;
+
+import io.github.erp.erp.resources.WorkInProgressRegistrationResource;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.BigDecimalFilter;
-import tech.jhipster.service.filter.BooleanFilter;
-import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
-import tech.jhipster.service.filter.FloatFilter;
-import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 
 /**
- * Criteria class for the {@link io.github.erp.domain.AssetRegistration} entity. This class is used
- * in {@link io.github.erp.web.rest.AssetRegistrationResource} to receive all the possible filtering options from
+ * Criteria class for the {@link io.github.erp.domain.WorkInProgressRegistration} entity. This class is used
+ * in {@link WorkInProgressRegistrationResource} to receive all the possible filtering options from
  * the Http GET request parameters.
  * For example the following could be a valid request:
- * {@code /asset-registrations?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
+ * {@code /work-in-progress-registrations?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
  * As Spring is unable to properly convert the types, unless specific {@link Filter} class are used, we need to use
  * fix type specific filters.
  */
-public class AssetRegistrationCriteria implements Serializable, Criteria {
+public class WorkInProgressRegistrationCriteria implements Serializable, Criteria {
 
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
 
-    private StringFilter assetNumber;
+    private StringFilter sequenceNumber;
 
-    private StringFilter assetTag;
+    private StringFilter particulars;
 
-    private StringFilter assetDetails;
-
-    private BigDecimalFilter assetCost;
+    private BigDecimalFilter instalmentAmount;
 
     private LongFilter placeholderId;
 
@@ -43,8 +39,6 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
 
     private LongFilter settlementId;
 
-    private LongFilter assetCategoryId;
-
     private LongFilter purchaseOrderId;
 
     private LongFilter deliveryNoteId;
@@ -53,34 +47,29 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
 
     private LongFilter dealerId;
 
-    private LongFilter designatedUsersId;
-
     private Boolean distinct;
 
-    public AssetRegistrationCriteria() {}
+    public WorkInProgressRegistrationCriteria() {}
 
-    public AssetRegistrationCriteria(AssetRegistrationCriteria other) {
+    public WorkInProgressRegistrationCriteria(WorkInProgressRegistrationCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.assetNumber = other.assetNumber == null ? null : other.assetNumber.copy();
-        this.assetTag = other.assetTag == null ? null : other.assetTag.copy();
-        this.assetDetails = other.assetDetails == null ? null : other.assetDetails.copy();
-        this.assetCost = other.assetCost == null ? null : other.assetCost.copy();
+        this.sequenceNumber = other.sequenceNumber == null ? null : other.sequenceNumber.copy();
+        this.particulars = other.particulars == null ? null : other.particulars.copy();
+        this.instalmentAmount = other.instalmentAmount == null ? null : other.instalmentAmount.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.paymentInvoicesId = other.paymentInvoicesId == null ? null : other.paymentInvoicesId.copy();
         this.serviceOutletId = other.serviceOutletId == null ? null : other.serviceOutletId.copy();
         this.settlementId = other.settlementId == null ? null : other.settlementId.copy();
-        this.assetCategoryId = other.assetCategoryId == null ? null : other.assetCategoryId.copy();
         this.purchaseOrderId = other.purchaseOrderId == null ? null : other.purchaseOrderId.copy();
         this.deliveryNoteId = other.deliveryNoteId == null ? null : other.deliveryNoteId.copy();
         this.jobSheetId = other.jobSheetId == null ? null : other.jobSheetId.copy();
         this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
-        this.designatedUsersId = other.designatedUsersId == null ? null : other.designatedUsersId.copy();
         this.distinct = other.distinct;
     }
 
     @Override
-    public AssetRegistrationCriteria copy() {
-        return new AssetRegistrationCriteria(this);
+    public WorkInProgressRegistrationCriteria copy() {
+        return new WorkInProgressRegistrationCriteria(this);
     }
 
     public LongFilter getId() {
@@ -98,64 +87,49 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
-    public StringFilter getAssetNumber() {
-        return assetNumber;
+    public StringFilter getSequenceNumber() {
+        return sequenceNumber;
     }
 
-    public StringFilter assetNumber() {
-        if (assetNumber == null) {
-            assetNumber = new StringFilter();
+    public StringFilter sequenceNumber() {
+        if (sequenceNumber == null) {
+            sequenceNumber = new StringFilter();
         }
-        return assetNumber;
+        return sequenceNumber;
     }
 
-    public void setAssetNumber(StringFilter assetNumber) {
-        this.assetNumber = assetNumber;
+    public void setSequenceNumber(StringFilter sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
     }
 
-    public StringFilter getAssetTag() {
-        return assetTag;
+    public StringFilter getParticulars() {
+        return particulars;
     }
 
-    public StringFilter assetTag() {
-        if (assetTag == null) {
-            assetTag = new StringFilter();
+    public StringFilter particulars() {
+        if (particulars == null) {
+            particulars = new StringFilter();
         }
-        return assetTag;
+        return particulars;
     }
 
-    public void setAssetTag(StringFilter assetTag) {
-        this.assetTag = assetTag;
+    public void setParticulars(StringFilter particulars) {
+        this.particulars = particulars;
     }
 
-    public StringFilter getAssetDetails() {
-        return assetDetails;
+    public BigDecimalFilter getInstalmentAmount() {
+        return instalmentAmount;
     }
 
-    public StringFilter assetDetails() {
-        if (assetDetails == null) {
-            assetDetails = new StringFilter();
+    public BigDecimalFilter instalmentAmount() {
+        if (instalmentAmount == null) {
+            instalmentAmount = new BigDecimalFilter();
         }
-        return assetDetails;
+        return instalmentAmount;
     }
 
-    public void setAssetDetails(StringFilter assetDetails) {
-        this.assetDetails = assetDetails;
-    }
-
-    public BigDecimalFilter getAssetCost() {
-        return assetCost;
-    }
-
-    public BigDecimalFilter assetCost() {
-        if (assetCost == null) {
-            assetCost = new BigDecimalFilter();
-        }
-        return assetCost;
-    }
-
-    public void setAssetCost(BigDecimalFilter assetCost) {
-        this.assetCost = assetCost;
+    public void setInstalmentAmount(BigDecimalFilter instalmentAmount) {
+        this.instalmentAmount = instalmentAmount;
     }
 
     public LongFilter getPlaceholderId() {
@@ -218,21 +192,6 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
         this.settlementId = settlementId;
     }
 
-    public LongFilter getAssetCategoryId() {
-        return assetCategoryId;
-    }
-
-    public LongFilter assetCategoryId() {
-        if (assetCategoryId == null) {
-            assetCategoryId = new LongFilter();
-        }
-        return assetCategoryId;
-    }
-
-    public void setAssetCategoryId(LongFilter assetCategoryId) {
-        this.assetCategoryId = assetCategoryId;
-    }
-
     public LongFilter getPurchaseOrderId() {
         return purchaseOrderId;
     }
@@ -293,21 +252,6 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
         this.dealerId = dealerId;
     }
 
-    public LongFilter getDesignatedUsersId() {
-        return designatedUsersId;
-    }
-
-    public LongFilter designatedUsersId() {
-        if (designatedUsersId == null) {
-            designatedUsersId = new LongFilter();
-        }
-        return designatedUsersId;
-    }
-
-    public void setDesignatedUsersId(LongFilter designatedUsersId) {
-        this.designatedUsersId = designatedUsersId;
-    }
-
     public Boolean getDistinct() {
         return distinct;
     }
@@ -324,23 +268,20 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final AssetRegistrationCriteria that = (AssetRegistrationCriteria) o;
+        final WorkInProgressRegistrationCriteria that = (WorkInProgressRegistrationCriteria) o;
         return (
             Objects.equals(id, that.id) &&
-            Objects.equals(assetNumber, that.assetNumber) &&
-            Objects.equals(assetTag, that.assetTag) &&
-            Objects.equals(assetDetails, that.assetDetails) &&
-            Objects.equals(assetCost, that.assetCost) &&
+            Objects.equals(sequenceNumber, that.sequenceNumber) &&
+            Objects.equals(particulars, that.particulars) &&
+            Objects.equals(instalmentAmount, that.instalmentAmount) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(paymentInvoicesId, that.paymentInvoicesId) &&
             Objects.equals(serviceOutletId, that.serviceOutletId) &&
             Objects.equals(settlementId, that.settlementId) &&
-            Objects.equals(assetCategoryId, that.assetCategoryId) &&
             Objects.equals(purchaseOrderId, that.purchaseOrderId) &&
             Objects.equals(deliveryNoteId, that.deliveryNoteId) &&
             Objects.equals(jobSheetId, that.jobSheetId) &&
             Objects.equals(dealerId, that.dealerId) &&
-            Objects.equals(designatedUsersId, that.designatedUsersId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -349,20 +290,17 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
             id,
-            assetNumber,
-            assetTag,
-            assetDetails,
-            assetCost,
+            sequenceNumber,
+            particulars,
+            instalmentAmount,
             placeholderId,
             paymentInvoicesId,
             serviceOutletId,
             settlementId,
-            assetCategoryId,
             purchaseOrderId,
             deliveryNoteId,
             jobSheetId,
             dealerId,
-            designatedUsersId,
             distinct
         );
     }
@@ -370,22 +308,19 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
     // prettier-ignore
     @Override
     public String toString() {
-        return "AssetRegistrationCriteria{" +
+        return "WorkInProgressRegistrationCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
-            (assetNumber != null ? "assetNumber=" + assetNumber + ", " : "") +
-            (assetTag != null ? "assetTag=" + assetTag + ", " : "") +
-            (assetDetails != null ? "assetDetails=" + assetDetails + ", " : "") +
-            (assetCost != null ? "assetCost=" + assetCost + ", " : "") +
+            (sequenceNumber != null ? "sequenceNumber=" + sequenceNumber + ", " : "") +
+            (particulars != null ? "particulars=" + particulars + ", " : "") +
+            (instalmentAmount != null ? "instalmentAmount=" + instalmentAmount + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (paymentInvoicesId != null ? "paymentInvoicesId=" + paymentInvoicesId + ", " : "") +
             (serviceOutletId != null ? "serviceOutletId=" + serviceOutletId + ", " : "") +
             (settlementId != null ? "settlementId=" + settlementId + ", " : "") +
-            (assetCategoryId != null ? "assetCategoryId=" + assetCategoryId + ", " : "") +
             (purchaseOrderId != null ? "purchaseOrderId=" + purchaseOrderId + ", " : "") +
             (deliveryNoteId != null ? "deliveryNoteId=" + deliveryNoteId + ", " : "") +
             (jobSheetId != null ? "jobSheetId=" + jobSheetId + ", " : "") +
             (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
-            (designatedUsersId != null ? "designatedUsersId=" + designatedUsersId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
