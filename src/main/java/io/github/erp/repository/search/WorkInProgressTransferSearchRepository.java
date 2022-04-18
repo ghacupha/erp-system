@@ -2,7 +2,7 @@ package io.github.erp.repository.search;
 
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
-import io.github.erp.domain.PaymentLabel;
+import io.github.erp.domain.WorkInProgressTransfer;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -15,28 +15,29 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
- * Spring Data Elasticsearch repository for the {@link PaymentLabel} entity.
+ * Spring Data Elasticsearch repository for the {@link WorkInProgressTransfer} entity.
  */
-public interface PaymentLabelSearchRepository extends ElasticsearchRepository<PaymentLabel, Long>, PaymentLabelSearchRepositoryInternal {}
+public interface WorkInProgressTransferSearchRepository
+    extends ElasticsearchRepository<WorkInProgressTransfer, Long>, WorkInProgressTransferSearchRepositoryInternal {}
 
-interface PaymentLabelSearchRepositoryInternal {
-    Page<PaymentLabel> search(String query, Pageable pageable);
+interface WorkInProgressTransferSearchRepositoryInternal {
+    Page<WorkInProgressTransfer> search(String query, Pageable pageable);
 }
 
-class PaymentLabelSearchRepositoryInternalImpl implements PaymentLabelSearchRepositoryInternal {
+class WorkInProgressTransferSearchRepositoryInternalImpl implements WorkInProgressTransferSearchRepositoryInternal {
 
     private final ElasticsearchRestTemplate elasticsearchTemplate;
 
-    PaymentLabelSearchRepositoryInternalImpl(ElasticsearchRestTemplate elasticsearchTemplate) {
+    WorkInProgressTransferSearchRepositoryInternalImpl(ElasticsearchRestTemplate elasticsearchTemplate) {
         this.elasticsearchTemplate = elasticsearchTemplate;
     }
 
     @Override
-    public Page<PaymentLabel> search(String query, Pageable pageable) {
+    public Page<WorkInProgressTransfer> search(String query, Pageable pageable) {
         NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
         nativeSearchQuery.setPageable(pageable);
-        List<PaymentLabel> hits = elasticsearchTemplate
-            .search(nativeSearchQuery, PaymentLabel.class)
+        List<WorkInProgressTransfer> hits = elasticsearchTemplate
+            .search(nativeSearchQuery, WorkInProgressTransfer.class)
             .map(SearchHit::getContent)
             .stream()
             .collect(Collectors.toList());
