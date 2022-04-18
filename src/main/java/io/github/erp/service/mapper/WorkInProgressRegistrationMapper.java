@@ -2,6 +2,7 @@ package io.github.erp.service.mapper;
 
 import io.github.erp.domain.WorkInProgressRegistration;
 import io.github.erp.service.dto.WorkInProgressRegistrationDTO;
+import java.util.Set;
 import org.mapstruct.*;
 
 /**
@@ -30,6 +31,11 @@ public interface WorkInProgressRegistrationMapper extends EntityMapper<WorkInPro
     @Mapping(target = "jobSheets", source = "jobSheets", qualifiedByName = "serialNumberSet")
     @Mapping(target = "dealer", source = "dealer", qualifiedByName = "dealerName")
     WorkInProgressRegistrationDTO toDto(WorkInProgressRegistration s);
+
+    @Named("idSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    Set<WorkInProgressRegistrationDTO> toDtoIdSet(Set<WorkInProgressRegistration> workInProgressRegistration);
 
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removePaymentInvoices", ignore = true)
