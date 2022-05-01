@@ -16,6 +16,12 @@ public interface TransactionAccountMapper extends EntityMapper<TransactionAccoun
     @Mapping(target = "removePlaceholder", ignore = true)
     TransactionAccount toEntity(TransactionAccountDTO transactionAccountDTO);
 
+    @Named("accountName")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "accountName", source = "accountName")
+    TransactionAccountDTO toDtoAccountName(TransactionAccount transactionAccount);
+
     @Named("accountNumber")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

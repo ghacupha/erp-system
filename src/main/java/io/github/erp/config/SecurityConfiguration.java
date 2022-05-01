@@ -89,7 +89,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/fixed-asset/**").hasAuthority(AuthoritiesConstants.FIXED_ASSETS_USER)
             .antMatchers("/api/files/**").hasAuthority(AuthoritiesConstants.DBA)
             .antMatchers("/api/dev/**").hasAuthority(AuthoritiesConstants.DEV)
-            .antMatchers("/api/payments/**").hasAnyAuthority(AuthoritiesConstants.PAYMENTS_USER, AuthoritiesConstants.FIXED_ASSETS_USER)
+            .antMatchers("/api/payments/**").hasAnyAuthority(
+                AuthoritiesConstants.PAYMENTS_USER,
+                AuthoritiesConstants.PREPAYMENTS_MODULE_USER,
+                AuthoritiesConstants.FIXED_ASSETS_USER)
+            .antMatchers("/api/prepayments/**").hasAnyAuthority(AuthoritiesConstants.PREPAYMENTS_MODULE_USER)
             .antMatchers("/api/taxes/**").hasAuthority(AuthoritiesConstants.TAX_MODULE_USER)
             .antMatchers("/api/granular-data/**").hasAnyAuthority(AuthoritiesConstants.GRANULAR_REPORTS_USER, AuthoritiesConstants.FIXED_ASSETS_USER)
             .antMatchers("/api/**").authenticated()
