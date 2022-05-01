@@ -15,6 +15,8 @@ public final class AuthoritiesConstants {
 
     public static final String DBA = "ROLE_DBA";
 
+    public static final String BOOK_KEEPING = "ROLE_BOOK_KEEPING";
+
     public static final String PAYMENTS_USER = "ROLE_PAYMENTS_USER";
 
     public static final String FIXED_ASSETS_USER = "ROLE_FIXED_ASSETS_USER";
