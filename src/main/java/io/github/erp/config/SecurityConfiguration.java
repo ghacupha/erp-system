@@ -87,6 +87,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/accounts/**").hasAnyAuthority(
                 AuthoritiesConstants.FIXED_ASSETS_USER,
+                AuthoritiesConstants.PREPAYMENTS_MODULE_USER,
                 AuthoritiesConstants.BOOK_KEEPING)
             .antMatchers("/api/fixed-asset/**").hasAuthority(AuthoritiesConstants.FIXED_ASSETS_USER)
             .antMatchers("/api/files/**").hasAuthority(AuthoritiesConstants.DBA)
