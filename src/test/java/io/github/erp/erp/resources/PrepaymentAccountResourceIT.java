@@ -1,30 +1,11 @@
 package io.github.erp.erp.resources;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.Dealer;
-import io.github.erp.domain.Placeholder;
-import io.github.erp.domain.PrepaymentAccount;
-import io.github.erp.domain.ServiceOutlet;
-import io.github.erp.domain.Settlement;
-import io.github.erp.domain.SettlementCurrency;
-import io.github.erp.domain.TransactionAccount;
+import io.github.erp.domain.*;
 import io.github.erp.repository.PrepaymentAccountRepository;
 import io.github.erp.repository.search.PrepaymentAccountSearchRepository;
 import io.github.erp.service.dto.PrepaymentAccountDTO;
 import io.github.erp.service.mapper.PrepaymentAccountMapper;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
-
-import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,6 +18,20 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static io.github.erp.web.rest.TestUtil.sameNumber;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link PrepaymentAccountResource} REST controller.
@@ -56,7 +51,11 @@ public class PrepaymentAccountResourceIT {
     private static final String DEFAULT_NOTES = "AAAAAAAAAA";
     private static final String UPDATED_NOTES = "BBBBBBBBBB";
 
-    private static final String ENTITY_API_URL = "/api/prepayments/prepayment-accounts";
+    private static final BigDecimal DEFAULT_PREPAYMENT_AMOUNT = new BigDecimal(1);
+    private static final BigDecimal UPDATED_PREPAYMENT_AMOUNT = new BigDecimal(2);
+    private static final BigDecimal SMALLER_PREPAYMENT_AMOUNT = new BigDecimal(1 - 1);
+
+    private static final String ENTITY_API_URL = "/api/prepayment-accounts";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/prepayments/_search/prepayment-accounts";
 
@@ -95,7 +94,8 @@ public class PrepaymentAccountResourceIT {
         PrepaymentAccount prepaymentAccount = new PrepaymentAccount()
             .catalogueNumber(DEFAULT_CATALOGUE_NUMBER)
             .particulars(DEFAULT_PARTICULARS)
-            .notes(DEFAULT_NOTES);
+            .notes(DEFAULT_NOTES)
+            .prepaymentAmount(DEFAULT_PREPAYMENT_AMOUNT);
         return prepaymentAccount;
     }
 
@@ -109,7 +109,8 @@ public class PrepaymentAccountResourceIT {
         PrepaymentAccount prepaymentAccount = new PrepaymentAccount()
             .catalogueNumber(UPDATED_CATALOGUE_NUMBER)
             .particulars(UPDATED_PARTICULARS)
-            .notes(UPDATED_NOTES);
+            .notes(UPDATED_NOTES)
+            .prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT);
         return prepaymentAccount;
     }
 
@@ -128,7 +129,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isCreated());
 
@@ -139,6 +140,7 @@ public class PrepaymentAccountResourceIT {
         assertThat(testPrepaymentAccount.getCatalogueNumber()).isEqualTo(DEFAULT_CATALOGUE_NUMBER);
         assertThat(testPrepaymentAccount.getParticulars()).isEqualTo(DEFAULT_PARTICULARS);
         assertThat(testPrepaymentAccount.getNotes()).isEqualTo(DEFAULT_NOTES);
+        assertThat(testPrepaymentAccount.getPrepaymentAmount()).isEqualByComparingTo(DEFAULT_PREPAYMENT_AMOUNT);
 
         // Validate the PrepaymentAccount in Elasticsearch
         verify(mockPrepaymentAccountSearchRepository, times(1)).save(testPrepaymentAccount);
@@ -158,7 +160,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -184,7 +186,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -206,7 +208,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -228,7 +230,8 @@ public class PrepaymentAccountResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentAccount.getId().intValue())))
             .andExpect(jsonPath("$.[*].catalogueNumber").value(hasItem(DEFAULT_CATALOGUE_NUMBER)))
             .andExpect(jsonPath("$.[*].particulars").value(hasItem(DEFAULT_PARTICULARS)))
-            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES.toString())));
+            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES.toString())))
+            .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))));
     }
 
     @Test
@@ -245,7 +248,8 @@ public class PrepaymentAccountResourceIT {
             .andExpect(jsonPath("$.id").value(prepaymentAccount.getId().intValue()))
             .andExpect(jsonPath("$.catalogueNumber").value(DEFAULT_CATALOGUE_NUMBER))
             .andExpect(jsonPath("$.particulars").value(DEFAULT_PARTICULARS))
-            .andExpect(jsonPath("$.notes").value(DEFAULT_NOTES.toString()));
+            .andExpect(jsonPath("$.notes").value(DEFAULT_NOTES.toString()))
+            .andExpect(jsonPath("$.prepaymentAmount").value(sameNumber(DEFAULT_PREPAYMENT_AMOUNT)));
     }
 
     @Test
@@ -424,16 +428,120 @@ public class PrepaymentAccountResourceIT {
 
     @Test
     @Transactional
+    void getAllPrepaymentAccountsByPrepaymentAmountIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where prepaymentAmount equals to DEFAULT_PREPAYMENT_AMOUNT
+        defaultPrepaymentAccountShouldBeFound("prepaymentAmount.equals=" + DEFAULT_PREPAYMENT_AMOUNT);
+
+        // Get all the prepaymentAccountList where prepaymentAmount equals to UPDATED_PREPAYMENT_AMOUNT
+        defaultPrepaymentAccountShouldNotBeFound("prepaymentAmount.equals=" + UPDATED_PREPAYMENT_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByPrepaymentAmountIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where prepaymentAmount not equals to DEFAULT_PREPAYMENT_AMOUNT
+        defaultPrepaymentAccountShouldNotBeFound("prepaymentAmount.notEquals=" + DEFAULT_PREPAYMENT_AMOUNT);
+
+        // Get all the prepaymentAccountList where prepaymentAmount not equals to UPDATED_PREPAYMENT_AMOUNT
+        defaultPrepaymentAccountShouldBeFound("prepaymentAmount.notEquals=" + UPDATED_PREPAYMENT_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByPrepaymentAmountIsInShouldWork() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where prepaymentAmount in DEFAULT_PREPAYMENT_AMOUNT or UPDATED_PREPAYMENT_AMOUNT
+        defaultPrepaymentAccountShouldBeFound("prepaymentAmount.in=" + DEFAULT_PREPAYMENT_AMOUNT + "," + UPDATED_PREPAYMENT_AMOUNT);
+
+        // Get all the prepaymentAccountList where prepaymentAmount equals to UPDATED_PREPAYMENT_AMOUNT
+        defaultPrepaymentAccountShouldNotBeFound("prepaymentAmount.in=" + UPDATED_PREPAYMENT_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByPrepaymentAmountIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where prepaymentAmount is not null
+        defaultPrepaymentAccountShouldBeFound("prepaymentAmount.specified=true");
+
+        // Get all the prepaymentAccountList where prepaymentAmount is null
+        defaultPrepaymentAccountShouldNotBeFound("prepaymentAmount.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByPrepaymentAmountIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where prepaymentAmount is greater than or equal to DEFAULT_PREPAYMENT_AMOUNT
+        defaultPrepaymentAccountShouldBeFound("prepaymentAmount.greaterThanOrEqual=" + DEFAULT_PREPAYMENT_AMOUNT);
+
+        // Get all the prepaymentAccountList where prepaymentAmount is greater than or equal to UPDATED_PREPAYMENT_AMOUNT
+        defaultPrepaymentAccountShouldNotBeFound("prepaymentAmount.greaterThanOrEqual=" + UPDATED_PREPAYMENT_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByPrepaymentAmountIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where prepaymentAmount is less than or equal to DEFAULT_PREPAYMENT_AMOUNT
+        defaultPrepaymentAccountShouldBeFound("prepaymentAmount.lessThanOrEqual=" + DEFAULT_PREPAYMENT_AMOUNT);
+
+        // Get all the prepaymentAccountList where prepaymentAmount is less than or equal to SMALLER_PREPAYMENT_AMOUNT
+        defaultPrepaymentAccountShouldNotBeFound("prepaymentAmount.lessThanOrEqual=" + SMALLER_PREPAYMENT_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByPrepaymentAmountIsLessThanSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where prepaymentAmount is less than DEFAULT_PREPAYMENT_AMOUNT
+        defaultPrepaymentAccountShouldNotBeFound("prepaymentAmount.lessThan=" + DEFAULT_PREPAYMENT_AMOUNT);
+
+        // Get all the prepaymentAccountList where prepaymentAmount is less than UPDATED_PREPAYMENT_AMOUNT
+        defaultPrepaymentAccountShouldBeFound("prepaymentAmount.lessThan=" + UPDATED_PREPAYMENT_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByPrepaymentAmountIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where prepaymentAmount is greater than DEFAULT_PREPAYMENT_AMOUNT
+        defaultPrepaymentAccountShouldNotBeFound("prepaymentAmount.greaterThan=" + DEFAULT_PREPAYMENT_AMOUNT);
+
+        // Get all the prepaymentAccountList where prepaymentAmount is greater than SMALLER_PREPAYMENT_AMOUNT
+        defaultPrepaymentAccountShouldBeFound("prepaymentAmount.greaterThan=" + SMALLER_PREPAYMENT_AMOUNT);
+    }
+
+    @Test
+    @Transactional
     void getAllPrepaymentAccountsBySettlementCurrencyIsEqualToSomething() throws Exception {
         // Initialize the database
         prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
         SettlementCurrency settlementCurrency;
-        if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
+        if (io.github.erp.web.rest.TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
             settlementCurrency = SettlementCurrencyResourceIT.createEntity(em);
             em.persist(settlementCurrency);
             em.flush();
         } else {
-            settlementCurrency = TestUtil.findAll(em, SettlementCurrency.class).get(0);
+            settlementCurrency = io.github.erp.web.rest.TestUtil.findAll(em, SettlementCurrency.class).get(0);
         }
         em.persist(settlementCurrency);
         em.flush();
@@ -454,12 +562,12 @@ public class PrepaymentAccountResourceIT {
         // Initialize the database
         prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
         Settlement prepaymentTransaction;
-        if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
+        if (io.github.erp.web.rest.TestUtil.findAll(em, Settlement.class).isEmpty()) {
             prepaymentTransaction = SettlementResourceIT.createEntity(em);
             em.persist(prepaymentTransaction);
             em.flush();
         } else {
-            prepaymentTransaction = TestUtil.findAll(em, Settlement.class).get(0);
+            prepaymentTransaction = io.github.erp.web.rest.TestUtil.findAll(em, Settlement.class).get(0);
         }
         em.persist(prepaymentTransaction);
         em.flush();
@@ -480,12 +588,12 @@ public class PrepaymentAccountResourceIT {
         // Initialize the database
         prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
         ServiceOutlet serviceOutlet;
-        if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
+        if (io.github.erp.web.rest.TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
             serviceOutlet = ServiceOutletResourceIT.createEntity(em);
             em.persist(serviceOutlet);
             em.flush();
         } else {
-            serviceOutlet = TestUtil.findAll(em, ServiceOutlet.class).get(0);
+            serviceOutlet = io.github.erp.web.rest.TestUtil.findAll(em, ServiceOutlet.class).get(0);
         }
         em.persist(serviceOutlet);
         em.flush();
@@ -506,12 +614,12 @@ public class PrepaymentAccountResourceIT {
         // Initialize the database
         prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
         Dealer dealer;
-        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
+        if (io.github.erp.web.rest.TestUtil.findAll(em, Dealer.class).isEmpty()) {
             dealer = DealerResourceIT.createEntity(em);
             em.persist(dealer);
             em.flush();
         } else {
-            dealer = TestUtil.findAll(em, Dealer.class).get(0);
+            dealer = io.github.erp.web.rest.TestUtil.findAll(em, Dealer.class).get(0);
         }
         em.persist(dealer);
         em.flush();
@@ -532,12 +640,12 @@ public class PrepaymentAccountResourceIT {
         // Initialize the database
         prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
         Placeholder placeholder;
-        if (TestUtil.findAll(em, Placeholder.class).isEmpty()) {
+        if (io.github.erp.web.rest.TestUtil.findAll(em, Placeholder.class).isEmpty()) {
             placeholder = PlaceholderResourceIT.createEntity(em);
             em.persist(placeholder);
             em.flush();
         } else {
-            placeholder = TestUtil.findAll(em, Placeholder.class).get(0);
+            placeholder = io.github.erp.web.rest.TestUtil.findAll(em, Placeholder.class).get(0);
         }
         em.persist(placeholder);
         em.flush();
@@ -558,12 +666,12 @@ public class PrepaymentAccountResourceIT {
         // Initialize the database
         prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
         TransactionAccount debitAccount;
-        if (TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
+        if (io.github.erp.web.rest.TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
             debitAccount = TransactionAccountResourceIT.createEntity(em);
             em.persist(debitAccount);
             em.flush();
         } else {
-            debitAccount = TestUtil.findAll(em, TransactionAccount.class).get(0);
+            debitAccount = io.github.erp.web.rest.TestUtil.findAll(em, TransactionAccount.class).get(0);
         }
         em.persist(debitAccount);
         em.flush();
@@ -584,12 +692,12 @@ public class PrepaymentAccountResourceIT {
         // Initialize the database
         prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
         TransactionAccount transferAccount;
-        if (TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
+        if (io.github.erp.web.rest.TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
             transferAccount = TransactionAccountResourceIT.createEntity(em);
             em.persist(transferAccount);
             em.flush();
         } else {
-            transferAccount = TestUtil.findAll(em, TransactionAccount.class).get(0);
+            transferAccount = io.github.erp.web.rest.TestUtil.findAll(em, TransactionAccount.class).get(0);
         }
         em.persist(transferAccount);
         em.flush();
@@ -615,7 +723,8 @@ public class PrepaymentAccountResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentAccount.getId().intValue())))
             .andExpect(jsonPath("$.[*].catalogueNumber").value(hasItem(DEFAULT_CATALOGUE_NUMBER)))
             .andExpect(jsonPath("$.[*].particulars").value(hasItem(DEFAULT_PARTICULARS)))
-            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES.toString())));
+            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES.toString())))
+            .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))));
 
         // Check, that the count call also returns 1
         restPrepaymentAccountMockMvc
@@ -663,14 +772,18 @@ public class PrepaymentAccountResourceIT {
         PrepaymentAccount updatedPrepaymentAccount = prepaymentAccountRepository.findById(prepaymentAccount.getId()).get();
         // Disconnect from session so that the updates on updatedPrepaymentAccount are not directly saved in db
         em.detach(updatedPrepaymentAccount);
-        updatedPrepaymentAccount.catalogueNumber(UPDATED_CATALOGUE_NUMBER).particulars(UPDATED_PARTICULARS).notes(UPDATED_NOTES);
+        updatedPrepaymentAccount
+            .catalogueNumber(UPDATED_CATALOGUE_NUMBER)
+            .particulars(UPDATED_PARTICULARS)
+            .notes(UPDATED_NOTES)
+            .prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT);
         PrepaymentAccountDTO prepaymentAccountDTO = prepaymentAccountMapper.toDto(updatedPrepaymentAccount);
 
         restPrepaymentAccountMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, prepaymentAccountDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isOk());
 
@@ -681,6 +794,7 @@ public class PrepaymentAccountResourceIT {
         assertThat(testPrepaymentAccount.getCatalogueNumber()).isEqualTo(UPDATED_CATALOGUE_NUMBER);
         assertThat(testPrepaymentAccount.getParticulars()).isEqualTo(UPDATED_PARTICULARS);
         assertThat(testPrepaymentAccount.getNotes()).isEqualTo(UPDATED_NOTES);
+        assertThat(testPrepaymentAccount.getPrepaymentAmount()).isEqualTo(UPDATED_PREPAYMENT_AMOUNT);
 
         // Validate the PrepaymentAccount in Elasticsearch
         verify(mockPrepaymentAccountSearchRepository).save(testPrepaymentAccount);
@@ -700,7 +814,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 put(ENTITY_API_URL_ID, prepaymentAccountDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -726,7 +840,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -750,7 +864,7 @@ public class PrepaymentAccountResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restPrepaymentAccountMockMvc
             .perform(
-                put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 
@@ -774,13 +888,13 @@ public class PrepaymentAccountResourceIT {
         PrepaymentAccount partialUpdatedPrepaymentAccount = new PrepaymentAccount();
         partialUpdatedPrepaymentAccount.setId(prepaymentAccount.getId());
 
-        partialUpdatedPrepaymentAccount.notes(UPDATED_NOTES);
+        partialUpdatedPrepaymentAccount.notes(UPDATED_NOTES).prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT);
 
         restPrepaymentAccountMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedPrepaymentAccount.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedPrepaymentAccount))
+                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(partialUpdatedPrepaymentAccount))
             )
             .andExpect(status().isOk());
 
@@ -791,6 +905,7 @@ public class PrepaymentAccountResourceIT {
         assertThat(testPrepaymentAccount.getCatalogueNumber()).isEqualTo(DEFAULT_CATALOGUE_NUMBER);
         assertThat(testPrepaymentAccount.getParticulars()).isEqualTo(DEFAULT_PARTICULARS);
         assertThat(testPrepaymentAccount.getNotes()).isEqualTo(UPDATED_NOTES);
+        assertThat(testPrepaymentAccount.getPrepaymentAmount()).isEqualByComparingTo(UPDATED_PREPAYMENT_AMOUNT);
     }
 
     @Test
@@ -805,13 +920,17 @@ public class PrepaymentAccountResourceIT {
         PrepaymentAccount partialUpdatedPrepaymentAccount = new PrepaymentAccount();
         partialUpdatedPrepaymentAccount.setId(prepaymentAccount.getId());
 
-        partialUpdatedPrepaymentAccount.catalogueNumber(UPDATED_CATALOGUE_NUMBER).particulars(UPDATED_PARTICULARS).notes(UPDATED_NOTES);
+        partialUpdatedPrepaymentAccount
+            .catalogueNumber(UPDATED_CATALOGUE_NUMBER)
+            .particulars(UPDATED_PARTICULARS)
+            .notes(UPDATED_NOTES)
+            .prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT);
 
         restPrepaymentAccountMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedPrepaymentAccount.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedPrepaymentAccount))
+                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(partialUpdatedPrepaymentAccount))
             )
             .andExpect(status().isOk());
 
@@ -822,6 +941,7 @@ public class PrepaymentAccountResourceIT {
         assertThat(testPrepaymentAccount.getCatalogueNumber()).isEqualTo(UPDATED_CATALOGUE_NUMBER);
         assertThat(testPrepaymentAccount.getParticulars()).isEqualTo(UPDATED_PARTICULARS);
         assertThat(testPrepaymentAccount.getNotes()).isEqualTo(UPDATED_NOTES);
+        assertThat(testPrepaymentAccount.getPrepaymentAmount()).isEqualByComparingTo(UPDATED_PREPAYMENT_AMOUNT);
     }
 
     @Test
@@ -838,7 +958,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 patch(ENTITY_API_URL_ID, prepaymentAccountDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -864,7 +984,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -890,7 +1010,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 patch(ENTITY_API_URL)
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 
@@ -940,6 +1060,7 @@ public class PrepaymentAccountResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentAccount.getId().intValue())))
             .andExpect(jsonPath("$.[*].catalogueNumber").value(hasItem(DEFAULT_CATALOGUE_NUMBER)))
             .andExpect(jsonPath("$.[*].particulars").value(hasItem(DEFAULT_PARTICULARS)))
-            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES.toString())));
+            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES.toString())))
+            .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))));
     }
 }

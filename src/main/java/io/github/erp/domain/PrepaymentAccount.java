@@ -2,6 +2,7 @@ package io.github.erp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -37,6 +38,9 @@ public class PrepaymentAccount implements Serializable {
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "notes")
     private String notes;
+
+    @Column(name = "prepayment_amount", precision = 21, scale = 2)
+    private BigDecimal prepaymentAmount;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
@@ -133,6 +137,19 @@ public class PrepaymentAccount implements Serializable {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public BigDecimal getPrepaymentAmount() {
+        return this.prepaymentAmount;
+    }
+
+    public PrepaymentAccount prepaymentAmount(BigDecimal prepaymentAmount) {
+        this.setPrepaymentAmount(prepaymentAmount);
+        return this;
+    }
+
+    public void setPrepaymentAmount(BigDecimal prepaymentAmount) {
+        this.prepaymentAmount = prepaymentAmount;
     }
 
     public SettlementCurrency getSettlementCurrency() {
@@ -253,6 +270,7 @@ public class PrepaymentAccount implements Serializable {
             ", catalogueNumber='" + getCatalogueNumber() + "'" +
             ", particulars='" + getParticulars() + "'" +
             ", notes='" + getNotes() + "'" +
+            ", prepaymentAmount=" + getPrepaymentAmount() +
             "}";
     }
 }
