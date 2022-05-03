@@ -27,4 +27,10 @@ public interface PrepaymentAccountMapper extends EntityMapper<PrepaymentAccountD
     @Mapping(target = "debitAccount", source = "debitAccount", qualifiedByName = "accountName")
     @Mapping(target = "transferAccount", source = "transferAccount", qualifiedByName = "accountName")
     PrepaymentAccountDTO toDto(PrepaymentAccount s);
+
+    @Named("catalogueNumber")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "catalogueNumber", source = "catalogueNumber")
+    PrepaymentAccountDTO toDtoCatalogueNumber(PrepaymentAccount prepaymentAccount);
 }
