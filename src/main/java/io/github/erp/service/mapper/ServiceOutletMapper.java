@@ -24,15 +24,15 @@ public interface ServiceOutletMapper extends EntityMapper<ServiceOutletDTO, Serv
     @Mapping(target = "removePlaceholder", ignore = true)
     ServiceOutlet toEntity(ServiceOutletDTO serviceOutletDTO);
 
-    @Named("outletCode")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "outletCode", source = "outletCode")
-    ServiceOutletDTO toDtoOutletCode(ServiceOutlet serviceOutlet);
-
     @Named("outletCodeSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "outletCode", source = "outletCode")
     Set<ServiceOutletDTO> toDtoOutletCodeSet(Set<ServiceOutlet> serviceOutlet);
+
+    @Named("outletCode")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "outletCode", source = "outletCode")
+    ServiceOutletDTO toDtoOutletCode(ServiceOutlet serviceOutlet);
 }
