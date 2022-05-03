@@ -1,6 +1,7 @@
 package io.github.erp.service.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Lob;
 import javax.validation.constraints.*;
@@ -20,6 +21,8 @@ public class PrepaymentAccountDTO implements Serializable {
 
     @Lob
     private String notes;
+
+    private BigDecimal prepaymentAmount;
 
     private SettlementCurrencyDTO settlementCurrency;
 
@@ -65,6 +68,14 @@ public class PrepaymentAccountDTO implements Serializable {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public BigDecimal getPrepaymentAmount() {
+        return prepaymentAmount;
+    }
+
+    public void setPrepaymentAmount(BigDecimal prepaymentAmount) {
+        this.prepaymentAmount = prepaymentAmount;
     }
 
     public SettlementCurrencyDTO getSettlementCurrency() {
@@ -152,6 +163,7 @@ public class PrepaymentAccountDTO implements Serializable {
             ", catalogueNumber='" + getCatalogueNumber() + "'" +
             ", particulars='" + getParticulars() + "'" +
             ", notes='" + getNotes() + "'" +
+            ", prepaymentAmount=" + getPrepaymentAmount() +
             ", settlementCurrency=" + getSettlementCurrency() +
             ", prepaymentTransaction=" + getPrepaymentTransaction() +
             ", serviceOutlet=" + getServiceOutlet() +

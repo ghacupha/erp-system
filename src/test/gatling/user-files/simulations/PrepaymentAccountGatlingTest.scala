@@ -74,6 +74,7 @@ class PrepaymentAccountGatlingTest extends Simulation {
                 "catalogueNumber":"SAMPLE_TEXT"
                 , "particulars":"SAMPLE_TEXT"
                 , "notes":null
+                , "prepaymentAmount":"0"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_prepaymentAccount_url"))).exitHereIfFailed

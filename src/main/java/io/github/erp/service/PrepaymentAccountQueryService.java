@@ -105,6 +105,10 @@ public class PrepaymentAccountQueryService extends QueryService<PrepaymentAccoun
             if (criteria.getParticulars() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getParticulars(), PrepaymentAccount_.particulars));
             }
+            if (criteria.getPrepaymentAmount() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getPrepaymentAmount(), PrepaymentAccount_.prepaymentAmount));
+            }
             if (criteria.getSettlementCurrencyId() != null) {
                 specification =
                     specification.and(
