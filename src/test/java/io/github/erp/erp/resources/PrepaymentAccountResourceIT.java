@@ -55,7 +55,7 @@ public class PrepaymentAccountResourceIT {
     private static final BigDecimal UPDATED_PREPAYMENT_AMOUNT = new BigDecimal(2);
     private static final BigDecimal SMALLER_PREPAYMENT_AMOUNT = new BigDecimal(1 - 1);
 
-    private static final String ENTITY_API_URL = "/api/prepayment-accounts";
+    private static final String ENTITY_API_URL = "/api/prepayments/prepayment-accounts";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/prepayments/_search/prepayment-accounts";
 
