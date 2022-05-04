@@ -56,6 +56,8 @@ public class DealerCriteria implements Serializable, Criteria {
 
     private StringFilter compilationToken;
 
+    private StringFilter otherNames;
+
     private LongFilter paymentLabelId;
 
     private LongFilter dealerGroupId;
@@ -83,6 +85,7 @@ public class DealerCriteria implements Serializable, Criteria {
         this.bankersSwiftCode = other.bankersSwiftCode == null ? null : other.bankersSwiftCode.copy();
         this.fileUploadToken = other.fileUploadToken == null ? null : other.fileUploadToken.copy();
         this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
+        this.otherNames = other.otherNames == null ? null : other.otherNames.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
         this.dealerGroupId = other.dealerGroupId == null ? null : other.dealerGroupId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
@@ -334,6 +337,21 @@ public class DealerCriteria implements Serializable, Criteria {
         this.compilationToken = compilationToken;
     }
 
+    public StringFilter getOtherNames() {
+        return otherNames;
+    }
+
+    public StringFilter otherNames() {
+        if (otherNames == null) {
+            otherNames = new StringFilter();
+        }
+        return otherNames;
+    }
+
+    public void setOtherNames(StringFilter otherNames) {
+        this.otherNames = otherNames;
+    }
+
     public LongFilter getPaymentLabelId() {
         return paymentLabelId;
     }
@@ -413,6 +431,7 @@ public class DealerCriteria implements Serializable, Criteria {
             Objects.equals(bankersSwiftCode, that.bankersSwiftCode) &&
             Objects.equals(fileUploadToken, that.fileUploadToken) &&
             Objects.equals(compilationToken, that.compilationToken) &&
+            Objects.equals(otherNames, that.otherNames) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
             Objects.equals(dealerGroupId, that.dealerGroupId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
@@ -439,6 +458,7 @@ public class DealerCriteria implements Serializable, Criteria {
             bankersSwiftCode,
             fileUploadToken,
             compilationToken,
+            otherNames,
             paymentLabelId,
             dealerGroupId,
             placeholderId,
@@ -466,6 +486,7 @@ public class DealerCriteria implements Serializable, Criteria {
             (bankersSwiftCode != null ? "bankersSwiftCode=" + bankersSwiftCode + ", " : "") +
             (fileUploadToken != null ? "fileUploadToken=" + fileUploadToken + ", " : "") +
             (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
+            (otherNames != null ? "otherNames=" + otherNames + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
             (dealerGroupId != null ? "dealerGroupId=" + dealerGroupId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +

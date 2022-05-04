@@ -40,6 +40,10 @@ public class PaymentInvoiceDTO implements Serializable {
 
     private DealerDTO biller;
 
+    private Set<DeliveryNoteDTO> deliveryNotes = new HashSet<>();
+
+    private Set<JobSheetDTO> jobSheets = new HashSet<>();
+
     public Long getId() {
         return id;
     }
@@ -136,6 +140,22 @@ public class PaymentInvoiceDTO implements Serializable {
         this.biller = biller;
     }
 
+    public Set<DeliveryNoteDTO> getDeliveryNotes() {
+        return deliveryNotes;
+    }
+
+    public void setDeliveryNotes(Set<DeliveryNoteDTO> deliveryNotes) {
+        this.deliveryNotes = deliveryNotes;
+    }
+
+    public Set<JobSheetDTO> getJobSheets() {
+        return jobSheets;
+    }
+
+    public void setJobSheets(Set<JobSheetDTO> jobSheets) {
+        this.jobSheets = jobSheets;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -173,6 +193,8 @@ public class PaymentInvoiceDTO implements Serializable {
             ", paymentLabels=" + getPaymentLabels() +
             ", settlementCurrency=" + getSettlementCurrency() +
             ", biller=" + getBiller() +
+            ", deliveryNotes=" + getDeliveryNotes() +
+            ", jobSheets=" + getJobSheets() +
             "}";
     }
 }

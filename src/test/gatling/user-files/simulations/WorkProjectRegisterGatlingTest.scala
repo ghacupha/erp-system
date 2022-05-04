@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.duration._
 
 /**
- * Performance test for the Dealer entity.
+ * Performance test for the WorkProjectRegister entity.
  */
-class DealerGatlingTest extends Simulation {
+class WorkProjectRegisterGatlingTest extends Simulation {
 
     val context: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
     // Log all HTTP requests
@@ -43,7 +43,7 @@ class DealerGatlingTest extends Simulation {
         "Authorization" -> "${access_token}"
     )
 
-    val scn = scenario("Test the Dealer entity")
+    val scn = scenario("Test the WorkProjectRegister entity")
         .exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headers_http)
@@ -62,44 +62,32 @@ class DealerGatlingTest extends Simulation {
         .check(status.is(200)))
         .pause(10)
         .repeat(2) {
-            exec(http("Get all dealers")
-            .get("/api/dealers")
+            exec(http("Get all workProjectRegisters")
+            .get("/api/work-project-registers")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
-            .exec(http("Create new dealer")
-            .post("/api/dealers")
+            .exec(http("Create new workProjectRegister")
+            .post("/api/work-project-registers")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
-                "dealerName":"SAMPLE_TEXT"
-                , "taxNumber":"SAMPLE_TEXT"
-                , "identificationDocumentNumber":"SAMPLE_TEXT"
-                , "organizationName":"SAMPLE_TEXT"
-                , "department":"SAMPLE_TEXT"
-                , "position":"SAMPLE_TEXT"
-                , "postalAddress":"SAMPLE_TEXT"
-                , "physicalAddress":"SAMPLE_TEXT"
-                , "accountName":"SAMPLE_TEXT"
-                , "accountNumber":"SAMPLE_TEXT"
-                , "bankersName":"SAMPLE_TEXT"
-                , "bankersBranch":"SAMPLE_TEXT"
-                , "bankersSwiftCode":"SAMPLE_TEXT"
-                , "fileUploadToken":"SAMPLE_TEXT"
-                , "compilationToken":"SAMPLE_TEXT"
-                , "remarks":null
-                , "otherNames":"SAMPLE_TEXT"
+                "catalogueNumber":"SAMPLE_TEXT"
+                , "description":"SAMPLE_TEXT"
+                , "details":null
+                , "totalProjectCost":"0"
+                , "additionalNotes":null
                 }""")).asJson
             .check(status.is(201))
-            .check(headerRegex("Location", "(.*)").saveAs("new_dealer_url"))).exitHereIfFailed
+            .check(headerRegex("Location", "(.*)").saveAs("new_workProjectRegister_url"))).exitHereIfFailed
             .pause(10)
             .repeat(5) {
-                exec(http("Get created dealer")
-                .get("${new_dealer_url}")
+                exec(http("Get created workProjectRegister")
+                .get("${new_workProjectRegister_url}")
                 .headers(headers_http_authenticated))
                 .pause(10)
             }
-            .exec(http("Delete created dealer")
-            .delete("${new_dealer_url}")
+            .exec(http("Delete created workProjectRegister")
+            .delete("${new_workProjectRegister_url}")
             .headers(headers_http_authenticated))
             .pause(10)
         }

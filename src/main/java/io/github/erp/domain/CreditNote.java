@@ -64,7 +64,7 @@ public class CreditNote implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "purchaseOrders", "placeholders", "paymentLabels", "settlementCurrency", "biller" },
+        value = { "purchaseOrders", "placeholders", "paymentLabels", "settlementCurrency", "biller", "deliveryNotes", "jobSheets" },
         allowSetters = true
     )
     private Set<PaymentInvoice> invoices = new HashSet<>();
@@ -88,6 +88,10 @@ public class CreditNote implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    private SettlementCurrency settlementCurrency;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -245,6 +249,19 @@ public class CreditNote implements Serializable {
 
     public CreditNote removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
+        return this;
+    }
+
+    public SettlementCurrency getSettlementCurrency() {
+        return this.settlementCurrency;
+    }
+
+    public void setSettlementCurrency(SettlementCurrency settlementCurrency) {
+        this.settlementCurrency = settlementCurrency;
+    }
+
+    public CreditNote settlementCurrency(SettlementCurrency settlementCurrency) {
+        this.setSettlementCurrency(settlementCurrency);
         return this;
     }
 

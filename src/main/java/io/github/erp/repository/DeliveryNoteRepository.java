@@ -15,18 +15,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DeliveryNoteRepository extends JpaRepository<DeliveryNote, Long>, JpaSpecificationExecutor<DeliveryNote> {
     @Query(
-        value = "select distinct deliveryNote from DeliveryNote deliveryNote left join fetch deliveryNote.placeholders left join fetch deliveryNote.deliveryStamps left join fetch deliveryNote.signatories",
+        value = "select distinct deliveryNote from DeliveryNote deliveryNote left join fetch deliveryNote.placeholders left join fetch deliveryNote.deliveryStamps left join fetch deliveryNote.signatories left join fetch deliveryNote.otherPurchaseOrders",
         countQuery = "select count(distinct deliveryNote) from DeliveryNote deliveryNote"
     )
     Page<DeliveryNote> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct deliveryNote from DeliveryNote deliveryNote left join fetch deliveryNote.placeholders left join fetch deliveryNote.deliveryStamps left join fetch deliveryNote.signatories"
+        "select distinct deliveryNote from DeliveryNote deliveryNote left join fetch deliveryNote.placeholders left join fetch deliveryNote.deliveryStamps left join fetch deliveryNote.signatories left join fetch deliveryNote.otherPurchaseOrders"
     )
     List<DeliveryNote> findAllWithEagerRelationships();
 
     @Query(
-        "select deliveryNote from DeliveryNote deliveryNote left join fetch deliveryNote.placeholders left join fetch deliveryNote.deliveryStamps left join fetch deliveryNote.signatories where deliveryNote.id =:id"
+        "select deliveryNote from DeliveryNote deliveryNote left join fetch deliveryNote.placeholders left join fetch deliveryNote.deliveryStamps left join fetch deliveryNote.signatories left join fetch deliveryNote.otherPurchaseOrders where deliveryNote.id =:id"
     )
     Optional<DeliveryNote> findOneWithEagerRelationships(@Param("id") Long id);
 }
