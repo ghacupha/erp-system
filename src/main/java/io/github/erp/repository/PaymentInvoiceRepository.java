@@ -15,18 +15,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PaymentInvoiceRepository extends JpaRepository<PaymentInvoice, Long>, JpaSpecificationExecutor<PaymentInvoice> {
     @Query(
-        value = "select distinct paymentInvoice from PaymentInvoice paymentInvoice left join fetch paymentInvoice.purchaseOrders left join fetch paymentInvoice.placeholders left join fetch paymentInvoice.paymentLabels",
+        value = "select distinct paymentInvoice from PaymentInvoice paymentInvoice left join fetch paymentInvoice.purchaseOrders left join fetch paymentInvoice.placeholders left join fetch paymentInvoice.paymentLabels left join fetch paymentInvoice.deliveryNotes left join fetch paymentInvoice.jobSheets",
         countQuery = "select count(distinct paymentInvoice) from PaymentInvoice paymentInvoice"
     )
     Page<PaymentInvoice> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct paymentInvoice from PaymentInvoice paymentInvoice left join fetch paymentInvoice.purchaseOrders left join fetch paymentInvoice.placeholders left join fetch paymentInvoice.paymentLabels"
+        "select distinct paymentInvoice from PaymentInvoice paymentInvoice left join fetch paymentInvoice.purchaseOrders left join fetch paymentInvoice.placeholders left join fetch paymentInvoice.paymentLabels left join fetch paymentInvoice.deliveryNotes left join fetch paymentInvoice.jobSheets"
     )
     List<PaymentInvoice> findAllWithEagerRelationships();
 
     @Query(
-        "select paymentInvoice from PaymentInvoice paymentInvoice left join fetch paymentInvoice.purchaseOrders left join fetch paymentInvoice.placeholders left join fetch paymentInvoice.paymentLabels where paymentInvoice.id =:id"
+        "select paymentInvoice from PaymentInvoice paymentInvoice left join fetch paymentInvoice.purchaseOrders left join fetch paymentInvoice.placeholders left join fetch paymentInvoice.paymentLabels left join fetch paymentInvoice.deliveryNotes left join fetch paymentInvoice.jobSheets where paymentInvoice.id =:id"
     )
     Optional<PaymentInvoice> findOneWithEagerRelationships(@Param("id") Long id);
 }

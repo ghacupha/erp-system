@@ -67,7 +67,7 @@ public class AssetRegistration implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "purchaseOrders", "placeholders", "paymentLabels", "settlementCurrency", "biller" },
+        value = { "purchaseOrders", "placeholders", "paymentLabels", "settlementCurrency", "biller", "deliveryNotes", "jobSheets" },
         allowSetters = true
     )
     private Set<PaymentInvoice> paymentInvoices = new HashSet<>();
@@ -132,7 +132,7 @@ public class AssetRegistration implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "placeholders", "receivedBy", "deliveryStamps", "purchaseOrder", "supplier", "signatories" },
+        value = { "placeholders", "receivedBy", "deliveryStamps", "purchaseOrder", "supplier", "signatories", "otherPurchaseOrders" },
         allowSetters = true
     )
     private Set<DeliveryNote> deliveryNotes = new HashSet<>();
@@ -164,6 +164,10 @@ public class AssetRegistration implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "placeholders" }, allowSetters = true)
     private Set<Dealer> designatedUsers = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    private SettlementCurrency settlementCurrency;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -465,6 +469,19 @@ public class AssetRegistration implements Serializable {
 
     public AssetRegistration removeDesignatedUsers(Dealer dealer) {
         this.designatedUsers.remove(dealer);
+        return this;
+    }
+
+    public SettlementCurrency getSettlementCurrency() {
+        return this.settlementCurrency;
+    }
+
+    public void setSettlementCurrency(SettlementCurrency settlementCurrency) {
+        this.settlementCurrency = settlementCurrency;
+    }
+
+    public AssetRegistration settlementCurrency(SettlementCurrency settlementCurrency) {
+        this.setSettlementCurrency(settlementCurrency);
         return this;
     }
 

@@ -42,6 +42,12 @@ public class WorkInProgressRegistrationDTO implements Serializable {
 
     private DealerDTO dealer;
 
+    private WorkInProgressRegistrationDTO workInProgressGroup;
+
+    private SettlementCurrencyDTO settlementCurrency;
+
+    private WorkProjectRegisterDTO workProjectRegister;
+
     public Long getId() {
         return id;
     }
@@ -154,6 +160,30 @@ public class WorkInProgressRegistrationDTO implements Serializable {
         this.dealer = dealer;
     }
 
+    public WorkInProgressRegistrationDTO getWorkInProgressGroup() {
+        return workInProgressGroup;
+    }
+
+    public void setWorkInProgressGroup(WorkInProgressRegistrationDTO workInProgressGroup) {
+        this.workInProgressGroup = workInProgressGroup;
+    }
+
+    public SettlementCurrencyDTO getSettlementCurrency() {
+        return settlementCurrency;
+    }
+
+    public void setSettlementCurrency(SettlementCurrencyDTO settlementCurrency) {
+        this.settlementCurrency = settlementCurrency;
+    }
+
+    public WorkProjectRegisterDTO getWorkProjectRegister() {
+        return workProjectRegister;
+    }
+
+    public void setWorkProjectRegister(WorkProjectRegisterDTO workProjectRegister) {
+        this.workProjectRegister = workProjectRegister;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -192,6 +222,9 @@ public class WorkInProgressRegistrationDTO implements Serializable {
             ", deliveryNotes=" + getDeliveryNotes() +
             ", jobSheets=" + getJobSheets() +
             ", dealer=" + getDealer() +
+            ", workInProgressGroup=" + getWorkInProgressGroup() +
+            ", settlementCurrency=" + getSettlementCurrency() +
+            ", workProjectRegister=" + getWorkProjectRegister() +
             "}";
     }
 }

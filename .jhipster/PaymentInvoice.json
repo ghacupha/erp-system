@@ -72,6 +72,22 @@
       "relationshipName": "biller",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"]
+    },
+    {
+      "relationshipName": "deliveryNote",
+      "otherEntityName": "deliveryNote",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "deliveryNoteNumber",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "paymentInvoice"
+    },
+    {
+      "relationshipName": "jobSheet",
+      "otherEntityName": "jobSheet",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "serialNumber",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "paymentInvoice"
     }
   ],
   "service": "serviceImpl"

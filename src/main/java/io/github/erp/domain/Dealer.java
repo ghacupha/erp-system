@@ -78,6 +78,9 @@ public class Dealer implements Serializable {
     @Column(name = "remarks")
     private String remarks;
 
+    @Column(name = "other_names")
+    private String otherNames;
+
     @ManyToMany
     @JoinTable(
         name = "rel_dealer__payment_label",
@@ -325,6 +328,19 @@ public class Dealer implements Serializable {
         this.remarks = remarks;
     }
 
+    public String getOtherNames() {
+        return this.otherNames;
+    }
+
+    public Dealer otherNames(String otherNames) {
+        this.setOtherNames(otherNames);
+        return this;
+    }
+
+    public void setOtherNames(String otherNames) {
+        this.otherNames = otherNames;
+    }
+
     public Set<PaymentLabel> getPaymentLabels() {
         return this.paymentLabels;
     }
@@ -424,6 +440,7 @@ public class Dealer implements Serializable {
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
             ", remarks='" + getRemarks() + "'" +
+            ", otherNames='" + getOtherNames() + "'" +
             "}";
     }
 }
