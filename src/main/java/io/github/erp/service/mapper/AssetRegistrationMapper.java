@@ -19,6 +19,7 @@ import org.mapstruct.*;
         DeliveryNoteMapper.class,
         JobSheetMapper.class,
         DealerMapper.class,
+        SettlementCurrencyMapper.class,
     }
 )
 public interface AssetRegistrationMapper extends EntityMapper<AssetRegistrationDTO, AssetRegistration> {
@@ -32,6 +33,7 @@ public interface AssetRegistrationMapper extends EntityMapper<AssetRegistrationD
     @Mapping(target = "jobSheets", source = "jobSheets", qualifiedByName = "serialNumberSet")
     @Mapping(target = "dealer", source = "dealer", qualifiedByName = "dealerName")
     @Mapping(target = "designatedUsers", source = "designatedUsers", qualifiedByName = "dealerNameSet")
+    @Mapping(target = "settlementCurrency", source = "settlementCurrency", qualifiedByName = "iso4217CurrencyCode")
     AssetRegistrationDTO toDto(AssetRegistration s);
 
     @Mapping(target = "removePlaceholder", ignore = true)

@@ -19,11 +19,13 @@ public interface DeliveryNoteMapper extends EntityMapper<DeliveryNoteDTO, Delive
     @Mapping(target = "purchaseOrder", source = "purchaseOrder", qualifiedByName = "purchaseOrderNumber")
     @Mapping(target = "supplier", source = "supplier", qualifiedByName = "dealerName")
     @Mapping(target = "signatories", source = "signatories", qualifiedByName = "dealerNameSet")
+    @Mapping(target = "otherPurchaseOrders", source = "otherPurchaseOrders", qualifiedByName = "purchaseOrderNumberSet")
     DeliveryNoteDTO toDto(DeliveryNote s);
 
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removeDeliveryStamps", ignore = true)
     @Mapping(target = "removeSignatories", ignore = true)
+    @Mapping(target = "removeOtherPurchaseOrders", ignore = true)
     DeliveryNote toEntity(DeliveryNoteDTO deliveryNoteDTO);
 
     @Named("deliveryNoteNumberSet")

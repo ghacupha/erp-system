@@ -143,6 +143,15 @@ public class CreditNoteQueryService extends QueryService<CreditNote> {
                         )
                     );
             }
+            if (criteria.getSettlementCurrencyId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getSettlementCurrencyId(),
+                            root -> root.join(CreditNote_.settlementCurrency, JoinType.LEFT).get(SettlementCurrency_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

@@ -200,6 +200,15 @@ public class AssetRegistrationQueryService extends QueryService<AssetRegistratio
                         )
                     );
             }
+            if (criteria.getSettlementCurrencyId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getSettlementCurrencyId(),
+                            root -> root.join(AssetRegistration_.settlementCurrency, JoinType.LEFT).get(SettlementCurrency_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

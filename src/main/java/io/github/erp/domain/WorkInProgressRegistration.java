@@ -62,7 +62,7 @@ public class WorkInProgressRegistration implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "purchaseOrders", "placeholders", "paymentLabels", "settlementCurrency", "biller" },
+        value = { "purchaseOrders", "placeholders", "paymentLabels", "settlementCurrency", "biller", "deliveryNotes", "jobSheets" },
         allowSetters = true
     )
     private Set<PaymentInvoice> paymentInvoices = new HashSet<>();
@@ -122,7 +122,7 @@ public class WorkInProgressRegistration implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "placeholders", "receivedBy", "deliveryStamps", "purchaseOrder", "supplier", "signatories" },
+        value = { "placeholders", "receivedBy", "deliveryStamps", "purchaseOrder", "supplier", "signatories", "otherPurchaseOrders" },
         allowSetters = true
     )
     private Set<DeliveryNote> deliveryNotes = new HashSet<>();
@@ -144,6 +144,33 @@ public class WorkInProgressRegistration implements Serializable {
     @NotNull
     @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "placeholders" }, allowSetters = true)
     private Dealer dealer;
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = {
+            "placeholders",
+            "paymentInvoices",
+            "serviceOutlets",
+            "settlements",
+            "purchaseOrders",
+            "deliveryNotes",
+            "jobSheets",
+            "dealer",
+            "workInProgressGroup",
+            "settlementCurrency",
+            "workProjectRegister",
+        },
+        allowSetters = true
+    )
+    private WorkInProgressRegistration workInProgressGroup;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    private SettlementCurrency settlementCurrency;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "dealers", "settlementCurrency", "placeholders" }, allowSetters = true)
+    private WorkProjectRegister workProjectRegister;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -396,6 +423,45 @@ public class WorkInProgressRegistration implements Serializable {
 
     public WorkInProgressRegistration dealer(Dealer dealer) {
         this.setDealer(dealer);
+        return this;
+    }
+
+    public WorkInProgressRegistration getWorkInProgressGroup() {
+        return this.workInProgressGroup;
+    }
+
+    public void setWorkInProgressGroup(WorkInProgressRegistration workInProgressRegistration) {
+        this.workInProgressGroup = workInProgressRegistration;
+    }
+
+    public WorkInProgressRegistration workInProgressGroup(WorkInProgressRegistration workInProgressRegistration) {
+        this.setWorkInProgressGroup(workInProgressRegistration);
+        return this;
+    }
+
+    public SettlementCurrency getSettlementCurrency() {
+        return this.settlementCurrency;
+    }
+
+    public void setSettlementCurrency(SettlementCurrency settlementCurrency) {
+        this.settlementCurrency = settlementCurrency;
+    }
+
+    public WorkInProgressRegistration settlementCurrency(SettlementCurrency settlementCurrency) {
+        this.setSettlementCurrency(settlementCurrency);
+        return this;
+    }
+
+    public WorkProjectRegister getWorkProjectRegister() {
+        return this.workProjectRegister;
+    }
+
+    public void setWorkProjectRegister(WorkProjectRegister workProjectRegister) {
+        this.workProjectRegister = workProjectRegister;
+    }
+
+    public WorkInProgressRegistration workProjectRegister(WorkProjectRegister workProjectRegister) {
+        this.setWorkProjectRegister(workProjectRegister);
         return this;
     }
 

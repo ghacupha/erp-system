@@ -94,6 +94,16 @@ public class DeliveryNote implements Serializable {
     @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "placeholders" }, allowSetters = true)
     private Set<Dealer> signatories = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+        name = "rel_delivery_note__other_purchase_orders",
+        joinColumns = @JoinColumn(name = "delivery_note_id"),
+        inverseJoinColumns = @JoinColumn(name = "other_purchase_orders_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "settlementCurrency", "placeholders", "signatories", "vendor" }, allowSetters = true)
+    private Set<PurchaseOrder> otherPurchaseOrders = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -292,6 +302,29 @@ public class DeliveryNote implements Serializable {
 
     public DeliveryNote removeSignatories(Dealer dealer) {
         this.signatories.remove(dealer);
+        return this;
+    }
+
+    public Set<PurchaseOrder> getOtherPurchaseOrders() {
+        return this.otherPurchaseOrders;
+    }
+
+    public void setOtherPurchaseOrders(Set<PurchaseOrder> purchaseOrders) {
+        this.otherPurchaseOrders = purchaseOrders;
+    }
+
+    public DeliveryNote otherPurchaseOrders(Set<PurchaseOrder> purchaseOrders) {
+        this.setOtherPurchaseOrders(purchaseOrders);
+        return this;
+    }
+
+    public DeliveryNote addOtherPurchaseOrders(PurchaseOrder purchaseOrder) {
+        this.otherPurchaseOrders.add(purchaseOrder);
+        return this;
+    }
+
+    public DeliveryNote removeOtherPurchaseOrders(PurchaseOrder purchaseOrder) {
+        this.otherPurchaseOrders.remove(purchaseOrder);
         return this;
     }
 

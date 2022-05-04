@@ -36,6 +36,8 @@ public class CreditNoteDTO implements Serializable {
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
+    private SettlementCurrencyDTO settlementCurrency;
+
     public Long getId() {
         return id;
     }
@@ -108,6 +110,14 @@ public class CreditNoteDTO implements Serializable {
         this.placeholders = placeholders;
     }
 
+    public SettlementCurrencyDTO getSettlementCurrency() {
+        return settlementCurrency;
+    }
+
+    public void setSettlementCurrency(SettlementCurrencyDTO settlementCurrency) {
+        this.settlementCurrency = settlementCurrency;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -142,6 +152,7 @@ public class CreditNoteDTO implements Serializable {
             ", invoices=" + getInvoices() +
             ", paymentLabels=" + getPaymentLabels() +
             ", placeholders=" + getPlaceholders() +
+            ", settlementCurrency=" + getSettlementCurrency() +
             "}";
     }
 }

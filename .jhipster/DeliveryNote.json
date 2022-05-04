@@ -79,6 +79,14 @@
       "ownerSide": true,
       "relationshipName": "signatories",
       "relationshipType": "many-to-many"
+    },
+    {
+      "relationshipName": "otherPurchaseOrders",
+      "otherEntityName": "purchaseOrder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "purchaseOrderNumber",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "deliveryNote"
     }
   ],
   "service": "serviceImpl"

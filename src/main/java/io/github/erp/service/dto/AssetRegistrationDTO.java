@@ -50,6 +50,8 @@ public class AssetRegistrationDTO implements Serializable {
 
     private Set<DealerDTO> designatedUsers = new HashSet<>();
 
+    private SettlementCurrencyDTO settlementCurrency;
+
     public Long getId() {
         return id;
     }
@@ -186,6 +188,14 @@ public class AssetRegistrationDTO implements Serializable {
         this.designatedUsers = designatedUsers;
     }
 
+    public SettlementCurrencyDTO getSettlementCurrency() {
+        return settlementCurrency;
+    }
+
+    public void setSettlementCurrency(SettlementCurrencyDTO settlementCurrency) {
+        this.settlementCurrency = settlementCurrency;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -227,6 +237,7 @@ public class AssetRegistrationDTO implements Serializable {
             ", jobSheets=" + getJobSheets() +
             ", dealer=" + getDealer() +
             ", designatedUsers=" + getDesignatedUsers() +
+            ", settlementCurrency=" + getSettlementCurrency() +
             "}";
     }
 }

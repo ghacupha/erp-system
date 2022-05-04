@@ -184,6 +184,36 @@ public class WorkInProgressRegistrationQueryService extends QueryService<WorkInP
                         )
                     );
             }
+            if (criteria.getWorkInProgressGroupId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getWorkInProgressGroupId(),
+                            root ->
+                                root
+                                    .join(WorkInProgressRegistration_.workInProgressGroup, JoinType.LEFT)
+                                    .get(WorkInProgressRegistration_.id)
+                        )
+                    );
+            }
+            if (criteria.getSettlementCurrencyId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getSettlementCurrencyId(),
+                            root -> root.join(WorkInProgressRegistration_.settlementCurrency, JoinType.LEFT).get(SettlementCurrency_.id)
+                        )
+                    );
+            }
+            if (criteria.getWorkProjectRegisterId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getWorkProjectRegisterId(),
+                            root -> root.join(WorkInProgressRegistration_.workProjectRegister, JoinType.LEFT).get(WorkProjectRegister_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

@@ -42,6 +42,8 @@ public class CreditNoteCriteria implements Serializable, Criteria {
 
     private LongFilter placeholderId;
 
+    private LongFilter settlementCurrencyId;
+
     private Boolean distinct;
 
     public CreditNoteCriteria() {}
@@ -55,6 +57,7 @@ public class CreditNoteCriteria implements Serializable, Criteria {
         this.invoicesId = other.invoicesId == null ? null : other.invoicesId.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
         this.distinct = other.distinct;
     }
 
@@ -183,6 +186,21 @@ public class CreditNoteCriteria implements Serializable, Criteria {
         this.placeholderId = placeholderId;
     }
 
+    public LongFilter getSettlementCurrencyId() {
+        return settlementCurrencyId;
+    }
+
+    public LongFilter settlementCurrencyId() {
+        if (settlementCurrencyId == null) {
+            settlementCurrencyId = new LongFilter();
+        }
+        return settlementCurrencyId;
+    }
+
+    public void setSettlementCurrencyId(LongFilter settlementCurrencyId) {
+        this.settlementCurrencyId = settlementCurrencyId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -209,6 +227,7 @@ public class CreditNoteCriteria implements Serializable, Criteria {
             Objects.equals(invoicesId, that.invoicesId) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -224,6 +243,7 @@ public class CreditNoteCriteria implements Serializable, Criteria {
             invoicesId,
             paymentLabelId,
             placeholderId,
+            settlementCurrencyId,
             distinct
         );
     }
@@ -240,6 +260,7 @@ public class CreditNoteCriteria implements Serializable, Criteria {
             (invoicesId != null ? "invoicesId=" + invoicesId + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

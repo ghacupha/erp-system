@@ -168,6 +168,15 @@ public class DeliveryNoteQueryService extends QueryService<DeliveryNote> {
                         )
                     );
             }
+            if (criteria.getOtherPurchaseOrdersId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getOtherPurchaseOrdersId(),
+                            root -> root.join(DeliveryNote_.otherPurchaseOrders, JoinType.LEFT).get(PurchaseOrder_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

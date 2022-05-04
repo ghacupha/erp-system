@@ -49,6 +49,12 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
 
     private LongFilter dealerId;
 
+    private LongFilter workInProgressGroupId;
+
+    private LongFilter settlementCurrencyId;
+
+    private LongFilter workProjectRegisterId;
+
     private Boolean distinct;
 
     public WorkInProgressRegistrationCriteria() {}
@@ -66,6 +72,9 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
         this.deliveryNoteId = other.deliveryNoteId == null ? null : other.deliveryNoteId.copy();
         this.jobSheetId = other.jobSheetId == null ? null : other.jobSheetId.copy();
         this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
+        this.workInProgressGroupId = other.workInProgressGroupId == null ? null : other.workInProgressGroupId.copy();
+        this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
+        this.workProjectRegisterId = other.workProjectRegisterId == null ? null : other.workProjectRegisterId.copy();
         this.distinct = other.distinct;
     }
 
@@ -254,6 +263,51 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
         this.dealerId = dealerId;
     }
 
+    public LongFilter getWorkInProgressGroupId() {
+        return workInProgressGroupId;
+    }
+
+    public LongFilter workInProgressGroupId() {
+        if (workInProgressGroupId == null) {
+            workInProgressGroupId = new LongFilter();
+        }
+        return workInProgressGroupId;
+    }
+
+    public void setWorkInProgressGroupId(LongFilter workInProgressGroupId) {
+        this.workInProgressGroupId = workInProgressGroupId;
+    }
+
+    public LongFilter getSettlementCurrencyId() {
+        return settlementCurrencyId;
+    }
+
+    public LongFilter settlementCurrencyId() {
+        if (settlementCurrencyId == null) {
+            settlementCurrencyId = new LongFilter();
+        }
+        return settlementCurrencyId;
+    }
+
+    public void setSettlementCurrencyId(LongFilter settlementCurrencyId) {
+        this.settlementCurrencyId = settlementCurrencyId;
+    }
+
+    public LongFilter getWorkProjectRegisterId() {
+        return workProjectRegisterId;
+    }
+
+    public LongFilter workProjectRegisterId() {
+        if (workProjectRegisterId == null) {
+            workProjectRegisterId = new LongFilter();
+        }
+        return workProjectRegisterId;
+    }
+
+    public void setWorkProjectRegisterId(LongFilter workProjectRegisterId) {
+        this.workProjectRegisterId = workProjectRegisterId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -284,6 +338,9 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
             Objects.equals(deliveryNoteId, that.deliveryNoteId) &&
             Objects.equals(jobSheetId, that.jobSheetId) &&
             Objects.equals(dealerId, that.dealerId) &&
+            Objects.equals(workInProgressGroupId, that.workInProgressGroupId) &&
+            Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
+            Objects.equals(workProjectRegisterId, that.workProjectRegisterId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -303,6 +360,9 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
             deliveryNoteId,
             jobSheetId,
             dealerId,
+            workInProgressGroupId,
+            settlementCurrencyId,
+            workProjectRegisterId,
             distinct
         );
     }
@@ -323,6 +383,9 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
             (deliveryNoteId != null ? "deliveryNoteId=" + deliveryNoteId + ", " : "") +
             (jobSheetId != null ? "jobSheetId=" + jobSheetId + ", " : "") +
             (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
+            (workInProgressGroupId != null ? "workInProgressGroupId=" + workInProgressGroupId + ", " : "") +
+            (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
+            (workProjectRegisterId != null ? "workProjectRegisterId=" + workProjectRegisterId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

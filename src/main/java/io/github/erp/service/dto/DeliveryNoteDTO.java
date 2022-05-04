@@ -42,6 +42,8 @@ public class DeliveryNoteDTO implements Serializable {
 
     private Set<DealerDTO> signatories = new HashSet<>();
 
+    private Set<PurchaseOrderDTO> otherPurchaseOrders = new HashSet<>();
+
     public Long getId() {
         return id;
     }
@@ -146,6 +148,14 @@ public class DeliveryNoteDTO implements Serializable {
         this.signatories = signatories;
     }
 
+    public Set<PurchaseOrderDTO> getOtherPurchaseOrders() {
+        return otherPurchaseOrders;
+    }
+
+    public void setOtherPurchaseOrders(Set<PurchaseOrderDTO> otherPurchaseOrders) {
+        this.otherPurchaseOrders = otherPurchaseOrders;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -184,6 +194,7 @@ public class DeliveryNoteDTO implements Serializable {
             ", purchaseOrder=" + getPurchaseOrder() +
             ", supplier=" + getSupplier() +
             ", signatories=" + getSignatories() +
+            ", otherPurchaseOrders=" + getOtherPurchaseOrders() +
             "}";
     }
 }

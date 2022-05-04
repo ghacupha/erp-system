@@ -90,6 +90,32 @@ public class PaymentInvoice implements Serializable {
     @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "placeholders" }, allowSetters = true)
     private Dealer biller;
 
+    @ManyToMany
+    @JoinTable(
+        name = "rel_payment_invoice__delivery_note",
+        joinColumns = @JoinColumn(name = "payment_invoice_id"),
+        inverseJoinColumns = @JoinColumn(name = "delivery_note_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = { "placeholders", "receivedBy", "deliveryStamps", "purchaseOrder", "supplier", "signatories", "otherPurchaseOrders" },
+        allowSetters = true
+    )
+    private Set<DeliveryNote> deliveryNotes = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_payment_invoice__job_sheet",
+        joinColumns = @JoinColumn(name = "payment_invoice_id"),
+        inverseJoinColumns = @JoinColumn(name = "job_sheet_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = { "biller", "signatories", "contactPerson", "businessStamps", "placeholders", "paymentLabels" },
+        allowSetters = true
+    )
+    private Set<JobSheet> jobSheets = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -275,6 +301,52 @@ public class PaymentInvoice implements Serializable {
 
     public PaymentInvoice biller(Dealer dealer) {
         this.setBiller(dealer);
+        return this;
+    }
+
+    public Set<DeliveryNote> getDeliveryNotes() {
+        return this.deliveryNotes;
+    }
+
+    public void setDeliveryNotes(Set<DeliveryNote> deliveryNotes) {
+        this.deliveryNotes = deliveryNotes;
+    }
+
+    public PaymentInvoice deliveryNotes(Set<DeliveryNote> deliveryNotes) {
+        this.setDeliveryNotes(deliveryNotes);
+        return this;
+    }
+
+    public PaymentInvoice addDeliveryNote(DeliveryNote deliveryNote) {
+        this.deliveryNotes.add(deliveryNote);
+        return this;
+    }
+
+    public PaymentInvoice removeDeliveryNote(DeliveryNote deliveryNote) {
+        this.deliveryNotes.remove(deliveryNote);
+        return this;
+    }
+
+    public Set<JobSheet> getJobSheets() {
+        return this.jobSheets;
+    }
+
+    public void setJobSheets(Set<JobSheet> jobSheets) {
+        this.jobSheets = jobSheets;
+    }
+
+    public PaymentInvoice jobSheets(Set<JobSheet> jobSheets) {
+        this.setJobSheets(jobSheets);
+        return this;
+    }
+
+    public PaymentInvoice addJobSheet(JobSheet jobSheet) {
+        this.jobSheets.add(jobSheet);
+        return this;
+    }
+
+    public PaymentInvoice removeJobSheet(JobSheet jobSheet) {
+        this.jobSheets.remove(jobSheet);
         return this;
     }
 

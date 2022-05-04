@@ -11,7 +11,13 @@ import org.mapstruct.*;
 @Mapper(
     componentModel = "spring",
     uses = {
-        PurchaseOrderMapper.class, PlaceholderMapper.class, PaymentLabelMapper.class, SettlementCurrencyMapper.class, DealerMapper.class,
+        PurchaseOrderMapper.class,
+        PlaceholderMapper.class,
+        PaymentLabelMapper.class,
+        SettlementCurrencyMapper.class,
+        DealerMapper.class,
+        DeliveryNoteMapper.class,
+        JobSheetMapper.class,
     }
 )
 public interface PaymentInvoiceMapper extends EntityMapper<PaymentInvoiceDTO, PaymentInvoice> {
@@ -20,11 +26,15 @@ public interface PaymentInvoiceMapper extends EntityMapper<PaymentInvoiceDTO, Pa
     @Mapping(target = "paymentLabels", source = "paymentLabels", qualifiedByName = "descriptionSet")
     @Mapping(target = "settlementCurrency", source = "settlementCurrency", qualifiedByName = "iso4217CurrencyCode")
     @Mapping(target = "biller", source = "biller", qualifiedByName = "dealerName")
+    @Mapping(target = "deliveryNotes", source = "deliveryNotes", qualifiedByName = "deliveryNoteNumberSet")
+    @Mapping(target = "jobSheets", source = "jobSheets", qualifiedByName = "serialNumberSet")
     PaymentInvoiceDTO toDto(PaymentInvoice s);
 
     @Mapping(target = "removePurchaseOrder", ignore = true)
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removePaymentLabel", ignore = true)
+    @Mapping(target = "removeDeliveryNote", ignore = true)
+    @Mapping(target = "removeJobSheet", ignore = true)
     PaymentInvoice toEntity(PaymentInvoiceDTO paymentInvoiceDTO);
 
     @Named("invoiceNumberSet")

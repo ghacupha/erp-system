@@ -112,6 +112,12 @@
       "ownerSide": true,
       "relationshipName": "designatedUsers",
       "relationshipType": "many-to-many"
+    },
+    {
+      "relationshipName": "settlementCurrency",
+      "otherEntityName": "settlementCurrency",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "iso4217CurrencyCode"
     }
   ],
   "service": "serviceImpl"
