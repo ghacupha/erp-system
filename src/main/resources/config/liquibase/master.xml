@@ -113,5 +113,6 @@
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
     <include file="config/liquibase/changelog/20220316132103_added_remarks_column_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220329145633_settlement_currency_new_columns.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220504063024_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220503082729_adds_prepayment_amount_col_to_prepayment.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
