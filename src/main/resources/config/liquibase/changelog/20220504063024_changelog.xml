@@ -30,50 +30,6 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1651645924478-9">
-        <createTable tableName="rel_work_project_register__dealers">
-            <column name="work_project_register_id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="dealers_id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1651645924478-10">
-        <createTable tableName="rel_work_project_register__placeholder">
-            <column name="work_project_register_id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="placeholder_id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1651645924478-11">
-        <createTable tableName="work_project_register">
-            <column autoIncrement="true" name="id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="work_project_registerPK"/>
-            </column>
-            <column name="additional_notes" type="BYTEA"/>
-            <column name="additional_notes_content_type" type="VARCHAR(255)"/>
-            <column name="catalogue_number" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="description" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="details" type="BYTEA"/>
-            <column name="details_content_type" type="VARCHAR(255)"/>
-            <column name="total_project_cost" type="numeric(21, 2)"/>
-            <column name="settlement_currency_id" type="BIGINT"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1651645924478-12">
-        <addColumn tableName="agency_notice">
-            <column name="assessment_notice_content_type" type="varchar(255)"/>
-        </addColumn>
-    </changeSet>
     <changeSet author="edwin.njeru (generated)" id="1651645924478-13">
         <addColumn tableName="dealer">
             <column name="other_names" type="varchar(255)"/>
@@ -104,20 +60,8 @@
             <column name="work_project_register_id" type="int8"/>
         </addColumn>
     </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1651645924478-19">
-        <addUniqueConstraint columnNames="branch_code" constraintName="UC_BANK_BRANCH_CODEBRANCH_CODE_COL" tableName="bank_branch_code"/>
-    </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1651645924478-20">
-        <addUniqueConstraint columnNames="iso_4217_currency_code" constraintName="UC_SETTLEMENT_CURRENCYISO_4217_CURRENCY_CODE_COL" tableName="settlement_currency"/>
-    </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1651645924478-21">
-        <addUniqueConstraint columnNames="catalogue_number" constraintName="UC_WORK_PROJECT_REGISTERCATALOGUE_NUMBER_COL" tableName="work_project_register"/>
-    </changeSet>
     <changeSet author="edwin.njeru (generated)" id="1651645924478-22">
         <addForeignKeyConstraint baseColumnNames="settlement_currency_id" baseTableName="work_in_progress_registration" constraintName="FK1oln1fov0v567amq8db6cm8de" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement_currency" validate="true"/>
-    </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1651645924478-23">
-        <addForeignKeyConstraint baseColumnNames="dealers_id" baseTableName="rel_work_project_register__dealers" constraintName="FK2ihsxrvuowtogqfrlc7hvrc5t" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="dealer" validate="true"/>
     </changeSet>
     <changeSet author="edwin.njeru (generated)" id="1651645924478-24">
         <addForeignKeyConstraint baseColumnNames="work_project_register_id" baseTableName="work_in_progress_registration" constraintName="FK5w8sqsm5qebiqcf3ed1j8k5f7" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="work_project_register" validate="true"/>
@@ -136,9 +80,6 @@
     </changeSet>
     <changeSet author="edwin.njeru (generated)" id="1651645924478-29">
         <addForeignKeyConstraint baseColumnNames="delivery_note_id" baseTableName="rel_payment_invoice__delivery_note" constraintName="FKhac4e2f7ae3e8c48in1uv0fwo" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="delivery_note" validate="true"/>
-    </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1651645924478-30">
-        <addForeignKeyConstraint baseColumnNames="work_project_register_id" baseTableName="rel_work_project_register__dealers" constraintName="FKhfub3heacpidrp0nl9c2e82hq" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="work_project_register" validate="true"/>
     </changeSet>
     <changeSet author="edwin.njeru (generated)" id="1651645924478-31">
         <addForeignKeyConstraint baseColumnNames="settlement_currency_id" baseTableName="asset_registration" constraintName="FKltv6pp81pxev7hx5fn1f4ih6t" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement_currency" validate="true"/>
@@ -160,20 +101,5 @@
     </changeSet>
     <changeSet author="edwin.njeru (generated)" id="1651645924478-37">
         <addForeignKeyConstraint baseColumnNames="work_project_register_id" baseTableName="rel_work_project_register__placeholder" constraintName="FKxacwso3hkahv8wugg84o7pyk" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="work_project_register" validate="true"/>
-    </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1651645924478-1">
-        <alterSequence sequenceName="sequence_generator"/>
-    </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1651645924478-2">
-        <dropNotNullConstraint columnDataType="bigint" columnName="assessor_id" tableName="agency_notice"/>
-    </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1651645924478-3">
-        <addNotNullConstraint columnDataType="bigint" columnName="biller_id" tableName="settlement" validate="true"/>
-    </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1651645924478-4">
-        <addNotNullConstraint columnDataType="bigint" columnName="payment_category_id" tableName="settlement" validate="true"/>
-    </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1651645924478-5">
-        <dropNotNullConstraint columnDataType="bigint" columnName="settlement_currency_id" tableName="agency_notice"/>
     </changeSet>
 </databaseChangeLog>
