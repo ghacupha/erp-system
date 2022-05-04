@@ -156,6 +156,24 @@ public class PaymentInvoiceQueryService extends QueryService<PaymentInvoice> {
                         buildSpecification(criteria.getBillerId(), root -> root.join(PaymentInvoice_.biller, JoinType.LEFT).get(Dealer_.id))
                     );
             }
+            if (criteria.getDeliveryNoteId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getDeliveryNoteId(),
+                            root -> root.join(PaymentInvoice_.deliveryNotes, JoinType.LEFT).get(DeliveryNote_.id)
+                        )
+                    );
+            }
+            if (criteria.getJobSheetId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getJobSheetId(),
+                            root -> root.join(PaymentInvoice_.jobSheets, JoinType.LEFT).get(JobSheet_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

@@ -19,6 +19,8 @@ import org.mapstruct.*;
         DeliveryNoteMapper.class,
         JobSheetMapper.class,
         DealerMapper.class,
+        SettlementCurrencyMapper.class,
+        WorkProjectRegisterMapper.class,
     }
 )
 public interface WorkInProgressRegistrationMapper extends EntityMapper<WorkInProgressRegistrationDTO, WorkInProgressRegistration> {
@@ -30,6 +32,9 @@ public interface WorkInProgressRegistrationMapper extends EntityMapper<WorkInPro
     @Mapping(target = "deliveryNotes", source = "deliveryNotes", qualifiedByName = "deliveryNoteNumberSet")
     @Mapping(target = "jobSheets", source = "jobSheets", qualifiedByName = "serialNumberSet")
     @Mapping(target = "dealer", source = "dealer", qualifiedByName = "dealerName")
+    @Mapping(target = "workInProgressGroup", source = "workInProgressGroup", qualifiedByName = "sequenceNumber")
+    @Mapping(target = "settlementCurrency", source = "settlementCurrency", qualifiedByName = "iso4217CurrencyCode")
+    @Mapping(target = "workProjectRegister", source = "workProjectRegister", qualifiedByName = "catalogueNumber")
     WorkInProgressRegistrationDTO toDto(WorkInProgressRegistration s);
 
     @Named("idSet")
@@ -45,4 +50,10 @@ public interface WorkInProgressRegistrationMapper extends EntityMapper<WorkInPro
     @Mapping(target = "removeDeliveryNote", ignore = true)
     @Mapping(target = "removeJobSheet", ignore = true)
     WorkInProgressRegistration toEntity(WorkInProgressRegistrationDTO workInProgressRegistrationDTO);
+
+    @Named("sequenceNumber")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "sequenceNumber", source = "sequenceNumber")
+    WorkInProgressRegistrationDTO toDtoSequenceNumber(WorkInProgressRegistration workInProgressRegistration);
 }

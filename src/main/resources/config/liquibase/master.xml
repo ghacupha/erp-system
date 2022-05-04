@@ -57,6 +57,7 @@
     <include file="config/liquibase/changelog/20220413150618_added_entity_AssetRegistration.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220413185958_added_entity_WorkInProgressRegistration.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220418094424_added_entity_WorkInProgressTransfer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220428124926_added_entity_WorkProjectRegister.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220501080955_added_entity_TransactionAccount.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220501104047_added_entity_PrepaymentAccount.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220503161722_added_entity_PrepaymentMarshalling.xml" relativeToChangelogFile="false"/>
@@ -103,6 +104,7 @@
     <include file="config/liquibase/changelog/20220413150618_added_entity_constraints_AssetRegistration.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220413185958_added_entity_constraints_WorkInProgressRegistration.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220418094424_added_entity_constraints_WorkInProgressTransfer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220428124926_added_entity_constraints_WorkProjectRegister.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220501080955_added_entity_constraints_TransactionAccount.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220501104047_added_entity_constraints_PrepaymentAccount.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220503161722_added_entity_constraints_PrepaymentMarshalling.xml" relativeToChangelogFile="false"/>

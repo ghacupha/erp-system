@@ -55,6 +55,8 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
 
     private LongFilter designatedUsersId;
 
+    private LongFilter settlementCurrencyId;
+
     private Boolean distinct;
 
     public AssetRegistrationCriteria() {}
@@ -75,6 +77,7 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
         this.jobSheetId = other.jobSheetId == null ? null : other.jobSheetId.copy();
         this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
         this.designatedUsersId = other.designatedUsersId == null ? null : other.designatedUsersId.copy();
+        this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
         this.distinct = other.distinct;
     }
 
@@ -308,6 +311,21 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
         this.designatedUsersId = designatedUsersId;
     }
 
+    public LongFilter getSettlementCurrencyId() {
+        return settlementCurrencyId;
+    }
+
+    public LongFilter settlementCurrencyId() {
+        if (settlementCurrencyId == null) {
+            settlementCurrencyId = new LongFilter();
+        }
+        return settlementCurrencyId;
+    }
+
+    public void setSettlementCurrencyId(LongFilter settlementCurrencyId) {
+        this.settlementCurrencyId = settlementCurrencyId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -341,6 +359,7 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             Objects.equals(jobSheetId, that.jobSheetId) &&
             Objects.equals(dealerId, that.dealerId) &&
             Objects.equals(designatedUsersId, that.designatedUsersId) &&
+            Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -363,6 +382,7 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             jobSheetId,
             dealerId,
             designatedUsersId,
+            settlementCurrencyId,
             distinct
         );
     }
@@ -386,6 +406,7 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             (jobSheetId != null ? "jobSheetId=" + jobSheetId + ", " : "") +
             (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             (designatedUsersId != null ? "designatedUsersId=" + designatedUsersId + ", " : "") +
+            (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

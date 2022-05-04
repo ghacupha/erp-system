@@ -70,6 +70,10 @@
       "fieldName": "remarks",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "otherNames",
+      "fieldType": "String"
     }
   ],
   "fluentMethods": true,

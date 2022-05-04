@@ -91,6 +91,24 @@
       "relationshipName": "dealer",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"]
+    },
+    {
+      "relationshipName": "workInProgressGroup",
+      "otherEntityName": "workInProgressRegistration",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "sequenceNumber"
+    },
+    {
+      "relationshipName": "settlementCurrency",
+      "otherEntityName": "settlementCurrency",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "iso4217CurrencyCode"
+    },
+    {
+      "relationshipName": "workProjectRegister",
+      "otherEntityName": "workProjectRegister",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "catalogueNumber"
     }
   ],
   "service": "serviceImpl"

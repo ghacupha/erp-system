@@ -49,6 +49,8 @@ public class DeliveryNoteCriteria implements Serializable, Criteria {
 
     private LongFilter signatoriesId;
 
+    private LongFilter otherPurchaseOrdersId;
+
     private Boolean distinct;
 
     public DeliveryNoteCriteria() {}
@@ -66,6 +68,7 @@ public class DeliveryNoteCriteria implements Serializable, Criteria {
         this.purchaseOrderId = other.purchaseOrderId == null ? null : other.purchaseOrderId.copy();
         this.supplierId = other.supplierId == null ? null : other.supplierId.copy();
         this.signatoriesId = other.signatoriesId == null ? null : other.signatoriesId.copy();
+        this.otherPurchaseOrdersId = other.otherPurchaseOrdersId == null ? null : other.otherPurchaseOrdersId.copy();
         this.distinct = other.distinct;
     }
 
@@ -254,6 +257,21 @@ public class DeliveryNoteCriteria implements Serializable, Criteria {
         this.signatoriesId = signatoriesId;
     }
 
+    public LongFilter getOtherPurchaseOrdersId() {
+        return otherPurchaseOrdersId;
+    }
+
+    public LongFilter otherPurchaseOrdersId() {
+        if (otherPurchaseOrdersId == null) {
+            otherPurchaseOrdersId = new LongFilter();
+        }
+        return otherPurchaseOrdersId;
+    }
+
+    public void setOtherPurchaseOrdersId(LongFilter otherPurchaseOrdersId) {
+        this.otherPurchaseOrdersId = otherPurchaseOrdersId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -284,6 +302,7 @@ public class DeliveryNoteCriteria implements Serializable, Criteria {
             Objects.equals(purchaseOrderId, that.purchaseOrderId) &&
             Objects.equals(supplierId, that.supplierId) &&
             Objects.equals(signatoriesId, that.signatoriesId) &&
+            Objects.equals(otherPurchaseOrdersId, that.otherPurchaseOrdersId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -303,6 +322,7 @@ public class DeliveryNoteCriteria implements Serializable, Criteria {
             purchaseOrderId,
             supplierId,
             signatoriesId,
+            otherPurchaseOrdersId,
             distinct
         );
     }
@@ -323,6 +343,7 @@ public class DeliveryNoteCriteria implements Serializable, Criteria {
             (purchaseOrderId != null ? "purchaseOrderId=" + purchaseOrderId + ", " : "") +
             (supplierId != null ? "supplierId=" + supplierId + ", " : "") +
             (signatoriesId != null ? "signatoriesId=" + signatoriesId + ", " : "") +
+            (otherPurchaseOrdersId != null ? "otherPurchaseOrdersId=" + otherPurchaseOrdersId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

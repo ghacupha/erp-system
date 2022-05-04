@@ -40,7 +40,17 @@ public class WorkInProgressTransfer implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
         value = {
-            "placeholders", "paymentInvoices", "serviceOutlets", "settlements", "purchaseOrders", "deliveryNotes", "jobSheets", "dealer",
+            "placeholders",
+            "paymentInvoices",
+            "serviceOutlets",
+            "settlements",
+            "purchaseOrders",
+            "deliveryNotes",
+            "jobSheets",
+            "dealer",
+            "workInProgressGroup",
+            "settlementCurrency",
+            "workProjectRegister",
         },
         allowSetters = true
     )

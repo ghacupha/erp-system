@@ -142,6 +142,9 @@ public class DealerQueryService extends QueryService<Dealer> {
             if (criteria.getCompilationToken() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getCompilationToken(), Dealer_.compilationToken));
             }
+            if (criteria.getOtherNames() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getOtherNames(), Dealer_.otherNames));
+            }
             if (criteria.getPaymentLabelId() != null) {
                 specification =
                     specification.and(

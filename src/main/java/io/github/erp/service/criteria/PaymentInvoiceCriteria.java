@@ -48,6 +48,10 @@ public class PaymentInvoiceCriteria implements Serializable, Criteria {
 
     private LongFilter billerId;
 
+    private LongFilter deliveryNoteId;
+
+    private LongFilter jobSheetId;
+
     private Boolean distinct;
 
     public PaymentInvoiceCriteria() {}
@@ -64,6 +68,8 @@ public class PaymentInvoiceCriteria implements Serializable, Criteria {
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
         this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
         this.billerId = other.billerId == null ? null : other.billerId.copy();
+        this.deliveryNoteId = other.deliveryNoteId == null ? null : other.deliveryNoteId.copy();
+        this.jobSheetId = other.jobSheetId == null ? null : other.jobSheetId.copy();
         this.distinct = other.distinct;
     }
 
@@ -237,6 +243,36 @@ public class PaymentInvoiceCriteria implements Serializable, Criteria {
         this.billerId = billerId;
     }
 
+    public LongFilter getDeliveryNoteId() {
+        return deliveryNoteId;
+    }
+
+    public LongFilter deliveryNoteId() {
+        if (deliveryNoteId == null) {
+            deliveryNoteId = new LongFilter();
+        }
+        return deliveryNoteId;
+    }
+
+    public void setDeliveryNoteId(LongFilter deliveryNoteId) {
+        this.deliveryNoteId = deliveryNoteId;
+    }
+
+    public LongFilter getJobSheetId() {
+        return jobSheetId;
+    }
+
+    public LongFilter jobSheetId() {
+        if (jobSheetId == null) {
+            jobSheetId = new LongFilter();
+        }
+        return jobSheetId;
+    }
+
+    public void setJobSheetId(LongFilter jobSheetId) {
+        this.jobSheetId = jobSheetId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -266,6 +302,8 @@ public class PaymentInvoiceCriteria implements Serializable, Criteria {
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
             Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
             Objects.equals(billerId, that.billerId) &&
+            Objects.equals(deliveryNoteId, that.deliveryNoteId) &&
+            Objects.equals(jobSheetId, that.jobSheetId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -284,6 +322,8 @@ public class PaymentInvoiceCriteria implements Serializable, Criteria {
             paymentLabelId,
             settlementCurrencyId,
             billerId,
+            deliveryNoteId,
+            jobSheetId,
             distinct
         );
     }
@@ -303,6 +343,8 @@ public class PaymentInvoiceCriteria implements Serializable, Criteria {
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
             (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
             (billerId != null ? "billerId=" + billerId + ", " : "") +
+            (deliveryNoteId != null ? "deliveryNoteId=" + deliveryNoteId + ", " : "") +
+            (jobSheetId != null ? "jobSheetId=" + jobSheetId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

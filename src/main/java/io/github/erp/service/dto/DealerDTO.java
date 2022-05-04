@@ -48,6 +48,8 @@ public class DealerDTO implements Serializable {
     @Lob
     private String remarks;
 
+    private String otherNames;
+
     private Set<PaymentLabelDTO> paymentLabels = new HashSet<>();
 
     private DealerDTO dealerGroup;
@@ -190,6 +192,14 @@ public class DealerDTO implements Serializable {
         this.remarks = remarks;
     }
 
+    public String getOtherNames() {
+        return otherNames;
+    }
+
+    public void setOtherNames(String otherNames) {
+        this.otherNames = otherNames;
+    }
+
     public Set<PaymentLabelDTO> getPaymentLabels() {
         return paymentLabels;
     }
@@ -256,6 +266,7 @@ public class DealerDTO implements Serializable {
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
             ", remarks='" + getRemarks() + "'" +
+            ", otherNames='" + getOtherNames() + "'" +
             ", paymentLabels=" + getPaymentLabels() +
             ", dealerGroup=" + getDealerGroup() +
             ", placeholders=" + getPlaceholders() +
