@@ -85,12 +85,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/account/reset-password/init").permitAll()
             .antMatchers("/api/account/reset-password/finish").permitAll()
             .antMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/accounts/**").hasAnyAuthority(
+                AuthoritiesConstants.FIXED_ASSETS_USER,
+                AuthoritiesConstants.PREPAYMENTS_MODULE_USER,
+                AuthoritiesConstants.BOOK_KEEPING)
             .antMatchers("/api/fixed-asset/**").hasAuthority(AuthoritiesConstants.FIXED_ASSETS_USER)
             .antMatchers("/api/files/**").hasAuthority(AuthoritiesConstants.DBA)
             .antMatchers("/api/dev/**").hasAuthority(AuthoritiesConstants.DEV)
-            .antMatchers("/api/payments/**").hasAnyAuthority(AuthoritiesConstants.PAYMENTS_USER, AuthoritiesConstants.FIXED_ASSETS_USER)
+            .antMatchers("/api/payments/**").hasAnyAuthority(
+                AuthoritiesConstants.PAYMENTS_USER,
+                AuthoritiesConstants.PREPAYMENTS_MODULE_USER,
+                AuthoritiesConstants.FIXED_ASSETS_USER)
+            .antMatchers("/api/prepayments/**").hasAnyAuthority(AuthoritiesConstants.PREPAYMENTS_MODULE_USER)
             .antMatchers("/api/taxes/**").hasAuthority(AuthoritiesConstants.TAX_MODULE_USER)
-            .antMatchers("/api/granular-data/**").hasAnyAuthority(AuthoritiesConstants.GRANULAR_REPORTS_USER, AuthoritiesConstants.FIXED_ASSETS_USER)
+            .antMatchers("/api/granular-data/**").hasAnyAuthority(
+                AuthoritiesConstants.GRANULAR_REPORTS_USER,
+                AuthoritiesConstants.PREPAYMENTS_MODULE_USER,
+                AuthoritiesConstants.FIXED_ASSETS_USER)
             .antMatchers("/api/**").authenticated()
             .antMatchers("/websocket/**").authenticated()
             .antMatchers("/management/health").permitAll()
