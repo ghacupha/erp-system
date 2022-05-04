@@ -62,6 +62,13 @@
       "WorkInProgressRegistration",
       "WorkInProgressTransfer",
       "WorkProjectRegister"
+      "WorkInProgressTransfer",
+      "TransactionAccount",
+      "PrepaymentAccount",
+      "PrepaymentMarshalling",
+      "PrepaymentAmortization",
+      "WorkInProgressTransfer",
+      "WorkProjectRegister"
     ],
     "entitySuffix": "",
     "incrementalChangelog": false,

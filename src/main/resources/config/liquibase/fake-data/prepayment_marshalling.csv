@@ -1,0 +1,11 @@
+id;inactive;amortization_commencement_date;amortization_periods;prepayment_account_id
+1;true;2022-05-03;89933;1
+2;true;2022-05-03;59428;2
+3;false;2022-05-03;76351;3
+4;true;2022-05-03;16631;4
+5;false;2022-05-03;7328;5
+6;false;2022-05-03;59946;6
+7;true;2022-05-03;20225;7
+8;false;2022-05-03;26982;8
+9;false;2022-05-02;82317;9
+10;false;2022-05-03;18432;10

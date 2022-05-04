@@ -1,11 +1,11 @@
 id;file_type_name;file_medium_type;description;file_template;file_template_content_type;file_type
 1;Indiana transmit;EXCEL_XLS;Quetzal;../fake-data/blob/hipster.png;image/png;PAYMENT_LABEL
 2;Delaware application;EXCEL;COM CSS;../fake-data/blob/hipster.png;image/png;PAYMENT_CATEGORY
-3;Health dedicated Orchestrator;EXCEL_XML;Health Administrator Toys;../fake-data/blob/hipster.png;image/png;INVOICE
-4;initiatives Agent Accounts;EXCEL_XML;user-centric Steel Investment;../fake-data/blob/hipster.png;image/png;FIXED_ASSET_ACQUISITION
+3;Health dedicated Orchestrator;EXCEL_XML;Health Administrator Toys;../fake-data/blob/hipster.png;image/png;SIGNED_PAYMENT
+4;initiatives Agent Accounts;EXCEL_XML;user-centric Steel Investment;../fake-data/blob/hipster.png;image/png;CURRENCY_LIST
 5;protocol De-engineered;POWERPOINT;Generic;../fake-data/blob/hipster.png;image/png;FIXED_ASSET_DEPRECIATION
-6;zero Identity turn-key;DOC;TCP interfaces;../fake-data/blob/hipster.png;image/png;
+6;zero Identity turn-key;DOC;TCP interfaces;../fake-data/blob/hipster.png;image/png;INVOICE
 7;Rupiah deposit;JSON;azure Palladium experiences;../fake-data/blob/hipster.png;image/png;PAYMENT
-8;Computers Berkshire;EXCEL_CSV;Kuna;../fake-data/blob/hipster.png;image/png;FIXED_ASSET_NBV
-9;architectures Buckinghamshire Health;JSON;Specialist user-centric reintermediate;../fake-data/blob/hipster.png;image/png;DEALER
-10;Avon;EXCEL;Metal;../fake-data/blob/hipster.png;image/png;CURRENCY_LIST
+8;Polarised;EXCEL_XML;intuitive project Plastic;../fake-data/blob/hipster.png;image/png;DEALER
+9;Health;JSON;Specialist user-centric reintermediate;../fake-data/blob/hipster.png;image/png;FIXED_ASSET_NBV
+10;Sleek Steel;POWERPOINT;Account;../fake-data/blob/hipster.png;image/png;FIXED_ASSET_ACQUISITION
