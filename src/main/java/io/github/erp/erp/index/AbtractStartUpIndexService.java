@@ -11,9 +11,8 @@ public abstract class AbtractStartUpIndexService implements ApplicationIndexingS
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
-        log.info("Initiating payment indexing...");
+        log.info("Index build initiated. Standby for next sequence");
         index();
-        log.info("Payments search index initiated and ready for queries...");
     }
 
     public abstract void index();
