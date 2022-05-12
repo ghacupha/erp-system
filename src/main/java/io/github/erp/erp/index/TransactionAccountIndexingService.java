@@ -1,9 +1,9 @@
 package io.github.erp.erp.index;
 
 import com.google.common.collect.ImmutableList;
-import io.github.erp.repository.search.SettlementCurrencySearchRepository;
-import io.github.erp.service.SettlementCurrencyService;
-import io.github.erp.service.mapper.SettlementCurrencyMapper;
+import io.github.erp.repository.search.TransactionAccountSearchRepository;
+import io.github.erp.service.TransactionAccountService;
+import io.github.erp.service.mapper.TransactionAccountMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -15,15 +15,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class SettlementCurrencyIndexingService extends AbtractStartUpIndexService implements ApplicationIndexingService, ApplicationListener<ApplicationReadyEvent> {
-    private static final String TAG = "SettlementCurrencyIndex";
+public class TransactionAccountIndexingService  extends AbtractStartUpIndexService implements ApplicationIndexingService, ApplicationListener<ApplicationReadyEvent> {
+
+    private static final String TAG = "TransactionAccountIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
 
-    private final SettlementCurrencyService service;
-    private final SettlementCurrencyMapper mapper;
-    private final SettlementCurrencySearchRepository searchRepository;
+    private final TransactionAccountService service;
+    private final TransactionAccountMapper mapper;
+    private final TransactionAccountSearchRepository searchRepository;
 
-    public SettlementCurrencyIndexingService(SettlementCurrencyService service, SettlementCurrencyMapper mapper, SettlementCurrencySearchRepository searchRepository) {
+    public TransactionAccountIndexingService(TransactionAccountService service, TransactionAccountMapper mapper, TransactionAccountSearchRepository searchRepository) {
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;
