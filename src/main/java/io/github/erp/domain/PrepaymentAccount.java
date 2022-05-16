@@ -74,10 +74,6 @@ public class PrepaymentAccount implements Serializable {
     private Dealer dealer;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
-    private Placeholder placeholder;
-
-    @ManyToOne
     @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
     private TransactionAccount debitAccount;
 
@@ -201,19 +197,6 @@ public class PrepaymentAccount implements Serializable {
 
     public PrepaymentAccount dealer(Dealer dealer) {
         this.setDealer(dealer);
-        return this;
-    }
-
-    public Placeholder getPlaceholder() {
-        return this.placeholder;
-    }
-
-    public void setPlaceholder(Placeholder placeholder) {
-        this.placeholder = placeholder;
-    }
-
-    public PrepaymentAccount placeholder(Placeholder placeholder) {
-        this.setPlaceholder(placeholder);
         return this;
     }
 

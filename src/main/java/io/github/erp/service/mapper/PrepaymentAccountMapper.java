@@ -14,7 +14,6 @@ import org.mapstruct.*;
         SettlementMapper.class,
         ServiceOutletMapper.class,
         DealerMapper.class,
-        PlaceholderMapper.class,
         TransactionAccountMapper.class,
     }
 )
@@ -23,7 +22,6 @@ public interface PrepaymentAccountMapper extends EntityMapper<PrepaymentAccountD
     @Mapping(target = "prepaymentTransaction", source = "prepaymentTransaction", qualifiedByName = "paymentNumber")
     @Mapping(target = "serviceOutlet", source = "serviceOutlet", qualifiedByName = "outletCode")
     @Mapping(target = "dealer", source = "dealer", qualifiedByName = "dealerName")
-    @Mapping(target = "placeholder", source = "placeholder", qualifiedByName = "description")
     @Mapping(target = "debitAccount", source = "debitAccount", qualifiedByName = "accountName")
     @Mapping(target = "transferAccount", source = "transferAccount", qualifiedByName = "accountName")
     PrepaymentAccountDTO toDto(PrepaymentAccount s);

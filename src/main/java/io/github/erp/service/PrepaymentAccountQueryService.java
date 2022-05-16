@@ -145,15 +145,6 @@ public class PrepaymentAccountQueryService extends QueryService<PrepaymentAccoun
                         )
                     );
             }
-            if (criteria.getPlaceholderId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getPlaceholderId(),
-                            root -> root.join(PrepaymentAccount_.placeholder, JoinType.LEFT).get(Placeholder_.id)
-                        )
-                    );
-            }
             if (criteria.getDebitAccountId() != null) {
                 specification =
                     specification.and(

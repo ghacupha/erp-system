@@ -41,15 +41,15 @@ public interface SettlementMapper extends EntityMapper<SettlementDTO, Settlement
     @Mapping(target = "removeSignatories", ignore = true)
     Settlement toEntity(SettlementDTO settlementDTO);
 
-    @Named("paymentNumberSet")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "paymentNumber", source = "paymentNumber")
-    Set<SettlementDTO> toDtoPaymentNumberSet(Set<Settlement> settlement);
-
     @Named("paymentNumber")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "paymentNumber", source = "paymentNumber")
     SettlementDTO toDtoPaymentNumber(Settlement settlement);
+
+    @Named("paymentNumberSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "paymentNumber", source = "paymentNumber")
+    Set<SettlementDTO> toDtoPaymentNumberSet(Set<Settlement> settlement);
 }

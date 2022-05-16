@@ -40,9 +40,7 @@ public class PrepaymentMarshalling implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
-        value = {
-            "settlementCurrency", "prepaymentTransaction", "serviceOutlet", "dealer", "placeholder", "debitAccount", "transferAccount",
-        },
+        value = { "settlementCurrency", "prepaymentTransaction", "serviceOutlet", "dealer", "debitAccount", "transferAccount" },
         allowSetters = true
     )
     private PrepaymentAccount prepaymentAccount;
