@@ -78,11 +78,15 @@ public class PrepaymentAccountServiceImpl implements PrepaymentAccountService {
         return prepaymentAccountRepository.findAll(pageable).map(prepaymentAccountMapper::toDto);
     }
 
+    public Page<PrepaymentAccountDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return prepaymentAccountRepository.findAllWithEagerRelationships(pageable).map(prepaymentAccountMapper::toDto);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<PrepaymentAccountDTO> findOne(Long id) {
         log.debug("Request to get PrepaymentAccount : {}", id);
-        return prepaymentAccountRepository.findById(id).map(prepaymentAccountMapper::toDto);
+        return prepaymentAccountRepository.findOneWithEagerRelationships(id).map(prepaymentAccountMapper::toDto);
     }
 
     @Override

@@ -34,6 +34,14 @@ public interface PrepaymentAccountService {
     Page<PrepaymentAccountDTO> findAll(Pageable pageable);
 
     /**
+     * Get all the prepaymentAccounts with eager load of many-to-many relationships.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<PrepaymentAccountDTO> findAllWithEagerRelationships(Pageable pageable);
+
+    /**
      * Get the "id" prepaymentAccount.
      *
      * @param id the id of the entity.
