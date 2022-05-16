@@ -2,7 +2,9 @@ package io.github.erp.service.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Lob;
 import javax.validation.constraints.*;
 
@@ -35,6 +37,8 @@ public class PrepaymentAccountDTO implements Serializable {
     private TransactionAccountDTO debitAccount;
 
     private TransactionAccountDTO transferAccount;
+
+    private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -124,6 +128,14 @@ public class PrepaymentAccountDTO implements Serializable {
         this.transferAccount = transferAccount;
     }
 
+    public Set<PlaceholderDTO> getPlaceholders() {
+        return placeholders;
+    }
+
+    public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
+        this.placeholders = placeholders;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -160,6 +172,7 @@ public class PrepaymentAccountDTO implements Serializable {
             ", dealer=" + getDealer() +
             ", debitAccount=" + getDebitAccount() +
             ", transferAccount=" + getTransferAccount() +
+            ", placeholders=" + getPlaceholders() +
             "}";
     }
 }

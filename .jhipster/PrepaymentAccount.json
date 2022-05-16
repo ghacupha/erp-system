@@ -56,6 +56,14 @@
       "otherEntityName": "transactionAccount",
       "relationshipType": "many-to-one",
       "otherEntityField": "accountName"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "prepaymentAccount"
     }
   ],
   "service": "serviceImpl",

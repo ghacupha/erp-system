@@ -3,6 +3,8 @@ package io.github.erp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -80,6 +82,16 @@ public class PrepaymentAccount implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
     private TransactionAccount transferAccount;
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_prepayment_account__placeholder",
+        joinColumns = @JoinColumn(name = "prepayment_account_id"),
+        inverseJoinColumns = @JoinColumn(name = "placeholder_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
+    private Set<Placeholder> placeholders = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -223,6 +235,29 @@ public class PrepaymentAccount implements Serializable {
 
     public PrepaymentAccount transferAccount(TransactionAccount transactionAccount) {
         this.setTransferAccount(transactionAccount);
+        return this;
+    }
+
+    public Set<Placeholder> getPlaceholders() {
+        return this.placeholders;
+    }
+
+    public void setPlaceholders(Set<Placeholder> placeholders) {
+        this.placeholders = placeholders;
+    }
+
+    public PrepaymentAccount placeholders(Set<Placeholder> placeholders) {
+        this.setPlaceholders(placeholders);
+        return this;
+    }
+
+    public PrepaymentAccount addPlaceholder(Placeholder placeholder) {
+        this.placeholders.add(placeholder);
+        return this;
+    }
+
+    public PrepaymentAccount removePlaceholder(Placeholder placeholder) {
+        this.placeholders.remove(placeholder);
         return this;
     }
 
