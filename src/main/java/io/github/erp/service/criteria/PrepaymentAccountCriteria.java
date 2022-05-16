@@ -2,19 +2,17 @@ package io.github.erp.service.criteria;
 
 import java.io.Serializable;
 import java.util.Objects;
+
+import io.github.erp.erp.resources.PrepaymentAccountResource;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.BigDecimalFilter;
-import tech.jhipster.service.filter.BooleanFilter;
-import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
-import tech.jhipster.service.filter.FloatFilter;
-import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 
 /**
  * Criteria class for the {@link io.github.erp.domain.PrepaymentAccount} entity. This class is used
- * in {@link io.github.erp.web.rest.PrepaymentAccountResource} to receive all the possible filtering options from
+ * in {@link PrepaymentAccountResource} to receive all the possible filtering options from
  * the Http GET request parameters.
  * For example the following could be a valid request:
  * {@code /prepayment-accounts?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
@@ -41,8 +39,6 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
 
     private LongFilter dealerId;
 
-    private LongFilter placeholderId;
-
     private LongFilter debitAccountId;
 
     private LongFilter transferAccountId;
@@ -60,7 +56,6 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
         this.prepaymentTransactionId = other.prepaymentTransactionId == null ? null : other.prepaymentTransactionId.copy();
         this.serviceOutletId = other.serviceOutletId == null ? null : other.serviceOutletId.copy();
         this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
-        this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.debitAccountId = other.debitAccountId == null ? null : other.debitAccountId.copy();
         this.transferAccountId = other.transferAccountId == null ? null : other.transferAccountId.copy();
         this.distinct = other.distinct;
@@ -191,21 +186,6 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
         this.dealerId = dealerId;
     }
 
-    public LongFilter getPlaceholderId() {
-        return placeholderId;
-    }
-
-    public LongFilter placeholderId() {
-        if (placeholderId == null) {
-            placeholderId = new LongFilter();
-        }
-        return placeholderId;
-    }
-
-    public void setPlaceholderId(LongFilter placeholderId) {
-        this.placeholderId = placeholderId;
-    }
-
     public LongFilter getDebitAccountId() {
         return debitAccountId;
     }
@@ -262,7 +242,6 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             Objects.equals(prepaymentTransactionId, that.prepaymentTransactionId) &&
             Objects.equals(serviceOutletId, that.serviceOutletId) &&
             Objects.equals(dealerId, that.dealerId) &&
-            Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(debitAccountId, that.debitAccountId) &&
             Objects.equals(transferAccountId, that.transferAccountId) &&
             Objects.equals(distinct, that.distinct)
@@ -280,7 +259,6 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             prepaymentTransactionId,
             serviceOutletId,
             dealerId,
-            placeholderId,
             debitAccountId,
             transferAccountId,
             distinct
@@ -299,7 +277,6 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             (prepaymentTransactionId != null ? "prepaymentTransactionId=" + prepaymentTransactionId + ", " : "") +
             (serviceOutletId != null ? "serviceOutletId=" + serviceOutletId + ", " : "") +
             (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
-            (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (debitAccountId != null ? "debitAccountId=" + debitAccountId + ", " : "") +
             (transferAccountId != null ? "transferAccountId=" + transferAccountId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

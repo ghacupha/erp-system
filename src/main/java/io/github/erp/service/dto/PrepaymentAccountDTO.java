@@ -32,8 +32,6 @@ public class PrepaymentAccountDTO implements Serializable {
 
     private DealerDTO dealer;
 
-    private PlaceholderDTO placeholder;
-
     private TransactionAccountDTO debitAccount;
 
     private TransactionAccountDTO transferAccount;
@@ -110,14 +108,6 @@ public class PrepaymentAccountDTO implements Serializable {
         this.dealer = dealer;
     }
 
-    public PlaceholderDTO getPlaceholder() {
-        return placeholder;
-    }
-
-    public void setPlaceholder(PlaceholderDTO placeholder) {
-        this.placeholder = placeholder;
-    }
-
     public TransactionAccountDTO getDebitAccount() {
         return debitAccount;
     }
@@ -168,7 +158,6 @@ public class PrepaymentAccountDTO implements Serializable {
             ", prepaymentTransaction=" + getPrepaymentTransaction() +
             ", serviceOutlet=" + getServiceOutlet() +
             ", dealer=" + getDealer() +
-            ", placeholder=" + getPlaceholder() +
             ", debitAccount=" + getDebitAccount() +
             ", transferAccount=" + getTransferAccount() +
             "}";

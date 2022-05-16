@@ -41,9 +41,7 @@ public class PrepaymentAmortization implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties(
-        value = {
-            "settlementCurrency", "prepaymentTransaction", "serviceOutlet", "dealer", "placeholder", "debitAccount", "transferAccount",
-        },
+        value = { "settlementCurrency", "prepaymentTransaction", "serviceOutlet", "dealer", "debitAccount", "transferAccount" },
         allowSetters = true
     )
     private PrepaymentAccount prepaymentAccount;

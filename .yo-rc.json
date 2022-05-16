@@ -61,7 +61,7 @@
       "AssetRegistration",
       "WorkInProgressRegistration",
       "WorkInProgressTransfer",
-      "WorkProjectRegister"
+      "WorkProjectRegister",
       "WorkInProgressTransfer",
       "TransactionAccount",
       "PrepaymentAccount",
