@@ -118,4 +118,5 @@
     <include file="config/liquibase/changelog/20220504063024_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220504063024_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220503082729_adds_prepayment_amount_col_to_prepayment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220516122036_fixes_placeholders_in_prep_account_changelog.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
