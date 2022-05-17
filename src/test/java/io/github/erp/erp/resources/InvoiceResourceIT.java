@@ -111,6 +111,7 @@ class InvoiceResourceIT {
     @Autowired
     private InvoiceMapper invoiceMapper;
 
+
     @Mock
     private InvoiceService invoiceServiceMock;
 

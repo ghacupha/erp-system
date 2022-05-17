@@ -93,7 +93,7 @@ spring:
       hibernate.connection.provider_disables_autocommit: true
       hibernate.cache.use_second_level_cache: true
       hibernate.cache.use_query_cache: false
-      hibernate.generate_statistics: false
+      hibernate.generate_statistics: true
       # modify batch size as necessary
       hibernate.jdbc.batch_size: 25
       hibernate.order_inserts: true
@@ -104,11 +104,13 @@ spring:
       hibernate.cache.use_minimal_puts: true
       hibernate.cache.hazelcast.instance_name: erpSystem
       hibernate.cache.hazelcast.use_lite_member: true
+      hibernate.format_sql: true
     hibernate:
       ddl-auto: none
       naming:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    show-sql: true
   messages:
     basename: i18n/messages
   main:
