@@ -29,6 +29,9 @@
             <column name="quantity" type="integer">
                 <constraints nullable="true" />
             </column>
+            <column name="remarks" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
             <column name="received_by_id" type="bigint">
                 <constraints nullable="false" />
             </column>
@@ -76,6 +79,17 @@
         </createTable>
 
         <addPrimaryKey columnNames="delivery_note_id, signatories_id" tableName="rel_delivery_note__signatories"/>
+
+        <createTable tableName="rel_delivery_note__other_purchase_orders">
+            <column name="other_purchase_orders_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="delivery_note_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="delivery_note_id, other_purchase_orders_id" tableName="rel_delivery_note__other_purchase_orders"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -100,6 +114,7 @@
             <column name="description" type="string"/>
             <column name="serial_number" type="string"/>
             <column name="quantity" type="numeric"/>
+            <column name="remarks" type="clob"/>
             <column name="received_by_id" type="numeric"/>
             <column name="supplier_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->

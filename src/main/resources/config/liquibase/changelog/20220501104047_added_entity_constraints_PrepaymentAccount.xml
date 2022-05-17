@@ -32,12 +32,6 @@
                                  referencedColumnNames="id"
                                  referencedTableName="dealer"/>
 
-        <addForeignKeyConstraint baseColumnNames="placeholder_id"
-                                 baseTableName="prepayment_account"
-                                 constraintName="fk_prepayment_account__placeholder_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="placeholder"/>
-
         <addForeignKeyConstraint baseColumnNames="debit_account_id"
                                  baseTableName="prepayment_account"
                                  constraintName="fk_prepayment_account__debit_account_id"
@@ -49,5 +43,17 @@
                                  constraintName="fk_prepayment_account__transfer_account_id"
                                  referencedColumnNames="id"
                                  referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="prepayment_account_id"
+                                 baseTableName="rel_prepayment_account__placeholder"
+                                 constraintName="fk_rel_prepayment_account__placeholder__prepayment_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="prepayment_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_prepayment_account__placeholder"
+                                 constraintName="fk_rel_prepayment_account__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
     </changeSet>
 </databaseChangeLog>

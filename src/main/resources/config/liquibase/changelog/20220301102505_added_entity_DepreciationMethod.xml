@@ -23,6 +23,9 @@
             <column name="depreciation_type" type="varchar(255)">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_depreciation_method__depreciation_type" />
             </column>
+            <column name="remarks" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
@@ -61,6 +64,7 @@
             <column name="depreciation_method_name" type="string"/>
             <column name="description" type="string"/>
             <column name="depreciation_type" type="string"/>
+            <column name="remarks" type="clob"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

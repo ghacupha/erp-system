@@ -23,6 +23,9 @@
             <column name="notes" type="${clobType}">
                 <constraints nullable="true" />
             </column>
+            <column name="prepayment_amount" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
             <column name="settlement_currency_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -35,9 +38,6 @@
             <column name="dealer_id" type="bigint">
                 <constraints nullable="true" />
             </column>
-            <column name="placeholder_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
             <column name="debit_account_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -46,6 +46,20 @@
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
+    </changeSet>
+
+    <changeSet id="20220501104047-1-relations" author="jhipster">
+
+        <createTable tableName="rel_prepayment_account__placeholder">
+            <column name="placeholder_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="prepayment_account_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="prepayment_account_id, placeholder_id" tableName="rel_prepayment_account__placeholder"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -68,6 +82,7 @@
             <column name="catalogue_number" type="string"/>
             <column name="particulars" type="string"/>
             <column name="notes" type="clob"/>
+            <column name="prepayment_amount" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

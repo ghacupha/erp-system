@@ -55,5 +55,11 @@
                                  constraintName="fk_rel_credit_note__placeholder__placeholder_id"
                                  referencedColumnNames="id"
                                  referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="settlement_currency_id"
+                                 baseTableName="credit_note"
+                                 constraintName="fk_credit_note__settlement_currency_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="settlement_currency"/>
     </changeSet>
 </databaseChangeLog>
