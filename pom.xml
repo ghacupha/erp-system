@@ -484,6 +484,48 @@
                 <groupId>org.gaul</groupId>
                 <artifactId>modernizer-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>4.0.rc2</version>
+                <configuration>
+                    <excludes>
+                        <exclude>.idea/**</exclude>
+                        <exclude>.jhipster/**</exclude>
+                        <exclude>node/**</exclude>
+                        <exclude>node_modules/**</exclude>
+                        <exclude>**/README</exclude>
+                        <exclude>**/pom.xml</exclude>
+                        <exclude>**/LICENSE</exclude>
+                        <exclude>src/test/resources/**</exclude>
+                        <exclude>src/main/resources/**</exclude>
+                        <!--// TODO review license for production-->
+                    </excludes>
+                    <header>com/mycila/maven/plugin/license/templates/GPL-3.txt</header>
+                    <properties>
+                        <owner>${project.owner}</owner>
+                        <email>${owner.email}</email>
+                        <year>${project.inceptionYear}</year>
+                        <website>${founder.website}</website>
+                    </properties>
+                    <project>
+                        <name>${project.name}</name>
+                        <inceptionYear>${project.inceptionYear}</inceptionYear>
+                        <description>${project.description}</description>
+                    </project>
+                    <mapping>
+                        <java>JAVAPKG_STYLE</java>
+                    </mapping>
+                </configuration>
+                <executions>
+                    <execution>
+                        <!--<phase>process-sources</phase>-->
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- jhipster-needle-maven-add-plugin -->
         </plugins>
         <pluginManagement>
