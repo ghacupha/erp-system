@@ -29,6 +29,9 @@
             <column name="compilation_token" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="remarks" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
             <column name="settlement_currency_id" type="bigint">
                 <constraints nullable="false" />
             </column>
@@ -73,6 +76,28 @@
         </createTable>
 
         <addPrimaryKey columnNames="payment_invoice_id, payment_label_id" tableName="rel_payment_invoice__payment_label"/>
+
+        <createTable tableName="rel_payment_invoice__delivery_note">
+            <column name="delivery_note_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_invoice_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="payment_invoice_id, delivery_note_id" tableName="rel_payment_invoice__delivery_note"/>
+
+        <createTable tableName="rel_payment_invoice__job_sheet">
+            <column name="job_sheet_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_invoice_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="payment_invoice_id, job_sheet_id" tableName="rel_payment_invoice__job_sheet"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -97,6 +122,7 @@
             <column name="invoice_amount" type="numeric"/>
             <column name="file_upload_token" type="string"/>
             <column name="compilation_token" type="string"/>
+            <column name="remarks" type="clob"/>
             <column name="settlement_currency_id" type="numeric"/>
             <column name="biller_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->

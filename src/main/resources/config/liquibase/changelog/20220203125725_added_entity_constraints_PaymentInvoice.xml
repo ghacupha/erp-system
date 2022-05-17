@@ -55,5 +55,29 @@
                                  constraintName="fk_payment_invoice__biller_id"
                                  referencedColumnNames="id"
                                  referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_invoice_id"
+                                 baseTableName="rel_payment_invoice__delivery_note"
+                                 constraintName="fk_rel_payment_invoice__delivery_note__payment_invoice_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_invoice"/>
+
+        <addForeignKeyConstraint baseColumnNames="delivery_note_id"
+                                 baseTableName="rel_payment_invoice__delivery_note"
+                                 constraintName="fk_rel_payment_invoice__delivery_note__delivery_note_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="delivery_note"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_invoice_id"
+                                 baseTableName="rel_payment_invoice__job_sheet"
+                                 constraintName="fk_rel_payment_invoice__job_sheet__payment_invoice_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_invoice"/>
+
+        <addForeignKeyConstraint baseColumnNames="job_sheet_id"
+                                 baseTableName="rel_payment_invoice__job_sheet"
+                                 constraintName="fk_rel_payment_invoice__job_sheet__job_sheet_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="job_sheet"/>
     </changeSet>
 </databaseChangeLog>

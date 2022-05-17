@@ -2,7 +2,7 @@
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
     <!--
         Added the constraints for entity AssetRegistration.
     -->
@@ -115,5 +115,11 @@
                                  constraintName="fk_rel_asset_registration__desi__designated_users_6f_id"
                                  referencedColumnNames="id"
                                  referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="settlement_currency_id"
+                                 baseTableName="asset_registration"
+                                 constraintName="fk_asset_registration__settlement_currency_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="settlement_currency"/>
     </changeSet>
 </databaseChangeLog>

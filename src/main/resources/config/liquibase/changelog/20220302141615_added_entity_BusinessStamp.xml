@@ -23,6 +23,9 @@
             <column name="details" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="remarks" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
             <column name="stamp_holder_id" type="bigint">
                 <constraints nullable="false" />
             </column>
@@ -64,6 +67,7 @@
             <column name="stamp_date" type="date"/>
             <column name="purpose" type="string"/>
             <column name="details" type="string"/>
+            <column name="remarks" type="clob"/>
             <column name="stamp_holder_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>

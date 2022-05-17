@@ -41,6 +41,9 @@
             <column name="compilation_token" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="remarks" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
             <column name="settlement_currency_id" type="bigint">
                 <constraints nullable="false" />
             </column>
@@ -130,6 +133,7 @@
             <column name="calculation_file_content_type" type="string"/>
             <column name="file_upload_token" type="string"/>
             <column name="compilation_token" type="string"/>
+            <column name="remarks" type="clob"/>
             <column name="settlement_currency_id" type="numeric"/>
             <column name="payment_category_id" type="numeric"/>
             <column name="biller_id" type="numeric"/>

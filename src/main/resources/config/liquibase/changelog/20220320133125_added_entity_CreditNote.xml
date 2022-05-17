@@ -26,6 +26,9 @@
             <column name="remarks" type="${clobType}">
                 <constraints nullable="true" />
             </column>
+            <column name="settlement_currency_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>

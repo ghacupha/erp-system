@@ -61,5 +61,17 @@
                                  constraintName="fk_rel_delivery_note__signatories__signatories_id"
                                  referencedColumnNames="id"
                                  referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="delivery_note_id"
+                                 baseTableName="rel_delivery_note__other_purchase_orders"
+                                 constraintName="fk_rel_delivery_note__other_purchase_orders__delivery_note_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="delivery_note"/>
+
+        <addForeignKeyConstraint baseColumnNames="other_purchase_orders_id"
+                                 baseTableName="rel_delivery_note__other_purchase_orders"
+                                 constraintName="fk_rel_delivery_note__other_pur__other_purchase_orders_09_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="purchase_order"/>
     </changeSet>
 </databaseChangeLog>
