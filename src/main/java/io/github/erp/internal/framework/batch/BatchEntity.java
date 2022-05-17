@@ -1,7 +1,7 @@
 package io.github.erp.internal.framework.batch;
 
 /*-
- * ERP System - ERP data management platform
+ * Erp System - Mark I Ver 1 (Artaxerxes)
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.internal.framework.batch;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 /**
  * This interface consists and object whose data is uploaded from a file in a list.
  * This interface must be implemented for each entity whose data is going to be processed

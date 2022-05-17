@@ -1,7 +1,7 @@
 package io.github.erp.config;
 
 /*-
- * ERP System - ERP data management platform
+ * Erp System - Mark I Ver 1 (Artaxerxes)
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
