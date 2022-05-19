@@ -25,6 +25,23 @@ public class SimpleJasperReportCompiler {
         return saveReport(jasperReport, reportFileName);
     }
 
+    @SneakyThrows
+    public JasperReport compileReport(File reportFile) {
+
+        InputStream reportStream = new FileInputStream(reportFile);
+        JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
+
+        return saveReport(jasperReport, reportFile.getAbsolutePath());
+    }
+
+    @SneakyThrows
+    public JasperReport compileReport(InputStream reportFileStream) {
+
+        JasperReport jasperReport = JasperCompileManager.compileReport(reportFileStream);
+
+        return jasperReport;
+    }
+
     private JasperReport saveReport(JasperReport jasperReport, String reportFileName) throws JRException {
         JRSaver.saveObject(jasperReport, reportFileName.replace(".jrxml", ".jasper"));
 

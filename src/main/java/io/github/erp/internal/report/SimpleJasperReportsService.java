@@ -14,9 +14,12 @@ public class SimpleJasperReportsService {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    @Value("${erp.reportsDirectory}")
+    private String reportsDirectory;
+
     private final SimpleJasperReportCompiler compiler;
-    private SimpleJasperReportFiller simpleReportFiller;
-    private SimpleJasperReportExporter simpleExporter;
+    private final SimpleJasperReportFiller simpleReportFiller;
+    private final SimpleJasperReportExporter simpleExporter;
 
     public SimpleJasperReportsService(SimpleJasperReportCompiler compiler, SimpleJasperReportFiller simpleReportFiller, SimpleJasperReportExporter simpleExporter) {
         this.compiler = compiler;
@@ -26,7 +29,8 @@ public class SimpleJasperReportsService {
 
     public void generateReport() {
 
-        JasperReport compiledReport = compiler.compileReport("generated-reports/Simple_Blue.jrxml");
+        // todo JasperReport compiledReport = compiler.compileReport("generated-reports/Simple_Blue.jrxml");
+        JasperReport compiledReport = compiler.compileReport(reportsDirectory + "Simple_Blue.jrxml");
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("title", "Dealers Report Example");
@@ -35,10 +39,10 @@ public class SimpleJasperReportsService {
 
         simpleExporter.setJasperPrint(print);
 
-        simpleExporter.exportToPdf("generated-reports/employeeReport.pdf", applicationName);
-        simpleExporter.exportToXlsx("generated-reports/employeeReport.xlsx", "Employee Data");
-        simpleExporter.exportToCsv("generated-reports/employeeReport.csv");
-        simpleExporter.exportToHtml("generated-reports/employeeReport.html");
+        simpleExporter.exportToPdf(reportsDirectory + "employeeReport.pdf", applicationName, "ownerPassword","userPassword");
+        simpleExporter.exportToXlsx(reportsDirectory + "employeeReport.xlsx", "Employee Data");
+        simpleExporter.exportToCsv(reportsDirectory + "employeeReport.csv");
+        simpleExporter.exportToHtml(reportsDirectory + "employeeReport.html");
 
     }
 }

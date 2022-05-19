@@ -7,14 +7,7 @@ import net.sf.jasperreports.engine.export.HtmlExporter;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
-import net.sf.jasperreports.export.SimplePdfReportConfiguration;
-import net.sf.jasperreports.export.SimpleWriterExporterOutput;
-import net.sf.jasperreports.export.SimpleXlsxExporterConfiguration;
-import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
+import net.sf.jasperreports.export.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +22,7 @@ public class SimpleJasperReportExporter {
 
 
     @SneakyThrows
-    public void exportToPdf(String fileName, String author) {
+    public void exportToPdf(String fileName, String author, String ownerPassword, String userPassword) {
         JRPdfExporter exporter = new JRPdfExporter();
         exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
         exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(fileName));
@@ -41,8 +34,8 @@ public class SimpleJasperReportExporter {
         SimplePdfExporterConfiguration exportConfig = new SimplePdfExporterConfiguration();
         exportConfig.setMetadataAuthor(author);
         exportConfig.setEncrypted(true);
-        exportConfig.setOwnerPassword("PRINTED");
-        exportConfig.setUserPassword("printed");
+        exportConfig.setOwnerPassword(ownerPassword);
+        exportConfig.setUserPassword(userPassword);
         exportConfig.set128BitKey(true);
         exportConfig.setCompressed(true);
         // TODO exportConfig.setPdfaConformance(PdfaConformanceEnum.PDFA_1A);
@@ -75,6 +68,19 @@ public class SimpleJasperReportExporter {
     @SneakyThrows
     public void exportToCsv(String fileName) {
         JRCsvExporter exporter = new JRCsvExporter();
+
+        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        exporter.setExporterOutput(new SimpleWriterExporterOutput(fileName));
+
+        exporter.exportReport();
+    }
+
+    @SneakyThrows
+    public void exportToCsv(String fileName, String fieldDelimiter) {
+        JRCsvExporter exporter = new JRCsvExporter();
+
+        SimpleCsvExporterConfiguration exportConfig = new SimpleCsvExporterConfiguration();
+        exportConfig.setFieldDelimiter(fieldDelimiter);
 
         exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
         exporter.setExporterOutput(new SimpleWriterExporterOutput(fileName));

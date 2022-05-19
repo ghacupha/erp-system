@@ -17,7 +17,7 @@ package io.github.erp.internal.framework;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.config.FileUploadsPropertyFactory;
+import io.github.erp.config.AppPropertyFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -27,7 +27,7 @@ import org.springframework.context.annotation.PropertySource;
  */
 @Configuration
 @ConfigurationProperties(prefix = "reader")
-@PropertySource(value = "classpath:config/fileUploads.yml", factory = FileUploadsPropertyFactory.class)
+@PropertySource(value = "classpath:config/fileUploads.yml", factory = AppPropertyFactory.class)
 public class FileUploadsProperties {
 
     private int listSize;
