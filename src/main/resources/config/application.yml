@@ -151,7 +151,7 @@ info:
 
 jhipster:
   clientApp:
-    name: 'erpSystemApp'
+    name: 'ERP System Mark I version I Artaxerxes Series'
   # By default CORS is disabled. Uncomment to enable.
   cors:
      allowed-origins: 'http://localhost:8100,https://localhost:8100,http://localhost:9000,https://localhost:9000,https://localhost:8981,http://localhost:8981'
@@ -171,7 +171,7 @@ jhipster:
     terms-of-service-url:
     contact-name: Edwin Njeru
     contact-url: https://github.com/ghacupha
-    contact-email:
+    contact-email: edwn.njeru@gmail.com
     license: GPLv3
     license-url: https://www.gnu.org/licenses/gpl-3.0.txt
   security:
