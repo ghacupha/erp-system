@@ -23,6 +23,10 @@ import org.hibernate.internal.CriteriaImpl;
 import org.hibernate.loader.criteria.CriteriaJoinWalker;
 import org.hibernate.loader.criteria.CriteriaQueryTranslator;
 import org.hibernate.persister.entity.OuterJoinLoadable;
+import org.springframework.orm.jpa.EntityManagerFactoryInfo;
+
+import javax.persistence.EntityManager;
+import javax.sql.DataSource;
 
 /**
  * General utils used in tests and logs for checking queries created by JPA
@@ -50,5 +54,10 @@ public class QueryTools {
         );
 
         return sql;
+    }
+
+    public static DataSource getDataSourceFromHibernateEntityManager(EntityManager em) {
+        EntityManagerFactoryInfo info = (EntityManagerFactoryInfo) em.getEntityManagerFactory();
+        return info.getDataSource();
     }
 }
