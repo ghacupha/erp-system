@@ -27,10 +27,11 @@ public class SimpleJasperReportsService {
         this.simpleExporter = simpleExporter;
     }
 
-    public void generateReport() {
+    public void generateReport(String resourceLocation) {
 
         // todo JasperReport compiledReport = compiler.compileReport("generated-reports/Simple_Blue.jrxml");
-        JasperReport compiledReport = compiler.compileReport(reportsDirectory + "Simple_Blue.jrxml");
+        // todo JasperReport compiledReport = compiler.compileReport(reportsDirectory + "Simple_Blue.jrxml");
+        JasperReport compiledReport = compiler.compileReport(reportsDirectory + resourceLocation);
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("title", "Dealers Report Example");
@@ -44,5 +45,22 @@ public class SimpleJasperReportsService {
         simpleExporter.exportToCsv(reportsDirectory + "employeeReport.csv");
         simpleExporter.exportToHtml(reportsDirectory + "employeeReport.html");
 
+    }
+
+    public String generatePDFReport(String reportFileLocation, String reportName) {
+
+        JasperReport compiledReport = compiler.compileReport(reportsDirectory + reportFileLocation);
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("title", "Dealers Report Example");
+
+        JasperPrint print = simpleReportFiller.fillReport(compiledReport, parameters);
+
+        simpleExporter.setJasperPrint(print);
+
+        // todo simpleExporter.exportToPdf(reportsDirectory + "employeeReport.pdf", applicationName, "ownerPassword","userPassword");
+        simpleExporter.exportToPdf(reportsDirectory + reportName, applicationName, "ownerPassword","userPassword");
+
+        return reportsDirectory + reportName;
     }
 }
