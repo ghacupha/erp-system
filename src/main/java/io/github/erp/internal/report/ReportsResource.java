@@ -35,7 +35,8 @@ public class ReportsResource {
     public ResponseEntity<Void> createDealersReport() {
         log.debug("REST request to create report {}", "dealers");
 
-        String reportPath = simpleJasperReportsService.generatePDFReport("Simple_Blue.jrxml", "dealers-report.pdf");
+        // TODO REPLACE THESE PARAMETERS WITH VALUES FROM FRONT-END REQUEST
+        String reportPath = simpleJasperReportsService.generatePDFReport("Simple_Blue.jrxml", "dealers-report.pdf", "ownerPassword","userPassword");
 
         log.debug("Report generated on the path {}", reportPath);
 
