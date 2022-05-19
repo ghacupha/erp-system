@@ -47,7 +47,7 @@ public class SimpleJasperReportsService {
 
     }
 
-    public String generatePDFReport(String reportFileLocation, String reportName) {
+    public String generatePDFReport(String reportFileLocation, String reportName, String ownerPassword, String userPassword) {
 
         JasperReport compiledReport = compiler.compileReport(reportsDirectory + reportFileLocation);
 
@@ -59,7 +59,7 @@ public class SimpleJasperReportsService {
         simpleExporter.setJasperPrint(print);
 
         // todo simpleExporter.exportToPdf(reportsDirectory + "employeeReport.pdf", applicationName, "ownerPassword","userPassword");
-        simpleExporter.exportToPdf(reportsDirectory + reportName, applicationName, "ownerPassword","userPassword");
+        simpleExporter.exportToPdf(reportsDirectory + reportName, applicationName, ownerPassword,userPassword);
 
         return reportsDirectory + reportName;
     }
