@@ -30,7 +30,7 @@ import java.util.Properties;
 /**
  * This factory was created to enable property-source configs based on yml file type
  */
-public class FileUploadsPropertyFactory implements PropertySourceFactory {
+public class AppPropertyFactory implements PropertySourceFactory {
 
     @Override
     public PropertySource<?> createPropertySource(String name, EncodedResource encodedResource)
