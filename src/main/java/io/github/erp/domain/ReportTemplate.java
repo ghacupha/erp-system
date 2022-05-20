@@ -43,6 +43,20 @@ public class ReportTemplate implements Serializable {
     @Column(name = "notes_content_type")
     private String notesContentType;
 
+    @Lob
+    @Column(name = "report_file")
+    private byte[] reportFile;
+
+    @Column(name = "report_file_content_type")
+    private String reportFileContentType;
+
+    @Lob
+    @Column(name = "compile_report_file")
+    private byte[] compileReportFile;
+
+    @Column(name = "compile_report_file_content_type")
+    private String compileReportFileContentType;
+
     @ManyToMany
     @JoinTable(
         name = "rel_report_template__placeholder",
@@ -120,6 +134,58 @@ public class ReportTemplate implements Serializable {
         this.notesContentType = notesContentType;
     }
 
+    public byte[] getReportFile() {
+        return this.reportFile;
+    }
+
+    public ReportTemplate reportFile(byte[] reportFile) {
+        this.setReportFile(reportFile);
+        return this;
+    }
+
+    public void setReportFile(byte[] reportFile) {
+        this.reportFile = reportFile;
+    }
+
+    public String getReportFileContentType() {
+        return this.reportFileContentType;
+    }
+
+    public ReportTemplate reportFileContentType(String reportFileContentType) {
+        this.reportFileContentType = reportFileContentType;
+        return this;
+    }
+
+    public void setReportFileContentType(String reportFileContentType) {
+        this.reportFileContentType = reportFileContentType;
+    }
+
+    public byte[] getCompileReportFile() {
+        return this.compileReportFile;
+    }
+
+    public ReportTemplate compileReportFile(byte[] compileReportFile) {
+        this.setCompileReportFile(compileReportFile);
+        return this;
+    }
+
+    public void setCompileReportFile(byte[] compileReportFile) {
+        this.compileReportFile = compileReportFile;
+    }
+
+    public String getCompileReportFileContentType() {
+        return this.compileReportFileContentType;
+    }
+
+    public ReportTemplate compileReportFileContentType(String compileReportFileContentType) {
+        this.compileReportFileContentType = compileReportFileContentType;
+        return this;
+    }
+
+    public void setCompileReportFileContentType(String compileReportFileContentType) {
+        this.compileReportFileContentType = compileReportFileContentType;
+    }
+
     public Set<Placeholder> getPlaceholders() {
         return this.placeholders;
     }
@@ -171,6 +237,10 @@ public class ReportTemplate implements Serializable {
             ", description='" + getDescription() + "'" +
             ", notes='" + getNotes() + "'" +
             ", notesContentType='" + getNotesContentType() + "'" +
+            ", reportFile='" + getReportFile() + "'" +
+            ", reportFileContentType='" + getReportFileContentType() + "'" +
+            ", compileReportFile='" + getCompileReportFile() + "'" +
+            ", compileReportFileContentType='" + getCompileReportFileContentType() + "'" +
             "}";
     }
 }

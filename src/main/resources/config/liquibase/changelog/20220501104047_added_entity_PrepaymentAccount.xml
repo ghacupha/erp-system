@@ -48,20 +48,6 @@
         </createTable>
     </changeSet>
 
-    <!--<changeSet id="20220501104047-1-relations" author="jhipster">
-
-        <createTable tableName="rel_prepayment_account__placeholder">
-            <column name="placeholder_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="prepayment_account_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <addPrimaryKey columnNames="prepayment_account_id, placeholder_id" tableName="rel_prepayment_account__placeholder"/>
-    </changeSet>-->
-
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 
     <!--

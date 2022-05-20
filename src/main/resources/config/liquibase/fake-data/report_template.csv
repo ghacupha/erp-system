@@ -1,11 +1,11 @@
-id;catalogue_number;description;notes;notes_content_type
-1;California withdrawal invoice;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png
-2;gold Frozen EXE;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png
-3;solutions;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png
-4;ROI redundant neural-net;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png
-5;green Data;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png
-6;Investment;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png
-7;Account Quality cross-platform;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png
-8;Unbranded;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png
-9;generating;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png
-10;Egypt streamline Movies;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png
+id;catalogue_number;description;notes;notes_content_type;report_file;report_file_content_type;compile_report_file;compile_report_file_content_type
+1;California withdrawal invoice;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png
+2;gold Frozen EXE;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png
+3;solutions;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png
+4;ROI redundant neural-net;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png
+5;green Data;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png
+6;Investment;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png
+7;Account Quality cross-platform;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png
+8;Unbranded;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png
+9;generating;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png
+10;Egypt streamline Movies;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png

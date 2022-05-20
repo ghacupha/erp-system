@@ -44,7 +44,7 @@ import org.springframework.util.Base64Utils;
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
-class ReportTemplateResourceIT {
+public class ReportTemplateResourceIT {
 
     private static final String DEFAULT_CATALOGUE_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_CATALOGUE_NUMBER = "BBBBBBBBBB";
@@ -56,6 +56,16 @@ class ReportTemplateResourceIT {
     private static final byte[] UPDATED_NOTES = TestUtil.createByteArray(1, "1");
     private static final String DEFAULT_NOTES_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_NOTES_CONTENT_TYPE = "image/png";
+
+    private static final byte[] DEFAULT_REPORT_FILE = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_REPORT_FILE = TestUtil.createByteArray(1, "1");
+    private static final String DEFAULT_REPORT_FILE_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_REPORT_FILE_CONTENT_TYPE = "image/png";
+
+    private static final byte[] DEFAULT_COMPILE_REPORT_FILE = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_COMPILE_REPORT_FILE = TestUtil.createByteArray(1, "1");
+    private static final String DEFAULT_COMPILE_REPORT_FILE_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_COMPILE_REPORT_FILE_CONTENT_TYPE = "image/png";
 
     private static final String ENTITY_API_URL = "/api/report-templates";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -103,7 +113,11 @@ class ReportTemplateResourceIT {
             .catalogueNumber(DEFAULT_CATALOGUE_NUMBER)
             .description(DEFAULT_DESCRIPTION)
             .notes(DEFAULT_NOTES)
-            .notesContentType(DEFAULT_NOTES_CONTENT_TYPE);
+            .notesContentType(DEFAULT_NOTES_CONTENT_TYPE)
+            .reportFile(DEFAULT_REPORT_FILE)
+            .reportFileContentType(DEFAULT_REPORT_FILE_CONTENT_TYPE)
+            .compileReportFile(DEFAULT_COMPILE_REPORT_FILE)
+            .compileReportFileContentType(DEFAULT_COMPILE_REPORT_FILE_CONTENT_TYPE);
         return reportTemplate;
     }
 
@@ -118,7 +132,11 @@ class ReportTemplateResourceIT {
             .catalogueNumber(UPDATED_CATALOGUE_NUMBER)
             .description(UPDATED_DESCRIPTION)
             .notes(UPDATED_NOTES)
-            .notesContentType(UPDATED_NOTES_CONTENT_TYPE);
+            .notesContentType(UPDATED_NOTES_CONTENT_TYPE)
+            .reportFile(UPDATED_REPORT_FILE)
+            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE)
+            .compileReportFile(UPDATED_COMPILE_REPORT_FILE)
+            .compileReportFileContentType(UPDATED_COMPILE_REPORT_FILE_CONTENT_TYPE);
         return reportTemplate;
     }
 
@@ -147,6 +165,10 @@ class ReportTemplateResourceIT {
         assertThat(testReportTemplate.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testReportTemplate.getNotes()).isEqualTo(DEFAULT_NOTES);
         assertThat(testReportTemplate.getNotesContentType()).isEqualTo(DEFAULT_NOTES_CONTENT_TYPE);
+        assertThat(testReportTemplate.getReportFile()).isEqualTo(DEFAULT_REPORT_FILE);
+        assertThat(testReportTemplate.getReportFileContentType()).isEqualTo(DEFAULT_REPORT_FILE_CONTENT_TYPE);
+        assertThat(testReportTemplate.getCompileReportFile()).isEqualTo(DEFAULT_COMPILE_REPORT_FILE);
+        assertThat(testReportTemplate.getCompileReportFileContentType()).isEqualTo(DEFAULT_COMPILE_REPORT_FILE_CONTENT_TYPE);
 
         // Validate the ReportTemplate in Elasticsearch
         verify(mockReportTemplateSearchRepository, times(1)).save(testReportTemplate);
@@ -211,7 +233,11 @@ class ReportTemplateResourceIT {
             .andExpect(jsonPath("$.[*].catalogueNumber").value(hasItem(DEFAULT_CATALOGUE_NUMBER)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].notesContentType").value(hasItem(DEFAULT_NOTES_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].notes").value(hasItem(Base64Utils.encodeToString(DEFAULT_NOTES))));
+            .andExpect(jsonPath("$.[*].notes").value(hasItem(Base64Utils.encodeToString(DEFAULT_NOTES))))
+            .andExpect(jsonPath("$.[*].reportFileContentType").value(hasItem(DEFAULT_REPORT_FILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))))
+            .andExpect(jsonPath("$.[*].compileReportFileContentType").value(hasItem(DEFAULT_COMPILE_REPORT_FILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].compileReportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMPILE_REPORT_FILE))));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -247,7 +273,11 @@ class ReportTemplateResourceIT {
             .andExpect(jsonPath("$.catalogueNumber").value(DEFAULT_CATALOGUE_NUMBER))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.notesContentType").value(DEFAULT_NOTES_CONTENT_TYPE))
-            .andExpect(jsonPath("$.notes").value(Base64Utils.encodeToString(DEFAULT_NOTES)));
+            .andExpect(jsonPath("$.notes").value(Base64Utils.encodeToString(DEFAULT_NOTES)))
+            .andExpect(jsonPath("$.reportFileContentType").value(DEFAULT_REPORT_FILE_CONTENT_TYPE))
+            .andExpect(jsonPath("$.reportFile").value(Base64Utils.encodeToString(DEFAULT_REPORT_FILE)))
+            .andExpect(jsonPath("$.compileReportFileContentType").value(DEFAULT_COMPILE_REPORT_FILE_CONTENT_TYPE))
+            .andExpect(jsonPath("$.compileReportFile").value(Base64Utils.encodeToString(DEFAULT_COMPILE_REPORT_FILE)));
     }
 
     @Test
@@ -384,7 +414,11 @@ class ReportTemplateResourceIT {
             .andExpect(jsonPath("$.[*].catalogueNumber").value(hasItem(DEFAULT_CATALOGUE_NUMBER)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].notesContentType").value(hasItem(DEFAULT_NOTES_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].notes").value(hasItem(Base64Utils.encodeToString(DEFAULT_NOTES))));
+            .andExpect(jsonPath("$.[*].notes").value(hasItem(Base64Utils.encodeToString(DEFAULT_NOTES))))
+            .andExpect(jsonPath("$.[*].reportFileContentType").value(hasItem(DEFAULT_REPORT_FILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))))
+            .andExpect(jsonPath("$.[*].compileReportFileContentType").value(hasItem(DEFAULT_COMPILE_REPORT_FILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].compileReportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMPILE_REPORT_FILE))));
 
         // Check, that the count call also returns 1
         restReportTemplateMockMvc
@@ -436,7 +470,11 @@ class ReportTemplateResourceIT {
             .catalogueNumber(UPDATED_CATALOGUE_NUMBER)
             .description(UPDATED_DESCRIPTION)
             .notes(UPDATED_NOTES)
-            .notesContentType(UPDATED_NOTES_CONTENT_TYPE);
+            .notesContentType(UPDATED_NOTES_CONTENT_TYPE)
+            .reportFile(UPDATED_REPORT_FILE)
+            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE)
+            .compileReportFile(UPDATED_COMPILE_REPORT_FILE)
+            .compileReportFileContentType(UPDATED_COMPILE_REPORT_FILE_CONTENT_TYPE);
         ReportTemplateDTO reportTemplateDTO = reportTemplateMapper.toDto(updatedReportTemplate);
 
         restReportTemplateMockMvc
@@ -455,6 +493,10 @@ class ReportTemplateResourceIT {
         assertThat(testReportTemplate.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testReportTemplate.getNotes()).isEqualTo(UPDATED_NOTES);
         assertThat(testReportTemplate.getNotesContentType()).isEqualTo(UPDATED_NOTES_CONTENT_TYPE);
+        assertThat(testReportTemplate.getReportFile()).isEqualTo(UPDATED_REPORT_FILE);
+        assertThat(testReportTemplate.getReportFileContentType()).isEqualTo(UPDATED_REPORT_FILE_CONTENT_TYPE);
+        assertThat(testReportTemplate.getCompileReportFile()).isEqualTo(UPDATED_COMPILE_REPORT_FILE);
+        assertThat(testReportTemplate.getCompileReportFileContentType()).isEqualTo(UPDATED_COMPILE_REPORT_FILE_CONTENT_TYPE);
 
         // Validate the ReportTemplate in Elasticsearch
         verify(mockReportTemplateSearchRepository).save(testReportTemplate);
@@ -569,6 +611,10 @@ class ReportTemplateResourceIT {
         assertThat(testReportTemplate.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testReportTemplate.getNotes()).isEqualTo(UPDATED_NOTES);
         assertThat(testReportTemplate.getNotesContentType()).isEqualTo(UPDATED_NOTES_CONTENT_TYPE);
+        assertThat(testReportTemplate.getReportFile()).isEqualTo(DEFAULT_REPORT_FILE);
+        assertThat(testReportTemplate.getReportFileContentType()).isEqualTo(DEFAULT_REPORT_FILE_CONTENT_TYPE);
+        assertThat(testReportTemplate.getCompileReportFile()).isEqualTo(DEFAULT_COMPILE_REPORT_FILE);
+        assertThat(testReportTemplate.getCompileReportFileContentType()).isEqualTo(DEFAULT_COMPILE_REPORT_FILE_CONTENT_TYPE);
     }
 
     @Test
@@ -587,7 +633,11 @@ class ReportTemplateResourceIT {
             .catalogueNumber(UPDATED_CATALOGUE_NUMBER)
             .description(UPDATED_DESCRIPTION)
             .notes(UPDATED_NOTES)
-            .notesContentType(UPDATED_NOTES_CONTENT_TYPE);
+            .notesContentType(UPDATED_NOTES_CONTENT_TYPE)
+            .reportFile(UPDATED_REPORT_FILE)
+            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE)
+            .compileReportFile(UPDATED_COMPILE_REPORT_FILE)
+            .compileReportFileContentType(UPDATED_COMPILE_REPORT_FILE_CONTENT_TYPE);
 
         restReportTemplateMockMvc
             .perform(
@@ -605,6 +655,10 @@ class ReportTemplateResourceIT {
         assertThat(testReportTemplate.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testReportTemplate.getNotes()).isEqualTo(UPDATED_NOTES);
         assertThat(testReportTemplate.getNotesContentType()).isEqualTo(UPDATED_NOTES_CONTENT_TYPE);
+        assertThat(testReportTemplate.getReportFile()).isEqualTo(UPDATED_REPORT_FILE);
+        assertThat(testReportTemplate.getReportFileContentType()).isEqualTo(UPDATED_REPORT_FILE_CONTENT_TYPE);
+        assertThat(testReportTemplate.getCompileReportFile()).isEqualTo(UPDATED_COMPILE_REPORT_FILE);
+        assertThat(testReportTemplate.getCompileReportFileContentType()).isEqualTo(UPDATED_COMPILE_REPORT_FILE_CONTENT_TYPE);
     }
 
     @Test
@@ -724,6 +778,10 @@ class ReportTemplateResourceIT {
             .andExpect(jsonPath("$.[*].catalogueNumber").value(hasItem(DEFAULT_CATALOGUE_NUMBER)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].notesContentType").value(hasItem(DEFAULT_NOTES_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].notes").value(hasItem(Base64Utils.encodeToString(DEFAULT_NOTES))));
+            .andExpect(jsonPath("$.[*].notes").value(hasItem(Base64Utils.encodeToString(DEFAULT_NOTES))))
+            .andExpect(jsonPath("$.[*].reportFileContentType").value(hasItem(DEFAULT_REPORT_FILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))))
+            .andExpect(jsonPath("$.[*].compileReportFileContentType").value(hasItem(DEFAULT_COMPILE_REPORT_FILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].compileReportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMPILE_REPORT_FILE))));
     }
 }

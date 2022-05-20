@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.duration._
 
 /**
- * Performance test for the ReportTemplate entity.
+ * Performance test for the PdfReportRequisition entity.
  */
-class ReportTemplateGatlingTest extends Simulation {
+class PdfReportRequisitionGatlingTest extends Simulation {
 
     val context: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
     // Log all HTTP requests
@@ -43,7 +43,7 @@ class ReportTemplateGatlingTest extends Simulation {
         "Authorization" -> "${access_token}"
     )
 
-    val scn = scenario("Test the ReportTemplate entity")
+    val scn = scenario("Test the PdfReportRequisition entity")
         .exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headers_http)
@@ -62,32 +62,33 @@ class ReportTemplateGatlingTest extends Simulation {
         .check(status.is(200)))
         .pause(10)
         .repeat(2) {
-            exec(http("Get all reportTemplates")
-            .get("/api/report-templates")
+            exec(http("Get all pdfReportRequisitions")
+            .get("/api/pdf-report-requisitions")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
-            .exec(http("Create new reportTemplate")
-            .post("/api/report-templates")
+            .exec(http("Create new pdfReportRequisition")
+            .post("/api/pdf-report-requisitions")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
-                "catalogueNumber":"SAMPLE_TEXT"
-                , "description":null
-                , "notes":null
-                , "reportFile":null
-                , "compileReportFile":null
+                "reportName":"SAMPLE_TEXT"
+                , "reportDate":"2020-01-01T00:00:00.000Z"
+                , "userPassword":"SAMPLE_TEXT"
+                , "ownerPassword":"SAMPLE_TEXT"
+                , "reportStatus":"GENERATING"
+                , "reportId":null
                 }""")).asJson
             .check(status.is(201))
-            .check(headerRegex("Location", "(.*)").saveAs("new_reportTemplate_url"))).exitHereIfFailed
+            .check(headerRegex("Location", "(.*)").saveAs("new_pdfReportRequisition_url"))).exitHereIfFailed
             .pause(10)
             .repeat(5) {
-                exec(http("Get created reportTemplate")
-                .get("${new_reportTemplate_url}")
+                exec(http("Get created pdfReportRequisition")
+                .get("${new_pdfReportRequisition_url}")
                 .headers(headers_http_authenticated))
                 .pause(10)
             }
-            .exec(http("Delete created reportTemplate")
-            .delete("${new_reportTemplate_url}")
+            .exec(http("Delete created pdfReportRequisition")
+            .delete("${new_pdfReportRequisition_url}")
             .headers(headers_http_authenticated))
             .pause(10)
         }
