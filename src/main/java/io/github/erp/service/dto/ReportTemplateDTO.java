@@ -24,6 +24,16 @@ public class ReportTemplateDTO implements Serializable {
     private byte[] notes;
 
     private String notesContentType;
+
+    @Lob
+    private byte[] reportFile;
+
+    private String reportFileContentType;
+
+    @Lob
+    private byte[] compileReportFile;
+
+    private String compileReportFileContentType;
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     public Long getId() {
@@ -66,6 +76,38 @@ public class ReportTemplateDTO implements Serializable {
         this.notesContentType = notesContentType;
     }
 
+    public byte[] getReportFile() {
+        return reportFile;
+    }
+
+    public void setReportFile(byte[] reportFile) {
+        this.reportFile = reportFile;
+    }
+
+    public String getReportFileContentType() {
+        return reportFileContentType;
+    }
+
+    public void setReportFileContentType(String reportFileContentType) {
+        this.reportFileContentType = reportFileContentType;
+    }
+
+    public byte[] getCompileReportFile() {
+        return compileReportFile;
+    }
+
+    public void setCompileReportFile(byte[] compileReportFile) {
+        this.compileReportFile = compileReportFile;
+    }
+
+    public String getCompileReportFileContentType() {
+        return compileReportFileContentType;
+    }
+
+    public void setCompileReportFileContentType(String compileReportFileContentType) {
+        this.compileReportFileContentType = compileReportFileContentType;
+    }
+
     public Set<PlaceholderDTO> getPlaceholders() {
         return placeholders;
     }
@@ -103,6 +145,8 @@ public class ReportTemplateDTO implements Serializable {
             ", catalogueNumber='" + getCatalogueNumber() + "'" +
             ", description='" + getDescription() + "'" +
             ", notes='" + getNotes() + "'" +
+            ", reportFile='" + getReportFile() + "'" +
+            ", compileReportFile='" + getCompileReportFile() + "'" +
             ", placeholders=" + getPlaceholders() +
             "}";
     }

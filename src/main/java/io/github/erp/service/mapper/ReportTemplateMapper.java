@@ -14,4 +14,10 @@ public interface ReportTemplateMapper extends EntityMapper<ReportTemplateDTO, Re
 
     @Mapping(target = "removePlaceholder", ignore = true)
     ReportTemplate toEntity(ReportTemplateDTO reportTemplateDTO);
+
+    @Named("catalogueNumber")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "catalogueNumber", source = "catalogueNumber")
+    ReportTemplateDTO toDtoCatalogueNumber(ReportTemplate reportTemplate);
 }
