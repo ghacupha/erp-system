@@ -3,10 +3,12 @@ package io.github.erp.service.criteria;
 import io.github.erp.domain.enumeration.ReportStatusTypes;
 import java.io.Serializable;
 import java.util.Objects;
-
-import io.github.erp.erp.resources.PdfReportRequisitionResource;
 import tech.jhipster.service.Criteria;
+import tech.jhipster.service.filter.BooleanFilter;
+import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
+import tech.jhipster.service.filter.FloatFilter;
+import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
@@ -14,7 +16,7 @@ import tech.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link io.github.erp.domain.PdfReportRequisition} entity. This class is used
- * in {@link PdfReportRequisitionResource} to receive all the possible filtering options from
+ * in {@link io.github.erp.web.rest.PdfReportRequisitionResource} to receive all the possible filtering options from
  * the Http GET request parameters.
  * For example the following could be a valid request:
  * {@code /pdf-report-requisitions?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
