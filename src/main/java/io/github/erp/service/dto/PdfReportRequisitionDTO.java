@@ -35,6 +35,8 @@ public class PdfReportRequisitionDTO implements Serializable {
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
+    private byte[] reportAttachment;
+
     public Long getId() {
         return id;
     }
@@ -105,6 +107,15 @@ public class PdfReportRequisitionDTO implements Serializable {
 
     public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
         this.placeholders = placeholders;
+    }
+
+    public byte[] getReportAttachment() {
+        return reportAttachment;
+    }
+
+    public PdfReportRequisitionDTO setReportAttachment(byte[] reportAttachment) {
+        this.reportAttachment = reportAttachment;
+        return this;
     }
 
     @Override
