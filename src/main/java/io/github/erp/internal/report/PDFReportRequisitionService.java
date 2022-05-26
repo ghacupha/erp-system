@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -30,17 +31,19 @@ public class PDFReportRequisitionService implements ReportRequisitionService<Pdf
     @Override
     public void createReport(PdfReportRequisitionDTO dto) {
         String fileName = reportTemplatePresentation.presentTemplate(dto);
+
+        Map<String, Object> parameters = new HashMap<>();
+
+        parameters.put("title", dto.getReportName());
+        parameters.put("description", dto.getReportTemplate().getDescription());
+
         String reportPath =
             simpleJasperReportsService.generateReport(
                 fileName,
                 dto.getReportId().toString().concat(".pdf"),
                 dto.getOwnerPassword(),
                 dto.getUserPassword(),
-                Map.of(
-                    "title", dto.getReportName(),
-                    "report-template", dto.getReportTemplate().getCatalogueNumber(),
-                    "description", dto.getReportTemplate().getDescription()
-                )
+                parameters
             );
 
         log.debug("The report is successfully generated on the path: {}", reportPath);
