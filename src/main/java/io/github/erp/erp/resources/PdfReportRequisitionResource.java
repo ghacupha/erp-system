@@ -1,5 +1,6 @@
 package io.github.erp.erp.resources;
 
+import io.github.erp.internal.report.ReportAttachmentService;
 import io.github.erp.repository.PdfReportRequisitionRepository;
 import io.github.erp.service.PdfReportRequisitionQueryService;
 import io.github.erp.service.PdfReportRequisitionService;
@@ -46,14 +47,17 @@ public class PdfReportRequisitionResource {
 
     private final PdfReportRequisitionQueryService pdfReportRequisitionQueryService;
 
+    private final ReportAttachmentService<Optional<PdfReportRequisitionDTO>> reportAttachmentService;
+
     public PdfReportRequisitionResource(
         PdfReportRequisitionService pdfReportRequisitionService,
         PdfReportRequisitionRepository pdfReportRequisitionRepository,
-        PdfReportRequisitionQueryService pdfReportRequisitionQueryService
-    ) {
+        PdfReportRequisitionQueryService pdfReportRequisitionQueryService,
+        ReportAttachmentService<Optional<PdfReportRequisitionDTO>> reportAttachmentService) {
         this.pdfReportRequisitionService = pdfReportRequisitionService;
         this.pdfReportRequisitionRepository = pdfReportRequisitionRepository;
         this.pdfReportRequisitionQueryService = pdfReportRequisitionQueryService;
+        this.reportAttachmentService = reportAttachmentService;
     }
 
     /**
@@ -187,7 +191,7 @@ public class PdfReportRequisitionResource {
     @GetMapping("/pdf-report-requisitions/{id}")
     public ResponseEntity<PdfReportRequisitionDTO> getPdfReportRequisition(@PathVariable Long id) {
         log.debug("REST request to get PdfReportRequisition : {}", id);
-        Optional<PdfReportRequisitionDTO> pdfReportRequisitionDTO = pdfReportRequisitionService.findOne(id);
+        Optional<PdfReportRequisitionDTO> pdfReportRequisitionDTO = reportAttachmentService.attachReport(pdfReportRequisitionService.findOne(id));
         return ResponseUtil.wrapOrNotFound(pdfReportRequisitionDTO);
     }
 
