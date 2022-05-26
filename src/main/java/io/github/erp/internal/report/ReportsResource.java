@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/reports")
 public class ReportsResource {
@@ -19,9 +21,9 @@ public class ReportsResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final SimpleJasperReportsService simpleJasperReportsService;
+    private final PDFReportsService simpleJasperReportsService;
 
-    public ReportsResource(SimpleJasperReportsService simpleJasperReportsService) {
+    public ReportsResource(PDFReportsService simpleJasperReportsService) {
         this.simpleJasperReportsService = simpleJasperReportsService;
     }
 
@@ -30,7 +32,13 @@ public class ReportsResource {
         log.debug("REST request to create report {}", "dealers");
 
         // TODO REPLACE THESE PARAMETERS WITH VALUES FROM FRONT-END REQUEST
-        String reportPath = simpleJasperReportsService.generatePDFReport("Simple_Blue.jrxml", "dealers-report.pdf", "ownerPassword","userPassword");
+        String reportPath =
+            simpleJasperReportsService.generateReport(
+                "Simple_Blue.jrxml",
+                "dealers-report.pdf",
+                "ownerPassword",
+                "userPassword",
+            Map.of("title", "Sample report"));
 
         log.debug("Report generated on the path {}", reportPath);
 

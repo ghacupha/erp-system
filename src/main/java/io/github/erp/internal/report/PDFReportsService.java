@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class SimpleJasperReportsService {
+public class PDFReportsService implements SecuredReportsService, UnsecuredReportsService {
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
@@ -21,7 +21,7 @@ public class SimpleJasperReportsService {
     private final SimpleJasperReportFiller simpleReportFiller;
     private final SimpleJasperReportExporter simpleExporter;
 
-    public SimpleJasperReportsService(SimpleJasperReportCompiler compiler, SimpleJasperReportFiller simpleReportFiller, SimpleJasperReportExporter simpleExporter) {
+    public PDFReportsService(SimpleJasperReportCompiler compiler, SimpleJasperReportFiller simpleReportFiller, SimpleJasperReportExporter simpleExporter) {
         this.compiler = compiler;
         this.simpleReportFiller = simpleReportFiller;
         this.simpleExporter = simpleExporter;
@@ -29,8 +29,6 @@ public class SimpleJasperReportsService {
 
     public void generateReport(String resourceLocation) {
 
-        // todo JasperReport compiledReport = compiler.compileReport("generated-reports/Simple_Blue.jrxml");
-        // todo JasperReport compiledReport = compiler.compileReport(reportsDirectory + "Simple_Blue.jrxml");
         JasperReport compiledReport = compiler.compileReport(reportsDirectory + resourceLocation);
 
         Map<String, Object> parameters = new HashMap<>();
@@ -47,21 +45,29 @@ public class SimpleJasperReportsService {
 
     }
 
-    public String generatePDFReport(String reportFileLocation, String reportName, String ownerPassword, String userPassword) {
+    @Override
+    public String generateReport(String reportFileLocation, String reportName, String ownerPassword, String userPassword, Map<String, Object> parameters) {
 
         JasperReport compiledReport = compiler.compileReport(reportsDirectory + reportFileLocation);
-        // JasperReport compiledReport = compiler.compileReport(reportFileLocation);
-
-        // Todo Additional parameters
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("title", reportName);
 
         JasperPrint print = simpleReportFiller.fillReport(compiledReport, parameters);
 
         simpleExporter.setJasperPrint(print);
 
-        // todo simpleExporter.exportToPdf(reportsDirectory + "employeeReport.pdf", applicationName, "ownerPassword","userPassword");
         simpleExporter.exportToPdf(reportsDirectory + reportName, applicationName, ownerPassword,userPassword);
+
+        return reportsDirectory + reportName;
+    }
+
+    @Override
+    public String generateReport(String reportFileLocation, String reportName, Map<String, Object> parameters) {
+        JasperReport compiledReport = compiler.compileReport(reportsDirectory + reportFileLocation);
+
+        JasperPrint print = simpleReportFiller.fillReport(compiledReport, parameters);
+
+        simpleExporter.setJasperPrint(print);
+
+        simpleExporter.exportToPdf(reportsDirectory + reportName, applicationName);
 
         return reportsDirectory + reportName;
     }
