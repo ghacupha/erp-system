@@ -50,9 +50,11 @@ public class SimpleJasperReportsService {
     public String generatePDFReport(String reportFileLocation, String reportName, String ownerPassword, String userPassword) {
 
         JasperReport compiledReport = compiler.compileReport(reportsDirectory + reportFileLocation);
+        // JasperReport compiledReport = compiler.compileReport(reportFileLocation);
 
+        // Todo Additional parameters
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("title", "Dealers Report Example");
+        parameters.put("title", reportName);
 
         JasperPrint print = simpleReportFiller.fillReport(compiledReport, parameters);
 

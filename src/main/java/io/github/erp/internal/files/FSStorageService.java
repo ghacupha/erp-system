@@ -21,8 +21,10 @@ public class FSStorageService implements FileStorageService {
 //    @Value("${erp.reportsDirectory}")
 //    private String reportsDirectory;
 
+    private static final String DEST_PATH = "reports-directory/";
 
-    private final Path root = Paths.get("reports-directory/");
+
+    private final Path root = Paths.get(DEST_PATH);
 
     @Override
     public void init() {
