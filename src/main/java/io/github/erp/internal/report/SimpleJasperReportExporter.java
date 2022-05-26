@@ -39,7 +39,28 @@ public class SimpleJasperReportExporter {
         exportConfig.set128BitKey(true);
         exportConfig.setCompressed(true);
         // TODO exportConfig.setPdfaConformance(PdfaConformanceEnum.PDFA_1A);
-        exportConfig.setAllowedPermissionsHint("PRINTING");
+        // exportConfig.setAllowedPermissionsHint("PRINTING");
+
+        exporter.setConfiguration(reportConfig);
+        exporter.setConfiguration(exportConfig);
+
+        exporter.exportReport();
+    }
+
+    @SneakyThrows
+    public void exportToPdf(String fileName, String author) {
+        JRPdfExporter exporter = new JRPdfExporter();
+        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(fileName));
+
+        SimplePdfReportConfiguration reportConfig = new SimplePdfReportConfiguration();
+        reportConfig.setSizePageToContent(true);
+        reportConfig.setForceLineBreakPolicy(false);
+
+        SimplePdfExporterConfiguration exportConfig = new SimplePdfExporterConfiguration();
+        exportConfig.setMetadataAuthor(author);
+        exportConfig.setEncrypted(false);
+        exportConfig.setCompressed(true);
 
         exporter.setConfiguration(reportConfig);
         exporter.setConfiguration(exportConfig);
