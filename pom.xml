@@ -10,7 +10,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Erp System</name>
-    <description>Mark I Ver 1 (Artaxerxes)</description>
+    <description>Mark II Version 2 (Artaxerxes)</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->
