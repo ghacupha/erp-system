@@ -24,6 +24,8 @@ services:
     image: ghacupha/erp-system:0.0.1-SNAPSHOT
     volumes:
       - ./logs/:/logs/
+      - ./reports-directory/:/reports-directory/
+      - ./generated-reports/:/generated-reports/
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
