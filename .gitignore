@@ -158,3 +158,6 @@ Desktop.ini
 /.nyc_output/
 /generated-reports/
 /reports-directory/
+/docker/reports-directory/
+/docker/generated-reports/
+src/main/docker/reports-directory/

@@ -1,5 +1,6 @@
 package io.github.erp.internal.files;
 
+import io.github.erp.internal.report.ReportsProperties;
 import lombok.SneakyThrows;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -19,13 +20,11 @@ import java.util.stream.Stream;
 @Service
 public class FSStorageService implements FileStorageService {
 
-//    @Value("${erp.reportsDirectory}")
-//    private String reportsDirectory;
+    private final Path root;
 
-    private static final String DEST_PATH = "reports-directory/";
-
-
-    private final Path root = Paths.get(DEST_PATH);
+    public FSStorageService(ReportsProperties reportsProperties) {
+        root = Paths.get(reportsProperties.getReportsDirectory());
+    }
 
     @SneakyThrows
     @Override
