@@ -1,5 +1,6 @@
 package io.github.erp.internal.files;
 
+import lombok.SneakyThrows;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -26,13 +27,10 @@ public class FSStorageService implements FileStorageService {
 
     private final Path root = Paths.get(DEST_PATH);
 
+    @SneakyThrows
     @Override
     public void init() {
-        try {
-            Files.createDirectory(root);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not initialize folder for upload!");
-        }
+          Files.createDirectory(root);
     }
 
     @Override
