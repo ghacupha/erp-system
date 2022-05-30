@@ -30,7 +30,11 @@ public class FSStorageService implements FileStorageService {
     @SneakyThrows
     @Override
     public void init() {
-          Files.createDirectory(root);
+        if(!Files.exists(root)) {
+            if (!Files.isRegularFile(root)) {
+                Files.createDirectory(root);
+            }
+        }
     }
 
     @Override
