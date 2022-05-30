@@ -1,3 +1,2 @@
 erp:
-  # TODO Setup environment variable
   reportsDirectory: 'reports-directory/'
