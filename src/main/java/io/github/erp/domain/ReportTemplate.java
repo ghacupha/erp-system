@@ -57,7 +57,11 @@ public class ReportTemplate implements Serializable {
     @Column(name = "compile_report_file_content_type")
     private String compileReportFileContentType;
 
-    @ManyToMany
+    @ManyToMany(
+        cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+        })
     @JoinTable(
         name = "rel_report_template__placeholder",
         joinColumns = @JoinColumn(name = "report_template_id"),
