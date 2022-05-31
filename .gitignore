@@ -161,3 +161,5 @@ Desktop.ini
 /docker/reports-directory/
 /docker/generated-reports/
 src/main/docker/reports-directory/
+/src/main/docker/generated-reports/
+/src/main/docker/reports-directory/
