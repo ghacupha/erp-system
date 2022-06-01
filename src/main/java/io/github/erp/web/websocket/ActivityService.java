@@ -1,7 +1,7 @@
 package io.github.erp.web.websocket;
 
 /*-
- * Erp System - Mark I Ver 1 (Artaxerxes)
+ * Erp System - Mark II No 4 (Artaxerxes Series)
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.web.websocket;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import static io.github.erp.config.WebsocketConfiguration.IP_ADDRESS;
 
 import io.github.erp.web.websocket.dto.ActivityDTO;
