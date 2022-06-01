@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Erp System - Mark I Ver 1 (Artaxerxes)
+# Erp System - Mark II No 4 (Artaxerxes Series)
 # Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
 #
 # This program is free software: you can redistribute it and/or modify
