@@ -23,11 +23,39 @@ import java.util.stream.Stream;
 
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * This interface presents the basic working requirements to use a file from the
+ * file system. The system assumes that the file location is configured by the implementation
+ * at startup
+ */
 public interface FileStorageService {
 
     void init();
+
+    /**
+     * Takes a multipart file from arguments and saves the file to the "working folder"
+     */
+    void save(MultipartFile file, String fileMd5CheckSum);
+
     void save(MultipartFile file);
+
+    /**
+     * Loads an item from the working folder whose name matches the argument
+     *
+     * @param filename
+     * @return
+     */
     Resource load(String filename);
+
+    /**
+     * Deletes everything in the working folder
+     */
     void deleteAll();
+
+    /**
+     * Loads all existing items in the working folder
+     *
+     * @return
+     */
     Stream<Path> loadAll();
 }

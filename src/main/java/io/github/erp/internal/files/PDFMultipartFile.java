@@ -28,6 +28,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * This object is used both as a map and spring framework implementation to present a file on the file system
+ */
 public class PDFMultipartFile implements MultipartFile {
 
     private final byte[] fileContent;

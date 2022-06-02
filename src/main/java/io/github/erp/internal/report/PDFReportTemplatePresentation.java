@@ -20,8 +20,14 @@ package io.github.erp.internal.report;
 
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.files.PDFMultipartFile;
+import io.github.erp.service.PlaceholderQueryService;
+import io.github.erp.service.criteria.PlaceholderCriteria;
 import io.github.erp.service.dto.PdfReportRequisitionDTO;
+import io.github.erp.service.dto.PlaceholderDTO;
 import org.springframework.stereotype.Component;
+import tech.jhipster.service.filter.StringFilter;
+
+import java.util.Objects;
 
 /**
  * Selects the appropriate report in accordance with the report requisition and saves it into an
@@ -32,26 +38,48 @@ public class PDFReportTemplatePresentation implements ReportTemplatePresentation
 
     private final FileStorageService fileStorageService;
     private final ReportsProperties reportsProperties;
+    private final PlaceholderQueryService placeholderQueryService;
 
-    // TODO Externalize this configuration
-    // private static final String DEST_PATH = "reports-directory/";
-
-
-    public PDFReportTemplatePresentation(FileStorageService fileStorageService, ReportsProperties reportsProperties) {
+    public PDFReportTemplatePresentation(FileStorageService fileStorageService, ReportsProperties reportsProperties, PlaceholderQueryService placeholderQueryService) {
         this.fileStorageService = fileStorageService;
         this.reportsProperties = reportsProperties;
+        this.placeholderQueryService = placeholderQueryService;
     }
 
     @Override
     public String presentTemplate(PdfReportRequisitionDTO dto) {
 
-        fileStorageService.save(
-            new PDFMultipartFile(
-                dto.getReportTemplate().getReportFile(),
-                reportsProperties.getReportsDirectory(),
-                dto.getReportTemplate().getCatalogueNumber().concat(".jrxml")
-            )
-        );
+        PlaceholderCriteria placeholderCriteria = new PlaceholderCriteria();
+        // The report-template needs to match the placeholder description
+        StringFilter descriptionFilter = new StringFilter();
+        descriptionFilter.setContains(dto.getReportTemplate().getCatalogueNumber());
+
+        placeholderCriteria.setDescription(descriptionFilter);
+
+        PlaceholderDTO plCandidate = null;
+
+        if (!placeholderQueryService.findByCriteria(placeholderCriteria).isEmpty()) {
+            plCandidate = placeholderQueryService.findByCriteria(placeholderCriteria).get(0);
+        }
+
+        if (plCandidate != null) {
+            fileStorageService.save(
+                new PDFMultipartFile(
+                    dto.getReportTemplate().getReportFile(),
+                    reportsProperties.getReportsDirectory(),
+                    dto.getReportTemplate().getCatalogueNumber().concat(".jrxml")
+                ),
+                plCandidate.getToken()
+            );
+        } else {
+            fileStorageService.save(
+                new PDFMultipartFile(
+                    dto.getReportTemplate().getReportFile(),
+                    reportsProperties.getReportsDirectory(),
+                    dto.getReportTemplate().getCatalogueNumber().concat(".jrxml")
+                )
+            );
+        }
 
         return dto.getReportTemplate().getCatalogueNumber().concat(".jrxml");
     }

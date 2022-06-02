@@ -23,10 +23,12 @@ import lombok.SneakyThrows;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,6 +37,12 @@ import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+/**
+ * This service implements the file-storage-service and as promised by the interface
+ * abstracts the file-location. The client will never know where the file is installed
+ * unless by query. At the time of writing such a method does not exist but  might exist
+ * in future for file integrity checks.
+ */
 @Service
 public class FSStorageService implements FileStorageService {
 
@@ -56,13 +64,36 @@ public class FSStorageService implements FileStorageService {
 
     @Override
     public void save(MultipartFile file) {
-        try {
+        this.save(file, null);
+    }
+
+    /**
+     * Saves the file in the argument to the file system, replacing a similar
+     * file should one be found existing
+     *
+     * @param file
+     */
+    @SneakyThrows
+    @Override
+    public void save(MultipartFile file, String fileMd5CheckSum) {
+
+        if (!FileUtils.fileChecksOut(this.root, file, fileMd5CheckSum)) {
             Files.copy(
                 file.getInputStream(),
                 this.root.resolve(Objects.requireNonNull(file.getOriginalFilename())),
-                StandardCopyOption.REPLACE_EXISTING);
-        } catch (Exception e) {
-            throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
+                StandardCopyOption.REPLACE_EXISTING
+            );
+        } else if (!Files.exists(root.resolve(Objects.requireNonNull(file.getOriginalFilename())))) {
+            Files.copy(
+                file.getInputStream(),
+                this.root.resolve(Objects.requireNonNull(file.getOriginalFilename()))
+            );
+        } else {
+            Files.copy(
+                file.getInputStream(),
+                this.root.resolve(Objects.requireNonNull(file.getOriginalFilename())),
+                StandardCopyOption.REPLACE_EXISTING
+            );
         }
     }
 
