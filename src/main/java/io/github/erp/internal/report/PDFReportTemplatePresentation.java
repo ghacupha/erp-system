@@ -31,13 +31,15 @@ import org.springframework.stereotype.Component;
 public class PDFReportTemplatePresentation implements ReportTemplatePresentation<PdfReportRequisitionDTO> {
 
     private final FileStorageService fileStorageService;
+    private final ReportsProperties reportsProperties;
 
     // TODO Externalize this configuration
-    private static final String DEST_PATH = "reports-directory/";
+    // private static final String DEST_PATH = "reports-directory/";
 
 
-    public PDFReportTemplatePresentation(FileStorageService fileStorageService) {
+    public PDFReportTemplatePresentation(FileStorageService fileStorageService, ReportsProperties reportsProperties) {
         this.fileStorageService = fileStorageService;
+        this.reportsProperties = reportsProperties;
     }
 
     @Override
@@ -46,7 +48,7 @@ public class PDFReportTemplatePresentation implements ReportTemplatePresentation
         fileStorageService.save(
             new PDFMultipartFile(
                 dto.getReportTemplate().getReportFile(),
-                DEST_PATH,
+                reportsProperties.getReportsDirectory(),
                 dto.getReportTemplate().getCatalogueNumber().concat(".jrxml")
             )
         );
