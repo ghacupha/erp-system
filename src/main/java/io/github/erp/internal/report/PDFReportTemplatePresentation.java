@@ -19,6 +19,7 @@ package io.github.erp.internal.report;
  */
 
 import io.github.erp.internal.files.FileStorageService;
+import io.github.erp.internal.files.JRXMLMultipartFile;
 import io.github.erp.internal.files.PDFMultipartFile;
 import io.github.erp.service.PlaceholderQueryService;
 import io.github.erp.service.criteria.PlaceholderCriteria;
@@ -64,7 +65,7 @@ public class PDFReportTemplatePresentation implements ReportTemplatePresentation
 
         if (plCandidate != null) {
             fileStorageService.save(
-                new PDFMultipartFile(
+                new JRXMLMultipartFile(
                     dto.getReportTemplate().getReportFile(),
                     reportsProperties.getReportsDirectory(),
                     dto.getReportTemplate().getCatalogueNumber().concat(".jrxml")
