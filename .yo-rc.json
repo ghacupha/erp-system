@@ -70,7 +70,8 @@
       "WorkInProgressTransfer",
       "WorkProjectRegister",
       "ReportTemplate",
-      "PdfReportRequisition"
+      "PdfReportRequisition",
+      "XlsxReportRequisition"
     ],
     "entitySuffix": "",
     "incrementalChangelog": false,

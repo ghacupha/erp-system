@@ -1,23 +1,5 @@
 package io.github.erp.service.mapper;
 
-/*-
- * Erp System - Mark II No 4 (Artaxerxes Series)
- * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import io.github.erp.domain.Settlement;
 import io.github.erp.service.dto.SettlementDTO;
 import java.util.Set;
@@ -59,15 +41,15 @@ public interface SettlementMapper extends EntityMapper<SettlementDTO, Settlement
     @Mapping(target = "removeSignatories", ignore = true)
     Settlement toEntity(SettlementDTO settlementDTO);
 
-    @Named("paymentNumber")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "paymentNumber", source = "paymentNumber")
-    SettlementDTO toDtoPaymentNumber(Settlement settlement);
-
     @Named("paymentNumberSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "paymentNumber", source = "paymentNumber")
     Set<SettlementDTO> toDtoPaymentNumberSet(Set<Settlement> settlement);
+
+    @Named("paymentNumber")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "paymentNumber", source = "paymentNumber")
+    SettlementDTO toDtoPaymentNumber(Settlement settlement);
 }
