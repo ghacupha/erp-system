@@ -65,6 +65,7 @@
     <include file="config/liquibase/changelog/20220503162809_added_entity_PrepaymentAmortization.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220517074515_added_entity_ReportTemplate.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220520053032_added_entity_PdfReportRequisition.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220605111232_added_entity_XlsxReportRequisition.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
@@ -115,8 +116,8 @@
     <include file="config/liquibase/changelog/20220503162809_added_entity_constraints_PrepaymentAmortization.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220517074515_added_entity_constraints_ReportTemplate.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220520053032_added_entity_constraints_PdfReportRequisition.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20220605082704_changelog.xml" relativeToChangelogFile="false"/>
 <!--    <include file="config/liquibase/changelog/20220524052147_changelog.xml" relativeToChangelogFile="false"/>-->
+    <include file="config/liquibase/changelog/20220605111232_added_entity_constraints_XlsxReportRequisition.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

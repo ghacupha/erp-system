@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity XlsxReportRequisition.
+    -->
+    <changeSet id="20220605111232-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="report_template_id"
+                                 baseTableName="xlsx_report_requisition"
+                                 constraintName="fk_xlsx_report_requisition__report_template_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="report_template"/>
+
+        <addForeignKeyConstraint baseColumnNames="xlsx_report_requisition_id"
+                                 baseTableName="rel_xlsx_report_requisition__placeholder"
+                                 constraintName="fk_rel_xlsx_report_requisition___xlsx_report_requisition_24_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="xlsx_report_requisition"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_xlsx_report_requisition__placeholder"
+                                 constraintName="fk_rel_xlsx_report_requisition__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+    </changeSet>
+</databaseChangeLog>
