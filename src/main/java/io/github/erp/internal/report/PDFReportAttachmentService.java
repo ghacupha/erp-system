@@ -19,20 +19,18 @@ package io.github.erp.internal.report;
  */
 
 import io.github.erp.internal.files.FileStorageService;
-import io.github.erp.service.dto.PdfReportRequisitionDTO;
+import io.github.erp.internal.model.AttachedPdfReportRequisitionDTO;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.util.Optional;
 
 /**
  * This services attaches a PDF report to a pdf-report-requisition-dto
  */
 @Service
-public class PDFReportAttachmentService implements ReportAttachmentService<Optional<PdfReportRequisitionDTO>> {
+public class PDFReportAttachmentService implements ReportAttachmentService<AttachedPdfReportRequisitionDTO> {
 
     private final static Logger log = LoggerFactory.getLogger(PDFReportAttachmentService.class);
     private final FileStorageService fileStorageService;
@@ -43,20 +41,23 @@ public class PDFReportAttachmentService implements ReportAttachmentService<Optio
 
     @SneakyThrows
     @Override
-    public Optional<PdfReportRequisitionDTO> attachReport(Optional<PdfReportRequisitionDTO> one) {
+    public AttachedPdfReportRequisitionDTO attachReport(AttachedPdfReportRequisitionDTO one) {
+        log.debug("Report designation {} has been mapped successfully for attachment. Commencing attachment", one.getReportName());
 
-        one.ifPresent(
-            dto -> {
-                log.debug("Fetching report name : {}", dto.getReportName());
-                byte[] reportResource = new byte[0];
-                try {
-                    reportResource = fileStorageService.load(dto.getReportId().toString().concat(".pdf")).getInputStream().readAllBytes();
-                } catch (IOException e) {
-                    log.error("We were unable to find the generated report with id: " + dto.getReportId().toString().concat(".pdf"), e);
-                }
-                dto.setReportAttachment(reportResource);}
-        );
+        long startup = System.currentTimeMillis();
 
+        log.debug("Fetching report name : {}", one.getReportName());
+
+        String reportFileName = one.getReportId().toString().concat(".pdf");
+
+        log.debug("Fetching report named : {}", reportFileName);
+
+        byte[] reportAttachment = fileStorageService.load(reportFileName).getInputStream().readAllBytes();
+
+        log.debug("Attaching report retrieved to DTO designation : {} ", one.getReportName());
+        one.setReportAttachment(reportAttachment);
+
+        log.debug("Report attachment completed successfully in {} milliseconds; sending attached report to the client  ", System.currentTimeMillis() - startup);
         return one;
     }
 }
