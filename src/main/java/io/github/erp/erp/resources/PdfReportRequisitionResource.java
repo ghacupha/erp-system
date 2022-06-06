@@ -21,7 +21,7 @@ package io.github.erp.erp.resources;
 import io.github.erp.internal.model.AttachedPdfReportRequisitionDTO;
 import io.github.erp.internal.model.mapping.AttachedPdfReportRequisitionDTOMapping;
 import io.github.erp.internal.report.ReportAttachmentService;
-import io.github.erp.internal.report.ReportRequisitionService;
+import io.github.erp.internal.report.ReportAssemblyService;
 import io.github.erp.repository.PdfReportRequisitionRepository;
 import io.github.erp.service.PdfReportRequisitionQueryService;
 import io.github.erp.service.PdfReportRequisitionService;
@@ -33,9 +33,12 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -81,7 +84,7 @@ public class PdfReportRequisitionResource {
 
 
     private final AttachedPdfReportRequisitionDTOMapping reportRequisitionDTOMapping;
-    private final ReportRequisitionService<PdfReportRequisitionDTO> reportRequisitionService;
+    private final ReportAssemblyService<PdfReportRequisitionDTO> reportRequisitionService;
     private final ReportAttachmentService<AttachedPdfReportRequisitionDTO> reportAttachmentService;
 
     public PdfReportRequisitionResource(
@@ -89,7 +92,7 @@ public class PdfReportRequisitionResource {
         PdfReportRequisitionRepository pdfReportRequisitionRepository,
         PdfReportRequisitionQueryService pdfReportRequisitionQueryService,
         AttachedPdfReportRequisitionDTOMapping reportRequisitionDTOMapping,
-        ReportRequisitionService<PdfReportRequisitionDTO> reportRequisitionService,
+        ReportAssemblyService<PdfReportRequisitionDTO> reportRequisitionService,
         ReportAttachmentService<AttachedPdfReportRequisitionDTO> reportAttachmentService) {
         this.pdfReportRequisitionService = pdfReportRequisitionService;
         this.pdfReportRequisitionRepository = pdfReportRequisitionRepository;
@@ -124,9 +127,20 @@ public class PdfReportRequisitionResource {
             .body(result);
     }
 
+    @SneakyThrows
     @Async
     void createReport(PdfReportRequisitionDTO pdfReportRequisitionDTO) {
-        reportRequisitionService.createReport(pdfReportRequisitionDTO);
+
+        long start = System.currentTimeMillis();
+
+        CompletableFuture<String> reportCreation = CompletableFuture.supplyAsync(() -> reportRequisitionService.createReport(pdfReportRequisitionDTO, ".pdf"));
+
+        reportCreation.thenApplyAsync(reportPath -> {
+            log.info("Report created successfully in {} milliseconds and set on the path {}", System.currentTimeMillis() - start, reportPath);
+            return reportPath;
+        });
+
+        // reportCreation.get();
     }
 
     /**
@@ -244,7 +258,6 @@ public class PdfReportRequisitionResource {
     @GetMapping("/pdf-report-requisitions/{id}")
     public ResponseEntity<AttachedPdfReportRequisitionDTO> getPdfReportRequisition(@PathVariable Long id) {
         log.debug("REST request to get PdfReportRequisition : {}", id);
-        Optional<PdfReportRequisitionDTO> pdfReportRequisitionDTO = Optional.empty();
 
         AtomicReference<AttachedPdfReportRequisitionDTO> attachedReport = new AtomicReference<>();
 

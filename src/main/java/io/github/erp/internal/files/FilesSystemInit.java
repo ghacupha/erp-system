@@ -18,8 +18,8 @@ package io.github.erp.internal.files;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.internal.report.PDFReportRequisitionService;
 import io.github.erp.service.PdfReportRequisitionService;
+import io.github.erp.service.XlsxReportRequisitionService;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.data.domain.Pageable;
@@ -32,10 +32,12 @@ public class FilesSystemInit implements ApplicationListener<ApplicationReadyEven
 
     private final FileStorageService storageService;
     private final PdfReportRequisitionService pdfReportRequisitionService;
+    private final XlsxReportRequisitionService xlsxReportRequisitionService;
 
-    public FilesSystemInit(FileStorageService storageService, PdfReportRequisitionService pdfReportRequisitionService) {
+    public FilesSystemInit(FileStorageService storageService, PdfReportRequisitionService pdfReportRequisitionService, XlsxReportRequisitionService xlsxReportRequisitionService) {
         this.storageService = storageService;
         this.pdfReportRequisitionService = pdfReportRequisitionService;
+        this.xlsxReportRequisitionService = xlsxReportRequisitionService;
     }
 
     @Override
@@ -43,6 +45,9 @@ public class FilesSystemInit implements ApplicationListener<ApplicationReadyEven
         // Delete all report entities from the system
         pdfReportRequisitionService.findAll(Pageable.unpaged())
             .forEach((report) -> pdfReportRequisitionService.delete(report.getId()));
+
+        xlsxReportRequisitionService.findAll(Pageable.unpaged())
+            .forEach(report -> xlsxReportRequisitionService.delete(report.getId()));
 
         // delete the report files from the system
         storageService.deleteAll();

@@ -19,7 +19,7 @@ public class XLSXReportAttachmentService
     @SneakyThrows
     @Override
     public AttachedXlsxReportRequisitionDTO attachReport(AttachedXlsxReportRequisitionDTO one) {
-        return (AttachedXlsxReportRequisitionDTO) super.attachReport(one);
+        return (AttachedXlsxReportRequisitionDTO) super.attachReport(one, ".xlsx");
     }
 
 }

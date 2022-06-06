@@ -39,7 +39,7 @@ public class FileUtils {
                 Path filePath = root.resolve(Objects.requireNonNull(file.getOriginalFilename()));
                 InputStream is = Files.newInputStream(filePath);
                 // TODO localFileMd5 = DigestUtils.md5DigestAsHex(is.readAllBytes());
-                localFile = com.google.common.io.Files.hash(filePath.toFile(), Hashing.crc32()).toString();
+                localFile = com.google.common.io.Files.hash(filePath.toFile(), Hashing.sha512()).toString();
 
                 return fileCheckSum.equalsIgnoreCase(localFile);
             } else {
