@@ -18,14 +18,14 @@ public class AbstractReportAttachmentService<DTO> {
 
     @NotNull
     @SneakyThrows
-    public AttachedReport<DTO> attachReport(AttachedReport<DTO> one) {
+    public AttachedReport<DTO> attachReport(AttachedReport<DTO> one, String fileExtension) {
         log.debug("Report designation {} has been mapped successfully for attachment. Commencing attachment", one.getReportName());
 
         long startup = System.currentTimeMillis();
 
         log.debug("Fetching report name : {}", one.getReportName());
 
-        String reportFileName = one.getReportId().toString().concat(".pdf");
+        String reportFileName = one.getReportId().toString().concat(fileExtension);
 
         log.debug("Fetching report named : {}", reportFileName);
 

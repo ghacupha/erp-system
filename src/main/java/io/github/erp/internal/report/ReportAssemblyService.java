@@ -18,11 +18,19 @@ package io.github.erp.internal.report;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import java.util.concurrent.CompletableFuture;
+
 /**
  * This interface takes report-requisition data and start the process of creating a report
  * @param <T>
  */
-public interface ReportRequisitionService<T> {
+public interface ReportAssemblyService<T> {
 
-    void createReport(T dto);
+    /**
+     * Creates the report and returns the report-path of the report
+     * @param dto
+     * @param fileExtension e.g. ".pdf", ".xlsx"
+     * @return
+     */
+   String createReport(T dto, String fileExtension);
 }

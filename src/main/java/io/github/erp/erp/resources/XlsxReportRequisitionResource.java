@@ -1,5 +1,9 @@
 package io.github.erp.erp.resources;
 
+import io.github.erp.internal.model.AttachedXlsxReportRequisitionDTO;
+import io.github.erp.internal.model.mapping.AttachedXlsxReportRequisitionDTOMapping;
+import io.github.erp.internal.report.ReportAttachmentService;
+import io.github.erp.internal.report.ReportAssemblyService;
 import io.github.erp.repository.XlsxReportRequisitionRepository;
 import io.github.erp.service.XlsxReportRequisitionQueryService;
 import io.github.erp.service.XlsxReportRequisitionService;
@@ -11,8 +15,12 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +28,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -46,14 +55,23 @@ public class XlsxReportRequisitionResource {
 
     private final XlsxReportRequisitionQueryService xlsxReportRequisitionQueryService;
 
+    private final AttachedXlsxReportRequisitionDTOMapping reportRequisitionDTOMapping;
+    private final ReportAssemblyService<XlsxReportRequisitionDTO> reportRequisitionService;
+    private final ReportAttachmentService<AttachedXlsxReportRequisitionDTO> reportAttachmentService;
+
     public XlsxReportRequisitionResource(
         XlsxReportRequisitionService xlsxReportRequisitionService,
         XlsxReportRequisitionRepository xlsxReportRequisitionRepository,
-        XlsxReportRequisitionQueryService xlsxReportRequisitionQueryService
-    ) {
+        XlsxReportRequisitionQueryService xlsxReportRequisitionQueryService,
+        AttachedXlsxReportRequisitionDTOMapping reportRequisitionDTOMapping,
+        ReportAssemblyService<XlsxReportRequisitionDTO> reportRequisitionService,
+        ReportAttachmentService<AttachedXlsxReportRequisitionDTO> reportAttachmentService) {
         this.xlsxReportRequisitionService = xlsxReportRequisitionService;
         this.xlsxReportRequisitionRepository = xlsxReportRequisitionRepository;
         this.xlsxReportRequisitionQueryService = xlsxReportRequisitionQueryService;
+        this.reportRequisitionDTOMapping = reportRequisitionDTOMapping;
+        this.reportRequisitionService = reportRequisitionService;
+        this.reportAttachmentService = reportAttachmentService;
     }
 
     /**
@@ -71,11 +89,30 @@ public class XlsxReportRequisitionResource {
         if (xlsxReportRequisitionDTO.getId() != null) {
             throw new BadRequestAlertException("A new xlsxReportRequisition cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        createReport(xlsxReportRequisitionDTO);
+
         XlsxReportRequisitionDTO result = xlsxReportRequisitionService.save(xlsxReportRequisitionDTO);
         return ResponseEntity
             .created(new URI("/api/xlsx-report-requisitions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    @SneakyThrows
+    @Async
+    void createReport(XlsxReportRequisitionDTO reportRequisitionDTO) {
+
+        long start = System.currentTimeMillis();
+
+        CompletableFuture<String> reportCreation = CompletableFuture.supplyAsync(() -> reportRequisitionService.createReport(reportRequisitionDTO, ".xlsx"));
+
+        reportCreation.thenApply(reportPath -> {
+            log.info("Report created successfully in {} milliseconds and set on the path {}", System.currentTimeMillis() - start, reportPath);
+            return reportPath;
+        });
+
+        // reportCreation.get();
     }
 
     /**
@@ -104,6 +141,8 @@ public class XlsxReportRequisitionResource {
         if (!xlsxReportRequisitionRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
+
+        createReport(xlsxReportRequisitionDTO);
 
         XlsxReportRequisitionDTO result = xlsxReportRequisitionService.save(xlsxReportRequisitionDTO);
         return ResponseEntity
@@ -142,6 +181,8 @@ public class XlsxReportRequisitionResource {
 
         Optional<XlsxReportRequisitionDTO> result = xlsxReportRequisitionService.partialUpdate(xlsxReportRequisitionDTO);
 
+        createReport(xlsxReportRequisitionDTO);
+
         return ResponseUtil.wrapOrNotFound(
             result,
             HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, xlsxReportRequisitionDTO.getId().toString())
@@ -163,6 +204,8 @@ public class XlsxReportRequisitionResource {
         log.debug("REST request to get XlsxReportRequisitions by criteria: {}", criteria);
         Page<XlsxReportRequisitionDTO> page = xlsxReportRequisitionQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+
+        // TODO Implement list requisitions
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
@@ -185,10 +228,17 @@ public class XlsxReportRequisitionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the xlsxReportRequisitionDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/xlsx-report-requisitions/{id}")
-    public ResponseEntity<XlsxReportRequisitionDTO> getXlsxReportRequisition(@PathVariable Long id) {
+    public ResponseEntity<AttachedXlsxReportRequisitionDTO> getXlsxReportRequisition(@PathVariable Long id) {
         log.debug("REST request to get XlsxReportRequisition : {}", id);
-        Optional<XlsxReportRequisitionDTO> xlsxReportRequisitionDTO = xlsxReportRequisitionService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(xlsxReportRequisitionDTO);
+        // Optional<XlsxReportRequisitionDTO> xlsxReportRequisitionDTO = xlsxReportRequisitionService.findOne(id);
+
+        AtomicReference<AttachedXlsxReportRequisitionDTO> attachedReport = new AtomicReference<>();
+
+        xlsxReportRequisitionService.findOne(id).ifPresentOrElse(theOne -> attachedReport.set(reportAttachmentService.attachReport(reportRequisitionDTOMapping.toValue2(theOne))),
+            () -> { throw new RuntimeException("We have failed to retrieve report id: " + id); }
+        );
+
+        return ResponseUtil.wrapOrNotFound(Optional.of(attachedReport.getAcquire()));
     }
 
     /**

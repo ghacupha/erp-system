@@ -77,7 +77,13 @@ public class FSStorageService implements FileStorageService {
     @Override
     public void save(MultipartFile file, String fileMd5CheckSum) {
 
-        if (!FileUtils.fileChecksOut(this.root, file, fileMd5CheckSum)) {
+        Files.copy(
+            file.getInputStream(),
+            this.root.resolve(Objects.requireNonNull(file.getOriginalFilename())),
+            StandardCopyOption.REPLACE_EXISTING
+        );
+
+        /* if (!FileUtils.fileChecksOut(this.root, file, fileMd5CheckSum)) {
             Files.copy(
                 file.getInputStream(),
                 this.root.resolve(Objects.requireNonNull(file.getOriginalFilename())),
@@ -94,7 +100,7 @@ public class FSStorageService implements FileStorageService {
                 this.root.resolve(Objects.requireNonNull(file.getOriginalFilename())),
                 StandardCopyOption.REPLACE_EXISTING
             );
-        }
+        } */
     }
 
     @Override
