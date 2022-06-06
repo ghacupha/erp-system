@@ -18,6 +18,8 @@ package io.github.erp.erp.resources;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.internal.model.AttachedPdfReportRequisitionDTO;
+import io.github.erp.internal.model.mapping.AttachedPdfReportRequisitionDTOMapping;
 import io.github.erp.internal.report.ReportAttachmentService;
 import io.github.erp.internal.report.ReportRequisitionService;
 import io.github.erp.repository.PdfReportRequisitionRepository;
@@ -31,6 +33,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -77,18 +80,21 @@ public class PdfReportRequisitionResource {
     private final PdfReportRequisitionQueryService pdfReportRequisitionQueryService;
 
 
+    private final AttachedPdfReportRequisitionDTOMapping reportRequisitionDTOMapping;
     private final ReportRequisitionService<PdfReportRequisitionDTO> reportRequisitionService;
-    private final ReportAttachmentService<Optional<PdfReportRequisitionDTO>> reportAttachmentService;
+    private final ReportAttachmentService<AttachedPdfReportRequisitionDTO> reportAttachmentService;
 
     public PdfReportRequisitionResource(
         PdfReportRequisitionService pdfReportRequisitionService,
         PdfReportRequisitionRepository pdfReportRequisitionRepository,
         PdfReportRequisitionQueryService pdfReportRequisitionQueryService,
+        AttachedPdfReportRequisitionDTOMapping reportRequisitionDTOMapping,
         ReportRequisitionService<PdfReportRequisitionDTO> reportRequisitionService,
-        ReportAttachmentService<Optional<PdfReportRequisitionDTO>> reportAttachmentService) {
+        ReportAttachmentService<AttachedPdfReportRequisitionDTO> reportAttachmentService) {
         this.pdfReportRequisitionService = pdfReportRequisitionService;
         this.pdfReportRequisitionRepository = pdfReportRequisitionRepository;
         this.pdfReportRequisitionQueryService = pdfReportRequisitionQueryService;
+        this.reportRequisitionDTOMapping = reportRequisitionDTOMapping;
         this.reportRequisitionService = reportRequisitionService;
         this.reportAttachmentService = reportAttachmentService;
     }
@@ -150,6 +156,8 @@ public class PdfReportRequisitionResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
+        createReport(pdfReportRequisitionDTO);
+
         PdfReportRequisitionDTO result = pdfReportRequisitionService.save(pdfReportRequisitionDTO);
         return ResponseEntity
             .ok()
@@ -187,6 +195,8 @@ public class PdfReportRequisitionResource {
 
         Optional<PdfReportRequisitionDTO> result = pdfReportRequisitionService.partialUpdate(pdfReportRequisitionDTO);
 
+        createReport(pdfReportRequisitionDTO);
+
         return ResponseUtil.wrapOrNotFound(
             result,
             HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, pdfReportRequisitionDTO.getId().toString())
@@ -206,6 +216,8 @@ public class PdfReportRequisitionResource {
         Pageable pageable
     ) {
         log.debug("REST request to get PdfReportRequisitions by criteria: {}", criteria);
+
+        // TODO Implement attachment for list
         Page<PdfReportRequisitionDTO> page = pdfReportRequisitionQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
@@ -230,10 +242,17 @@ public class PdfReportRequisitionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the pdfReportRequisitionDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/pdf-report-requisitions/{id}")
-    public ResponseEntity<PdfReportRequisitionDTO> getPdfReportRequisition(@PathVariable Long id) {
+    public ResponseEntity<AttachedPdfReportRequisitionDTO> getPdfReportRequisition(@PathVariable Long id) {
         log.debug("REST request to get PdfReportRequisition : {}", id);
-        Optional<PdfReportRequisitionDTO> pdfReportRequisitionDTO = reportAttachmentService.attachReport(pdfReportRequisitionService.findOne(id));
-        return ResponseUtil.wrapOrNotFound(pdfReportRequisitionDTO);
+        Optional<PdfReportRequisitionDTO> pdfReportRequisitionDTO = Optional.empty();
+
+        AtomicReference<AttachedPdfReportRequisitionDTO> attachedReport = new AtomicReference<>();
+
+        pdfReportRequisitionService.findOne(id).ifPresentOrElse(theOne -> {
+            attachedReport.set(reportAttachmentService.attachReport(reportRequisitionDTOMapping.toValue2(theOne)));
+        }, () -> {throw new IllegalStateException("We have failed to retrieve report id: " + id);});
+
+        return  ResponseUtil.wrapOrNotFound(Optional.of(attachedReport.getAcquire()));
     }
 
     /**
