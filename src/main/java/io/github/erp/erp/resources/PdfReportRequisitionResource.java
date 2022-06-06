@@ -250,7 +250,7 @@ public class PdfReportRequisitionResource {
 
         pdfReportRequisitionService.findOne(id).ifPresentOrElse(theOne -> {
             attachedReport.set(reportAttachmentService.attachReport(reportRequisitionDTOMapping.toValue2(theOne)));
-        }, () -> {throw new IllegalStateException("We have failed to retrieve report id: " + id);});
+        }, () -> {throw new RuntimeException("We have failed to retrieve report id: " + id);});
 
         return  ResponseUtil.wrapOrNotFound(Optional.of(attachedReport.getAcquire()));
     }

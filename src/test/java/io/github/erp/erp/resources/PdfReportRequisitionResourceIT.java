@@ -919,7 +919,7 @@ public class PdfReportRequisitionResourceIT {
     @Transactional
     void getNonExistingPdfReportRequisition() throws Exception {
         // Get the pdfReportRequisition
-        restPdfReportRequisitionMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
+        restPdfReportRequisitionMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().is5xxServerError());
     }
 
     @Test
