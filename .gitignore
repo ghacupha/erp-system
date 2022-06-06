@@ -163,3 +163,4 @@ Desktop.ini
 src/main/docker/reports-directory/
 /src/main/docker/generated-reports/
 /src/main/docker/reports-directory/
+src/test/resources/files/invoice-zip-test.zip
