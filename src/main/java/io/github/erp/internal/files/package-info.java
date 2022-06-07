@@ -4,7 +4,7 @@
 package io.github.erp.internal.files;
 
 /*-
- * Erp System - Mark II No 4 (Artaxerxes Series)
+ * Erp System - Mark II No 7 (Artaxerxes Series)
  * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,4 +20,3 @@ package io.github.erp.internal.files;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
