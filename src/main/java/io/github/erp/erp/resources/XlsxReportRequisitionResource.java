@@ -18,6 +18,7 @@ package io.github.erp.erp.resources;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.domain.enumeration.ReportStatusTypes;
 import io.github.erp.internal.model.AttachedXlsxReportRequisitionDTO;
 import io.github.erp.internal.model.mapping.AttachedXlsxReportRequisitionDTOMapping;
 import io.github.erp.internal.report.ReportAttachmentService;
@@ -26,6 +27,7 @@ import io.github.erp.repository.XlsxReportRequisitionRepository;
 import io.github.erp.service.XlsxReportRequisitionQueryService;
 import io.github.erp.service.XlsxReportRequisitionService;
 import io.github.erp.service.criteria.XlsxReportRequisitionCriteria;
+import io.github.erp.service.dto.PdfReportRequisitionDTO;
 import io.github.erp.service.dto.XlsxReportRequisitionDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -111,10 +113,44 @@ public class XlsxReportRequisitionResource {
         createReport(xlsxReportRequisitionDTO);
 
         XlsxReportRequisitionDTO result = xlsxReportRequisitionService.save(xlsxReportRequisitionDTO);
+
+        updateReport(result);
+
         return ResponseEntity
             .created(new URI("/api/xlsx-report-requisitions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    @Async
+    @SneakyThrows
+    void updateReport(XlsxReportRequisitionDTO report) {
+
+        // TODO in the write step when the batch process is ready
+        log.info("Updating report status for report ID {}", report.getId());
+
+        long start = System.currentTimeMillis();
+
+        CompletableFuture<XlsxReportRequisitionDTO> reportAcquisition = CompletableFuture.supplyAsync(() -> {
+            AtomicReference<XlsxReportRequisitionDTO> dto = new AtomicReference<>();
+            xlsxReportRequisitionService.findOne(report.getId()).ifPresent(rep -> {
+                    rep.setReportStatus(ReportStatusTypes.SUCCESSFUL);
+                    dto.set(xlsxReportRequisitionService.partialUpdate(rep).get());
+                });
+            return dto.getAcquire();
+        });
+
+        reportAcquisition.thenApplyAsync(rpt -> {
+            rpt.setReportStatus(ReportStatusTypes.SUCCESSFUL);
+            return xlsxReportRequisitionService.partialUpdate(rpt);
+        });
+
+        reportAcquisition.thenApplyAsync(rpt -> {
+            log.info("Report status change complete for report ID {} in {} milliseconds", rpt.getId(), System.currentTimeMillis() - start);
+            return rpt;
+        });
+
+        // reportAcquisition.get();
     }
 
     @SneakyThrows

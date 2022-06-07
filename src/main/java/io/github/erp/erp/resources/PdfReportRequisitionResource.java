@@ -17,6 +17,7 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.domain.enumeration.ReportStatusTypes;
 import io.github.erp.internal.model.AttachedPdfReportRequisitionDTO;
 import io.github.erp.internal.model.mapping.AttachedPdfReportRequisitionDTOMapping;
 import io.github.erp.internal.report.ReportAttachmentService;
@@ -57,6 +58,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tech.jhipster.service.filter.UUIDFilter;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -75,6 +77,8 @@ public class PdfReportRequisitionResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final PdfReportRequisitionRepository reportRequisitionRepository;
+
     private final PdfReportRequisitionService pdfReportRequisitionService;
 
     private final PdfReportRequisitionRepository pdfReportRequisitionRepository;
@@ -87,12 +91,13 @@ public class PdfReportRequisitionResource {
     private final ReportAttachmentService<AttachedPdfReportRequisitionDTO> reportAttachmentService;
 
     public PdfReportRequisitionResource(
-        PdfReportRequisitionService pdfReportRequisitionService,
+        PdfReportRequisitionRepository reportRequisitionRepository, PdfReportRequisitionService pdfReportRequisitionService,
         PdfReportRequisitionRepository pdfReportRequisitionRepository,
         PdfReportRequisitionQueryService pdfReportRequisitionQueryService,
         AttachedPdfReportRequisitionDTOMapping reportRequisitionDTOMapping,
         ReportAssemblyService<PdfReportRequisitionDTO> reportRequisitionService,
         ReportAttachmentService<AttachedPdfReportRequisitionDTO> reportAttachmentService) {
+        this.reportRequisitionRepository = reportRequisitionRepository;
         this.pdfReportRequisitionService = pdfReportRequisitionService;
         this.pdfReportRequisitionRepository = pdfReportRequisitionRepository;
         this.pdfReportRequisitionQueryService = pdfReportRequisitionQueryService;
@@ -120,16 +125,44 @@ public class PdfReportRequisitionResource {
         createReport(pdfReportRequisitionDTO);
 
         PdfReportRequisitionDTO result = pdfReportRequisitionService.save(pdfReportRequisitionDTO);
+
+        updateReport(result);
+
         return ResponseEntity
             .created(new URI("/api/pdf-report-requisitions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
+    @Async
+    @SneakyThrows
+    void updateReport(PdfReportRequisitionDTO report) {
+
+        // TODO in the write step when the batch process is ready
+        log.info("Updating report status for pdf report ID {}", report.getId());
+
+        long start = System.currentTimeMillis();
+
+        CompletableFuture<PdfReportRequisitionDTO> reportAcquisition = CompletableFuture.supplyAsync(() -> pdfReportRequisitionService.findOne(report.getId()).get());
+
+        reportAcquisition.thenApplyAsync(rpt -> {
+            rpt.setReportStatus(ReportStatusTypes.SUCCESSFUL);
+            return pdfReportRequisitionService.partialUpdate(rpt);
+        });
+
+        reportAcquisition.thenApplyAsync(rpt -> {
+            log.info("Report status change complete for pdf report ID {} in {} milliseconds", rpt.getId(), System.currentTimeMillis() - start);
+            return rpt;
+        });
+
+        reportAcquisition.get();
+    }
+
     @SneakyThrows
     @Async
     void createReport(PdfReportRequisitionDTO pdfReportRequisitionDTO) {
 
+        // TODO split this into read step and process step when you setup a batch sequence for the report
         long start = System.currentTimeMillis();
 
         CompletableFuture<String> reportCreation = CompletableFuture.supplyAsync(() -> reportRequisitionService.createReport(pdfReportRequisitionDTO, ".pdf"));
