@@ -66,6 +66,15 @@ public class XlsxReportRequisition implements Serializable {
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+        name = "rel_xlsx_report_requisition__value_maps",
+        joinColumns = @JoinColumn(name = "xlsx_report_requisition_id"),
+        inverseJoinColumns = @JoinColumn(name = "value_maps_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<UniversallyUniqueMapping> valueMaps = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -192,6 +201,29 @@ public class XlsxReportRequisition implements Serializable {
 
     public XlsxReportRequisition removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
+        return this;
+    }
+
+    public Set<UniversallyUniqueMapping> getValueMaps() {
+        return this.valueMaps;
+    }
+
+    public void setValueMaps(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
+        this.valueMaps = universallyUniqueMappings;
+    }
+
+    public XlsxReportRequisition valueMaps(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
+        this.setValueMaps(universallyUniqueMappings);
+        return this;
+    }
+
+    public XlsxReportRequisition addValueMaps(UniversallyUniqueMapping universallyUniqueMapping) {
+        this.valueMaps.add(universallyUniqueMapping);
+        return this;
+    }
+
+    public XlsxReportRequisition removeValueMaps(UniversallyUniqueMapping universallyUniqueMapping) {
+        this.valueMaps.remove(universallyUniqueMapping);
         return this;
     }
 

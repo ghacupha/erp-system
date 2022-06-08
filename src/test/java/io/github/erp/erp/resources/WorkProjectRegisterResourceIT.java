@@ -27,7 +27,7 @@ import io.github.erp.repository.search.WorkProjectRegisterSearchRepository;
 import io.github.erp.service.WorkProjectRegisterService;
 import io.github.erp.service.dto.WorkProjectRegisterDTO;
 import io.github.erp.service.mapper.WorkProjectRegisterMapper;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,7 +51,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static io.github.erp.web.rest.utils.TestUtil.sameNumber;
+import static io.github.erp.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;

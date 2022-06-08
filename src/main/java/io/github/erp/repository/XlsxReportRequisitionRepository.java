@@ -16,18 +16,18 @@ import org.springframework.stereotype.Repository;
 public interface XlsxReportRequisitionRepository
     extends JpaRepository<XlsxReportRequisition, Long>, JpaSpecificationExecutor<XlsxReportRequisition> {
     @Query(
-        value = "select distinct xlsxReportRequisition from XlsxReportRequisition xlsxReportRequisition left join fetch xlsxReportRequisition.placeholders",
+        value = "select distinct xlsxReportRequisition from XlsxReportRequisition xlsxReportRequisition left join fetch xlsxReportRequisition.placeholders left join fetch xlsxReportRequisition.valueMaps",
         countQuery = "select count(distinct xlsxReportRequisition) from XlsxReportRequisition xlsxReportRequisition"
     )
     Page<XlsxReportRequisition> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct xlsxReportRequisition from XlsxReportRequisition xlsxReportRequisition left join fetch xlsxReportRequisition.placeholders"
+        "select distinct xlsxReportRequisition from XlsxReportRequisition xlsxReportRequisition left join fetch xlsxReportRequisition.placeholders left join fetch xlsxReportRequisition.valueMaps"
     )
     List<XlsxReportRequisition> findAllWithEagerRelationships();
 
     @Query(
-        "select xlsxReportRequisition from XlsxReportRequisition xlsxReportRequisition left join fetch xlsxReportRequisition.placeholders where xlsxReportRequisition.id =:id"
+        "select xlsxReportRequisition from XlsxReportRequisition xlsxReportRequisition left join fetch xlsxReportRequisition.placeholders left join fetch xlsxReportRequisition.valueMaps where xlsxReportRequisition.id =:id"
     )
     Optional<XlsxReportRequisition> findOneWithEagerRelationships(@Param("id") Long id);
 }

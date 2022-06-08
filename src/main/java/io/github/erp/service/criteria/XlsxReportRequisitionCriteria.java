@@ -62,6 +62,8 @@ public class XlsxReportRequisitionCriteria implements Serializable, Criteria {
 
     private LongFilter placeholderId;
 
+    private LongFilter valueMapsId;
+
     private Boolean distinct;
 
     public XlsxReportRequisitionCriteria() {}
@@ -76,6 +78,7 @@ public class XlsxReportRequisitionCriteria implements Serializable, Criteria {
         this.reportId = other.reportId == null ? null : other.reportId.copy();
         this.reportTemplateId = other.reportTemplateId == null ? null : other.reportTemplateId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.valueMapsId = other.valueMapsId == null ? null : other.valueMapsId.copy();
         this.distinct = other.distinct;
     }
 
@@ -219,6 +222,21 @@ public class XlsxReportRequisitionCriteria implements Serializable, Criteria {
         this.placeholderId = placeholderId;
     }
 
+    public LongFilter getValueMapsId() {
+        return valueMapsId;
+    }
+
+    public LongFilter valueMapsId() {
+        if (valueMapsId == null) {
+            valueMapsId = new LongFilter();
+        }
+        return valueMapsId;
+    }
+
+    public void setValueMapsId(LongFilter valueMapsId) {
+        this.valueMapsId = valueMapsId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -246,6 +264,7 @@ public class XlsxReportRequisitionCriteria implements Serializable, Criteria {
             Objects.equals(reportId, that.reportId) &&
             Objects.equals(reportTemplateId, that.reportTemplateId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(valueMapsId, that.valueMapsId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -262,6 +281,7 @@ public class XlsxReportRequisitionCriteria implements Serializable, Criteria {
             reportId,
             reportTemplateId,
             placeholderId,
+            valueMapsId,
             distinct
         );
     }
@@ -279,6 +299,7 @@ public class XlsxReportRequisitionCriteria implements Serializable, Criteria {
             (reportId != null ? "reportId=" + reportId + ", " : "") +
             (reportTemplateId != null ? "reportTemplateId=" + reportTemplateId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (valueMapsId != null ? "valueMapsId=" + valueMapsId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

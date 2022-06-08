@@ -138,6 +138,15 @@ public class XlsxReportRequisitionQueryService extends QueryService<XlsxReportRe
                         )
                     );
             }
+            if (criteria.getValueMapsId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getValueMapsId(),
+                            root -> root.join(XlsxReportRequisition_.valueMaps, JoinType.LEFT).get(UniversallyUniqueMapping_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

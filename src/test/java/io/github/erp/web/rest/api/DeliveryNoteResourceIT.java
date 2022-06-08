@@ -24,7 +24,7 @@ import io.github.erp.repository.search.DeliveryNoteSearchRepository;
 import io.github.erp.service.DeliveryNoteService;
 import io.github.erp.service.dto.DeliveryNoteDTO;
 import io.github.erp.service.mapper.DeliveryNoteMapper;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

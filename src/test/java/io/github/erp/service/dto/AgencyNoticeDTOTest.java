@@ -2,7 +2,7 @@ package io.github.erp.service.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.Test;
 
 class AgencyNoticeDTOTest {

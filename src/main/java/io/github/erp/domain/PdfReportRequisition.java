@@ -70,6 +70,15 @@ public class PdfReportRequisition implements Serializable {
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+        name = "rel_pdf_report_requisition__value_maps",
+        joinColumns = @JoinColumn(name = "pdf_report_requisition_id"),
+        inverseJoinColumns = @JoinColumn(name = "value_maps_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<UniversallyUniqueMapping> valueMaps = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -209,6 +218,29 @@ public class PdfReportRequisition implements Serializable {
 
     public PdfReportRequisition removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
+        return this;
+    }
+
+    public Set<UniversallyUniqueMapping> getValueMaps() {
+        return this.valueMaps;
+    }
+
+    public void setValueMaps(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
+        this.valueMaps = universallyUniqueMappings;
+    }
+
+    public PdfReportRequisition valueMaps(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
+        this.setValueMaps(universallyUniqueMappings);
+        return this;
+    }
+
+    public PdfReportRequisition addValueMaps(UniversallyUniqueMapping universallyUniqueMapping) {
+        this.valueMaps.add(universallyUniqueMapping);
+        return this;
+    }
+
+    public PdfReportRequisition removeValueMaps(UniversallyUniqueMapping universallyUniqueMapping) {
+        this.valueMaps.remove(universallyUniqueMapping);
         return this;
     }
 

@@ -22,7 +22,7 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.repository.UniversallyUniqueMappingRepository;
 import io.github.erp.repository.search.UniversallyUniqueMappingSearchRepository;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

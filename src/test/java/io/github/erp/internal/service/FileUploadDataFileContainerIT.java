@@ -27,7 +27,7 @@ import io.github.erp.service.FileUploadQueryService;
 import io.github.erp.service.FileUploadService;
 import io.github.erp.service.dto.FileUploadDTO;
 import io.github.erp.service.mapper.FileUploadMapper;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
