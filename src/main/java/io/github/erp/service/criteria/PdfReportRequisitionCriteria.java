@@ -1,23 +1,5 @@
 package io.github.erp.service.criteria;
 
-/*-
- * Erp System - Mark II No 7 (Artaxerxes Series)
- * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import io.github.erp.domain.enumeration.ReportStatusTypes;
 import java.io.Serializable;
 import java.util.Objects;
@@ -72,6 +54,8 @@ public class PdfReportRequisitionCriteria implements Serializable, Criteria {
 
     private StringFilter ownerPassword;
 
+    private StringFilter reportFileChecksum;
+
     private ReportStatusTypesFilter reportStatus;
 
     private UUIDFilter reportId;
@@ -90,6 +74,7 @@ public class PdfReportRequisitionCriteria implements Serializable, Criteria {
         this.reportDate = other.reportDate == null ? null : other.reportDate.copy();
         this.userPassword = other.userPassword == null ? null : other.userPassword.copy();
         this.ownerPassword = other.ownerPassword == null ? null : other.ownerPassword.copy();
+        this.reportFileChecksum = other.reportFileChecksum == null ? null : other.reportFileChecksum.copy();
         this.reportStatus = other.reportStatus == null ? null : other.reportStatus.copy();
         this.reportId = other.reportId == null ? null : other.reportId.copy();
         this.reportTemplateId = other.reportTemplateId == null ? null : other.reportTemplateId.copy();
@@ -177,6 +162,21 @@ public class PdfReportRequisitionCriteria implements Serializable, Criteria {
         this.ownerPassword = ownerPassword;
     }
 
+    public StringFilter getReportFileChecksum() {
+        return reportFileChecksum;
+    }
+
+    public StringFilter reportFileChecksum() {
+        if (reportFileChecksum == null) {
+            reportFileChecksum = new StringFilter();
+        }
+        return reportFileChecksum;
+    }
+
+    public void setReportFileChecksum(StringFilter reportFileChecksum) {
+        this.reportFileChecksum = reportFileChecksum;
+    }
+
     public ReportStatusTypesFilter getReportStatus() {
         return reportStatus;
     }
@@ -260,6 +260,7 @@ public class PdfReportRequisitionCriteria implements Serializable, Criteria {
             Objects.equals(reportDate, that.reportDate) &&
             Objects.equals(userPassword, that.userPassword) &&
             Objects.equals(ownerPassword, that.ownerPassword) &&
+            Objects.equals(reportFileChecksum, that.reportFileChecksum) &&
             Objects.equals(reportStatus, that.reportStatus) &&
             Objects.equals(reportId, that.reportId) &&
             Objects.equals(reportTemplateId, that.reportTemplateId) &&
@@ -276,6 +277,7 @@ public class PdfReportRequisitionCriteria implements Serializable, Criteria {
             reportDate,
             userPassword,
             ownerPassword,
+            reportFileChecksum,
             reportStatus,
             reportId,
             reportTemplateId,
@@ -293,6 +295,7 @@ public class PdfReportRequisitionCriteria implements Serializable, Criteria {
             (reportDate != null ? "reportDate=" + reportDate + ", " : "") +
             (userPassword != null ? "userPassword=" + userPassword + ", " : "") +
             (ownerPassword != null ? "ownerPassword=" + ownerPassword + ", " : "") +
+            (reportFileChecksum != null ? "reportFileChecksum=" + reportFileChecksum + ", " : "") +
             (reportStatus != null ? "reportStatus=" + reportStatus + ", " : "") +
             (reportId != null ? "reportId=" + reportId + ", " : "") +
             (reportTemplateId != null ? "reportTemplateId=" + reportTemplateId + ", " : "") +
