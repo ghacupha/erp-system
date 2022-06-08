@@ -21,7 +21,10 @@
                 <constraints nullable="true" />
             </column>
             <column name="user_password" type="varchar(255)">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_xlsx_report_requisition__user_password" />
+                <constraints nullable="false" />
+            </column>
+            <column name="report_file_checksum" type="varchar(255)">
+                <constraints nullable="true" />
             </column>
             <column name="report_status" type="varchar(255)">
                 <constraints nullable="true" />
@@ -70,6 +73,7 @@
             <column name="report_name" type="string"/>
             <column name="report_date" type="date"/>
             <column name="user_password" type="string"/>
+            <column name="report_file_checksum" type="string"/>
             <column name="report_status" type="string"/>
             <column name="report_id" type="${uuidType}"/>
             <column name="report_template_id" type="numeric"/>
