@@ -1,23 +1,5 @@
 package io.github.erp.domain;
 
-/*-
- * Erp System - Mark II No 7 (Artaxerxes Series)
- * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.github.erp.domain.enumeration.ReportStatusTypes;
 import java.io.Serializable;
@@ -61,6 +43,9 @@ public class PdfReportRequisition implements Serializable {
     @NotNull
     @Column(name = "owner_password", nullable = false)
     private String ownerPassword;
+
+    @Column(name = "report_file_checksum")
+    private String reportFileChecksum;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "report_status")
@@ -150,6 +135,19 @@ public class PdfReportRequisition implements Serializable {
 
     public void setOwnerPassword(String ownerPassword) {
         this.ownerPassword = ownerPassword;
+    }
+
+    public String getReportFileChecksum() {
+        return this.reportFileChecksum;
+    }
+
+    public PdfReportRequisition reportFileChecksum(String reportFileChecksum) {
+        this.setReportFileChecksum(reportFileChecksum);
+        return this;
+    }
+
+    public void setReportFileChecksum(String reportFileChecksum) {
+        this.reportFileChecksum = reportFileChecksum;
     }
 
     public ReportStatusTypes getReportStatus() {
@@ -242,6 +240,7 @@ public class PdfReportRequisition implements Serializable {
             ", reportDate='" + getReportDate() + "'" +
             ", userPassword='" + getUserPassword() + "'" +
             ", ownerPassword='" + getOwnerPassword() + "'" +
+            ", reportFileChecksum='" + getReportFileChecksum() + "'" +
             ", reportStatus='" + getReportStatus() + "'" +
             ", reportId='" + getReportId() + "'" +
             "}";

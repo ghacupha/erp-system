@@ -20,6 +20,10 @@
       "fieldValidateRules": ["required"]
     },
     {
+      "fieldName": "reportFileChecksum",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "reportStatus",
       "fieldType": "ReportStatusTypes",
       "fieldValues": "GENERATING,SUCCESSFUL,FAILED"

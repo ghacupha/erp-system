@@ -1,23 +1,5 @@
 package io.github.erp.service.dto;
 
-/*-
- * Erp System - Mark II No 7 (Artaxerxes Series)
- * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import io.github.erp.domain.enumeration.ReportStatusTypes;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -41,6 +23,8 @@ public class XlsxReportRequisitionDTO implements Serializable {
 
     @NotNull
     private String userPassword;
+
+    private String reportFileChecksum;
 
     private ReportStatusTypes reportStatus;
 
@@ -81,6 +65,14 @@ public class XlsxReportRequisitionDTO implements Serializable {
 
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
+    }
+
+    public String getReportFileChecksum() {
+        return reportFileChecksum;
+    }
+
+    public void setReportFileChecksum(String reportFileChecksum) {
+        this.reportFileChecksum = reportFileChecksum;
     }
 
     public ReportStatusTypes getReportStatus() {
@@ -144,6 +136,7 @@ public class XlsxReportRequisitionDTO implements Serializable {
             ", reportName='" + getReportName() + "'" +
             ", reportDate='" + getReportDate() + "'" +
             ", userPassword='" + getUserPassword() + "'" +
+            ", reportFileChecksum='" + getReportFileChecksum() + "'" +
             ", reportStatus='" + getReportStatus() + "'" +
             ", reportId='" + getReportId() + "'" +
             ", reportTemplate=" + getReportTemplate() +
