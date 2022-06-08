@@ -39,6 +39,7 @@ public class PdfReportRequisitionDTO implements Serializable {
 
     private LocalDate reportDate;
 
+    @NotNull
     private String userPassword;
 
     @NotNull

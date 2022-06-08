@@ -17,7 +17,7 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import static io.github.erp.web.rest.TestUtil.sameNumber;
+import static io.github.erp.web.rest.utils.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.any;
@@ -44,7 +44,6 @@ import io.github.erp.domain.TransactionAccount;
 import io.github.erp.repository.PrepaymentAccountRepository;
 import io.github.erp.repository.search.PrepaymentAccountSearchRepository;
 import io.github.erp.service.PrepaymentAccountService;
-import io.github.erp.service.criteria.PrepaymentAccountCriteria;
 import io.github.erp.service.dto.PrepaymentAccountDTO;
 import io.github.erp.service.mapper.PrepaymentAccountMapper;
 import java.math.BigDecimal;
@@ -55,6 +54,7 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 
+import io.github.erp.web.rest.utils.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -68,7 +68,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Base64Utils;
 
 /**
  * Integration tests for the {@link PrepaymentAccountResource} REST controller.
@@ -172,7 +171,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isCreated());
 
@@ -203,7 +202,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -229,7 +228,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -251,7 +250,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -597,12 +596,12 @@ public class PrepaymentAccountResourceIT {
         // Initialize the database
         prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
         SettlementCurrency settlementCurrency;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
+        if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
             settlementCurrency = SettlementCurrencyResourceIT.createEntity(em);
             em.persist(settlementCurrency);
             em.flush();
         } else {
-            settlementCurrency = io.github.erp.web.rest.TestUtil.findAll(em, SettlementCurrency.class).get(0);
+            settlementCurrency = TestUtil.findAll(em, SettlementCurrency.class).get(0);
         }
         em.persist(settlementCurrency);
         em.flush();
@@ -623,12 +622,12 @@ public class PrepaymentAccountResourceIT {
         // Initialize the database
         prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
         Settlement prepaymentTransaction;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, Settlement.class).isEmpty()) {
+        if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
             prepaymentTransaction = SettlementResourceIT.createEntity(em);
             em.persist(prepaymentTransaction);
             em.flush();
         } else {
-            prepaymentTransaction = io.github.erp.web.rest.TestUtil.findAll(em, Settlement.class).get(0);
+            prepaymentTransaction = TestUtil.findAll(em, Settlement.class).get(0);
         }
         em.persist(prepaymentTransaction);
         em.flush();
@@ -649,12 +648,12 @@ public class PrepaymentAccountResourceIT {
         // Initialize the database
         prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
         ServiceOutlet serviceOutlet;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
+        if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
             serviceOutlet = ServiceOutletResourceIT.createEntity(em);
             em.persist(serviceOutlet);
             em.flush();
         } else {
-            serviceOutlet = io.github.erp.web.rest.TestUtil.findAll(em, ServiceOutlet.class).get(0);
+            serviceOutlet = TestUtil.findAll(em, ServiceOutlet.class).get(0);
         }
         em.persist(serviceOutlet);
         em.flush();
@@ -675,12 +674,12 @@ public class PrepaymentAccountResourceIT {
         // Initialize the database
         prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
         Dealer dealer;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, Dealer.class).isEmpty()) {
+        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
             dealer = DealerResourceIT.createEntity(em);
             em.persist(dealer);
             em.flush();
         } else {
-            dealer = io.github.erp.web.rest.TestUtil.findAll(em, Dealer.class).get(0);
+            dealer = TestUtil.findAll(em, Dealer.class).get(0);
         }
         em.persist(dealer);
         em.flush();
@@ -701,12 +700,12 @@ public class PrepaymentAccountResourceIT {
         // Initialize the database
         prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
         TransactionAccount debitAccount;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
+        if (TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
             debitAccount = TransactionAccountResourceIT.createEntity(em);
             em.persist(debitAccount);
             em.flush();
         } else {
-            debitAccount = io.github.erp.web.rest.TestUtil.findAll(em, TransactionAccount.class).get(0);
+            debitAccount = TestUtil.findAll(em, TransactionAccount.class).get(0);
         }
         em.persist(debitAccount);
         em.flush();
@@ -727,12 +726,12 @@ public class PrepaymentAccountResourceIT {
         // Initialize the database
         prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
         TransactionAccount transferAccount;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
+        if (TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
             transferAccount = TransactionAccountResourceIT.createEntity(em);
             em.persist(transferAccount);
             em.flush();
         } else {
-            transferAccount = io.github.erp.web.rest.TestUtil.findAll(em, TransactionAccount.class).get(0);
+            transferAccount = TestUtil.findAll(em, TransactionAccount.class).get(0);
         }
         em.persist(transferAccount);
         em.flush();
@@ -753,12 +752,12 @@ public class PrepaymentAccountResourceIT {
         // Initialize the database
         prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
         Placeholder placeholder;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, Placeholder.class).isEmpty()) {
+        if (TestUtil.findAll(em, Placeholder.class).isEmpty()) {
             placeholder = PlaceholderResourceIT.createEntity(em);
             em.persist(placeholder);
             em.flush();
         } else {
-            placeholder = io.github.erp.web.rest.TestUtil.findAll(em, Placeholder.class).get(0);
+            placeholder = TestUtil.findAll(em, Placeholder.class).get(0);
         }
         em.persist(placeholder);
         em.flush();
@@ -844,7 +843,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 put(ENTITY_API_URL_ID, prepaymentAccountDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isOk());
 
@@ -875,7 +874,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 put(ENTITY_API_URL_ID, prepaymentAccountDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -901,7 +900,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -925,7 +924,7 @@ public class PrepaymentAccountResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restPrepaymentAccountMockMvc
             .perform(
-                put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 
@@ -955,7 +954,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedPrepaymentAccount.getId())
                     .contentType("application/merge-patch+json")
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(partialUpdatedPrepaymentAccount))
+                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedPrepaymentAccount))
             )
             .andExpect(status().isOk());
 
@@ -991,7 +990,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedPrepaymentAccount.getId())
                     .contentType("application/merge-patch+json")
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(partialUpdatedPrepaymentAccount))
+                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedPrepaymentAccount))
             )
             .andExpect(status().isOk());
 
@@ -1019,7 +1018,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 patch(ENTITY_API_URL_ID, prepaymentAccountDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -1045,7 +1044,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -1071,7 +1070,7 @@ public class PrepaymentAccountResourceIT {
             .perform(
                 patch(ENTITY_API_URL)
                     .contentType("application/merge-patch+json")
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(prepaymentAccountDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 

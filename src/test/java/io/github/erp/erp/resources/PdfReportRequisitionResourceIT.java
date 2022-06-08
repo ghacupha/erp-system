@@ -19,9 +19,6 @@ package io.github.erp.erp.resources;
  */
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.PdfReportRequisition;
@@ -33,17 +30,8 @@ import io.github.erp.repository.search.PdfReportRequisitionSearchRepository;
 import io.github.erp.service.PdfReportRequisitionService;
 import io.github.erp.service.dto.PdfReportRequisitionDTO;
 import io.github.erp.service.mapper.PdfReportRequisitionMapper;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
-
-import io.github.erp.web.rest.TestUtil;
+import io.github.erp.web.rest.PdfReportRequisitionResource;
+import io.github.erp.web.rest.utils.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,6 +45,31 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Integration tests for the {@link PdfReportRequisitionResource} REST controller.
@@ -83,7 +96,7 @@ public class PdfReportRequisitionResourceIT {
     private static final ReportStatusTypes DEFAULT_REPORT_STATUS = ReportStatusTypes.GENERATING;
     private static final ReportStatusTypes UPDATED_REPORT_STATUS = ReportStatusTypes.SUCCESSFUL;
 
-    private static final UUID DEFAULT_REPORT_ID = UUID.fromString("f408c756-6788-4d45-b20e-6753cbd75fe0");
+    private static final UUID DEFAULT_REPORT_ID = UUID.randomUUID();
     private static final UUID UPDATED_REPORT_ID = UUID.randomUUID();
 
     private static final String ENTITY_API_URL = "/api/pdf-report-requisitions";
@@ -242,6 +255,28 @@ public class PdfReportRequisitionResourceIT {
         int databaseSizeBeforeTest = pdfReportRequisitionRepository.findAll().size();
         // set the field null
         pdfReportRequisition.setReportName(null);
+
+        // Create the PdfReportRequisition, which fails.
+        PdfReportRequisitionDTO pdfReportRequisitionDTO = pdfReportRequisitionMapper.toDto(pdfReportRequisition);
+
+        restPdfReportRequisitionMockMvc
+            .perform(
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(pdfReportRequisitionDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<PdfReportRequisition> pdfReportRequisitionList = pdfReportRequisitionRepository.findAll();
+        assertThat(pdfReportRequisitionList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkUserPasswordIsRequired() throws Exception {
+        int databaseSizeBeforeTest = pdfReportRequisitionRepository.findAll().size();
+        // set the field null
+        pdfReportRequisition.setUserPassword(null);
 
         // Create the PdfReportRequisition, which fails.
         PdfReportRequisitionDTO pdfReportRequisitionDTO = pdfReportRequisitionMapper.toDto(pdfReportRequisition);

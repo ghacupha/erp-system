@@ -26,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.SubCountyCode;
-import io.github.erp.erp.resources.SubCountyCodeResource;
 import io.github.erp.repository.SubCountyCodeRepository;
 import io.github.erp.repository.search.SubCountyCodeSearchRepository;
 import io.github.erp.service.SubCountyCodeService;
@@ -39,7 +38,7 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 
-import io.github.erp.web.rest.TestUtil;
+import io.github.erp.web.rest.utils.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

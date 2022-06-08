@@ -26,7 +26,7 @@ import io.github.erp.repository.search.DepreciationMethodSearchRepository;
 import io.github.erp.service.DepreciationMethodService;
 import io.github.erp.service.dto.DepreciationMethodDTO;
 import io.github.erp.service.mapper.DepreciationMethodMapper;
-import io.github.erp.web.rest.TestUtil;
+import io.github.erp.web.rest.utils.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

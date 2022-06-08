@@ -25,7 +25,7 @@ import io.github.erp.repository.search.OutletTypeSearchRepository;
 import io.github.erp.service.OutletTypeService;
 import io.github.erp.service.dto.OutletTypeDTO;
 import io.github.erp.service.mapper.OutletTypeMapper;
-import io.github.erp.web.rest.TestUtil;
+import io.github.erp.web.rest.utils.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

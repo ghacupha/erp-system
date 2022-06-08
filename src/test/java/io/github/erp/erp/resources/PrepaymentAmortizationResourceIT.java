@@ -17,7 +17,7 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import static io.github.erp.web.rest.TestUtil.sameNumber;
+import static io.github.erp.web.rest.utils.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -30,7 +30,6 @@ import io.github.erp.domain.PrepaymentAccount;
 import io.github.erp.domain.PrepaymentAmortization;
 import io.github.erp.domain.SettlementCurrency;
 import io.github.erp.domain.TransactionAccount;
-import io.github.erp.erp.resources.PrepaymentAmortizationResource;
 import io.github.erp.repository.PrepaymentAmortizationRepository;
 import io.github.erp.repository.search.PrepaymentAmortizationSearchRepository;
 import io.github.erp.service.PrepaymentAmortizationService;
@@ -46,7 +45,7 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 
-import io.github.erp.web.rest.TestUtil;
+import io.github.erp.web.rest.utils.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
