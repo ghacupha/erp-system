@@ -139,12 +139,12 @@ public class PdfReportRequisitionQueryService extends QueryService<PdfReportRequ
                         )
                     );
             }
-            if (criteria.getValueMapsId() != null) {
+            if (criteria.getParametersId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
-                            criteria.getValueMapsId(),
-                            root -> root.join(PdfReportRequisition_.valueMaps, JoinType.LEFT).get(UniversallyUniqueMapping_.id)
+                            criteria.getParametersId(),
+                            root -> root.join(PdfReportRequisition_.parameters, JoinType.LEFT).get(UniversallyUniqueMapping_.id)
                         )
                     );
             }

@@ -11,10 +11,10 @@ import org.mapstruct.*;
 public interface PdfReportRequisitionMapper extends EntityMapper<PdfReportRequisitionDTO, PdfReportRequisition> {
     @Mapping(target = "reportTemplate", source = "reportTemplate", qualifiedByName = "catalogueNumber")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
-    @Mapping(target = "valueMaps", source = "valueMaps", qualifiedByName = "mappedValueSet")
+    @Mapping(target = "parameters", source = "parameters", qualifiedByName = "mappedValueSet")
     PdfReportRequisitionDTO toDto(PdfReportRequisition s);
 
     @Mapping(target = "removePlaceholder", ignore = true)
-    @Mapping(target = "removeValueMaps", ignore = true)
+    @Mapping(target = "removeParameters", ignore = true)
     PdfReportRequisition toEntity(PdfReportRequisitionDTO pdfReportRequisitionDTO);
 }

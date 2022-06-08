@@ -16,18 +16,18 @@ import org.springframework.stereotype.Repository;
 public interface PdfReportRequisitionRepository
     extends JpaRepository<PdfReportRequisition, Long>, JpaSpecificationExecutor<PdfReportRequisition> {
     @Query(
-        value = "select distinct pdfReportRequisition from PdfReportRequisition pdfReportRequisition left join fetch pdfReportRequisition.placeholders left join fetch pdfReportRequisition.valueMaps",
+        value = "select distinct pdfReportRequisition from PdfReportRequisition pdfReportRequisition left join fetch pdfReportRequisition.placeholders left join fetch pdfReportRequisition.parameters",
         countQuery = "select count(distinct pdfReportRequisition) from PdfReportRequisition pdfReportRequisition"
     )
     Page<PdfReportRequisition> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct pdfReportRequisition from PdfReportRequisition pdfReportRequisition left join fetch pdfReportRequisition.placeholders left join fetch pdfReportRequisition.valueMaps"
+        "select distinct pdfReportRequisition from PdfReportRequisition pdfReportRequisition left join fetch pdfReportRequisition.placeholders left join fetch pdfReportRequisition.parameters"
     )
     List<PdfReportRequisition> findAllWithEagerRelationships();
 
     @Query(
-        "select pdfReportRequisition from PdfReportRequisition pdfReportRequisition left join fetch pdfReportRequisition.placeholders left join fetch pdfReportRequisition.valueMaps where pdfReportRequisition.id =:id"
+        "select pdfReportRequisition from PdfReportRequisition pdfReportRequisition left join fetch pdfReportRequisition.placeholders left join fetch pdfReportRequisition.parameters where pdfReportRequisition.id =:id"
     )
     Optional<PdfReportRequisition> findOneWithEagerRelationships(@Param("id") Long id);
 }

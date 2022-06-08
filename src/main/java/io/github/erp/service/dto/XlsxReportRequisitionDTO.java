@@ -35,7 +35,7 @@ public class XlsxReportRequisitionDTO implements Serializable {
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
-    private Set<UniversallyUniqueMappingDTO> valueMaps = new HashSet<>();
+    private Set<UniversallyUniqueMappingDTO> parameters = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -109,12 +109,12 @@ public class XlsxReportRequisitionDTO implements Serializable {
         this.placeholders = placeholders;
     }
 
-    public Set<UniversallyUniqueMappingDTO> getValueMaps() {
-        return valueMaps;
+    public Set<UniversallyUniqueMappingDTO> getParameters() {
+        return parameters;
     }
 
-    public void setValueMaps(Set<UniversallyUniqueMappingDTO> valueMaps) {
-        this.valueMaps = valueMaps;
+    public void setParameters(Set<UniversallyUniqueMappingDTO> parameters) {
+        this.parameters = parameters;
     }
 
     @Override
@@ -151,7 +151,7 @@ public class XlsxReportRequisitionDTO implements Serializable {
             ", reportId='" + getReportId() + "'" +
             ", reportTemplate=" + getReportTemplate() +
             ", placeholders=" + getPlaceholders() +
-            ", valueMaps=" + getValueMaps() +
+            ", parameters=" + getParameters() +
             "}";
     }
 }
