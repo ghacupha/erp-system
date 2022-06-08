@@ -1,0 +1,21 @@
+{
+  "fields": [
+    {
+      "fieldName": "universalKey",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "mappedValue",
+      "fieldType": "String",
+      "fieldValidateRules": []
+    }
+  ],
+  "relationships": [],
+  "service": "no",
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "UniversallyUniqueMapping",
+  "changelogDate": "20220608075128",
+  "incrementalChangelog": false
+}
