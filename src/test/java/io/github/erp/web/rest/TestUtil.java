@@ -1,4 +1,4 @@
-package io.github.erp.web.rest.utils;
+package io.github.erp.web.rest;
 
 /*-
  * Erp System - Mark II No 7 (Artaxerxes Series)

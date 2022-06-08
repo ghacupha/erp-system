@@ -44,6 +44,14 @@
       "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "xlsxReportRequisition"
+    },
+    {
+      "relationshipName": "parameters",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "mappedValue",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "xlsxReportRequisition"
     }
   ],
   "service": "serviceImpl",

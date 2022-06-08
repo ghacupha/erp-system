@@ -7,12 +7,14 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link PdfReportRequisition} and its DTO {@link PdfReportRequisitionDTO}.
  */
-@Mapper(componentModel = "spring", uses = { ReportTemplateMapper.class, PlaceholderMapper.class })
+@Mapper(componentModel = "spring", uses = { ReportTemplateMapper.class, PlaceholderMapper.class, UniversallyUniqueMappingMapper.class })
 public interface PdfReportRequisitionMapper extends EntityMapper<PdfReportRequisitionDTO, PdfReportRequisition> {
     @Mapping(target = "reportTemplate", source = "reportTemplate", qualifiedByName = "catalogueNumber")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
+    @Mapping(target = "valueMaps", source = "valueMaps", qualifiedByName = "mappedValueSet")
     PdfReportRequisitionDTO toDto(PdfReportRequisition s);
 
     @Mapping(target = "removePlaceholder", ignore = true)
+    @Mapping(target = "removeValueMaps", ignore = true)
     PdfReportRequisition toEntity(PdfReportRequisitionDTO pdfReportRequisitionDTO);
 }

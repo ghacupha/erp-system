@@ -12,7 +12,9 @@
     }
   ],
   "relationships": [],
-  "service": "no",
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
   "readOnly": false,
   "pagination": "pagination",
   "name": "UniversallyUniqueMapping",
