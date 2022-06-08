@@ -25,7 +25,7 @@ import io.github.erp.repository.search.CountyCodeSearchRepository;
 import io.github.erp.service.CountyCodeService;
 import io.github.erp.service.dto.CountyCodeDTO;
 import io.github.erp.service.mapper.CountyCodeMapper;
-import io.github.erp.web.rest.TestUtil;
+import io.github.erp.web.rest.utils.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

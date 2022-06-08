@@ -12,7 +12,7 @@
     {
       "fieldName": "userPassword",
       "fieldType": "String",
-      "fieldValidateRules": ["unique"]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "ownerPassword",

@@ -20,7 +20,7 @@ package io.github.erp.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.github.erp.web.rest.TestUtil;
+import io.github.erp.web.rest.utils.TestUtil;
 import org.junit.jupiter.api.Test;
 
 class SignedPaymentTest {

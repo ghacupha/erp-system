@@ -38,6 +38,7 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 
+import io.github.erp.web.rest.utils.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -68,8 +69,8 @@ public class TransactionAccountResourceIT {
     private static final String DEFAULT_ACCOUNT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_ACCOUNT_NAME = "BBBBBBBBBB";
 
-    private static final byte[] DEFAULT_NOTES = io.github.erp.web.rest.TestUtil.createByteArray(1, "0");
-    private static final byte[] UPDATED_NOTES = io.github.erp.web.rest.TestUtil.createByteArray(1, "1");
+    private static final byte[] DEFAULT_NOTES = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_NOTES = TestUtil.createByteArray(1, "1");
     private static final String DEFAULT_NOTES_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_NOTES_CONTENT_TYPE = "image/png";
 
@@ -153,7 +154,7 @@ public class TransactionAccountResourceIT {
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
             )
             .andExpect(status().isCreated());
 
@@ -184,7 +185,7 @@ public class TransactionAccountResourceIT {
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -210,7 +211,7 @@ public class TransactionAccountResourceIT {
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -232,7 +233,7 @@ public class TransactionAccountResourceIT {
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -474,12 +475,12 @@ public class TransactionAccountResourceIT {
         // Initialize the database
         transactionAccountRepository.saveAndFlush(transactionAccount);
         TransactionAccount parentAccount;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
+        if (TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
             parentAccount = TransactionAccountResourceIT.createEntity(em);
             em.persist(parentAccount);
             em.flush();
         } else {
-            parentAccount = io.github.erp.web.rest.TestUtil.findAll(em, TransactionAccount.class).get(0);
+            parentAccount = TestUtil.findAll(em, TransactionAccount.class).get(0);
         }
         em.persist(parentAccount);
         em.flush();
@@ -500,12 +501,12 @@ public class TransactionAccountResourceIT {
         // Initialize the database
         transactionAccountRepository.saveAndFlush(transactionAccount);
         Placeholder placeholder;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, Placeholder.class).isEmpty()) {
+        if (TestUtil.findAll(em, Placeholder.class).isEmpty()) {
             placeholder = PlaceholderResourceIT.createEntity(em);
             em.persist(placeholder);
             em.flush();
         } else {
-            placeholder = io.github.erp.web.rest.TestUtil.findAll(em, Placeholder.class).get(0);
+            placeholder = TestUtil.findAll(em, Placeholder.class).get(0);
         }
         em.persist(placeholder);
         em.flush();
@@ -591,7 +592,7 @@ public class TransactionAccountResourceIT {
             .perform(
                 put(ENTITY_API_URL_ID, transactionAccountDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
             )
             .andExpect(status().isOk());
 
@@ -622,7 +623,7 @@ public class TransactionAccountResourceIT {
             .perform(
                 put(ENTITY_API_URL_ID, transactionAccountDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -648,7 +649,7 @@ public class TransactionAccountResourceIT {
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -674,7 +675,7 @@ public class TransactionAccountResourceIT {
             .perform(
                 put(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 
@@ -704,7 +705,7 @@ public class TransactionAccountResourceIT {
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedTransactionAccount.getId())
                     .contentType("application/merge-patch+json")
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(partialUpdatedTransactionAccount))
+                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedTransactionAccount))
             )
             .andExpect(status().isOk());
 
@@ -740,7 +741,7 @@ public class TransactionAccountResourceIT {
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedTransactionAccount.getId())
                     .contentType("application/merge-patch+json")
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(partialUpdatedTransactionAccount))
+                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedTransactionAccount))
             )
             .andExpect(status().isOk());
 
@@ -768,7 +769,7 @@ public class TransactionAccountResourceIT {
             .perform(
                 patch(ENTITY_API_URL_ID, transactionAccountDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -794,7 +795,7 @@ public class TransactionAccountResourceIT {
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -820,7 +821,7 @@ public class TransactionAccountResourceIT {
             .perform(
                 patch(ENTITY_API_URL)
                     .contentType("application/merge-patch+json")
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 

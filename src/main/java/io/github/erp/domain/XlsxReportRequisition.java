@@ -54,7 +54,8 @@ public class XlsxReportRequisition implements Serializable {
     @Column(name = "report_date")
     private LocalDate reportDate;
 
-    @Column(name = "user_password", unique = true)
+    @NotNull
+    @Column(name = "user_password", nullable = false)
     private String userPassword;
 
     @Enumerated(EnumType.STRING)

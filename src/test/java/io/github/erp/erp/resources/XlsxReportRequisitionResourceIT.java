@@ -18,12 +18,6 @@ package io.github.erp.erp.resources;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.ReportTemplate;
@@ -34,17 +28,7 @@ import io.github.erp.repository.search.XlsxReportRequisitionSearchRepository;
 import io.github.erp.service.XlsxReportRequisitionService;
 import io.github.erp.service.dto.XlsxReportRequisitionDTO;
 import io.github.erp.service.mapper.XlsxReportRequisitionMapper;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
-
-import io.github.erp.web.rest.TestUtil;
+import io.github.erp.web.rest.utils.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,6 +42,31 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Integration tests for the {@link XlsxReportRequisitionResource} REST controller.
@@ -236,6 +245,28 @@ public class XlsxReportRequisitionResourceIT {
         int databaseSizeBeforeTest = xlsxReportRequisitionRepository.findAll().size();
         // set the field null
         xlsxReportRequisition.setReportName(null);
+
+        // Create the XlsxReportRequisition, which fails.
+        XlsxReportRequisitionDTO xlsxReportRequisitionDTO = xlsxReportRequisitionMapper.toDto(xlsxReportRequisition);
+
+        restXlsxReportRequisitionMockMvc
+            .perform(
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(xlsxReportRequisitionDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<XlsxReportRequisition> xlsxReportRequisitionList = xlsxReportRequisitionRepository.findAll();
+        assertThat(xlsxReportRequisitionList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkUserPasswordIsRequired() throws Exception {
+        int databaseSizeBeforeTest = xlsxReportRequisitionRepository.findAll().size();
+        // set the field null
+        xlsxReportRequisition.setUserPassword(null);
 
         // Create the XlsxReportRequisition, which fails.
         XlsxReportRequisitionDTO xlsxReportRequisitionDTO = xlsxReportRequisitionMapper.toDto(xlsxReportRequisition);

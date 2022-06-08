@@ -25,7 +25,7 @@ import io.github.erp.repository.search.BankBranchCodeSearchRepository;
 import io.github.erp.service.BankBranchCodeService;
 import io.github.erp.service.dto.BankBranchCodeDTO;
 import io.github.erp.service.mapper.BankBranchCodeMapper;
-import io.github.erp.web.rest.TestUtil;
+import io.github.erp.web.rest.utils.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -17,7 +17,7 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import static io.github.erp.web.rest.TestUtil.sameNumber;
+import static io.github.erp.web.rest.utils.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -34,7 +34,6 @@ import io.github.erp.domain.PurchaseOrder;
 import io.github.erp.domain.ServiceOutlet;
 import io.github.erp.domain.Settlement;
 import io.github.erp.domain.WorkInProgressRegistration;
-import io.github.erp.erp.resources.WorkInProgressRegistrationResource;
 import io.github.erp.repository.WorkInProgressRegistrationRepository;
 import io.github.erp.repository.search.WorkInProgressRegistrationSearchRepository;
 import io.github.erp.service.WorkInProgressRegistrationService;
@@ -48,7 +47,7 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 
-import io.github.erp.web.rest.TestUtil;
+import io.github.erp.web.rest.utils.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -83,8 +82,8 @@ public class WorkInProgressRegistrationResourceIT {
     private static final BigDecimal UPDATED_INSTALMENT_AMOUNT = new BigDecimal(2);
     private static final BigDecimal SMALLER_INSTALMENT_AMOUNT = new BigDecimal(1 - 1);
 
-    private static final byte[] DEFAULT_COMMENTS = io.github.erp.web.rest.TestUtil.createByteArray(1, "0");
-    private static final byte[] UPDATED_COMMENTS = io.github.erp.web.rest.TestUtil.createByteArray(1, "1");
+    private static final byte[] DEFAULT_COMMENTS = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_COMMENTS = TestUtil.createByteArray(1, "1");
     private static final String DEFAULT_COMMENTS_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_COMMENTS_CONTENT_TYPE = "image/png";
 
@@ -138,32 +137,32 @@ public class WorkInProgressRegistrationResourceIT {
             .commentsContentType(DEFAULT_COMMENTS_CONTENT_TYPE);
         // Add required entity
         ServiceOutlet serviceOutlet;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
+        if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
             serviceOutlet = ServiceOutletResourceIT.createEntity(em);
             em.persist(serviceOutlet);
             em.flush();
         } else {
-            serviceOutlet = io.github.erp.web.rest.TestUtil.findAll(em, ServiceOutlet.class).get(0);
+            serviceOutlet = TestUtil.findAll(em, ServiceOutlet.class).get(0);
         }
         workInProgressRegistration.getServiceOutlets().add(serviceOutlet);
         // Add required entity
         Settlement settlement;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, Settlement.class).isEmpty()) {
+        if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
             settlement = SettlementResourceIT.createEntity(em);
             em.persist(settlement);
             em.flush();
         } else {
-            settlement = io.github.erp.web.rest.TestUtil.findAll(em, Settlement.class).get(0);
+            settlement = TestUtil.findAll(em, Settlement.class).get(0);
         }
         workInProgressRegistration.getSettlements().add(settlement);
         // Add required entity
         Dealer dealer;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, Dealer.class).isEmpty()) {
+        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
             dealer = DealerResourceIT.createEntity(em);
             em.persist(dealer);
             em.flush();
         } else {
-            dealer = io.github.erp.web.rest.TestUtil.findAll(em, Dealer.class).get(0);
+            dealer = TestUtil.findAll(em, Dealer.class).get(0);
         }
         workInProgressRegistration.setDealer(dealer);
         return workInProgressRegistration;
@@ -184,32 +183,32 @@ public class WorkInProgressRegistrationResourceIT {
             .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE);
         // Add required entity
         ServiceOutlet serviceOutlet;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
+        if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
             serviceOutlet = ServiceOutletResourceIT.createUpdatedEntity(em);
             em.persist(serviceOutlet);
             em.flush();
         } else {
-            serviceOutlet = io.github.erp.web.rest.TestUtil.findAll(em, ServiceOutlet.class).get(0);
+            serviceOutlet = TestUtil.findAll(em, ServiceOutlet.class).get(0);
         }
         workInProgressRegistration.getServiceOutlets().add(serviceOutlet);
         // Add required entity
         Settlement settlement;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, Settlement.class).isEmpty()) {
+        if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
             settlement = SettlementResourceIT.createUpdatedEntity(em);
             em.persist(settlement);
             em.flush();
         } else {
-            settlement = io.github.erp.web.rest.TestUtil.findAll(em, Settlement.class).get(0);
+            settlement = TestUtil.findAll(em, Settlement.class).get(0);
         }
         workInProgressRegistration.getSettlements().add(settlement);
         // Add required entity
         Dealer dealer;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, Dealer.class).isEmpty()) {
+        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
             dealer = DealerResourceIT.createUpdatedEntity(em);
             em.persist(dealer);
             em.flush();
         } else {
-            dealer = io.github.erp.web.rest.TestUtil.findAll(em, Dealer.class).get(0);
+            dealer = TestUtil.findAll(em, Dealer.class).get(0);
         }
         workInProgressRegistration.setDealer(dealer);
         return workInProgressRegistration;
@@ -230,7 +229,7 @@ public class WorkInProgressRegistrationResourceIT {
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
             )
             .andExpect(status().isCreated());
 
@@ -264,7 +263,7 @@ public class WorkInProgressRegistrationResourceIT {
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -290,7 +289,7 @@ public class WorkInProgressRegistrationResourceIT {
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -640,12 +639,12 @@ public class WorkInProgressRegistrationResourceIT {
         // Initialize the database
         workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
         Placeholder placeholder;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, Placeholder.class).isEmpty()) {
+        if (TestUtil.findAll(em, Placeholder.class).isEmpty()) {
             placeholder = PlaceholderResourceIT.createEntity(em);
             em.persist(placeholder);
             em.flush();
         } else {
-            placeholder = io.github.erp.web.rest.TestUtil.findAll(em, Placeholder.class).get(0);
+            placeholder = TestUtil.findAll(em, Placeholder.class).get(0);
         }
         em.persist(placeholder);
         em.flush();
@@ -666,12 +665,12 @@ public class WorkInProgressRegistrationResourceIT {
         // Initialize the database
         workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
         PaymentInvoice paymentInvoices;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, PaymentInvoice.class).isEmpty()) {
+        if (TestUtil.findAll(em, PaymentInvoice.class).isEmpty()) {
             paymentInvoices = PaymentInvoiceResourceIT.createEntity(em);
             em.persist(paymentInvoices);
             em.flush();
         } else {
-            paymentInvoices = io.github.erp.web.rest.TestUtil.findAll(em, PaymentInvoice.class).get(0);
+            paymentInvoices = TestUtil.findAll(em, PaymentInvoice.class).get(0);
         }
         em.persist(paymentInvoices);
         em.flush();
@@ -692,12 +691,12 @@ public class WorkInProgressRegistrationResourceIT {
         // Initialize the database
         workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
         ServiceOutlet serviceOutlet;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
+        if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
             serviceOutlet = ServiceOutletResourceIT.createEntity(em);
             em.persist(serviceOutlet);
             em.flush();
         } else {
-            serviceOutlet = io.github.erp.web.rest.TestUtil.findAll(em, ServiceOutlet.class).get(0);
+            serviceOutlet = TestUtil.findAll(em, ServiceOutlet.class).get(0);
         }
         em.persist(serviceOutlet);
         em.flush();
@@ -718,12 +717,12 @@ public class WorkInProgressRegistrationResourceIT {
         // Initialize the database
         workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
         Settlement settlement;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, Settlement.class).isEmpty()) {
+        if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
             settlement = SettlementResourceIT.createEntity(em);
             em.persist(settlement);
             em.flush();
         } else {
-            settlement = io.github.erp.web.rest.TestUtil.findAll(em, Settlement.class).get(0);
+            settlement = TestUtil.findAll(em, Settlement.class).get(0);
         }
         em.persist(settlement);
         em.flush();
@@ -744,12 +743,12 @@ public class WorkInProgressRegistrationResourceIT {
         // Initialize the database
         workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
         PurchaseOrder purchaseOrder;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, PurchaseOrder.class).isEmpty()) {
+        if (TestUtil.findAll(em, PurchaseOrder.class).isEmpty()) {
             purchaseOrder = PurchaseOrderResourceIT.createEntity(em);
             em.persist(purchaseOrder);
             em.flush();
         } else {
-            purchaseOrder = io.github.erp.web.rest.TestUtil.findAll(em, PurchaseOrder.class).get(0);
+            purchaseOrder = TestUtil.findAll(em, PurchaseOrder.class).get(0);
         }
         em.persist(purchaseOrder);
         em.flush();
@@ -770,12 +769,12 @@ public class WorkInProgressRegistrationResourceIT {
         // Initialize the database
         workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
         DeliveryNote deliveryNote;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, DeliveryNote.class).isEmpty()) {
+        if (TestUtil.findAll(em, DeliveryNote.class).isEmpty()) {
             deliveryNote = DeliveryNoteResourceIT.createEntity(em);
             em.persist(deliveryNote);
             em.flush();
         } else {
-            deliveryNote = io.github.erp.web.rest.TestUtil.findAll(em, DeliveryNote.class).get(0);
+            deliveryNote = TestUtil.findAll(em, DeliveryNote.class).get(0);
         }
         em.persist(deliveryNote);
         em.flush();
@@ -796,12 +795,12 @@ public class WorkInProgressRegistrationResourceIT {
         // Initialize the database
         workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
         JobSheet jobSheet;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, JobSheet.class).isEmpty()) {
+        if (TestUtil.findAll(em, JobSheet.class).isEmpty()) {
             jobSheet = JobSheetResourceIT.createEntity(em);
             em.persist(jobSheet);
             em.flush();
         } else {
-            jobSheet = io.github.erp.web.rest.TestUtil.findAll(em, JobSheet.class).get(0);
+            jobSheet = TestUtil.findAll(em, JobSheet.class).get(0);
         }
         em.persist(jobSheet);
         em.flush();
@@ -822,12 +821,12 @@ public class WorkInProgressRegistrationResourceIT {
         // Initialize the database
         workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
         Dealer dealer;
-        if (io.github.erp.web.rest.TestUtil.findAll(em, Dealer.class).isEmpty()) {
+        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
             dealer = DealerResourceIT.createEntity(em);
             em.persist(dealer);
             em.flush();
         } else {
-            dealer = io.github.erp.web.rest.TestUtil.findAll(em, Dealer.class).get(0);
+            dealer = TestUtil.findAll(em, Dealer.class).get(0);
         }
         em.persist(dealer);
         em.flush();
@@ -919,7 +918,7 @@ public class WorkInProgressRegistrationResourceIT {
             .perform(
                 put(ENTITY_API_URL_ID, workInProgressRegistrationDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
             )
             .andExpect(status().isOk());
 
@@ -953,7 +952,7 @@ public class WorkInProgressRegistrationResourceIT {
             .perform(
                 put(ENTITY_API_URL_ID, workInProgressRegistrationDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -979,7 +978,7 @@ public class WorkInProgressRegistrationResourceIT {
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -1005,7 +1004,7 @@ public class WorkInProgressRegistrationResourceIT {
             .perform(
                 put(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 
@@ -1035,7 +1034,7 @@ public class WorkInProgressRegistrationResourceIT {
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedWorkInProgressRegistration.getId())
                     .contentType("application/merge-patch+json")
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(partialUpdatedWorkInProgressRegistration))
+                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedWorkInProgressRegistration))
             )
             .andExpect(status().isOk());
 
@@ -1075,7 +1074,7 @@ public class WorkInProgressRegistrationResourceIT {
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedWorkInProgressRegistration.getId())
                     .contentType("application/merge-patch+json")
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(partialUpdatedWorkInProgressRegistration))
+                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedWorkInProgressRegistration))
             )
             .andExpect(status().isOk());
 
@@ -1106,7 +1105,7 @@ public class WorkInProgressRegistrationResourceIT {
             .perform(
                 patch(ENTITY_API_URL_ID, workInProgressRegistrationDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -1132,7 +1131,7 @@ public class WorkInProgressRegistrationResourceIT {
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -1158,7 +1157,7 @@ public class WorkInProgressRegistrationResourceIT {
             .perform(
                 patch(ENTITY_API_URL)
                     .contentType("application/merge-patch+json")
-                    .content(io.github.erp.web.rest.TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
+                    .content(TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 

@@ -39,6 +39,7 @@ public class XlsxReportRequisitionDTO implements Serializable {
 
     private LocalDate reportDate;
 
+    @NotNull
     private String userPassword;
 
     private ReportStatusTypes reportStatus;
