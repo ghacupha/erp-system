@@ -118,7 +118,6 @@
     <include file="config/liquibase/changelog/20220517074515_added_entity_constraints_ReportTemplate.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220520053032_added_entity_constraints_PdfReportRequisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220605111232_added_entity_constraints_XlsxReportRequisition.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20220608103300_changelog.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

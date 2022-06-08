@@ -68,12 +68,12 @@ public class XlsxReportRequisition implements Serializable {
 
     @ManyToMany
     @JoinTable(
-        name = "rel_xlsx_report_requisition__value_maps",
+        name = "rel_xlsx_report_requisition__parameters",
         joinColumns = @JoinColumn(name = "xlsx_report_requisition_id"),
-        inverseJoinColumns = @JoinColumn(name = "value_maps_id")
+        inverseJoinColumns = @JoinColumn(name = "parameters_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<UniversallyUniqueMapping> valueMaps = new HashSet<>();
+    private Set<UniversallyUniqueMapping> parameters = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -204,26 +204,26 @@ public class XlsxReportRequisition implements Serializable {
         return this;
     }
 
-    public Set<UniversallyUniqueMapping> getValueMaps() {
-        return this.valueMaps;
+    public Set<UniversallyUniqueMapping> getParameters() {
+        return this.parameters;
     }
 
-    public void setValueMaps(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
-        this.valueMaps = universallyUniqueMappings;
+    public void setParameters(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
+        this.parameters = universallyUniqueMappings;
     }
 
-    public XlsxReportRequisition valueMaps(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
-        this.setValueMaps(universallyUniqueMappings);
+    public XlsxReportRequisition parameters(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
+        this.setParameters(universallyUniqueMappings);
         return this;
     }
 
-    public XlsxReportRequisition addValueMaps(UniversallyUniqueMapping universallyUniqueMapping) {
-        this.valueMaps.add(universallyUniqueMapping);
+    public XlsxReportRequisition addParameters(UniversallyUniqueMapping universallyUniqueMapping) {
+        this.parameters.add(universallyUniqueMapping);
         return this;
     }
 
-    public XlsxReportRequisition removeValueMaps(UniversallyUniqueMapping universallyUniqueMapping) {
-        this.valueMaps.remove(universallyUniqueMapping);
+    public XlsxReportRequisition removeParameters(UniversallyUniqueMapping universallyUniqueMapping) {
+        this.parameters.remove(universallyUniqueMapping);
         return this;
     }
 

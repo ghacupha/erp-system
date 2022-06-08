@@ -25,5 +25,17 @@
                                  constraintName="fk_rel_xlsx_report_requisition__placeholder__placeholder_id"
                                  referencedColumnNames="id"
                                  referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="xlsx_report_requisition_id"
+                                 baseTableName="rel_xlsx_report_requisition__parameters"
+                                 constraintName="fk_rel_xlsx_report_requisition___xlsx_report_requisition_7a_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="xlsx_report_requisition"/>
+
+        <addForeignKeyConstraint baseColumnNames="parameters_id"
+                                 baseTableName="rel_xlsx_report_requisition__parameters"
+                                 constraintName="fk_rel_xlsx_report_requisition__parameters__parameters_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="universally_unique_mapping"/>
     </changeSet>
 </databaseChangeLog>

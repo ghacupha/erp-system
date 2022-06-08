@@ -11,10 +11,10 @@ import org.mapstruct.*;
 public interface XlsxReportRequisitionMapper extends EntityMapper<XlsxReportRequisitionDTO, XlsxReportRequisition> {
     @Mapping(target = "reportTemplate", source = "reportTemplate", qualifiedByName = "catalogueNumber")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
-    @Mapping(target = "valueMaps", source = "valueMaps", qualifiedByName = "mappedValueSet")
+    @Mapping(target = "parameters", source = "parameters", qualifiedByName = "mappedValueSet")
     XlsxReportRequisitionDTO toDto(XlsxReportRequisition s);
 
     @Mapping(target = "removePlaceholder", ignore = true)
-    @Mapping(target = "removeValueMaps", ignore = true)
+    @Mapping(target = "removeParameters", ignore = true)
     XlsxReportRequisition toEntity(XlsxReportRequisitionDTO xlsxReportRequisitionDTO);
 }

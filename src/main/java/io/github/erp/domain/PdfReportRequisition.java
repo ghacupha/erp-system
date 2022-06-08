@@ -72,12 +72,12 @@ public class PdfReportRequisition implements Serializable {
 
     @ManyToMany
     @JoinTable(
-        name = "rel_pdf_report_requisition__value_maps",
+        name = "rel_pdf_report_requisition__parameters",
         joinColumns = @JoinColumn(name = "pdf_report_requisition_id"),
-        inverseJoinColumns = @JoinColumn(name = "value_maps_id")
+        inverseJoinColumns = @JoinColumn(name = "parameters_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<UniversallyUniqueMapping> valueMaps = new HashSet<>();
+    private Set<UniversallyUniqueMapping> parameters = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -221,26 +221,26 @@ public class PdfReportRequisition implements Serializable {
         return this;
     }
 
-    public Set<UniversallyUniqueMapping> getValueMaps() {
-        return this.valueMaps;
+    public Set<UniversallyUniqueMapping> getParameters() {
+        return this.parameters;
     }
 
-    public void setValueMaps(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
-        this.valueMaps = universallyUniqueMappings;
+    public void setParameters(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
+        this.parameters = universallyUniqueMappings;
     }
 
-    public PdfReportRequisition valueMaps(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
-        this.setValueMaps(universallyUniqueMappings);
+    public PdfReportRequisition parameters(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
+        this.setParameters(universallyUniqueMappings);
         return this;
     }
 
-    public PdfReportRequisition addValueMaps(UniversallyUniqueMapping universallyUniqueMapping) {
-        this.valueMaps.add(universallyUniqueMapping);
+    public PdfReportRequisition addParameters(UniversallyUniqueMapping universallyUniqueMapping) {
+        this.parameters.add(universallyUniqueMapping);
         return this;
     }
 
-    public PdfReportRequisition removeValueMaps(UniversallyUniqueMapping universallyUniqueMapping) {
-        this.valueMaps.remove(universallyUniqueMapping);
+    public PdfReportRequisition removeParameters(UniversallyUniqueMapping universallyUniqueMapping) {
+        this.parameters.remove(universallyUniqueMapping);
         return this;
     }
 

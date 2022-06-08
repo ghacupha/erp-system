@@ -21,10 +21,13 @@
                 <constraints nullable="true" />
             </column>
             <column name="user_password" type="varchar(255)">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_pdf_report_requisition__user_password" />
+                <constraints nullable="false" />
             </column>
             <column name="owner_password" type="varchar(255)">
                 <constraints nullable="false" />
+            </column>
+            <column name="report_file_checksum" type="varchar(255)">
+                <constraints nullable="true" />
             </column>
             <column name="report_status" type="varchar(255)">
                 <constraints nullable="true" />
@@ -51,6 +54,17 @@
         </createTable>
 
         <addPrimaryKey columnNames="pdf_report_requisition_id, placeholder_id" tableName="rel_pdf_report_requisition__placeholder"/>
+
+        <createTable tableName="rel_pdf_report_requisition__parameters">
+            <column name="parameters_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pdf_report_requisition_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="pdf_report_requisition_id, parameters_id" tableName="rel_pdf_report_requisition__parameters"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -74,6 +88,7 @@
             <column name="report_date" type="date"/>
             <column name="user_password" type="string"/>
             <column name="owner_password" type="string"/>
+            <column name="report_file_checksum" type="string"/>
             <column name="report_status" type="string"/>
             <column name="report_id" type="${uuidType}"/>
             <column name="report_template_id" type="numeric"/>

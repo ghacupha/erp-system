@@ -62,7 +62,7 @@ public class XlsxReportRequisitionCriteria implements Serializable, Criteria {
 
     private LongFilter placeholderId;
 
-    private LongFilter valueMapsId;
+    private LongFilter parametersId;
 
     private Boolean distinct;
 
@@ -78,7 +78,7 @@ public class XlsxReportRequisitionCriteria implements Serializable, Criteria {
         this.reportId = other.reportId == null ? null : other.reportId.copy();
         this.reportTemplateId = other.reportTemplateId == null ? null : other.reportTemplateId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
-        this.valueMapsId = other.valueMapsId == null ? null : other.valueMapsId.copy();
+        this.parametersId = other.parametersId == null ? null : other.parametersId.copy();
         this.distinct = other.distinct;
     }
 
@@ -222,19 +222,19 @@ public class XlsxReportRequisitionCriteria implements Serializable, Criteria {
         this.placeholderId = placeholderId;
     }
 
-    public LongFilter getValueMapsId() {
-        return valueMapsId;
+    public LongFilter getParametersId() {
+        return parametersId;
     }
 
-    public LongFilter valueMapsId() {
-        if (valueMapsId == null) {
-            valueMapsId = new LongFilter();
+    public LongFilter parametersId() {
+        if (parametersId == null) {
+            parametersId = new LongFilter();
         }
-        return valueMapsId;
+        return parametersId;
     }
 
-    public void setValueMapsId(LongFilter valueMapsId) {
-        this.valueMapsId = valueMapsId;
+    public void setParametersId(LongFilter parametersId) {
+        this.parametersId = parametersId;
     }
 
     public Boolean getDistinct() {
@@ -264,7 +264,7 @@ public class XlsxReportRequisitionCriteria implements Serializable, Criteria {
             Objects.equals(reportId, that.reportId) &&
             Objects.equals(reportTemplateId, that.reportTemplateId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
-            Objects.equals(valueMapsId, that.valueMapsId) &&
+            Objects.equals(parametersId, that.parametersId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -281,7 +281,7 @@ public class XlsxReportRequisitionCriteria implements Serializable, Criteria {
             reportId,
             reportTemplateId,
             placeholderId,
-            valueMapsId,
+            parametersId,
             distinct
         );
     }
@@ -299,7 +299,7 @@ public class XlsxReportRequisitionCriteria implements Serializable, Criteria {
             (reportId != null ? "reportId=" + reportId + ", " : "") +
             (reportTemplateId != null ? "reportTemplateId=" + reportTemplateId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
-            (valueMapsId != null ? "valueMapsId=" + valueMapsId + ", " : "") +
+            (parametersId != null ? "parametersId=" + parametersId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
