@@ -23,12 +23,16 @@ import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.model.enums.CompressionLevel;
 import net.lingala.zip4j.model.enums.EncryptionMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
 public class ZipUtils {
 
-    public static void zipFile(String targetFileName, String targetFilePassword, File toZip) throws ZipException {
+    public final static Logger log = LoggerFactory.getLogger(ZipUtils.class);
+
+    public static void zipFile(String targetFileName, char[] targetFilePassword, File toZip) throws ZipException {
 
         ZipParameters zipParameters = new ZipParameters();
         zipParameters.setEncryptFiles(true);
@@ -36,7 +40,8 @@ public class ZipUtils {
         zipParameters.setEncryptionMethod(EncryptionMethod.AES);
 
         // ZipFile zipFile = new ZipFile("compressed.zip", "password".toCharArray());
-        ZipFile zipFile = new ZipFile(targetFileName, targetFilePassword.toCharArray());
+        // TODO ZipFile zipFile = new ZipFile(targetFileName, targetFilePassword.toCharArray());
+        ZipFile zipFile = new ZipFile(targetFileName, targetFilePassword);
         // zipFile.addFile(new File("aFile.txt"), zipParameters);
         zipFile.addFile(toZip, zipParameters);
     }
