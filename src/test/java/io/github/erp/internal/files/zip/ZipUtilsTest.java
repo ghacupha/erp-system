@@ -31,8 +31,6 @@ class ZipUtilsTest {
     @Test
     void zipFile() throws Exception {
 
-        //File file = getFile("files/invoice-zip-test.xlsx");
-
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("files/invoice-zip-test.xlsx").getFile());
 
@@ -41,8 +39,6 @@ class ZipUtilsTest {
             "zipped-invoice".toCharArray(),
             file
         );
-
-        // File zippedFile = getFile("files/invoice-zip-test.zip");
 
         File zippedFile = new File(classLoader.getResource("files/invoice-zip-test.zip").getFile());
 

@@ -32,11 +32,18 @@ public class ZipUtils {
 
     public final static Logger log = LoggerFactory.getLogger(ZipUtils.class);
 
-    public static void zipFile(String targetFileName, char[] targetFilePassword, File toZip) throws ZipException {
+    /**
+     *
+     * @param targetFileName The file to be created after the sequence is completed
+     * @param targetFilePassword The password of the zip file
+     * @param fileOrigin This is the file to be zipped
+     * @throws ZipException
+     */
+    public static void zipFile(String targetFileName, char[] targetFilePassword, File fileOrigin) throws ZipException {
 
         long start = System.currentTimeMillis();
 
-        log.info("System is about to zip the file : {} on the file system which will be named: {}", targetFileName, toZip);
+        log.info("System is about to zip the file : {} on the file system which will be named: {}", fileOrigin, targetFileName);
 
         ZipParameters zipParameters = new ZipParameters();
         zipParameters.setEncryptFiles(true);
@@ -45,8 +52,8 @@ public class ZipUtils {
 
         // TODO ZipFile zipFile = new ZipFile(targetFileName, targetFilePassword.toCharArray());
         ZipFile zipFile = new ZipFile(targetFileName, targetFilePassword);
-        zipFile.addFile(toZip, zipParameters);
+        zipFile.addFile(fileOrigin, zipParameters);
 
-        log.info("System has created a zipped file named: {} in {} milliseconds, standby for removal of the original file", toZip, System.currentTimeMillis() - start);
+        log.info("System has created a zipped file named: {} in {} milliseconds, standby for removal of the original file", targetFileName, System.currentTimeMillis() - start);
     }
 }
