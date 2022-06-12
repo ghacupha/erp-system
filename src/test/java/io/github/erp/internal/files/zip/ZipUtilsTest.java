@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ZipUtilsTest {
 
-    // todo @Test
+    @Test
     void zipFile() throws Exception {
 
         //File file = getFile("files/invoice-zip-test.xlsx");
@@ -38,7 +38,7 @@ class ZipUtilsTest {
 
         ZipUtils.zipFile(
             "src/test/resources/files/invoice-zip-test.zip",
-            "zipped-invoice",
+            "zipped-invoice".toCharArray(),
             file
         );
 
@@ -46,7 +46,7 @@ class ZipUtilsTest {
 
         File zippedFile = new File(classLoader.getResource("files/invoice-zip-test.zip").getFile());
 
-        // TODO assertTrue(zippedFile.getAbsolutePath().endsWith("files/invoice-zip-test.zip"));
+        assertTrue(zippedFile.getAbsolutePath().endsWith("files\\invoice-zip-test.zip"));
 
     }
 
