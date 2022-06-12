@@ -33,11 +33,15 @@ public class ZipUtils {
     public final static Logger log = LoggerFactory.getLogger(ZipUtils.class);
 
     /**
+     * The target-file-password is represented as char[] rather than string because string is
+     * immutable and likely to remain in memory and accessible to anyone with a memory-dump
+     * permissions. So for the password it's probable the outer API uses string, in which case
+     * we expect someone will do something like targetFilePassword#toCharArray()
      *
      * @param targetFileName The file to be created after the sequence is completed
      * @param targetFilePassword The password of the zip file
      * @param fileOrigin This is the file to be zipped
-     * @throws ZipException
+     * @throws ZipException Anything could go wrong, cross thy fingers
      */
     public static void zipFile(String targetFileName, char[] targetFilePassword, File fileOrigin) throws ZipException {
 
