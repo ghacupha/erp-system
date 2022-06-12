@@ -19,6 +19,7 @@ package io.github.erp.internal.files.zip;
  */
 
 import org.jetbrains.annotations.NotNull;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -28,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ZipUtilsTest {
 
+    @Ignore
     @Test
     void zipFile() throws Exception {
 
