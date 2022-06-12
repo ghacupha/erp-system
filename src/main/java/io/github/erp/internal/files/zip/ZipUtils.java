@@ -34,15 +34,19 @@ public class ZipUtils {
 
     public static void zipFile(String targetFileName, char[] targetFilePassword, File toZip) throws ZipException {
 
+        long start = System.currentTimeMillis();
+
+        log.info("System is about to zip the file : {} on the file system which will be named: {}", targetFileName, toZip);
+
         ZipParameters zipParameters = new ZipParameters();
         zipParameters.setEncryptFiles(true);
         zipParameters.setCompressionLevel(CompressionLevel.HIGHER);
         zipParameters.setEncryptionMethod(EncryptionMethod.AES);
 
-        // ZipFile zipFile = new ZipFile("compressed.zip", "password".toCharArray());
         // TODO ZipFile zipFile = new ZipFile(targetFileName, targetFilePassword.toCharArray());
         ZipFile zipFile = new ZipFile(targetFileName, targetFilePassword);
-        // zipFile.addFile(new File("aFile.txt"), zipParameters);
         zipFile.addFile(toZip, zipParameters);
+
+        log.info("System has created a zipped file named: {} in {} milliseconds, standby for removal of the original file", toZip, System.currentTimeMillis() - start);
     }
 }
