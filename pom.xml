@@ -149,7 +149,7 @@
         </dependency>
 
 
-        <dependency>
+        <!--<dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.6.7</version>
@@ -173,7 +173,7 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-native</artifactId>
             <version>1.6.7</version>
-        </dependency>
+        </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
