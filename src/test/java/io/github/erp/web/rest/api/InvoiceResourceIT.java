@@ -66,7 +66,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"DEV"})
-class InvoiceResourceIT {
+public class InvoiceResourceIT {
 
     private static final String DEFAULT_INVOICE_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_INVOICE_NUMBER = "BBBBBBBBBB";

@@ -176,8 +176,7 @@ public class WorkInProgressRegistrationResource {
      */
     @GetMapping("/work-in-progress-registrations")
     public ResponseEntity<List<WorkInProgressRegistrationDTO>> getAllWorkInProgressRegistrations(
-        WorkInProgressRegistrationCriteria criteria,
-        @org.springdoc.api.annotations.ParameterObject Pageable pageable
+        WorkInProgressRegistrationCriteria criteria, Pageable pageable
     ) {
         log.debug("REST request to get WorkInProgressRegistrations by criteria: {}", criteria);
         Page<WorkInProgressRegistrationDTO> page = workInProgressRegistrationQueryService.findByCriteria(criteria, pageable);
@@ -236,8 +235,7 @@ public class WorkInProgressRegistrationResource {
      */
     @GetMapping("/_search/work-in-progress-registrations")
     public ResponseEntity<List<WorkInProgressRegistrationDTO>> searchWorkInProgressRegistrations(
-        @RequestParam String query,
-        @org.springdoc.api.annotations.ParameterObject Pageable pageable
+        @RequestParam String query, Pageable pageable
     ) {
         log.debug("REST request to search for a page of WorkInProgressRegistrations for query {}", query);
         Page<WorkInProgressRegistrationDTO> page = workInProgressRegistrationService.search(query, pageable);

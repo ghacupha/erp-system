@@ -64,7 +64,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"DEV"})
-class FixedAssetAcquisitionResourceIT {
+public class FixedAssetAcquisitionResourceIT {
 
     private static final Long DEFAULT_ASSET_NUMBER = 1L;
     private static final Long UPDATED_ASSET_NUMBER = 2L;

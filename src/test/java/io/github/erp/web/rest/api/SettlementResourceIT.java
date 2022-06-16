@@ -70,7 +70,7 @@ import org.springframework.util.Base64Utils;
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"DEV"})
-class SettlementResourceIT {
+public class SettlementResourceIT {
 
     private static final String DEFAULT_PAYMENT_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_PAYMENT_NUMBER = "BBBBBBBBBB";

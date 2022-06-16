@@ -77,7 +77,7 @@ import org.springframework.util.Base64Utils;
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"DEV"})
-class AgencyNoticeResourceIT {
+public class AgencyNoticeResourceIT {
 
     private static final String DEFAULT_REFERENCE_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_REFERENCE_NUMBER = "BBBBBBBBBB";

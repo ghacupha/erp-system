@@ -63,7 +63,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"DEV"})
-class PaymentCategoryResourceIT {
+public class PaymentCategoryResourceIT {
 
     private static final String DEFAULT_CATEGORY_NAME = "AAAAAAAAAA";
     private static final String UPDATED_CATEGORY_NAME = "BBBBBBBBBB";

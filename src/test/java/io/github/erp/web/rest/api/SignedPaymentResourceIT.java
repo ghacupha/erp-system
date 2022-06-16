@@ -67,7 +67,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"DEV"})
-class SignedPaymentResourceIT {
+public class SignedPaymentResourceIT {
 
     private static final String DEFAULT_TRANSACTION_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_TRANSACTION_NUMBER = "BBBBBBBBBB";

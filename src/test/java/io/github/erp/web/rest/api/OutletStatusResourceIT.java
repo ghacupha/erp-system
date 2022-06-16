@@ -61,7 +61,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"DEV"})
-class OutletStatusResourceIT {
+public class OutletStatusResourceIT {
 
     private static final String DEFAULT_BRANCH_STATUS_TYPE_CODE = "AAAAAAAAAA";
     private static final String UPDATED_BRANCH_STATUS_TYPE_CODE = "BBBBBBBBBB";

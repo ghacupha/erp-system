@@ -58,13 +58,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link XlsxReportRequisitionResource} REST controller.
+ * Integration tests for the {@link XlsxReportRequisitionResourceDev} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
-class XlsxReportRequisitionResourceIT {
+@WithMockUser(roles = {"DEV"})
+public class XlsxReportRequisitionResourceIT {
 
     private static final String DEFAULT_REPORT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_REPORT_NAME = "BBBBBBBBBB";
@@ -85,9 +85,9 @@ class XlsxReportRequisitionResourceIT {
     private static final UUID DEFAULT_REPORT_ID = UUID.randomUUID();
     private static final UUID UPDATED_REPORT_ID = UUID.randomUUID();
 
-    private static final String ENTITY_API_URL = "/api/xlsx-report-requisitions";
+    private static final String ENTITY_API_URL = "/api/dev/xlsx-report-requisitions";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/xlsx-report-requisitions";
+    private static final String ENTITY_SEARCH_API_URL = "/api/dev/_search/xlsx-report-requisitions";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

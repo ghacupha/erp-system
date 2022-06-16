@@ -61,7 +61,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"DEV"})
-class DeliveryNoteResourceIT {
+public class DeliveryNoteResourceIT {
 
     private static final String DEFAULT_DELIVERY_NOTE_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_DELIVERY_NOTE_NUMBER = "BBBBBBBBBB";

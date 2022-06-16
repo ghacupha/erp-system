@@ -60,7 +60,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"DEV"})
-class TaxRuleResourceIT {
+public class TaxRuleResourceIT {
 
     private static final Double DEFAULT_TELCO_EXCISE_DUTY = 1D;
     private static final Double UPDATED_TELCO_EXCISE_DUTY = 2D;
