@@ -142,6 +142,15 @@ public class ReportRequisitionQueryService extends QueryService<ReportRequisitio
                         )
                     );
             }
+            if (criteria.getReportContentTypeId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getReportContentTypeId(),
+                            root -> root.join(ReportRequisition_.reportContentType, JoinType.LEFT).get(ReportContentType_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

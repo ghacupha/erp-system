@@ -50,6 +50,8 @@ public class ReportRequisitionDTO implements Serializable {
 
     private ReportTemplateDTO reportTemplate;
 
+    private ReportContentTypeDTO reportContentType;
+
     public Long getId() {
         return id;
     }
@@ -162,6 +164,14 @@ public class ReportRequisitionDTO implements Serializable {
         this.reportTemplate = reportTemplate;
     }
 
+    public ReportContentTypeDTO getReportContentType() {
+        return reportContentType;
+    }
+
+    public void setReportContentType(ReportContentTypeDTO reportContentType) {
+        this.reportContentType = reportContentType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -199,6 +209,7 @@ public class ReportRequisitionDTO implements Serializable {
             ", placeholders=" + getPlaceholders() +
             ", parameters=" + getParameters() +
             ", reportTemplate=" + getReportTemplate() +
+            ", reportContentType=" + getReportContentType() +
             "}";
     }
 }

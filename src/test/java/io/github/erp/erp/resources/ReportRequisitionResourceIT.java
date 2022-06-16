@@ -1,10 +1,7 @@
 package io.github.erp.erp.resources;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.Placeholder;
-import io.github.erp.domain.ReportRequisition;
-import io.github.erp.domain.ReportTemplate;
-import io.github.erp.domain.UniversallyUniqueMapping;
+import io.github.erp.domain.*;
 import io.github.erp.domain.enumeration.ReportStatusTypes;
 import io.github.erp.repository.ReportRequisitionRepository;
 import io.github.erp.repository.search.ReportRequisitionSearchRepository;
@@ -49,7 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
-class ReportRequisitionResourceIT {
+public class ReportRequisitionResourceIT {
 
     private static final String DEFAULT_REPORT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_REPORT_NAME = "BBBBBBBBBB";
@@ -136,13 +133,23 @@ class ReportRequisitionResourceIT {
         // Add required entity
         ReportTemplate reportTemplate;
         if (TestUtil.findAll(em, ReportTemplate.class).isEmpty()) {
-            reportTemplate = ReportTemplateResourceIT.createEntity(em);
+            reportTemplate =  ReportTemplateResourceIT.createEntity(em);
             em.persist(reportTemplate);
             em.flush();
         } else {
             reportTemplate = TestUtil.findAll(em, ReportTemplate.class).get(0);
         }
         reportRequisition.setReportTemplate(reportTemplate);
+        // Add required entity
+        ReportContentType reportContentType;
+        if (TestUtil.findAll(em, ReportContentType.class).isEmpty()) {
+            reportContentType = ReportContentTypeResourceIT.createEntity(em);
+            em.persist(reportContentType);
+            em.flush();
+        } else {
+            reportContentType = TestUtil.findAll(em, ReportContentType.class).get(0);
+        }
+        reportRequisition.setReportContentType(reportContentType);
         return reportRequisition;
     }
 
@@ -174,6 +181,16 @@ class ReportRequisitionResourceIT {
             reportTemplate = TestUtil.findAll(em, ReportTemplate.class).get(0);
         }
         reportRequisition.setReportTemplate(reportTemplate);
+        // Add required entity
+        ReportContentType reportContentType;
+        if (TestUtil.findAll(em, ReportContentType.class).isEmpty()) {
+            reportContentType = ReportContentTypeResourceIT.createUpdatedEntity(em);
+            em.persist(reportContentType);
+            em.flush();
+        } else {
+            reportContentType = TestUtil.findAll(em, ReportContentType.class).get(0);
+        }
+        reportRequisition.setReportContentType(reportContentType);
         return reportRequisition;
     }
 
@@ -853,6 +870,32 @@ class ReportRequisitionResourceIT {
 
         // Get all the reportRequisitionList where reportTemplate equals to (reportTemplateId + 1)
         defaultReportRequisitionShouldNotBeFound("reportTemplateId.equals=" + (reportTemplateId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllReportRequisitionsByReportContentTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        reportRequisitionRepository.saveAndFlush(reportRequisition);
+        ReportContentType reportContentType;
+        if (TestUtil.findAll(em, ReportContentType.class).isEmpty()) {
+            reportContentType = ReportContentTypeResourceIT.createEntity(em);
+            em.persist(reportContentType);
+            em.flush();
+        } else {
+            reportContentType = TestUtil.findAll(em, ReportContentType.class).get(0);
+        }
+        em.persist(reportContentType);
+        em.flush();
+        reportRequisition.setReportContentType(reportContentType);
+        reportRequisitionRepository.saveAndFlush(reportRequisition);
+        Long reportContentTypeId = reportContentType.getId();
+
+        // Get all the reportRequisitionList where reportContentType equals to reportContentTypeId
+        defaultReportRequisitionShouldBeFound("reportContentTypeId.equals=" + reportContentTypeId);
+
+        // Get all the reportRequisitionList where reportContentType equals to (reportContentTypeId + 1)
+        defaultReportRequisitionShouldNotBeFound("reportContentTypeId.equals=" + (reportContentTypeId + 1));
     }
 
     /**
