@@ -62,6 +62,8 @@ public class ReportRequisitionCriteria implements Serializable, Criteria {
 
     private LongFilter reportTemplateId;
 
+    private LongFilter reportContentTypeId;
+
     private Boolean distinct;
 
     public ReportRequisitionCriteria() {}
@@ -76,6 +78,7 @@ public class ReportRequisitionCriteria implements Serializable, Criteria {
         this.placeholdersId = other.placeholdersId == null ? null : other.placeholdersId.copy();
         this.parametersId = other.parametersId == null ? null : other.parametersId.copy();
         this.reportTemplateId = other.reportTemplateId == null ? null : other.reportTemplateId.copy();
+        this.reportContentTypeId = other.reportContentTypeId == null ? null : other.reportContentTypeId.copy();
         this.distinct = other.distinct;
     }
 
@@ -219,6 +222,21 @@ public class ReportRequisitionCriteria implements Serializable, Criteria {
         this.reportTemplateId = reportTemplateId;
     }
 
+    public LongFilter getReportContentTypeId() {
+        return reportContentTypeId;
+    }
+
+    public LongFilter reportContentTypeId() {
+        if (reportContentTypeId == null) {
+            reportContentTypeId = new LongFilter();
+        }
+        return reportContentTypeId;
+    }
+
+    public void setReportContentTypeId(LongFilter reportContentTypeId) {
+        this.reportContentTypeId = reportContentTypeId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -246,6 +264,7 @@ public class ReportRequisitionCriteria implements Serializable, Criteria {
             Objects.equals(placeholdersId, that.placeholdersId) &&
             Objects.equals(parametersId, that.parametersId) &&
             Objects.equals(reportTemplateId, that.reportTemplateId) &&
+            Objects.equals(reportContentTypeId, that.reportContentTypeId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -262,6 +281,7 @@ public class ReportRequisitionCriteria implements Serializable, Criteria {
             placeholdersId,
             parametersId,
             reportTemplateId,
+            reportContentTypeId,
             distinct
         );
     }
@@ -279,6 +299,7 @@ public class ReportRequisitionCriteria implements Serializable, Criteria {
             (placeholdersId != null ? "placeholdersId=" + placeholdersId + ", " : "") +
             (parametersId != null ? "parametersId=" + parametersId + ", " : "") +
             (reportTemplateId != null ? "reportTemplateId=" + reportTemplateId + ", " : "") +
+            (reportContentTypeId != null ? "reportContentTypeId=" + reportContentTypeId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

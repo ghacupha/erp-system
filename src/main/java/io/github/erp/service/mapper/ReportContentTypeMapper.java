@@ -15,4 +15,10 @@ public interface ReportContentTypeMapper extends EntityMapper<ReportContentTypeD
 
     @Mapping(target = "removePlaceholder", ignore = true)
     ReportContentType toEntity(ReportContentTypeDTO reportContentTypeDTO);
+
+    @Named("reportTypeName")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "reportTypeName", source = "reportTypeName")
+    ReportContentTypeDTO toDtoReportTypeName(ReportContentType reportContentType);
 }

@@ -94,6 +94,11 @@ public class ReportRequisition implements Serializable {
     @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
     private ReportTemplate reportTemplate;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "systemContentType", "placeholders" }, allowSetters = true)
+    private ReportContentType reportContentType;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -295,6 +300,19 @@ public class ReportRequisition implements Serializable {
 
     public ReportRequisition reportTemplate(ReportTemplate reportTemplate) {
         this.setReportTemplate(reportTemplate);
+        return this;
+    }
+
+    public ReportContentType getReportContentType() {
+        return this.reportContentType;
+    }
+
+    public void setReportContentType(ReportContentType reportContentType) {
+        this.reportContentType = reportContentType;
+    }
+
+    public ReportRequisition reportContentType(ReportContentType reportContentType) {
+        this.setReportContentType(reportContentType);
         return this;
     }
 

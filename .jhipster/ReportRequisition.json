@@ -65,6 +65,13 @@
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
       "otherEntityField": "catalogueNumber"
+    },
+    {
+      "relationshipName": "reportContentType",
+      "otherEntityName": "reportContentType",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "reportTypeName"
     }
   ],
   "service": "serviceImpl",

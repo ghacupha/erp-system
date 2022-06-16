@@ -7,11 +7,15 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link ReportRequisition} and its DTO {@link ReportRequisitionDTO}.
  */
-@Mapper(componentModel = "spring", uses = { PlaceholderMapper.class, UniversallyUniqueMappingMapper.class, ReportTemplateMapper.class })
+@Mapper(
+    componentModel = "spring",
+    uses = { PlaceholderMapper.class, UniversallyUniqueMappingMapper.class, ReportTemplateMapper.class, ReportContentTypeMapper.class }
+)
 public interface ReportRequisitionMapper extends EntityMapper<ReportRequisitionDTO, ReportRequisition> {
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     @Mapping(target = "parameters", source = "parameters", qualifiedByName = "mappedValueSet")
     @Mapping(target = "reportTemplate", source = "reportTemplate", qualifiedByName = "catalogueNumber")
+    @Mapping(target = "reportContentType", source = "reportContentType", qualifiedByName = "reportTypeName")
     ReportRequisitionDTO toDto(ReportRequisition s);
 
     @Mapping(target = "removePlaceholders", ignore = true)
