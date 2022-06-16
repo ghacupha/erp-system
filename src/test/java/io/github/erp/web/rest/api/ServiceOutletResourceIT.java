@@ -66,7 +66,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"DEV"})
-class ServiceOutletResourceIT {
+public class ServiceOutletResourceIT {
 
     private static final String DEFAULT_OUTLET_CODE = "AAAAAAAAAA";
     private static final String UPDATED_OUTLET_CODE = "BBBBBBBBBB";

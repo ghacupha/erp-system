@@ -63,7 +63,7 @@ import org.springframework.util.Base64Utils;
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"DEV"})
-class FileTypeResourceIT {
+public class FileTypeResourceIT {
 
     private static final String DEFAULT_FILE_TYPE_NAME = "AAAAAAAAAA";
     private static final String UPDATED_FILE_TYPE_NAME = "BBBBBBBBBB";

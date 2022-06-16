@@ -64,7 +64,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"DEV"})
-class PaymentCalculationResourceIT {
+public class PaymentCalculationResourceIT {
 
     private static final BigDecimal DEFAULT_PAYMENT_EXPENSE = new BigDecimal(1);
     private static final BigDecimal UPDATED_PAYMENT_EXPENSE = new BigDecimal(2);

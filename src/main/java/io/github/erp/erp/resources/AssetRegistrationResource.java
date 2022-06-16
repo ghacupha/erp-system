@@ -173,9 +173,7 @@ public class AssetRegistrationResource {
      */
     @GetMapping("/asset-registrations")
     public ResponseEntity<List<AssetRegistrationDTO>> getAllAssetRegistrations(
-        AssetRegistrationCriteria criteria,
-        @org.springdoc.api.annotations.ParameterObject Pageable pageable
-    ) {
+        AssetRegistrationCriteria criteria, Pageable pageable) {
         log.debug("REST request to get AssetRegistrations by criteria: {}", criteria);
         Page<AssetRegistrationDTO> page = assetRegistrationQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -233,9 +231,7 @@ public class AssetRegistrationResource {
      */
     @GetMapping("/_search/asset-registrations")
     public ResponseEntity<List<AssetRegistrationDTO>> searchAssetRegistrations(
-        @RequestParam String query,
-        @org.springdoc.api.annotations.ParameterObject Pageable pageable
-    ) {
+        @RequestParam String query, Pageable pageable) {
         log.debug("REST request to search for a page of AssetRegistrations for query {}", query);
         Page<AssetRegistrationDTO> page = assetRegistrationService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);

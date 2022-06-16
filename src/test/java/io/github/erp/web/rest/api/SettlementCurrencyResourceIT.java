@@ -60,7 +60,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"DEV"})
-class SettlementCurrencyResourceIT {
+public class SettlementCurrencyResourceIT {
 
     private static final String DEFAULT_ISO_4217_CURRENCY_CODE = "AAA";
     private static final String UPDATED_ISO_4217_CURRENCY_CODE = "BBB";

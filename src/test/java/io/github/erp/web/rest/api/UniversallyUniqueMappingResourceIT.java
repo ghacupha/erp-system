@@ -51,13 +51,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link UniversallyUniqueMappingResource} REST controller.
+ * Integration tests for the {@link UniversallyUniqueMappingResourceDev} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
-class UniversallyUniqueMappingResourceIT {
+@WithMockUser(roles = {"DEV"})
+public class UniversallyUniqueMappingResourceIT {
 
     private static final String DEFAULT_UNIVERSAL_KEY = "AAAAAAAAAA";
     private static final String UPDATED_UNIVERSAL_KEY = "BBBBBBBBBB";
@@ -65,9 +65,9 @@ class UniversallyUniqueMappingResourceIT {
     private static final String DEFAULT_MAPPED_VALUE = "AAAAAAAAAA";
     private static final String UPDATED_MAPPED_VALUE = "BBBBBBBBBB";
 
-    private static final String ENTITY_API_URL = "/api/universally-unique-mappings";
+    private static final String ENTITY_API_URL = "/api/dev/universally-unique-mappings";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/universally-unique-mappings";
+    private static final String ENTITY_SEARCH_API_URL = "/api/dev/_search/universally-unique-mappings";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

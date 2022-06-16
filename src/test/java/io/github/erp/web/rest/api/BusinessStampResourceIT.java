@@ -63,7 +63,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"DEV"})
-class BusinessStampResourceIT {
+public class BusinessStampResourceIT {
 
     private static final LocalDate DEFAULT_STAMP_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_STAMP_DATE = LocalDate.now(ZoneId.systemDefault());

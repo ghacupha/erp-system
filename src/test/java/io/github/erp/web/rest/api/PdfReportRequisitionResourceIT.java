@@ -58,13 +58,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link PdfReportRequisitionResource} REST controller.
+ * Integration tests for the {@link PdfReportRequisitionResourceDev} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
-class PdfReportRequisitionResourceIT {
+@WithMockUser(roles = {"DEV"})
+public class PdfReportRequisitionResourceIT {
 
     private static final String DEFAULT_REPORT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_REPORT_NAME = "BBBBBBBBBB";
@@ -88,9 +88,9 @@ class PdfReportRequisitionResourceIT {
     private static final UUID DEFAULT_REPORT_ID = UUID.randomUUID();
     private static final UUID UPDATED_REPORT_ID = UUID.randomUUID();
 
-    private static final String ENTITY_API_URL = "/api/pdf-report-requisitions";
+    private static final String ENTITY_API_URL = "/api/dev/pdf-report-requisitions";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/pdf-report-requisitions";
+    private static final String ENTITY_SEARCH_API_URL = "/api/dev/_search/pdf-report-requisitions";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
@@ -196,8 +196,8 @@ class PdfReportRequisitionResourceIT {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(TestUtil.convertObjectToJsonBytes(pdfReportRequisitionDTO))
             )
-            .andExpect(status().is5xxServerError());
-        // TODO .andExpect(status().isCreated());
+            // .andExpect(status().is5xxServerError());
+        .andExpect(status().isCreated());
 
         // Validate the PdfReportRequisition in the database
         List<PdfReportRequisition> pdfReportRequisitionList = pdfReportRequisitionRepository.findAll();

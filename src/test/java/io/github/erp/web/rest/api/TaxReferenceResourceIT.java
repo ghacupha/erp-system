@@ -61,7 +61,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"DEV"})
-class TaxReferenceResourceIT {
+public class TaxReferenceResourceIT {
 
     private static final String DEFAULT_TAX_NAME = "AAAAAAAAAA";
     private static final String UPDATED_TAX_NAME = "BBBBBBBBBB";
