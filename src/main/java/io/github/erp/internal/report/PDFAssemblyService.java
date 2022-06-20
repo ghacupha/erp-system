@@ -34,8 +34,6 @@ import java.util.Map;
 @Transactional
 public class PDFAssemblyService implements ReportAssemblyService<PdfReportRequisitionDTO> {
 
-    private final static Logger log = LoggerFactory.getLogger(PDFAssemblyService.class);
-
     private final PDFReportsService simpleJasperReportsService;
     private final TemplatePresentation templatePresentation;
     private final ReportTemplateService reportTemplateService;
