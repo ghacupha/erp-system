@@ -17,6 +17,7 @@ package io.github.erp.internal.report;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.service.ReportTemplateService;
 import io.github.erp.service.dto.PdfReportRequisitionDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,23 +38,34 @@ public class PDFAssemblyService implements ReportAssemblyService<PdfReportRequis
 
     private final PDFReportsService simpleJasperReportsService;
     private final TemplatePresentation templatePresentation;
+    private final ReportTemplateService reportTemplateService;
 
-    public PDFAssemblyService(PDFReportsService simpleJasperReportsService, TemplatePresentation templatePresentation) {
+    public PDFAssemblyService(PDFReportsService simpleJasperReportsService, TemplatePresentation templatePresentation, ReportTemplateService reportTemplateService) {
         this.simpleJasperReportsService = simpleJasperReportsService;
         this.templatePresentation = templatePresentation;
+        this.reportTemplateService = reportTemplateService;
     }
 
     @Override
     public String createReport(PdfReportRequisitionDTO dto, String fileExtension) {
-        String fileName = templatePresentation.presentTemplate(dto.getReportTemplate());
 
         Map<String, Object> parameters = new HashMap<>();
+        final String[] fileName = {""};
 
-        parameters.put("title", dto.getReportName());
-        parameters.put("description", dto.getReportTemplate().getDescription());
+        reportTemplateService.findOne(dto.getReportTemplate().getId()).ifPresent(template -> {
+
+            fileName[0] = templatePresentation.presentTemplate(template);
+
+            parameters.put("title", dto.getReportName());
+            parameters.put("description", dto.getReportTemplate().getDescription());
+
+            dto.getParameters().forEach(p -> {
+                parameters.put(p.getUniversalKey(), p.getMappedValue());
+            });
+        });
 
         return simpleJasperReportsService.generateReport(
-            fileName,
+            fileName[0],
             dto.getReportId().toString().concat(fileExtension),
             dto.getOwnerPassword(),
             dto.getUserPassword(),

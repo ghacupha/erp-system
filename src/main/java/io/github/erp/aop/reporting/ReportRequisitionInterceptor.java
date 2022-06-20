@@ -25,9 +25,9 @@ public class ReportRequisitionInterceptor {
 
     private static final Logger log = LoggerFactory.getLogger(ReportRequisitionInterceptor.class);
 
-    private final ReportAssemblyService<PdfReportRequisitionDTO> reportRequisitionService;
+    private final ReportAssemblyService<ReportRequisitionDTO> reportRequisitionService;
 
-    public ReportRequisitionInterceptor(ReportAssemblyService<PdfReportRequisitionDTO> reportRequisitionService) {
+    public ReportRequisitionInterceptor(ReportAssemblyService<ReportRequisitionDTO> reportRequisitionService) {
         this.reportRequisitionService = reportRequisitionService;
     }
 
@@ -56,19 +56,19 @@ public class ReportRequisitionInterceptor {
 
         long start = System.currentTimeMillis();
 
-        CompletableFuture<PdfReportRequisitionDTO> reportAcquisition = CompletableFuture.supplyAsync(() -> pdfReportRequisitionService.findOne(report.getId()).get());
+//        CompletableFuture<PdfReportRequisitionDTO> reportAcquisition = CompletableFuture.supplyAsync(() -> pdfReportRequisitionService.findOne(report.getId()).get());
 
-        reportAcquisition.thenApplyAsync(rpt -> {
-            rpt.setReportStatus(ReportStatusTypes.SUCCESSFUL);
-            return pdfReportRequisitionService.partialUpdate(rpt);
-        });
+//        reportAcquisition.thenApplyAsync(rpt -> {
+//            rpt.setReportStatus(ReportStatusTypes.SUCCESSFUL);
+//            return pdfReportRequisitionService.partialUpdate(rpt);
+//        });
 
-        reportAcquisition.thenApplyAsync(rpt -> {
-            log.info("Report status change complete for pdf report ID {} in {} milliseconds", rpt.getId(), System.currentTimeMillis() - start);
-            return rpt;
-        });
-
-        reportAcquisition.get();
+//        reportAcquisition.thenApplyAsync(rpt -> {
+//            log.info("Report status change complete for pdf report ID {} in {} milliseconds", rpt.getId(), System.currentTimeMillis() - start);
+//            return rpt;
+//        });
+//
+//        reportAcquisition.get();
     }
 
     @SneakyThrows

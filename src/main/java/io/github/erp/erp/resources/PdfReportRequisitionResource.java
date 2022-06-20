@@ -17,11 +17,9 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.enumeration.ReportStatusTypes;
 import io.github.erp.internal.model.AttachedPdfReportRequisitionDTO;
 import io.github.erp.internal.model.mapping.AttachedPdfReportRequisitionDTOMapping;
 import io.github.erp.internal.report.ReportAttachmentService;
-import io.github.erp.internal.report.ReportAssemblyService;
 import io.github.erp.repository.PdfReportRequisitionRepository;
 import io.github.erp.service.PdfReportRequisitionQueryService;
 import io.github.erp.service.PdfReportRequisitionService;
@@ -33,12 +31,10 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,7 +42,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -58,7 +53,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import tech.jhipster.service.filter.UUIDFilter;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -77,8 +71,6 @@ public class PdfReportRequisitionResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final PdfReportRequisitionRepository reportRequisitionRepository;
-
     private final PdfReportRequisitionService pdfReportRequisitionService;
 
     private final PdfReportRequisitionRepository pdfReportRequisitionRepository;
@@ -87,22 +79,18 @@ public class PdfReportRequisitionResource {
 
 
     private final AttachedPdfReportRequisitionDTOMapping reportRequisitionDTOMapping;
-    private final ReportAssemblyService<PdfReportRequisitionDTO> reportRequisitionService;
     private final ReportAttachmentService<AttachedPdfReportRequisitionDTO> reportAttachmentService;
 
     public PdfReportRequisitionResource(
-        PdfReportRequisitionRepository reportRequisitionRepository, PdfReportRequisitionService pdfReportRequisitionService,
+        PdfReportRequisitionService pdfReportRequisitionService,
         PdfReportRequisitionRepository pdfReportRequisitionRepository,
         PdfReportRequisitionQueryService pdfReportRequisitionQueryService,
         AttachedPdfReportRequisitionDTOMapping reportRequisitionDTOMapping,
-        ReportAssemblyService<PdfReportRequisitionDTO> reportRequisitionService,
         ReportAttachmentService<AttachedPdfReportRequisitionDTO> reportAttachmentService) {
-        this.reportRequisitionRepository = reportRequisitionRepository;
         this.pdfReportRequisitionService = pdfReportRequisitionService;
         this.pdfReportRequisitionRepository = pdfReportRequisitionRepository;
         this.pdfReportRequisitionQueryService = pdfReportRequisitionQueryService;
         this.reportRequisitionDTOMapping = reportRequisitionDTOMapping;
-        this.reportRequisitionService = reportRequisitionService;
         this.reportAttachmentService = reportAttachmentService;
     }
 
@@ -122,57 +110,12 @@ public class PdfReportRequisitionResource {
             throw new BadRequestAlertException("A new pdfReportRequisition cannot already have an ID", ENTITY_NAME, "idexists");
         }
 
-        createReport(pdfReportRequisitionDTO);
-
         PdfReportRequisitionDTO result = pdfReportRequisitionService.save(pdfReportRequisitionDTO);
-
-        updateReport(result);
 
         return ResponseEntity
             .created(new URI("/api/pdf-report-requisitions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
-    }
-
-    @Async
-    @SneakyThrows
-    void updateReport(PdfReportRequisitionDTO report) {
-
-        // TODO in the write step when the batch process is ready
-        log.info("Updating report status for pdf report ID {}", report.getId());
-
-        long start = System.currentTimeMillis();
-
-        CompletableFuture<PdfReportRequisitionDTO> reportAcquisition = CompletableFuture.supplyAsync(() -> pdfReportRequisitionService.findOne(report.getId()).get());
-
-        reportAcquisition.thenApplyAsync(rpt -> {
-            rpt.setReportStatus(ReportStatusTypes.SUCCESSFUL);
-            return pdfReportRequisitionService.partialUpdate(rpt);
-        });
-
-        reportAcquisition.thenApplyAsync(rpt -> {
-            log.info("Report status change complete for pdf report ID {} in {} milliseconds", rpt.getId(), System.currentTimeMillis() - start);
-            return rpt;
-        });
-
-        reportAcquisition.get();
-    }
-
-    @SneakyThrows
-    @Async
-    void createReport(PdfReportRequisitionDTO pdfReportRequisitionDTO) {
-
-        // TODO split this into read step and process step when you setup a batch sequence for the report
-        long start = System.currentTimeMillis();
-
-        CompletableFuture<String> reportCreation = CompletableFuture.supplyAsync(() -> reportRequisitionService.createReport(pdfReportRequisitionDTO, ".pdf"));
-
-        reportCreation.thenApplyAsync(reportPath -> {
-            log.info("Report created successfully in {} milliseconds and set on the path {}", System.currentTimeMillis() - start, reportPath);
-            return reportPath;
-        });
-
-        // reportCreation.get();
     }
 
     /**
@@ -201,8 +144,6 @@ public class PdfReportRequisitionResource {
         if (!pdfReportRequisitionRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
-
-        createReport(pdfReportRequisitionDTO);
 
         PdfReportRequisitionDTO result = pdfReportRequisitionService.save(pdfReportRequisitionDTO);
         return ResponseEntity
@@ -240,8 +181,6 @@ public class PdfReportRequisitionResource {
         }
 
         Optional<PdfReportRequisitionDTO> result = pdfReportRequisitionService.partialUpdate(pdfReportRequisitionDTO);
-
-        createReport(pdfReportRequisitionDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
