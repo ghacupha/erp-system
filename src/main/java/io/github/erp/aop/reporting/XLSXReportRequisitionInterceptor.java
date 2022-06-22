@@ -2,8 +2,8 @@ package io.github.erp.aop.reporting;
 
 import io.github.erp.domain.enumeration.ReportStatusTypes;
 import io.github.erp.internal.report.ReportAssemblyService;
-import io.github.erp.service.PdfReportRequisitionService;
-import io.github.erp.service.dto.PdfReportRequisitionDTO;
+import io.github.erp.service.XlsxReportRequisitionService;
+import io.github.erp.service.dto.XlsxReportRequisitionDTO;
 import lombok.SneakyThrows;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -16,50 +16,44 @@ import org.springframework.scheduling.annotation.Async;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-/**
- * Intercepts the response after a pdf-report-requisition is created and triggers the actual
- * report creation process
- */
 @Aspect
-public class PDFReportRequisitionInterceptor {
+public class XLSXReportRequisitionInterceptor {
     private static final Logger log = LoggerFactory.getLogger(ReportRequisitionInterceptor.class);
 
-    private final PdfReportRequisitionService pdfReportRequisitionService;
-    private final ReportAssemblyService<PdfReportRequisitionDTO> reportRequisitionService;
+    private final XlsxReportRequisitionService reportRequisitionService;
+    private final ReportAssemblyService<XlsxReportRequisitionDTO> reportAssemblyService;
 
-    public PDFReportRequisitionInterceptor(
-        ReportAssemblyService<PdfReportRequisitionDTO> reportRequisitionService,
-        PdfReportRequisitionService pdfReportRequisitionService) {
+    public XLSXReportRequisitionInterceptor(XlsxReportRequisitionService reportRequisitionService, ReportAssemblyService<XlsxReportRequisitionDTO> reportAssemblyService) {
         this.reportRequisitionService = reportRequisitionService;
-        this.pdfReportRequisitionService = pdfReportRequisitionService;
+        this.reportAssemblyService = reportAssemblyService;
     }
 
     @AfterReturning(
-        pointcut="execution(* io.github.erp.erp.resources.PdfReportRequisitionResource.createPdfReportRequisition(..))",
+        pointcut="execution(* io.github.erp.erp.resources.XlsxReportRequisitionResource.createXlsxReportRequisition(..))",
         returning="response")
-    public void getCreatedReportInfo(JoinPoint joinPoint, ResponseEntity<PdfReportRequisitionDTO> response) {
+    public void getCreatedReportInfo(JoinPoint joinPoint, ResponseEntity<XlsxReportRequisitionDTO> response) {
 
         log.info("Report requisition response intercept completed successfully");
 
-        PdfReportRequisitionDTO reportDTO = Objects.requireNonNull(response.getBody());
+        XlsxReportRequisitionDTO reportDTO = Objects.requireNonNull(response.getBody());
         String reportId = reportDTO.getReportId().toString();
         long entityId = reportDTO.getId();
 
-        log.info("PDF report requisition with id: {} has been registered, with entity id # {} commencing report creation sequence...", reportId, entityId);
+        log.info("Report requisition with id: {} has been registered, with entity id # {} commencing report creation sequence...", reportId, entityId);
 
         createReport(reportDTO);
 
-        pdfReportRequisitionService.findOne(reportDTO.getId()).ifPresent(this::updateReport);
+        reportRequisitionService.findOne(reportDTO.getId()).ifPresent(this::updateReport);
 
     }
 
     @SneakyThrows
     @Async
-    void createReport(PdfReportRequisitionDTO pdfReportRequisitionDTO) {
+    void createReport(XlsxReportRequisitionDTO reportRequisitionDTO) {
 
         long start = System.currentTimeMillis();
 
-        CompletableFuture<String> reportCreation = CompletableFuture.supplyAsync(() -> reportRequisitionService.createReport(pdfReportRequisitionDTO, ".pdf"));
+        CompletableFuture<String> reportCreation = CompletableFuture.supplyAsync(() -> reportAssemblyService.createReport(reportRequisitionDTO, ".xlsx"));
 
         reportCreation.thenApplyAsync(reportPath -> {
             log.info("Report created successfully in {} milliseconds and set on the path {}", System.currentTimeMillis() - start, reportPath);
@@ -70,17 +64,17 @@ public class PDFReportRequisitionInterceptor {
 
     @Async
     @SneakyThrows
-    void updateReport(PdfReportRequisitionDTO report) {
+    void updateReport(XlsxReportRequisitionDTO report) {
 
         log.info("Updating report status for pdf report ID {}", report.getId());
 
         long start = System.currentTimeMillis();
 
-        CompletableFuture<PdfReportRequisitionDTO> reportAcquisition = CompletableFuture.supplyAsync(() -> pdfReportRequisitionService.findOne(report.getId()).get());
+        CompletableFuture<XlsxReportRequisitionDTO> reportAcquisition = CompletableFuture.supplyAsync(() -> reportRequisitionService.findOne(report.getId()).get());
 
         reportAcquisition.thenApplyAsync(rpt -> {
             rpt.setReportStatus(ReportStatusTypes.SUCCESSFUL);
-            return pdfReportRequisitionService.partialUpdate(rpt);
+            return reportRequisitionService.partialUpdate(rpt);
         });
 
         reportAcquisition.thenApplyAsync(rpt -> {
@@ -90,5 +84,4 @@ public class PDFReportRequisitionInterceptor {
 
         reportAcquisition.get();
     }
-
 }
