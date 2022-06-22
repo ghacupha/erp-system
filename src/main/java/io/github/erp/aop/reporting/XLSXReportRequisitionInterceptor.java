@@ -14,8 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
+/**
+ * Designed to intercept the xlsx-report-requisition resource when creating a report. As the
+ * response is returning to the user the report-service is invoked in the background to continue
+ * with the work of assembling the report.
+ */
 @Aspect
 public class XLSXReportRequisitionInterceptor {
     private static final Logger log = LoggerFactory.getLogger(XLSXReportRequisitionInterceptor.class);
@@ -53,15 +57,9 @@ public class XLSXReportRequisitionInterceptor {
 
         long start = System.currentTimeMillis();
 
-        CompletableFuture<String> reportCreation = CompletableFuture.supplyAsync(() -> reportAssemblyService.createReport(reportRequisitionDTO, ".xlsx"));
+        String reportPath = reportAssemblyService.createReport(reportRequisitionDTO, ".xlsx");
 
-        reportCreation.thenApplyAsync(reportPath -> {
-            log.info("Report created successfully in {} milliseconds and set on the path {}", System.currentTimeMillis() - start, reportPath);
-            return reportPath;
-        });
-
-        reportCreation.get();
-
+        log.info("Report created successfully in {} milliseconds and set on the path {}", System.currentTimeMillis() - start, reportPath);
     }
 
     @Async
@@ -72,18 +70,10 @@ public class XLSXReportRequisitionInterceptor {
 
         long start = System.currentTimeMillis();
 
-        CompletableFuture<XlsxReportRequisitionDTO> reportAcquisition = CompletableFuture.supplyAsync(() -> reportRequisitionService.findOne(report.getId()).get());
-
-        reportAcquisition.thenApplyAsync(rpt -> {
-            rpt.setReportStatus(ReportStatusTypes.SUCCESSFUL);
-            return reportRequisitionService.save(rpt);
+        reportRequisitionService.findOne(report.getId()).ifPresent(found -> {
+            found.setReportStatus(ReportStatusTypes.SUCCESSFUL);
+            reportRequisitionService.save(found);
+            log.info("Report status change complete for xlsx report ID {} in {} milliseconds", found.getId(), System.currentTimeMillis() - start);
         });
-
-        reportAcquisition.thenApplyAsync(rpt -> {
-            log.info("Report status change complete for xlsx report ID {} in {} milliseconds", rpt.getId(), System.currentTimeMillis() - start);
-            return rpt;
-        });
-
-        reportAcquisition.get();
     }
 }
