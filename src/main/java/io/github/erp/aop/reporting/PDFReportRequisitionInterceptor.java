@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
  */
 @Aspect
 public class PDFReportRequisitionInterceptor {
-    private static final Logger log = LoggerFactory.getLogger(ReportRequisitionInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(PDFReportRequisitionInterceptor.class);
 
     private final PdfReportRequisitionService pdfReportRequisitionService;
     private final ReportAssemblyService<PdfReportRequisitionDTO> reportRequisitionService;

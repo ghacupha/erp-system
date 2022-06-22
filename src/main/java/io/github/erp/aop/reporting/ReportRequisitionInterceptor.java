@@ -2,8 +2,8 @@ package io.github.erp.aop.reporting;
 
 import io.github.erp.domain.enumeration.ReportStatusTypes;
 import io.github.erp.internal.report.ReportAssemblyService;
-import io.github.erp.service.PdfReportRequisitionService;
-import io.github.erp.service.dto.PdfReportRequisitionDTO;
+import io.github.erp.service.ReportContentTypeService;
+import io.github.erp.service.ReportRequisitionService;
 import io.github.erp.service.dto.ReportRequisitionDTO;
 import lombok.SneakyThrows;
 import org.aspectj.lang.JoinPoint;
@@ -25,10 +25,14 @@ public class ReportRequisitionInterceptor {
 
     private static final Logger log = LoggerFactory.getLogger(ReportRequisitionInterceptor.class);
 
-    private final ReportAssemblyService<ReportRequisitionDTO> reportRequisitionService;
+    private final ReportContentTypeService reportContentTypeService;
+    private final ReportRequisitionService reportRequisitionService;
+    private final ReportAssemblyService<ReportRequisitionDTO> reportAssemblyService;
 
-    public ReportRequisitionInterceptor(ReportAssemblyService<ReportRequisitionDTO> reportRequisitionService) {
+    public ReportRequisitionInterceptor(ReportContentTypeService reportContentTypeService, ReportRequisitionService reportRequisitionService, ReportAssemblyService<ReportRequisitionDTO> reportAssemblyService) {
+        this.reportContentTypeService = reportContentTypeService;
         this.reportRequisitionService = reportRequisitionService;
+        this.reportAssemblyService = reportAssemblyService;
     }
 
     @AfterReturning(
@@ -45,46 +49,47 @@ public class ReportRequisitionInterceptor {
         log.info("Report requisition with id: {} has been registered, with entity id # {} commencing report creation sequence...", reportId, entityId);
 
         createReport(reportDTO);
+
+        reportRequisitionService.findOne(reportDTO.getId()).ifPresent(this::updateReport);
+
+    }
+
+    @SneakyThrows
+    @Async
+    void createReport(ReportRequisitionDTO reportRequisitionDTO) {
+
+        long start = System.currentTimeMillis();
+
+        reportContentTypeService.findOne(reportRequisitionDTO.getReportContentType().getId()).ifPresent(contentType -> {
+            CompletableFuture<String> reportCreation = CompletableFuture.supplyAsync(() -> reportAssemblyService.createReport(reportRequisitionDTO, contentType.getReportFileExtension()));
+
+            reportCreation.thenApplyAsync(reportPath -> {
+                log.info("Report created successfully in {} milliseconds and set on the path {}", System.currentTimeMillis() - start, reportPath);
+                return reportPath;
+            });
+        });
     }
 
     @Async
     @SneakyThrows
     void updateReport(ReportRequisitionDTO report) {
 
-        // TODO in the write step when the batch process is ready
-        log.info("Updating report status for pdf report ID {}", report.getId());
+        log.info("Updating report status for report ID {}", report.getId());
 
         long start = System.currentTimeMillis();
 
-//        CompletableFuture<PdfReportRequisitionDTO> reportAcquisition = CompletableFuture.supplyAsync(() -> pdfReportRequisitionService.findOne(report.getId()).get());
+        CompletableFuture<ReportRequisitionDTO> reportAcquisition = CompletableFuture.supplyAsync(() -> reportRequisitionService.findOne(report.getId()).get());
 
-//        reportAcquisition.thenApplyAsync(rpt -> {
-//            rpt.setReportStatus(ReportStatusTypes.SUCCESSFUL);
-//            return pdfReportRequisitionService.partialUpdate(rpt);
-//        });
-
-//        reportAcquisition.thenApplyAsync(rpt -> {
-//            log.info("Report status change complete for pdf report ID {} in {} milliseconds", rpt.getId(), System.currentTimeMillis() - start);
-//            return rpt;
-//        });
-//
-//        reportAcquisition.get();
-    }
-
-    @SneakyThrows
-    @Async
-    void createReport(ReportRequisitionDTO pdfReportRequisitionDTO) {
-
-        // TODO split this into read step and process step when you setup a batch sequence for the report
-        long start = System.currentTimeMillis();
-
-        CompletableFuture<String> reportCreation = CompletableFuture.supplyAsync(() -> reportRequisitionService.createReport(pdfReportRequisitionDTO, ".pdf"));
-
-        reportCreation.thenApplyAsync(reportPath -> {
-            log.info("Report created successfully in {} milliseconds and set on the path {}", System.currentTimeMillis() - start, reportPath);
-            return reportPath;
+        reportAcquisition.thenApplyAsync(rpt -> {
+            rpt.setReportStatus(ReportStatusTypes.SUCCESSFUL);
+            return reportRequisitionService.partialUpdate(rpt);
         });
 
-        // reportCreation.get();
+        reportAcquisition.thenApplyAsync(rpt -> {
+            log.info("Report status change complete for pdf report ID {} in {} milliseconds", rpt.getId(), System.currentTimeMillis() - start);
+            return rpt;
+        });
+
+        reportAcquisition.get();
     }
 }

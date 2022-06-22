@@ -18,12 +18,12 @@ import java.util.concurrent.CompletableFuture;
 
 @Aspect
 public class XLSXReportRequisitionInterceptor {
-    private static final Logger log = LoggerFactory.getLogger(ReportRequisitionInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(XLSXReportRequisitionInterceptor.class);
 
     private final XlsxReportRequisitionService reportRequisitionService;
     private final ReportAssemblyService<XlsxReportRequisitionDTO> reportAssemblyService;
 
-    public XLSXReportRequisitionInterceptor(XlsxReportRequisitionService reportRequisitionService, ReportAssemblyService<XlsxReportRequisitionDTO> reportAssemblyService) {
+    public XLSXReportRequisitionInterceptor(ReportAssemblyService<XlsxReportRequisitionDTO> reportAssemblyService, XlsxReportRequisitionService reportRequisitionService) {
         this.reportRequisitionService = reportRequisitionService;
         this.reportAssemblyService = reportAssemblyService;
     }
@@ -60,13 +60,15 @@ public class XLSXReportRequisitionInterceptor {
             return reportPath;
         });
 
+        reportCreation.get();
+
     }
 
     @Async
     @SneakyThrows
     void updateReport(XlsxReportRequisitionDTO report) {
 
-        log.info("Updating report status for pdf report ID {}", report.getId());
+        log.info("Updating report status for xlsx report ID {}", report.getId());
 
         long start = System.currentTimeMillis();
 
@@ -74,11 +76,11 @@ public class XLSXReportRequisitionInterceptor {
 
         reportAcquisition.thenApplyAsync(rpt -> {
             rpt.setReportStatus(ReportStatusTypes.SUCCESSFUL);
-            return reportRequisitionService.partialUpdate(rpt);
+            return reportRequisitionService.save(rpt);
         });
 
         reportAcquisition.thenApplyAsync(rpt -> {
-            log.info("Report status change complete for pdf report ID {} in {} milliseconds", rpt.getId(), System.currentTimeMillis() - start);
+            log.info("Report status change complete for xlsx report ID {} in {} milliseconds", rpt.getId(), System.currentTimeMillis() - start);
             return rpt;
         });
 
