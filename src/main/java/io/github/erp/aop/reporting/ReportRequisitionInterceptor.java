@@ -8,13 +8,17 @@ import io.github.erp.service.dto.ReportContentTypeDTO;
 import io.github.erp.service.dto.ReportRequisitionDTO;
 import lombok.SneakyThrows;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -52,6 +56,52 @@ public class ReportRequisitionInterceptor {
 
         updateReport(reportDTO);
 
+    }
+
+    /**
+     * Advice that attaches a report to a response when we are responding to client.
+     *
+     * @param joinPoint join point for advice.
+     * @return result.
+     * @throws Throwable throws {@link IllegalArgumentException}.
+     */
+    @Around(value = "reportResponsePointcut()")
+    public ResponseEntity<ReportRequisitionDTO> attachReportToResponse(ProceedingJoinPoint joinPoint) throws Throwable {
+        Logger log = logger(joinPoint);
+        if (log.isDebugEnabled()) {
+            log.debug("Enter: {}() with argument[s] = {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
+        }
+        try {
+            ResponseEntity<ReportRequisitionDTO> result = (ResponseEntity<ReportRequisitionDTO>)joinPoint.proceed();
+
+            Objects.requireNonNull(result.getBody()).setReportStatus(ReportStatusTypes.GENERATING);
+
+            if (log.isDebugEnabled()) {
+                log.debug("Exit: {}() with result = {}", joinPoint.getSignature().getName(), result);
+            }
+            return result;
+        } catch (IllegalArgumentException e) {
+            log.error("Illegal argument: {} in {}()", Arrays.toString(joinPoint.getArgs()), joinPoint.getSignature().getName());
+            throw e;
+        }
+    }
+
+    /**
+     * Retrieves the {@link Logger} associated to the given {@link JoinPoint}.
+     *
+     * @param joinPoint join point we want the logger for.
+     * @return {@link Logger} associated to the given {@link JoinPoint}.
+     */
+    private Logger logger(JoinPoint joinPoint) {
+        return LoggerFactory.getLogger(joinPoint.getSignature().getDeclaringTypeName());
+    }
+
+    /**
+     * Pointcut that matches all Spring beans in the application's main packages.
+     */
+    @Pointcut("execution(* io.github.erp.erp.resources.ReportRequisitionResource.getReportRequisition(..))")
+    public void reportResponsePointcut() {
+        // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }
 
     @SneakyThrows
