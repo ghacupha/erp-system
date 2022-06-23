@@ -10,7 +10,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Erp System</name>
-    <description>Mark II No 7 (Artaxerxes Series)</description>
+    <description>Mark II No 9 (Artaxerxes Series)</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->
