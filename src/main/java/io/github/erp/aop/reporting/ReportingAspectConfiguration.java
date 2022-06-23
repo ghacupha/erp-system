@@ -1,6 +1,7 @@
 package io.github.erp.aop.reporting;
 
 import io.github.erp.internal.report.ReportAssemblyService;
+import io.github.erp.internal.report.ReportAttachmentService;
 import io.github.erp.service.PdfReportRequisitionService;
 import io.github.erp.service.ReportContentTypeService;
 import io.github.erp.service.ReportRequisitionService;
@@ -36,6 +37,9 @@ public class ReportingAspectConfiguration {
     @Autowired
     private ReportRequisitionService reportRequisitionService;
 
+    @Autowired
+    private ReportAttachmentService<ReportRequisitionDTO> reportAttachmentService;
+
     @Bean
     public ReportRequisitionInterceptor reportRequisitionInterceptor() {
 
@@ -52,5 +56,10 @@ public class ReportingAspectConfiguration {
     public XLSXReportRequisitionInterceptor xlsxReportRequisitionInterceptor() {
 
         return new XLSXReportRequisitionInterceptor(xlsxReportAssemblyService, xlsxReportRequisitionService);
+    }
+
+    @Bean
+    public ReportRequisitionAttachmentInterceptor reportRequisitionAttachmentInterceptor() {
+        return new ReportRequisitionAttachmentInterceptor(reportAttachmentService);
     }
 }

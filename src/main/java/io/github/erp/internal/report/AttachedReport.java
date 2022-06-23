@@ -18,8 +18,6 @@ package io.github.erp.internal.report;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.internal.model.AttachedXlsxReportRequisitionDTO;
-
 import java.util.UUID;
 
 public interface AttachedReport<DTO> {
