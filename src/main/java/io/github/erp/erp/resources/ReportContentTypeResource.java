@@ -49,7 +49,7 @@ import java.util.Optional;
  * REST controller for managing {@link io.github.erp.domain.ReportContentType}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/dev")
 public class ReportContentTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(ReportContentTypeResource.class);
