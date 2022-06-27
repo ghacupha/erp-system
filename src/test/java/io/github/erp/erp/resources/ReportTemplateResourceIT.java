@@ -60,7 +60,7 @@ import org.springframework.util.Base64Utils;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"REPORT_DESIGNER", "DEV"})
 public class ReportTemplateResourceIT {
 
     private static final String DEFAULT_CATALOGUE_NUMBER = "AAAAAAAAAA";
@@ -84,9 +84,9 @@ public class ReportTemplateResourceIT {
     private static final String DEFAULT_COMPILE_REPORT_FILE_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_COMPILE_REPORT_FILE_CONTENT_TYPE = "image/png";
 
-    private static final String ENTITY_API_URL = "/api/report-templates";
+    private static final String ENTITY_API_URL = "/api/design-report/report-templates";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/report-templates";
+    private static final String ENTITY_SEARCH_API_URL = "/api/design-report/_search/report-templates";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

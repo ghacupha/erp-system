@@ -73,7 +73,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"REPORT_ACCESSOR"})
 public class XlsxReportRequisitionResourceIT {
 
     private static final String DEFAULT_REPORT_NAME = "AAAAAAAAAA";
@@ -92,9 +92,9 @@ public class XlsxReportRequisitionResourceIT {
     private static final UUID DEFAULT_REPORT_ID = UUID.randomUUID();
     private static final UUID UPDATED_REPORT_ID = UUID.randomUUID();
 
-    private static final String ENTITY_API_URL = "/api/xlsx-report-requisitions";
+    private static final String ENTITY_API_URL = "/api/read-report/xlsx-report-requisitions";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/xlsx-report-requisitions";
+    private static final String ENTITY_SEARCH_API_URL = "/api/read-report/_search/xlsx-report-requisitions";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

@@ -61,7 +61,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"DEV"})
 class ReportContentTypeResourceIT {
 
     private static final String DEFAULT_REPORT_TYPE_NAME = "AAAAAAAAAA";

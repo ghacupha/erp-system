@@ -62,7 +62,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"DEV"})
 class SystemContentTypeResourceIT {
 
     private static final String DEFAULT_CONTENT_TYPE_NAME = "AAAAAAAAAA";
