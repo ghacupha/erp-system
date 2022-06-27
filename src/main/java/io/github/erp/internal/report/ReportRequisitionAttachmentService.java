@@ -66,10 +66,12 @@ public class ReportRequisitionAttachmentService implements ReportAttachmentServi
         log.debug("Fetching report named : {}", reportFileName.get());
 
         byte[] reportAttachment = fileStorageService.load(reportFileName.get()).getInputStream().readAllBytes();
+        String md5CheckSum = fileStorageService.calculateMD5CheckSum(reportFileName.get());
 
         log.debug("Attaching report retrieved to DTO designation : {} ", one.getReportName());
         one.setReportFileAttachment(reportAttachment);
         one.setReportFileAttachmentContentType(fileAttachmentContentType.get());
+        one.setReportFileCheckSum(md5CheckSum);
 
         log.debug("Report attachment completed successfully in {} milliseconds; sending attached report to the client  ", System.currentTimeMillis() - startup);
         return one;
