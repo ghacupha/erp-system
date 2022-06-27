@@ -20,6 +20,10 @@
 # version: '3.8'
 version: '3.3'
 services:
+  erp-client:
+    image: ghacupha/erp-client:0.0.1-SNAPSHOT
+    ports:
+      - "8981:80"
   erpsystem-app:
     image: ghacupha/erp-system:0.0.1-SNAPSHOT
     volumes:
