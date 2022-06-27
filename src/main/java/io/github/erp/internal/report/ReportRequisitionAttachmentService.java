@@ -71,7 +71,7 @@ public class ReportRequisitionAttachmentService implements ReportAttachmentServi
         log.debug("Attaching report retrieved to DTO designation : {} ", one.getReportName());
         one.setReportFileAttachment(reportAttachment);
         one.setReportFileAttachmentContentType(fileAttachmentContentType.get());
-        one.setReportFileCheckSum(md5CheckSum);
+        one.setReportFileCheckSum("MD5 :" + md5CheckSum);
 
         log.debug("Report attachment completed successfully in {} milliseconds; sending attached report to the client  ", System.currentTimeMillis() - startup);
         return one;
