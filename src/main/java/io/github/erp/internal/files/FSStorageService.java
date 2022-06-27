@@ -22,17 +22,20 @@ import lombok.SneakyThrows;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.DigestUtils;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.bind.DatatypeConverter;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -81,25 +84,6 @@ public class FSStorageService implements FileStorageService {
             this.root.resolve(Objects.requireNonNull(file.getOriginalFilename())),
             StandardCopyOption.REPLACE_EXISTING
         );
-
-        /* if (!FileUtils.fileChecksOut(this.root, file, fileMd5CheckSum)) {
-            Files.copy(
-                file.getInputStream(),
-                this.root.resolve(Objects.requireNonNull(file.getOriginalFilename())),
-                StandardCopyOption.REPLACE_EXISTING
-            );
-        } else if (!Files.exists(root.resolve(Objects.requireNonNull(file.getOriginalFilename())))) {
-            Files.copy(
-                file.getInputStream(),
-                this.root.resolve(Objects.requireNonNull(file.getOriginalFilename()))
-            );
-        } else {
-            Files.copy(
-                file.getInputStream(),
-                this.root.resolve(Objects.requireNonNull(file.getOriginalFilename())),
-                StandardCopyOption.REPLACE_EXISTING
-            );
-        } */
     }
 
     @Override
@@ -115,6 +99,11 @@ public class FSStorageService implements FileStorageService {
         } catch (MalformedURLException e) {
             throw new RuntimeException("Error: " + e.getMessage());
         }
+    }
+
+    @Override
+    public String calculateMD5CheckSum(String filename) {
+        return FileUtils.calculateMD5CheckSum(root, filename);
     }
 
     @Override

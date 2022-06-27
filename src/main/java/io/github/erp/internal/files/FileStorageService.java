@@ -58,4 +58,12 @@ public interface FileStorageService {
      * @return
      */
     Stream<Path> loadAll();
+
+    /**
+     * Calculates the MD5 sum of the filename provided from the working folder
+     *
+     * @param filename
+     * @return
+     */
+    String calculateMD5CheckSum(String filename);
 }
