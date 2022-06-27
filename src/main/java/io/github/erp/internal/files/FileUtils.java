@@ -22,12 +22,21 @@ import lombok.SneakyThrows;
 import org.bouncycastle.crypto.digests.SHA512Digest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.bind.DatatypeConverter;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 import java.util.Objects;
 
 public class FileUtils {
@@ -68,5 +77,35 @@ public class FileUtils {
 
             throw new RuntimeException("The file validation cannot be done against a null checksum");
         }
+    }
+
+    public static String calculateMD5CheckSum(final Path root, String filename) {
+        Path file = root.resolve(filename);
+//            //Resource resource = new UrlResource(file.toUri());
+//            if (resource.exists() || resource.isReadable()) {
+
+        String md5Digest = "";
+
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+
+            File nativeFile = file.toFile();
+            byte[] fileContent;
+            try {
+                fileContent = Files.readAllBytes(nativeFile.toPath());
+            } catch (IOException e) {
+                throw new RuntimeException("We were unable to read the file: " + nativeFile.getAbsolutePath());
+            }
+
+            md5.update(fileContent);
+            byte[] digest = md5.digest();
+
+            md5Digest = DatatypeConverter.printHexBinary(digest).toUpperCase(Locale.ROOT);
+
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Algorithm exception. Check runtime environment", e);
+        }
+
+        return md5Digest;
     }
 }
