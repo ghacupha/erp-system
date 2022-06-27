@@ -47,7 +47,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * REST controller for managing {@link io.github.erp.domain.ReportTemplate}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/design-report")
 public class ReportTemplateResource {
 
     private final Logger log = LoggerFactory.getLogger(ReportTemplateResource.class);

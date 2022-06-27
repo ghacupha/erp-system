@@ -44,5 +44,9 @@ public final class AuthoritiesConstants {
 
     public static final String GRANULAR_REPORTS_USER = "ROLE_GRANULAR_REPORTS_USER";
 
+    public static final String REPORT_ACCESSOR = "ROLE_REPORT_ACCESSOR";
+
+    public static final String REPORT_DESIGNER = "ROLE_REPORT_DESIGNER";
+
     private AuthoritiesConstants() {}
 }
