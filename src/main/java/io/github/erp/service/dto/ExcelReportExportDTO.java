@@ -43,6 +43,8 @@ public class ExcelReportExportDTO implements Serializable {
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
+    private Set<UniversallyUniqueMappingDTO> parameters = new HashSet<>();
+
     public Long getId() {
         return id;
     }
@@ -131,6 +133,14 @@ public class ExcelReportExportDTO implements Serializable {
         this.placeholders = placeholders;
     }
 
+    public Set<UniversallyUniqueMappingDTO> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(Set<UniversallyUniqueMappingDTO> parameters) {
+        this.parameters = parameters;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -165,6 +175,7 @@ public class ExcelReportExportDTO implements Serializable {
             ", reportTimeStamp='" + getReportTimeStamp() + "'" +
             ", reportId='" + getReportId() + "'" +
             ", placeholders=" + getPlaceholders() +
+            ", parameters=" + getParameters() +
             "}";
     }
 }

@@ -58,6 +58,17 @@
         </createTable>
 
         <addPrimaryKey columnNames="excel_report_export_id, placeholder_id" tableName="rel_excel_report_export__placeholder"/>
+
+        <createTable tableName="rel_excel_report_export__parameters">
+            <column name="parameters_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="excel_report_export_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="excel_report_export_id, parameters_id" tableName="rel_excel_report_export__parameters"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->

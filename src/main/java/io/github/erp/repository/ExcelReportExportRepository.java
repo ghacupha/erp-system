@@ -15,16 +15,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ExcelReportExportRepository extends JpaRepository<ExcelReportExport, Long>, JpaSpecificationExecutor<ExcelReportExport> {
     @Query(
-        value = "select distinct excelReportExport from ExcelReportExport excelReportExport left join fetch excelReportExport.placeholders",
+        value = "select distinct excelReportExport from ExcelReportExport excelReportExport left join fetch excelReportExport.placeholders left join fetch excelReportExport.parameters",
         countQuery = "select count(distinct excelReportExport) from ExcelReportExport excelReportExport"
     )
     Page<ExcelReportExport> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("select distinct excelReportExport from ExcelReportExport excelReportExport left join fetch excelReportExport.placeholders")
+    @Query(
+        "select distinct excelReportExport from ExcelReportExport excelReportExport left join fetch excelReportExport.placeholders left join fetch excelReportExport.parameters"
+    )
     List<ExcelReportExport> findAllWithEagerRelationships();
 
     @Query(
-        "select excelReportExport from ExcelReportExport excelReportExport left join fetch excelReportExport.placeholders where excelReportExport.id =:id"
+        "select excelReportExport from ExcelReportExport excelReportExport left join fetch excelReportExport.placeholders left join fetch excelReportExport.parameters where excelReportExport.id =:id"
     )
     Optional<ExcelReportExport> findOneWithEagerRelationships(@Param("id") Long id);
 }

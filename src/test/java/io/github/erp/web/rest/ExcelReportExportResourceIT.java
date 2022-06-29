@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.ExcelReportExport;
 import io.github.erp.domain.Placeholder;
+import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.repository.ExcelReportExportRepository;
 import io.github.erp.repository.search.ExcelReportExportSearchRepository;
 import io.github.erp.service.ExcelReportExportService;
@@ -621,6 +622,32 @@ class ExcelReportExportResourceIT {
 
         // Get all the excelReportExportList where placeholder equals to (placeholderId + 1)
         defaultExcelReportExportShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllExcelReportExportsByParametersIsEqualToSomething() throws Exception {
+        // Initialize the database
+        excelReportExportRepository.saveAndFlush(excelReportExport);
+        UniversallyUniqueMapping parameters;
+        if (TestUtil.findAll(em, UniversallyUniqueMapping.class).isEmpty()) {
+            parameters = UniversallyUniqueMappingResourceIT.createEntity(em);
+            em.persist(parameters);
+            em.flush();
+        } else {
+            parameters = TestUtil.findAll(em, UniversallyUniqueMapping.class).get(0);
+        }
+        em.persist(parameters);
+        em.flush();
+        excelReportExport.addParameters(parameters);
+        excelReportExportRepository.saveAndFlush(excelReportExport);
+        Long parametersId = parameters.getId();
+
+        // Get all the excelReportExportList where parameters equals to parametersId
+        defaultExcelReportExportShouldBeFound("parametersId.equals=" + parametersId);
+
+        // Get all the excelReportExportList where parameters equals to (parametersId + 1)
+        defaultExcelReportExportShouldNotBeFound("parametersId.equals=" + (parametersId + 1));
     }
 
     /**
