@@ -1,6 +1,6 @@
 @REM
-@REM Erp System - Mark II No 11 (Artaxerxes Series)
-@REM Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
+@REM Erp System - Mark II No 17 (Baruch Series)
+@REM Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
 @REM
 @REM This program is free software: you can redistribute it and/or modify
 @REM it under the terms of the GNU General Public License as published by
