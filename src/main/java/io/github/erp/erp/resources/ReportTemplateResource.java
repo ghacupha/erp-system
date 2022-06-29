@@ -28,6 +28,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -47,7 +48,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * REST controller for managing {@link io.github.erp.domain.ReportTemplate}.
  */
 @RestController
-@RequestMapping("/api/design-report")
+@RequestMapping("/api")
 public class ReportTemplateResource {
 
     private final Logger log = LoggerFactory.getLogger(ReportTemplateResource.class);
@@ -171,6 +172,7 @@ public class ReportTemplateResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of reportTemplates in body.
      */
+    @RolesAllowed({"ROLE_REPORT_ACCESSOR", "ROLE_REPORT_DESIGNER", "ROLE_DEV"})
     @GetMapping("/report-templates")
     public ResponseEntity<List<ReportTemplateDTO>> getAllReportTemplates(ReportTemplateCriteria criteria, Pageable pageable) {
         log.debug("REST request to get ReportTemplates by criteria: {}", criteria);

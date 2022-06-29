@@ -48,7 +48,7 @@ import java.util.Optional;
  * REST controller for managing {@link io.github.erp.domain.ReportRequisition}.
  */
 @RestController
-@RequestMapping("/api/read-report")
+@RequestMapping("/api")
 public class ReportRequisitionResource {
 
     private final Logger log = LoggerFactory.getLogger(ReportRequisitionResource.class);
