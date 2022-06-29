@@ -53,6 +53,15 @@
       "otherEntityField": "mappedValue",
       "ownerSide": true,
       "otherEntityRelationshipName": "excelReportExport"
+    },
+    {
+      "relationshipName": "reportStatus",
+      "otherEntityName": "reportStatus",
+      "relationshipType": "one-to-one",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "id": false,
+      "otherEntityRelationshipName": "excelReportExport"
     }
   ],
   "service": "serviceImpl",

@@ -12,6 +12,11 @@ public interface ReportStatusMapper extends EntityMapper<ReportStatusDTO, Report
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     ReportStatusDTO toDto(ReportStatus s);
 
+    @Named("id")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    ReportStatusDTO toDtoId(ReportStatus reportStatus);
+
     @Mapping(target = "removePlaceholder", ignore = true)
     ReportStatus toEntity(ReportStatusDTO reportStatusDTO);
 }

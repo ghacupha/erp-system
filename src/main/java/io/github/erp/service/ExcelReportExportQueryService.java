@@ -126,6 +126,15 @@ public class ExcelReportExportQueryService extends QueryService<ExcelReportExpor
                         )
                     );
             }
+            if (criteria.getReportStatusId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getReportStatusId(),
+                            root -> root.join(ExcelReportExport_.reportStatus, JoinType.LEFT).get(ReportStatus_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

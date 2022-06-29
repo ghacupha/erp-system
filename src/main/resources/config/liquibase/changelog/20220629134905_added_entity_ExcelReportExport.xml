@@ -41,6 +41,9 @@
             <column name="report_id" type="${uuidType}">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_excel_report_export__report_id" />
             </column>
+            <column name="report_status_id" type="bigint">
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_excel_report_export__report_status_id" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
         <dropDefaultValue tableName="excel_report_export" columnName="report_time_stamp" columnDataType="${datetimeType}"/>

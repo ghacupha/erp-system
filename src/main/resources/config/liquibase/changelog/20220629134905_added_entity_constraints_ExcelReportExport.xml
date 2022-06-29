@@ -31,5 +31,11 @@
                                  constraintName="fk_rel_excel_report_export__parameters__parameters_id"
                                  referencedColumnNames="id"
                                  referencedTableName="universally_unique_mapping"/>
+
+        <addForeignKeyConstraint baseColumnNames="report_status_id"
+                                 baseTableName="excel_report_export"
+                                 constraintName="fk_excel_report_export__report_status_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="report_status"/>
     </changeSet>
 </databaseChangeLog>

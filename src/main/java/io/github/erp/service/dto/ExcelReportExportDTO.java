@@ -45,6 +45,8 @@ public class ExcelReportExportDTO implements Serializable {
 
     private Set<UniversallyUniqueMappingDTO> parameters = new HashSet<>();
 
+    private ReportStatusDTO reportStatus;
+
     public Long getId() {
         return id;
     }
@@ -141,6 +143,14 @@ public class ExcelReportExportDTO implements Serializable {
         this.parameters = parameters;
     }
 
+    public ReportStatusDTO getReportStatus() {
+        return reportStatus;
+    }
+
+    public void setReportStatus(ReportStatusDTO reportStatus) {
+        this.reportStatus = reportStatus;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -176,6 +186,7 @@ public class ExcelReportExportDTO implements Serializable {
             ", reportId='" + getReportId() + "'" +
             ", placeholders=" + getPlaceholders() +
             ", parameters=" + getParameters() +
+            ", reportStatus=" + getReportStatus() +
             "}";
     }
 }
