@@ -1,0 +1,45 @@
+{
+  "fields": [
+    {
+      "fieldName": "designation",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "statusCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "processStatus"
+    },
+    {
+      "relationshipName": "parameters",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "mappedValue",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "processStatus"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "ProcessStatus",
+  "changelogDate": "20220629144311",
+  "incrementalChangelog": false
+}

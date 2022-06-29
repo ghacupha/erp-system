@@ -11,18 +11,17 @@ import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 import tech.jhipster.service.filter.UUIDFilter;
-import tech.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
- * Criteria class for the {@link io.github.erp.domain.ExcelReportExport} entity. This class is used
- * in {@link io.github.erp.web.rest.ExcelReportExportResource} to receive all the possible filtering options from
+ * Criteria class for the {@link io.github.erp.domain.ReportStatus} entity. This class is used
+ * in {@link io.github.erp.web.rest.ReportStatusResource} to receive all the possible filtering options from
  * the Http GET request parameters.
  * For example the following could be a valid request:
- * {@code /excel-report-exports?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
+ * {@code /report-statuses?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
  * As Spring is unable to properly convert the types, unless specific {@link Filter} class are used, we need to use
  * fix type specific filters.
  */
-public class ExcelReportExportCriteria implements Serializable, Criteria {
+public class ReportStatusCriteria implements Serializable, Criteria {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,31 +29,25 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
 
     private StringFilter reportName;
 
-    private ZonedDateTimeFilter reportTimeStamp;
-
     private UUIDFilter reportId;
 
     private LongFilter placeholderId;
 
-    private LongFilter parametersId;
-
     private Boolean distinct;
 
-    public ExcelReportExportCriteria() {}
+    public ReportStatusCriteria() {}
 
-    public ExcelReportExportCriteria(ExcelReportExportCriteria other) {
+    public ReportStatusCriteria(ReportStatusCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.reportName = other.reportName == null ? null : other.reportName.copy();
-        this.reportTimeStamp = other.reportTimeStamp == null ? null : other.reportTimeStamp.copy();
         this.reportId = other.reportId == null ? null : other.reportId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
-        this.parametersId = other.parametersId == null ? null : other.parametersId.copy();
         this.distinct = other.distinct;
     }
 
     @Override
-    public ExcelReportExportCriteria copy() {
-        return new ExcelReportExportCriteria(this);
+    public ReportStatusCriteria copy() {
+        return new ReportStatusCriteria(this);
     }
 
     public LongFilter getId() {
@@ -87,21 +80,6 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
         this.reportName = reportName;
     }
 
-    public ZonedDateTimeFilter getReportTimeStamp() {
-        return reportTimeStamp;
-    }
-
-    public ZonedDateTimeFilter reportTimeStamp() {
-        if (reportTimeStamp == null) {
-            reportTimeStamp = new ZonedDateTimeFilter();
-        }
-        return reportTimeStamp;
-    }
-
-    public void setReportTimeStamp(ZonedDateTimeFilter reportTimeStamp) {
-        this.reportTimeStamp = reportTimeStamp;
-    }
-
     public UUIDFilter getReportId() {
         return reportId;
     }
@@ -132,21 +110,6 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
         this.placeholderId = placeholderId;
     }
 
-    public LongFilter getParametersId() {
-        return parametersId;
-    }
-
-    public LongFilter parametersId() {
-        if (parametersId == null) {
-            parametersId = new LongFilter();
-        }
-        return parametersId;
-    }
-
-    public void setParametersId(LongFilter parametersId) {
-        this.parametersId = parametersId;
-    }
-
     public Boolean getDistinct() {
         return distinct;
     }
@@ -163,33 +126,29 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final ExcelReportExportCriteria that = (ExcelReportExportCriteria) o;
+        final ReportStatusCriteria that = (ReportStatusCriteria) o;
         return (
             Objects.equals(id, that.id) &&
             Objects.equals(reportName, that.reportName) &&
-            Objects.equals(reportTimeStamp, that.reportTimeStamp) &&
             Objects.equals(reportId, that.reportId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
-            Objects.equals(parametersId, that.parametersId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, reportName, reportTimeStamp, reportId, placeholderId, parametersId, distinct);
+        return Objects.hash(id, reportName, reportId, placeholderId, distinct);
     }
 
     // prettier-ignore
     @Override
     public String toString() {
-        return "ExcelReportExportCriteria{" +
+        return "ReportStatusCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
             (reportName != null ? "reportName=" + reportName + ", " : "") +
-            (reportTimeStamp != null ? "reportTimeStamp=" + reportTimeStamp + ", " : "") +
             (reportId != null ? "reportId=" + reportId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
-            (parametersId != null ? "parametersId=" + parametersId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

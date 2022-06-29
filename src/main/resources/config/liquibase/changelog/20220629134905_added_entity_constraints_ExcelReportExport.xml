@@ -19,5 +19,17 @@
                                  constraintName="fk_rel_excel_report_export__placeholder__placeholder_id"
                                  referencedColumnNames="id"
                                  referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="excel_report_export_id"
+                                 baseTableName="rel_excel_report_export__parameters"
+                                 constraintName="fk_rel_excel_report_export__parameters__excel_report_export_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="excel_report_export"/>
+
+        <addForeignKeyConstraint baseColumnNames="parameters_id"
+                                 baseTableName="rel_excel_report_export__parameters"
+                                 constraintName="fk_rel_excel_report_export__parameters__parameters_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="universally_unique_mapping"/>
     </changeSet>
 </databaseChangeLog>

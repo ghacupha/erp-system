@@ -53,13 +53,6 @@
       "otherEntityField": "mappedValue",
       "ownerSide": true,
       "otherEntityRelationshipName": "excelReportExport"
-    },
-    {
-      "relationshipName": "reportTemplate",
-      "otherEntityName": "reportTemplate",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "catalogueNumber"
     }
   ],
   "service": "serviceImpl",
