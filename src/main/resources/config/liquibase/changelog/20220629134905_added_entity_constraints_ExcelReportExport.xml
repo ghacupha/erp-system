@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity ExcelReportExport.
+    -->
+    <changeSet id="20220629134905-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="excel_report_export_id"
+                                 baseTableName="rel_excel_report_export__placeholder"
+                                 constraintName="fk_rel_excel_report_export__pla__excel_report_export_06_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="excel_report_export"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_excel_report_export__placeholder"
+                                 constraintName="fk_rel_excel_report_export__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+    </changeSet>
+</databaseChangeLog>
