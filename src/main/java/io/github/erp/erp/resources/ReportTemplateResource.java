@@ -81,6 +81,7 @@ public class ReportTemplateResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new reportTemplateDTO, or with status {@code 400 (Bad Request)} if the reportTemplate has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @RolesAllowed({"ROLE_REPORT_DESIGNER", "ROLE_DEV"})
     @PostMapping("/report-templates")
     public ResponseEntity<ReportTemplateDTO> createReportTemplate(@Valid @RequestBody ReportTemplateDTO reportTemplateDTO)
         throws URISyntaxException {
@@ -105,6 +106,7 @@ public class ReportTemplateResource {
      * or with status {@code 500 (Internal Server Error)} if the reportTemplateDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @RolesAllowed({"ROLE_REPORT_DESIGNER", "ROLE_DEV"})
     @PutMapping("/report-templates/{id}")
     public ResponseEntity<ReportTemplateDTO> updateReportTemplate(
         @PathVariable(value = "id", required = false) final Long id,
@@ -140,6 +142,7 @@ public class ReportTemplateResource {
      * or with status {@code 500 (Internal Server Error)} if the reportTemplateDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @RolesAllowed({"ROLE_REPORT_DESIGNER", "ROLE_DEV"})
     @PatchMapping(value = "/report-templates/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<ReportTemplateDTO> partialUpdateReportTemplate(
         @PathVariable(value = "id", required = false) final Long id,
@@ -199,6 +202,7 @@ public class ReportTemplateResource {
      * @param id the id of the reportTemplateDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the reportTemplateDTO, or with status {@code 404 (Not Found)}.
      */
+    @RolesAllowed({"ROLE_REPORT_ACCESSOR", "ROLE_REPORT_DESIGNER", "ROLE_DEV"})
     @GetMapping("/report-templates/{id}")
     public ResponseEntity<ReportTemplateDTO> getReportTemplate(@PathVariable Long id) {
         log.debug("REST request to get ReportTemplate : {}", id);
@@ -212,6 +216,7 @@ public class ReportTemplateResource {
      * @param id the id of the reportTemplateDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
+    @RolesAllowed({"ROLE_REPORT_DESIGNER", "ROLE_DEV"})
     @DeleteMapping("/report-templates/{id}")
     public ResponseEntity<Void> deleteReportTemplate(@PathVariable Long id) {
         log.debug("REST request to delete ReportTemplate : {}", id);
@@ -230,6 +235,7 @@ public class ReportTemplateResource {
      * @param pageable the pagination information.
      * @return the result of the search.
      */
+    @RolesAllowed({"ROLE_REPORT_DESIGNER", "ROLE_DEV"})
     @GetMapping("/_search/report-templates")
     public ResponseEntity<List<ReportTemplateDTO>> searchReportTemplates(@RequestParam String query, Pageable pageable) {
         log.debug("REST request to search for a page of ReportTemplates for query {}", query);

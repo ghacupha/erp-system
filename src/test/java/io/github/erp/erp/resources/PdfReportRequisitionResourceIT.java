@@ -98,9 +98,9 @@ public class PdfReportRequisitionResourceIT {
     private static final UUID DEFAULT_REPORT_ID = UUID.randomUUID();
     private static final UUID UPDATED_REPORT_ID = UUID.randomUUID();
 
-    private static final String ENTITY_API_URL = "/api/read-report/pdf-report-requisitions";
+    private static final String ENTITY_API_URL = "/api/pdf-report-requisitions";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/read-report/_search/pdf-report-requisitions";
+    private static final String ENTITY_SEARCH_API_URL = "/api/_search/pdf-report-requisitions";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

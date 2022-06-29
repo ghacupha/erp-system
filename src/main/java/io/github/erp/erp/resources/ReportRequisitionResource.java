@@ -36,6 +36,7 @@ import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
@@ -49,6 +50,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
+@RolesAllowed({"ROLE_REPORT_ACCESSOR", "ROLE_REPORT_DESIGNER", "ROLE_DEV"})
 public class ReportRequisitionResource {
 
     private final Logger log = LoggerFactory.getLogger(ReportRequisitionResource.class);
