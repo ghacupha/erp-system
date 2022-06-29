@@ -52,7 +52,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * REST controller for managing {@link io.github.erp.domain.XlsxReportRequisition}.
  */
 @RestController
-@RequestMapping("/api/read-report")
+@RequestMapping("/api")
 public class XlsxReportRequisitionResource {
 
     private final Logger log = LoggerFactory.getLogger(XlsxReportRequisitionResource.class);

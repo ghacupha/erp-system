@@ -61,7 +61,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * REST controller for managing {@link io.github.erp.domain.PdfReportRequisition}.
  */
 @RestController
-@RequestMapping("/api/read-report")
+@RequestMapping("/api")
 public class PdfReportRequisitionResource {
 
     private final Logger log = LoggerFactory.getLogger(PdfReportRequisitionResource.class);
