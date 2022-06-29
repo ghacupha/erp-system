@@ -36,6 +36,7 @@ import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
@@ -49,6 +50,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
+@RolesAllowed({"ROLE_REPORT_ACCESSOR", "ROLE_REPORT_DESIGNER", "ROLE_DEV"})
 public class ReportContentTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(ReportContentTypeResource.class);
@@ -81,6 +83,7 @@ public class ReportContentTypeResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new reportContentTypeDTO, or with status {@code 400 (Bad Request)} if the reportContentType has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @RolesAllowed({"ROLE_REPORT_DESIGNER", "ROLE_DEV"})
     @PostMapping("/report-content-types")
     public ResponseEntity<ReportContentTypeDTO> createReportContentType(@Valid @RequestBody ReportContentTypeDTO reportContentTypeDTO)
         throws URISyntaxException {
@@ -105,6 +108,7 @@ public class ReportContentTypeResource {
      * or with status {@code 500 (Internal Server Error)} if the reportContentTypeDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @RolesAllowed({"ROLE_REPORT_DESIGNER", "ROLE_DEV"})
     @PutMapping("/report-content-types/{id}")
     public ResponseEntity<ReportContentTypeDTO> updateReportContentType(
         @PathVariable(value = "id", required = false) final Long id,
@@ -140,6 +144,7 @@ public class ReportContentTypeResource {
      * or with status {@code 500 (Internal Server Error)} if the reportContentTypeDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @RolesAllowed({"ROLE_REPORT_DESIGNER", "ROLE_DEV"})
     @PatchMapping(value = "/report-content-types/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<ReportContentTypeDTO> partialUpdateReportContentType(
         @PathVariable(value = "id", required = false) final Long id,

@@ -60,7 +60,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser(roles = {"DEV"})
+@WithMockUser(roles = {"REPORT_DESIGNER"}) // , "REPORT_ACCESSOR", "DEV"})
 class ReportContentTypeResourceIT {
 
     private static final String DEFAULT_REPORT_TYPE_NAME = "AAAAAAAAAA";
@@ -69,9 +69,9 @@ class ReportContentTypeResourceIT {
     private static final String DEFAULT_REPORT_FILE_EXTENSION = "AAAAAAAAAA";
     private static final String UPDATED_REPORT_FILE_EXTENSION = "BBBBBBBBBB";
 
-    private static final String ENTITY_API_URL = "/api/dev/report-content-types";
+    private static final String ENTITY_API_URL = "/api/report-content-types";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/dev/_search/report-content-types";
+    private static final String ENTITY_SEARCH_API_URL = "/api/_search/report-content-types";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
