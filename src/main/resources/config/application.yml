@@ -151,7 +151,7 @@ info:
 
 jhipster:
   clientApp:
-    name: 'ERP_System_Artaxerxes_Series'
+    name: 'ERP_System_Baruch_Series'
   # By default CORS is disabled. Uncomment to enable.
   cors:
      allowed-origins: 'http://localhost:8100,https://localhost:8100,http://localhost:9000,https://localhost:9000,https://localhost:8981,http://localhost:8981,http://127.0.0.1:8980'
@@ -186,4 +186,4 @@ jhipster:
 # ===================================================================
 
 app:
-  title: 'Mark II No. 11'
+  title: 'Mark II No. 17'

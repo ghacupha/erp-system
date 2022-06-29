@@ -1,8 +1,8 @@
 package io.github.erp.internal.files;
 
 /*-
- * Erp System - Mark II No 11 (Artaxerxes Series)
- * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark II No 17 (Baruch Series)
+ * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@ package io.github.erp.internal.files;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.internal.report.ReportsProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

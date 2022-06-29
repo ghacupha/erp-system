@@ -1,8 +1,8 @@
 package io.github.erp.repository.timezone;
 
 /*-
- * Erp System - Mark II No 11 (Artaxerxes Series)
- * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark II No 17 (Baruch Series)
+ * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
