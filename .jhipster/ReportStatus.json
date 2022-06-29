@@ -19,6 +19,12 @@
       "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "reportStatus"
+    },
+    {
+      "relationshipName": "processStatus",
+      "otherEntityName": "processStatus",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "statusCode"
     }
   ],
   "service": "serviceImpl",

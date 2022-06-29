@@ -113,6 +113,15 @@ public class ReportStatusQueryService extends QueryService<ReportStatus> {
                         )
                     );
             }
+            if (criteria.getProcessStatusId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getProcessStatusId(),
+                            root -> root.join(ReportStatus_.processStatus, JoinType.LEFT).get(ProcessStatus_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

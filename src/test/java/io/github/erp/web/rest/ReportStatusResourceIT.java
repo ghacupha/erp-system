@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Placeholder;
+import io.github.erp.domain.ProcessStatus;
 import io.github.erp.domain.ReportStatus;
 import io.github.erp.repository.ReportStatusRepository;
 import io.github.erp.repository.search.ReportStatusSearchRepository;
@@ -422,6 +423,32 @@ class ReportStatusResourceIT {
 
         // Get all the reportStatusList where placeholder equals to (placeholderId + 1)
         defaultReportStatusShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllReportStatusesByProcessStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        reportStatusRepository.saveAndFlush(reportStatus);
+        ProcessStatus processStatus;
+        if (TestUtil.findAll(em, ProcessStatus.class).isEmpty()) {
+            processStatus = ProcessStatusResourceIT.createEntity(em);
+            em.persist(processStatus);
+            em.flush();
+        } else {
+            processStatus = TestUtil.findAll(em, ProcessStatus.class).get(0);
+        }
+        em.persist(processStatus);
+        em.flush();
+        reportStatus.setProcessStatus(processStatus);
+        reportStatusRepository.saveAndFlush(reportStatus);
+        Long processStatusId = processStatus.getId();
+
+        // Get all the reportStatusList where processStatus equals to processStatusId
+        defaultReportStatusShouldBeFound("processStatusId.equals=" + processStatusId);
+
+        // Get all the reportStatusList where processStatus equals to (processStatusId + 1)
+        defaultReportStatusShouldNotBeFound("processStatusId.equals=" + (processStatusId + 1));
     }
 
     /**

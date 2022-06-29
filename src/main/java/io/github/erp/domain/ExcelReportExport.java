@@ -84,7 +84,7 @@ public class ExcelReportExport implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<UniversallyUniqueMapping> parameters = new HashSet<>();
 
-    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "placeholders", "processStatus" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
     private ReportStatus reportStatus;

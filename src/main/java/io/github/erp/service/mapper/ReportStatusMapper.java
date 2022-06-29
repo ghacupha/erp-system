@@ -7,9 +7,10 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link ReportStatus} and its DTO {@link ReportStatusDTO}.
  */
-@Mapper(componentModel = "spring", uses = { PlaceholderMapper.class })
+@Mapper(componentModel = "spring", uses = { PlaceholderMapper.class, ProcessStatusMapper.class })
 public interface ReportStatusMapper extends EntityMapper<ReportStatusDTO, ReportStatus> {
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
+    @Mapping(target = "processStatus", source = "processStatus", qualifiedByName = "statusCode")
     ReportStatusDTO toDto(ReportStatus s);
 
     @Named("id")

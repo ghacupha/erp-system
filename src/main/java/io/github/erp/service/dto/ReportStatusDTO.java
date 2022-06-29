@@ -22,6 +22,8 @@ public class ReportStatusDTO implements Serializable {
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
+    private ProcessStatusDTO processStatus;
+
     public Long getId() {
         return id;
     }
@@ -54,6 +56,14 @@ public class ReportStatusDTO implements Serializable {
         this.placeholders = placeholders;
     }
 
+    public ProcessStatusDTO getProcessStatus() {
+        return processStatus;
+    }
+
+    public void setProcessStatus(ProcessStatusDTO processStatus) {
+        this.processStatus = processStatus;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -83,6 +93,7 @@ public class ReportStatusDTO implements Serializable {
             ", reportName='" + getReportName() + "'" +
             ", reportId='" + getReportId() + "'" +
             ", placeholders=" + getPlaceholders() +
+            ", processStatus=" + getProcessStatus() +
             "}";
     }
 }

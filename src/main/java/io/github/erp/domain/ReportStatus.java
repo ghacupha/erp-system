@@ -45,6 +45,10 @@ public class ReportStatus implements Serializable {
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "placeholders", "parameters" }, allowSetters = true)
+    private ProcessStatus processStatus;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -106,6 +110,19 @@ public class ReportStatus implements Serializable {
 
     public ReportStatus removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
+        return this;
+    }
+
+    public ProcessStatus getProcessStatus() {
+        return this.processStatus;
+    }
+
+    public void setProcessStatus(ProcessStatus processStatus) {
+        this.processStatus = processStatus;
+    }
+
+    public ReportStatus processStatus(ProcessStatus processStatus) {
+        this.setProcessStatus(processStatus);
         return this;
     }
 
