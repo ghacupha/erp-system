@@ -16,4 +16,10 @@ public interface ProcessStatusMapper extends EntityMapper<ProcessStatusDTO, Proc
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removeParameters", ignore = true)
     ProcessStatus toEntity(ProcessStatusDTO processStatusDTO);
+
+    @Named("statusCode")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "statusCode", source = "statusCode")
+    ProcessStatusDTO toDtoStatusCode(ProcessStatus processStatus);
 }

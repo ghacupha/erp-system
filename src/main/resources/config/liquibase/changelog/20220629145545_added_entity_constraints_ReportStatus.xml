@@ -19,5 +19,11 @@
                                  constraintName="fk_rel_report_status__placeholder__placeholder_id"
                                  referencedColumnNames="id"
                                  referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="process_status_id"
+                                 baseTableName="report_status"
+                                 constraintName="fk_report_status__process_status_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="process_status"/>
     </changeSet>
 </databaseChangeLog>

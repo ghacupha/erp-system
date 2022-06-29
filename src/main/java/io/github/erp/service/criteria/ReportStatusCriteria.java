@@ -33,6 +33,8 @@ public class ReportStatusCriteria implements Serializable, Criteria {
 
     private LongFilter placeholderId;
 
+    private LongFilter processStatusId;
+
     private Boolean distinct;
 
     public ReportStatusCriteria() {}
@@ -42,6 +44,7 @@ public class ReportStatusCriteria implements Serializable, Criteria {
         this.reportName = other.reportName == null ? null : other.reportName.copy();
         this.reportId = other.reportId == null ? null : other.reportId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.processStatusId = other.processStatusId == null ? null : other.processStatusId.copy();
         this.distinct = other.distinct;
     }
 
@@ -110,6 +113,21 @@ public class ReportStatusCriteria implements Serializable, Criteria {
         this.placeholderId = placeholderId;
     }
 
+    public LongFilter getProcessStatusId() {
+        return processStatusId;
+    }
+
+    public LongFilter processStatusId() {
+        if (processStatusId == null) {
+            processStatusId = new LongFilter();
+        }
+        return processStatusId;
+    }
+
+    public void setProcessStatusId(LongFilter processStatusId) {
+        this.processStatusId = processStatusId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -132,13 +150,14 @@ public class ReportStatusCriteria implements Serializable, Criteria {
             Objects.equals(reportName, that.reportName) &&
             Objects.equals(reportId, that.reportId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(processStatusId, that.processStatusId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, reportName, reportId, placeholderId, distinct);
+        return Objects.hash(id, reportName, reportId, placeholderId, processStatusId, distinct);
     }
 
     // prettier-ignore
@@ -149,6 +168,7 @@ public class ReportStatusCriteria implements Serializable, Criteria {
             (reportName != null ? "reportName=" + reportName + ", " : "") +
             (reportId != null ? "reportId=" + reportId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (processStatusId != null ? "processStatusId=" + processStatusId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

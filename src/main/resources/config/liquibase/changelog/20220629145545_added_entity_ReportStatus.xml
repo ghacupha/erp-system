@@ -20,6 +20,9 @@
             <column name="report_id" type="${uuidType}">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_report_status__report_id" />
             </column>
+            <column name="process_status_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
