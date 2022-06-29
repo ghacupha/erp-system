@@ -84,6 +84,11 @@ public class ExcelReportExport implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<UniversallyUniqueMapping> parameters = new HashSet<>();
 
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    @OneToOne
+    @JoinColumn(unique = true)
+    private ReportStatus reportStatus;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -259,6 +264,19 @@ public class ExcelReportExport implements Serializable {
 
     public ExcelReportExport removeParameters(UniversallyUniqueMapping universallyUniqueMapping) {
         this.parameters.remove(universallyUniqueMapping);
+        return this;
+    }
+
+    public ReportStatus getReportStatus() {
+        return this.reportStatus;
+    }
+
+    public void setReportStatus(ReportStatus reportStatus) {
+        this.reportStatus = reportStatus;
+    }
+
+    public ExcelReportExport reportStatus(ReportStatus reportStatus) {
+        this.setReportStatus(reportStatus);
         return this;
     }
 

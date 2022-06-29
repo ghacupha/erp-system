@@ -38,6 +38,8 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
 
     private LongFilter parametersId;
 
+    private LongFilter reportStatusId;
+
     private Boolean distinct;
 
     public ExcelReportExportCriteria() {}
@@ -49,6 +51,7 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
         this.reportId = other.reportId == null ? null : other.reportId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.parametersId = other.parametersId == null ? null : other.parametersId.copy();
+        this.reportStatusId = other.reportStatusId == null ? null : other.reportStatusId.copy();
         this.distinct = other.distinct;
     }
 
@@ -147,6 +150,21 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
         this.parametersId = parametersId;
     }
 
+    public LongFilter getReportStatusId() {
+        return reportStatusId;
+    }
+
+    public LongFilter reportStatusId() {
+        if (reportStatusId == null) {
+            reportStatusId = new LongFilter();
+        }
+        return reportStatusId;
+    }
+
+    public void setReportStatusId(LongFilter reportStatusId) {
+        this.reportStatusId = reportStatusId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -171,13 +189,14 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
             Objects.equals(reportId, that.reportId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(parametersId, that.parametersId) &&
+            Objects.equals(reportStatusId, that.reportStatusId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, reportName, reportTimeStamp, reportId, placeholderId, parametersId, distinct);
+        return Objects.hash(id, reportName, reportTimeStamp, reportId, placeholderId, parametersId, reportStatusId, distinct);
     }
 
     // prettier-ignore
@@ -190,6 +209,7 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
             (reportId != null ? "reportId=" + reportId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (parametersId != null ? "parametersId=" + parametersId + ", " : "") +
+            (reportStatusId != null ? "reportStatusId=" + reportStatusId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
