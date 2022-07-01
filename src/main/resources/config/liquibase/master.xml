@@ -77,6 +77,7 @@
     <include file="config/liquibase/changelog/20220701123538_added_entity_SecurityClearance.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220701133235_added_entity_ApplicationUser.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220701140751_added_entity_ReportDesign.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220701141203_added_entity_SystemModule.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
