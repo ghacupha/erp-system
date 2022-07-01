@@ -158,6 +158,15 @@ public class ReportDesignQueryService extends QueryService<ReportDesign> {
                         )
                     );
             }
+            if (criteria.getSystemModuleId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getSystemModuleId(),
+                            root -> root.join(ReportDesign_.systemModule, JoinType.LEFT).get(SystemModule_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

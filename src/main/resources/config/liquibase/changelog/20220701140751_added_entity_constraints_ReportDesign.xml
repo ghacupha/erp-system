@@ -55,5 +55,11 @@
                                  constraintName="fk_rel_report_design__placeholder__placeholder_id"
                                  referencedColumnNames="id"
                                  referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="system_module_id"
+                                 baseTableName="report_design"
+                                 constraintName="fk_report_design__system_module_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="system_module"/>
     </changeSet>
 </databaseChangeLog>

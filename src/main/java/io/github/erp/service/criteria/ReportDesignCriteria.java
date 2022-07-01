@@ -43,6 +43,8 @@ public class ReportDesignCriteria implements Serializable, Criteria {
 
     private LongFilter placeholderId;
 
+    private LongFilter systemModuleId;
+
     private Boolean distinct;
 
     public ReportDesignCriteria() {}
@@ -57,6 +59,7 @@ public class ReportDesignCriteria implements Serializable, Criteria {
         this.organizationId = other.organizationId == null ? null : other.organizationId.copy();
         this.departmentId = other.departmentId == null ? null : other.departmentId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.systemModuleId = other.systemModuleId == null ? null : other.systemModuleId.copy();
         this.distinct = other.distinct;
     }
 
@@ -200,6 +203,21 @@ public class ReportDesignCriteria implements Serializable, Criteria {
         this.placeholderId = placeholderId;
     }
 
+    public LongFilter getSystemModuleId() {
+        return systemModuleId;
+    }
+
+    public LongFilter systemModuleId() {
+        if (systemModuleId == null) {
+            systemModuleId = new LongFilter();
+        }
+        return systemModuleId;
+    }
+
+    public void setSystemModuleId(LongFilter systemModuleId) {
+        this.systemModuleId = systemModuleId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -227,6 +245,7 @@ public class ReportDesignCriteria implements Serializable, Criteria {
             Objects.equals(organizationId, that.organizationId) &&
             Objects.equals(departmentId, that.departmentId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(systemModuleId, that.systemModuleId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -243,6 +262,7 @@ public class ReportDesignCriteria implements Serializable, Criteria {
             organizationId,
             departmentId,
             placeholderId,
+            systemModuleId,
             distinct
         );
     }
@@ -260,6 +280,7 @@ public class ReportDesignCriteria implements Serializable, Criteria {
             (organizationId != null ? "organizationId=" + organizationId + ", " : "") +
             (departmentId != null ? "departmentId=" + departmentId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (systemModuleId != null ? "systemModuleId=" + systemModuleId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

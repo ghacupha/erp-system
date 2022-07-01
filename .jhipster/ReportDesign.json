@@ -72,6 +72,13 @@
       "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "reportDesign"
+    },
+    {
+      "relationshipName": "systemModule",
+      "otherEntityName": "systemModule",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "moduleName"
     }
   ],
   "service": "serviceImpl",

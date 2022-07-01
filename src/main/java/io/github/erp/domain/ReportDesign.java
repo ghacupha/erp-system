@@ -98,6 +98,10 @@ public class ReportDesign implements Serializable {
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
 
+    @ManyToOne(optional = false)
+    @NotNull
+    private SystemModule systemModule;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -299,6 +303,19 @@ public class ReportDesign implements Serializable {
 
     public ReportDesign removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
+        return this;
+    }
+
+    public SystemModule getSystemModule() {
+        return this.systemModule;
+    }
+
+    public void setSystemModule(SystemModule systemModule) {
+        this.systemModule = systemModule;
+    }
+
+    public ReportDesign systemModule(SystemModule systemModule) {
+        this.setSystemModule(systemModule);
         return this;
     }
 
