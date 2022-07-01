@@ -25,7 +25,7 @@ public interface ExcelReportExportMapper extends EntityMapper<ExcelReportExportD
     @Mapping(target = "parameters", source = "parameters", qualifiedByName = "mappedValueSet")
     @Mapping(target = "reportStatus", source = "reportStatus", qualifiedByName = "id")
     @Mapping(target = "securityClearance", source = "securityClearance", qualifiedByName = "clearanceLevel")
-    @Mapping(target = "reportCreator", source = "reportCreator", qualifiedByName = "id")
+    @Mapping(target = "reportCreator", source = "reportCreator", qualifiedByName = "applicationIdentity")
     @Mapping(target = "organization", source = "organization", qualifiedByName = "dealerName")
     @Mapping(target = "department", source = "department", qualifiedByName = "dealerName")
     @Mapping(target = "systemModule", source = "systemModule", qualifiedByName = "moduleName")
