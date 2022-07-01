@@ -72,7 +72,7 @@ class ExcelReportExportGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "reportName":"SAMPLE_TEXT"
-                , "reportPassword":null
+                , "reportPassword":"SAMPLE_TEXT"
                 , "reportNotes":null
                 , "fileCheckSum":null
                 , "reportFile":null

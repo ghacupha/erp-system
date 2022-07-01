@@ -17,7 +17,7 @@
             <column name="report_name" type="varchar(255)">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_excel_report_export__report_name" />
             </column>
-            <column name="report_password" type="${clobType}">
+            <column name="report_password" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
             <column name="report_notes" type="longblob">
@@ -43,6 +43,24 @@
             </column>
             <column name="report_status_id" type="bigint">
                 <constraints nullable="true" unique="true" uniqueConstraintName="ux_excel_report_export__report_status_id" />
+            </column>
+            <column name="security_clearance_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="report_creator_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="organization_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="department_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="system_module_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="report_design_id" type="bigint">
+                <constraints nullable="false" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
@@ -92,7 +110,7 @@
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="report_name" type="string"/>
-            <column name="report_password" type="clob"/>
+            <column name="report_password" type="string"/>
             <column name="report_notes" type="blob"/>
             <column name="report_notes_content_type" type="string"/>
             <column name="file_check_sum" type="clob"/>
@@ -100,6 +118,12 @@
             <column name="report_file_content_type" type="string"/>
             <column name="report_time_stamp" type="date"/>
             <column name="report_id" type="${uuidType}"/>
+            <column name="security_clearance_id" type="numeric"/>
+            <column name="report_creator_id" type="numeric"/>
+            <column name="organization_id" type="numeric"/>
+            <column name="department_id" type="numeric"/>
+            <column name="system_module_id" type="numeric"/>
+            <column name="report_design_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

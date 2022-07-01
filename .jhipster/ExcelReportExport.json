@@ -7,8 +7,7 @@
     },
     {
       "fieldName": "reportPassword",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "text",
+      "fieldType": "String",
       "fieldValidateRules": ["required"]
     },
     {
@@ -62,6 +61,48 @@
       "ownerSide": true,
       "id": false,
       "otherEntityRelationshipName": "excelReportExport"
+    },
+    {
+      "relationshipName": "securityClearance",
+      "otherEntityName": "securityClearance",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "clearanceLevel"
+    },
+    {
+      "relationshipName": "reportCreator",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "organization",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "dealerName"
+    },
+    {
+      "relationshipName": "department",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "dealerName"
+    },
+    {
+      "relationshipName": "systemModule",
+      "otherEntityName": "systemModule",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "moduleName"
+    },
+    {
+      "relationshipName": "reportDesign",
+      "otherEntityName": "reportDesign",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "designation"
     }
   ],
   "service": "serviceImpl",

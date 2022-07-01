@@ -101,6 +101,10 @@ public class ExcelReportExportQueryService extends QueryService<ExcelReportExpor
             if (criteria.getReportName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getReportName(), ExcelReportExport_.reportName));
             }
+            if (criteria.getReportPassword() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getReportPassword(), ExcelReportExport_.reportPassword));
+            }
             if (criteria.getReportTimeStamp() != null) {
                 specification =
                     specification.and(buildRangeSpecification(criteria.getReportTimeStamp(), ExcelReportExport_.reportTimeStamp));
@@ -132,6 +136,60 @@ public class ExcelReportExportQueryService extends QueryService<ExcelReportExpor
                         buildSpecification(
                             criteria.getReportStatusId(),
                             root -> root.join(ExcelReportExport_.reportStatus, JoinType.LEFT).get(ReportStatus_.id)
+                        )
+                    );
+            }
+            if (criteria.getSecurityClearanceId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getSecurityClearanceId(),
+                            root -> root.join(ExcelReportExport_.securityClearance, JoinType.LEFT).get(SecurityClearance_.id)
+                        )
+                    );
+            }
+            if (criteria.getReportCreatorId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getReportCreatorId(),
+                            root -> root.join(ExcelReportExport_.reportCreator, JoinType.LEFT).get(ApplicationUser_.id)
+                        )
+                    );
+            }
+            if (criteria.getOrganizationId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getOrganizationId(),
+                            root -> root.join(ExcelReportExport_.organization, JoinType.LEFT).get(Dealer_.id)
+                        )
+                    );
+            }
+            if (criteria.getDepartmentId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getDepartmentId(),
+                            root -> root.join(ExcelReportExport_.department, JoinType.LEFT).get(Dealer_.id)
+                        )
+                    );
+            }
+            if (criteria.getSystemModuleId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getSystemModuleId(),
+                            root -> root.join(ExcelReportExport_.systemModule, JoinType.LEFT).get(SystemModule_.id)
+                        )
+                    );
+            }
+            if (criteria.getReportDesignId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getReportDesignId(),
+                            root -> root.join(ExcelReportExport_.reportDesign, JoinType.LEFT).get(ReportDesign_.id)
                         )
                     );
             }
