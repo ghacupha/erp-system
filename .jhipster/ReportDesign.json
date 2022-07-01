@@ -1,0 +1,85 @@
+{
+  "fields": [
+    {
+      "fieldName": "catalogueNumber",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "designation",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "notes",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "reportFile",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "parameters",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many",
+      "relationshipValidateRules": [],
+      "otherEntityField": "mappedValue",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "reportDesign"
+    },
+    {
+      "relationshipName": "securityClearance",
+      "otherEntityName": "securityClearance",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "clearanceLevel"
+    },
+    {
+      "relationshipName": "reportDesigner",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "organization",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "dealerName"
+    },
+    {
+      "relationshipName": "department",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "dealerName"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "reportDesign"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "ReportDesign",
+  "changelogDate": "20220701140751",
+  "incrementalChangelog": false
+}
