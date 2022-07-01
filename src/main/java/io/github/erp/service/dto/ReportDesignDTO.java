@@ -45,6 +45,8 @@ public class ReportDesignDTO implements Serializable {
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
+    private SystemModuleDTO systemModule;
+
     public Long getId() {
         return id;
     }
@@ -157,6 +159,14 @@ public class ReportDesignDTO implements Serializable {
         this.placeholders = placeholders;
     }
 
+    public SystemModuleDTO getSystemModule() {
+        return systemModule;
+    }
+
+    public void setSystemModule(SystemModuleDTO systemModule) {
+        this.systemModule = systemModule;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -194,6 +204,7 @@ public class ReportDesignDTO implements Serializable {
             ", organization=" + getOrganization() +
             ", department=" + getDepartment() +
             ", placeholders=" + getPlaceholders() +
+            ", systemModule=" + getSystemModule() +
             "}";
     }
 }

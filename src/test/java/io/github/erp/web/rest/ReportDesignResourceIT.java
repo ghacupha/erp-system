@@ -12,6 +12,7 @@ import io.github.erp.domain.Dealer;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.ReportDesign;
 import io.github.erp.domain.SecurityClearance;
+import io.github.erp.domain.SystemModule;
 import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.repository.ReportDesignRepository;
 import io.github.erp.repository.search.ReportDesignSearchRepository;
@@ -151,6 +152,16 @@ class ReportDesignResourceIT {
         reportDesign.setOrganization(dealer);
         // Add required entity
         reportDesign.setDepartment(dealer);
+        // Add required entity
+        SystemModule systemModule;
+        if (TestUtil.findAll(em, SystemModule.class).isEmpty()) {
+            systemModule = SystemModuleResourceIT.createEntity(em);
+            em.persist(systemModule);
+            em.flush();
+        } else {
+            systemModule = TestUtil.findAll(em, SystemModule.class).get(0);
+        }
+        reportDesign.setSystemModule(systemModule);
         return reportDesign;
     }
 
@@ -201,6 +212,16 @@ class ReportDesignResourceIT {
         reportDesign.setOrganization(dealer);
         // Add required entity
         reportDesign.setDepartment(dealer);
+        // Add required entity
+        SystemModule systemModule;
+        if (TestUtil.findAll(em, SystemModule.class).isEmpty()) {
+            systemModule = SystemModuleResourceIT.createUpdatedEntity(em);
+            em.persist(systemModule);
+            em.flush();
+        } else {
+            systemModule = TestUtil.findAll(em, SystemModule.class).get(0);
+        }
+        reportDesign.setSystemModule(systemModule);
         return reportDesign;
     }
 
@@ -663,6 +684,32 @@ class ReportDesignResourceIT {
 
         // Get all the reportDesignList where placeholder equals to (placeholderId + 1)
         defaultReportDesignShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllReportDesignsBySystemModuleIsEqualToSomething() throws Exception {
+        // Initialize the database
+        reportDesignRepository.saveAndFlush(reportDesign);
+        SystemModule systemModule;
+        if (TestUtil.findAll(em, SystemModule.class).isEmpty()) {
+            systemModule = SystemModuleResourceIT.createEntity(em);
+            em.persist(systemModule);
+            em.flush();
+        } else {
+            systemModule = TestUtil.findAll(em, SystemModule.class).get(0);
+        }
+        em.persist(systemModule);
+        em.flush();
+        reportDesign.setSystemModule(systemModule);
+        reportDesignRepository.saveAndFlush(reportDesign);
+        Long systemModuleId = systemModule.getId();
+
+        // Get all the reportDesignList where systemModule equals to systemModuleId
+        defaultReportDesignShouldBeFound("systemModuleId.equals=" + systemModuleId);
+
+        // Get all the reportDesignList where systemModule equals to (systemModuleId + 1)
+        defaultReportDesignShouldNotBeFound("systemModuleId.equals=" + (systemModuleId + 1));
     }
 
     /**
