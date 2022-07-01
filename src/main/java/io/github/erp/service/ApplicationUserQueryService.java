@@ -101,6 +101,10 @@ public class ApplicationUserQueryService extends QueryService<ApplicationUser> {
             if (criteria.getDesignation() != null) {
                 specification = specification.and(buildSpecification(criteria.getDesignation(), ApplicationUser_.designation));
             }
+            if (criteria.getApplicationIdentity() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getApplicationIdentity(), ApplicationUser_.applicationIdentity));
+            }
             if (criteria.getOrganizationId() != null) {
                 specification =
                     specification.and(
@@ -143,6 +147,15 @@ public class ApplicationUserQueryService extends QueryService<ApplicationUser> {
                         buildSpecification(
                             criteria.getUserPropertiesId(),
                             root -> root.join(ApplicationUser_.userProperties, JoinType.LEFT).get(UniversallyUniqueMapping_.id)
+                        )
+                    );
+            }
+            if (criteria.getDealerIdentityId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getDealerIdentityId(),
+                            root -> root.join(ApplicationUser_.dealerIdentity, JoinType.LEFT).get(Dealer_.id)
                         )
                     );
             }

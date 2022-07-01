@@ -43,5 +43,11 @@
                                  constraintName="fk_rel_application_user__user_properties__user_properties_id"
                                  referencedColumnNames="id"
                                  referencedTableName="universally_unique_mapping"/>
+
+        <addForeignKeyConstraint baseColumnNames="dealer_identity_id"
+                                 baseTableName="application_user"
+                                 constraintName="fk_application_user__dealer_identity_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
     </changeSet>
 </databaseChangeLog>

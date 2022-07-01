@@ -1,3 +1,3 @@
-id;designation;organization_id;department_id;security_clearance_id;system_identity_id
-1;b165d936-d214-4a99-ab56-bc49f25c94f9;1;1;1;1
-2;4b9fed3b-69b7-40d3-8c3c-f48381f0b910;2;2;2;2
+id;designation;application_identity;organization_id;department_id;security_clearance_id;system_identity_id;dealer_identity_id
+1;b165d936-d214-4a99-ab56-bc49f25c94f9;Peso;1;1;1;1;1
+2;ed3b69b7-0d3c-4c3c-b483-81f0b9100645;open-source Isle JSON;2;2;2;2;2

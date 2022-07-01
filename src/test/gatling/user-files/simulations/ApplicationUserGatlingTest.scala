@@ -72,6 +72,7 @@ class ApplicationUserGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "designation":null
+                , "applicationIdentity":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_applicationUser_url"))).exitHereIfFailed

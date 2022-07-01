@@ -17,6 +17,9 @@ public class ApplicationUserDTO implements Serializable {
     @NotNull
     private UUID designation;
 
+    @NotNull
+    private String applicationIdentity;
+
     private DealerDTO organization;
 
     private DealerDTO department;
@@ -26,6 +29,8 @@ public class ApplicationUserDTO implements Serializable {
     private UserDTO systemIdentity;
 
     private Set<UniversallyUniqueMappingDTO> userProperties = new HashSet<>();
+
+    private DealerDTO dealerIdentity;
 
     public Long getId() {
         return id;
@@ -41,6 +46,14 @@ public class ApplicationUserDTO implements Serializable {
 
     public void setDesignation(UUID designation) {
         this.designation = designation;
+    }
+
+    public String getApplicationIdentity() {
+        return applicationIdentity;
+    }
+
+    public void setApplicationIdentity(String applicationIdentity) {
+        this.applicationIdentity = applicationIdentity;
     }
 
     public DealerDTO getOrganization() {
@@ -83,6 +96,14 @@ public class ApplicationUserDTO implements Serializable {
         this.userProperties = userProperties;
     }
 
+    public DealerDTO getDealerIdentity() {
+        return dealerIdentity;
+    }
+
+    public void setDealerIdentity(DealerDTO dealerIdentity) {
+        this.dealerIdentity = dealerIdentity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -110,11 +131,13 @@ public class ApplicationUserDTO implements Serializable {
         return "ApplicationUserDTO{" +
             "id=" + getId() +
             ", designation='" + getDesignation() + "'" +
+            ", applicationIdentity='" + getApplicationIdentity() + "'" +
             ", organization=" + getOrganization() +
             ", department=" + getDepartment() +
             ", securityClearance=" + getSecurityClearance() +
             ", systemIdentity=" + getSystemIdentity() +
             ", userProperties=" + getUserProperties() +
+            ", dealerIdentity=" + getDealerIdentity() +
             "}";
     }
 }

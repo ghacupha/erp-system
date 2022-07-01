@@ -4,6 +4,11 @@
       "fieldName": "designation",
       "fieldType": "UUID",
       "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "applicationIdentity",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
     }
   ],
   "relationships": [
@@ -44,6 +49,16 @@
       "relationshipType": "many-to-many",
       "otherEntityField": "mappedValue",
       "ownerSide": true,
+      "otherEntityRelationshipName": "applicationUser"
+    },
+    {
+      "relationshipName": "dealerIdentity",
+      "otherEntityName": "dealer",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "dealerName",
+      "ownerSide": true,
+      "id": false,
       "otherEntityRelationshipName": "applicationUser"
     }
   ],

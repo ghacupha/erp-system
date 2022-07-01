@@ -51,6 +51,9 @@ class ApplicationUserResourceIT {
     private static final UUID DEFAULT_DESIGNATION = UUID.randomUUID();
     private static final UUID UPDATED_DESIGNATION = UUID.randomUUID();
 
+    private static final String DEFAULT_APPLICATION_IDENTITY = "AAAAAAAAAA";
+    private static final String UPDATED_APPLICATION_IDENTITY = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/application-users";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/application-users";
@@ -93,7 +96,9 @@ class ApplicationUserResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static ApplicationUser createEntity(EntityManager em) {
-        ApplicationUser applicationUser = new ApplicationUser().designation(DEFAULT_DESIGNATION);
+        ApplicationUser applicationUser = new ApplicationUser()
+            .designation(DEFAULT_DESIGNATION)
+            .applicationIdentity(DEFAULT_APPLICATION_IDENTITY);
         // Add required entity
         Dealer dealer;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
@@ -121,6 +126,8 @@ class ApplicationUserResourceIT {
         em.persist(user);
         em.flush();
         applicationUser.setSystemIdentity(user);
+        // Add required entity
+        applicationUser.setDealerIdentity(dealer);
         return applicationUser;
     }
 
@@ -131,7 +138,9 @@ class ApplicationUserResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static ApplicationUser createUpdatedEntity(EntityManager em) {
-        ApplicationUser applicationUser = new ApplicationUser().designation(UPDATED_DESIGNATION);
+        ApplicationUser applicationUser = new ApplicationUser()
+            .designation(UPDATED_DESIGNATION)
+            .applicationIdentity(UPDATED_APPLICATION_IDENTITY);
         // Add required entity
         Dealer dealer;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
@@ -159,6 +168,8 @@ class ApplicationUserResourceIT {
         em.persist(user);
         em.flush();
         applicationUser.setSystemIdentity(user);
+        // Add required entity
+        applicationUser.setDealerIdentity(dealer);
         return applicationUser;
     }
 
@@ -184,6 +195,7 @@ class ApplicationUserResourceIT {
         assertThat(applicationUserList).hasSize(databaseSizeBeforeCreate + 1);
         ApplicationUser testApplicationUser = applicationUserList.get(applicationUserList.size() - 1);
         assertThat(testApplicationUser.getDesignation()).isEqualTo(DEFAULT_DESIGNATION);
+        assertThat(testApplicationUser.getApplicationIdentity()).isEqualTo(DEFAULT_APPLICATION_IDENTITY);
 
         // Validate the ApplicationUser in Elasticsearch
         verify(mockApplicationUserSearchRepository, times(1)).save(testApplicationUser);
@@ -235,6 +247,26 @@ class ApplicationUserResourceIT {
 
     @Test
     @Transactional
+    void checkApplicationIdentityIsRequired() throws Exception {
+        int databaseSizeBeforeTest = applicationUserRepository.findAll().size();
+        // set the field null
+        applicationUser.setApplicationIdentity(null);
+
+        // Create the ApplicationUser, which fails.
+        ApplicationUserDTO applicationUserDTO = applicationUserMapper.toDto(applicationUser);
+
+        restApplicationUserMockMvc
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(applicationUserDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<ApplicationUser> applicationUserList = applicationUserRepository.findAll();
+        assertThat(applicationUserList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllApplicationUsers() throws Exception {
         // Initialize the database
         applicationUserRepository.saveAndFlush(applicationUser);
@@ -245,7 +277,8 @@ class ApplicationUserResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(applicationUser.getId().intValue())))
-            .andExpect(jsonPath("$.[*].designation").value(hasItem(DEFAULT_DESIGNATION.toString())));
+            .andExpect(jsonPath("$.[*].designation").value(hasItem(DEFAULT_DESIGNATION.toString())))
+            .andExpect(jsonPath("$.[*].applicationIdentity").value(hasItem(DEFAULT_APPLICATION_IDENTITY)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -278,7 +311,8 @@ class ApplicationUserResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(applicationUser.getId().intValue()))
-            .andExpect(jsonPath("$.designation").value(DEFAULT_DESIGNATION.toString()));
+            .andExpect(jsonPath("$.designation").value(DEFAULT_DESIGNATION.toString()))
+            .andExpect(jsonPath("$.applicationIdentity").value(DEFAULT_APPLICATION_IDENTITY));
     }
 
     @Test
@@ -349,6 +383,84 @@ class ApplicationUserResourceIT {
 
         // Get all the applicationUserList where designation is null
         defaultApplicationUserShouldNotBeFound("designation.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllApplicationUsersByApplicationIdentityIsEqualToSomething() throws Exception {
+        // Initialize the database
+        applicationUserRepository.saveAndFlush(applicationUser);
+
+        // Get all the applicationUserList where applicationIdentity equals to DEFAULT_APPLICATION_IDENTITY
+        defaultApplicationUserShouldBeFound("applicationIdentity.equals=" + DEFAULT_APPLICATION_IDENTITY);
+
+        // Get all the applicationUserList where applicationIdentity equals to UPDATED_APPLICATION_IDENTITY
+        defaultApplicationUserShouldNotBeFound("applicationIdentity.equals=" + UPDATED_APPLICATION_IDENTITY);
+    }
+
+    @Test
+    @Transactional
+    void getAllApplicationUsersByApplicationIdentityIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        applicationUserRepository.saveAndFlush(applicationUser);
+
+        // Get all the applicationUserList where applicationIdentity not equals to DEFAULT_APPLICATION_IDENTITY
+        defaultApplicationUserShouldNotBeFound("applicationIdentity.notEquals=" + DEFAULT_APPLICATION_IDENTITY);
+
+        // Get all the applicationUserList where applicationIdentity not equals to UPDATED_APPLICATION_IDENTITY
+        defaultApplicationUserShouldBeFound("applicationIdentity.notEquals=" + UPDATED_APPLICATION_IDENTITY);
+    }
+
+    @Test
+    @Transactional
+    void getAllApplicationUsersByApplicationIdentityIsInShouldWork() throws Exception {
+        // Initialize the database
+        applicationUserRepository.saveAndFlush(applicationUser);
+
+        // Get all the applicationUserList where applicationIdentity in DEFAULT_APPLICATION_IDENTITY or UPDATED_APPLICATION_IDENTITY
+        defaultApplicationUserShouldBeFound("applicationIdentity.in=" + DEFAULT_APPLICATION_IDENTITY + "," + UPDATED_APPLICATION_IDENTITY);
+
+        // Get all the applicationUserList where applicationIdentity equals to UPDATED_APPLICATION_IDENTITY
+        defaultApplicationUserShouldNotBeFound("applicationIdentity.in=" + UPDATED_APPLICATION_IDENTITY);
+    }
+
+    @Test
+    @Transactional
+    void getAllApplicationUsersByApplicationIdentityIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        applicationUserRepository.saveAndFlush(applicationUser);
+
+        // Get all the applicationUserList where applicationIdentity is not null
+        defaultApplicationUserShouldBeFound("applicationIdentity.specified=true");
+
+        // Get all the applicationUserList where applicationIdentity is null
+        defaultApplicationUserShouldNotBeFound("applicationIdentity.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllApplicationUsersByApplicationIdentityContainsSomething() throws Exception {
+        // Initialize the database
+        applicationUserRepository.saveAndFlush(applicationUser);
+
+        // Get all the applicationUserList where applicationIdentity contains DEFAULT_APPLICATION_IDENTITY
+        defaultApplicationUserShouldBeFound("applicationIdentity.contains=" + DEFAULT_APPLICATION_IDENTITY);
+
+        // Get all the applicationUserList where applicationIdentity contains UPDATED_APPLICATION_IDENTITY
+        defaultApplicationUserShouldNotBeFound("applicationIdentity.contains=" + UPDATED_APPLICATION_IDENTITY);
+    }
+
+    @Test
+    @Transactional
+    void getAllApplicationUsersByApplicationIdentityNotContainsSomething() throws Exception {
+        // Initialize the database
+        applicationUserRepository.saveAndFlush(applicationUser);
+
+        // Get all the applicationUserList where applicationIdentity does not contain DEFAULT_APPLICATION_IDENTITY
+        defaultApplicationUserShouldNotBeFound("applicationIdentity.doesNotContain=" + DEFAULT_APPLICATION_IDENTITY);
+
+        // Get all the applicationUserList where applicationIdentity does not contain UPDATED_APPLICATION_IDENTITY
+        defaultApplicationUserShouldBeFound("applicationIdentity.doesNotContain=" + UPDATED_APPLICATION_IDENTITY);
     }
 
     @Test
@@ -470,6 +582,21 @@ class ApplicationUserResourceIT {
         defaultApplicationUserShouldNotBeFound("userPropertiesId.equals=" + (userPropertiesId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllApplicationUsersByDealerIdentityIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        Dealer dealerIdentity = applicationUser.getDealerIdentity();
+        applicationUserRepository.saveAndFlush(applicationUser);
+        Long dealerIdentityId = dealerIdentity.getId();
+
+        // Get all the applicationUserList where dealerIdentity equals to dealerIdentityId
+        defaultApplicationUserShouldBeFound("dealerIdentityId.equals=" + dealerIdentityId);
+
+        // Get all the applicationUserList where dealerIdentity equals to (dealerIdentityId + 1)
+        defaultApplicationUserShouldNotBeFound("dealerIdentityId.equals=" + (dealerIdentityId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -479,7 +606,8 @@ class ApplicationUserResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(applicationUser.getId().intValue())))
-            .andExpect(jsonPath("$.[*].designation").value(hasItem(DEFAULT_DESIGNATION.toString())));
+            .andExpect(jsonPath("$.[*].designation").value(hasItem(DEFAULT_DESIGNATION.toString())))
+            .andExpect(jsonPath("$.[*].applicationIdentity").value(hasItem(DEFAULT_APPLICATION_IDENTITY)));
 
         // Check, that the count call also returns 1
         restApplicationUserMockMvc
@@ -527,7 +655,7 @@ class ApplicationUserResourceIT {
         ApplicationUser updatedApplicationUser = applicationUserRepository.findById(applicationUser.getId()).get();
         // Disconnect from session so that the updates on updatedApplicationUser are not directly saved in db
         em.detach(updatedApplicationUser);
-        updatedApplicationUser.designation(UPDATED_DESIGNATION);
+        updatedApplicationUser.designation(UPDATED_DESIGNATION).applicationIdentity(UPDATED_APPLICATION_IDENTITY);
         ApplicationUserDTO applicationUserDTO = applicationUserMapper.toDto(updatedApplicationUser);
 
         restApplicationUserMockMvc
@@ -543,6 +671,7 @@ class ApplicationUserResourceIT {
         assertThat(applicationUserList).hasSize(databaseSizeBeforeUpdate);
         ApplicationUser testApplicationUser = applicationUserList.get(applicationUserList.size() - 1);
         assertThat(testApplicationUser.getDesignation()).isEqualTo(UPDATED_DESIGNATION);
+        assertThat(testApplicationUser.getApplicationIdentity()).isEqualTo(UPDATED_APPLICATION_IDENTITY);
 
         // Validate the ApplicationUser in Elasticsearch
         verify(mockApplicationUserSearchRepository).save(testApplicationUser);
@@ -636,6 +765,8 @@ class ApplicationUserResourceIT {
         ApplicationUser partialUpdatedApplicationUser = new ApplicationUser();
         partialUpdatedApplicationUser.setId(applicationUser.getId());
 
+        partialUpdatedApplicationUser.applicationIdentity(UPDATED_APPLICATION_IDENTITY);
+
         restApplicationUserMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedApplicationUser.getId())
@@ -649,6 +780,7 @@ class ApplicationUserResourceIT {
         assertThat(applicationUserList).hasSize(databaseSizeBeforeUpdate);
         ApplicationUser testApplicationUser = applicationUserList.get(applicationUserList.size() - 1);
         assertThat(testApplicationUser.getDesignation()).isEqualTo(DEFAULT_DESIGNATION);
+        assertThat(testApplicationUser.getApplicationIdentity()).isEqualTo(UPDATED_APPLICATION_IDENTITY);
     }
 
     @Test
@@ -663,7 +795,7 @@ class ApplicationUserResourceIT {
         ApplicationUser partialUpdatedApplicationUser = new ApplicationUser();
         partialUpdatedApplicationUser.setId(applicationUser.getId());
 
-        partialUpdatedApplicationUser.designation(UPDATED_DESIGNATION);
+        partialUpdatedApplicationUser.designation(UPDATED_DESIGNATION).applicationIdentity(UPDATED_APPLICATION_IDENTITY);
 
         restApplicationUserMockMvc
             .perform(
@@ -678,6 +810,7 @@ class ApplicationUserResourceIT {
         assertThat(applicationUserList).hasSize(databaseSizeBeforeUpdate);
         ApplicationUser testApplicationUser = applicationUserList.get(applicationUserList.size() - 1);
         assertThat(testApplicationUser.getDesignation()).isEqualTo(UPDATED_DESIGNATION);
+        assertThat(testApplicationUser.getApplicationIdentity()).isEqualTo(UPDATED_APPLICATION_IDENTITY);
     }
 
     @Test
@@ -794,6 +927,7 @@ class ApplicationUserResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(applicationUser.getId().intValue())))
-            .andExpect(jsonPath("$.[*].designation").value(hasItem(DEFAULT_DESIGNATION.toString())));
+            .andExpect(jsonPath("$.[*].designation").value(hasItem(DEFAULT_DESIGNATION.toString())))
+            .andExpect(jsonPath("$.[*].applicationIdentity").value(hasItem(DEFAULT_APPLICATION_IDENTITY)));
     }
 }
