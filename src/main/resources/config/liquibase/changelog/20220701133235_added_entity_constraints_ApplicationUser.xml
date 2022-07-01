@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity ApplicationUser.
+    -->
+    <changeSet id="20220701133235-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="organization_id"
+                                 baseTableName="application_user"
+                                 constraintName="fk_application_user__organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="department_id"
+                                 baseTableName="application_user"
+                                 constraintName="fk_application_user__department_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="security_clearance_id"
+                                 baseTableName="application_user"
+                                 constraintName="fk_application_user__security_clearance_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="security_clearance"/>
+
+        <addForeignKeyConstraint baseColumnNames="system_identity_id"
+                                 baseTableName="application_user"
+                                 constraintName="fk_application_user__system_identity_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="application_user_id"
+                                 baseTableName="rel_application_user__user_properties"
+                                 constraintName="fk_rel_application_user__user_properties__application_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_properties_id"
+                                 baseTableName="rel_application_user__user_properties"
+                                 constraintName="fk_rel_application_user__user_properties__user_properties_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="universally_unique_mapping"/>
+    </changeSet>
+</databaseChangeLog>
