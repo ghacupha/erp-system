@@ -14,14 +14,11 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="designation" type="varchar(255)">
-                <constraints nullable="false" unique="true" uniqueConstraintName="ux_process_status__designation" />
+            <column name="status_code" type="varchar(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_process_status__status_code" />
             </column>
             <column name="description" type="varchar(255)">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_process_status__description" />
-            </column>
-            <column name="status_code" type="varchar(255)">
-                <constraints nullable="false" unique="true" uniqueConstraintName="ux_process_status__status_code" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
@@ -69,9 +66,8 @@
                   tableName="process_status"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
-            <column name="designation" type="string"/>
-            <column name="description" type="string"/>
             <column name="status_code" type="string"/>
+            <column name="description" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

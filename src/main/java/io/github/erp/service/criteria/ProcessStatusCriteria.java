@@ -26,11 +26,9 @@ public class ProcessStatusCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private StringFilter designation;
+    private StringFilter statusCode;
 
     private StringFilter description;
-
-    private StringFilter statusCode;
 
     private LongFilter placeholderId;
 
@@ -42,9 +40,8 @@ public class ProcessStatusCriteria implements Serializable, Criteria {
 
     public ProcessStatusCriteria(ProcessStatusCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.designation = other.designation == null ? null : other.designation.copy();
-        this.description = other.description == null ? null : other.description.copy();
         this.statusCode = other.statusCode == null ? null : other.statusCode.copy();
+        this.description = other.description == null ? null : other.description.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.parametersId = other.parametersId == null ? null : other.parametersId.copy();
         this.distinct = other.distinct;
@@ -70,19 +67,19 @@ public class ProcessStatusCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
-    public StringFilter getDesignation() {
-        return designation;
+    public StringFilter getStatusCode() {
+        return statusCode;
     }
 
-    public StringFilter designation() {
-        if (designation == null) {
-            designation = new StringFilter();
+    public StringFilter statusCode() {
+        if (statusCode == null) {
+            statusCode = new StringFilter();
         }
-        return designation;
+        return statusCode;
     }
 
-    public void setDesignation(StringFilter designation) {
-        this.designation = designation;
+    public void setStatusCode(StringFilter statusCode) {
+        this.statusCode = statusCode;
     }
 
     public StringFilter getDescription() {
@@ -98,21 +95,6 @@ public class ProcessStatusCriteria implements Serializable, Criteria {
 
     public void setDescription(StringFilter description) {
         this.description = description;
-    }
-
-    public StringFilter getStatusCode() {
-        return statusCode;
-    }
-
-    public StringFilter statusCode() {
-        if (statusCode == null) {
-            statusCode = new StringFilter();
-        }
-        return statusCode;
-    }
-
-    public void setStatusCode(StringFilter statusCode) {
-        this.statusCode = statusCode;
     }
 
     public LongFilter getPlaceholderId() {
@@ -164,9 +146,8 @@ public class ProcessStatusCriteria implements Serializable, Criteria {
         final ProcessStatusCriteria that = (ProcessStatusCriteria) o;
         return (
             Objects.equals(id, that.id) &&
-            Objects.equals(designation, that.designation) &&
-            Objects.equals(description, that.description) &&
             Objects.equals(statusCode, that.statusCode) &&
+            Objects.equals(description, that.description) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(parametersId, that.parametersId) &&
             Objects.equals(distinct, that.distinct)
@@ -175,7 +156,7 @@ public class ProcessStatusCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, designation, description, statusCode, placeholderId, parametersId, distinct);
+        return Objects.hash(id, statusCode, description, placeholderId, parametersId, distinct);
     }
 
     // prettier-ignore
@@ -183,9 +164,8 @@ public class ProcessStatusCriteria implements Serializable, Criteria {
     public String toString() {
         return "ProcessStatusCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
-            (designation != null ? "designation=" + designation + ", " : "") +
-            (description != null ? "description=" + description + ", " : "") +
             (statusCode != null ? "statusCode=" + statusCode + ", " : "") +
+            (description != null ? "description=" + description + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (parametersId != null ? "parametersId=" + parametersId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

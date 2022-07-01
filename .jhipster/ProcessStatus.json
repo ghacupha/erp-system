@@ -1,17 +1,12 @@
 {
   "fields": [
     {
-      "fieldName": "designation",
+      "fieldName": "statusCode",
       "fieldType": "String",
       "fieldValidateRules": ["required", "unique"]
     },
     {
       "fieldName": "description",
-      "fieldType": "String",
-      "fieldValidateRules": ["required", "unique"]
-    },
-    {
-      "fieldName": "statusCode",
       "fieldType": "String",
       "fieldValidateRules": ["required", "unique"]
     }

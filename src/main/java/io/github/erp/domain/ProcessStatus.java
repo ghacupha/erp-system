@@ -27,16 +27,12 @@ public class ProcessStatus implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "designation", nullable = false, unique = true)
-    private String designation;
+    @Column(name = "status_code", nullable = false, unique = true)
+    private String statusCode;
 
     @NotNull
     @Column(name = "description", nullable = false, unique = true)
     private String description;
-
-    @NotNull
-    @Column(name = "status_code", nullable = false, unique = true)
-    private String statusCode;
 
     @ManyToMany
     @JoinTable(
@@ -72,17 +68,17 @@ public class ProcessStatus implements Serializable {
         this.id = id;
     }
 
-    public String getDesignation() {
-        return this.designation;
+    public String getStatusCode() {
+        return this.statusCode;
     }
 
-    public ProcessStatus designation(String designation) {
-        this.setDesignation(designation);
+    public ProcessStatus statusCode(String statusCode) {
+        this.setStatusCode(statusCode);
         return this;
     }
 
-    public void setDesignation(String designation) {
-        this.designation = designation;
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
     }
 
     public String getDescription() {
@@ -96,19 +92,6 @@ public class ProcessStatus implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getStatusCode() {
-        return this.statusCode;
-    }
-
-    public ProcessStatus statusCode(String statusCode) {
-        this.setStatusCode(statusCode);
-        return this;
-    }
-
-    public void setStatusCode(String statusCode) {
-        this.statusCode = statusCode;
     }
 
     public Set<Placeholder> getPlaceholders() {
@@ -181,9 +164,8 @@ public class ProcessStatus implements Serializable {
     public String toString() {
         return "ProcessStatus{" +
             "id=" + getId() +
-            ", designation='" + getDesignation() + "'" +
-            ", description='" + getDescription() + "'" +
             ", statusCode='" + getStatusCode() + "'" +
+            ", description='" + getDescription() + "'" +
             "}";
     }
 }

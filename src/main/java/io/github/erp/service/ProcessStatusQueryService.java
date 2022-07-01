@@ -98,14 +98,11 @@ public class ProcessStatusQueryService extends QueryService<ProcessStatus> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), ProcessStatus_.id));
             }
-            if (criteria.getDesignation() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getDesignation(), ProcessStatus_.designation));
+            if (criteria.getStatusCode() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getStatusCode(), ProcessStatus_.statusCode));
             }
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), ProcessStatus_.description));
-            }
-            if (criteria.getStatusCode() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getStatusCode(), ProcessStatus_.statusCode));
             }
             if (criteria.getPlaceholderId() != null) {
                 specification =
