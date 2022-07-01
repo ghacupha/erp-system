@@ -14,13 +14,10 @@ public class ProcessStatusDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private String designation;
+    private String statusCode;
 
     @NotNull
     private String description;
-
-    @NotNull
-    private String statusCode;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
@@ -34,12 +31,12 @@ public class ProcessStatusDTO implements Serializable {
         this.id = id;
     }
 
-    public String getDesignation() {
-        return designation;
+    public String getStatusCode() {
+        return statusCode;
     }
 
-    public void setDesignation(String designation) {
-        this.designation = designation;
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
     }
 
     public String getDescription() {
@@ -48,14 +45,6 @@ public class ProcessStatusDTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getStatusCode() {
-        return statusCode;
-    }
-
-    public void setStatusCode(String statusCode) {
-        this.statusCode = statusCode;
     }
 
     public Set<PlaceholderDTO> getPlaceholders() {
@@ -100,9 +89,8 @@ public class ProcessStatusDTO implements Serializable {
     public String toString() {
         return "ProcessStatusDTO{" +
             "id=" + getId() +
-            ", designation='" + getDesignation() + "'" +
-            ", description='" + getDescription() + "'" +
             ", statusCode='" + getStatusCode() + "'" +
+            ", description='" + getDescription() + "'" +
             ", placeholders=" + getPlaceholders() +
             ", parameters=" + getParameters() +
             "}";

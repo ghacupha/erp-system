@@ -71,9 +71,8 @@ class ProcessStatusGatlingTest extends Simulation {
             .post("/api/process-statuses")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
-                "designation":"SAMPLE_TEXT"
+                "statusCode":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
-                , "statusCode":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_processStatus_url"))).exitHereIfFailed

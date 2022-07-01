@@ -45,14 +45,11 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class ProcessStatusResourceIT {
 
-    private static final String DEFAULT_DESIGNATION = "AAAAAAAAAA";
-    private static final String UPDATED_DESIGNATION = "BBBBBBBBBB";
+    private static final String DEFAULT_STATUS_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_STATUS_CODE = "BBBBBBBBBB";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
-
-    private static final String DEFAULT_STATUS_CODE = "AAAAAAAAAA";
-    private static final String UPDATED_STATUS_CODE = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/process-statuses";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -96,10 +93,7 @@ class ProcessStatusResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static ProcessStatus createEntity(EntityManager em) {
-        ProcessStatus processStatus = new ProcessStatus()
-            .designation(DEFAULT_DESIGNATION)
-            .description(DEFAULT_DESCRIPTION)
-            .statusCode(DEFAULT_STATUS_CODE);
+        ProcessStatus processStatus = new ProcessStatus().statusCode(DEFAULT_STATUS_CODE).description(DEFAULT_DESCRIPTION);
         return processStatus;
     }
 
@@ -110,10 +104,7 @@ class ProcessStatusResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static ProcessStatus createUpdatedEntity(EntityManager em) {
-        ProcessStatus processStatus = new ProcessStatus()
-            .designation(UPDATED_DESIGNATION)
-            .description(UPDATED_DESCRIPTION)
-            .statusCode(UPDATED_STATUS_CODE);
+        ProcessStatus processStatus = new ProcessStatus().statusCode(UPDATED_STATUS_CODE).description(UPDATED_DESCRIPTION);
         return processStatus;
     }
 
@@ -138,9 +129,8 @@ class ProcessStatusResourceIT {
         List<ProcessStatus> processStatusList = processStatusRepository.findAll();
         assertThat(processStatusList).hasSize(databaseSizeBeforeCreate + 1);
         ProcessStatus testProcessStatus = processStatusList.get(processStatusList.size() - 1);
-        assertThat(testProcessStatus.getDesignation()).isEqualTo(DEFAULT_DESIGNATION);
-        assertThat(testProcessStatus.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testProcessStatus.getStatusCode()).isEqualTo(DEFAULT_STATUS_CODE);
+        assertThat(testProcessStatus.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
 
         // Validate the ProcessStatus in Elasticsearch
         verify(mockProcessStatusSearchRepository, times(1)).save(testProcessStatus);
@@ -172,10 +162,10 @@ class ProcessStatusResourceIT {
 
     @Test
     @Transactional
-    void checkDesignationIsRequired() throws Exception {
+    void checkStatusCodeIsRequired() throws Exception {
         int databaseSizeBeforeTest = processStatusRepository.findAll().size();
         // set the field null
-        processStatus.setDesignation(null);
+        processStatus.setStatusCode(null);
 
         // Create the ProcessStatus, which fails.
         ProcessStatusDTO processStatusDTO = processStatusMapper.toDto(processStatus);
@@ -212,26 +202,6 @@ class ProcessStatusResourceIT {
 
     @Test
     @Transactional
-    void checkStatusCodeIsRequired() throws Exception {
-        int databaseSizeBeforeTest = processStatusRepository.findAll().size();
-        // set the field null
-        processStatus.setStatusCode(null);
-
-        // Create the ProcessStatus, which fails.
-        ProcessStatusDTO processStatusDTO = processStatusMapper.toDto(processStatus);
-
-        restProcessStatusMockMvc
-            .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(processStatusDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<ProcessStatus> processStatusList = processStatusRepository.findAll();
-        assertThat(processStatusList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllProcessStatuses() throws Exception {
         // Initialize the database
         processStatusRepository.saveAndFlush(processStatus);
@@ -242,9 +212,8 @@ class ProcessStatusResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(processStatus.getId().intValue())))
-            .andExpect(jsonPath("$.[*].designation").value(hasItem(DEFAULT_DESIGNATION)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].statusCode").value(hasItem(DEFAULT_STATUS_CODE)));
+            .andExpect(jsonPath("$.[*].statusCode").value(hasItem(DEFAULT_STATUS_CODE)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -277,9 +246,8 @@ class ProcessStatusResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(processStatus.getId().intValue()))
-            .andExpect(jsonPath("$.designation").value(DEFAULT_DESIGNATION))
-            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.statusCode").value(DEFAULT_STATUS_CODE));
+            .andExpect(jsonPath("$.statusCode").value(DEFAULT_STATUS_CODE))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION));
     }
 
     @Test
@@ -298,162 +266,6 @@ class ProcessStatusResourceIT {
 
         defaultProcessStatusShouldBeFound("id.lessThanOrEqual=" + id);
         defaultProcessStatusShouldNotBeFound("id.lessThan=" + id);
-    }
-
-    @Test
-    @Transactional
-    void getAllProcessStatusesByDesignationIsEqualToSomething() throws Exception {
-        // Initialize the database
-        processStatusRepository.saveAndFlush(processStatus);
-
-        // Get all the processStatusList where designation equals to DEFAULT_DESIGNATION
-        defaultProcessStatusShouldBeFound("designation.equals=" + DEFAULT_DESIGNATION);
-
-        // Get all the processStatusList where designation equals to UPDATED_DESIGNATION
-        defaultProcessStatusShouldNotBeFound("designation.equals=" + UPDATED_DESIGNATION);
-    }
-
-    @Test
-    @Transactional
-    void getAllProcessStatusesByDesignationIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        processStatusRepository.saveAndFlush(processStatus);
-
-        // Get all the processStatusList where designation not equals to DEFAULT_DESIGNATION
-        defaultProcessStatusShouldNotBeFound("designation.notEquals=" + DEFAULT_DESIGNATION);
-
-        // Get all the processStatusList where designation not equals to UPDATED_DESIGNATION
-        defaultProcessStatusShouldBeFound("designation.notEquals=" + UPDATED_DESIGNATION);
-    }
-
-    @Test
-    @Transactional
-    void getAllProcessStatusesByDesignationIsInShouldWork() throws Exception {
-        // Initialize the database
-        processStatusRepository.saveAndFlush(processStatus);
-
-        // Get all the processStatusList where designation in DEFAULT_DESIGNATION or UPDATED_DESIGNATION
-        defaultProcessStatusShouldBeFound("designation.in=" + DEFAULT_DESIGNATION + "," + UPDATED_DESIGNATION);
-
-        // Get all the processStatusList where designation equals to UPDATED_DESIGNATION
-        defaultProcessStatusShouldNotBeFound("designation.in=" + UPDATED_DESIGNATION);
-    }
-
-    @Test
-    @Transactional
-    void getAllProcessStatusesByDesignationIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        processStatusRepository.saveAndFlush(processStatus);
-
-        // Get all the processStatusList where designation is not null
-        defaultProcessStatusShouldBeFound("designation.specified=true");
-
-        // Get all the processStatusList where designation is null
-        defaultProcessStatusShouldNotBeFound("designation.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllProcessStatusesByDesignationContainsSomething() throws Exception {
-        // Initialize the database
-        processStatusRepository.saveAndFlush(processStatus);
-
-        // Get all the processStatusList where designation contains DEFAULT_DESIGNATION
-        defaultProcessStatusShouldBeFound("designation.contains=" + DEFAULT_DESIGNATION);
-
-        // Get all the processStatusList where designation contains UPDATED_DESIGNATION
-        defaultProcessStatusShouldNotBeFound("designation.contains=" + UPDATED_DESIGNATION);
-    }
-
-    @Test
-    @Transactional
-    void getAllProcessStatusesByDesignationNotContainsSomething() throws Exception {
-        // Initialize the database
-        processStatusRepository.saveAndFlush(processStatus);
-
-        // Get all the processStatusList where designation does not contain DEFAULT_DESIGNATION
-        defaultProcessStatusShouldNotBeFound("designation.doesNotContain=" + DEFAULT_DESIGNATION);
-
-        // Get all the processStatusList where designation does not contain UPDATED_DESIGNATION
-        defaultProcessStatusShouldBeFound("designation.doesNotContain=" + UPDATED_DESIGNATION);
-    }
-
-    @Test
-    @Transactional
-    void getAllProcessStatusesByDescriptionIsEqualToSomething() throws Exception {
-        // Initialize the database
-        processStatusRepository.saveAndFlush(processStatus);
-
-        // Get all the processStatusList where description equals to DEFAULT_DESCRIPTION
-        defaultProcessStatusShouldBeFound("description.equals=" + DEFAULT_DESCRIPTION);
-
-        // Get all the processStatusList where description equals to UPDATED_DESCRIPTION
-        defaultProcessStatusShouldNotBeFound("description.equals=" + UPDATED_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    void getAllProcessStatusesByDescriptionIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        processStatusRepository.saveAndFlush(processStatus);
-
-        // Get all the processStatusList where description not equals to DEFAULT_DESCRIPTION
-        defaultProcessStatusShouldNotBeFound("description.notEquals=" + DEFAULT_DESCRIPTION);
-
-        // Get all the processStatusList where description not equals to UPDATED_DESCRIPTION
-        defaultProcessStatusShouldBeFound("description.notEquals=" + UPDATED_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    void getAllProcessStatusesByDescriptionIsInShouldWork() throws Exception {
-        // Initialize the database
-        processStatusRepository.saveAndFlush(processStatus);
-
-        // Get all the processStatusList where description in DEFAULT_DESCRIPTION or UPDATED_DESCRIPTION
-        defaultProcessStatusShouldBeFound("description.in=" + DEFAULT_DESCRIPTION + "," + UPDATED_DESCRIPTION);
-
-        // Get all the processStatusList where description equals to UPDATED_DESCRIPTION
-        defaultProcessStatusShouldNotBeFound("description.in=" + UPDATED_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    void getAllProcessStatusesByDescriptionIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        processStatusRepository.saveAndFlush(processStatus);
-
-        // Get all the processStatusList where description is not null
-        defaultProcessStatusShouldBeFound("description.specified=true");
-
-        // Get all the processStatusList where description is null
-        defaultProcessStatusShouldNotBeFound("description.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllProcessStatusesByDescriptionContainsSomething() throws Exception {
-        // Initialize the database
-        processStatusRepository.saveAndFlush(processStatus);
-
-        // Get all the processStatusList where description contains DEFAULT_DESCRIPTION
-        defaultProcessStatusShouldBeFound("description.contains=" + DEFAULT_DESCRIPTION);
-
-        // Get all the processStatusList where description contains UPDATED_DESCRIPTION
-        defaultProcessStatusShouldNotBeFound("description.contains=" + UPDATED_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    void getAllProcessStatusesByDescriptionNotContainsSomething() throws Exception {
-        // Initialize the database
-        processStatusRepository.saveAndFlush(processStatus);
-
-        // Get all the processStatusList where description does not contain DEFAULT_DESCRIPTION
-        defaultProcessStatusShouldNotBeFound("description.doesNotContain=" + DEFAULT_DESCRIPTION);
-
-        // Get all the processStatusList where description does not contain UPDATED_DESCRIPTION
-        defaultProcessStatusShouldBeFound("description.doesNotContain=" + UPDATED_DESCRIPTION);
     }
 
     @Test
@@ -536,6 +348,84 @@ class ProcessStatusResourceIT {
 
     @Test
     @Transactional
+    void getAllProcessStatusesByDescriptionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        processStatusRepository.saveAndFlush(processStatus);
+
+        // Get all the processStatusList where description equals to DEFAULT_DESCRIPTION
+        defaultProcessStatusShouldBeFound("description.equals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the processStatusList where description equals to UPDATED_DESCRIPTION
+        defaultProcessStatusShouldNotBeFound("description.equals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    void getAllProcessStatusesByDescriptionIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        processStatusRepository.saveAndFlush(processStatus);
+
+        // Get all the processStatusList where description not equals to DEFAULT_DESCRIPTION
+        defaultProcessStatusShouldNotBeFound("description.notEquals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the processStatusList where description not equals to UPDATED_DESCRIPTION
+        defaultProcessStatusShouldBeFound("description.notEquals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    void getAllProcessStatusesByDescriptionIsInShouldWork() throws Exception {
+        // Initialize the database
+        processStatusRepository.saveAndFlush(processStatus);
+
+        // Get all the processStatusList where description in DEFAULT_DESCRIPTION or UPDATED_DESCRIPTION
+        defaultProcessStatusShouldBeFound("description.in=" + DEFAULT_DESCRIPTION + "," + UPDATED_DESCRIPTION);
+
+        // Get all the processStatusList where description equals to UPDATED_DESCRIPTION
+        defaultProcessStatusShouldNotBeFound("description.in=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    void getAllProcessStatusesByDescriptionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        processStatusRepository.saveAndFlush(processStatus);
+
+        // Get all the processStatusList where description is not null
+        defaultProcessStatusShouldBeFound("description.specified=true");
+
+        // Get all the processStatusList where description is null
+        defaultProcessStatusShouldNotBeFound("description.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllProcessStatusesByDescriptionContainsSomething() throws Exception {
+        // Initialize the database
+        processStatusRepository.saveAndFlush(processStatus);
+
+        // Get all the processStatusList where description contains DEFAULT_DESCRIPTION
+        defaultProcessStatusShouldBeFound("description.contains=" + DEFAULT_DESCRIPTION);
+
+        // Get all the processStatusList where description contains UPDATED_DESCRIPTION
+        defaultProcessStatusShouldNotBeFound("description.contains=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    void getAllProcessStatusesByDescriptionNotContainsSomething() throws Exception {
+        // Initialize the database
+        processStatusRepository.saveAndFlush(processStatus);
+
+        // Get all the processStatusList where description does not contain DEFAULT_DESCRIPTION
+        defaultProcessStatusShouldNotBeFound("description.doesNotContain=" + DEFAULT_DESCRIPTION);
+
+        // Get all the processStatusList where description does not contain UPDATED_DESCRIPTION
+        defaultProcessStatusShouldBeFound("description.doesNotContain=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
     void getAllProcessStatusesByPlaceholderIsEqualToSomething() throws Exception {
         // Initialize the database
         processStatusRepository.saveAndFlush(processStatus);
@@ -595,9 +485,8 @@ class ProcessStatusResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(processStatus.getId().intValue())))
-            .andExpect(jsonPath("$.[*].designation").value(hasItem(DEFAULT_DESIGNATION)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].statusCode").value(hasItem(DEFAULT_STATUS_CODE)));
+            .andExpect(jsonPath("$.[*].statusCode").value(hasItem(DEFAULT_STATUS_CODE)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
 
         // Check, that the count call also returns 1
         restProcessStatusMockMvc
@@ -645,7 +534,7 @@ class ProcessStatusResourceIT {
         ProcessStatus updatedProcessStatus = processStatusRepository.findById(processStatus.getId()).get();
         // Disconnect from session so that the updates on updatedProcessStatus are not directly saved in db
         em.detach(updatedProcessStatus);
-        updatedProcessStatus.designation(UPDATED_DESIGNATION).description(UPDATED_DESCRIPTION).statusCode(UPDATED_STATUS_CODE);
+        updatedProcessStatus.statusCode(UPDATED_STATUS_CODE).description(UPDATED_DESCRIPTION);
         ProcessStatusDTO processStatusDTO = processStatusMapper.toDto(updatedProcessStatus);
 
         restProcessStatusMockMvc
@@ -660,9 +549,8 @@ class ProcessStatusResourceIT {
         List<ProcessStatus> processStatusList = processStatusRepository.findAll();
         assertThat(processStatusList).hasSize(databaseSizeBeforeUpdate);
         ProcessStatus testProcessStatus = processStatusList.get(processStatusList.size() - 1);
-        assertThat(testProcessStatus.getDesignation()).isEqualTo(UPDATED_DESIGNATION);
-        assertThat(testProcessStatus.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testProcessStatus.getStatusCode()).isEqualTo(UPDATED_STATUS_CODE);
+        assertThat(testProcessStatus.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
 
         // Validate the ProcessStatus in Elasticsearch
         verify(mockProcessStatusSearchRepository).save(testProcessStatus);
@@ -768,9 +656,8 @@ class ProcessStatusResourceIT {
         List<ProcessStatus> processStatusList = processStatusRepository.findAll();
         assertThat(processStatusList).hasSize(databaseSizeBeforeUpdate);
         ProcessStatus testProcessStatus = processStatusList.get(processStatusList.size() - 1);
-        assertThat(testProcessStatus.getDesignation()).isEqualTo(DEFAULT_DESIGNATION);
-        assertThat(testProcessStatus.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testProcessStatus.getStatusCode()).isEqualTo(DEFAULT_STATUS_CODE);
+        assertThat(testProcessStatus.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
     }
 
     @Test
@@ -785,7 +672,7 @@ class ProcessStatusResourceIT {
         ProcessStatus partialUpdatedProcessStatus = new ProcessStatus();
         partialUpdatedProcessStatus.setId(processStatus.getId());
 
-        partialUpdatedProcessStatus.designation(UPDATED_DESIGNATION).description(UPDATED_DESCRIPTION).statusCode(UPDATED_STATUS_CODE);
+        partialUpdatedProcessStatus.statusCode(UPDATED_STATUS_CODE).description(UPDATED_DESCRIPTION);
 
         restProcessStatusMockMvc
             .perform(
@@ -799,9 +686,8 @@ class ProcessStatusResourceIT {
         List<ProcessStatus> processStatusList = processStatusRepository.findAll();
         assertThat(processStatusList).hasSize(databaseSizeBeforeUpdate);
         ProcessStatus testProcessStatus = processStatusList.get(processStatusList.size() - 1);
-        assertThat(testProcessStatus.getDesignation()).isEqualTo(UPDATED_DESIGNATION);
-        assertThat(testProcessStatus.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testProcessStatus.getStatusCode()).isEqualTo(UPDATED_STATUS_CODE);
+        assertThat(testProcessStatus.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
     }
 
     @Test
@@ -918,8 +804,7 @@ class ProcessStatusResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(processStatus.getId().intValue())))
-            .andExpect(jsonPath("$.[*].designation").value(hasItem(DEFAULT_DESIGNATION)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].statusCode").value(hasItem(DEFAULT_STATUS_CODE)));
+            .andExpect(jsonPath("$.[*].statusCode").value(hasItem(DEFAULT_STATUS_CODE)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
     }
 }
