@@ -1,0 +1,2 @@
+id;catalogue_number;designation;description;notes;notes_content_type;report_file;report_file_content_type;security_clearance_id;report_designer_id;organization_id;department_id
+1;ded80bfc-f6ae-4527-91a6-bdeb6f4d82a7;Generic Republic;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;1;1;1;1

@@ -19,6 +19,11 @@ public interface ApplicationUserMapper extends EntityMapper<ApplicationUserDTO, 
     @Mapping(target = "userProperties", source = "userProperties", qualifiedByName = "mappedValueSet")
     ApplicationUserDTO toDto(ApplicationUser s);
 
+    @Named("id")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    ApplicationUserDTO toDtoId(ApplicationUser applicationUser);
+
     @Mapping(target = "removeUserProperties", ignore = true)
     ApplicationUser toEntity(ApplicationUserDTO applicationUserDTO);
 }
