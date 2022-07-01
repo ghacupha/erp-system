@@ -18,6 +18,12 @@ public interface SecurityClearanceMapper extends EntityMapper<SecurityClearanceD
     @Mapping(target = "removePlaceholder", ignore = true)
     SecurityClearance toEntity(SecurityClearanceDTO securityClearanceDTO);
 
+    @Named("clearanceLevel")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "clearanceLevel", source = "clearanceLevel")
+    SecurityClearanceDTO toDtoClearanceLevel(SecurityClearance securityClearance);
+
     @Named("clearanceLevelSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
