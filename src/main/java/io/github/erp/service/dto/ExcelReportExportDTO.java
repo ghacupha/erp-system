@@ -19,7 +19,7 @@ public class ExcelReportExportDTO implements Serializable {
     @NotNull
     private String reportName;
 
-    @Lob
+    @NotNull
     private String reportPassword;
 
     @Lob
@@ -46,6 +46,18 @@ public class ExcelReportExportDTO implements Serializable {
     private Set<UniversallyUniqueMappingDTO> parameters = new HashSet<>();
 
     private ReportStatusDTO reportStatus;
+
+    private SecurityClearanceDTO securityClearance;
+
+    private ApplicationUserDTO reportCreator;
+
+    private DealerDTO organization;
+
+    private DealerDTO department;
+
+    private SystemModuleDTO systemModule;
+
+    private ReportDesignDTO reportDesign;
 
     public Long getId() {
         return id;
@@ -151,6 +163,54 @@ public class ExcelReportExportDTO implements Serializable {
         this.reportStatus = reportStatus;
     }
 
+    public SecurityClearanceDTO getSecurityClearance() {
+        return securityClearance;
+    }
+
+    public void setSecurityClearance(SecurityClearanceDTO securityClearance) {
+        this.securityClearance = securityClearance;
+    }
+
+    public ApplicationUserDTO getReportCreator() {
+        return reportCreator;
+    }
+
+    public void setReportCreator(ApplicationUserDTO reportCreator) {
+        this.reportCreator = reportCreator;
+    }
+
+    public DealerDTO getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(DealerDTO organization) {
+        this.organization = organization;
+    }
+
+    public DealerDTO getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(DealerDTO department) {
+        this.department = department;
+    }
+
+    public SystemModuleDTO getSystemModule() {
+        return systemModule;
+    }
+
+    public void setSystemModule(SystemModuleDTO systemModule) {
+        this.systemModule = systemModule;
+    }
+
+    public ReportDesignDTO getReportDesign() {
+        return reportDesign;
+    }
+
+    public void setReportDesign(ReportDesignDTO reportDesign) {
+        this.reportDesign = reportDesign;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -187,6 +247,12 @@ public class ExcelReportExportDTO implements Serializable {
             ", placeholders=" + getPlaceholders() +
             ", parameters=" + getParameters() +
             ", reportStatus=" + getReportStatus() +
+            ", securityClearance=" + getSecurityClearance() +
+            ", reportCreator=" + getReportCreator() +
+            ", organization=" + getOrganization() +
+            ", department=" + getDepartment() +
+            ", systemModule=" + getSystemModule() +
+            ", reportDesign=" + getReportDesign() +
             "}";
     }
 }

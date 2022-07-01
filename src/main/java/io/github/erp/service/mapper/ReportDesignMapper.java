@@ -31,4 +31,10 @@ public interface ReportDesignMapper extends EntityMapper<ReportDesignDTO, Report
     @Mapping(target = "removeParameters", ignore = true)
     @Mapping(target = "removePlaceholder", ignore = true)
     ReportDesign toEntity(ReportDesignDTO reportDesignDTO);
+
+    @Named("designation")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "designation", source = "designation")
+    ReportDesignDTO toDtoDesignation(ReportDesign reportDesign);
 }

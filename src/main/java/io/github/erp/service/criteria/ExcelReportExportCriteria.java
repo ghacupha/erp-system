@@ -30,6 +30,8 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
 
     private StringFilter reportName;
 
+    private StringFilter reportPassword;
+
     private ZonedDateTimeFilter reportTimeStamp;
 
     private UUIDFilter reportId;
@@ -40,6 +42,18 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
 
     private LongFilter reportStatusId;
 
+    private LongFilter securityClearanceId;
+
+    private LongFilter reportCreatorId;
+
+    private LongFilter organizationId;
+
+    private LongFilter departmentId;
+
+    private LongFilter systemModuleId;
+
+    private LongFilter reportDesignId;
+
     private Boolean distinct;
 
     public ExcelReportExportCriteria() {}
@@ -47,11 +61,18 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
     public ExcelReportExportCriteria(ExcelReportExportCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.reportName = other.reportName == null ? null : other.reportName.copy();
+        this.reportPassword = other.reportPassword == null ? null : other.reportPassword.copy();
         this.reportTimeStamp = other.reportTimeStamp == null ? null : other.reportTimeStamp.copy();
         this.reportId = other.reportId == null ? null : other.reportId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.parametersId = other.parametersId == null ? null : other.parametersId.copy();
         this.reportStatusId = other.reportStatusId == null ? null : other.reportStatusId.copy();
+        this.securityClearanceId = other.securityClearanceId == null ? null : other.securityClearanceId.copy();
+        this.reportCreatorId = other.reportCreatorId == null ? null : other.reportCreatorId.copy();
+        this.organizationId = other.organizationId == null ? null : other.organizationId.copy();
+        this.departmentId = other.departmentId == null ? null : other.departmentId.copy();
+        this.systemModuleId = other.systemModuleId == null ? null : other.systemModuleId.copy();
+        this.reportDesignId = other.reportDesignId == null ? null : other.reportDesignId.copy();
         this.distinct = other.distinct;
     }
 
@@ -88,6 +109,21 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
 
     public void setReportName(StringFilter reportName) {
         this.reportName = reportName;
+    }
+
+    public StringFilter getReportPassword() {
+        return reportPassword;
+    }
+
+    public StringFilter reportPassword() {
+        if (reportPassword == null) {
+            reportPassword = new StringFilter();
+        }
+        return reportPassword;
+    }
+
+    public void setReportPassword(StringFilter reportPassword) {
+        this.reportPassword = reportPassword;
     }
 
     public ZonedDateTimeFilter getReportTimeStamp() {
@@ -165,6 +201,96 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
         this.reportStatusId = reportStatusId;
     }
 
+    public LongFilter getSecurityClearanceId() {
+        return securityClearanceId;
+    }
+
+    public LongFilter securityClearanceId() {
+        if (securityClearanceId == null) {
+            securityClearanceId = new LongFilter();
+        }
+        return securityClearanceId;
+    }
+
+    public void setSecurityClearanceId(LongFilter securityClearanceId) {
+        this.securityClearanceId = securityClearanceId;
+    }
+
+    public LongFilter getReportCreatorId() {
+        return reportCreatorId;
+    }
+
+    public LongFilter reportCreatorId() {
+        if (reportCreatorId == null) {
+            reportCreatorId = new LongFilter();
+        }
+        return reportCreatorId;
+    }
+
+    public void setReportCreatorId(LongFilter reportCreatorId) {
+        this.reportCreatorId = reportCreatorId;
+    }
+
+    public LongFilter getOrganizationId() {
+        return organizationId;
+    }
+
+    public LongFilter organizationId() {
+        if (organizationId == null) {
+            organizationId = new LongFilter();
+        }
+        return organizationId;
+    }
+
+    public void setOrganizationId(LongFilter organizationId) {
+        this.organizationId = organizationId;
+    }
+
+    public LongFilter getDepartmentId() {
+        return departmentId;
+    }
+
+    public LongFilter departmentId() {
+        if (departmentId == null) {
+            departmentId = new LongFilter();
+        }
+        return departmentId;
+    }
+
+    public void setDepartmentId(LongFilter departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public LongFilter getSystemModuleId() {
+        return systemModuleId;
+    }
+
+    public LongFilter systemModuleId() {
+        if (systemModuleId == null) {
+            systemModuleId = new LongFilter();
+        }
+        return systemModuleId;
+    }
+
+    public void setSystemModuleId(LongFilter systemModuleId) {
+        this.systemModuleId = systemModuleId;
+    }
+
+    public LongFilter getReportDesignId() {
+        return reportDesignId;
+    }
+
+    public LongFilter reportDesignId() {
+        if (reportDesignId == null) {
+            reportDesignId = new LongFilter();
+        }
+        return reportDesignId;
+    }
+
+    public void setReportDesignId(LongFilter reportDesignId) {
+        this.reportDesignId = reportDesignId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -185,18 +311,41 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
         return (
             Objects.equals(id, that.id) &&
             Objects.equals(reportName, that.reportName) &&
+            Objects.equals(reportPassword, that.reportPassword) &&
             Objects.equals(reportTimeStamp, that.reportTimeStamp) &&
             Objects.equals(reportId, that.reportId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(parametersId, that.parametersId) &&
             Objects.equals(reportStatusId, that.reportStatusId) &&
+            Objects.equals(securityClearanceId, that.securityClearanceId) &&
+            Objects.equals(reportCreatorId, that.reportCreatorId) &&
+            Objects.equals(organizationId, that.organizationId) &&
+            Objects.equals(departmentId, that.departmentId) &&
+            Objects.equals(systemModuleId, that.systemModuleId) &&
+            Objects.equals(reportDesignId, that.reportDesignId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, reportName, reportTimeStamp, reportId, placeholderId, parametersId, reportStatusId, distinct);
+        return Objects.hash(
+            id,
+            reportName,
+            reportPassword,
+            reportTimeStamp,
+            reportId,
+            placeholderId,
+            parametersId,
+            reportStatusId,
+            securityClearanceId,
+            reportCreatorId,
+            organizationId,
+            departmentId,
+            systemModuleId,
+            reportDesignId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -205,11 +354,18 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
         return "ExcelReportExportCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
             (reportName != null ? "reportName=" + reportName + ", " : "") +
+            (reportPassword != null ? "reportPassword=" + reportPassword + ", " : "") +
             (reportTimeStamp != null ? "reportTimeStamp=" + reportTimeStamp + ", " : "") +
             (reportId != null ? "reportId=" + reportId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (parametersId != null ? "parametersId=" + parametersId + ", " : "") +
             (reportStatusId != null ? "reportStatusId=" + reportStatusId + ", " : "") +
+            (securityClearanceId != null ? "securityClearanceId=" + securityClearanceId + ", " : "") +
+            (reportCreatorId != null ? "reportCreatorId=" + reportCreatorId + ", " : "") +
+            (organizationId != null ? "organizationId=" + organizationId + ", " : "") +
+            (departmentId != null ? "departmentId=" + departmentId + ", " : "") +
+            (systemModuleId != null ? "systemModuleId=" + systemModuleId + ", " : "") +
+            (reportDesignId != null ? "reportDesignId=" + reportDesignId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

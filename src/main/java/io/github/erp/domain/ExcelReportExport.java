@@ -33,8 +33,7 @@ public class ExcelReportExport implements Serializable {
     @Column(name = "report_name", nullable = false, unique = true)
     private String reportName;
 
-    @Lob
-    @Type(type = "org.hibernate.type.TextType")
+    @NotNull
     @Column(name = "report_password", nullable = false)
     private String reportPassword;
 
@@ -88,6 +87,41 @@ public class ExcelReportExport implements Serializable {
     @OneToOne
     @JoinColumn(unique = true)
     private ReportStatus reportStatus;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "grantedClearances", "placeholders" }, allowSetters = true)
+    private SecurityClearance securityClearance;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(
+        value = { "organization", "department", "securityClearance", "systemIdentity", "userProperties" },
+        allowSetters = true
+    )
+    private ApplicationUser reportCreator;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "placeholders" }, allowSetters = true)
+    private Dealer organization;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "placeholders" }, allowSetters = true)
+    private Dealer department;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    private SystemModule systemModule;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(
+        value = { "parameters", "securityClearance", "reportDesigner", "organization", "department", "placeholders", "systemModule" },
+        allowSetters = true
+    )
+    private ReportDesign reportDesign;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -277,6 +311,84 @@ public class ExcelReportExport implements Serializable {
 
     public ExcelReportExport reportStatus(ReportStatus reportStatus) {
         this.setReportStatus(reportStatus);
+        return this;
+    }
+
+    public SecurityClearance getSecurityClearance() {
+        return this.securityClearance;
+    }
+
+    public void setSecurityClearance(SecurityClearance securityClearance) {
+        this.securityClearance = securityClearance;
+    }
+
+    public ExcelReportExport securityClearance(SecurityClearance securityClearance) {
+        this.setSecurityClearance(securityClearance);
+        return this;
+    }
+
+    public ApplicationUser getReportCreator() {
+        return this.reportCreator;
+    }
+
+    public void setReportCreator(ApplicationUser applicationUser) {
+        this.reportCreator = applicationUser;
+    }
+
+    public ExcelReportExport reportCreator(ApplicationUser applicationUser) {
+        this.setReportCreator(applicationUser);
+        return this;
+    }
+
+    public Dealer getOrganization() {
+        return this.organization;
+    }
+
+    public void setOrganization(Dealer dealer) {
+        this.organization = dealer;
+    }
+
+    public ExcelReportExport organization(Dealer dealer) {
+        this.setOrganization(dealer);
+        return this;
+    }
+
+    public Dealer getDepartment() {
+        return this.department;
+    }
+
+    public void setDepartment(Dealer dealer) {
+        this.department = dealer;
+    }
+
+    public ExcelReportExport department(Dealer dealer) {
+        this.setDepartment(dealer);
+        return this;
+    }
+
+    public SystemModule getSystemModule() {
+        return this.systemModule;
+    }
+
+    public void setSystemModule(SystemModule systemModule) {
+        this.systemModule = systemModule;
+    }
+
+    public ExcelReportExport systemModule(SystemModule systemModule) {
+        this.setSystemModule(systemModule);
+        return this;
+    }
+
+    public ReportDesign getReportDesign() {
+        return this.reportDesign;
+    }
+
+    public void setReportDesign(ReportDesign reportDesign) {
+        this.reportDesign = reportDesign;
+    }
+
+    public ExcelReportExport reportDesign(ReportDesign reportDesign) {
+        this.setReportDesign(reportDesign);
         return this;
     }
 

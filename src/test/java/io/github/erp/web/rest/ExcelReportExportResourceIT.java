@@ -8,9 +8,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.ApplicationUser;
+import io.github.erp.domain.Dealer;
 import io.github.erp.domain.ExcelReportExport;
 import io.github.erp.domain.Placeholder;
+import io.github.erp.domain.ReportDesign;
 import io.github.erp.domain.ReportStatus;
+import io.github.erp.domain.SecurityClearance;
+import io.github.erp.domain.SystemModule;
 import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.repository.ExcelReportExportRepository;
 import io.github.erp.repository.search.ExcelReportExportSearchRepository;
@@ -131,6 +136,58 @@ class ExcelReportExportResourceIT {
             .reportFileContentType(DEFAULT_REPORT_FILE_CONTENT_TYPE)
             .reportTimeStamp(DEFAULT_REPORT_TIME_STAMP)
             .reportId(DEFAULT_REPORT_ID);
+        // Add required entity
+        SecurityClearance securityClearance;
+        if (TestUtil.findAll(em, SecurityClearance.class).isEmpty()) {
+            securityClearance = SecurityClearanceResourceIT.createEntity(em);
+            em.persist(securityClearance);
+            em.flush();
+        } else {
+            securityClearance = TestUtil.findAll(em, SecurityClearance.class).get(0);
+        }
+        excelReportExport.setSecurityClearance(securityClearance);
+        // Add required entity
+        ApplicationUser applicationUser;
+        if (TestUtil.findAll(em, ApplicationUser.class).isEmpty()) {
+            applicationUser = ApplicationUserResourceIT.createEntity(em);
+            em.persist(applicationUser);
+            em.flush();
+        } else {
+            applicationUser = TestUtil.findAll(em, ApplicationUser.class).get(0);
+        }
+        excelReportExport.setReportCreator(applicationUser);
+        // Add required entity
+        Dealer dealer;
+        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
+            dealer = DealerResourceIT.createEntity(em);
+            em.persist(dealer);
+            em.flush();
+        } else {
+            dealer = TestUtil.findAll(em, Dealer.class).get(0);
+        }
+        excelReportExport.setOrganization(dealer);
+        // Add required entity
+        excelReportExport.setDepartment(dealer);
+        // Add required entity
+        SystemModule systemModule;
+        if (TestUtil.findAll(em, SystemModule.class).isEmpty()) {
+            systemModule = SystemModuleResourceIT.createEntity(em);
+            em.persist(systemModule);
+            em.flush();
+        } else {
+            systemModule = TestUtil.findAll(em, SystemModule.class).get(0);
+        }
+        excelReportExport.setSystemModule(systemModule);
+        // Add required entity
+        ReportDesign reportDesign;
+        if (TestUtil.findAll(em, ReportDesign.class).isEmpty()) {
+            reportDesign = ReportDesignResourceIT.createEntity(em);
+            em.persist(reportDesign);
+            em.flush();
+        } else {
+            reportDesign = TestUtil.findAll(em, ReportDesign.class).get(0);
+        }
+        excelReportExport.setReportDesign(reportDesign);
         return excelReportExport;
     }
 
@@ -151,6 +208,58 @@ class ExcelReportExportResourceIT {
             .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE)
             .reportTimeStamp(UPDATED_REPORT_TIME_STAMP)
             .reportId(UPDATED_REPORT_ID);
+        // Add required entity
+        SecurityClearance securityClearance;
+        if (TestUtil.findAll(em, SecurityClearance.class).isEmpty()) {
+            securityClearance = SecurityClearanceResourceIT.createUpdatedEntity(em);
+            em.persist(securityClearance);
+            em.flush();
+        } else {
+            securityClearance = TestUtil.findAll(em, SecurityClearance.class).get(0);
+        }
+        excelReportExport.setSecurityClearance(securityClearance);
+        // Add required entity
+        ApplicationUser applicationUser;
+        if (TestUtil.findAll(em, ApplicationUser.class).isEmpty()) {
+            applicationUser = ApplicationUserResourceIT.createUpdatedEntity(em);
+            em.persist(applicationUser);
+            em.flush();
+        } else {
+            applicationUser = TestUtil.findAll(em, ApplicationUser.class).get(0);
+        }
+        excelReportExport.setReportCreator(applicationUser);
+        // Add required entity
+        Dealer dealer;
+        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
+            dealer = DealerResourceIT.createUpdatedEntity(em);
+            em.persist(dealer);
+            em.flush();
+        } else {
+            dealer = TestUtil.findAll(em, Dealer.class).get(0);
+        }
+        excelReportExport.setOrganization(dealer);
+        // Add required entity
+        excelReportExport.setDepartment(dealer);
+        // Add required entity
+        SystemModule systemModule;
+        if (TestUtil.findAll(em, SystemModule.class).isEmpty()) {
+            systemModule = SystemModuleResourceIT.createUpdatedEntity(em);
+            em.persist(systemModule);
+            em.flush();
+        } else {
+            systemModule = TestUtil.findAll(em, SystemModule.class).get(0);
+        }
+        excelReportExport.setSystemModule(systemModule);
+        // Add required entity
+        ReportDesign reportDesign;
+        if (TestUtil.findAll(em, ReportDesign.class).isEmpty()) {
+            reportDesign = ReportDesignResourceIT.createUpdatedEntity(em);
+            em.persist(reportDesign);
+            em.flush();
+        } else {
+            reportDesign = TestUtil.findAll(em, ReportDesign.class).get(0);
+        }
+        excelReportExport.setReportDesign(reportDesign);
         return excelReportExport;
     }
 
@@ -241,6 +350,28 @@ class ExcelReportExportResourceIT {
 
     @Test
     @Transactional
+    void checkReportPasswordIsRequired() throws Exception {
+        int databaseSizeBeforeTest = excelReportExportRepository.findAll().size();
+        // set the field null
+        excelReportExport.setReportPassword(null);
+
+        // Create the ExcelReportExport, which fails.
+        ExcelReportExportDTO excelReportExportDTO = excelReportExportMapper.toDto(excelReportExport);
+
+        restExcelReportExportMockMvc
+            .perform(
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(excelReportExportDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<ExcelReportExport> excelReportExportList = excelReportExportRepository.findAll();
+        assertThat(excelReportExportList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void checkReportTimeStampIsRequired() throws Exception {
         int databaseSizeBeforeTest = excelReportExportRepository.findAll().size();
         // set the field null
@@ -296,7 +427,7 @@ class ExcelReportExportResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(excelReportExport.getId().intValue())))
             .andExpect(jsonPath("$.[*].reportName").value(hasItem(DEFAULT_REPORT_NAME)))
-            .andExpect(jsonPath("$.[*].reportPassword").value(hasItem(DEFAULT_REPORT_PASSWORD.toString())))
+            .andExpect(jsonPath("$.[*].reportPassword").value(hasItem(DEFAULT_REPORT_PASSWORD)))
             .andExpect(jsonPath("$.[*].reportNotesContentType").value(hasItem(DEFAULT_REPORT_NOTES_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].reportNotes").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_NOTES))))
             .andExpect(jsonPath("$.[*].fileCheckSum").value(hasItem(DEFAULT_FILE_CHECK_SUM.toString())))
@@ -337,7 +468,7 @@ class ExcelReportExportResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(excelReportExport.getId().intValue()))
             .andExpect(jsonPath("$.reportName").value(DEFAULT_REPORT_NAME))
-            .andExpect(jsonPath("$.reportPassword").value(DEFAULT_REPORT_PASSWORD.toString()))
+            .andExpect(jsonPath("$.reportPassword").value(DEFAULT_REPORT_PASSWORD))
             .andExpect(jsonPath("$.reportNotesContentType").value(DEFAULT_REPORT_NOTES_CONTENT_TYPE))
             .andExpect(jsonPath("$.reportNotes").value(Base64Utils.encodeToString(DEFAULT_REPORT_NOTES)))
             .andExpect(jsonPath("$.fileCheckSum").value(DEFAULT_FILE_CHECK_SUM.toString()))
@@ -441,6 +572,84 @@ class ExcelReportExportResourceIT {
 
         // Get all the excelReportExportList where reportName does not contain UPDATED_REPORT_NAME
         defaultExcelReportExportShouldBeFound("reportName.doesNotContain=" + UPDATED_REPORT_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllExcelReportExportsByReportPasswordIsEqualToSomething() throws Exception {
+        // Initialize the database
+        excelReportExportRepository.saveAndFlush(excelReportExport);
+
+        // Get all the excelReportExportList where reportPassword equals to DEFAULT_REPORT_PASSWORD
+        defaultExcelReportExportShouldBeFound("reportPassword.equals=" + DEFAULT_REPORT_PASSWORD);
+
+        // Get all the excelReportExportList where reportPassword equals to UPDATED_REPORT_PASSWORD
+        defaultExcelReportExportShouldNotBeFound("reportPassword.equals=" + UPDATED_REPORT_PASSWORD);
+    }
+
+    @Test
+    @Transactional
+    void getAllExcelReportExportsByReportPasswordIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        excelReportExportRepository.saveAndFlush(excelReportExport);
+
+        // Get all the excelReportExportList where reportPassword not equals to DEFAULT_REPORT_PASSWORD
+        defaultExcelReportExportShouldNotBeFound("reportPassword.notEquals=" + DEFAULT_REPORT_PASSWORD);
+
+        // Get all the excelReportExportList where reportPassword not equals to UPDATED_REPORT_PASSWORD
+        defaultExcelReportExportShouldBeFound("reportPassword.notEquals=" + UPDATED_REPORT_PASSWORD);
+    }
+
+    @Test
+    @Transactional
+    void getAllExcelReportExportsByReportPasswordIsInShouldWork() throws Exception {
+        // Initialize the database
+        excelReportExportRepository.saveAndFlush(excelReportExport);
+
+        // Get all the excelReportExportList where reportPassword in DEFAULT_REPORT_PASSWORD or UPDATED_REPORT_PASSWORD
+        defaultExcelReportExportShouldBeFound("reportPassword.in=" + DEFAULT_REPORT_PASSWORD + "," + UPDATED_REPORT_PASSWORD);
+
+        // Get all the excelReportExportList where reportPassword equals to UPDATED_REPORT_PASSWORD
+        defaultExcelReportExportShouldNotBeFound("reportPassword.in=" + UPDATED_REPORT_PASSWORD);
+    }
+
+    @Test
+    @Transactional
+    void getAllExcelReportExportsByReportPasswordIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        excelReportExportRepository.saveAndFlush(excelReportExport);
+
+        // Get all the excelReportExportList where reportPassword is not null
+        defaultExcelReportExportShouldBeFound("reportPassword.specified=true");
+
+        // Get all the excelReportExportList where reportPassword is null
+        defaultExcelReportExportShouldNotBeFound("reportPassword.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllExcelReportExportsByReportPasswordContainsSomething() throws Exception {
+        // Initialize the database
+        excelReportExportRepository.saveAndFlush(excelReportExport);
+
+        // Get all the excelReportExportList where reportPassword contains DEFAULT_REPORT_PASSWORD
+        defaultExcelReportExportShouldBeFound("reportPassword.contains=" + DEFAULT_REPORT_PASSWORD);
+
+        // Get all the excelReportExportList where reportPassword contains UPDATED_REPORT_PASSWORD
+        defaultExcelReportExportShouldNotBeFound("reportPassword.contains=" + UPDATED_REPORT_PASSWORD);
+    }
+
+    @Test
+    @Transactional
+    void getAllExcelReportExportsByReportPasswordNotContainsSomething() throws Exception {
+        // Initialize the database
+        excelReportExportRepository.saveAndFlush(excelReportExport);
+
+        // Get all the excelReportExportList where reportPassword does not contain DEFAULT_REPORT_PASSWORD
+        defaultExcelReportExportShouldNotBeFound("reportPassword.doesNotContain=" + DEFAULT_REPORT_PASSWORD);
+
+        // Get all the excelReportExportList where reportPassword does not contain UPDATED_REPORT_PASSWORD
+        defaultExcelReportExportShouldBeFound("reportPassword.doesNotContain=" + UPDATED_REPORT_PASSWORD);
     }
 
     @Test
@@ -677,6 +886,162 @@ class ExcelReportExportResourceIT {
         defaultExcelReportExportShouldNotBeFound("reportStatusId.equals=" + (reportStatusId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllExcelReportExportsBySecurityClearanceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        excelReportExportRepository.saveAndFlush(excelReportExport);
+        SecurityClearance securityClearance;
+        if (TestUtil.findAll(em, SecurityClearance.class).isEmpty()) {
+            securityClearance = SecurityClearanceResourceIT.createEntity(em);
+            em.persist(securityClearance);
+            em.flush();
+        } else {
+            securityClearance = TestUtil.findAll(em, SecurityClearance.class).get(0);
+        }
+        em.persist(securityClearance);
+        em.flush();
+        excelReportExport.setSecurityClearance(securityClearance);
+        excelReportExportRepository.saveAndFlush(excelReportExport);
+        Long securityClearanceId = securityClearance.getId();
+
+        // Get all the excelReportExportList where securityClearance equals to securityClearanceId
+        defaultExcelReportExportShouldBeFound("securityClearanceId.equals=" + securityClearanceId);
+
+        // Get all the excelReportExportList where securityClearance equals to (securityClearanceId + 1)
+        defaultExcelReportExportShouldNotBeFound("securityClearanceId.equals=" + (securityClearanceId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllExcelReportExportsByReportCreatorIsEqualToSomething() throws Exception {
+        // Initialize the database
+        excelReportExportRepository.saveAndFlush(excelReportExport);
+        ApplicationUser reportCreator;
+        if (TestUtil.findAll(em, ApplicationUser.class).isEmpty()) {
+            reportCreator = ApplicationUserResourceIT.createEntity(em);
+            em.persist(reportCreator);
+            em.flush();
+        } else {
+            reportCreator = TestUtil.findAll(em, ApplicationUser.class).get(0);
+        }
+        em.persist(reportCreator);
+        em.flush();
+        excelReportExport.setReportCreator(reportCreator);
+        excelReportExportRepository.saveAndFlush(excelReportExport);
+        Long reportCreatorId = reportCreator.getId();
+
+        // Get all the excelReportExportList where reportCreator equals to reportCreatorId
+        defaultExcelReportExportShouldBeFound("reportCreatorId.equals=" + reportCreatorId);
+
+        // Get all the excelReportExportList where reportCreator equals to (reportCreatorId + 1)
+        defaultExcelReportExportShouldNotBeFound("reportCreatorId.equals=" + (reportCreatorId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllExcelReportExportsByOrganizationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        excelReportExportRepository.saveAndFlush(excelReportExport);
+        Dealer organization;
+        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
+            organization = DealerResourceIT.createEntity(em);
+            em.persist(organization);
+            em.flush();
+        } else {
+            organization = TestUtil.findAll(em, Dealer.class).get(0);
+        }
+        em.persist(organization);
+        em.flush();
+        excelReportExport.setOrganization(organization);
+        excelReportExportRepository.saveAndFlush(excelReportExport);
+        Long organizationId = organization.getId();
+
+        // Get all the excelReportExportList where organization equals to organizationId
+        defaultExcelReportExportShouldBeFound("organizationId.equals=" + organizationId);
+
+        // Get all the excelReportExportList where organization equals to (organizationId + 1)
+        defaultExcelReportExportShouldNotBeFound("organizationId.equals=" + (organizationId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllExcelReportExportsByDepartmentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        excelReportExportRepository.saveAndFlush(excelReportExport);
+        Dealer department;
+        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
+            department = DealerResourceIT.createEntity(em);
+            em.persist(department);
+            em.flush();
+        } else {
+            department = TestUtil.findAll(em, Dealer.class).get(0);
+        }
+        em.persist(department);
+        em.flush();
+        excelReportExport.setDepartment(department);
+        excelReportExportRepository.saveAndFlush(excelReportExport);
+        Long departmentId = department.getId();
+
+        // Get all the excelReportExportList where department equals to departmentId
+        defaultExcelReportExportShouldBeFound("departmentId.equals=" + departmentId);
+
+        // Get all the excelReportExportList where department equals to (departmentId + 1)
+        defaultExcelReportExportShouldNotBeFound("departmentId.equals=" + (departmentId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllExcelReportExportsBySystemModuleIsEqualToSomething() throws Exception {
+        // Initialize the database
+        excelReportExportRepository.saveAndFlush(excelReportExport);
+        SystemModule systemModule;
+        if (TestUtil.findAll(em, SystemModule.class).isEmpty()) {
+            systemModule = SystemModuleResourceIT.createEntity(em);
+            em.persist(systemModule);
+            em.flush();
+        } else {
+            systemModule = TestUtil.findAll(em, SystemModule.class).get(0);
+        }
+        em.persist(systemModule);
+        em.flush();
+        excelReportExport.setSystemModule(systemModule);
+        excelReportExportRepository.saveAndFlush(excelReportExport);
+        Long systemModuleId = systemModule.getId();
+
+        // Get all the excelReportExportList where systemModule equals to systemModuleId
+        defaultExcelReportExportShouldBeFound("systemModuleId.equals=" + systemModuleId);
+
+        // Get all the excelReportExportList where systemModule equals to (systemModuleId + 1)
+        defaultExcelReportExportShouldNotBeFound("systemModuleId.equals=" + (systemModuleId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllExcelReportExportsByReportDesignIsEqualToSomething() throws Exception {
+        // Initialize the database
+        excelReportExportRepository.saveAndFlush(excelReportExport);
+        ReportDesign reportDesign;
+        if (TestUtil.findAll(em, ReportDesign.class).isEmpty()) {
+            reportDesign = ReportDesignResourceIT.createEntity(em);
+            em.persist(reportDesign);
+            em.flush();
+        } else {
+            reportDesign = TestUtil.findAll(em, ReportDesign.class).get(0);
+        }
+        em.persist(reportDesign);
+        em.flush();
+        excelReportExport.setReportDesign(reportDesign);
+        excelReportExportRepository.saveAndFlush(excelReportExport);
+        Long reportDesignId = reportDesign.getId();
+
+        // Get all the excelReportExportList where reportDesign equals to reportDesignId
+        defaultExcelReportExportShouldBeFound("reportDesignId.equals=" + reportDesignId);
+
+        // Get all the excelReportExportList where reportDesign equals to (reportDesignId + 1)
+        defaultExcelReportExportShouldNotBeFound("reportDesignId.equals=" + (reportDesignId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -687,7 +1052,7 @@ class ExcelReportExportResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(excelReportExport.getId().intValue())))
             .andExpect(jsonPath("$.[*].reportName").value(hasItem(DEFAULT_REPORT_NAME)))
-            .andExpect(jsonPath("$.[*].reportPassword").value(hasItem(DEFAULT_REPORT_PASSWORD.toString())))
+            .andExpect(jsonPath("$.[*].reportPassword").value(hasItem(DEFAULT_REPORT_PASSWORD)))
             .andExpect(jsonPath("$.[*].reportNotesContentType").value(hasItem(DEFAULT_REPORT_NOTES_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].reportNotes").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_NOTES))))
             .andExpect(jsonPath("$.[*].fileCheckSum").value(hasItem(DEFAULT_FILE_CHECK_SUM.toString())))
@@ -1054,7 +1419,7 @@ class ExcelReportExportResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(excelReportExport.getId().intValue())))
             .andExpect(jsonPath("$.[*].reportName").value(hasItem(DEFAULT_REPORT_NAME)))
-            .andExpect(jsonPath("$.[*].reportPassword").value(hasItem(DEFAULT_REPORT_PASSWORD.toString())))
+            .andExpect(jsonPath("$.[*].reportPassword").value(hasItem(DEFAULT_REPORT_PASSWORD)))
             .andExpect(jsonPath("$.[*].reportNotesContentType").value(hasItem(DEFAULT_REPORT_NOTES_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].reportNotes").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_NOTES))))
             .andExpect(jsonPath("$.[*].fileCheckSum").value(hasItem(DEFAULT_FILE_CHECK_SUM.toString())))
