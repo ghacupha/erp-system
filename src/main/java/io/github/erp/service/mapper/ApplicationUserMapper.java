@@ -17,6 +17,7 @@ public interface ApplicationUserMapper extends EntityMapper<ApplicationUserDTO, 
     @Mapping(target = "securityClearance", source = "securityClearance", qualifiedByName = "clearanceLevel")
     @Mapping(target = "systemIdentity", source = "systemIdentity", qualifiedByName = "login")
     @Mapping(target = "userProperties", source = "userProperties", qualifiedByName = "mappedValueSet")
+    @Mapping(target = "dealerIdentity", source = "dealerIdentity", qualifiedByName = "dealerName")
     ApplicationUserDTO toDto(ApplicationUser s);
 
     @Named("id")

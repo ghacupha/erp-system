@@ -29,6 +29,8 @@ public class ApplicationUserCriteria implements Serializable, Criteria {
 
     private UUIDFilter designation;
 
+    private StringFilter applicationIdentity;
+
     private LongFilter organizationId;
 
     private LongFilter departmentId;
@@ -39,6 +41,8 @@ public class ApplicationUserCriteria implements Serializable, Criteria {
 
     private LongFilter userPropertiesId;
 
+    private LongFilter dealerIdentityId;
+
     private Boolean distinct;
 
     public ApplicationUserCriteria() {}
@@ -46,11 +50,13 @@ public class ApplicationUserCriteria implements Serializable, Criteria {
     public ApplicationUserCriteria(ApplicationUserCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.designation = other.designation == null ? null : other.designation.copy();
+        this.applicationIdentity = other.applicationIdentity == null ? null : other.applicationIdentity.copy();
         this.organizationId = other.organizationId == null ? null : other.organizationId.copy();
         this.departmentId = other.departmentId == null ? null : other.departmentId.copy();
         this.securityClearanceId = other.securityClearanceId == null ? null : other.securityClearanceId.copy();
         this.systemIdentityId = other.systemIdentityId == null ? null : other.systemIdentityId.copy();
         this.userPropertiesId = other.userPropertiesId == null ? null : other.userPropertiesId.copy();
+        this.dealerIdentityId = other.dealerIdentityId == null ? null : other.dealerIdentityId.copy();
         this.distinct = other.distinct;
     }
 
@@ -87,6 +93,21 @@ public class ApplicationUserCriteria implements Serializable, Criteria {
 
     public void setDesignation(UUIDFilter designation) {
         this.designation = designation;
+    }
+
+    public StringFilter getApplicationIdentity() {
+        return applicationIdentity;
+    }
+
+    public StringFilter applicationIdentity() {
+        if (applicationIdentity == null) {
+            applicationIdentity = new StringFilter();
+        }
+        return applicationIdentity;
+    }
+
+    public void setApplicationIdentity(StringFilter applicationIdentity) {
+        this.applicationIdentity = applicationIdentity;
     }
 
     public LongFilter getOrganizationId() {
@@ -164,6 +185,21 @@ public class ApplicationUserCriteria implements Serializable, Criteria {
         this.userPropertiesId = userPropertiesId;
     }
 
+    public LongFilter getDealerIdentityId() {
+        return dealerIdentityId;
+    }
+
+    public LongFilter dealerIdentityId() {
+        if (dealerIdentityId == null) {
+            dealerIdentityId = new LongFilter();
+        }
+        return dealerIdentityId;
+    }
+
+    public void setDealerIdentityId(LongFilter dealerIdentityId) {
+        this.dealerIdentityId = dealerIdentityId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -184,11 +220,13 @@ public class ApplicationUserCriteria implements Serializable, Criteria {
         return (
             Objects.equals(id, that.id) &&
             Objects.equals(designation, that.designation) &&
+            Objects.equals(applicationIdentity, that.applicationIdentity) &&
             Objects.equals(organizationId, that.organizationId) &&
             Objects.equals(departmentId, that.departmentId) &&
             Objects.equals(securityClearanceId, that.securityClearanceId) &&
             Objects.equals(systemIdentityId, that.systemIdentityId) &&
             Objects.equals(userPropertiesId, that.userPropertiesId) &&
+            Objects.equals(dealerIdentityId, that.dealerIdentityId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -198,11 +236,13 @@ public class ApplicationUserCriteria implements Serializable, Criteria {
         return Objects.hash(
             id,
             designation,
+            applicationIdentity,
             organizationId,
             departmentId,
             securityClearanceId,
             systemIdentityId,
             userPropertiesId,
+            dealerIdentityId,
             distinct
         );
     }
@@ -213,11 +253,13 @@ public class ApplicationUserCriteria implements Serializable, Criteria {
         return "ApplicationUserCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
             (designation != null ? "designation=" + designation + ", " : "") +
+            (applicationIdentity != null ? "applicationIdentity=" + applicationIdentity + ", " : "") +
             (organizationId != null ? "organizationId=" + organizationId + ", " : "") +
             (departmentId != null ? "departmentId=" + departmentId + ", " : "") +
             (securityClearanceId != null ? "securityClearanceId=" + securityClearanceId + ", " : "") +
             (systemIdentityId != null ? "systemIdentityId=" + systemIdentityId + ", " : "") +
             (userPropertiesId != null ? "userPropertiesId=" + userPropertiesId + ", " : "") +
+            (dealerIdentityId != null ? "dealerIdentityId=" + dealerIdentityId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

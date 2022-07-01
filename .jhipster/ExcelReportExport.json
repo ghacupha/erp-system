@@ -74,7 +74,7 @@
       "otherEntityName": "applicationUser",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
-      "otherEntityField": "id"
+      "otherEntityField": "applicationIdentity"
     },
     {
       "relationshipName": "organization",

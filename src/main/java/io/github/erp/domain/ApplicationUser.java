@@ -31,6 +31,10 @@ public class ApplicationUser implements Serializable {
     @Column(name = "designation", nullable = false, unique = true)
     private UUID designation;
 
+    @NotNull
+    @Column(name = "application_identity", nullable = false, unique = true)
+    private String applicationIdentity;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "placeholders" }, allowSetters = true)
@@ -60,6 +64,12 @@ public class ApplicationUser implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<UniversallyUniqueMapping> userProperties = new HashSet<>();
 
+    @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "placeholders" }, allowSetters = true)
+    @OneToOne(optional = false)
+    @NotNull
+    @JoinColumn(unique = true)
+    private Dealer dealerIdentity;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -86,6 +96,19 @@ public class ApplicationUser implements Serializable {
 
     public void setDesignation(UUID designation) {
         this.designation = designation;
+    }
+
+    public String getApplicationIdentity() {
+        return this.applicationIdentity;
+    }
+
+    public ApplicationUser applicationIdentity(String applicationIdentity) {
+        this.setApplicationIdentity(applicationIdentity);
+        return this;
+    }
+
+    public void setApplicationIdentity(String applicationIdentity) {
+        this.applicationIdentity = applicationIdentity;
     }
 
     public Dealer getOrganization() {
@@ -163,6 +186,19 @@ public class ApplicationUser implements Serializable {
         return this;
     }
 
+    public Dealer getDealerIdentity() {
+        return this.dealerIdentity;
+    }
+
+    public void setDealerIdentity(Dealer dealer) {
+        this.dealerIdentity = dealer;
+    }
+
+    public ApplicationUser dealerIdentity(Dealer dealer) {
+        this.setDealerIdentity(dealer);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -188,6 +224,7 @@ public class ApplicationUser implements Serializable {
         return "ApplicationUser{" +
             "id=" + getId() +
             ", designation='" + getDesignation() + "'" +
+            ", applicationIdentity='" + getApplicationIdentity() + "'" +
             "}";
     }
 }

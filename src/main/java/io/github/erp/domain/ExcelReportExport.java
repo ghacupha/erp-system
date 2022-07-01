@@ -96,7 +96,7 @@ public class ExcelReportExport implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
-        value = { "organization", "department", "securityClearance", "systemIdentity", "userProperties" },
+        value = { "organization", "department", "securityClearance", "systemIdentity", "userProperties", "dealerIdentity" },
         allowSetters = true
     )
     private ApplicationUser reportCreator;

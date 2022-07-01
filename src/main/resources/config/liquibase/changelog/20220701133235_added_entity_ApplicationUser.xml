@@ -17,6 +17,9 @@
             <column name="designation" type="${uuidType}">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_application_user__designation" />
             </column>
+            <column name="application_identity" type="varchar(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_application_user__application_identity" />
+            </column>
             <column name="organization_id" type="bigint">
                 <constraints nullable="false" />
             </column>
@@ -28,6 +31,9 @@
             </column>
             <column name="system_identity_id" type="bigint">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_application_user__system_identity_id" />
+            </column>
+            <column name="dealer_identity_id" type="bigint">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_application_user__dealer_identity_id" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
@@ -65,10 +71,12 @@
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="designation" type="${uuidType}"/>
+            <column name="application_identity" type="string"/>
             <column name="organization_id" type="numeric"/>
             <column name="department_id" type="numeric"/>
             <column name="security_clearance_id" type="numeric"/>
             <column name="system_identity_id" type="numeric"/>
+            <column name="dealer_identity_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>
