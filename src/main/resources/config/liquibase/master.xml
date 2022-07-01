@@ -73,6 +73,7 @@
     <include file="config/liquibase/changelog/20220629134905_added_entity_ExcelReportExport.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220629144311_added_entity_ProcessStatus.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220629145545_added_entity_ReportStatus.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220701123133_added_entity_Algorithm.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
@@ -132,6 +133,7 @@
     <include file="config/liquibase/changelog/20220629134905_added_entity_constraints_ExcelReportExport.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220629144311_added_entity_constraints_ProcessStatus.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220629145545_added_entity_constraints_ReportStatus.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220701123133_added_entity_constraints_Algorithm.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
