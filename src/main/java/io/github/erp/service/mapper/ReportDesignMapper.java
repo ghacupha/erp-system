@@ -21,7 +21,7 @@ import org.mapstruct.*;
 public interface ReportDesignMapper extends EntityMapper<ReportDesignDTO, ReportDesign> {
     @Mapping(target = "parameters", source = "parameters", qualifiedByName = "mappedValueSet")
     @Mapping(target = "securityClearance", source = "securityClearance", qualifiedByName = "clearanceLevel")
-    @Mapping(target = "reportDesigner", source = "reportDesigner", qualifiedByName = "id")
+    @Mapping(target = "reportDesigner", source = "reportDesigner", qualifiedByName = "applicationIdentity")
     @Mapping(target = "organization", source = "organization", qualifiedByName = "dealerName")
     @Mapping(target = "department", source = "department", qualifiedByName = "dealerName")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")

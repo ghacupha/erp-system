@@ -20,11 +20,12 @@ public interface ApplicationUserMapper extends EntityMapper<ApplicationUserDTO, 
     @Mapping(target = "dealerIdentity", source = "dealerIdentity", qualifiedByName = "dealerName")
     ApplicationUserDTO toDto(ApplicationUser s);
 
-    @Named("id")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    ApplicationUserDTO toDtoId(ApplicationUser applicationUser);
-
     @Mapping(target = "removeUserProperties", ignore = true)
     ApplicationUser toEntity(ApplicationUserDTO applicationUserDTO);
+
+    @Named("applicationIdentity")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "applicationIdentity", source = "applicationIdentity")
+    ApplicationUserDTO toDtoApplicationIdentity(ApplicationUser applicationUser);
 }
