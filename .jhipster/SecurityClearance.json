@@ -1,0 +1,35 @@
+{
+  "fields": [
+    {
+      "fieldName": "clearanceLevel",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "grantedClearances",
+      "otherEntityName": "securityClearance",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "clearanceLevel",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "securityClearance"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "securityClearance"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "SecurityClearance",
+  "changelogDate": "20220701123538",
+  "incrementalChangelog": false
+}
