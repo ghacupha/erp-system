@@ -1,0 +1,73 @@
+{
+  "fields": [
+    {
+      "fieldName": "designation",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "applicationIdentity",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "organization",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "dealerName"
+    },
+    {
+      "relationshipName": "department",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "dealerName"
+    },
+    {
+      "relationshipName": "securityClearance",
+      "otherEntityName": "securityClearance",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "clearanceLevel"
+    },
+    {
+      "relationshipName": "systemIdentity",
+      "otherEntityName": "user",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "login",
+      "ownerSide": true,
+      "id": false,
+      "otherEntityRelationshipName": "applicationUser"
+    },
+    {
+      "relationshipName": "userProperties",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "mappedValue",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "applicationUser"
+    },
+    {
+      "relationshipName": "dealerIdentity",
+      "otherEntityName": "dealer",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "dealerName",
+      "ownerSide": true,
+      "id": false,
+      "otherEntityRelationshipName": "applicationUser"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "ApplicationUser",
+  "changelogDate": "20220701133235",
+  "incrementalChangelog": false
+}
