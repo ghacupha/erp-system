@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity SecurityClearance.
+    -->
+    <changeSet id="20220701123538-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="security_clearance_id"
+                                 baseTableName="rel_security_clearance__granted_clearances"
+                                 constraintName="fk_rel_security_clearance__gran__security_clearance_86_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="security_clearance"/>
+
+        <addForeignKeyConstraint baseColumnNames="granted_clearances_id"
+                                 baseTableName="rel_security_clearance__granted_clearances"
+                                 constraintName="fk_rel_security_clearance__gran__granted_clearances_fd_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="security_clearance"/>
+
+        <addForeignKeyConstraint baseColumnNames="security_clearance_id"
+                                 baseTableName="rel_security_clearance__placeholder"
+                                 constraintName="fk_rel_security_clearance__placeholder__security_clearance_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="security_clearance"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_security_clearance__placeholder"
+                                 constraintName="fk_rel_security_clearance__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+    </changeSet>
+</databaseChangeLog>

@@ -191,6 +191,37 @@ public class ReportTemplateResourceIT {
         verify(mockReportTemplateSearchRepository, times(1)).save(testReportTemplate);
     }
 
+    // TODO Test for expected failure
+    @Test
+    @Transactional
+    @WithMockUser(roles = {"REPORT_ACCESSOR"})
+    void createReportTemplateWithLessPrivileges() throws Exception {
+        int databaseSizeBeforeCreate = reportTemplateRepository.findAll().size();
+        // Create the ReportTemplate
+        ReportTemplateDTO reportTemplateDTO = reportTemplateMapper.toDto(reportTemplate);
+        restReportTemplateMockMvc
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(reportTemplateDTO))
+            )
+            .andExpect(status().isCreated());
+
+        // Validate the ReportTemplate in the database
+        List<ReportTemplate> reportTemplateList = reportTemplateRepository.findAll();
+        assertThat(reportTemplateList).hasSize(databaseSizeBeforeCreate + 1);
+        ReportTemplate testReportTemplate = reportTemplateList.get(reportTemplateList.size() - 1);
+        assertThat(testReportTemplate.getCatalogueNumber()).isEqualTo(DEFAULT_CATALOGUE_NUMBER);
+        assertThat(testReportTemplate.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testReportTemplate.getNotes()).isEqualTo(DEFAULT_NOTES);
+        assertThat(testReportTemplate.getNotesContentType()).isEqualTo(DEFAULT_NOTES_CONTENT_TYPE);
+        assertThat(testReportTemplate.getReportFile()).isEqualTo(DEFAULT_REPORT_FILE);
+        assertThat(testReportTemplate.getReportFileContentType()).isEqualTo(DEFAULT_REPORT_FILE_CONTENT_TYPE);
+        assertThat(testReportTemplate.getCompileReportFile()).isEqualTo(DEFAULT_COMPILE_REPORT_FILE);
+        assertThat(testReportTemplate.getCompileReportFileContentType()).isEqualTo(DEFAULT_COMPILE_REPORT_FILE_CONTENT_TYPE);
+
+        // Validate the ReportTemplate in Elasticsearch
+        verify(mockReportTemplateSearchRepository, times(1)).save(testReportTemplate);
+    }
+
     @Test
     @Transactional
     void createReportTemplateWithExistingId() throws Exception {
