@@ -1,4 +1,4 @@
-# erpSystem
+# ERP System
 
 This application was generated using JHipster 7.3.1, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v7.3.1](https://www.jhipster.tech/documentation-archive/v7.3.1).
 
@@ -11,6 +11,26 @@ To start your application in the dev profile, run:
 ```
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
+
+## Environment
+
+A couple of environment variables need to be setup for any of the containers or the source code itself to run. At least the following are needed at a minimum:
+
+ - LOCAL_PG_SERVER - String for the postres server in the local environment
+- ERP_SYSTEM_PROD_DB - String designation of the production DB
+- SPRING_DATA_JEST_URI - String designation of the search engine address
+- ERP_SYSTEM_DEV_DB - String designation of the development DB
+- ERP_SYSTEM_PORT - String designation of the server port. Thee client will be looking for 8980
+- PG_DATABASE_DEV_USER - String designation of the development db login credentials
+- PG_DATABASE_PROD_USER - String designation of the production db login credentials
+- PG_DATABASE_DEV_PASSWORD - String designation of the development db login password credentials
+- PG_DATABASE_PROD_PASSWORD - String designation of the production db login password credentials
+- ERP_SYSTEM_DEV_PORT - String designation of the development db login credentials
+- ERP_SYSTEM_PROD_PORT - String designation of the (development) server port. Thee client will be looking for 8980
+- ERP_SYSTEM_PROD_MAIL_BASE_URL
+- ERP_SYSTEM_DEV_MAIL_BASE_URL
+- SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+- UPLOADS_SIZE - String designation of the chunk size of the Excel processing system
 
 ### JHipster Control Center
 
