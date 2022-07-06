@@ -31,6 +31,8 @@ public class ReportDesignCriteria implements Serializable, Criteria {
 
     private StringFilter designation;
 
+    private StringFilter reportFileChecksum;
+
     private LongFilter parametersId;
 
     private LongFilter securityClearanceId;
@@ -45,6 +47,8 @@ public class ReportDesignCriteria implements Serializable, Criteria {
 
     private LongFilter systemModuleId;
 
+    private LongFilter fileCheckSumAlgorithmId;
+
     private Boolean distinct;
 
     public ReportDesignCriteria() {}
@@ -53,6 +57,7 @@ public class ReportDesignCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.catalogueNumber = other.catalogueNumber == null ? null : other.catalogueNumber.copy();
         this.designation = other.designation == null ? null : other.designation.copy();
+        this.reportFileChecksum = other.reportFileChecksum == null ? null : other.reportFileChecksum.copy();
         this.parametersId = other.parametersId == null ? null : other.parametersId.copy();
         this.securityClearanceId = other.securityClearanceId == null ? null : other.securityClearanceId.copy();
         this.reportDesignerId = other.reportDesignerId == null ? null : other.reportDesignerId.copy();
@@ -60,6 +65,7 @@ public class ReportDesignCriteria implements Serializable, Criteria {
         this.departmentId = other.departmentId == null ? null : other.departmentId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.systemModuleId = other.systemModuleId == null ? null : other.systemModuleId.copy();
+        this.fileCheckSumAlgorithmId = other.fileCheckSumAlgorithmId == null ? null : other.fileCheckSumAlgorithmId.copy();
         this.distinct = other.distinct;
     }
 
@@ -111,6 +117,21 @@ public class ReportDesignCriteria implements Serializable, Criteria {
 
     public void setDesignation(StringFilter designation) {
         this.designation = designation;
+    }
+
+    public StringFilter getReportFileChecksum() {
+        return reportFileChecksum;
+    }
+
+    public StringFilter reportFileChecksum() {
+        if (reportFileChecksum == null) {
+            reportFileChecksum = new StringFilter();
+        }
+        return reportFileChecksum;
+    }
+
+    public void setReportFileChecksum(StringFilter reportFileChecksum) {
+        this.reportFileChecksum = reportFileChecksum;
     }
 
     public LongFilter getParametersId() {
@@ -218,6 +239,21 @@ public class ReportDesignCriteria implements Serializable, Criteria {
         this.systemModuleId = systemModuleId;
     }
 
+    public LongFilter getFileCheckSumAlgorithmId() {
+        return fileCheckSumAlgorithmId;
+    }
+
+    public LongFilter fileCheckSumAlgorithmId() {
+        if (fileCheckSumAlgorithmId == null) {
+            fileCheckSumAlgorithmId = new LongFilter();
+        }
+        return fileCheckSumAlgorithmId;
+    }
+
+    public void setFileCheckSumAlgorithmId(LongFilter fileCheckSumAlgorithmId) {
+        this.fileCheckSumAlgorithmId = fileCheckSumAlgorithmId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -239,6 +275,7 @@ public class ReportDesignCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(catalogueNumber, that.catalogueNumber) &&
             Objects.equals(designation, that.designation) &&
+            Objects.equals(reportFileChecksum, that.reportFileChecksum) &&
             Objects.equals(parametersId, that.parametersId) &&
             Objects.equals(securityClearanceId, that.securityClearanceId) &&
             Objects.equals(reportDesignerId, that.reportDesignerId) &&
@@ -246,6 +283,7 @@ public class ReportDesignCriteria implements Serializable, Criteria {
             Objects.equals(departmentId, that.departmentId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(systemModuleId, that.systemModuleId) &&
+            Objects.equals(fileCheckSumAlgorithmId, that.fileCheckSumAlgorithmId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -256,6 +294,7 @@ public class ReportDesignCriteria implements Serializable, Criteria {
             id,
             catalogueNumber,
             designation,
+            reportFileChecksum,
             parametersId,
             securityClearanceId,
             reportDesignerId,
@@ -263,6 +302,7 @@ public class ReportDesignCriteria implements Serializable, Criteria {
             departmentId,
             placeholderId,
             systemModuleId,
+            fileCheckSumAlgorithmId,
             distinct
         );
     }
@@ -274,6 +314,7 @@ public class ReportDesignCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (catalogueNumber != null ? "catalogueNumber=" + catalogueNumber + ", " : "") +
             (designation != null ? "designation=" + designation + ", " : "") +
+            (reportFileChecksum != null ? "reportFileChecksum=" + reportFileChecksum + ", " : "") +
             (parametersId != null ? "parametersId=" + parametersId + ", " : "") +
             (securityClearanceId != null ? "securityClearanceId=" + securityClearanceId + ", " : "") +
             (reportDesignerId != null ? "reportDesignerId=" + reportDesignerId + ", " : "") +
@@ -281,6 +322,7 @@ public class ReportDesignCriteria implements Serializable, Criteria {
             (departmentId != null ? "departmentId=" + departmentId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (systemModuleId != null ? "systemModuleId=" + systemModuleId + ", " : "") +
+            (fileCheckSumAlgorithmId != null ? "fileCheckSumAlgorithmId=" + fileCheckSumAlgorithmId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

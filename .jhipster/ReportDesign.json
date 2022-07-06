@@ -23,8 +23,12 @@
     {
       "fieldName": "reportFile",
       "fieldType": "byte[]",
-      "fieldTypeBlobContent": "any",
-      "fieldValidateRules": ["required", "unique"]
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "reportFileChecksum",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
     }
   ],
   "relationships": [
@@ -79,6 +83,13 @@
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
       "otherEntityField": "moduleName"
+    },
+    {
+      "relationshipName": "fileCheckSumAlgorithm",
+      "otherEntityName": "algorithm",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "name"
     }
   ],
   "service": "serviceImpl",

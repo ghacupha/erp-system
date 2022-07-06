@@ -7,7 +7,6 @@ import io.github.erp.repository.search.ReportDesignSearchRepository;
 import io.github.erp.service.ReportDesignService;
 import io.github.erp.service.dto.ReportDesignDTO;
 import io.github.erp.service.mapper.ReportDesignMapper;
-//import io.github.erp.web.rest.ReportDesignResource;
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,13 +34,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link ReportDesignResourceDev} REST controller.
+ * Integration tests for the ReportDesignResource REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"DEV"})
-class ReportDesignResourceIT {
+public class ReportDesignResourceIT {
 
     private static final UUID DEFAULT_CATALOGUE_NUMBER = UUID.randomUUID();
     private static final UUID UPDATED_CATALOGUE_NUMBER = UUID.randomUUID();
@@ -61,6 +60,9 @@ class ReportDesignResourceIT {
     private static final byte[] UPDATED_REPORT_FILE = TestUtil.createByteArray(1, "1");
     private static final String DEFAULT_REPORT_FILE_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_REPORT_FILE_CONTENT_TYPE = "image/png";
+
+    private static final String DEFAULT_REPORT_FILE_CHECKSUM = "AAAAAAAAAA";
+    private static final String UPDATED_REPORT_FILE_CHECKSUM = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/dev/report-designs";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -111,7 +113,8 @@ class ReportDesignResourceIT {
             .notes(DEFAULT_NOTES)
             .notesContentType(DEFAULT_NOTES_CONTENT_TYPE)
             .reportFile(DEFAULT_REPORT_FILE)
-            .reportFileContentType(DEFAULT_REPORT_FILE_CONTENT_TYPE);
+            .reportFileContentType(DEFAULT_REPORT_FILE_CONTENT_TYPE)
+            .reportFileChecksum(DEFAULT_REPORT_FILE_CHECKSUM);
         // Add required entity
         SecurityClearance securityClearance;
         if (TestUtil.findAll(em, SecurityClearance.class).isEmpty()) {
@@ -154,6 +157,16 @@ class ReportDesignResourceIT {
             systemModule = TestUtil.findAll(em, SystemModule.class).get(0);
         }
         reportDesign.setSystemModule(systemModule);
+        // Add required entity
+        Algorithm algorithm;
+        if (TestUtil.findAll(em, Algorithm.class).isEmpty()) {
+            algorithm = AlgorithmResourceIT.createEntity(em);
+            em.persist(algorithm);
+            em.flush();
+        } else {
+            algorithm = TestUtil.findAll(em, Algorithm.class).get(0);
+        }
+        reportDesign.setFileCheckSumAlgorithm(algorithm);
         return reportDesign;
     }
 
@@ -171,7 +184,8 @@ class ReportDesignResourceIT {
             .notes(UPDATED_NOTES)
             .notesContentType(UPDATED_NOTES_CONTENT_TYPE)
             .reportFile(UPDATED_REPORT_FILE)
-            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE);
+            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE)
+            .reportFileChecksum(UPDATED_REPORT_FILE_CHECKSUM);
         // Add required entity
         SecurityClearance securityClearance;
         if (TestUtil.findAll(em, SecurityClearance.class).isEmpty()) {
@@ -214,6 +228,16 @@ class ReportDesignResourceIT {
             systemModule = TestUtil.findAll(em, SystemModule.class).get(0);
         }
         reportDesign.setSystemModule(systemModule);
+        // Add required entity
+        Algorithm algorithm;
+        if (TestUtil.findAll(em, Algorithm.class).isEmpty()) {
+            algorithm = AlgorithmResourceIT.createUpdatedEntity(em);
+            em.persist(algorithm);
+            em.flush();
+        } else {
+            algorithm = TestUtil.findAll(em, Algorithm.class).get(0);
+        }
+        reportDesign.setFileCheckSumAlgorithm(algorithm);
         return reportDesign;
     }
 
@@ -245,6 +269,7 @@ class ReportDesignResourceIT {
         assertThat(testReportDesign.getNotesContentType()).isEqualTo(DEFAULT_NOTES_CONTENT_TYPE);
         assertThat(testReportDesign.getReportFile()).isEqualTo(DEFAULT_REPORT_FILE);
         assertThat(testReportDesign.getReportFileContentType()).isEqualTo(DEFAULT_REPORT_FILE_CONTENT_TYPE);
+        assertThat(testReportDesign.getReportFileChecksum()).isEqualTo(DEFAULT_REPORT_FILE_CHECKSUM);
 
         // Validate the ReportDesign in Elasticsearch
         verify(mockReportDesignSearchRepository, times(1)).save(testReportDesign);
@@ -332,7 +357,8 @@ class ReportDesignResourceIT {
             .andExpect(jsonPath("$.[*].notesContentType").value(hasItem(DEFAULT_NOTES_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].notes").value(hasItem(Base64Utils.encodeToString(DEFAULT_NOTES))))
             .andExpect(jsonPath("$.[*].reportFileContentType").value(hasItem(DEFAULT_REPORT_FILE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))));
+            .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))))
+            .andExpect(jsonPath("$.[*].reportFileChecksum").value(hasItem(DEFAULT_REPORT_FILE_CHECKSUM)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -371,7 +397,8 @@ class ReportDesignResourceIT {
             .andExpect(jsonPath("$.notesContentType").value(DEFAULT_NOTES_CONTENT_TYPE))
             .andExpect(jsonPath("$.notes").value(Base64Utils.encodeToString(DEFAULT_NOTES)))
             .andExpect(jsonPath("$.reportFileContentType").value(DEFAULT_REPORT_FILE_CONTENT_TYPE))
-            .andExpect(jsonPath("$.reportFile").value(Base64Utils.encodeToString(DEFAULT_REPORT_FILE)));
+            .andExpect(jsonPath("$.reportFile").value(Base64Utils.encodeToString(DEFAULT_REPORT_FILE)))
+            .andExpect(jsonPath("$.reportFileChecksum").value(DEFAULT_REPORT_FILE_CHECKSUM));
     }
 
     @Test
@@ -520,6 +547,84 @@ class ReportDesignResourceIT {
 
         // Get all the reportDesignList where designation does not contain UPDATED_DESIGNATION
         defaultReportDesignShouldBeFound("designation.doesNotContain=" + UPDATED_DESIGNATION);
+    }
+
+    @Test
+    @Transactional
+    void getAllReportDesignsByReportFileChecksumIsEqualToSomething() throws Exception {
+        // Initialize the database
+        reportDesignRepository.saveAndFlush(reportDesign);
+
+        // Get all the reportDesignList where reportFileChecksum equals to DEFAULT_REPORT_FILE_CHECKSUM
+        defaultReportDesignShouldBeFound("reportFileChecksum.equals=" + DEFAULT_REPORT_FILE_CHECKSUM);
+
+        // Get all the reportDesignList where reportFileChecksum equals to UPDATED_REPORT_FILE_CHECKSUM
+        defaultReportDesignShouldNotBeFound("reportFileChecksum.equals=" + UPDATED_REPORT_FILE_CHECKSUM);
+    }
+
+    @Test
+    @Transactional
+    void getAllReportDesignsByReportFileChecksumIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        reportDesignRepository.saveAndFlush(reportDesign);
+
+        // Get all the reportDesignList where reportFileChecksum not equals to DEFAULT_REPORT_FILE_CHECKSUM
+        defaultReportDesignShouldNotBeFound("reportFileChecksum.notEquals=" + DEFAULT_REPORT_FILE_CHECKSUM);
+
+        // Get all the reportDesignList where reportFileChecksum not equals to UPDATED_REPORT_FILE_CHECKSUM
+        defaultReportDesignShouldBeFound("reportFileChecksum.notEquals=" + UPDATED_REPORT_FILE_CHECKSUM);
+    }
+
+    @Test
+    @Transactional
+    void getAllReportDesignsByReportFileChecksumIsInShouldWork() throws Exception {
+        // Initialize the database
+        reportDesignRepository.saveAndFlush(reportDesign);
+
+        // Get all the reportDesignList where reportFileChecksum in DEFAULT_REPORT_FILE_CHECKSUM or UPDATED_REPORT_FILE_CHECKSUM
+        defaultReportDesignShouldBeFound("reportFileChecksum.in=" + DEFAULT_REPORT_FILE_CHECKSUM + "," + UPDATED_REPORT_FILE_CHECKSUM);
+
+        // Get all the reportDesignList where reportFileChecksum equals to UPDATED_REPORT_FILE_CHECKSUM
+        defaultReportDesignShouldNotBeFound("reportFileChecksum.in=" + UPDATED_REPORT_FILE_CHECKSUM);
+    }
+
+    @Test
+    @Transactional
+    void getAllReportDesignsByReportFileChecksumIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        reportDesignRepository.saveAndFlush(reportDesign);
+
+        // Get all the reportDesignList where reportFileChecksum is not null
+        defaultReportDesignShouldBeFound("reportFileChecksum.specified=true");
+
+        // Get all the reportDesignList where reportFileChecksum is null
+        defaultReportDesignShouldNotBeFound("reportFileChecksum.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllReportDesignsByReportFileChecksumContainsSomething() throws Exception {
+        // Initialize the database
+        reportDesignRepository.saveAndFlush(reportDesign);
+
+        // Get all the reportDesignList where reportFileChecksum contains DEFAULT_REPORT_FILE_CHECKSUM
+        defaultReportDesignShouldBeFound("reportFileChecksum.contains=" + DEFAULT_REPORT_FILE_CHECKSUM);
+
+        // Get all the reportDesignList where reportFileChecksum contains UPDATED_REPORT_FILE_CHECKSUM
+        defaultReportDesignShouldNotBeFound("reportFileChecksum.contains=" + UPDATED_REPORT_FILE_CHECKSUM);
+    }
+
+    @Test
+    @Transactional
+    void getAllReportDesignsByReportFileChecksumNotContainsSomething() throws Exception {
+        // Initialize the database
+        reportDesignRepository.saveAndFlush(reportDesign);
+
+        // Get all the reportDesignList where reportFileChecksum does not contain DEFAULT_REPORT_FILE_CHECKSUM
+        defaultReportDesignShouldNotBeFound("reportFileChecksum.doesNotContain=" + DEFAULT_REPORT_FILE_CHECKSUM);
+
+        // Get all the reportDesignList where reportFileChecksum does not contain UPDATED_REPORT_FILE_CHECKSUM
+        defaultReportDesignShouldBeFound("reportFileChecksum.doesNotContain=" + UPDATED_REPORT_FILE_CHECKSUM);
     }
 
     @Test
@@ -704,6 +809,32 @@ class ReportDesignResourceIT {
         defaultReportDesignShouldNotBeFound("systemModuleId.equals=" + (systemModuleId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllReportDesignsByFileCheckSumAlgorithmIsEqualToSomething() throws Exception {
+        // Initialize the database
+        reportDesignRepository.saveAndFlush(reportDesign);
+        Algorithm fileCheckSumAlgorithm;
+        if (TestUtil.findAll(em, Algorithm.class).isEmpty()) {
+            fileCheckSumAlgorithm = AlgorithmResourceIT.createEntity(em);
+            em.persist(fileCheckSumAlgorithm);
+            em.flush();
+        } else {
+            fileCheckSumAlgorithm = TestUtil.findAll(em, Algorithm.class).get(0);
+        }
+        em.persist(fileCheckSumAlgorithm);
+        em.flush();
+        reportDesign.setFileCheckSumAlgorithm(fileCheckSumAlgorithm);
+        reportDesignRepository.saveAndFlush(reportDesign);
+        Long fileCheckSumAlgorithmId = fileCheckSumAlgorithm.getId();
+
+        // Get all the reportDesignList where fileCheckSumAlgorithm equals to fileCheckSumAlgorithmId
+        defaultReportDesignShouldBeFound("fileCheckSumAlgorithmId.equals=" + fileCheckSumAlgorithmId);
+
+        // Get all the reportDesignList where fileCheckSumAlgorithm equals to (fileCheckSumAlgorithmId + 1)
+        defaultReportDesignShouldNotBeFound("fileCheckSumAlgorithmId.equals=" + (fileCheckSumAlgorithmId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -719,7 +850,8 @@ class ReportDesignResourceIT {
             .andExpect(jsonPath("$.[*].notesContentType").value(hasItem(DEFAULT_NOTES_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].notes").value(hasItem(Base64Utils.encodeToString(DEFAULT_NOTES))))
             .andExpect(jsonPath("$.[*].reportFileContentType").value(hasItem(DEFAULT_REPORT_FILE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))));
+            .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))))
+            .andExpect(jsonPath("$.[*].reportFileChecksum").value(hasItem(DEFAULT_REPORT_FILE_CHECKSUM)));
 
         // Check, that the count call also returns 1
         restReportDesignMockMvc
@@ -774,7 +906,8 @@ class ReportDesignResourceIT {
             .notes(UPDATED_NOTES)
             .notesContentType(UPDATED_NOTES_CONTENT_TYPE)
             .reportFile(UPDATED_REPORT_FILE)
-            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE);
+            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE)
+            .reportFileChecksum(UPDATED_REPORT_FILE_CHECKSUM);
         ReportDesignDTO reportDesignDTO = reportDesignMapper.toDto(updatedReportDesign);
 
         restReportDesignMockMvc
@@ -796,6 +929,7 @@ class ReportDesignResourceIT {
         assertThat(testReportDesign.getNotesContentType()).isEqualTo(UPDATED_NOTES_CONTENT_TYPE);
         assertThat(testReportDesign.getReportFile()).isEqualTo(UPDATED_REPORT_FILE);
         assertThat(testReportDesign.getReportFileContentType()).isEqualTo(UPDATED_REPORT_FILE_CONTENT_TYPE);
+        assertThat(testReportDesign.getReportFileChecksum()).isEqualTo(UPDATED_REPORT_FILE_CHECKSUM);
 
         // Validate the ReportDesign in Elasticsearch
         verify(mockReportDesignSearchRepository).save(testReportDesign);
@@ -892,7 +1026,8 @@ class ReportDesignResourceIT {
         partialUpdatedReportDesign
             .catalogueNumber(UPDATED_CATALOGUE_NUMBER)
             .designation(UPDATED_DESIGNATION)
-            .description(UPDATED_DESCRIPTION);
+            .description(UPDATED_DESCRIPTION)
+            .reportFileChecksum(UPDATED_REPORT_FILE_CHECKSUM);
 
         restReportDesignMockMvc
             .perform(
@@ -913,6 +1048,7 @@ class ReportDesignResourceIT {
         assertThat(testReportDesign.getNotesContentType()).isEqualTo(DEFAULT_NOTES_CONTENT_TYPE);
         assertThat(testReportDesign.getReportFile()).isEqualTo(DEFAULT_REPORT_FILE);
         assertThat(testReportDesign.getReportFileContentType()).isEqualTo(DEFAULT_REPORT_FILE_CONTENT_TYPE);
+        assertThat(testReportDesign.getReportFileChecksum()).isEqualTo(UPDATED_REPORT_FILE_CHECKSUM);
     }
 
     @Test
@@ -934,7 +1070,8 @@ class ReportDesignResourceIT {
             .notes(UPDATED_NOTES)
             .notesContentType(UPDATED_NOTES_CONTENT_TYPE)
             .reportFile(UPDATED_REPORT_FILE)
-            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE);
+            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE)
+            .reportFileChecksum(UPDATED_REPORT_FILE_CHECKSUM);
 
         restReportDesignMockMvc
             .perform(
@@ -955,6 +1092,7 @@ class ReportDesignResourceIT {
         assertThat(testReportDesign.getNotesContentType()).isEqualTo(UPDATED_NOTES_CONTENT_TYPE);
         assertThat(testReportDesign.getReportFile()).isEqualTo(UPDATED_REPORT_FILE);
         assertThat(testReportDesign.getReportFileContentType()).isEqualTo(UPDATED_REPORT_FILE_CONTENT_TYPE);
+        assertThat(testReportDesign.getReportFileChecksum()).isEqualTo(UPDATED_REPORT_FILE_CHECKSUM);
     }
 
     @Test
@@ -1077,6 +1215,7 @@ class ReportDesignResourceIT {
             .andExpect(jsonPath("$.[*].notesContentType").value(hasItem(DEFAULT_NOTES_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].notes").value(hasItem(Base64Utils.encodeToString(DEFAULT_NOTES))))
             .andExpect(jsonPath("$.[*].reportFileContentType").value(hasItem(DEFAULT_REPORT_FILE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))));
+            .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))))
+            .andExpect(jsonPath("$.[*].reportFileChecksum").value(hasItem(DEFAULT_REPORT_FILE_CHECKSUM)));
     }
 }
