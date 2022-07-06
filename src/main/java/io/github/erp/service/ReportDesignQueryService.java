@@ -104,6 +104,10 @@ public class ReportDesignQueryService extends QueryService<ReportDesign> {
             if (criteria.getDesignation() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDesignation(), ReportDesign_.designation));
             }
+            if (criteria.getReportFileChecksum() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getReportFileChecksum(), ReportDesign_.reportFileChecksum));
+            }
             if (criteria.getParametersId() != null) {
                 specification =
                     specification.and(
@@ -164,6 +168,15 @@ public class ReportDesignQueryService extends QueryService<ReportDesign> {
                         buildSpecification(
                             criteria.getSystemModuleId(),
                             root -> root.join(ReportDesign_.systemModule, JoinType.LEFT).get(SystemModule_.id)
+                        )
+                    );
+            }
+            if (criteria.getFileCheckSumAlgorithmId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getFileCheckSumAlgorithmId(),
+                            root -> root.join(ReportDesign_.fileCheckSumAlgorithm, JoinType.LEFT).get(Algorithm_.id)
                         )
                     );
             }

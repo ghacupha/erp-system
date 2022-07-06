@@ -30,10 +30,13 @@
                 <constraints nullable="true" />
             </column>
             <column name="report_file" type="longblob">
-                <constraints nullable="false" unique="true" uniqueConstraintName="ux_report_design__report_file" />
+                <constraints nullable="true" />
             </column>
             <column name="report_file_content_type" type="varchar(255)">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
+            </column>
+            <column name="report_file_checksum" type="varchar(255)">
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_report_design__report_file_checksum" />
             </column>
             <column name="security_clearance_id" type="bigint">
                 <constraints nullable="false" />
@@ -48,6 +51,9 @@
                 <constraints nullable="false" />
             </column>
             <column name="system_module_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="file_check_sum_algorithm_id" type="bigint">
                 <constraints nullable="false" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -103,11 +109,13 @@
             <column name="notes_content_type" type="string"/>
             <column name="report_file" type="blob"/>
             <column name="report_file_content_type" type="string"/>
+            <column name="report_file_checksum" type="string"/>
             <column name="security_clearance_id" type="numeric"/>
             <column name="report_designer_id" type="numeric"/>
             <column name="organization_id" type="numeric"/>
             <column name="department_id" type="numeric"/>
             <column name="system_module_id" type="numeric"/>
+            <column name="file_check_sum_algorithm_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

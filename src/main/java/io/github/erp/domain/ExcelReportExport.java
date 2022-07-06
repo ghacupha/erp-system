@@ -118,7 +118,16 @@ public class ExcelReportExport implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
-        value = { "parameters", "securityClearance", "reportDesigner", "organization", "department", "placeholders", "systemModule" },
+        value = {
+            "parameters",
+            "securityClearance",
+            "reportDesigner",
+            "organization",
+            "department",
+            "placeholders",
+            "systemModule",
+            "fileCheckSumAlgorithm",
+        },
         allowSetters = true
     )
     private ReportDesign reportDesign;

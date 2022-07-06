@@ -16,6 +16,7 @@ import org.mapstruct.*;
         DealerMapper.class,
         PlaceholderMapper.class,
         SystemModuleMapper.class,
+        AlgorithmMapper.class,
     }
 )
 public interface ReportDesignMapper extends EntityMapper<ReportDesignDTO, ReportDesign> {
@@ -26,6 +27,7 @@ public interface ReportDesignMapper extends EntityMapper<ReportDesignDTO, Report
     @Mapping(target = "department", source = "department", qualifiedByName = "dealerName")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     @Mapping(target = "systemModule", source = "systemModule", qualifiedByName = "moduleName")
+    @Mapping(target = "fileCheckSumAlgorithm", source = "fileCheckSumAlgorithm", qualifiedByName = "name")
     ReportDesignDTO toDto(ReportDesign s);
 
     @Mapping(target = "removeParameters", ignore = true)

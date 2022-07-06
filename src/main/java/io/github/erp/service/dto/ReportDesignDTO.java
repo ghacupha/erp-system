@@ -33,6 +33,9 @@ public class ReportDesignDTO implements Serializable {
     private byte[] reportFile;
 
     private String reportFileContentType;
+
+    private String reportFileChecksum;
+
     private Set<UniversallyUniqueMappingDTO> parameters = new HashSet<>();
 
     private SecurityClearanceDTO securityClearance;
@@ -46,6 +49,8 @@ public class ReportDesignDTO implements Serializable {
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     private SystemModuleDTO systemModule;
+
+    private AlgorithmDTO fileCheckSumAlgorithm;
 
     public Long getId() {
         return id;
@@ -111,6 +116,14 @@ public class ReportDesignDTO implements Serializable {
         this.reportFileContentType = reportFileContentType;
     }
 
+    public String getReportFileChecksum() {
+        return reportFileChecksum;
+    }
+
+    public void setReportFileChecksum(String reportFileChecksum) {
+        this.reportFileChecksum = reportFileChecksum;
+    }
+
     public Set<UniversallyUniqueMappingDTO> getParameters() {
         return parameters;
     }
@@ -167,6 +180,14 @@ public class ReportDesignDTO implements Serializable {
         this.systemModule = systemModule;
     }
 
+    public AlgorithmDTO getFileCheckSumAlgorithm() {
+        return fileCheckSumAlgorithm;
+    }
+
+    public void setFileCheckSumAlgorithm(AlgorithmDTO fileCheckSumAlgorithm) {
+        this.fileCheckSumAlgorithm = fileCheckSumAlgorithm;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -198,6 +219,7 @@ public class ReportDesignDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", notes='" + getNotes() + "'" +
             ", reportFile='" + getReportFile() + "'" +
+            ", reportFileChecksum='" + getReportFileChecksum() + "'" +
             ", parameters=" + getParameters() +
             ", securityClearance=" + getSecurityClearance() +
             ", reportDesigner=" + getReportDesigner() +
@@ -205,6 +227,7 @@ public class ReportDesignDTO implements Serializable {
             ", department=" + getDepartment() +
             ", placeholders=" + getPlaceholders() +
             ", systemModule=" + getSystemModule() +
+            ", fileCheckSumAlgorithm=" + getFileCheckSumAlgorithm() +
             "}";
     }
 }

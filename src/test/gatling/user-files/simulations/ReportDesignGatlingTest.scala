@@ -76,6 +76,7 @@ class ReportDesignGatlingTest extends Simulation {
                 , "description":null
                 , "notes":null
                 , "reportFile":null
+                , "reportFileChecksum":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_reportDesign_url"))).exitHereIfFailed
