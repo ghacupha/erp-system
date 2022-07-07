@@ -47,9 +47,6 @@
             <column name="report_template_id" type="bigint">
                 <constraints nullable="false" />
             </column>
-            <column name="report_content_type_id" type="bigint">
-                <constraints nullable="false" />
-            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
         <dropDefaultValue tableName="report_requisition" columnName="report_request_time" columnDataType="${datetimeType}"/>
@@ -108,7 +105,6 @@
             <column name="report_notes" type="blob"/>
             <column name="report_notes_content_type" type="string"/>
             <column name="report_template_id" type="numeric"/>
-            <column name="report_content_type_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

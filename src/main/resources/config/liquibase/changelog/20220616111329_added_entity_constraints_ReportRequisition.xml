@@ -37,11 +37,5 @@
                                  constraintName="fk_report_requisition__report_template_id"
                                  referencedColumnNames="id"
                                  referencedTableName="report_template"/>
-
-        <addForeignKeyConstraint baseColumnNames="report_content_type_id"
-                                 baseTableName="report_requisition"
-                                 constraintName="fk_report_requisition__report_content_type_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="report_content_type"/>
     </changeSet>
 </databaseChangeLog>
