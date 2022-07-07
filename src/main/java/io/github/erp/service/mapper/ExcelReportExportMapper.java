@@ -18,6 +18,7 @@ import org.mapstruct.*;
         DealerMapper.class,
         SystemModuleMapper.class,
         ReportDesignMapper.class,
+        AlgorithmMapper.class,
     }
 )
 public interface ExcelReportExportMapper extends EntityMapper<ExcelReportExportDTO, ExcelReportExport> {
@@ -30,6 +31,7 @@ public interface ExcelReportExportMapper extends EntityMapper<ExcelReportExportD
     @Mapping(target = "department", source = "department", qualifiedByName = "dealerName")
     @Mapping(target = "systemModule", source = "systemModule", qualifiedByName = "moduleName")
     @Mapping(target = "reportDesign", source = "reportDesign", qualifiedByName = "designation")
+    @Mapping(target = "fileCheckSumAlgorithm", source = "fileCheckSumAlgorithm", qualifiedByName = "name")
     ExcelReportExportDTO toDto(ExcelReportExport s);
 
     @Mapping(target = "removePlaceholder", ignore = true)

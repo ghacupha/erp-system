@@ -49,12 +49,14 @@ public class ReportDesign implements Serializable {
     private String notesContentType;
 
     @Lob
-    @Column(name = "report_file", nullable = false, unique = true)
+    @Column(name = "report_file")
     private byte[] reportFile;
 
-    @NotNull
-    @Column(name = "report_file_content_type", nullable = false)
+    @Column(name = "report_file_content_type")
     private String reportFileContentType;
+
+    @Column(name = "report_file_checksum", unique = true)
+    private String reportFileChecksum;
 
     @ManyToMany
     @JoinTable(
@@ -101,6 +103,11 @@ public class ReportDesign implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     private SystemModule systemModule;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "placeholders", "parameters" }, allowSetters = true)
+    private Algorithm fileCheckSumAlgorithm;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -206,6 +213,19 @@ public class ReportDesign implements Serializable {
 
     public void setReportFileContentType(String reportFileContentType) {
         this.reportFileContentType = reportFileContentType;
+    }
+
+    public String getReportFileChecksum() {
+        return this.reportFileChecksum;
+    }
+
+    public ReportDesign reportFileChecksum(String reportFileChecksum) {
+        this.setReportFileChecksum(reportFileChecksum);
+        return this;
+    }
+
+    public void setReportFileChecksum(String reportFileChecksum) {
+        this.reportFileChecksum = reportFileChecksum;
     }
 
     public Set<UniversallyUniqueMapping> getParameters() {
@@ -319,6 +339,19 @@ public class ReportDesign implements Serializable {
         return this;
     }
 
+    public Algorithm getFileCheckSumAlgorithm() {
+        return this.fileCheckSumAlgorithm;
+    }
+
+    public void setFileCheckSumAlgorithm(Algorithm algorithm) {
+        this.fileCheckSumAlgorithm = algorithm;
+    }
+
+    public ReportDesign fileCheckSumAlgorithm(Algorithm algorithm) {
+        this.setFileCheckSumAlgorithm(algorithm);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -350,6 +383,7 @@ public class ReportDesign implements Serializable {
             ", notesContentType='" + getNotesContentType() + "'" +
             ", reportFile='" + getReportFile() + "'" +
             ", reportFileContentType='" + getReportFileContentType() + "'" +
+            ", reportFileChecksum='" + getReportFileChecksum() + "'" +
             "}";
     }
 }

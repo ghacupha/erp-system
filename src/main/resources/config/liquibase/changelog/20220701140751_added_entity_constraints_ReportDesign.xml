@@ -61,5 +61,11 @@
                                  constraintName="fk_report_design__system_module_id"
                                  referencedColumnNames="id"
                                  referencedTableName="system_module"/>
+
+        <addForeignKeyConstraint baseColumnNames="file_check_sum_algorithm_id"
+                                 baseTableName="report_design"
+                                 constraintName="fk_report_design__file_check_sum_algorithm_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="algorithm"/>
     </changeSet>
 </databaseChangeLog>

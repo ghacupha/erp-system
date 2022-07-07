@@ -103,6 +103,13 @@
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
       "otherEntityField": "designation"
+    },
+    {
+      "relationshipName": "fileCheckSumAlgorithm",
+      "otherEntityName": "algorithm",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "name"
     }
   ],
   "service": "serviceImpl",
