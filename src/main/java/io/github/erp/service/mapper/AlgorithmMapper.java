@@ -16,4 +16,10 @@ public interface AlgorithmMapper extends EntityMapper<AlgorithmDTO, Algorithm> {
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removeParameters", ignore = true)
     Algorithm toEntity(AlgorithmDTO algorithmDTO);
+
+    @Named("name")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    AlgorithmDTO toDtoName(Algorithm algorithm);
 }

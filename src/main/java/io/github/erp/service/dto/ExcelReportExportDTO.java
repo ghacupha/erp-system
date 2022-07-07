@@ -59,6 +59,8 @@ public class ExcelReportExportDTO implements Serializable {
 
     private ReportDesignDTO reportDesign;
 
+    private AlgorithmDTO fileCheckSumAlgorithm;
+
     public Long getId() {
         return id;
     }
@@ -211,6 +213,14 @@ public class ExcelReportExportDTO implements Serializable {
         this.reportDesign = reportDesign;
     }
 
+    public AlgorithmDTO getFileCheckSumAlgorithm() {
+        return fileCheckSumAlgorithm;
+    }
+
+    public void setFileCheckSumAlgorithm(AlgorithmDTO fileCheckSumAlgorithm) {
+        this.fileCheckSumAlgorithm = fileCheckSumAlgorithm;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -253,6 +263,7 @@ public class ExcelReportExportDTO implements Serializable {
             ", department=" + getDepartment() +
             ", systemModule=" + getSystemModule() +
             ", reportDesign=" + getReportDesign() +
+            ", fileCheckSumAlgorithm=" + getFileCheckSumAlgorithm() +
             "}";
     }
 }

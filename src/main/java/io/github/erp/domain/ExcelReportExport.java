@@ -118,10 +118,24 @@ public class ExcelReportExport implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
-        value = { "parameters", "securityClearance", "reportDesigner", "organization", "department", "placeholders", "systemModule" },
+        value = {
+            "parameters",
+            "securityClearance",
+            "reportDesigner",
+            "organization",
+            "department",
+            "placeholders",
+            "systemModule",
+            "fileCheckSumAlgorithm",
+        },
         allowSetters = true
     )
     private ReportDesign reportDesign;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "placeholders", "parameters" }, allowSetters = true)
+    private Algorithm fileCheckSumAlgorithm;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -389,6 +403,19 @@ public class ExcelReportExport implements Serializable {
 
     public ExcelReportExport reportDesign(ReportDesign reportDesign) {
         this.setReportDesign(reportDesign);
+        return this;
+    }
+
+    public Algorithm getFileCheckSumAlgorithm() {
+        return this.fileCheckSumAlgorithm;
+    }
+
+    public void setFileCheckSumAlgorithm(Algorithm algorithm) {
+        this.fileCheckSumAlgorithm = algorithm;
+    }
+
+    public ExcelReportExport fileCheckSumAlgorithm(Algorithm algorithm) {
+        this.setFileCheckSumAlgorithm(algorithm);
         return this;
     }
 

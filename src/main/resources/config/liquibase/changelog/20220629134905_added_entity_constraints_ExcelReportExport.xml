@@ -73,5 +73,11 @@
                                  constraintName="fk_excel_report_export__report_design_id"
                                  referencedColumnNames="id"
                                  referencedTableName="report_design"/>
+
+        <addForeignKeyConstraint baseColumnNames="file_check_sum_algorithm_id"
+                                 baseTableName="excel_report_export"
+                                 constraintName="fk_excel_report_export__file_check_sum_algorithm_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="algorithm"/>
     </changeSet>
 </databaseChangeLog>

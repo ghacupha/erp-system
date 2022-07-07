@@ -193,6 +193,15 @@ public class ExcelReportExportQueryService extends QueryService<ExcelReportExpor
                         )
                     );
             }
+            if (criteria.getFileCheckSumAlgorithmId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getFileCheckSumAlgorithmId(),
+                            root -> root.join(ExcelReportExport_.fileCheckSumAlgorithm, JoinType.LEFT).get(Algorithm_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

@@ -54,6 +54,8 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
 
     private LongFilter reportDesignId;
 
+    private LongFilter fileCheckSumAlgorithmId;
+
     private Boolean distinct;
 
     public ExcelReportExportCriteria() {}
@@ -73,6 +75,7 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
         this.departmentId = other.departmentId == null ? null : other.departmentId.copy();
         this.systemModuleId = other.systemModuleId == null ? null : other.systemModuleId.copy();
         this.reportDesignId = other.reportDesignId == null ? null : other.reportDesignId.copy();
+        this.fileCheckSumAlgorithmId = other.fileCheckSumAlgorithmId == null ? null : other.fileCheckSumAlgorithmId.copy();
         this.distinct = other.distinct;
     }
 
@@ -291,6 +294,21 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
         this.reportDesignId = reportDesignId;
     }
 
+    public LongFilter getFileCheckSumAlgorithmId() {
+        return fileCheckSumAlgorithmId;
+    }
+
+    public LongFilter fileCheckSumAlgorithmId() {
+        if (fileCheckSumAlgorithmId == null) {
+            fileCheckSumAlgorithmId = new LongFilter();
+        }
+        return fileCheckSumAlgorithmId;
+    }
+
+    public void setFileCheckSumAlgorithmId(LongFilter fileCheckSumAlgorithmId) {
+        this.fileCheckSumAlgorithmId = fileCheckSumAlgorithmId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -323,6 +341,7 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
             Objects.equals(departmentId, that.departmentId) &&
             Objects.equals(systemModuleId, that.systemModuleId) &&
             Objects.equals(reportDesignId, that.reportDesignId) &&
+            Objects.equals(fileCheckSumAlgorithmId, that.fileCheckSumAlgorithmId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -344,6 +363,7 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
             departmentId,
             systemModuleId,
             reportDesignId,
+            fileCheckSumAlgorithmId,
             distinct
         );
     }
@@ -366,6 +386,7 @@ public class ExcelReportExportCriteria implements Serializable, Criteria {
             (departmentId != null ? "departmentId=" + departmentId + ", " : "") +
             (systemModuleId != null ? "systemModuleId=" + systemModuleId + ", " : "") +
             (reportDesignId != null ? "reportDesignId=" + reportDesignId + ", " : "") +
+            (fileCheckSumAlgorithmId != null ? "fileCheckSumAlgorithmId=" + fileCheckSumAlgorithmId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
