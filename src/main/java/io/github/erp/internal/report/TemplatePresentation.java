@@ -70,7 +70,7 @@ public class TemplatePresentation implements ReportTemplatePresentation<ReportTe
             );
         } else {
             fileStorageService.save(
-                new PDFMultipartFile(
+                new JRXMLMultipartFile(
                     reportTemplate.getReportFile(),
                     reportsProperties.getReportsDirectory(),
                     reportTemplate.getCatalogueNumber().concat(".jrxml")
