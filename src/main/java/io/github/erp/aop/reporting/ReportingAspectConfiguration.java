@@ -17,15 +17,16 @@ package io.github.erp.aop.reporting;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.report.repository.InternalProcessStatusRepository;
+import io.github.erp.internal.report.repository.InternalReportStatusRepository;
 import io.github.erp.internal.report.ReportAssemblyService;
 import io.github.erp.internal.report.ReportAttachmentService;
-import io.github.erp.service.PdfReportRequisitionService;
-import io.github.erp.service.ReportContentTypeService;
-import io.github.erp.service.ReportRequisitionService;
-import io.github.erp.service.XlsxReportRequisitionService;
+import io.github.erp.service.*;
+import io.github.erp.service.dto.ExcelReportExportDTO;
 import io.github.erp.service.dto.PdfReportRequisitionDTO;
 import io.github.erp.service.dto.ReportRequisitionDTO;
 import io.github.erp.service.dto.XlsxReportRequisitionDTO;
+import io.github.erp.service.mapper.ReportStatusMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -57,6 +58,21 @@ public class ReportingAspectConfiguration {
     @Autowired
     private ReportAttachmentService<ReportRequisitionDTO> reportAttachmentService;
 
+    @Autowired
+    private ReportStatusMapper reportStatusMapper;
+
+    @Autowired
+    private InternalProcessStatusRepository processStatusRepository;
+
+    @Autowired
+    private InternalReportStatusRepository reportStatusRepository;
+
+    @Autowired
+    private ExcelReportExportService excelReportExportService;
+
+    @Autowired
+    private ReportAssemblyService<ExcelReportExportDTO> excelReportExportAssempblyService;
+
     @Bean
     public ReportRequisitionInterceptor reportRequisitionInterceptor() {
 
@@ -78,5 +94,10 @@ public class ReportingAspectConfiguration {
     @Bean
     public ReportRequisitionAttachmentInterceptor reportRequisitionAttachmentInterceptor() {
         return new ReportRequisitionAttachmentInterceptor(reportAttachmentService);
+    }
+
+    @Bean
+    public ExcelReportExportInterceptor excelReportExportInterceptor() {
+        return new ExcelReportExportInterceptor(reportStatusMapper, processStatusRepository, reportStatusRepository, excelReportExportService, excelReportExportAssempblyService);
     }
 }
