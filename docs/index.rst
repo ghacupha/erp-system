@@ -1,7 +1,7 @@
 Welcome to ERP-System documentation!
 ===================================
 
-**ERP System** (/lu'make/) is a java app for accountants
+**ERP System** is a java app for accountants business admins
 that maintains base information used for analysis and reporting, the kind which is not yet supported
 on Quickbooks or typical business core apps.
 
@@ -19,3 +19,4 @@ Contents
 
    usage
    api
+   installation
