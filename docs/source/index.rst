@@ -1,4 +1,4 @@
-Welcome to ERP-System documentation!
+ERP-System documentation!
 ===================================
 
 **ERP System** is a java app for accountants business admins
