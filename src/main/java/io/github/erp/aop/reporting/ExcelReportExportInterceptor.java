@@ -56,8 +56,6 @@ public class ExcelReportExportInterceptor {
 
         log.info("Report requisition with id: {} has been registered, with entity id # {} commencing report creation sequence...", reportId, entityId);
 
-        acceptReportStatus(reportDTO);
-
         reportDTO.setReportStatus(reportStatusMapper.toDto(acceptReportStatus(reportDTO)));
 
         createReport(reportDTO);
