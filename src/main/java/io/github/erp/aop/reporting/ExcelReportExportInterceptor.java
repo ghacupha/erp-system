@@ -94,7 +94,6 @@ public class ExcelReportExportInterceptor {
     }
 
     @Async
-    @SneakyThrows
     void updateReport(ExcelReportExportDTO report) {
 
         log.info("Updating report status for xlsx report ID {}", report.getId());
@@ -102,9 +101,13 @@ public class ExcelReportExportInterceptor {
         long start = System.currentTimeMillis();
 
         reportRequisitionService.findOne(report.getId()).ifPresent(found -> {
-            // TODO Create status
-            // Save the status in the report
-            ReportStatusDTO rs = reportStatusMapper.toDto(reportStatusRepository.save(createSuccessReportStatus(found)));
+            ReportStatusDTO rs = null;
+
+            try {
+                rs = reportStatusMapper.toDto(reportStatusRepository.save(createSuccessReportStatus(found)));
+            } catch (Exception e) {
+                throw new RuntimeException("Exception encountered. Refer to reporting manual.", e);
+            }
 
             found.setReportStatus(rs);
             reportRequisitionService.save(found);

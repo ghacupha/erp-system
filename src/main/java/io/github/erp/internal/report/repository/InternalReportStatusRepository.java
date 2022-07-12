@@ -22,6 +22,8 @@ import io.github.erp.domain.ReportStatus;
 import io.github.erp.repository.ReportStatusRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -30,5 +32,9 @@ import java.util.UUID;
 @Repository
 public interface InternalReportStatusRepository extends ReportStatusRepository, JpaRepository<ReportStatus, Long>, JpaSpecificationExecutor<ReportStatus> {
 
-    Optional<ReportStatus> findReportStatusByReportIdEquals(UUID reportId);
+    @Query("select reportStatus " +
+        "from ReportStatus reportStatus " +
+        "left join fetch reportStatus.placeholders " +
+        "where reportStatus.reportId =:reportId")
+    Optional<ReportStatus> findReportStatusByReportIdEquals(@Param("reportId") UUID reportId);
 }
