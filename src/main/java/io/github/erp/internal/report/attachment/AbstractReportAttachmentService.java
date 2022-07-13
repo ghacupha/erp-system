@@ -50,6 +50,7 @@ public class AbstractReportAttachmentService<DTO> {
 
         log.debug("Attaching report retrieved to DTO designation : {} ", one.getReportName());
         one.setReportAttachment(reportAttachment);
+        one.setChecksum(fileStorageService.calculateMD5CheckSum(reportFileName));
 
         log.debug("Report attachment completed successfully in {} milliseconds; sending attached report to the client  ", System.currentTimeMillis() - startup);
         return one;
