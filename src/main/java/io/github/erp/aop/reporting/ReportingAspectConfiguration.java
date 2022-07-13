@@ -20,7 +20,7 @@ package io.github.erp.aop.reporting;
 import io.github.erp.internal.report.repository.InternalProcessStatusRepository;
 import io.github.erp.internal.report.repository.InternalReportStatusRepository;
 import io.github.erp.internal.report.ReportAssemblyService;
-import io.github.erp.internal.report.ReportAttachmentService;
+import io.github.erp.internal.report.attachment.ReportAttachmentService;
 import io.github.erp.service.*;
 import io.github.erp.service.dto.ExcelReportExportDTO;
 import io.github.erp.service.dto.PdfReportRequisitionDTO;
@@ -71,7 +71,10 @@ public class ReportingAspectConfiguration {
     private ExcelReportExportService excelReportExportService;
 
     @Autowired
-    private ReportAssemblyService<ExcelReportExportDTO> excelReportExportAssempblyService;
+    private ReportAssemblyService<ExcelReportExportDTO> excelReportExportAssemblyService;
+
+    @Autowired
+    private ReportAttachmentService<ExcelReportExportDTO> excelReportExportReportAttachmentService;
 
     @Bean
     public ReportRequisitionInterceptor reportRequisitionInterceptor() {
@@ -98,6 +101,11 @@ public class ReportingAspectConfiguration {
 
     @Bean
     public ExcelReportExportInterceptor excelReportExportInterceptor() {
-        return new ExcelReportExportInterceptor(reportStatusMapper, processStatusRepository, reportStatusRepository, excelReportExportService, excelReportExportAssempblyService);
+        return new ExcelReportExportInterceptor(reportStatusMapper, processStatusRepository, reportStatusRepository, excelReportExportService, excelReportExportAssemblyService);
+    }
+
+    @Bean
+    public ExcelReportExportAttachmentInterceptor excelReportExportAttachmentInterceptor() {
+        return new ExcelReportExportAttachmentInterceptor(excelReportExportReportAttachmentService);
     }
 }

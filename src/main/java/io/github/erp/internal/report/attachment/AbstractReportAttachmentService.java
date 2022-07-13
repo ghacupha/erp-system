@@ -1,4 +1,4 @@
-package io.github.erp.internal.report;
+package io.github.erp.internal.report.attachment;
 
 /*-
  * Erp System - Mark II No 17 (Baruch Series)

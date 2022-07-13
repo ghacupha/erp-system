@@ -19,7 +19,7 @@ package io.github.erp.erp.resources;
  */
 import io.github.erp.internal.model.AttachedPdfReportRequisitionDTO;
 import io.github.erp.internal.model.mapping.AttachedPdfReportRequisitionDTOMapping;
-import io.github.erp.internal.report.ReportAttachmentService;
+import io.github.erp.internal.report.attachment.ReportAttachmentService;
 import io.github.erp.repository.PdfReportRequisitionRepository;
 import io.github.erp.service.PdfReportRequisitionQueryService;
 import io.github.erp.service.PdfReportRequisitionService;
