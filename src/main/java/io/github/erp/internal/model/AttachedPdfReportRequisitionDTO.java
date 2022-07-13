@@ -18,7 +18,7 @@ package io.github.erp.internal.model;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.enumeration.ReportStatusTypes;
-import io.github.erp.internal.report.AttachedReport;
+import io.github.erp.internal.report.attachment.AttachedReport;
 import io.github.erp.service.dto.PdfReportRequisitionDTO;
 import io.github.erp.service.dto.PlaceholderDTO;
 import io.github.erp.service.dto.ReportTemplateDTO;

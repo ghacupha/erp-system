@@ -1,4 +1,4 @@
-package io.github.erp.internal.report;
+package io.github.erp.internal.report.attachment;
 
 /*-
  * Erp System - Mark II No 17 (Baruch Series)
@@ -17,10 +17,15 @@ package io.github.erp.internal.report;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.internal.model.AttachedXlsxReportRequisitionDTO;
-import lombok.SneakyThrows;
 
-public interface AttachedRepoprtService<AttachedXlsxReportRequisitionDTO> {
-    @SneakyThrows
-    AttachedXlsxReportRequisitionDTO attachReport(AttachedXlsxReportRequisitionDTO one);
+/**
+ * This service takes a DTO and adds to the DTO the appropriate bytes-stream of the file from the
+ * file-system and also the calculated checksum of the same file using the appropriate
+ * algorithm
+ *
+ * @param <RR>
+ */
+public interface ReportAttachmentService<RR> {
+
+    RR attachReport(RR one);
 }

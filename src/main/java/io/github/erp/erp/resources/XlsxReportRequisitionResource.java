@@ -19,7 +19,7 @@ package io.github.erp.erp.resources;
  */
 import io.github.erp.internal.model.AttachedXlsxReportRequisitionDTO;
 import io.github.erp.internal.model.mapping.AttachedXlsxReportRequisitionDTOMapping;
-import io.github.erp.internal.report.ReportAttachmentService;
+import io.github.erp.internal.report.attachment.ReportAttachmentService;
 import io.github.erp.repository.XlsxReportRequisitionRepository;
 import io.github.erp.service.XlsxReportRequisitionQueryService;
 import io.github.erp.service.XlsxReportRequisitionService;
