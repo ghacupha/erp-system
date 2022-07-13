@@ -27,7 +27,17 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AttachedExcelReportExportDTO implements AttachedReport<ExcelReportExportDTO> {
+public class AttachedExcelReportExportDTO implements AttachedReport<ExcelReportExportDTO>, HasChecksum{
+
+    @Override
+    public void setChecksum(String fileChecksum) {
+        this.fileCheckSum = fileChecksum;
+    }
+
+    @Override
+    public String getFileChecksum() {
+        return this.fileCheckSum;
+    }
 
     @Override
     public AttachedReport<ExcelReportExportDTO> setReportAttachment(byte[] reportResource) {

@@ -37,7 +37,19 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AttachedXlsxReportRequisitionDTO implements AttachedReport<XlsxReportRequisitionDTO> {
+public class AttachedXlsxReportRequisitionDTO implements AttachedReport<XlsxReportRequisitionDTO>, HasChecksum {
+
+    @Override
+    public void setChecksum(String fileChecksum) {
+        this.fileCheckSum = fileChecksum;
+    }
+
+    @Override
+    public String getFileChecksum() {
+        return this.fileCheckSum;
+    }
+
+    private String fileCheckSum;
 
     private Long id;
 
