@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark II No 17 (Baruch Series)
+ * Erp System - Mark II No 19 (Baruch Series)
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import java.util.List;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.MappingTarget;

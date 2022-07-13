@@ -10,7 +10,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Erp System</name>
-    <description>Mark II No 17 (Baruch Series)</description>
+    <description>Mark II No 19 (Baruch Series)</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->
