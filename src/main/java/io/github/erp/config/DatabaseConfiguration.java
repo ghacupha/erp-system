@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import tech.jhipster.config.JHipsterConstants;
 
 @Configuration
-@EnableJpaRepositories({ "io.github.erp.repository", "io.github.erp.internal.report" })
+@EnableJpaRepositories({ "io.github.erp.repository", "io.github.erp.internal.repository" })
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement
 @EnableElasticsearchRepositories("io.github.erp.repository.search")

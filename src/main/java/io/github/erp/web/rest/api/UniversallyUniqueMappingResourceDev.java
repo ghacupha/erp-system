@@ -25,6 +25,7 @@ import io.github.erp.service.dto.UniversallyUniqueMappingDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -65,7 +66,7 @@ public class UniversallyUniqueMappingResourceDev {
     private final UniversallyUniqueMappingQueryService universallyUniqueMappingQueryService;
 
     public UniversallyUniqueMappingResourceDev(
-        UniversallyUniqueMappingService universallyUniqueMappingService,
+        @Qualifier("internalUniversallyUniqueMappingService") UniversallyUniqueMappingService universallyUniqueMappingService,
         UniversallyUniqueMappingRepository universallyUniqueMappingRepository,
         UniversallyUniqueMappingQueryService universallyUniqueMappingQueryService
     ) {
