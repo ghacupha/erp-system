@@ -18,8 +18,8 @@ package io.github.erp.aop.reporting;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.ReportStatus;
-import io.github.erp.internal.report.repository.InternalProcessStatusRepository;
-import io.github.erp.internal.report.repository.InternalReportStatusRepository;
+import io.github.erp.internal.repository.InternalProcessStatusRepository;
+import io.github.erp.internal.repository.InternalReportStatusRepository;
 import io.github.erp.internal.report.ReportAssemblyService;
 import io.github.erp.service.ExcelReportExportService;
 import io.github.erp.service.dto.ExcelReportExportDTO;

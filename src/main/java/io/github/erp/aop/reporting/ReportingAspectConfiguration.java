@@ -17,8 +17,8 @@ package io.github.erp.aop.reporting;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.internal.report.repository.InternalProcessStatusRepository;
-import io.github.erp.internal.report.repository.InternalReportStatusRepository;
+import io.github.erp.internal.repository.InternalProcessStatusRepository;
+import io.github.erp.internal.repository.InternalReportStatusRepository;
 import io.github.erp.internal.report.ReportAssemblyService;
 import io.github.erp.internal.report.attachment.ReportAttachmentService;
 import io.github.erp.service.*;
