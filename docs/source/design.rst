@@ -14,6 +14,7 @@ value whenever we are about to create a settlement entity, or some "preferred de
 
 ..code:
 
+   ``
     updatePreferredDepartment(): void {
         // TODO Replace with entity filters
         this.universallyUniqueMappingService.search({ page: 0, size: 0, sort: [], query: "globallyPreferredReportDesignDepartmentDealer"})
@@ -30,3 +31,4 @@ value whenever we are about to create a settlement entity, or some "preferred de
             }
           });
     }
+    ``
