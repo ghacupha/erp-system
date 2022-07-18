@@ -60,18 +60,14 @@ public class UniversallyUniqueMappingResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final InternalUniversallyUniqueMappingService universallyUniqueMappingService;
-
     private final UniversallyUniqueMappingRepository universallyUniqueMappingRepository;
 
     private final UniversallyUniqueMappingSearchRepository universallyUniqueMappingSearchRepository;
 
     public UniversallyUniqueMappingResource(
-        @Qualifier("internalUniversallyUniqueMappingService") InternalUniversallyUniqueMappingService universallyUniqueMappingService,
         UniversallyUniqueMappingRepository universallyUniqueMappingRepository,
         UniversallyUniqueMappingSearchRepository universallyUniqueMappingSearchRepository
     ) {
-        this.universallyUniqueMappingService = universallyUniqueMappingService;
         this.universallyUniqueMappingRepository = universallyUniqueMappingRepository;
         this.universallyUniqueMappingSearchRepository = universallyUniqueMappingSearchRepository;
     }
@@ -212,19 +208,6 @@ public class UniversallyUniqueMappingResource {
         log.debug("REST request to get UniversallyUniqueMapping : {}", id);
         Optional<UniversallyUniqueMapping> universallyUniqueMapping = universallyUniqueMappingRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(universallyUniqueMapping);
-    }
-
-    /**
-     * {@code GET  /universally-unique-mappings/:universalKey} : get the "mappedValue" of universallyUniqueMapping given the "universalKey".
-     *
-     * @param universalKey the key of the universallyUniqueMapping value to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the mappedValue, or with status {@code 404 (Not Found)}.
-     */
-    @GetMapping("/universally-unique-mappings/{universalKey}")
-    public ResponseEntity<String> getUniversalMapping(@PathVariable String universalKey) {
-        log.debug("REST request to get UniversallyUniqueMapping : {}", universalKey);
-        Optional<String> uMapping = universallyUniqueMappingService.getMapping(universalKey);
-        return ResponseUtil.wrapOrNotFound(uMapping);
     }
 
     /**
