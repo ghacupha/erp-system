@@ -1,5 +1,6 @@
 package io.github.erp.internal.service;
 
+import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.internal.repository.InternalUniversallyUniqueMappingRepository;
 import io.github.erp.repository.UniversallyUniqueMappingRepository;
 import io.github.erp.repository.search.UniversallyUniqueMappingSearchRepository;
@@ -30,10 +31,10 @@ public class InternalUniversallyUniqueMappingServiceImpl
     }
 
     @Override
-    public Optional<String> getMapping(String universalKey) {
-        AtomicReference<String> val = new AtomicReference<>("");
+    public Optional<UniversallyUniqueMapping> getMapping(String universalKey) {
+        AtomicReference<UniversallyUniqueMapping> val = new AtomicReference<>();
         internalUUMappingRepository.findByUniversalKeyEquals(universalKey).ifPresentOrElse(
-            map -> { val.set(map.getMappedValue()); },
+            val::set,
             () -> {throw new RuntimeException("Sorry, couldn't find mapping for " + universalKey + " Are sure you that configured?"); }
         );
         return Optional.of(val.get());

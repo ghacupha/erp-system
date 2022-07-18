@@ -1,5 +1,6 @@
 package io.github.erp.internal.service;
 
+import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.service.UniversallyUniqueMappingService;
 
 import java.util.Optional;
@@ -19,5 +20,5 @@ public interface InternalUniversallyUniqueMappingService extends UniversallyUniq
      *
      * @return the value mapped to that key
      */
-    Optional<String> getMapping(String universalKey);
+    Optional<UniversallyUniqueMapping> getMapping(String universalKey);
 }
