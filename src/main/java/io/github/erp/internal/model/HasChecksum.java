@@ -1,7 +1,7 @@
 package io.github.erp.internal.model;
 
 /*-
- * Erp System - Mark II No 19 (Baruch Series)
+ * Erp System - Mark II No 20 (Baruch Series)
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.internal.model;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 /**
  * This interface serves an object that tracks a checksum of some kind,
  * without dictating the algorithm for the calculation or the purpose. The
