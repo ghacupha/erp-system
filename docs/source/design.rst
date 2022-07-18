@@ -15,7 +15,7 @@ The implementation is a simple repository that runs a findByKey query and return
 We could for instance use the key to store a value like ``globallyPreferredIso4217CurrencyCode`` and seek that
 value whenever we are about to create a settlement entity, or some "preferred department...
 
-    ```
+   .. code-block::
         updatePreferredDepartment(): void {
             // TODO Replace with entity filters
             this.universallyUniqueMappingService.search({ page: 0, size: 0, sort: [], query: "globallyPreferredReportDesignDepartmentDealer"})
@@ -32,4 +32,3 @@ value whenever we are about to create a settlement entity, or some "preferred de
                 }
               });
         }
-    ```
