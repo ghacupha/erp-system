@@ -1,5 +1,6 @@
 package io.github.erp.erp.resources;
 
+import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.internal.service.InternalUniversallyUniqueMappingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,9 +37,9 @@ public class ConfigurationMappingResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the mappedValue, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/universally-unique-mappings/{universalKey}")
-    public ResponseEntity<String> getUniversalMapping(@PathVariable String universalKey) {
+    public ResponseEntity<UniversallyUniqueMapping> getUniversalMapping(@PathVariable String universalKey) {
         log.debug("REST request to get UniversallyUniqueMapping : {}", universalKey);
-        Optional<String> uMapping = universallyUniqueMappingService.getMapping(universalKey);
+        Optional<UniversallyUniqueMapping> uMapping = universallyUniqueMappingService.getMapping(universalKey);
         return ResponseUtil.wrapOrNotFound(uMapping);
     }
 }
