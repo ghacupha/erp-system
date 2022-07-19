@@ -21,7 +21,7 @@
 version: '3.3'
 services:
   erp-system-server:
-    image: ghacupha/erp-system:0.0.1
+    image: ghacupha/erp-system:0.0.2-SNAPSHOT
     volumes:
       - ./logs/:/logs/
       - ./reports-directory/:/reports-directory/
@@ -85,6 +85,6 @@ services:
       - 'discovery.type=single-node'
 
   erp-client-web:
-    image: ghacupha/erp-client:0.0.1-SNAPSHOT
+    image: ghacupha/erp-client:0.0.2-SNAPSHOT
     ports:
       - "8981:80"
