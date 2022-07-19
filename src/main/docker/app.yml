@@ -85,6 +85,6 @@ services:
       - 'discovery.type=single-node'
 
   erp-client-web:
-    image: ghacupha/erp-client:0.0.2-SNAPSHOT
+    image: ghacupha/erp-client:0.0.3
     ports:
       - "8981:80"
