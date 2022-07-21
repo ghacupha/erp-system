@@ -1,15 +1,14 @@
 .. include:: ../README.rst
 
-Welcome to Lumache's documentation!
+Welcome to ERP-SYSTEM documentation!
 ===================================
 
-**Lumache** (/lu'make/) is a Python library for cooks and food lovers
-that creates recipes mixing random ingredients.
-It pulls data from the `Open Food Facts database <https://world.openfoodfacts.org/>`_
-and offers a *simple* and *intuitive* API.
+**ERP-SYSTEM** is a Java accountants and accounts admins
+that records the kind of financial information that you don't normally have on a
+typical accounts management app.
 
 Check out the :doc:`usage` section for further information, including
-how to :ref:`installation` the project.
+how to :ref:`install` the project.
 
 .. note::
 
@@ -23,3 +22,4 @@ Contents
    Home <self>
    usage
    api
+   milestones
