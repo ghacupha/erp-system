@@ -29,6 +29,6 @@ value whenever we are about to create a settlement entity, or some "preferred de
                       });
                   }
                 }
-              });
+              })
         }
    ```
