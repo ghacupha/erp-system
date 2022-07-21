@@ -524,6 +524,7 @@
                 <configuration>
                     <excludes>
                         <exclude>.idea/**</exclude>
+                        <exclude>docs/**</exclude>
                         <exclude>.jhipster/**</exclude>
                         <exclude>node/**</exclude>
                         <exclude>node_modules/**</exclude>
