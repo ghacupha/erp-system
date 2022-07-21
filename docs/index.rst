@@ -3,7 +3,7 @@
 Welcome to ERP-SYSTEM documentation!
 ===================================
 
-**ERP-SYSTEM** is a Java accountants and accounts admins
+**ERP-SYSTEM** is a Java application for accountants and accounts admins
 that records the kind of financial information that you don't normally have on a
 typical accounts management app.
 
