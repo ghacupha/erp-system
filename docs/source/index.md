@@ -18,7 +18,6 @@ This project is under active development.
 Contents
 --------
 
- - [usage](usage)
  - [api](api)
  - [installation](installation)
  - [design](design)
