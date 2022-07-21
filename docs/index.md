@@ -4,7 +4,7 @@
 ERP-System documentation
 ===================================
 
-**ERP System** is a java app for accountants business admins
+**ERP System** is a java app for accountants and business admins
 that maintains base information used for analysis and reporting, and the kind of day to day
 data that is not captured on Quickbooks or typical business core apps.
 
