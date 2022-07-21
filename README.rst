@@ -1,0 +1,295 @@
+ERP System
+==========
+
+This application was generated using JHipster 7.3.1, you can find
+documentation and help at
+https://www.jhipster.tech/documentation-archive/v7.3.1.
+
+Development
+-----------
+
+To start your application in the dev profile, run:
+
+::
+
+   ./mvnw
+
+For further instructions on how to develop with JHipster, have a look at
+`Using JHipster in
+development <https://www.jhipster.tech/documentation-archive/v7.3.1/development/>`__.
+
+Environment
+-----------
+
+A couple of environment variables need to be setup for any of the
+containers or the source code itself to run. At least the following are
+needed at a minimum:
+
+-  LOCAL_PG_SERVER - String for the postres server in the local
+   environment
+-  ERP_SYSTEM_PROD_DB - String designation of the production DB
+-  SPRING_DATA_JEST_URI - String designation of the search engine
+   address
+-  ERP_SYSTEM_DEV_DB - String designation of the development DB
+-  ERP_SYSTEM_PORT - String designation of the server port. Thee client
+   will be looking for 8980
+-  PG_DATABASE_DEV_USER - String designation of the development db login
+   credentials
+-  PG_DATABASE_PROD_USER - String designation of the production db login
+   credentials
+-  PG_DATABASE_DEV_PASSWORD - String designation of the development db
+   login password credentials
+-  PG_DATABASE_PROD_PASSWORD - String designation of the production db
+   login password credentials
+-  ERP_SYSTEM_DEV_PORT - String designation of the development db login
+   credentials
+-  ERP_SYSTEM_PROD_PORT - String designation of the (development) server
+   port. Thee client will be looking for 8980
+-  ERP_SYSTEM_PROD_MAIL_BASE_URL
+-  ERP_SYSTEM_DEV_MAIL_BASE_URL
+-  SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+-  UPLOADS_SIZE - String designation of the chunk size of the Excel
+   processing system
+
+JHipster Control Center
+~~~~~~~~~~~~~~~~~~~~~~~
+
+JHipster Control Center can help you manage and control your
+application(s). You can start a local control center server (accessible
+on http://localhost:7419) with:
+
+::
+
+   docker-compose -f src/main/docker/jhipster-control-center.yml up
+
+Building for production
+-----------------------
+
+Packaging as jar
+~~~~~~~~~~~~~~~~
+
+To build the final jar and optimize the erpSystem application for
+production, run:
+
+::
+
+   ./mvnw -Pprod clean verify
+
+To ensure everything worked, run:
+
+::
+
+   java -jar target/*.jar
+
+Refer to `Using JHipster in
+production <https://www.jhipster.tech/documentation-archive/v7.3.1/production/>`__
+for more details.
+
+Packaging as war
+~~~~~~~~~~~~~~~~
+
+To package your application as a war in order to deploy it to an
+application server, run:
+
+::
+
+   ./mvnw -Pprod,war clean verify
+
+Testing
+-------
+
+To launch your application’s tests, run:
+
+::
+
+   ./mvnw verify
+
+Other tests
+~~~~~~~~~~~
+
+Performance tests are run by `Gatling <https://gatling.io/>`__ and
+written in Scala. They’re located in
+`src/test/gatling <src/test/gatling>`__.
+
+To use those tests, you must install Gatling from https://gatling.io/.
+
+For more information, refer to the `Running tests
+page <https://www.jhipster.tech/documentation-archive/v7.3.1/running-tests/>`__.
+
+Code quality
+~~~~~~~~~~~~
+
+Sonar is used to analyse code quality. You can start a local Sonar
+server (accessible on http://localhost:9001) with:
+
+::
+
+   docker-compose -f src/main/docker/sonar.yml up -d
+
+Note: we have turned off authentication in
+`src/main/docker/sonar.yml <src/main/docker/sonar.yml>`__ for out of the
+box experience while trying out SonarQube, for real use cases turn it
+back on.
+
+You can run a Sonar analysis with using the
+`sonar-scanner <https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner>`__
+or by using the maven plugin.
+
+Then, run a Sonar analysis:
+
+::
+
+   ./mvnw -Pprod clean verify sonar:sonar
+
+If you need to re-run the Sonar phase, please be sure to specify at
+least the ``initialize`` phase since Sonar properties are loaded from
+the sonar-project.properties file.
+
+::
+
+   ./mvnw initialize sonar:sonar
+
+For more information, refer to the `Code quality
+page <https://www.jhipster.tech/documentation-archive/v7.3.1/code-quality/>`__.
+
+Using Docker to simplify development (optional)
+-----------------------------------------------
+
+You can use Docker to improve your JHipster development experience. A
+number of docker-compose configuration are available in the
+`src/main/docker <src/main/docker>`__ folder to launch required third
+party services.
+
+For example, to start a postgresql database in a docker container, run:
+
+::
+
+   docker-compose -f src/main/docker/postgresql.yml up -d
+
+To stop it and remove the container, run:
+
+::
+
+   docker-compose -f src/main/docker/postgresql.yml down
+
+You can also fully dockerize your application and all the services that
+it depends on. To achieve this, first build a docker image of your app
+by running:
+
+::
+
+   ./mvnw -Pprod verify jib:dockerBuild
+
+Then run:
+
+::
+
+   docker-compose -f src/main/docker/app.yml up -d
+
+For more information refer to `Using Docker and
+Docker-Compose <https://www.jhipster.tech/documentation-archive/v7.3.1/docker-compose>`__,
+this page also contains information on the docker-compose sub-generator
+(``jhipster docker-compose``), which is able to generate docker
+configurations for one or several JHipster applications.
+
+Continuous Integration (optional)
+---------------------------------
+
+To configure CI for your project, run the ci-cd sub-generator
+(``jhipster ci-cd``), this will let you generate configuration files for
+a number of Continuous Integration systems. Consult the `Setting up
+Continuous
+Integration <https://www.jhipster.tech/documentation-archive/v7.3.1/setting-up-ci/>`__
+page for more information.
+
+Artaxerxes Series?
+------------------
+
+Well the idea of breaking down versions into series sounds corny, but
+it’s sort of a workaround for versioning the docker images. I figured, I
+do not have a lot of resources to keep up with semantic versioning
+especially because both the license headers which are important to me,
+and the container versions read the code version from the project object
+model (pom) file. This means I cannot just start changing the versions
+because each change would likely produce an additional partition in the
+docker repository and there can only be so much free space, and soon
+would need to start paying that service. Since this is not a project I
+get paid for, “free = good” and so with every release we overwrite the
+previous version but still maintain the “0.0.1-SNAPSHOT” tag. So
+versioning is not important here, but I still needed a way to mark
+progress and milestone achievements and then I got my inspiration from
+Matrix (the 1999 movie). I’ll give you some time to roll your eyes…
+
+Are you done? Good welcome back. So you recall that scene as Neo is
+introduced, by Morpheus to the crew of the ship Nebuchadnezzar, and
+there’s this inscription on the hull of the ship “Mark III No 11
+Nebuchadnezzar Made in USA YEAR 2060”. I figured of course, if someone
+was going to run a project as ambitious as a hovercraft that size, a
+vehicle that completely denies the existence of gravity, carry the
+weight of that engine, the weaponry, the ammunition, food, creature
+comforts for the crew, communication equipment and still fly at that
+speed, you are going to need to be able to make money from the project
+in order to fuel the production of the product. That is you will need to
+be able to see the product hit the market, at the earliest opportunity,
+while still creating the product and the goal is not perfection, and
+there’s probably no end goal except to make it better. What there is
+though, is this short list of MVP specifications which once achieved you
+start marketing the product while the production and even research is
+still on going. So you don’t wait to finish the product, you use it as
+soon as you can while continuing the development. It’s a
+research-in-motion kind of thing. Of course the trilogy likely uses that
+production code to hint at (I believe) the idea of Neo being “the One”,
+because if you look at that particular verse it says (Mark 3:11) “you
+are the Son of God”, and Neo in these movies, is a savior whose gifts
+enable him to achieve the overarching goal of saving humanity. As for
+me, I am (AFAIK) to my knowledge the user of ERP and because of resource
+and time constraints have developed a non-finished product which I use
+in office as I develop better techniques, carry out more research and
+produce both client and server images with better enhanced features in
+record keeping and reporting. So why did I use the title Artaxerxes?
+
+Well the Achaemenid people were known to be lovers of records, it is a
+generally accepted historical opinion that distinguishes them from their
+predecessors. For instance in the book of Esther(the Bible again) you
+see the Queen has been fasting and interceding for the salvation of the
+people of Israel. Unbeknownst to them Haman the main antagonist in the
+book is plotting the death of Mordecai. Am imagining a conversation in
+heaven as the powers that be discussed how they were going to save
+Mordecai and disrupt Haman’s plans, and an idea comes up: let’s give the
+King a sleepless night, and we know how much he loves his records.
+Right? He will likely start going through the records and in them will
+find the story of Mordecai, how this servant had uncovered another plot
+to kill the king and had saved the king’s life from those who were
+plotting evil against him and in the end, no reward was given to the
+faithful servant. The king might then be prompted to do something in the
+servant’s favor, knowing that he owed him one, making it impossible, and
+if not, politically inexpedient for Haman to hang to death the same man
+for whatever reason.Of course, you know how that unfolds (if not, it’s a
+nice story, read it), because the king found himself sleepless at night,
+and sure enough he calls his servants to have them read through records.
+If you don’t find that attachment to records odd, ask yourself this:
+when was the last time that you lacked sleep in the night and so you
+decided to go get some business records for entertainment (or whatever)?
+Not many will answer in the affirmative, and I will tell you why. Not
+many will you find keeping logs of their transactions, receipts,
+contracts and so on and so forth. When one of your appliances break
+down, you find you don’t even know where you left the warranty document.
+If you do keep such records, how many sleepless nights did you find
+yourself perusing them for whatever reason as opposed to tv, Facebook,
+Twitter; most will not even leave the bed. So if you were king instead,
+Mordecai would hang despite all the good he’s done for you. So that’s
+what it about, a desire to keep track of my personal day-to-day
+transactions at the office and have a way of recalling that information
+quickly when needed. So you will find all kinds of entities, for all my
+various concerns in my own work. This milestone describes a system with
+the ability to do that, and the flexibility to fashion reports as
+desired and have them produced quickly and as needed. We are able to
+define reports and run them without recompiling the code, ensure
+security of records and access them at any time, thanks to the search
+functionality (by the way big ups to Elasticsearch on that one!) Once
+that basic need is fulfilled, the milestone is complete.
+
+Oh, and that king was called Artaxerxes.
+
+.. |Documentation Status| image:: vertopal_5b12338291164d45a75f3769f2c2dab5/953c326c10eb69335c02e3ea0216a2929daa276f.svg
+   :target: https://erp-system.readthedocs.io/en/latest/?badge=latest
