@@ -8,16 +8,18 @@ Many of the system's modules are designed to update information that eventually 
 assets. Prepayments is one of those as you might realize some assets can be recognised by a posting
 that credits a prepayment account and debiting the corresponding asset account.
 
-.. note::
+::
    DR. Corresponding Asset A/c
+
    CR. Prepayment A/C
 
 This necessitates setup of full blown prepayments accounting and as is commonly intended prepayment
 accounts are usually prepaid expenses rather than prepaid assets, so ever so often the organization
 needs to effect amortization transactions such as the following:
 
-.. note::
+::
    DR. Expense A/C
+   
    CR. Prepayment A/C
 
 The basic philosophy of amortization
@@ -33,7 +35,7 @@ can satisfy themselves that the account has not been used to hide assets (most t
 for a period of more than a year, you are dealing with an asset), or reduce the expense figure reported
 for a given period.
 
-.. note::
+::
     Some thrift members of our beloved profession have been known to postpone expenses
     by simply posting them as prepayments, therefore moving those to the assets on the balance sheet rather
     than the dreaded expense lines on the profit and loss, in order to amortize the same in some preferred or
