@@ -1,27 +1,11 @@
 package io.github.erp.domain;
 
-/*-
- * Erp System - Mark II No 20 (Baruch Series)
- * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -60,6 +44,9 @@ public class PrepaymentAccount implements Serializable {
 
     @Column(name = "prepayment_amount", precision = 21, scale = 2)
     private BigDecimal prepaymentAmount;
+
+    @Column(name = "guid")
+    private UUID guid;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
@@ -109,6 +96,25 @@ public class PrepaymentAccount implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_prepayment_account__general_parameters",
+        joinColumns = @JoinColumn(name = "prepayment_account_id"),
+        inverseJoinColumns = @JoinColumn(name = "general_parameters_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<UniversallyUniqueMapping> generalParameters = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_prepayment_account__prepayment_parameters",
+        joinColumns = @JoinColumn(name = "prepayment_account_id"),
+        inverseJoinColumns = @JoinColumn(name = "prepayment_parameters_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    private Set<PrepaymentMapping> prepaymentParameters = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -175,6 +181,19 @@ public class PrepaymentAccount implements Serializable {
 
     public void setPrepaymentAmount(BigDecimal prepaymentAmount) {
         this.prepaymentAmount = prepaymentAmount;
+    }
+
+    public UUID getGuid() {
+        return this.guid;
+    }
+
+    public PrepaymentAccount guid(UUID guid) {
+        this.setGuid(guid);
+        return this;
+    }
+
+    public void setGuid(UUID guid) {
+        this.guid = guid;
     }
 
     public SettlementCurrency getSettlementCurrency() {
@@ -278,6 +297,52 @@ public class PrepaymentAccount implements Serializable {
         return this;
     }
 
+    public Set<UniversallyUniqueMapping> getGeneralParameters() {
+        return this.generalParameters;
+    }
+
+    public void setGeneralParameters(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
+        this.generalParameters = universallyUniqueMappings;
+    }
+
+    public PrepaymentAccount generalParameters(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
+        this.setGeneralParameters(universallyUniqueMappings);
+        return this;
+    }
+
+    public PrepaymentAccount addGeneralParameters(UniversallyUniqueMapping universallyUniqueMapping) {
+        this.generalParameters.add(universallyUniqueMapping);
+        return this;
+    }
+
+    public PrepaymentAccount removeGeneralParameters(UniversallyUniqueMapping universallyUniqueMapping) {
+        this.generalParameters.remove(universallyUniqueMapping);
+        return this;
+    }
+
+    public Set<PrepaymentMapping> getPrepaymentParameters() {
+        return this.prepaymentParameters;
+    }
+
+    public void setPrepaymentParameters(Set<PrepaymentMapping> prepaymentMappings) {
+        this.prepaymentParameters = prepaymentMappings;
+    }
+
+    public PrepaymentAccount prepaymentParameters(Set<PrepaymentMapping> prepaymentMappings) {
+        this.setPrepaymentParameters(prepaymentMappings);
+        return this;
+    }
+
+    public PrepaymentAccount addPrepaymentParameters(PrepaymentMapping prepaymentMapping) {
+        this.prepaymentParameters.add(prepaymentMapping);
+        return this;
+    }
+
+    public PrepaymentAccount removePrepaymentParameters(PrepaymentMapping prepaymentMapping) {
+        this.prepaymentParameters.remove(prepaymentMapping);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -306,6 +371,7 @@ public class PrepaymentAccount implements Serializable {
             ", particulars='" + getParticulars() + "'" +
             ", notes='" + getNotes() + "'" +
             ", prepaymentAmount=" + getPrepaymentAmount() +
+            ", guid='" + getGuid() + "'" +
             "}";
     }
 }

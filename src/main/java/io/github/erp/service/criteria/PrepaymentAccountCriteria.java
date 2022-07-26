@@ -1,22 +1,5 @@
 package io.github.erp.service.criteria;
 
-/*-
- * Erp System - Mark II No 20 (Baruch Series)
- * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -28,6 +11,7 @@ import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
+import tech.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link io.github.erp.domain.PrepaymentAccount} entity. This class is used
@@ -50,6 +34,8 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter prepaymentAmount;
 
+    private UUIDFilter guid;
+
     private LongFilter settlementCurrencyId;
 
     private LongFilter prepaymentTransactionId;
@@ -64,6 +50,10 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
 
     private LongFilter placeholderId;
 
+    private LongFilter generalParametersId;
+
+    private LongFilter prepaymentParametersId;
+
     private Boolean distinct;
 
     public PrepaymentAccountCriteria() {}
@@ -73,6 +63,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
         this.catalogueNumber = other.catalogueNumber == null ? null : other.catalogueNumber.copy();
         this.particulars = other.particulars == null ? null : other.particulars.copy();
         this.prepaymentAmount = other.prepaymentAmount == null ? null : other.prepaymentAmount.copy();
+        this.guid = other.guid == null ? null : other.guid.copy();
         this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
         this.prepaymentTransactionId = other.prepaymentTransactionId == null ? null : other.prepaymentTransactionId.copy();
         this.serviceOutletId = other.serviceOutletId == null ? null : other.serviceOutletId.copy();
@@ -80,6 +71,8 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
         this.debitAccountId = other.debitAccountId == null ? null : other.debitAccountId.copy();
         this.transferAccountId = other.transferAccountId == null ? null : other.transferAccountId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.generalParametersId = other.generalParametersId == null ? null : other.generalParametersId.copy();
+        this.prepaymentParametersId = other.prepaymentParametersId == null ? null : other.prepaymentParametersId.copy();
         this.distinct = other.distinct;
     }
 
@@ -146,6 +139,21 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
 
     public void setPrepaymentAmount(BigDecimalFilter prepaymentAmount) {
         this.prepaymentAmount = prepaymentAmount;
+    }
+
+    public UUIDFilter getGuid() {
+        return guid;
+    }
+
+    public UUIDFilter guid() {
+        if (guid == null) {
+            guid = new UUIDFilter();
+        }
+        return guid;
+    }
+
+    public void setGuid(UUIDFilter guid) {
+        this.guid = guid;
     }
 
     public LongFilter getSettlementCurrencyId() {
@@ -253,6 +261,36 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
         this.placeholderId = placeholderId;
     }
 
+    public LongFilter getGeneralParametersId() {
+        return generalParametersId;
+    }
+
+    public LongFilter generalParametersId() {
+        if (generalParametersId == null) {
+            generalParametersId = new LongFilter();
+        }
+        return generalParametersId;
+    }
+
+    public void setGeneralParametersId(LongFilter generalParametersId) {
+        this.generalParametersId = generalParametersId;
+    }
+
+    public LongFilter getPrepaymentParametersId() {
+        return prepaymentParametersId;
+    }
+
+    public LongFilter prepaymentParametersId() {
+        if (prepaymentParametersId == null) {
+            prepaymentParametersId = new LongFilter();
+        }
+        return prepaymentParametersId;
+    }
+
+    public void setPrepaymentParametersId(LongFilter prepaymentParametersId) {
+        this.prepaymentParametersId = prepaymentParametersId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -275,6 +313,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             Objects.equals(catalogueNumber, that.catalogueNumber) &&
             Objects.equals(particulars, that.particulars) &&
             Objects.equals(prepaymentAmount, that.prepaymentAmount) &&
+            Objects.equals(guid, that.guid) &&
             Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
             Objects.equals(prepaymentTransactionId, that.prepaymentTransactionId) &&
             Objects.equals(serviceOutletId, that.serviceOutletId) &&
@@ -282,6 +321,8 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             Objects.equals(debitAccountId, that.debitAccountId) &&
             Objects.equals(transferAccountId, that.transferAccountId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(generalParametersId, that.generalParametersId) &&
+            Objects.equals(prepaymentParametersId, that.prepaymentParametersId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -293,6 +334,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             catalogueNumber,
             particulars,
             prepaymentAmount,
+            guid,
             settlementCurrencyId,
             prepaymentTransactionId,
             serviceOutletId,
@@ -300,6 +342,8 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             debitAccountId,
             transferAccountId,
             placeholderId,
+            generalParametersId,
+            prepaymentParametersId,
             distinct
         );
     }
@@ -312,6 +356,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             (catalogueNumber != null ? "catalogueNumber=" + catalogueNumber + ", " : "") +
             (particulars != null ? "particulars=" + particulars + ", " : "") +
             (prepaymentAmount != null ? "prepaymentAmount=" + prepaymentAmount + ", " : "") +
+            (guid != null ? "guid=" + guid + ", " : "") +
             (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
             (prepaymentTransactionId != null ? "prepaymentTransactionId=" + prepaymentTransactionId + ", " : "") +
             (serviceOutletId != null ? "serviceOutletId=" + serviceOutletId + ", " : "") +
@@ -319,6 +364,8 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             (debitAccountId != null ? "debitAccountId=" + debitAccountId + ", " : "") +
             (transferAccountId != null ? "transferAccountId=" + transferAccountId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (generalParametersId != null ? "generalParametersId=" + generalParametersId + ", " : "") +
+            (prepaymentParametersId != null ? "prepaymentParametersId=" + prepaymentParametersId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

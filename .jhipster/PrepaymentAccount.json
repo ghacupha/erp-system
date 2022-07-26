@@ -18,6 +18,10 @@
     {
       "fieldName": "prepaymentAmount",
       "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "guid",
+      "fieldType": "UUID"
     }
   ],
   "relationships": [
@@ -62,6 +66,22 @@
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "prepaymentAccount"
+    },
+    {
+      "relationshipName": "generalParameters",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "mappedValue",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "prepaymentAccount"
+    },
+    {
+      "relationshipName": "prepaymentParameters",
+      "otherEntityName": "prepaymentMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "key",
       "ownerSide": true,
       "otherEntityRelationshipName": "prepaymentAccount"
     }

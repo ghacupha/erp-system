@@ -7,10 +7,10 @@
 
     <groupId>io.github.erp</groupId>
     <artifactId>erp-system</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.3-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Erp System</name>
-    <description>Mark II No 20 (Baruch Series)</description>
+    <description>Mark II No 21 (Baruch Series)</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->
