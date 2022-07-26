@@ -167,7 +167,7 @@ jhipster:
     management-include-pattern: ${server.servlet.context-path:}/management/.*
     title: Erp System API
     description: Erp System API documentation
-    version: 0.0.1
+    version: 0.0.3-SNAPSHOT
     terms-of-service-url:
     contact-name: Edwin Njeru
     contact-url: https://github.com/ghacupha
@@ -186,4 +186,4 @@ jhipster:
 # ===================================================================
 
 app:
-  title: 'Mark II No. 20'
+  title: 'Mark II No. 21'
