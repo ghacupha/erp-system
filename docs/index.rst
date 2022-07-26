@@ -39,3 +39,4 @@ Contents
    usage
    api
    milestones
+   design
