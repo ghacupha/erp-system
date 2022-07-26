@@ -112,7 +112,7 @@ The main entities are as follows:
  pruning process be desired or even one that is invoked by a well-advised user.
 
  The  **amortization-sequence** entity tracks the events
- 
+
  - latest_amortization_date: local-date
  - next_amortization_date: local-date
  - previous_amortization_date: local-date
@@ -134,6 +134,9 @@ The main entities are as follows:
  start date AND the next amortization date is also later than the request object's end date. Everything else will be
  considered for further amortization. So before the actual amortization run the use will have a way of knowing which
  entities are due for amortization within the request object's parameters.
+
+ Each of this entities will have a uuid reference which could help us relate instances even without the help of JPA/Hibernate,
+ as some of the reports do have to be generated against pure-metal JDBC instance inside the jasper reports engine.
 
  Reporting Period (work in progress)
  --------------------------------------
