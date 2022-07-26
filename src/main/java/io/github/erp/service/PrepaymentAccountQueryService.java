@@ -1,22 +1,5 @@
 package io.github.erp.service;
 
-/*-
- * Erp System - Mark II No 20 (Baruch Series)
- * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import io.github.erp.domain.*; // for static metamodels
 import io.github.erp.domain.PrepaymentAccount;
 import io.github.erp.repository.PrepaymentAccountRepository;
@@ -126,6 +109,9 @@ public class PrepaymentAccountQueryService extends QueryService<PrepaymentAccoun
                 specification =
                     specification.and(buildRangeSpecification(criteria.getPrepaymentAmount(), PrepaymentAccount_.prepaymentAmount));
             }
+            if (criteria.getGuid() != null) {
+                specification = specification.and(buildSpecification(criteria.getGuid(), PrepaymentAccount_.guid));
+            }
             if (criteria.getSettlementCurrencyId() != null) {
                 specification =
                     specification.and(
@@ -186,6 +172,24 @@ public class PrepaymentAccountQueryService extends QueryService<PrepaymentAccoun
                         buildSpecification(
                             criteria.getPlaceholderId(),
                             root -> root.join(PrepaymentAccount_.placeholders, JoinType.LEFT).get(Placeholder_.id)
+                        )
+                    );
+            }
+            if (criteria.getGeneralParametersId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getGeneralParametersId(),
+                            root -> root.join(PrepaymentAccount_.generalParameters, JoinType.LEFT).get(UniversallyUniqueMapping_.id)
+                        )
+                    );
+            }
+            if (criteria.getPrepaymentParametersId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPrepaymentParametersId(),
+                            root -> root.join(PrepaymentAccount_.prepaymentParameters, JoinType.LEFT).get(PrepaymentMapping_.id)
                         )
                     );
             }

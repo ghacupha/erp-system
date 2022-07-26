@@ -1,24 +1,15 @@
 package io.github.erp.web.rest.api;
 
-/*-
- * Erp System - Mark II No 20 (Baruch Series)
- * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.*;
+import io.github.erp.domain.Dealer;
+import io.github.erp.domain.Placeholder;
+import io.github.erp.domain.PrepaymentAccount;
+import io.github.erp.domain.PrepaymentMapping;
+import io.github.erp.domain.ServiceOutlet;
+import io.github.erp.domain.Settlement;
+import io.github.erp.domain.SettlementCurrency;
+import io.github.erp.domain.TransactionAccount;
+import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.repository.PrepaymentAccountRepository;
 import io.github.erp.repository.search.PrepaymentAccountSearchRepository;
 import io.github.erp.service.PrepaymentAccountService;
@@ -45,17 +36,27 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static io.github.erp.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * Integration tests for the {@link PrepaymentAccountResource} REST controller.
+ * Integration tests for the PrepaymentAccountResource REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -75,6 +76,9 @@ public class PrepaymentAccountResourceIT {
     private static final BigDecimal DEFAULT_PREPAYMENT_AMOUNT = new BigDecimal(1);
     private static final BigDecimal UPDATED_PREPAYMENT_AMOUNT = new BigDecimal(2);
     private static final BigDecimal SMALLER_PREPAYMENT_AMOUNT = new BigDecimal(1 - 1);
+
+    private static final UUID DEFAULT_GUID = UUID.randomUUID();
+    private static final UUID UPDATED_GUID = UUID.randomUUID();
 
     private static final String ENTITY_API_URL = "/api/dev/prepayment-accounts";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -122,7 +126,8 @@ public class PrepaymentAccountResourceIT {
             .catalogueNumber(DEFAULT_CATALOGUE_NUMBER)
             .particulars(DEFAULT_PARTICULARS)
             .notes(DEFAULT_NOTES)
-            .prepaymentAmount(DEFAULT_PREPAYMENT_AMOUNT);
+            .prepaymentAmount(DEFAULT_PREPAYMENT_AMOUNT)
+            .guid(DEFAULT_GUID);
         return prepaymentAccount;
     }
 
@@ -137,7 +142,8 @@ public class PrepaymentAccountResourceIT {
             .catalogueNumber(UPDATED_CATALOGUE_NUMBER)
             .particulars(UPDATED_PARTICULARS)
             .notes(UPDATED_NOTES)
-            .prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT);
+            .prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT)
+            .guid(UPDATED_GUID);
         return prepaymentAccount;
     }
 
@@ -168,6 +174,7 @@ public class PrepaymentAccountResourceIT {
         assertThat(testPrepaymentAccount.getParticulars()).isEqualTo(DEFAULT_PARTICULARS);
         assertThat(testPrepaymentAccount.getNotes()).isEqualTo(DEFAULT_NOTES);
         assertThat(testPrepaymentAccount.getPrepaymentAmount()).isEqualByComparingTo(DEFAULT_PREPAYMENT_AMOUNT);
+        assertThat(testPrepaymentAccount.getGuid()).isEqualTo(DEFAULT_GUID);
 
         // Validate the PrepaymentAccount in Elasticsearch
         verify(mockPrepaymentAccountSearchRepository, times(1)).save(testPrepaymentAccount);
@@ -258,7 +265,8 @@ public class PrepaymentAccountResourceIT {
             .andExpect(jsonPath("$.[*].catalogueNumber").value(hasItem(DEFAULT_CATALOGUE_NUMBER)))
             .andExpect(jsonPath("$.[*].particulars").value(hasItem(DEFAULT_PARTICULARS)))
             .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES.toString())))
-            .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))));
+            .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))))
+            .andExpect(jsonPath("$.[*].guid").value(hasItem(DEFAULT_GUID.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -294,7 +302,8 @@ public class PrepaymentAccountResourceIT {
             .andExpect(jsonPath("$.catalogueNumber").value(DEFAULT_CATALOGUE_NUMBER))
             .andExpect(jsonPath("$.particulars").value(DEFAULT_PARTICULARS))
             .andExpect(jsonPath("$.notes").value(DEFAULT_NOTES.toString()))
-            .andExpect(jsonPath("$.prepaymentAmount").value(sameNumber(DEFAULT_PREPAYMENT_AMOUNT)));
+            .andExpect(jsonPath("$.prepaymentAmount").value(sameNumber(DEFAULT_PREPAYMENT_AMOUNT)))
+            .andExpect(jsonPath("$.guid").value(DEFAULT_GUID.toString()));
     }
 
     @Test
@@ -577,6 +586,58 @@ public class PrepaymentAccountResourceIT {
 
     @Test
     @Transactional
+    void getAllPrepaymentAccountsByGuidIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where guid equals to DEFAULT_GUID
+        defaultPrepaymentAccountShouldBeFound("guid.equals=" + DEFAULT_GUID);
+
+        // Get all the prepaymentAccountList where guid equals to UPDATED_GUID
+        defaultPrepaymentAccountShouldNotBeFound("guid.equals=" + UPDATED_GUID);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByGuidIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where guid not equals to DEFAULT_GUID
+        defaultPrepaymentAccountShouldNotBeFound("guid.notEquals=" + DEFAULT_GUID);
+
+        // Get all the prepaymentAccountList where guid not equals to UPDATED_GUID
+        defaultPrepaymentAccountShouldBeFound("guid.notEquals=" + UPDATED_GUID);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByGuidIsInShouldWork() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where guid in DEFAULT_GUID or UPDATED_GUID
+        defaultPrepaymentAccountShouldBeFound("guid.in=" + DEFAULT_GUID + "," + UPDATED_GUID);
+
+        // Get all the prepaymentAccountList where guid equals to UPDATED_GUID
+        defaultPrepaymentAccountShouldNotBeFound("guid.in=" + UPDATED_GUID);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByGuidIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where guid is not null
+        defaultPrepaymentAccountShouldBeFound("guid.specified=true");
+
+        // Get all the prepaymentAccountList where guid is null
+        defaultPrepaymentAccountShouldNotBeFound("guid.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllPrepaymentAccountsBySettlementCurrencyIsEqualToSomething() throws Exception {
         // Initialize the database
         prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
@@ -757,6 +818,58 @@ public class PrepaymentAccountResourceIT {
         defaultPrepaymentAccountShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByGeneralParametersIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+        UniversallyUniqueMapping generalParameters;
+        if (TestUtil.findAll(em, UniversallyUniqueMapping.class).isEmpty()) {
+            generalParameters = UniversallyUniqueMappingResourceIT.createEntity(em);
+            em.persist(generalParameters);
+            em.flush();
+        } else {
+            generalParameters = TestUtil.findAll(em, UniversallyUniqueMapping.class).get(0);
+        }
+        em.persist(generalParameters);
+        em.flush();
+        prepaymentAccount.addGeneralParameters(generalParameters);
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+        Long generalParametersId = generalParameters.getId();
+
+        // Get all the prepaymentAccountList where generalParameters equals to generalParametersId
+        defaultPrepaymentAccountShouldBeFound("generalParametersId.equals=" + generalParametersId);
+
+        // Get all the prepaymentAccountList where generalParameters equals to (generalParametersId + 1)
+        defaultPrepaymentAccountShouldNotBeFound("generalParametersId.equals=" + (generalParametersId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByPrepaymentParametersIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+        PrepaymentMapping prepaymentParameters;
+        if (TestUtil.findAll(em, PrepaymentMapping.class).isEmpty()) {
+            prepaymentParameters = PrepaymentMappingResourceIT.createEntity(em);
+            em.persist(prepaymentParameters);
+            em.flush();
+        } else {
+            prepaymentParameters = TestUtil.findAll(em, PrepaymentMapping.class).get(0);
+        }
+        em.persist(prepaymentParameters);
+        em.flush();
+        prepaymentAccount.addPrepaymentParameters(prepaymentParameters);
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+        Long prepaymentParametersId = prepaymentParameters.getId();
+
+        // Get all the prepaymentAccountList where prepaymentParameters equals to prepaymentParametersId
+        defaultPrepaymentAccountShouldBeFound("prepaymentParametersId.equals=" + prepaymentParametersId);
+
+        // Get all the prepaymentAccountList where prepaymentParameters equals to (prepaymentParametersId + 1)
+        defaultPrepaymentAccountShouldNotBeFound("prepaymentParametersId.equals=" + (prepaymentParametersId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -769,7 +882,8 @@ public class PrepaymentAccountResourceIT {
             .andExpect(jsonPath("$.[*].catalogueNumber").value(hasItem(DEFAULT_CATALOGUE_NUMBER)))
             .andExpect(jsonPath("$.[*].particulars").value(hasItem(DEFAULT_PARTICULARS)))
             .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES.toString())))
-            .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))));
+            .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))))
+            .andExpect(jsonPath("$.[*].guid").value(hasItem(DEFAULT_GUID.toString())));
 
         // Check, that the count call also returns 1
         restPrepaymentAccountMockMvc
@@ -821,7 +935,8 @@ public class PrepaymentAccountResourceIT {
             .catalogueNumber(UPDATED_CATALOGUE_NUMBER)
             .particulars(UPDATED_PARTICULARS)
             .notes(UPDATED_NOTES)
-            .prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT);
+            .prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT)
+            .guid(UPDATED_GUID);
         PrepaymentAccountDTO prepaymentAccountDTO = prepaymentAccountMapper.toDto(updatedPrepaymentAccount);
 
         restPrepaymentAccountMockMvc
@@ -840,6 +955,7 @@ public class PrepaymentAccountResourceIT {
         assertThat(testPrepaymentAccount.getParticulars()).isEqualTo(UPDATED_PARTICULARS);
         assertThat(testPrepaymentAccount.getNotes()).isEqualTo(UPDATED_NOTES);
         assertThat(testPrepaymentAccount.getPrepaymentAmount()).isEqualTo(UPDATED_PREPAYMENT_AMOUNT);
+        assertThat(testPrepaymentAccount.getGuid()).isEqualTo(UPDATED_GUID);
 
         // Validate the PrepaymentAccount in Elasticsearch
         verify(mockPrepaymentAccountSearchRepository).save(testPrepaymentAccount);
@@ -933,7 +1049,7 @@ public class PrepaymentAccountResourceIT {
         PrepaymentAccount partialUpdatedPrepaymentAccount = new PrepaymentAccount();
         partialUpdatedPrepaymentAccount.setId(prepaymentAccount.getId());
 
-        partialUpdatedPrepaymentAccount.notes(UPDATED_NOTES).prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT);
+        partialUpdatedPrepaymentAccount.notes(UPDATED_NOTES).prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT).guid(UPDATED_GUID);
 
         restPrepaymentAccountMockMvc
             .perform(
@@ -951,6 +1067,7 @@ public class PrepaymentAccountResourceIT {
         assertThat(testPrepaymentAccount.getParticulars()).isEqualTo(DEFAULT_PARTICULARS);
         assertThat(testPrepaymentAccount.getNotes()).isEqualTo(UPDATED_NOTES);
         assertThat(testPrepaymentAccount.getPrepaymentAmount()).isEqualByComparingTo(UPDATED_PREPAYMENT_AMOUNT);
+        assertThat(testPrepaymentAccount.getGuid()).isEqualTo(UPDATED_GUID);
     }
 
     @Test
@@ -969,7 +1086,8 @@ public class PrepaymentAccountResourceIT {
             .catalogueNumber(UPDATED_CATALOGUE_NUMBER)
             .particulars(UPDATED_PARTICULARS)
             .notes(UPDATED_NOTES)
-            .prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT);
+            .prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT)
+            .guid(UPDATED_GUID);
 
         restPrepaymentAccountMockMvc
             .perform(
@@ -987,6 +1105,7 @@ public class PrepaymentAccountResourceIT {
         assertThat(testPrepaymentAccount.getParticulars()).isEqualTo(UPDATED_PARTICULARS);
         assertThat(testPrepaymentAccount.getNotes()).isEqualTo(UPDATED_NOTES);
         assertThat(testPrepaymentAccount.getPrepaymentAmount()).isEqualByComparingTo(UPDATED_PREPAYMENT_AMOUNT);
+        assertThat(testPrepaymentAccount.getGuid()).isEqualTo(UPDATED_GUID);
     }
 
     @Test
@@ -1106,6 +1225,7 @@ public class PrepaymentAccountResourceIT {
             .andExpect(jsonPath("$.[*].catalogueNumber").value(hasItem(DEFAULT_CATALOGUE_NUMBER)))
             .andExpect(jsonPath("$.[*].particulars").value(hasItem(DEFAULT_PARTICULARS)))
             .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES.toString())))
-            .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))));
+            .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))))
+            .andExpect(jsonPath("$.[*].guid").value(hasItem(DEFAULT_GUID.toString())));
     }
 }

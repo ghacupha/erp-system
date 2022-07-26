@@ -1,11 +1,11 @@
-id;catalogue_number;particulars;notes;prepayment_amount
-1;Computer middleware collaborative;mint Account Soft;../fake-data/blob/hipster.txt;54503
-2;radical;Balanced Louisiana;../fake-data/blob/hipster.txt;34587
-3;Guinea;redundant Buckinghamshire Peso;../fake-data/blob/hipster.txt;38878
-4;Jewelery Concrete programming;Bedfordshire Developer;../fake-data/blob/hipster.txt;72674
-5;Montserrat;scalable;../fake-data/blob/hipster.txt;50632
-6;incremental;Investor;../fake-data/blob/hipster.txt;67195
-7;Accountability cross-platform online;info-mediaries Soap portals;../fake-data/blob/hipster.txt;66015
-8;payment benchmark recontextualize;Cambridgeshire Global;../fake-data/blob/hipster.txt;35229
-9;EXE Planner;Gorgeous Technician global;../fake-data/blob/hipster.txt;69768
-10;Pre-emptive AI;Account FTP;../fake-data/blob/hipster.txt;47851
+id;catalogue_number;particulars;notes;prepayment_amount;guid
+1;Computer middleware collaborative;mint Account Soft;../fake-data/blob/hipster.txt;54503;04cca300-95a5-4285-8dc6-38cab2c6c0c5
+2;purple;Profound Multi-channelled Lari;../fake-data/blob/hipster.txt;11094;89e25138-4485-44e9-aadf-edc59c71f477
+3;Loan;alarm payment;../fake-data/blob/hipster.txt;29754;2d6ff97e-1e82-456e-88f9-ee14ffa9548b
+4;Pre-emptive AI;Account FTP;../fake-data/blob/hipster.txt;47851;1b5066b0-9c17-4928-9095-81ea69a0e902
+5;Progressive Communications incubate;Tasty hack;../fake-data/blob/hipster.txt;94201;f8059f47-b21d-4b2a-8e22-f999e4a1404d
+6;Angola;monitoring alliance;../fake-data/blob/hipster.txt;24985;932bb779-ab07-4b0a-a602-45f1e0eb7e11
+7;backing indexing Mouse;Darussalam 3rd SMTP;../fake-data/blob/hipster.txt;38598;56cc27ae-423d-4f1d-8146-e249c8acd884
+8;connect channels;Maryland invoice Loop;../fake-data/blob/hipster.txt;42659;5eac80cb-e0e5-4715-a5b3-d76203f7c23f
+9;innovate;Fantastic;../fake-data/blob/hipster.txt;33901;868b07b0-8612-4615-baf2-a3994678be9b
+10;Developer exploit redefine;Handcrafted Bike;../fake-data/blob/hipster.txt;10410;3020e5bb-88c7-4c4c-8a7e-9721e4c2094d
