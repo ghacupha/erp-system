@@ -1,7 +1,7 @@
 package io.github.erp.internal.repository;
 
 /*-
- * Erp System - Mark II No 20 (Baruch Series)
+ * Erp System - Mark II No 21 (Baruch Series)
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.internal.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.repository.UniversallyUniqueMappingRepository;
 import org.springframework.data.jpa.repository.JpaRepository;

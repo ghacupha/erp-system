@@ -1,6 +1,6 @@
 
 /*-
- * Erp System - Mark II No 20 (Baruch Series)
+ * Erp System - Mark II No 21 (Baruch Series)
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 /*-
  * Erp System - Mark II No 19 (Baruch Series)
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
