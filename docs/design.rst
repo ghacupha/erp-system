@@ -19,7 +19,7 @@ needs to effect amortization transactions such as the following:
 
 ::
    DR. Expense A/C
-   
+
    CR. Prepayment A/C
 
 The basic philosophy of amortization
@@ -35,7 +35,7 @@ can satisfy themselves that the account has not been used to hide assets (most t
 for a period of more than a year, you are dealing with an asset), or reduce the expense figure reported
 for a given period.
 
-::
+.. note::
     Some thrift members of our beloved profession have been known to postpone expenses
     by simply posting them as prepayments, therefore moving those to the assets on the balance sheet rather
     than the dreaded expense lines on the profit and loss, in order to amortize the same in some preferred or
