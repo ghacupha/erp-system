@@ -142,6 +142,7 @@
     <include file="config/liquibase/changelog/20220701133235_added_entity_constraints_ApplicationUser.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220701140751_added_entity_constraints_ReportDesign.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220726145438_added_entity_constraints_PrepaymentMapping.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220801130650_changelog.xml" relativeToChangelogFile="false"/>
     <!--<include file="config/liquibase/changelog/20220726153626_changelog.xml" relativeToChangelogFile="false"/>-->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
