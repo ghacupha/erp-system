@@ -57,7 +57,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link PrepaymentMarshallingResource} REST controller.
+ * Integration tests for the PrepaymentMarshallingResource REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)

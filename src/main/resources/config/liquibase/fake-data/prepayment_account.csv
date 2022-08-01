@@ -1,4 +1,4 @@
-id;catalogue_number;particulars;notes;prepayment_amount;guid
+id;catalogue_number;particulars;notes;prepayment_amount;prepayment_guid
 1;Computer middleware collaborative;mint Account Soft;../fake-data/blob/hipster.txt;54503;04cca300-95a5-4285-8dc6-38cab2c6c0c5
 2;purple;Profound Multi-channelled Lari;../fake-data/blob/hipster.txt;11094;89e25138-4485-44e9-aadf-edc59c71f477
 3;Loan;alarm payment;../fake-data/blob/hipster.txt;29754;2d6ff97e-1e82-456e-88f9-ee14ffa9548b

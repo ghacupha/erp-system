@@ -1,20 +1,3 @@
-/**
- * Erp System - Mark II No 21 (Baruch Series)
- * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import _root_.io.gatling.core.scenario.Simulation
 import ch.qos.logback.classic.{Level, LoggerContext}
 import io.gatling.core.Predef._
@@ -88,8 +71,8 @@ class PrepaymentMappingGatlingTest extends Simulation {
             .post("/api/prepayment-mappings")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
-                "key":"SAMPLE_TEXT"
-                , "guid":null
+                "parameterKey":"SAMPLE_TEXT"
+                , "parameterGuid":null
                 , "parameter":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))

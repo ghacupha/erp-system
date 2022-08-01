@@ -1,23 +1,5 @@
 package io.github.erp.service.dto;
 
-/*-
- * Erp System - Mark II No 21 (Baruch Series)
- * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -45,7 +27,7 @@ public class PrepaymentAccountDTO implements Serializable {
 
     private BigDecimal prepaymentAmount;
 
-    private UUID guid;
+    private UUID prepaymentGuid;
 
     private SettlementCurrencyDTO settlementCurrency;
 
@@ -105,12 +87,12 @@ public class PrepaymentAccountDTO implements Serializable {
         this.prepaymentAmount = prepaymentAmount;
     }
 
-    public UUID getGuid() {
-        return guid;
+    public UUID getPrepaymentGuid() {
+        return prepaymentGuid;
     }
 
-    public void setGuid(UUID guid) {
-        this.guid = guid;
+    public void setPrepaymentGuid(UUID prepaymentGuid) {
+        this.prepaymentGuid = prepaymentGuid;
     }
 
     public SettlementCurrencyDTO getSettlementCurrency() {
@@ -215,7 +197,7 @@ public class PrepaymentAccountDTO implements Serializable {
             ", particulars='" + getParticulars() + "'" +
             ", notes='" + getNotes() + "'" +
             ", prepaymentAmount=" + getPrepaymentAmount() +
-            ", guid='" + getGuid() + "'" +
+            ", prepaymentGuid='" + getPrepaymentGuid() + "'" +
             ", settlementCurrency=" + getSettlementCurrency() +
             ", prepaymentTransaction=" + getPrepaymentTransaction() +
             ", serviceOutlet=" + getServiceOutlet() +

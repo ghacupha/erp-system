@@ -1,23 +1,5 @@
 package io.github.erp.service.criteria;
 
-/*-
- * Erp System - Mark II No 21 (Baruch Series)
- * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -52,7 +34,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter prepaymentAmount;
 
-    private UUIDFilter guid;
+    private UUIDFilter prepaymentGuid;
 
     private LongFilter settlementCurrencyId;
 
@@ -81,7 +63,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
         this.catalogueNumber = other.catalogueNumber == null ? null : other.catalogueNumber.copy();
         this.particulars = other.particulars == null ? null : other.particulars.copy();
         this.prepaymentAmount = other.prepaymentAmount == null ? null : other.prepaymentAmount.copy();
-        this.guid = other.guid == null ? null : other.guid.copy();
+        this.prepaymentGuid = other.prepaymentGuid == null ? null : other.prepaymentGuid.copy();
         this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
         this.prepaymentTransactionId = other.prepaymentTransactionId == null ? null : other.prepaymentTransactionId.copy();
         this.serviceOutletId = other.serviceOutletId == null ? null : other.serviceOutletId.copy();
@@ -159,19 +141,19 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
         this.prepaymentAmount = prepaymentAmount;
     }
 
-    public UUIDFilter getGuid() {
-        return guid;
+    public UUIDFilter getPrepaymentGuid() {
+        return prepaymentGuid;
     }
 
-    public UUIDFilter guid() {
-        if (guid == null) {
-            guid = new UUIDFilter();
+    public UUIDFilter prepaymentGuid() {
+        if (prepaymentGuid == null) {
+            prepaymentGuid = new UUIDFilter();
         }
-        return guid;
+        return prepaymentGuid;
     }
 
-    public void setGuid(UUIDFilter guid) {
-        this.guid = guid;
+    public void setPrepaymentGuid(UUIDFilter prepaymentGuid) {
+        this.prepaymentGuid = prepaymentGuid;
     }
 
     public LongFilter getSettlementCurrencyId() {
@@ -331,7 +313,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             Objects.equals(catalogueNumber, that.catalogueNumber) &&
             Objects.equals(particulars, that.particulars) &&
             Objects.equals(prepaymentAmount, that.prepaymentAmount) &&
-            Objects.equals(guid, that.guid) &&
+            Objects.equals(prepaymentGuid, that.prepaymentGuid) &&
             Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
             Objects.equals(prepaymentTransactionId, that.prepaymentTransactionId) &&
             Objects.equals(serviceOutletId, that.serviceOutletId) &&
@@ -352,7 +334,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             catalogueNumber,
             particulars,
             prepaymentAmount,
-            guid,
+            prepaymentGuid,
             settlementCurrencyId,
             prepaymentTransactionId,
             serviceOutletId,
@@ -374,7 +356,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             (catalogueNumber != null ? "catalogueNumber=" + catalogueNumber + ", " : "") +
             (particulars != null ? "particulars=" + particulars + ", " : "") +
             (prepaymentAmount != null ? "prepaymentAmount=" + prepaymentAmount + ", " : "") +
-            (guid != null ? "guid=" + guid + ", " : "") +
+            (prepaymentGuid != null ? "prepaymentGuid=" + prepaymentGuid + ", " : "") +
             (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
             (prepaymentTransactionId != null ? "prepaymentTransactionId=" + prepaymentTransactionId + ", " : "") +
             (serviceOutletId != null ? "serviceOutletId=" + serviceOutletId + ", " : "") +

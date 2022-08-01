@@ -21,7 +21,7 @@
 version: '3.3'
 services:
   erp-system-server:
-    image: ghacupha/erp-system:0.0.3-SNAPSHOT
+    image: ghacupha/erp-system:0.0.4-SNAPSHOT
     volumes:
       - ./logs/:/logs/
       - ./reports-directory/:/reports-directory/

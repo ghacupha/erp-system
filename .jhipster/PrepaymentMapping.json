@@ -1,12 +1,12 @@
 {
   "fields": [
     {
-      "fieldName": "key",
+      "fieldName": "parameterKey",
       "fieldType": "String",
       "fieldValidateRules": ["required", "unique"]
     },
     {
-      "fieldName": "guid",
+      "fieldName": "parameterGuid",
       "fieldType": "UUID",
       "fieldValidateRules": ["required", "unique"]
     },

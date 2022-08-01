@@ -1,23 +1,5 @@
 package io.github.erp.domain;
 
-/*-
- * Erp System - Mark II No 21 (Baruch Series)
- * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -46,12 +28,12 @@ public class PrepaymentMapping implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "key", nullable = false, unique = true)
-    private String key;
+    @Column(name = "parameter_key", nullable = false, unique = true)
+    private String parameterKey;
 
     @NotNull
-    @Column(name = "guid", nullable = false, unique = true)
-    private UUID guid;
+    @Column(name = "parameter_guid", nullable = false, unique = true)
+    private UUID parameterGuid;
 
     @NotNull
     @Column(name = "parameter", nullable = false)
@@ -82,30 +64,30 @@ public class PrepaymentMapping implements Serializable {
         this.id = id;
     }
 
-    public String getKey() {
-        return this.key;
+    public String getParameterKey() {
+        return this.parameterKey;
     }
 
-    public PrepaymentMapping key(String key) {
-        this.setKey(key);
+    public PrepaymentMapping parameterKey(String parameterKey) {
+        this.setParameterKey(parameterKey);
         return this;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setParameterKey(String parameterKey) {
+        this.parameterKey = parameterKey;
     }
 
-    public UUID getGuid() {
-        return this.guid;
+    public UUID getParameterGuid() {
+        return this.parameterGuid;
     }
 
-    public PrepaymentMapping guid(UUID guid) {
-        this.setGuid(guid);
+    public PrepaymentMapping parameterGuid(UUID parameterGuid) {
+        this.setParameterGuid(parameterGuid);
         return this;
     }
 
-    public void setGuid(UUID guid) {
-        this.guid = guid;
+    public void setParameterGuid(UUID parameterGuid) {
+        this.parameterGuid = parameterGuid;
     }
 
     public String getParameter() {
@@ -168,8 +150,8 @@ public class PrepaymentMapping implements Serializable {
     public String toString() {
         return "PrepaymentMapping{" +
             "id=" + getId() +
-            ", key='" + getKey() + "'" +
-            ", guid='" + getGuid() + "'" +
+            ", parameterKey='" + getParameterKey() + "'" +
+            ", parameterGuid='" + getParameterGuid() + "'" +
             ", parameter='" + getParameter() + "'" +
             "}";
     }
