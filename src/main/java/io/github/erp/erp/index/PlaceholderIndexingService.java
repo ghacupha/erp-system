@@ -1,7 +1,7 @@
 package io.github.erp.erp.index;
 
 /*-
- * Erp System - Mark II No 21 (Baruch Series)
+ * Erp System - Mark II No 22 (Baruch Series)
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
