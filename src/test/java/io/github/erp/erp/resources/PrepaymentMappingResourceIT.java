@@ -1,23 +1,5 @@
 package io.github.erp.erp.resources;
 
-/*-
- * Erp System - Mark II No 21 (Baruch Series)
- * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.PrepaymentMapping;
@@ -42,27 +24,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link PrepaymentMappingResource} REST controller.
@@ -73,11 +42,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 class PrepaymentMappingResourceIT {
 
-    private static final String DEFAULT_KEY = "AAAAAAAAAA";
-    private static final String UPDATED_KEY = "BBBBBBBBBB";
+    private static final String DEFAULT_PARAMETER_KEY = "AAAAAAAAAA";
+    private static final String UPDATED_PARAMETER_KEY = "BBBBBBBBBB";
 
-    private static final UUID DEFAULT_GUID = UUID.randomUUID();
-    private static final UUID UPDATED_GUID = UUID.randomUUID();
+    private static final UUID DEFAULT_PARAMETER_GUID = UUID.randomUUID();
+    private static final UUID UPDATED_PARAMETER_GUID = UUID.randomUUID();
 
     private static final String DEFAULT_PARAMETER = "AAAAAAAAAA";
     private static final String UPDATED_PARAMETER = "BBBBBBBBBB";
@@ -124,7 +93,10 @@ class PrepaymentMappingResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static PrepaymentMapping createEntity(EntityManager em) {
-        PrepaymentMapping prepaymentMapping = new PrepaymentMapping().key(DEFAULT_KEY).guid(DEFAULT_GUID).parameter(DEFAULT_PARAMETER);
+        PrepaymentMapping prepaymentMapping = new PrepaymentMapping()
+            .parameterKey(DEFAULT_PARAMETER_KEY)
+            .parameterGuid(DEFAULT_PARAMETER_GUID)
+            .parameter(DEFAULT_PARAMETER);
         return prepaymentMapping;
     }
 
@@ -135,7 +107,10 @@ class PrepaymentMappingResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static PrepaymentMapping createUpdatedEntity(EntityManager em) {
-        PrepaymentMapping prepaymentMapping = new PrepaymentMapping().key(UPDATED_KEY).guid(UPDATED_GUID).parameter(UPDATED_PARAMETER);
+        PrepaymentMapping prepaymentMapping = new PrepaymentMapping()
+            .parameterKey(UPDATED_PARAMETER_KEY)
+            .parameterGuid(UPDATED_PARAMETER_GUID)
+            .parameter(UPDATED_PARAMETER);
         return prepaymentMapping;
     }
 
@@ -162,8 +137,8 @@ class PrepaymentMappingResourceIT {
         List<PrepaymentMapping> prepaymentMappingList = prepaymentMappingRepository.findAll();
         assertThat(prepaymentMappingList).hasSize(databaseSizeBeforeCreate + 1);
         PrepaymentMapping testPrepaymentMapping = prepaymentMappingList.get(prepaymentMappingList.size() - 1);
-        assertThat(testPrepaymentMapping.getKey()).isEqualTo(DEFAULT_KEY);
-        assertThat(testPrepaymentMapping.getGuid()).isEqualTo(DEFAULT_GUID);
+        assertThat(testPrepaymentMapping.getParameterKey()).isEqualTo(DEFAULT_PARAMETER_KEY);
+        assertThat(testPrepaymentMapping.getParameterGuid()).isEqualTo(DEFAULT_PARAMETER_GUID);
         assertThat(testPrepaymentMapping.getParameter()).isEqualTo(DEFAULT_PARAMETER);
 
         // Validate the PrepaymentMapping in Elasticsearch
@@ -198,10 +173,10 @@ class PrepaymentMappingResourceIT {
 
     @Test
     @Transactional
-    void checkKeyIsRequired() throws Exception {
+    void checkParameterKeyIsRequired() throws Exception {
         int databaseSizeBeforeTest = prepaymentMappingRepository.findAll().size();
         // set the field null
-        prepaymentMapping.setKey(null);
+        prepaymentMapping.setParameterKey(null);
 
         // Create the PrepaymentMapping, which fails.
         PrepaymentMappingDTO prepaymentMappingDTO = prepaymentMappingMapper.toDto(prepaymentMapping);
@@ -220,10 +195,10 @@ class PrepaymentMappingResourceIT {
 
     @Test
     @Transactional
-    void checkGuidIsRequired() throws Exception {
+    void checkParameterGuidIsRequired() throws Exception {
         int databaseSizeBeforeTest = prepaymentMappingRepository.findAll().size();
         // set the field null
-        prepaymentMapping.setGuid(null);
+        prepaymentMapping.setParameterGuid(null);
 
         // Create the PrepaymentMapping, which fails.
         PrepaymentMappingDTO prepaymentMappingDTO = prepaymentMappingMapper.toDto(prepaymentMapping);
@@ -274,8 +249,8 @@ class PrepaymentMappingResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentMapping.getId().intValue())))
-            .andExpect(jsonPath("$.[*].key").value(hasItem(DEFAULT_KEY)))
-            .andExpect(jsonPath("$.[*].guid").value(hasItem(DEFAULT_GUID.toString())))
+            .andExpect(jsonPath("$.[*].parameterKey").value(hasItem(DEFAULT_PARAMETER_KEY)))
+            .andExpect(jsonPath("$.[*].parameterGuid").value(hasItem(DEFAULT_PARAMETER_GUID.toString())))
             .andExpect(jsonPath("$.[*].parameter").value(hasItem(DEFAULT_PARAMETER)));
     }
 
@@ -309,8 +284,8 @@ class PrepaymentMappingResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(prepaymentMapping.getId().intValue()))
-            .andExpect(jsonPath("$.key").value(DEFAULT_KEY))
-            .andExpect(jsonPath("$.guid").value(DEFAULT_GUID.toString()))
+            .andExpect(jsonPath("$.parameterKey").value(DEFAULT_PARAMETER_KEY))
+            .andExpect(jsonPath("$.parameterGuid").value(DEFAULT_PARAMETER_GUID.toString()))
             .andExpect(jsonPath("$.parameter").value(DEFAULT_PARAMETER));
     }
 
@@ -334,132 +309,132 @@ class PrepaymentMappingResourceIT {
 
     @Test
     @Transactional
-    void getAllPrepaymentMappingsByKeyIsEqualToSomething() throws Exception {
+    void getAllPrepaymentMappingsByParameterKeyIsEqualToSomething() throws Exception {
         // Initialize the database
         prepaymentMappingRepository.saveAndFlush(prepaymentMapping);
 
-        // Get all the prepaymentMappingList where key equals to DEFAULT_KEY
-        defaultPrepaymentMappingShouldBeFound("key.equals=" + DEFAULT_KEY);
+        // Get all the prepaymentMappingList where parameterKey equals to DEFAULT_PARAMETER_KEY
+        defaultPrepaymentMappingShouldBeFound("parameterKey.equals=" + DEFAULT_PARAMETER_KEY);
 
-        // Get all the prepaymentMappingList where key equals to UPDATED_KEY
-        defaultPrepaymentMappingShouldNotBeFound("key.equals=" + UPDATED_KEY);
+        // Get all the prepaymentMappingList where parameterKey equals to UPDATED_PARAMETER_KEY
+        defaultPrepaymentMappingShouldNotBeFound("parameterKey.equals=" + UPDATED_PARAMETER_KEY);
     }
 
     @Test
     @Transactional
-    void getAllPrepaymentMappingsByKeyIsNotEqualToSomething() throws Exception {
+    void getAllPrepaymentMappingsByParameterKeyIsNotEqualToSomething() throws Exception {
         // Initialize the database
         prepaymentMappingRepository.saveAndFlush(prepaymentMapping);
 
-        // Get all the prepaymentMappingList where key not equals to DEFAULT_KEY
-        defaultPrepaymentMappingShouldNotBeFound("key.notEquals=" + DEFAULT_KEY);
+        // Get all the prepaymentMappingList where parameterKey not equals to DEFAULT_PARAMETER_KEY
+        defaultPrepaymentMappingShouldNotBeFound("parameterKey.notEquals=" + DEFAULT_PARAMETER_KEY);
 
-        // Get all the prepaymentMappingList where key not equals to UPDATED_KEY
-        defaultPrepaymentMappingShouldBeFound("key.notEquals=" + UPDATED_KEY);
+        // Get all the prepaymentMappingList where parameterKey not equals to UPDATED_PARAMETER_KEY
+        defaultPrepaymentMappingShouldBeFound("parameterKey.notEquals=" + UPDATED_PARAMETER_KEY);
     }
 
     @Test
     @Transactional
-    void getAllPrepaymentMappingsByKeyIsInShouldWork() throws Exception {
+    void getAllPrepaymentMappingsByParameterKeyIsInShouldWork() throws Exception {
         // Initialize the database
         prepaymentMappingRepository.saveAndFlush(prepaymentMapping);
 
-        // Get all the prepaymentMappingList where key in DEFAULT_KEY or UPDATED_KEY
-        defaultPrepaymentMappingShouldBeFound("key.in=" + DEFAULT_KEY + "," + UPDATED_KEY);
+        // Get all the prepaymentMappingList where parameterKey in DEFAULT_PARAMETER_KEY or UPDATED_PARAMETER_KEY
+        defaultPrepaymentMappingShouldBeFound("parameterKey.in=" + DEFAULT_PARAMETER_KEY + "," + UPDATED_PARAMETER_KEY);
 
-        // Get all the prepaymentMappingList where key equals to UPDATED_KEY
-        defaultPrepaymentMappingShouldNotBeFound("key.in=" + UPDATED_KEY);
+        // Get all the prepaymentMappingList where parameterKey equals to UPDATED_PARAMETER_KEY
+        defaultPrepaymentMappingShouldNotBeFound("parameterKey.in=" + UPDATED_PARAMETER_KEY);
     }
 
     @Test
     @Transactional
-    void getAllPrepaymentMappingsByKeyIsNullOrNotNull() throws Exception {
+    void getAllPrepaymentMappingsByParameterKeyIsNullOrNotNull() throws Exception {
         // Initialize the database
         prepaymentMappingRepository.saveAndFlush(prepaymentMapping);
 
-        // Get all the prepaymentMappingList where key is not null
-        defaultPrepaymentMappingShouldBeFound("key.specified=true");
+        // Get all the prepaymentMappingList where parameterKey is not null
+        defaultPrepaymentMappingShouldBeFound("parameterKey.specified=true");
 
-        // Get all the prepaymentMappingList where key is null
-        defaultPrepaymentMappingShouldNotBeFound("key.specified=false");
+        // Get all the prepaymentMappingList where parameterKey is null
+        defaultPrepaymentMappingShouldNotBeFound("parameterKey.specified=false");
     }
 
     @Test
     @Transactional
-    void getAllPrepaymentMappingsByKeyContainsSomething() throws Exception {
+    void getAllPrepaymentMappingsByParameterKeyContainsSomething() throws Exception {
         // Initialize the database
         prepaymentMappingRepository.saveAndFlush(prepaymentMapping);
 
-        // Get all the prepaymentMappingList where key contains DEFAULT_KEY
-        defaultPrepaymentMappingShouldBeFound("key.contains=" + DEFAULT_KEY);
+        // Get all the prepaymentMappingList where parameterKey contains DEFAULT_PARAMETER_KEY
+        defaultPrepaymentMappingShouldBeFound("parameterKey.contains=" + DEFAULT_PARAMETER_KEY);
 
-        // Get all the prepaymentMappingList where key contains UPDATED_KEY
-        defaultPrepaymentMappingShouldNotBeFound("key.contains=" + UPDATED_KEY);
+        // Get all the prepaymentMappingList where parameterKey contains UPDATED_PARAMETER_KEY
+        defaultPrepaymentMappingShouldNotBeFound("parameterKey.contains=" + UPDATED_PARAMETER_KEY);
     }
 
     @Test
     @Transactional
-    void getAllPrepaymentMappingsByKeyNotContainsSomething() throws Exception {
+    void getAllPrepaymentMappingsByParameterKeyNotContainsSomething() throws Exception {
         // Initialize the database
         prepaymentMappingRepository.saveAndFlush(prepaymentMapping);
 
-        // Get all the prepaymentMappingList where key does not contain DEFAULT_KEY
-        defaultPrepaymentMappingShouldNotBeFound("key.doesNotContain=" + DEFAULT_KEY);
+        // Get all the prepaymentMappingList where parameterKey does not contain DEFAULT_PARAMETER_KEY
+        defaultPrepaymentMappingShouldNotBeFound("parameterKey.doesNotContain=" + DEFAULT_PARAMETER_KEY);
 
-        // Get all the prepaymentMappingList where key does not contain UPDATED_KEY
-        defaultPrepaymentMappingShouldBeFound("key.doesNotContain=" + UPDATED_KEY);
+        // Get all the prepaymentMappingList where parameterKey does not contain UPDATED_PARAMETER_KEY
+        defaultPrepaymentMappingShouldBeFound("parameterKey.doesNotContain=" + UPDATED_PARAMETER_KEY);
     }
 
     @Test
     @Transactional
-    void getAllPrepaymentMappingsByGuidIsEqualToSomething() throws Exception {
+    void getAllPrepaymentMappingsByParameterGuidIsEqualToSomething() throws Exception {
         // Initialize the database
         prepaymentMappingRepository.saveAndFlush(prepaymentMapping);
 
-        // Get all the prepaymentMappingList where guid equals to DEFAULT_GUID
-        defaultPrepaymentMappingShouldBeFound("guid.equals=" + DEFAULT_GUID);
+        // Get all the prepaymentMappingList where parameterGuid equals to DEFAULT_PARAMETER_GUID
+        defaultPrepaymentMappingShouldBeFound("parameterGuid.equals=" + DEFAULT_PARAMETER_GUID);
 
-        // Get all the prepaymentMappingList where guid equals to UPDATED_GUID
-        defaultPrepaymentMappingShouldNotBeFound("guid.equals=" + UPDATED_GUID);
+        // Get all the prepaymentMappingList where parameterGuid equals to UPDATED_PARAMETER_GUID
+        defaultPrepaymentMappingShouldNotBeFound("parameterGuid.equals=" + UPDATED_PARAMETER_GUID);
     }
 
     @Test
     @Transactional
-    void getAllPrepaymentMappingsByGuidIsNotEqualToSomething() throws Exception {
+    void getAllPrepaymentMappingsByParameterGuidIsNotEqualToSomething() throws Exception {
         // Initialize the database
         prepaymentMappingRepository.saveAndFlush(prepaymentMapping);
 
-        // Get all the prepaymentMappingList where guid not equals to DEFAULT_GUID
-        defaultPrepaymentMappingShouldNotBeFound("guid.notEquals=" + DEFAULT_GUID);
+        // Get all the prepaymentMappingList where parameterGuid not equals to DEFAULT_PARAMETER_GUID
+        defaultPrepaymentMappingShouldNotBeFound("parameterGuid.notEquals=" + DEFAULT_PARAMETER_GUID);
 
-        // Get all the prepaymentMappingList where guid not equals to UPDATED_GUID
-        defaultPrepaymentMappingShouldBeFound("guid.notEquals=" + UPDATED_GUID);
+        // Get all the prepaymentMappingList where parameterGuid not equals to UPDATED_PARAMETER_GUID
+        defaultPrepaymentMappingShouldBeFound("parameterGuid.notEquals=" + UPDATED_PARAMETER_GUID);
     }
 
     @Test
     @Transactional
-    void getAllPrepaymentMappingsByGuidIsInShouldWork() throws Exception {
+    void getAllPrepaymentMappingsByParameterGuidIsInShouldWork() throws Exception {
         // Initialize the database
         prepaymentMappingRepository.saveAndFlush(prepaymentMapping);
 
-        // Get all the prepaymentMappingList where guid in DEFAULT_GUID or UPDATED_GUID
-        defaultPrepaymentMappingShouldBeFound("guid.in=" + DEFAULT_GUID + "," + UPDATED_GUID);
+        // Get all the prepaymentMappingList where parameterGuid in DEFAULT_PARAMETER_GUID or UPDATED_PARAMETER_GUID
+        defaultPrepaymentMappingShouldBeFound("parameterGuid.in=" + DEFAULT_PARAMETER_GUID + "," + UPDATED_PARAMETER_GUID);
 
-        // Get all the prepaymentMappingList where guid equals to UPDATED_GUID
-        defaultPrepaymentMappingShouldNotBeFound("guid.in=" + UPDATED_GUID);
+        // Get all the prepaymentMappingList where parameterGuid equals to UPDATED_PARAMETER_GUID
+        defaultPrepaymentMappingShouldNotBeFound("parameterGuid.in=" + UPDATED_PARAMETER_GUID);
     }
 
     @Test
     @Transactional
-    void getAllPrepaymentMappingsByGuidIsNullOrNotNull() throws Exception {
+    void getAllPrepaymentMappingsByParameterGuidIsNullOrNotNull() throws Exception {
         // Initialize the database
         prepaymentMappingRepository.saveAndFlush(prepaymentMapping);
 
-        // Get all the prepaymentMappingList where guid is not null
-        defaultPrepaymentMappingShouldBeFound("guid.specified=true");
+        // Get all the prepaymentMappingList where parameterGuid is not null
+        defaultPrepaymentMappingShouldBeFound("parameterGuid.specified=true");
 
-        // Get all the prepaymentMappingList where guid is null
-        defaultPrepaymentMappingShouldNotBeFound("guid.specified=false");
+        // Get all the prepaymentMappingList where parameterGuid is null
+        defaultPrepaymentMappingShouldNotBeFound("parameterGuid.specified=false");
     }
 
     @Test
@@ -575,8 +550,8 @@ class PrepaymentMappingResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentMapping.getId().intValue())))
-            .andExpect(jsonPath("$.[*].key").value(hasItem(DEFAULT_KEY)))
-            .andExpect(jsonPath("$.[*].guid").value(hasItem(DEFAULT_GUID.toString())))
+            .andExpect(jsonPath("$.[*].parameterKey").value(hasItem(DEFAULT_PARAMETER_KEY)))
+            .andExpect(jsonPath("$.[*].parameterGuid").value(hasItem(DEFAULT_PARAMETER_GUID.toString())))
             .andExpect(jsonPath("$.[*].parameter").value(hasItem(DEFAULT_PARAMETER)));
 
         // Check, that the count call also returns 1
@@ -625,7 +600,7 @@ class PrepaymentMappingResourceIT {
         PrepaymentMapping updatedPrepaymentMapping = prepaymentMappingRepository.findById(prepaymentMapping.getId()).get();
         // Disconnect from session so that the updates on updatedPrepaymentMapping are not directly saved in db
         em.detach(updatedPrepaymentMapping);
-        updatedPrepaymentMapping.key(UPDATED_KEY).guid(UPDATED_GUID).parameter(UPDATED_PARAMETER);
+        updatedPrepaymentMapping.parameterKey(UPDATED_PARAMETER_KEY).parameterGuid(UPDATED_PARAMETER_GUID).parameter(UPDATED_PARAMETER);
         PrepaymentMappingDTO prepaymentMappingDTO = prepaymentMappingMapper.toDto(updatedPrepaymentMapping);
 
         restPrepaymentMappingMockMvc
@@ -640,8 +615,8 @@ class PrepaymentMappingResourceIT {
         List<PrepaymentMapping> prepaymentMappingList = prepaymentMappingRepository.findAll();
         assertThat(prepaymentMappingList).hasSize(databaseSizeBeforeUpdate);
         PrepaymentMapping testPrepaymentMapping = prepaymentMappingList.get(prepaymentMappingList.size() - 1);
-        assertThat(testPrepaymentMapping.getKey()).isEqualTo(UPDATED_KEY);
-        assertThat(testPrepaymentMapping.getGuid()).isEqualTo(UPDATED_GUID);
+        assertThat(testPrepaymentMapping.getParameterKey()).isEqualTo(UPDATED_PARAMETER_KEY);
+        assertThat(testPrepaymentMapping.getParameterGuid()).isEqualTo(UPDATED_PARAMETER_GUID);
         assertThat(testPrepaymentMapping.getParameter()).isEqualTo(UPDATED_PARAMETER);
 
         // Validate the PrepaymentMapping in Elasticsearch
@@ -736,7 +711,7 @@ class PrepaymentMappingResourceIT {
         PrepaymentMapping partialUpdatedPrepaymentMapping = new PrepaymentMapping();
         partialUpdatedPrepaymentMapping.setId(prepaymentMapping.getId());
 
-        partialUpdatedPrepaymentMapping.key(UPDATED_KEY);
+        partialUpdatedPrepaymentMapping.parameterKey(UPDATED_PARAMETER_KEY);
 
         restPrepaymentMappingMockMvc
             .perform(
@@ -750,8 +725,8 @@ class PrepaymentMappingResourceIT {
         List<PrepaymentMapping> prepaymentMappingList = prepaymentMappingRepository.findAll();
         assertThat(prepaymentMappingList).hasSize(databaseSizeBeforeUpdate);
         PrepaymentMapping testPrepaymentMapping = prepaymentMappingList.get(prepaymentMappingList.size() - 1);
-        assertThat(testPrepaymentMapping.getKey()).isEqualTo(UPDATED_KEY);
-        assertThat(testPrepaymentMapping.getGuid()).isEqualTo(DEFAULT_GUID);
+        assertThat(testPrepaymentMapping.getParameterKey()).isEqualTo(UPDATED_PARAMETER_KEY);
+        assertThat(testPrepaymentMapping.getParameterGuid()).isEqualTo(DEFAULT_PARAMETER_GUID);
         assertThat(testPrepaymentMapping.getParameter()).isEqualTo(DEFAULT_PARAMETER);
     }
 
@@ -767,7 +742,10 @@ class PrepaymentMappingResourceIT {
         PrepaymentMapping partialUpdatedPrepaymentMapping = new PrepaymentMapping();
         partialUpdatedPrepaymentMapping.setId(prepaymentMapping.getId());
 
-        partialUpdatedPrepaymentMapping.key(UPDATED_KEY).guid(UPDATED_GUID).parameter(UPDATED_PARAMETER);
+        partialUpdatedPrepaymentMapping
+            .parameterKey(UPDATED_PARAMETER_KEY)
+            .parameterGuid(UPDATED_PARAMETER_GUID)
+            .parameter(UPDATED_PARAMETER);
 
         restPrepaymentMappingMockMvc
             .perform(
@@ -781,8 +759,8 @@ class PrepaymentMappingResourceIT {
         List<PrepaymentMapping> prepaymentMappingList = prepaymentMappingRepository.findAll();
         assertThat(prepaymentMappingList).hasSize(databaseSizeBeforeUpdate);
         PrepaymentMapping testPrepaymentMapping = prepaymentMappingList.get(prepaymentMappingList.size() - 1);
-        assertThat(testPrepaymentMapping.getKey()).isEqualTo(UPDATED_KEY);
-        assertThat(testPrepaymentMapping.getGuid()).isEqualTo(UPDATED_GUID);
+        assertThat(testPrepaymentMapping.getParameterKey()).isEqualTo(UPDATED_PARAMETER_KEY);
+        assertThat(testPrepaymentMapping.getParameterGuid()).isEqualTo(UPDATED_PARAMETER_GUID);
         assertThat(testPrepaymentMapping.getParameter()).isEqualTo(UPDATED_PARAMETER);
     }
 
@@ -900,8 +878,8 @@ class PrepaymentMappingResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentMapping.getId().intValue())))
-            .andExpect(jsonPath("$.[*].key").value(hasItem(DEFAULT_KEY)))
-            .andExpect(jsonPath("$.[*].guid").value(hasItem(DEFAULT_GUID.toString())))
+            .andExpect(jsonPath("$.[*].parameterKey").value(hasItem(DEFAULT_PARAMETER_KEY)))
+            .andExpect(jsonPath("$.[*].parameterGuid").value(hasItem(DEFAULT_PARAMETER_GUID.toString())))
             .andExpect(jsonPath("$.[*].parameter").value(hasItem(DEFAULT_PARAMETER)));
     }
 }

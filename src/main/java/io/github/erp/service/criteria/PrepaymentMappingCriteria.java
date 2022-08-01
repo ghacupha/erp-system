@@ -1,23 +1,5 @@
 package io.github.erp.service.criteria;
 
-/*-
- * Erp System - Mark II No 21 (Baruch Series)
- * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -45,9 +27,9 @@ public class PrepaymentMappingCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private StringFilter key;
+    private StringFilter parameterKey;
 
-    private UUIDFilter guid;
+    private UUIDFilter parameterGuid;
 
     private StringFilter parameter;
 
@@ -59,8 +41,8 @@ public class PrepaymentMappingCriteria implements Serializable, Criteria {
 
     public PrepaymentMappingCriteria(PrepaymentMappingCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.key = other.key == null ? null : other.key.copy();
-        this.guid = other.guid == null ? null : other.guid.copy();
+        this.parameterKey = other.parameterKey == null ? null : other.parameterKey.copy();
+        this.parameterGuid = other.parameterGuid == null ? null : other.parameterGuid.copy();
         this.parameter = other.parameter == null ? null : other.parameter.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
@@ -86,34 +68,34 @@ public class PrepaymentMappingCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
-    public StringFilter getKey() {
-        return key;
+    public StringFilter getParameterKey() {
+        return parameterKey;
     }
 
-    public StringFilter key() {
-        if (key == null) {
-            key = new StringFilter();
+    public StringFilter parameterKey() {
+        if (parameterKey == null) {
+            parameterKey = new StringFilter();
         }
-        return key;
+        return parameterKey;
     }
 
-    public void setKey(StringFilter key) {
-        this.key = key;
+    public void setParameterKey(StringFilter parameterKey) {
+        this.parameterKey = parameterKey;
     }
 
-    public UUIDFilter getGuid() {
-        return guid;
+    public UUIDFilter getParameterGuid() {
+        return parameterGuid;
     }
 
-    public UUIDFilter guid() {
-        if (guid == null) {
-            guid = new UUIDFilter();
+    public UUIDFilter parameterGuid() {
+        if (parameterGuid == null) {
+            parameterGuid = new UUIDFilter();
         }
-        return guid;
+        return parameterGuid;
     }
 
-    public void setGuid(UUIDFilter guid) {
-        this.guid = guid;
+    public void setParameterGuid(UUIDFilter parameterGuid) {
+        this.parameterGuid = parameterGuid;
     }
 
     public StringFilter getParameter() {
@@ -165,8 +147,8 @@ public class PrepaymentMappingCriteria implements Serializable, Criteria {
         final PrepaymentMappingCriteria that = (PrepaymentMappingCriteria) o;
         return (
             Objects.equals(id, that.id) &&
-            Objects.equals(key, that.key) &&
-            Objects.equals(guid, that.guid) &&
+            Objects.equals(parameterKey, that.parameterKey) &&
+            Objects.equals(parameterGuid, that.parameterGuid) &&
             Objects.equals(parameter, that.parameter) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
@@ -175,7 +157,7 @@ public class PrepaymentMappingCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, key, guid, parameter, placeholderId, distinct);
+        return Objects.hash(id, parameterKey, parameterGuid, parameter, placeholderId, distinct);
     }
 
     // prettier-ignore
@@ -183,8 +165,8 @@ public class PrepaymentMappingCriteria implements Serializable, Criteria {
     public String toString() {
         return "PrepaymentMappingCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
-            (key != null ? "key=" + key + ", " : "") +
-            (guid != null ? "guid=" + guid + ", " : "") +
+            (parameterKey != null ? "parameterKey=" + parameterKey + ", " : "") +
+            (parameterGuid != null ? "parameterGuid=" + parameterGuid + ", " : "") +
             (parameter != null ? "parameter=" + parameter + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

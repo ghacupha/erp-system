@@ -1,23 +1,5 @@
 package io.github.erp.domain;
 
-/*-
- * Erp System - Mark II No 21 (Baruch Series)
- * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -63,8 +45,8 @@ public class PrepaymentAccount implements Serializable {
     @Column(name = "prepayment_amount", precision = 21, scale = 2)
     private BigDecimal prepaymentAmount;
 
-    @Column(name = "guid")
-    private UUID guid;
+    @Column(name = "prepayment_guid")
+    private UUID prepaymentGuid;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
@@ -201,17 +183,17 @@ public class PrepaymentAccount implements Serializable {
         this.prepaymentAmount = prepaymentAmount;
     }
 
-    public UUID getGuid() {
-        return this.guid;
+    public UUID getPrepaymentGuid() {
+        return this.prepaymentGuid;
     }
 
-    public PrepaymentAccount guid(UUID guid) {
-        this.setGuid(guid);
+    public PrepaymentAccount prepaymentGuid(UUID prepaymentGuid) {
+        this.setPrepaymentGuid(prepaymentGuid);
         return this;
     }
 
-    public void setGuid(UUID guid) {
-        this.guid = guid;
+    public void setPrepaymentGuid(UUID prepaymentGuid) {
+        this.prepaymentGuid = prepaymentGuid;
     }
 
     public SettlementCurrency getSettlementCurrency() {
@@ -389,7 +371,7 @@ public class PrepaymentAccount implements Serializable {
             ", particulars='" + getParticulars() + "'" +
             ", notes='" + getNotes() + "'" +
             ", prepaymentAmount=" + getPrepaymentAmount() +
-            ", guid='" + getGuid() + "'" +
+            ", prepaymentGuid='" + getPrepaymentGuid() + "'" +
             "}";
     }
 }
