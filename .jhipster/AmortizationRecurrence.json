@@ -1,0 +1,100 @@
+{
+  "fields": [
+    {
+      "fieldName": "firstAmortizationDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "amortizationFrequency",
+      "fieldType": "recurrenceFrequency",
+      "fieldValues": "MONTHLY,BI_MONTHLY,QUARTERLY,TRIMESTERS,BIANNUAL",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "numberOfRecurrences",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "notes",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "particulars",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "isOverWritten",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "timeOfInstallation",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "recurrenceGuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "prepaymentAccountGuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "amortizationRecurrence"
+    },
+    {
+      "relationshipName": "parameters",
+      "otherEntityName": "prepaymentMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "parameter",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "amortizationRecurrence"
+    },
+    {
+      "relationshipName": "applicationParameters",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "mappedValue",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "amortizationRecurrence"
+    },
+    {
+      "relationshipName": "depreciationMethod",
+      "otherEntityName": "depreciationMethod",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "description"
+    },
+    {
+      "relationshipName": "prepaymentAccount",
+      "otherEntityName": "prepaymentAccount",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "catalogueNumber"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "AmortizationRecurrence",
+  "changelogDate": "20220802070433",
+  "incrementalChangelog": false
+}
