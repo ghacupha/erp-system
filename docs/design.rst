@@ -113,13 +113,19 @@ The main entities are as follows:
 
  The  **amortization-sequence** entity tracks the events
 
- - latest_amortization_date: local-date
+ - sequence_number: integer
+ - current_amortization_date: local-date
  - next_amortization_date: local-date
  - previous_amortization_date: local-date
+ - is_commencement_sequence: boolean
+ - is_terminal_sequence: boolean
 
  This means we can independently track the amortization date of a prepayment and know when it is due for prepayment. This is
  logic proceeds from the recurrence when dictates the frequency with which amortization occurs whether monthly, quarterly,
  half-yearly and so on and so forth.
+
+ The entity instance will also track whether the current_sequence is the commencement of amortization or the terminal instance
+ or both.
 
  **Day one** is a configuration which dictates a cut off date considered the initial date for recognition of prepayments,
  amortization-report and prepayment-balance. No sequence can therefore have a last_amortization_date that is earlier than the
