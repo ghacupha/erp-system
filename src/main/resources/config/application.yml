@@ -154,7 +154,7 @@ jhipster:
     name: 'ERP_System_Baruch_Series'
   # By default CORS is disabled. Uncomment to enable.
   cors:
-     allowed-origins: 'http://localhost:8100,https://localhost:8100,http://localhost:9000,https://localhost:9000,https://localhost:8981,http://localhost:8981,http://127.0.0.1:8980,https://127.0.0.1:8984,http://127.0.0.1:8984,https://localhost:8984,http://localhost:8984,http://127.0.0.1:8982,https://localhost:8982,http://localhost:8982'
+     allowed-origins: 'http://localhost:8100,https://localhost:8100,http://localhost:9000,https://localhost:9000,https://localhost:8981,http://localhost:8981,http://127.0.0.1:8980,${app.SandboxInstance.urls}'
      allowed-methods: "*"
      allowed-headers: "*"
      exposed-headers: "Origin,X-Requested-With,Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params"
@@ -187,3 +187,6 @@ jhipster:
 
 app:
   title: 'Mark II No. 21'
+  SandboxInstance:
+    urls: ${SANDBOX_INSTANCE_URLS}
+    #urls: 'https://127.0.0.1:8984,http://127.0.0.1:8984,https://localhost:8984,http://localhost:8984,http://127.0.0.1:8982,https://localhost:8982,http://localhost:8982,'

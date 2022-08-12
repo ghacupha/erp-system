@@ -32,4 +32,9 @@ import org.springframework.context.annotation.PropertySource;
 public class OtherProperties {
 
     private String title;
+
+    @Data
+    public static class SandboxInstance {
+        private String urls;
+    }
 }
