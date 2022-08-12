@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Erp System - Mark II No 26 (Baruch Series)
+# Erp System - Mark II No 26 (Baruch Series) Server ver 0.0.6-SNAPSHOT
 # Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
 #
 # This program is free software: you can redistribute it and/or modify
