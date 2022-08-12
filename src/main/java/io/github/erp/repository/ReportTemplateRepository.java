@@ -1,7 +1,7 @@
 package io.github.erp.repository;
 
 /*-
- * Erp System - Mark II No 23 (Baruch Series)
+ * Erp System - Mark II No 26 (Baruch Series)
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.domain.ReportTemplate;
 import java.util.List;
 import java.util.Optional;
