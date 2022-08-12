@@ -17,6 +17,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
+export ERP_SERVER_DEPLOYMENT_PROD_PORT=${ERP_SERVER_DEPLOYMENT_PROD_PORT}
 
-echo "The application will start in ${JHIPSTER_SLEEP}s..." && sleep ${JHIPSTER_SLEEP}
+echo "The application will start in ${JHIPSTER_SLEEP}s on port configuration matrix: ${ERP_SERVER_DEPLOYMENT_PROD_PORT}. Standby..." && sleep ${JHIPSTER_SLEEP}
 exec java ${JAVA_OPTS} -noverify -XX:+AlwaysPreTouch -Djava.security.egd=file:/dev/./urandom -cp /app/resources/:/app/classes/:/app/libs/* "io.github.erp.ErpSystemApp"  "$@"
