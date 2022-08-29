@@ -18,9 +18,9 @@ package io.github.erp.erp.index;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import com.google.common.collect.ImmutableList;
-import io.github.erp.repository.search.AssetCategorySearchRepository;
-import io.github.erp.service.AssetCategoryService;
-import io.github.erp.service.mapper.AssetCategoryMapper;
+import io.github.erp.repository.search.PrepaymentAccountSearchRepository;
+import io.github.erp.service.PrepaymentAccountService;
+import io.github.erp.service.mapper.PrepaymentAccountMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -33,14 +33,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class PrepaymentAccountIndexingService extends AbtractStartUpIndexService implements ApplicationIndexingService, ApplicationListener<ApplicationReadyEvent> {
-    private static final String TAG = "PrepaymentAccountIndexi";
+    private static final String TAG = "PrepaymentAccountIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
 
-    private final AssetCategoryMapper mapper;
-    private final AssetCategoryService service;
-    private final AssetCategorySearchRepository searchRepository;
+    private final PrepaymentAccountMapper mapper;
+    private final PrepaymentAccountService service;
+    private final PrepaymentAccountSearchRepository searchRepository;
 
-    public PrepaymentAccountIndexingService(AssetCategoryMapper mapper, AssetCategoryService service, AssetCategorySearchRepository searchRepository) {
+    public PrepaymentAccountIndexingService(PrepaymentAccountMapper mapper, PrepaymentAccountService service, PrepaymentAccountSearchRepository searchRepository) {
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;
