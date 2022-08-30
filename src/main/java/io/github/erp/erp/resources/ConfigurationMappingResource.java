@@ -18,6 +18,8 @@ package io.github.erp.erp.resources;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.UniversallyUniqueMapping;
+import io.github.erp.service.dto.PrepaymentMappingDTO;
+import io.github.erp.internal.service.InternalPrepaymentMappingService;
 import io.github.erp.internal.service.InternalUniversallyUniqueMappingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,18 +35,27 @@ import java.util.Optional;
 
 /**
  * This resource is designed primarily to fetch parameters that are mapped in the
- * universally-unique-mapping entity
+ * universally-unique-mapping entity.
+ * Edit: 2022-08-30
+ * Okay this feature turned out to be so useful that we created other domain-specific
+ * entities primarily for front-end configuration. For instance we now have and entity
+ * called prepayment-mapping in which we configure parameters that are specific to 
+ * prepayments only
  */
 @RestController
 @RequestMapping("/api/configuration")
 public class ConfigurationMappingResource {
 
-    private final static Logger log = LoggerFactory.getLogger(ConfigurationMappingResource.class);
+    private static final Logger log = LoggerFactory.getLogger(ConfigurationMappingResource.class);
 
+    private final InternalPrepaymentMappingService prepaymentMappingService;
     private final InternalUniversallyUniqueMappingService universallyUniqueMappingService;
 
-    public ConfigurationMappingResource(@Qualifier("internalUniversallyUniqueMappingService") InternalUniversallyUniqueMappingService universallyUniqueMappingService) {
+    public ConfigurationMappingResource(
+        @Qualifier("internalUniversallyUniqueMappingService") InternalUniversallyUniqueMappingService universallyUniqueMappingService,
+        @Qualifier("internalPrepaymentMappingService") InternalPrepaymentMappingService prepaymentMappingService ) {
         this.universallyUniqueMappingService = universallyUniqueMappingService;
+        this.prepaymentMappingService = prepaymentMappingService;
     }
 
     /**
@@ -57,6 +68,19 @@ public class ConfigurationMappingResource {
     public ResponseEntity<UniversallyUniqueMapping> getUniversalMapping(@PathVariable String universalKey) {
         log.debug("REST request to get UniversallyUniqueMapping : {}", universalKey);
         Optional<UniversallyUniqueMapping> uMapping = universallyUniqueMappingService.getMapping(universalKey);
+        return ResponseUtil.wrapOrNotFound(uMapping);
+    }
+
+    /**
+     * {@code GET  /prepayment-mappings/:universalKey} : get the "parameter" of prepaymentMapping given the "parameterKey".
+     *
+     * @param parameterKey the key of the prepaymentMapping value to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the mappedValue, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/prepayment-mappings/{parameterKey}")
+    public ResponseEntity<PrepaymentMappingDTO> getPrepaymentMapping(@PathVariable String parameterKey) {
+        log.debug("REST request to get Prepayment mapping for the key : {}", parameterKey);
+        Optional<PrepaymentMappingDTO> uMapping = prepaymentMappingService.getMapping(parameterKey);
         return ResponseUtil.wrapOrNotFound(uMapping);
     }
 }
