@@ -186,7 +186,7 @@ jhipster:
 # ===================================================================
 
 app:
-  title: 'Mark II No. 27'
+  title: 'Mark II No. 28'
   SandboxInstance:
     urls: ${SANDBOX_INSTANCE_URLS}
     #urls: 'https://127.0.0.1:8984,http://127.0.0.1:8984,https://localhost:8984,http://localhost:8984,http://127.0.0.1:8982,https://localhost:8982,http://localhost:8982,'
