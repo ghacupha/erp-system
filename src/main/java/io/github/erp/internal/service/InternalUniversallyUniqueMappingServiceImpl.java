@@ -52,7 +52,7 @@ public class InternalUniversallyUniqueMappingServiceImpl
         AtomicReference<UniversallyUniqueMapping> val = new AtomicReference<>();
         internalUUMappingRepository.findByUniversalKeyEquals(universalKey).ifPresentOrElse(
             val::set,
-            () -> {throw new RuntimeException("Sorry, couldn't find mapping for " + universalKey + " Are sure you that configured?"); }
+            () -> {throw new ConfigurationMappingNotFoundException("Sorry, couldn't find mapping for " + universalKey + " Are sure you had that configured?"); }
         );
         return Optional.of(val.get());
     }

@@ -59,5 +59,4 @@ public class PrepaymentAccountIndexingService extends AbtractStartUpIndexService
                 .collect(ImmutableList.toImmutableList()));
         log.info("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
     }
-
 }
