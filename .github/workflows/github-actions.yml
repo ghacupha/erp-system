@@ -2,7 +2,7 @@ name: Application CI
 on: [push, pull_request]
 jobs:
     pipeline:
-        name: erpSystem pipeline
+        name: ERP System pipeline
         runs-on: ubuntu-latest
         if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
         timeout-minutes: 40
@@ -41,10 +41,6 @@ jobs:
               run: |
                   chmod +x mvnw
                   npm run ci:backend:test
-            #- name: Run frontend test
-            #  run: npm run ci:frontend:test
-            #- name: Package application
-            #  run: npm run java:jar:prod
             - name: Login to Docker hub
               uses: docker/login-action@v1
               with:
@@ -53,5 +49,5 @@ jobs:
             - name: Build image
               run: ./mvnw -ntp package jib:dockerBuild -Pprod -DskipTests
             - name: Publish image
-              run: docker push ghacupha/erp-system:0.0.8-SNAPSHOT
+              run: docker push ghacupha/erp-system:0.0.9-SNAPSHOT
 

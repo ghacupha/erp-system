@@ -1,7 +1,7 @@
 package io.github.erp.internal.repository;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.8-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.9-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.internal.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import java.util.Optional;
 
 import io.github.erp.repository.PrepaymentMappingRepository;
