@@ -67,7 +67,8 @@ management:
 
 spring:
   application:
-    name: erpSystem
+    name: ${app.title}
+    #name: erpSystem
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
     # Otherwise, it will be filled in by maven when building the JAR file
@@ -186,7 +187,7 @@ jhipster:
 # ===================================================================
 
 app:
-  title: 'Mark II No. 28'
+  title: 'ERP System Mark II No. 28 Baruch Series'
   SandboxInstance:
     urls: ${SANDBOX_INSTANCE_URLS}
     #urls: 'https://127.0.0.1:8984,http://127.0.0.1:8984,https://localhost:8984,http://localhost:8984,http://127.0.0.1:8982,https://localhost:8982,http://localhost:8982,'
