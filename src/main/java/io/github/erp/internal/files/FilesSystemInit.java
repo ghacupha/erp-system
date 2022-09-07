@@ -17,37 +17,55 @@ package io.github.erp.internal.files;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.service.ExcelReportExportService;
 import io.github.erp.service.PdfReportRequisitionService;
 import io.github.erp.service.ReportRequisitionService;
 import io.github.erp.service.XlsxReportRequisitionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * This service runs at startup to delete all reports in the reports directory and all
+ * report metadata. This is to prevent overwhelming the fs with old transcient reports
+ * that could be generated again on a whim.
+ * This of course adds the burden of the startup sequence because at the same time we are also running
+ * indices of certain searchable entities. At some time in future we would like to come back
+ * and revisit this process with a stable batch sequence and quick gentle startups
+ */
 @Service
 @Transactional
 public class FilesSystemInit implements ApplicationListener<ApplicationReadyEvent> {
+
+    private static final Logger log = LoggerFactory.getLogger(FilesSystemInit.class);
 
     private final FileStorageService storageService;
     private final ReportRequisitionService reportRequisitionService;
     private final PdfReportRequisitionService pdfReportRequisitionService;
     private final XlsxReportRequisitionService xlsxReportRequisitionService;
+    private final ExcelReportExportService excelReportExportService;
 
     public FilesSystemInit(
-        FileStorageService storageService, 
-        PdfReportRequisitionService pdfReportRequisitionService, 
-        ReportRequisitionService reportRequisitionService, 
-        XlsxReportRequisitionService xlsxReportRequisitionService) {
+        FileStorageService storageService,
+        PdfReportRequisitionService pdfReportRequisitionService,
+        ReportRequisitionService reportRequisitionService,
+        XlsxReportRequisitionService xlsxReportRequisitionService, ExcelReportExportService excelReportExportService) {
         this.storageService = storageService;
         this.pdfReportRequisitionService = pdfReportRequisitionService;
         this.reportRequisitionService = reportRequisitionService;
         this.xlsxReportRequisitionService = xlsxReportRequisitionService;
+        this.excelReportExportService = excelReportExportService;
     }
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
+
+        log.info("Initializing file-system for reports directory, and cleanup services. Standby...");
+
         // Delete all report entities from the system
         pdfReportRequisitionService.findAll(Pageable.unpaged())
             .forEach((report) -> pdfReportRequisitionService.delete(report.getId()));
@@ -58,10 +76,17 @@ public class FilesSystemInit implements ApplicationListener<ApplicationReadyEven
         reportRequisitionService.findAll(Pageable.unpaged())
             .forEach(report -> reportRequisitionService.delete(report.getId()));
 
+        excelReportExportService.findAll(Pageable.unpaged())
+            .forEach(report -> reportRequisitionService.delete(report.getId()));
+
+        log.info("All report metadata has been deleted, removing old files from the reports directory. Standby...");
+
         // delete the report files from the system
         storageService.deleteAll();
 
         // initialize storage
         storageService.init();
+
+        log.info("File-system initialization sequence complete, reports directory is now restored and ready for instructions.");
     }
 }
