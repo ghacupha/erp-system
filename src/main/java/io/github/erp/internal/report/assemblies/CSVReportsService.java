@@ -1,4 +1,4 @@
-package io.github.erp.internal.report;
+package io.github.erp.internal.report.assemblies;
 
 /*-
  * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.8-SNAPSHOT
@@ -22,17 +22,17 @@ import net.sf.jasperreports.engine.JasperReport;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This is also an early prototype for the implementation of jasper reports that will be
- * removed in a future update
+ * So yeah, it's what it is, this is probably overkill, the jasper-reports guys have said so themselves
+ * that the API is there, but it's like they don't actually expect anyone to use it, and I tend to agree.
+ * We really can apply some technology that is more native to Java, which means it will be stupid fast. And
+ * fast is a good thing. So we are deprecating this one as well
  */
 @Deprecated
 @Service
-public class PDFReportsService implements SecuredReportsService, UnsecuredReportsService {
-
+public class CSVReportsService implements SecuredReportsService, UnsecuredReportsService {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
@@ -43,54 +43,30 @@ public class PDFReportsService implements SecuredReportsService, UnsecuredReport
     private final SimpleJasperReportFiller simpleReportFiller;
     private final SimpleJasperReportExporter simpleExporter;
 
-    public PDFReportsService(SimpleJasperReportCompiler compiler, SimpleJasperReportFiller simpleReportFiller, SimpleJasperReportExporter simpleExporter) {
+    public CSVReportsService(SimpleJasperReportCompiler compiler, SimpleJasperReportFiller simpleReportFiller, SimpleJasperReportExporter simpleExporter) {
         this.compiler = compiler;
         this.simpleReportFiller = simpleReportFiller;
         this.simpleExporter = simpleExporter;
     }
 
-    public void generateReport(String resourceLocation) {
-
-        JasperReport compiledReport = compiler.compileReport(reportsDirectory + resourceLocation);
-
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("title", "Dealers Report Example");
-
-        JasperPrint print = simpleReportFiller.fillReport(compiledReport, parameters);
-
-        simpleExporter.setJasperPrint(print);
-
-        simpleExporter.exportToPdf(reportsDirectory + "employeeReport.pdf", applicationName, "ownerPassword","userPassword");
-        simpleExporter.exportToXlsx(reportsDirectory + "employeeReport.xlsx", "Employee Data");
-        simpleExporter.exportToCsv(reportsDirectory + "employeeReport.csv");
-        simpleExporter.exportToHtml(reportsDirectory + "employeeReport.html");
-
-    }
-
     @Override
     public String generateReport(String reportFileLocation, String reportName, String ownerPassword, String userPassword, Map<String, Object> parameters) {
 
+        // TODO Implement a password protected archive for the resulting file
         JasperReport compiledReport = compiler.compileReport(reportsDirectory + reportFileLocation);
-
         JasperPrint print = simpleReportFiller.fillReport(compiledReport, parameters);
-
         simpleExporter.setJasperPrint(print);
-
-        simpleExporter.exportToPdf(reportsDirectory + reportName, applicationName, ownerPassword,userPassword);
-
+        simpleExporter.exportToCsv(reportsDirectory + reportName, applicationName);
         return reportsDirectory + reportName;
     }
 
     @Override
     public String generateReport(String reportFileLocation, String reportName, Map<String, Object> parameters) {
+
         JasperReport compiledReport = compiler.compileReport(reportsDirectory + reportFileLocation);
-
         JasperPrint print = simpleReportFiller.fillReport(compiledReport, parameters);
-
         simpleExporter.setJasperPrint(print);
-
-        simpleExporter.exportToPdf(reportsDirectory + reportName, applicationName);
-
+        simpleExporter.exportToCsv(reportsDirectory + reportName, applicationName);
         return reportsDirectory + reportName;
     }
 }

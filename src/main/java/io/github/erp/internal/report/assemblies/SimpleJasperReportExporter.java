@@ -1,4 +1,4 @@
-package io.github.erp.internal.report;
+package io.github.erp.internal.report.assemblies;
 
 /*-
  * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.8-SNAPSHOT

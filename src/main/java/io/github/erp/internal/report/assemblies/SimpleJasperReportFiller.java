@@ -1,4 +1,4 @@
-package io.github.erp.internal.report;
+package io.github.erp.internal.report.assemblies;
 
 /*-
  * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.8-SNAPSHOT
@@ -17,19 +17,28 @@ package io.github.erp.internal.report;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import java.util.concurrent.CompletableFuture;
+import lombok.Data;
+import lombok.SneakyThrows;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import org.springframework.stereotype.Service;
 
-/**
- * This interface takes report-requisition data and start the process of creating a report
- * @param <T>
- */
-public interface ReportAssemblyService<T> {
+import javax.sql.DataSource;
+import java.util.Map;
 
-    /**
-     * Creates the report and returns the report-path of the report
-     * @param dto
-     * @param fileExtension e.g. ".pdf", ".xlsx"
-     * @return
-     */
-   String createReport(T dto, String fileExtension);
+@Data
+@Service
+public class SimpleJasperReportFiller {
+
+    private final DataSource dataSource;
+
+    public SimpleJasperReportFiller(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    @SneakyThrows
+    public JasperPrint fillReport(JasperReport compiledReport, Map<String, Object> parameters) {
+        return JasperFillManager.fillReport(compiledReport, parameters, dataSource.getConnection());
+    }
 }

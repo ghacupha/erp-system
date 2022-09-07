@@ -1,4 +1,4 @@
-package io.github.erp.internal.report;
+package io.github.erp.internal.report.assemblies;
 
 /*-
  * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.8-SNAPSHOT
@@ -25,10 +25,11 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 /**
- * Dedicated HTML report generation service
+ * Generates a report in the XLSX format. Please note due to the unavailability of the
+ * encryption API, the file is wrapped in a password protected archive instead
  */
 @Service
-public class HTMLReportsService implements SecuredReportsService, UnsecuredReportsService {
+public class XLSXReportsService implements SecuredReportsService, UnsecuredReportsService {
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
@@ -40,7 +41,7 @@ public class HTMLReportsService implements SecuredReportsService, UnsecuredRepor
     private final SimpleJasperReportFiller simpleReportFiller;
     private final SimpleJasperReportExporter simpleExporter;
 
-    public HTMLReportsService(SimpleJasperReportCompiler compiler, SimpleJasperReportFiller simpleReportFiller, SimpleJasperReportExporter simpleExporter) {
+    public XLSXReportsService(SimpleJasperReportCompiler compiler, SimpleJasperReportFiller simpleReportFiller, SimpleJasperReportExporter simpleExporter) {
         this.compiler = compiler;
         this.simpleReportFiller = simpleReportFiller;
         this.simpleExporter = simpleExporter;
@@ -53,7 +54,7 @@ public class HTMLReportsService implements SecuredReportsService, UnsecuredRepor
         JasperReport compiledReport = compiler.compileReport(reportsDirectory + reportFileLocation);
         JasperPrint print = simpleReportFiller.fillReport(compiledReport, parameters);
         simpleExporter.setJasperPrint(print);
-        simpleExporter.exportToHtml(reportsDirectory + reportName);
+        simpleExporter.exportToXlsx(reportsDirectory + reportName, applicationName);
         return reportsDirectory + reportName;
     }
 
@@ -63,7 +64,8 @@ public class HTMLReportsService implements SecuredReportsService, UnsecuredRepor
         JasperReport compiledReport = compiler.compileReport(reportsDirectory + reportFileLocation);
         JasperPrint print = simpleReportFiller.fillReport(compiledReport, parameters);
         simpleExporter.setJasperPrint(print);
-        simpleExporter.exportToHtml(reportsDirectory + reportName);
+        simpleExporter.exportToXlsx(reportsDirectory + reportName, applicationName);
         return reportsDirectory + reportName;
     }
+
 }

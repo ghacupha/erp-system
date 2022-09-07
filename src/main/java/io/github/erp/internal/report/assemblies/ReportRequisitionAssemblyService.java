@@ -1,4 +1,4 @@
-package io.github.erp.internal.report;
+package io.github.erp.internal.report.assemblies;
 
 /*-
  * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.8-SNAPSHOT
@@ -17,6 +17,7 @@ package io.github.erp.internal.report;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.report.templates.TemplatePresentation;
 import io.github.erp.service.ReportContentTypeService;
 import io.github.erp.service.ReportTemplateService;
 import io.github.erp.service.SystemContentTypeService;
