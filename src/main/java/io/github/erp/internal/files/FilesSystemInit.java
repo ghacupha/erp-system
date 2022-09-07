@@ -77,7 +77,7 @@ public class FilesSystemInit implements ApplicationListener<ApplicationReadyEven
             .forEach(report -> reportRequisitionService.delete(report.getId()));
 
         excelReportExportService.findAll(Pageable.unpaged())
-            .forEach(report -> reportRequisitionService.delete(report.getId()));
+            .forEach(report -> excelReportExportService.delete(report.getId()));
 
         log.info("All report metadata has been deleted, removing old files from the reports directory. Standby...");
 
