@@ -40,3 +40,4 @@ Contents
    api
    milestones
    design
+   reports
