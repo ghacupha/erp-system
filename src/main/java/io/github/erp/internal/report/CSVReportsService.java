@@ -24,6 +24,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+/**
+ * So yeah, it's what it is, this is probably overkill, the jasper-reports guys have said so themselves
+ * that the API is there, but it's like they don't actually expect anyone to use it, and I tend to agree.
+ * We really can apply some technology that is more native to Java, which means it will be stupid fast. And
+ * fast is a good thing. So we are deprecating this one as well
+ */
+@Deprecated
 @Service
 public class CSVReportsService implements SecuredReportsService, UnsecuredReportsService {
     @Value("${jhipster.clientApp.name}")

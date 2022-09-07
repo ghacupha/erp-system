@@ -17,6 +17,14 @@ package io.github.erp.internal.report;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+/**
+ * This interface is a general interface for clients that read report requests and fetch the
+ * appropriate report template and dump it on the report directory path. The goal is to have
+ * the right template when one is needed, so that the next step in report generation can commence
+ *
+ * @param <T>
+ */
 public interface ReportTemplatePresentation<T> {
 
     String presentTemplate(T dto);
