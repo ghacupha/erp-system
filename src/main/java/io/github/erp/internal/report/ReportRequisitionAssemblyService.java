@@ -26,6 +26,12 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This service is usable but with warnings: after the creation was complete, it was seen that the
+ * reports generated were somehow corrupted and that means that we'll need to create a couple of very
+ * serious checksum algorithms and routines, and until then this API is to be considered an untested
+ * prototype
+ */
 @Service
 public class ReportRequisitionAssemblyService implements ReportAssemblyService<ReportRequisitionDTO>{
 

@@ -25,6 +25,11 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This is also an early prototype for the implementation of jasper reports that will be
+ * removed in a future update
+ */
+@Deprecated
 @Service
 public class PDFReportsService implements SecuredReportsService, UnsecuredReportsService {
 

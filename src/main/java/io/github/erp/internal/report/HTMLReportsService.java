@@ -24,6 +24,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+/**
+ * Dedicated HTML report generation service
+ */
 @Service
 public class HTMLReportsService implements SecuredReportsService, UnsecuredReportsService {
 
@@ -50,7 +53,7 @@ public class HTMLReportsService implements SecuredReportsService, UnsecuredRepor
         JasperReport compiledReport = compiler.compileReport(reportsDirectory + reportFileLocation);
         JasperPrint print = simpleReportFiller.fillReport(compiledReport, parameters);
         simpleExporter.setJasperPrint(print);
-        simpleExporter.exportToCsv(reportsDirectory + reportName, applicationName);
+        simpleExporter.exportToHtml(reportsDirectory + reportName);
         return reportsDirectory + reportName;
     }
 
@@ -60,7 +63,7 @@ public class HTMLReportsService implements SecuredReportsService, UnsecuredRepor
         JasperReport compiledReport = compiler.compileReport(reportsDirectory + reportFileLocation);
         JasperPrint print = simpleReportFiller.fillReport(compiledReport, parameters);
         simpleExporter.setJasperPrint(print);
-        simpleExporter.exportToCsv(reportsDirectory + reportName, applicationName);
+        simpleExporter.exportToHtml(reportsDirectory + reportName);
         return reportsDirectory + reportName;
     }
 }

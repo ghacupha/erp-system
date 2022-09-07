@@ -26,6 +26,10 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * This services checks the repository for the report templated previously saved and creates the same
  * on the file-system using the file-storage-service.
+ * This interface exists in anticipation of a future interface in which instead of dumping the files on
+ * the host's file system, the system might need to do so on some remote drive, probably using native
+ * tools like git or FTP. The current implementation is a simple dump-to-fs implementation and works for now.
+ * So that puts a ding on the cloud-readiness theme huh?
  */
 @Service
 @Transactional

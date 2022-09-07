@@ -22,6 +22,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+/**
+ * This configuration gives us the exact location where we can dump the jasper templates and
+ * compiled reports
+ */
 @Configuration
 @ConfigurationProperties(prefix = "erp")
 @PropertySource(value = "classpath:config/erpConfigs.yml", factory = AppPropertyFactory.class)

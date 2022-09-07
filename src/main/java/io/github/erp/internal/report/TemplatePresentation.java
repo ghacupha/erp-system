@@ -28,6 +28,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.filter.StringFilter;
 
+/**
+ * A simple dump-to-file template-presentation for the report-template-dto
+ */
 @Service
 @Transactional
 public class TemplatePresentation implements ReportTemplatePresentation<ReportTemplateDTO> {

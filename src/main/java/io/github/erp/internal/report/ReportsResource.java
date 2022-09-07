@@ -27,6 +27,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+/**
+ * This is one of the original designs of the reports system that was deemed inadequate
+ * in favor of full-blown entities with authentication and parameters for metadata and that's
+ * why this is going in a future update
+ */
+@Deprecated
 @RestController
 @RequestMapping("/api/reports")
 public class ReportsResource {

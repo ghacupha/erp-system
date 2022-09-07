@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Uses instructions from the excel-report-export to create a Jasper report in excel format using the
+ * Uses instructions from the excel-report-export entity to create a Jasper report in excel format using the
  * template from the report-design model
  */
 @Service
@@ -36,8 +36,6 @@ public class ExcelReportExportAssemblyService implements ReportAssemblyService<E
     private final ReportTemplatePresentation<ReportDesignDTO> templatePresentation;
     private final XLSXReportsService reportsService;
     private final ReportDesignService reportDesignService;
-
-    // private final ReportDesignRepository reportDesignRepository;
 
     public ExcelReportExportAssemblyService(ReportTemplatePresentation<ReportDesignDTO> templatePresentation, XLSXReportsService reportsService, ReportDesignService reportDesignService) {
         this.templatePresentation = templatePresentation;
