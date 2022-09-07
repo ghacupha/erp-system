@@ -19,7 +19,7 @@ package io.github.erp.aop.reporting;
  */
 import io.github.erp.internal.repository.InternalProcessStatusRepository;
 import io.github.erp.internal.repository.InternalReportStatusRepository;
-import io.github.erp.internal.report.ReportAssemblyService;
+import io.github.erp.internal.report.assemblies.ReportAssemblyService;
 import io.github.erp.internal.report.attachment.ReportAttachmentService;
 import io.github.erp.service.*;
 import io.github.erp.service.dto.ExcelReportExportDTO;

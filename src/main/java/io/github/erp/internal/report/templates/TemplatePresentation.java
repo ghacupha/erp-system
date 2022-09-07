@@ -1,4 +1,4 @@
-package io.github.erp.internal.report;
+package io.github.erp.internal.report.templates;
 
 /*-
  * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.8-SNAPSHOT
@@ -19,7 +19,7 @@ package io.github.erp.internal.report;
  */
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.files.JRXMLMultipartFile;
-import io.github.erp.internal.files.PDFMultipartFile;
+import io.github.erp.internal.report.ReportsProperties;
 import io.github.erp.service.PlaceholderQueryService;
 import io.github.erp.service.criteria.PlaceholderCriteria;
 import io.github.erp.service.dto.PlaceholderDTO;

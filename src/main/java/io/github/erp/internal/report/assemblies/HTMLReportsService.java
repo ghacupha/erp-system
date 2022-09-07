@@ -1,4 +1,4 @@
-package io.github.erp.internal.report;
+package io.github.erp.internal.report.assemblies;
 
 /*-
  * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.8-SNAPSHOT
@@ -25,14 +25,11 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 /**
- * So yeah, it's what it is, this is probably overkill, the jasper-reports guys have said so themselves
- * that the API is there, but it's like they don't actually expect anyone to use it, and I tend to agree.
- * We really can apply some technology that is more native to Java, which means it will be stupid fast. And
- * fast is a good thing. So we are deprecating this one as well
+ * Dedicated HTML report generation service
  */
-@Deprecated
 @Service
-public class CSVReportsService implements SecuredReportsService, UnsecuredReportsService {
+public class HTMLReportsService implements SecuredReportsService, UnsecuredReportsService {
+
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
@@ -43,7 +40,7 @@ public class CSVReportsService implements SecuredReportsService, UnsecuredReport
     private final SimpleJasperReportFiller simpleReportFiller;
     private final SimpleJasperReportExporter simpleExporter;
 
-    public CSVReportsService(SimpleJasperReportCompiler compiler, SimpleJasperReportFiller simpleReportFiller, SimpleJasperReportExporter simpleExporter) {
+    public HTMLReportsService(SimpleJasperReportCompiler compiler, SimpleJasperReportFiller simpleReportFiller, SimpleJasperReportExporter simpleExporter) {
         this.compiler = compiler;
         this.simpleReportFiller = simpleReportFiller;
         this.simpleExporter = simpleExporter;
@@ -56,7 +53,7 @@ public class CSVReportsService implements SecuredReportsService, UnsecuredReport
         JasperReport compiledReport = compiler.compileReport(reportsDirectory + reportFileLocation);
         JasperPrint print = simpleReportFiller.fillReport(compiledReport, parameters);
         simpleExporter.setJasperPrint(print);
-        simpleExporter.exportToCsv(reportsDirectory + reportName, applicationName);
+        simpleExporter.exportToHtml(reportsDirectory + reportName);
         return reportsDirectory + reportName;
     }
 
@@ -66,7 +63,7 @@ public class CSVReportsService implements SecuredReportsService, UnsecuredReport
         JasperReport compiledReport = compiler.compileReport(reportsDirectory + reportFileLocation);
         JasperPrint print = simpleReportFiller.fillReport(compiledReport, parameters);
         simpleExporter.setJasperPrint(print);
-        simpleExporter.exportToCsv(reportsDirectory + reportName, applicationName);
+        simpleExporter.exportToHtml(reportsDirectory + reportName);
         return reportsDirectory + reportName;
     }
 }

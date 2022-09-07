@@ -18,7 +18,7 @@ package io.github.erp.aop.reporting;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.enumeration.ReportStatusTypes;
-import io.github.erp.internal.report.ReportAssemblyService;
+import io.github.erp.internal.report.assemblies.ReportAssemblyService;
 import io.github.erp.service.XlsxReportRequisitionService;
 import io.github.erp.service.dto.XlsxReportRequisitionDTO;
 import lombok.SneakyThrows;
