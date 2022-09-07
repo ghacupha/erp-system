@@ -1,4 +1,4 @@
-Design od the reports platform
+Design of the reports platform
 ==============================
 
 The report system is based on jasper reports. This is a challenging implementation but one that has been
