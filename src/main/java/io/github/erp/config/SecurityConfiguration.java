@@ -76,8 +76,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         // @formatter:off
         http
-            //.csrf()
-            //.disable()
+            .csrf()
+            .disable()
             .addFilterBefore(corsFilter, CsrfFilter.class)
             .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling()
