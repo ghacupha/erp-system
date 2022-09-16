@@ -1,7 +1,7 @@
 package io.github.erp.web.rest.api;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.9-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.0-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@ package io.github.erp.web.rest.api;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
 import io.github.erp.repository.ApplicationUserRepository;
@@ -24,7 +25,6 @@ import io.github.erp.repository.search.ApplicationUserSearchRepository;
 import io.github.erp.service.ApplicationUserService;
 import io.github.erp.service.dto.ApplicationUserDTO;
 import io.github.erp.service.mapper.ApplicationUserMapper;
-//import io.github.erp.web.rest.ApplicationUserResource;
 import io.github.erp.web.rest.TestUtil;
 import io.github.erp.web.rest.userManagement.UserResourceIT;
 import org.junit.jupiter.api.BeforeEach;
@@ -607,6 +607,32 @@ class ApplicationUserResourceIT {
 
         // Get all the applicationUserList where dealerIdentity equals to (dealerIdentityId + 1)
         defaultApplicationUserShouldNotBeFound("dealerIdentityId.equals=" + (dealerIdentityId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllApplicationUsersByPlaceholderIsEqualToSomething() throws Exception {
+        // Initialize the database
+        applicationUserRepository.saveAndFlush(applicationUser);
+        Placeholder placeholder;
+        if (TestUtil.findAll(em, Placeholder.class).isEmpty()) {
+            placeholder = PlaceholderResourceIT.createEntity(em);
+            em.persist(placeholder);
+            em.flush();
+        } else {
+            placeholder = TestUtil.findAll(em, Placeholder.class).get(0);
+        }
+        em.persist(placeholder);
+        em.flush();
+        applicationUser.addPlaceholder(placeholder);
+        applicationUserRepository.saveAndFlush(applicationUser);
+        Long placeholderId = placeholder.getId();
+
+        // Get all the applicationUserList where placeholder equals to placeholderId
+        defaultApplicationUserShouldBeFound("placeholderId.equals=" + placeholderId);
+
+        // Get all the applicationUserList where placeholder equals to (placeholderId + 1)
+        defaultApplicationUserShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
     }
 
     /**

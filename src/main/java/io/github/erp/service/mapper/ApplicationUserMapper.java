@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.9-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.0-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.ApplicationUser;
 import io.github.erp.service.dto.ApplicationUserDTO;
 import org.mapstruct.*;
@@ -26,7 +27,9 @@ import org.mapstruct.*;
  */
 @Mapper(
     componentModel = "spring",
-    uses = { DealerMapper.class, SecurityClearanceMapper.class, UserMapper.class, UniversallyUniqueMappingMapper.class }
+    uses = {
+        DealerMapper.class, SecurityClearanceMapper.class, UserMapper.class, UniversallyUniqueMappingMapper.class, PlaceholderMapper.class,
+    }
 )
 public interface ApplicationUserMapper extends EntityMapper<ApplicationUserDTO, ApplicationUser> {
     @Mapping(target = "organization", source = "organization", qualifiedByName = "dealerName")
@@ -35,9 +38,11 @@ public interface ApplicationUserMapper extends EntityMapper<ApplicationUserDTO, 
     @Mapping(target = "systemIdentity", source = "systemIdentity", qualifiedByName = "login")
     @Mapping(target = "userProperties", source = "userProperties", qualifiedByName = "mappedValueSet")
     @Mapping(target = "dealerIdentity", source = "dealerIdentity", qualifiedByName = "dealerName")
+    @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     ApplicationUserDTO toDto(ApplicationUser s);
 
     @Mapping(target = "removeUserProperties", ignore = true)
+    @Mapping(target = "removePlaceholder", ignore = true)
     ApplicationUser toEntity(ApplicationUserDTO applicationUserDTO);
 
     @Named("applicationIdentity")

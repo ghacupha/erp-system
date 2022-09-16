@@ -60,6 +60,14 @@
       "ownerSide": true,
       "id": false,
       "otherEntityRelationshipName": "applicationUser"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "applicationUser"
     }
   ],
   "service": "serviceImpl",

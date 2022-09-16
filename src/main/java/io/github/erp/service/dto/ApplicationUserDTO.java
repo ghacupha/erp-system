@@ -1,7 +1,7 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.9-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.0-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
@@ -48,6 +49,8 @@ public class ApplicationUserDTO implements Serializable {
     private Set<UniversallyUniqueMappingDTO> userProperties = new HashSet<>();
 
     private DealerDTO dealerIdentity;
+
+    private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -121,6 +124,14 @@ public class ApplicationUserDTO implements Serializable {
         this.dealerIdentity = dealerIdentity;
     }
 
+    public Set<PlaceholderDTO> getPlaceholders() {
+        return placeholders;
+    }
+
+    public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
+        this.placeholders = placeholders;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -155,6 +166,7 @@ public class ApplicationUserDTO implements Serializable {
             ", systemIdentity=" + getSystemIdentity() +
             ", userProperties=" + getUserProperties() +
             ", dealerIdentity=" + getDealerIdentity() +
+            ", placeholders=" + getPlaceholders() +
             "}";
     }
 }

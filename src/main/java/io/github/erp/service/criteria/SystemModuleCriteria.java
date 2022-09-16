@@ -1,7 +1,7 @@
 package io.github.erp.service.criteria;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.9-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.0-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@ package io.github.erp.service.criteria;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -45,6 +46,10 @@ public class SystemModuleCriteria implements Serializable, Criteria {
 
     private StringFilter moduleName;
 
+    private LongFilter placeholderId;
+
+    private LongFilter applicationMappingId;
+
     private Boolean distinct;
 
     public SystemModuleCriteria() {}
@@ -52,6 +57,8 @@ public class SystemModuleCriteria implements Serializable, Criteria {
     public SystemModuleCriteria(SystemModuleCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.moduleName = other.moduleName == null ? null : other.moduleName.copy();
+        this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.applicationMappingId = other.applicationMappingId == null ? null : other.applicationMappingId.copy();
         this.distinct = other.distinct;
     }
 
@@ -90,6 +97,36 @@ public class SystemModuleCriteria implements Serializable, Criteria {
         this.moduleName = moduleName;
     }
 
+    public LongFilter getPlaceholderId() {
+        return placeholderId;
+    }
+
+    public LongFilter placeholderId() {
+        if (placeholderId == null) {
+            placeholderId = new LongFilter();
+        }
+        return placeholderId;
+    }
+
+    public void setPlaceholderId(LongFilter placeholderId) {
+        this.placeholderId = placeholderId;
+    }
+
+    public LongFilter getApplicationMappingId() {
+        return applicationMappingId;
+    }
+
+    public LongFilter applicationMappingId() {
+        if (applicationMappingId == null) {
+            applicationMappingId = new LongFilter();
+        }
+        return applicationMappingId;
+    }
+
+    public void setApplicationMappingId(LongFilter applicationMappingId) {
+        this.applicationMappingId = applicationMappingId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -107,12 +144,18 @@ public class SystemModuleCriteria implements Serializable, Criteria {
             return false;
         }
         final SystemModuleCriteria that = (SystemModuleCriteria) o;
-        return Objects.equals(id, that.id) && Objects.equals(moduleName, that.moduleName) && Objects.equals(distinct, that.distinct);
+        return (
+            Objects.equals(id, that.id) &&
+            Objects.equals(moduleName, that.moduleName) &&
+            Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(applicationMappingId, that.applicationMappingId) &&
+            Objects.equals(distinct, that.distinct)
+        );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, moduleName, distinct);
+        return Objects.hash(id, moduleName, placeholderId, applicationMappingId, distinct);
     }
 
     // prettier-ignore
@@ -121,6 +164,8 @@ public class SystemModuleCriteria implements Serializable, Criteria {
         return "SystemModuleCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
             (moduleName != null ? "moduleName=" + moduleName + ", " : "") +
+            (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (applicationMappingId != null ? "applicationMappingId=" + applicationMappingId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

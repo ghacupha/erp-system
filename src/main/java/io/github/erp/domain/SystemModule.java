@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.9-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.0-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,11 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -43,6 +47,25 @@ public class SystemModule implements Serializable {
     @NotNull
     @Column(name = "module_name", nullable = false, unique = true)
     private String moduleName;
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_system_module__placeholder",
+        joinColumns = @JoinColumn(name = "system_module_id"),
+        inverseJoinColumns = @JoinColumn(name = "placeholder_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
+    private Set<Placeholder> placeholders = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_system_module__application_mapping",
+        joinColumns = @JoinColumn(name = "system_module_id"),
+        inverseJoinColumns = @JoinColumn(name = "application_mapping_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<UniversallyUniqueMapping> applicationMappings = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -70,6 +93,52 @@ public class SystemModule implements Serializable {
 
     public void setModuleName(String moduleName) {
         this.moduleName = moduleName;
+    }
+
+    public Set<Placeholder> getPlaceholders() {
+        return this.placeholders;
+    }
+
+    public void setPlaceholders(Set<Placeholder> placeholders) {
+        this.placeholders = placeholders;
+    }
+
+    public SystemModule placeholders(Set<Placeholder> placeholders) {
+        this.setPlaceholders(placeholders);
+        return this;
+    }
+
+    public SystemModule addPlaceholder(Placeholder placeholder) {
+        this.placeholders.add(placeholder);
+        return this;
+    }
+
+    public SystemModule removePlaceholder(Placeholder placeholder) {
+        this.placeholders.remove(placeholder);
+        return this;
+    }
+
+    public Set<UniversallyUniqueMapping> getApplicationMappings() {
+        return this.applicationMappings;
+    }
+
+    public void setApplicationMappings(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
+        this.applicationMappings = universallyUniqueMappings;
+    }
+
+    public SystemModule applicationMappings(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
+        this.setApplicationMappings(universallyUniqueMappings);
+        return this;
+    }
+
+    public SystemModule addApplicationMapping(UniversallyUniqueMapping universallyUniqueMapping) {
+        this.applicationMappings.add(universallyUniqueMapping);
+        return this;
+    }
+
+    public SystemModule removeApplicationMapping(UniversallyUniqueMapping universallyUniqueMapping) {
+        this.applicationMappings.remove(universallyUniqueMapping);
+        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.9-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.0-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.SystemModule;
 import io.github.erp.service.dto.SystemModuleDTO;
 import org.mapstruct.*;
@@ -24,8 +25,16 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link SystemModule} and its DTO {@link SystemModuleDTO}.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = { PlaceholderMapper.class, UniversallyUniqueMappingMapper.class })
 public interface SystemModuleMapper extends EntityMapper<SystemModuleDTO, SystemModule> {
+    @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
+    @Mapping(target = "applicationMappings", source = "applicationMappings", qualifiedByName = "universalKeySet")
+    SystemModuleDTO toDto(SystemModule s);
+
+    @Mapping(target = "removePlaceholder", ignore = true)
+    @Mapping(target = "removeApplicationMapping", ignore = true)
+    SystemModule toEntity(SystemModuleDTO systemModuleDTO);
+
     @Named("moduleName")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

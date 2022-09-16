@@ -1,7 +1,7 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.9-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.0-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@ package io.github.erp.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.*; // for static metamodels
 import io.github.erp.domain.ApplicationUser;
 import io.github.erp.repository.ApplicationUserRepository;
@@ -173,6 +174,15 @@ public class ApplicationUserQueryService extends QueryService<ApplicationUser> {
                         buildSpecification(
                             criteria.getDealerIdentityId(),
                             root -> root.join(ApplicationUser_.dealerIdentity, JoinType.LEFT).get(Dealer_.id)
+                        )
+                    );
+            }
+            if (criteria.getPlaceholderId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPlaceholderId(),
+                            root -> root.join(ApplicationUser_.placeholders, JoinType.LEFT).get(Placeholder_.id)
                         )
                     );
             }

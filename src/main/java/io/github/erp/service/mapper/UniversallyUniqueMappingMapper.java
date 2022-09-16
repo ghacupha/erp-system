@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.9-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.0-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.service.dto.UniversallyUniqueMappingDTO;
 import java.util.Set;
@@ -32,4 +33,10 @@ public interface UniversallyUniqueMappingMapper extends EntityMapper<Universally
     @Mapping(target = "id", source = "id")
     @Mapping(target = "mappedValue", source = "mappedValue")
     Set<UniversallyUniqueMappingDTO> toDtoMappedValueSet(Set<UniversallyUniqueMapping> universallyUniqueMapping);
+
+    @Named("universalKeySet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "universalKey", source = "universalKey")
+    Set<UniversallyUniqueMappingDTO> toDtoUniversalKeySet(Set<UniversallyUniqueMapping> universallyUniqueMapping);
 }
