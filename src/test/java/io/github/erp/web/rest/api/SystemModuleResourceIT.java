@@ -1,7 +1,7 @@
 package io.github.erp.web.rest.api;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.9-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.0-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,16 +17,21 @@ package io.github.erp.web.rest.api;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.SystemModule;
+import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.repository.SystemModuleRepository;
 import io.github.erp.repository.search.SystemModuleSearchRepository;
+import io.github.erp.service.SystemModuleService;
 import io.github.erp.service.dto.SystemModuleDTO;
 import io.github.erp.service.mapper.SystemModuleMapper;
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -38,6 +43,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -71,8 +77,14 @@ class SystemModuleResourceIT {
     @Autowired
     private SystemModuleRepository systemModuleRepository;
 
+    @Mock
+    private SystemModuleRepository systemModuleRepositoryMock;
+
     @Autowired
     private SystemModuleMapper systemModuleMapper;
+
+    @Mock
+    private SystemModuleService systemModuleServiceMock;
 
     /**
      * This repository is mocked in the io.github.erp.repository.search test package.
@@ -198,6 +210,24 @@ class SystemModuleResourceIT {
             .andExpect(jsonPath("$.[*].moduleName").value(hasItem(DEFAULT_MODULE_NAME)));
     }
 
+    @SuppressWarnings({ "unchecked" })
+    void getAllSystemModulesWithEagerRelationshipsIsEnabled() throws Exception {
+        when(systemModuleServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restSystemModuleMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(systemModuleServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllSystemModulesWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(systemModuleServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restSystemModuleMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(systemModuleServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
     @Test
     @Transactional
     void getSystemModule() throws Exception {
@@ -307,6 +337,58 @@ class SystemModuleResourceIT {
 
         // Get all the systemModuleList where moduleName does not contain UPDATED_MODULE_NAME
         defaultSystemModuleShouldBeFound("moduleName.doesNotContain=" + UPDATED_MODULE_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllSystemModulesByPlaceholderIsEqualToSomething() throws Exception {
+        // Initialize the database
+        systemModuleRepository.saveAndFlush(systemModule);
+        Placeholder placeholder;
+        if (TestUtil.findAll(em, Placeholder.class).isEmpty()) {
+            placeholder = PlaceholderResourceIT.createEntity(em);
+            em.persist(placeholder);
+            em.flush();
+        } else {
+            placeholder = TestUtil.findAll(em, Placeholder.class).get(0);
+        }
+        em.persist(placeholder);
+        em.flush();
+        systemModule.addPlaceholder(placeholder);
+        systemModuleRepository.saveAndFlush(systemModule);
+        Long placeholderId = placeholder.getId();
+
+        // Get all the systemModuleList where placeholder equals to placeholderId
+        defaultSystemModuleShouldBeFound("placeholderId.equals=" + placeholderId);
+
+        // Get all the systemModuleList where placeholder equals to (placeholderId + 1)
+        defaultSystemModuleShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllSystemModulesByApplicationMappingIsEqualToSomething() throws Exception {
+        // Initialize the database
+        systemModuleRepository.saveAndFlush(systemModule);
+        UniversallyUniqueMapping applicationMapping;
+        if (TestUtil.findAll(em, UniversallyUniqueMapping.class).isEmpty()) {
+            applicationMapping = UniversallyUniqueMappingResourceIT.createEntity(em);
+            em.persist(applicationMapping);
+            em.flush();
+        } else {
+            applicationMapping = TestUtil.findAll(em, UniversallyUniqueMapping.class).get(0);
+        }
+        em.persist(applicationMapping);
+        em.flush();
+        systemModule.addApplicationMapping(applicationMapping);
+        systemModuleRepository.saveAndFlush(systemModule);
+        Long applicationMappingId = applicationMapping.getId();
+
+        // Get all the systemModuleList where applicationMapping equals to applicationMappingId
+        defaultSystemModuleShouldBeFound("applicationMappingId.equals=" + applicationMappingId);
+
+        // Get all the systemModuleList where applicationMapping equals to (applicationMappingId + 1)
+        defaultSystemModuleShouldNotBeFound("applicationMappingId.equals=" + (applicationMappingId + 1));
     }
 
     /**

@@ -1,7 +1,7 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.9-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.0-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,8 +17,11 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import javax.validation.constraints.*;
 
 /**
@@ -30,6 +33,10 @@ public class SystemModuleDTO implements Serializable {
 
     @NotNull
     private String moduleName;
+
+    private Set<PlaceholderDTO> placeholders = new HashSet<>();
+
+    private Set<UniversallyUniqueMappingDTO> applicationMappings = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -45,6 +52,22 @@ public class SystemModuleDTO implements Serializable {
 
     public void setModuleName(String moduleName) {
         this.moduleName = moduleName;
+    }
+
+    public Set<PlaceholderDTO> getPlaceholders() {
+        return placeholders;
+    }
+
+    public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
+        this.placeholders = placeholders;
+    }
+
+    public Set<UniversallyUniqueMappingDTO> getApplicationMappings() {
+        return applicationMappings;
+    }
+
+    public void setApplicationMappings(Set<UniversallyUniqueMappingDTO> applicationMappings) {
+        this.applicationMappings = applicationMappings;
     }
 
     @Override
@@ -74,6 +97,8 @@ public class SystemModuleDTO implements Serializable {
         return "SystemModuleDTO{" +
             "id=" + getId() +
             ", moduleName='" + getModuleName() + "'" +
+            ", placeholders=" + getPlaceholders() +
+            ", applicationMappings=" + getApplicationMappings() +
             "}";
     }
 }

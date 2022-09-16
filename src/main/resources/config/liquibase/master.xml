@@ -148,6 +148,8 @@
     <!--<include file="config/liquibase/changelog/20220726153626_changelog.xml" relativeToChangelogFile="false"/>-->
     <include file="config/liquibase/changelog/20220802070433_added_entity_constraints_AmortizationRecurrence.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220802080530_added_entity_constraints_AmortizationSequence.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220916150911_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220701141203_added_entity_constraints_SystemModule.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

@@ -1,7 +1,7 @@
 package io.github.erp.repository;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.9-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.0-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@ package io.github.erp.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.ApplicationUser;
 import java.util.List;
 import java.util.Optional;
@@ -32,16 +33,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ApplicationUserRepository extends JpaRepository<ApplicationUser, Long>, JpaSpecificationExecutor<ApplicationUser> {
     @Query(
-        value = "select distinct applicationUser from ApplicationUser applicationUser left join fetch applicationUser.userProperties",
+        value = "select distinct applicationUser from ApplicationUser applicationUser left join fetch applicationUser.userProperties left join fetch applicationUser.placeholders",
         countQuery = "select count(distinct applicationUser) from ApplicationUser applicationUser"
     )
     Page<ApplicationUser> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("select distinct applicationUser from ApplicationUser applicationUser left join fetch applicationUser.userProperties")
+    @Query(
+        "select distinct applicationUser from ApplicationUser applicationUser left join fetch applicationUser.userProperties left join fetch applicationUser.placeholders"
+    )
     List<ApplicationUser> findAllWithEagerRelationships();
 
     @Query(
-        "select applicationUser from ApplicationUser applicationUser left join fetch applicationUser.userProperties where applicationUser.id =:id"
+        "select applicationUser from ApplicationUser applicationUser left join fetch applicationUser.userProperties left join fetch applicationUser.placeholders where applicationUser.id =:id"
     )
     Optional<ApplicationUser> findOneWithEagerRelationships(@Param("id") Long id);
 }

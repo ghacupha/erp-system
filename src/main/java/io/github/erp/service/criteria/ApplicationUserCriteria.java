@@ -1,7 +1,7 @@
 package io.github.erp.service.criteria;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.0.9-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.0-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@ package io.github.erp.service.criteria;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -60,6 +61,8 @@ public class ApplicationUserCriteria implements Serializable, Criteria {
 
     private LongFilter dealerIdentityId;
 
+    private LongFilter placeholderId;
+
     private Boolean distinct;
 
     public ApplicationUserCriteria() {}
@@ -74,6 +77,7 @@ public class ApplicationUserCriteria implements Serializable, Criteria {
         this.systemIdentityId = other.systemIdentityId == null ? null : other.systemIdentityId.copy();
         this.userPropertiesId = other.userPropertiesId == null ? null : other.userPropertiesId.copy();
         this.dealerIdentityId = other.dealerIdentityId == null ? null : other.dealerIdentityId.copy();
+        this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
     }
 
@@ -217,6 +221,21 @@ public class ApplicationUserCriteria implements Serializable, Criteria {
         this.dealerIdentityId = dealerIdentityId;
     }
 
+    public LongFilter getPlaceholderId() {
+        return placeholderId;
+    }
+
+    public LongFilter placeholderId() {
+        if (placeholderId == null) {
+            placeholderId = new LongFilter();
+        }
+        return placeholderId;
+    }
+
+    public void setPlaceholderId(LongFilter placeholderId) {
+        this.placeholderId = placeholderId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -244,6 +263,7 @@ public class ApplicationUserCriteria implements Serializable, Criteria {
             Objects.equals(systemIdentityId, that.systemIdentityId) &&
             Objects.equals(userPropertiesId, that.userPropertiesId) &&
             Objects.equals(dealerIdentityId, that.dealerIdentityId) &&
+            Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -260,6 +280,7 @@ public class ApplicationUserCriteria implements Serializable, Criteria {
             systemIdentityId,
             userPropertiesId,
             dealerIdentityId,
+            placeholderId,
             distinct
         );
     }
@@ -277,6 +298,7 @@ public class ApplicationUserCriteria implements Serializable, Criteria {
             (systemIdentityId != null ? "systemIdentityId=" + systemIdentityId + ", " : "") +
             (userPropertiesId != null ? "userPropertiesId=" + userPropertiesId + ", " : "") +
             (dealerIdentityId != null ? "dealerIdentityId=" + dealerIdentityId + ", " : "") +
+            (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
