@@ -41,3 +41,4 @@ Contents
    milestones
    design
    reports
+   changelogs
