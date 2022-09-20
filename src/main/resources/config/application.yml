@@ -168,7 +168,7 @@ jhipster:
     management-include-pattern: ${server.servlet.context-path:}/management/.*
     title: Erp System API
     description: Erp System API documentation
-    version: 0.0.9-SNAPSHOT
+    version: 0.1.1-SNAPSHOT
     terms-of-service-url:
     contact-name: Edwin Njeru
     contact-url: https://github.com/ghacupha
@@ -187,7 +187,7 @@ jhipster:
 # ===================================================================
 
 app:
-  title: 'ERP System Mark II No. 28 Baruch Series'
+  title: 'Mark II No 28 (Baruch Series) Server ver 0.1.1-SNAPSHOT'
   SandboxInstance:
     urls: ${SANDBOX_INSTANCE_URLS}
     #urls: 'https://127.0.0.1:8984,http://127.0.0.1:8984,https://localhost:8984,http://localhost:8984,http://127.0.0.1:8982,https://localhost:8982,http://localhost:8982,'

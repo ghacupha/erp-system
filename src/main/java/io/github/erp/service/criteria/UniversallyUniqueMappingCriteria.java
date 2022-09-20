@@ -1,7 +1,7 @@
 package io.github.erp.service.criteria;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.0-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.1-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -48,6 +48,10 @@ public class UniversallyUniqueMappingCriteria implements Serializable, Criteria 
 
     private StringFilter mappedValue;
 
+    private LongFilter parentMappingId;
+
+    private LongFilter placeholderId;
+
     private Boolean distinct;
 
     public UniversallyUniqueMappingCriteria() {}
@@ -56,6 +60,8 @@ public class UniversallyUniqueMappingCriteria implements Serializable, Criteria 
         this.id = other.id == null ? null : other.id.copy();
         this.universalKey = other.universalKey == null ? null : other.universalKey.copy();
         this.mappedValue = other.mappedValue == null ? null : other.mappedValue.copy();
+        this.parentMappingId = other.parentMappingId == null ? null : other.parentMappingId.copy();
+        this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
     }
 
@@ -109,6 +115,36 @@ public class UniversallyUniqueMappingCriteria implements Serializable, Criteria 
         this.mappedValue = mappedValue;
     }
 
+    public LongFilter getParentMappingId() {
+        return parentMappingId;
+    }
+
+    public LongFilter parentMappingId() {
+        if (parentMappingId == null) {
+            parentMappingId = new LongFilter();
+        }
+        return parentMappingId;
+    }
+
+    public void setParentMappingId(LongFilter parentMappingId) {
+        this.parentMappingId = parentMappingId;
+    }
+
+    public LongFilter getPlaceholderId() {
+        return placeholderId;
+    }
+
+    public LongFilter placeholderId() {
+        if (placeholderId == null) {
+            placeholderId = new LongFilter();
+        }
+        return placeholderId;
+    }
+
+    public void setPlaceholderId(LongFilter placeholderId) {
+        this.placeholderId = placeholderId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -130,13 +166,15 @@ public class UniversallyUniqueMappingCriteria implements Serializable, Criteria 
             Objects.equals(id, that.id) &&
             Objects.equals(universalKey, that.universalKey) &&
             Objects.equals(mappedValue, that.mappedValue) &&
+            Objects.equals(parentMappingId, that.parentMappingId) &&
+            Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, universalKey, mappedValue, distinct);
+        return Objects.hash(id, universalKey, mappedValue, parentMappingId, placeholderId, distinct);
     }
 
     // prettier-ignore
@@ -146,6 +184,8 @@ public class UniversallyUniqueMappingCriteria implements Serializable, Criteria 
             (id != null ? "id=" + id + ", " : "") +
             (universalKey != null ? "universalKey=" + universalKey + ", " : "") +
             (mappedValue != null ? "mappedValue=" + mappedValue + ", " : "") +
+            (parentMappingId != null ? "parentMappingId=" + parentMappingId + ", " : "") +
+            (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.0-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.1-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -26,8 +26,21 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link UniversallyUniqueMapping} and its DTO {@link UniversallyUniqueMappingDTO}.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = { PlaceholderMapper.class })
 public interface UniversallyUniqueMappingMapper extends EntityMapper<UniversallyUniqueMappingDTO, UniversallyUniqueMapping> {
+    @Mapping(target = "parentMapping", source = "parentMapping", qualifiedByName = "universalKey")
+    @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
+    UniversallyUniqueMappingDTO toDto(UniversallyUniqueMapping s);
+
+    @Mapping(target = "removePlaceholder", ignore = true)
+    UniversallyUniqueMapping toEntity(UniversallyUniqueMappingDTO universallyUniqueMappingDTO);
+
+    @Named("universalKey")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "universalKey", source = "universalKey")
+    UniversallyUniqueMappingDTO toDtoUniversalKey(UniversallyUniqueMapping universallyUniqueMapping);
+
     @Named("mappedValueSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
