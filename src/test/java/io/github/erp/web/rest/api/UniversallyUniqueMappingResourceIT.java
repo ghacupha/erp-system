@@ -1,7 +1,7 @@
 package io.github.erp.web.rest.api;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.0-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.1-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,16 +17,20 @@ package io.github.erp.web.rest.api;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.repository.UniversallyUniqueMappingRepository;
 import io.github.erp.repository.search.UniversallyUniqueMappingSearchRepository;
+import io.github.erp.service.UniversallyUniqueMappingService;
 import io.github.erp.service.dto.UniversallyUniqueMappingDTO;
 import io.github.erp.service.mapper.UniversallyUniqueMappingMapper;
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -38,6 +42,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -74,8 +79,14 @@ public class UniversallyUniqueMappingResourceIT {
     @Autowired
     private UniversallyUniqueMappingRepository universallyUniqueMappingRepository;
 
+    @Mock
+    private UniversallyUniqueMappingRepository universallyUniqueMappingRepositoryMock;
+
     @Autowired
     private UniversallyUniqueMappingMapper universallyUniqueMappingMapper;
+
+    @Mock
+    private UniversallyUniqueMappingService universallyUniqueMappingServiceMock;
 
     /**
      * This repository is mocked in the io.github.erp.repository.search test package.
@@ -213,6 +224,24 @@ public class UniversallyUniqueMappingResourceIT {
             .andExpect(jsonPath("$.[*].mappedValue").value(hasItem(DEFAULT_MAPPED_VALUE)));
     }
 
+    @SuppressWarnings({ "unchecked" })
+    void getAllUniversallyUniqueMappingsWithEagerRelationshipsIsEnabled() throws Exception {
+        when(universallyUniqueMappingServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restUniversallyUniqueMappingMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(universallyUniqueMappingServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllUniversallyUniqueMappingsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(universallyUniqueMappingServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restUniversallyUniqueMappingMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(universallyUniqueMappingServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
     @Test
     @Transactional
     void getUniversallyUniqueMapping() throws Exception {
@@ -237,8 +266,8 @@ public class UniversallyUniqueMappingResourceIT {
 
         Long id = universallyUniqueMapping.getId();
 
-        // TODO defaultUniversallyUniqueMappingShouldBeFound("id.equals=" + id);
-        // TODO defaultUniversallyUniqueMappingShouldNotBeFound("id.notEquals=" + id);
+        defaultUniversallyUniqueMappingShouldBeFound("id.equals=" + id);
+        defaultUniversallyUniqueMappingShouldNotBeFound("id.notEquals=" + id);
 
         defaultUniversallyUniqueMappingShouldBeFound("id.greaterThanOrEqual=" + id);
         defaultUniversallyUniqueMappingShouldNotBeFound("id.greaterThan=" + id);
@@ -400,7 +429,59 @@ public class UniversallyUniqueMappingResourceIT {
         // TODO defaultUniversallyUniqueMappingShouldNotBeFound("mappedValue.doesNotContain=" + DEFAULT_MAPPED_VALUE);
 
         // Get all the universallyUniqueMappingList where mappedValue does not contain UPDATED_MAPPED_VALUE
-        // TODO defaultUniversallyUniqueMappingShouldBeFound("mappedValue.doesNotContain=" + UPDATED_MAPPED_VALUE);
+        defaultUniversallyUniqueMappingShouldBeFound("mappedValue.doesNotContain=" + UPDATED_MAPPED_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllUniversallyUniqueMappingsByParentMappingIsEqualToSomething() throws Exception {
+        // Initialize the database
+        universallyUniqueMappingRepository.saveAndFlush(universallyUniqueMapping);
+        UniversallyUniqueMapping parentMapping;
+        if (TestUtil.findAll(em, UniversallyUniqueMapping.class).isEmpty()) {
+            parentMapping = UniversallyUniqueMappingResourceIT.createEntity(em);
+            em.persist(parentMapping);
+            em.flush();
+        } else {
+            parentMapping = TestUtil.findAll(em, UniversallyUniqueMapping.class).get(0);
+        }
+        em.persist(parentMapping);
+        em.flush();
+        universallyUniqueMapping.setParentMapping(parentMapping);
+        universallyUniqueMappingRepository.saveAndFlush(universallyUniqueMapping);
+        Long parentMappingId = parentMapping.getId();
+
+        // Get all the universallyUniqueMappingList where parentMapping equals to parentMappingId
+        defaultUniversallyUniqueMappingShouldBeFound("parentMappingId.equals=" + parentMappingId);
+
+        // Get all the universallyUniqueMappingList where parentMapping equals to (parentMappingId + 1)
+        defaultUniversallyUniqueMappingShouldNotBeFound("parentMappingId.equals=" + (parentMappingId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllUniversallyUniqueMappingsByPlaceholderIsEqualToSomething() throws Exception {
+        // Initialize the database
+        universallyUniqueMappingRepository.saveAndFlush(universallyUniqueMapping);
+        Placeholder placeholder;
+        if (TestUtil.findAll(em, Placeholder.class).isEmpty()) {
+            placeholder = PlaceholderResourceIT.createEntity(em);
+            em.persist(placeholder);
+            em.flush();
+        } else {
+            placeholder = TestUtil.findAll(em, Placeholder.class).get(0);
+        }
+        em.persist(placeholder);
+        em.flush();
+        universallyUniqueMapping.addPlaceholder(placeholder);
+        universallyUniqueMappingRepository.saveAndFlush(universallyUniqueMapping);
+        Long placeholderId = placeholder.getId();
+
+        // Get all the universallyUniqueMappingList where placeholder equals to placeholderId
+        defaultUniversallyUniqueMappingShouldBeFound("placeholderId.equals=" + placeholderId);
+
+        // Get all the universallyUniqueMappingList where placeholder equals to (placeholderId + 1)
+        defaultUniversallyUniqueMappingShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
     }
 
     /**

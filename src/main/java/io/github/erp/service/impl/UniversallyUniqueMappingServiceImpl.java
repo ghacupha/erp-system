@@ -1,7 +1,7 @@
 package io.github.erp.service.impl;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.0-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.1-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -96,11 +96,15 @@ public class UniversallyUniqueMappingServiceImpl implements UniversallyUniqueMap
         return universallyUniqueMappingRepository.findAll(pageable).map(universallyUniqueMappingMapper::toDto);
     }
 
+    public Page<UniversallyUniqueMappingDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return universallyUniqueMappingRepository.findAllWithEagerRelationships(pageable).map(universallyUniqueMappingMapper::toDto);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<UniversallyUniqueMappingDTO> findOne(Long id) {
         log.debug("Request to get UniversallyUniqueMapping : {}", id);
-        return universallyUniqueMappingRepository.findById(id).map(universallyUniqueMappingMapper::toDto);
+        return universallyUniqueMappingRepository.findOneWithEagerRelationships(id).map(universallyUniqueMappingMapper::toDto);
     }
 
     @Override

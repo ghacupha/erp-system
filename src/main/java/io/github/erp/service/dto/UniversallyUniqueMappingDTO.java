@@ -1,7 +1,7 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.0-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.1-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,9 @@ package io.github.erp.service.dto;
  */
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import javax.validation.constraints.*;
 
 /**
@@ -33,6 +35,10 @@ public class UniversallyUniqueMappingDTO implements Serializable {
     private String universalKey;
 
     private String mappedValue;
+
+    private UniversallyUniqueMappingDTO parentMapping;
+
+    private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -56,6 +62,22 @@ public class UniversallyUniqueMappingDTO implements Serializable {
 
     public void setMappedValue(String mappedValue) {
         this.mappedValue = mappedValue;
+    }
+
+    public UniversallyUniqueMappingDTO getParentMapping() {
+        return parentMapping;
+    }
+
+    public void setParentMapping(UniversallyUniqueMappingDTO parentMapping) {
+        this.parentMapping = parentMapping;
+    }
+
+    public Set<PlaceholderDTO> getPlaceholders() {
+        return placeholders;
+    }
+
+    public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
+        this.placeholders = placeholders;
     }
 
     @Override
@@ -86,6 +108,8 @@ public class UniversallyUniqueMappingDTO implements Serializable {
             "id=" + getId() +
             ", universalKey='" + getUniversalKey() + "'" +
             ", mappedValue='" + getMappedValue() + "'" +
+            ", parentMapping=" + getParentMapping() +
+            ", placeholders=" + getPlaceholders() +
             "}";
     }
 }

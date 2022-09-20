@@ -1,7 +1,7 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.0-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.1-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -123,6 +123,24 @@ public class UniversallyUniqueMappingQueryService extends QueryService<Universal
             if (criteria.getMappedValue() != null) {
                 specification =
                     specification.and(buildStringSpecification(criteria.getMappedValue(), UniversallyUniqueMapping_.mappedValue));
+            }
+            if (criteria.getParentMappingId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getParentMappingId(),
+                            root -> root.join(UniversallyUniqueMapping_.parentMapping, JoinType.LEFT).get(UniversallyUniqueMapping_.id)
+                        )
+                    );
+            }
+            if (criteria.getPlaceholderId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPlaceholderId(),
+                            root -> root.join(UniversallyUniqueMapping_.placeholders, JoinType.LEFT).get(Placeholder_.id)
+                        )
+                    );
             }
         }
         return specification;

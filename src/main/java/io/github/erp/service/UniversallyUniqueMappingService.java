@@ -1,7 +1,7 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.0-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.1-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -50,6 +50,14 @@ public interface UniversallyUniqueMappingService {
      * @return the list of entities.
      */
     Page<UniversallyUniqueMappingDTO> findAll(Pageable pageable);
+
+    /**
+     * Get all the universallyUniqueMappings with eager load of many-to-many relationships.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<UniversallyUniqueMappingDTO> findAllWithEagerRelationships(Pageable pageable);
 
     /**
      * Get the "id" universallyUniqueMapping.

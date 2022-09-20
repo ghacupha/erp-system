@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.0-SNAPSHOT
+ * Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.1-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -81,6 +81,7 @@ public class SystemContentType implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "sys_maps_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "parentMapping", "placeholders" }, allowSetters = true)
     private Set<UniversallyUniqueMapping> sysMaps = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

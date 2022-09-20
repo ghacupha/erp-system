@@ -11,7 +11,22 @@
       "fieldValidateRules": []
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipName": "parentMapping",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "universalKey"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "universallyUniqueMapping"
+    }
+  ],
   "service": "serviceImpl",
   "dto": "mapstruct",
   "jpaMetamodelFiltering": true,
