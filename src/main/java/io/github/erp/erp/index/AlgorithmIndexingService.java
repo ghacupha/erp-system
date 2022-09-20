@@ -19,9 +19,9 @@ package io.github.erp.erp.index;
  */
 
 import com.google.common.collect.ImmutableList;
-import io.github.erp.repository.search.SystemModuleSearchRepository;
-import io.github.erp.service.SystemModuleService;
-import io.github.erp.service.mapper.SystemModuleMapper;
+import io.github.erp.repository.search.AlgorithmSearchRepository;
+import io.github.erp.service.AlgorithmService;
+import io.github.erp.service.mapper.AlgorithmMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -33,14 +33,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class AlgorithmIndexingService extends AbtractStartUpIndexService {
 
-    private static final String TAG = "SystemModuleIndex";
+    private static final String TAG = "AlgorithmIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
 
-    private final SystemModuleMapper mapper;
-    private final SystemModuleService service;
-    private final SystemModuleSearchRepository searchRepository;
+    private final AlgorithmMapper mapper;
+    private final AlgorithmService service;
+    private final AlgorithmSearchRepository searchRepository;
 
-    public AlgorithmIndexingService(SystemModuleMapper mapper, SystemModuleService service, SystemModuleSearchRepository searchRepository) {
+    public AlgorithmIndexingService(AlgorithmMapper mapper, AlgorithmService service, AlgorithmSearchRepository searchRepository) {
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;
