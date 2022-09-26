@@ -10,7 +10,7 @@
     <version>0.1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Erp System</name>
-    <description>Mark II No 28 (Baruch Series) Server ver 0.1.1-SNAPSHOT</description>
+    <description>Mark III No 1 (Caleb Series) Server ver 0.1.1-SNAPSHOT</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->
