@@ -105,7 +105,8 @@ public class ErpSystemApp {
             "Application '{}' is running! Access URLs:\n\t" +
             "Local: \t\t{}://localhost:{}{}\n\t" +
             "External: \t{}://{}:{}{}\n\t" +
-            "Profile(s): \t{}\n----------------------------------------------------------",
+            "Profile(s): \t{}\n\t" +
+            "CORS Url(s) Allowed Origins: \t{}\n----------------------------------------------------------",
             env.getProperty("spring.application.name"),
             protocol,
             serverPort,
@@ -114,7 +115,8 @@ public class ErpSystemApp {
             hostAddress,
             serverPort,
             contextPath,
-            env.getActiveProfiles().length == 0 ? env.getDefaultProfiles() : env.getActiveProfiles()
+            env.getActiveProfiles().length == 0 ? env.getDefaultProfiles() : env.getActiveProfiles(),
+            env.getProperty("jhipster.cors.allowed-origins")
         );
     }
 }
