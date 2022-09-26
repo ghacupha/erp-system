@@ -1,5 +1,5 @@
 @REM
-@REM Erp System - Mark II No 28 (Baruch Series) Server ver 0.1.1-SNAPSHOT
+@REM Erp System - Mark III No 1 (Caleb Series) Server ver 0.1.1-SNAPSHOT
 @REM Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
 @REM
 @REM This program is free software: you can redistribute it and/or modify
