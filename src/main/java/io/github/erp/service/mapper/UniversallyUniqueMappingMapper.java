@@ -1,22 +1,5 @@
 package io.github.erp.service.mapper;
 
-/*-
- * Erp System - Mark III No 1 (Caleb Series) Server ver 0.1.1-SNAPSHOT
- * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.service.dto.UniversallyUniqueMappingDTO;
 import java.util.Set;
@@ -34,11 +17,11 @@ public interface UniversallyUniqueMappingMapper extends EntityMapper<Universally
     @Mapping(target = "removePlaceholder", ignore = true)
     UniversallyUniqueMapping toEntity(UniversallyUniqueMappingDTO universallyUniqueMappingDTO);
 
-    @Named("universalKey")
+    @Named("universalKeySet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "universalKey", source = "universalKey")
-    UniversallyUniqueMappingDTO toDtoUniversalKey(UniversallyUniqueMapping universallyUniqueMapping);
+    Set<UniversallyUniqueMappingDTO> toDtoUniversalKeySet(Set<UniversallyUniqueMapping> universallyUniqueMapping);
 
     @Named("mappedValueSet")
     @BeanMapping(ignoreByDefault = true)
@@ -46,9 +29,9 @@ public interface UniversallyUniqueMappingMapper extends EntityMapper<Universally
     @Mapping(target = "mappedValue", source = "mappedValue")
     Set<UniversallyUniqueMappingDTO> toDtoMappedValueSet(Set<UniversallyUniqueMapping> universallyUniqueMapping);
 
-    @Named("universalKeySet")
+    @Named("universalKey")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "universalKey", source = "universalKey")
-    Set<UniversallyUniqueMappingDTO> toDtoUniversalKeySet(Set<UniversallyUniqueMapping> universallyUniqueMapping);
+    UniversallyUniqueMappingDTO toDtoUniversalKey(UniversallyUniqueMapping universallyUniqueMapping);
 }
