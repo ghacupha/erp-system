@@ -81,6 +81,8 @@
     <include file="config/liquibase/changelog/20220726145438_added_entity_PrepaymentMapping.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220802070433_added_entity_AmortizationRecurrence.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220802080530_added_entity_AmortizationSequence.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221019140655_added_entity_BusinessDocument.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221019144519_added_entity_SettlementRequisition.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
@@ -152,6 +154,8 @@
     <include file="config/liquibase/changelog/20220701141203_added_entity_constraints_SystemModule.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220920154234_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220608075128_added_entity_constraints_UniversallyUniqueMapping.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221019140655_added_entity_constraints_BusinessDocument.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20221019144519_added_entity_constraints_SettlementRequisition.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
