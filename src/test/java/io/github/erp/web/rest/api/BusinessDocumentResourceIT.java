@@ -1,13 +1,16 @@
 package io.github.erp.web.rest.api;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.*;
+import io.github.erp.domain.ApplicationUser;
+import io.github.erp.domain.BusinessDocument;
+import io.github.erp.domain.Dealer;
+import io.github.erp.domain.Placeholder;
+import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.repository.BusinessDocumentRepository;
 import io.github.erp.repository.search.BusinessDocumentSearchRepository;
 import io.github.erp.service.BusinessDocumentService;
 import io.github.erp.service.dto.BusinessDocumentDTO;
 import io.github.erp.service.mapper.BusinessDocumentMapper;
-import io.github.erp.web.rest.BusinessDocumentResource;
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +31,11 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static io.github.erp.web.rest.TestUtil.sameInstant;
@@ -45,7 +52,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
-class BusinessDocumentResourceIT {
+public class BusinessDocumentResourceIT {
 
     private static final String DEFAULT_DOCUMENT_TITLE = "AAAAAAAAAA";
     private static final String UPDATED_DOCUMENT_TITLE = "BBBBBBBBBB";
@@ -114,7 +121,7 @@ class BusinessDocumentResourceIT {
         // Add required entity
         ApplicationUser applicationUser;
         if (TestUtil.findAll(em, ApplicationUser.class).isEmpty()) {
-            applicationUser = io.github.erp.web.rest.ApplicationUserResourceIT.createEntity(em);
+            applicationUser = ApplicationUserResourceIT.createEntity(em);
             em.persist(applicationUser);
             em.flush();
         } else {
@@ -124,7 +131,7 @@ class BusinessDocumentResourceIT {
         // Add required entity
         Dealer dealer;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            dealer = io.github.erp.web.rest.DealerResourceIT.createEntity(em);
+            dealer = DealerResourceIT.createEntity(em);
             em.persist(dealer);
             em.flush();
         } else {
@@ -150,7 +157,7 @@ class BusinessDocumentResourceIT {
         // Add required entity
         ApplicationUser applicationUser;
         if (TestUtil.findAll(em, ApplicationUser.class).isEmpty()) {
-            applicationUser = io.github.erp.web.rest.ApplicationUserResourceIT.createUpdatedEntity(em);
+            applicationUser = ApplicationUserResourceIT.createUpdatedEntity(em);
             em.persist(applicationUser);
             em.flush();
         } else {
@@ -160,7 +167,7 @@ class BusinessDocumentResourceIT {
         // Add required entity
         Dealer dealer;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            dealer = io.github.erp.web.rest.DealerResourceIT.createUpdatedEntity(em);
+            dealer = DealerResourceIT.createUpdatedEntity(em);
             em.persist(dealer);
             em.flush();
         } else {
@@ -756,7 +763,7 @@ class BusinessDocumentResourceIT {
         businessDocumentRepository.saveAndFlush(businessDocument);
         ApplicationUser createdBy;
         if (TestUtil.findAll(em, ApplicationUser.class).isEmpty()) {
-            createdBy = io.github.erp.web.rest.ApplicationUserResourceIT.createEntity(em);
+            createdBy = ApplicationUserResourceIT.createEntity(em);
             em.persist(createdBy);
             em.flush();
         } else {
@@ -782,7 +789,7 @@ class BusinessDocumentResourceIT {
         businessDocumentRepository.saveAndFlush(businessDocument);
         ApplicationUser lastModifiedBy;
         if (TestUtil.findAll(em, ApplicationUser.class).isEmpty()) {
-            lastModifiedBy = io.github.erp.web.rest.ApplicationUserResourceIT.createEntity(em);
+            lastModifiedBy = ApplicationUserResourceIT.createEntity(em);
             em.persist(lastModifiedBy);
             em.flush();
         } else {
@@ -808,7 +815,7 @@ class BusinessDocumentResourceIT {
         businessDocumentRepository.saveAndFlush(businessDocument);
         Dealer originatingDepartment;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            originatingDepartment = io.github.erp.web.rest.DealerResourceIT.createEntity(em);
+            originatingDepartment = DealerResourceIT.createEntity(em);
             em.persist(originatingDepartment);
             em.flush();
         } else {
@@ -834,7 +841,7 @@ class BusinessDocumentResourceIT {
         businessDocumentRepository.saveAndFlush(businessDocument);
         UniversallyUniqueMapping applicationMappings;
         if (TestUtil.findAll(em, UniversallyUniqueMapping.class).isEmpty()) {
-            applicationMappings = io.github.erp.web.rest.UniversallyUniqueMappingResourceIT.createEntity(em);
+            applicationMappings = UniversallyUniqueMappingResourceIT.createEntity(em);
             em.persist(applicationMappings);
             em.flush();
         } else {
@@ -860,7 +867,7 @@ class BusinessDocumentResourceIT {
         businessDocumentRepository.saveAndFlush(businessDocument);
         Placeholder placeholder;
         if (TestUtil.findAll(em, Placeholder.class).isEmpty()) {
-            placeholder = io.github.erp.web.rest.PlaceholderResourceIT.createEntity(em);
+            placeholder = PlaceholderResourceIT.createEntity(em);
             em.persist(placeholder);
             em.flush();
         } else {
