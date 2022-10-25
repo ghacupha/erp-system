@@ -29,7 +29,7 @@ public interface PrepaymentAccountMapper extends EntityMapper<PrepaymentAccountD
     @Mapping(target = "transferAccount", source = "transferAccount", qualifiedByName = "accountName")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     @Mapping(target = "generalParameters", source = "generalParameters", qualifiedByName = "mappedValueSet")
-    @Mapping(target = "prepaymentParameters", source = "prepaymentParameters", qualifiedByName = "keySet")
+    @Mapping(target = "prepaymentParameters", source = "prepaymentParameters", qualifiedByName = "parameterSet")
     PrepaymentAccountDTO toDto(PrepaymentAccount s);
 
     @Mapping(target = "removePlaceholder", ignore = true)

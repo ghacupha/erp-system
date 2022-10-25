@@ -81,7 +81,7 @@
       "relationshipName": "prepaymentParameters",
       "otherEntityName": "prepaymentMapping",
       "relationshipType": "many-to-many",
-      "otherEntityField": "key",
+      "otherEntityField": "parameterKey",
       "ownerSide": true,
       "otherEntityRelationshipName": "prepaymentAccount"
     }
