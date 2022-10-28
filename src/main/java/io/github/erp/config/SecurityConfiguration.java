@@ -119,7 +119,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/payments/**").hasAnyAuthority(
                 AuthoritiesConstants.PAYMENTS_USER,
                 AuthoritiesConstants.PREPAYMENTS_MODULE_USER,
+                AuthoritiesConstants.REQUISITION_MANAGER,
                 AuthoritiesConstants.FIXED_ASSETS_USER)
+            .antMatchers("/api/requisition/**").hasAnyAuthority(
+                AuthoritiesConstants.PAYMENTS_USER,
+                AuthoritiesConstants.REQUISITION_MANAGER)
             .antMatchers("/api/prepayments/**").hasAnyAuthority(AuthoritiesConstants.PREPAYMENTS_MODULE_USER)
             .antMatchers("/api/taxes/**").hasAuthority(AuthoritiesConstants.TAX_MODULE_USER)
             .antMatchers("/api/granular-data/**").hasAnyAuthority(

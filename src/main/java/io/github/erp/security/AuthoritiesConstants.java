@@ -48,5 +48,7 @@ public final class AuthoritiesConstants {
 
     public static final String REPORT_DESIGNER = "ROLE_REPORT_DESIGNER";
 
+    public static final String REQUISITION_MANAGER = "ROLE_REQUISITION_MANAGER";
+
     private AuthoritiesConstants() {}
 }
