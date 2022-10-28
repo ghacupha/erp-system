@@ -1,4 +1,4 @@
-package io.github.erp.web.rest.api;
+package io.github.erp.erp.resources;
 
 /*-
  * Erp System - Mark III No 2 (Caleb Series) Server ver 0.1.2-SNAPSHOT
@@ -19,16 +19,7 @@ package io.github.erp.web.rest.api;
  */
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.ApplicationUser;
-import io.github.erp.domain.BusinessDocument;
-import io.github.erp.domain.Dealer;
-import io.github.erp.domain.DeliveryNote;
-import io.github.erp.domain.JobSheet;
-import io.github.erp.domain.PaymentInvoice;
-import io.github.erp.domain.Placeholder;
-import io.github.erp.domain.SettlementCurrency;
-import io.github.erp.domain.SettlementRequisition;
-import io.github.erp.domain.UniversallyUniqueMapping;
+import io.github.erp.domain.*;
 import io.github.erp.domain.enumeration.PaymentStatus;
 import io.github.erp.repository.SettlementRequisitionRepository;
 import io.github.erp.repository.search.SettlementRequisitionSearchRepository;
@@ -36,6 +27,15 @@ import io.github.erp.service.SettlementRequisitionService;
 import io.github.erp.service.dto.SettlementRequisitionDTO;
 import io.github.erp.service.mapper.SettlementRequisitionMapper;
 import io.github.erp.web.rest.TestUtil;
+import io.github.erp.web.rest.api.DealerResourceIT;
+import io.github.erp.web.rest.api.DeliveryNoteResourceIT;
+import io.github.erp.web.rest.api.JobSheetResourceIT;
+import io.github.erp.web.rest.api.PaymentInvoiceResourceIT;
+import io.github.erp.web.rest.api.PlaceholderResourceIT;
+import io.github.erp.web.rest.api.SettlementCurrencyResourceIT;
+import io.github.erp.web.rest.api.SettlementRequisitionResourceDev;
+import io.github.erp.web.rest.api.UniversallyUniqueMappingResourceIT;
+import io.github.erp.web.rest.api.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -73,7 +73,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser(roles = {"DEV"})
+@WithMockUser(roles = {"REQUISITION_MANAGER"})
 public class SettlementRequisitionResourceIT {
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
@@ -96,9 +96,9 @@ public class SettlementRequisitionResourceIT {
     private static final PaymentStatus DEFAULT_PAYMENT_STATUS = PaymentStatus.PROCESSED;
     private static final PaymentStatus UPDATED_PAYMENT_STATUS = PaymentStatus.IN_PROCESS;
 
-    private static final String ENTITY_API_URL = "/api/dev/settlement-requisitions";
+    private static final String ENTITY_API_URL = "/api/requisition/settlement-requisitions";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/dev/_search/settlement-requisitions";
+    private static final String ENTITY_SEARCH_API_URL = "/api/requisition/_search/settlement-requisitions";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
@@ -148,7 +148,7 @@ public class SettlementRequisitionResourceIT {
         // Add required entity
         SettlementCurrency settlementCurrency;
         if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
-            settlementCurrency = SettlementCurrencyResourceIT.createEntity(em);
+            settlementCurrency = io.github.erp.web.rest.api.SettlementCurrencyResourceIT.createEntity(em);
             em.persist(settlementCurrency);
             em.flush();
         } else {
@@ -170,7 +170,7 @@ public class SettlementRequisitionResourceIT {
         // Add required entity
         Dealer dealer;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            dealer = DealerResourceIT.createEntity(em);
+            dealer = io.github.erp.web.rest.api.DealerResourceIT.createEntity(em);
             em.persist(dealer);
             em.flush();
         } else {
@@ -199,7 +199,7 @@ public class SettlementRequisitionResourceIT {
         // Add required entity
         SettlementCurrency settlementCurrency;
         if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
-            settlementCurrency = SettlementCurrencyResourceIT.createUpdatedEntity(em);
+            settlementCurrency = io.github.erp.web.rest.api.SettlementCurrencyResourceIT.createUpdatedEntity(em);
             em.persist(settlementCurrency);
             em.flush();
         } else {
@@ -221,7 +221,7 @@ public class SettlementRequisitionResourceIT {
         // Add required entity
         Dealer dealer;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            dealer = DealerResourceIT.createUpdatedEntity(em);
+            dealer = io.github.erp.web.rest.api.DealerResourceIT.createUpdatedEntity(em);
             em.persist(dealer);
             em.flush();
         } else {
@@ -1034,7 +1034,7 @@ public class SettlementRequisitionResourceIT {
         settlementRequisitionRepository.saveAndFlush(settlementRequisition);
         Dealer nativeDepartment;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            nativeDepartment = DealerResourceIT.createEntity(em);
+            nativeDepartment = io.github.erp.web.rest.api.DealerResourceIT.createEntity(em);
             em.persist(nativeDepartment);
             em.flush();
         } else {
@@ -1060,7 +1060,7 @@ public class SettlementRequisitionResourceIT {
         settlementRequisitionRepository.saveAndFlush(settlementRequisition);
         Dealer biller;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            biller = DealerResourceIT.createEntity(em);
+            biller = io.github.erp.web.rest.api.DealerResourceIT.createEntity(em);
             em.persist(biller);
             em.flush();
         } else {

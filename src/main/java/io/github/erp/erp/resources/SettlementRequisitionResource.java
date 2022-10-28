@@ -1,4 +1,4 @@
-package io.github.erp.web.rest.api;
+package io.github.erp.erp.resources;
 
 /*-
  * Erp System - Mark III No 2 (Caleb Series) Server ver 0.1.2-SNAPSHOT
@@ -49,7 +49,7 @@ import java.util.Optional;
  * REST controller for managing {@link io.github.erp.domain.SettlementRequisition}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/requisition")
 public class SettlementRequisitionResource {
 
     private final Logger log = LoggerFactory.getLogger(SettlementRequisitionResource.class);
