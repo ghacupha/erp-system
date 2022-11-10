@@ -49,7 +49,7 @@ import java.util.Optional;
  * REST controller for managing {@link io.github.erp.domain.ReportContentType}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/design-report")
 @RolesAllowed({"ROLE_REPORT_ACCESSOR", "ROLE_REPORT_DESIGNER", "ROLE_DEV"})
 public class ReportContentTypeResource {
 
