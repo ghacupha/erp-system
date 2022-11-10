@@ -88,7 +88,8 @@
       "AmortizationRecurrence",
       "AmortizationSequence",
       "BusinessDocument",
-      "SettlementRequisition"
+      "SettlementRequisition",
+      "QuestionBase"
     ],
     "entitySuffix": "",
     "incrementalChangelog": false,
