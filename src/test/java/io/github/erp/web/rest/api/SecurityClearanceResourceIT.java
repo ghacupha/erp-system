@@ -17,9 +17,11 @@ package io.github.erp.web.rest.api;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.SecurityClearance;
+import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.repository.SecurityClearanceRepository;
 import io.github.erp.repository.search.SecurityClearanceSearchRepository;
 import io.github.erp.service.SecurityClearanceService;
@@ -395,6 +397,32 @@ public class SecurityClearanceResourceIT {
 
         // Get all the securityClearanceList where placeholder equals to (placeholderId + 1)
         defaultSecurityClearanceShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllSecurityClearancesBySystemParametersIsEqualToSomething() throws Exception {
+        // Initialize the database
+        securityClearanceRepository.saveAndFlush(securityClearance);
+        UniversallyUniqueMapping systemParameters;
+        if (TestUtil.findAll(em, UniversallyUniqueMapping.class).isEmpty()) {
+            systemParameters = UniversallyUniqueMappingResourceIT.createEntity(em);
+            em.persist(systemParameters);
+            em.flush();
+        } else {
+            systemParameters = TestUtil.findAll(em, UniversallyUniqueMapping.class).get(0);
+        }
+        em.persist(systemParameters);
+        em.flush();
+        securityClearance.addSystemParameters(systemParameters);
+        securityClearanceRepository.saveAndFlush(securityClearance);
+        Long systemParametersId = systemParameters.getId();
+
+        // Get all the securityClearanceList where systemParameters equals to systemParametersId
+        defaultSecurityClearanceShouldBeFound("systemParametersId.equals=" + systemParametersId);
+
+        // Get all the securityClearanceList where systemParameters equals to (systemParametersId + 1)
+        defaultSecurityClearanceShouldNotBeFound("systemParametersId.equals=" + (systemParametersId + 1));
     }
 
     /**

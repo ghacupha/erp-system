@@ -17,6 +17,7 @@ package io.github.erp.service.criteria;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -49,6 +50,8 @@ public class SecurityClearanceCriteria implements Serializable, Criteria {
 
     private LongFilter placeholderId;
 
+    private LongFilter systemParametersId;
+
     private Boolean distinct;
 
     public SecurityClearanceCriteria() {}
@@ -58,6 +61,7 @@ public class SecurityClearanceCriteria implements Serializable, Criteria {
         this.clearanceLevel = other.clearanceLevel == null ? null : other.clearanceLevel.copy();
         this.grantedClearancesId = other.grantedClearancesId == null ? null : other.grantedClearancesId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.systemParametersId = other.systemParametersId == null ? null : other.systemParametersId.copy();
         this.distinct = other.distinct;
     }
 
@@ -126,6 +130,21 @@ public class SecurityClearanceCriteria implements Serializable, Criteria {
         this.placeholderId = placeholderId;
     }
 
+    public LongFilter getSystemParametersId() {
+        return systemParametersId;
+    }
+
+    public LongFilter systemParametersId() {
+        if (systemParametersId == null) {
+            systemParametersId = new LongFilter();
+        }
+        return systemParametersId;
+    }
+
+    public void setSystemParametersId(LongFilter systemParametersId) {
+        this.systemParametersId = systemParametersId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -148,13 +167,14 @@ public class SecurityClearanceCriteria implements Serializable, Criteria {
             Objects.equals(clearanceLevel, that.clearanceLevel) &&
             Objects.equals(grantedClearancesId, that.grantedClearancesId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(systemParametersId, that.systemParametersId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, clearanceLevel, grantedClearancesId, placeholderId, distinct);
+        return Objects.hash(id, clearanceLevel, grantedClearancesId, placeholderId, systemParametersId, distinct);
     }
 
     // prettier-ignore
@@ -165,6 +185,7 @@ public class SecurityClearanceCriteria implements Serializable, Criteria {
             (clearanceLevel != null ? "clearanceLevel=" + clearanceLevel + ", " : "") +
             (grantedClearancesId != null ? "grantedClearancesId=" + grantedClearancesId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (systemParametersId != null ? "systemParametersId=" + systemParametersId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

@@ -17,6 +17,7 @@ package io.github.erp.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.*; // for static metamodels
 import io.github.erp.domain.SecurityClearance;
 import io.github.erp.repository.SecurityClearanceRepository;
@@ -134,6 +135,15 @@ public class SecurityClearanceQueryService extends QueryService<SecurityClearanc
                         buildSpecification(
                             criteria.getPlaceholderId(),
                             root -> root.join(SecurityClearance_.placeholders, JoinType.LEFT).get(Placeholder_.id)
+                        )
+                    );
+            }
+            if (criteria.getSystemParametersId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getSystemParametersId(),
+                            root -> root.join(SecurityClearance_.systemParameters, JoinType.LEFT).get(UniversallyUniqueMapping_.id)
                         )
                     );
             }

@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.BusinessDocument;
 import io.github.erp.service.dto.BusinessDocumentDTO;
 import java.util.Set;
@@ -27,7 +28,14 @@ import org.mapstruct.*;
  */
 @Mapper(
     componentModel = "spring",
-    uses = { ApplicationUserMapper.class, DealerMapper.class, UniversallyUniqueMappingMapper.class, PlaceholderMapper.class }
+    uses = {
+        ApplicationUserMapper.class,
+        DealerMapper.class,
+        UniversallyUniqueMappingMapper.class,
+        PlaceholderMapper.class,
+        AlgorithmMapper.class,
+        SecurityClearanceMapper.class,
+    }
 )
 public interface BusinessDocumentMapper extends EntityMapper<BusinessDocumentDTO, BusinessDocument> {
     @Mapping(target = "createdBy", source = "createdBy", qualifiedByName = "applicationIdentity")
@@ -35,6 +43,8 @@ public interface BusinessDocumentMapper extends EntityMapper<BusinessDocumentDTO
     @Mapping(target = "originatingDepartment", source = "originatingDepartment", qualifiedByName = "dealerName")
     @Mapping(target = "applicationMappings", source = "applicationMappings", qualifiedByName = "universalKeySet")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
+    @Mapping(target = "fileChecksumAlgorithm", source = "fileChecksumAlgorithm", qualifiedByName = "name")
+    @Mapping(target = "securityClearance", source = "securityClearance", qualifiedByName = "clearanceLevel")
     BusinessDocumentDTO toDto(BusinessDocument s);
 
     @Mapping(target = "removeApplicationMappings", ignore = true)

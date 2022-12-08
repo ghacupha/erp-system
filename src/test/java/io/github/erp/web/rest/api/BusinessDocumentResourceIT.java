@@ -17,12 +17,9 @@ package io.github.erp.web.rest.api;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.ApplicationUser;
-import io.github.erp.domain.BusinessDocument;
-import io.github.erp.domain.Dealer;
-import io.github.erp.domain.Placeholder;
-import io.github.erp.domain.UniversallyUniqueMapping;
+import io.github.erp.domain.*;
 import io.github.erp.repository.BusinessDocumentRepository;
 import io.github.erp.repository.search.BusinessDocumentSearchRepository;
 import io.github.erp.service.BusinessDocumentService;
@@ -63,12 +60,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link BusinessDocumentResource} REST controller.
+ * Integration tests for the {@link BusinessDocumentResourceDev} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"DEV"})
 public class BusinessDocumentResourceIT {
 
     private static final String DEFAULT_DOCUMENT_TITLE = "AAAAAAAAAA";
@@ -87,9 +84,18 @@ public class BusinessDocumentResourceIT {
     private static final String DEFAULT_ATTACHMENT_FILE_PATH = "AAAAAAAAAA";
     private static final String UPDATED_ATTACHMENT_FILE_PATH = "BBBBBBBBBB";
 
-    private static final String ENTITY_API_URL = "/api/business-documents";
+    private static final String DEFAULT_DOCUMENT_FILE_CONTENT_TYPE = "AAAAAAAAAA";
+    private static final String UPDATED_DOCUMENT_FILE_CONTENT_TYPE = "BBBBBBBBBB";
+
+    private static final Boolean DEFAULT_FILE_TAMPERED = false;
+    private static final Boolean UPDATED_FILE_TAMPERED = true;
+
+    private static final String DEFAULT_DOCUMENT_FILE_CHECKSUM = "AAAAAAAAAA";
+    private static final String UPDATED_DOCUMENT_FILE_CHECKSUM = "BBBBBBBBBB";
+
+    private static final String ENTITY_API_URL = "/api/dev/business-documents";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/business-documents";
+    private static final String ENTITY_SEARCH_API_URL = "/api/dev/_search/business-documents";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
@@ -134,7 +140,10 @@ public class BusinessDocumentResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .documentSerial(DEFAULT_DOCUMENT_SERIAL)
             .lastModified(DEFAULT_LAST_MODIFIED)
-            .attachmentFilePath(DEFAULT_ATTACHMENT_FILE_PATH);
+            .attachmentFilePath(DEFAULT_ATTACHMENT_FILE_PATH)
+            .documentFileContentType(DEFAULT_DOCUMENT_FILE_CONTENT_TYPE)
+            .fileTampered(DEFAULT_FILE_TAMPERED)
+            .documentFileChecksum(DEFAULT_DOCUMENT_FILE_CHECKSUM);
         // Add required entity
         ApplicationUser applicationUser;
         if (TestUtil.findAll(em, ApplicationUser.class).isEmpty()) {
@@ -155,6 +164,26 @@ public class BusinessDocumentResourceIT {
             dealer = TestUtil.findAll(em, Dealer.class).get(0);
         }
         businessDocument.setOriginatingDepartment(dealer);
+        // Add required entity
+        Algorithm algorithm;
+        if (TestUtil.findAll(em, Algorithm.class).isEmpty()) {
+            algorithm = AlgorithmResourceIT.createEntity(em);
+            em.persist(algorithm);
+            em.flush();
+        } else {
+            algorithm = TestUtil.findAll(em, Algorithm.class).get(0);
+        }
+        businessDocument.setFileChecksumAlgorithm(algorithm);
+        // Add required entity
+        SecurityClearance securityClearance;
+        if (TestUtil.findAll(em, SecurityClearance.class).isEmpty()) {
+            securityClearance = SecurityClearanceResourceIT.createEntity(em);
+            em.persist(securityClearance);
+            em.flush();
+        } else {
+            securityClearance = TestUtil.findAll(em, SecurityClearance.class).get(0);
+        }
+        businessDocument.setSecurityClearance(securityClearance);
         return businessDocument;
     }
 
@@ -170,7 +199,10 @@ public class BusinessDocumentResourceIT {
             .description(UPDATED_DESCRIPTION)
             .documentSerial(UPDATED_DOCUMENT_SERIAL)
             .lastModified(UPDATED_LAST_MODIFIED)
-            .attachmentFilePath(UPDATED_ATTACHMENT_FILE_PATH);
+            .attachmentFilePath(UPDATED_ATTACHMENT_FILE_PATH)
+            .documentFileContentType(UPDATED_DOCUMENT_FILE_CONTENT_TYPE)
+            .fileTampered(UPDATED_FILE_TAMPERED)
+            .documentFileChecksum(UPDATED_DOCUMENT_FILE_CHECKSUM);
         // Add required entity
         ApplicationUser applicationUser;
         if (TestUtil.findAll(em, ApplicationUser.class).isEmpty()) {
@@ -191,6 +223,26 @@ public class BusinessDocumentResourceIT {
             dealer = TestUtil.findAll(em, Dealer.class).get(0);
         }
         businessDocument.setOriginatingDepartment(dealer);
+        // Add required entity
+        Algorithm algorithm;
+        if (TestUtil.findAll(em, Algorithm.class).isEmpty()) {
+            algorithm = AlgorithmResourceIT.createUpdatedEntity(em);
+            em.persist(algorithm);
+            em.flush();
+        } else {
+            algorithm = TestUtil.findAll(em, Algorithm.class).get(0);
+        }
+        businessDocument.setFileChecksumAlgorithm(algorithm);
+        // Add required entity
+        SecurityClearance securityClearance;
+        if (TestUtil.findAll(em, SecurityClearance.class).isEmpty()) {
+            securityClearance = SecurityClearanceResourceIT.createUpdatedEntity(em);
+            em.persist(securityClearance);
+            em.flush();
+        } else {
+            securityClearance = TestUtil.findAll(em, SecurityClearance.class).get(0);
+        }
+        businessDocument.setSecurityClearance(securityClearance);
         return businessDocument;
     }
 
@@ -220,6 +272,9 @@ public class BusinessDocumentResourceIT {
         assertThat(testBusinessDocument.getDocumentSerial()).isEqualTo(DEFAULT_DOCUMENT_SERIAL);
         assertThat(testBusinessDocument.getLastModified()).isEqualTo(DEFAULT_LAST_MODIFIED);
         assertThat(testBusinessDocument.getAttachmentFilePath()).isEqualTo(DEFAULT_ATTACHMENT_FILE_PATH);
+        assertThat(testBusinessDocument.getDocumentFileContentType()).isEqualTo(DEFAULT_DOCUMENT_FILE_CONTENT_TYPE);
+        assertThat(testBusinessDocument.getFileTampered()).isEqualTo(DEFAULT_FILE_TAMPERED);
+        assertThat(testBusinessDocument.getDocumentFileChecksum()).isEqualTo(DEFAULT_DOCUMENT_FILE_CHECKSUM);
 
         // Validate the BusinessDocument in Elasticsearch
         verify(mockBusinessDocumentSearchRepository, times(1)).save(testBusinessDocument);
@@ -311,6 +366,46 @@ public class BusinessDocumentResourceIT {
 
     @Test
     @Transactional
+    void checkDocumentFileContentTypeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = businessDocumentRepository.findAll().size();
+        // set the field null
+        businessDocument.setDocumentFileContentType(null);
+
+        // Create the BusinessDocument, which fails.
+        BusinessDocumentDTO businessDocumentDTO = businessDocumentMapper.toDto(businessDocument);
+
+        restBusinessDocumentMockMvc
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(businessDocumentDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<BusinessDocument> businessDocumentList = businessDocumentRepository.findAll();
+        assertThat(businessDocumentList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkDocumentFileChecksumIsRequired() throws Exception {
+        int databaseSizeBeforeTest = businessDocumentRepository.findAll().size();
+        // set the field null
+        businessDocument.setDocumentFileChecksum(null);
+
+        // Create the BusinessDocument, which fails.
+        BusinessDocumentDTO businessDocumentDTO = businessDocumentMapper.toDto(businessDocument);
+
+        restBusinessDocumentMockMvc
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(businessDocumentDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<BusinessDocument> businessDocumentList = businessDocumentRepository.findAll();
+        assertThat(businessDocumentList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllBusinessDocuments() throws Exception {
         // Initialize the database
         businessDocumentRepository.saveAndFlush(businessDocument);
@@ -325,7 +420,10 @@ public class BusinessDocumentResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].documentSerial").value(hasItem(DEFAULT_DOCUMENT_SERIAL.toString())))
             .andExpect(jsonPath("$.[*].lastModified").value(hasItem(sameInstant(DEFAULT_LAST_MODIFIED))))
-            .andExpect(jsonPath("$.[*].attachmentFilePath").value(hasItem(DEFAULT_ATTACHMENT_FILE_PATH)));
+            .andExpect(jsonPath("$.[*].attachmentFilePath").value(hasItem(DEFAULT_ATTACHMENT_FILE_PATH)))
+            .andExpect(jsonPath("$.[*].documentFileContentType").value(hasItem(DEFAULT_DOCUMENT_FILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].fileTampered").value(hasItem(DEFAULT_FILE_TAMPERED.booleanValue())))
+            .andExpect(jsonPath("$.[*].documentFileChecksum").value(hasItem(DEFAULT_DOCUMENT_FILE_CHECKSUM)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -362,7 +460,10 @@ public class BusinessDocumentResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.documentSerial").value(DEFAULT_DOCUMENT_SERIAL.toString()))
             .andExpect(jsonPath("$.lastModified").value(sameInstant(DEFAULT_LAST_MODIFIED)))
-            .andExpect(jsonPath("$.attachmentFilePath").value(DEFAULT_ATTACHMENT_FILE_PATH));
+            .andExpect(jsonPath("$.attachmentFilePath").value(DEFAULT_ATTACHMENT_FILE_PATH))
+            .andExpect(jsonPath("$.documentFileContentType").value(DEFAULT_DOCUMENT_FILE_CONTENT_TYPE))
+            .andExpect(jsonPath("$.fileTampered").value(DEFAULT_FILE_TAMPERED.booleanValue()))
+            .andExpect(jsonPath("$.documentFileChecksum").value(DEFAULT_DOCUMENT_FILE_CHECKSUM));
     }
 
     @Test
@@ -775,6 +876,218 @@ public class BusinessDocumentResourceIT {
 
     @Test
     @Transactional
+    void getAllBusinessDocumentsByDocumentFileContentTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        businessDocumentRepository.saveAndFlush(businessDocument);
+
+        // Get all the businessDocumentList where documentFileContentType equals to DEFAULT_DOCUMENT_FILE_CONTENT_TYPE
+        defaultBusinessDocumentShouldBeFound("documentFileContentType.equals=" + DEFAULT_DOCUMENT_FILE_CONTENT_TYPE);
+
+        // Get all the businessDocumentList where documentFileContentType equals to UPDATED_DOCUMENT_FILE_CONTENT_TYPE
+        defaultBusinessDocumentShouldNotBeFound("documentFileContentType.equals=" + UPDATED_DOCUMENT_FILE_CONTENT_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllBusinessDocumentsByDocumentFileContentTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        businessDocumentRepository.saveAndFlush(businessDocument);
+
+        // Get all the businessDocumentList where documentFileContentType not equals to DEFAULT_DOCUMENT_FILE_CONTENT_TYPE
+        defaultBusinessDocumentShouldNotBeFound("documentFileContentType.notEquals=" + DEFAULT_DOCUMENT_FILE_CONTENT_TYPE);
+
+        // Get all the businessDocumentList where documentFileContentType not equals to UPDATED_DOCUMENT_FILE_CONTENT_TYPE
+        defaultBusinessDocumentShouldBeFound("documentFileContentType.notEquals=" + UPDATED_DOCUMENT_FILE_CONTENT_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllBusinessDocumentsByDocumentFileContentTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        businessDocumentRepository.saveAndFlush(businessDocument);
+
+        // Get all the businessDocumentList where documentFileContentType in DEFAULT_DOCUMENT_FILE_CONTENT_TYPE or UPDATED_DOCUMENT_FILE_CONTENT_TYPE
+        defaultBusinessDocumentShouldBeFound(
+            "documentFileContentType.in=" + DEFAULT_DOCUMENT_FILE_CONTENT_TYPE + "," + UPDATED_DOCUMENT_FILE_CONTENT_TYPE
+        );
+
+        // Get all the businessDocumentList where documentFileContentType equals to UPDATED_DOCUMENT_FILE_CONTENT_TYPE
+        defaultBusinessDocumentShouldNotBeFound("documentFileContentType.in=" + UPDATED_DOCUMENT_FILE_CONTENT_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllBusinessDocumentsByDocumentFileContentTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        businessDocumentRepository.saveAndFlush(businessDocument);
+
+        // Get all the businessDocumentList where documentFileContentType is not null
+        defaultBusinessDocumentShouldBeFound("documentFileContentType.specified=true");
+
+        // Get all the businessDocumentList where documentFileContentType is null
+        defaultBusinessDocumentShouldNotBeFound("documentFileContentType.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllBusinessDocumentsByDocumentFileContentTypeContainsSomething() throws Exception {
+        // Initialize the database
+        businessDocumentRepository.saveAndFlush(businessDocument);
+
+        // Get all the businessDocumentList where documentFileContentType contains DEFAULT_DOCUMENT_FILE_CONTENT_TYPE
+        defaultBusinessDocumentShouldBeFound("documentFileContentType.contains=" + DEFAULT_DOCUMENT_FILE_CONTENT_TYPE);
+
+        // Get all the businessDocumentList where documentFileContentType contains UPDATED_DOCUMENT_FILE_CONTENT_TYPE
+        defaultBusinessDocumentShouldNotBeFound("documentFileContentType.contains=" + UPDATED_DOCUMENT_FILE_CONTENT_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllBusinessDocumentsByDocumentFileContentTypeNotContainsSomething() throws Exception {
+        // Initialize the database
+        businessDocumentRepository.saveAndFlush(businessDocument);
+
+        // Get all the businessDocumentList where documentFileContentType does not contain DEFAULT_DOCUMENT_FILE_CONTENT_TYPE
+        defaultBusinessDocumentShouldNotBeFound("documentFileContentType.doesNotContain=" + DEFAULT_DOCUMENT_FILE_CONTENT_TYPE);
+
+        // Get all the businessDocumentList where documentFileContentType does not contain UPDATED_DOCUMENT_FILE_CONTENT_TYPE
+        defaultBusinessDocumentShouldBeFound("documentFileContentType.doesNotContain=" + UPDATED_DOCUMENT_FILE_CONTENT_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllBusinessDocumentsByFileTamperedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        businessDocumentRepository.saveAndFlush(businessDocument);
+
+        // Get all the businessDocumentList where fileTampered equals to DEFAULT_FILE_TAMPERED
+        defaultBusinessDocumentShouldBeFound("fileTampered.equals=" + DEFAULT_FILE_TAMPERED);
+
+        // Get all the businessDocumentList where fileTampered equals to UPDATED_FILE_TAMPERED
+        defaultBusinessDocumentShouldNotBeFound("fileTampered.equals=" + UPDATED_FILE_TAMPERED);
+    }
+
+    @Test
+    @Transactional
+    void getAllBusinessDocumentsByFileTamperedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        businessDocumentRepository.saveAndFlush(businessDocument);
+
+        // Get all the businessDocumentList where fileTampered not equals to DEFAULT_FILE_TAMPERED
+        defaultBusinessDocumentShouldNotBeFound("fileTampered.notEquals=" + DEFAULT_FILE_TAMPERED);
+
+        // Get all the businessDocumentList where fileTampered not equals to UPDATED_FILE_TAMPERED
+        defaultBusinessDocumentShouldBeFound("fileTampered.notEquals=" + UPDATED_FILE_TAMPERED);
+    }
+
+    @Test
+    @Transactional
+    void getAllBusinessDocumentsByFileTamperedIsInShouldWork() throws Exception {
+        // Initialize the database
+        businessDocumentRepository.saveAndFlush(businessDocument);
+
+        // Get all the businessDocumentList where fileTampered in DEFAULT_FILE_TAMPERED or UPDATED_FILE_TAMPERED
+        defaultBusinessDocumentShouldBeFound("fileTampered.in=" + DEFAULT_FILE_TAMPERED + "," + UPDATED_FILE_TAMPERED);
+
+        // Get all the businessDocumentList where fileTampered equals to UPDATED_FILE_TAMPERED
+        defaultBusinessDocumentShouldNotBeFound("fileTampered.in=" + UPDATED_FILE_TAMPERED);
+    }
+
+    @Test
+    @Transactional
+    void getAllBusinessDocumentsByFileTamperedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        businessDocumentRepository.saveAndFlush(businessDocument);
+
+        // Get all the businessDocumentList where fileTampered is not null
+        defaultBusinessDocumentShouldBeFound("fileTampered.specified=true");
+
+        // Get all the businessDocumentList where fileTampered is null
+        defaultBusinessDocumentShouldNotBeFound("fileTampered.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllBusinessDocumentsByDocumentFileChecksumIsEqualToSomething() throws Exception {
+        // Initialize the database
+        businessDocumentRepository.saveAndFlush(businessDocument);
+
+        // Get all the businessDocumentList where documentFileChecksum equals to DEFAULT_DOCUMENT_FILE_CHECKSUM
+        defaultBusinessDocumentShouldBeFound("documentFileChecksum.equals=" + DEFAULT_DOCUMENT_FILE_CHECKSUM);
+
+        // Get all the businessDocumentList where documentFileChecksum equals to UPDATED_DOCUMENT_FILE_CHECKSUM
+        defaultBusinessDocumentShouldNotBeFound("documentFileChecksum.equals=" + UPDATED_DOCUMENT_FILE_CHECKSUM);
+    }
+
+    @Test
+    @Transactional
+    void getAllBusinessDocumentsByDocumentFileChecksumIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        businessDocumentRepository.saveAndFlush(businessDocument);
+
+        // Get all the businessDocumentList where documentFileChecksum not equals to DEFAULT_DOCUMENT_FILE_CHECKSUM
+        defaultBusinessDocumentShouldNotBeFound("documentFileChecksum.notEquals=" + DEFAULT_DOCUMENT_FILE_CHECKSUM);
+
+        // Get all the businessDocumentList where documentFileChecksum not equals to UPDATED_DOCUMENT_FILE_CHECKSUM
+        defaultBusinessDocumentShouldBeFound("documentFileChecksum.notEquals=" + UPDATED_DOCUMENT_FILE_CHECKSUM);
+    }
+
+    @Test
+    @Transactional
+    void getAllBusinessDocumentsByDocumentFileChecksumIsInShouldWork() throws Exception {
+        // Initialize the database
+        businessDocumentRepository.saveAndFlush(businessDocument);
+
+        // Get all the businessDocumentList where documentFileChecksum in DEFAULT_DOCUMENT_FILE_CHECKSUM or UPDATED_DOCUMENT_FILE_CHECKSUM
+        defaultBusinessDocumentShouldBeFound(
+            "documentFileChecksum.in=" + DEFAULT_DOCUMENT_FILE_CHECKSUM + "," + UPDATED_DOCUMENT_FILE_CHECKSUM
+        );
+
+        // Get all the businessDocumentList where documentFileChecksum equals to UPDATED_DOCUMENT_FILE_CHECKSUM
+        defaultBusinessDocumentShouldNotBeFound("documentFileChecksum.in=" + UPDATED_DOCUMENT_FILE_CHECKSUM);
+    }
+
+    @Test
+    @Transactional
+    void getAllBusinessDocumentsByDocumentFileChecksumIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        businessDocumentRepository.saveAndFlush(businessDocument);
+
+        // Get all the businessDocumentList where documentFileChecksum is not null
+        defaultBusinessDocumentShouldBeFound("documentFileChecksum.specified=true");
+
+        // Get all the businessDocumentList where documentFileChecksum is null
+        defaultBusinessDocumentShouldNotBeFound("documentFileChecksum.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllBusinessDocumentsByDocumentFileChecksumContainsSomething() throws Exception {
+        // Initialize the database
+        businessDocumentRepository.saveAndFlush(businessDocument);
+
+        // Get all the businessDocumentList where documentFileChecksum contains DEFAULT_DOCUMENT_FILE_CHECKSUM
+        defaultBusinessDocumentShouldBeFound("documentFileChecksum.contains=" + DEFAULT_DOCUMENT_FILE_CHECKSUM);
+
+        // Get all the businessDocumentList where documentFileChecksum contains UPDATED_DOCUMENT_FILE_CHECKSUM
+        defaultBusinessDocumentShouldNotBeFound("documentFileChecksum.contains=" + UPDATED_DOCUMENT_FILE_CHECKSUM);
+    }
+
+    @Test
+    @Transactional
+    void getAllBusinessDocumentsByDocumentFileChecksumNotContainsSomething() throws Exception {
+        // Initialize the database
+        businessDocumentRepository.saveAndFlush(businessDocument);
+
+        // Get all the businessDocumentList where documentFileChecksum does not contain DEFAULT_DOCUMENT_FILE_CHECKSUM
+        defaultBusinessDocumentShouldNotBeFound("documentFileChecksum.doesNotContain=" + DEFAULT_DOCUMENT_FILE_CHECKSUM);
+
+        // Get all the businessDocumentList where documentFileChecksum does not contain UPDATED_DOCUMENT_FILE_CHECKSUM
+        defaultBusinessDocumentShouldBeFound("documentFileChecksum.doesNotContain=" + UPDATED_DOCUMENT_FILE_CHECKSUM);
+    }
+
+    @Test
+    @Transactional
     void getAllBusinessDocumentsByCreatedByIsEqualToSomething() throws Exception {
         // Initialize the database
         businessDocumentRepository.saveAndFlush(businessDocument);
@@ -903,6 +1216,58 @@ public class BusinessDocumentResourceIT {
         defaultBusinessDocumentShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllBusinessDocumentsByFileChecksumAlgorithmIsEqualToSomething() throws Exception {
+        // Initialize the database
+        businessDocumentRepository.saveAndFlush(businessDocument);
+        Algorithm fileChecksumAlgorithm;
+        if (TestUtil.findAll(em, Algorithm.class).isEmpty()) {
+            fileChecksumAlgorithm = AlgorithmResourceIT.createEntity(em);
+            em.persist(fileChecksumAlgorithm);
+            em.flush();
+        } else {
+            fileChecksumAlgorithm = TestUtil.findAll(em, Algorithm.class).get(0);
+        }
+        em.persist(fileChecksumAlgorithm);
+        em.flush();
+        businessDocument.setFileChecksumAlgorithm(fileChecksumAlgorithm);
+        businessDocumentRepository.saveAndFlush(businessDocument);
+        Long fileChecksumAlgorithmId = fileChecksumAlgorithm.getId();
+
+        // Get all the businessDocumentList where fileChecksumAlgorithm equals to fileChecksumAlgorithmId
+        defaultBusinessDocumentShouldBeFound("fileChecksumAlgorithmId.equals=" + fileChecksumAlgorithmId);
+
+        // Get all the businessDocumentList where fileChecksumAlgorithm equals to (fileChecksumAlgorithmId + 1)
+        defaultBusinessDocumentShouldNotBeFound("fileChecksumAlgorithmId.equals=" + (fileChecksumAlgorithmId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllBusinessDocumentsBySecurityClearanceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        businessDocumentRepository.saveAndFlush(businessDocument);
+        SecurityClearance securityClearance;
+        if (TestUtil.findAll(em, SecurityClearance.class).isEmpty()) {
+            securityClearance = SecurityClearanceResourceIT.createEntity(em);
+            em.persist(securityClearance);
+            em.flush();
+        } else {
+            securityClearance = TestUtil.findAll(em, SecurityClearance.class).get(0);
+        }
+        em.persist(securityClearance);
+        em.flush();
+        businessDocument.setSecurityClearance(securityClearance);
+        businessDocumentRepository.saveAndFlush(businessDocument);
+        Long securityClearanceId = securityClearance.getId();
+
+        // Get all the businessDocumentList where securityClearance equals to securityClearanceId
+        defaultBusinessDocumentShouldBeFound("securityClearanceId.equals=" + securityClearanceId);
+
+        // Get all the businessDocumentList where securityClearance equals to (securityClearanceId + 1)
+        defaultBusinessDocumentShouldNotBeFound("securityClearanceId.equals=" + (securityClearanceId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -916,7 +1281,10 @@ public class BusinessDocumentResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].documentSerial").value(hasItem(DEFAULT_DOCUMENT_SERIAL.toString())))
             .andExpect(jsonPath("$.[*].lastModified").value(hasItem(sameInstant(DEFAULT_LAST_MODIFIED))))
-            .andExpect(jsonPath("$.[*].attachmentFilePath").value(hasItem(DEFAULT_ATTACHMENT_FILE_PATH)));
+            .andExpect(jsonPath("$.[*].attachmentFilePath").value(hasItem(DEFAULT_ATTACHMENT_FILE_PATH)))
+            .andExpect(jsonPath("$.[*].documentFileContentType").value(hasItem(DEFAULT_DOCUMENT_FILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].fileTampered").value(hasItem(DEFAULT_FILE_TAMPERED.booleanValue())))
+            .andExpect(jsonPath("$.[*].documentFileChecksum").value(hasItem(DEFAULT_DOCUMENT_FILE_CHECKSUM)));
 
         // Check, that the count call also returns 1
         restBusinessDocumentMockMvc
@@ -969,7 +1337,10 @@ public class BusinessDocumentResourceIT {
             .description(UPDATED_DESCRIPTION)
             .documentSerial(UPDATED_DOCUMENT_SERIAL)
             .lastModified(UPDATED_LAST_MODIFIED)
-            .attachmentFilePath(UPDATED_ATTACHMENT_FILE_PATH);
+            .attachmentFilePath(UPDATED_ATTACHMENT_FILE_PATH)
+            .documentFileContentType(UPDATED_DOCUMENT_FILE_CONTENT_TYPE)
+            .fileTampered(UPDATED_FILE_TAMPERED)
+            .documentFileChecksum(UPDATED_DOCUMENT_FILE_CHECKSUM);
         BusinessDocumentDTO businessDocumentDTO = businessDocumentMapper.toDto(updatedBusinessDocument);
 
         restBusinessDocumentMockMvc
@@ -989,6 +1360,9 @@ public class BusinessDocumentResourceIT {
         assertThat(testBusinessDocument.getDocumentSerial()).isEqualTo(UPDATED_DOCUMENT_SERIAL);
         assertThat(testBusinessDocument.getLastModified()).isEqualTo(UPDATED_LAST_MODIFIED);
         assertThat(testBusinessDocument.getAttachmentFilePath()).isEqualTo(UPDATED_ATTACHMENT_FILE_PATH);
+        assertThat(testBusinessDocument.getDocumentFileContentType()).isEqualTo(UPDATED_DOCUMENT_FILE_CONTENT_TYPE);
+        assertThat(testBusinessDocument.getFileTampered()).isEqualTo(UPDATED_FILE_TAMPERED);
+        assertThat(testBusinessDocument.getDocumentFileChecksum()).isEqualTo(UPDATED_DOCUMENT_FILE_CHECKSUM);
 
         // Validate the BusinessDocument in Elasticsearch
         verify(mockBusinessDocumentSearchRepository).save(testBusinessDocument);
@@ -1085,7 +1459,8 @@ public class BusinessDocumentResourceIT {
         partialUpdatedBusinessDocument
             .documentSerial(UPDATED_DOCUMENT_SERIAL)
             .lastModified(UPDATED_LAST_MODIFIED)
-            .attachmentFilePath(UPDATED_ATTACHMENT_FILE_PATH);
+            .attachmentFilePath(UPDATED_ATTACHMENT_FILE_PATH)
+            .fileTampered(UPDATED_FILE_TAMPERED);
 
         restBusinessDocumentMockMvc
             .perform(
@@ -1104,6 +1479,9 @@ public class BusinessDocumentResourceIT {
         assertThat(testBusinessDocument.getDocumentSerial()).isEqualTo(UPDATED_DOCUMENT_SERIAL);
         assertThat(testBusinessDocument.getLastModified()).isEqualTo(UPDATED_LAST_MODIFIED);
         assertThat(testBusinessDocument.getAttachmentFilePath()).isEqualTo(UPDATED_ATTACHMENT_FILE_PATH);
+        assertThat(testBusinessDocument.getDocumentFileContentType()).isEqualTo(DEFAULT_DOCUMENT_FILE_CONTENT_TYPE);
+        assertThat(testBusinessDocument.getFileTampered()).isEqualTo(UPDATED_FILE_TAMPERED);
+        assertThat(testBusinessDocument.getDocumentFileChecksum()).isEqualTo(DEFAULT_DOCUMENT_FILE_CHECKSUM);
     }
 
     @Test
@@ -1123,7 +1501,10 @@ public class BusinessDocumentResourceIT {
             .description(UPDATED_DESCRIPTION)
             .documentSerial(UPDATED_DOCUMENT_SERIAL)
             .lastModified(UPDATED_LAST_MODIFIED)
-            .attachmentFilePath(UPDATED_ATTACHMENT_FILE_PATH);
+            .attachmentFilePath(UPDATED_ATTACHMENT_FILE_PATH)
+            .documentFileContentType(UPDATED_DOCUMENT_FILE_CONTENT_TYPE)
+            .fileTampered(UPDATED_FILE_TAMPERED)
+            .documentFileChecksum(UPDATED_DOCUMENT_FILE_CHECKSUM);
 
         restBusinessDocumentMockMvc
             .perform(
@@ -1142,6 +1523,9 @@ public class BusinessDocumentResourceIT {
         assertThat(testBusinessDocument.getDocumentSerial()).isEqualTo(UPDATED_DOCUMENT_SERIAL);
         assertThat(testBusinessDocument.getLastModified()).isEqualTo(UPDATED_LAST_MODIFIED);
         assertThat(testBusinessDocument.getAttachmentFilePath()).isEqualTo(UPDATED_ATTACHMENT_FILE_PATH);
+        assertThat(testBusinessDocument.getDocumentFileContentType()).isEqualTo(UPDATED_DOCUMENT_FILE_CONTENT_TYPE);
+        assertThat(testBusinessDocument.getFileTampered()).isEqualTo(UPDATED_FILE_TAMPERED);
+        assertThat(testBusinessDocument.getDocumentFileChecksum()).isEqualTo(UPDATED_DOCUMENT_FILE_CHECKSUM);
     }
 
     @Test
@@ -1262,6 +1646,9 @@ public class BusinessDocumentResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].documentSerial").value(hasItem(DEFAULT_DOCUMENT_SERIAL.toString())))
             .andExpect(jsonPath("$.[*].lastModified").value(hasItem(sameInstant(DEFAULT_LAST_MODIFIED))))
-            .andExpect(jsonPath("$.[*].attachmentFilePath").value(hasItem(DEFAULT_ATTACHMENT_FILE_PATH)));
+            .andExpect(jsonPath("$.[*].attachmentFilePath").value(hasItem(DEFAULT_ATTACHMENT_FILE_PATH)))
+            .andExpect(jsonPath("$.[*].documentFileContentType").value(hasItem(DEFAULT_DOCUMENT_FILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].fileTampered").value(hasItem(DEFAULT_FILE_TAMPERED.booleanValue())))
+            .andExpect(jsonPath("$.[*].documentFileChecksum").value(hasItem(DEFAULT_DOCUMENT_FILE_CHECKSUM)));
     }
 }

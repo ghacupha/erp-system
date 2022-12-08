@@ -1,4 +1,4 @@
-package io.github.erp.web.rest.api;
+package io.github.erp.erp.resources;
 
 /*-
  * Erp System - Mark III No 4 (Caleb Series) Server ver 0.1.4-SNAPSHOT
