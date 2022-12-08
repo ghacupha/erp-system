@@ -17,6 +17,7 @@ package io.github.erp.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.SecurityClearance;
 import java.util.List;
 import java.util.Optional;
@@ -32,18 +33,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SecurityClearanceRepository extends JpaRepository<SecurityClearance, Long>, JpaSpecificationExecutor<SecurityClearance> {
     @Query(
-        value = "select distinct securityClearance from SecurityClearance securityClearance left join fetch securityClearance.grantedClearances left join fetch securityClearance.placeholders",
+        value = "select distinct securityClearance from SecurityClearance securityClearance left join fetch securityClearance.grantedClearances left join fetch securityClearance.placeholders left join fetch securityClearance.systemParameters",
         countQuery = "select count(distinct securityClearance) from SecurityClearance securityClearance"
     )
     Page<SecurityClearance> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct securityClearance from SecurityClearance securityClearance left join fetch securityClearance.grantedClearances left join fetch securityClearance.placeholders"
+        "select distinct securityClearance from SecurityClearance securityClearance left join fetch securityClearance.grantedClearances left join fetch securityClearance.placeholders left join fetch securityClearance.systemParameters"
     )
     List<SecurityClearance> findAllWithEagerRelationships();
 
     @Query(
-        "select securityClearance from SecurityClearance securityClearance left join fetch securityClearance.grantedClearances left join fetch securityClearance.placeholders where securityClearance.id =:id"
+        "select securityClearance from SecurityClearance securityClearance left join fetch securityClearance.grantedClearances left join fetch securityClearance.placeholders left join fetch securityClearance.systemParameters where securityClearance.id =:id"
     )
     Optional<SecurityClearance> findOneWithEagerRelationships(@Param("id") Long id);
 }

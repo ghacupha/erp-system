@@ -17,6 +17,7 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -54,7 +55,7 @@ public class SecurityClearance implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "granted_clearances_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "grantedClearances", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "grantedClearances", "placeholders", "systemParameters" }, allowSetters = true)
     private Set<SecurityClearance> grantedClearances = new HashSet<>();
 
     @ManyToMany
@@ -66,6 +67,16 @@ public class SecurityClearance implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_security_clearance__system_parameters",
+        joinColumns = @JoinColumn(name = "security_clearance_id"),
+        inverseJoinColumns = @JoinColumn(name = "system_parameters_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "parentMapping", "placeholders" }, allowSetters = true)
+    private Set<UniversallyUniqueMapping> systemParameters = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -138,6 +149,29 @@ public class SecurityClearance implements Serializable {
 
     public SecurityClearance removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
+        return this;
+    }
+
+    public Set<UniversallyUniqueMapping> getSystemParameters() {
+        return this.systemParameters;
+    }
+
+    public void setSystemParameters(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
+        this.systemParameters = universallyUniqueMappings;
+    }
+
+    public SecurityClearance systemParameters(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
+        this.setSystemParameters(universallyUniqueMappings);
+        return this;
+    }
+
+    public SecurityClearance addSystemParameters(UniversallyUniqueMapping universallyUniqueMapping) {
+        this.systemParameters.add(universallyUniqueMapping);
+        return this;
+    }
+
+    public SecurityClearance removeSystemParameters(UniversallyUniqueMapping universallyUniqueMapping) {
+        this.systemParameters.remove(universallyUniqueMapping);
         return this;
     }
 

@@ -17,6 +17,7 @@ package io.github.erp.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.*; // for static metamodels
 import io.github.erp.domain.BusinessDocument;
 import io.github.erp.repository.BusinessDocumentRepository;
@@ -131,6 +132,19 @@ public class BusinessDocumentQueryService extends QueryService<BusinessDocument>
                 specification =
                     specification.and(buildStringSpecification(criteria.getAttachmentFilePath(), BusinessDocument_.attachmentFilePath));
             }
+            if (criteria.getDocumentFileContentType() != null) {
+                specification =
+                    specification.and(
+                        buildStringSpecification(criteria.getDocumentFileContentType(), BusinessDocument_.documentFileContentType)
+                    );
+            }
+            if (criteria.getFileTampered() != null) {
+                specification = specification.and(buildSpecification(criteria.getFileTampered(), BusinessDocument_.fileTampered));
+            }
+            if (criteria.getDocumentFileChecksum() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getDocumentFileChecksum(), BusinessDocument_.documentFileChecksum));
+            }
             if (criteria.getCreatedById() != null) {
                 specification =
                     specification.and(
@@ -173,6 +187,24 @@ public class BusinessDocumentQueryService extends QueryService<BusinessDocument>
                         buildSpecification(
                             criteria.getPlaceholderId(),
                             root -> root.join(BusinessDocument_.placeholders, JoinType.LEFT).get(Placeholder_.id)
+                        )
+                    );
+            }
+            if (criteria.getFileChecksumAlgorithmId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getFileChecksumAlgorithmId(),
+                            root -> root.join(BusinessDocument_.fileChecksumAlgorithm, JoinType.LEFT).get(Algorithm_.id)
+                        )
+                    );
+            }
+            if (criteria.getSecurityClearanceId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getSecurityClearanceId(),
+                            root -> root.join(BusinessDocument_.securityClearance, JoinType.LEFT).get(SecurityClearance_.id)
                         )
                     );
             }

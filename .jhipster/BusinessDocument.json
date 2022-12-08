@@ -22,6 +22,20 @@
       "fieldName": "attachmentFilePath",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "documentFileContentType",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fileTampered",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "documentFileChecksum",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
     }
   ],
   "relationships": [
@@ -60,6 +74,20 @@
       "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "businessDocument"
+    },
+    {
+      "relationshipName": "fileChecksumAlgorithm",
+      "otherEntityName": "algorithm",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipName": "securityClearance",
+      "otherEntityName": "securityClearance",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "clearanceLevel"
     }
   ],
   "service": "serviceImpl",

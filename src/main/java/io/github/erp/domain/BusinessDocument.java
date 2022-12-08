@@ -17,6 +17,7 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
@@ -63,6 +64,17 @@ public class BusinessDocument implements Serializable {
     @Column(name = "attachment_file_path", nullable = false)
     private String attachmentFilePath;
 
+    @NotNull
+    @Column(name = "document_file_content_type", nullable = false)
+    private String documentFileContentType;
+
+    @Column(name = "file_tampered")
+    private Boolean fileTampered;
+
+    @NotNull
+    @Column(name = "document_file_checksum", nullable = false, unique = true)
+    private String documentFileChecksum;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
@@ -102,6 +114,16 @@ public class BusinessDocument implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "placeholders", "parameters" }, allowSetters = true)
+    private Algorithm fileChecksumAlgorithm;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "grantedClearances", "placeholders", "systemParameters" }, allowSetters = true)
+    private SecurityClearance securityClearance;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -181,6 +203,45 @@ public class BusinessDocument implements Serializable {
 
     public void setAttachmentFilePath(String attachmentFilePath) {
         this.attachmentFilePath = attachmentFilePath;
+    }
+
+    public String getDocumentFileContentType() {
+        return this.documentFileContentType;
+    }
+
+    public BusinessDocument documentFileContentType(String documentFileContentType) {
+        this.setDocumentFileContentType(documentFileContentType);
+        return this;
+    }
+
+    public void setDocumentFileContentType(String documentFileContentType) {
+        this.documentFileContentType = documentFileContentType;
+    }
+
+    public Boolean getFileTampered() {
+        return this.fileTampered;
+    }
+
+    public BusinessDocument fileTampered(Boolean fileTampered) {
+        this.setFileTampered(fileTampered);
+        return this;
+    }
+
+    public void setFileTampered(Boolean fileTampered) {
+        this.fileTampered = fileTampered;
+    }
+
+    public String getDocumentFileChecksum() {
+        return this.documentFileChecksum;
+    }
+
+    public BusinessDocument documentFileChecksum(String documentFileChecksum) {
+        this.setDocumentFileChecksum(documentFileChecksum);
+        return this;
+    }
+
+    public void setDocumentFileChecksum(String documentFileChecksum) {
+        this.documentFileChecksum = documentFileChecksum;
     }
 
     public ApplicationUser getCreatedBy() {
@@ -268,6 +329,32 @@ public class BusinessDocument implements Serializable {
         return this;
     }
 
+    public Algorithm getFileChecksumAlgorithm() {
+        return this.fileChecksumAlgorithm;
+    }
+
+    public void setFileChecksumAlgorithm(Algorithm algorithm) {
+        this.fileChecksumAlgorithm = algorithm;
+    }
+
+    public BusinessDocument fileChecksumAlgorithm(Algorithm algorithm) {
+        this.setFileChecksumAlgorithm(algorithm);
+        return this;
+    }
+
+    public SecurityClearance getSecurityClearance() {
+        return this.securityClearance;
+    }
+
+    public void setSecurityClearance(SecurityClearance securityClearance) {
+        this.securityClearance = securityClearance;
+    }
+
+    public BusinessDocument securityClearance(SecurityClearance securityClearance) {
+        this.setSecurityClearance(securityClearance);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -297,6 +384,9 @@ public class BusinessDocument implements Serializable {
             ", documentSerial='" + getDocumentSerial() + "'" +
             ", lastModified='" + getLastModified() + "'" +
             ", attachmentFilePath='" + getAttachmentFilePath() + "'" +
+            ", documentFileContentType='" + getDocumentFileContentType() + "'" +
+            ", fileTampered='" + getFileTampered() + "'" +
+            ", documentFileChecksum='" + getDocumentFileChecksum() + "'" +
             "}";
     }
 }

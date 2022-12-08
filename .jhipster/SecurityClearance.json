@@ -22,6 +22,14 @@
       "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "securityClearance"
+    },
+    {
+      "relationshipName": "systemParameters",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "universalKey",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "securityClearance"
     }
   ],
   "service": "serviceImpl",

@@ -17,6 +17,7 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
@@ -45,6 +46,14 @@ public class BusinessDocumentDTO implements Serializable {
     @NotNull
     private String attachmentFilePath;
 
+    @NotNull
+    private String documentFileContentType;
+
+    private Boolean fileTampered;
+
+    @NotNull
+    private String documentFileChecksum;
+
     private ApplicationUserDTO createdBy;
 
     private ApplicationUserDTO lastModifiedBy;
@@ -54,6 +63,10 @@ public class BusinessDocumentDTO implements Serializable {
     private Set<UniversallyUniqueMappingDTO> applicationMappings = new HashSet<>();
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
+
+    private AlgorithmDTO fileChecksumAlgorithm;
+
+    private SecurityClearanceDTO securityClearance;
 
     public Long getId() {
         return id;
@@ -103,6 +116,30 @@ public class BusinessDocumentDTO implements Serializable {
         this.attachmentFilePath = attachmentFilePath;
     }
 
+    public String getDocumentFileContentType() {
+        return documentFileContentType;
+    }
+
+    public void setDocumentFileContentType(String documentFileContentType) {
+        this.documentFileContentType = documentFileContentType;
+    }
+
+    public Boolean getFileTampered() {
+        return fileTampered;
+    }
+
+    public void setFileTampered(Boolean fileTampered) {
+        this.fileTampered = fileTampered;
+    }
+
+    public String getDocumentFileChecksum() {
+        return documentFileChecksum;
+    }
+
+    public void setDocumentFileChecksum(String documentFileChecksum) {
+        this.documentFileChecksum = documentFileChecksum;
+    }
+
     public ApplicationUserDTO getCreatedBy() {
         return createdBy;
     }
@@ -143,6 +180,22 @@ public class BusinessDocumentDTO implements Serializable {
         this.placeholders = placeholders;
     }
 
+    public AlgorithmDTO getFileChecksumAlgorithm() {
+        return fileChecksumAlgorithm;
+    }
+
+    public void setFileChecksumAlgorithm(AlgorithmDTO fileChecksumAlgorithm) {
+        this.fileChecksumAlgorithm = fileChecksumAlgorithm;
+    }
+
+    public SecurityClearanceDTO getSecurityClearance() {
+        return securityClearance;
+    }
+
+    public void setSecurityClearance(SecurityClearanceDTO securityClearance) {
+        this.securityClearance = securityClearance;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -174,11 +227,16 @@ public class BusinessDocumentDTO implements Serializable {
             ", documentSerial='" + getDocumentSerial() + "'" +
             ", lastModified='" + getLastModified() + "'" +
             ", attachmentFilePath='" + getAttachmentFilePath() + "'" +
+            ", documentFileContentType='" + getDocumentFileContentType() + "'" +
+            ", fileTampered='" + getFileTampered() + "'" +
+            ", documentFileChecksum='" + getDocumentFileChecksum() + "'" +
             ", createdBy=" + getCreatedBy() +
             ", lastModifiedBy=" + getLastModifiedBy() +
             ", originatingDepartment=" + getOriginatingDepartment() +
             ", applicationMappings=" + getApplicationMappings() +
             ", placeholders=" + getPlaceholders() +
+            ", fileChecksumAlgorithm=" + getFileChecksumAlgorithm() +
+            ", securityClearance=" + getSecurityClearance() +
             "}";
     }
 }

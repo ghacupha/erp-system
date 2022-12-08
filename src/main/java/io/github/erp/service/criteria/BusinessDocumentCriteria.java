@@ -17,6 +17,7 @@ package io.github.erp.service.criteria;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -55,6 +56,12 @@ public class BusinessDocumentCriteria implements Serializable, Criteria {
 
     private StringFilter attachmentFilePath;
 
+    private StringFilter documentFileContentType;
+
+    private BooleanFilter fileTampered;
+
+    private StringFilter documentFileChecksum;
+
     private LongFilter createdById;
 
     private LongFilter lastModifiedById;
@@ -64,6 +71,10 @@ public class BusinessDocumentCriteria implements Serializable, Criteria {
     private LongFilter applicationMappingsId;
 
     private LongFilter placeholderId;
+
+    private LongFilter fileChecksumAlgorithmId;
+
+    private LongFilter securityClearanceId;
 
     private Boolean distinct;
 
@@ -76,11 +87,16 @@ public class BusinessDocumentCriteria implements Serializable, Criteria {
         this.documentSerial = other.documentSerial == null ? null : other.documentSerial.copy();
         this.lastModified = other.lastModified == null ? null : other.lastModified.copy();
         this.attachmentFilePath = other.attachmentFilePath == null ? null : other.attachmentFilePath.copy();
+        this.documentFileContentType = other.documentFileContentType == null ? null : other.documentFileContentType.copy();
+        this.fileTampered = other.fileTampered == null ? null : other.fileTampered.copy();
+        this.documentFileChecksum = other.documentFileChecksum == null ? null : other.documentFileChecksum.copy();
         this.createdById = other.createdById == null ? null : other.createdById.copy();
         this.lastModifiedById = other.lastModifiedById == null ? null : other.lastModifiedById.copy();
         this.originatingDepartmentId = other.originatingDepartmentId == null ? null : other.originatingDepartmentId.copy();
         this.applicationMappingsId = other.applicationMappingsId == null ? null : other.applicationMappingsId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.fileChecksumAlgorithmId = other.fileChecksumAlgorithmId == null ? null : other.fileChecksumAlgorithmId.copy();
+        this.securityClearanceId = other.securityClearanceId == null ? null : other.securityClearanceId.copy();
         this.distinct = other.distinct;
     }
 
@@ -179,6 +195,51 @@ public class BusinessDocumentCriteria implements Serializable, Criteria {
         this.attachmentFilePath = attachmentFilePath;
     }
 
+    public StringFilter getDocumentFileContentType() {
+        return documentFileContentType;
+    }
+
+    public StringFilter documentFileContentType() {
+        if (documentFileContentType == null) {
+            documentFileContentType = new StringFilter();
+        }
+        return documentFileContentType;
+    }
+
+    public void setDocumentFileContentType(StringFilter documentFileContentType) {
+        this.documentFileContentType = documentFileContentType;
+    }
+
+    public BooleanFilter getFileTampered() {
+        return fileTampered;
+    }
+
+    public BooleanFilter fileTampered() {
+        if (fileTampered == null) {
+            fileTampered = new BooleanFilter();
+        }
+        return fileTampered;
+    }
+
+    public void setFileTampered(BooleanFilter fileTampered) {
+        this.fileTampered = fileTampered;
+    }
+
+    public StringFilter getDocumentFileChecksum() {
+        return documentFileChecksum;
+    }
+
+    public StringFilter documentFileChecksum() {
+        if (documentFileChecksum == null) {
+            documentFileChecksum = new StringFilter();
+        }
+        return documentFileChecksum;
+    }
+
+    public void setDocumentFileChecksum(StringFilter documentFileChecksum) {
+        this.documentFileChecksum = documentFileChecksum;
+    }
+
     public LongFilter getCreatedById() {
         return createdById;
     }
@@ -254,6 +315,36 @@ public class BusinessDocumentCriteria implements Serializable, Criteria {
         this.placeholderId = placeholderId;
     }
 
+    public LongFilter getFileChecksumAlgorithmId() {
+        return fileChecksumAlgorithmId;
+    }
+
+    public LongFilter fileChecksumAlgorithmId() {
+        if (fileChecksumAlgorithmId == null) {
+            fileChecksumAlgorithmId = new LongFilter();
+        }
+        return fileChecksumAlgorithmId;
+    }
+
+    public void setFileChecksumAlgorithmId(LongFilter fileChecksumAlgorithmId) {
+        this.fileChecksumAlgorithmId = fileChecksumAlgorithmId;
+    }
+
+    public LongFilter getSecurityClearanceId() {
+        return securityClearanceId;
+    }
+
+    public LongFilter securityClearanceId() {
+        if (securityClearanceId == null) {
+            securityClearanceId = new LongFilter();
+        }
+        return securityClearanceId;
+    }
+
+    public void setSecurityClearanceId(LongFilter securityClearanceId) {
+        this.securityClearanceId = securityClearanceId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -278,11 +369,16 @@ public class BusinessDocumentCriteria implements Serializable, Criteria {
             Objects.equals(documentSerial, that.documentSerial) &&
             Objects.equals(lastModified, that.lastModified) &&
             Objects.equals(attachmentFilePath, that.attachmentFilePath) &&
+            Objects.equals(documentFileContentType, that.documentFileContentType) &&
+            Objects.equals(fileTampered, that.fileTampered) &&
+            Objects.equals(documentFileChecksum, that.documentFileChecksum) &&
             Objects.equals(createdById, that.createdById) &&
             Objects.equals(lastModifiedById, that.lastModifiedById) &&
             Objects.equals(originatingDepartmentId, that.originatingDepartmentId) &&
             Objects.equals(applicationMappingsId, that.applicationMappingsId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(fileChecksumAlgorithmId, that.fileChecksumAlgorithmId) &&
+            Objects.equals(securityClearanceId, that.securityClearanceId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -296,11 +392,16 @@ public class BusinessDocumentCriteria implements Serializable, Criteria {
             documentSerial,
             lastModified,
             attachmentFilePath,
+            documentFileContentType,
+            fileTampered,
+            documentFileChecksum,
             createdById,
             lastModifiedById,
             originatingDepartmentId,
             applicationMappingsId,
             placeholderId,
+            fileChecksumAlgorithmId,
+            securityClearanceId,
             distinct
         );
     }
@@ -315,11 +416,16 @@ public class BusinessDocumentCriteria implements Serializable, Criteria {
             (documentSerial != null ? "documentSerial=" + documentSerial + ", " : "") +
             (lastModified != null ? "lastModified=" + lastModified + ", " : "") +
             (attachmentFilePath != null ? "attachmentFilePath=" + attachmentFilePath + ", " : "") +
+            (documentFileContentType != null ? "documentFileContentType=" + documentFileContentType + ", " : "") +
+            (fileTampered != null ? "fileTampered=" + fileTampered + ", " : "") +
+            (documentFileChecksum != null ? "documentFileChecksum=" + documentFileChecksum + ", " : "") +
             (createdById != null ? "createdById=" + createdById + ", " : "") +
             (lastModifiedById != null ? "lastModifiedById=" + lastModifiedById + ", " : "") +
             (originatingDepartmentId != null ? "originatingDepartmentId=" + originatingDepartmentId + ", " : "") +
             (applicationMappingsId != null ? "applicationMappingsId=" + applicationMappingsId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (fileChecksumAlgorithmId != null ? "fileChecksumAlgorithmId=" + fileChecksumAlgorithmId + ", " : "") +
+            (securityClearanceId != null ? "securityClearanceId=" + securityClearanceId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
