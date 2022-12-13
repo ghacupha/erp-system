@@ -17,7 +17,9 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.erp.index.SettlementReIndexerService;
 import io.github.erp.repository.SettlementRepository;
+import io.github.erp.security.SecurityUtils;
 import io.github.erp.service.SettlementQueryService;
 import io.github.erp.service.SettlementService;
 import io.github.erp.service.criteria.SettlementCriteria;
@@ -30,6 +32,8 @@ import java.util.Objects;
 import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,14 +67,32 @@ public class SettlementResource {
 
     private final SettlementQueryService settlementQueryService;
 
+    private final SettlementReIndexerService reIndexerService;
+
     public SettlementResource(
         SettlementService settlementService,
         SettlementRepository settlementRepository,
-        SettlementQueryService settlementQueryService
-    ) {
+        SettlementQueryService settlementQueryService,
+        SettlementReIndexerService reIndexerService) {
         this.settlementService = settlementService;
         this.settlementRepository = settlementRepository;
         this.settlementQueryService = settlementQueryService;
+        this.reIndexerService = reIndexerService;
+    }
+
+    /**
+     * POST /elasticsearch/re-index -> Reindex all Settlement documents
+     */
+    @PostMapping("/elasticsearch/re-index")
+    @Timed
+    // @Secured(AuthoritiesConstants.PAYMENTS_USER)
+    public ResponseEntity reindexAll() {
+        log.info("REST request to reindex Elasticsearch by : {}",
+            SecurityUtils.getCurrentUserLogin());
+        reIndexerService.reIndex();
+        return ResponseEntity.accepted()
+            .headers(HeaderUtil.createAlert("elasticsearch.reindex.accepted", null,
+                null)).build();
     }
 
     /**
