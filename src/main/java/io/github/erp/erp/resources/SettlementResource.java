@@ -81,18 +81,21 @@ public class SettlementResource {
     }
 
     /**
-     * POST /elasticsearch/re-index -> Reindex all Settlement documents
+     * GET /elasticsearch/re-index -> Reindex all Settlement documents
      */
-    @PostMapping("/elasticsearch/re-index")
+    @GetMapping("/elasticsearch/re-index")
     @Timed
     // @Secured(AuthoritiesConstants.PAYMENTS_USER)
-    public ResponseEntity reindexAll() {
-        log.info("REST request to reindex Elasticsearch by : {}",
-            SecurityUtils.getCurrentUserLogin());
+    public ResponseEntity<List<SettlementDTO>> reindexAll(SettlementCriteria criteria, Pageable pageable) {
+        log.info("REST request to reindex Elasticsearch by : {}", SecurityUtils.getCurrentUserLogin().orElse("user"));
+
         reIndexerService.reIndex();
-        return ResponseEntity.accepted()
-            .headers(HeaderUtil.createAlert("elasticsearch.reindex.accepted", null,
-                null)).build();
+
+        Page<SettlementDTO> page = settlementQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok()
+            .headers(headers)
+            .body(page.getContent());
     }
 
     /**
