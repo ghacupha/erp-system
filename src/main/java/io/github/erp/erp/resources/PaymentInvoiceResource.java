@@ -83,7 +83,7 @@ public class PaymentInvoiceResource {
     /**
      * GET /elasticsearch/re-index -> Reindex all documents
      */
-    @GetMapping("/elasticsearch/re-index")
+    @GetMapping("/payment-invoices/elasticsearch/re-index")
     @Timed
     // @Secured(AuthoritiesConstants.PAYMENTS_USER)
     public ResponseEntity<List<PaymentInvoiceDTO>> reindexAll(PaymentInvoiceCriteria criteria, Pageable pageable) {

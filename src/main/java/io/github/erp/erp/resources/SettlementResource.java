@@ -83,7 +83,7 @@ public class SettlementResource {
     /**
      * GET /elasticsearch/re-index -> Reindex all Settlement documents
      */
-    @GetMapping("/elasticsearch/re-index")
+    @GetMapping("/settlements/elasticsearch/re-index")
     @Timed
     // @Secured(AuthoritiesConstants.PAYMENTS_USER)
     public ResponseEntity<List<SettlementDTO>> reindexAll(SettlementCriteria criteria, Pageable pageable) {
