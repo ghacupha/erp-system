@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class BusinessDocumentIndexingService  extends AbtractStartUpIndexService implements ApplicationIndexingService, ApplicationListener<ApplicationReadyEvent> {
-    private static final String TAG = "DealersIndex";
+    private static final String TAG = "BusinessDocumentIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
 
     private final BusinessDocumentService service;

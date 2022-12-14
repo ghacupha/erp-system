@@ -1,9 +1,9 @@
 package io.github.erp.erp.index;
 
 import com.google.common.collect.ImmutableList;
-import io.github.erp.repository.search.PaymentInvoiceSearchRepository;
-import io.github.erp.service.PaymentInvoiceService;
-import io.github.erp.service.mapper.PaymentInvoiceMapper;
+import io.github.erp.repository.search.SettlementRequisitionSearchRepository;
+import io.github.erp.service.SettlementRequisitionService;
+import io.github.erp.service.mapper.SettlementRequisitionMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -16,16 +16,16 @@ import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @Transactional
-public class PaymentInvoiceReIndexerService extends AbstractReIndexerService {
+public class SettlementRequisitionReIndexingService extends AbstractReIndexerService {
 
     private static final Lock reindexLock = new ReentrantLock();
-    private static final String TAG = "PaymentInvoice";
+    private static final String TAG = "SettlementRequisition";
     private static final Logger log = LoggerFactory.getLogger(TAG);
-    private final PaymentInvoiceService service;
-    private final PaymentInvoiceMapper mapper;
-    private final PaymentInvoiceSearchRepository searchRepository;
+    private final SettlementRequisitionService service;
+    private final SettlementRequisitionMapper mapper;
+    private final SettlementRequisitionSearchRepository searchRepository;
 
-    public PaymentInvoiceReIndexerService(PaymentInvoiceService service, PaymentInvoiceMapper mapper, PaymentInvoiceSearchRepository searchRepository) {
+    public SettlementRequisitionReIndexingService(SettlementRequisitionService service, SettlementRequisitionMapper mapper, SettlementRequisitionSearchRepository searchRepository) {
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;
