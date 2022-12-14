@@ -7,7 +7,7 @@
     {
       "fieldName": "serialNumber",
       "fieldType": "UUID",
-      "fieldValidateRules": ["required", "unique"]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "timeOfRequisition",
@@ -17,7 +17,7 @@
     {
       "fieldName": "requisitionNumber",
       "fieldType": "String",
-      "fieldValidateRules": ["required", "unique"]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "paymentAmount",

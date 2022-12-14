@@ -1,7 +1,7 @@
 package io.github.erp.web.rest.api;
 
 /*-
- * Erp System - Mark III No 5 (Caleb Series) Server ver 0.1.7-SNAPSHOT
+ * Erp System - Mark III No 5 (Caleb Series) Server ver 0.1.8-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ import io.github.erp.repository.search.PrepaymentAmortizationSearchRepository;
 import io.github.erp.service.PrepaymentAmortizationService;
 import io.github.erp.service.dto.PrepaymentAmortizationDTO;
 import io.github.erp.service.mapper.PrepaymentAmortizationMapper;
-import io.github.erp.web.rest.TestUtil;
+import io.github.erp.web.rest.utils.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,7 +49,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static io.github.erp.web.rest.TestUtil.sameNumber;
+import static io.github.erp.web.rest.utils.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
