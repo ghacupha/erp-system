@@ -1,26 +1,9 @@
 package io.github.erp.erp.index;
 
-/*-
- * Erp System - Mark III No 5 (Caleb Series) Server ver 0.1.7-SNAPSHOT
- * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import com.google.common.collect.ImmutableList;
-import io.github.erp.repository.search.DealerSearchRepository;
-import io.github.erp.service.DealerService;
-import io.github.erp.service.mapper.DealerMapper;
+import io.github.erp.repository.search.PaymentInvoiceSearchRepository;
+import io.github.erp.service.PaymentInvoiceService;
+import io.github.erp.service.mapper.PaymentInvoiceMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -33,16 +16,16 @@ import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @Transactional
-public class DealersReIndexerService extends AbstractReIndexerService {
+public class PaymentInvoiceReIndexerService extends AbstractReIndexerService {
 
     private static final Lock reindexLock = new ReentrantLock();
     private static final String TAG = "DealerIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
-    private final DealerService service;
-    private final DealerMapper mapper;
-    private final DealerSearchRepository searchRepository;
+    private final PaymentInvoiceService service;
+    private final PaymentInvoiceMapper mapper;
+    private final PaymentInvoiceSearchRepository searchRepository;
 
-    public DealersReIndexerService(DealerService service, DealerMapper mapper, DealerSearchRepository searchRepository) {
+    public PaymentInvoiceReIndexerService(PaymentInvoiceService service, PaymentInvoiceMapper mapper, PaymentInvoiceSearchRepository searchRepository) {
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;
@@ -71,7 +54,7 @@ public class DealersReIndexerService extends AbstractReIndexerService {
     public void tearDown() {
 
         if (reindexLock.tryLock()) {
-           this.searchRepository.deleteAll();
+            this.searchRepository.deleteAll();
         } else {
             log.info("{} ReIndexer: Concurrent reindexing attempt", TAG);
         }
