@@ -1,0 +1,4 @@
+erp:
+  reIndexer:
+      interval: PT3600S
+  reportsDirectory: 'reports-directory/'
