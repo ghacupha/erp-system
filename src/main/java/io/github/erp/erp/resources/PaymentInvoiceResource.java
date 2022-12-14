@@ -17,7 +17,9 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.erp.index.PaymentInvoiceReIndexerService;
 import io.github.erp.repository.PaymentInvoiceRepository;
+import io.github.erp.security.SecurityUtils;
 import io.github.erp.service.PaymentInvoiceQueryService;
 import io.github.erp.service.PaymentInvoiceService;
 import io.github.erp.service.criteria.PaymentInvoiceCriteria;
@@ -30,6 +32,8 @@ import java.util.Objects;
 import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,14 +67,35 @@ public class PaymentInvoiceResource {
 
     private final PaymentInvoiceQueryService paymentInvoiceQueryService;
 
+    private final PaymentInvoiceReIndexerService reIndexerService;
+
     public PaymentInvoiceResource(
         PaymentInvoiceService paymentInvoiceService,
         PaymentInvoiceRepository paymentInvoiceRepository,
-        PaymentInvoiceQueryService paymentInvoiceQueryService
-    ) {
+        PaymentInvoiceQueryService paymentInvoiceQueryService,
+        PaymentInvoiceReIndexerService reIndexerService) {
         this.paymentInvoiceService = paymentInvoiceService;
         this.paymentInvoiceRepository = paymentInvoiceRepository;
         this.paymentInvoiceQueryService = paymentInvoiceQueryService;
+        this.reIndexerService = reIndexerService;
+    }
+
+    /**
+     * GET /elasticsearch/re-index -> Reindex all documents
+     */
+    @GetMapping("/elasticsearch/re-index")
+    @Timed
+    // @Secured(AuthoritiesConstants.PAYMENTS_USER)
+    public ResponseEntity<List<PaymentInvoiceDTO>> reindexAll(PaymentInvoiceCriteria criteria, Pageable pageable) {
+        log.info("REST request to reindex Elasticsearch by : {}", SecurityUtils.getCurrentUserLogin().orElse("user"));
+
+        reIndexerService.reIndex();
+
+        Page<PaymentInvoiceDTO> page = paymentInvoiceQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok()
+            .headers(headers)
+            .body(page.getContent());
     }
 
     /**
