@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark III No 5 (Caleb Series) Server ver 0.1.7-SNAPSHOT
+ * Erp System - Mark III No 5 (Caleb Series) Server ver 0.1.8-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,7 @@ import io.github.erp.repository.search.SettlementRequisitionSearchRepository;
 import io.github.erp.service.SettlementRequisitionService;
 import io.github.erp.service.dto.SettlementRequisitionDTO;
 import io.github.erp.service.mapper.SettlementRequisitionMapper;
-import io.github.erp.web.rest.TestUtil;
+import io.github.erp.web.rest.utils.TestUtil;
 import io.github.erp.web.rest.api.DealerResourceIT;
 import io.github.erp.web.rest.api.DeliveryNoteResourceIT;
 import io.github.erp.web.rest.api.JobSheetResourceIT;
@@ -34,7 +34,6 @@ import io.github.erp.web.rest.api.PlaceholderResourceIT;
 import io.github.erp.web.rest.api.SettlementCurrencyResourceIT;
 import io.github.erp.web.rest.api.SettlementRequisitionResourceDev;
 import io.github.erp.web.rest.api.UniversallyUniqueMappingResourceIT;
-import io.github.erp.web.rest.api.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,8 +57,8 @@ import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static io.github.erp.web.rest.TestUtil.sameInstant;
-import static io.github.erp.web.rest.TestUtil.sameNumber;
+import static io.github.erp.web.rest.utils.TestUtil.sameInstant;
+import static io.github.erp.web.rest.utils.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
