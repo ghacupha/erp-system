@@ -36,7 +36,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class SettlementReIndexerService extends AbstractReIndexerService {
 
     private static final Lock reindexLock = new ReentrantLock();
-    private static final String TAG = "SettlementIndex";
+    private static final String TAG = "SettlementReIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
     private final SettlementService service;
     private final SettlementMapper mapper;

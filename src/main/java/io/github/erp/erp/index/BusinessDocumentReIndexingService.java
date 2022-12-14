@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class BusinessDocumentReIndexingService extends AbstractReIndexerService {
 
     private static final Lock reindexLock = new ReentrantLock();
-    private static final String TAG = "DealerIndex";
+    private static final String TAG = "BusinessDocumentReIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
     private final BusinessDocumentService service;
     private final BusinessDocumentMapper mapper;

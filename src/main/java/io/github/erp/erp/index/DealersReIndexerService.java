@@ -36,7 +36,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class DealersReIndexerService extends AbstractReIndexerService {
 
     private static final Lock reindexLock = new ReentrantLock();
-    private static final String TAG = "DealerIndex";
+    private static final String TAG = "Dealer";
     private static final Logger log = LoggerFactory.getLogger(TAG);
     private final DealerService service;
     private final DealerMapper mapper;

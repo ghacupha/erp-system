@@ -34,7 +34,7 @@ import io.github.erp.service.mapper.DepreciationMethodMapper;
 @Transactional
 public class DepreciationMethodsIndexingService extends AbtractStartUpIndexService {
 
-    private static final String TAG = "PrepaymentAccountIndex";
+    private static final String TAG = "DepreciationMethodsIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
 
     private final DepreciationMethodMapper mapper;
@@ -61,5 +61,5 @@ public class DepreciationMethodsIndexingService extends AbtractStartUpIndexServi
                 .filter(entity -> !searchRepository.existsById(entity.getId()))
                 .collect(ImmutableList.toImmutableList()));
         log.info("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
-    } 
+    }
 }
