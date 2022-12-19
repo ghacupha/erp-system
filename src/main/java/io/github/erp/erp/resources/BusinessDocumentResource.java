@@ -17,6 +17,8 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.model.BusinessDocumentFSO;
+import io.github.erp.internal.model.mapping.BusinessDocumentFSOMapping;
 import io.github.erp.repository.BusinessDocumentRepository;
 import io.github.erp.service.BusinessDocumentQueryService;
 import io.github.erp.service.BusinessDocumentService;
@@ -30,7 +32,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
@@ -64,14 +75,17 @@ public class BusinessDocumentResource {
 
     private final BusinessDocumentQueryService businessDocumentQueryService;
 
+    private final BusinessDocumentFSOMapping businessDocumentFSOMapping;
+
     public BusinessDocumentResource(
         BusinessDocumentService businessDocumentService,
         BusinessDocumentRepository businessDocumentRepository,
-        BusinessDocumentQueryService businessDocumentQueryService
-    ) {
+        BusinessDocumentQueryService businessDocumentQueryService,
+        BusinessDocumentFSOMapping businessDocumentFSOMapping) {
         this.businessDocumentService = businessDocumentService;
         this.businessDocumentRepository = businessDocumentRepository;
         this.businessDocumentQueryService = businessDocumentQueryService;
+        this.businessDocumentFSOMapping = businessDocumentFSOMapping;
     }
 
     /**
@@ -82,18 +96,41 @@ public class BusinessDocumentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/business-documents")
-    public ResponseEntity<BusinessDocumentDTO> createBusinessDocument(@Valid @RequestBody BusinessDocumentDTO businessDocumentDTO)
+    public ResponseEntity<BusinessDocumentFSO> createBusinessDocument(@Valid @RequestBody BusinessDocumentFSO businessDocumentDTO)
         throws URISyntaxException {
         log.debug("REST request to save BusinessDocument : {}", businessDocumentDTO);
         if (businessDocumentDTO.getId() != null) {
             throw new BadRequestAlertException("A new businessDocument cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        BusinessDocumentDTO result = businessDocumentService.save(businessDocumentDTO);
+        BusinessDocumentDTO result = businessDocumentService.save(businessDocumentFSOMapping.toValue2(businessDocumentDTO));
+
         return ResponseEntity
             .created(new URI("/api/business-documents/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+            .body(businessDocumentFSOMapping.toValue1(result));
     }
+
+
+//    /**
+//     * {@code POST  /business-documents} : Create a new businessDocument.
+//     *
+//     * @param businessDocumentDTO the businessDocumentDTO to create.
+//     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new businessDocumentDTO, or with status {@code 400 (Bad Request)} if the businessDocument has already an ID.
+//     * @throws URISyntaxException if the Location URI syntax is incorrect.
+//     */
+//    @PostMapping("/business-documents")
+//    public ResponseEntity<BusinessDocumentDTO> createBusinessDocument(@Valid @RequestBody BusinessDocumentDTO businessDocumentDTO)
+//        throws URISyntaxException {
+//        log.debug("REST request to save BusinessDocument : {}", businessDocumentDTO);
+//        if (businessDocumentDTO.getId() != null) {
+//            throw new BadRequestAlertException("A new businessDocument cannot already have an ID", ENTITY_NAME, "idexists");
+//        }
+//        BusinessDocumentDTO result = businessDocumentService.save(businessDocumentDTO);
+//        return ResponseEntity
+//            .created(new URI("/api/business-documents/" + result.getId()))
+//            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+//            .body(result);
+//    }
 
     /**
      * {@code PUT  /business-documents/:id} : Updates an existing businessDocument.
