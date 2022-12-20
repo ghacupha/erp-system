@@ -25,14 +25,14 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class FSStorageServiceTest {
 
-    private FSStorageService storageService;
+    private ReportsFSStorageService storageService;
 
     @BeforeEach
     void setUp() {
         ReportsProperties properties = new ReportsProperties();
         properties.setReportsDirectory("src/test/resources/test-working-directory/");
 
-        storageService = new FSStorageService(properties);
+        storageService = new ReportsFSStorageService(properties);
     }
 
     @Test
