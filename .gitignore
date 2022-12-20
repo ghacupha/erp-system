@@ -302,3 +302,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#  Business Documents
+business-documents/
