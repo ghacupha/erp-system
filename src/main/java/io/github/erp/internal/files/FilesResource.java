@@ -17,6 +17,7 @@ package io.github.erp.internal.files;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,13 +30,14 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Controller("/api")
-@CrossOrigin("http://localhost:8980")
+@Deprecated
+// @Controller("/api")
+// @CrossOrigin("http://localhost:8980")
 public class FilesResource {
 
     private final FileStorageService fileStorageService;
 
-    public FilesResource(FileStorageService fileStorageService) {
+    public FilesResource(@Qualifier("reportsFSStorageService") FileStorageService fileStorageService) {
         this.fileStorageService = fileStorageService;
     }
 

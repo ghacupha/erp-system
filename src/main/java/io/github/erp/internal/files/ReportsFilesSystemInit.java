@@ -23,6 +23,7 @@ import io.github.erp.service.ReportRequisitionService;
 import io.github.erp.service.XlsxReportRequisitionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.data.domain.Pageable;
@@ -39,9 +40,9 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class FilesSystemInit implements ApplicationListener<ApplicationReadyEvent> {
+public class ReportsFilesSystemInit implements ApplicationListener<ApplicationReadyEvent> {
 
-    private static final Logger log = LoggerFactory.getLogger(FilesSystemInit.class);
+    private static final Logger log = LoggerFactory.getLogger(ReportsFilesSystemInit.class);
 
     private final FileStorageService storageService;
     private final ReportRequisitionService reportRequisitionService;
@@ -49,8 +50,8 @@ public class FilesSystemInit implements ApplicationListener<ApplicationReadyEven
     private final XlsxReportRequisitionService xlsxReportRequisitionService;
     private final ExcelReportExportService excelReportExportService;
 
-    public FilesSystemInit(
-        FileStorageService storageService,
+    public ReportsFilesSystemInit(
+        @Qualifier("reportsFSStorageService") FileStorageService storageService,
         PdfReportRequisitionService pdfReportRequisitionService,
         ReportRequisitionService reportRequisitionService,
         XlsxReportRequisitionService xlsxReportRequisitionService, ExcelReportExportService excelReportExportService) {

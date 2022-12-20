@@ -24,6 +24,7 @@ import io.github.erp.service.dto.ReportRequisitionDTO;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -37,7 +38,10 @@ public class ReportRequisitionAttachmentService implements ReportAttachmentServi
     private final static Logger log = LoggerFactory.getLogger(PDFReportAttachmentService.class);
     private final FileStorageService fileStorageService;
 
-    public ReportRequisitionAttachmentService(ReportContentTypeService reportContentTypeService, SystemContentTypeService systemContentTypeService, FileStorageService fileStorageService) {
+    public ReportRequisitionAttachmentService(
+        ReportContentTypeService reportContentTypeService,
+        SystemContentTypeService systemContentTypeService,
+        @Qualifier("reportsFSStorageService") FileStorageService fileStorageService) {
         this.reportContentTypeService = reportContentTypeService;
         this.systemContentTypeService = systemContentTypeService;
         this.fileStorageService = fileStorageService;

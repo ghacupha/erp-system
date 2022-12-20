@@ -24,6 +24,7 @@ import io.github.erp.service.PlaceholderQueryService;
 import io.github.erp.service.criteria.PlaceholderCriteria;
 import io.github.erp.service.dto.PlaceholderDTO;
 import io.github.erp.service.dto.ReportTemplateDTO;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.filter.StringFilter;
@@ -39,7 +40,7 @@ public class TemplatePresentation implements ReportTemplatePresentation<ReportTe
     private final ReportsProperties reportsProperties;
     private final PlaceholderQueryService placeholderQueryService;
 
-    public TemplatePresentation(final FileStorageService fileStorageService,
+    public TemplatePresentation(@Qualifier("reportsFSStorageService") final FileStorageService fileStorageService,
                                 final ReportsProperties reportsProperties,
                                 final PlaceholderQueryService placeholderQueryService) {
         this.fileStorageService = fileStorageService;

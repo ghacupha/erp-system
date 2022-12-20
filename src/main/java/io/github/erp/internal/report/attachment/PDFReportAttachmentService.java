@@ -22,6 +22,7 @@ import io.github.erp.internal.model.AttachedPdfReportRequisitionDTO;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 
@@ -34,7 +35,7 @@ public class PDFReportAttachmentService implements ReportAttachmentService<Attac
     private final static Logger log = LoggerFactory.getLogger(PDFReportAttachmentService.class);
     private final FileStorageService fileStorageService;
 
-    public PDFReportAttachmentService(FileStorageService fileStorageService) {
+    public PDFReportAttachmentService(@Qualifier("reportsFSStorageService") FileStorageService fileStorageService) {
         this.fileStorageService = fileStorageService;
     }
 
