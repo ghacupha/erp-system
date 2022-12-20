@@ -22,6 +22,7 @@ import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.model.mapping.BusinessDocumentFSOMapping;
 import io.github.erp.service.BusinessDocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -35,6 +36,7 @@ public class BusinessDocumentFilingAspectConfiguration {
     private BusinessDocumentFSOMapping businessDocumentFSOMapping;
 
     @Autowired
+    @Qualifier("businessDocumentFSStorageService")
     private FileStorageService fileStorageService;
 
     @Bean
