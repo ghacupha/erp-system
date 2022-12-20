@@ -23,6 +23,7 @@ import io.github.erp.internal.model.AttachedExcelReportExportDTO;
 import io.github.erp.internal.model.mapping.AttachedExcelReportExportDTOMapping;
 import io.github.erp.service.dto.ExcelReportExportDTO;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
@@ -35,7 +36,7 @@ public class ExcelReportExportAttachmentService
 
     private final Mapping<ExcelReportExportDTO, AttachedExcelReportExportDTO> mapping;
 
-    public ExcelReportExportAttachmentService(FileStorageService fileStorageService,
+    public ExcelReportExportAttachmentService(@Qualifier("reportsFSStorageService") FileStorageService fileStorageService,
                                               Mapping<ExcelReportExportDTO, AttachedExcelReportExportDTO> mapping) {
         super(fileStorageService);
         this.mapping = mapping;

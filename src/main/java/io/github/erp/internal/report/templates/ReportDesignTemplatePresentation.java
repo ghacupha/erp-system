@@ -21,6 +21,7 @@ import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.files.JRXMLMultipartFile;
 import io.github.erp.internal.report.ReportsProperties;
 import io.github.erp.service.dto.ReportDesignDTO;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,8 +40,8 @@ public class ReportDesignTemplatePresentation implements ReportTemplatePresentat
     private final FileStorageService fileStorageService;
     private final ReportsProperties reportsProperties;
 
-    public ReportDesignTemplatePresentation(final FileStorageService fileStorageService,
-                                final ReportsProperties reportsProperties) {
+    public ReportDesignTemplatePresentation(@Qualifier("reportsFSStorageService") final FileStorageService fileStorageService,
+                                            final ReportsProperties reportsProperties) {
         this.fileStorageService = fileStorageService;
         this.reportsProperties = reportsProperties;
     }

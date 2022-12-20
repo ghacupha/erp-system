@@ -21,6 +21,7 @@ import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.model.AttachedXlsxReportRequisitionDTO;
 import io.github.erp.service.dto.XlsxReportRequisitionDTO;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 
@@ -29,7 +30,7 @@ public class XLSXReportAttachmentService
     extends AbstractReportAttachmentService<XlsxReportRequisitionDTO>
     implements ReportAttachmentService<AttachedXlsxReportRequisitionDTO> {
 
-    public XLSXReportAttachmentService(FileStorageService fileStorageService) {
+    public XLSXReportAttachmentService(@Qualifier("reportsFSStorageService") FileStorageService fileStorageService) {
         super(fileStorageService);
     }
 

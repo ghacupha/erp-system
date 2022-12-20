@@ -1,4 +1,4 @@
-package io.github.erp.internal.report;
+package io.github.erp.internal.files.documents;
 
 /*-
  * Erp System - Mark III No 5 (Caleb Series) Server ver 0.1.8-SNAPSHOT
@@ -17,37 +17,24 @@ package io.github.erp.internal.report;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.config.AppPropertyFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-/**
- * This configuration gives us the exact location where we can dump the jasper templates and
- * compiled reports
- */
 @Configuration
-@ConfigurationProperties(prefix = "erp")
+@ConfigurationProperties(prefix = "erp.business.documents")
 @PropertySource(value = "classpath:config/erpConfigs.yml", factory = AppPropertyFactory.class)
-public class ReportsProperties {
+public class BusinessDocumentProperties {
 
-    private String reportsDirectory;
+    private String businessDocumentsDirectory;
 
-    private String businessDocsDirectory;
-
-    public String getReportsDirectory() {
-        return reportsDirectory;
+    public String getBusinessDocumentsDirectory() {
+        return businessDocumentsDirectory;
     }
 
-    public void setReportsDirectory(String reportsDirectory) {
-        this.reportsDirectory = reportsDirectory;
-    }
-
-    public String getBusinessDocsDirectory() {
-        return businessDocsDirectory;
-    }
-
-    public void setBusinessDocsDirectory(String businessDocsDirectory) {
-        this.businessDocsDirectory = businessDocsDirectory;
+    public void setBusinessDocumentsDirectory(String businessDocumentsDirectory) {
+        this.businessDocumentsDirectory = businessDocumentsDirectory;
     }
 }

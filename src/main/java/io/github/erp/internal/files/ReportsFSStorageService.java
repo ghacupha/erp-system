@@ -45,12 +45,12 @@ import java.util.stream.Stream;
  * unless by query. At the time of writing such a method does not exist but  might exist
  * in future for file integrity checks.
  */
-@Service
-public class FSStorageService implements FileStorageService {
+@Service("reportsFSStorageService")
+public class ReportsFSStorageService implements FileStorageService {
 
     private final Path root;
 
-    public FSStorageService(ReportsProperties reportsProperties) {
+    public ReportsFSStorageService(ReportsProperties reportsProperties) {
         root = Paths.get(reportsProperties.getReportsDirectory());
     }
 
