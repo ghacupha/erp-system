@@ -18,31 +18,25 @@
  */
 package io.github.erp.aop.businessDocuments;
 
-import com.google.common.collect.HashBiMap;
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.model.BusinessDocumentFSO;
 import io.github.erp.internal.model.mapping.BusinessDocumentFSOMapping;
 import io.github.erp.service.BusinessDocumentService;
 import io.github.erp.service.dto.BusinessDocumentDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.io.*;
-import java.util.*;
+import java.util.Arrays;
 
 /**
  * This advise intercepts the BusinessDocuments#createBusinessDocument method processes and stores
@@ -61,7 +55,10 @@ public class BusinessDocumentsFilingInterceptor {
 
     private final FileStorageService fileStorageService;
 
-    public BusinessDocumentsFilingInterceptor(BusinessDocumentService businessDocumentService, BusinessDocumentFSOMapping businessDocumentFSOMapping, FileStorageService fileStorageService) {
+    public BusinessDocumentsFilingInterceptor(
+        BusinessDocumentService businessDocumentService,
+        BusinessDocumentFSOMapping businessDocumentFSOMapping,
+        @Qualifier("businessDocumentFSStorageService") FileStorageService fileStorageService) {
         this.businessDocumentService = businessDocumentService;
         this.businessDocumentFSOMapping = businessDocumentFSOMapping;
         this.fileStorageService = fileStorageService;
@@ -136,127 +133,5 @@ public class BusinessDocumentsFilingInterceptor {
     @Pointcut("execution(* io.github.erp.erp.resources.BusinessDocumentResource.createBusinessDocument(..))")
     public void filingResponsePointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
-    }
-
-    private static class DecodedMultipartFile implements MultipartFile {
-
-        private static final Map<String, String> fileExtensionMap;
-
-        static {
-            fileExtensionMap = new HashMap<>();
-            // MS Office
-            fileExtensionMap.put("doc", "application/msword");
-            fileExtensionMap.put("dot", "application/msword");
-            fileExtensionMap.put("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-            fileExtensionMap.put("dotx", "application/vnd.openxmlformats-officedocument.wordprocessingml.template");
-            fileExtensionMap.put("docm", "application/vnd.ms-word.document.macroEnabled.12");
-            fileExtensionMap.put("dotm", "application/vnd.ms-word.template.macroEnabled.12");
-            fileExtensionMap.put("xls", "application/vnd.ms-excel");
-            fileExtensionMap.put("xlt", "application/vnd.ms-excel");
-            fileExtensionMap.put("xla", "application/vnd.ms-excel");
-            fileExtensionMap.put("xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-            fileExtensionMap.put("xltx", "application/vnd.openxmlformats-officedocument.spreadsheetml.template");
-            fileExtensionMap.put("xlsm", "application/vnd.ms-excel.sheet.macroEnabled.12");
-            fileExtensionMap.put("xltm", "application/vnd.ms-excel.template.macroEnabled.12");
-            fileExtensionMap.put("xlam", "application/vnd.ms-excel.addin.macroEnabled.12");
-            fileExtensionMap.put("xlsb", "application/vnd.ms-excel.sheet.binary.macroEnabled.12");
-            fileExtensionMap.put("ppt", "application/vnd.ms-powerpoint");
-            fileExtensionMap.put("pot", "application/vnd.ms-powerpoint");
-            fileExtensionMap.put("pps", "application/vnd.ms-powerpoint");
-            fileExtensionMap.put("ppa", "application/vnd.ms-powerpoint");
-            fileExtensionMap.put("pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation");
-            fileExtensionMap.put("potx", "application/vnd.openxmlformats-officedocument.presentationml.template");
-            fileExtensionMap.put("ppsx", "application/vnd.openxmlformats-officedocument.presentationml.slideshow");
-            fileExtensionMap.put("ppam", "application/vnd.ms-powerpoint.addin.macroEnabled.12");
-            fileExtensionMap.put("pptm", "application/vnd.ms-powerpoint.presentation.macroEnabled.12");
-            fileExtensionMap.put("potm", "application/vnd.ms-powerpoint.presentation.macroEnabled.12");
-            fileExtensionMap.put("ppsm", "application/vnd.ms-powerpoint.slideshow.macroEnabled.12");
-            // Open Office
-            fileExtensionMap.put("odt", "application/vnd.oasis.opendocument.text");
-            fileExtensionMap.put("ott", "application/vnd.oasis.opendocument.text-template");
-            fileExtensionMap.put("oth", "application/vnd.oasis.opendocument.text-web");
-            fileExtensionMap.put("odm", "application/vnd.oasis.opendocument.text-master");
-            fileExtensionMap.put("odg", "application/vnd.oasis.opendocument.graphics");
-            fileExtensionMap.put("otg", "application/vnd.oasis.opendocument.graphics-template");
-            fileExtensionMap.put("odp", "application/vnd.oasis.opendocument.presentation");
-            fileExtensionMap.put("otp", "application/vnd.oasis.opendocument.presentation-template");
-            fileExtensionMap.put("ods", "application/vnd.oasis.opendocument.spreadsheet");
-            fileExtensionMap.put("ots", "application/vnd.oasis.opendocument.spreadsheet-template");
-            fileExtensionMap.put("odc", "application/vnd.oasis.opendocument.chart");
-            fileExtensionMap.put("odf", "application/vnd.oasis.opendocument.formula");
-            fileExtensionMap.put("odb", "application/vnd.oasis.opendocument.database");
-            fileExtensionMap.put("odi", "application/vnd.oasis.opendocument.image");
-            fileExtensionMap.put("oxt", "application/vnd.openofficeorg.extension");
-            // Other
-            fileExtensionMap.put("txt", "text/plain");
-            fileExtensionMap.put("rtf", "application/rtf");
-            fileExtensionMap.put("pdf", "application/pdf");
-        }
-
-        private final byte[] fileContent;
-        private final String fileContentType;
-        private final String fileName;
-        private final String ext;
-
-        public DecodedMultipartFile(BusinessDocumentFSO businessDocument) {
-            fileContent = businessDocument.getDocumentFile();
-            fileName = businessDocument.getDocumentSerial().toString();
-            fileContentType = businessDocument.getDocumentFileContentType();
-            ext = getKeys(fileExtensionMap, businessDocument.getDocumentFileContentType()).stream().findFirst().orElse("erp");
-        }
-
-        public String getExt() {
-            return "."+ext;
-        }
-
-        @Override
-        public @NotNull String getName() {
-            return fileName + getExt();
-        }
-
-        @Override
-        public String getOriginalFilename() {
-            return fileName + getExt();
-        }
-
-        @Override
-        public String getContentType() {
-            return fileContentType;
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return fileContent == null || fileContent.length == 0;
-        }
-
-        @Override
-        public long getSize() {
-            return fileContent.length;
-        }
-
-        @Override
-        public byte @NotNull [] getBytes() throws IOException {
-            return fileContent;
-        }
-
-        @Override
-        public @NotNull InputStream getInputStream() throws IOException {
-            return new ByteArrayInputStream(fileContent);
-        }
-
-        @Override
-        public void transferTo(@NotNull File dest) throws IOException, IllegalStateException {
-            new FileOutputStream(dest).write(fileContent);
-        }
-
-        private <K, V> Set<K> getKeys(Map<K, V> map, V value) {
-            Set<K> keys = new HashSet<>();
-            for (Map.Entry<K, V> entry : map.entrySet()) {
-                if (entry.getValue().equals(value)) {
-                    keys.add(entry.getKey());
-                }
-            }
-            return keys;
-        }
     }
 }
