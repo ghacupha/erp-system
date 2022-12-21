@@ -1,7 +1,7 @@
 package io.github.erp.aop.logging;
 
 /*-
- * Erp System - Mark III No 5 (Caleb Series) Server ver 0.1.8-SNAPSHOT
+ * Erp System - Mark III No 6 (Caleb Series) Server ver 0.1.9-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
