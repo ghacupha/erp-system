@@ -25,7 +25,7 @@ import java.util.UUID;
 /**
  * Representation of the business-document-fso on retrieval
  */
-public interface RetrievedDocument<FSO, A> extends HasChecksum, ContainsChecksumAlgorithm<A>, RecordsTamper {
+public interface RetrievedDocument<FSO, A> extends HasChecksum, ContainsChecksumAlgorithm<A>, RecordsTamper<FSO> {
 
     void setDocumentFile(byte[] reportResource);
 
@@ -35,17 +35,7 @@ public interface RetrievedDocument<FSO, A> extends HasChecksum, ContainsChecksum
 
     String getFileContentType();
 
-    @Override
-    default void setChecksum(String fileChecksum) {
-        // We dare not reset any serials
-    }
-
-    @Override
-    default String getFileChecksum() {
-        return this.getDocumentSerial().toString();
-    }
-
     A getChecksumAlgorithm();
 
-    void isTampered(boolean isTempered);
+    FSO isTampered(boolean isTempered);
 }

@@ -85,6 +85,16 @@ public class BusinessDocumentFSO implements Serializable, RetrievedDocument<Busi
     private SecurityClearanceDTO securityClearance;
 
     @Override
+    public void setChecksum(String fileChecksum) {
+        // DO NOT EVEN THINK!!!
+    }
+
+    @Override
+    public String getFileChecksum() {
+        return this.documentFileChecksum;
+    }
+
+    @Override
     public String getFileContentType() {
         return getDocumentFileContentType();
     }
@@ -95,8 +105,9 @@ public class BusinessDocumentFSO implements Serializable, RetrievedDocument<Busi
     }
 
     @Override
-    public void isTampered(boolean isTempered) {
+    public BusinessDocumentFSO isTampered(boolean isTempered) {
         this.setFileTampered(isTempered);
+        return this;
     }
 
     public Long getId() {

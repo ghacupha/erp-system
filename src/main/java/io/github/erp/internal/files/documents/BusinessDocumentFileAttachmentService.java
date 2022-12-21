@@ -20,9 +20,10 @@ package io.github.erp.internal.files.documents;
 
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.model.BusinessDocumentFSO;
+import io.github.erp.internal.model.mapping.BusinessDocumentFSOMapping;
 import io.github.erp.internal.report.attachment.AbstractFileAttachmentService;
 import io.github.erp.internal.report.attachment.MatchesChecksum;
-import io.github.erp.internal.report.attachment.RetrievedDocument;
+import io.github.erp.service.BusinessDocumentService;
 import io.github.erp.service.dto.AlgorithmDTO;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,15 +32,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
-public class BusinessDocumentFileAttachmentService extends AbstractFileAttachmentService<BusinessDocumentFSO> implements FileAttachmentService<RetrievedDocument<BusinessDocumentFSO, AlgorithmDTO>> {
+public class BusinessDocumentFileAttachmentService extends AbstractFileAttachmentService implements FileAttachmentService<BusinessDocumentFSO> {
 
 
-    public BusinessDocumentFileAttachmentService(@Qualifier("businessDocumentFSStorageService") FileStorageService fileStorageService, MatchesChecksum<AlgorithmDTO> matchesChecksum) {
-        super(fileStorageService, matchesChecksum);
+    public BusinessDocumentFileAttachmentService(
+        @Qualifier("businessDocumentFSStorageService") FileStorageService fileStorageService,
+        MatchesChecksum<AlgorithmDTO> matchesChecksum,
+        BusinessDocumentService businessDocumentService,
+        BusinessDocumentFSOMapping businessDocumentFSOMapping) {
+        super(fileStorageService, matchesChecksum, businessDocumentService, businessDocumentFSOMapping);
     }
 
     @Override
-    public @NotNull RetrievedDocument<BusinessDocumentFSO, AlgorithmDTO> attach(RetrievedDocument<BusinessDocumentFSO, AlgorithmDTO> attachment) {
+    public @NotNull BusinessDocumentFSO attach(BusinessDocumentFSO attachment) {
         return super.attach(attachment);
     }
 }

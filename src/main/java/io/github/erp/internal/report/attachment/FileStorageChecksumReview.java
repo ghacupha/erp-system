@@ -44,6 +44,6 @@ public class FileStorageChecksumReview implements MatchesChecksum<AlgorithmDTO> 
      */
     @Override
     public boolean checksumIsMatching(String documentChecksum, String fileName, AlgorithmDTO checksumAlgorithm) {
-        return documentChecksum.equalsIgnoreCase(fileStorageService.calculateCheckSum(fileName, checksumAlgorithm.getName()));
+        return !documentChecksum.equalsIgnoreCase(fileStorageService.calculateCheckSum(fileName, checksumAlgorithm.getName()));
     }
 }

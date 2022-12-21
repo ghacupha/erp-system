@@ -20,9 +20,6 @@ package io.github.erp.aop.businessDocuments;
 
 import io.github.erp.internal.files.documents.FileAttachmentService;
 import io.github.erp.internal.model.BusinessDocumentFSO;
-import io.github.erp.internal.report.attachment.ReportAttachmentService;
-import io.github.erp.service.dto.BusinessDocumentDTO;
-import io.github.erp.service.dto.ExcelReportExportDTO;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

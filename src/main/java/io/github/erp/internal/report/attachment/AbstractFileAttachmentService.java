@@ -21,46 +21,52 @@ package io.github.erp.internal.report.attachment;
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.files.FileUtils;
 import io.github.erp.internal.files.documents.FileAttachmentService;
+import io.github.erp.internal.model.BusinessDocumentFSO;
+import io.github.erp.internal.model.mapping.BusinessDocumentFSOMapping;
+import io.github.erp.service.BusinessDocumentService;
 import io.github.erp.service.dto.AlgorithmDTO;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class AbstractFileAttachmentService<FSO> implements FileAttachmentService<RetrievedDocument<FSO, AlgorithmDTO>> {
+public abstract class AbstractFileAttachmentService implements FileAttachmentService<BusinessDocumentFSO> {
 
     private static final Logger log = LoggerFactory.getLogger("BusinessDocumentRetrieval");
 
     private final FileStorageService fileStorageService;
     private final MatchesChecksum<AlgorithmDTO> matchesChecksum;
+    private final BusinessDocumentService businessDocumentService;
+    private final BusinessDocumentFSOMapping businessDocumentFSOMapping;
 
-    public AbstractFileAttachmentService(FileStorageService fileStorageService, MatchesChecksum<AlgorithmDTO> matchesChecksum) {
+    public AbstractFileAttachmentService(FileStorageService fileStorageService, MatchesChecksum<AlgorithmDTO> matchesChecksum, BusinessDocumentService businessDocumentService, BusinessDocumentFSOMapping businessDocumentFSOMapping) {
         this.fileStorageService = fileStorageService;
         this.matchesChecksum = matchesChecksum;
+        this.businessDocumentService = businessDocumentService;
+        this.businessDocumentFSOMapping = businessDocumentFSOMapping;
     }
 
     @NotNull
     @SneakyThrows
-    public RetrievedDocument<FSO, AlgorithmDTO> attach(RetrievedDocument<FSO, AlgorithmDTO> attachment) {
-        log.debug("File designation {} has been mapped successfully for attachment. Commencing attachment", attachment.getDocumentTitle());
+    public BusinessDocumentFSO attach(BusinessDocumentFSO businessDocument) {
+        log.debug("File designation {} has been mapped successfully for attachment. Commencing attachment", businessDocument.getDocumentTitle());
 
         long startup = System.currentTimeMillis();
 
-        log.debug("Fetching document name : {}", attachment.getDocumentTitle());
+        log.debug("Fetching document name : {}", businessDocument.getDocumentTitle());
 
-        String documentFileName = attachment.getDocumentSerial().toString().concat(".").concat(FileUtils.getFileExtension(attachment.getFileContentType()));
+        String documentFileName = businessDocument.getDocumentSerial().toString().concat(".").concat(FileUtils.getFileExtension(businessDocument.getFileContentType()));
 
-        log.debug("Fetching report named : {}", documentFileName);
+        log.debug("Fetching document named : {}", documentFileName);
 
-        byte[] reportAttachment = fileStorageService.load(documentFileName).getInputStream().readAllBytes();
-
-        log.debug("Attaching document retrieved to DTO designation : {} ", attachment.getDocumentTitle());
-        attachment.setDocumentFile(reportAttachment);
-
-        attachment.isTampered(!matchesChecksum.checksumIsMatching(attachment.getFileChecksum(), documentFileName, attachment.getChecksumAlgorithm()));
+        BusinessDocumentFSO updated = businessDocumentFSOMapping.toValue1(businessDocumentService.save(businessDocumentFSOMapping.toValue2(businessDocument.isTampered(matchesChecksum.checksumIsMatching(businessDocument.getFileChecksum(), documentFileName, businessDocument.getChecksumAlgorithm())))));
 
         log.debug("File attachment completed successfully in {} milliseconds; sending attached report to the client  ", System.currentTimeMillis() - startup);
 
-        return attachment;
+        byte[] reportAttachment = fileStorageService.load(documentFileName).getInputStream().readAllBytes();
+        log.debug("Attaching document retrieved to DTO designation : {} ", businessDocument.getDocumentTitle());
+        updated.setDocumentFile(reportAttachment);
+
+        return updated;
     }
 }

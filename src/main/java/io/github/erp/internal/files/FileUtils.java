@@ -169,7 +169,7 @@ public class FileUtils {
         String fileDigest = "";
 
         try {
-            MessageDigest sha512 = MessageDigest.getInstance("SHA512");
+            MessageDigest sha512 = MessageDigest.getInstance("SHA-512");
 
             File nativeFile = file.toFile();
             byte[] fileContent;
