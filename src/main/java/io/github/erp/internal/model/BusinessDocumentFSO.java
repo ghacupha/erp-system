@@ -18,6 +18,7 @@ package io.github.erp.internal.model;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.internal.report.attachment.RetrievedDocument;
 import io.github.erp.service.dto.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,10 +40,9 @@ import java.util.UUID;
  * So while this BEO contains such a field it does not imply persistence
  */
 @Builder
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BusinessDocumentFSO implements Serializable {
+public class BusinessDocumentFSO implements Serializable, RetrievedDocument<BusinessDocumentFSO, AlgorithmDTO> {
 
     private Long id;
 
@@ -83,4 +83,158 @@ public class BusinessDocumentFSO implements Serializable {
     private AlgorithmDTO fileChecksumAlgorithm;
 
     private SecurityClearanceDTO securityClearance;
+
+    @Override
+    public String getFileContentType() {
+        return getDocumentFileContentType();
+    }
+
+    @Override
+    public AlgorithmDTO getChecksumAlgorithm() {
+        return getFileChecksumAlgorithm();
+    }
+
+    @Override
+    public void isTampered(boolean isTempered) {
+        this.setFileTampered(isTempered);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getDocumentTitle() {
+        return documentTitle;
+    }
+
+    public void setDocumentTitle(String documentTitle) {
+        this.documentTitle = documentTitle;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public UUID getDocumentSerial() {
+        return documentSerial;
+    }
+
+    public void setDocumentSerial(UUID documentSerial) {
+        this.documentSerial = documentSerial;
+    }
+
+    public ZonedDateTime getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(ZonedDateTime lastModified) {
+        this.lastModified = lastModified;
+    }
+
+    public String getAttachmentFilePath() {
+        return attachmentFilePath;
+    }
+
+    public void setAttachmentFilePath(String attachmentFilePath) {
+        this.attachmentFilePath = attachmentFilePath;
+    }
+
+    public byte[] getDocumentFile() {
+        return documentFile;
+    }
+
+    @Override
+    public void setDocumentFile(byte[] documentFile) {
+        this.documentFile = documentFile;
+    }
+
+    public String getDocumentFileContentType() {
+        return documentFileContentType;
+    }
+
+    public void setDocumentFileContentType(String documentFileContentType) {
+        this.documentFileContentType = documentFileContentType;
+    }
+
+    public Boolean getFileTampered() {
+        return fileTampered;
+    }
+
+    public void setFileTampered(Boolean fileTampered) {
+        this.fileTampered = fileTampered;
+    }
+
+    public String getDocumentFileChecksum() {
+        return documentFileChecksum;
+    }
+
+    public void setDocumentFileChecksum(String documentFileChecksum) {
+        this.documentFileChecksum = documentFileChecksum;
+    }
+
+    public ApplicationUserDTO getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(ApplicationUserDTO createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public ApplicationUserDTO getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(ApplicationUserDTO lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    public DealerDTO getOriginatingDepartment() {
+        return originatingDepartment;
+    }
+
+    public void setOriginatingDepartment(DealerDTO originatingDepartment) {
+        this.originatingDepartment = originatingDepartment;
+    }
+
+    public Set<UniversallyUniqueMappingDTO> getApplicationMappings() {
+        return applicationMappings;
+    }
+
+    public void setApplicationMappings(Set<UniversallyUniqueMappingDTO> applicationMappings) {
+        this.applicationMappings = applicationMappings;
+    }
+
+    public Set<PlaceholderDTO> getPlaceholders() {
+        return placeholders;
+    }
+
+    public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
+        this.placeholders = placeholders;
+    }
+
+    public AlgorithmDTO getFileChecksumAlgorithm() {
+        return fileChecksumAlgorithm;
+    }
+
+    public void setFileChecksumAlgorithm(AlgorithmDTO fileChecksumAlgorithm) {
+        this.fileChecksumAlgorithm = fileChecksumAlgorithm;
+    }
+
+    public SecurityClearanceDTO getSecurityClearance() {
+        return securityClearance;
+    }
+
+    public void setSecurityClearance(SecurityClearanceDTO securityClearance) {
+        this.securityClearance = securityClearance;
+    }
 }

@@ -113,4 +113,27 @@ public class BusinessDocumentFSStorageService implements FileStorageService {
             throw new RuntimeException("Could not load the files!");
         }
     }
+
+    /**
+     * Calculates checksum given a fileName
+     *
+     * @param fileName      fileName whose checksum we'll compute
+     * @param algorithmName name of algorithm used to calculate checksum
+     * @return file checksum
+     */
+    @Override
+    public String calculateCheckSum(String fileName, String algorithmName) {
+        switch (algorithmName) {
+            case "sha512": {
+                return FileUtils.calculateSha512CheckSum(root, fileName);
+            }
+            case "md5": {
+               return FileUtils.calculateMD5CheckSum(root, fileName);
+            }
+            // TODO more algorithms
+            default: {
+                return FileUtils.calculateSha512CheckSum(root, fileName);
+            }
+        }
+    }
 }

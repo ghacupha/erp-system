@@ -119,4 +119,16 @@ public class ReportsFSStorageService implements FileStorageService {
             throw new RuntimeException("Could not load the files!");
         }
     }
+
+    /**
+     * Calculates checksum given a fileName
+     *
+     * @param fileName      fileName whose checksum we'll compute
+     * @param algorithmName name of algorithm used to calculate checksum
+     * @return file checksum
+     */
+    @Override
+    public String calculateCheckSum(String fileName, String algorithmName) {
+        return this.calculateMD5CheckSum(fileName);
+    }
 }
