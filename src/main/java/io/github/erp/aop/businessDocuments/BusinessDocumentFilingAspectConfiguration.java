@@ -19,6 +19,8 @@
 package io.github.erp.aop.businessDocuments;
 
 import io.github.erp.internal.files.FileStorageService;
+import io.github.erp.internal.files.documents.FileAttachmentService;
+import io.github.erp.internal.model.BusinessDocumentFSO;
 import io.github.erp.internal.model.mapping.BusinessDocumentFSOMapping;
 import io.github.erp.service.BusinessDocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +41,16 @@ public class BusinessDocumentFilingAspectConfiguration {
     @Qualifier("businessDocumentFSStorageService")
     private FileStorageService fileStorageService;
 
+    @Autowired
+    private FileAttachmentService<BusinessDocumentFSO> businessDocumentFileAttachmentService;
+
     @Bean
     public BusinessDocumentsFilingInterceptor businessDocumentsFilingInterceptor() {
         return new BusinessDocumentsFilingInterceptor(businessDocumentService, businessDocumentFSOMapping, fileStorageService);
+    }
+
+    @Bean
+    public BusinessDocumentsFileRetrievalInterceptor businessDocumentsFileRetrievalInterceptor() {
+        return new BusinessDocumentsFileRetrievalInterceptor(businessDocumentFileAttachmentService);
     }
 }

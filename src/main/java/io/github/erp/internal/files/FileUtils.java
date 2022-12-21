@@ -161,6 +161,36 @@ public class FileUtils {
         return md5Digest;
     }
 
+    public static String calculateSha512CheckSum(final Path root, String filename) {
+        Path file = root.resolve(filename);
+//            //Resource resource = new UrlResource(file.toUri());
+//            if (resource.exists() || resource.isReadable()) {
+
+        String fileDigest = "";
+
+        try {
+            MessageDigest sha512 = MessageDigest.getInstance("SHA512");
+
+            File nativeFile = file.toFile();
+            byte[] fileContent;
+            try {
+                fileContent = Files.readAllBytes(nativeFile.toPath());
+            } catch (IOException e) {
+                throw new RuntimeException("We were unable to read the file: " + nativeFile.getAbsolutePath());
+            }
+
+            sha512.update(fileContent);
+            byte[] digest = sha512.digest();
+
+            fileDigest = DatatypeConverter.printHexBinary(digest).toUpperCase(Locale.ROOT);
+
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Algorithm exception. Check runtime environment", e);
+        }
+
+        return fileDigest;
+    }
+
     /**
      * Get file extension given the fileContentType
      * @param fileContentType

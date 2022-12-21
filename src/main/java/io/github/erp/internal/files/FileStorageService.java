@@ -66,4 +66,13 @@ public interface FileStorageService {
      * @return
      */
     String calculateMD5CheckSum(String filename);
+
+    /**
+     * Calculates checksum given a fileName
+     *
+     * @param fileName fileName whose checksum we'll compute
+     * @param algorithmName name of algorithm used to calculate checksum
+     * @return file checksum
+     */
+    String calculateCheckSum(String fileName, String algorithmName);
 }

@@ -236,10 +236,13 @@ public class BusinessDocumentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the businessDocumentDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/business-documents/{id}")
-    public ResponseEntity<BusinessDocumentDTO> getBusinessDocument(@PathVariable Long id) {
+    public ResponseEntity<BusinessDocumentFSO> getBusinessDocument(@PathVariable Long id) {
         log.debug("REST request to get BusinessDocument : {}", id);
-        Optional<BusinessDocumentDTO> businessDocumentDTO = businessDocumentService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(businessDocumentDTO);
+        final Optional[] businessDocument = new Optional[]{Optional.empty()};
+        businessDocumentService.findOne(id).ifPresent(doc -> {
+            businessDocument[0] = Optional.ofNullable(businessDocumentFSOMapping.toValue1(doc));
+        });
+        return ResponseUtil.wrapOrNotFound(businessDocument[0]);
     }
 
     /**
