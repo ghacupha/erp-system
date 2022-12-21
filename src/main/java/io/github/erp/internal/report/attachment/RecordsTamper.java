@@ -24,12 +24,12 @@ package io.github.erp.internal.report.attachment;
  *
  * @param <T>
  */
-public interface RecordsTamper {
+public interface RecordsTamper<T> {
 
     /**
      * Records whether or not information has been tampered
      *
      * @param dataIsTempered true if the information is tampered
      */
-    void isTampered(boolean dataIsTempered);
+    T isTampered(boolean dataIsTempered);
 }
