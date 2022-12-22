@@ -59,7 +59,7 @@ import java.util.Optional;
  * REST controller for managing {@link io.github.erp.domain.BusinessDocument}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/docs")
 public class BusinessDocumentResource {
 
     private final Logger log = LoggerFactory.getLogger(BusinessDocumentResource.class);

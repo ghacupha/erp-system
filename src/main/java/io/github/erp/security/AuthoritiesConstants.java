@@ -50,5 +50,7 @@ public final class AuthoritiesConstants {
 
     public static final String REQUISITION_MANAGER = "ROLE_REQUISITION_MANAGER";
 
+    public static final String DOCUMENT_MODULE_USER = "DOCUMENT_MODULE_USER";
+
     private AuthoritiesConstants() {}
 }
