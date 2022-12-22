@@ -60,7 +60,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"DOCUMENT_MODULE_USER"})
 public class BusinessDocumentResourceIT {
 
     private static final String DEFAULT_DOCUMENT_TITLE = "AAAAAAAAAA";
