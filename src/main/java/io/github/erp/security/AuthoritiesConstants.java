@@ -1,7 +1,7 @@
 package io.github.erp.security;
 
 /*-
- * Erp System - Mark III No 6 (Caleb Series) Server ver 0.1.9-SNAPSHOT
+ * Erp System - Mark III No 6 (Caleb Series) Server ver 0.2.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -50,7 +50,7 @@ public final class AuthoritiesConstants {
 
     public static final String REQUISITION_MANAGER = "ROLE_REQUISITION_MANAGER";
 
-    public static final String DOCUMENT_MODULE_USER = "DOCUMENT_MODULE_USER";
+    public static final String DOCUMENT_MODULE_USER = "ROLE_DOCUMENT_MODULE_USER";
 
     private AuthoritiesConstants() {}
 }

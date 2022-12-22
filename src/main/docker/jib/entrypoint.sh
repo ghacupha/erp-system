@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Erp System - Mark III No 6 (Caleb Series) Server ver 0.1.9-SNAPSHOT
+# Erp System - Mark III No 6 (Caleb Series) Server ver 0.2.0
 # Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
 #
 # This program is free software: you can redistribute it and/or modify

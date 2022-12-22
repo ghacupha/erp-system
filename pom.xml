@@ -7,10 +7,10 @@
 
     <groupId>io.github.erp</groupId>
     <artifactId>erp-system</artifactId>
-    <version>0.1.9-SNAPSHOT</version>
+    <version>0.2.0</version>
     <packaging>jar</packaging>
     <name>Erp System</name>
-    <description>Mark III No 6 (Caleb Series) Server ver 0.1.9-SNAPSHOT</description>
+    <description>Mark III No 6 (Caleb Series) Server ver 0.2.0</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->

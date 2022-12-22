@@ -1,5 +1,5 @@
 #
-# Erp System - Mark III No 6 (Caleb Series) Server ver 0.1.9-SNAPSHOT
+# Erp System - Mark III No 6 (Caleb Series) Server ver 0.2.0
 # Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
 #
 # This program is free software: you can redistribute it and/or modify
@@ -21,11 +21,12 @@
 version: '3.3'
 services:
   erp-system-server:
-    image: ghacupha/erp-system:0.1.5-SNAPSHOT
+    image: ghacupha/erp-system:0.2.0
     volumes:
       - ./logs/:/logs/
       - ./reports-directory/:/reports-directory/
       - ./generated-reports/:/generated-reports/
+      - ./business-documents/:/business-documents/
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
@@ -52,6 +53,7 @@ services:
       - SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=${SECURITY_AUTHENTICATION_JWT_BASE64_SECRET}
       - UPLOADS_SIZE=${UPLOADS_SIZE}
       - SANDBOX_INSTANCE_URLS=${SANDBOX_INSTANCE_URLS}
+      - ERP_REINDEXER_INTERVAL=${ERP_REINDEXER_INTERVAL}
       # - LOGGING_CONFIG=${LOGGING_CONFIG}
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
