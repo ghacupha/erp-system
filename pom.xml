@@ -7,10 +7,11 @@
 
     <groupId>io.github.erp</groupId>
     <artifactId>erp-system</artifactId>
-    <version>0.2.0</version>
+    <version>${ERP_SYSTEM_DEPLOYMENT_VERSION}</version>
     <packaging>jar</packaging>
     <name>Erp System</name>
-    <description>Mark III No 6 (Caleb Series) Server ver 0.2.0</description>
+    <!--<description>Mark III No 6 (Caleb Series) Server ver 0.3.0-SNAPSHOT</description>-->
+    <description>${ERP_SYSTEM_DEPLOYMENT_TITLE}</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->
@@ -24,6 +25,10 @@
 
     <properties>
         <!-- Build properties -->
+        <ERP_SYSTEM_DEPLOYMENT_SERIES>Caleb Series</ERP_SYSTEM_DEPLOYMENT_SERIES>
+        <ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>Mark III No 7 </ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>
+        <ERP_SYSTEM_DEPLOYMENT_VERSION>0.3.0-SNAPSHOT</ERP_SYSTEM_DEPLOYMENT_VERSION>
+        <ERP_SYSTEM_DEPLOYMENT_TITLE>${ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER} (${ERP_SYSTEM_DEPLOYMENT_SERIES}) Server ver ${ERP_SYSTEM_DEPLOYMENT_VERSION}</ERP_SYSTEM_DEPLOYMENT_TITLE>
         <maven.version>3.3.9</maven.version>
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

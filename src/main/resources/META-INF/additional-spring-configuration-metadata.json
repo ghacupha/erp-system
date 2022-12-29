@@ -3,12 +3,22 @@
     {
       "name": "app.title",
       "type": "java.lang.String",
-      "description": "Description for app.title."
+      "description": "Title of the current milestone."
     },
     {
       "name": "app.SandboxInstance.urls",
       "type": "java.lang.String",
       "description": "URL of the client-app running in a sandbox"
+    },
+    {
+      "name": "app.version",
+      "type": "java.lang.String",
+      "description": "Version of the server source code."
+    },
+    {
+      "name": "spring.config.import.file",
+      "type": "java.lang.String",
+      "description": "Description for spring.config.import.file."
     }
   ]
 }
