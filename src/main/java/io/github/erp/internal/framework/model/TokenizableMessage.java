@@ -1,7 +1,7 @@
 package io.github.erp.internal.framework.model;
 
 /*-
- * Erp System - Mark III No 6 (Caleb Series) Server ver 0.2.0
+ * Erp System - Mark III No 7 (Caleb Series) Server ver 0.3.0-SNAPSHOT
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify

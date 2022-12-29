@@ -1,6 +1,6 @@
 {
   "name": "erp-system",
-  "version": "0.1.9-SNAPSHOT",
+  "version": "0.3.0-SNAPSHOT",
   "private": true,
   "description": "Back-end for the ERP System: Mark III No 6 (Caleb Series) Server",
   "license": "GPLv3",
