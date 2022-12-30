@@ -38,7 +38,7 @@
     {
       "otherEntityField": "invoiceNumber",
       "otherEntityName": "paymentInvoice",
-      "otherEntityRelationshipName": "assetRegistration",
+      "otherEntityRelationshipName": "workInProgressRegistration",
       "ownerSide": true,
       "relationshipName": "paymentInvoices",
       "relationshipType": "many-to-many"
@@ -46,25 +46,23 @@
     {
       "otherEntityField": "outletCode",
       "otherEntityName": "serviceOutlet",
-      "otherEntityRelationshipName": "assetRegistration",
+      "otherEntityRelationshipName": "workInProgressRegistration",
       "ownerSide": true,
       "relationshipName": "serviceOutlet",
-      "relationshipType": "many-to-many",
-      "relationshipValidateRules": ["required"]
+      "relationshipType": "many-to-many"
     },
     {
       "otherEntityField": "paymentNumber",
       "otherEntityName": "settlement",
-      "otherEntityRelationshipName": "assetRegistration",
+      "otherEntityRelationshipName": "workInProgressRegistration",
       "ownerSide": true,
       "relationshipName": "settlement",
-      "relationshipType": "many-to-many",
-      "relationshipValidateRules": ["required"]
+      "relationshipType": "many-to-many"
     },
     {
       "otherEntityField": "purchaseOrderNumber",
       "otherEntityName": "purchaseOrder",
-      "otherEntityRelationshipName": "assetRegistration",
+      "otherEntityRelationshipName": "workInProgressRegistration",
       "ownerSide": true,
       "relationshipName": "purchaseOrder",
       "relationshipType": "many-to-many"
@@ -72,7 +70,7 @@
     {
       "otherEntityField": "deliveryNoteNumber",
       "otherEntityName": "deliveryNote",
-      "otherEntityRelationshipName": "assetRegistration",
+      "otherEntityRelationshipName": "workInProgressRegistration",
       "ownerSide": true,
       "relationshipName": "deliveryNote",
       "relationshipType": "many-to-many"
@@ -80,7 +78,7 @@
     {
       "otherEntityField": "serialNumber",
       "otherEntityName": "jobSheet",
-      "otherEntityRelationshipName": "assetRegistration",
+      "otherEntityRelationshipName": "workInProgressRegistration",
       "ownerSide": true,
       "relationshipName": "jobSheet",
       "relationshipType": "many-to-many"
@@ -89,8 +87,7 @@
       "otherEntityField": "dealerName",
       "otherEntityName": "dealer",
       "relationshipName": "dealer",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"]
+      "relationshipType": "many-to-one"
     },
     {
       "relationshipName": "workInProgressGroup",
@@ -109,6 +106,14 @@
       "otherEntityName": "workProjectRegister",
       "relationshipType": "many-to-one",
       "otherEntityField": "catalogueNumber"
+    },
+    {
+      "relationshipName": "businessDocument",
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "documentTitle",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "workInProgressRegistration"
     }
   ],
   "service": "serviceImpl"

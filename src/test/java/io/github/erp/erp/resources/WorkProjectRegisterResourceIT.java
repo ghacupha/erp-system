@@ -17,17 +17,15 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.Dealer;
-import io.github.erp.domain.Placeholder;
-import io.github.erp.domain.SettlementCurrency;
-import io.github.erp.domain.WorkProjectRegister;
+import io.github.erp.domain.*;
 import io.github.erp.repository.WorkProjectRegisterRepository;
 import io.github.erp.repository.search.WorkProjectRegisterSearchRepository;
 import io.github.erp.service.WorkProjectRegisterService;
 import io.github.erp.service.dto.WorkProjectRegisterDTO;
 import io.github.erp.service.mapper.WorkProjectRegisterMapper;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,7 +49,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static io.github.erp.web.rest.utils.TestUtil.sameNumber;
+import static io.github.erp.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -697,6 +695,32 @@ public class WorkProjectRegisterResourceIT {
 
         // Get all the workProjectRegisterList where placeholder equals to (placeholderId + 1)
         defaultWorkProjectRegisterShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkProjectRegistersByBusinessDocumentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workProjectRegisterRepository.saveAndFlush(workProjectRegister);
+        BusinessDocument businessDocument;
+        if (TestUtil.findAll(em, BusinessDocument.class).isEmpty()) {
+            businessDocument = BusinessDocumentResourceIT.createEntity(em);
+            em.persist(businessDocument);
+            em.flush();
+        } else {
+            businessDocument = TestUtil.findAll(em, BusinessDocument.class).get(0);
+        }
+        em.persist(businessDocument);
+        em.flush();
+        workProjectRegister.addBusinessDocument(businessDocument);
+        workProjectRegisterRepository.saveAndFlush(workProjectRegister);
+        Long businessDocumentId = businessDocument.getId();
+
+        // Get all the workProjectRegisterList where businessDocument equals to businessDocumentId
+        defaultWorkProjectRegisterShouldBeFound("businessDocumentId.equals=" + businessDocumentId);
+
+        // Get all the workProjectRegisterList where businessDocument equals to (businessDocumentId + 1)
+        defaultWorkProjectRegisterShouldNotBeFound("businessDocumentId.equals=" + (businessDocumentId + 1));
     }
 
     /**

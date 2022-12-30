@@ -17,6 +17,7 @@ package io.github.erp.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.JobSheet;
 import java.util.List;
 import java.util.Optional;
@@ -32,18 +33,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface JobSheetRepository extends JpaRepository<JobSheet, Long>, JpaSpecificationExecutor<JobSheet> {
     @Query(
-        value = "select distinct jobSheet from JobSheet jobSheet left join fetch jobSheet.signatories left join fetch jobSheet.businessStamps left join fetch jobSheet.placeholders left join fetch jobSheet.paymentLabels",
+        value = "select distinct jobSheet from JobSheet jobSheet left join fetch jobSheet.signatories left join fetch jobSheet.businessStamps left join fetch jobSheet.placeholders left join fetch jobSheet.paymentLabels left join fetch jobSheet.businessDocuments",
         countQuery = "select count(distinct jobSheet) from JobSheet jobSheet"
     )
     Page<JobSheet> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct jobSheet from JobSheet jobSheet left join fetch jobSheet.signatories left join fetch jobSheet.businessStamps left join fetch jobSheet.placeholders left join fetch jobSheet.paymentLabels"
+        "select distinct jobSheet from JobSheet jobSheet left join fetch jobSheet.signatories left join fetch jobSheet.businessStamps left join fetch jobSheet.placeholders left join fetch jobSheet.paymentLabels left join fetch jobSheet.businessDocuments"
     )
     List<JobSheet> findAllWithEagerRelationships();
 
     @Query(
-        "select jobSheet from JobSheet jobSheet left join fetch jobSheet.signatories left join fetch jobSheet.businessStamps left join fetch jobSheet.placeholders left join fetch jobSheet.paymentLabels where jobSheet.id =:id"
+        "select jobSheet from JobSheet jobSheet left join fetch jobSheet.signatories left join fetch jobSheet.businessStamps left join fetch jobSheet.placeholders left join fetch jobSheet.paymentLabels left join fetch jobSheet.businessDocuments where jobSheet.id =:id"
     )
     Optional<JobSheet> findOneWithEagerRelationships(@Param("id") Long id);
 }

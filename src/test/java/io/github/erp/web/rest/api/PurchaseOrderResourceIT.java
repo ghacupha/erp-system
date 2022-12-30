@@ -17,34 +17,15 @@ package io.github.erp.web.rest.api;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import static io.github.erp.web.rest.utils.TestUtil.sameNumber;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.Dealer;
-import io.github.erp.domain.Placeholder;
-import io.github.erp.domain.PurchaseOrder;
-import io.github.erp.domain.SettlementCurrency;
+import io.github.erp.domain.*;
 import io.github.erp.repository.PurchaseOrderRepository;
 import io.github.erp.repository.search.PurchaseOrderSearchRepository;
 import io.github.erp.service.PurchaseOrderService;
 import io.github.erp.service.dto.PurchaseOrderDTO;
 import io.github.erp.service.mapper.PurchaseOrderMapper;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
-
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,6 +39,23 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static io.github.erp.web.rest.TestUtil.sameNumber;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link PurchaseOrderResource} REST controller.
@@ -90,6 +88,9 @@ public class PurchaseOrderResourceIT {
 
     private static final String DEFAULT_COMPILATION_TOKEN = "AAAAAAAAAA";
     private static final String UPDATED_COMPILATION_TOKEN = "BBBBBBBBBB";
+
+    private static final String DEFAULT_REMARKS = "AAAAAAAAAA";
+    private static final String UPDATED_REMARKS = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/dev/purchase-orders";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -140,7 +141,8 @@ public class PurchaseOrderResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .notes(DEFAULT_NOTES)
             .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
-            .compilationToken(DEFAULT_COMPILATION_TOKEN);
+            .compilationToken(DEFAULT_COMPILATION_TOKEN)
+            .remarks(DEFAULT_REMARKS);
         // Add required entity
         Dealer dealer;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
@@ -168,7 +170,8 @@ public class PurchaseOrderResourceIT {
             .description(UPDATED_DESCRIPTION)
             .notes(UPDATED_NOTES)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
-            .compilationToken(UPDATED_COMPILATION_TOKEN);
+            .compilationToken(UPDATED_COMPILATION_TOKEN)
+            .remarks(UPDATED_REMARKS);
         // Add required entity
         Dealer dealer;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
@@ -210,6 +213,7 @@ public class PurchaseOrderResourceIT {
         assertThat(testPurchaseOrder.getNotes()).isEqualTo(DEFAULT_NOTES);
         assertThat(testPurchaseOrder.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
         assertThat(testPurchaseOrder.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
+        assertThat(testPurchaseOrder.getRemarks()).isEqualTo(DEFAULT_REMARKS);
 
         // Validate the PurchaseOrder in Elasticsearch
         verify(mockPurchaseOrderSearchRepository, times(1)).save(testPurchaseOrder);
@@ -277,7 +281,8 @@ public class PurchaseOrderResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES)))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
-            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)))
+            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -316,7 +321,8 @@ public class PurchaseOrderResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.notes").value(DEFAULT_NOTES))
             .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
-            .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN));
+            .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN))
+            .andExpect(jsonPath("$.remarks").value(DEFAULT_REMARKS.toString()));
     }
 
     @Test
@@ -1039,6 +1045,32 @@ public class PurchaseOrderResourceIT {
         defaultPurchaseOrderShouldNotBeFound("vendorId.equals=" + (vendorId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllPurchaseOrdersByBusinessDocumentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        purchaseOrderRepository.saveAndFlush(purchaseOrder);
+        BusinessDocument businessDocument;
+        if (TestUtil.findAll(em, BusinessDocument.class).isEmpty()) {
+            businessDocument = BusinessDocumentResourceIT.createEntity(em);
+            em.persist(businessDocument);
+            em.flush();
+        } else {
+            businessDocument = TestUtil.findAll(em, BusinessDocument.class).get(0);
+        }
+        em.persist(businessDocument);
+        em.flush();
+        purchaseOrder.addBusinessDocument(businessDocument);
+        purchaseOrderRepository.saveAndFlush(purchaseOrder);
+        Long businessDocumentId = businessDocument.getId();
+
+        // Get all the purchaseOrderList where businessDocument equals to businessDocumentId
+        defaultPurchaseOrderShouldBeFound("businessDocumentId.equals=" + businessDocumentId);
+
+        // Get all the purchaseOrderList where businessDocument equals to (businessDocumentId + 1)
+        defaultPurchaseOrderShouldNotBeFound("businessDocumentId.equals=" + (businessDocumentId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1054,7 +1086,8 @@ public class PurchaseOrderResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES)))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
-            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)))
+            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())));
 
         // Check, that the count call also returns 1
         restPurchaseOrderMockMvc
@@ -1109,7 +1142,8 @@ public class PurchaseOrderResourceIT {
             .description(UPDATED_DESCRIPTION)
             .notes(UPDATED_NOTES)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
-            .compilationToken(UPDATED_COMPILATION_TOKEN);
+            .compilationToken(UPDATED_COMPILATION_TOKEN)
+            .remarks(UPDATED_REMARKS);
         PurchaseOrderDTO purchaseOrderDTO = purchaseOrderMapper.toDto(updatedPurchaseOrder);
 
         restPurchaseOrderMockMvc
@@ -1131,6 +1165,7 @@ public class PurchaseOrderResourceIT {
         assertThat(testPurchaseOrder.getNotes()).isEqualTo(UPDATED_NOTES);
         assertThat(testPurchaseOrder.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
         assertThat(testPurchaseOrder.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
+        assertThat(testPurchaseOrder.getRemarks()).isEqualTo(UPDATED_REMARKS);
 
         // Validate the PurchaseOrder in Elasticsearch
         verify(mockPurchaseOrderSearchRepository).save(testPurchaseOrder);
@@ -1248,6 +1283,7 @@ public class PurchaseOrderResourceIT {
         assertThat(testPurchaseOrder.getNotes()).isEqualTo(UPDATED_NOTES);
         assertThat(testPurchaseOrder.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
         assertThat(testPurchaseOrder.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
+        assertThat(testPurchaseOrder.getRemarks()).isEqualTo(DEFAULT_REMARKS);
     }
 
     @Test
@@ -1269,7 +1305,8 @@ public class PurchaseOrderResourceIT {
             .description(UPDATED_DESCRIPTION)
             .notes(UPDATED_NOTES)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
-            .compilationToken(UPDATED_COMPILATION_TOKEN);
+            .compilationToken(UPDATED_COMPILATION_TOKEN)
+            .remarks(UPDATED_REMARKS);
 
         restPurchaseOrderMockMvc
             .perform(
@@ -1290,6 +1327,7 @@ public class PurchaseOrderResourceIT {
         assertThat(testPurchaseOrder.getNotes()).isEqualTo(UPDATED_NOTES);
         assertThat(testPurchaseOrder.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
         assertThat(testPurchaseOrder.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
+        assertThat(testPurchaseOrder.getRemarks()).isEqualTo(UPDATED_REMARKS);
     }
 
     @Test
@@ -1412,6 +1450,7 @@ public class PurchaseOrderResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES)))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
-            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)))
+            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())));
     }
 }

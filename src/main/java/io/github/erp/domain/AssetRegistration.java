@@ -17,6 +17,7 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -84,7 +85,16 @@ public class AssetRegistration implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "purchaseOrders", "placeholders", "paymentLabels", "settlementCurrency", "biller", "deliveryNotes", "jobSheets" },
+        value = {
+            "purchaseOrders",
+            "placeholders",
+            "paymentLabels",
+            "settlementCurrency",
+            "biller",
+            "deliveryNotes",
+            "jobSheets",
+            "businessDocuments",
+        },
         allowSetters = true
     )
     private Set<PaymentInvoice> paymentInvoices = new HashSet<>();
@@ -121,6 +131,7 @@ public class AssetRegistration implements Serializable {
             "biller",
             "paymentInvoices",
             "signatories",
+            "businessDocuments",
         },
         allowSetters = true
     )
@@ -138,7 +149,10 @@ public class AssetRegistration implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "purchase_order_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "settlementCurrency", "placeholders", "signatories", "vendor" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "settlementCurrency", "placeholders", "signatories", "vendor", "businessDocuments" },
+        allowSetters = true
+    )
     private Set<PurchaseOrder> purchaseOrders = new HashSet<>();
 
     @ManyToMany
@@ -149,7 +163,16 @@ public class AssetRegistration implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "placeholders", "receivedBy", "deliveryStamps", "purchaseOrder", "supplier", "signatories", "otherPurchaseOrders" },
+        value = {
+            "placeholders",
+            "receivedBy",
+            "deliveryStamps",
+            "purchaseOrder",
+            "supplier",
+            "signatories",
+            "otherPurchaseOrders",
+            "businessDocuments",
+        },
         allowSetters = true
     )
     private Set<DeliveryNote> deliveryNotes = new HashSet<>();
@@ -162,7 +185,7 @@ public class AssetRegistration implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "biller", "signatories", "contactPerson", "businessStamps", "placeholders", "paymentLabels" },
+        value = { "biller", "signatories", "contactPerson", "businessStamps", "placeholders", "paymentLabels", "businessDocuments" },
         allowSetters = true
     )
     private Set<JobSheet> jobSheets = new HashSet<>();
@@ -185,6 +208,27 @@ public class AssetRegistration implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
     private SettlementCurrency settlementCurrency;
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_asset_registration__business_document",
+        joinColumns = @JoinColumn(name = "asset_registration_id"),
+        inverseJoinColumns = @JoinColumn(name = "business_document_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = {
+            "createdBy",
+            "lastModifiedBy",
+            "originatingDepartment",
+            "applicationMappings",
+            "placeholders",
+            "fileChecksumAlgorithm",
+            "securityClearance",
+        },
+        allowSetters = true
+    )
+    private Set<BusinessDocument> businessDocuments = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -499,6 +543,29 @@ public class AssetRegistration implements Serializable {
 
     public AssetRegistration settlementCurrency(SettlementCurrency settlementCurrency) {
         this.setSettlementCurrency(settlementCurrency);
+        return this;
+    }
+
+    public Set<BusinessDocument> getBusinessDocuments() {
+        return this.businessDocuments;
+    }
+
+    public void setBusinessDocuments(Set<BusinessDocument> businessDocuments) {
+        this.businessDocuments = businessDocuments;
+    }
+
+    public AssetRegistration businessDocuments(Set<BusinessDocument> businessDocuments) {
+        this.setBusinessDocuments(businessDocuments);
+        return this;
+    }
+
+    public AssetRegistration addBusinessDocument(BusinessDocument businessDocument) {
+        this.businessDocuments.add(businessDocument);
+        return this;
+    }
+
+    public AssetRegistration removeBusinessDocument(BusinessDocument businessDocument) {
+        this.businessDocuments.remove(businessDocument);
         return this;
     }
 

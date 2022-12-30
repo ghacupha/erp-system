@@ -17,6 +17,7 @@ package io.github.erp.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.WorkProjectRegister;
 import java.util.List;
 import java.util.Optional;
@@ -33,18 +34,18 @@ import org.springframework.stereotype.Repository;
 public interface WorkProjectRegisterRepository
     extends JpaRepository<WorkProjectRegister, Long>, JpaSpecificationExecutor<WorkProjectRegister> {
     @Query(
-        value = "select distinct workProjectRegister from WorkProjectRegister workProjectRegister left join fetch workProjectRegister.dealers left join fetch workProjectRegister.placeholders",
+        value = "select distinct workProjectRegister from WorkProjectRegister workProjectRegister left join fetch workProjectRegister.dealers left join fetch workProjectRegister.placeholders left join fetch workProjectRegister.businessDocuments",
         countQuery = "select count(distinct workProjectRegister) from WorkProjectRegister workProjectRegister"
     )
     Page<WorkProjectRegister> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct workProjectRegister from WorkProjectRegister workProjectRegister left join fetch workProjectRegister.dealers left join fetch workProjectRegister.placeholders"
+        "select distinct workProjectRegister from WorkProjectRegister workProjectRegister left join fetch workProjectRegister.dealers left join fetch workProjectRegister.placeholders left join fetch workProjectRegister.businessDocuments"
     )
     List<WorkProjectRegister> findAllWithEagerRelationships();
 
     @Query(
-        "select workProjectRegister from WorkProjectRegister workProjectRegister left join fetch workProjectRegister.dealers left join fetch workProjectRegister.placeholders where workProjectRegister.id =:id"
+        "select workProjectRegister from WorkProjectRegister workProjectRegister left join fetch workProjectRegister.dealers left join fetch workProjectRegister.placeholders left join fetch workProjectRegister.businessDocuments where workProjectRegister.id =:id"
     )
     Optional<WorkProjectRegister> findOneWithEagerRelationships(@Param("id") Long id);
 }

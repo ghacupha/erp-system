@@ -26,7 +26,7 @@ import io.github.erp.repository.search.PrepaymentMarshallingSearchRepository;
 import io.github.erp.service.PrepaymentMarshallingService;
 import io.github.erp.service.dto.PrepaymentMarshallingDTO;
 import io.github.erp.service.mapper.PrepaymentMarshallingMapper;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

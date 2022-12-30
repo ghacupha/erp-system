@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.PrepaymentAccount;
 import io.github.erp.service.dto.PrepaymentAccountDTO;
 import org.mapstruct.*;
@@ -35,6 +36,7 @@ import org.mapstruct.*;
         PlaceholderMapper.class,
         UniversallyUniqueMappingMapper.class,
         PrepaymentMappingMapper.class,
+        BusinessDocumentMapper.class,
     }
 )
 public interface PrepaymentAccountMapper extends EntityMapper<PrepaymentAccountDTO, PrepaymentAccount> {
@@ -47,11 +49,13 @@ public interface PrepaymentAccountMapper extends EntityMapper<PrepaymentAccountD
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     @Mapping(target = "generalParameters", source = "generalParameters", qualifiedByName = "mappedValueSet")
     @Mapping(target = "prepaymentParameters", source = "prepaymentParameters", qualifiedByName = "parameterKeySet")
+    @Mapping(target = "businessDocuments", source = "businessDocuments", qualifiedByName = "documentTitleSet")
     PrepaymentAccountDTO toDto(PrepaymentAccount s);
 
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removeGeneralParameters", ignore = true)
     @Mapping(target = "removePrepaymentParameters", ignore = true)
+    @Mapping(target = "removeBusinessDocument", ignore = true)
     PrepaymentAccount toEntity(PrepaymentAccountDTO prepaymentAccountDTO);
 
     @Named("catalogueNumber")

@@ -17,36 +17,15 @@ package io.github.erp.web.rest.api;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import static io.github.erp.web.rest.utils.TestUtil.sameNumber;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.Dealer;
-import io.github.erp.domain.PaymentInvoice;
-import io.github.erp.domain.PaymentLabel;
-import io.github.erp.domain.Placeholder;
-import io.github.erp.domain.PurchaseOrder;
-import io.github.erp.domain.SettlementCurrency;
+import io.github.erp.domain.*;
 import io.github.erp.repository.PaymentInvoiceRepository;
 import io.github.erp.repository.search.PaymentInvoiceSearchRepository;
 import io.github.erp.service.PaymentInvoiceService;
 import io.github.erp.service.dto.PaymentInvoiceDTO;
 import io.github.erp.service.mapper.PaymentInvoiceMapper;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
-
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -60,6 +39,23 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static io.github.erp.web.rest.TestUtil.sameNumber;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link PaymentInvoiceResource} REST controller.
@@ -86,6 +82,9 @@ public class PaymentInvoiceResourceIT {
 
     private static final String DEFAULT_COMPILATION_TOKEN = "AAAAAAAAAA";
     private static final String UPDATED_COMPILATION_TOKEN = "BBBBBBBBBB";
+
+    private static final String DEFAULT_REMARKS = "AAAAAAAAAA";
+    private static final String UPDATED_REMARKS = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/dev/payment-invoices";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -134,7 +133,8 @@ public class PaymentInvoiceResourceIT {
             .invoiceDate(DEFAULT_INVOICE_DATE)
             .invoiceAmount(DEFAULT_INVOICE_AMOUNT)
             .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
-            .compilationToken(DEFAULT_COMPILATION_TOKEN);
+            .compilationToken(DEFAULT_COMPILATION_TOKEN)
+            .remarks(DEFAULT_REMARKS);
         // Add required entity
         SettlementCurrency settlementCurrency;
         if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
@@ -170,7 +170,8 @@ public class PaymentInvoiceResourceIT {
             .invoiceDate(UPDATED_INVOICE_DATE)
             .invoiceAmount(UPDATED_INVOICE_AMOUNT)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
-            .compilationToken(UPDATED_COMPILATION_TOKEN);
+            .compilationToken(UPDATED_COMPILATION_TOKEN)
+            .remarks(UPDATED_REMARKS);
         // Add required entity
         SettlementCurrency settlementCurrency;
         if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
@@ -220,6 +221,7 @@ public class PaymentInvoiceResourceIT {
         assertThat(testPaymentInvoice.getInvoiceAmount()).isEqualByComparingTo(DEFAULT_INVOICE_AMOUNT);
         assertThat(testPaymentInvoice.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
         assertThat(testPaymentInvoice.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
+        assertThat(testPaymentInvoice.getRemarks()).isEqualTo(DEFAULT_REMARKS);
 
         // Validate the PaymentInvoice in Elasticsearch
         verify(mockPaymentInvoiceSearchRepository, times(1)).save(testPaymentInvoice);
@@ -285,7 +287,8 @@ public class PaymentInvoiceResourceIT {
             .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())))
             .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(sameNumber(DEFAULT_INVOICE_AMOUNT))))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
-            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)))
+            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -322,7 +325,8 @@ public class PaymentInvoiceResourceIT {
             .andExpect(jsonPath("$.invoiceDate").value(DEFAULT_INVOICE_DATE.toString()))
             .andExpect(jsonPath("$.invoiceAmount").value(sameNumber(DEFAULT_INVOICE_AMOUNT)))
             .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
-            .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN));
+            .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN))
+            .andExpect(jsonPath("$.remarks").value(DEFAULT_REMARKS.toString()));
     }
 
     @Test
@@ -915,6 +919,84 @@ public class PaymentInvoiceResourceIT {
         defaultPaymentInvoiceShouldNotBeFound("billerId.equals=" + (billerId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllPaymentInvoicesByDeliveryNoteIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentInvoiceRepository.saveAndFlush(paymentInvoice);
+        DeliveryNote deliveryNote;
+        if (TestUtil.findAll(em, DeliveryNote.class).isEmpty()) {
+            deliveryNote = DeliveryNoteResourceIT.createEntity(em);
+            em.persist(deliveryNote);
+            em.flush();
+        } else {
+            deliveryNote = TestUtil.findAll(em, DeliveryNote.class).get(0);
+        }
+        em.persist(deliveryNote);
+        em.flush();
+        paymentInvoice.addDeliveryNote(deliveryNote);
+        paymentInvoiceRepository.saveAndFlush(paymentInvoice);
+        Long deliveryNoteId = deliveryNote.getId();
+
+        // Get all the paymentInvoiceList where deliveryNote equals to deliveryNoteId
+        defaultPaymentInvoiceShouldBeFound("deliveryNoteId.equals=" + deliveryNoteId);
+
+        // Get all the paymentInvoiceList where deliveryNote equals to (deliveryNoteId + 1)
+        defaultPaymentInvoiceShouldNotBeFound("deliveryNoteId.equals=" + (deliveryNoteId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentInvoicesByJobSheetIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentInvoiceRepository.saveAndFlush(paymentInvoice);
+        JobSheet jobSheet;
+        if (TestUtil.findAll(em, JobSheet.class).isEmpty()) {
+            jobSheet = JobSheetResourceIT.createEntity(em);
+            em.persist(jobSheet);
+            em.flush();
+        } else {
+            jobSheet = TestUtil.findAll(em, JobSheet.class).get(0);
+        }
+        em.persist(jobSheet);
+        em.flush();
+        paymentInvoice.addJobSheet(jobSheet);
+        paymentInvoiceRepository.saveAndFlush(paymentInvoice);
+        Long jobSheetId = jobSheet.getId();
+
+        // Get all the paymentInvoiceList where jobSheet equals to jobSheetId
+        defaultPaymentInvoiceShouldBeFound("jobSheetId.equals=" + jobSheetId);
+
+        // Get all the paymentInvoiceList where jobSheet equals to (jobSheetId + 1)
+        defaultPaymentInvoiceShouldNotBeFound("jobSheetId.equals=" + (jobSheetId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentInvoicesByBusinessDocumentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentInvoiceRepository.saveAndFlush(paymentInvoice);
+        BusinessDocument businessDocument;
+        if (TestUtil.findAll(em, BusinessDocument.class).isEmpty()) {
+            businessDocument = BusinessDocumentResourceIT.createEntity(em);
+            em.persist(businessDocument);
+            em.flush();
+        } else {
+            businessDocument = TestUtil.findAll(em, BusinessDocument.class).get(0);
+        }
+        em.persist(businessDocument);
+        em.flush();
+        paymentInvoice.addBusinessDocument(businessDocument);
+        paymentInvoiceRepository.saveAndFlush(paymentInvoice);
+        Long businessDocumentId = businessDocument.getId();
+
+        // Get all the paymentInvoiceList where businessDocument equals to businessDocumentId
+        defaultPaymentInvoiceShouldBeFound("businessDocumentId.equals=" + businessDocumentId);
+
+        // Get all the paymentInvoiceList where businessDocument equals to (businessDocumentId + 1)
+        defaultPaymentInvoiceShouldNotBeFound("businessDocumentId.equals=" + (businessDocumentId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -928,7 +1010,8 @@ public class PaymentInvoiceResourceIT {
             .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())))
             .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(sameNumber(DEFAULT_INVOICE_AMOUNT))))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
-            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)))
+            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())));
 
         // Check, that the count call also returns 1
         restPaymentInvoiceMockMvc
@@ -981,7 +1064,8 @@ public class PaymentInvoiceResourceIT {
             .invoiceDate(UPDATED_INVOICE_DATE)
             .invoiceAmount(UPDATED_INVOICE_AMOUNT)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
-            .compilationToken(UPDATED_COMPILATION_TOKEN);
+            .compilationToken(UPDATED_COMPILATION_TOKEN)
+            .remarks(UPDATED_REMARKS);
         PaymentInvoiceDTO paymentInvoiceDTO = paymentInvoiceMapper.toDto(updatedPaymentInvoice);
 
         restPaymentInvoiceMockMvc
@@ -1001,6 +1085,7 @@ public class PaymentInvoiceResourceIT {
         assertThat(testPaymentInvoice.getInvoiceAmount()).isEqualTo(UPDATED_INVOICE_AMOUNT);
         assertThat(testPaymentInvoice.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
         assertThat(testPaymentInvoice.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
+        assertThat(testPaymentInvoice.getRemarks()).isEqualTo(UPDATED_REMARKS);
 
         // Validate the PaymentInvoice in Elasticsearch
         verify(mockPaymentInvoiceSearchRepository).save(testPaymentInvoice);
@@ -1113,6 +1198,7 @@ public class PaymentInvoiceResourceIT {
         assertThat(testPaymentInvoice.getInvoiceAmount()).isEqualByComparingTo(UPDATED_INVOICE_AMOUNT);
         assertThat(testPaymentInvoice.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
         assertThat(testPaymentInvoice.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
+        assertThat(testPaymentInvoice.getRemarks()).isEqualTo(DEFAULT_REMARKS);
     }
 
     @Test
@@ -1132,7 +1218,8 @@ public class PaymentInvoiceResourceIT {
             .invoiceDate(UPDATED_INVOICE_DATE)
             .invoiceAmount(UPDATED_INVOICE_AMOUNT)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
-            .compilationToken(UPDATED_COMPILATION_TOKEN);
+            .compilationToken(UPDATED_COMPILATION_TOKEN)
+            .remarks(UPDATED_REMARKS);
 
         restPaymentInvoiceMockMvc
             .perform(
@@ -1151,6 +1238,7 @@ public class PaymentInvoiceResourceIT {
         assertThat(testPaymentInvoice.getInvoiceAmount()).isEqualByComparingTo(UPDATED_INVOICE_AMOUNT);
         assertThat(testPaymentInvoice.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
         assertThat(testPaymentInvoice.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
+        assertThat(testPaymentInvoice.getRemarks()).isEqualTo(UPDATED_REMARKS);
     }
 
     @Test
@@ -1271,6 +1359,7 @@ public class PaymentInvoiceResourceIT {
             .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())))
             .andExpect(jsonPath("$.[*].invoiceAmount").value(hasItem(sameNumber(DEFAULT_INVOICE_AMOUNT))))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
-            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)))
+            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())));
     }
 }

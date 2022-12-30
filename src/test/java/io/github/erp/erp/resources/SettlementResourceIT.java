@@ -17,37 +17,15 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import static io.github.erp.web.rest.utils.TestUtil.sameNumber;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.Dealer;
-import io.github.erp.domain.PaymentCategory;
-import io.github.erp.domain.PaymentInvoice;
-import io.github.erp.domain.PaymentLabel;
-import io.github.erp.domain.Placeholder;
-import io.github.erp.domain.Settlement;
-import io.github.erp.domain.SettlementCurrency;
+import io.github.erp.domain.*;
 import io.github.erp.repository.SettlementRepository;
 import io.github.erp.repository.search.SettlementSearchRepository;
 import io.github.erp.service.SettlementService;
 import io.github.erp.service.dto.SettlementDTO;
 import io.github.erp.service.mapper.SettlementMapper;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
-
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,6 +40,23 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
+
+import javax.persistence.EntityManager;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static io.github.erp.web.rest.TestUtil.sameNumber;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link SettlementResource} REST controller.
@@ -99,6 +94,9 @@ class SettlementResourceIT {
 
     private static final String DEFAULT_COMPILATION_TOKEN = "AAAAAAAAAA";
     private static final String UPDATED_COMPILATION_TOKEN = "BBBBBBBBBB";
+
+    private static final String DEFAULT_REMARKS = "AAAAAAAAAA";
+    private static final String UPDATED_REMARKS = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/payments/settlements";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -151,7 +149,8 @@ class SettlementResourceIT {
             .calculationFile(DEFAULT_CALCULATION_FILE)
             .calculationFileContentType(DEFAULT_CALCULATION_FILE_CONTENT_TYPE)
             .fileUploadToken(DEFAULT_FILE_UPLOAD_TOKEN)
-            .compilationToken(DEFAULT_COMPILATION_TOKEN);
+            .compilationToken(DEFAULT_COMPILATION_TOKEN)
+            .remarks(DEFAULT_REMARKS);
         // Add required entity
         SettlementCurrency settlementCurrency;
         if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
@@ -201,7 +200,8 @@ class SettlementResourceIT {
             .calculationFile(UPDATED_CALCULATION_FILE)
             .calculationFileContentType(UPDATED_CALCULATION_FILE_CONTENT_TYPE)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
-            .compilationToken(UPDATED_COMPILATION_TOKEN);
+            .compilationToken(UPDATED_COMPILATION_TOKEN)
+            .remarks(UPDATED_REMARKS);
         // Add required entity
         SettlementCurrency settlementCurrency;
         if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
@@ -263,6 +263,7 @@ class SettlementResourceIT {
         assertThat(testSettlement.getCalculationFileContentType()).isEqualTo(DEFAULT_CALCULATION_FILE_CONTENT_TYPE);
         assertThat(testSettlement.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
         assertThat(testSettlement.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
+        assertThat(testSettlement.getRemarks()).isEqualTo(DEFAULT_REMARKS);
 
         // Validate the Settlement in Elasticsearch
         verify(mockSettlementSearchRepository, times(1)).save(testSettlement);
@@ -310,7 +311,8 @@ class SettlementResourceIT {
             .andExpect(jsonPath("$.[*].calculationFileContentType").value(hasItem(DEFAULT_CALCULATION_FILE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].calculationFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_CALCULATION_FILE))))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
-            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)))
+            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -351,7 +353,8 @@ class SettlementResourceIT {
             .andExpect(jsonPath("$.calculationFileContentType").value(DEFAULT_CALCULATION_FILE_CONTENT_TYPE))
             .andExpect(jsonPath("$.calculationFile").value(Base64Utils.encodeToString(DEFAULT_CALCULATION_FILE)))
             .andExpect(jsonPath("$.fileUploadToken").value(DEFAULT_FILE_UPLOAD_TOKEN))
-            .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN));
+            .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN))
+            .andExpect(jsonPath("$.remarks").value(DEFAULT_REMARKS.toString()));
     }
 
     @Test
@@ -1178,6 +1181,32 @@ class SettlementResourceIT {
         defaultSettlementShouldNotBeFound("signatoriesId.equals=" + (signatoriesId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllSettlementsByBusinessDocumentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        settlementRepository.saveAndFlush(settlement);
+        BusinessDocument businessDocument;
+        if (TestUtil.findAll(em, BusinessDocument.class).isEmpty()) {
+            businessDocument = BusinessDocumentResourceIT.createEntity(em);
+            em.persist(businessDocument);
+            em.flush();
+        } else {
+            businessDocument = TestUtil.findAll(em, BusinessDocument.class).get(0);
+        }
+        em.persist(businessDocument);
+        em.flush();
+        settlement.addBusinessDocument(businessDocument);
+        settlementRepository.saveAndFlush(settlement);
+        Long businessDocumentId = businessDocument.getId();
+
+        // Get all the settlementList where businessDocument equals to businessDocumentId
+        defaultSettlementShouldBeFound("businessDocumentId.equals=" + businessDocumentId);
+
+        // Get all the settlementList where businessDocument equals to (businessDocumentId + 1)
+        defaultSettlementShouldNotBeFound("businessDocumentId.equals=" + (businessDocumentId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1195,7 +1224,8 @@ class SettlementResourceIT {
             .andExpect(jsonPath("$.[*].calculationFileContentType").value(hasItem(DEFAULT_CALCULATION_FILE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].calculationFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_CALCULATION_FILE))))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
-            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)))
+            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())));
 
         // Check, that the count call also returns 1
         restSettlementMockMvc
@@ -1252,7 +1282,8 @@ class SettlementResourceIT {
             .calculationFile(UPDATED_CALCULATION_FILE)
             .calculationFileContentType(UPDATED_CALCULATION_FILE_CONTENT_TYPE)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
-            .compilationToken(UPDATED_COMPILATION_TOKEN);
+            .compilationToken(UPDATED_COMPILATION_TOKEN)
+            .remarks(UPDATED_REMARKS);
         SettlementDTO settlementDTO = settlementMapper.toDto(updatedSettlement);
 
         restSettlementMockMvc
@@ -1276,6 +1307,7 @@ class SettlementResourceIT {
         assertThat(testSettlement.getCalculationFileContentType()).isEqualTo(UPDATED_CALCULATION_FILE_CONTENT_TYPE);
         assertThat(testSettlement.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
         assertThat(testSettlement.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
+        assertThat(testSettlement.getRemarks()).isEqualTo(UPDATED_REMARKS);
 
         // Validate the Settlement in Elasticsearch
         verify(mockSettlementSearchRepository).save(testSettlement);
@@ -1390,6 +1422,7 @@ class SettlementResourceIT {
         assertThat(testSettlement.getCalculationFileContentType()).isEqualTo(DEFAULT_CALCULATION_FILE_CONTENT_TYPE);
         assertThat(testSettlement.getFileUploadToken()).isEqualTo(DEFAULT_FILE_UPLOAD_TOKEN);
         assertThat(testSettlement.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
+        assertThat(testSettlement.getRemarks()).isEqualTo(DEFAULT_REMARKS);
     }
 
     @Test
@@ -1413,7 +1446,8 @@ class SettlementResourceIT {
             .calculationFile(UPDATED_CALCULATION_FILE)
             .calculationFileContentType(UPDATED_CALCULATION_FILE_CONTENT_TYPE)
             .fileUploadToken(UPDATED_FILE_UPLOAD_TOKEN)
-            .compilationToken(UPDATED_COMPILATION_TOKEN);
+            .compilationToken(UPDATED_COMPILATION_TOKEN)
+            .remarks(UPDATED_REMARKS);
 
         restSettlementMockMvc
             .perform(
@@ -1436,6 +1470,7 @@ class SettlementResourceIT {
         assertThat(testSettlement.getCalculationFileContentType()).isEqualTo(UPDATED_CALCULATION_FILE_CONTENT_TYPE);
         assertThat(testSettlement.getFileUploadToken()).isEqualTo(UPDATED_FILE_UPLOAD_TOKEN);
         assertThat(testSettlement.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
+        assertThat(testSettlement.getRemarks()).isEqualTo(UPDATED_REMARKS);
     }
 
     @Test
@@ -1558,6 +1593,7 @@ class SettlementResourceIT {
             .andExpect(jsonPath("$.[*].calculationFileContentType").value(hasItem(DEFAULT_CALCULATION_FILE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].calculationFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_CALCULATION_FILE))))
             .andExpect(jsonPath("$.[*].fileUploadToken").value(hasItem(DEFAULT_FILE_UPLOAD_TOKEN)))
-            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)));
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN)))
+            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())));
     }
 }

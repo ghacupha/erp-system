@@ -17,6 +17,7 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -80,6 +81,7 @@ public class PrepaymentAccount implements Serializable {
             "biller",
             "paymentInvoices",
             "signatories",
+            "businessDocuments",
         },
         allowSetters = true
     )
@@ -133,6 +135,27 @@ public class PrepaymentAccount implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
     private Set<PrepaymentMapping> prepaymentParameters = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_prepayment_account__business_document",
+        joinColumns = @JoinColumn(name = "prepayment_account_id"),
+        inverseJoinColumns = @JoinColumn(name = "business_document_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = {
+            "createdBy",
+            "lastModifiedBy",
+            "originatingDepartment",
+            "applicationMappings",
+            "placeholders",
+            "fileChecksumAlgorithm",
+            "securityClearance",
+        },
+        allowSetters = true
+    )
+    private Set<BusinessDocument> businessDocuments = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -358,6 +381,29 @@ public class PrepaymentAccount implements Serializable {
 
     public PrepaymentAccount removePrepaymentParameters(PrepaymentMapping prepaymentMapping) {
         this.prepaymentParameters.remove(prepaymentMapping);
+        return this;
+    }
+
+    public Set<BusinessDocument> getBusinessDocuments() {
+        return this.businessDocuments;
+    }
+
+    public void setBusinessDocuments(Set<BusinessDocument> businessDocuments) {
+        this.businessDocuments = businessDocuments;
+    }
+
+    public PrepaymentAccount businessDocuments(Set<BusinessDocument> businessDocuments) {
+        this.setBusinessDocuments(businessDocuments);
+        return this;
+    }
+
+    public PrepaymentAccount addBusinessDocument(BusinessDocument businessDocument) {
+        this.businessDocuments.add(businessDocument);
+        return this;
+    }
+
+    public PrepaymentAccount removeBusinessDocument(BusinessDocument businessDocument) {
+        this.businessDocuments.remove(businessDocument);
         return this;
     }
 

@@ -24,7 +24,7 @@ import io.github.erp.repository.search.ApplicationUserSearchRepository;
 import io.github.erp.service.ApplicationUserService;
 import io.github.erp.service.dto.ApplicationUserDTO;
 import io.github.erp.service.mapper.ApplicationUserMapper;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import io.github.erp.web.rest.userManagement.UserResourceIT;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

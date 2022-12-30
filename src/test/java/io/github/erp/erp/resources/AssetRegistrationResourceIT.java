@@ -17,38 +17,15 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import static io.github.erp.web.rest.utils.TestUtil.sameNumber;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.AssetCategory;
-import io.github.erp.domain.AssetRegistration;
-import io.github.erp.domain.Dealer;
-import io.github.erp.domain.DeliveryNote;
-import io.github.erp.domain.JobSheet;
-import io.github.erp.domain.PaymentInvoice;
-import io.github.erp.domain.Placeholder;
-import io.github.erp.domain.PurchaseOrder;
-import io.github.erp.domain.ServiceOutlet;
-import io.github.erp.domain.Settlement;
+import io.github.erp.domain.*;
 import io.github.erp.repository.AssetRegistrationRepository;
 import io.github.erp.repository.search.AssetRegistrationSearchRepository;
 import io.github.erp.service.AssetRegistrationService;
 import io.github.erp.service.dto.AssetRegistrationDTO;
 import io.github.erp.service.mapper.AssetRegistrationMapper;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
-
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -63,6 +40,21 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
+
+import javax.persistence.EntityManager;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static io.github.erp.web.rest.TestUtil.sameNumber;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link AssetRegistrationResource} REST controller.
@@ -1040,6 +1032,58 @@ public class AssetRegistrationResourceIT {
         defaultAssetRegistrationShouldNotBeFound("designatedUsersId.equals=" + (designatedUsersId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsBySettlementCurrencyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+        SettlementCurrency settlementCurrency;
+        if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
+            settlementCurrency = SettlementCurrencyResourceIT.createEntity(em);
+            em.persist(settlementCurrency);
+            em.flush();
+        } else {
+            settlementCurrency = TestUtil.findAll(em, SettlementCurrency.class).get(0);
+        }
+        em.persist(settlementCurrency);
+        em.flush();
+        assetRegistration.setSettlementCurrency(settlementCurrency);
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+        Long settlementCurrencyId = settlementCurrency.getId();
+
+        // Get all the assetRegistrationList where settlementCurrency equals to settlementCurrencyId
+        defaultAssetRegistrationShouldBeFound("settlementCurrencyId.equals=" + settlementCurrencyId);
+
+        // Get all the assetRegistrationList where settlementCurrency equals to (settlementCurrencyId + 1)
+        defaultAssetRegistrationShouldNotBeFound("settlementCurrencyId.equals=" + (settlementCurrencyId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByBusinessDocumentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+        BusinessDocument businessDocument;
+        if (TestUtil.findAll(em, BusinessDocument.class).isEmpty()) {
+            businessDocument = BusinessDocumentResourceIT.createEntity(em);
+            em.persist(businessDocument);
+            em.flush();
+        } else {
+            businessDocument = TestUtil.findAll(em, BusinessDocument.class).get(0);
+        }
+        em.persist(businessDocument);
+        em.flush();
+        assetRegistration.addBusinessDocument(businessDocument);
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+        Long businessDocumentId = businessDocument.getId();
+
+        // Get all the assetRegistrationList where businessDocument equals to businessDocumentId
+        defaultAssetRegistrationShouldBeFound("businessDocumentId.equals=" + businessDocumentId);
+
+        // Get all the assetRegistrationList where businessDocument equals to (businessDocumentId + 1)
+        defaultAssetRegistrationShouldNotBeFound("businessDocumentId.equals=" + (businessDocumentId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1126,7 +1170,7 @@ public class AssetRegistrationResourceIT {
         assertThat(testAssetRegistration.getAssetNumber()).isEqualTo(UPDATED_ASSET_NUMBER);
         assertThat(testAssetRegistration.getAssetTag()).isEqualTo(UPDATED_ASSET_TAG);
         assertThat(testAssetRegistration.getAssetDetails()).isEqualTo(UPDATED_ASSET_DETAILS);
-        assertThat(testAssetRegistration.getAssetCost()).isEqualByComparingTo(UPDATED_ASSET_COST);
+        assertThat(testAssetRegistration.getAssetCost()).isEqualTo(UPDATED_ASSET_COST);
         assertThat(testAssetRegistration.getComments()).isEqualTo(UPDATED_COMMENTS);
         assertThat(testAssetRegistration.getCommentsContentType()).isEqualTo(UPDATED_COMMENTS_CONTENT_TYPE);
 

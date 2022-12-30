@@ -1,4 +1,4 @@
-package api;
+package io.github.erp.web.rest.api;
 
 /*-
  * Erp System - Mark III No 7 (Caleb Series) Server ver 0.3.0-SNAPSHOT
@@ -17,6 +17,7 @@ package api;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
 import io.github.erp.repository.AssetRegistrationRepository;
@@ -24,8 +25,7 @@ import io.github.erp.repository.search.AssetRegistrationSearchRepository;
 import io.github.erp.service.AssetRegistrationService;
 import io.github.erp.service.dto.AssetRegistrationDTO;
 import io.github.erp.service.mapper.AssetRegistrationMapper;
-import io.github.erp.web.rest.utils.TestUtil;
-import io.github.erp.web.rest.api.*;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,7 +49,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static io.github.erp.web.rest.utils.TestUtil.sameNumber;
+import static io.github.erp.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -57,7 +57,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link io.github.erp.web.rest.api.AssetRegistrationResourceDev} REST controller.
+ * Integration tests for the AssetRegistrationResourceDev REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -1056,6 +1056,32 @@ public class AssetRegistrationResourceIT {
 
         // Get all the assetRegistrationList where settlementCurrency equals to (settlementCurrencyId + 1)
         defaultAssetRegistrationShouldNotBeFound("settlementCurrencyId.equals=" + (settlementCurrencyId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByBusinessDocumentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+        BusinessDocument businessDocument;
+        if (TestUtil.findAll(em, BusinessDocument.class).isEmpty()) {
+            businessDocument = BusinessDocumentResourceIT.createEntity(em);
+            em.persist(businessDocument);
+            em.flush();
+        } else {
+            businessDocument = TestUtil.findAll(em, BusinessDocument.class).get(0);
+        }
+        em.persist(businessDocument);
+        em.flush();
+        assetRegistration.addBusinessDocument(businessDocument);
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+        Long businessDocumentId = businessDocument.getId();
+
+        // Get all the assetRegistrationList where businessDocument equals to businessDocumentId
+        defaultAssetRegistrationShouldBeFound("businessDocumentId.equals=" + businessDocumentId);
+
+        // Get all the assetRegistrationList where businessDocument equals to (businessDocumentId + 1)
+        defaultAssetRegistrationShouldNotBeFound("businessDocumentId.equals=" + (businessDocumentId + 1));
     }
 
     /**

@@ -17,6 +17,7 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.enumeration.AgencyStatusType;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -56,6 +57,8 @@ public class AgencyNoticeDTO implements Serializable {
     private DealerDTO assessor;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
+
+    private Set<BusinessDocumentDTO> businessDocuments = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -145,6 +148,14 @@ public class AgencyNoticeDTO implements Serializable {
         this.placeholders = placeholders;
     }
 
+    public Set<BusinessDocumentDTO> getBusinessDocuments() {
+        return businessDocuments;
+    }
+
+    public void setBusinessDocuments(Set<BusinessDocumentDTO> businessDocuments) {
+        this.businessDocuments = businessDocuments;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -180,6 +191,7 @@ public class AgencyNoticeDTO implements Serializable {
             ", settlementCurrency=" + getSettlementCurrency() +
             ", assessor=" + getAssessor() +
             ", placeholders=" + getPlaceholders() +
+            ", businessDocuments=" + getBusinessDocuments() +
             "}";
     }
 }

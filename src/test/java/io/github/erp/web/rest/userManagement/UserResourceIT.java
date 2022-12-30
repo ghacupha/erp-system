@@ -157,7 +157,7 @@ import io.github.erp.repository.search.UserSearchRepository;
 import io.github.erp.security.AuthoritiesConstants;
 import io.github.erp.service.dto.AdminUserDTO;
 import io.github.erp.service.mapper.UserMapper;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import io.github.erp.web.rest.vm.ManagedUserVM;
 import java.time.Instant;
 import java.util.*;

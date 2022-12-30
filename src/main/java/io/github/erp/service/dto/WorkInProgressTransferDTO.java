@@ -17,6 +17,7 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
@@ -36,6 +37,8 @@ public class WorkInProgressTransferDTO implements Serializable {
     private Set<WorkInProgressRegistrationDTO> workInProgressRegistrations = new HashSet<>();
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
+
+    private Set<BusinessDocumentDTO> businessDocuments = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -77,6 +80,14 @@ public class WorkInProgressTransferDTO implements Serializable {
         this.placeholders = placeholders;
     }
 
+    public Set<BusinessDocumentDTO> getBusinessDocuments() {
+        return businessDocuments;
+    }
+
+    public void setBusinessDocuments(Set<BusinessDocumentDTO> businessDocuments) {
+        this.businessDocuments = businessDocuments;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -107,6 +118,7 @@ public class WorkInProgressTransferDTO implements Serializable {
             ", targetAssetNumber='" + getTargetAssetNumber() + "'" +
             ", workInProgressRegistrations=" + getWorkInProgressRegistrations() +
             ", placeholders=" + getPlaceholders() +
+            ", businessDocuments=" + getBusinessDocuments() +
             "}";
     }
 }

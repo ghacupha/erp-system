@@ -17,6 +17,7 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -60,6 +61,8 @@ public class DeliveryNoteDTO implements Serializable {
     private Set<DealerDTO> signatories = new HashSet<>();
 
     private Set<PurchaseOrderDTO> otherPurchaseOrders = new HashSet<>();
+
+    private Set<BusinessDocumentDTO> businessDocuments = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -173,6 +176,14 @@ public class DeliveryNoteDTO implements Serializable {
         this.otherPurchaseOrders = otherPurchaseOrders;
     }
 
+    public Set<BusinessDocumentDTO> getBusinessDocuments() {
+        return businessDocuments;
+    }
+
+    public void setBusinessDocuments(Set<BusinessDocumentDTO> businessDocuments) {
+        this.businessDocuments = businessDocuments;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -212,6 +223,7 @@ public class DeliveryNoteDTO implements Serializable {
             ", supplier=" + getSupplier() +
             ", signatories=" + getSignatories() +
             ", otherPurchaseOrders=" + getOtherPurchaseOrders() +
+            ", businessDocuments=" + getBusinessDocuments() +
             "}";
     }
 }

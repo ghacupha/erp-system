@@ -88,6 +88,14 @@
       "otherEntityField": "serialNumber",
       "ownerSide": true,
       "otherEntityRelationshipName": "paymentInvoice"
+    },
+    {
+      "relationshipName": "businessDocument",
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "documentTitle",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "paymentInvoice"
     }
   ],
   "service": "serviceImpl"

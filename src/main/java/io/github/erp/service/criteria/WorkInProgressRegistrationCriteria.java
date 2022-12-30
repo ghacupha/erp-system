@@ -17,6 +17,7 @@ package io.github.erp.service.criteria;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -72,6 +73,8 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
 
     private LongFilter workProjectRegisterId;
 
+    private LongFilter businessDocumentId;
+
     private Boolean distinct;
 
     public WorkInProgressRegistrationCriteria() {}
@@ -92,6 +95,7 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
         this.workInProgressGroupId = other.workInProgressGroupId == null ? null : other.workInProgressGroupId.copy();
         this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
         this.workProjectRegisterId = other.workProjectRegisterId == null ? null : other.workProjectRegisterId.copy();
+        this.businessDocumentId = other.businessDocumentId == null ? null : other.businessDocumentId.copy();
         this.distinct = other.distinct;
     }
 
@@ -325,6 +329,21 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
         this.workProjectRegisterId = workProjectRegisterId;
     }
 
+    public LongFilter getBusinessDocumentId() {
+        return businessDocumentId;
+    }
+
+    public LongFilter businessDocumentId() {
+        if (businessDocumentId == null) {
+            businessDocumentId = new LongFilter();
+        }
+        return businessDocumentId;
+    }
+
+    public void setBusinessDocumentId(LongFilter businessDocumentId) {
+        this.businessDocumentId = businessDocumentId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -358,6 +377,7 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
             Objects.equals(workInProgressGroupId, that.workInProgressGroupId) &&
             Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
             Objects.equals(workProjectRegisterId, that.workProjectRegisterId) &&
+            Objects.equals(businessDocumentId, that.businessDocumentId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -380,6 +400,7 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
             workInProgressGroupId,
             settlementCurrencyId,
             workProjectRegisterId,
+            businessDocumentId,
             distinct
         );
     }
@@ -403,6 +424,7 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
             (workInProgressGroupId != null ? "workInProgressGroupId=" + workInProgressGroupId + ", " : "") +
             (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
             (workProjectRegisterId != null ? "workProjectRegisterId=" + workProjectRegisterId + ", " : "") +
+            (businessDocumentId != null ? "businessDocumentId=" + businessDocumentId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

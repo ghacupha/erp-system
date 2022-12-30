@@ -17,6 +17,7 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -74,7 +75,10 @@ public class PaymentInvoice implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "purchase_order_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "settlementCurrency", "placeholders", "signatories", "vendor" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "settlementCurrency", "placeholders", "signatories", "vendor", "businessDocuments" },
+        allowSetters = true
+    )
     private Set<PurchaseOrder> purchaseOrders = new HashSet<>();
 
     @ManyToMany
@@ -115,7 +119,16 @@ public class PaymentInvoice implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "placeholders", "receivedBy", "deliveryStamps", "purchaseOrder", "supplier", "signatories", "otherPurchaseOrders" },
+        value = {
+            "placeholders",
+            "receivedBy",
+            "deliveryStamps",
+            "purchaseOrder",
+            "supplier",
+            "signatories",
+            "otherPurchaseOrders",
+            "businessDocuments",
+        },
         allowSetters = true
     )
     private Set<DeliveryNote> deliveryNotes = new HashSet<>();
@@ -128,10 +141,31 @@ public class PaymentInvoice implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "biller", "signatories", "contactPerson", "businessStamps", "placeholders", "paymentLabels" },
+        value = { "biller", "signatories", "contactPerson", "businessStamps", "placeholders", "paymentLabels", "businessDocuments" },
         allowSetters = true
     )
     private Set<JobSheet> jobSheets = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_payment_invoice__business_document",
+        joinColumns = @JoinColumn(name = "payment_invoice_id"),
+        inverseJoinColumns = @JoinColumn(name = "business_document_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = {
+            "createdBy",
+            "lastModifiedBy",
+            "originatingDepartment",
+            "applicationMappings",
+            "placeholders",
+            "fileChecksumAlgorithm",
+            "securityClearance",
+        },
+        allowSetters = true
+    )
+    private Set<BusinessDocument> businessDocuments = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -364,6 +398,29 @@ public class PaymentInvoice implements Serializable {
 
     public PaymentInvoice removeJobSheet(JobSheet jobSheet) {
         this.jobSheets.remove(jobSheet);
+        return this;
+    }
+
+    public Set<BusinessDocument> getBusinessDocuments() {
+        return this.businessDocuments;
+    }
+
+    public void setBusinessDocuments(Set<BusinessDocument> businessDocuments) {
+        this.businessDocuments = businessDocuments;
+    }
+
+    public PaymentInvoice businessDocuments(Set<BusinessDocument> businessDocuments) {
+        this.setBusinessDocuments(businessDocuments);
+        return this;
+    }
+
+    public PaymentInvoice addBusinessDocument(BusinessDocument businessDocument) {
+        this.businessDocuments.add(businessDocument);
+        return this;
+    }
+
+    public PaymentInvoice removeBusinessDocument(BusinessDocument businessDocument) {
+        this.businessDocuments.remove(businessDocument);
         return this;
     }
 

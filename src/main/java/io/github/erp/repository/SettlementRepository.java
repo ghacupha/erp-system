@@ -17,6 +17,7 @@ package io.github.erp.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.Settlement;
 import java.util.List;
 import java.util.Optional;
@@ -32,18 +33,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SettlementRepository extends JpaRepository<Settlement, Long>, JpaSpecificationExecutor<Settlement> {
     @Query(
-        value = "select distinct settlement from Settlement settlement left join fetch settlement.placeholders left join fetch settlement.paymentLabels left join fetch settlement.paymentInvoices left join fetch settlement.signatories",
+        value = "select distinct settlement from Settlement settlement left join fetch settlement.placeholders left join fetch settlement.paymentLabels left join fetch settlement.paymentInvoices left join fetch settlement.signatories left join fetch settlement.businessDocuments",
         countQuery = "select count(distinct settlement) from Settlement settlement"
     )
     Page<Settlement> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct settlement from Settlement settlement left join fetch settlement.placeholders left join fetch settlement.paymentLabels left join fetch settlement.paymentInvoices left join fetch settlement.signatories"
+        "select distinct settlement from Settlement settlement left join fetch settlement.placeholders left join fetch settlement.paymentLabels left join fetch settlement.paymentInvoices left join fetch settlement.signatories left join fetch settlement.businessDocuments"
     )
     List<Settlement> findAllWithEagerRelationships();
 
     @Query(
-        "select settlement from Settlement settlement left join fetch settlement.placeholders left join fetch settlement.paymentLabels left join fetch settlement.paymentInvoices left join fetch settlement.signatories where settlement.id =:id"
+        "select settlement from Settlement settlement left join fetch settlement.placeholders left join fetch settlement.paymentLabels left join fetch settlement.paymentInvoices left join fetch settlement.signatories left join fetch settlement.businessDocuments where settlement.id =:id"
     )
     Optional<Settlement> findOneWithEagerRelationships(@Param("id") Long id);
 }

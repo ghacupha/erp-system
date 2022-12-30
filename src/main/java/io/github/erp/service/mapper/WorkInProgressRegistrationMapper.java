@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.WorkInProgressRegistration;
 import io.github.erp.service.dto.WorkInProgressRegistrationDTO;
 import java.util.Set;
@@ -38,6 +39,7 @@ import org.mapstruct.*;
         DealerMapper.class,
         SettlementCurrencyMapper.class,
         WorkProjectRegisterMapper.class,
+        BusinessDocumentMapper.class,
     }
 )
 public interface WorkInProgressRegistrationMapper extends EntityMapper<WorkInProgressRegistrationDTO, WorkInProgressRegistration> {
@@ -52,6 +54,7 @@ public interface WorkInProgressRegistrationMapper extends EntityMapper<WorkInPro
     @Mapping(target = "workInProgressGroup", source = "workInProgressGroup", qualifiedByName = "sequenceNumber")
     @Mapping(target = "settlementCurrency", source = "settlementCurrency", qualifiedByName = "iso4217CurrencyCode")
     @Mapping(target = "workProjectRegister", source = "workProjectRegister", qualifiedByName = "catalogueNumber")
+    @Mapping(target = "businessDocuments", source = "businessDocuments", qualifiedByName = "documentTitleSet")
     WorkInProgressRegistrationDTO toDto(WorkInProgressRegistration s);
 
     @Named("idSet")
@@ -66,6 +69,7 @@ public interface WorkInProgressRegistrationMapper extends EntityMapper<WorkInPro
     @Mapping(target = "removePurchaseOrder", ignore = true)
     @Mapping(target = "removeDeliveryNote", ignore = true)
     @Mapping(target = "removeJobSheet", ignore = true)
+    @Mapping(target = "removeBusinessDocument", ignore = true)
     WorkInProgressRegistration toEntity(WorkInProgressRegistrationDTO workInProgressRegistrationDTO);
 
     @Named("sequenceNumber")

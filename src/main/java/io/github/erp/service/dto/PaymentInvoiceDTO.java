@@ -17,6 +17,7 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -60,6 +61,8 @@ public class PaymentInvoiceDTO implements Serializable {
     private Set<DeliveryNoteDTO> deliveryNotes = new HashSet<>();
 
     private Set<JobSheetDTO> jobSheets = new HashSet<>();
+
+    private Set<BusinessDocumentDTO> businessDocuments = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -173,6 +176,14 @@ public class PaymentInvoiceDTO implements Serializable {
         this.jobSheets = jobSheets;
     }
 
+    public Set<BusinessDocumentDTO> getBusinessDocuments() {
+        return businessDocuments;
+    }
+
+    public void setBusinessDocuments(Set<BusinessDocumentDTO> businessDocuments) {
+        this.businessDocuments = businessDocuments;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -212,6 +223,7 @@ public class PaymentInvoiceDTO implements Serializable {
             ", biller=" + getBiller() +
             ", deliveryNotes=" + getDeliveryNotes() +
             ", jobSheets=" + getJobSheets() +
+            ", businessDocuments=" + getBusinessDocuments() +
             "}";
     }
 }

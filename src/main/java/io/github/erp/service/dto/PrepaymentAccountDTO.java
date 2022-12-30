@@ -17,6 +17,7 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -63,6 +64,8 @@ public class PrepaymentAccountDTO implements Serializable {
     private Set<UniversallyUniqueMappingDTO> generalParameters = new HashSet<>();
 
     private Set<PrepaymentMappingDTO> prepaymentParameters = new HashSet<>();
+
+    private Set<BusinessDocumentDTO> businessDocuments = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -184,6 +187,14 @@ public class PrepaymentAccountDTO implements Serializable {
         this.prepaymentParameters = prepaymentParameters;
     }
 
+    public Set<BusinessDocumentDTO> getBusinessDocuments() {
+        return businessDocuments;
+    }
+
+    public void setBusinessDocuments(Set<BusinessDocumentDTO> businessDocuments) {
+        this.businessDocuments = businessDocuments;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -224,6 +235,7 @@ public class PrepaymentAccountDTO implements Serializable {
             ", placeholders=" + getPlaceholders() +
             ", generalParameters=" + getGeneralParameters() +
             ", prepaymentParameters=" + getPrepaymentParameters() +
+            ", businessDocuments=" + getBusinessDocuments() +
             "}";
     }
 }

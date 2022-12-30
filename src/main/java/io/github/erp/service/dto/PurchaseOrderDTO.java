@@ -17,6 +17,7 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -58,6 +59,8 @@ public class PurchaseOrderDTO implements Serializable {
     private Set<DealerDTO> signatories = new HashSet<>();
 
     private DealerDTO vendor;
+
+    private Set<BusinessDocumentDTO> businessDocuments = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -163,6 +166,14 @@ public class PurchaseOrderDTO implements Serializable {
         this.vendor = vendor;
     }
 
+    public Set<BusinessDocumentDTO> getBusinessDocuments() {
+        return businessDocuments;
+    }
+
+    public void setBusinessDocuments(Set<BusinessDocumentDTO> businessDocuments) {
+        this.businessDocuments = businessDocuments;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -201,6 +212,7 @@ public class PurchaseOrderDTO implements Serializable {
             ", placeholders=" + getPlaceholders() +
             ", signatories=" + getSignatories() +
             ", vendor=" + getVendor() +
+            ", businessDocuments=" + getBusinessDocuments() +
             "}";
     }
 }

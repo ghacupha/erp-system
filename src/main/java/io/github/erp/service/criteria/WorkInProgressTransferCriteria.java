@@ -17,6 +17,7 @@ package io.github.erp.service.criteria;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -51,6 +52,8 @@ public class WorkInProgressTransferCriteria implements Serializable, Criteria {
 
     private LongFilter placeholderId;
 
+    private LongFilter businessDocumentId;
+
     private Boolean distinct;
 
     public WorkInProgressTransferCriteria() {}
@@ -61,6 +64,7 @@ public class WorkInProgressTransferCriteria implements Serializable, Criteria {
         this.targetAssetNumber = other.targetAssetNumber == null ? null : other.targetAssetNumber.copy();
         this.workInProgressRegistrationId = other.workInProgressRegistrationId == null ? null : other.workInProgressRegistrationId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.businessDocumentId = other.businessDocumentId == null ? null : other.businessDocumentId.copy();
         this.distinct = other.distinct;
     }
 
@@ -144,6 +148,21 @@ public class WorkInProgressTransferCriteria implements Serializable, Criteria {
         this.placeholderId = placeholderId;
     }
 
+    public LongFilter getBusinessDocumentId() {
+        return businessDocumentId;
+    }
+
+    public LongFilter businessDocumentId() {
+        if (businessDocumentId == null) {
+            businessDocumentId = new LongFilter();
+        }
+        return businessDocumentId;
+    }
+
+    public void setBusinessDocumentId(LongFilter businessDocumentId) {
+        this.businessDocumentId = businessDocumentId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -167,13 +186,14 @@ public class WorkInProgressTransferCriteria implements Serializable, Criteria {
             Objects.equals(targetAssetNumber, that.targetAssetNumber) &&
             Objects.equals(workInProgressRegistrationId, that.workInProgressRegistrationId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(businessDocumentId, that.businessDocumentId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, targetAssetNumber, workInProgressRegistrationId, placeholderId, distinct);
+        return Objects.hash(id, description, targetAssetNumber, workInProgressRegistrationId, placeholderId, businessDocumentId, distinct);
     }
 
     // prettier-ignore
@@ -185,6 +205,7 @@ public class WorkInProgressTransferCriteria implements Serializable, Criteria {
             (targetAssetNumber != null ? "targetAssetNumber=" + targetAssetNumber + ", " : "") +
             (workInProgressRegistrationId != null ? "workInProgressRegistrationId=" + workInProgressRegistrationId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (businessDocumentId != null ? "businessDocumentId=" + businessDocumentId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

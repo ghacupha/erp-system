@@ -17,6 +17,7 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -93,7 +94,10 @@ public class DeliveryNote implements Serializable {
     private Set<BusinessStamp> deliveryStamps = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "settlementCurrency", "placeholders", "signatories", "vendor" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "settlementCurrency", "placeholders", "signatories", "vendor", "businessDocuments" },
+        allowSetters = true
+    )
     private PurchaseOrder purchaseOrder;
 
     @ManyToOne(optional = false)
@@ -118,8 +122,32 @@ public class DeliveryNote implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "other_purchase_orders_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "settlementCurrency", "placeholders", "signatories", "vendor" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "settlementCurrency", "placeholders", "signatories", "vendor", "businessDocuments" },
+        allowSetters = true
+    )
     private Set<PurchaseOrder> otherPurchaseOrders = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_delivery_note__business_document",
+        joinColumns = @JoinColumn(name = "delivery_note_id"),
+        inverseJoinColumns = @JoinColumn(name = "business_document_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = {
+            "createdBy",
+            "lastModifiedBy",
+            "originatingDepartment",
+            "applicationMappings",
+            "placeholders",
+            "fileChecksumAlgorithm",
+            "securityClearance",
+        },
+        allowSetters = true
+    )
+    private Set<BusinessDocument> businessDocuments = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -342,6 +370,29 @@ public class DeliveryNote implements Serializable {
 
     public DeliveryNote removeOtherPurchaseOrders(PurchaseOrder purchaseOrder) {
         this.otherPurchaseOrders.remove(purchaseOrder);
+        return this;
+    }
+
+    public Set<BusinessDocument> getBusinessDocuments() {
+        return this.businessDocuments;
+    }
+
+    public void setBusinessDocuments(Set<BusinessDocument> businessDocuments) {
+        this.businessDocuments = businessDocuments;
+    }
+
+    public DeliveryNote businessDocuments(Set<BusinessDocument> businessDocuments) {
+        this.setBusinessDocuments(businessDocuments);
+        return this;
+    }
+
+    public DeliveryNote addBusinessDocument(BusinessDocument businessDocument) {
+        this.businessDocuments.add(businessDocument);
+        return this;
+    }
+
+    public DeliveryNote removeBusinessDocument(BusinessDocument businessDocument) {
+        this.businessDocuments.remove(businessDocument);
         return this;
     }
 

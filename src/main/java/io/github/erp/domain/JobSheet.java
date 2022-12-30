@@ -17,6 +17,7 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -108,6 +109,27 @@ public class JobSheet implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "containingPaymentLabel", "placeholders" }, allowSetters = true)
     private Set<PaymentLabel> paymentLabels = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_job_sheet__business_document",
+        joinColumns = @JoinColumn(name = "job_sheet_id"),
+        inverseJoinColumns = @JoinColumn(name = "business_document_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = {
+            "createdBy",
+            "lastModifiedBy",
+            "originatingDepartment",
+            "applicationMappings",
+            "placeholders",
+            "fileChecksumAlgorithm",
+            "securityClearance",
+        },
+        allowSetters = true
+    )
+    private Set<BusinessDocument> businessDocuments = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -291,6 +313,29 @@ public class JobSheet implements Serializable {
 
     public JobSheet removePaymentLabel(PaymentLabel paymentLabel) {
         this.paymentLabels.remove(paymentLabel);
+        return this;
+    }
+
+    public Set<BusinessDocument> getBusinessDocuments() {
+        return this.businessDocuments;
+    }
+
+    public void setBusinessDocuments(Set<BusinessDocument> businessDocuments) {
+        this.businessDocuments = businessDocuments;
+    }
+
+    public JobSheet businessDocuments(Set<BusinessDocument> businessDocuments) {
+        this.setBusinessDocuments(businessDocuments);
+        return this;
+    }
+
+    public JobSheet addBusinessDocument(BusinessDocument businessDocument) {
+        this.businessDocuments.add(businessDocument);
+        return this;
+    }
+
+    public JobSheet removeBusinessDocument(BusinessDocument businessDocument) {
+        this.businessDocuments.remove(businessDocument);
         return this;
     }
 

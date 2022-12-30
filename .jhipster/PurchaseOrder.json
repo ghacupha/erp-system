@@ -72,6 +72,14 @@
       "relationshipName": "vendor",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"]
+    },
+    {
+      "relationshipName": "businessDocument",
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "documentTitle",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "purchaseOrder"
     }
   ],
   "service": "serviceImpl"

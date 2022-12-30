@@ -17,6 +17,7 @@ package io.github.erp.service.criteria;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -74,6 +75,8 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
 
     private LongFilter settlementCurrencyId;
 
+    private LongFilter businessDocumentId;
+
     private Boolean distinct;
 
     public AssetRegistrationCriteria() {}
@@ -95,6 +98,7 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
         this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
         this.designatedUsersId = other.designatedUsersId == null ? null : other.designatedUsersId.copy();
         this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
+        this.businessDocumentId = other.businessDocumentId == null ? null : other.businessDocumentId.copy();
         this.distinct = other.distinct;
     }
 
@@ -343,6 +347,21 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
         this.settlementCurrencyId = settlementCurrencyId;
     }
 
+    public LongFilter getBusinessDocumentId() {
+        return businessDocumentId;
+    }
+
+    public LongFilter businessDocumentId() {
+        if (businessDocumentId == null) {
+            businessDocumentId = new LongFilter();
+        }
+        return businessDocumentId;
+    }
+
+    public void setBusinessDocumentId(LongFilter businessDocumentId) {
+        this.businessDocumentId = businessDocumentId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -377,6 +396,7 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             Objects.equals(dealerId, that.dealerId) &&
             Objects.equals(designatedUsersId, that.designatedUsersId) &&
             Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
+            Objects.equals(businessDocumentId, that.businessDocumentId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -400,6 +420,7 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             dealerId,
             designatedUsersId,
             settlementCurrencyId,
+            businessDocumentId,
             distinct
         );
     }
@@ -424,6 +445,7 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             (designatedUsersId != null ? "designatedUsersId=" + designatedUsersId + ", " : "") +
             (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
+            (businessDocumentId != null ? "businessDocumentId=" + businessDocumentId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

@@ -17,6 +17,7 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -64,6 +65,8 @@ public class WorkInProgressRegistrationDTO implements Serializable {
     private SettlementCurrencyDTO settlementCurrency;
 
     private WorkProjectRegisterDTO workProjectRegister;
+
+    private Set<BusinessDocumentDTO> businessDocuments = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -201,6 +204,14 @@ public class WorkInProgressRegistrationDTO implements Serializable {
         this.workProjectRegister = workProjectRegister;
     }
 
+    public Set<BusinessDocumentDTO> getBusinessDocuments() {
+        return businessDocuments;
+    }
+
+    public void setBusinessDocuments(Set<BusinessDocumentDTO> businessDocuments) {
+        this.businessDocuments = businessDocuments;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -242,6 +253,7 @@ public class WorkInProgressRegistrationDTO implements Serializable {
             ", workInProgressGroup=" + getWorkInProgressGroup() +
             ", settlementCurrency=" + getSettlementCurrency() +
             ", workProjectRegister=" + getWorkProjectRegister() +
+            ", businessDocuments=" + getBusinessDocuments() +
             "}";
     }
 }

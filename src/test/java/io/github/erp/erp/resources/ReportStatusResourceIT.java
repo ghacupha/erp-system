@@ -27,7 +27,7 @@ import io.github.erp.service.ReportStatusService;
 import io.github.erp.service.dto.ReportStatusDTO;
 import io.github.erp.service.mapper.ReportStatusMapper;
 //import io.github.erp.web.rest.ReportStatusResource;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

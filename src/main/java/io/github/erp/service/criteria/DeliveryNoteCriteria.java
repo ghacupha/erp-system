@@ -17,6 +17,7 @@ package io.github.erp.service.criteria;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -68,6 +69,8 @@ public class DeliveryNoteCriteria implements Serializable, Criteria {
 
     private LongFilter otherPurchaseOrdersId;
 
+    private LongFilter businessDocumentId;
+
     private Boolean distinct;
 
     public DeliveryNoteCriteria() {}
@@ -86,6 +89,7 @@ public class DeliveryNoteCriteria implements Serializable, Criteria {
         this.supplierId = other.supplierId == null ? null : other.supplierId.copy();
         this.signatoriesId = other.signatoriesId == null ? null : other.signatoriesId.copy();
         this.otherPurchaseOrdersId = other.otherPurchaseOrdersId == null ? null : other.otherPurchaseOrdersId.copy();
+        this.businessDocumentId = other.businessDocumentId == null ? null : other.businessDocumentId.copy();
         this.distinct = other.distinct;
     }
 
@@ -289,6 +293,21 @@ public class DeliveryNoteCriteria implements Serializable, Criteria {
         this.otherPurchaseOrdersId = otherPurchaseOrdersId;
     }
 
+    public LongFilter getBusinessDocumentId() {
+        return businessDocumentId;
+    }
+
+    public LongFilter businessDocumentId() {
+        if (businessDocumentId == null) {
+            businessDocumentId = new LongFilter();
+        }
+        return businessDocumentId;
+    }
+
+    public void setBusinessDocumentId(LongFilter businessDocumentId) {
+        this.businessDocumentId = businessDocumentId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -320,6 +339,7 @@ public class DeliveryNoteCriteria implements Serializable, Criteria {
             Objects.equals(supplierId, that.supplierId) &&
             Objects.equals(signatoriesId, that.signatoriesId) &&
             Objects.equals(otherPurchaseOrdersId, that.otherPurchaseOrdersId) &&
+            Objects.equals(businessDocumentId, that.businessDocumentId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -340,6 +360,7 @@ public class DeliveryNoteCriteria implements Serializable, Criteria {
             supplierId,
             signatoriesId,
             otherPurchaseOrdersId,
+            businessDocumentId,
             distinct
         );
     }
@@ -361,6 +382,7 @@ public class DeliveryNoteCriteria implements Serializable, Criteria {
             (supplierId != null ? "supplierId=" + supplierId + ", " : "") +
             (signatoriesId != null ? "signatoriesId=" + signatoriesId + ", " : "") +
             (otherPurchaseOrdersId != null ? "otherPurchaseOrdersId=" + otherPurchaseOrdersId + ", " : "") +
+            (businessDocumentId != null ? "businessDocumentId=" + businessDocumentId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

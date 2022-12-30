@@ -17,37 +17,15 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import static io.github.erp.web.rest.utils.TestUtil.sameNumber;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.Dealer;
-import io.github.erp.domain.DeliveryNote;
-import io.github.erp.domain.JobSheet;
-import io.github.erp.domain.PaymentInvoice;
-import io.github.erp.domain.Placeholder;
-import io.github.erp.domain.PurchaseOrder;
-import io.github.erp.domain.ServiceOutlet;
-import io.github.erp.domain.Settlement;
-import io.github.erp.domain.WorkInProgressRegistration;
+import io.github.erp.domain.*;
 import io.github.erp.repository.WorkInProgressRegistrationRepository;
 import io.github.erp.repository.search.WorkInProgressRegistrationSearchRepository;
 import io.github.erp.service.WorkInProgressRegistrationService;
 import io.github.erp.service.dto.WorkInProgressRegistrationDTO;
 import io.github.erp.service.mapper.WorkInProgressRegistrationMapper;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
-
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,6 +40,21 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
+
+import javax.persistence.EntityManager;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static io.github.erp.web.rest.TestUtil.sameNumber;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link WorkInProgressRegistrationResource} REST controller.
@@ -135,36 +128,6 @@ public class WorkInProgressRegistrationResourceIT {
             .instalmentAmount(DEFAULT_INSTALMENT_AMOUNT)
             .comments(DEFAULT_COMMENTS)
             .commentsContentType(DEFAULT_COMMENTS_CONTENT_TYPE);
-        // Add required entity
-        ServiceOutlet serviceOutlet;
-        if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
-            serviceOutlet = ServiceOutletResourceIT.createEntity(em);
-            em.persist(serviceOutlet);
-            em.flush();
-        } else {
-            serviceOutlet = TestUtil.findAll(em, ServiceOutlet.class).get(0);
-        }
-        workInProgressRegistration.getServiceOutlets().add(serviceOutlet);
-        // Add required entity
-        Settlement settlement;
-        if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
-            settlement = SettlementResourceIT.createEntity(em);
-            em.persist(settlement);
-            em.flush();
-        } else {
-            settlement = TestUtil.findAll(em, Settlement.class).get(0);
-        }
-        workInProgressRegistration.getSettlements().add(settlement);
-        // Add required entity
-        Dealer dealer;
-        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            dealer = DealerResourceIT.createEntity(em);
-            em.persist(dealer);
-            em.flush();
-        } else {
-            dealer = TestUtil.findAll(em, Dealer.class).get(0);
-        }
-        workInProgressRegistration.setDealer(dealer);
         return workInProgressRegistration;
     }
 
@@ -181,36 +144,6 @@ public class WorkInProgressRegistrationResourceIT {
             .instalmentAmount(UPDATED_INSTALMENT_AMOUNT)
             .comments(UPDATED_COMMENTS)
             .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE);
-        // Add required entity
-        ServiceOutlet serviceOutlet;
-        if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
-            serviceOutlet = ServiceOutletResourceIT.createUpdatedEntity(em);
-            em.persist(serviceOutlet);
-            em.flush();
-        } else {
-            serviceOutlet = TestUtil.findAll(em, ServiceOutlet.class).get(0);
-        }
-        workInProgressRegistration.getServiceOutlets().add(serviceOutlet);
-        // Add required entity
-        Settlement settlement;
-        if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
-            settlement = SettlementResourceIT.createUpdatedEntity(em);
-            em.persist(settlement);
-            em.flush();
-        } else {
-            settlement = TestUtil.findAll(em, Settlement.class).get(0);
-        }
-        workInProgressRegistration.getSettlements().add(settlement);
-        // Add required entity
-        Dealer dealer;
-        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            dealer = DealerResourceIT.createUpdatedEntity(em);
-            em.persist(dealer);
-            em.flush();
-        } else {
-            dealer = TestUtil.findAll(em, Dealer.class).get(0);
-        }
-        workInProgressRegistration.setDealer(dealer);
         return workInProgressRegistration;
     }
 
@@ -841,6 +774,110 @@ public class WorkInProgressRegistrationResourceIT {
         defaultWorkInProgressRegistrationShouldNotBeFound("dealerId.equals=" + (dealerId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByWorkInProgressGroupIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        WorkInProgressRegistration workInProgressGroup;
+        if (TestUtil.findAll(em, WorkInProgressRegistration.class).isEmpty()) {
+            workInProgressGroup = WorkInProgressRegistrationResourceIT.createEntity(em);
+            em.persist(workInProgressGroup);
+            em.flush();
+        } else {
+            workInProgressGroup = TestUtil.findAll(em, WorkInProgressRegistration.class).get(0);
+        }
+        em.persist(workInProgressGroup);
+        em.flush();
+        workInProgressRegistration.setWorkInProgressGroup(workInProgressGroup);
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        Long workInProgressGroupId = workInProgressGroup.getId();
+
+        // Get all the workInProgressRegistrationList where workInProgressGroup equals to workInProgressGroupId
+        defaultWorkInProgressRegistrationShouldBeFound("workInProgressGroupId.equals=" + workInProgressGroupId);
+
+        // Get all the workInProgressRegistrationList where workInProgressGroup equals to (workInProgressGroupId + 1)
+        defaultWorkInProgressRegistrationShouldNotBeFound("workInProgressGroupId.equals=" + (workInProgressGroupId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsBySettlementCurrencyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        SettlementCurrency settlementCurrency;
+        if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
+            settlementCurrency = SettlementCurrencyResourceIT.createEntity(em);
+            em.persist(settlementCurrency);
+            em.flush();
+        } else {
+            settlementCurrency = TestUtil.findAll(em, SettlementCurrency.class).get(0);
+        }
+        em.persist(settlementCurrency);
+        em.flush();
+        workInProgressRegistration.setSettlementCurrency(settlementCurrency);
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        Long settlementCurrencyId = settlementCurrency.getId();
+
+        // Get all the workInProgressRegistrationList where settlementCurrency equals to settlementCurrencyId
+        defaultWorkInProgressRegistrationShouldBeFound("settlementCurrencyId.equals=" + settlementCurrencyId);
+
+        // Get all the workInProgressRegistrationList where settlementCurrency equals to (settlementCurrencyId + 1)
+        defaultWorkInProgressRegistrationShouldNotBeFound("settlementCurrencyId.equals=" + (settlementCurrencyId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByWorkProjectRegisterIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        WorkProjectRegister workProjectRegister;
+        if (TestUtil.findAll(em, WorkProjectRegister.class).isEmpty()) {
+            workProjectRegister = WorkProjectRegisterResourceIT.createEntity(em);
+            em.persist(workProjectRegister);
+            em.flush();
+        } else {
+            workProjectRegister = TestUtil.findAll(em, WorkProjectRegister.class).get(0);
+        }
+        em.persist(workProjectRegister);
+        em.flush();
+        workInProgressRegistration.setWorkProjectRegister(workProjectRegister);
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        Long workProjectRegisterId = workProjectRegister.getId();
+
+        // Get all the workInProgressRegistrationList where workProjectRegister equals to workProjectRegisterId
+        defaultWorkInProgressRegistrationShouldBeFound("workProjectRegisterId.equals=" + workProjectRegisterId);
+
+        // Get all the workInProgressRegistrationList where workProjectRegister equals to (workProjectRegisterId + 1)
+        defaultWorkInProgressRegistrationShouldNotBeFound("workProjectRegisterId.equals=" + (workProjectRegisterId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByBusinessDocumentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        BusinessDocument businessDocument;
+        if (TestUtil.findAll(em, BusinessDocument.class).isEmpty()) {
+            businessDocument = BusinessDocumentResourceIT.createEntity(em);
+            em.persist(businessDocument);
+            em.flush();
+        } else {
+            businessDocument = TestUtil.findAll(em, BusinessDocument.class).get(0);
+        }
+        em.persist(businessDocument);
+        em.flush();
+        workInProgressRegistration.addBusinessDocument(businessDocument);
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        Long businessDocumentId = businessDocument.getId();
+
+        // Get all the workInProgressRegistrationList where businessDocument equals to businessDocumentId
+        defaultWorkInProgressRegistrationShouldBeFound("businessDocumentId.equals=" + businessDocumentId);
+
+        // Get all the workInProgressRegistrationList where businessDocument equals to (businessDocumentId + 1)
+        defaultWorkInProgressRegistrationShouldNotBeFound("businessDocumentId.equals=" + (businessDocumentId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -930,7 +967,7 @@ public class WorkInProgressRegistrationResourceIT {
         );
         assertThat(testWorkInProgressRegistration.getSequenceNumber()).isEqualTo(UPDATED_SEQUENCE_NUMBER);
         assertThat(testWorkInProgressRegistration.getParticulars()).isEqualTo(UPDATED_PARTICULARS);
-        assertThat(testWorkInProgressRegistration.getInstalmentAmount()).isEqualByComparingTo(UPDATED_INSTALMENT_AMOUNT);
+        assertThat(testWorkInProgressRegistration.getInstalmentAmount()).isEqualTo(UPDATED_INSTALMENT_AMOUNT);
         assertThat(testWorkInProgressRegistration.getComments()).isEqualTo(UPDATED_COMMENTS);
         assertThat(testWorkInProgressRegistration.getCommentsContentType()).isEqualTo(UPDATED_COMMENTS_CONTENT_TYPE);
 
