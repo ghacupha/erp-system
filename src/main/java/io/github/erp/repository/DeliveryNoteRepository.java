@@ -17,6 +17,7 @@ package io.github.erp.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.DeliveryNote;
 import java.util.List;
 import java.util.Optional;
@@ -32,18 +33,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DeliveryNoteRepository extends JpaRepository<DeliveryNote, Long>, JpaSpecificationExecutor<DeliveryNote> {
     @Query(
-        value = "select distinct deliveryNote from DeliveryNote deliveryNote left join fetch deliveryNote.placeholders left join fetch deliveryNote.deliveryStamps left join fetch deliveryNote.signatories left join fetch deliveryNote.otherPurchaseOrders",
+        value = "select distinct deliveryNote from DeliveryNote deliveryNote left join fetch deliveryNote.placeholders left join fetch deliveryNote.deliveryStamps left join fetch deliveryNote.signatories left join fetch deliveryNote.otherPurchaseOrders left join fetch deliveryNote.businessDocuments",
         countQuery = "select count(distinct deliveryNote) from DeliveryNote deliveryNote"
     )
     Page<DeliveryNote> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct deliveryNote from DeliveryNote deliveryNote left join fetch deliveryNote.placeholders left join fetch deliveryNote.deliveryStamps left join fetch deliveryNote.signatories left join fetch deliveryNote.otherPurchaseOrders"
+        "select distinct deliveryNote from DeliveryNote deliveryNote left join fetch deliveryNote.placeholders left join fetch deliveryNote.deliveryStamps left join fetch deliveryNote.signatories left join fetch deliveryNote.otherPurchaseOrders left join fetch deliveryNote.businessDocuments"
     )
     List<DeliveryNote> findAllWithEagerRelationships();
 
     @Query(
-        "select deliveryNote from DeliveryNote deliveryNote left join fetch deliveryNote.placeholders left join fetch deliveryNote.deliveryStamps left join fetch deliveryNote.signatories left join fetch deliveryNote.otherPurchaseOrders where deliveryNote.id =:id"
+        "select deliveryNote from DeliveryNote deliveryNote left join fetch deliveryNote.placeholders left join fetch deliveryNote.deliveryStamps left join fetch deliveryNote.signatories left join fetch deliveryNote.otherPurchaseOrders left join fetch deliveryNote.businessDocuments where deliveryNote.id =:id"
     )
     Optional<DeliveryNote> findOneWithEagerRelationships(@Param("id") Long id);
 }

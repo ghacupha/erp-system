@@ -17,35 +17,16 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import static io.github.erp.web.rest.utils.TestUtil.sameNumber;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.AgencyNotice;
-import io.github.erp.domain.Dealer;
-import io.github.erp.domain.Placeholder;
-import io.github.erp.domain.SettlementCurrency;
+import io.github.erp.domain.*;
 import io.github.erp.domain.enumeration.AgencyStatusType;
 import io.github.erp.repository.AgencyNoticeRepository;
 import io.github.erp.repository.search.AgencyNoticeSearchRepository;
 import io.github.erp.service.AgencyNoticeService;
 import io.github.erp.service.dto.AgencyNoticeDTO;
 import io.github.erp.service.mapper.AgencyNoticeMapper;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
-
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -61,14 +42,31 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
+import javax.persistence.EntityManager;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static io.github.erp.web.rest.TestUtil.sameNumber;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 /**
- * Integration tests for the AgencyNoticeResource REST controller.
+ * Integration tests for the {@link AgencyNoticeResource} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"TAX_MODULE_USER"})
-class AgencyNoticeResourceIT {
+public class AgencyNoticeResourceIT {
 
     private static final String DEFAULT_REFERENCE_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_REFERENCE_NUMBER = "BBBBBBBBBB";
@@ -790,6 +788,32 @@ class AgencyNoticeResourceIT {
 
         // Get all the agencyNoticeList where placeholder equals to (placeholderId + 1)
         defaultAgencyNoticeShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllAgencyNoticesByBusinessDocumentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        agencyNoticeRepository.saveAndFlush(agencyNotice);
+        BusinessDocument businessDocument;
+        if (TestUtil.findAll(em, BusinessDocument.class).isEmpty()) {
+            businessDocument = BusinessDocumentResourceIT.createEntity(em);
+            em.persist(businessDocument);
+            em.flush();
+        } else {
+            businessDocument = TestUtil.findAll(em, BusinessDocument.class).get(0);
+        }
+        em.persist(businessDocument);
+        em.flush();
+        agencyNotice.addBusinessDocument(businessDocument);
+        agencyNoticeRepository.saveAndFlush(agencyNotice);
+        Long businessDocumentId = businessDocument.getId();
+
+        // Get all the agencyNoticeList where businessDocument equals to businessDocumentId
+        defaultAgencyNoticeShouldBeFound("businessDocumentId.equals=" + businessDocumentId);
+
+        // Get all the agencyNoticeList where businessDocument equals to (businessDocumentId + 1)
+        defaultAgencyNoticeShouldNotBeFound("businessDocumentId.equals=" + (businessDocumentId + 1));
     }
 
     /**

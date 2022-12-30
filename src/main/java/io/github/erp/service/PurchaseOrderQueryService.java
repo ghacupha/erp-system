@@ -17,6 +17,7 @@ package io.github.erp.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.*; // for static metamodels
 import io.github.erp.domain.PurchaseOrder;
 import io.github.erp.repository.PurchaseOrderRepository;
@@ -171,6 +172,15 @@ public class PurchaseOrderQueryService extends QueryService<PurchaseOrder> {
                 specification =
                     specification.and(
                         buildSpecification(criteria.getVendorId(), root -> root.join(PurchaseOrder_.vendor, JoinType.LEFT).get(Dealer_.id))
+                    );
+            }
+            if (criteria.getBusinessDocumentId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getBusinessDocumentId(),
+                            root -> root.join(PurchaseOrder_.businessDocuments, JoinType.LEFT).get(BusinessDocument_.id)
+                        )
                     );
             }
         }

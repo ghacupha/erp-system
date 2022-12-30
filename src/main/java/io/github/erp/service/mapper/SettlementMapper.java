@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.Settlement;
 import io.github.erp.service.dto.SettlementDTO;
 import java.util.Set;
@@ -34,6 +35,7 @@ import org.mapstruct.*;
         PaymentCategoryMapper.class,
         DealerMapper.class,
         PaymentInvoiceMapper.class,
+        BusinessDocumentMapper.class,
     }
 )
 public interface SettlementMapper extends EntityMapper<SettlementDTO, Settlement> {
@@ -45,6 +47,7 @@ public interface SettlementMapper extends EntityMapper<SettlementDTO, Settlement
     @Mapping(target = "biller", source = "biller", qualifiedByName = "dealerName")
     @Mapping(target = "paymentInvoices", source = "paymentInvoices", qualifiedByName = "invoiceNumberSet")
     @Mapping(target = "signatories", source = "signatories", qualifiedByName = "dealerNameSet")
+    @Mapping(target = "businessDocuments", source = "businessDocuments", qualifiedByName = "documentTitleSet")
     SettlementDTO toDto(Settlement s);
 
     @Named("id")
@@ -56,6 +59,7 @@ public interface SettlementMapper extends EntityMapper<SettlementDTO, Settlement
     @Mapping(target = "removePaymentLabel", ignore = true)
     @Mapping(target = "removePaymentInvoice", ignore = true)
     @Mapping(target = "removeSignatories", ignore = true)
+    @Mapping(target = "removeBusinessDocument", ignore = true)
     Settlement toEntity(SettlementDTO settlementDTO);
 
     @Named("paymentNumberSet")

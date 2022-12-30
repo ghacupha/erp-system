@@ -17,6 +17,7 @@ package io.github.erp.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.*; // for static metamodels
 import io.github.erp.domain.JobSheet;
 import io.github.erp.repository.JobSheetRepository;
@@ -172,6 +173,15 @@ public class JobSheetQueryService extends QueryService<JobSheet> {
                         buildSpecification(
                             criteria.getPaymentLabelId(),
                             root -> root.join(JobSheet_.paymentLabels, JoinType.LEFT).get(PaymentLabel_.id)
+                        )
+                    );
+            }
+            if (criteria.getBusinessDocumentId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getBusinessDocumentId(),
+                            root -> root.join(JobSheet_.businessDocuments, JoinType.LEFT).get(BusinessDocument_.id)
                         )
                     );
             }

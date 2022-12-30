@@ -17,6 +17,7 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -120,6 +121,7 @@ public class Settlement implements Serializable {
             "biller",
             "paymentInvoices",
             "signatories",
+            "businessDocuments",
         },
         allowSetters = true
     )
@@ -138,7 +140,16 @@ public class Settlement implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "purchaseOrders", "placeholders", "paymentLabels", "settlementCurrency", "biller", "deliveryNotes", "jobSheets" },
+        value = {
+            "purchaseOrders",
+            "placeholders",
+            "paymentLabels",
+            "settlementCurrency",
+            "biller",
+            "deliveryNotes",
+            "jobSheets",
+            "businessDocuments",
+        },
         allowSetters = true
     )
     private Set<PaymentInvoice> paymentInvoices = new HashSet<>();
@@ -152,6 +163,27 @@ public class Settlement implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "placeholders" }, allowSetters = true)
     private Set<Dealer> signatories = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_settlement__business_document",
+        joinColumns = @JoinColumn(name = "settlement_id"),
+        inverseJoinColumns = @JoinColumn(name = "business_document_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = {
+            "createdBy",
+            "lastModifiedBy",
+            "originatingDepartment",
+            "applicationMappings",
+            "placeholders",
+            "fileChecksumAlgorithm",
+            "securityClearance",
+        },
+        allowSetters = true
+    )
+    private Set<BusinessDocument> businessDocuments = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -439,6 +471,29 @@ public class Settlement implements Serializable {
 
     public Settlement removeSignatories(Dealer dealer) {
         this.signatories.remove(dealer);
+        return this;
+    }
+
+    public Set<BusinessDocument> getBusinessDocuments() {
+        return this.businessDocuments;
+    }
+
+    public void setBusinessDocuments(Set<BusinessDocument> businessDocuments) {
+        this.businessDocuments = businessDocuments;
+    }
+
+    public Settlement businessDocuments(Set<BusinessDocument> businessDocuments) {
+        this.setBusinessDocuments(businessDocuments);
+        return this;
+    }
+
+    public Settlement addBusinessDocument(BusinessDocument businessDocument) {
+        this.businessDocuments.add(businessDocument);
+        return this;
+    }
+
+    public Settlement removeBusinessDocument(BusinessDocument businessDocument) {
+        this.businessDocuments.remove(businessDocument);
         return this;
     }
 

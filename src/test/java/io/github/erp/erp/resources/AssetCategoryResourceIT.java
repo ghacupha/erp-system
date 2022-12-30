@@ -26,7 +26,7 @@ import io.github.erp.repository.search.AssetCategorySearchRepository;
 import io.github.erp.service.AssetCategoryService;
 import io.github.erp.service.dto.AssetCategoryDTO;
 import io.github.erp.service.mapper.AssetCategoryMapper;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -84,6 +84,14 @@
       "otherEntityField": "parameterKey",
       "ownerSide": true,
       "otherEntityRelationshipName": "prepaymentAccount"
+    },
+    {
+      "relationshipName": "businessDocument",
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "documentTitle",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "prepaymentAccount"
     }
   ],
   "service": "serviceImpl",

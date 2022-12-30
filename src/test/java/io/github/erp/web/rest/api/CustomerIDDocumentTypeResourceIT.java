@@ -25,7 +25,7 @@ import io.github.erp.repository.search.CustomerIDDocumentTypeSearchRepository;
 import io.github.erp.service.CustomerIDDocumentTypeService;
 import io.github.erp.service.dto.CustomerIDDocumentTypeDTO;
 import io.github.erp.service.mapper.CustomerIDDocumentTypeMapper;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

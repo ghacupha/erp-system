@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.JobSheet;
 import io.github.erp.service.dto.JobSheetDTO;
 import java.util.Set;
@@ -27,7 +28,9 @@ import org.mapstruct.*;
  */
 @Mapper(
     componentModel = "spring",
-    uses = { DealerMapper.class, BusinessStampMapper.class, PlaceholderMapper.class, PaymentLabelMapper.class }
+    uses = {
+        DealerMapper.class, BusinessStampMapper.class, PlaceholderMapper.class, PaymentLabelMapper.class, BusinessDocumentMapper.class,
+    }
 )
 public interface JobSheetMapper extends EntityMapper<JobSheetDTO, JobSheet> {
     @Mapping(target = "biller", source = "biller", qualifiedByName = "dealerName")
@@ -36,12 +39,14 @@ public interface JobSheetMapper extends EntityMapper<JobSheetDTO, JobSheet> {
     @Mapping(target = "businessStamps", source = "businessStamps", qualifiedByName = "detailsSet")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     @Mapping(target = "paymentLabels", source = "paymentLabels", qualifiedByName = "descriptionSet")
+    @Mapping(target = "businessDocuments", source = "businessDocuments", qualifiedByName = "documentTitleSet")
     JobSheetDTO toDto(JobSheet s);
 
     @Mapping(target = "removeSignatories", ignore = true)
     @Mapping(target = "removeBusinessStamps", ignore = true)
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removePaymentLabel", ignore = true)
+    @Mapping(target = "removeBusinessDocument", ignore = true)
     JobSheet toEntity(JobSheetDTO jobSheetDTO);
 
     @Named("serialNumberSet")

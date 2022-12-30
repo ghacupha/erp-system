@@ -27,7 +27,7 @@ import io.github.erp.repository.search.SystemContentTypeSearchRepository;
 import io.github.erp.service.SystemContentTypeService;
 import io.github.erp.service.dto.SystemContentTypeDTO;
 import io.github.erp.service.mapper.SystemContentTypeMapper;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

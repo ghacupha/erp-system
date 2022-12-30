@@ -17,6 +17,7 @@ package io.github.erp.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.*; // for static metamodels
 import io.github.erp.domain.PaymentInvoice;
 import io.github.erp.repository.PaymentInvoiceRepository;
@@ -188,6 +189,15 @@ public class PaymentInvoiceQueryService extends QueryService<PaymentInvoice> {
                         buildSpecification(
                             criteria.getJobSheetId(),
                             root -> root.join(PaymentInvoice_.jobSheets, JoinType.LEFT).get(JobSheet_.id)
+                        )
+                    );
+            }
+            if (criteria.getBusinessDocumentId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getBusinessDocumentId(),
+                            root -> root.join(PaymentInvoice_.businessDocuments, JoinType.LEFT).get(BusinessDocument_.id)
                         )
                     );
             }

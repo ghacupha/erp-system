@@ -118,6 +118,14 @@
       "otherEntityName": "settlementCurrency",
       "relationshipType": "many-to-one",
       "otherEntityField": "iso4217CurrencyCode"
+    },
+    {
+      "relationshipName": "businessDocument",
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "documentTitle",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "assetRegistration"
     }
   ],
   "service": "serviceImpl"

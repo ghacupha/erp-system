@@ -17,6 +17,7 @@ package io.github.erp.service.criteria;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -62,6 +63,8 @@ public class JobSheetCriteria implements Serializable, Criteria {
 
     private LongFilter paymentLabelId;
 
+    private LongFilter businessDocumentId;
+
     private Boolean distinct;
 
     public JobSheetCriteria() {}
@@ -77,6 +80,7 @@ public class JobSheetCriteria implements Serializable, Criteria {
         this.businessStampsId = other.businessStampsId == null ? null : other.businessStampsId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
+        this.businessDocumentId = other.businessDocumentId == null ? null : other.businessDocumentId.copy();
         this.distinct = other.distinct;
     }
 
@@ -235,6 +239,21 @@ public class JobSheetCriteria implements Serializable, Criteria {
         this.paymentLabelId = paymentLabelId;
     }
 
+    public LongFilter getBusinessDocumentId() {
+        return businessDocumentId;
+    }
+
+    public LongFilter businessDocumentId() {
+        if (businessDocumentId == null) {
+            businessDocumentId = new LongFilter();
+        }
+        return businessDocumentId;
+    }
+
+    public void setBusinessDocumentId(LongFilter businessDocumentId) {
+        this.businessDocumentId = businessDocumentId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -263,6 +282,7 @@ public class JobSheetCriteria implements Serializable, Criteria {
             Objects.equals(businessStampsId, that.businessStampsId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
+            Objects.equals(businessDocumentId, that.businessDocumentId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -280,6 +300,7 @@ public class JobSheetCriteria implements Serializable, Criteria {
             businessStampsId,
             placeholderId,
             paymentLabelId,
+            businessDocumentId,
             distinct
         );
     }
@@ -298,6 +319,7 @@ public class JobSheetCriteria implements Serializable, Criteria {
             (businessStampsId != null ? "businessStampsId=" + businessStampsId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
+            (businessDocumentId != null ? "businessDocumentId=" + businessDocumentId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

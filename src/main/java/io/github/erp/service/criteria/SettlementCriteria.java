@@ -17,6 +17,7 @@ package io.github.erp.service.criteria;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -75,6 +76,8 @@ public class SettlementCriteria implements Serializable, Criteria {
 
     private LongFilter signatoriesId;
 
+    private LongFilter businessDocumentId;
+
     private Boolean distinct;
 
     public SettlementCriteria() {}
@@ -96,6 +99,7 @@ public class SettlementCriteria implements Serializable, Criteria {
         this.billerId = other.billerId == null ? null : other.billerId.copy();
         this.paymentInvoiceId = other.paymentInvoiceId == null ? null : other.paymentInvoiceId.copy();
         this.signatoriesId = other.signatoriesId == null ? null : other.signatoriesId.copy();
+        this.businessDocumentId = other.businessDocumentId == null ? null : other.businessDocumentId.copy();
         this.distinct = other.distinct;
     }
 
@@ -344,6 +348,21 @@ public class SettlementCriteria implements Serializable, Criteria {
         this.signatoriesId = signatoriesId;
     }
 
+    public LongFilter getBusinessDocumentId() {
+        return businessDocumentId;
+    }
+
+    public LongFilter businessDocumentId() {
+        if (businessDocumentId == null) {
+            businessDocumentId = new LongFilter();
+        }
+        return businessDocumentId;
+    }
+
+    public void setBusinessDocumentId(LongFilter businessDocumentId) {
+        this.businessDocumentId = businessDocumentId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -378,6 +397,7 @@ public class SettlementCriteria implements Serializable, Criteria {
             Objects.equals(billerId, that.billerId) &&
             Objects.equals(paymentInvoiceId, that.paymentInvoiceId) &&
             Objects.equals(signatoriesId, that.signatoriesId) &&
+            Objects.equals(businessDocumentId, that.businessDocumentId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -401,6 +421,7 @@ public class SettlementCriteria implements Serializable, Criteria {
             billerId,
             paymentInvoiceId,
             signatoriesId,
+            businessDocumentId,
             distinct
         );
     }
@@ -425,6 +446,7 @@ public class SettlementCriteria implements Serializable, Criteria {
             (billerId != null ? "billerId=" + billerId + ", " : "") +
             (paymentInvoiceId != null ? "paymentInvoiceId=" + paymentInvoiceId + ", " : "") +
             (signatoriesId != null ? "signatoriesId=" + signatoriesId + ", " : "") +
+            (businessDocumentId != null ? "businessDocumentId=" + businessDocumentId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

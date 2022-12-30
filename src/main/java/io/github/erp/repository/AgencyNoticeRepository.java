@@ -17,6 +17,7 @@ package io.github.erp.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.AgencyNotice;
 import java.util.List;
 import java.util.Optional;
@@ -32,18 +33,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AgencyNoticeRepository extends JpaRepository<AgencyNotice, Long>, JpaSpecificationExecutor<AgencyNotice> {
     @Query(
-        value = "select distinct agencyNotice from AgencyNotice agencyNotice left join fetch agencyNotice.correspondents left join fetch agencyNotice.placeholders",
+        value = "select distinct agencyNotice from AgencyNotice agencyNotice left join fetch agencyNotice.correspondents left join fetch agencyNotice.placeholders left join fetch agencyNotice.businessDocuments",
         countQuery = "select count(distinct agencyNotice) from AgencyNotice agencyNotice"
     )
     Page<AgencyNotice> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct agencyNotice from AgencyNotice agencyNotice left join fetch agencyNotice.correspondents left join fetch agencyNotice.placeholders"
+        "select distinct agencyNotice from AgencyNotice agencyNotice left join fetch agencyNotice.correspondents left join fetch agencyNotice.placeholders left join fetch agencyNotice.businessDocuments"
     )
     List<AgencyNotice> findAllWithEagerRelationships();
 
     @Query(
-        "select agencyNotice from AgencyNotice agencyNotice left join fetch agencyNotice.correspondents left join fetch agencyNotice.placeholders where agencyNotice.id =:id"
+        "select agencyNotice from AgencyNotice agencyNotice left join fetch agencyNotice.correspondents left join fetch agencyNotice.placeholders left join fetch agencyNotice.businessDocuments where agencyNotice.id =:id"
     )
     Optional<AgencyNotice> findOneWithEagerRelationships(@Param("id") Long id);
 }

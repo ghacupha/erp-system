@@ -1,4 +1,4 @@
-package io.github.erp.web.rest.utils;
+package io.github.erp.web.rest;
 
 /*-
  * Erp System - Mark III No 7 (Caleb Series) Server ver 0.3.0-SNAPSHOT

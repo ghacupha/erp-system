@@ -17,6 +17,7 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
 import io.github.erp.repository.PrepaymentAccountRepository;
@@ -24,7 +25,7 @@ import io.github.erp.repository.search.PrepaymentAccountSearchRepository;
 import io.github.erp.service.PrepaymentAccountService;
 import io.github.erp.service.dto.PrepaymentAccountDTO;
 import io.github.erp.service.mapper.PrepaymentAccountMapper;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,7 +45,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static io.github.erp.web.rest.utils.TestUtil.sameNumber;
+import static io.github.erp.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -864,6 +865,32 @@ public class PrepaymentAccountResourceIT {
 
         // Get all the prepaymentAccountList where prepaymentParameters equals to (prepaymentParametersId + 1)
         defaultPrepaymentAccountShouldNotBeFound("prepaymentParametersId.equals=" + (prepaymentParametersId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByBusinessDocumentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+        BusinessDocument businessDocument;
+        if (TestUtil.findAll(em, BusinessDocument.class).isEmpty()) {
+            businessDocument = BusinessDocumentResourceIT.createEntity(em);
+            em.persist(businessDocument);
+            em.flush();
+        } else {
+            businessDocument = TestUtil.findAll(em, BusinessDocument.class).get(0);
+        }
+        em.persist(businessDocument);
+        em.flush();
+        prepaymentAccount.addBusinessDocument(businessDocument);
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+        Long businessDocumentId = businessDocument.getId();
+
+        // Get all the prepaymentAccountList where businessDocument equals to businessDocumentId
+        defaultPrepaymentAccountShouldBeFound("businessDocumentId.equals=" + businessDocumentId);
+
+        // Get all the prepaymentAccountList where businessDocument equals to (businessDocumentId + 1)
+        defaultPrepaymentAccountShouldNotBeFound("businessDocumentId.equals=" + (businessDocumentId + 1));
     }
 
     /**

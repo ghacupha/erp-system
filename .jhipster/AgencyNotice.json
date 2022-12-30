@@ -61,6 +61,14 @@
       "ownerSide": true,
       "relationshipName": "placeholder",
       "relationshipType": "many-to-many"
+    },
+    {
+      "relationshipName": "businessDocument",
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "documentTitle",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "agencyNotice"
     }
   ],
   "service": "serviceImpl"

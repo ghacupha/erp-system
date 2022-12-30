@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.DeliveryNote;
 import io.github.erp.service.dto.DeliveryNoteDTO;
 import java.util.Set;
@@ -27,7 +28,9 @@ import org.mapstruct.*;
  */
 @Mapper(
     componentModel = "spring",
-    uses = { PlaceholderMapper.class, DealerMapper.class, BusinessStampMapper.class, PurchaseOrderMapper.class }
+    uses = {
+        PlaceholderMapper.class, DealerMapper.class, BusinessStampMapper.class, PurchaseOrderMapper.class, BusinessDocumentMapper.class,
+    }
 )
 public interface DeliveryNoteMapper extends EntityMapper<DeliveryNoteDTO, DeliveryNote> {
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
@@ -37,12 +40,14 @@ public interface DeliveryNoteMapper extends EntityMapper<DeliveryNoteDTO, Delive
     @Mapping(target = "supplier", source = "supplier", qualifiedByName = "dealerName")
     @Mapping(target = "signatories", source = "signatories", qualifiedByName = "dealerNameSet")
     @Mapping(target = "otherPurchaseOrders", source = "otherPurchaseOrders", qualifiedByName = "purchaseOrderNumberSet")
+    @Mapping(target = "businessDocuments", source = "businessDocuments", qualifiedByName = "documentTitleSet")
     DeliveryNoteDTO toDto(DeliveryNote s);
 
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removeDeliveryStamps", ignore = true)
     @Mapping(target = "removeSignatories", ignore = true)
     @Mapping(target = "removeOtherPurchaseOrders", ignore = true)
+    @Mapping(target = "removeBusinessDocument", ignore = true)
     DeliveryNote toEntity(DeliveryNoteDTO deliveryNoteDTO);
 
     @Named("deliveryNoteNumberSet")

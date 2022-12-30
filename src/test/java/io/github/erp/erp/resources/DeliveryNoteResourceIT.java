@@ -17,6 +17,7 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
 import io.github.erp.repository.DeliveryNoteRepository;
@@ -24,7 +25,7 @@ import io.github.erp.repository.search.DeliveryNoteSearchRepository;
 import io.github.erp.service.DeliveryNoteService;
 import io.github.erp.service.dto.DeliveryNoteDTO;
 import io.github.erp.service.mapper.DeliveryNoteMapper;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,13 +56,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the DeliveryNoteResource REST controller.
+ * Integration tests for the {@link DeliveryNoteResource} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"PAYMENTS_USER", "FIXED_ASSETS_USER"})
-class DeliveryNoteResourceIT {
+public class DeliveryNoteResourceIT {
 
     private static final String DEFAULT_DELIVERY_NOTE_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_DELIVERY_NOTE_NUMBER = "BBBBBBBBBB";
@@ -79,6 +80,9 @@ class DeliveryNoteResourceIT {
     private static final Integer DEFAULT_QUANTITY = 1;
     private static final Integer UPDATED_QUANTITY = 2;
     private static final Integer SMALLER_QUANTITY = 1 - 1;
+
+    private static final String DEFAULT_REMARKS = "AAAAAAAAAA";
+    private static final String UPDATED_REMARKS = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/payments/delivery-notes";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -127,7 +131,8 @@ class DeliveryNoteResourceIT {
             .documentDate(DEFAULT_DOCUMENT_DATE)
             .description(DEFAULT_DESCRIPTION)
             .serialNumber(DEFAULT_SERIAL_NUMBER)
-            .quantity(DEFAULT_QUANTITY);
+            .quantity(DEFAULT_QUANTITY)
+            .remarks(DEFAULT_REMARKS);
         // Add required entity
         Dealer dealer;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
@@ -155,7 +160,8 @@ class DeliveryNoteResourceIT {
             .documentDate(UPDATED_DOCUMENT_DATE)
             .description(UPDATED_DESCRIPTION)
             .serialNumber(UPDATED_SERIAL_NUMBER)
-            .quantity(UPDATED_QUANTITY);
+            .quantity(UPDATED_QUANTITY)
+            .remarks(UPDATED_REMARKS);
         // Add required entity
         Dealer dealer;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
@@ -197,6 +203,7 @@ class DeliveryNoteResourceIT {
         assertThat(testDeliveryNote.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testDeliveryNote.getSerialNumber()).isEqualTo(DEFAULT_SERIAL_NUMBER);
         assertThat(testDeliveryNote.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
+        assertThat(testDeliveryNote.getRemarks()).isEqualTo(DEFAULT_REMARKS);
 
         // Validate the DeliveryNote in Elasticsearch
         verify(mockDeliveryNoteSearchRepository, times(1)).save(testDeliveryNote);
@@ -282,7 +289,8 @@ class DeliveryNoteResourceIT {
             .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].serialNumber").value(hasItem(DEFAULT_SERIAL_NUMBER)))
-            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)));
+            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
+            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -319,7 +327,8 @@ class DeliveryNoteResourceIT {
             .andExpect(jsonPath("$.documentDate").value(DEFAULT_DOCUMENT_DATE.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.serialNumber").value(DEFAULT_SERIAL_NUMBER))
-            .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY));
+            .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY))
+            .andExpect(jsonPath("$.remarks").value(DEFAULT_REMARKS.toString()));
     }
 
     @Test
@@ -938,6 +947,58 @@ class DeliveryNoteResourceIT {
         defaultDeliveryNoteShouldNotBeFound("signatoriesId.equals=" + (signatoriesId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllDeliveryNotesByOtherPurchaseOrdersIsEqualToSomething() throws Exception {
+        // Initialize the database
+        deliveryNoteRepository.saveAndFlush(deliveryNote);
+        PurchaseOrder otherPurchaseOrders;
+        if (TestUtil.findAll(em, PurchaseOrder.class).isEmpty()) {
+            otherPurchaseOrders = PurchaseOrderResourceIT.createEntity(em);
+            em.persist(otherPurchaseOrders);
+            em.flush();
+        } else {
+            otherPurchaseOrders = TestUtil.findAll(em, PurchaseOrder.class).get(0);
+        }
+        em.persist(otherPurchaseOrders);
+        em.flush();
+        deliveryNote.addOtherPurchaseOrders(otherPurchaseOrders);
+        deliveryNoteRepository.saveAndFlush(deliveryNote);
+        Long otherPurchaseOrdersId = otherPurchaseOrders.getId();
+
+        // Get all the deliveryNoteList where otherPurchaseOrders equals to otherPurchaseOrdersId
+        defaultDeliveryNoteShouldBeFound("otherPurchaseOrdersId.equals=" + otherPurchaseOrdersId);
+
+        // Get all the deliveryNoteList where otherPurchaseOrders equals to (otherPurchaseOrdersId + 1)
+        defaultDeliveryNoteShouldNotBeFound("otherPurchaseOrdersId.equals=" + (otherPurchaseOrdersId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllDeliveryNotesByBusinessDocumentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        deliveryNoteRepository.saveAndFlush(deliveryNote);
+        BusinessDocument businessDocument;
+        if (TestUtil.findAll(em, BusinessDocument.class).isEmpty()) {
+            businessDocument = BusinessDocumentResourceIT.createEntity(em);
+            em.persist(businessDocument);
+            em.flush();
+        } else {
+            businessDocument = TestUtil.findAll(em, BusinessDocument.class).get(0);
+        }
+        em.persist(businessDocument);
+        em.flush();
+        deliveryNote.addBusinessDocument(businessDocument);
+        deliveryNoteRepository.saveAndFlush(deliveryNote);
+        Long businessDocumentId = businessDocument.getId();
+
+        // Get all the deliveryNoteList where businessDocument equals to businessDocumentId
+        defaultDeliveryNoteShouldBeFound("businessDocumentId.equals=" + businessDocumentId);
+
+        // Get all the deliveryNoteList where businessDocument equals to (businessDocumentId + 1)
+        defaultDeliveryNoteShouldNotBeFound("businessDocumentId.equals=" + (businessDocumentId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -951,7 +1012,8 @@ class DeliveryNoteResourceIT {
             .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].serialNumber").value(hasItem(DEFAULT_SERIAL_NUMBER)))
-            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)));
+            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
+            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())));
 
         // Check, that the count call also returns 1
         restDeliveryNoteMockMvc
@@ -1004,7 +1066,8 @@ class DeliveryNoteResourceIT {
             .documentDate(UPDATED_DOCUMENT_DATE)
             .description(UPDATED_DESCRIPTION)
             .serialNumber(UPDATED_SERIAL_NUMBER)
-            .quantity(UPDATED_QUANTITY);
+            .quantity(UPDATED_QUANTITY)
+            .remarks(UPDATED_REMARKS);
         DeliveryNoteDTO deliveryNoteDTO = deliveryNoteMapper.toDto(updatedDeliveryNote);
 
         restDeliveryNoteMockMvc
@@ -1024,6 +1087,7 @@ class DeliveryNoteResourceIT {
         assertThat(testDeliveryNote.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testDeliveryNote.getSerialNumber()).isEqualTo(UPDATED_SERIAL_NUMBER);
         assertThat(testDeliveryNote.getQuantity()).isEqualTo(UPDATED_QUANTITY);
+        assertThat(testDeliveryNote.getRemarks()).isEqualTo(UPDATED_REMARKS);
 
         // Validate the DeliveryNote in Elasticsearch
         verify(mockDeliveryNoteSearchRepository).save(testDeliveryNote);
@@ -1136,6 +1200,7 @@ class DeliveryNoteResourceIT {
         assertThat(testDeliveryNote.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testDeliveryNote.getSerialNumber()).isEqualTo(UPDATED_SERIAL_NUMBER);
         assertThat(testDeliveryNote.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
+        assertThat(testDeliveryNote.getRemarks()).isEqualTo(DEFAULT_REMARKS);
     }
 
     @Test
@@ -1155,7 +1220,8 @@ class DeliveryNoteResourceIT {
             .documentDate(UPDATED_DOCUMENT_DATE)
             .description(UPDATED_DESCRIPTION)
             .serialNumber(UPDATED_SERIAL_NUMBER)
-            .quantity(UPDATED_QUANTITY);
+            .quantity(UPDATED_QUANTITY)
+            .remarks(UPDATED_REMARKS);
 
         restDeliveryNoteMockMvc
             .perform(
@@ -1174,6 +1240,7 @@ class DeliveryNoteResourceIT {
         assertThat(testDeliveryNote.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testDeliveryNote.getSerialNumber()).isEqualTo(UPDATED_SERIAL_NUMBER);
         assertThat(testDeliveryNote.getQuantity()).isEqualTo(UPDATED_QUANTITY);
+        assertThat(testDeliveryNote.getRemarks()).isEqualTo(UPDATED_REMARKS);
     }
 
     @Test
@@ -1294,6 +1361,7 @@ class DeliveryNoteResourceIT {
             .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].serialNumber").value(hasItem(DEFAULT_SERIAL_NUMBER)))
-            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)));
+            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
+            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())));
     }
 }

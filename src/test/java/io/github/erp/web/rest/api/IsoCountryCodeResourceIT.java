@@ -25,7 +25,7 @@ import io.github.erp.repository.search.IsoCountryCodeSearchRepository;
 import io.github.erp.service.IsoCountryCodeService;
 import io.github.erp.service.dto.IsoCountryCodeDTO;
 import io.github.erp.service.mapper.IsoCountryCodeMapper;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

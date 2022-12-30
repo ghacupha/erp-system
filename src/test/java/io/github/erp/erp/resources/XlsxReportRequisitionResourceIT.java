@@ -27,7 +27,7 @@ import io.github.erp.repository.search.XlsxReportRequisitionSearchRepository;
 import io.github.erp.service.XlsxReportRequisitionService;
 import io.github.erp.service.dto.XlsxReportRequisitionDTO;
 import io.github.erp.service.mapper.XlsxReportRequisitionMapper;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

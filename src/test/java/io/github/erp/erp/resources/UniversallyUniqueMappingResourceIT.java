@@ -25,7 +25,7 @@ import io.github.erp.repository.search.UniversallyUniqueMappingSearchRepository;
 import io.github.erp.service.UniversallyUniqueMappingService;
 import io.github.erp.service.dto.UniversallyUniqueMappingDTO;
 import io.github.erp.service.mapper.UniversallyUniqueMappingMapper;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

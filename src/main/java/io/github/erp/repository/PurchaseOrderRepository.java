@@ -17,6 +17,7 @@ package io.github.erp.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.PurchaseOrder;
 import java.util.List;
 import java.util.Optional;
@@ -32,18 +33,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder, Long>, JpaSpecificationExecutor<PurchaseOrder> {
     @Query(
-        value = "select distinct purchaseOrder from PurchaseOrder purchaseOrder left join fetch purchaseOrder.placeholders left join fetch purchaseOrder.signatories",
+        value = "select distinct purchaseOrder from PurchaseOrder purchaseOrder left join fetch purchaseOrder.placeholders left join fetch purchaseOrder.signatories left join fetch purchaseOrder.businessDocuments",
         countQuery = "select count(distinct purchaseOrder) from PurchaseOrder purchaseOrder"
     )
     Page<PurchaseOrder> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct purchaseOrder from PurchaseOrder purchaseOrder left join fetch purchaseOrder.placeholders left join fetch purchaseOrder.signatories"
+        "select distinct purchaseOrder from PurchaseOrder purchaseOrder left join fetch purchaseOrder.placeholders left join fetch purchaseOrder.signatories left join fetch purchaseOrder.businessDocuments"
     )
     List<PurchaseOrder> findAllWithEagerRelationships();
 
     @Query(
-        "select purchaseOrder from PurchaseOrder purchaseOrder left join fetch purchaseOrder.placeholders left join fetch purchaseOrder.signatories where purchaseOrder.id =:id"
+        "select purchaseOrder from PurchaseOrder purchaseOrder left join fetch purchaseOrder.placeholders left join fetch purchaseOrder.signatories left join fetch purchaseOrder.businessDocuments where purchaseOrder.id =:id"
     )
     Optional<PurchaseOrder> findOneWithEagerRelationships(@Param("id") Long id);
 }

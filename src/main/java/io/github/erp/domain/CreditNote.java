@@ -17,6 +17,7 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -70,7 +71,10 @@ public class CreditNote implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "purchase_orders_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "settlementCurrency", "placeholders", "signatories", "vendor" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "settlementCurrency", "placeholders", "signatories", "vendor", "businessDocuments" },
+        allowSetters = true
+    )
     private Set<PurchaseOrder> purchaseOrders = new HashSet<>();
 
     @ManyToMany
@@ -81,7 +85,16 @@ public class CreditNote implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "purchaseOrders", "placeholders", "paymentLabels", "settlementCurrency", "biller", "deliveryNotes", "jobSheets" },
+        value = {
+            "purchaseOrders",
+            "placeholders",
+            "paymentLabels",
+            "settlementCurrency",
+            "biller",
+            "deliveryNotes",
+            "jobSheets",
+            "businessDocuments",
+        },
         allowSetters = true
     )
     private Set<PaymentInvoice> invoices = new HashSet<>();

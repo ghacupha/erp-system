@@ -17,7 +17,9 @@ package io.github.erp.web.rest.api;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.BusinessDocument;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.WorkInProgressRegistration;
 import io.github.erp.domain.WorkInProgressTransfer;
@@ -26,7 +28,7 @@ import io.github.erp.repository.search.WorkInProgressTransferSearchRepository;
 import io.github.erp.service.WorkInProgressTransferService;
 import io.github.erp.service.dto.WorkInProgressTransferDTO;
 import io.github.erp.service.mapper.WorkInProgressTransferMapper;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,7 +57,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link WorkInProgressTransferResource} REST controller.
+ * Integration tests for the WorkInProgressTransferResource REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -462,6 +464,32 @@ public class WorkInProgressTransferResourceIT {
 
         // Get all the workInProgressTransferList where placeholder equals to (placeholderId + 1)
         defaultWorkInProgressTransferShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByBusinessDocumentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+        BusinessDocument businessDocument;
+        if (TestUtil.findAll(em, BusinessDocument.class).isEmpty()) {
+            businessDocument = BusinessDocumentResourceIT.createEntity(em);
+            em.persist(businessDocument);
+            em.flush();
+        } else {
+            businessDocument = TestUtil.findAll(em, BusinessDocument.class).get(0);
+        }
+        em.persist(businessDocument);
+        em.flush();
+        workInProgressTransfer.addBusinessDocument(businessDocument);
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+        Long businessDocumentId = businessDocument.getId();
+
+        // Get all the workInProgressTransferList where businessDocument equals to businessDocumentId
+        defaultWorkInProgressTransferShouldBeFound("businessDocumentId.equals=" + businessDocumentId);
+
+        // Get all the workInProgressTransferList where businessDocument equals to (businessDocumentId + 1)
+        defaultWorkInProgressTransferShouldNotBeFound("businessDocumentId.equals=" + (businessDocumentId + 1));
     }
 
     /**

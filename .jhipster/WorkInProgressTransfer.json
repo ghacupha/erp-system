@@ -25,6 +25,14 @@
       "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "workInProgressTransfer"
+    },
+    {
+      "relationshipName": "businessDocument",
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "documentTitle",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "workInProgressTransfer"
     }
   ],
   "service": "serviceImpl",

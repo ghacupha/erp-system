@@ -17,6 +17,7 @@ package io.github.erp.service.criteria;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -71,6 +72,8 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
 
     private LongFilter prepaymentParametersId;
 
+    private LongFilter businessDocumentId;
+
     private Boolean distinct;
 
     public PrepaymentAccountCriteria() {}
@@ -90,6 +93,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.generalParametersId = other.generalParametersId == null ? null : other.generalParametersId.copy();
         this.prepaymentParametersId = other.prepaymentParametersId == null ? null : other.prepaymentParametersId.copy();
+        this.businessDocumentId = other.businessDocumentId == null ? null : other.businessDocumentId.copy();
         this.distinct = other.distinct;
     }
 
@@ -308,6 +312,21 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
         this.prepaymentParametersId = prepaymentParametersId;
     }
 
+    public LongFilter getBusinessDocumentId() {
+        return businessDocumentId;
+    }
+
+    public LongFilter businessDocumentId() {
+        if (businessDocumentId == null) {
+            businessDocumentId = new LongFilter();
+        }
+        return businessDocumentId;
+    }
+
+    public void setBusinessDocumentId(LongFilter businessDocumentId) {
+        this.businessDocumentId = businessDocumentId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -340,6 +359,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(generalParametersId, that.generalParametersId) &&
             Objects.equals(prepaymentParametersId, that.prepaymentParametersId) &&
+            Objects.equals(businessDocumentId, that.businessDocumentId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -361,6 +381,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             placeholderId,
             generalParametersId,
             prepaymentParametersId,
+            businessDocumentId,
             distinct
         );
     }
@@ -383,6 +404,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (generalParametersId != null ? "generalParametersId=" + generalParametersId + ", " : "") +
             (prepaymentParametersId != null ? "prepaymentParametersId=" + prepaymentParametersId + ", " : "") +
+            (businessDocumentId != null ? "businessDocumentId=" + businessDocumentId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

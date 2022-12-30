@@ -17,6 +17,7 @@ package io.github.erp.service.criteria;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -69,6 +70,8 @@ public class PaymentInvoiceCriteria implements Serializable, Criteria {
 
     private LongFilter jobSheetId;
 
+    private LongFilter businessDocumentId;
+
     private Boolean distinct;
 
     public PaymentInvoiceCriteria() {}
@@ -87,6 +90,7 @@ public class PaymentInvoiceCriteria implements Serializable, Criteria {
         this.billerId = other.billerId == null ? null : other.billerId.copy();
         this.deliveryNoteId = other.deliveryNoteId == null ? null : other.deliveryNoteId.copy();
         this.jobSheetId = other.jobSheetId == null ? null : other.jobSheetId.copy();
+        this.businessDocumentId = other.businessDocumentId == null ? null : other.businessDocumentId.copy();
         this.distinct = other.distinct;
     }
 
@@ -290,6 +294,21 @@ public class PaymentInvoiceCriteria implements Serializable, Criteria {
         this.jobSheetId = jobSheetId;
     }
 
+    public LongFilter getBusinessDocumentId() {
+        return businessDocumentId;
+    }
+
+    public LongFilter businessDocumentId() {
+        if (businessDocumentId == null) {
+            businessDocumentId = new LongFilter();
+        }
+        return businessDocumentId;
+    }
+
+    public void setBusinessDocumentId(LongFilter businessDocumentId) {
+        this.businessDocumentId = businessDocumentId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -321,6 +340,7 @@ public class PaymentInvoiceCriteria implements Serializable, Criteria {
             Objects.equals(billerId, that.billerId) &&
             Objects.equals(deliveryNoteId, that.deliveryNoteId) &&
             Objects.equals(jobSheetId, that.jobSheetId) &&
+            Objects.equals(businessDocumentId, that.businessDocumentId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -341,6 +361,7 @@ public class PaymentInvoiceCriteria implements Serializable, Criteria {
             billerId,
             deliveryNoteId,
             jobSheetId,
+            businessDocumentId,
             distinct
         );
     }
@@ -362,6 +383,7 @@ public class PaymentInvoiceCriteria implements Serializable, Criteria {
             (billerId != null ? "billerId=" + billerId + ", " : "") +
             (deliveryNoteId != null ? "deliveryNoteId=" + deliveryNoteId + ", " : "") +
             (jobSheetId != null ? "jobSheetId=" + jobSheetId + ", " : "") +
+            (businessDocumentId != null ? "businessDocumentId=" + businessDocumentId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

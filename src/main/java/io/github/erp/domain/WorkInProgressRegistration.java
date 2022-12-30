@@ -17,6 +17,7 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -79,13 +80,21 @@ public class WorkInProgressRegistration implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "purchaseOrders", "placeholders", "paymentLabels", "settlementCurrency", "biller", "deliveryNotes", "jobSheets" },
+        value = {
+            "purchaseOrders",
+            "placeholders",
+            "paymentLabels",
+            "settlementCurrency",
+            "biller",
+            "deliveryNotes",
+            "jobSheets",
+            "businessDocuments",
+        },
         allowSetters = true
     )
     private Set<PaymentInvoice> paymentInvoices = new HashSet<>();
 
     @ManyToMany
-    @NotNull
     @JoinTable(
         name = "rel_work_in_progress_registration__service_outlet",
         joinColumns = @JoinColumn(name = "work_in_progress_registration_id"),
@@ -99,7 +108,6 @@ public class WorkInProgressRegistration implements Serializable {
     private Set<ServiceOutlet> serviceOutlets = new HashSet<>();
 
     @ManyToMany
-    @NotNull
     @JoinTable(
         name = "rel_work_in_progress_registration__settlement",
         joinColumns = @JoinColumn(name = "work_in_progress_registration_id"),
@@ -116,6 +124,7 @@ public class WorkInProgressRegistration implements Serializable {
             "biller",
             "paymentInvoices",
             "signatories",
+            "businessDocuments",
         },
         allowSetters = true
     )
@@ -128,7 +137,10 @@ public class WorkInProgressRegistration implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "purchase_order_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "settlementCurrency", "placeholders", "signatories", "vendor" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "settlementCurrency", "placeholders", "signatories", "vendor", "businessDocuments" },
+        allowSetters = true
+    )
     private Set<PurchaseOrder> purchaseOrders = new HashSet<>();
 
     @ManyToMany
@@ -139,7 +151,16 @@ public class WorkInProgressRegistration implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "placeholders", "receivedBy", "deliveryStamps", "purchaseOrder", "supplier", "signatories", "otherPurchaseOrders" },
+        value = {
+            "placeholders",
+            "receivedBy",
+            "deliveryStamps",
+            "purchaseOrder",
+            "supplier",
+            "signatories",
+            "otherPurchaseOrders",
+            "businessDocuments",
+        },
         allowSetters = true
     )
     private Set<DeliveryNote> deliveryNotes = new HashSet<>();
@@ -152,13 +173,12 @@ public class WorkInProgressRegistration implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "biller", "signatories", "contactPerson", "businessStamps", "placeholders", "paymentLabels" },
+        value = { "biller", "signatories", "contactPerson", "businessStamps", "placeholders", "paymentLabels", "businessDocuments" },
         allowSetters = true
     )
     private Set<JobSheet> jobSheets = new HashSet<>();
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "placeholders" }, allowSetters = true)
     private Dealer dealer;
 
@@ -176,6 +196,7 @@ public class WorkInProgressRegistration implements Serializable {
             "workInProgressGroup",
             "settlementCurrency",
             "workProjectRegister",
+            "businessDocuments",
         },
         allowSetters = true
     )
@@ -186,8 +207,29 @@ public class WorkInProgressRegistration implements Serializable {
     private SettlementCurrency settlementCurrency;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "dealers", "settlementCurrency", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "dealers", "settlementCurrency", "placeholders", "businessDocuments" }, allowSetters = true)
     private WorkProjectRegister workProjectRegister;
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_work_in_progress_registration__business_document",
+        joinColumns = @JoinColumn(name = "work_in_progress_registration_id"),
+        inverseJoinColumns = @JoinColumn(name = "business_document_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = {
+            "createdBy",
+            "lastModifiedBy",
+            "originatingDepartment",
+            "applicationMappings",
+            "placeholders",
+            "fileChecksumAlgorithm",
+            "securityClearance",
+        },
+        allowSetters = true
+    )
+    private Set<BusinessDocument> businessDocuments = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -479,6 +521,29 @@ public class WorkInProgressRegistration implements Serializable {
 
     public WorkInProgressRegistration workProjectRegister(WorkProjectRegister workProjectRegister) {
         this.setWorkProjectRegister(workProjectRegister);
+        return this;
+    }
+
+    public Set<BusinessDocument> getBusinessDocuments() {
+        return this.businessDocuments;
+    }
+
+    public void setBusinessDocuments(Set<BusinessDocument> businessDocuments) {
+        this.businessDocuments = businessDocuments;
+    }
+
+    public WorkInProgressRegistration businessDocuments(Set<BusinessDocument> businessDocuments) {
+        this.setBusinessDocuments(businessDocuments);
+        return this;
+    }
+
+    public WorkInProgressRegistration addBusinessDocument(BusinessDocument businessDocument) {
+        this.businessDocuments.add(businessDocument);
+        return this;
+    }
+
+    public WorkInProgressRegistration removeBusinessDocument(BusinessDocument businessDocument) {
+        this.businessDocuments.remove(businessDocument);
         return this;
     }
 

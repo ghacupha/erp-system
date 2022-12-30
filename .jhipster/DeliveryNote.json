@@ -87,6 +87,14 @@
       "otherEntityField": "purchaseOrderNumber",
       "ownerSide": true,
       "otherEntityRelationshipName": "deliveryNote"
+    },
+    {
+      "relationshipName": "businessDocument",
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "documentTitle",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "deliveryNote"
     }
   ],
   "service": "serviceImpl"

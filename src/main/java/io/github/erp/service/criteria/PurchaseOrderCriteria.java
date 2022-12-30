@@ -17,6 +17,7 @@ package io.github.erp.service.criteria;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -67,6 +68,8 @@ public class PurchaseOrderCriteria implements Serializable, Criteria {
 
     private LongFilter vendorId;
 
+    private LongFilter businessDocumentId;
+
     private Boolean distinct;
 
     public PurchaseOrderCriteria() {}
@@ -84,6 +87,7 @@ public class PurchaseOrderCriteria implements Serializable, Criteria {
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.signatoriesId = other.signatoriesId == null ? null : other.signatoriesId.copy();
         this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
+        this.businessDocumentId = other.businessDocumentId == null ? null : other.businessDocumentId.copy();
         this.distinct = other.distinct;
     }
 
@@ -272,6 +276,21 @@ public class PurchaseOrderCriteria implements Serializable, Criteria {
         this.vendorId = vendorId;
     }
 
+    public LongFilter getBusinessDocumentId() {
+        return businessDocumentId;
+    }
+
+    public LongFilter businessDocumentId() {
+        if (businessDocumentId == null) {
+            businessDocumentId = new LongFilter();
+        }
+        return businessDocumentId;
+    }
+
+    public void setBusinessDocumentId(LongFilter businessDocumentId) {
+        this.businessDocumentId = businessDocumentId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -302,6 +321,7 @@ public class PurchaseOrderCriteria implements Serializable, Criteria {
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(signatoriesId, that.signatoriesId) &&
             Objects.equals(vendorId, that.vendorId) &&
+            Objects.equals(businessDocumentId, that.businessDocumentId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -321,6 +341,7 @@ public class PurchaseOrderCriteria implements Serializable, Criteria {
             placeholderId,
             signatoriesId,
             vendorId,
+            businessDocumentId,
             distinct
         );
     }
@@ -341,6 +362,7 @@ public class PurchaseOrderCriteria implements Serializable, Criteria {
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (signatoriesId != null ? "signatoriesId=" + signatoriesId + ", " : "") +
             (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
+            (businessDocumentId != null ? "businessDocumentId=" + businessDocumentId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

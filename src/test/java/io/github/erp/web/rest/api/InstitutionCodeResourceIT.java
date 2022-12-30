@@ -25,7 +25,7 @@ import io.github.erp.repository.search.InstitutionCodeSearchRepository;
 import io.github.erp.service.InstitutionCodeService;
 import io.github.erp.service.dto.InstitutionCodeDTO;
 import io.github.erp.service.mapper.InstitutionCodeMapper;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

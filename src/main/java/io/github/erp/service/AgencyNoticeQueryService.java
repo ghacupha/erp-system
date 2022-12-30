@@ -17,6 +17,7 @@ package io.github.erp.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.*; // for static metamodels
 import io.github.erp.domain.AgencyNotice;
 import io.github.erp.repository.AgencyNoticeRepository;
@@ -160,6 +161,15 @@ public class AgencyNoticeQueryService extends QueryService<AgencyNotice> {
                         buildSpecification(
                             criteria.getPlaceholderId(),
                             root -> root.join(AgencyNotice_.placeholders, JoinType.LEFT).get(Placeholder_.id)
+                        )
+                    );
+            }
+            if (criteria.getBusinessDocumentId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getBusinessDocumentId(),
+                            root -> root.join(AgencyNotice_.businessDocuments, JoinType.LEFT).get(BusinessDocument_.id)
                         )
                     );
             }

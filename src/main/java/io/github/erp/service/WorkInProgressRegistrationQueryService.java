@@ -17,6 +17,7 @@ package io.github.erp.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.*; // for static metamodels
 import io.github.erp.domain.WorkInProgressRegistration;
 import io.github.erp.repository.WorkInProgressRegistrationRepository;
@@ -228,6 +229,15 @@ public class WorkInProgressRegistrationQueryService extends QueryService<WorkInP
                         buildSpecification(
                             criteria.getWorkProjectRegisterId(),
                             root -> root.join(WorkInProgressRegistration_.workProjectRegister, JoinType.LEFT).get(WorkProjectRegister_.id)
+                        )
+                    );
+            }
+            if (criteria.getBusinessDocumentId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getBusinessDocumentId(),
+                            root -> root.join(WorkInProgressRegistration_.businessDocuments, JoinType.LEFT).get(BusinessDocument_.id)
                         )
                     );
             }

@@ -27,7 +27,7 @@ import io.github.erp.service.AlgorithmService;
 import io.github.erp.service.dto.AlgorithmDTO;
 import io.github.erp.service.mapper.AlgorithmMapper;
 //import io.github.erp.web.rest.AlgorithmResource;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

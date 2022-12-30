@@ -105,6 +105,14 @@
       "ownerSide": true,
       "relationshipName": "signatories",
       "relationshipType": "many-to-many"
+    },
+    {
+      "relationshipName": "businessDocument",
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "documentTitle",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "settlement"
     }
   ],
   "service": "serviceImpl"

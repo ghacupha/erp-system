@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.AssetRegistration;
 import io.github.erp.service.dto.AssetRegistrationDTO;
 import org.mapstruct.*;
@@ -37,6 +38,7 @@ import org.mapstruct.*;
         JobSheetMapper.class,
         DealerMapper.class,
         SettlementCurrencyMapper.class,
+        BusinessDocumentMapper.class,
     }
 )
 public interface AssetRegistrationMapper extends EntityMapper<AssetRegistrationDTO, AssetRegistration> {
@@ -51,6 +53,7 @@ public interface AssetRegistrationMapper extends EntityMapper<AssetRegistrationD
     @Mapping(target = "dealer", source = "dealer", qualifiedByName = "dealerName")
     @Mapping(target = "designatedUsers", source = "designatedUsers", qualifiedByName = "dealerNameSet")
     @Mapping(target = "settlementCurrency", source = "settlementCurrency", qualifiedByName = "iso4217CurrencyCode")
+    @Mapping(target = "businessDocuments", source = "businessDocuments", qualifiedByName = "documentTitleSet")
     AssetRegistrationDTO toDto(AssetRegistration s);
 
     @Mapping(target = "removePlaceholder", ignore = true)
@@ -61,5 +64,6 @@ public interface AssetRegistrationMapper extends EntityMapper<AssetRegistrationD
     @Mapping(target = "removeDeliveryNote", ignore = true)
     @Mapping(target = "removeJobSheet", ignore = true)
     @Mapping(target = "removeDesignatedUsers", ignore = true)
+    @Mapping(target = "removeBusinessDocument", ignore = true)
     AssetRegistration toEntity(AssetRegistrationDTO assetRegistrationDTO);
 }

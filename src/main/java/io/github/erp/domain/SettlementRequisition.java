@@ -17,6 +17,7 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.github.erp.domain.enumeration.PaymentStatus;
 import java.io.Serializable;
@@ -110,7 +111,16 @@ public class SettlementRequisition implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "purchaseOrders", "placeholders", "paymentLabels", "settlementCurrency", "biller", "deliveryNotes", "jobSheets" },
+        value = {
+            "purchaseOrders",
+            "placeholders",
+            "paymentLabels",
+            "settlementCurrency",
+            "biller",
+            "deliveryNotes",
+            "jobSheets",
+            "businessDocuments",
+        },
         allowSetters = true
     )
     private Set<PaymentInvoice> paymentInvoices = new HashSet<>();
@@ -123,7 +133,16 @@ public class SettlementRequisition implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "placeholders", "receivedBy", "deliveryStamps", "purchaseOrder", "supplier", "signatories", "otherPurchaseOrders" },
+        value = {
+            "placeholders",
+            "receivedBy",
+            "deliveryStamps",
+            "purchaseOrder",
+            "supplier",
+            "signatories",
+            "otherPurchaseOrders",
+            "businessDocuments",
+        },
         allowSetters = true
     )
     private Set<DeliveryNote> deliveryNotes = new HashSet<>();
@@ -136,7 +155,7 @@ public class SettlementRequisition implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "biller", "signatories", "contactPerson", "businessStamps", "placeholders", "paymentLabels" },
+        value = { "biller", "signatories", "contactPerson", "businessStamps", "placeholders", "paymentLabels", "businessDocuments" },
         allowSetters = true
     )
     private Set<JobSheet> jobSheets = new HashSet<>();

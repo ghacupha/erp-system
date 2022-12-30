@@ -17,6 +17,7 @@ package io.github.erp.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.*; // for static metamodels
 import io.github.erp.domain.AssetRegistration;
 import io.github.erp.repository.AssetRegistrationRepository;
@@ -223,6 +224,15 @@ public class AssetRegistrationQueryService extends QueryService<AssetRegistratio
                         buildSpecification(
                             criteria.getSettlementCurrencyId(),
                             root -> root.join(AssetRegistration_.settlementCurrency, JoinType.LEFT).get(SettlementCurrency_.id)
+                        )
+                    );
+            }
+            if (criteria.getBusinessDocumentId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getBusinessDocumentId(),
+                            root -> root.join(AssetRegistration_.businessDocuments, JoinType.LEFT).get(BusinessDocument_.id)
                         )
                     );
             }

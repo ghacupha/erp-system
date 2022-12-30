@@ -17,6 +17,7 @@ package io.github.erp.service.criteria;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.enumeration.AgencyStatusType;
 import java.io.Serializable;
 import java.util.Objects;
@@ -79,6 +80,8 @@ public class AgencyNoticeCriteria implements Serializable, Criteria {
 
     private LongFilter placeholderId;
 
+    private LongFilter businessDocumentId;
+
     private Boolean distinct;
 
     public AgencyNoticeCriteria() {}
@@ -93,6 +96,7 @@ public class AgencyNoticeCriteria implements Serializable, Criteria {
         this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
         this.assessorId = other.assessorId == null ? null : other.assessorId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.businessDocumentId = other.businessDocumentId == null ? null : other.businessDocumentId.copy();
         this.distinct = other.distinct;
     }
 
@@ -236,6 +240,21 @@ public class AgencyNoticeCriteria implements Serializable, Criteria {
         this.placeholderId = placeholderId;
     }
 
+    public LongFilter getBusinessDocumentId() {
+        return businessDocumentId;
+    }
+
+    public LongFilter businessDocumentId() {
+        if (businessDocumentId == null) {
+            businessDocumentId = new LongFilter();
+        }
+        return businessDocumentId;
+    }
+
+    public void setBusinessDocumentId(LongFilter businessDocumentId) {
+        this.businessDocumentId = businessDocumentId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -263,6 +282,7 @@ public class AgencyNoticeCriteria implements Serializable, Criteria {
             Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
             Objects.equals(assessorId, that.assessorId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(businessDocumentId, that.businessDocumentId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -279,6 +299,7 @@ public class AgencyNoticeCriteria implements Serializable, Criteria {
             settlementCurrencyId,
             assessorId,
             placeholderId,
+            businessDocumentId,
             distinct
         );
     }
@@ -296,6 +317,7 @@ public class AgencyNoticeCriteria implements Serializable, Criteria {
             (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
             (assessorId != null ? "assessorId=" + assessorId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (businessDocumentId != null ? "businessDocumentId=" + businessDocumentId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

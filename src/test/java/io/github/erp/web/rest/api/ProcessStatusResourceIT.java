@@ -27,7 +27,7 @@ import io.github.erp.service.ProcessStatusService;
 import io.github.erp.service.dto.ProcessStatusDTO;
 import io.github.erp.service.mapper.ProcessStatusMapper;
 //import io.github.erp.web.rest.ProcessStatusResource;
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

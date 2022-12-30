@@ -17,33 +17,15 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.BusinessStamp;
-import io.github.erp.domain.Dealer;
-import io.github.erp.domain.JobSheet;
-import io.github.erp.domain.PaymentLabel;
-import io.github.erp.domain.Placeholder;
+import io.github.erp.domain.*;
 import io.github.erp.repository.JobSheetRepository;
 import io.github.erp.repository.search.JobSheetSearchRepository;
 import io.github.erp.service.JobSheetService;
 import io.github.erp.service.dto.JobSheetDTO;
 import io.github.erp.service.mapper.JobSheetMapper;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
-
-import io.github.erp.web.rest.utils.TestUtil;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,6 +39,21 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link JobSheetResource} REST controller.
@@ -719,6 +716,32 @@ public class JobSheetResourceIT {
 
         // Get all the jobSheetList where paymentLabel equals to (paymentLabelId + 1)
         defaultJobSheetShouldNotBeFound("paymentLabelId.equals=" + (paymentLabelId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllJobSheetsByBusinessDocumentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        jobSheetRepository.saveAndFlush(jobSheet);
+        BusinessDocument businessDocument;
+        if (TestUtil.findAll(em, BusinessDocument.class).isEmpty()) {
+            businessDocument = BusinessDocumentResourceIT.createEntity(em);
+            em.persist(businessDocument);
+            em.flush();
+        } else {
+            businessDocument = TestUtil.findAll(em, BusinessDocument.class).get(0);
+        }
+        em.persist(businessDocument);
+        em.flush();
+        jobSheet.addBusinessDocument(businessDocument);
+        jobSheetRepository.saveAndFlush(jobSheet);
+        Long businessDocumentId = businessDocument.getId();
+
+        // Get all the jobSheetList where businessDocument equals to businessDocumentId
+        defaultJobSheetShouldBeFound("businessDocumentId.equals=" + businessDocumentId);
+
+        // Get all the jobSheetList where businessDocument equals to (businessDocumentId + 1)
+        defaultJobSheetShouldNotBeFound("businessDocumentId.equals=" + (businessDocumentId + 1));
     }
 
     /**
