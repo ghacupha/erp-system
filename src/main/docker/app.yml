@@ -54,6 +54,7 @@ services:
       - UPLOADS_SIZE=${UPLOADS_SIZE}
       - SANDBOX_INSTANCE_URLS=${SANDBOX_INSTANCE_URLS}
       - ERP_REINDEXER_INTERVAL=${ERP_REINDEXER_INTERVAL}
+      - ERP_DOCUMENTS_MAX_FILE_SIZE=${ERP_DOCUMENTS_MAX_FILE_SIZE}
       # - LOGGING_CONFIG=${LOGGING_CONFIG}
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
