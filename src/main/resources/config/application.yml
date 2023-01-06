@@ -121,6 +121,7 @@ spring:
       enabled: true
       #max-file-size: 100MB
       max-file-size: ${ERP_DOCUMENTS_MAX_FILE_SIZE}
+      max-request-size: ${ERP_DOCUMENTS_MAX_FILE_SIZE}
   task:
     execution:
       thread-name-prefix: erp-system-task-
