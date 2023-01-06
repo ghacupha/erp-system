@@ -1,7 +1,7 @@
 package io.github.erp.internal.batch;
 
 /*-
- * Erp System - Mark III No 8 (Caleb Series) Server ver 0.3.0-SNAPSHOT
+ * Erp System - Mark III No 8 (Caleb Series) Server ver 0.3.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
