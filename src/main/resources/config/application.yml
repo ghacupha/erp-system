@@ -174,7 +174,7 @@ jhipster:
     management-include-pattern: ${server.servlet.context-path:}/management/.*
     title: Erp System API
     description: Erp System API documentation
-    version: 0.3.0
+    version: 0.4.0
     terms-of-service-url:
     contact-name: Edwin Njeru
     contact-url: https://github.com/ghacupha
@@ -193,7 +193,7 @@ jhipster:
 # ===================================================================
 
 app:
-  title: 'Mark III No 8 (Caleb Series) Server ver 0.3.0'
+  title: 'Mark III No 9 (Caleb Series) Server ver 0.4.0'
   SandboxInstance:
     urls: ${SANDBOX_INSTANCE_URLS}
     #urls: 'https://127.0.0.1:8984,http://127.0.0.1:8984,https://localhost:8984,http://localhost:8984,http://127.0.0.1:8982,https://localhost:8982,http://localhost:8982,'
