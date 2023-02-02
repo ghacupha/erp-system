@@ -1,7 +1,7 @@
 package io.github.erp.cucumber.stepdefs;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.4.0
+ * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.github.erp.web.rest.userManagement.UserResource;
+import io.github.erp.erp.userManagement.UserResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;

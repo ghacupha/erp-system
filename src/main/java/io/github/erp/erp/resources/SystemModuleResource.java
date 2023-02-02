@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.4.0
+ * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@ import io.github.erp.service.SystemModuleQueryService;
 import io.github.erp.service.SystemModuleService;
 import io.github.erp.service.criteria.SystemModuleCriteria;
 import io.github.erp.service.dto.SystemModuleDTO;
-import io.github.erp.web.rest.errors.BadRequestAlertException;
+import io.github.erp.erp.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

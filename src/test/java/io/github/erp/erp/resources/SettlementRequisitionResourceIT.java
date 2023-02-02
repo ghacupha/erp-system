@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.4.0
+ * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -26,14 +26,14 @@ import io.github.erp.service.SettlementRequisitionService;
 import io.github.erp.service.dto.SettlementRequisitionDTO;
 import io.github.erp.service.mapper.SettlementRequisitionMapper;
 import io.github.erp.web.rest.TestUtil;
-import io.github.erp.web.rest.api.DealerResourceIT;
-import io.github.erp.web.rest.api.DeliveryNoteResourceIT;
-import io.github.erp.web.rest.api.JobSheetResourceIT;
-import io.github.erp.web.rest.api.PaymentInvoiceResourceIT;
-import io.github.erp.web.rest.api.PlaceholderResourceIT;
-import io.github.erp.web.rest.api.SettlementCurrencyResourceIT;
-import io.github.erp.web.rest.api.SettlementRequisitionResourceDev;
-import io.github.erp.web.rest.api.UniversallyUniqueMappingResourceIT;
+import io.github.erp.erp.dev.DealerResourceIT;
+import io.github.erp.erp.dev.DeliveryNoteResourceIT;
+import io.github.erp.erp.dev.JobSheetResourceIT;
+import io.github.erp.erp.dev.PaymentInvoiceResourceIT;
+import io.github.erp.erp.dev.PlaceholderResourceIT;
+import io.github.erp.erp.dev.SettlementCurrencyResourceIT;
+import io.github.erp.erp.dev.SettlementRequisitionResourceDev;
+import io.github.erp.erp.dev.UniversallyUniqueMappingResourceIT;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -146,7 +146,7 @@ public class SettlementRequisitionResourceIT {
         // Add required entity
         SettlementCurrency settlementCurrency;
         if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
-            settlementCurrency = io.github.erp.web.rest.api.SettlementCurrencyResourceIT.createEntity(em);
+            settlementCurrency = io.github.erp.erp.dev.SettlementCurrencyResourceIT.createEntity(em);
             em.persist(settlementCurrency);
             em.flush();
         } else {
@@ -168,7 +168,7 @@ public class SettlementRequisitionResourceIT {
         // Add required entity
         Dealer dealer;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            dealer = io.github.erp.web.rest.api.DealerResourceIT.createEntity(em);
+            dealer = io.github.erp.erp.dev.DealerResourceIT.createEntity(em);
             em.persist(dealer);
             em.flush();
         } else {
@@ -197,7 +197,7 @@ public class SettlementRequisitionResourceIT {
         // Add required entity
         SettlementCurrency settlementCurrency;
         if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
-            settlementCurrency = io.github.erp.web.rest.api.SettlementCurrencyResourceIT.createUpdatedEntity(em);
+            settlementCurrency = io.github.erp.erp.dev.SettlementCurrencyResourceIT.createUpdatedEntity(em);
             em.persist(settlementCurrency);
             em.flush();
         } else {
@@ -219,7 +219,7 @@ public class SettlementRequisitionResourceIT {
         // Add required entity
         Dealer dealer;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            dealer = io.github.erp.web.rest.api.DealerResourceIT.createUpdatedEntity(em);
+            dealer = io.github.erp.erp.dev.DealerResourceIT.createUpdatedEntity(em);
             em.persist(dealer);
             em.flush();
         } else {
@@ -1032,7 +1032,7 @@ public class SettlementRequisitionResourceIT {
         settlementRequisitionRepository.saveAndFlush(settlementRequisition);
         Dealer nativeDepartment;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            nativeDepartment = io.github.erp.web.rest.api.DealerResourceIT.createEntity(em);
+            nativeDepartment = io.github.erp.erp.dev.DealerResourceIT.createEntity(em);
             em.persist(nativeDepartment);
             em.flush();
         } else {
@@ -1058,7 +1058,7 @@ public class SettlementRequisitionResourceIT {
         settlementRequisitionRepository.saveAndFlush(settlementRequisition);
         Dealer biller;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            biller = io.github.erp.web.rest.api.DealerResourceIT.createEntity(em);
+            biller = io.github.erp.erp.dev.DealerResourceIT.createEntity(em);
             em.persist(biller);
             em.flush();
         } else {

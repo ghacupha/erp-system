@@ -1,5 +1,23 @@
 
 /*-
+ * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*-
  * Erp System - Mark III No 9 (Caleb Series) Server ver 0.4.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
@@ -167,7 +185,7 @@ import io.github.erp.internal.model.BusinessDocumentFSO;
 import io.github.erp.internal.model.mapping.BusinessDocumentFSOMapping;
 import io.github.erp.service.BusinessDocumentService;
 import io.github.erp.service.dto.BusinessDocumentDTO;
-import io.github.erp.web.rest.errors.BadRequestAlertException;
+import io.github.erp.erp.errors.BadRequestAlertException;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
