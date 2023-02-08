@@ -1,11 +1,11 @@
-id;description;serial_number;time_of_requisition;requisition_number;payment_amount;payment_status;settlement_currency_id;current_owner_id;native_owner_id;native_department_id;biller_id
-1;Tools Table;b8e46e7b-6b2f-4bd7-b295-79048741cf95;2022-10-19T03:05:21;bypassing;70738;IN_PROCESS;1;1;1;1;1
-2;Concrete;0993b352-4af7-4fa6-8748-eff4f25451ca;2022-10-19T06:03:15;visualize;64387;IN_PROCESS;2;2;2;2;2
-3;target blue generating;448f3181-5063-4748-8605-bbb5fa51ff33;2022-10-18T15:11:11;Gibraltar transition Franc;82689;SENT_FOR_FURTHER_APPROVAL;3;1;2;3;3
-4;Internal;dadd4550-91f3-4d5f-8a7f-21986bcbd2b6;2022-10-19T14:14:02;Computers Towels deposit;56066;PROCESSED;4;1;2;4;4
-5;schemas Avon Sweden;bc3c2200-a28a-4ec7-9c43-64cb580ecf78;2022-10-19T03:53:02;networks white;92607;SENT_FOR_FURTHER_APPROVAL;5;1;2;5;5
-6;Walk;eb3ccb52-a98b-46ec-a0bd-a6e60bb4c09d;2022-10-19T14:24:31;Small contingency;15772;SENT_FOR_FURTHER_APPROVAL;6;1;2;6;6
-7;Michigan;35cd551e-8477-4448-8166-f43075f80090;2022-10-19T12:14:43;Internal Boliviano;36090;SENT_FOR_FURTHER_APPROVAL;7;1;2;7;7
-8;Practical;e361e5a6-5494-45cb-9e04-39df9329ff87;2022-10-19T05:12:52;Palladium;62471;SENT_FOR_FURTHER_APPROVAL;8;1;2;8;8
-9;Cross-group Greens Assimilated;d41d4752-3cc4-45e3-964b-d85ad6a8e4a5;2022-10-18T21:19:26;supply-chains Arkansas e-business;38607;PROCESSED;9;1;1;9;9
-10;Incredible parallelism;1296e947-98d2-408a-8589-810c891153da;2022-10-19T01:24:21;back;82527;IN_PROCESS;10;1;2;10;10
+id;description;serial_number;time_of_requisition;requisition_number;payment_amount;payment_status;remarks;settlement_currency_id;current_owner_id;native_owner_id;native_department_id;biller_id
+1;Tools Table;b8e46e7b-6b2f-4bd7-b295-79048741cf95;2022-10-19T03:05:21;bypassing;70738;IN_PROCESS;Concrete;1;1;1;1;1
+2;New;b3524af7-fa68-4748-aff4-f25451ca506a;2022-10-19T03:24:23;visionary Avon;8558;SENT_FOR_FURTHER_APPROVAL;Savings edge blue;2;2;2;2;2
+3;algorithm;37488605-bbb5-4fa5-9ff3-3fb85f6e5bfa;2022-10-18T18:54:34;tangible Fuerte;82154;RETURNED_TO_SENDER;flexibility;3;1;2;3;3
+4;Tasty copying;4a7f2198-6bcb-4d2b-a0d0-39295a0382f6;2022-10-18T19:39:44;Avon Sweden;72192;RETURNED_TO_SENDER;digital;4;1;1;4;4
+5;Wooden;ec79c436-4cb5-480e-8f78-787c523feb07;2022-10-18T15:27:41;International input;37303;PROCESSED;Account e-business;5;2;1;5;5
+6;Fresh ADP;bb4c09d0-810a-4432-a929-6c35cd551e84;2022-10-19T02:52:37;directional Benin;42732;RETURNED_TO_SENDER;Balanced;6;2;2;6;6
+7;Designer;09018edb-a135-4b10-b114-e361e5a65494;2022-10-19T06:50:31;Uruguayo Home Account;57365;PROCESSED;Virginia;7;1;1;7;7
+8;Keys Palladium;99b31374-9307-4d41-9475-23cc45e3164b;2022-10-18T19:01:35;turn-key reintermediate;92406;IN_PROCESS;bricks-and-clicks supply-chains Arkansas;8;1;1;8;8
+9;HDD Open-source;5e5ba129-6e94-4798-9208-a8589810c891;2022-10-19T12:43:56;Sharable Delaware;5322;PROCESSED;Avon Virtual attitude-oriented;9;2;1;9;9
+10;local California;5d02fd79-0b23-48f8-9fb0-c6bbd1b16f66;2022-10-19T04:31:55;innovate purple;14976;PROCESSED;grow Personal Steel;10;1;1;10;10

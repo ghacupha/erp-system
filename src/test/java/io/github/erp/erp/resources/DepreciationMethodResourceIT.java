@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@ import io.github.erp.repository.search.DepreciationMethodSearchRepository;
 import io.github.erp.service.DepreciationMethodService;
 import io.github.erp.service.dto.DepreciationMethodDTO;
 import io.github.erp.service.mapper.DepreciationMethodMapper;
-import io.github.erp.web.rest.TestUtil;
+import io.github.erp.erp.resources.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -72,9 +72,9 @@ class DepreciationMethodResourceIT {
     private static final DepreciationTypes DEFAULT_DEPRECIATION_TYPE = DepreciationTypes.STRAIGHT_LINE;
     private static final DepreciationTypes UPDATED_DEPRECIATION_TYPE = DepreciationTypes.DECLINING_BALANCE;
 
-    private static final String ENTITY_API_URL = "/api/fixed-asset/depreciation-methods";
+    private static final String ENTITY_API_URL = "/v2/api/fixed-asset/depreciation-methods";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/fixed-asset/_search/depreciation-methods";
+    private static final String ENTITY_SEARCH_API_URL = "/v2/api/fixed-asset/_search/depreciation-methods";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

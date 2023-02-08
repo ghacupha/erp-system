@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ import io.github.erp.repository.search.ServiceOutletSearchRepository;
 import io.github.erp.service.ServiceOutletService;
 import io.github.erp.service.dto.ServiceOutletDTO;
 import io.github.erp.service.mapper.ServiceOutletMapper;
-import io.github.erp.web.rest.TestUtil;
+import io.github.erp.erp.resources.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,7 +49,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static io.github.erp.web.rest.TestUtil.sameNumber;
+import static io.github.erp.erp.resources.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -100,9 +100,9 @@ class ServiceOutletResourceIT {
     private static final BigDecimal UPDATED_LICENSE_FEE_PAYABLE = new BigDecimal(2);
     private static final BigDecimal SMALLER_LICENSE_FEE_PAYABLE = new BigDecimal(1 - 1);
 
-    private static final String ENTITY_API_URL = "/api/granular-data/service-outlets";
+    private static final String ENTITY_API_URL = "/v2/api/granular-data/service-outlets";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/granular-data/_search/service-outlets";
+    private static final String ENTITY_SEARCH_API_URL = "/v2/api/granular-data/_search/service-outlets";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

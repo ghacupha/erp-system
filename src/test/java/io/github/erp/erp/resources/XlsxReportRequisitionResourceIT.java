@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@ import io.github.erp.repository.search.XlsxReportRequisitionSearchRepository;
 import io.github.erp.service.XlsxReportRequisitionService;
 import io.github.erp.service.dto.XlsxReportRequisitionDTO;
 import io.github.erp.service.mapper.XlsxReportRequisitionMapper;
-import io.github.erp.web.rest.TestUtil;
+import io.github.erp.erp.resources.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -92,9 +92,9 @@ public class XlsxReportRequisitionResourceIT {
     private static final UUID DEFAULT_REPORT_ID = UUID.randomUUID();
     private static final UUID UPDATED_REPORT_ID = UUID.randomUUID();
 
-    private static final String ENTITY_API_URL = "/api/xlsx-report-requisitions";
+    private static final String ENTITY_API_URL = "/v2/api/xlsx-report-requisitions";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/xlsx-report-requisitions";
+    private static final String ENTITY_SEARCH_API_URL = "/v2/api/_search/xlsx-report-requisitions";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

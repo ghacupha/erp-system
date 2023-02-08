@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,7 @@ import io.github.erp.service.PdfReportRequisitionQueryService;
 import io.github.erp.service.PdfReportRequisitionService;
 import io.github.erp.service.criteria.PdfReportRequisitionCriteria;
 import io.github.erp.service.dto.PdfReportRequisitionDTO;
-import io.github.erp.erp.errors.BadRequestAlertException;
+import io.github.erp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -61,8 +61,8 @@ import tech.jhipster.web.util.ResponseUtil;
 /**
  * REST controller for managing {@link io.github.erp.domain.PdfReportRequisition}.
  */
-@RestController
-@RequestMapping("/api")
+@RestController("ProductionPDFReportRequisitionResource")
+@RequestMapping("/v2/api")
 @RolesAllowed({"ROLE_REPORT_ACCESSOR", "ROLE_REPORT_DESIGNER", "ROLE_DEV"})
 public class PdfReportRequisitionResource {
 

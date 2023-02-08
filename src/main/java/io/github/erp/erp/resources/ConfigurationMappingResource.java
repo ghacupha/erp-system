@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -39,11 +39,11 @@ import java.util.Optional;
  * Edit: 2022-08-30
  * Okay this feature turned out to be so useful that we created other domain-specific
  * entities primarily for front-end configuration. For instance we now have and entity
- * called prepayment-mapping in which we configure parameters that are specific to 
+ * called prepayment-mapping in which we configure parameters that are specific to
  * prepayments only
  */
 @RestController
-@RequestMapping("/api/configuration")
+@RequestMapping("/v2/api/configuration")
 public class ConfigurationMappingResource {
 
     private static final Logger log = LoggerFactory.getLogger(ConfigurationMappingResource.class);

@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,7 @@ import io.github.erp.repository.search.ReportRequisitionSearchRepository;
 import io.github.erp.service.ReportRequisitionService;
 import io.github.erp.service.dto.ReportRequisitionDTO;
 import io.github.erp.service.mapper.ReportRequisitionMapper;
-import io.github.erp.web.rest.TestUtil;
+import io.github.erp.erp.resources.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,7 +49,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static io.github.erp.web.rest.TestUtil.sameInstant;
+import static io.github.erp.erp.resources.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -94,9 +94,9 @@ public class ReportRequisitionResourceIT {
     private static final String DEFAULT_REPORT_NOTES_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_REPORT_NOTES_CONTENT_TYPE = "image/png";
 
-    private static final String ENTITY_API_URL = "/api/report-requisitions";
+    private static final String ENTITY_API_URL = "/v2/api/report-requisitions";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/report-requisitions";
+    private static final String ENTITY_SEARCH_API_URL = "/v2/api/_search/report-requisitions";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
@@ -228,8 +228,9 @@ public class ReportRequisitionResourceIT {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(TestUtil.convertObjectToJsonBytes(reportRequisitionDTO))
             )
+            // TODO the report is intercepted and compiled in the FS, SimpleJasperReportCompiler.java:40 throws an error
             .andExpect(status().is5xxServerError());
-            // todo .andExpect(status().isCreated());
+            // .andExpect(status().isCreated());
 
         // Validate the ReportRequisition in the database
         List<ReportRequisition> reportRequisitionList = reportRequisitionRepository.findAll();

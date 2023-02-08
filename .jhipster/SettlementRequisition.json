@@ -29,6 +29,10 @@
       "fieldType": "PaymentStatus",
       "fieldValues": "PROCESSED,IN_PROCESS,SENT_FOR_FURTHER_APPROVAL,RETURNED_TO_SENDER",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "remarks",
+      "fieldType": "String"
     }
   ],
   "relationships": [
@@ -120,6 +124,22 @@
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "settlementRequisition"
+    },
+    {
+      "relationshipName": "settlement",
+      "otherEntityName": "settlement",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "paymentNumber",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "settlementRequisition"
+    },
+    {
+      "relationshipName": "otherBeneficiaries",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "dealerName",
       "ownerSide": true,
       "otherEntityRelationshipName": "settlementRequisition"
     }

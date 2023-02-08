@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@ import io.github.erp.repository.search.QuestionBaseSearchRepository;
 import io.github.erp.service.QuestionBaseService;
 import io.github.erp.service.dto.QuestionBaseDTO;
 import io.github.erp.service.mapper.QuestionBaseMapper;
-import io.github.erp.web.rest.TestUtil;
+import io.github.erp.erp.resources.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -92,9 +92,9 @@ public class QuestionBaseResourceIT {
     private static final Boolean DEFAULT_ITERABLE = false;
     private static final Boolean UPDATED_ITERABLE = true;
 
-    private static final String ENTITY_API_URL = "/api/design-report/question-bases";
+    private static final String ENTITY_API_URL = "/v2/api/design-report/question-bases";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/design-report/_search/question-bases";
+    private static final String ENTITY_SEARCH_API_URL = "/v2/api/design-report/_search/question-bases";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

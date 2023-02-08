@@ -1,0 +1,40 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1675417151085-4">
+        <createTable tableName="rel_settlement_requisition__other_beneficiaries">
+            <column name="settlement_requisition_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="other_beneficiaries_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1675417151085-5">
+        <createTable tableName="rel_settlement_requisition__settlement">
+            <column name="settlement_requisition_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="settlement_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1675417151085-6">
+        <addColumn tableName="settlement_requisition">
+            <column name="remarks" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1675417151085-9">
+        <addForeignKeyConstraint baseColumnNames="other_beneficiaries_id" baseTableName="rel_settlement_requisition__other_beneficiaries" constraintName="FKemmwfxm7b3falwulvrksjhh7h" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="dealer" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1675417151085-10">
+        <addForeignKeyConstraint baseColumnNames="settlement_requisition_id" baseTableName="rel_settlement_requisition__other_beneficiaries" constraintName="FKfjshu1mv4b3j6jsc1x3umovxl" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement_requisition" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1675417151085-11">
+        <addForeignKeyConstraint baseColumnNames="settlement_requisition_id" baseTableName="rel_settlement_requisition__settlement" constraintName="FKjypbqghsx3b0rn97s3ddc5bkg" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement_requisition" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1675417151085-12">
+        <addForeignKeyConstraint baseColumnNames="settlement_id" baseTableName="rel_settlement_requisition__settlement" constraintName="FKnnfvl3bij994hykmjngrrpoe0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@ import io.github.erp.service.MfbBranchCodeQueryService;
 import io.github.erp.service.MfbBranchCodeService;
 import io.github.erp.service.criteria.MfbBranchCodeCriteria;
 import io.github.erp.service.dto.MfbBranchCodeDTO;
-import io.github.erp.erp.errors.BadRequestAlertException;
+import io.github.erp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -45,8 +45,8 @@ import tech.jhipster.web.util.ResponseUtil;
 /**
  * REST controller for managing {@link io.github.erp.domain.MfbBranchCode}.
  */
-@RestController
-@RequestMapping("/api/granular-data")
+@RestController("ProductionMFBBranchCodeResource")
+@RequestMapping("/v2/api/granular-data")
 public class MfbBranchCodeResource {
 
     private final Logger log = LoggerFactory.getLogger(MfbBranchCodeResource.class);

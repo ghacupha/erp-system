@@ -1,7 +1,7 @@
 package io.github.erp.internal.service;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,6 +20,7 @@ package io.github.erp.internal.service;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,7 @@ import io.github.erp.service.mapper.PrepaymentMappingMapper;
 /**
  * Custom service for prepayment-mapping with access to the internal-prepayment-mapping-repository
  */
+@Primary
 @Service("internalPrepaymentMappingService")
 @Transactional
 public class InternalPrepaymentMappingServiceImpl
@@ -53,6 +55,12 @@ implements InternalPrepaymentMappingService {
        this.prepaymentMappingMapper = prepaymentMappingMapper;
 
     }
+
+//
+//    public InternalPrepaymentMappingServiceImpl(PrepaymentMappingMapper prepaymentMappingMapper, InternalPrepaymentMappingRepository internalPrepaymentMappingRepository) {
+//        this.prepaymentMappingMapper = prepaymentMappingMapper;
+//        this.internalPrepaymentMappingRepository = internalPrepaymentMappingRepository;
+//    }
 
     @Override
     public Optional<PrepaymentMappingDTO> getMapping(String parameterKey) {

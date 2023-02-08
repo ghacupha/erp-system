@@ -1,7 +1,7 @@
 package io.github.erp.erp.index;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,7 +23,6 @@ import io.github.erp.service.PrepaymentMappingService;
 import io.github.erp.service.mapper.PrepaymentMappingMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.data.domain.Pageable;
@@ -44,7 +43,7 @@ public class PrepaymentMappingIndexingService extends AbtractStartUpIndexService
 
     public PrepaymentMappingIndexingService(
         PrepaymentMappingMapper mapper,
-        @Qualifier("internalPrepaymentMappingService") PrepaymentMappingService service,
+        PrepaymentMappingService service,
         PrepaymentMappingSearchRepository searchRepository) {
         this.mapper = mapper;
         this.service = service;

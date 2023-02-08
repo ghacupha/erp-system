@@ -1,7 +1,7 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@ package io.github.erp.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.*; // for static metamodels
 import io.github.erp.domain.SettlementRequisition;
 import io.github.erp.repository.SettlementRequisitionRepository;
@@ -136,6 +137,9 @@ public class SettlementRequisitionQueryService extends QueryService<SettlementRe
             if (criteria.getPaymentStatus() != null) {
                 specification = specification.and(buildSpecification(criteria.getPaymentStatus(), SettlementRequisition_.paymentStatus));
             }
+            if (criteria.getRemarks() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getRemarks(), SettlementRequisition_.remarks));
+            }
             if (criteria.getSettlementCurrencyId() != null) {
                 specification =
                     specification.and(
@@ -241,6 +245,24 @@ public class SettlementRequisitionQueryService extends QueryService<SettlementRe
                         buildSpecification(
                             criteria.getPlaceholderId(),
                             root -> root.join(SettlementRequisition_.placeholders, JoinType.LEFT).get(Placeholder_.id)
+                        )
+                    );
+            }
+            if (criteria.getSettlementId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getSettlementId(),
+                            root -> root.join(SettlementRequisition_.settlements, JoinType.LEFT).get(Settlement_.id)
+                        )
+                    );
+            }
+            if (criteria.getOtherBeneficiariesId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getOtherBeneficiariesId(),
+                            root -> root.join(SettlementRequisition_.otherBeneficiaries, JoinType.LEFT).get(Dealer_.id)
                         )
                     );
             }

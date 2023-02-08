@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@ import io.github.erp.service.BankBranchCodeQueryService;
 import io.github.erp.service.BankBranchCodeService;
 import io.github.erp.service.criteria.BankBranchCodeCriteria;
 import io.github.erp.service.dto.BankBranchCodeDTO;
-import io.github.erp.erp.errors.BadRequestAlertException;
+import io.github.erp.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,8 +47,8 @@ import java.util.Optional;
 /**
  * REST controller for managing {@link io.github.erp.domain.BankBranchCode}.
  */
-@RestController
-@RequestMapping("/api/granular-data")
+@RestController("ProductionBankBranchCodeResource")
+@RequestMapping("/v2/api/granular-data")
 public class BankBranchCodeResource {
 
     private final Logger log = LoggerFactory.getLogger(BankBranchCodeResource.class);

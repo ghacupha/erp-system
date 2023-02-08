@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.SettlementRequisition;
 import io.github.erp.service.dto.SettlementRequisitionDTO;
 import org.mapstruct.*;
@@ -36,6 +37,7 @@ import org.mapstruct.*;
         BusinessDocumentMapper.class,
         UniversallyUniqueMappingMapper.class,
         PlaceholderMapper.class,
+        SettlementMapper.class,
     }
 )
 public interface SettlementRequisitionMapper extends EntityMapper<SettlementRequisitionDTO, SettlementRequisition> {
@@ -51,6 +53,8 @@ public interface SettlementRequisitionMapper extends EntityMapper<SettlementRequ
     @Mapping(target = "businessDocuments", source = "businessDocuments", qualifiedByName = "documentTitleSet")
     @Mapping(target = "applicationMappings", source = "applicationMappings", qualifiedByName = "universalKeySet")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
+    @Mapping(target = "settlements", source = "settlements", qualifiedByName = "paymentNumberSet")
+    @Mapping(target = "otherBeneficiaries", source = "otherBeneficiaries", qualifiedByName = "dealerNameSet")
     SettlementRequisitionDTO toDto(SettlementRequisition s);
 
     @Mapping(target = "removePaymentInvoice", ignore = true)
@@ -60,5 +64,7 @@ public interface SettlementRequisitionMapper extends EntityMapper<SettlementRequ
     @Mapping(target = "removeBusinessDocument", ignore = true)
     @Mapping(target = "removeApplicationMapping", ignore = true)
     @Mapping(target = "removePlaceholder", ignore = true)
+    @Mapping(target = "removeSettlement", ignore = true)
+    @Mapping(target = "removeOtherBeneficiaries", ignore = true)
     SettlementRequisition toEntity(SettlementRequisitionDTO settlementRequisitionDTO);
 }

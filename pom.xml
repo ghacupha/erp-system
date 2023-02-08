@@ -7,7 +7,7 @@
 
     <groupId>io.github.erp</groupId>
     <artifactId>erp-system</artifactId>
-    <version>${ERP_SYSTEM_DEPLOYMENT_VERSION}</version>
+    <version>0.6.0</version>
     <packaging>jar</packaging>
     <name>Erp System</name>
     <!--<description>Mark III No 6 (Caleb Series) Server ver 0.3.0-SNAPSHOT</description>-->
@@ -26,8 +26,8 @@
     <properties>
         <!-- Build properties -->
         <ERP_SYSTEM_DEPLOYMENT_SERIES>Caleb Series</ERP_SYSTEM_DEPLOYMENT_SERIES>
-        <ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>Mark III No 9 </ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>
-        <ERP_SYSTEM_DEPLOYMENT_VERSION>0.5.0</ERP_SYSTEM_DEPLOYMENT_VERSION>
+        <ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>Mark III No 10 </ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>
+        <ERP_SYSTEM_DEPLOYMENT_VERSION>${project.version}</ERP_SYSTEM_DEPLOYMENT_VERSION>
         <ERP_SYSTEM_DEPLOYMENT_TITLE>${ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER} (${ERP_SYSTEM_DEPLOYMENT_SERIES}) Server ver ${ERP_SYSTEM_DEPLOYMENT_VERSION}</ERP_SYSTEM_DEPLOYMENT_TITLE>
         <maven.version>3.3.9</maven.version>
         <java.version>11</java.version>
@@ -456,6 +456,15 @@
 
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
+        <resources>
+            <resource>
+                <directory>src/</directory>
+                <excludes>
+                    <!--<exclude>src/main/resources/scripts/</exclude>-->
+                    <exclude>src/main/java/io/github/erp/web/rest</exclude>
+                </excludes>
+            </resource>
+        </resources>
         <testResources>
             <testResource>
                 <directory>src/test/resources/</directory>
@@ -476,17 +485,10 @@
                             <goal>revision</goal>
                         </goals>
                     </execution>
-                    <execution>
-                        <id>validate-the-git-infos</id>
-                        <goals>
-                            <goal>validateRevision</goal>
-                        </goals>
-                    </execution>
                 </executions>
                 <configuration>
                     <generateGitPropertiesFile>true</generateGitPropertiesFile>
                     <failOnNoGitDirectory>false</failOnNoGitDirectory>
-                    <verbose>true</verbose>
                 </configuration>
             </plugin>
             <plugin>
@@ -524,6 +526,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        io/github/erp/web/rest/**
+                    </excludes>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>

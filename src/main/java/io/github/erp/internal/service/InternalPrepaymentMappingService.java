@@ -1,7 +1,7 @@
 package io.github.erp.internal.service;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,12 +21,14 @@ import java.util.Optional;
 
 import io.github.erp.service.PrepaymentMappingService;
 import io.github.erp.service.dto.PrepaymentMappingDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Interface for retrieval of mapping parameters used in the prepayment modules
  */
 public interface InternalPrepaymentMappingService extends PrepaymentMappingService {
-    
+
     /**
      * Search for the universallyUniqueMapping corresponding to the query.
      *

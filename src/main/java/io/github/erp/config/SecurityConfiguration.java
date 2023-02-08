@@ -1,7 +1,7 @@
 package io.github.erp.config;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -97,41 +97,50 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
             .authorizeRequests()
+            // .antMatchers("/api/**").hasAuthority(AuthoritiesConstants.DEV)
             .antMatchers("/api/authenticate").permitAll()
             .antMatchers("/api/register").permitAll()
             .antMatchers("/api/activate").permitAll()
+            .antMatchers("/api/users/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/authorities/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/account").permitAll()
+            .antMatchers("/api/account/change-password").permitAll()
             .antMatchers("/api/account/reset-password/init").permitAll()
+            // .antMatchers("/api/account").hasAnyAuthority(AuthoritiesConstants.ANONYMOUS)
             .antMatchers("/api/account/reset-password/finish").permitAll()
+//            .antMatchers("/api/account").hasAnyAuthority(
+//                AuthoritiesConstants.ADMIN,
+//            AuthoritiesConstants.DEV)
             .antMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/accounts/**").hasAnyAuthority(
+            .antMatchers("/v2/api/accounts/**").hasAnyAuthority(
                 AuthoritiesConstants.FIXED_ASSETS_USER,
                 AuthoritiesConstants.PREPAYMENTS_MODULE_USER,
                 AuthoritiesConstants.BOOK_KEEPING)
-            .antMatchers("/api/fixed-asset/**").hasAnyAuthority(
+            .antMatchers("/v2/api/fixed-asset/**").hasAnyAuthority(
                 AuthoritiesConstants.FIXED_ASSETS_USER,
                 AuthoritiesConstants.PREPAYMENTS_MODULE_USER)
-            .antMatchers("/api/files/**").hasAuthority(AuthoritiesConstants.DBA)
-            .antMatchers("/api/docs/**").hasAuthority(AuthoritiesConstants.DOCUMENT_MODULE_USER)
-            .antMatchers("/api/design-report/**").hasAuthority(AuthoritiesConstants.REPORT_DESIGNER)
-            .antMatchers("/api/read-report/**").hasAuthority(AuthoritiesConstants.REPORT_DESIGNER)
-            .antMatchers("/api/read-report/**").hasAuthority(AuthoritiesConstants.REPORT_ACCESSOR)
-            .antMatchers("/api/dev/**").hasAuthority(AuthoritiesConstants.DEV)
-            .antMatchers("/api/dev-test/**").hasAuthority(AuthoritiesConstants.DEV)
-            .antMatchers("/api/payments/**").hasAnyAuthority(
+            .antMatchers("/v2/api/files/**").hasAuthority(AuthoritiesConstants.DBA)
+            .antMatchers("/v2/api/docs/**").hasAuthority(AuthoritiesConstants.DOCUMENT_MODULE_USER)
+            .antMatchers("/v2/api/design-report/**").hasAuthority(AuthoritiesConstants.REPORT_DESIGNER)
+            .antMatchers("/v2/api/read-report/**").hasAnyAuthority(AuthoritiesConstants.REPORT_DESIGNER, AuthoritiesConstants.REPORT_ACCESSOR)
+            .antMatchers("/v2/api/dev/**").hasAuthority(AuthoritiesConstants.DEV)
+            .antMatchers("/v2/api/dev-test/**").hasAuthority(AuthoritiesConstants.DEV)
+            .antMatchers("/v2/api/payments/**").hasAnyAuthority(
                 AuthoritiesConstants.PAYMENTS_USER,
                 AuthoritiesConstants.PREPAYMENTS_MODULE_USER,
                 AuthoritiesConstants.REQUISITION_MANAGER,
                 AuthoritiesConstants.FIXED_ASSETS_USER)
-            .antMatchers("/api/requisition/**").hasAnyAuthority(
+            .antMatchers("/v2/api/requisition/**").hasAnyAuthority(
                 AuthoritiesConstants.PAYMENTS_USER,
                 AuthoritiesConstants.REQUISITION_MANAGER)
-            .antMatchers("/api/prepayments/**").hasAnyAuthority(AuthoritiesConstants.PREPAYMENTS_MODULE_USER)
-            .antMatchers("/api/taxes/**").hasAuthority(AuthoritiesConstants.TAX_MODULE_USER)
-            .antMatchers("/api/granular-data/**").hasAnyAuthority(
+            .antMatchers("/v2/api/prepayments/**").hasAnyAuthority(AuthoritiesConstants.PREPAYMENTS_MODULE_USER)
+            .antMatchers("/v2/api/taxes/**").hasAuthority(AuthoritiesConstants.TAX_MODULE_USER)
+            .antMatchers("/v2/api/granular-data/**").hasAnyAuthority(
                 AuthoritiesConstants.GRANULAR_REPORTS_USER,
                 AuthoritiesConstants.PREPAYMENTS_MODULE_USER,
                 AuthoritiesConstants.FIXED_ASSETS_USER)
-            .antMatchers("/api/**").authenticated()
+            //.antMatchers("/api/**").authenticated() // TODO confirm this works!!!
+            .antMatchers("/api/**").hasAuthority(AuthoritiesConstants.DEV)
             .antMatchers("/websocket/**").authenticated()
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/health/**").permitAll()

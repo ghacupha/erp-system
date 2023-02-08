@@ -1,7 +1,7 @@
 package io.github.erp.internal.service;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@ import io.github.erp.service.FileUploadQueryService;
 import io.github.erp.service.FileUploadService;
 import io.github.erp.service.dto.FileUploadDTO;
 import io.github.erp.service.mapper.FileUploadMapper;
-import io.github.erp.web.rest.TestUtil;
+import io.github.erp.erp.resources.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -179,7 +179,7 @@ class FileUploadDataFileContainerIT {
         int databaseSizeBeforeCreate = fileUploadRepository.findAll().size();
         // Create the FileUpload
         FileUploadDTO fileUploadDTO = fileUploadMapper.toDto(fileUpload);
-        restFileUploadMockMvc.perform(post("/api/files/file-uploads")
+        restFileUploadMockMvc.perform(post("/v2/api/files/file-uploads")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(fileUploadDTO)))
             .andExpect(status().isCreated());

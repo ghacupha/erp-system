@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.github.erp.domain.enumeration.PaymentStatus;
 import java.io.Serializable;
@@ -70,6 +71,9 @@ public class SettlementRequisition implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_status", nullable = false)
     private PaymentStatus paymentStatus;
+
+    @Column(name = "remarks")
+    private String remarks;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -210,6 +214,39 @@ public class SettlementRequisition implements Serializable {
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+        name = "rel_settlement_requisition__settlement",
+        joinColumns = @JoinColumn(name = "settlement_requisition_id"),
+        inverseJoinColumns = @JoinColumn(name = "settlement_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = {
+            "placeholders",
+            "settlementCurrency",
+            "paymentLabels",
+            "paymentCategory",
+            "groupSettlement",
+            "biller",
+            "paymentInvoices",
+            "signatories",
+            "businessDocuments",
+        },
+        allowSetters = true
+    )
+    private Set<Settlement> settlements = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_settlement_requisition__other_beneficiaries",
+        joinColumns = @JoinColumn(name = "settlement_requisition_id"),
+        inverseJoinColumns = @JoinColumn(name = "other_beneficiaries_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "placeholders" }, allowSetters = true)
+    private Set<Dealer> otherBeneficiaries = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -301,6 +338,19 @@ public class SettlementRequisition implements Serializable {
 
     public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+
+    public String getRemarks() {
+        return this.remarks;
+    }
+
+    public SettlementRequisition remarks(String remarks) {
+        this.setRemarks(remarks);
+        return this;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
     public SettlementCurrency getSettlementCurrency() {
@@ -529,6 +579,52 @@ public class SettlementRequisition implements Serializable {
         return this;
     }
 
+    public Set<Settlement> getSettlements() {
+        return this.settlements;
+    }
+
+    public void setSettlements(Set<Settlement> settlements) {
+        this.settlements = settlements;
+    }
+
+    public SettlementRequisition settlements(Set<Settlement> settlements) {
+        this.setSettlements(settlements);
+        return this;
+    }
+
+    public SettlementRequisition addSettlement(Settlement settlement) {
+        this.settlements.add(settlement);
+        return this;
+    }
+
+    public SettlementRequisition removeSettlement(Settlement settlement) {
+        this.settlements.remove(settlement);
+        return this;
+    }
+
+    public Set<Dealer> getOtherBeneficiaries() {
+        return this.otherBeneficiaries;
+    }
+
+    public void setOtherBeneficiaries(Set<Dealer> dealers) {
+        this.otherBeneficiaries = dealers;
+    }
+
+    public SettlementRequisition otherBeneficiaries(Set<Dealer> dealers) {
+        this.setOtherBeneficiaries(dealers);
+        return this;
+    }
+
+    public SettlementRequisition addOtherBeneficiaries(Dealer dealer) {
+        this.otherBeneficiaries.add(dealer);
+        return this;
+    }
+
+    public SettlementRequisition removeOtherBeneficiaries(Dealer dealer) {
+        this.otherBeneficiaries.remove(dealer);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -559,6 +655,7 @@ public class SettlementRequisition implements Serializable {
             ", requisitionNumber='" + getRequisitionNumber() + "'" +
             ", paymentAmount=" + getPaymentAmount() +
             ", paymentStatus='" + getPaymentStatus() + "'" +
+            ", remarks='" + getRemarks() + "'" +
             "}";
     }
 }

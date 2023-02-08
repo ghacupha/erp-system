@@ -1,7 +1,7 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.enumeration.PaymentStatus;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -51,6 +52,8 @@ public class SettlementRequisitionDTO implements Serializable {
     @NotNull
     private PaymentStatus paymentStatus;
 
+    private String remarks;
+
     private SettlementCurrencyDTO settlementCurrency;
 
     private ApplicationUserDTO currentOwner;
@@ -74,6 +77,10 @@ public class SettlementRequisitionDTO implements Serializable {
     private Set<UniversallyUniqueMappingDTO> applicationMappings = new HashSet<>();
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
+
+    private Set<SettlementDTO> settlements = new HashSet<>();
+
+    private Set<DealerDTO> otherBeneficiaries = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -129,6 +136,14 @@ public class SettlementRequisitionDTO implements Serializable {
 
     public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
     public SettlementCurrencyDTO getSettlementCurrency() {
@@ -227,6 +242,22 @@ public class SettlementRequisitionDTO implements Serializable {
         this.placeholders = placeholders;
     }
 
+    public Set<SettlementDTO> getSettlements() {
+        return settlements;
+    }
+
+    public void setSettlements(Set<SettlementDTO> settlements) {
+        this.settlements = settlements;
+    }
+
+    public Set<DealerDTO> getOtherBeneficiaries() {
+        return otherBeneficiaries;
+    }
+
+    public void setOtherBeneficiaries(Set<DealerDTO> otherBeneficiaries) {
+        this.otherBeneficiaries = otherBeneficiaries;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -259,6 +290,7 @@ public class SettlementRequisitionDTO implements Serializable {
             ", requisitionNumber='" + getRequisitionNumber() + "'" +
             ", paymentAmount=" + getPaymentAmount() +
             ", paymentStatus='" + getPaymentStatus() + "'" +
+            ", remarks='" + getRemarks() + "'" +
             ", settlementCurrency=" + getSettlementCurrency() +
             ", currentOwner=" + getCurrentOwner() +
             ", nativeOwner=" + getNativeOwner() +
@@ -271,6 +303,8 @@ public class SettlementRequisitionDTO implements Serializable {
             ", businessDocuments=" + getBusinessDocuments() +
             ", applicationMappings=" + getApplicationMappings() +
             ", placeholders=" + getPlaceholders() +
+            ", settlements=" + getSettlements() +
+            ", otherBeneficiaries=" + getOtherBeneficiaries() +
             "}";
     }
 }

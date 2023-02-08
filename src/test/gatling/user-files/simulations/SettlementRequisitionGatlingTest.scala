@@ -1,5 +1,5 @@
 /**
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -94,6 +94,7 @@ class SettlementRequisitionGatlingTest extends Simulation {
                 , "requisitionNumber":"SAMPLE_TEXT"
                 , "paymentAmount":"0"
                 , "paymentStatus":"PROCESSED"
+                , "remarks":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_settlementRequisition_url"))).exitHereIfFailed

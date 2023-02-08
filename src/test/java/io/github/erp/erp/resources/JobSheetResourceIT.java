@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ import io.github.erp.repository.search.JobSheetSearchRepository;
 import io.github.erp.service.JobSheetService;
 import io.github.erp.service.dto.JobSheetDTO;
 import io.github.erp.service.mapper.JobSheetMapper;
-import io.github.erp.web.rest.TestUtil;
+import io.github.erp.erp.resources.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -76,9 +76,9 @@ public class JobSheetResourceIT {
     private static final String DEFAULT_REMARKS = "AAAAAAAAAA";
     private static final String UPDATED_REMARKS = "BBBBBBBBBB";
 
-    private static final String ENTITY_API_URL = "/api/payments/job-sheets";
+    private static final String ENTITY_API_URL = "/v2/api/payments/job-sheets";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/payments/_search/job-sheets";
+    private static final String ENTITY_SEARCH_API_URL = "/v2/api/payments/_search/job-sheets";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

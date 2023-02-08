@@ -170,7 +170,7 @@ jhipster:
   mail:
     from: erpSystem@localhost
   api-docs:
-    default-include-pattern: ${server.servlet.context-path:}/api/.*
+    default-include-pattern: ${server.servlet.context-path:}/v2/api/.*
     management-include-pattern: ${server.servlet.context-path:}/management/.*
     title: Erp System API
     description: Erp System API documentation
@@ -193,7 +193,7 @@ jhipster:
 # ===================================================================
 
 app:
-  title: 'Mark III No 9 (Caleb Series) Server ver 0.5.0'
+  title: 'Mark III No 10 (Caleb Series) Server ver 0.6.0'
   SandboxInstance:
     urls: ${SANDBOX_INSTANCE_URLS}
     #urls: 'https://127.0.0.1:8984,http://127.0.0.1:8984,https://localhost:8984,http://localhost:8984,http://127.0.0.1:8982,https://localhost:8982,http://localhost:8982,'

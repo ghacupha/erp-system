@@ -1,7 +1,7 @@
 package io.github.erp.internal.service;
 
 /*-
- * Erp System - Mark III No 9 (Caleb Series) Server ver 0.5.0
+ * Erp System - Mark III No 10 (Caleb Series) Server ver 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,12 +23,14 @@ import io.github.erp.repository.UniversallyUniqueMappingRepository;
 import io.github.erp.repository.search.UniversallyUniqueMappingSearchRepository;
 import io.github.erp.service.impl.UniversallyUniqueMappingServiceImpl;
 import io.github.erp.service.mapper.UniversallyUniqueMappingMapper;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
+@Primary
 @Service("internalUniversallyUniqueMappingService")
 @Transactional
 public class InternalUniversallyUniqueMappingServiceImpl
