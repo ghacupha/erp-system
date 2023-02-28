@@ -7,7 +7,7 @@
 
     <groupId>io.github.erp</groupId>
     <artifactId>erp-system</artifactId>
-    <version>0.5.0</version>
+    <version>0.6.0</version>
     <packaging>jar</packaging>
     <name>Erp System</name>
     <!--<description>Mark III No 6 (Caleb Series) Server ver 0.3.0-SNAPSHOT</description>-->
@@ -27,7 +27,7 @@
         <!-- Build properties -->
         <ERP_SYSTEM_DEPLOYMENT_SERIES>Caleb Series</ERP_SYSTEM_DEPLOYMENT_SERIES>
         <ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>Mark III No 10 </ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>
-        <ERP_SYSTEM_DEPLOYMENT_VERSION>0.5.0</ERP_SYSTEM_DEPLOYMENT_VERSION>
+        <ERP_SYSTEM_DEPLOYMENT_VERSION>0.6.0</ERP_SYSTEM_DEPLOYMENT_VERSION>
         <ERP_SYSTEM_DEPLOYMENT_TITLE>${ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER} (${ERP_SYSTEM_DEPLOYMENT_SERIES}) Server ver ${ERP_SYSTEM_DEPLOYMENT_VERSION}</ERP_SYSTEM_DEPLOYMENT_TITLE>
         <maven.version>3.3.9</maven.version>
         <java.version>11</java.version>
@@ -122,6 +122,25 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/net.sourceforge.dynamicreports/dynamicreports-core -->
+        <dependency>
+            <groupId>net.sourceforge.dynamicreports</groupId>
+            <artifactId>dynamicreports-core</artifactId>
+            <version>6.12.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/net.sourceforge.dynamicreports/dynamicreports-adhoc -->
+        <dependency>
+            <groupId>net.sourceforge.dynamicreports</groupId>
+            <artifactId>dynamicreports-adhoc</artifactId>
+            <version>6.12.1</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.dynamicreports</groupId>
+            <artifactId>dynamicreports-googlecharts</artifactId>
+            <version>6.12.1</version>
+        </dependency>
+
+
         <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
         <dependency>
             <groupId>commons-fileupload</groupId>

@@ -52,5 +52,7 @@ public final class AuthoritiesConstants {
 
     public static final String DOCUMENT_MODULE_USER = "ROLE_DOCUMENT_MODULE_USER";
 
+    public static final String LEASE_MANAGER = "ROLE_LEASE_MANAGER";
+
     private AuthoritiesConstants() {}
 }
