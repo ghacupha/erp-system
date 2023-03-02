@@ -1,8 +1,8 @@
 package io.github.erp.internal.report;
 
 /*-
- * Granular Summaries - Granular data analysis system
- * Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark III No 11 (Caleb Series) Server ver 0.7.0
+ * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
