@@ -1,4 +1,4 @@
-package io.github.erp.service.reports;
+package io.github.erp.internal.report.service;
 
 /*-
  * Erp System - Mark III No 11 (Caleb Series) Server ver 0.7.0
@@ -18,7 +18,6 @@ package io.github.erp.service.reports;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.erp.reports.SettlementBillerReportDTO;
 import io.github.erp.erp.reports.SettlementBillerReportRequisitionDTO;
 import io.github.erp.internal.report.ReportModel;
 

@@ -19,7 +19,8 @@ package io.github.erp.erp.reports;
  */
 
 import io.github.erp.internal.report.ReportModel;
-import io.github.erp.service.reports.SettlementBillerReportRequisitionService;
+import io.github.erp.internal.report.service.SettlementBillerReportDTO;
+import io.github.erp.internal.report.service.SettlementBillerReportRequisitionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;

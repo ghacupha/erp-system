@@ -1,4 +1,4 @@
-package io.github.erp.service.reports;
+package io.github.erp.internal.service;
 
 /*-
  * Erp System - Mark III No 11 (Caleb Series) Server ver 0.7.0

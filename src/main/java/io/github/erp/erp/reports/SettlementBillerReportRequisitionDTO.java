@@ -28,7 +28,7 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SettlementBillerReportRequisitionDTO {
-    private long biller_id;
+    private long billerId;
     private ZonedDateTime from;
     private ZonedDateTime to;
 }

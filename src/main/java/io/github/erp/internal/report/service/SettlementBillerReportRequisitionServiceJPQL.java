@@ -1,4 +1,4 @@
-package io.github.erp.service.reports;
+package io.github.erp.internal.report.service;
 
 /*-
  * Erp System - Mark III No 11 (Caleb Series) Server ver 0.7.0
@@ -18,12 +18,8 @@ package io.github.erp.service.reports;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.domain.*;
-import io.github.erp.domain.enumeration.PaymentStatus;
-import io.github.erp.erp.reports.SettlementBillerReportDTO;
 import io.github.erp.erp.reports.SettlementBillerReportRequisitionDTO;
 import io.github.erp.internal.report.ReportModel;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,9 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
-import java.math.BigDecimal;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 @Transactional
@@ -46,7 +39,6 @@ public class SettlementBillerReportRequisitionServiceJPQL implements SettlementB
     private final EntityManagerFactory emFactory;
 
     public SettlementBillerReportRequisitionServiceJPQL(final EntityManagerFactory entityManager) {
-        // this.sessionFactory = entityManager.unwrap(SessionFactory.class);;
         this.emFactory = entityManager;
     }
 
@@ -66,7 +58,7 @@ public class SettlementBillerReportRequisitionServiceJPQL implements SettlementB
 
         TypedQuery<SettlementBillerReportDTO> query =
             entityManager.createQuery(
-                "SELECT NEW io.github.erp.erp.reports.SettlementBillerReportDTO ( " +
+                "SELECT NEW io.github.erp.internal.report.service.SettlementBillerReportDTO ( " +
                     "r.id, " +
                     "d.dealerName, " +
                     "r.description, " +
@@ -84,10 +76,12 @@ public class SettlementBillerReportRequisitionServiceJPQL implements SettlementB
                     "JOIN r.currentOwner o " +
                     "JOIN r.nativeOwner no " +
                     "JOIN r.nativeDepartment nd " +
-                    "JOIN r.settlementCurrency c ",
+                    "JOIN r.settlementCurrency c " +
+                    "WHERE ( r.biller.id = :billerId )",
                 SettlementBillerReportDTO.class);
 
-        // TODO Add where clause for biller_id
+        query.setParameter("billerId", reportRequisition.getBillerId());
+
         // TODO Add where clause for time of requisition
 
         ReportModel<List<SettlementBillerReportDTO>> reportModel = new ReportModel<>();
