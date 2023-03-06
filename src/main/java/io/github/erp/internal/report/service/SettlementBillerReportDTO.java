@@ -1,4 +1,4 @@
-package io.github.erp.erp.reports;
+package io.github.erp.internal.report.service;
 
 /*-
  * Erp System - Mark III No 11 (Caleb Series) Server ver 0.7.0
@@ -27,7 +27,6 @@ import lombok.ToString;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 @XmlRootElement
