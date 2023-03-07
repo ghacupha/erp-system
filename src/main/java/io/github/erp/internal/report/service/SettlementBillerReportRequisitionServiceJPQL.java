@@ -47,7 +47,7 @@ public class SettlementBillerReportRequisitionServiceJPQL implements SettlementB
 
         ReportModel<List<SettlementBillerReportDTO>> resultModel = getSummary(reportRequisition, emFactory);
 
-        log.info("Table F summary list with {} items, generated in {} ms",resultModel.getReportData().size(),System.currentTimeMillis() - requestStart);
+        log.info("Summary list with {} items, generated in {} ms",resultModel.getReportData().size(),System.currentTimeMillis() - requestStart);
 
         return resultModel;
     }
