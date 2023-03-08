@@ -1,5 +1,5 @@
 @REM
-@REM Erp System - Mark III No 11 (Caleb Series) Server ver 0.7.0
+@REM Erp System - Mark III No 12 (Caleb Series) Server ver 0.8.0
 @REM Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
 @REM
 @REM This program is free software: you can redistribute it and/or modify
