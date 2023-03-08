@@ -1,7 +1,7 @@
 package io.github.erp.internal.report.service;
 
 /*-
- * Erp System - Mark III No 11 (Caleb Series) Server ver 0.7.0
+ * Erp System - Mark III No 12 (Caleb Series) Server ver 0.8.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.internal.report.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.erp.reports.SettlementBillerReportRequisitionDTO;
 import io.github.erp.internal.report.ReportModel;
 import org.slf4j.Logger;
