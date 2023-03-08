@@ -88,6 +88,8 @@ public class SettlementBillerReportRequisitionServiceJPQL implements SettlementB
         reportModel.sqlString(query);
         reportModel.setReportData(query.getResultList());
 
+        entityManager.close();
+
         return reportModel;
     }
 }
