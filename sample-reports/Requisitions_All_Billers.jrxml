@@ -147,7 +147,7 @@ WHERE r.settlement_currency_id = s.id
                                 <reportElement x="0" y="0" width="40" height="30" uuid="afb10161-2bf4-48d1-86a9-b13b02e60780"/>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="12" isBold="true"/>
+                                    <font fontName="SansSerif" size="12" isBold="true"/>
                                 </textElement>
                                 <text><![CDATA[No.]]></text>
                             </staticText>
@@ -160,7 +160,7 @@ WHERE r.settlement_currency_id = s.id
                                 </reportElement>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="9"/>
+                                    <font fontName="SansSerif" size="9"/>
                                 </textElement>
                                 <textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
                             </textField>
@@ -174,7 +174,7 @@ WHERE r.settlement_currency_id = s.id
                                 <reportElement x="0" y="0" width="280" height="30" uuid="3f61640c-bf54-4894-9dcf-b48bc3373c35"/>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="12" isBold="true"/>
+                                    <font fontName="SansSerif" size="12" isBold="true"/>
                                 </textElement>
                                 <text><![CDATA[Description]]></text>
                             </staticText>
@@ -187,7 +187,7 @@ WHERE r.settlement_currency_id = s.id
                                 </reportElement>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="9"/>
+                                    <font fontName="SansSerif" size="9"/>
                                 </textElement>
                                 <textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
                             </textField>
@@ -201,7 +201,7 @@ WHERE r.settlement_currency_id = s.id
                                 <reportElement x="0" y="0" width="100" height="30" uuid="d0874ebd-1a51-4c0e-ba2d-4ee9446779ca"/>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="12" isBold="true"/>
+                                    <font fontName="SansSerif" size="12" isBold="true"/>
                                 </textElement>
                                 <text><![CDATA[Time]]></text>
                             </staticText>
@@ -212,7 +212,7 @@ WHERE r.settlement_currency_id = s.id
                                 <reportElement x="0" y="0" width="100" height="30" uuid="75f32f14-980a-483a-8285-f0509aecc0ab"/>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="9"/>
+                                    <font fontName="SansSerif" size="9"/>
                                 </textElement>
                                 <textFieldExpression><![CDATA[$F{time_of_requisition}]]></textFieldExpression>
                             </textField>
@@ -226,7 +226,7 @@ WHERE r.settlement_currency_id = s.id
                                 <reportElement x="0" y="0" width="60" height="30" uuid="11e1f95a-37aa-4276-b6ba-46499239abd0"/>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="12" isBold="true"/>
+                                    <font fontName="SansSerif" size="12" isBold="true"/>
                                 </textElement>
                                 <text><![CDATA[Req. No.]]></text>
                             </staticText>
@@ -237,7 +237,7 @@ WHERE r.settlement_currency_id = s.id
                                 <reportElement x="0" y="0" width="60" height="30" uuid="fd8ea1b1-e20b-4b63-b239-ec1f65a35ec0"/>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="9"/>
+                                    <font fontName="SansSerif" size="9"/>
                                 </textElement>
                                 <textFieldExpression><![CDATA[$F{requisition_number}]]></textFieldExpression>
                             </textField>
@@ -251,7 +251,7 @@ WHERE r.settlement_currency_id = s.id
                                 <reportElement x="0" y="0" width="70" height="30" uuid="0b85a5f5-144b-4f35-9e8e-90f5dfe30bba"/>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="12" isBold="true"/>
+                                    <font fontName="SansSerif" size="12" isBold="true"/>
                                 </textElement>
                                 <text><![CDATA[CCY Code]]></text>
                             </staticText>
@@ -262,7 +262,7 @@ WHERE r.settlement_currency_id = s.id
                                 <reportElement x="0" y="0" width="70" height="30" uuid="ab9253ce-fdc5-4a8a-9329-1688ba0a058d"/>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="9"/>
+                                    <font fontName="SansSerif" size="9"/>
                                 </textElement>
                                 <textFieldExpression><![CDATA[$F{iso_4217_currency_code}]]></textFieldExpression>
                             </textField>
@@ -276,7 +276,7 @@ WHERE r.settlement_currency_id = s.id
                                 <reportElement x="0" y="0" width="60" height="30" uuid="263cbb48-35d1-40c2-9c64-bfe54784ce08"/>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="12" isBold="true"/>
+                                    <font fontName="SansSerif" size="12" isBold="true"/>
                                 </textElement>
                                 <text><![CDATA[Amount]]></text>
                             </staticText>
@@ -287,7 +287,7 @@ WHERE r.settlement_currency_id = s.id
                                 <reportElement x="0" y="0" width="60" height="30" uuid="eb786e38-be39-47ec-898b-09c829639b9c"/>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="9"/>
+                                    <font fontName="SansSerif" size="9"/>
                                 </textElement>
                                 <textFieldExpression><![CDATA[$F{payment_amount}]]></textFieldExpression>
                             </textField>
@@ -301,7 +301,7 @@ WHERE r.settlement_currency_id = s.id
                                 <reportElement x="0" y="0" width="190" height="30" uuid="b7871449-31c3-4014-9299-5d6af052dffa"/>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="12" isBold="true"/>
+                                    <font fontName="SansSerif" size="12" isBold="true"/>
                                 </textElement>
                                 <text><![CDATA[Status]]></text>
                             </staticText>
@@ -312,7 +312,7 @@ WHERE r.settlement_currency_id = s.id
                                 <reportElement x="0" y="0" width="190" height="30" uuid="74d0c4f3-8ffa-4412-9a1e-b3fa0730bcc8"/>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="9"/>
+                                    <font fontName="SansSerif" size="9"/>
                                 </textElement>
                                 <textFieldExpression><![CDATA[$F{payment_status}]]></textFieldExpression>
                             </textField>
@@ -326,7 +326,7 @@ WHERE r.settlement_currency_id = s.id
                                 <reportElement x="0" y="0" width="125" height="30" uuid="0e5ff15f-97c3-4bb3-b508-11fbf193c999"/>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="12" isBold="true"/>
+                                    <font fontName="SansSerif" size="12" isBold="true"/>
                                 </textElement>
                                 <text><![CDATA[Biller]]></text>
                             </staticText>
@@ -337,7 +337,7 @@ WHERE r.settlement_currency_id = s.id
                                 <reportElement x="0" y="0" width="125" height="30" uuid="eb6071e5-0427-4a6d-9362-7f18e189f7b5"/>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="9"/>
+                                    <font fontName="SansSerif" size="9"/>
                                 </textElement>
                                 <textFieldExpression><![CDATA[$F{biller}]]></textFieldExpression>
                             </textField>
@@ -351,7 +351,7 @@ WHERE r.settlement_currency_id = s.id
                                 <reportElement x="0" y="0" width="130" height="30" uuid="7877d881-87cc-454f-a75f-646188fa0655"/>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="12" isBold="true"/>
+                                    <font fontName="SansSerif" size="12" isBold="true"/>
                                 </textElement>
                                 <text><![CDATA[Current Owner]]></text>
                             </staticText>
@@ -362,7 +362,7 @@ WHERE r.settlement_currency_id = s.id
                                 <reportElement x="0" y="0" width="130" height="30" uuid="917ecd5e-7527-40af-89ff-8446baacff79"/>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="9"/>
+                                    <font fontName="SansSerif" size="9"/>
                                 </textElement>
                                 <textFieldExpression><![CDATA[$F{current_owner}]]></textFieldExpression>
                             </textField>
@@ -376,7 +376,7 @@ WHERE r.settlement_currency_id = s.id
                                 <reportElement x="0" y="0" width="110" height="30" uuid="0b5883ad-1a4b-44a4-8d64-b188f1ff620d"/>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="12" isBold="true"/>
+                                    <font fontName="SansSerif" size="12" isBold="true"/>
                                 </textElement>
                                 <text><![CDATA[Native Owner]]></text>
                             </staticText>
@@ -387,7 +387,7 @@ WHERE r.settlement_currency_id = s.id
                                 <reportElement x="0" y="0" width="110" height="30" uuid="82f0b234-3586-4dd2-b370-e1fce6d0d445"/>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="9"/>
+                                    <font fontName="SansSerif" size="9"/>
                                 </textElement>
                                 <textFieldExpression><![CDATA[$F{native_owner}]]></textFieldExpression>
                             </textField>
@@ -401,7 +401,7 @@ WHERE r.settlement_currency_id = s.id
                                 <reportElement x="0" y="0" width="140" height="30" uuid="c69036b1-b6c3-4e2f-9181-d2bb017a6884"/>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="12" isBold="true"/>
+                                    <font fontName="SansSerif" size="12" isBold="true"/>
                                 </textElement>
                                 <text><![CDATA[Native Department]]></text>
                             </staticText>
@@ -412,7 +412,7 @@ WHERE r.settlement_currency_id = s.id
                                 <reportElement x="0" y="0" width="140" height="30" uuid="e4d386c3-2513-4625-95e6-4b378a0d10c3"/>
                                 <box leftPadding="2"/>
                                 <textElement>
-                                    <font fontName="Book Antiqua" size="9"/>
+                                    <font fontName="SansSerif" size="9"/>
                                 </textElement>
                                 <textFieldExpression><![CDATA[$F{native_department}]]></textFieldExpression>
                             </textField>
