@@ -57,9 +57,9 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController("DevFileUploadResource")
 @RequestMapping("/api/dev")
-public class FileUploadResource {
+public class FileUploadResourceDev {
 
-    private final Logger log = LoggerFactory.getLogger(FileUploadResource.class);
+    private final Logger log = LoggerFactory.getLogger(FileUploadResourceDev.class);
 
     private static final String ENTITY_NAME = "filesFileUpload";
 
@@ -72,7 +72,7 @@ public class FileUploadResource {
 
     private final FileUploadQueryService fileUploadQueryService;
 
-    public FileUploadResource(
+    public FileUploadResourceDev(
         FileUploadService fileUploadService,
         FileUploadRepository fileUploadRepository,
         FileUploadQueryService fileUploadQueryService

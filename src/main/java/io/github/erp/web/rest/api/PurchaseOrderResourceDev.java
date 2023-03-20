@@ -57,9 +57,9 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController("DevPurchaseOrderResource")
 @RequestMapping("/api/dev")
-public class PurchaseOrderResource {
+public class PurchaseOrderResourceDev {
 
-    private final Logger log = LoggerFactory.getLogger(PurchaseOrderResource.class);
+    private final Logger log = LoggerFactory.getLogger(PurchaseOrderResourceDev.class);
 
     private static final String ENTITY_NAME = "purchaseOrder";
 
@@ -72,7 +72,7 @@ public class PurchaseOrderResource {
 
     private final PurchaseOrderQueryService purchaseOrderQueryService;
 
-    public PurchaseOrderResource(
+    public PurchaseOrderResourceDev(
         PurchaseOrderService purchaseOrderService,
         PurchaseOrderRepository purchaseOrderRepository,
         PurchaseOrderQueryService purchaseOrderQueryService

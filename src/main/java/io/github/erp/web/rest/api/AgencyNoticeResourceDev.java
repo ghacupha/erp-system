@@ -57,9 +57,9 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController("DevAgencyNoticeResource")
 @RequestMapping("/api/dev")
-public class AgencyNoticeResource {
+public class AgencyNoticeResourceDev {
 
-    private final Logger log = LoggerFactory.getLogger(AgencyNoticeResource.class);
+    private final Logger log = LoggerFactory.getLogger(AgencyNoticeResourceDev.class);
 
     private static final String ENTITY_NAME = "agencyNotice";
 
@@ -72,7 +72,7 @@ public class AgencyNoticeResource {
 
     private final AgencyNoticeQueryService agencyNoticeQueryService;
 
-    public AgencyNoticeResource(
+    public AgencyNoticeResourceDev(
         AgencyNoticeService agencyNoticeService,
         AgencyNoticeRepository agencyNoticeRepository,
         AgencyNoticeQueryService agencyNoticeQueryService

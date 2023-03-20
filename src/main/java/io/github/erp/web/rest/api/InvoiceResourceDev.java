@@ -57,9 +57,9 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController("DevInvoiceResource")
 @RequestMapping("/api/dev")
-public class InvoiceResource {
+public class InvoiceResourceDev {
 
-    private final Logger log = LoggerFactory.getLogger(InvoiceResource.class);
+    private final Logger log = LoggerFactory.getLogger(InvoiceResourceDev.class);
 
     private static final String ENTITY_NAME = "paymentsInvoice";
 
@@ -72,7 +72,7 @@ public class InvoiceResource {
 
     private final InvoiceQueryService invoiceQueryService;
 
-    public InvoiceResource(InvoiceService invoiceService, InvoiceRepository invoiceRepository, InvoiceQueryService invoiceQueryService) {
+    public InvoiceResourceDev(InvoiceService invoiceService, InvoiceRepository invoiceRepository, InvoiceQueryService invoiceQueryService) {
         this.invoiceService = invoiceService;
         this.invoiceRepository = invoiceRepository;
         this.invoiceQueryService = invoiceQueryService;

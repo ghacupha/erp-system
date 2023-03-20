@@ -56,9 +56,9 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController("DevTaxRuleResource")
 @RequestMapping("/api/dev")
-public class TaxRuleResource {
+public class TaxRuleResourceDev {
 
-    private final Logger log = LoggerFactory.getLogger(TaxRuleResource.class);
+    private final Logger log = LoggerFactory.getLogger(TaxRuleResourceDev.class);
 
     private static final String ENTITY_NAME = "paymentsTaxRule";
 
@@ -71,7 +71,7 @@ public class TaxRuleResource {
 
     private final TaxRuleQueryService taxRuleQueryService;
 
-    public TaxRuleResource(TaxRuleService taxRuleService, TaxRuleRepository taxRuleRepository, TaxRuleQueryService taxRuleQueryService) {
+    public TaxRuleResourceDev(TaxRuleService taxRuleService, TaxRuleRepository taxRuleRepository, TaxRuleQueryService taxRuleQueryService) {
         this.taxRuleService = taxRuleService;
         this.taxRuleRepository = taxRuleRepository;
         this.taxRuleQueryService = taxRuleQueryService;

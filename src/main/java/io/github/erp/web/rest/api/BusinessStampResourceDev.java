@@ -49,9 +49,9 @@ import java.util.Optional;
  */
 @RestController("DevBusinessStampResource")
 @RequestMapping("/api/dev")
-public class BusinessStampResource {
+public class BusinessStampResourceDev {
 
-    private final Logger log = LoggerFactory.getLogger(BusinessStampResource.class);
+    private final Logger log = LoggerFactory.getLogger(BusinessStampResourceDev.class);
 
     private static final String ENTITY_NAME = "businessStamp";
 
@@ -64,7 +64,7 @@ public class BusinessStampResource {
 
     private final BusinessStampQueryService businessStampQueryService;
 
-    public BusinessStampResource(
+    public BusinessStampResourceDev(
         BusinessStampService businessStampService,
         BusinessStampRepository businessStampRepository,
         BusinessStampQueryService businessStampQueryService

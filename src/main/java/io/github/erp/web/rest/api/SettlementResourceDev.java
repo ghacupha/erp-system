@@ -57,9 +57,9 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController("DevSettlementResource")
 @RequestMapping("/api/dev")
-public class SettlementResource {
+public class SettlementResourceDev {
 
-    private final Logger log = LoggerFactory.getLogger(SettlementResource.class);
+    private final Logger log = LoggerFactory.getLogger(SettlementResourceDev.class);
 
     private static final String ENTITY_NAME = "settlement";
 
@@ -72,7 +72,7 @@ public class SettlementResource {
 
     private final SettlementQueryService settlementQueryService;
 
-    public SettlementResource(
+    public SettlementResourceDev(
         SettlementService settlementService,
         SettlementRepository settlementRepository,
         SettlementQueryService settlementQueryService

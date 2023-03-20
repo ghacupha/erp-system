@@ -56,9 +56,9 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController("DevFixedAssetNetBookValueResource")
 @RequestMapping("/api/dev")
-public class FixedAssetNetBookValueResource {
+public class FixedAssetNetBookValueResourceDev {
 
-    private final Logger log = LoggerFactory.getLogger(FixedAssetNetBookValueResource.class);
+    private final Logger log = LoggerFactory.getLogger(FixedAssetNetBookValueResourceDev.class);
 
     private static final String ENTITY_NAME = "assetsFixedAssetNetBookValue";
 
@@ -71,7 +71,7 @@ public class FixedAssetNetBookValueResource {
 
     private final FixedAssetNetBookValueQueryService fixedAssetNetBookValueQueryService;
 
-    public FixedAssetNetBookValueResource(
+    public FixedAssetNetBookValueResourceDev(
         FixedAssetNetBookValueService fixedAssetNetBookValueService,
         FixedAssetNetBookValueRepository fixedAssetNetBookValueRepository,
         FixedAssetNetBookValueQueryService fixedAssetNetBookValueQueryService
