@@ -18,9 +18,7 @@ package io.github.erp.erp.resources;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.BusinessDocument;
 import io.github.erp.domain.Placeholder;
-import io.github.erp.domain.WorkInProgressRegistration;
 import io.github.erp.domain.WorkInProgressTransfer;
 import io.github.erp.repository.WorkInProgressTransferRepository;
 import io.github.erp.repository.search.WorkInProgressTransferSearchRepository;
@@ -56,7 +54,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link WorkInProgressTransferResource} REST controller.
+ * Integration tests for the {@link WorkInProgressTransferResourceProd} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)

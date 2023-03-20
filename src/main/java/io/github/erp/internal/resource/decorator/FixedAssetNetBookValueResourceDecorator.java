@@ -19,7 +19,7 @@ package io.github.erp.internal.resource.decorator;
  */
 import io.github.erp.service.criteria.FixedAssetNetBookValueCriteria;
 import io.github.erp.service.dto.FixedAssetNetBookValueDTO;
-import io.github.erp.erp.resources.FixedAssetNetBookValueResource;
+import io.github.erp.erp.resources.FixedAssetNetBookValueResourceProd;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +29,9 @@ import java.util.List;
 
 public class FixedAssetNetBookValueResourceDecorator implements IFixedAssetNetBookValueResource {
 
-    private final FixedAssetNetBookValueResource fixedAssetNetBookValueResource;
+    private final FixedAssetNetBookValueResourceProd fixedAssetNetBookValueResource;
 
-    public FixedAssetNetBookValueResourceDecorator(FixedAssetNetBookValueResource fixedAssetNetBookValueResource) {
+    public FixedAssetNetBookValueResourceDecorator(FixedAssetNetBookValueResourceProd fixedAssetNetBookValueResource) {
         this.fixedAssetNetBookValueResource = fixedAssetNetBookValueResource;
     }
 

@@ -66,7 +66,7 @@ public class UniversallyUniqueMappingResourceDev {
     private final UniversallyUniqueMappingQueryService universallyUniqueMappingQueryService;
 
     public UniversallyUniqueMappingResourceDev(
-        @Qualifier("internalUniversallyUniqueMappingService") UniversallyUniqueMappingService universallyUniqueMappingService,
+        UniversallyUniqueMappingService universallyUniqueMappingService,
         UniversallyUniqueMappingRepository universallyUniqueMappingRepository,
         UniversallyUniqueMappingQueryService universallyUniqueMappingQueryService
     ) {

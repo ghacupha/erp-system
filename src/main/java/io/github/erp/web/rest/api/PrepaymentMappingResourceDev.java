@@ -66,7 +66,7 @@ public class PrepaymentMappingResourceDev {
     private final PrepaymentMappingQueryService prepaymentMappingQueryService;
 
     public PrepaymentMappingResourceDev(
-        @Qualifier("internalPrepaymentMappingService") PrepaymentMappingService prepaymentMappingService,
+        PrepaymentMappingService prepaymentMappingService,
         PrepaymentMappingRepository prepaymentMappingRepository,
         PrepaymentMappingQueryService prepaymentMappingQueryService
     ) {

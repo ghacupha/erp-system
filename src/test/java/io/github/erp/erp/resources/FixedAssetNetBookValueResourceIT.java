@@ -59,7 +59,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Integration tests for the {@link FixedAssetNetBookValueResource} REST controller.
+ * Integration tests for the {@link FixedAssetNetBookValueResourceProd} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)

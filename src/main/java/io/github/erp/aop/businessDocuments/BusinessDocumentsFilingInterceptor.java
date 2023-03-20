@@ -273,7 +273,7 @@ public class BusinessDocumentsFilingInterceptor {
     /**
      * Pointcut for report-requisition file attachment
      */
-    @Pointcut("execution(* io.github.erp.erp.resources.BusinessDocumentResource.createBusinessDocument(..))")
+    @Pointcut("execution(* io.github.erp.erp.resources.BusinessDocumentResourceProd.createBusinessDocument(..))")
     public void filingResponsePointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }

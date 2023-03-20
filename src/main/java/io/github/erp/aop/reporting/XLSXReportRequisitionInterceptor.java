@@ -50,7 +50,7 @@ public class XLSXReportRequisitionInterceptor {
     }
 
     @AfterReturning(
-        pointcut="execution(* io.github.erp.erp.resources.XlsxReportRequisitionResource.createXlsxReportRequisition(..))",
+        pointcut="execution(* io.github.erp.erp.resources.XlsxReportRequisitionResourceProd.createXlsxReportRequisition(..))",
         returning="response")
     public void getCreatedReportInfo(JoinPoint joinPoint, ResponseEntity<XlsxReportRequisitionDTO> response) {
 

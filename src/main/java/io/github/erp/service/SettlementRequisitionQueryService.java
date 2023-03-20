@@ -1,22 +1,5 @@
 package io.github.erp.service;
 
-/*-
- * Erp System - Mark III No 12 (Caleb Series) Server ver 0.8.0
- * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import io.github.erp.domain.*; // for static metamodels
 import io.github.erp.domain.SettlementRequisition;
 import io.github.erp.repository.SettlementRequisitionRepository;
@@ -136,6 +119,14 @@ public class SettlementRequisitionQueryService extends QueryService<SettlementRe
             if (criteria.getPaymentStatus() != null) {
                 specification = specification.and(buildSpecification(criteria.getPaymentStatus(), SettlementRequisition_.paymentStatus));
             }
+            if (criteria.getTransactionId() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getTransactionId(), SettlementRequisition_.transactionId));
+            }
+            if (criteria.getTransactionDate() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getTransactionDate(), SettlementRequisition_.transactionDate));
+            }
             if (criteria.getSettlementCurrencyId() != null) {
                 specification =
                     specification.and(
@@ -241,6 +232,15 @@ public class SettlementRequisitionQueryService extends QueryService<SettlementRe
                         buildSpecification(
                             criteria.getPlaceholderId(),
                             root -> root.join(SettlementRequisition_.placeholders, JoinType.LEFT).get(Placeholder_.id)
+                        )
+                    );
+            }
+            if (criteria.getSettlementId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getSettlementId(),
+                            root -> root.join(SettlementRequisition_.settlements, JoinType.LEFT).get(Settlement_.id)
                         )
                     );
             }

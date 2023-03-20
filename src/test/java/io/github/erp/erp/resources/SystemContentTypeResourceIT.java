@@ -56,7 +56,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link SystemContentTypeResource} REST controller.
+ * Integration tests for the {@link SystemContentTypeResourceProd} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -76,9 +76,9 @@ class SystemContentTypeResourceIT {
     private static final SystemContentTypeAvailability DEFAULT_AVAILABILITY = SystemContentTypeAvailability.SUPPORTED;
     private static final SystemContentTypeAvailability UPDATED_AVAILABILITY = SystemContentTypeAvailability.NOT_SUPPORTED;
 
-    private static final String ENTITY_API_URL = "/api/dev/system-content-types";
+    private static final String ENTITY_API_URL = "/api/app/system-content-types";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/dev/_search/system-content-types";
+    private static final String ENTITY_SEARCH_API_URL = "/api/app/_search/system-content-types";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

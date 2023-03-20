@@ -57,7 +57,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link ReportRequisitionResource} REST controller.
+ * Integration tests for the {@link ReportRequisitionResourceProd} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -228,8 +228,8 @@ public class ReportRequisitionResourceIT {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(TestUtil.convertObjectToJsonBytes(reportRequisitionDTO))
             )
-            .andExpect(status().is5xxServerError());
-            // todo .andExpect(status().isCreated());
+            //.andExpect(status().is5xxServerError());
+            .andExpect(status().isCreated());
 
         // Validate the ReportRequisition in the database
         List<ReportRequisition> reportRequisitionList = reportRequisitionRepository.findAll();

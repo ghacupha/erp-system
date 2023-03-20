@@ -61,7 +61,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Integration tests for the {@link PrepaymentAmortizationResource} REST controller.
+ * Integration tests for the {@link PrepaymentAmortizationResourceProd} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)

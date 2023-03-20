@@ -236,7 +236,7 @@ public class BusinessDocumentsFileRetrievalInterceptor {
     /**
      * Pointcut for report-requisition file attachment
      */
-    @Pointcut("execution(* io.github.erp.erp.resources.BusinessDocumentResource.getBusinessDocument(..))")
+    @Pointcut("execution(* io.github.erp.erp.resources.BusinessDocumentResourceProd.getBusinessDocument(..))")
     public void reportResponsePointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }

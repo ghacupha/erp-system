@@ -57,7 +57,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link BusinessStampResource} REST controller.
+ * Integration tests for the {@link BusinessStampResourceDev} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)

@@ -57,7 +57,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
 /**
- * Integration tests for the {@link FileUploadResource} REST controller.
+ * Integration tests for the {@link FileUploadResourceDev} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)

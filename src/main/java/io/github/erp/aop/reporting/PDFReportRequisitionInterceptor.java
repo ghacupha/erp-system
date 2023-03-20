@@ -52,7 +52,7 @@ public class PDFReportRequisitionInterceptor {
     }
 
     @AfterReturning(
-        pointcut="execution(* io.github.erp.erp.resources.PdfReportRequisitionResource.createPdfReportRequisition(..))",
+        pointcut="execution(* io.github.erp.erp.resources.PdfReportRequisitionResourceProd.createPdfReportRequisition(..))",
         returning="response")
     public void getCreatedReportInfo(JoinPoint joinPoint, ResponseEntity<PdfReportRequisitionDTO> response) {
 

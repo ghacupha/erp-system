@@ -1,25 +1,9 @@
 package io.github.erp.service.dto;
 
-/*-
- * Erp System - Mark III No 12 (Caleb Series) Server ver 0.8.0
- * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import io.github.erp.domain.enumeration.PaymentStatus;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Objects;
@@ -51,6 +35,10 @@ public class SettlementRequisitionDTO implements Serializable {
     @NotNull
     private PaymentStatus paymentStatus;
 
+    private String transactionId;
+
+    private LocalDate transactionDate;
+
     private SettlementCurrencyDTO settlementCurrency;
 
     private ApplicationUserDTO currentOwner;
@@ -74,6 +62,8 @@ public class SettlementRequisitionDTO implements Serializable {
     private Set<UniversallyUniqueMappingDTO> applicationMappings = new HashSet<>();
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
+
+    private Set<SettlementDTO> settlements = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -129,6 +119,22 @@ public class SettlementRequisitionDTO implements Serializable {
 
     public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public LocalDate getTransactionDate() {
+        return transactionDate;
+    }
+
+    public void setTransactionDate(LocalDate transactionDate) {
+        this.transactionDate = transactionDate;
     }
 
     public SettlementCurrencyDTO getSettlementCurrency() {
@@ -227,6 +233,14 @@ public class SettlementRequisitionDTO implements Serializable {
         this.placeholders = placeholders;
     }
 
+    public Set<SettlementDTO> getSettlements() {
+        return settlements;
+    }
+
+    public void setSettlements(Set<SettlementDTO> settlements) {
+        this.settlements = settlements;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -259,6 +273,8 @@ public class SettlementRequisitionDTO implements Serializable {
             ", requisitionNumber='" + getRequisitionNumber() + "'" +
             ", paymentAmount=" + getPaymentAmount() +
             ", paymentStatus='" + getPaymentStatus() + "'" +
+            ", transactionId='" + getTransactionId() + "'" +
+            ", transactionDate='" + getTransactionDate() + "'" +
             ", settlementCurrency=" + getSettlementCurrency() +
             ", currentOwner=" + getCurrentOwner() +
             ", nativeOwner=" + getNativeOwner() +
@@ -271,6 +287,7 @@ public class SettlementRequisitionDTO implements Serializable {
             ", businessDocuments=" + getBusinessDocuments() +
             ", applicationMappings=" + getApplicationMappings() +
             ", placeholders=" + getPlaceholders() +
+            ", settlements=" + getSettlements() +
             "}";
     }
 }

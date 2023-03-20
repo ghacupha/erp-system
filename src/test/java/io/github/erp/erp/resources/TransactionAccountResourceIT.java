@@ -55,7 +55,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
 /**
- * Integration tests for the {@link TransactionAccountResource} REST controller.
+ * Integration tests for the {@link TransactionAccountResourceProd} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
