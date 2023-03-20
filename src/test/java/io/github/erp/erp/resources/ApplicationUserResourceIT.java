@@ -25,7 +25,7 @@ import io.github.erp.service.ApplicationUserService;
 import io.github.erp.service.dto.ApplicationUserDTO;
 import io.github.erp.service.mapper.ApplicationUserMapper;
 import io.github.erp.web.rest.TestUtil;
-import io.github.erp.web.rest.userManagement.UserResourceIT;
+import io.github.erp.web.rest.UserResourceIT;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
