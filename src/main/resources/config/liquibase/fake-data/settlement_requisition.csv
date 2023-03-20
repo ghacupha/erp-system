@@ -1,11 +1,11 @@
-id;description;serial_number;time_of_requisition;requisition_number;payment_amount;payment_status;settlement_currency_id;current_owner_id;native_owner_id;native_department_id;biller_id
-1;Tools Table;b8e46e7b-6b2f-4bd7-b295-79048741cf95;2022-10-19T03:05:21;bypassing;70738;IN_PROCESS;1;1;1;1;1
-2;Concrete;0993b352-4af7-4fa6-8748-eff4f25451ca;2022-10-19T06:03:15;visualize;64387;IN_PROCESS;2;2;2;2;2
-3;target blue generating;448f3181-5063-4748-8605-bbb5fa51ff33;2022-10-18T15:11:11;Gibraltar transition Franc;82689;SENT_FOR_FURTHER_APPROVAL;3;1;2;3;3
-4;Internal;dadd4550-91f3-4d5f-8a7f-21986bcbd2b6;2022-10-19T14:14:02;Computers Towels deposit;56066;PROCESSED;4;1;2;4;4
-5;schemas Avon Sweden;bc3c2200-a28a-4ec7-9c43-64cb580ecf78;2022-10-19T03:53:02;networks white;92607;SENT_FOR_FURTHER_APPROVAL;5;1;2;5;5
-6;Walk;eb3ccb52-a98b-46ec-a0bd-a6e60bb4c09d;2022-10-19T14:24:31;Small contingency;15772;SENT_FOR_FURTHER_APPROVAL;6;1;2;6;6
-7;Michigan;35cd551e-8477-4448-8166-f43075f80090;2022-10-19T12:14:43;Internal Boliviano;36090;SENT_FOR_FURTHER_APPROVAL;7;1;2;7;7
-8;Practical;e361e5a6-5494-45cb-9e04-39df9329ff87;2022-10-19T05:12:52;Palladium;62471;SENT_FOR_FURTHER_APPROVAL;8;1;2;8;8
-9;Cross-group Greens Assimilated;d41d4752-3cc4-45e3-964b-d85ad6a8e4a5;2022-10-18T21:19:26;supply-chains Arkansas e-business;38607;PROCESSED;9;1;1;9;9
-10;Incredible parallelism;1296e947-98d2-408a-8589-810c891153da;2022-10-19T01:24:21;back;82527;IN_PROCESS;10;1;2;10;10
+id;description;serial_number;time_of_requisition;requisition_number;payment_amount;payment_status;transaction_id;transaction_date;settlement_currency_id;current_owner_id;native_owner_id;native_department_id;biller_id
+1;Tools Table;b8e46e7b-6b2f-4bd7-b295-79048741cf95;2022-10-19T03:05:21;bypassing;70738;IN_PROCESS;Concrete;2022-10-19;1;1;1;1;1
+2;Illinois Horizontal;4af7fa68-748e-4ff4-b254-51ca506a7a5e;2022-10-19T05:51:50;Electronics Hryvnia;17238;IN_PROCESS;Wyoming;2022-10-19;2;2;2;2;2
+3;Plastic channels;488605bb-b5fa-451f-b33f-b85f6e5bfad8;2022-10-19T07:53:58;calculating invoice eco-centric;2154;SENT_FOR_FURTHER_APPROVAL;Integration;2022-10-19;3;1;2;3;3
+4;multimedia Marketing Loan;bcbd2b60-d039-4295-a038-2f6c88058dcb;2022-10-18T20:04:04;digital;4648;PROCESSED;Rubber Accounts Pennsylvania;2022-10-19;4;1;1;4;4
+5;regional back-end;ecf78787-c523-4feb-87f6-eb3ccb52a98b;2022-10-19T04:35:16;bluetooth transmit e-business;3108;SENT_FOR_FURTHER_APPROVAL;secondary Auto Avon;2022-10-18;5;2;1;5;5
+6;Digitized;9296c35c-d551-4e84-b744-88166f43075f;2022-10-19T02:16:10;Steel;92050;RETURNED_TO_SENDER;Boliviano synergistic Practical;2022-10-18;6;2;2;6;6
+7;evolve;5a654945-cbde-4043-9df9-329ff8760af3;2022-10-18T23:45:43;program Multi-layered;61691;PROCESSED;Stream;2022-10-19;7;1;1;7;7
+8;Networked Bike open-source;e3164bd8-5ad6-4a8e-8a5b-d67d9126d963;2022-10-19T02:05:20;success;72431;SENT_FOR_FURTHER_APPROVAL;Soap;2022-10-18;8;1;1;8;8
+9;info-mediaries Switzerland;08a85898-10c8-4911-93da-82b03d7073f4;2022-10-19T07:41:47;maroon;57686;PROCESSED;Handmade TCP;2022-10-18;9;2;1;9;9
+10;Pine panel Vanuatu;dfb0c6bb-d1b1-46f6-a676-bb32023e67b9;2022-10-18T15:19:02;Steel;37021;PROCESSED;Pizza payment Unbranded;2022-10-19;10;1;1;10;10

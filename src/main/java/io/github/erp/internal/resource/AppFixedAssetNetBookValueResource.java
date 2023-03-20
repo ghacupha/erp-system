@@ -22,7 +22,7 @@ import io.github.erp.internal.resource.decorator.IFixedAssetNetBookValueResource
 import io.github.erp.service.FixedAssetNetBookValueQueryService;
 import io.github.erp.service.criteria.FixedAssetNetBookValueCriteria;
 import io.github.erp.service.dto.FixedAssetNetBookValueDTO;
-import io.github.erp.erp.resources.FixedAssetNetBookValueResource;
+import io.github.erp.erp.resources.FixedAssetNetBookValueResourceProd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
@@ -46,7 +46,7 @@ public class AppFixedAssetNetBookValueResource extends FixedAssetNetBookValueRes
 
     private static final Logger log = LoggerFactory.getLogger(AppFixedAssetNetBookValueResource.class);
 
-    public AppFixedAssetNetBookValueResource(FixedAssetNetBookValueResource fixedAssetNetBookValueResource, FixedAssetNetBookValueQueryService fixedAssetNetBookValueQueryService) {
+    public AppFixedAssetNetBookValueResource(FixedAssetNetBookValueResourceProd fixedAssetNetBookValueResource, FixedAssetNetBookValueQueryService fixedAssetNetBookValueQueryService) {
         super(fixedAssetNetBookValueResource);
         this.fixedAssetNetBookValueQueryService = fixedAssetNetBookValueQueryService;
     }

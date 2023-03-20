@@ -1,22 +1,5 @@
 package io.github.erp.service.criteria;
 
-/*-
- * Erp System - Mark III No 12 (Caleb Series) Server ver 0.8.0
- * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import io.github.erp.domain.enumeration.PaymentStatus;
 import java.io.Serializable;
 import java.util.Objects;
@@ -27,6 +10,7 @@ import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
+import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 import tech.jhipster.service.filter.UUIDFilter;
@@ -76,6 +60,10 @@ public class SettlementRequisitionCriteria implements Serializable, Criteria {
 
     private PaymentStatusFilter paymentStatus;
 
+    private StringFilter transactionId;
+
+    private LocalDateFilter transactionDate;
+
     private LongFilter settlementCurrencyId;
 
     private LongFilter currentOwnerId;
@@ -100,6 +88,8 @@ public class SettlementRequisitionCriteria implements Serializable, Criteria {
 
     private LongFilter placeholderId;
 
+    private LongFilter settlementId;
+
     private Boolean distinct;
 
     public SettlementRequisitionCriteria() {}
@@ -112,6 +102,8 @@ public class SettlementRequisitionCriteria implements Serializable, Criteria {
         this.requisitionNumber = other.requisitionNumber == null ? null : other.requisitionNumber.copy();
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
         this.paymentStatus = other.paymentStatus == null ? null : other.paymentStatus.copy();
+        this.transactionId = other.transactionId == null ? null : other.transactionId.copy();
+        this.transactionDate = other.transactionDate == null ? null : other.transactionDate.copy();
         this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
         this.currentOwnerId = other.currentOwnerId == null ? null : other.currentOwnerId.copy();
         this.nativeOwnerId = other.nativeOwnerId == null ? null : other.nativeOwnerId.copy();
@@ -124,6 +116,7 @@ public class SettlementRequisitionCriteria implements Serializable, Criteria {
         this.businessDocumentId = other.businessDocumentId == null ? null : other.businessDocumentId.copy();
         this.applicationMappingId = other.applicationMappingId == null ? null : other.applicationMappingId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.settlementId = other.settlementId == null ? null : other.settlementId.copy();
         this.distinct = other.distinct;
     }
 
@@ -235,6 +228,36 @@ public class SettlementRequisitionCriteria implements Serializable, Criteria {
 
     public void setPaymentStatus(PaymentStatusFilter paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+
+    public StringFilter getTransactionId() {
+        return transactionId;
+    }
+
+    public StringFilter transactionId() {
+        if (transactionId == null) {
+            transactionId = new StringFilter();
+        }
+        return transactionId;
+    }
+
+    public void setTransactionId(StringFilter transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public LocalDateFilter getTransactionDate() {
+        return transactionDate;
+    }
+
+    public LocalDateFilter transactionDate() {
+        if (transactionDate == null) {
+            transactionDate = new LocalDateFilter();
+        }
+        return transactionDate;
+    }
+
+    public void setTransactionDate(LocalDateFilter transactionDate) {
+        this.transactionDate = transactionDate;
     }
 
     public LongFilter getSettlementCurrencyId() {
@@ -417,6 +440,21 @@ public class SettlementRequisitionCriteria implements Serializable, Criteria {
         this.placeholderId = placeholderId;
     }
 
+    public LongFilter getSettlementId() {
+        return settlementId;
+    }
+
+    public LongFilter settlementId() {
+        if (settlementId == null) {
+            settlementId = new LongFilter();
+        }
+        return settlementId;
+    }
+
+    public void setSettlementId(LongFilter settlementId) {
+        this.settlementId = settlementId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -442,6 +480,8 @@ public class SettlementRequisitionCriteria implements Serializable, Criteria {
             Objects.equals(requisitionNumber, that.requisitionNumber) &&
             Objects.equals(paymentAmount, that.paymentAmount) &&
             Objects.equals(paymentStatus, that.paymentStatus) &&
+            Objects.equals(transactionId, that.transactionId) &&
+            Objects.equals(transactionDate, that.transactionDate) &&
             Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
             Objects.equals(currentOwnerId, that.currentOwnerId) &&
             Objects.equals(nativeOwnerId, that.nativeOwnerId) &&
@@ -454,6 +494,7 @@ public class SettlementRequisitionCriteria implements Serializable, Criteria {
             Objects.equals(businessDocumentId, that.businessDocumentId) &&
             Objects.equals(applicationMappingId, that.applicationMappingId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(settlementId, that.settlementId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -468,6 +509,8 @@ public class SettlementRequisitionCriteria implements Serializable, Criteria {
             requisitionNumber,
             paymentAmount,
             paymentStatus,
+            transactionId,
+            transactionDate,
             settlementCurrencyId,
             currentOwnerId,
             nativeOwnerId,
@@ -480,6 +523,7 @@ public class SettlementRequisitionCriteria implements Serializable, Criteria {
             businessDocumentId,
             applicationMappingId,
             placeholderId,
+            settlementId,
             distinct
         );
     }
@@ -495,6 +539,8 @@ public class SettlementRequisitionCriteria implements Serializable, Criteria {
             (requisitionNumber != null ? "requisitionNumber=" + requisitionNumber + ", " : "") +
             (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
             (paymentStatus != null ? "paymentStatus=" + paymentStatus + ", " : "") +
+            (transactionId != null ? "transactionId=" + transactionId + ", " : "") +
+            (transactionDate != null ? "transactionDate=" + transactionDate + ", " : "") +
             (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
             (currentOwnerId != null ? "currentOwnerId=" + currentOwnerId + ", " : "") +
             (nativeOwnerId != null ? "nativeOwnerId=" + nativeOwnerId + ", " : "") +
@@ -507,6 +553,7 @@ public class SettlementRequisitionCriteria implements Serializable, Criteria {
             (businessDocumentId != null ? "businessDocumentId=" + businessDocumentId + ", " : "") +
             (applicationMappingId != null ? "applicationMappingId=" + applicationMappingId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (settlementId != null ? "settlementId=" + settlementId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

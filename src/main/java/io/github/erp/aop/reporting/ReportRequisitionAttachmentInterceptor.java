@@ -90,7 +90,7 @@ public class ReportRequisitionAttachmentInterceptor {
     /**
      * Pointcut for report-requisition file attachment
      */
-    @Pointcut("execution(* io.github.erp.erp.resources.ReportRequisitionResource.getReportRequisition(..))")
+    @Pointcut("execution(* io.github.erp.erp.resources.ReportRequisitionResourceProd.getReportRequisition(..))")
     public void reportResponsePointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }

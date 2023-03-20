@@ -109,10 +109,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 AuthoritiesConstants.LEASE_MANAGER,
                 AuthoritiesConstants.PREPAYMENTS_MODULE_USER,
                 AuthoritiesConstants.BOOK_KEEPING)
-            .antMatchers("/api/fixed-asset/**").hasAnyAuthority(
+            .antMatchers("/api/app/fixed-asset/**").hasAnyAuthority(
                 AuthoritiesConstants.FIXED_ASSETS_USER,
                 AuthoritiesConstants.PREPAYMENTS_MODULE_USER)
-            .antMatchers("/api/files/**").hasAuthority(AuthoritiesConstants.DBA)
+            .antMatchers("/api/app/files/**").hasAuthority(AuthoritiesConstants.DBA)
             .antMatchers("/api/leases/**").hasAuthority(AuthoritiesConstants.LEASE_MANAGER)
             .antMatchers("/api/docs/**").hasAuthority(AuthoritiesConstants.DOCUMENT_MODULE_USER)
             .antMatchers("/api/design-report/**").hasAuthority(AuthoritiesConstants.REPORT_DESIGNER)
@@ -120,16 +120,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/read-report/**").hasAuthority(AuthoritiesConstants.REPORT_ACCESSOR)
             .antMatchers("/api/dev/**").hasAuthority(AuthoritiesConstants.DEV)
             .antMatchers("/api/dev-test/**").hasAuthority(AuthoritiesConstants.DEV)
-            .antMatchers("/api/payments/**").hasAnyAuthority(
+            .antMatchers("/api/app/payments/**").hasAnyAuthority(
                 AuthoritiesConstants.LEASE_MANAGER,
                 AuthoritiesConstants.PAYMENTS_USER,
                 AuthoritiesConstants.PREPAYMENTS_MODULE_USER,
                 AuthoritiesConstants.REQUISITION_MANAGER,
                 AuthoritiesConstants.FIXED_ASSETS_USER)
-            .antMatchers("/api/requisition/**").hasAnyAuthority(
+            .antMatchers("/api/app/requisition/**").hasAnyAuthority(
                 AuthoritiesConstants.PAYMENTS_USER,
                 AuthoritiesConstants.REQUISITION_MANAGER)
-            .antMatchers("/api/prepayments/**").hasAnyAuthority(AuthoritiesConstants.PREPAYMENTS_MODULE_USER)
+            .antMatchers("/api/app/prepayments/**").hasAnyAuthority(AuthoritiesConstants.PREPAYMENTS_MODULE_USER)
             .antMatchers("/api/taxes/**").hasAuthority(AuthoritiesConstants.TAX_MODULE_USER)
             .antMatchers("/api/granular-data/**").hasAnyAuthority(
                 AuthoritiesConstants.GRANULAR_REPORTS_USER,

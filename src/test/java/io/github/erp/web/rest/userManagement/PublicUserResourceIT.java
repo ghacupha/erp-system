@@ -54,16 +54,18 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.cache.CacheManager;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Integration tests for the {@link UserResource} REST controller.
  */
+@DirtiesContext
 @AutoConfigureMockMvc
 @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 @IntegrationTest
-class PublicUserResourceIT {
+public class PublicUserResourceIT {
 
     private static final String DEFAULT_LOGIN = "johndoe";
 

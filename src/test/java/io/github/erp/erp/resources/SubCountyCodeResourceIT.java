@@ -54,7 +54,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Integration tests for the {@link SubCountyCodeResource} REST controller.
+ * Integration tests for the {@link SubCountyCodeResourceProd} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)

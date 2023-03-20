@@ -63,7 +63,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Integration tests for the {@link InstitutionCodeResource} REST controller.
+ * Integration tests for the {@link InstitutionCodeResourceProd} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)

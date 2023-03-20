@@ -23,7 +23,6 @@ import io.github.erp.service.UniversallyUniqueMappingService;
 import io.github.erp.service.mapper.UniversallyUniqueMappingMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.data.domain.Pageable;
@@ -43,7 +42,7 @@ public class UniversallyUniqueMapIndexingService extends AbtractStartUpIndexServ
     private final UniversallyUniqueMappingSearchRepository searchRepository;
 
     public UniversallyUniqueMapIndexingService(
-        @Qualifier("internalUniversallyUniqueMappingService") UniversallyUniqueMappingService service,
+        UniversallyUniqueMappingService service,
         UniversallyUniqueMappingMapper mapper,
         UniversallyUniqueMappingSearchRepository searchRepository) {
         this.service = service;

@@ -54,7 +54,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link AmortizationRecurrenceResource} REST controller.
+ * Integration tests for the {@link AmortizationRecurrenceResourceProd} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)

@@ -19,7 +19,7 @@ package io.github.erp.internal.resource.decorator;
  */
 import io.github.erp.service.criteria.FileUploadCriteria;
 import io.github.erp.service.dto.FileUploadDTO;
-import io.github.erp.erp.resources.FileUploadResource;
+import io.github.erp.erp.resources.FileUploadResourceProd;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -43,9 +43,9 @@ import java.util.List;
 @Component("fileUploadResourceDecorator")
 public class FileUploadResourceDecorator implements IFileUploadResource {
 
-    private final FileUploadResource fileUploadResource;
+    private final FileUploadResourceProd fileUploadResource;
 
-    public FileUploadResourceDecorator(final FileUploadResource fileUploadResource) {
+    public FileUploadResourceDecorator(final FileUploadResourceProd fileUploadResource) {
         this.fileUploadResource = fileUploadResource;
     }
 

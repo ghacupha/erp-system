@@ -55,7 +55,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link DeliveryNoteResource} REST controller.
+ * Integration tests for the {@link DeliveryNoteResourceDev} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)

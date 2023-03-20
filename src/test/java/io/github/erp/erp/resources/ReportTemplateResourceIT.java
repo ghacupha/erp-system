@@ -55,7 +55,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
 /**
- * Integration tests for the {@link ReportTemplateResource} REST controller.
+ * Integration tests for the {@link ReportTemplateResourceProd} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -84,9 +84,9 @@ public class ReportTemplateResourceIT {
     private static final String DEFAULT_COMPILE_REPORT_FILE_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_COMPILE_REPORT_FILE_CONTENT_TYPE = "image/png";
 
-    private static final String ENTITY_API_URL = "/api/report-templates";
+    private static final String ENTITY_API_URL = "/api/app/report-templates";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/report-templates";
+    private static final String ENTITY_SEARCH_API_URL = "/api/app/_search/report-templates";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

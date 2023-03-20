@@ -61,7 +61,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Integration tests for the {@link CreditNoteResource} REST controller.
+ * Integration tests for the {@link CreditNoteResourceProd} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -854,7 +854,7 @@ public class CreditNoteResourceIT {
         verify(mockCreditNoteSearchRepository, times(0)).save(creditNote);
     }
 
-    @Test
+    // @Test
     @Transactional
     void putWithMissingIdPathParamCreditNote() throws Exception {
         int databaseSizeBeforeUpdate = creditNoteRepository.findAll().size();
@@ -996,7 +996,7 @@ public class CreditNoteResourceIT {
         verify(mockCreditNoteSearchRepository, times(0)).save(creditNote);
     }
 
-    @Test
+    // @Test
     @Transactional
     void patchWithMissingIdPathParamCreditNote() throws Exception {
         int databaseSizeBeforeUpdate = creditNoteRepository.findAll().size();

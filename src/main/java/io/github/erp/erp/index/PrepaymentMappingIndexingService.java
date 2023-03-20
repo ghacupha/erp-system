@@ -44,7 +44,7 @@ public class PrepaymentMappingIndexingService extends AbtractStartUpIndexService
 
     public PrepaymentMappingIndexingService(
         PrepaymentMappingMapper mapper,
-        @Qualifier("internalPrepaymentMappingService") PrepaymentMappingService service,
+        PrepaymentMappingService service,
         PrepaymentMappingSearchRepository searchRepository) {
         this.mapper = mapper;
         this.service = service;

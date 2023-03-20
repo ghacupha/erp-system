@@ -29,6 +29,14 @@
       "fieldType": "PaymentStatus",
       "fieldValues": "PROCESSED,IN_PROCESS,SENT_FOR_FURTHER_APPROVAL,RETURNED_TO_SENDER",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "transactionId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "transactionDate",
+      "fieldType": "LocalDate"
     }
   ],
   "relationships": [
@@ -120,6 +128,14 @@
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "settlementRequisition"
+    },
+    {
+      "relationshipName": "settlement",
+      "otherEntityName": "settlement",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "paymentNumber",
       "ownerSide": true,
       "otherEntityRelationshipName": "settlementRequisition"
     }
