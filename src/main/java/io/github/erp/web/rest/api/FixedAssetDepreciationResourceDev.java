@@ -56,9 +56,9 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController("DevFixedAssetDepreciationResource")
 @RequestMapping("/api/dev")
-public class FixedAssetDepreciationResource {
+public class FixedAssetDepreciationResourceDev {
 
-    private final Logger log = LoggerFactory.getLogger(FixedAssetDepreciationResource.class);
+    private final Logger log = LoggerFactory.getLogger(FixedAssetDepreciationResourceDev.class);
 
     private static final String ENTITY_NAME = "assetsFixedAssetDepreciation";
 
@@ -71,7 +71,7 @@ public class FixedAssetDepreciationResource {
 
     private final FixedAssetDepreciationQueryService fixedAssetDepreciationQueryService;
 
-    public FixedAssetDepreciationResource(
+    public FixedAssetDepreciationResourceDev(
         FixedAssetDepreciationService fixedAssetDepreciationService,
         FixedAssetDepreciationRepository fixedAssetDepreciationRepository,
         FixedAssetDepreciationQueryService fixedAssetDepreciationQueryService

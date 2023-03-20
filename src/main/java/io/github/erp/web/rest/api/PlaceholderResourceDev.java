@@ -57,9 +57,9 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController("DevPlaceholderResource")
 @RequestMapping("/api/dev")
-public class PlaceholderResource {
+public class PlaceholderResourceDev {
 
-    private final Logger log = LoggerFactory.getLogger(PlaceholderResource.class);
+    private final Logger log = LoggerFactory.getLogger(PlaceholderResourceDev.class);
 
     private static final String ENTITY_NAME = "erpServicePlaceholder";
 
@@ -72,7 +72,7 @@ public class PlaceholderResource {
 
     private final PlaceholderQueryService placeholderQueryService;
 
-    public PlaceholderResource(
+    public PlaceholderResourceDev(
         PlaceholderService placeholderService,
         PlaceholderRepository placeholderRepository,
         PlaceholderQueryService placeholderQueryService

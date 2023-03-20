@@ -57,9 +57,9 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController("DevTaxReferenceResource")
 @RequestMapping("/api/dev")
-public class TaxReferenceResource {
+public class TaxReferenceResourceDev {
 
-    private final Logger log = LoggerFactory.getLogger(TaxReferenceResource.class);
+    private final Logger log = LoggerFactory.getLogger(TaxReferenceResourceDev.class);
 
     private static final String ENTITY_NAME = "paymentsTaxReference";
 
@@ -72,7 +72,7 @@ public class TaxReferenceResource {
 
     private final TaxReferenceQueryService taxReferenceQueryService;
 
-    public TaxReferenceResource(
+    public TaxReferenceResourceDev(
         TaxReferenceService taxReferenceService,
         TaxReferenceRepository taxReferenceRepository,
         TaxReferenceQueryService taxReferenceQueryService

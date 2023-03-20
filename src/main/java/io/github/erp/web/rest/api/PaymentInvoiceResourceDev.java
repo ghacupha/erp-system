@@ -57,9 +57,9 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController("DevPaymentInvoiceResource")
 @RequestMapping("/api/dev")
-public class PaymentInvoiceResource {
+public class PaymentInvoiceResourceDev {
 
-    private final Logger log = LoggerFactory.getLogger(PaymentInvoiceResource.class);
+    private final Logger log = LoggerFactory.getLogger(PaymentInvoiceResourceDev.class);
 
     private static final String ENTITY_NAME = "paymentInvoice";
 
@@ -72,7 +72,7 @@ public class PaymentInvoiceResource {
 
     private final PaymentInvoiceQueryService paymentInvoiceQueryService;
 
-    public PaymentInvoiceResource(
+    public PaymentInvoiceResourceDev(
         PaymentInvoiceService paymentInvoiceService,
         PaymentInvoiceRepository paymentInvoiceRepository,
         PaymentInvoiceQueryService paymentInvoiceQueryService

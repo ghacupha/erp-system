@@ -58,9 +58,9 @@ import java.util.Optional;
  */
 @RestController("DevOutletStatusResource")
 @RequestMapping("/api/dev")
-public class OutletStatusResource {
+public class OutletStatusResourceDev {
 
-    private final Logger log = LoggerFactory.getLogger(OutletStatusResource.class);
+    private final Logger log = LoggerFactory.getLogger(OutletStatusResourceDev.class);
 
     private static final String ENTITY_NAME = "outletStatus";
 
@@ -73,7 +73,7 @@ public class OutletStatusResource {
 
     private final OutletStatusQueryService outletStatusQueryService;
 
-    public OutletStatusResource(
+    public OutletStatusResourceDev(
         OutletStatusService outletStatusService,
         OutletStatusRepository outletStatusRepository,
         OutletStatusQueryService outletStatusQueryService

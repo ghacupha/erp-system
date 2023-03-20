@@ -57,9 +57,9 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController("DevDealerResource")
 @RequestMapping("/api/dev")
-public class DealerResource {
+public class DealerResourceDev {
 
-    private final Logger log = LoggerFactory.getLogger(DealerResource.class);
+    private final Logger log = LoggerFactory.getLogger(DealerResourceDev.class);
 
     private static final String ENTITY_NAME = "dealersDealer";
 
@@ -72,7 +72,7 @@ public class DealerResource {
 
     private final DealerQueryService dealerQueryService;
 
-    public DealerResource(DealerService dealerService, DealerRepository dealerRepository, DealerQueryService dealerQueryService) {
+    public DealerResourceDev(DealerService dealerService, DealerRepository dealerRepository, DealerQueryService dealerQueryService) {
         this.dealerService = dealerService;
         this.dealerRepository = dealerRepository;
         this.dealerQueryService = dealerQueryService;

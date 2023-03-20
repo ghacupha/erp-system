@@ -49,9 +49,9 @@ import java.util.Optional;
  */
 @RestController("DevServiceOutletResource")
 @RequestMapping("/api/dev")
-public class ServiceOutletResource {
+public class ServiceOutletResourceDev {
 
-    private final Logger log = LoggerFactory.getLogger(ServiceOutletResource.class);
+    private final Logger log = LoggerFactory.getLogger(ServiceOutletResourceDev.class);
 
     private static final String ENTITY_NAME = "serviceOutlet";
 
@@ -64,7 +64,7 @@ public class ServiceOutletResource {
 
     private final ServiceOutletQueryService serviceOutletQueryService;
 
-    public ServiceOutletResource(
+    public ServiceOutletResourceDev(
         ServiceOutletService serviceOutletService,
         ServiceOutletRepository serviceOutletRepository,
         ServiceOutletQueryService serviceOutletQueryService

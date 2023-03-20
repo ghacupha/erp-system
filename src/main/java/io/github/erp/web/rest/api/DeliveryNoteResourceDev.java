@@ -58,9 +58,9 @@ import java.util.Optional;
  */
 @RestController("DevDeliveryNoteResource")
 @RequestMapping("/api/dev")
-public class DeliveryNoteResource {
+public class DeliveryNoteResourceDev {
 
-    private final Logger log = LoggerFactory.getLogger(DeliveryNoteResource.class);
+    private final Logger log = LoggerFactory.getLogger(DeliveryNoteResourceDev.class);
 
     private static final String ENTITY_NAME = "deliveryNote";
 
@@ -73,7 +73,7 @@ public class DeliveryNoteResource {
 
     private final DeliveryNoteQueryService deliveryNoteQueryService;
 
-    public DeliveryNoteResource(
+    public DeliveryNoteResourceDev(
         DeliveryNoteService deliveryNoteService,
         DeliveryNoteRepository deliveryNoteRepository,
         DeliveryNoteQueryService deliveryNoteQueryService

@@ -57,9 +57,9 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController("DevMessageTokenResource")
 @RequestMapping("/api/dev")
-public class MessageTokenResource {
+public class MessageTokenResourceDev {
 
-    private final Logger log = LoggerFactory.getLogger(MessageTokenResource.class);
+    private final Logger log = LoggerFactory.getLogger(MessageTokenResourceDev.class);
 
     private static final String ENTITY_NAME = "filesMessageToken";
 
@@ -72,7 +72,7 @@ public class MessageTokenResource {
 
     private final MessageTokenQueryService messageTokenQueryService;
 
-    public MessageTokenResource(
+    public MessageTokenResourceDev(
         MessageTokenService messageTokenService,
         MessageTokenRepository messageTokenRepository,
         MessageTokenQueryService messageTokenQueryService
