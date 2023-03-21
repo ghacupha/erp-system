@@ -46,6 +46,8 @@ public class LeaseContractCriteria implements Serializable, Criteria {
 
     private LongFilter businessDocumentId;
 
+    private LongFilter contractMetadataId;
+
     private Boolean distinct;
 
     public LeaseContractCriteria() {}
@@ -61,6 +63,7 @@ public class LeaseContractCriteria implements Serializable, Criteria {
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.systemMappingsId = other.systemMappingsId == null ? null : other.systemMappingsId.copy();
         this.businessDocumentId = other.businessDocumentId == null ? null : other.businessDocumentId.copy();
+        this.contractMetadataId = other.contractMetadataId == null ? null : other.contractMetadataId.copy();
         this.distinct = other.distinct;
     }
 
@@ -219,6 +222,21 @@ public class LeaseContractCriteria implements Serializable, Criteria {
         this.businessDocumentId = businessDocumentId;
     }
 
+    public LongFilter getContractMetadataId() {
+        return contractMetadataId;
+    }
+
+    public LongFilter contractMetadataId() {
+        if (contractMetadataId == null) {
+            contractMetadataId = new LongFilter();
+        }
+        return contractMetadataId;
+    }
+
+    public void setContractMetadataId(LongFilter contractMetadataId) {
+        this.contractMetadataId = contractMetadataId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -247,6 +265,7 @@ public class LeaseContractCriteria implements Serializable, Criteria {
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(systemMappingsId, that.systemMappingsId) &&
             Objects.equals(businessDocumentId, that.businessDocumentId) &&
+            Objects.equals(contractMetadataId, that.contractMetadataId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -264,6 +283,7 @@ public class LeaseContractCriteria implements Serializable, Criteria {
             placeholderId,
             systemMappingsId,
             businessDocumentId,
+            contractMetadataId,
             distinct
         );
     }
@@ -282,6 +302,7 @@ public class LeaseContractCriteria implements Serializable, Criteria {
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (systemMappingsId != null ? "systemMappingsId=" + systemMappingsId + ", " : "") +
             (businessDocumentId != null ? "businessDocumentId=" + businessDocumentId + ", " : "") +
+            (contractMetadataId != null ? "contractMetadataId=" + contractMetadataId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

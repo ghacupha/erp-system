@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.BusinessDocument;
+import io.github.erp.domain.ContractMetadata;
 import io.github.erp.domain.LeaseContract;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.UniversallyUniqueMapping;
@@ -940,6 +941,32 @@ class LeaseContractResourceIT {
 
         // Get all the leaseContractList where businessDocument equals to (businessDocumentId + 1)
         defaultLeaseContractShouldNotBeFound("businessDocumentId.equals=" + (businessDocumentId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseContractsByContractMetadataIsEqualToSomething() throws Exception {
+        // Initialize the database
+        leaseContractRepository.saveAndFlush(leaseContract);
+        ContractMetadata contractMetadata;
+        if (TestUtil.findAll(em, ContractMetadata.class).isEmpty()) {
+            contractMetadata = ContractMetadataResourceIT.createEntity(em);
+            em.persist(contractMetadata);
+            em.flush();
+        } else {
+            contractMetadata = TestUtil.findAll(em, ContractMetadata.class).get(0);
+        }
+        em.persist(contractMetadata);
+        em.flush();
+        leaseContract.addContractMetadata(contractMetadata);
+        leaseContractRepository.saveAndFlush(leaseContract);
+        Long contractMetadataId = contractMetadata.getId();
+
+        // Get all the leaseContractList where contractMetadata equals to contractMetadataId
+        defaultLeaseContractShouldBeFound("contractMetadataId.equals=" + contractMetadataId);
+
+        // Get all the leaseContractList where contractMetadata equals to (contractMetadataId + 1)
+        defaultLeaseContractShouldNotBeFound("contractMetadataId.equals=" + (contractMetadataId + 1));
     }
 
     /**

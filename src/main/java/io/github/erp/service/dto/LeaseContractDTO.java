@@ -38,6 +38,8 @@ public class LeaseContractDTO implements Serializable {
 
     private Set<BusinessDocumentDTO> businessDocuments = new HashSet<>();
 
+    private Set<ContractMetadataDTO> contractMetadata = new HashSet<>();
+
     public Long getId() {
         return id;
     }
@@ -118,6 +120,14 @@ public class LeaseContractDTO implements Serializable {
         this.businessDocuments = businessDocuments;
     }
 
+    public Set<ContractMetadataDTO> getContractMetadata() {
+        return contractMetadata;
+    }
+
+    public void setContractMetadata(Set<ContractMetadataDTO> contractMetadata) {
+        this.contractMetadata = contractMetadata;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -153,6 +163,7 @@ public class LeaseContractDTO implements Serializable {
             ", placeholders=" + getPlaceholders() +
             ", systemMappings=" + getSystemMappings() +
             ", businessDocuments=" + getBusinessDocuments() +
+            ", contractMetadata=" + getContractMetadata() +
             "}";
     }
 }

@@ -92,6 +92,29 @@ public class LeaseContract implements Serializable {
     )
     private Set<BusinessDocument> businessDocuments = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+        name = "rel_lease_contract__contract_metadata",
+        joinColumns = @JoinColumn(name = "lease_contract_id"),
+        inverseJoinColumns = @JoinColumn(name = "contract_metadata_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = {
+            "relatedContracts",
+            "department",
+            "contractPartner",
+            "responsiblePerson",
+            "signatories",
+            "securityClearance",
+            "placeholders",
+            "contractDocumentFiles",
+            "contractMappings",
+        },
+        allowSetters = true
+    )
+    private Set<ContractMetadata> contractMetadata = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -251,6 +274,29 @@ public class LeaseContract implements Serializable {
 
     public LeaseContract removeBusinessDocument(BusinessDocument businessDocument) {
         this.businessDocuments.remove(businessDocument);
+        return this;
+    }
+
+    public Set<ContractMetadata> getContractMetadata() {
+        return this.contractMetadata;
+    }
+
+    public void setContractMetadata(Set<ContractMetadata> contractMetadata) {
+        this.contractMetadata = contractMetadata;
+    }
+
+    public LeaseContract contractMetadata(Set<ContractMetadata> contractMetadata) {
+        this.setContractMetadata(contractMetadata);
+        return this;
+    }
+
+    public LeaseContract addContractMetadata(ContractMetadata contractMetadata) {
+        this.contractMetadata.add(contractMetadata);
+        return this;
+    }
+
+    public LeaseContract removeContractMetadata(ContractMetadata contractMetadata) {
+        this.contractMetadata.remove(contractMetadata);
         return this;
     }
 
