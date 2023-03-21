@@ -230,7 +230,7 @@ class PaymentResourceIT {
         verify(mockPaymentSearchRepository, times(0)).save(payment);
     }
 
-    // @Test
+    @Test
     @Transactional
     void checkSettlementCurrencyIsRequired() throws Exception {
         int databaseSizeBeforeTest = paymentRepository.findAll().size();

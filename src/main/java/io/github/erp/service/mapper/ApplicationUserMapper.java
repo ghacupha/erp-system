@@ -2,6 +2,7 @@ package io.github.erp.service.mapper;
 
 import io.github.erp.domain.ApplicationUser;
 import io.github.erp.service.dto.ApplicationUserDTO;
+import java.util.Set;
 import org.mapstruct.*;
 
 /**
@@ -32,4 +33,10 @@ public interface ApplicationUserMapper extends EntityMapper<ApplicationUserDTO, 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "applicationIdentity", source = "applicationIdentity")
     ApplicationUserDTO toDtoApplicationIdentity(ApplicationUser applicationUser);
+
+    @Named("applicationIdentitySet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "applicationIdentity", source = "applicationIdentity")
+    Set<ApplicationUserDTO> toDtoApplicationIdentitySet(Set<ApplicationUser> applicationUser);
 }
