@@ -33,10 +33,10 @@
     <logger name="com.hazelcast" level="INFO"/>
     <logger name="com.ryantenney" level="WARN"/>
     <logger name="com.sun" level="WARN"/>
-    <logger name="com.zaxxer" level="INFO"/>
-    <logger name="com.zaxxer.hikari.HikariConfig" level="DEBUG"/>
-    <logger name="com.zaxxer.hikari.metrics" level="DEBUG"/>
-    <logger name="com.zaxxer.hikari" level="TRACE"/>
+    <logger name="com.zaxxer" level="WARN"/>
+    <!--<logger name="com.zaxxer.hikari.HikariConfig" level="DEBUG"/>-->
+    <!--<logger name="com.zaxxer.hikari.metrics" level="DEBUG"/>-->
+    <!--<logger name="com.zaxxer.hikari" level="TRACE"/>-->
     <logger name="io.searchbox" level="WARN"/>
     <logger name="io.undertow" level="WARN"/>
     <logger name="io.undertow.websockets.jsr" level="ERROR"/>
