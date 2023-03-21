@@ -54,6 +54,14 @@
       "otherEntityField": "documentTitle",
       "ownerSide": true,
       "otherEntityRelationshipName": "leaseContract"
+    },
+    {
+      "relationshipName": "contractMetadata",
+      "otherEntityName": "contractMetadata",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "contractTitle",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "leaseContract"
     }
   ],
   "service": "serviceImpl",

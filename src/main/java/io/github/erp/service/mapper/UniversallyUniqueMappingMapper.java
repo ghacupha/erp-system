@@ -17,12 +17,6 @@ public interface UniversallyUniqueMappingMapper extends EntityMapper<Universally
     @Mapping(target = "removePlaceholder", ignore = true)
     UniversallyUniqueMapping toEntity(UniversallyUniqueMappingDTO universallyUniqueMappingDTO);
 
-    @Named("universalKeySet")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "universalKey", source = "universalKey")
-    Set<UniversallyUniqueMappingDTO> toDtoUniversalKeySet(Set<UniversallyUniqueMapping> universallyUniqueMapping);
-
     @Named("mappedValueSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
@@ -34,4 +28,10 @@ public interface UniversallyUniqueMappingMapper extends EntityMapper<Universally
     @Mapping(target = "id", source = "id")
     @Mapping(target = "universalKey", source = "universalKey")
     UniversallyUniqueMappingDTO toDtoUniversalKey(UniversallyUniqueMapping universallyUniqueMapping);
+
+    @Named("universalKeySet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "universalKey", source = "universalKey")
+    Set<UniversallyUniqueMappingDTO> toDtoUniversalKeySet(Set<UniversallyUniqueMapping> universallyUniqueMapping);
 }

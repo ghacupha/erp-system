@@ -15,18 +15,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LeaseContractRepository extends JpaRepository<LeaseContract, Long>, JpaSpecificationExecutor<LeaseContract> {
     @Query(
-        value = "select distinct leaseContract from LeaseContract leaseContract left join fetch leaseContract.placeholders left join fetch leaseContract.systemMappings left join fetch leaseContract.businessDocuments",
+        value = "select distinct leaseContract from LeaseContract leaseContract left join fetch leaseContract.placeholders left join fetch leaseContract.systemMappings left join fetch leaseContract.businessDocuments left join fetch leaseContract.contractMetadata",
         countQuery = "select count(distinct leaseContract) from LeaseContract leaseContract"
     )
     Page<LeaseContract> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct leaseContract from LeaseContract leaseContract left join fetch leaseContract.placeholders left join fetch leaseContract.systemMappings left join fetch leaseContract.businessDocuments"
+        "select distinct leaseContract from LeaseContract leaseContract left join fetch leaseContract.placeholders left join fetch leaseContract.systemMappings left join fetch leaseContract.businessDocuments left join fetch leaseContract.contractMetadata"
     )
     List<LeaseContract> findAllWithEagerRelationships();
 
     @Query(
-        "select leaseContract from LeaseContract leaseContract left join fetch leaseContract.placeholders left join fetch leaseContract.systemMappings left join fetch leaseContract.businessDocuments where leaseContract.id =:id"
+        "select leaseContract from LeaseContract leaseContract left join fetch leaseContract.placeholders left join fetch leaseContract.systemMappings left join fetch leaseContract.businessDocuments left join fetch leaseContract.contractMetadata where leaseContract.id =:id"
     )
     Optional<LeaseContract> findOneWithEagerRelationships(@Param("id") Long id);
 }

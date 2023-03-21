@@ -143,6 +143,15 @@ public class LeaseContractQueryService extends QueryService<LeaseContract> {
                         )
                     );
             }
+            if (criteria.getContractMetadataId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getContractMetadataId(),
+                            root -> root.join(LeaseContract_.contractMetadata, JoinType.LEFT).get(ContractMetadata_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }
