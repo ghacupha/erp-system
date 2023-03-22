@@ -26,14 +26,6 @@ import io.github.erp.service.SettlementRequisitionService;
 import io.github.erp.service.dto.SettlementRequisitionDTO;
 import io.github.erp.service.mapper.SettlementRequisitionMapper;
 import io.github.erp.web.rest.TestUtil;
-import io.github.erp.web.rest.api.DealerResourceIT;
-import io.github.erp.web.rest.api.DeliveryNoteResourceIT;
-import io.github.erp.web.rest.api.JobSheetResourceIT;
-import io.github.erp.web.rest.api.PaymentInvoiceResourceIT;
-import io.github.erp.web.rest.api.PlaceholderResourceIT;
-import io.github.erp.web.rest.api.SettlementCurrencyResourceIT;
-import io.github.erp.web.rest.api.SettlementRequisitionResourceDev;
-import io.github.erp.web.rest.api.UniversallyUniqueMappingResourceIT;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -66,7 +58,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link SettlementRequisitionResourceDev} REST controller.
+ * Integration tests for the SettlementRequisitionResource REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -146,7 +138,7 @@ public class SettlementRequisitionResourceIT {
         // Add required entity
         SettlementCurrency settlementCurrency;
         if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
-            settlementCurrency = io.github.erp.web.rest.api.SettlementCurrencyResourceIT.createEntity(em);
+            settlementCurrency = SettlementCurrencyResourceIT.createEntity(em);
             em.persist(settlementCurrency);
             em.flush();
         } else {
@@ -168,7 +160,7 @@ public class SettlementRequisitionResourceIT {
         // Add required entity
         Dealer dealer;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            dealer = io.github.erp.web.rest.api.DealerResourceIT.createEntity(em);
+            dealer = DealerResourceIT.createEntity(em);
             em.persist(dealer);
             em.flush();
         } else {
@@ -197,7 +189,7 @@ public class SettlementRequisitionResourceIT {
         // Add required entity
         SettlementCurrency settlementCurrency;
         if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
-            settlementCurrency = io.github.erp.web.rest.api.SettlementCurrencyResourceIT.createUpdatedEntity(em);
+            settlementCurrency = SettlementCurrencyResourceIT.createUpdatedEntity(em);
             em.persist(settlementCurrency);
             em.flush();
         } else {
@@ -219,7 +211,7 @@ public class SettlementRequisitionResourceIT {
         // Add required entity
         Dealer dealer;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            dealer = io.github.erp.web.rest.api.DealerResourceIT.createUpdatedEntity(em);
+            dealer = DealerResourceIT.createUpdatedEntity(em);
             em.persist(dealer);
             em.flush();
         } else {
@@ -1032,7 +1024,7 @@ public class SettlementRequisitionResourceIT {
         settlementRequisitionRepository.saveAndFlush(settlementRequisition);
         Dealer nativeDepartment;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            nativeDepartment = io.github.erp.web.rest.api.DealerResourceIT.createEntity(em);
+            nativeDepartment = DealerResourceIT.createEntity(em);
             em.persist(nativeDepartment);
             em.flush();
         } else {
@@ -1058,7 +1050,7 @@ public class SettlementRequisitionResourceIT {
         settlementRequisitionRepository.saveAndFlush(settlementRequisition);
         Dealer biller;
         if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            biller = io.github.erp.web.rest.api.DealerResourceIT.createEntity(em);
+            biller = DealerResourceIT.createEntity(em);
             em.persist(biller);
             em.flush();
         } else {
