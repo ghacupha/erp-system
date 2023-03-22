@@ -175,6 +175,20 @@ Once that basic need is fulfilled, the milestone is complete.
 
 Oh, and that king was called Artaxerxes.
 
+## Caleb Series?
+The Caleb series designation is a hats off recognition of a certain person whose story keeps motivating me to keep on taking on difficult challenges. If you are a person of the book then you know of the person with little faith whose command given in faith could move a mountain and cast it into the sea and
+thereby perhaps clearing their way, or establishing a suitable settlement, or surmounting some great challenge. I often wonder, that if such a powerful act is orchestrated by a person with little faith, what wonders would great faith manifest?
+We meet such a person in Caleb. As Israelites settled into Caanan, there was a challenge in that though the land was "theirs" as per the promise to Abraham, the residents were not magically removed to
+"make way" for them. They had to deal with the reality that they would have to take the land by conquest. 
+The last time a company had been sent to "measure up the enemy" the spies were truly freaked out and scared the crowd into a frenzy so much so that they were sent back into the desert for disobedience and lack of faith.
+And even now when they came back, this time under the leadership of Joshua, these giants and well-fed residents of Canaan had gone nowhere. The Lord had not removed them to prepare a place for this special people.
+So this is where the character of Caleb inspires, in that the man is not going to pray his obstacles away. No. Instead, he says "give me this mountain!". That inspiration drives my persistence through overwhelming failure.
+Obstacles exist, training may not suffice, errors without proper logs, null pointer exceptions, stack overflows, front end systems that disagree with your backend thinking, the list goes on. The challenges I seek to surmount will have to be addressed by someone eventually. 
+In this series I seek to improve the system further by keeping reporting modules front and centre. Additionally, I make my life even harder by trying to address the challenges posed by lease accounting in IFRS 16, contract management,
+and fixed assets management and reporting. This calls for that much extra dose of courage to take on a task that could lead you into one rabbit hole today; that you get out of in like a month having achieved nothing, and having the tenacity
+to not simply give up or despair, but to try something else, or the same problem differently.
+When these modules are done we will remember choosing to stay with the problem and embrace failure with open arms, repeat gruelling work whether feeling inspired or not inspired. Those words come to me every time. Caleb sets a lofty example seeking not that the 
+mountain be moved, or that his enemies be magically done away with, or for that to become someone else's problem. He chose to make the mountain his home. 
 
 [jhipster homepage and latest documentation]: https://www.jhipster.tech
 [jhipster 7.3.1 archive]: https://www.jhipster.tech/documentation-archive/v7.3.1
