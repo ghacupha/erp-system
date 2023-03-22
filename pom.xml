@@ -7,7 +7,7 @@
 
     <groupId>io.github.erp</groupId>
     <artifactId>erp-system</artifactId>
-    <version>0.8.0-SNAPSHOT</version>
+    <version>0.9.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Erp System</name>
     <!--<description>Mark III No 6 (Caleb Series) Server ver 0.3.0-SNAPSHOT</description>-->
@@ -27,7 +27,7 @@
         <!-- Build properties -->
         <ERP_SYSTEM_DEPLOYMENT_SERIES>Caleb Series</ERP_SYSTEM_DEPLOYMENT_SERIES>
         <ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>Mark III No 12 </ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>
-        <ERP_SYSTEM_DEPLOYMENT_VERSION>0.8.0</ERP_SYSTEM_DEPLOYMENT_VERSION>
+        <ERP_SYSTEM_DEPLOYMENT_VERSION>0.9.0</ERP_SYSTEM_DEPLOYMENT_VERSION>
         <ERP_SYSTEM_DEPLOYMENT_TITLE>${ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER} (${ERP_SYSTEM_DEPLOYMENT_SERIES}) Server ver ${ERP_SYSTEM_DEPLOYMENT_VERSION}</ERP_SYSTEM_DEPLOYMENT_TITLE>
         <maven.version>3.3.9</maven.version>
         <java.version>11</java.version>
@@ -49,7 +49,7 @@
         <docker.image.prefix>ghacupha</docker.image.prefix>
         <founder.website>https://github.com/ghacupha</founder.website>
         <owner.email>mailnjeru@gmail.com</owner.email>
-        <project.inceptionYear>2021 - 2022</project.inceptionYear>
+        <project.inceptionYear>2021 - 2023</project.inceptionYear>
         <project.owner>Edwin Njeru</project.owner>
         <!--<application.port>8979</application.port>-->
         <application.port>${env.ERP_SYSTEM_DEV_PORT}</application.port>
