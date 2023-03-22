@@ -1,37 +1,15 @@
-package io.github.erp.web.rest;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+package io.github.erp.erp.resources;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.ApplicationUser;
-import io.github.erp.domain.BusinessDocument;
-import io.github.erp.domain.ContractMetadata;
-import io.github.erp.domain.ContractMetadata;
-import io.github.erp.domain.Dealer;
-import io.github.erp.domain.Placeholder;
-import io.github.erp.domain.SecurityClearance;
-import io.github.erp.domain.UniversallyUniqueMapping;
+import io.github.erp.domain.*;
 import io.github.erp.domain.enumeration.ContractStatus;
 import io.github.erp.domain.enumeration.ContractType;
 import io.github.erp.repository.ContractMetadataRepository;
 import io.github.erp.repository.search.ContractMetadataSearchRepository;
 import io.github.erp.service.ContractMetadataService;
-import io.github.erp.service.criteria.ContractMetadataCriteria;
 import io.github.erp.service.dto.ContractMetadataDTO;
 import io.github.erp.service.mapper.ContractMetadataMapper;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,10 +23,21 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Base64Utils;
+
+import javax.persistence.EntityManager;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link ContractMetadataResource} REST controller.
+ * Integration tests for the ContractMetadataResource REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -85,9 +74,9 @@ class ContractMetadataResourceIT {
     private static final String DEFAULT_CONTRACT_IDENTIFIER_SHORT = "AAAAAAAAAA";
     private static final String UPDATED_CONTRACT_IDENTIFIER_SHORT = "BBBBBBBBBB";
 
-    private static final String ENTITY_API_URL = "/api/contract-metadata";
+    private static final String ENTITY_API_URL = "/api/app/contract-metadata";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/contract-metadata";
+    private static final String ENTITY_SEARCH_API_URL = "/api/app/_search/contract-metadata";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
@@ -1061,7 +1050,7 @@ class ContractMetadataResourceIT {
         Long relatedContractsId = relatedContracts.getId();
 
         // Get all the contractMetadataList where relatedContracts equals to relatedContractsId
-        // defaultContractMetadataShouldBeFound("relatedContractsId.equals=" + relatedContractsId);
+        // todo defaultContractMetadataShouldBeFound("relatedContractsId.equals=" + relatedContractsId);
 
         // Get all the contractMetadataList where relatedContracts equals to (relatedContractsId + 1)
         defaultContractMetadataShouldNotBeFound("relatedContractsId.equals=" + (relatedContractsId + 1));
