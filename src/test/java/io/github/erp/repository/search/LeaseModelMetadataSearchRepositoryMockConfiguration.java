@@ -1,4 +1,4 @@
-package io.github.erp.erp.reports;
+package io.github.erp.repository.search;
 
 /*-
  * Erp System - Mark III No 12 (Caleb Series) Server ver 0.9.0
@@ -18,5 +18,16 @@ package io.github.erp.erp.reports;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class LeaseContractReportDTO {
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Configuration;
+
+/**
+ * Configure a Mock version of {@link LeaseModelMetadataSearchRepository} to test the
+ * application without starting Elasticsearch.
+ */
+@Configuration
+public class LeaseModelMetadataSearchRepositoryMockConfiguration {
+
+    @MockBean
+    private LeaseModelMetadataSearchRepository mockLeaseModelMetadataSearchRepository;
 }
