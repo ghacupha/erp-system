@@ -56,15 +56,15 @@ public interface ContractMetadataMapper extends EntityMapper<ContractMetadataDTO
     @Mapping(target = "removeContractMappings", ignore = true)
     ContractMetadata toEntity(ContractMetadataDTO contractMetadataDTO);
 
-    @Named("descriptionSet")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "description", source = "description")
-    Set<ContractMetadataDTO> toDtoDescriptionSet(Set<ContractMetadata> contractMetadata);
-
     @Named("contractTitleSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "contractTitle", source = "contractTitle")
     Set<ContractMetadataDTO> toDtoContractTitleSet(Set<ContractMetadata> contractMetadata);
+
+    @Named("descriptionSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "description", source = "description")
+    Set<ContractMetadataDTO> toDtoDescriptionSet(Set<ContractMetadata> contractMetadata);
 }

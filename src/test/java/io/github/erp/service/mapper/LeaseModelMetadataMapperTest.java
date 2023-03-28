@@ -1,4 +1,4 @@
-package io.github.erp.erp.reports;
+package io.github.erp.service.mapper;
 
 /*-
  * Erp System - Mark III No 12 (Caleb Series) Server ver 0.9.0
@@ -18,5 +18,17 @@ package io.github.erp.erp.reports;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class LeaseContractReportDTO {
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+class LeaseModelMetadataMapperTest {
+
+    private LeaseModelMetadataMapper leaseModelMetadataMapper;
+
+    @BeforeEach
+    public void setUp() {
+        leaseModelMetadataMapper = new LeaseModelMetadataMapperImpl();
+    }
 }

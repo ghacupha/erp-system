@@ -41,4 +41,10 @@ public interface LeaseContractMapper extends EntityMapper<LeaseContractDTO, Leas
     @Mapping(target = "removeBusinessDocument", ignore = true)
     @Mapping(target = "removeContractMetadata", ignore = true)
     LeaseContract toEntity(LeaseContractDTO leaseContractDTO);
+
+    @Named("bookingId")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "bookingId", source = "bookingId")
+    LeaseContractDTO toDtoBookingId(LeaseContract leaseContract);
 }
