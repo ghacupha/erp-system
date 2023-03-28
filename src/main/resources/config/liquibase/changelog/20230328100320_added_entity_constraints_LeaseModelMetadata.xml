@@ -97,5 +97,11 @@
                                  constraintName="fk_lease_model_metadata__rou_depreciation_account_id"
                                  referencedColumnNames="id"
                                  referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="accrued_depreciation_account_id"
+                                 baseTableName="lease_model_metadata"
+                                 constraintName="fk_lease_model_metadata__accrued_depreciation_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
     </changeSet>
 </databaseChangeLog>

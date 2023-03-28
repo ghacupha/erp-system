@@ -147,6 +147,12 @@
       "otherEntityName": "transactionAccount",
       "relationshipType": "many-to-one",
       "otherEntityField": "accountNumber"
+    },
+    {
+      "relationshipName": "accruedDepreciationAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountNumber"
     }
   ],
   "service": "serviceImpl",

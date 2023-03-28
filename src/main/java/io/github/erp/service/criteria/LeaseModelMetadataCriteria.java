@@ -1,23 +1,5 @@
 package io.github.erp.service.criteria;
 
-/*-
- * Erp System - Mark III No 12 (Caleb Series) Server ver 0.9.0
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -96,6 +78,8 @@ public class LeaseModelMetadataCriteria implements Serializable, Criteria {
 
     private LongFilter rouDepreciationAccountId;
 
+    private LongFilter accruedDepreciationAccountId;
+
     private Boolean distinct;
 
     public LeaseModelMetadataCriteria() {}
@@ -127,6 +111,7 @@ public class LeaseModelMetadataCriteria implements Serializable, Criteria {
         this.interestExpenseAccountId = other.interestExpenseAccountId == null ? null : other.interestExpenseAccountId.copy();
         this.rouAssetAccountId = other.rouAssetAccountId == null ? null : other.rouAssetAccountId.copy();
         this.rouDepreciationAccountId = other.rouDepreciationAccountId == null ? null : other.rouDepreciationAccountId.copy();
+        this.accruedDepreciationAccountId = other.accruedDepreciationAccountId == null ? null : other.accruedDepreciationAccountId.copy();
         this.distinct = other.distinct;
     }
 
@@ -525,6 +510,21 @@ public class LeaseModelMetadataCriteria implements Serializable, Criteria {
         this.rouDepreciationAccountId = rouDepreciationAccountId;
     }
 
+    public LongFilter getAccruedDepreciationAccountId() {
+        return accruedDepreciationAccountId;
+    }
+
+    public LongFilter accruedDepreciationAccountId() {
+        if (accruedDepreciationAccountId == null) {
+            accruedDepreciationAccountId = new LongFilter();
+        }
+        return accruedDepreciationAccountId;
+    }
+
+    public void setAccruedDepreciationAccountId(LongFilter accruedDepreciationAccountId) {
+        this.accruedDepreciationAccountId = accruedDepreciationAccountId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -569,6 +569,7 @@ public class LeaseModelMetadataCriteria implements Serializable, Criteria {
             Objects.equals(interestExpenseAccountId, that.interestExpenseAccountId) &&
             Objects.equals(rouAssetAccountId, that.rouAssetAccountId) &&
             Objects.equals(rouDepreciationAccountId, that.rouDepreciationAccountId) &&
+            Objects.equals(accruedDepreciationAccountId, that.accruedDepreciationAccountId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -602,6 +603,7 @@ public class LeaseModelMetadataCriteria implements Serializable, Criteria {
             interestExpenseAccountId,
             rouAssetAccountId,
             rouDepreciationAccountId,
+            accruedDepreciationAccountId,
             distinct
         );
     }
@@ -636,6 +638,7 @@ public class LeaseModelMetadataCriteria implements Serializable, Criteria {
             (interestExpenseAccountId != null ? "interestExpenseAccountId=" + interestExpenseAccountId + ", " : "") +
             (rouAssetAccountId != null ? "rouAssetAccountId=" + rouAssetAccountId + ", " : "") +
             (rouDepreciationAccountId != null ? "rouDepreciationAccountId=" + rouDepreciationAccountId + ", " : "") +
+            (accruedDepreciationAccountId != null ? "accruedDepreciationAccountId=" + accruedDepreciationAccountId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

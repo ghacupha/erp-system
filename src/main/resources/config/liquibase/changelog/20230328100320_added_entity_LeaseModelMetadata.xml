@@ -89,6 +89,9 @@
             <column name="rou_depreciation_account_id" type="bigint">
                 <constraints nullable="true" />
             </column>
+            <column name="accrued_depreciation_account_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
