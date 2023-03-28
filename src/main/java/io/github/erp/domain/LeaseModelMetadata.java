@@ -1,23 +1,5 @@
 package io.github.erp.domain;
 
-/*-
- * Erp System - Mark III No 12 (Caleb Series) Server ver 0.9.0
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -134,6 +116,7 @@ public class LeaseModelMetadata implements Serializable {
             "interestExpenseAccount",
             "rouAssetAccount",
             "rouDepreciationAccount",
+            "accruedDepreciationAccount",
         },
         allowSetters = true
     )
@@ -189,6 +172,10 @@ public class LeaseModelMetadata implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
     private TransactionAccount rouDepreciationAccount;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
+    private TransactionAccount accruedDepreciationAccount;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -573,6 +560,19 @@ public class LeaseModelMetadata implements Serializable {
 
     public LeaseModelMetadata rouDepreciationAccount(TransactionAccount transactionAccount) {
         this.setRouDepreciationAccount(transactionAccount);
+        return this;
+    }
+
+    public TransactionAccount getAccruedDepreciationAccount() {
+        return this.accruedDepreciationAccount;
+    }
+
+    public void setAccruedDepreciationAccount(TransactionAccount transactionAccount) {
+        this.accruedDepreciationAccount = transactionAccount;
+    }
+
+    public LeaseModelMetadata accruedDepreciationAccount(TransactionAccount transactionAccount) {
+        this.setAccruedDepreciationAccount(transactionAccount);
         return this;
     }
 
