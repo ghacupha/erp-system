@@ -6,7 +6,7 @@
 package io.github.erp.config;
 
 /*-
- * Erp System - Mark III No 12 (Caleb Series) Server ver 1.0.1-SNAPSHOT
+ * Erp System - Mark III No 12 (Caleb Series) Server ver 1.0.2-SNAPSHOT
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,6 @@ package io.github.erp.config;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
