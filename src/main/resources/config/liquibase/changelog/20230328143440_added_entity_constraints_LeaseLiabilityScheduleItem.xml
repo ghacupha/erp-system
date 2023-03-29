@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity LeaseLiabilityScheduleItem.
+    -->
+    <changeSet id="20230328143440-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="lease_liability_schedule_item_id"
+                                 baseTableName="rel_lease_liability_schedule_item__placeholder"
+                                 constraintName="fk_rel_lease_liability_schedule__lease_liability_schedule_00_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lease_liability_schedule_item"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_lease_liability_schedule_item__placeholder"
+                                 constraintName="fk_rel_lease_liability_schedule__placeholder_82_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="lease_contract_id"
+                                 baseTableName="lease_liability_schedule_item"
+                                 constraintName="fk_lease_liability_schedule_item__lease_contract_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lease_contract"/>
+
+        <addForeignKeyConstraint baseColumnNames="lease_model_metadata_id"
+                                 baseTableName="lease_liability_schedule_item"
+                                 constraintName="fk_lease_liability_schedule_item__lease_model_metadata_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lease_model_metadata"/>
+
+        <addForeignKeyConstraint baseColumnNames="lease_liability_schedule_item_id"
+                                 baseTableName="rel_lease_liability_schedule_item__universally_unique_mapping"
+                                 constraintName="fk_rel_lease_liability_schedule__lease_liability_schedule_9f_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lease_liability_schedule_item"/>
+
+        <addForeignKeyConstraint baseColumnNames="universally_unique_mapping_id"
+                                 baseTableName="rel_lease_liability_schedule_item__universally_unique_mapping"
+                                 constraintName="fk_rel_lease_liability_schedule__universally_unique_mappi_0b_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="universally_unique_mapping"/>
+    </changeSet>
+</databaseChangeLog>
