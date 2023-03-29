@@ -12,6 +12,12 @@
 # Full reference is available at:
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 
 logging:
   level:
@@ -142,6 +148,8 @@ jhipster:
       host: localhost
       port: 5000
       queue-size: 512
+  registry:
+    password: admin
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

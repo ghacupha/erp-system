@@ -13,6 +13,31 @@
 # Full reference is available at:
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
+eureka:
+  client:
+    enabled: true
+    healthcheck:
+      enabled: true
+    fetch-registry: true
+    register-with-eureka: true
+    instance-info-replication-interval-seconds: 10
+    registry-fetch-interval-seconds: 10
+  instance:
+    appname: erpsystem
+    instanceId: erpsystem:${spring.application.instance-id:${random.value}}
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+    status-page-url-path: ${management.endpoints.web.base-path}/info
+    health-check-url-path: ${management.endpoints.web.base-path}/health
+    metadata-map:
+      zone: primary # This is needed for the load balancer
+      #zone: http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka # This is needed for the load balancer
+      profile: ${spring.profiles.active}
+      version: #project.version#
+      git-version: ${git.commit.id.describe:}
+      git-commit: ${git.commit.id.abbrev:}
+      git-branch: ${git.branch:}
+      context-path: ${server.servlet.context-path:}
 
 management:
   endpoints:
@@ -33,13 +58,14 @@ management:
     git:
       mode: full
   health:
-    group:
-      liveness:
-        include: livenessState
-      readiness:
-        include: readinessState,db
     mail:
       enabled: false # When using the MailService, configure an SMTP server and set this to true
+    db:
+      enabled: true
+    elasticsearch:
+      enabled: true
+    diskspace:
+      enabled: true
   metrics:
     export:
       # Prometheus is the default metrics backend
@@ -66,6 +92,8 @@ management:
             enabled: true
 
 spring:
+  autoconfigure:
+    exclude: org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration
   application:
     name: ${app.title}
     #name: erpSystem
@@ -158,7 +186,7 @@ info:
 
 jhipster:
   clientApp:
-    name: 'erpClient'
+    name: 'erpSystemApp'
   # By default CORS is disabled. Uncomment to enable.
   cors:
      allowed-origins: 'http://localhost:8100,https://localhost:8100,http://localhost:9000,https://localhost:9000,https://localhost:8981,http://localhost:8981,http://127.0.0.1:8980,http://10.60.27.22:9000,${app.SandboxInstance.urls}'
@@ -183,6 +211,8 @@ jhipster:
     license-url: https://www.gnu.org/licenses/gpl-3.0.txt
   security:
     content-security-policy: "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com data:"
+  registry:
+    password: admin
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
@@ -193,7 +223,7 @@ jhipster:
 # ===================================================================
 
 app:
-  title: 'Mark III No 11 (Caleb Series) Server ver 0.7.0'
+  title: 'erpSystem'
   SandboxInstance:
     urls: ${SANDBOX_INSTANCE_URLS}
     #urls: 'https://127.0.0.1:8984,http://127.0.0.1:8984,https://localhost:8984,http://localhost:8984,http://127.0.0.1:8982,https://localhost:8982,http://localhost:8982,'
