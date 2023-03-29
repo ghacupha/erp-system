@@ -1,22 +1,5 @@
 package io.github.erp.erp.resources;
 
-/*-
- * Erp System - Mark III No 12 (Caleb Series) Server ver 0.9.0
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.SecurityClearance;
@@ -26,6 +9,7 @@ import io.github.erp.repository.search.SecurityClearanceSearchRepository;
 import io.github.erp.service.SecurityClearanceService;
 import io.github.erp.service.dto.SecurityClearanceDTO;
 import io.github.erp.service.mapper.SecurityClearanceMapper;
+import io.github.erp.web.rest.SecurityClearanceResource;
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,7 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
-public class SecurityClearanceResourceIT {
+class SecurityClearanceResourceIT {
 
     private static final String DEFAULT_CLEARANCE_LEVEL = "AAAAAAAAAA";
     private static final String UPDATED_CLEARANCE_LEVEL = "BBBBBBBBBB";
