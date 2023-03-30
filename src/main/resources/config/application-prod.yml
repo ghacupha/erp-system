@@ -160,9 +160,9 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-application:
-  Registry:
-    host: ${SERVER_API_DOCKER_DEPLOY_HOST}
+#application:
+#  Registry:
+#    host: ${SERVER_API_DOCKER_DEPLOY_HOST}
 
 app:
   SandboxInstance:
