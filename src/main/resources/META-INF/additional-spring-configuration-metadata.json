@@ -24,6 +24,16 @@
       "name": "application.Registry.host",
       "type": "java.lang.String",
       "description": "Description for application.Registry.host."
+    },
+    {
+      "name": "configserver.name",
+      "type": "java.lang.String",
+      "description": "Description for configserver.name."
+    },
+    {
+      "name": "configserver.status",
+      "type": "java.lang.String",
+      "description": "Description for configserver.status."
     }
   ]
 }
