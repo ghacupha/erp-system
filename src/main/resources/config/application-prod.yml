@@ -17,7 +17,8 @@ eureka:
     prefer-ip-address: true
   client:
     service-url:
-      defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
+      defaultZone: http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka # This is needed for the load balancer
+      #defaultZone: http://admin:${jhipster.registry.password}@${jhipster.registry.host}:8761/eureka/
 
 logging:
   level:
@@ -159,7 +160,9 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+  registry:
+    host: ${SERVER_API_DOCKER_DEPLOY_HOST}
 app:
   SandboxInstance:
     urls: ${SANDBOX_INSTANCE_URLS}
