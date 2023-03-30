@@ -47,6 +47,8 @@ management:
         include:
           ['configprops', 'env', 'health', 'info', 'jhimetrics', 'logfile', 'loggers', 'prometheus', 'threaddump', 'caches', 'liquibase']
   endpoint:
+    metrics:
+      enabled: true
     health:
       show-details: when_authorized
       roles: 'ROLE_ADMIN'
