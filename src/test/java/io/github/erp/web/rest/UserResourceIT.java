@@ -197,7 +197,7 @@
 package io.github.erp.web.rest;
 
 /*-
- * Erp System - Mark III No 12 (Caleb Series) Server ver 1.0.2-SNAPSHOT
+ * Erp System - Mark III No 12 (Caleb Series) Server ver 1.0.5-SNAPSHOT
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
