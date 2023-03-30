@@ -21,9 +21,9 @@
       "description": "Description for spring.config.import.file."
     },
     {
-      "name": "application.registry.host",
+      "name": "application.Registry.host",
       "type": "java.lang.String",
-      "description": "Description for application.registry.host."
+      "description": "Description for application.Registry.host."
     }
   ]
 }

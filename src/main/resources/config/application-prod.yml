@@ -161,8 +161,9 @@ jhipster:
 # ===================================================================
 
 application:
-  registry:
+  Registry:
     host: ${SERVER_API_DOCKER_DEPLOY_HOST}
+
 app:
   SandboxInstance:
     urls: ${SANDBOX_INSTANCE_URLS}
