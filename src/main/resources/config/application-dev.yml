@@ -12,6 +12,12 @@
 # Full reference is available at:
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
+
+# Common configuration shared between all applications
+configserver:
+  name: Docker JHipster Registry
+  status: ERP Dev Server is now connected to the JHipster Registry running in Docker
+
 eureka:
   instance:
     prefer-ip-address: true
