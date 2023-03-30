@@ -17,7 +17,8 @@ eureka:
     prefer-ip-address: true
   client:
     service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE} # This is needed for the load balancer
+      defaultZone: http://admin:${jhipster.registry.password}@jhipster-registry:8761/eureka # This is needed for the load balancer
+      #defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE} # This is needed for the load balancer
       #defaultZone: http://admin:${jhipster.registry.password}@${jhipster.registry.host}:8761/eureka/
 
 logging:
