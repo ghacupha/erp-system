@@ -1,5 +1,6 @@
 package io.github.erp.erp.resources;
 
+import io.github.erp.internal.model.ApplicationStatus;
 import io.github.erp.service.dto.ApplicationUserDTO;
 import lombok.Data;
 import lombok.Builder;
@@ -32,18 +33,6 @@ public class ApplicationVersionReportingResource {
 
     @Value("${eureka.instance.metadata-map.git-branch}")
     private String branch;
-
-    @Data
-    @Builder
-    static class ApplicationStatus {
-        private String build;
-
-        private String version;
-
-        private String profile;
-
-        private String branch;
-    }
 
     /**
      * {@code GET  /application-users/:id} : get the "id" applicationUser.
