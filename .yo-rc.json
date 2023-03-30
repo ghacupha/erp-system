@@ -112,7 +112,7 @@
     "searchEngine": "elasticsearch",
     "serverPort": "8977",
     "serverSideOptions": ["searchEngine:elasticsearch", "websocket:spring-websocket"],
-    "serviceDiscoveryType": "no",
+    "serviceDiscoveryType": "eureka",
     "skipCheckLengthOfIdentifier": false,
     "skipClient": true,
     "skipFakeData": false,
