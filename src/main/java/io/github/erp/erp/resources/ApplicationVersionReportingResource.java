@@ -22,17 +22,17 @@ public class ApplicationVersionReportingResource {
 
     private static final Logger log = LoggerFactory.getLogger(ApplicationVersionReportingResource.class);
 
-    @Value("${eureka.instance.metadata-map.git-commit}")
-    private String build;
+    @Value("${git.commit.id.abbrev:}")
+    private static String build;
 
-    @Value("${eureka.instance.metadata-map.git-version}")
-    private String version;
+    @Value("${git.commit.id.describe:}")
+    private static String version;
 
-    @Value("${eureka.instance.metadata-map.profile}")
-    private String profile;
+    @Value("${spring.profiles.active}")
+    private static String profile;
 
-    @Value("${eureka.instance.metadata-map.git-branch}")
-    private String branch;
+    @Value("${git.branch:}")
+    private static String branch;
 
     /**
      * {@code GET  /application-users/:id} : get the "id" applicationUser.
