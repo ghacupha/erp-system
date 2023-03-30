@@ -17,7 +17,7 @@ package io.github.erp.config;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import lombok.Data;
+// import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -29,8 +29,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
 
-    @Data
-    public static class Registry {
-        private String host;
-    }
+//    @Data
+//    public static class Registry {
+//        private String host;
+//    }
 }
