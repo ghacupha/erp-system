@@ -42,6 +42,7 @@
         <run.addResources>false</run.addResources>
         <!-- These remain empty unless the corresponding profile is active -->
         <profile.no-liquibase />
+        <profile.no-index />
         <profile.api-docs />
         <profile.tls />
 
@@ -1118,7 +1119,7 @@
             </dependencies>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev${profile.tls}${profile.no-liquibase}</spring.profiles.active>
+                <spring.profiles.active>dev${profile.tls}${profile.no-liquibase}${profile.no-index}</spring.profiles.active>
             </properties>
         </profile>
         <profile>

@@ -28,8 +28,8 @@ public abstract class AbstractReIndexerService implements ApplicationIndexingSer
     @Override
     @Scheduled(fixedDelayString = "${erp.reIndexer.interval}")
     public void reIndex() {
-        this.tearDown();
-        this.index();
+        // this.tearDown();
+        // this.index();
     }
 
     @Override

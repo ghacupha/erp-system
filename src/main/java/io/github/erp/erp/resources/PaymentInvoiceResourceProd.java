@@ -67,36 +67,36 @@ public class PaymentInvoiceResourceProd {
 
     private final PaymentInvoiceQueryService paymentInvoiceQueryService;
 
-    private final PaymentInvoiceReIndexerService reIndexerService;
+    // private final PaymentInvoiceReIndexerService reIndexerService;
 
     public PaymentInvoiceResourceProd(
         PaymentInvoiceService paymentInvoiceService,
         PaymentInvoiceRepository paymentInvoiceRepository,
-        PaymentInvoiceQueryService paymentInvoiceQueryService,
-        PaymentInvoiceReIndexerService reIndexerService) {
+        PaymentInvoiceQueryService paymentInvoiceQueryService
+        ) {
         this.paymentInvoiceService = paymentInvoiceService;
         this.paymentInvoiceRepository = paymentInvoiceRepository;
         this.paymentInvoiceQueryService = paymentInvoiceQueryService;
-        this.reIndexerService = reIndexerService;
+        // this.reIndexerService = reIndexerService;
     }
 
-    /**
-     * GET /elasticsearch/re-index -> Reindex all documents
-     */
-    @GetMapping("/payment-invoices/elasticsearch/re-index")
-    @Timed
-    // @Secured(AuthoritiesConstants.PAYMENTS_USER)
-    public ResponseEntity<List<PaymentInvoiceDTO>> reindexAll(PaymentInvoiceCriteria criteria, Pageable pageable) {
-        log.info("REST request to reindex Elasticsearch by : {}", SecurityUtils.getCurrentUserLogin().orElse("user"));
-
-        reIndexerService.reIndex();
-
-        Page<PaymentInvoiceDTO> page = paymentInvoiceQueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok()
-            .headers(headers)
-            .body(page.getContent());
-    }
+//    /**
+//     * GET /elasticsearch/re-index -> Reindex all documents
+//     */
+//    @GetMapping("/payment-invoices/elasticsearch/re-index")
+//    @Timed
+//    // @Secured(AuthoritiesConstants.PAYMENTS_USER)
+//    public ResponseEntity<List<PaymentInvoiceDTO>> reindexAll(PaymentInvoiceCriteria criteria, Pageable pageable) {
+//        log.info("REST request to reindex Elasticsearch by : {}", SecurityUtils.getCurrentUserLogin().orElse("user"));
+//
+//        reIndexerService.reIndex();
+//
+//        Page<PaymentInvoiceDTO> page = paymentInvoiceQueryService.findByCriteria(criteria, pageable);
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+//        return ResponseEntity.ok()
+//            .headers(headers)
+//            .body(page.getContent());
+//    }
 
     /**
      * {@code POST  /payment-invoices} : Create a new paymentInvoice.

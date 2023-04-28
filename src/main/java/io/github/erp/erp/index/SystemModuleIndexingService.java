@@ -18,6 +18,8 @@ package io.github.erp.erp.index;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import com.google.common.collect.ImmutableList;
+import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
+import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
 import io.github.erp.repository.search.SystemModuleSearchRepository;
 import io.github.erp.service.SystemModuleService;
 import io.github.erp.service.mapper.SystemModuleMapper;
@@ -25,12 +27,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-@Service
-@Transactional
-public class SystemModuleIndexingService extends AbtractStartUpIndexService {
+@IndexingService
+public class SystemModuleIndexingService extends AbstractStartupRegisteredIndexService {
 
     private static final String TAG = "SystemModuleIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
@@ -45,6 +44,17 @@ public class SystemModuleIndexingService extends AbtractStartUpIndexService {
         this.searchRepository = searchRepository;
     }
 
+    /**
+     * This method is called to register a service which is to respond to the callback
+     */
+    @Override
+    public void register() {
+
+        log.info("Registering {} Service", TAG);
+
+        IndexingServiceChainSingleton.getInstance().registerService(this);
+    }
+
     @Async
     public void index() {
         log.info("Initiating {} build sequence", TAG);
@@ -55,6 +65,6 @@ public class SystemModuleIndexingService extends AbtractStartUpIndexService {
                 .map(mapper::toEntity)
                 .filter(entity -> !searchRepository.existsById(entity.getId()))
                 .collect(ImmutableList.toImmutableList()));
-        log.info("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
+        log.trace("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
     }
 }
