@@ -111,6 +111,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 AuthoritiesConstants.BOOK_KEEPING)
             .antMatchers("/api/app/fixed-asset/**").hasAnyAuthority(
                 AuthoritiesConstants.FIXED_ASSETS_USER,
+                AuthoritiesConstants.LEASE_MANAGER,
                 AuthoritiesConstants.PREPAYMENTS_MODULE_USER)
             .antMatchers("/api/app/files/**").hasAuthority(AuthoritiesConstants.DBA)
             .antMatchers("/api/leases/**").hasAuthority(AuthoritiesConstants.LEASE_MANAGER)
@@ -127,6 +128,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 AuthoritiesConstants.REQUISITION_MANAGER,
                 AuthoritiesConstants.FIXED_ASSETS_USER)
             .antMatchers("/api/app/requisition/**").hasAnyAuthority(
+                AuthoritiesConstants.LEASE_MANAGER,
                 AuthoritiesConstants.PAYMENTS_USER,
                 AuthoritiesConstants.REQUISITION_MANAGER)
             .antMatchers("/api/app/prepayments/**").hasAnyAuthority(AuthoritiesConstants.PREPAYMENTS_MODULE_USER)

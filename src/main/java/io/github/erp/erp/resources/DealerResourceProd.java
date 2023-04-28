@@ -67,31 +67,13 @@ public class DealerResourceProd {
 
     private final DealerQueryService dealerQueryService;
 
-    private final DealersReIndexerService reIndexerService;
+    // private final DealersReIndexerService reIndexerService;
 
-    public DealerResourceProd(DealerService dealerService, DealerRepository dealerRepository, DealerQueryService dealerQueryService, DealersReIndexerService reIndexerService) {
+    public DealerResourceProd(DealerService dealerService, DealerRepository dealerRepository, DealerQueryService dealerQueryService) {
         this.dealerService = dealerService;
         this.dealerRepository = dealerRepository;
         this.dealerQueryService = dealerQueryService;
-        this.reIndexerService = reIndexerService;
-    }
-
-    /**
-     * GET /elasticsearch/re-index -> Reindex all Dealer documents
-     */
-    @GetMapping("/dealers/elasticsearch/re-index")
-    @Timed
-    // @Secured(AuthoritiesConstants.PAYMENTS_USER)
-    public ResponseEntity<List<DealerDTO>> reindexAll(DealerCriteria criteria, Pageable pageable) {
-        log.info("REST request to reindex Elasticsearch by : {}", SecurityUtils.getCurrentUserLogin().orElse("user"));
-
-        reIndexerService.reIndex();
-
-        Page<DealerDTO> page = dealerQueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok()
-            .headers(headers)
-            .body(page.getContent());
+        // this.reIndexerService = reIndexerService;
     }
 
     /**

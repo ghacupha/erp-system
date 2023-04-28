@@ -17,12 +17,12 @@ package io.github.erp.erp.index;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
+import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.ImmutableList;
 
@@ -30,9 +30,8 @@ import io.github.erp.repository.search.DepreciationMethodSearchRepository;
 import io.github.erp.service.DepreciationMethodService;
 import io.github.erp.service.mapper.DepreciationMethodMapper;
 
-@Service
-@Transactional
-public class DepreciationMethodsIndexingService extends AbtractStartUpIndexService {
+@IndexingService
+public class DepreciationMethodsIndexingService extends AbstractStartupRegisteredIndexService {
 
     private static final String TAG = "DepreciationMethodsIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
@@ -50,6 +49,17 @@ public class DepreciationMethodsIndexingService extends AbtractStartUpIndexServi
         this.searchRepository = searchRepository;
     }
 
+    /**
+     * This method is called to register a service which is to respond to the callback
+     */
+    @Override
+    public void register() {
+
+        log.info("Registering {} Service", TAG);
+
+        IndexingServiceChainSingleton.getInstance().registerService(this);
+    }
+
     @Async
     public void index() {
         log.info("Initiating {} build sequence", TAG);
@@ -60,6 +70,6 @@ public class DepreciationMethodsIndexingService extends AbtractStartUpIndexServi
                 .map(mapper::toEntity)
                 .filter(entity -> !searchRepository.existsById(entity.getId()))
                 .collect(ImmutableList.toImmutableList()));
-        log.info("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
+        log.trace("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
     }
 }

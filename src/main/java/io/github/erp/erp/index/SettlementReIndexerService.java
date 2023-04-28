@@ -18,6 +18,7 @@ package io.github.erp.erp.index;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import com.google.common.collect.ImmutableList;
+import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
 import io.github.erp.repository.search.SettlementSearchRepository;
 import io.github.erp.service.SettlementService;
 import io.github.erp.service.mapper.SettlementMapper;
@@ -31,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+//@IndexingService
 @Service
 @Transactional
 public class SettlementReIndexerService extends AbstractReIndexerService {
@@ -60,9 +62,9 @@ public class SettlementReIndexerService extends AbstractReIndexerService {
                     .map(mapper::toEntity)
                     .filter(entity -> !searchRepository.existsById(entity.getId()))
                     .collect(ImmutableList.toImmutableList()));
-            log.info("{} cleanup complete. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
+            log.trace("{} cleanup complete. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
         } finally {
-            log.info("{} ReIndexer: ReIndexing completed successfully, unlocking the index", TAG);
+            log.trace("{} ReIndexer: ReIndexing completed successfully, unlocking the index", TAG);
             reindexLock.unlock();
         }
     }
@@ -73,7 +75,7 @@ public class SettlementReIndexerService extends AbstractReIndexerService {
         if (reindexLock.tryLock()) {
             this.searchRepository.deleteAll();
         } else {
-            log.info("{} ReIndexer: Concurrent reindexing attempt", TAG);
+            log.trace("{} ReIndexer: Concurrent reindexing attempt", TAG);
         }
     }
 }

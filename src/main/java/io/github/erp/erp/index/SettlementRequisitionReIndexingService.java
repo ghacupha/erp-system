@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+//@IndexingService
 @Service
 @Transactional
 public class SettlementRequisitionReIndexingService extends AbstractReIndexerService {
@@ -60,9 +61,9 @@ public class SettlementRequisitionReIndexingService extends AbstractReIndexerSer
                     .map(mapper::toEntity)
                     .filter(entity -> !searchRepository.existsById(entity.getId()))
                     .collect(ImmutableList.toImmutableList()));
-            log.info("{} cleanup complete. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
+            log.trace("{} cleanup complete. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
         } finally {
-            log.info("{} ReIndexer: ReIndexing has been completed successfully; unlocking the index", TAG);
+            log.trace("{} ReIndexer: ReIndexing has been completed successfully; unlocking the index", TAG);
             reindexLock.unlock();
         }
     }
@@ -73,7 +74,7 @@ public class SettlementRequisitionReIndexingService extends AbstractReIndexerSer
         if (reindexLock.tryLock()) {
             this.searchRepository.deleteAll();
         } else {
-            log.info("{} ReIndexer: Concurrent reindexing attempt", TAG);
+            log.trace("{} ReIndexer: Concurrent reindexing attempt", TAG);
         }
     }
 }

@@ -29,6 +29,7 @@ import org.springframework.scheduling.annotation.Async;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+@IndexingService
 public class BusinessDocumentReIndexingService extends AbstractReIndexerService {
 
     private static final Lock reindexLock = new ReentrantLock();
@@ -56,9 +57,9 @@ public class BusinessDocumentReIndexingService extends AbstractReIndexerService 
                     .map(mapper::toEntity)
                     .filter(entity -> !searchRepository.existsById(entity.getId()))
                     .collect(ImmutableList.toImmutableList()));
-            log.info("{} cleanup complete. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
+            log.trace("{} cleanup complete. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
         } finally {
-            log.info("{} ReIndexer: ReIndexing has been completed successfully; unlocking the index", TAG);
+            log.trace("{} ReIndexer: ReIndexing has been completed successfully; unlocking the index", TAG);
             reindexLock.unlock();
         }
     }
@@ -69,7 +70,7 @@ public class BusinessDocumentReIndexingService extends AbstractReIndexerService 
         if (reindexLock.tryLock()) {
             this.searchRepository.deleteAll();
         } else {
-            log.info("{} ReIndexer: Concurrent reindexing attempt", TAG);
+            log.trace("{} ReIndexer: Concurrent reindexing attempt", TAG);
         }
     }
 }

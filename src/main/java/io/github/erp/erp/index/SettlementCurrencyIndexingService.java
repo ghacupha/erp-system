@@ -18,6 +18,8 @@ package io.github.erp.erp.index;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import com.google.common.collect.ImmutableList;
+import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
+import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
 import io.github.erp.repository.search.SettlementCurrencySearchRepository;
 import io.github.erp.service.SettlementCurrencyService;
 import io.github.erp.service.mapper.SettlementCurrencyMapper;
@@ -30,9 +32,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
-@Transactional
-public class SettlementCurrencyIndexingService extends AbtractStartUpIndexService implements ApplicationIndexingService, ApplicationListener<ApplicationReadyEvent> {
+@IndexingService
+public class SettlementCurrencyIndexingService extends AbstractStartupRegisteredIndexService {
     private static final String TAG = "SettlementCurrencyIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
 
@@ -46,6 +47,17 @@ public class SettlementCurrencyIndexingService extends AbtractStartUpIndexServic
         this.searchRepository = searchRepository;
     }
 
+    /**
+     * This method is called to register a service which is to respond to the callback
+     */
+    @Override
+    public void register() {
+
+        log.info("Registering {} Service", TAG);
+
+        IndexingServiceChainSingleton.getInstance().registerService(this);
+    }
+
     @Async
     @Override
     public void index() {
@@ -57,6 +69,6 @@ public class SettlementCurrencyIndexingService extends AbtractStartUpIndexServic
                 .map(mapper::toEntity)
                 .filter(entity -> !searchRepository.existsById(entity.getId()))
                 .collect(ImmutableList.toImmutableList()));
-        log.info("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
+        log.trace("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
     }
 }

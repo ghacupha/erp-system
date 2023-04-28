@@ -67,35 +67,15 @@ public class SettlementRequisitionResourceProd {
 
     private final SettlementRequisitionQueryService settlementRequisitionQueryService;
 
-    private final SettlementRequisitionReIndexingService reIndexerService;
+    // private final SettlementRequisitionReIndexingService reIndexerService;
 
     public SettlementRequisitionResourceProd(
         SettlementRequisitionService settlementRequisitionService,
         SettlementRequisitionRepository settlementRequisitionRepository,
-        SettlementRequisitionQueryService settlementRequisitionQueryService,
-        SettlementRequisitionReIndexingService reIndexerService) {
+        SettlementRequisitionQueryService settlementRequisitionQueryService) {
         this.settlementRequisitionService = settlementRequisitionService;
         this.settlementRequisitionRepository = settlementRequisitionRepository;
         this.settlementRequisitionQueryService = settlementRequisitionQueryService;
-        this.reIndexerService = reIndexerService;
-    }
-
-    /**
-     * GET /elasticsearch/re-index -> Reindex all documents
-     */
-    @GetMapping("/elasticsearch/re-index")
-    @Timed
-    // @Secured(AuthoritiesConstants.PAYMENTS_USER)
-    public ResponseEntity<List<SettlementRequisitionDTO>> reindexAll(SettlementRequisitionCriteria criteria, Pageable pageable) {
-        log.info("REST request to reindex Elasticsearch by : {}", SecurityUtils.getCurrentUserLogin().orElse("user"));
-
-        reIndexerService.reIndex();
-
-        Page<SettlementRequisitionDTO> page = settlementRequisitionQueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok()
-            .headers(headers)
-            .body(page.getContent());
     }
 
     /**

@@ -23,6 +23,7 @@ import io.github.erp.service.ApplicationUserService;
 import io.github.erp.service.mapper.ApplicationUserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -31,8 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-@Service
-@Transactional
+@IndexingService
 public class ApplicationUserReindexingService extends AbstractReIndexerService {
 
     private static final Lock reindexLock = new ReentrantLock();
@@ -60,9 +60,9 @@ public class ApplicationUserReindexingService extends AbstractReIndexerService {
                     .map(mapper::toEntity)
                     .filter(entity -> !searchRepository.existsById(entity.getId()))
                     .collect(ImmutableList.toImmutableList()));
-            log.info("{} cleanup complete. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
+            log.trace("{} cleanup complete. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
         } finally {
-            log.info("{} ReIndexer: ReIndexing has been completed successfully; unlocking the index", TAG);
+            log.trace("{} ReIndexer: ReIndexing has been completed successfully; unlocking the index", TAG);
             reindexLock.unlock();
         }
     }
@@ -73,7 +73,7 @@ public class ApplicationUserReindexingService extends AbstractReIndexerService {
         if (reindexLock.tryLock()) {
             this.searchRepository.deleteAll();
         } else {
-            log.info("{} ReIndexer: Concurrent reindexing attempt", TAG);
+            log.trace("{} ReIndexer: Concurrent reindexing attempt", TAG);
         }
     }
 }
