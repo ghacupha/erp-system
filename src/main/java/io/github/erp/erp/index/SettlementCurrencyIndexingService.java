@@ -32,7 +32,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@IndexingService
+@Service
+@Transactional
 public class SettlementCurrencyIndexingService extends AbstractStartupRegisteredIndexService {
     private static final String TAG = "SettlementCurrencyIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);

@@ -29,8 +29,11 @@ import com.google.common.collect.ImmutableList;
 import io.github.erp.repository.search.DepreciationMethodSearchRepository;
 import io.github.erp.service.DepreciationMethodService;
 import io.github.erp.service.mapper.DepreciationMethodMapper;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@IndexingService
+@Service
+@Transactional
 public class DepreciationMethodsIndexingService extends AbstractStartupRegisteredIndexService {
 
     private static final String TAG = "DepreciationMethodsIndex";

@@ -18,6 +18,7 @@ package io.github.erp.erp.index;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import com.google.common.collect.ImmutableList;
+import io.github.erp.erp.index.reindexer.AbstractReIndexerService;
 import io.github.erp.repository.search.BusinessDocumentSearchRepository;
 import io.github.erp.service.BusinessDocumentService;
 import io.github.erp.service.mapper.BusinessDocumentMapper;
@@ -25,11 +26,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-@IndexingService
+@Service
+@Transactional
 public class BusinessDocumentReIndexingService extends AbstractReIndexerService {
 
     private static final Lock reindexLock = new ReentrantLock();

@@ -27,8 +27,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@IndexingService
+@Service
+@Transactional
 public class PrepaymentAccountIndexingService extends AbstractStartupRegisteredIndexService {
     private static final String TAG = "PrepaymentAccountIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
