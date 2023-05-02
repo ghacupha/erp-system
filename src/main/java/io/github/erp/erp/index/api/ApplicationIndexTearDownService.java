@@ -1,4 +1,4 @@
-package io.github.erp.erp.index;
+package io.github.erp.erp.index.api;
 
 /*-
  * Erp System - Mark III No 12 (Caleb Series) Server ver 1.0.5-SNAPSHOT
