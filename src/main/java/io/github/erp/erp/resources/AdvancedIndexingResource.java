@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.PaginationUtil;
@@ -33,14 +34,21 @@ public class AdvancedIndexingResource {
     /**
      * GET /elasticsearch/re-index -> Reindex all Dealer documents
      */
-    @PostMapping("/run-index")
+    @GetMapping("/run-index")
     @Timed
     @ResponseStatus(HttpStatus.ACCEPTED)
     // @Secured(AuthoritiesConstants.PAYMENTS_USER)
-    public void reindexAll() {
+    public ResponseEntity<?> reindexAll() {
         log.info("REST request to reindex Elasticsearch by : {}", SecurityUtils.getCurrentUserLogin().orElse("user"));
 
-        asynchronousIndexingService.startAsynchronousIndex();
+        try {
+            asynchronousIndexingService.startAsynchronousIndex();
 
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (Exception ignored) {
+
+            return new ResponseEntity<Error>(HttpStatus.CONFLICT);
+        }
     }
 }
