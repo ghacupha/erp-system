@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Maintains the list of indexing services registered
+ * Maintains the list of indexing services registered at startup
  */
 public class IndexingServiceChainSingleton {
 

@@ -1,7 +1,8 @@
 package io.github.erp.erp.index.engine_v1;
 
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-
+/**
+ * This is a registered index management service
+ */
 public interface ControllerIndexingService {
 
     /**
