@@ -1,6 +1,6 @@
 package io.github.erp.erp.resources;
 
-import io.github.erp.erp.index.PaymentInvoiceReIndexerService;
+import io.github.erp.erp.index.reindexer.PaymentInvoiceReIndexerService;
 import io.github.erp.security.SecurityUtils;
 import io.github.erp.service.PaymentInvoiceQueryService;
 import io.github.erp.service.criteria.PaymentInvoiceCriteria;
@@ -8,7 +8,6 @@ import io.github.erp.service.dto.PaymentInvoiceDTO;
 import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

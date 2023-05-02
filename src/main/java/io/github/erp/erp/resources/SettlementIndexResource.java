@@ -1,6 +1,6 @@
 package io.github.erp.erp.resources;
 
-import io.github.erp.erp.index.SettlementReIndexerService;
+import io.github.erp.erp.index.reindexer.SettlementReIndexerService;
 import io.github.erp.security.SecurityUtils;
 import io.github.erp.service.SettlementQueryService;
 import io.github.erp.service.criteria.SettlementCriteria;

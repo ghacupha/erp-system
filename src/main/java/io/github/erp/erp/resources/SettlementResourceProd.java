@@ -17,9 +17,7 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.erp.index.SettlementReIndexerService;
 import io.github.erp.repository.SettlementRepository;
-import io.github.erp.security.SecurityUtils;
 import io.github.erp.service.SettlementQueryService;
 import io.github.erp.service.SettlementService;
 import io.github.erp.service.criteria.SettlementCriteria;
@@ -33,7 +31,6 @@ import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

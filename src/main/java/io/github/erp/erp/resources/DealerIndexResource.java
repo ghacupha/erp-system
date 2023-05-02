@@ -1,6 +1,6 @@
 package io.github.erp.erp.resources;
 
-import io.github.erp.erp.index.DealersReIndexerService;
+import io.github.erp.erp.index.reindexer.DealersReIndexerService;
 import io.github.erp.security.SecurityUtils;
 import io.github.erp.service.DealerQueryService;
 import io.github.erp.service.criteria.DealerCriteria;
