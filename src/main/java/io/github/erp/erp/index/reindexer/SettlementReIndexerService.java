@@ -1,4 +1,4 @@
-package io.github.erp.erp.index;
+package io.github.erp.erp.index.reindexer;
 
 /*-
  * Erp System - Mark III No 12 (Caleb Series) Server ver 1.0.5-SNAPSHOT
@@ -18,9 +18,9 @@ package io.github.erp.erp.index;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import com.google.common.collect.ImmutableList;
-import io.github.erp.repository.search.PaymentInvoiceSearchRepository;
-import io.github.erp.service.PaymentInvoiceService;
-import io.github.erp.service.mapper.PaymentInvoiceMapper;
+import io.github.erp.repository.search.SettlementSearchRepository;
+import io.github.erp.service.SettlementService;
+import io.github.erp.service.mapper.SettlementMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -34,16 +34,16 @@ import java.util.concurrent.locks.ReentrantLock;
 //@IndexingService
 @Service
 @Transactional
-public class PaymentInvoiceReIndexerService extends AbstractReIndexerService {
+public class SettlementReIndexerService extends AbstractReIndexerService {
 
     private static final Lock reindexLock = new ReentrantLock();
-    private static final String TAG = "PaymentInvoice";
+    private static final String TAG = "SettlementReIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
-    private final PaymentInvoiceService service;
-    private final PaymentInvoiceMapper mapper;
-    private final PaymentInvoiceSearchRepository searchRepository;
+    private final SettlementService service;
+    private final SettlementMapper mapper;
+    private final SettlementSearchRepository searchRepository;
 
-    public PaymentInvoiceReIndexerService(PaymentInvoiceService service, PaymentInvoiceMapper mapper, PaymentInvoiceSearchRepository searchRepository) {
+    public SettlementReIndexerService(SettlementService service, SettlementMapper mapper, SettlementSearchRepository searchRepository) {
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;
@@ -63,7 +63,7 @@ public class PaymentInvoiceReIndexerService extends AbstractReIndexerService {
                     .collect(ImmutableList.toImmutableList()));
             log.trace("{} cleanup complete. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
         } finally {
-            log.trace("{} ReIndexer: ReIndexing has been completed successfully; unlocking the index", TAG);
+            log.trace("{} ReIndexer: ReIndexing completed successfully, unlocking the index", TAG);
             reindexLock.unlock();
         }
     }
