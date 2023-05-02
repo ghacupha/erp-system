@@ -1,6 +1,6 @@
 package io.github.erp.erp.index.engine_v1;
 
-import io.github.erp.erp.index.ApplicationIndexingService;
+import io.github.erp.erp.index.api.ApplicationIndexingService;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

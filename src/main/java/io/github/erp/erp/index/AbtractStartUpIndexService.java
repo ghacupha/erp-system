@@ -17,11 +17,18 @@ package io.github.erp.erp.index;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.erp.index.api.ApplicationIndexingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 
+/**
+ * This service initiates index updates during startup. It is not currently implemented in favor of startup registration
+ * and subsequent user-triggered index. This is because at every start up the development instance kept dirtifying
+ *  the search context of the production instance, making it impossible to continue with development without interfering
+ *  with the production data
+ */
 public abstract class AbtractStartUpIndexService implements ApplicationIndexingService, ApplicationListener<ApplicationReadyEvent> {
 
     private static final Logger log = LoggerFactory.getLogger("AppIndexingService");

@@ -18,6 +18,7 @@ package io.github.erp.erp.index;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import com.google.common.collect.ImmutableList;
+import io.github.erp.erp.index.reindexer.AbstractReIndexerService;
 import io.github.erp.repository.search.SettlementRequisitionSearchRepository;
 import io.github.erp.service.SettlementRequisitionService;
 import io.github.erp.service.mapper.SettlementRequisitionMapper;
