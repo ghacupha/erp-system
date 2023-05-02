@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.erp.erp.index;
+package io.github.erp.erp.index.api;
 
 /*-
  * Erp System - Mark III No 12 (Caleb Series) Server ver 1.0.5-SNAPSHOT
