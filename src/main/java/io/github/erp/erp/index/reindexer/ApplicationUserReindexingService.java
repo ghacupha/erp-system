@@ -1,4 +1,4 @@
-package io.github.erp.erp.index;
+package io.github.erp.erp.index.reindexer;
 
 /*-
  * Erp System - Mark III No 13 (Caleb Series) Server ver 1.1.3-SNAPSHOT
@@ -19,9 +19,9 @@ package io.github.erp.erp.index;
  */
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.reindexer.AbstractReIndexerService;
-import io.github.erp.repository.search.SettlementRequisitionSearchRepository;
-import io.github.erp.service.SettlementRequisitionService;
-import io.github.erp.service.mapper.SettlementRequisitionMapper;
+import io.github.erp.repository.search.ApplicationUserSearchRepository;
+import io.github.erp.service.ApplicationUserService;
+import io.github.erp.service.mapper.ApplicationUserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -32,19 +32,18 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-//@IndexingService
 @Service
 @Transactional
-public class SettlementRequisitionReIndexingService extends AbstractReIndexerService {
+public class ApplicationUserReindexingService extends AbstractReIndexerService {
 
     private static final Lock reindexLock = new ReentrantLock();
-    private static final String TAG = "SettlementRequisition";
+    private static final String TAG = "ApplicationUser";
     private static final Logger log = LoggerFactory.getLogger(TAG);
-    private final SettlementRequisitionService service;
-    private final SettlementRequisitionMapper mapper;
-    private final SettlementRequisitionSearchRepository searchRepository;
+    private final ApplicationUserService service;
+    private final ApplicationUserMapper mapper;
+    private final ApplicationUserSearchRepository searchRepository;
 
-    public SettlementRequisitionReIndexingService(SettlementRequisitionService service, SettlementRequisitionMapper mapper, SettlementRequisitionSearchRepository searchRepository) {
+    public ApplicationUserReindexingService(ApplicationUserService service, ApplicationUserMapper mapper, ApplicationUserSearchRepository searchRepository) {
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

@@ -38,7 +38,11 @@ public abstract class AbstractStartupRegisteredIndexService implements Controlle
         log.info("Index Service registration initiated. Standby for next sequence");
 
         register();
+
+        index();
     }
 
     public abstract void register();
+
+    public abstract void index();
 }

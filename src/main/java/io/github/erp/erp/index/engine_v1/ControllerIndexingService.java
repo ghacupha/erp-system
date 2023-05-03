@@ -33,4 +33,5 @@ public interface ControllerIndexingService {
      */
     void register();
 
+    void tearDown();
 }
