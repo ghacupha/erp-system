@@ -28,6 +28,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 
 // @Service
 // @Transactional
@@ -55,9 +58,23 @@ public class SignedPaymentsIndexingService extends AbstractStartupRegisteredInde
         IndexingServiceChainSingleton.getInstance().registerService(this);
     }
 
+    private static final Lock reindexLock = new ReentrantLock();
+
     @Async
-    @Override
     public void index() {
+        try {
+            reindexLock.lockInterruptibly();
+
+            indexerSequence();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            reindexLock.unlock();
+        }
+    }
+
+    private void indexerSequence() {
         log.info("Initiating {} build sequence", TAG);
         long startup = System.currentTimeMillis();
         this.searchRepository.saveAll(
@@ -67,5 +84,15 @@ public class SignedPaymentsIndexingService extends AbstractStartupRegisteredInde
                 .filter(entity -> !searchRepository.existsById(entity.getId()))
                 .collect(ImmutableList.toImmutableList()));
         log.trace("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
+    }
+
+    @Override
+    public void tearDown() {
+
+        if (reindexLock.tryLock()) {
+            this.searchRepository.deleteAll();
+        } else {
+            log.trace("{} ReIndexer: Concurrent reindexing attempt", TAG);
+        }
     }
 }

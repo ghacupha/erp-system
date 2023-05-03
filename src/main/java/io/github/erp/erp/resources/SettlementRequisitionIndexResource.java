@@ -18,7 +18,7 @@ package io.github.erp.erp.resources;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.erp.index.SettlementRequisitionReIndexingService;
+import io.github.erp.erp.index.reindexer.SettlementRequisitionReIndexingService;
 import io.github.erp.security.SecurityUtils;
 import io.github.erp.service.SettlementRequisitionQueryService;
 import io.github.erp.service.criteria.SettlementRequisitionCriteria;

@@ -30,7 +30,10 @@ public class AsynchronousIndexingService {
         System.out.println("Performing operation in Asynchronous Task");
 
         IndexingServiceChainSingleton.getInstance().getRegisteredIndexingServiceList().forEach(service -> {
-            new Thread(service::index).start();
+            new Thread(() -> {
+                service.tearDown();
+                service.index();
+            }).start();
         });
     }
 
