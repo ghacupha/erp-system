@@ -168,3 +168,6 @@ jhipster:
 app:
   SandboxInstance:
     urls: ${SANDBOX_INSTANCE_URLS}
+  ReIndexer:
+    #      interval: PT3600S
+    interval: ${ERP_REINDEXER_INTERVAL_PROD}
