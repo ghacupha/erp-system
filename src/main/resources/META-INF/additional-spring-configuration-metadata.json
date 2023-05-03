@@ -34,6 +34,11 @@
       "name": "configserver.status",
       "type": "java.lang.String",
       "description": "Description for configserver.status."
+    },
+    {
+      "name": "app.reIndexer.interval",
+      "type": "java.lang.String",
+      "description": "Description for app.reIndexer.interval."
     }
   ]
 }

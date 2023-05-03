@@ -23,12 +23,17 @@ import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 
 @Data
 @NoArgsConstructor
 @Configuration
 @ConfigurationProperties(prefix = "app")
-@PropertySource(value = "classpath:config/application.yml", factory = AppPropertyFactory.class)
+@PropertySources({
+    @PropertySource(value = "classpath:config/application.yml", factory = AppPropertyFactory.class),
+    @PropertySource(value = "classpath:config/application-dev.yml", factory = AppPropertyFactory.class),
+    @PropertySource(value = "classpath:config/application-prod.yml", factory = AppPropertyFactory.class),
+})
 public class OtherProperties {
 
     private String title;
@@ -36,5 +41,10 @@ public class OtherProperties {
     @Data
     public static class SandboxInstance {
         private String urls;
+    }
+
+    @Data
+    public static class ReIndexer {
+        private String interval;
     }
 }

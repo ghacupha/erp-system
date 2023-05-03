@@ -29,7 +29,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 public abstract class AbstractReIndexerService implements ApplicationIndexingService, ApplicationReindexingService, ApplicationIndexTearDownService {
 
     @Override
-    @Scheduled(fixedDelayString = "${erp.reIndexer.interval}")
+    //@Scheduled(fixedDelayString = "${erp.reIndexer.interval}")
+    @Scheduled(fixedDelayString = "${app.ReIndexer.interval}")
     public void reIndex() {
         // this.tearDown();
         // this.index();
