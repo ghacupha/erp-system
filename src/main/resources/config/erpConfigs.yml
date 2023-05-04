@@ -1,7 +1,4 @@
 erp:
-  reIndexer:
-#      interval: PT3600S
-      interval: ${ERP_REINDEXER_INTERVAL}
   reportsDirectory: 'reports-directory/'
   business:
     documents:
