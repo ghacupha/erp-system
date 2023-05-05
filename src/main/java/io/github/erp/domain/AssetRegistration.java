@@ -67,6 +67,12 @@ public class AssetRegistration implements Serializable {
     @Column(name = "comments_content_type")
     private String commentsContentType;
 
+    @Column(name = "model_number")
+    private String modelNumber;
+
+    @Column(name = "serial_number")
+    private String serialNumber;
+
     @ManyToMany
     @JoinTable(
         name = "rel_asset_registration__placeholder",
@@ -230,6 +236,39 @@ public class AssetRegistration implements Serializable {
     )
     private Set<BusinessDocument> businessDocuments = new HashSet<>();
 
+    @OneToMany(mappedBy = "assetRegistration")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = {
+            "assetRegistration",
+            "placeholders",
+            "paymentInvoices",
+            "serviceOutlets",
+            "settlements",
+            "assetCategory",
+            "purchaseOrders",
+            "deliveryNotes",
+            "jobSheets",
+            "dealer",
+            "designatedUsers",
+            "settlementCurrency",
+            "businessDocuments",
+            "universallyUniqueMappings",
+        },
+        allowSetters = true
+    )
+    private Set<AssetAccessory> assetAccessories = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_asset_registration__universally_unique_mapping",
+        joinColumns = @JoinColumn(name = "asset_registration_id"),
+        inverseJoinColumns = @JoinColumn(name = "universally_unique_mapping_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "parentMapping", "placeholders" }, allowSetters = true)
+    private Set<UniversallyUniqueMapping> universallyUniqueMappings = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -321,6 +360,32 @@ public class AssetRegistration implements Serializable {
 
     public void setCommentsContentType(String commentsContentType) {
         this.commentsContentType = commentsContentType;
+    }
+
+    public String getModelNumber() {
+        return this.modelNumber;
+    }
+
+    public AssetRegistration modelNumber(String modelNumber) {
+        this.setModelNumber(modelNumber);
+        return this;
+    }
+
+    public void setModelNumber(String modelNumber) {
+        this.modelNumber = modelNumber;
+    }
+
+    public String getSerialNumber() {
+        return this.serialNumber;
+    }
+
+    public AssetRegistration serialNumber(String serialNumber) {
+        this.setSerialNumber(serialNumber);
+        return this;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public Set<Placeholder> getPlaceholders() {
@@ -569,6 +634,60 @@ public class AssetRegistration implements Serializable {
         return this;
     }
 
+    public Set<AssetAccessory> getAssetAccessories() {
+        return this.assetAccessories;
+    }
+
+    public void setAssetAccessories(Set<AssetAccessory> assetAccessories) {
+        if (this.assetAccessories != null) {
+            this.assetAccessories.forEach(i -> i.setAssetRegistration(null));
+        }
+        if (assetAccessories != null) {
+            assetAccessories.forEach(i -> i.setAssetRegistration(this));
+        }
+        this.assetAccessories = assetAccessories;
+    }
+
+    public AssetRegistration assetAccessories(Set<AssetAccessory> assetAccessories) {
+        this.setAssetAccessories(assetAccessories);
+        return this;
+    }
+
+    public AssetRegistration addAssetAccessory(AssetAccessory assetAccessory) {
+        this.assetAccessories.add(assetAccessory);
+        assetAccessory.setAssetRegistration(this);
+        return this;
+    }
+
+    public AssetRegistration removeAssetAccessory(AssetAccessory assetAccessory) {
+        this.assetAccessories.remove(assetAccessory);
+        assetAccessory.setAssetRegistration(null);
+        return this;
+    }
+
+    public Set<UniversallyUniqueMapping> getUniversallyUniqueMappings() {
+        return this.universallyUniqueMappings;
+    }
+
+    public void setUniversallyUniqueMappings(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
+        this.universallyUniqueMappings = universallyUniqueMappings;
+    }
+
+    public AssetRegistration universallyUniqueMappings(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
+        this.setUniversallyUniqueMappings(universallyUniqueMappings);
+        return this;
+    }
+
+    public AssetRegistration addUniversallyUniqueMapping(UniversallyUniqueMapping universallyUniqueMapping) {
+        this.universallyUniqueMappings.add(universallyUniqueMapping);
+        return this;
+    }
+
+    public AssetRegistration removeUniversallyUniqueMapping(UniversallyUniqueMapping universallyUniqueMapping) {
+        this.universallyUniqueMappings.remove(universallyUniqueMapping);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -599,6 +718,8 @@ public class AssetRegistration implements Serializable {
             ", assetCost=" + getAssetCost() +
             ", comments='" + getComments() + "'" +
             ", commentsContentType='" + getCommentsContentType() + "'" +
+            ", modelNumber='" + getModelNumber() + "'" +
+            ", serialNumber='" + getSerialNumber() + "'" +
             "}";
     }
 }

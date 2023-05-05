@@ -173,6 +173,7 @@
     <include file="config/liquibase/changelog/20230328100320_added_entity_constraints_LeaseModelMetadata.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230328143440_added_entity_constraints_LeaseLiabilityScheduleItem.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230505113336_added_entity_constraints_AssetAccessory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230505132057_changelog.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

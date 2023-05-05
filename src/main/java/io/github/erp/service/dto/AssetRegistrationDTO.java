@@ -48,6 +48,10 @@ public class AssetRegistrationDTO implements Serializable {
     private byte[] comments;
 
     private String commentsContentType;
+    private String modelNumber;
+
+    private String serialNumber;
+
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     private Set<PaymentInvoiceDTO> paymentInvoices = new HashSet<>();
@@ -71,6 +75,8 @@ public class AssetRegistrationDTO implements Serializable {
     private SettlementCurrencyDTO settlementCurrency;
 
     private Set<BusinessDocumentDTO> businessDocuments = new HashSet<>();
+
+    private Set<UniversallyUniqueMappingDTO> universallyUniqueMappings = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -126,6 +132,22 @@ public class AssetRegistrationDTO implements Serializable {
 
     public void setCommentsContentType(String commentsContentType) {
         this.commentsContentType = commentsContentType;
+    }
+
+    public String getModelNumber() {
+        return modelNumber;
+    }
+
+    public void setModelNumber(String modelNumber) {
+        this.modelNumber = modelNumber;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public Set<PlaceholderDTO> getPlaceholders() {
@@ -224,6 +246,14 @@ public class AssetRegistrationDTO implements Serializable {
         this.businessDocuments = businessDocuments;
     }
 
+    public Set<UniversallyUniqueMappingDTO> getUniversallyUniqueMappings() {
+        return universallyUniqueMappings;
+    }
+
+    public void setUniversallyUniqueMappings(Set<UniversallyUniqueMappingDTO> universallyUniqueMappings) {
+        this.universallyUniqueMappings = universallyUniqueMappings;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -255,6 +285,8 @@ public class AssetRegistrationDTO implements Serializable {
             ", assetDetails='" + getAssetDetails() + "'" +
             ", assetCost=" + getAssetCost() +
             ", comments='" + getComments() + "'" +
+            ", modelNumber='" + getModelNumber() + "'" +
+            ", serialNumber='" + getSerialNumber() + "'" +
             ", placeholders=" + getPlaceholders() +
             ", paymentInvoices=" + getPaymentInvoices() +
             ", serviceOutlets=" + getServiceOutlets() +
@@ -267,6 +299,7 @@ public class AssetRegistrationDTO implements Serializable {
             ", designatedUsers=" + getDesignatedUsers() +
             ", settlementCurrency=" + getSettlementCurrency() +
             ", businessDocuments=" + getBusinessDocuments() +
+            ", universallyUniqueMappings=" + getUniversallyUniqueMappings() +
             "}";
     }
 }

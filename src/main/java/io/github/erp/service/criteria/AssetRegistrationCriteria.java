@@ -53,6 +53,10 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter assetCost;
 
+    private StringFilter modelNumber;
+
+    private StringFilter serialNumber;
+
     private LongFilter placeholderId;
 
     private LongFilter paymentInvoicesId;
@@ -77,6 +81,10 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
 
     private LongFilter businessDocumentId;
 
+    private LongFilter assetAccessoryId;
+
+    private LongFilter universallyUniqueMappingId;
+
     private Boolean distinct;
 
     public AssetRegistrationCriteria() {}
@@ -87,6 +95,8 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
         this.assetTag = other.assetTag == null ? null : other.assetTag.copy();
         this.assetDetails = other.assetDetails == null ? null : other.assetDetails.copy();
         this.assetCost = other.assetCost == null ? null : other.assetCost.copy();
+        this.modelNumber = other.modelNumber == null ? null : other.modelNumber.copy();
+        this.serialNumber = other.serialNumber == null ? null : other.serialNumber.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.paymentInvoicesId = other.paymentInvoicesId == null ? null : other.paymentInvoicesId.copy();
         this.serviceOutletId = other.serviceOutletId == null ? null : other.serviceOutletId.copy();
@@ -99,6 +109,8 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
         this.designatedUsersId = other.designatedUsersId == null ? null : other.designatedUsersId.copy();
         this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
         this.businessDocumentId = other.businessDocumentId == null ? null : other.businessDocumentId.copy();
+        this.assetAccessoryId = other.assetAccessoryId == null ? null : other.assetAccessoryId.copy();
+        this.universallyUniqueMappingId = other.universallyUniqueMappingId == null ? null : other.universallyUniqueMappingId.copy();
         this.distinct = other.distinct;
     }
 
@@ -180,6 +192,36 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
 
     public void setAssetCost(BigDecimalFilter assetCost) {
         this.assetCost = assetCost;
+    }
+
+    public StringFilter getModelNumber() {
+        return modelNumber;
+    }
+
+    public StringFilter modelNumber() {
+        if (modelNumber == null) {
+            modelNumber = new StringFilter();
+        }
+        return modelNumber;
+    }
+
+    public void setModelNumber(StringFilter modelNumber) {
+        this.modelNumber = modelNumber;
+    }
+
+    public StringFilter getSerialNumber() {
+        return serialNumber;
+    }
+
+    public StringFilter serialNumber() {
+        if (serialNumber == null) {
+            serialNumber = new StringFilter();
+        }
+        return serialNumber;
+    }
+
+    public void setSerialNumber(StringFilter serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public LongFilter getPlaceholderId() {
@@ -362,6 +404,36 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
         this.businessDocumentId = businessDocumentId;
     }
 
+    public LongFilter getAssetAccessoryId() {
+        return assetAccessoryId;
+    }
+
+    public LongFilter assetAccessoryId() {
+        if (assetAccessoryId == null) {
+            assetAccessoryId = new LongFilter();
+        }
+        return assetAccessoryId;
+    }
+
+    public void setAssetAccessoryId(LongFilter assetAccessoryId) {
+        this.assetAccessoryId = assetAccessoryId;
+    }
+
+    public LongFilter getUniversallyUniqueMappingId() {
+        return universallyUniqueMappingId;
+    }
+
+    public LongFilter universallyUniqueMappingId() {
+        if (universallyUniqueMappingId == null) {
+            universallyUniqueMappingId = new LongFilter();
+        }
+        return universallyUniqueMappingId;
+    }
+
+    public void setUniversallyUniqueMappingId(LongFilter universallyUniqueMappingId) {
+        this.universallyUniqueMappingId = universallyUniqueMappingId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -385,6 +457,8 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             Objects.equals(assetTag, that.assetTag) &&
             Objects.equals(assetDetails, that.assetDetails) &&
             Objects.equals(assetCost, that.assetCost) &&
+            Objects.equals(modelNumber, that.modelNumber) &&
+            Objects.equals(serialNumber, that.serialNumber) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(paymentInvoicesId, that.paymentInvoicesId) &&
             Objects.equals(serviceOutletId, that.serviceOutletId) &&
@@ -397,6 +471,8 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             Objects.equals(designatedUsersId, that.designatedUsersId) &&
             Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
             Objects.equals(businessDocumentId, that.businessDocumentId) &&
+            Objects.equals(assetAccessoryId, that.assetAccessoryId) &&
+            Objects.equals(universallyUniqueMappingId, that.universallyUniqueMappingId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -409,6 +485,8 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             assetTag,
             assetDetails,
             assetCost,
+            modelNumber,
+            serialNumber,
             placeholderId,
             paymentInvoicesId,
             serviceOutletId,
@@ -421,6 +499,8 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             designatedUsersId,
             settlementCurrencyId,
             businessDocumentId,
+            assetAccessoryId,
+            universallyUniqueMappingId,
             distinct
         );
     }
@@ -434,6 +514,8 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             (assetTag != null ? "assetTag=" + assetTag + ", " : "") +
             (assetDetails != null ? "assetDetails=" + assetDetails + ", " : "") +
             (assetCost != null ? "assetCost=" + assetCost + ", " : "") +
+            (modelNumber != null ? "modelNumber=" + modelNumber + ", " : "") +
+            (serialNumber != null ? "serialNumber=" + serialNumber + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (paymentInvoicesId != null ? "paymentInvoicesId=" + paymentInvoicesId + ", " : "") +
             (serviceOutletId != null ? "serviceOutletId=" + serviceOutletId + ", " : "") +
@@ -446,6 +528,8 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             (designatedUsersId != null ? "designatedUsersId=" + designatedUsersId + ", " : "") +
             (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
             (businessDocumentId != null ? "businessDocumentId=" + businessDocumentId + ", " : "") +
+            (assetAccessoryId != null ? "assetAccessoryId=" + assetAccessoryId + ", " : "") +
+            (universallyUniqueMappingId != null ? "universallyUniqueMappingId=" + universallyUniqueMappingId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

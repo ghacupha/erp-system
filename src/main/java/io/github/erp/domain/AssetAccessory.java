@@ -78,6 +78,8 @@ public class AssetAccessory implements Serializable {
             "designatedUsers",
             "settlementCurrency",
             "businessDocuments",
+            "assetAccessories",
+            "universallyUniqueMappings",
         },
         allowSetters = true
     )

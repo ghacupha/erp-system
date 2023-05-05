@@ -25,6 +25,14 @@
       "fieldName": "comments",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "modelNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "serialNumber",
+      "fieldType": "String"
     }
   ],
   "incrementalChangelog": false,
@@ -124,6 +132,20 @@
       "otherEntityName": "businessDocument",
       "relationshipType": "many-to-many",
       "otherEntityField": "documentTitle",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "assetRegistration"
+    },
+    {
+      "relationshipName": "assetAccessory",
+      "otherEntityName": "assetAccessory",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "assetRegistration"
+    },
+    {
+      "relationshipName": "universallyUniqueMapping",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "universalKey",
       "ownerSide": true,
       "otherEntityRelationshipName": "assetRegistration"
     }

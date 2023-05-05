@@ -1,11 +1,11 @@
-id;asset_number;asset_tag;asset_details;asset_cost;comments;comments_content_type;asset_category_id;dealer_id
-1;Fantastic;Berkshire;firewall;96225;../fake-data/blob/hipster.png;image/png;1;1
-2;EXE;pink technologies;invoice;98253;../fake-data/blob/hipster.png;image/png;2;2
-3;Pre-emptive parse;bifurcated;Keyboard Chair systems;71334;../fake-data/blob/hipster.png;image/png;3;3
-4;index integrate;redundant Executive;Solutions Fully-configurable deposit;7558;../fake-data/blob/hipster.png;image/png;4;4
-5;Borders;Quetzal Jewelery;Awesome virtual;21873;../fake-data/blob/hipster.png;image/png;5;5
-6;parsing;El;Soap;34431;../fake-data/blob/hipster.png;image/png;6;6
-7;ivory;enhance Practical copying;Fresh;36663;../fake-data/blob/hipster.png;image/png;7;7
-8;Rubber;Heard Liaison;Pizza tertiary experiences;38895;../fake-data/blob/hipster.png;image/png;8;8
-9;tan Wooden Frozen;override Checking Handmade;Australian;27297;../fake-data/blob/hipster.png;image/png;9;9
-10;Rubber synthesize;Games content-based full-range;grey;47138;../fake-data/blob/hipster.png;image/png;10;10
+id;asset_number;asset_tag;asset_details;asset_cost;comments;comments_content_type;model_number;serial_number;asset_category_id;dealer_id
+1;Fantastic;Berkshire;firewall;96225;../fake-data/blob/hipster.png;image/png;EXE;pink technologies;1;1
+2;invoice;end-to-end ivory Avon;Singapore;14534;../fake-data/blob/hipster.png;image/png;Chair systems;Samoa foreground Ngultrum;2;2
+3;Frozen functionalities;withdrawal;deposit Gorgeous;59556;../fake-data/blob/hipster.png;image/png;visualize green systems;responsive conglomeration;3;3
+4;Executive El Car;Oklahoma Mouse Rand;Computer;45544;../fake-data/blob/hipster.png;image/png;web-enabled Fresh 24/7;Awesome Liaison;4;4
+5;Pizza tertiary experiences;microchip hacking;Frozen Producer HDD;45161;../fake-data/blob/hipster.png;image/png;transmitter;Practical pixel Buckinghamshire;5;5
+6;Afghani Engineer;full-range composite web-enabled;Internal Angola;47509;../fake-data/blob/hipster.png;image/png;Metal Accountability Central;port;6;6
+7;one-to-one calculate vertical;Marketing payment;Grenada Customer;32027;../fake-data/blob/hipster.png;image/png;capability green;Frozen expedite homogeneous;7;7
+8;Berkshire;Account withdrawal generate;tan;77600;../fake-data/blob/hipster.png;image/png;Refined Fantastic;Kids;8;8
+9;benchmark local panel;Poland Gibraltar;Handcrafted compress;2396;../fake-data/blob/hipster.png;image/png;Market;Soap projection Oklahoma;9;9
+10;Trail productize Division;transmitter tan;deposit PCI program;59927;../fake-data/blob/hipster.png;image/png;Versatile Specialist alliance;Accountability eyeballs calculate;10;10
