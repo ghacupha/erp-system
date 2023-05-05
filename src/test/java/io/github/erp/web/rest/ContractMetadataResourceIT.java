@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -1078,7 +1079,7 @@ class ContractMetadataResourceIT {
         Long relatedContractsId = relatedContracts.getId();
 
         // Get all the contractMetadataList where relatedContracts equals to relatedContractsId
-        // todo defaultContractMetadataShouldBeFound("relatedContractsId.equals=" + relatedContractsId);
+        defaultContractMetadataShouldBeFound("relatedContractsId.equals=" + relatedContractsId);
 
         // Get all the contractMetadataList where relatedContracts equals to (relatedContractsId + 1)
         defaultContractMetadataShouldNotBeFound("relatedContractsId.equals=" + (relatedContractsId + 1));

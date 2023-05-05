@@ -17,6 +17,7 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.github.erp.domain.enumeration.DepreciationTypes;
 import java.io.Serializable;
