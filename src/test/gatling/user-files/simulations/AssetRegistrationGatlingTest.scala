@@ -93,6 +93,8 @@ class AssetRegistrationGatlingTest extends Simulation {
                 , "assetDetails":"SAMPLE_TEXT"
                 , "assetCost":"0"
                 , "comments":null
+                , "modelNumber":"SAMPLE_TEXT"
+                , "serialNumber":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_assetRegistration_url"))).exitHereIfFailed

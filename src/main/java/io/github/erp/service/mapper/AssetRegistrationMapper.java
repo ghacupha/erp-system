@@ -39,6 +39,7 @@ import org.mapstruct.*;
         DealerMapper.class,
         SettlementCurrencyMapper.class,
         BusinessDocumentMapper.class,
+        UniversallyUniqueMappingMapper.class,
     }
 )
 public interface AssetRegistrationMapper extends EntityMapper<AssetRegistrationDTO, AssetRegistration> {
@@ -54,6 +55,7 @@ public interface AssetRegistrationMapper extends EntityMapper<AssetRegistrationD
     @Mapping(target = "designatedUsers", source = "designatedUsers", qualifiedByName = "dealerNameSet")
     @Mapping(target = "settlementCurrency", source = "settlementCurrency", qualifiedByName = "iso4217CurrencyCode")
     @Mapping(target = "businessDocuments", source = "businessDocuments", qualifiedByName = "documentTitleSet")
+    @Mapping(target = "universallyUniqueMappings", source = "universallyUniqueMappings", qualifiedByName = "universalKeySet")
     AssetRegistrationDTO toDto(AssetRegistration s);
 
     @Mapping(target = "removePlaceholder", ignore = true)
@@ -65,6 +67,7 @@ public interface AssetRegistrationMapper extends EntityMapper<AssetRegistrationD
     @Mapping(target = "removeJobSheet", ignore = true)
     @Mapping(target = "removeDesignatedUsers", ignore = true)
     @Mapping(target = "removeBusinessDocument", ignore = true)
+    @Mapping(target = "removeUniversallyUniqueMapping", ignore = true)
     AssetRegistration toEntity(AssetRegistrationDTO assetRegistrationDTO);
 
     @Named("assetNumber")

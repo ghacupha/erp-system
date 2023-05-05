@@ -128,6 +128,12 @@ public class AssetRegistrationQueryService extends QueryService<AssetRegistratio
             if (criteria.getAssetCost() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getAssetCost(), AssetRegistration_.assetCost));
             }
+            if (criteria.getModelNumber() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getModelNumber(), AssetRegistration_.modelNumber));
+            }
+            if (criteria.getSerialNumber() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getSerialNumber(), AssetRegistration_.serialNumber));
+            }
             if (criteria.getPlaceholderId() != null) {
                 specification =
                     specification.and(
@@ -233,6 +239,24 @@ public class AssetRegistrationQueryService extends QueryService<AssetRegistratio
                         buildSpecification(
                             criteria.getBusinessDocumentId(),
                             root -> root.join(AssetRegistration_.businessDocuments, JoinType.LEFT).get(BusinessDocument_.id)
+                        )
+                    );
+            }
+            if (criteria.getAssetAccessoryId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getAssetAccessoryId(),
+                            root -> root.join(AssetRegistration_.assetAccessories, JoinType.LEFT).get(AssetAccessory_.id)
+                        )
+                    );
+            }
+            if (criteria.getUniversallyUniqueMappingId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getUniversallyUniqueMappingId(),
+                            root -> root.join(AssetRegistration_.universallyUniqueMappings, JoinType.LEFT).get(UniversallyUniqueMapping_.id)
                         )
                     );
             }

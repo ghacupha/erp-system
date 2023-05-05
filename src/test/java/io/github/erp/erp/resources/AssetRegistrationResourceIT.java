@@ -82,9 +82,15 @@ public class AssetRegistrationResourceIT {
     private static final String DEFAULT_COMMENTS_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_COMMENTS_CONTENT_TYPE = "image/png";
 
-    private static final String ENTITY_API_URL = "/api/fixed-asset/asset-registrations";
+    private static final String DEFAULT_MODEL_NUMBER = "AAAAAAAAAA";
+    private static final String UPDATED_MODEL_NUMBER = "BBBBBBBBBB";
+
+    private static final String DEFAULT_SERIAL_NUMBER = "AAAAAAAAAA";
+    private static final String UPDATED_SERIAL_NUMBER = "BBBBBBBBBB";
+
+    private static final String ENTITY_API_URL = "/api/asset-registrations";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/fixed-asset/_search/asset-registrations";
+    private static final String ENTITY_SEARCH_API_URL = "/api/_search/asset-registrations";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
@@ -130,7 +136,9 @@ public class AssetRegistrationResourceIT {
             .assetDetails(DEFAULT_ASSET_DETAILS)
             .assetCost(DEFAULT_ASSET_COST)
             .comments(DEFAULT_COMMENTS)
-            .commentsContentType(DEFAULT_COMMENTS_CONTENT_TYPE);
+            .commentsContentType(DEFAULT_COMMENTS_CONTENT_TYPE)
+            .modelNumber(DEFAULT_MODEL_NUMBER)
+            .serialNumber(DEFAULT_SERIAL_NUMBER);
         // Add required entity
         ServiceOutlet serviceOutlet;
         if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
@@ -187,7 +195,9 @@ public class AssetRegistrationResourceIT {
             .assetDetails(UPDATED_ASSET_DETAILS)
             .assetCost(UPDATED_ASSET_COST)
             .comments(UPDATED_COMMENTS)
-            .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE);
+            .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE)
+            .modelNumber(UPDATED_MODEL_NUMBER)
+            .serialNumber(UPDATED_SERIAL_NUMBER);
         // Add required entity
         ServiceOutlet serviceOutlet;
         if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
@@ -260,6 +270,8 @@ public class AssetRegistrationResourceIT {
         assertThat(testAssetRegistration.getAssetCost()).isEqualByComparingTo(DEFAULT_ASSET_COST);
         assertThat(testAssetRegistration.getComments()).isEqualTo(DEFAULT_COMMENTS);
         assertThat(testAssetRegistration.getCommentsContentType()).isEqualTo(DEFAULT_COMMENTS_CONTENT_TYPE);
+        assertThat(testAssetRegistration.getModelNumber()).isEqualTo(DEFAULT_MODEL_NUMBER);
+        assertThat(testAssetRegistration.getSerialNumber()).isEqualTo(DEFAULT_SERIAL_NUMBER);
 
         // Validate the AssetRegistration in Elasticsearch
         verify(mockAssetRegistrationSearchRepository, times(1)).save(testAssetRegistration);
@@ -374,7 +386,9 @@ public class AssetRegistrationResourceIT {
             .andExpect(jsonPath("$.[*].assetDetails").value(hasItem(DEFAULT_ASSET_DETAILS)))
             .andExpect(jsonPath("$.[*].assetCost").value(hasItem(sameNumber(DEFAULT_ASSET_COST))))
             .andExpect(jsonPath("$.[*].commentsContentType").value(hasItem(DEFAULT_COMMENTS_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].comments").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMMENTS))));
+            .andExpect(jsonPath("$.[*].comments").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMMENTS))))
+            .andExpect(jsonPath("$.[*].modelNumber").value(hasItem(DEFAULT_MODEL_NUMBER)))
+            .andExpect(jsonPath("$.[*].serialNumber").value(hasItem(DEFAULT_SERIAL_NUMBER)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -412,7 +426,9 @@ public class AssetRegistrationResourceIT {
             .andExpect(jsonPath("$.assetDetails").value(DEFAULT_ASSET_DETAILS))
             .andExpect(jsonPath("$.assetCost").value(sameNumber(DEFAULT_ASSET_COST)))
             .andExpect(jsonPath("$.commentsContentType").value(DEFAULT_COMMENTS_CONTENT_TYPE))
-            .andExpect(jsonPath("$.comments").value(Base64Utils.encodeToString(DEFAULT_COMMENTS)));
+            .andExpect(jsonPath("$.comments").value(Base64Utils.encodeToString(DEFAULT_COMMENTS)))
+            .andExpect(jsonPath("$.modelNumber").value(DEFAULT_MODEL_NUMBER))
+            .andExpect(jsonPath("$.serialNumber").value(DEFAULT_SERIAL_NUMBER));
     }
 
     @Test
@@ -773,6 +789,162 @@ public class AssetRegistrationResourceIT {
 
     @Test
     @Transactional
+    void getAllAssetRegistrationsByModelNumberIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where modelNumber equals to DEFAULT_MODEL_NUMBER
+        defaultAssetRegistrationShouldBeFound("modelNumber.equals=" + DEFAULT_MODEL_NUMBER);
+
+        // Get all the assetRegistrationList where modelNumber equals to UPDATED_MODEL_NUMBER
+        defaultAssetRegistrationShouldNotBeFound("modelNumber.equals=" + UPDATED_MODEL_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByModelNumberIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where modelNumber not equals to DEFAULT_MODEL_NUMBER
+        defaultAssetRegistrationShouldNotBeFound("modelNumber.notEquals=" + DEFAULT_MODEL_NUMBER);
+
+        // Get all the assetRegistrationList where modelNumber not equals to UPDATED_MODEL_NUMBER
+        defaultAssetRegistrationShouldBeFound("modelNumber.notEquals=" + UPDATED_MODEL_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByModelNumberIsInShouldWork() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where modelNumber in DEFAULT_MODEL_NUMBER or UPDATED_MODEL_NUMBER
+        defaultAssetRegistrationShouldBeFound("modelNumber.in=" + DEFAULT_MODEL_NUMBER + "," + UPDATED_MODEL_NUMBER);
+
+        // Get all the assetRegistrationList where modelNumber equals to UPDATED_MODEL_NUMBER
+        defaultAssetRegistrationShouldNotBeFound("modelNumber.in=" + UPDATED_MODEL_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByModelNumberIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where modelNumber is not null
+        defaultAssetRegistrationShouldBeFound("modelNumber.specified=true");
+
+        // Get all the assetRegistrationList where modelNumber is null
+        defaultAssetRegistrationShouldNotBeFound("modelNumber.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByModelNumberContainsSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where modelNumber contains DEFAULT_MODEL_NUMBER
+        defaultAssetRegistrationShouldBeFound("modelNumber.contains=" + DEFAULT_MODEL_NUMBER);
+
+        // Get all the assetRegistrationList where modelNumber contains UPDATED_MODEL_NUMBER
+        defaultAssetRegistrationShouldNotBeFound("modelNumber.contains=" + UPDATED_MODEL_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByModelNumberNotContainsSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where modelNumber does not contain DEFAULT_MODEL_NUMBER
+        defaultAssetRegistrationShouldNotBeFound("modelNumber.doesNotContain=" + DEFAULT_MODEL_NUMBER);
+
+        // Get all the assetRegistrationList where modelNumber does not contain UPDATED_MODEL_NUMBER
+        defaultAssetRegistrationShouldBeFound("modelNumber.doesNotContain=" + UPDATED_MODEL_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsBySerialNumberIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where serialNumber equals to DEFAULT_SERIAL_NUMBER
+        defaultAssetRegistrationShouldBeFound("serialNumber.equals=" + DEFAULT_SERIAL_NUMBER);
+
+        // Get all the assetRegistrationList where serialNumber equals to UPDATED_SERIAL_NUMBER
+        defaultAssetRegistrationShouldNotBeFound("serialNumber.equals=" + UPDATED_SERIAL_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsBySerialNumberIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where serialNumber not equals to DEFAULT_SERIAL_NUMBER
+        defaultAssetRegistrationShouldNotBeFound("serialNumber.notEquals=" + DEFAULT_SERIAL_NUMBER);
+
+        // Get all the assetRegistrationList where serialNumber not equals to UPDATED_SERIAL_NUMBER
+        defaultAssetRegistrationShouldBeFound("serialNumber.notEquals=" + UPDATED_SERIAL_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsBySerialNumberIsInShouldWork() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where serialNumber in DEFAULT_SERIAL_NUMBER or UPDATED_SERIAL_NUMBER
+        defaultAssetRegistrationShouldBeFound("serialNumber.in=" + DEFAULT_SERIAL_NUMBER + "," + UPDATED_SERIAL_NUMBER);
+
+        // Get all the assetRegistrationList where serialNumber equals to UPDATED_SERIAL_NUMBER
+        defaultAssetRegistrationShouldNotBeFound("serialNumber.in=" + UPDATED_SERIAL_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsBySerialNumberIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where serialNumber is not null
+        defaultAssetRegistrationShouldBeFound("serialNumber.specified=true");
+
+        // Get all the assetRegistrationList where serialNumber is null
+        defaultAssetRegistrationShouldNotBeFound("serialNumber.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsBySerialNumberContainsSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where serialNumber contains DEFAULT_SERIAL_NUMBER
+        defaultAssetRegistrationShouldBeFound("serialNumber.contains=" + DEFAULT_SERIAL_NUMBER);
+
+        // Get all the assetRegistrationList where serialNumber contains UPDATED_SERIAL_NUMBER
+        defaultAssetRegistrationShouldNotBeFound("serialNumber.contains=" + UPDATED_SERIAL_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsBySerialNumberNotContainsSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where serialNumber does not contain DEFAULT_SERIAL_NUMBER
+        defaultAssetRegistrationShouldNotBeFound("serialNumber.doesNotContain=" + DEFAULT_SERIAL_NUMBER);
+
+        // Get all the assetRegistrationList where serialNumber does not contain UPDATED_SERIAL_NUMBER
+        defaultAssetRegistrationShouldBeFound("serialNumber.doesNotContain=" + UPDATED_SERIAL_NUMBER);
+    }
+
+    @Test
+    @Transactional
     void getAllAssetRegistrationsByPlaceholderIsEqualToSomething() throws Exception {
         // Initialize the database
         assetRegistrationRepository.saveAndFlush(assetRegistration);
@@ -1083,6 +1255,58 @@ public class AssetRegistrationResourceIT {
         defaultAssetRegistrationShouldNotBeFound("businessDocumentId.equals=" + (businessDocumentId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByAssetAccessoryIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+        AssetAccessory assetAccessory;
+        if (TestUtil.findAll(em, AssetAccessory.class).isEmpty()) {
+            assetAccessory = AssetAccessoryResourceIT.createEntity(em);
+            em.persist(assetAccessory);
+            em.flush();
+        } else {
+            assetAccessory = TestUtil.findAll(em, AssetAccessory.class).get(0);
+        }
+        em.persist(assetAccessory);
+        em.flush();
+        assetRegistration.addAssetAccessory(assetAccessory);
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+        Long assetAccessoryId = assetAccessory.getId();
+
+        // Get all the assetRegistrationList where assetAccessory equals to assetAccessoryId
+        defaultAssetRegistrationShouldBeFound("assetAccessoryId.equals=" + assetAccessoryId);
+
+        // Get all the assetRegistrationList where assetAccessory equals to (assetAccessoryId + 1)
+        defaultAssetRegistrationShouldNotBeFound("assetAccessoryId.equals=" + (assetAccessoryId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByUniversallyUniqueMappingIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+        UniversallyUniqueMapping universallyUniqueMapping;
+        if (TestUtil.findAll(em, UniversallyUniqueMapping.class).isEmpty()) {
+            universallyUniqueMapping = UniversallyUniqueMappingResourceIT.createEntity(em);
+            em.persist(universallyUniqueMapping);
+            em.flush();
+        } else {
+            universallyUniqueMapping = TestUtil.findAll(em, UniversallyUniqueMapping.class).get(0);
+        }
+        em.persist(universallyUniqueMapping);
+        em.flush();
+        assetRegistration.addUniversallyUniqueMapping(universallyUniqueMapping);
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+        Long universallyUniqueMappingId = universallyUniqueMapping.getId();
+
+        // Get all the assetRegistrationList where universallyUniqueMapping equals to universallyUniqueMappingId
+        defaultAssetRegistrationShouldBeFound("universallyUniqueMappingId.equals=" + universallyUniqueMappingId);
+
+        // Get all the assetRegistrationList where universallyUniqueMapping equals to (universallyUniqueMappingId + 1)
+        defaultAssetRegistrationShouldNotBeFound("universallyUniqueMappingId.equals=" + (universallyUniqueMappingId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1097,7 +1321,9 @@ public class AssetRegistrationResourceIT {
             .andExpect(jsonPath("$.[*].assetDetails").value(hasItem(DEFAULT_ASSET_DETAILS)))
             .andExpect(jsonPath("$.[*].assetCost").value(hasItem(sameNumber(DEFAULT_ASSET_COST))))
             .andExpect(jsonPath("$.[*].commentsContentType").value(hasItem(DEFAULT_COMMENTS_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].comments").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMMENTS))));
+            .andExpect(jsonPath("$.[*].comments").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMMENTS))))
+            .andExpect(jsonPath("$.[*].modelNumber").value(hasItem(DEFAULT_MODEL_NUMBER)))
+            .andExpect(jsonPath("$.[*].serialNumber").value(hasItem(DEFAULT_SERIAL_NUMBER)));
 
         // Check, that the count call also returns 1
         restAssetRegistrationMockMvc
@@ -1151,7 +1377,9 @@ public class AssetRegistrationResourceIT {
             .assetDetails(UPDATED_ASSET_DETAILS)
             .assetCost(UPDATED_ASSET_COST)
             .comments(UPDATED_COMMENTS)
-            .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE);
+            .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE)
+            .modelNumber(UPDATED_MODEL_NUMBER)
+            .serialNumber(UPDATED_SERIAL_NUMBER);
         AssetRegistrationDTO assetRegistrationDTO = assetRegistrationMapper.toDto(updatedAssetRegistration);
 
         restAssetRegistrationMockMvc
@@ -1172,6 +1400,8 @@ public class AssetRegistrationResourceIT {
         assertThat(testAssetRegistration.getAssetCost()).isEqualTo(UPDATED_ASSET_COST);
         assertThat(testAssetRegistration.getComments()).isEqualTo(UPDATED_COMMENTS);
         assertThat(testAssetRegistration.getCommentsContentType()).isEqualTo(UPDATED_COMMENTS_CONTENT_TYPE);
+        assertThat(testAssetRegistration.getModelNumber()).isEqualTo(UPDATED_MODEL_NUMBER);
+        assertThat(testAssetRegistration.getSerialNumber()).isEqualTo(UPDATED_SERIAL_NUMBER);
 
         // Validate the AssetRegistration in Elasticsearch
         verify(mockAssetRegistrationSearchRepository).save(testAssetRegistration);
@@ -1269,7 +1499,8 @@ public class AssetRegistrationResourceIT {
             .assetDetails(UPDATED_ASSET_DETAILS)
             .assetCost(UPDATED_ASSET_COST)
             .comments(UPDATED_COMMENTS)
-            .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE);
+            .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE)
+            .serialNumber(UPDATED_SERIAL_NUMBER);
 
         restAssetRegistrationMockMvc
             .perform(
@@ -1289,6 +1520,8 @@ public class AssetRegistrationResourceIT {
         assertThat(testAssetRegistration.getAssetCost()).isEqualByComparingTo(UPDATED_ASSET_COST);
         assertThat(testAssetRegistration.getComments()).isEqualTo(UPDATED_COMMENTS);
         assertThat(testAssetRegistration.getCommentsContentType()).isEqualTo(UPDATED_COMMENTS_CONTENT_TYPE);
+        assertThat(testAssetRegistration.getModelNumber()).isEqualTo(DEFAULT_MODEL_NUMBER);
+        assertThat(testAssetRegistration.getSerialNumber()).isEqualTo(UPDATED_SERIAL_NUMBER);
     }
 
     @Test
@@ -1309,7 +1542,9 @@ public class AssetRegistrationResourceIT {
             .assetDetails(UPDATED_ASSET_DETAILS)
             .assetCost(UPDATED_ASSET_COST)
             .comments(UPDATED_COMMENTS)
-            .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE);
+            .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE)
+            .modelNumber(UPDATED_MODEL_NUMBER)
+            .serialNumber(UPDATED_SERIAL_NUMBER);
 
         restAssetRegistrationMockMvc
             .perform(
@@ -1329,6 +1564,8 @@ public class AssetRegistrationResourceIT {
         assertThat(testAssetRegistration.getAssetCost()).isEqualByComparingTo(UPDATED_ASSET_COST);
         assertThat(testAssetRegistration.getComments()).isEqualTo(UPDATED_COMMENTS);
         assertThat(testAssetRegistration.getCommentsContentType()).isEqualTo(UPDATED_COMMENTS_CONTENT_TYPE);
+        assertThat(testAssetRegistration.getModelNumber()).isEqualTo(UPDATED_MODEL_NUMBER);
+        assertThat(testAssetRegistration.getSerialNumber()).isEqualTo(UPDATED_SERIAL_NUMBER);
     }
 
     @Test
@@ -1450,6 +1687,8 @@ public class AssetRegistrationResourceIT {
             .andExpect(jsonPath("$.[*].assetDetails").value(hasItem(DEFAULT_ASSET_DETAILS)))
             .andExpect(jsonPath("$.[*].assetCost").value(hasItem(sameNumber(DEFAULT_ASSET_COST))))
             .andExpect(jsonPath("$.[*].commentsContentType").value(hasItem(DEFAULT_COMMENTS_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].comments").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMMENTS))));
+            .andExpect(jsonPath("$.[*].comments").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMMENTS))))
+            .andExpect(jsonPath("$.[*].modelNumber").value(hasItem(DEFAULT_MODEL_NUMBER)))
+            .andExpect(jsonPath("$.[*].serialNumber").value(hasItem(DEFAULT_SERIAL_NUMBER)));
     }
 }
