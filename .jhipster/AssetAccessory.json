@@ -1,0 +1,143 @@
+{
+  "fields": [
+    {
+      "fieldName": "assetTag",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assetDetails",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "comments",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "modelNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "serialNumber",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "assetRegistration",
+      "otherEntityName": "assetRegistration",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "assetNumber"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "assetAccessory"
+    },
+    {
+      "otherEntityField": "invoiceNumber",
+      "otherEntityName": "paymentInvoice",
+      "otherEntityRelationshipName": "assetAccessory",
+      "ownerSide": true,
+      "relationshipName": "paymentInvoices",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "outletCode",
+      "otherEntityName": "serviceOutlet",
+      "otherEntityRelationshipName": "assetAccessory",
+      "ownerSide": true,
+      "relationshipName": "serviceOutlet",
+      "relationshipType": "many-to-many",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "paymentNumber",
+      "otherEntityName": "settlement",
+      "otherEntityRelationshipName": "assetAccessory",
+      "ownerSide": true,
+      "relationshipName": "settlement",
+      "relationshipType": "many-to-many",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "assetCategoryName",
+      "otherEntityName": "assetCategory",
+      "relationshipName": "assetCategory",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "purchaseOrderNumber",
+      "otherEntityName": "purchaseOrder",
+      "otherEntityRelationshipName": "assetAccessory",
+      "ownerSide": true,
+      "relationshipName": "purchaseOrder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "deliveryNoteNumber",
+      "otherEntityName": "deliveryNote",
+      "otherEntityRelationshipName": "assetAccessory",
+      "ownerSide": true,
+      "relationshipName": "deliveryNote",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "serialNumber",
+      "otherEntityName": "jobSheet",
+      "otherEntityRelationshipName": "assetAccessory",
+      "ownerSide": true,
+      "relationshipName": "jobSheet",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "dealer",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "otherEntityRelationshipName": "assetAccessory",
+      "ownerSide": true,
+      "relationshipName": "designatedUsers",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "relationshipName": "settlementCurrency",
+      "otherEntityName": "settlementCurrency",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "iso4217CurrencyCode"
+    },
+    {
+      "relationshipName": "businessDocument",
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "documentTitle",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "assetRegistration"
+    },
+    {
+      "relationshipName": "universallyUniqueMapping",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "universalKey",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "assetAccessory"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "AssetAccessory",
+  "changelogDate": "20230505113336",
+  "incrementalChangelog": false
+}

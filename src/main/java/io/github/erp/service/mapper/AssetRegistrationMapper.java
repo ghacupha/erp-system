@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.AssetRegistration;
 import io.github.erp.service.dto.AssetRegistrationDTO;
 import org.mapstruct.*;
@@ -65,4 +66,10 @@ public interface AssetRegistrationMapper extends EntityMapper<AssetRegistrationD
     @Mapping(target = "removeDesignatedUsers", ignore = true)
     @Mapping(target = "removeBusinessDocument", ignore = true)
     AssetRegistration toEntity(AssetRegistrationDTO assetRegistrationDTO);
+
+    @Named("assetNumber")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "assetNumber", source = "assetNumber")
+    AssetRegistrationDTO toDtoAssetNumber(AssetRegistration assetRegistration);
 }
