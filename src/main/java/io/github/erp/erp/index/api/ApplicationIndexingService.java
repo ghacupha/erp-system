@@ -19,7 +19,7 @@
 package io.github.erp.erp.index.api;
 
 /*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.0-SNAPSHOT
+ * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.1
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
