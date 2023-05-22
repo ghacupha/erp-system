@@ -114,6 +114,22 @@
       "otherEntityField": "documentTitle",
       "ownerSide": true,
       "otherEntityRelationshipName": "workInProgressRegistration"
+    },
+    {
+      "relationshipName": "assetAccessory",
+      "otherEntityName": "assetAccessory",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "assetDetails",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "workInProgressRegistration"
+    },
+    {
+      "relationshipName": "assetWarranty",
+      "otherEntityName": "assetWarranty",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "workInProgressRegistration"
     }
   ],
   "service": "serviceImpl"

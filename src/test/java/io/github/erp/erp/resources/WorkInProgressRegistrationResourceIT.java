@@ -1,22 +1,5 @@
 package io.github.erp.erp.resources;
 
-/*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.1
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
 import io.github.erp.repository.WorkInProgressRegistrationRepository;
@@ -875,6 +858,58 @@ public class WorkInProgressRegistrationResourceIT {
 
         // Get all the workInProgressRegistrationList where businessDocument equals to (businessDocumentId + 1)
         defaultWorkInProgressRegistrationShouldNotBeFound("businessDocumentId.equals=" + (businessDocumentId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByAssetAccessoryIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        AssetAccessory assetAccessory;
+        if (TestUtil.findAll(em, AssetAccessory.class).isEmpty()) {
+            assetAccessory = AssetAccessoryResourceIT.createEntity(em);
+            em.persist(assetAccessory);
+            em.flush();
+        } else {
+            assetAccessory = TestUtil.findAll(em, AssetAccessory.class).get(0);
+        }
+        em.persist(assetAccessory);
+        em.flush();
+        workInProgressRegistration.addAssetAccessory(assetAccessory);
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        Long assetAccessoryId = assetAccessory.getId();
+
+        // Get all the workInProgressRegistrationList where assetAccessory equals to assetAccessoryId
+        defaultWorkInProgressRegistrationShouldBeFound("assetAccessoryId.equals=" + assetAccessoryId);
+
+        // Get all the workInProgressRegistrationList where assetAccessory equals to (assetAccessoryId + 1)
+        defaultWorkInProgressRegistrationShouldNotBeFound("assetAccessoryId.equals=" + (assetAccessoryId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByAssetWarrantyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        AssetWarranty assetWarranty;
+        if (TestUtil.findAll(em, AssetWarranty.class).isEmpty()) {
+            assetWarranty = AssetWarrantyResourceIT.createEntity(em);
+            em.persist(assetWarranty);
+            em.flush();
+        } else {
+            assetWarranty = TestUtil.findAll(em, AssetWarranty.class).get(0);
+        }
+        em.persist(assetWarranty);
+        em.flush();
+        workInProgressRegistration.addAssetWarranty(assetWarranty);
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        Long assetWarrantyId = assetWarranty.getId();
+
+        // Get all the workInProgressRegistrationList where assetWarranty equals to assetWarrantyId
+        defaultWorkInProgressRegistrationShouldBeFound("assetWarrantyId.equals=" + assetWarrantyId);
+
+        // Get all the workInProgressRegistrationList where assetWarranty equals to (assetWarrantyId + 1)
+        defaultWorkInProgressRegistrationShouldNotBeFound("assetWarrantyId.equals=" + (assetWarrantyId + 1));
     }
 
     /**

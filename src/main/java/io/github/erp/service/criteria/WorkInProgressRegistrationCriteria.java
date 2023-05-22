@@ -1,22 +1,5 @@
 package io.github.erp.service.criteria;
 
-/*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.1
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -74,6 +57,10 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
 
     private LongFilter businessDocumentId;
 
+    private LongFilter assetAccessoryId;
+
+    private LongFilter assetWarrantyId;
+
     private Boolean distinct;
 
     public WorkInProgressRegistrationCriteria() {}
@@ -95,6 +82,8 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
         this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
         this.workProjectRegisterId = other.workProjectRegisterId == null ? null : other.workProjectRegisterId.copy();
         this.businessDocumentId = other.businessDocumentId == null ? null : other.businessDocumentId.copy();
+        this.assetAccessoryId = other.assetAccessoryId == null ? null : other.assetAccessoryId.copy();
+        this.assetWarrantyId = other.assetWarrantyId == null ? null : other.assetWarrantyId.copy();
         this.distinct = other.distinct;
     }
 
@@ -343,6 +332,36 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
         this.businessDocumentId = businessDocumentId;
     }
 
+    public LongFilter getAssetAccessoryId() {
+        return assetAccessoryId;
+    }
+
+    public LongFilter assetAccessoryId() {
+        if (assetAccessoryId == null) {
+            assetAccessoryId = new LongFilter();
+        }
+        return assetAccessoryId;
+    }
+
+    public void setAssetAccessoryId(LongFilter assetAccessoryId) {
+        this.assetAccessoryId = assetAccessoryId;
+    }
+
+    public LongFilter getAssetWarrantyId() {
+        return assetWarrantyId;
+    }
+
+    public LongFilter assetWarrantyId() {
+        if (assetWarrantyId == null) {
+            assetWarrantyId = new LongFilter();
+        }
+        return assetWarrantyId;
+    }
+
+    public void setAssetWarrantyId(LongFilter assetWarrantyId) {
+        this.assetWarrantyId = assetWarrantyId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -377,6 +396,8 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
             Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
             Objects.equals(workProjectRegisterId, that.workProjectRegisterId) &&
             Objects.equals(businessDocumentId, that.businessDocumentId) &&
+            Objects.equals(assetAccessoryId, that.assetAccessoryId) &&
+            Objects.equals(assetWarrantyId, that.assetWarrantyId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -400,6 +421,8 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
             settlementCurrencyId,
             workProjectRegisterId,
             businessDocumentId,
+            assetAccessoryId,
+            assetWarrantyId,
             distinct
         );
     }
@@ -424,6 +447,8 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
             (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
             (workProjectRegisterId != null ? "workProjectRegisterId=" + workProjectRegisterId + ", " : "") +
             (businessDocumentId != null ? "businessDocumentId=" + businessDocumentId + ", " : "") +
+            (assetAccessoryId != null ? "assetAccessoryId=" + assetAccessoryId + ", " : "") +
+            (assetWarrantyId != null ? "assetWarrantyId=" + assetWarrantyId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
