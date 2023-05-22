@@ -1,22 +1,5 @@
 package io.github.erp.service.mapper;
 
-/*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.1
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import io.github.erp.domain.WorkInProgressRegistration;
 import io.github.erp.service.dto.WorkInProgressRegistrationDTO;
 import java.util.Set;
@@ -39,6 +22,8 @@ import org.mapstruct.*;
         SettlementCurrencyMapper.class,
         WorkProjectRegisterMapper.class,
         BusinessDocumentMapper.class,
+        AssetAccessoryMapper.class,
+        AssetWarrantyMapper.class,
     }
 )
 public interface WorkInProgressRegistrationMapper extends EntityMapper<WorkInProgressRegistrationDTO, WorkInProgressRegistration> {
@@ -54,6 +39,8 @@ public interface WorkInProgressRegistrationMapper extends EntityMapper<WorkInPro
     @Mapping(target = "settlementCurrency", source = "settlementCurrency", qualifiedByName = "iso4217CurrencyCode")
     @Mapping(target = "workProjectRegister", source = "workProjectRegister", qualifiedByName = "catalogueNumber")
     @Mapping(target = "businessDocuments", source = "businessDocuments", qualifiedByName = "documentTitleSet")
+    @Mapping(target = "assetAccessories", source = "assetAccessories", qualifiedByName = "assetDetailsSet")
+    @Mapping(target = "assetWarranties", source = "assetWarranties", qualifiedByName = "descriptionSet")
     WorkInProgressRegistrationDTO toDto(WorkInProgressRegistration s);
 
     @Named("idSet")
@@ -69,6 +56,8 @@ public interface WorkInProgressRegistrationMapper extends EntityMapper<WorkInPro
     @Mapping(target = "removeDeliveryNote", ignore = true)
     @Mapping(target = "removeJobSheet", ignore = true)
     @Mapping(target = "removeBusinessDocument", ignore = true)
+    @Mapping(target = "removeAssetAccessory", ignore = true)
+    @Mapping(target = "removeAssetWarranty", ignore = true)
     WorkInProgressRegistration toEntity(WorkInProgressRegistrationDTO workInProgressRegistrationDTO);
 
     @Named("sequenceNumber")

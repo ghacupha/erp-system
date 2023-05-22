@@ -1,22 +1,5 @@
 package io.github.erp.service.dto;
 
-/*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.1
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -66,6 +49,10 @@ public class WorkInProgressRegistrationDTO implements Serializable {
     private WorkProjectRegisterDTO workProjectRegister;
 
     private Set<BusinessDocumentDTO> businessDocuments = new HashSet<>();
+
+    private Set<AssetAccessoryDTO> assetAccessories = new HashSet<>();
+
+    private Set<AssetWarrantyDTO> assetWarranties = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -211,6 +198,22 @@ public class WorkInProgressRegistrationDTO implements Serializable {
         this.businessDocuments = businessDocuments;
     }
 
+    public Set<AssetAccessoryDTO> getAssetAccessories() {
+        return assetAccessories;
+    }
+
+    public void setAssetAccessories(Set<AssetAccessoryDTO> assetAccessories) {
+        this.assetAccessories = assetAccessories;
+    }
+
+    public Set<AssetWarrantyDTO> getAssetWarranties() {
+        return assetWarranties;
+    }
+
+    public void setAssetWarranties(Set<AssetWarrantyDTO> assetWarranties) {
+        this.assetWarranties = assetWarranties;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -253,6 +256,8 @@ public class WorkInProgressRegistrationDTO implements Serializable {
             ", settlementCurrency=" + getSettlementCurrency() +
             ", workProjectRegister=" + getWorkProjectRegister() +
             ", businessDocuments=" + getBusinessDocuments() +
+            ", assetAccessories=" + getAssetAccessories() +
+            ", assetWarranties=" + getAssetWarranties() +
             "}";
     }
 }

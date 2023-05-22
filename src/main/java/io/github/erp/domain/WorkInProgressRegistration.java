@@ -1,22 +1,5 @@
 package io.github.erp.domain;
 
-/*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.1
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -196,6 +179,8 @@ public class WorkInProgressRegistration implements Serializable {
             "settlementCurrency",
             "workProjectRegister",
             "businessDocuments",
+            "assetAccessories",
+            "assetWarranties",
         },
         allowSetters = true
     )
@@ -229,6 +214,47 @@ public class WorkInProgressRegistration implements Serializable {
         allowSetters = true
     )
     private Set<BusinessDocument> businessDocuments = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_work_in_progress_registration__asset_accessory",
+        joinColumns = @JoinColumn(name = "work_in_progress_registration_id"),
+        inverseJoinColumns = @JoinColumn(name = "asset_accessory_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = {
+            "assetRegistration",
+            "placeholders",
+            "paymentInvoices",
+            "serviceOutlets",
+            "settlements",
+            "assetCategory",
+            "purchaseOrders",
+            "deliveryNotes",
+            "jobSheets",
+            "dealer",
+            "designatedUsers",
+            "settlementCurrency",
+            "businessDocuments",
+            "universallyUniqueMappings",
+        },
+        allowSetters = true
+    )
+    private Set<AssetAccessory> assetAccessories = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_work_in_progress_registration__asset_warranty",
+        joinColumns = @JoinColumn(name = "work_in_progress_registration_id"),
+        inverseJoinColumns = @JoinColumn(name = "asset_warranty_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = { "placeholders", "universallyUniqueMappings", "dealer", "assetRegistration", "warrantyAttachments" },
+        allowSetters = true
+    )
+    private Set<AssetWarranty> assetWarranties = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -543,6 +569,52 @@ public class WorkInProgressRegistration implements Serializable {
 
     public WorkInProgressRegistration removeBusinessDocument(BusinessDocument businessDocument) {
         this.businessDocuments.remove(businessDocument);
+        return this;
+    }
+
+    public Set<AssetAccessory> getAssetAccessories() {
+        return this.assetAccessories;
+    }
+
+    public void setAssetAccessories(Set<AssetAccessory> assetAccessories) {
+        this.assetAccessories = assetAccessories;
+    }
+
+    public WorkInProgressRegistration assetAccessories(Set<AssetAccessory> assetAccessories) {
+        this.setAssetAccessories(assetAccessories);
+        return this;
+    }
+
+    public WorkInProgressRegistration addAssetAccessory(AssetAccessory assetAccessory) {
+        this.assetAccessories.add(assetAccessory);
+        return this;
+    }
+
+    public WorkInProgressRegistration removeAssetAccessory(AssetAccessory assetAccessory) {
+        this.assetAccessories.remove(assetAccessory);
+        return this;
+    }
+
+    public Set<AssetWarranty> getAssetWarranties() {
+        return this.assetWarranties;
+    }
+
+    public void setAssetWarranties(Set<AssetWarranty> assetWarranties) {
+        this.assetWarranties = assetWarranties;
+    }
+
+    public WorkInProgressRegistration assetWarranties(Set<AssetWarranty> assetWarranties) {
+        this.setAssetWarranties(assetWarranties);
+        return this;
+    }
+
+    public WorkInProgressRegistration addAssetWarranty(AssetWarranty assetWarranty) {
+        this.assetWarranties.add(assetWarranty);
+        return this;
+    }
+
+    public WorkInProgressRegistration removeAssetWarranty(AssetWarranty assetWarranty) {
+        this.assetWarranties.remove(assetWarranty);
         return this;
     }
 

@@ -30,6 +30,14 @@
       "otherEntityField": "assetNumber"
     },
     {
+      "relationshipName": "assetWarranty",
+      "otherEntityName": "assetWarranty",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "assetAccessory"
+    },
+    {
       "relationshipName": "placeholder",
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",
