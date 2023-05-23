@@ -1,23 +1,5 @@
 package io.github.erp.web.rest;
 
-/*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -28,6 +10,7 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.domain.AssetAccessory;
 import io.github.erp.domain.AssetCategory;
 import io.github.erp.domain.AssetRegistration;
+import io.github.erp.domain.AssetWarranty;
 import io.github.erp.domain.BusinessDocument;
 import io.github.erp.domain.Dealer;
 import io.github.erp.domain.DeliveryNote;
@@ -709,6 +692,32 @@ class AssetAccessoryResourceIT {
 
         // Get all the assetAccessoryList where assetRegistration equals to (assetRegistrationId + 1)
         defaultAssetAccessoryShouldNotBeFound("assetRegistrationId.equals=" + (assetRegistrationId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetAccessoriesByAssetWarrantyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetAccessoryRepository.saveAndFlush(assetAccessory);
+        AssetWarranty assetWarranty;
+        if (TestUtil.findAll(em, AssetWarranty.class).isEmpty()) {
+            assetWarranty = AssetWarrantyResourceIT.createEntity(em);
+            em.persist(assetWarranty);
+            em.flush();
+        } else {
+            assetWarranty = TestUtil.findAll(em, AssetWarranty.class).get(0);
+        }
+        em.persist(assetWarranty);
+        em.flush();
+        assetAccessory.addAssetWarranty(assetWarranty);
+        assetAccessoryRepository.saveAndFlush(assetAccessory);
+        Long assetWarrantyId = assetWarranty.getId();
+
+        // Get all the assetAccessoryList where assetWarranty equals to assetWarrantyId
+        defaultAssetAccessoryShouldBeFound("assetWarrantyId.equals=" + assetWarrantyId);
+
+        // Get all the assetAccessoryList where assetWarranty equals to (assetWarrantyId + 1)
+        defaultAssetAccessoryShouldNotBeFound("assetWarrantyId.equals=" + (assetWarrantyId + 1));
     }
 
     @Test

@@ -1,23 +1,5 @@
 package io.github.erp.service.mapper;
 
-/*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import io.github.erp.domain.AssetRegistration;
 import io.github.erp.service.dto.AssetRegistrationDTO;
 import org.mapstruct.*;
@@ -39,6 +21,7 @@ import org.mapstruct.*;
         DealerMapper.class,
         SettlementCurrencyMapper.class,
         BusinessDocumentMapper.class,
+        AssetWarrantyMapper.class,
         UniversallyUniqueMappingMapper.class,
     }
 )
@@ -55,6 +38,7 @@ public interface AssetRegistrationMapper extends EntityMapper<AssetRegistrationD
     @Mapping(target = "designatedUsers", source = "designatedUsers", qualifiedByName = "dealerNameSet")
     @Mapping(target = "settlementCurrency", source = "settlementCurrency", qualifiedByName = "iso4217CurrencyCode")
     @Mapping(target = "businessDocuments", source = "businessDocuments", qualifiedByName = "documentTitleSet")
+    @Mapping(target = "assetWarranties", source = "assetWarranties", qualifiedByName = "descriptionSet")
     @Mapping(target = "universallyUniqueMappings", source = "universallyUniqueMappings", qualifiedByName = "universalKeySet")
     AssetRegistrationDTO toDto(AssetRegistration s);
 
@@ -67,6 +51,7 @@ public interface AssetRegistrationMapper extends EntityMapper<AssetRegistrationD
     @Mapping(target = "removeJobSheet", ignore = true)
     @Mapping(target = "removeDesignatedUsers", ignore = true)
     @Mapping(target = "removeBusinessDocument", ignore = true)
+    @Mapping(target = "removeAssetWarranty", ignore = true)
     @Mapping(target = "removeUniversallyUniqueMapping", ignore = true)
     AssetRegistration toEntity(AssetRegistrationDTO assetRegistrationDTO);
 

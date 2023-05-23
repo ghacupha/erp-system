@@ -46,13 +46,6 @@
       "otherEntityField": "dealerName"
     },
     {
-      "relationshipName": "assetRegistration",
-      "otherEntityName": "assetRegistration",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "assetNumber"
-    },
-    {
       "relationshipName": "warrantyAttachment",
       "otherEntityName": "businessDocument",
       "relationshipType": "many-to-many",

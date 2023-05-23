@@ -1257,28 +1257,28 @@ public class AssetRegistrationResourceIT {
 
     @Test
     @Transactional
-    void getAllAssetRegistrationsByAssetAccessoryIsEqualToSomething() throws Exception {
+    void getAllAssetRegistrationsByAssetWarrantyIsEqualToSomething() throws Exception {
         // Initialize the database
         assetRegistrationRepository.saveAndFlush(assetRegistration);
-        AssetAccessory assetAccessory;
-        if (TestUtil.findAll(em, AssetAccessory.class).isEmpty()) {
-            assetAccessory = AssetAccessoryResourceIT.createEntity(em);
-            em.persist(assetAccessory);
+        AssetWarranty assetWarranty;
+        if (TestUtil.findAll(em, AssetWarranty.class).isEmpty()) {
+            assetWarranty = AssetWarrantyResourceIT.createEntity(em);
+            em.persist(assetWarranty);
             em.flush();
         } else {
-            assetAccessory = TestUtil.findAll(em, AssetAccessory.class).get(0);
+            assetWarranty = TestUtil.findAll(em, AssetWarranty.class).get(0);
         }
-        em.persist(assetAccessory);
+        em.persist(assetWarranty);
         em.flush();
-        assetRegistration.addAssetAccessory(assetAccessory);
+        assetRegistration.addAssetWarranty(assetWarranty);
         assetRegistrationRepository.saveAndFlush(assetRegistration);
-        Long assetAccessoryId = assetAccessory.getId();
+        Long assetWarrantyId = assetWarranty.getId();
 
-        // Get all the assetRegistrationList where assetAccessory equals to assetAccessoryId
-        defaultAssetRegistrationShouldBeFound("assetAccessoryId.equals=" + assetAccessoryId);
+        // Get all the assetRegistrationList where assetWarranty equals to assetWarrantyId
+        defaultAssetRegistrationShouldBeFound("assetWarrantyId.equals=" + assetWarrantyId);
 
-        // Get all the assetRegistrationList where assetAccessory equals to (assetAccessoryId + 1)
-        defaultAssetRegistrationShouldNotBeFound("assetAccessoryId.equals=" + (assetAccessoryId + 1));
+        // Get all the assetRegistrationList where assetWarranty equals to (assetWarrantyId + 1)
+        defaultAssetRegistrationShouldNotBeFound("assetWarrantyId.equals=" + (assetWarrantyId + 1));
     }
 
     @Test
@@ -1305,6 +1305,32 @@ public class AssetRegistrationResourceIT {
 
         // Get all the assetRegistrationList where universallyUniqueMapping equals to (universallyUniqueMappingId + 1)
         defaultAssetRegistrationShouldNotBeFound("universallyUniqueMappingId.equals=" + (universallyUniqueMappingId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByAssetAccessoryIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+        AssetAccessory assetAccessory;
+        if (TestUtil.findAll(em, AssetAccessory.class).isEmpty()) {
+            assetAccessory = AssetAccessoryResourceIT.createEntity(em);
+            em.persist(assetAccessory);
+            em.flush();
+        } else {
+            assetAccessory = TestUtil.findAll(em, AssetAccessory.class).get(0);
+        }
+        em.persist(assetAccessory);
+        em.flush();
+        assetRegistration.addAssetAccessory(assetAccessory);
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+        Long assetAccessoryId = assetAccessory.getId();
+
+        // Get all the assetRegistrationList where assetAccessory equals to assetAccessoryId
+        defaultAssetRegistrationShouldBeFound("assetAccessoryId.equals=" + assetAccessoryId);
+
+        // Get all the assetRegistrationList where assetAccessory equals to (assetAccessoryId + 1)
+        defaultAssetRegistrationShouldNotBeFound("assetAccessoryId.equals=" + (assetAccessoryId + 1));
     }
 
     /**

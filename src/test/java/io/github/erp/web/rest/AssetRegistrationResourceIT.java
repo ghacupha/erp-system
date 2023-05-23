@@ -1,23 +1,5 @@
 package io.github.erp.web.rest;
 
-/*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import static io.github.erp.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -29,6 +11,7 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.domain.AssetAccessory;
 import io.github.erp.domain.AssetCategory;
 import io.github.erp.domain.AssetRegistration;
+import io.github.erp.domain.AssetWarranty;
 import io.github.erp.domain.BusinessDocument;
 import io.github.erp.domain.Dealer;
 import io.github.erp.domain.DeliveryNote;
@@ -1270,28 +1253,28 @@ class AssetRegistrationResourceIT {
 
     @Test
     @Transactional
-    void getAllAssetRegistrationsByAssetAccessoryIsEqualToSomething() throws Exception {
+    void getAllAssetRegistrationsByAssetWarrantyIsEqualToSomething() throws Exception {
         // Initialize the database
         assetRegistrationRepository.saveAndFlush(assetRegistration);
-        AssetAccessory assetAccessory;
-        if (TestUtil.findAll(em, AssetAccessory.class).isEmpty()) {
-            assetAccessory = AssetAccessoryResourceIT.createEntity(em);
-            em.persist(assetAccessory);
+        AssetWarranty assetWarranty;
+        if (TestUtil.findAll(em, AssetWarranty.class).isEmpty()) {
+            assetWarranty = AssetWarrantyResourceIT.createEntity(em);
+            em.persist(assetWarranty);
             em.flush();
         } else {
-            assetAccessory = TestUtil.findAll(em, AssetAccessory.class).get(0);
+            assetWarranty = TestUtil.findAll(em, AssetWarranty.class).get(0);
         }
-        em.persist(assetAccessory);
+        em.persist(assetWarranty);
         em.flush();
-        assetRegistration.addAssetAccessory(assetAccessory);
+        assetRegistration.addAssetWarranty(assetWarranty);
         assetRegistrationRepository.saveAndFlush(assetRegistration);
-        Long assetAccessoryId = assetAccessory.getId();
+        Long assetWarrantyId = assetWarranty.getId();
 
-        // Get all the assetRegistrationList where assetAccessory equals to assetAccessoryId
-        defaultAssetRegistrationShouldBeFound("assetAccessoryId.equals=" + assetAccessoryId);
+        // Get all the assetRegistrationList where assetWarranty equals to assetWarrantyId
+        defaultAssetRegistrationShouldBeFound("assetWarrantyId.equals=" + assetWarrantyId);
 
-        // Get all the assetRegistrationList where assetAccessory equals to (assetAccessoryId + 1)
-        defaultAssetRegistrationShouldNotBeFound("assetAccessoryId.equals=" + (assetAccessoryId + 1));
+        // Get all the assetRegistrationList where assetWarranty equals to (assetWarrantyId + 1)
+        defaultAssetRegistrationShouldNotBeFound("assetWarrantyId.equals=" + (assetWarrantyId + 1));
     }
 
     @Test
@@ -1318,6 +1301,32 @@ class AssetRegistrationResourceIT {
 
         // Get all the assetRegistrationList where universallyUniqueMapping equals to (universallyUniqueMappingId + 1)
         defaultAssetRegistrationShouldNotBeFound("universallyUniqueMappingId.equals=" + (universallyUniqueMappingId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByAssetAccessoryIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+        AssetAccessory assetAccessory;
+        if (TestUtil.findAll(em, AssetAccessory.class).isEmpty()) {
+            assetAccessory = AssetAccessoryResourceIT.createEntity(em);
+            em.persist(assetAccessory);
+            em.flush();
+        } else {
+            assetAccessory = TestUtil.findAll(em, AssetAccessory.class).get(0);
+        }
+        em.persist(assetAccessory);
+        em.flush();
+        assetRegistration.addAssetAccessory(assetAccessory);
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+        Long assetAccessoryId = assetAccessory.getId();
+
+        // Get all the assetRegistrationList where assetAccessory equals to assetAccessoryId
+        defaultAssetRegistrationShouldBeFound("assetAccessoryId.equals=" + assetAccessoryId);
+
+        // Get all the assetRegistrationList where assetAccessory equals to (assetAccessoryId + 1)
+        defaultAssetRegistrationShouldNotBeFound("assetAccessoryId.equals=" + (assetAccessoryId + 1));
     }
 
     /**

@@ -136,12 +136,6 @@
       "otherEntityRelationshipName": "assetRegistration"
     },
     {
-      "relationshipName": "assetAccessory",
-      "otherEntityName": "assetAccessory",
-      "relationshipType": "one-to-many",
-      "otherEntityRelationshipName": "assetRegistration"
-    },
-    {
       "relationshipName": "assetWarranty",
       "otherEntityName": "assetWarranty",
       "relationshipType": "many-to-many",
@@ -155,6 +149,12 @@
       "relationshipType": "many-to-many",
       "otherEntityField": "universalKey",
       "ownerSide": true,
+      "otherEntityRelationshipName": "assetRegistration"
+    },
+    {
+      "relationshipName": "assetAccessory",
+      "otherEntityName": "assetAccessory",
+      "relationshipType": "one-to-many",
       "otherEntityRelationshipName": "assetRegistration"
     }
   ],

@@ -1,23 +1,5 @@
 package io.github.erp.service;
 
-/*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import io.github.erp.domain.*; // for static metamodels
 import io.github.erp.domain.AssetRegistration;
 import io.github.erp.repository.AssetRegistrationRepository;
@@ -242,12 +224,12 @@ public class AssetRegistrationQueryService extends QueryService<AssetRegistratio
                         )
                     );
             }
-            if (criteria.getAssetAccessoryId() != null) {
+            if (criteria.getAssetWarrantyId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
-                            criteria.getAssetAccessoryId(),
-                            root -> root.join(AssetRegistration_.assetAccessories, JoinType.LEFT).get(AssetAccessory_.id)
+                            criteria.getAssetWarrantyId(),
+                            root -> root.join(AssetRegistration_.assetWarranties, JoinType.LEFT).get(AssetWarranty_.id)
                         )
                     );
             }
@@ -257,6 +239,15 @@ public class AssetRegistrationQueryService extends QueryService<AssetRegistratio
                         buildSpecification(
                             criteria.getUniversallyUniqueMappingId(),
                             root -> root.join(AssetRegistration_.universallyUniqueMappings, JoinType.LEFT).get(UniversallyUniqueMapping_.id)
+                        )
+                    );
+            }
+            if (criteria.getAssetAccessoryId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getAssetAccessoryId(),
+                            root -> root.join(AssetRegistration_.assetAccessories, JoinType.LEFT).get(AssetAccessory_.id)
                         )
                     );
             }
