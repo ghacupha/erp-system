@@ -62,7 +62,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"FIXED_ASSETS_USER"})
-class AssetWarrantyResourceIT {
+public class AssetWarrantyResourceIT {
 
     private static final String DEFAULT_ASSET_TAG = "AAAAAAAAAA";
     private static final String UPDATED_ASSET_TAG = "BBBBBBBBBB";
@@ -138,16 +138,6 @@ class AssetWarrantyResourceIT {
             dealer = TestUtil.findAll(em, Dealer.class).get(0);
         }
         assetWarranty.setDealer(dealer);
-        // Add required entity
-        AssetRegistration assetRegistration;
-        if (TestUtil.findAll(em, AssetRegistration.class).isEmpty()) {
-            assetRegistration = AssetRegistrationResourceIT.createEntity(em);
-            em.persist(assetRegistration);
-            em.flush();
-        } else {
-            assetRegistration = TestUtil.findAll(em, AssetRegistration.class).get(0);
-        }
-        assetWarranty.setAssetRegistration(assetRegistration);
         return assetWarranty;
     }
 
@@ -174,16 +164,6 @@ class AssetWarrantyResourceIT {
             dealer = TestUtil.findAll(em, Dealer.class).get(0);
         }
         assetWarranty.setDealer(dealer);
-        // Add required entity
-        AssetRegistration assetRegistration;
-        if (TestUtil.findAll(em, AssetRegistration.class).isEmpty()) {
-            assetRegistration = AssetRegistrationResourceIT.createUpdatedEntity(em);
-            em.persist(assetRegistration);
-            em.flush();
-        } else {
-            assetRegistration = TestUtil.findAll(em, AssetRegistration.class).get(0);
-        }
-        assetWarranty.setAssetRegistration(assetRegistration);
         return assetWarranty;
     }
 
@@ -808,32 +788,6 @@ class AssetWarrantyResourceIT {
 
         // Get all the assetWarrantyList where dealer equals to (dealerId + 1)
         defaultAssetWarrantyShouldNotBeFound("dealerId.equals=" + (dealerId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllAssetWarrantiesByAssetRegistrationIsEqualToSomething() throws Exception {
-        // Initialize the database
-        assetWarrantyRepository.saveAndFlush(assetWarranty);
-        AssetRegistration assetRegistration;
-        if (TestUtil.findAll(em, AssetRegistration.class).isEmpty()) {
-            assetRegistration = AssetRegistrationResourceIT.createEntity(em);
-            em.persist(assetRegistration);
-            em.flush();
-        } else {
-            assetRegistration = TestUtil.findAll(em, AssetRegistration.class).get(0);
-        }
-        em.persist(assetRegistration);
-        em.flush();
-        assetWarranty.setAssetRegistration(assetRegistration);
-        assetWarrantyRepository.saveAndFlush(assetWarranty);
-        Long assetRegistrationId = assetRegistration.getId();
-
-        // Get all the assetWarrantyList where assetRegistration equals to assetRegistrationId
-        defaultAssetWarrantyShouldBeFound("assetRegistrationId.equals=" + assetRegistrationId);
-
-        // Get all the assetWarrantyList where assetRegistration equals to (assetRegistrationId + 1)
-        defaultAssetWarrantyShouldNotBeFound("assetRegistrationId.equals=" + (assetRegistrationId + 1));
     }
 
     @Test

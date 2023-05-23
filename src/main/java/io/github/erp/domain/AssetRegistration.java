@@ -1,23 +1,5 @@
 package io.github.erp.domain;
 
-/*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -236,11 +218,32 @@ public class AssetRegistration implements Serializable {
     )
     private Set<BusinessDocument> businessDocuments = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+        name = "rel_asset_registration__asset_warranty",
+        joinColumns = @JoinColumn(name = "asset_registration_id"),
+        inverseJoinColumns = @JoinColumn(name = "asset_warranty_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "placeholders", "universallyUniqueMappings", "dealer", "warrantyAttachments" }, allowSetters = true)
+    private Set<AssetWarranty> assetWarranties = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_asset_registration__universally_unique_mapping",
+        joinColumns = @JoinColumn(name = "asset_registration_id"),
+        inverseJoinColumns = @JoinColumn(name = "universally_unique_mapping_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "parentMapping", "placeholders" }, allowSetters = true)
+    private Set<UniversallyUniqueMapping> universallyUniqueMappings = new HashSet<>();
+
     @OneToMany(mappedBy = "assetRegistration")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
         value = {
             "assetRegistration",
+            "assetWarranties",
             "placeholders",
             "paymentInvoices",
             "serviceOutlets",
@@ -258,16 +261,6 @@ public class AssetRegistration implements Serializable {
         allowSetters = true
     )
     private Set<AssetAccessory> assetAccessories = new HashSet<>();
-
-    @ManyToMany
-    @JoinTable(
-        name = "rel_asset_registration__universally_unique_mapping",
-        joinColumns = @JoinColumn(name = "asset_registration_id"),
-        inverseJoinColumns = @JoinColumn(name = "universally_unique_mapping_id")
-    )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "parentMapping", "placeholders" }, allowSetters = true)
-    private Set<UniversallyUniqueMapping> universallyUniqueMappings = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -634,6 +627,52 @@ public class AssetRegistration implements Serializable {
         return this;
     }
 
+    public Set<AssetWarranty> getAssetWarranties() {
+        return this.assetWarranties;
+    }
+
+    public void setAssetWarranties(Set<AssetWarranty> assetWarranties) {
+        this.assetWarranties = assetWarranties;
+    }
+
+    public AssetRegistration assetWarranties(Set<AssetWarranty> assetWarranties) {
+        this.setAssetWarranties(assetWarranties);
+        return this;
+    }
+
+    public AssetRegistration addAssetWarranty(AssetWarranty assetWarranty) {
+        this.assetWarranties.add(assetWarranty);
+        return this;
+    }
+
+    public AssetRegistration removeAssetWarranty(AssetWarranty assetWarranty) {
+        this.assetWarranties.remove(assetWarranty);
+        return this;
+    }
+
+    public Set<UniversallyUniqueMapping> getUniversallyUniqueMappings() {
+        return this.universallyUniqueMappings;
+    }
+
+    public void setUniversallyUniqueMappings(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
+        this.universallyUniqueMappings = universallyUniqueMappings;
+    }
+
+    public AssetRegistration universallyUniqueMappings(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
+        this.setUniversallyUniqueMappings(universallyUniqueMappings);
+        return this;
+    }
+
+    public AssetRegistration addUniversallyUniqueMapping(UniversallyUniqueMapping universallyUniqueMapping) {
+        this.universallyUniqueMappings.add(universallyUniqueMapping);
+        return this;
+    }
+
+    public AssetRegistration removeUniversallyUniqueMapping(UniversallyUniqueMapping universallyUniqueMapping) {
+        this.universallyUniqueMappings.remove(universallyUniqueMapping);
+        return this;
+    }
+
     public Set<AssetAccessory> getAssetAccessories() {
         return this.assetAccessories;
     }
@@ -662,29 +701,6 @@ public class AssetRegistration implements Serializable {
     public AssetRegistration removeAssetAccessory(AssetAccessory assetAccessory) {
         this.assetAccessories.remove(assetAccessory);
         assetAccessory.setAssetRegistration(null);
-        return this;
-    }
-
-    public Set<UniversallyUniqueMapping> getUniversallyUniqueMappings() {
-        return this.universallyUniqueMappings;
-    }
-
-    public void setUniversallyUniqueMappings(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
-        this.universallyUniqueMappings = universallyUniqueMappings;
-    }
-
-    public AssetRegistration universallyUniqueMappings(Set<UniversallyUniqueMapping> universallyUniqueMappings) {
-        this.setUniversallyUniqueMappings(universallyUniqueMappings);
-        return this;
-    }
-
-    public AssetRegistration addUniversallyUniqueMapping(UniversallyUniqueMapping universallyUniqueMapping) {
-        this.universallyUniqueMappings.add(universallyUniqueMapping);
-        return this;
-    }
-
-    public AssetRegistration removeUniversallyUniqueMapping(UniversallyUniqueMapping universallyUniqueMapping) {
-        this.universallyUniqueMappings.remove(universallyUniqueMapping);
         return this;
     }
 

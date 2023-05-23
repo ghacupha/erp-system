@@ -1,23 +1,5 @@
 package io.github.erp.domain;
 
-/*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -78,12 +60,23 @@ public class AssetAccessory implements Serializable {
             "designatedUsers",
             "settlementCurrency",
             "businessDocuments",
-            "assetAccessories",
+            "assetWarranties",
             "universallyUniqueMappings",
+            "assetAccessories",
         },
         allowSetters = true
     )
     private AssetRegistration assetRegistration;
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_asset_accessory__asset_warranty",
+        joinColumns = @JoinColumn(name = "asset_accessory_id"),
+        inverseJoinColumns = @JoinColumn(name = "asset_warranty_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "placeholders", "universallyUniqueMappings", "dealer", "warrantyAttachments" }, allowSetters = true)
+    private Set<AssetWarranty> assetWarranties = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -361,6 +354,29 @@ public class AssetAccessory implements Serializable {
 
     public AssetAccessory assetRegistration(AssetRegistration assetRegistration) {
         this.setAssetRegistration(assetRegistration);
+        return this;
+    }
+
+    public Set<AssetWarranty> getAssetWarranties() {
+        return this.assetWarranties;
+    }
+
+    public void setAssetWarranties(Set<AssetWarranty> assetWarranties) {
+        this.assetWarranties = assetWarranties;
+    }
+
+    public AssetAccessory assetWarranties(Set<AssetWarranty> assetWarranties) {
+        this.setAssetWarranties(assetWarranties);
+        return this;
+    }
+
+    public AssetAccessory addAssetWarranty(AssetWarranty assetWarranty) {
+        this.assetWarranties.add(assetWarranty);
+        return this;
+    }
+
+    public AssetAccessory removeAssetWarranty(AssetWarranty assetWarranty) {
+        this.assetWarranties.remove(assetWarranty);
         return this;
     }
 

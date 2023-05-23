@@ -1,23 +1,5 @@
 package io.github.erp.service.mapper;
 
-/*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import io.github.erp.domain.AssetAccessory;
 import io.github.erp.service.dto.AssetAccessoryDTO;
 import java.util.Set;
@@ -30,6 +12,7 @@ import org.mapstruct.*;
     componentModel = "spring",
     uses = {
         AssetRegistrationMapper.class,
+        AssetWarrantyMapper.class,
         PlaceholderMapper.class,
         PaymentInvoiceMapper.class,
         ServiceOutletMapper.class,
@@ -46,6 +29,7 @@ import org.mapstruct.*;
 )
 public interface AssetAccessoryMapper extends EntityMapper<AssetAccessoryDTO, AssetAccessory> {
     @Mapping(target = "assetRegistration", source = "assetRegistration", qualifiedByName = "assetNumber")
+    @Mapping(target = "assetWarranties", source = "assetWarranties", qualifiedByName = "descriptionSet")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     @Mapping(target = "paymentInvoices", source = "paymentInvoices", qualifiedByName = "invoiceNumberSet")
     @Mapping(target = "serviceOutlets", source = "serviceOutlets", qualifiedByName = "outletCodeSet")
@@ -61,6 +45,7 @@ public interface AssetAccessoryMapper extends EntityMapper<AssetAccessoryDTO, As
     @Mapping(target = "universallyUniqueMappings", source = "universallyUniqueMappings", qualifiedByName = "universalKeySet")
     AssetAccessoryDTO toDto(AssetAccessory s);
 
+    @Mapping(target = "removeAssetWarranty", ignore = true)
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removePaymentInvoices", ignore = true)
     @Mapping(target = "removeServiceOutlet", ignore = true)

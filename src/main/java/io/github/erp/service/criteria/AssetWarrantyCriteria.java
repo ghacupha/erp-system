@@ -1,23 +1,5 @@
 package io.github.erp.service.criteria;
 
-/*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -61,8 +43,6 @@ public class AssetWarrantyCriteria implements Serializable, Criteria {
 
     private LongFilter dealerId;
 
-    private LongFilter assetRegistrationId;
-
     private LongFilter warrantyAttachmentId;
 
     private Boolean distinct;
@@ -79,7 +59,6 @@ public class AssetWarrantyCriteria implements Serializable, Criteria {
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.universallyUniqueMappingId = other.universallyUniqueMappingId == null ? null : other.universallyUniqueMappingId.copy();
         this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
-        this.assetRegistrationId = other.assetRegistrationId == null ? null : other.assetRegistrationId.copy();
         this.warrantyAttachmentId = other.warrantyAttachmentId == null ? null : other.warrantyAttachmentId.copy();
         this.distinct = other.distinct;
     }
@@ -224,21 +203,6 @@ public class AssetWarrantyCriteria implements Serializable, Criteria {
         this.dealerId = dealerId;
     }
 
-    public LongFilter getAssetRegistrationId() {
-        return assetRegistrationId;
-    }
-
-    public LongFilter assetRegistrationId() {
-        if (assetRegistrationId == null) {
-            assetRegistrationId = new LongFilter();
-        }
-        return assetRegistrationId;
-    }
-
-    public void setAssetRegistrationId(LongFilter assetRegistrationId) {
-        this.assetRegistrationId = assetRegistrationId;
-    }
-
     public LongFilter getWarrantyAttachmentId() {
         return warrantyAttachmentId;
     }
@@ -281,7 +245,6 @@ public class AssetWarrantyCriteria implements Serializable, Criteria {
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(universallyUniqueMappingId, that.universallyUniqueMappingId) &&
             Objects.equals(dealerId, that.dealerId) &&
-            Objects.equals(assetRegistrationId, that.assetRegistrationId) &&
             Objects.equals(warrantyAttachmentId, that.warrantyAttachmentId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -299,7 +262,6 @@ public class AssetWarrantyCriteria implements Serializable, Criteria {
             placeholderId,
             universallyUniqueMappingId,
             dealerId,
-            assetRegistrationId,
             warrantyAttachmentId,
             distinct
         );
@@ -318,7 +280,6 @@ public class AssetWarrantyCriteria implements Serializable, Criteria {
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (universallyUniqueMappingId != null ? "universallyUniqueMappingId=" + universallyUniqueMappingId + ", " : "") +
             (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
-            (assetRegistrationId != null ? "assetRegistrationId=" + assetRegistrationId + ", " : "") +
             (warrantyAttachmentId != null ? "warrantyAttachmentId=" + warrantyAttachmentId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

@@ -60,7 +60,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"FIXED_ASSETS_USER"})
-class AssetAccessoryResourceIT {
+public class AssetAccessoryResourceIT {
 
     private static final String DEFAULT_ASSET_TAG = "AAAAAAAAAA";
     private static final String UPDATED_ASSET_TAG = "BBBBBBBBBB";
@@ -696,6 +696,32 @@ class AssetAccessoryResourceIT {
 
         // Get all the assetAccessoryList where assetRegistration equals to (assetRegistrationId + 1)
         defaultAssetAccessoryShouldNotBeFound("assetRegistrationId.equals=" + (assetRegistrationId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetAccessoriesByAssetWarrantyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetAccessoryRepository.saveAndFlush(assetAccessory);
+        AssetWarranty assetWarranty;
+        if (TestUtil.findAll(em, AssetWarranty.class).isEmpty()) {
+            assetWarranty = AssetWarrantyResourceIT.createEntity(em);
+            em.persist(assetWarranty);
+            em.flush();
+        } else {
+            assetWarranty = TestUtil.findAll(em, AssetWarranty.class).get(0);
+        }
+        em.persist(assetWarranty);
+        em.flush();
+        assetAccessory.addAssetWarranty(assetWarranty);
+        assetAccessoryRepository.saveAndFlush(assetAccessory);
+        Long assetWarrantyId = assetWarranty.getId();
+
+        // Get all the assetAccessoryList where assetWarranty equals to assetWarrantyId
+        defaultAssetAccessoryShouldBeFound("assetWarrantyId.equals=" + assetWarrantyId);
+
+        // Get all the assetAccessoryList where assetWarranty equals to (assetWarrantyId + 1)
+        defaultAssetAccessoryShouldNotBeFound("assetWarrantyId.equals=" + (assetWarrantyId + 1));
     }
 
     @Test
