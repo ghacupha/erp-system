@@ -1,7 +1,7 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.3
+ * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.4
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -79,6 +79,8 @@ public class AssetRegistrationDTO implements Serializable {
     private Set<AssetWarrantyDTO> assetWarranties = new HashSet<>();
 
     private Set<UniversallyUniqueMappingDTO> universallyUniqueMappings = new HashSet<>();
+
+    private Set<AssetAccessoryDTO> assetAccessories = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -264,6 +266,14 @@ public class AssetRegistrationDTO implements Serializable {
         this.universallyUniqueMappings = universallyUniqueMappings;
     }
 
+    public Set<AssetAccessoryDTO> getAssetAccessories() {
+        return assetAccessories;
+    }
+
+    public void setAssetAccessories(Set<AssetAccessoryDTO> assetAccessories) {
+        this.assetAccessories = assetAccessories;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -311,6 +321,7 @@ public class AssetRegistrationDTO implements Serializable {
             ", businessDocuments=" + getBusinessDocuments() +
             ", assetWarranties=" + getAssetWarranties() +
             ", universallyUniqueMappings=" + getUniversallyUniqueMappings() +
+            ", assetAccessories=" + getAssetAccessories() +
             "}";
     }
 }

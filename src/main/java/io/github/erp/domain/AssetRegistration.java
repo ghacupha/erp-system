@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.3
+ * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.4
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -256,11 +256,15 @@ public class AssetRegistration implements Serializable {
     @JsonIgnoreProperties(value = { "parentMapping", "placeholders" }, allowSetters = true)
     private Set<UniversallyUniqueMapping> universallyUniqueMappings = new HashSet<>();
 
-    @OneToMany(mappedBy = "assetRegistration")
+    @ManyToMany
+    @JoinTable(
+        name = "rel_asset_registration__asset_accessory",
+        joinColumns = @JoinColumn(name = "asset_registration_id"),
+        inverseJoinColumns = @JoinColumn(name = "asset_accessory_id")
+    )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
         value = {
-            "assetRegistration",
             "assetWarranties",
             "placeholders",
             "paymentInvoices",
@@ -272,7 +276,6 @@ public class AssetRegistration implements Serializable {
             "jobSheets",
             "dealer",
             "designatedUsers",
-            "settlementCurrency",
             "businessDocuments",
             "universallyUniqueMappings",
         },
@@ -696,12 +699,6 @@ public class AssetRegistration implements Serializable {
     }
 
     public void setAssetAccessories(Set<AssetAccessory> assetAccessories) {
-        if (this.assetAccessories != null) {
-            this.assetAccessories.forEach(i -> i.setAssetRegistration(null));
-        }
-        if (assetAccessories != null) {
-            assetAccessories.forEach(i -> i.setAssetRegistration(this));
-        }
         this.assetAccessories = assetAccessories;
     }
 
@@ -712,13 +709,11 @@ public class AssetRegistration implements Serializable {
 
     public AssetRegistration addAssetAccessory(AssetAccessory assetAccessory) {
         this.assetAccessories.add(assetAccessory);
-        assetAccessory.setAssetRegistration(this);
         return this;
     }
 
     public AssetRegistration removeAssetAccessory(AssetAccessory assetAccessory) {
         this.assetAccessories.remove(assetAccessory);
-        assetAccessory.setAssetRegistration(null);
         return this;
     }
 

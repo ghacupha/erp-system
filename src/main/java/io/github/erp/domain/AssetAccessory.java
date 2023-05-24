@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.3
+ * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.4
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -62,29 +62,6 @@ public class AssetAccessory implements Serializable {
 
     @Column(name = "serial_number")
     private String serialNumber;
-
-    @ManyToOne
-    @JsonIgnoreProperties(
-        value = {
-            "placeholders",
-            "paymentInvoices",
-            "serviceOutlets",
-            "settlements",
-            "assetCategory",
-            "purchaseOrders",
-            "deliveryNotes",
-            "jobSheets",
-            "dealer",
-            "designatedUsers",
-            "settlementCurrency",
-            "businessDocuments",
-            "assetWarranties",
-            "universallyUniqueMappings",
-            "assetAccessories",
-        },
-        allowSetters = true
-    )
-    private AssetRegistration assetRegistration;
 
     @ManyToMany
     @JoinTable(
@@ -234,10 +211,6 @@ public class AssetAccessory implements Serializable {
     @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "placeholders" }, allowSetters = true)
     private Set<Dealer> designatedUsers = new HashSet<>();
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
-    private SettlementCurrency settlementCurrency;
-
     @ManyToMany
     @JoinTable(
         name = "rel_asset_accessory__business_document",
@@ -360,19 +333,6 @@ public class AssetAccessory implements Serializable {
 
     public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
-    }
-
-    public AssetRegistration getAssetRegistration() {
-        return this.assetRegistration;
-    }
-
-    public void setAssetRegistration(AssetRegistration assetRegistration) {
-        this.assetRegistration = assetRegistration;
-    }
-
-    public AssetAccessory assetRegistration(AssetRegistration assetRegistration) {
-        this.setAssetRegistration(assetRegistration);
-        return this;
     }
 
     public Set<AssetWarranty> getAssetWarranties() {
@@ -605,19 +565,6 @@ public class AssetAccessory implements Serializable {
 
     public AssetAccessory removeDesignatedUsers(Dealer dealer) {
         this.designatedUsers.remove(dealer);
-        return this;
-    }
-
-    public SettlementCurrency getSettlementCurrency() {
-        return this.settlementCurrency;
-    }
-
-    public void setSettlementCurrency(SettlementCurrency settlementCurrency) {
-        this.settlementCurrency = settlementCurrency;
-    }
-
-    public AssetAccessory settlementCurrency(SettlementCurrency settlementCurrency) {
-        this.setSettlementCurrency(settlementCurrency);
         return this;
     }
 

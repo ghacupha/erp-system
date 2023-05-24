@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.3
+ * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.4
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,7 +29,6 @@ import org.mapstruct.*;
 @Mapper(
     componentModel = "spring",
     uses = {
-        AssetRegistrationMapper.class,
         AssetWarrantyMapper.class,
         PlaceholderMapper.class,
         PaymentInvoiceMapper.class,
@@ -40,13 +39,11 @@ import org.mapstruct.*;
         DeliveryNoteMapper.class,
         JobSheetMapper.class,
         DealerMapper.class,
-        SettlementCurrencyMapper.class,
         BusinessDocumentMapper.class,
         UniversallyUniqueMappingMapper.class,
     }
 )
 public interface AssetAccessoryMapper extends EntityMapper<AssetAccessoryDTO, AssetAccessory> {
-    @Mapping(target = "assetRegistration", source = "assetRegistration", qualifiedByName = "assetNumber")
     @Mapping(target = "assetWarranties", source = "assetWarranties", qualifiedByName = "descriptionSet")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     @Mapping(target = "paymentInvoices", source = "paymentInvoices", qualifiedByName = "invoiceNumberSet")
@@ -58,7 +55,6 @@ public interface AssetAccessoryMapper extends EntityMapper<AssetAccessoryDTO, As
     @Mapping(target = "jobSheets", source = "jobSheets", qualifiedByName = "serialNumberSet")
     @Mapping(target = "dealer", source = "dealer", qualifiedByName = "dealerName")
     @Mapping(target = "designatedUsers", source = "designatedUsers", qualifiedByName = "dealerNameSet")
-    @Mapping(target = "settlementCurrency", source = "settlementCurrency", qualifiedByName = "iso4217CurrencyCode")
     @Mapping(target = "businessDocuments", source = "businessDocuments", qualifiedByName = "documentTitleSet")
     @Mapping(target = "universallyUniqueMappings", source = "universallyUniqueMappings", qualifiedByName = "universalKeySet")
     AssetAccessoryDTO toDto(AssetAccessory s);

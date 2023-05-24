@@ -1,7 +1,7 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.3
+ * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.4
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -128,15 +128,6 @@ public class AssetAccessoryQueryService extends QueryService<AssetAccessory> {
             if (criteria.getSerialNumber() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getSerialNumber(), AssetAccessory_.serialNumber));
             }
-            if (criteria.getAssetRegistrationId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getAssetRegistrationId(),
-                            root -> root.join(AssetAccessory_.assetRegistration, JoinType.LEFT).get(AssetRegistration_.id)
-                        )
-                    );
-            }
             if (criteria.getAssetWarrantyId() != null) {
                 specification =
                     specification.and(
@@ -230,15 +221,6 @@ public class AssetAccessoryQueryService extends QueryService<AssetAccessory> {
                         buildSpecification(
                             criteria.getDesignatedUsersId(),
                             root -> root.join(AssetAccessory_.designatedUsers, JoinType.LEFT).get(Dealer_.id)
-                        )
-                    );
-            }
-            if (criteria.getSettlementCurrencyId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getSettlementCurrencyId(),
-                            root -> root.join(AssetAccessory_.settlementCurrency, JoinType.LEFT).get(SettlementCurrency_.id)
                         )
                     );
             }

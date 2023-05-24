@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.3
+ * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.4
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -41,6 +41,7 @@ import org.mapstruct.*;
         BusinessDocumentMapper.class,
         AssetWarrantyMapper.class,
         UniversallyUniqueMappingMapper.class,
+        AssetAccessoryMapper.class,
     }
 )
 public interface AssetRegistrationMapper extends EntityMapper<AssetRegistrationDTO, AssetRegistration> {
@@ -58,6 +59,7 @@ public interface AssetRegistrationMapper extends EntityMapper<AssetRegistrationD
     @Mapping(target = "businessDocuments", source = "businessDocuments", qualifiedByName = "documentTitleSet")
     @Mapping(target = "assetWarranties", source = "assetWarranties", qualifiedByName = "descriptionSet")
     @Mapping(target = "universallyUniqueMappings", source = "universallyUniqueMappings", qualifiedByName = "universalKeySet")
+    @Mapping(target = "assetAccessories", source = "assetAccessories", qualifiedByName = "assetDetailsSet")
     AssetRegistrationDTO toDto(AssetRegistration s);
 
     @Mapping(target = "removePlaceholder", ignore = true)
@@ -71,11 +73,6 @@ public interface AssetRegistrationMapper extends EntityMapper<AssetRegistrationD
     @Mapping(target = "removeBusinessDocument", ignore = true)
     @Mapping(target = "removeAssetWarranty", ignore = true)
     @Mapping(target = "removeUniversallyUniqueMapping", ignore = true)
+    @Mapping(target = "removeAssetAccessory", ignore = true)
     AssetRegistration toEntity(AssetRegistrationDTO assetRegistrationDTO);
-
-    @Named("assetNumber")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "assetNumber", source = "assetNumber")
-    AssetRegistrationDTO toDtoAssetNumber(AssetRegistration assetRegistration);
 }

@@ -1,7 +1,7 @@
 package io.github.erp.repository;
 
 /*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.3
+ * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.4
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -33,18 +33,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AssetRegistrationRepository extends JpaRepository<AssetRegistration, Long>, JpaSpecificationExecutor<AssetRegistration> {
     @Query(
-        value = "select distinct assetRegistration from AssetRegistration assetRegistration left join fetch assetRegistration.placeholders left join fetch assetRegistration.paymentInvoices left join fetch assetRegistration.serviceOutlets left join fetch assetRegistration.settlements left join fetch assetRegistration.purchaseOrders left join fetch assetRegistration.deliveryNotes left join fetch assetRegistration.jobSheets left join fetch assetRegistration.designatedUsers left join fetch assetRegistration.businessDocuments left join fetch assetRegistration.assetWarranties left join fetch assetRegistration.universallyUniqueMappings",
+        value = "select distinct assetRegistration from AssetRegistration assetRegistration left join fetch assetRegistration.placeholders left join fetch assetRegistration.paymentInvoices left join fetch assetRegistration.serviceOutlets left join fetch assetRegistration.settlements left join fetch assetRegistration.purchaseOrders left join fetch assetRegistration.deliveryNotes left join fetch assetRegistration.jobSheets left join fetch assetRegistration.designatedUsers left join fetch assetRegistration.businessDocuments left join fetch assetRegistration.assetWarranties left join fetch assetRegistration.universallyUniqueMappings left join fetch assetRegistration.assetAccessories",
         countQuery = "select count(distinct assetRegistration) from AssetRegistration assetRegistration"
     )
     Page<AssetRegistration> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct assetRegistration from AssetRegistration assetRegistration left join fetch assetRegistration.placeholders left join fetch assetRegistration.paymentInvoices left join fetch assetRegistration.serviceOutlets left join fetch assetRegistration.settlements left join fetch assetRegistration.purchaseOrders left join fetch assetRegistration.deliveryNotes left join fetch assetRegistration.jobSheets left join fetch assetRegistration.designatedUsers left join fetch assetRegistration.businessDocuments left join fetch assetRegistration.assetWarranties left join fetch assetRegistration.universallyUniqueMappings"
+        "select distinct assetRegistration from AssetRegistration assetRegistration left join fetch assetRegistration.placeholders left join fetch assetRegistration.paymentInvoices left join fetch assetRegistration.serviceOutlets left join fetch assetRegistration.settlements left join fetch assetRegistration.purchaseOrders left join fetch assetRegistration.deliveryNotes left join fetch assetRegistration.jobSheets left join fetch assetRegistration.designatedUsers left join fetch assetRegistration.businessDocuments left join fetch assetRegistration.assetWarranties left join fetch assetRegistration.universallyUniqueMappings left join fetch assetRegistration.assetAccessories"
     )
     List<AssetRegistration> findAllWithEagerRelationships();
 
     @Query(
-        "select assetRegistration from AssetRegistration assetRegistration left join fetch assetRegistration.placeholders left join fetch assetRegistration.paymentInvoices left join fetch assetRegistration.serviceOutlets left join fetch assetRegistration.settlements left join fetch assetRegistration.purchaseOrders left join fetch assetRegistration.deliveryNotes left join fetch assetRegistration.jobSheets left join fetch assetRegistration.designatedUsers left join fetch assetRegistration.businessDocuments left join fetch assetRegistration.assetWarranties left join fetch assetRegistration.universallyUniqueMappings where assetRegistration.id =:id"
+        "select assetRegistration from AssetRegistration assetRegistration left join fetch assetRegistration.placeholders left join fetch assetRegistration.paymentInvoices left join fetch assetRegistration.serviceOutlets left join fetch assetRegistration.settlements left join fetch assetRegistration.purchaseOrders left join fetch assetRegistration.deliveryNotes left join fetch assetRegistration.jobSheets left join fetch assetRegistration.designatedUsers left join fetch assetRegistration.businessDocuments left join fetch assetRegistration.assetWarranties left join fetch assetRegistration.universallyUniqueMappings left join fetch assetRegistration.assetAccessories where assetRegistration.id =:id"
     )
     Optional<AssetRegistration> findOneWithEagerRelationships(@Param("id") Long id);
 }

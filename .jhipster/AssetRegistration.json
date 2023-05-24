@@ -154,7 +154,9 @@
     {
       "relationshipName": "assetAccessory",
       "otherEntityName": "assetAccessory",
-      "relationshipType": "one-to-many",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "assetDetails",
+      "ownerSide": true,
       "otherEntityRelationshipName": "assetRegistration"
     }
   ],
