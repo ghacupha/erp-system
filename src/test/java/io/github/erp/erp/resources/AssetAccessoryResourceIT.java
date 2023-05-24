@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.3
+ * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.4
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -674,32 +674,6 @@ public class AssetAccessoryResourceIT {
 
     @Test
     @Transactional
-    void getAllAssetAccessoriesByAssetRegistrationIsEqualToSomething() throws Exception {
-        // Initialize the database
-        assetAccessoryRepository.saveAndFlush(assetAccessory);
-        AssetRegistration assetRegistration;
-        if (TestUtil.findAll(em, AssetRegistration.class).isEmpty()) {
-            assetRegistration = AssetRegistrationResourceIT.createEntity(em);
-            em.persist(assetRegistration);
-            em.flush();
-        } else {
-            assetRegistration = TestUtil.findAll(em, AssetRegistration.class).get(0);
-        }
-        em.persist(assetRegistration);
-        em.flush();
-        assetAccessory.setAssetRegistration(assetRegistration);
-        assetAccessoryRepository.saveAndFlush(assetAccessory);
-        Long assetRegistrationId = assetRegistration.getId();
-
-        // Get all the assetAccessoryList where assetRegistration equals to assetRegistrationId
-        defaultAssetAccessoryShouldBeFound("assetRegistrationId.equals=" + assetRegistrationId);
-
-        // Get all the assetAccessoryList where assetRegistration equals to (assetRegistrationId + 1)
-        defaultAssetAccessoryShouldNotBeFound("assetRegistrationId.equals=" + (assetRegistrationId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllAssetAccessoriesByAssetWarrantyIsEqualToSomething() throws Exception {
         // Initialize the database
         assetAccessoryRepository.saveAndFlush(assetAccessory);
@@ -982,32 +956,6 @@ public class AssetAccessoryResourceIT {
 
         // Get all the assetAccessoryList where designatedUsers equals to (designatedUsersId + 1)
         defaultAssetAccessoryShouldNotBeFound("designatedUsersId.equals=" + (designatedUsersId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllAssetAccessoriesBySettlementCurrencyIsEqualToSomething() throws Exception {
-        // Initialize the database
-        assetAccessoryRepository.saveAndFlush(assetAccessory);
-        SettlementCurrency settlementCurrency;
-        if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
-            settlementCurrency = SettlementCurrencyResourceIT.createEntity(em);
-            em.persist(settlementCurrency);
-            em.flush();
-        } else {
-            settlementCurrency = TestUtil.findAll(em, SettlementCurrency.class).get(0);
-        }
-        em.persist(settlementCurrency);
-        em.flush();
-        assetAccessory.setSettlementCurrency(settlementCurrency);
-        assetAccessoryRepository.saveAndFlush(assetAccessory);
-        Long settlementCurrencyId = settlementCurrency.getId();
-
-        // Get all the assetAccessoryList where settlementCurrency equals to settlementCurrencyId
-        defaultAssetAccessoryShouldBeFound("settlementCurrencyId.equals=" + settlementCurrencyId);
-
-        // Get all the assetAccessoryList where settlementCurrency equals to (settlementCurrencyId + 1)
-        defaultAssetAccessoryShouldNotBeFound("settlementCurrencyId.equals=" + (settlementCurrencyId + 1));
     }
 
     @Test

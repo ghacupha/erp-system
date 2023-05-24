@@ -2,7 +2,7 @@
   "name": "erp-system",
   "version": "1.2.3",
   "private": true,
-  "description": "Back-end for the ERP System: Mark III No 15 (Caleb Series) Server v1.2.3",
+  "description": "Back-end for the ERP System: Mark III No 15 (Caleb Series) Server v1.2.4",
   "license": "GPLv3",
   "scripts": {
     "app:start": "./mvnw",

@@ -24,12 +24,6 @@
   ],
   "relationships": [
     {
-      "relationshipName": "assetRegistration",
-      "otherEntityName": "assetRegistration",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "assetNumber"
-    },
-    {
       "relationshipName": "assetWarranty",
       "otherEntityName": "assetWarranty",
       "relationshipType": "many-to-many",
@@ -116,12 +110,6 @@
       "ownerSide": true,
       "relationshipName": "designatedUsers",
       "relationshipType": "many-to-many"
-    },
-    {
-      "relationshipName": "settlementCurrency",
-      "otherEntityName": "settlementCurrency",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "iso4217CurrencyCode"
     },
     {
       "relationshipName": "businessDocument",

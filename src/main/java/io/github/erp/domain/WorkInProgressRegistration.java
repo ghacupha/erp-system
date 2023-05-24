@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.3
+ * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.4
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -242,7 +242,6 @@ public class WorkInProgressRegistration implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
         value = {
-            "assetRegistration",
             "assetWarranties",
             "placeholders",
             "paymentInvoices",
@@ -254,7 +253,6 @@ public class WorkInProgressRegistration implements Serializable {
             "jobSheets",
             "dealer",
             "designatedUsers",
-            "settlementCurrency",
             "businessDocuments",
             "universallyUniqueMappings",
         },

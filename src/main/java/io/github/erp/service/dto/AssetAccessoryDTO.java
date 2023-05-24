@@ -1,7 +1,7 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.3
+ * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.4
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -44,8 +44,6 @@ public class AssetAccessoryDTO implements Serializable {
 
     private String serialNumber;
 
-    private AssetRegistrationDTO assetRegistration;
-
     private Set<AssetWarrantyDTO> assetWarranties = new HashSet<>();
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
@@ -67,8 +65,6 @@ public class AssetAccessoryDTO implements Serializable {
     private DealerDTO dealer;
 
     private Set<DealerDTO> designatedUsers = new HashSet<>();
-
-    private SettlementCurrencyDTO settlementCurrency;
 
     private Set<BusinessDocumentDTO> businessDocuments = new HashSet<>();
 
@@ -128,14 +124,6 @@ public class AssetAccessoryDTO implements Serializable {
 
     public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
-    }
-
-    public AssetRegistrationDTO getAssetRegistration() {
-        return assetRegistration;
-    }
-
-    public void setAssetRegistration(AssetRegistrationDTO assetRegistration) {
-        this.assetRegistration = assetRegistration;
     }
 
     public Set<AssetWarrantyDTO> getAssetWarranties() {
@@ -226,14 +214,6 @@ public class AssetAccessoryDTO implements Serializable {
         this.designatedUsers = designatedUsers;
     }
 
-    public SettlementCurrencyDTO getSettlementCurrency() {
-        return settlementCurrency;
-    }
-
-    public void setSettlementCurrency(SettlementCurrencyDTO settlementCurrency) {
-        this.settlementCurrency = settlementCurrency;
-    }
-
     public Set<BusinessDocumentDTO> getBusinessDocuments() {
         return businessDocuments;
     }
@@ -281,7 +261,6 @@ public class AssetAccessoryDTO implements Serializable {
             ", comments='" + getComments() + "'" +
             ", modelNumber='" + getModelNumber() + "'" +
             ", serialNumber='" + getSerialNumber() + "'" +
-            ", assetRegistration=" + getAssetRegistration() +
             ", assetWarranties=" + getAssetWarranties() +
             ", placeholders=" + getPlaceholders() +
             ", paymentInvoices=" + getPaymentInvoices() +
@@ -293,7 +272,6 @@ public class AssetAccessoryDTO implements Serializable {
             ", jobSheets=" + getJobSheets() +
             ", dealer=" + getDealer() +
             ", designatedUsers=" + getDesignatedUsers() +
-            ", settlementCurrency=" + getSettlementCurrency() +
             ", businessDocuments=" + getBusinessDocuments() +
             ", universallyUniqueMappings=" + getUniversallyUniqueMappings() +
             "}";

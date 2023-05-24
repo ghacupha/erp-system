@@ -1,7 +1,7 @@
 package io.github.erp.service.criteria;
 
 /*-
- * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.3
+ * Erp System - Mark III No 15 (Caleb Series) Server ver 1.2.4
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -52,8 +52,6 @@ public class AssetAccessoryCriteria implements Serializable, Criteria {
 
     private StringFilter serialNumber;
 
-    private LongFilter assetRegistrationId;
-
     private LongFilter assetWarrantyId;
 
     private LongFilter placeholderId;
@@ -76,8 +74,6 @@ public class AssetAccessoryCriteria implements Serializable, Criteria {
 
     private LongFilter designatedUsersId;
 
-    private LongFilter settlementCurrencyId;
-
     private LongFilter businessDocumentId;
 
     private LongFilter universallyUniqueMappingId;
@@ -92,7 +88,6 @@ public class AssetAccessoryCriteria implements Serializable, Criteria {
         this.assetDetails = other.assetDetails == null ? null : other.assetDetails.copy();
         this.modelNumber = other.modelNumber == null ? null : other.modelNumber.copy();
         this.serialNumber = other.serialNumber == null ? null : other.serialNumber.copy();
-        this.assetRegistrationId = other.assetRegistrationId == null ? null : other.assetRegistrationId.copy();
         this.assetWarrantyId = other.assetWarrantyId == null ? null : other.assetWarrantyId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.paymentInvoicesId = other.paymentInvoicesId == null ? null : other.paymentInvoicesId.copy();
@@ -104,7 +99,6 @@ public class AssetAccessoryCriteria implements Serializable, Criteria {
         this.jobSheetId = other.jobSheetId == null ? null : other.jobSheetId.copy();
         this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
         this.designatedUsersId = other.designatedUsersId == null ? null : other.designatedUsersId.copy();
-        this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
         this.businessDocumentId = other.businessDocumentId == null ? null : other.businessDocumentId.copy();
         this.universallyUniqueMappingId = other.universallyUniqueMappingId == null ? null : other.universallyUniqueMappingId.copy();
         this.distinct = other.distinct;
@@ -188,21 +182,6 @@ public class AssetAccessoryCriteria implements Serializable, Criteria {
 
     public void setSerialNumber(StringFilter serialNumber) {
         this.serialNumber = serialNumber;
-    }
-
-    public LongFilter getAssetRegistrationId() {
-        return assetRegistrationId;
-    }
-
-    public LongFilter assetRegistrationId() {
-        if (assetRegistrationId == null) {
-            assetRegistrationId = new LongFilter();
-        }
-        return assetRegistrationId;
-    }
-
-    public void setAssetRegistrationId(LongFilter assetRegistrationId) {
-        this.assetRegistrationId = assetRegistrationId;
     }
 
     public LongFilter getAssetWarrantyId() {
@@ -370,21 +349,6 @@ public class AssetAccessoryCriteria implements Serializable, Criteria {
         this.designatedUsersId = designatedUsersId;
     }
 
-    public LongFilter getSettlementCurrencyId() {
-        return settlementCurrencyId;
-    }
-
-    public LongFilter settlementCurrencyId() {
-        if (settlementCurrencyId == null) {
-            settlementCurrencyId = new LongFilter();
-        }
-        return settlementCurrencyId;
-    }
-
-    public void setSettlementCurrencyId(LongFilter settlementCurrencyId) {
-        this.settlementCurrencyId = settlementCurrencyId;
-    }
-
     public LongFilter getBusinessDocumentId() {
         return businessDocumentId;
     }
@@ -438,7 +402,6 @@ public class AssetAccessoryCriteria implements Serializable, Criteria {
             Objects.equals(assetDetails, that.assetDetails) &&
             Objects.equals(modelNumber, that.modelNumber) &&
             Objects.equals(serialNumber, that.serialNumber) &&
-            Objects.equals(assetRegistrationId, that.assetRegistrationId) &&
             Objects.equals(assetWarrantyId, that.assetWarrantyId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(paymentInvoicesId, that.paymentInvoicesId) &&
@@ -450,7 +413,6 @@ public class AssetAccessoryCriteria implements Serializable, Criteria {
             Objects.equals(jobSheetId, that.jobSheetId) &&
             Objects.equals(dealerId, that.dealerId) &&
             Objects.equals(designatedUsersId, that.designatedUsersId) &&
-            Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
             Objects.equals(businessDocumentId, that.businessDocumentId) &&
             Objects.equals(universallyUniqueMappingId, that.universallyUniqueMappingId) &&
             Objects.equals(distinct, that.distinct)
@@ -465,7 +427,6 @@ public class AssetAccessoryCriteria implements Serializable, Criteria {
             assetDetails,
             modelNumber,
             serialNumber,
-            assetRegistrationId,
             assetWarrantyId,
             placeholderId,
             paymentInvoicesId,
@@ -477,7 +438,6 @@ public class AssetAccessoryCriteria implements Serializable, Criteria {
             jobSheetId,
             dealerId,
             designatedUsersId,
-            settlementCurrencyId,
             businessDocumentId,
             universallyUniqueMappingId,
             distinct
@@ -493,7 +453,6 @@ public class AssetAccessoryCriteria implements Serializable, Criteria {
             (assetDetails != null ? "assetDetails=" + assetDetails + ", " : "") +
             (modelNumber != null ? "modelNumber=" + modelNumber + ", " : "") +
             (serialNumber != null ? "serialNumber=" + serialNumber + ", " : "") +
-            (assetRegistrationId != null ? "assetRegistrationId=" + assetRegistrationId + ", " : "") +
             (assetWarrantyId != null ? "assetWarrantyId=" + assetWarrantyId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (paymentInvoicesId != null ? "paymentInvoicesId=" + paymentInvoicesId + ", " : "") +
@@ -505,7 +464,6 @@ public class AssetAccessoryCriteria implements Serializable, Criteria {
             (jobSheetId != null ? "jobSheetId=" + jobSheetId + ", " : "") +
             (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             (designatedUsersId != null ? "designatedUsersId=" + designatedUsersId + ", " : "") +
-            (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
             (businessDocumentId != null ? "businessDocumentId=" + businessDocumentId + ", " : "") +
             (universallyUniqueMappingId != null ? "universallyUniqueMappingId=" + universallyUniqueMappingId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
