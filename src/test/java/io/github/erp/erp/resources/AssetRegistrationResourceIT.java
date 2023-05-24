@@ -89,12 +89,12 @@ public class AssetRegistrationResourceIT {
     private static final String DEFAULT_SERIAL_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_SERIAL_NUMBER = "BBBBBBBBBB";
 
-    private static final String ENTITY_API_URL = "/api/asset-registrations";
+    private static final String ENTITY_API_URL = "/api/fixed-asset/asset-registrations";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/asset-registrations";
+    private static final String ENTITY_SEARCH_API_URL = "/api/fixed-asset/_search/asset-registrations";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private AssetRegistrationRepository assetRegistrationRepository;
