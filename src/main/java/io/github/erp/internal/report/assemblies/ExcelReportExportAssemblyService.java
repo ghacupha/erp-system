@@ -19,6 +19,7 @@ package io.github.erp.internal.report.assemblies;
  */
 import io.github.erp.internal.report.templates.ReportTemplatePresentation;
 import io.github.erp.service.ReportDesignService;
+import io.github.erp.service.UniversallyUniqueMappingService;
 import io.github.erp.service.dto.ExcelReportExportDTO;
 import io.github.erp.service.dto.ReportDesignDTO;
 import org.springframework.stereotype.Service;
@@ -37,17 +38,21 @@ public class ExcelReportExportAssemblyService implements ReportAssemblyService<E
     private final ReportTemplatePresentation<ReportDesignDTO> templatePresentation;
     private final XLSXReportsService reportsService;
     private final ReportDesignService reportDesignService;
+    private final UniversallyUniqueMappingService mappingService;
 
-    public ExcelReportExportAssemblyService(ReportTemplatePresentation<ReportDesignDTO> templatePresentation, XLSXReportsService reportsService, ReportDesignService reportDesignService) {
+    public ExcelReportExportAssemblyService(ReportTemplatePresentation<ReportDesignDTO> templatePresentation, XLSXReportsService reportsService, ReportDesignService reportDesignService, UniversallyUniqueMappingService mappingService) {
         this.templatePresentation = templatePresentation;
         this.reportsService = reportsService;
         this.reportDesignService = reportDesignService;
+        this.mappingService = mappingService;
     }
 
     @Override
     public String createReport(ExcelReportExportDTO dto, String fileExtension) {
         Map<String, Object> parameters = new HashMap<>();
         final String[] fileName = {""};
+
+        // TODO Get parameters from DTO object
 
         reportDesignService.findOne(dto.getReportDesign().getId()).ifPresent(template -> {
 
@@ -57,7 +62,8 @@ public class ExcelReportExportAssemblyService implements ReportAssemblyService<E
             parameters.put("description", dto.getReportDesign().getDescription());
 
             dto.getParameters().forEach(p -> {
-                parameters.put(p.getUniversalKey(), p.getMappedValue());
+                // TODO Use parameter service to fetch actual instances from the DB
+                mappingService.findOne(p.getId()).ifPresent(map -> parameters.put(p.getUniversalKey(), p.getMappedValue()));
             });
         });
 
