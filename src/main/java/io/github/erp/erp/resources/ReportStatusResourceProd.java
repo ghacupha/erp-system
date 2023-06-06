@@ -36,8 +36,6 @@ import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -82,8 +80,7 @@ public class ReportStatusResourceProd {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/report-statuses")
-    public ResponseEntity<ReportStatusDTO> createReportStatus(@Valid @RequestBody ReportStatusDTO reportStatusDTO)
-        throws URISyntaxException {
+    public ResponseEntity<ReportStatusDTO> createReportStatus(@RequestBody ReportStatusDTO reportStatusDTO) throws URISyntaxException {
         log.debug("REST request to save ReportStatus : {}", reportStatusDTO);
         if (reportStatusDTO.getId() != null) {
             throw new BadRequestAlertException("A new reportStatus cannot already have an ID", ENTITY_NAME, "idexists");
@@ -108,7 +105,7 @@ public class ReportStatusResourceProd {
     @PutMapping("/report-statuses/{id}")
     public ResponseEntity<ReportStatusDTO> updateReportStatus(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody ReportStatusDTO reportStatusDTO
+        @RequestBody ReportStatusDTO reportStatusDTO
     ) throws URISyntaxException {
         log.debug("REST request to update ReportStatus : {}, {}", id, reportStatusDTO);
         if (reportStatusDTO.getId() == null) {
@@ -143,7 +140,7 @@ public class ReportStatusResourceProd {
     @PatchMapping(value = "/report-statuses/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<ReportStatusDTO> partialUpdateReportStatus(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody ReportStatusDTO reportStatusDTO
+        @RequestBody ReportStatusDTO reportStatusDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update ReportStatus partially : {}, {}", id, reportStatusDTO);
         if (reportStatusDTO.getId() == null) {

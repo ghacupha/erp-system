@@ -24,7 +24,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -45,12 +44,10 @@ public class ReportStatus implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @NotNull
-    @Column(name = "report_name", nullable = false, unique = true)
+    @Column(name = "report_name")
     private String reportName;
 
-    @NotNull
-    @Column(name = "report_id", nullable = false, unique = true)
+    @Column(name = "report_id")
     private UUID reportId;
 
     @ManyToMany

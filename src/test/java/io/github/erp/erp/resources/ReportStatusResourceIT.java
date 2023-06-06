@@ -26,7 +26,6 @@ import io.github.erp.repository.search.ReportStatusSearchRepository;
 import io.github.erp.service.ReportStatusService;
 import io.github.erp.service.dto.ReportStatusDTO;
 import io.github.erp.service.mapper.ReportStatusMapper;
-//import io.github.erp.web.rest.ReportStatusResource;
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -67,9 +66,9 @@ class ReportStatusResourceIT {
     private static final UUID DEFAULT_REPORT_ID = UUID.randomUUID();
     private static final UUID UPDATED_REPORT_ID = UUID.randomUUID();
 
-    private static final String ENTITY_API_URL = "/api/report-statuses";
+    private static final String ENTITY_API_URL = "/api/app/report-statuses";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/report-statuses";
+    private static final String ENTITY_SEARCH_API_URL = "/api/app/_search/report-statuses";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
@@ -174,46 +173,6 @@ class ReportStatusResourceIT {
 
         // Validate the ReportStatus in Elasticsearch
         verify(mockReportStatusSearchRepository, times(0)).save(reportStatus);
-    }
-
-    @Test
-    @Transactional
-    void checkReportNameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = reportStatusRepository.findAll().size();
-        // set the field null
-        reportStatus.setReportName(null);
-
-        // Create the ReportStatus, which fails.
-        ReportStatusDTO reportStatusDTO = reportStatusMapper.toDto(reportStatus);
-
-        restReportStatusMockMvc
-            .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(reportStatusDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<ReportStatus> reportStatusList = reportStatusRepository.findAll();
-        assertThat(reportStatusList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    void checkReportIdIsRequired() throws Exception {
-        int databaseSizeBeforeTest = reportStatusRepository.findAll().size();
-        // set the field null
-        reportStatus.setReportId(null);
-
-        // Create the ReportStatus, which fails.
-        ReportStatusDTO reportStatusDTO = reportStatusMapper.toDto(reportStatus);
-
-        restReportStatusMockMvc
-            .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(reportStatusDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<ReportStatus> reportStatusList = reportStatusRepository.findAll();
-        assertThat(reportStatusList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test

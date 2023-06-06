@@ -181,46 +181,6 @@ class ReportStatusResourceIT {
 
     @Test
     @Transactional
-    void checkReportNameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = reportStatusRepository.findAll().size();
-        // set the field null
-        reportStatus.setReportName(null);
-
-        // Create the ReportStatus, which fails.
-        ReportStatusDTO reportStatusDTO = reportStatusMapper.toDto(reportStatus);
-
-        restReportStatusMockMvc
-            .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(reportStatusDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<ReportStatus> reportStatusList = reportStatusRepository.findAll();
-        assertThat(reportStatusList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    void checkReportIdIsRequired() throws Exception {
-        int databaseSizeBeforeTest = reportStatusRepository.findAll().size();
-        // set the field null
-        reportStatus.setReportId(null);
-
-        // Create the ReportStatus, which fails.
-        ReportStatusDTO reportStatusDTO = reportStatusMapper.toDto(reportStatus);
-
-        restReportStatusMockMvc
-            .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(reportStatusDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<ReportStatus> reportStatusList = reportStatusRepository.findAll();
-        assertThat(reportStatusList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllReportStatuses() throws Exception {
         // Initialize the database
         reportStatusRepository.saveAndFlush(reportStatus);
