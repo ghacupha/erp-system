@@ -17,10 +17,7 @@ package io.github.erp.internal.files;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.service.ExcelReportExportService;
-import io.github.erp.service.PdfReportRequisitionService;
-import io.github.erp.service.ReportRequisitionService;
-import io.github.erp.service.XlsxReportRequisitionService;
+import io.github.erp.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -49,17 +46,19 @@ public class ReportsFilesSystemInit implements ApplicationListener<ApplicationRe
     private final PdfReportRequisitionService pdfReportRequisitionService;
     private final XlsxReportRequisitionService xlsxReportRequisitionService;
     private final ExcelReportExportService excelReportExportService;
+    private final ReportStatusService reportStatusService;
 
     public ReportsFilesSystemInit(
         @Qualifier("reportsFSStorageService") FileStorageService storageService,
         PdfReportRequisitionService pdfReportRequisitionService,
         ReportRequisitionService reportRequisitionService,
-        XlsxReportRequisitionService xlsxReportRequisitionService, ExcelReportExportService excelReportExportService) {
+        XlsxReportRequisitionService xlsxReportRequisitionService, ExcelReportExportService excelReportExportService, ReportStatusService reportStatusService) {
         this.storageService = storageService;
         this.pdfReportRequisitionService = pdfReportRequisitionService;
         this.reportRequisitionService = reportRequisitionService;
         this.xlsxReportRequisitionService = xlsxReportRequisitionService;
         this.excelReportExportService = excelReportExportService;
+        this.reportStatusService = reportStatusService;
     }
 
     @Override
@@ -79,6 +78,9 @@ public class ReportsFilesSystemInit implements ApplicationListener<ApplicationRe
 
         excelReportExportService.findAll(Pageable.unpaged())
             .forEach(report -> excelReportExportService.delete(report.getId()));
+
+        reportStatusService.findAll(Pageable.unpaged())
+            .forEach(report -> reportStatusService.delete(report.getId()));
 
         log.info("All report metadata has been deleted, removing old files from the reports directory. Standby...");
 
