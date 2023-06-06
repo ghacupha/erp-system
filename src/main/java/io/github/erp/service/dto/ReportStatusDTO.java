@@ -23,7 +23,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link io.github.erp.domain.ReportStatus} entity.
@@ -32,10 +31,8 @@ public class ReportStatusDTO implements Serializable {
 
     private Long id;
 
-    @NotNull
     private String reportName;
 
-    @NotNull
     private UUID reportId;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();

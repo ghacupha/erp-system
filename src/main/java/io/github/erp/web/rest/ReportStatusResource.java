@@ -32,8 +32,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -86,8 +84,7 @@ public class ReportStatusResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/report-statuses")
-    public ResponseEntity<ReportStatusDTO> createReportStatus(@Valid @RequestBody ReportStatusDTO reportStatusDTO)
-        throws URISyntaxException {
+    public ResponseEntity<ReportStatusDTO> createReportStatus(@RequestBody ReportStatusDTO reportStatusDTO) throws URISyntaxException {
         log.debug("REST request to save ReportStatus : {}", reportStatusDTO);
         if (reportStatusDTO.getId() != null) {
             throw new BadRequestAlertException("A new reportStatus cannot already have an ID", ENTITY_NAME, "idexists");
@@ -112,7 +109,7 @@ public class ReportStatusResource {
     @PutMapping("/report-statuses/{id}")
     public ResponseEntity<ReportStatusDTO> updateReportStatus(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody ReportStatusDTO reportStatusDTO
+        @RequestBody ReportStatusDTO reportStatusDTO
     ) throws URISyntaxException {
         log.debug("REST request to update ReportStatus : {}, {}", id, reportStatusDTO);
         if (reportStatusDTO.getId() == null) {
@@ -147,7 +144,7 @@ public class ReportStatusResource {
     @PatchMapping(value = "/report-statuses/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<ReportStatusDTO> partialUpdateReportStatus(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody ReportStatusDTO reportStatusDTO
+        @RequestBody ReportStatusDTO reportStatusDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update ReportStatus partially : {}, {}", id, reportStatusDTO);
         if (reportStatusDTO.getId() == null) {
