@@ -57,6 +57,7 @@ public interface AssetAccessoryMapper extends EntityMapper<AssetAccessoryDTO, As
     @Mapping(target = "designatedUsers", source = "designatedUsers", qualifiedByName = "dealerNameSet")
     @Mapping(target = "businessDocuments", source = "businessDocuments", qualifiedByName = "documentTitleSet")
     @Mapping(target = "universallyUniqueMappings", source = "universallyUniqueMappings", qualifiedByName = "universalKeySet")
+    @Mapping(target = "mainServiceOutlet", source = "mainServiceOutlet", qualifiedByName = "outletCode")
     AssetAccessoryDTO toDto(AssetAccessory s);
 
     @Mapping(target = "removeAssetWarranty", ignore = true)

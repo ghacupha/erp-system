@@ -106,7 +106,6 @@ public class AssetAccessory implements Serializable {
     private Set<PaymentInvoice> paymentInvoices = new HashSet<>();
 
     @ManyToMany
-    @NotNull
     @JoinTable(
         name = "rel_asset_accessory__service_outlet",
         joinColumns = @JoinColumn(name = "asset_accessory_id"),
@@ -241,6 +240,13 @@ public class AssetAccessory implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "parentMapping", "placeholders" }, allowSetters = true)
     private Set<UniversallyUniqueMapping> universallyUniqueMappings = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = { "placeholders", "bankCode", "outletType", "outletStatus", "countyName", "subCountyName" },
+        allowSetters = true
+    )
+    private ServiceOutlet mainServiceOutlet;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -611,6 +617,19 @@ public class AssetAccessory implements Serializable {
 
     public AssetAccessory removeUniversallyUniqueMapping(UniversallyUniqueMapping universallyUniqueMapping) {
         this.universallyUniqueMappings.remove(universallyUniqueMapping);
+        return this;
+    }
+
+    public ServiceOutlet getMainServiceOutlet() {
+        return this.mainServiceOutlet;
+    }
+
+    public void setMainServiceOutlet(ServiceOutlet serviceOutlet) {
+        this.mainServiceOutlet = serviceOutlet;
+    }
+
+    public AssetAccessory mainServiceOutlet(ServiceOutlet serviceOutlet) {
+        this.setMainServiceOutlet(serviceOutlet);
         return this;
     }
 

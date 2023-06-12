@@ -141,16 +141,6 @@ class AssetAccessoryResourceIT {
             .modelNumber(DEFAULT_MODEL_NUMBER)
             .serialNumber(DEFAULT_SERIAL_NUMBER);
         // Add required entity
-        ServiceOutlet serviceOutlet;
-        if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
-            serviceOutlet = ServiceOutletResourceIT.createEntity(em);
-            em.persist(serviceOutlet);
-            em.flush();
-        } else {
-            serviceOutlet = TestUtil.findAll(em, ServiceOutlet.class).get(0);
-        }
-        assetAccessory.getServiceOutlets().add(serviceOutlet);
-        // Add required entity
         Settlement settlement;
         if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
             settlement = SettlementResourceIT.createEntity(em);
@@ -197,16 +187,6 @@ class AssetAccessoryResourceIT {
             .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE)
             .modelNumber(UPDATED_MODEL_NUMBER)
             .serialNumber(UPDATED_SERIAL_NUMBER);
-        // Add required entity
-        ServiceOutlet serviceOutlet;
-        if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
-            serviceOutlet = ServiceOutletResourceIT.createUpdatedEntity(em);
-            em.persist(serviceOutlet);
-            em.flush();
-        } else {
-            serviceOutlet = TestUtil.findAll(em, ServiceOutlet.class).get(0);
-        }
-        assetAccessory.getServiceOutlets().add(serviceOutlet);
         // Add required entity
         Settlement settlement;
         if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
@@ -1020,6 +1000,32 @@ class AssetAccessoryResourceIT {
 
         // Get all the assetAccessoryList where universallyUniqueMapping equals to (universallyUniqueMappingId + 1)
         defaultAssetAccessoryShouldNotBeFound("universallyUniqueMappingId.equals=" + (universallyUniqueMappingId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetAccessoriesByMainServiceOutletIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetAccessoryRepository.saveAndFlush(assetAccessory);
+        ServiceOutlet mainServiceOutlet;
+        if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
+            mainServiceOutlet = ServiceOutletResourceIT.createEntity(em);
+            em.persist(mainServiceOutlet);
+            em.flush();
+        } else {
+            mainServiceOutlet = TestUtil.findAll(em, ServiceOutlet.class).get(0);
+        }
+        em.persist(mainServiceOutlet);
+        em.flush();
+        assetAccessory.setMainServiceOutlet(mainServiceOutlet);
+        assetAccessoryRepository.saveAndFlush(assetAccessory);
+        Long mainServiceOutletId = mainServiceOutlet.getId();
+
+        // Get all the assetAccessoryList where mainServiceOutlet equals to mainServiceOutletId
+        defaultAssetAccessoryShouldBeFound("mainServiceOutletId.equals=" + mainServiceOutletId);
+
+        // Get all the assetAccessoryList where mainServiceOutlet equals to (mainServiceOutletId + 1)
+        defaultAssetAccessoryShouldNotBeFound("mainServiceOutletId.equals=" + (mainServiceOutletId + 1));
     }
 
     /**
