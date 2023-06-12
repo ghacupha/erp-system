@@ -70,6 +70,8 @@ public class AssetAccessoryDTO implements Serializable {
 
     private Set<UniversallyUniqueMappingDTO> universallyUniqueMappings = new HashSet<>();
 
+    private ServiceOutletDTO mainServiceOutlet;
+
     public Long getId() {
         return id;
     }
@@ -230,6 +232,14 @@ public class AssetAccessoryDTO implements Serializable {
         this.universallyUniqueMappings = universallyUniqueMappings;
     }
 
+    public ServiceOutletDTO getMainServiceOutlet() {
+        return mainServiceOutlet;
+    }
+
+    public void setMainServiceOutlet(ServiceOutletDTO mainServiceOutlet) {
+        this.mainServiceOutlet = mainServiceOutlet;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -274,6 +284,7 @@ public class AssetAccessoryDTO implements Serializable {
             ", designatedUsers=" + getDesignatedUsers() +
             ", businessDocuments=" + getBusinessDocuments() +
             ", universallyUniqueMappings=" + getUniversallyUniqueMappings() +
+            ", mainServiceOutlet=" + getMainServiceOutlet() +
             "}";
     }
 }

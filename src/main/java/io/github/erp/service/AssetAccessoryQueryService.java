@@ -242,6 +242,15 @@ public class AssetAccessoryQueryService extends QueryService<AssetAccessory> {
                         )
                     );
             }
+            if (criteria.getMainServiceOutletId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getMainServiceOutletId(),
+                            root -> root.join(AssetAccessory_.mainServiceOutlet, JoinType.LEFT).get(ServiceOutlet_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

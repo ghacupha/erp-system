@@ -255,6 +255,7 @@ public class WorkInProgressRegistration implements Serializable {
             "designatedUsers",
             "businessDocuments",
             "universallyUniqueMappings",
+            "mainServiceOutlet",
         },
         allowSetters = true
     )

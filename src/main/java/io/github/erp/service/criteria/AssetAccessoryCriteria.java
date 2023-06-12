@@ -78,6 +78,8 @@ public class AssetAccessoryCriteria implements Serializable, Criteria {
 
     private LongFilter universallyUniqueMappingId;
 
+    private LongFilter mainServiceOutletId;
+
     private Boolean distinct;
 
     public AssetAccessoryCriteria() {}
@@ -101,6 +103,7 @@ public class AssetAccessoryCriteria implements Serializable, Criteria {
         this.designatedUsersId = other.designatedUsersId == null ? null : other.designatedUsersId.copy();
         this.businessDocumentId = other.businessDocumentId == null ? null : other.businessDocumentId.copy();
         this.universallyUniqueMappingId = other.universallyUniqueMappingId == null ? null : other.universallyUniqueMappingId.copy();
+        this.mainServiceOutletId = other.mainServiceOutletId == null ? null : other.mainServiceOutletId.copy();
         this.distinct = other.distinct;
     }
 
@@ -379,6 +382,21 @@ public class AssetAccessoryCriteria implements Serializable, Criteria {
         this.universallyUniqueMappingId = universallyUniqueMappingId;
     }
 
+    public LongFilter getMainServiceOutletId() {
+        return mainServiceOutletId;
+    }
+
+    public LongFilter mainServiceOutletId() {
+        if (mainServiceOutletId == null) {
+            mainServiceOutletId = new LongFilter();
+        }
+        return mainServiceOutletId;
+    }
+
+    public void setMainServiceOutletId(LongFilter mainServiceOutletId) {
+        this.mainServiceOutletId = mainServiceOutletId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -415,6 +433,7 @@ public class AssetAccessoryCriteria implements Serializable, Criteria {
             Objects.equals(designatedUsersId, that.designatedUsersId) &&
             Objects.equals(businessDocumentId, that.businessDocumentId) &&
             Objects.equals(universallyUniqueMappingId, that.universallyUniqueMappingId) &&
+            Objects.equals(mainServiceOutletId, that.mainServiceOutletId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -440,6 +459,7 @@ public class AssetAccessoryCriteria implements Serializable, Criteria {
             designatedUsersId,
             businessDocumentId,
             universallyUniqueMappingId,
+            mainServiceOutletId,
             distinct
         );
     }
@@ -466,6 +486,7 @@ public class AssetAccessoryCriteria implements Serializable, Criteria {
             (designatedUsersId != null ? "designatedUsersId=" + designatedUsersId + ", " : "") +
             (businessDocumentId != null ? "businessDocumentId=" + businessDocumentId + ", " : "") +
             (universallyUniqueMappingId != null ? "universallyUniqueMappingId=" + universallyUniqueMappingId + ", " : "") +
+            (mainServiceOutletId != null ? "mainServiceOutletId=" + mainServiceOutletId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

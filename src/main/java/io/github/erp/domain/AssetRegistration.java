@@ -277,6 +277,7 @@ public class AssetRegistration implements Serializable {
             "designatedUsers",
             "businessDocuments",
             "universallyUniqueMappings",
+            "mainServiceOutlet",
         },
         allowSetters = true
     )
