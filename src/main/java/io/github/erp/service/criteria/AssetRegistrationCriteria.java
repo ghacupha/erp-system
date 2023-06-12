@@ -17,6 +17,7 @@ package io.github.erp.service.criteria;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -86,6 +87,8 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
 
     private LongFilter assetAccessoryId;
 
+    private LongFilter mainServiceOutletId;
+
     private Boolean distinct;
 
     public AssetRegistrationCriteria() {}
@@ -113,6 +116,7 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
         this.assetWarrantyId = other.assetWarrantyId == null ? null : other.assetWarrantyId.copy();
         this.universallyUniqueMappingId = other.universallyUniqueMappingId == null ? null : other.universallyUniqueMappingId.copy();
         this.assetAccessoryId = other.assetAccessoryId == null ? null : other.assetAccessoryId.copy();
+        this.mainServiceOutletId = other.mainServiceOutletId == null ? null : other.mainServiceOutletId.copy();
         this.distinct = other.distinct;
     }
 
@@ -451,6 +455,21 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
         this.assetAccessoryId = assetAccessoryId;
     }
 
+    public LongFilter getMainServiceOutletId() {
+        return mainServiceOutletId;
+    }
+
+    public LongFilter mainServiceOutletId() {
+        if (mainServiceOutletId == null) {
+            mainServiceOutletId = new LongFilter();
+        }
+        return mainServiceOutletId;
+    }
+
+    public void setMainServiceOutletId(LongFilter mainServiceOutletId) {
+        this.mainServiceOutletId = mainServiceOutletId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -491,6 +510,7 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             Objects.equals(assetWarrantyId, that.assetWarrantyId) &&
             Objects.equals(universallyUniqueMappingId, that.universallyUniqueMappingId) &&
             Objects.equals(assetAccessoryId, that.assetAccessoryId) &&
+            Objects.equals(mainServiceOutletId, that.mainServiceOutletId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -520,6 +540,7 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             assetWarrantyId,
             universallyUniqueMappingId,
             assetAccessoryId,
+            mainServiceOutletId,
             distinct
         );
     }
@@ -550,6 +571,7 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             (assetWarrantyId != null ? "assetWarrantyId=" + assetWarrantyId + ", " : "") +
             (universallyUniqueMappingId != null ? "universallyUniqueMappingId=" + universallyUniqueMappingId + ", " : "") +
             (assetAccessoryId != null ? "assetAccessoryId=" + assetAccessoryId + ", " : "") +
+            (mainServiceOutletId != null ? "mainServiceOutletId=" + mainServiceOutletId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

@@ -63,8 +63,7 @@
       "otherEntityRelationshipName": "assetRegistration",
       "ownerSide": true,
       "relationshipName": "serviceOutlet",
-      "relationshipType": "many-to-many",
-      "relationshipValidateRules": ["required"]
+      "relationshipType": "many-to-many"
     },
     {
       "otherEntityField": "paymentNumber",
@@ -158,6 +157,12 @@
       "otherEntityField": "assetDetails",
       "ownerSide": true,
       "otherEntityRelationshipName": "assetRegistration"
+    },
+    {
+      "relationshipName": "mainServiceOutlet",
+      "otherEntityName": "serviceOutlet",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "outletCode"
     }
   ],
   "service": "serviceImpl"

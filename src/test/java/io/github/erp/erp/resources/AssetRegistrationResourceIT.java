@@ -92,8 +92,8 @@ public class AssetRegistrationResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/fixed-asset/_search/asset-registrations";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private AssetRegistrationRepository assetRegistrationRepository;
@@ -139,16 +139,6 @@ public class AssetRegistrationResourceIT {
             .commentsContentType(DEFAULT_COMMENTS_CONTENT_TYPE)
             .modelNumber(DEFAULT_MODEL_NUMBER)
             .serialNumber(DEFAULT_SERIAL_NUMBER);
-        // Add required entity
-        ServiceOutlet serviceOutlet;
-        if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
-            serviceOutlet = ServiceOutletResourceIT.createEntity(em);
-            em.persist(serviceOutlet);
-            em.flush();
-        } else {
-            serviceOutlet = TestUtil.findAll(em, ServiceOutlet.class).get(0);
-        }
-        assetRegistration.getServiceOutlets().add(serviceOutlet);
         // Add required entity
         Settlement settlement;
         if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
@@ -198,16 +188,6 @@ public class AssetRegistrationResourceIT {
             .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE)
             .modelNumber(UPDATED_MODEL_NUMBER)
             .serialNumber(UPDATED_SERIAL_NUMBER);
-        // Add required entity
-        ServiceOutlet serviceOutlet;
-        if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
-            serviceOutlet = ServiceOutletResourceIT.createUpdatedEntity(em);
-            em.persist(serviceOutlet);
-            em.flush();
-        } else {
-            serviceOutlet = TestUtil.findAll(em, ServiceOutlet.class).get(0);
-        }
-        assetRegistration.getServiceOutlets().add(serviceOutlet);
         // Add required entity
         Settlement settlement;
         if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
@@ -1331,6 +1311,32 @@ public class AssetRegistrationResourceIT {
 
         // Get all the assetRegistrationList where assetAccessory equals to (assetAccessoryId + 1)
         defaultAssetRegistrationShouldNotBeFound("assetAccessoryId.equals=" + (assetAccessoryId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByMainServiceOutletIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+        ServiceOutlet mainServiceOutlet;
+        if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
+            mainServiceOutlet = ServiceOutletResourceIT.createEntity(em);
+            em.persist(mainServiceOutlet);
+            em.flush();
+        } else {
+            mainServiceOutlet = TestUtil.findAll(em, ServiceOutlet.class).get(0);
+        }
+        em.persist(mainServiceOutlet);
+        em.flush();
+        assetRegistration.setMainServiceOutlet(mainServiceOutlet);
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+        Long mainServiceOutletId = mainServiceOutlet.getId();
+
+        // Get all the assetRegistrationList where mainServiceOutlet equals to mainServiceOutletId
+        defaultAssetRegistrationShouldBeFound("mainServiceOutletId.equals=" + mainServiceOutletId);
+
+        // Get all the assetRegistrationList where mainServiceOutlet equals to (mainServiceOutletId + 1)
+        defaultAssetRegistrationShouldNotBeFound("mainServiceOutletId.equals=" + (mainServiceOutletId + 1));
     }
 
     /**
