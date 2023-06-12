@@ -17,6 +17,7 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -105,7 +106,6 @@ public class AssetRegistration implements Serializable {
     private Set<PaymentInvoice> paymentInvoices = new HashSet<>();
 
     @ManyToMany
-    @NotNull
     @JoinTable(
         name = "rel_asset_registration__service_outlet",
         joinColumns = @JoinColumn(name = "asset_registration_id"),
@@ -281,6 +281,13 @@ public class AssetRegistration implements Serializable {
         allowSetters = true
     )
     private Set<AssetAccessory> assetAccessories = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = { "placeholders", "bankCode", "outletType", "outletStatus", "countyName", "subCountyName" },
+        allowSetters = true
+    )
+    private ServiceOutlet mainServiceOutlet;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -713,6 +720,19 @@ public class AssetRegistration implements Serializable {
 
     public AssetRegistration removeAssetAccessory(AssetAccessory assetAccessory) {
         this.assetAccessories.remove(assetAccessory);
+        return this;
+    }
+
+    public ServiceOutlet getMainServiceOutlet() {
+        return this.mainServiceOutlet;
+    }
+
+    public void setMainServiceOutlet(ServiceOutlet serviceOutlet) {
+        this.mainServiceOutlet = serviceOutlet;
+    }
+
+    public AssetRegistration mainServiceOutlet(ServiceOutlet serviceOutlet) {
+        this.setMainServiceOutlet(serviceOutlet);
         return this;
     }
 

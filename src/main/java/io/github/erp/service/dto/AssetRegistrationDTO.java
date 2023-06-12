@@ -17,6 +17,7 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -80,6 +81,8 @@ public class AssetRegistrationDTO implements Serializable {
     private Set<UniversallyUniqueMappingDTO> universallyUniqueMappings = new HashSet<>();
 
     private Set<AssetAccessoryDTO> assetAccessories = new HashSet<>();
+
+    private ServiceOutletDTO mainServiceOutlet;
 
     public Long getId() {
         return id;
@@ -273,6 +276,14 @@ public class AssetRegistrationDTO implements Serializable {
         this.assetAccessories = assetAccessories;
     }
 
+    public ServiceOutletDTO getMainServiceOutlet() {
+        return mainServiceOutlet;
+    }
+
+    public void setMainServiceOutlet(ServiceOutletDTO mainServiceOutlet) {
+        this.mainServiceOutlet = mainServiceOutlet;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -321,6 +332,7 @@ public class AssetRegistrationDTO implements Serializable {
             ", assetWarranties=" + getAssetWarranties() +
             ", universallyUniqueMappings=" + getUniversallyUniqueMappings() +
             ", assetAccessories=" + getAssetAccessories() +
+            ", mainServiceOutlet=" + getMainServiceOutlet() +
             "}";
     }
 }
