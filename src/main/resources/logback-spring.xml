@@ -49,7 +49,7 @@
     <!-- <logger name="org.hibernate.validator" level="WARN"/> -->
     <logger name="org.hibernate" level="WARN"/>
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
-    <logger name="org.postgresql" level="WARN"/>
+    <logger name="org.postgresql" level="OFF"/>
     <logger name="org.springframework" level="OFF"/>
     <logger name="org.springframework.web" level="ERROR"/>
     <logger name="org.springframework.security" level="ERROR"/>
