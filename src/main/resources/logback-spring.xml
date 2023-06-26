@@ -31,7 +31,7 @@
     <logger name="javax.xml.bind" level="WARN"/>
     <logger name="ch.qos.logback" level="WARN"/>
     <logger name="com.hazelcast" level="WARN"/>
-    <logger name="jdk.event.security" level="WARN"/>
+    <logger name="jdk.event.security" level="OFF"/>
     <logger name="com.ryantenney" level="WARN"/>
     <logger name="com.sun" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
@@ -44,16 +44,16 @@
     <logger name="org.apache" level="WARN"/>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
     <logger name="org.bson" level="WARN"/>
-    <logger name="org.elasticsearch" level="ERROR"/>
+    <logger name="org.elasticsearch" level="OFF"/>
     <logger name="com.netflix" level="WARN"/>
-    <logger name="org.hibernate.validator" level="WARN"/>
+    <!-- <logger name="org.hibernate.validator" level="WARN"/> -->
     <logger name="org.hibernate" level="WARN"/>
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
     <logger name="org.postgresql" level="WARN"/>
-    <logger name="org.springframework" level="WARN"/>
-    <logger name="org.springframework.web" level="WARN"/>
-    <logger name="org.springframework.security" level="WARN"/>
-    <logger name="org.springframework.cache" level="WARN"/>
+    <logger name="org.springframework" level="OFF"/>
+    <logger name="org.springframework.web" level="ERROR"/>
+    <logger name="org.springframework.security" level="ERROR"/>
+    <logger name="org.springframework.cache" level="OFF"/>
     <logger name="org.thymeleaf" level="WARN"/>
     <logger name="org.xnio" level="WARN"/>
     <logger name="springfox" level="WARN"/>
