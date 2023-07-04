@@ -1,0 +1,33 @@
+{
+  "fields": [
+    {
+      "fieldName": "startDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "endDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "previousPeriod",
+      "otherEntityName": "depreciationPeriod",
+      "relationshipType": "one-to-one",
+      "otherEntityField": "endDate",
+      "ownerSide": true,
+      "id": false,
+      "otherEntityRelationshipName": "nextPeriod"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "DepreciationPeriod",
+  "changelogDate": "20230704155659",
+  "incrementalChangelog": false
+}
