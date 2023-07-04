@@ -90,6 +90,8 @@
     <include file="config/liquibase/changelog/20230328143440_added_entity_LeaseLiabilityScheduleItem.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230505113336_added_entity_AssetAccessory.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230505142910_added_entity_AssetWarranty.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230704155659_added_entity_DepreciationPeriod.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230704162523_added_entity_DepreciationEntry.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
@@ -182,6 +184,8 @@
     <include file="config/liquibase/changelog/20230606094729_remove_unneeded_constraints_from_report_status.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230612084035_add_main_service_outlet_to_asset_registration.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230612115705_add_main_service_outlet_to_asset_accessory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230704155659_added_entity_constraints_DepreciationPeriod.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230704162523_added_entity_constraints_DepreciationEntry.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
