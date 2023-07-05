@@ -15,8 +15,6 @@ public class StraightLineDepreciationCalculator {
 
         BigDecimal netBookValue = asset.getAssetCost();
         BigDecimal depreciationRate = getDepreciationRate();
-        // TODO int usefulLifeMonths = assetCategory.getUsefulLife() * 12;
-        int usefulLifeMonths = getUsefulLife() * 12;
         int elapsedMonths = calculateElapsedMonths(period);
 
         BigDecimal depreciationAmount = BigDecimal.ZERO;
@@ -30,11 +28,6 @@ public class StraightLineDepreciationCalculator {
         }
 
         return depreciationAmount;
-    }
-
-    private static int getUsefulLife() {
-        // TODO USE MODEL FOR RATES (ASSET CATEGORY/REGISTRATION)
-        return 3;
     }
 
     private static BigDecimal getDepreciationRate() {
