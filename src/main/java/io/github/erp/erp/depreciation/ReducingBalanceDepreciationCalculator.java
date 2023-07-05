@@ -16,7 +16,6 @@ public class ReducingBalanceDepreciationCalculator {
         // TODO BigDecimal depreciationRate = depreciationMethod.getDepreciationRate();
         BigDecimal depreciationRate = getDepreciationRate();
         // TODO int usefulLifeMonths = assetCategory.getUsefulLife() * 12;
-        int usefulLifeMonths = getUsefulLife() * 12;
         int elapsedMonths = calculateElapsedMonths(period);
 
         BigDecimal depreciationAmount = BigDecimal.ZERO;
@@ -36,11 +35,6 @@ public class ReducingBalanceDepreciationCalculator {
 
         // TODO USE MODEL FOR RATES (DEPRECIATION METHOD)
         return BigDecimal.valueOf(0.03);
-    }
-
-    private static int getUsefulLife() {
-        // TODO USE MODEL FOR RATES (ASSET CATEGORY/REGISTRATION)
-        return 3;
     }
 
     private static int calculateElapsedMonths(DepreciationPeriodDTO period) {
