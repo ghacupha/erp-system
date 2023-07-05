@@ -21,6 +21,7 @@ package io.github.erp.service.criteria;
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
+import tech.jhipster.service.filter.BigDecimalFilter;
 import tech.jhipster.service.filter.BooleanFilter;
 import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
@@ -50,6 +51,8 @@ public class AssetCategoryCriteria implements Serializable, Criteria {
 
     private StringFilter notes;
 
+    private BigDecimalFilter depreciationRateYearly;
+
     private LongFilter depreciationMethodId;
 
     private LongFilter placeholderId;
@@ -63,6 +66,7 @@ public class AssetCategoryCriteria implements Serializable, Criteria {
         this.assetCategoryName = other.assetCategoryName == null ? null : other.assetCategoryName.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.notes = other.notes == null ? null : other.notes.copy();
+        this.depreciationRateYearly = other.depreciationRateYearly == null ? null : other.depreciationRateYearly.copy();
         this.depreciationMethodId = other.depreciationMethodId == null ? null : other.depreciationMethodId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
@@ -133,6 +137,21 @@ public class AssetCategoryCriteria implements Serializable, Criteria {
         this.notes = notes;
     }
 
+    public BigDecimalFilter getDepreciationRateYearly() {
+        return depreciationRateYearly;
+    }
+
+    public BigDecimalFilter depreciationRateYearly() {
+        if (depreciationRateYearly == null) {
+            depreciationRateYearly = new BigDecimalFilter();
+        }
+        return depreciationRateYearly;
+    }
+
+    public void setDepreciationRateYearly(BigDecimalFilter depreciationRateYearly) {
+        this.depreciationRateYearly = depreciationRateYearly;
+    }
+
     public LongFilter getDepreciationMethodId() {
         return depreciationMethodId;
     }
@@ -185,6 +204,7 @@ public class AssetCategoryCriteria implements Serializable, Criteria {
             Objects.equals(assetCategoryName, that.assetCategoryName) &&
             Objects.equals(description, that.description) &&
             Objects.equals(notes, that.notes) &&
+            Objects.equals(depreciationRateYearly, that.depreciationRateYearly) &&
             Objects.equals(depreciationMethodId, that.depreciationMethodId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
@@ -193,7 +213,16 @@ public class AssetCategoryCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, assetCategoryName, description, notes, depreciationMethodId, placeholderId, distinct);
+        return Objects.hash(
+            id,
+            assetCategoryName,
+            description,
+            notes,
+            depreciationRateYearly,
+            depreciationMethodId,
+            placeholderId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -204,6 +233,7 @@ public class AssetCategoryCriteria implements Serializable, Criteria {
             (assetCategoryName != null ? "assetCategoryName=" + assetCategoryName + ", " : "") +
             (description != null ? "description=" + description + ", " : "") +
             (notes != null ? "notes=" + notes + ", " : "") +
+            (depreciationRateYearly != null ? "depreciationRateYearly=" + depreciationRateYearly + ", " : "") +
             (depreciationMethodId != null ? "depreciationMethodId=" + depreciationMethodId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

@@ -126,6 +126,10 @@ public class AssetCategoryQueryService extends QueryService<AssetCategory> {
             if (criteria.getNotes() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getNotes(), AssetCategory_.notes));
             }
+            if (criteria.getDepreciationRateYearly() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getDepreciationRateYearly(), AssetCategory_.depreciationRateYearly));
+            }
             if (criteria.getDepreciationMethodId() != null) {
                 specification =
                     specification.and(
