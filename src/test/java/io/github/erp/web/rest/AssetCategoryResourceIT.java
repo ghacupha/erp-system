@@ -18,6 +18,7 @@ package io.github.erp.web.rest;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import static io.github.erp.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -34,6 +35,7 @@ import io.github.erp.service.AssetCategoryService;
 import io.github.erp.service.criteria.AssetCategoryCriteria;
 import io.github.erp.service.dto.AssetCategoryDTO;
 import io.github.erp.service.mapper.AssetCategoryMapper;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -75,6 +77,10 @@ class AssetCategoryResourceIT {
 
     private static final String DEFAULT_REMARKS = "AAAAAAAAAA";
     private static final String UPDATED_REMARKS = "BBBBBBBBBB";
+
+    private static final BigDecimal DEFAULT_DEPRECIATION_RATE_YEARLY = new BigDecimal(1);
+    private static final BigDecimal UPDATED_DEPRECIATION_RATE_YEARLY = new BigDecimal(2);
+    private static final BigDecimal SMALLER_DEPRECIATION_RATE_YEARLY = new BigDecimal(1 - 1);
 
     private static final String ENTITY_API_URL = "/api/asset-categories";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -122,7 +128,8 @@ class AssetCategoryResourceIT {
             .assetCategoryName(DEFAULT_ASSET_CATEGORY_NAME)
             .description(DEFAULT_DESCRIPTION)
             .notes(DEFAULT_NOTES)
-            .remarks(DEFAULT_REMARKS);
+            .remarks(DEFAULT_REMARKS)
+            .depreciationRateYearly(DEFAULT_DEPRECIATION_RATE_YEARLY);
         // Add required entity
         DepreciationMethod depreciationMethod;
         if (TestUtil.findAll(em, DepreciationMethod.class).isEmpty()) {
@@ -147,7 +154,8 @@ class AssetCategoryResourceIT {
             .assetCategoryName(UPDATED_ASSET_CATEGORY_NAME)
             .description(UPDATED_DESCRIPTION)
             .notes(UPDATED_NOTES)
-            .remarks(UPDATED_REMARKS);
+            .remarks(UPDATED_REMARKS)
+            .depreciationRateYearly(UPDATED_DEPRECIATION_RATE_YEARLY);
         // Add required entity
         DepreciationMethod depreciationMethod;
         if (TestUtil.findAll(em, DepreciationMethod.class).isEmpty()) {
@@ -186,6 +194,7 @@ class AssetCategoryResourceIT {
         assertThat(testAssetCategory.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testAssetCategory.getNotes()).isEqualTo(DEFAULT_NOTES);
         assertThat(testAssetCategory.getRemarks()).isEqualTo(DEFAULT_REMARKS);
+        assertThat(testAssetCategory.getDepreciationRateYearly()).isEqualByComparingTo(DEFAULT_DEPRECIATION_RATE_YEARLY);
 
         // Validate the AssetCategory in Elasticsearch
         verify(mockAssetCategorySearchRepository, times(1)).save(testAssetCategory);
@@ -250,7 +259,8 @@ class AssetCategoryResourceIT {
             .andExpect(jsonPath("$.[*].assetCategoryName").value(hasItem(DEFAULT_ASSET_CATEGORY_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES)))
-            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())));
+            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())))
+            .andExpect(jsonPath("$.[*].depreciationRateYearly").value(hasItem(sameNumber(DEFAULT_DEPRECIATION_RATE_YEARLY))));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -286,7 +296,8 @@ class AssetCategoryResourceIT {
             .andExpect(jsonPath("$.assetCategoryName").value(DEFAULT_ASSET_CATEGORY_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.notes").value(DEFAULT_NOTES))
-            .andExpect(jsonPath("$.remarks").value(DEFAULT_REMARKS.toString()));
+            .andExpect(jsonPath("$.remarks").value(DEFAULT_REMARKS.toString()))
+            .andExpect(jsonPath("$.depreciationRateYearly").value(sameNumber(DEFAULT_DEPRECIATION_RATE_YEARLY)));
     }
 
     @Test
@@ -543,6 +554,112 @@ class AssetCategoryResourceIT {
 
     @Test
     @Transactional
+    void getAllAssetCategoriesByDepreciationRateYearlyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetCategoryRepository.saveAndFlush(assetCategory);
+
+        // Get all the assetCategoryList where depreciationRateYearly equals to DEFAULT_DEPRECIATION_RATE_YEARLY
+        defaultAssetCategoryShouldBeFound("depreciationRateYearly.equals=" + DEFAULT_DEPRECIATION_RATE_YEARLY);
+
+        // Get all the assetCategoryList where depreciationRateYearly equals to UPDATED_DEPRECIATION_RATE_YEARLY
+        defaultAssetCategoryShouldNotBeFound("depreciationRateYearly.equals=" + UPDATED_DEPRECIATION_RATE_YEARLY);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetCategoriesByDepreciationRateYearlyIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        assetCategoryRepository.saveAndFlush(assetCategory);
+
+        // Get all the assetCategoryList where depreciationRateYearly not equals to DEFAULT_DEPRECIATION_RATE_YEARLY
+        defaultAssetCategoryShouldNotBeFound("depreciationRateYearly.notEquals=" + DEFAULT_DEPRECIATION_RATE_YEARLY);
+
+        // Get all the assetCategoryList where depreciationRateYearly not equals to UPDATED_DEPRECIATION_RATE_YEARLY
+        defaultAssetCategoryShouldBeFound("depreciationRateYearly.notEquals=" + UPDATED_DEPRECIATION_RATE_YEARLY);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetCategoriesByDepreciationRateYearlyIsInShouldWork() throws Exception {
+        // Initialize the database
+        assetCategoryRepository.saveAndFlush(assetCategory);
+
+        // Get all the assetCategoryList where depreciationRateYearly in DEFAULT_DEPRECIATION_RATE_YEARLY or UPDATED_DEPRECIATION_RATE_YEARLY
+        defaultAssetCategoryShouldBeFound(
+            "depreciationRateYearly.in=" + DEFAULT_DEPRECIATION_RATE_YEARLY + "," + UPDATED_DEPRECIATION_RATE_YEARLY
+        );
+
+        // Get all the assetCategoryList where depreciationRateYearly equals to UPDATED_DEPRECIATION_RATE_YEARLY
+        defaultAssetCategoryShouldNotBeFound("depreciationRateYearly.in=" + UPDATED_DEPRECIATION_RATE_YEARLY);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetCategoriesByDepreciationRateYearlyIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        assetCategoryRepository.saveAndFlush(assetCategory);
+
+        // Get all the assetCategoryList where depreciationRateYearly is not null
+        defaultAssetCategoryShouldBeFound("depreciationRateYearly.specified=true");
+
+        // Get all the assetCategoryList where depreciationRateYearly is null
+        defaultAssetCategoryShouldNotBeFound("depreciationRateYearly.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetCategoriesByDepreciationRateYearlyIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        assetCategoryRepository.saveAndFlush(assetCategory);
+
+        // Get all the assetCategoryList where depreciationRateYearly is greater than or equal to DEFAULT_DEPRECIATION_RATE_YEARLY
+        defaultAssetCategoryShouldBeFound("depreciationRateYearly.greaterThanOrEqual=" + DEFAULT_DEPRECIATION_RATE_YEARLY);
+
+        // Get all the assetCategoryList where depreciationRateYearly is greater than or equal to UPDATED_DEPRECIATION_RATE_YEARLY
+        defaultAssetCategoryShouldNotBeFound("depreciationRateYearly.greaterThanOrEqual=" + UPDATED_DEPRECIATION_RATE_YEARLY);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetCategoriesByDepreciationRateYearlyIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        assetCategoryRepository.saveAndFlush(assetCategory);
+
+        // Get all the assetCategoryList where depreciationRateYearly is less than or equal to DEFAULT_DEPRECIATION_RATE_YEARLY
+        defaultAssetCategoryShouldBeFound("depreciationRateYearly.lessThanOrEqual=" + DEFAULT_DEPRECIATION_RATE_YEARLY);
+
+        // Get all the assetCategoryList where depreciationRateYearly is less than or equal to SMALLER_DEPRECIATION_RATE_YEARLY
+        defaultAssetCategoryShouldNotBeFound("depreciationRateYearly.lessThanOrEqual=" + SMALLER_DEPRECIATION_RATE_YEARLY);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetCategoriesByDepreciationRateYearlyIsLessThanSomething() throws Exception {
+        // Initialize the database
+        assetCategoryRepository.saveAndFlush(assetCategory);
+
+        // Get all the assetCategoryList where depreciationRateYearly is less than DEFAULT_DEPRECIATION_RATE_YEARLY
+        defaultAssetCategoryShouldNotBeFound("depreciationRateYearly.lessThan=" + DEFAULT_DEPRECIATION_RATE_YEARLY);
+
+        // Get all the assetCategoryList where depreciationRateYearly is less than UPDATED_DEPRECIATION_RATE_YEARLY
+        defaultAssetCategoryShouldBeFound("depreciationRateYearly.lessThan=" + UPDATED_DEPRECIATION_RATE_YEARLY);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetCategoriesByDepreciationRateYearlyIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        assetCategoryRepository.saveAndFlush(assetCategory);
+
+        // Get all the assetCategoryList where depreciationRateYearly is greater than DEFAULT_DEPRECIATION_RATE_YEARLY
+        defaultAssetCategoryShouldNotBeFound("depreciationRateYearly.greaterThan=" + DEFAULT_DEPRECIATION_RATE_YEARLY);
+
+        // Get all the assetCategoryList where depreciationRateYearly is greater than SMALLER_DEPRECIATION_RATE_YEARLY
+        defaultAssetCategoryShouldBeFound("depreciationRateYearly.greaterThan=" + SMALLER_DEPRECIATION_RATE_YEARLY);
+    }
+
+    @Test
+    @Transactional
     void getAllAssetCategoriesByDepreciationMethodIsEqualToSomething() throws Exception {
         // Initialize the database
         assetCategoryRepository.saveAndFlush(assetCategory);
@@ -605,7 +722,8 @@ class AssetCategoryResourceIT {
             .andExpect(jsonPath("$.[*].assetCategoryName").value(hasItem(DEFAULT_ASSET_CATEGORY_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES)))
-            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())));
+            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())))
+            .andExpect(jsonPath("$.[*].depreciationRateYearly").value(hasItem(sameNumber(DEFAULT_DEPRECIATION_RATE_YEARLY))));
 
         // Check, that the count call also returns 1
         restAssetCategoryMockMvc
@@ -657,7 +775,8 @@ class AssetCategoryResourceIT {
             .assetCategoryName(UPDATED_ASSET_CATEGORY_NAME)
             .description(UPDATED_DESCRIPTION)
             .notes(UPDATED_NOTES)
-            .remarks(UPDATED_REMARKS);
+            .remarks(UPDATED_REMARKS)
+            .depreciationRateYearly(UPDATED_DEPRECIATION_RATE_YEARLY);
         AssetCategoryDTO assetCategoryDTO = assetCategoryMapper.toDto(updatedAssetCategory);
 
         restAssetCategoryMockMvc
@@ -676,6 +795,7 @@ class AssetCategoryResourceIT {
         assertThat(testAssetCategory.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testAssetCategory.getNotes()).isEqualTo(UPDATED_NOTES);
         assertThat(testAssetCategory.getRemarks()).isEqualTo(UPDATED_REMARKS);
+        assertThat(testAssetCategory.getDepreciationRateYearly()).isEqualTo(UPDATED_DEPRECIATION_RATE_YEARLY);
 
         // Validate the AssetCategory in Elasticsearch
         verify(mockAssetCategorySearchRepository).save(testAssetCategory);
@@ -787,6 +907,7 @@ class AssetCategoryResourceIT {
         assertThat(testAssetCategory.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testAssetCategory.getNotes()).isEqualTo(DEFAULT_NOTES);
         assertThat(testAssetCategory.getRemarks()).isEqualTo(DEFAULT_REMARKS);
+        assertThat(testAssetCategory.getDepreciationRateYearly()).isEqualByComparingTo(DEFAULT_DEPRECIATION_RATE_YEARLY);
     }
 
     @Test
@@ -805,7 +926,8 @@ class AssetCategoryResourceIT {
             .assetCategoryName(UPDATED_ASSET_CATEGORY_NAME)
             .description(UPDATED_DESCRIPTION)
             .notes(UPDATED_NOTES)
-            .remarks(UPDATED_REMARKS);
+            .remarks(UPDATED_REMARKS)
+            .depreciationRateYearly(UPDATED_DEPRECIATION_RATE_YEARLY);
 
         restAssetCategoryMockMvc
             .perform(
@@ -823,6 +945,7 @@ class AssetCategoryResourceIT {
         assertThat(testAssetCategory.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testAssetCategory.getNotes()).isEqualTo(UPDATED_NOTES);
         assertThat(testAssetCategory.getRemarks()).isEqualTo(UPDATED_REMARKS);
+        assertThat(testAssetCategory.getDepreciationRateYearly()).isEqualByComparingTo(UPDATED_DEPRECIATION_RATE_YEARLY);
     }
 
     @Test
@@ -942,6 +1065,7 @@ class AssetCategoryResourceIT {
             .andExpect(jsonPath("$.[*].assetCategoryName").value(hasItem(DEFAULT_ASSET_CATEGORY_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES)))
-            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())));
+            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())))
+            .andExpect(jsonPath("$.[*].depreciationRateYearly").value(hasItem(sameNumber(DEFAULT_DEPRECIATION_RATE_YEARLY))));
     }
 }

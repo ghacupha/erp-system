@@ -19,6 +19,7 @@ package io.github.erp.service.dto;
  */
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -41,6 +42,8 @@ public class AssetCategoryDTO implements Serializable {
 
     @Lob
     private String remarks;
+
+    private BigDecimal depreciationRateYearly;
 
     private DepreciationMethodDTO depreciationMethod;
 
@@ -84,6 +87,14 @@ public class AssetCategoryDTO implements Serializable {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public BigDecimal getDepreciationRateYearly() {
+        return depreciationRateYearly;
+    }
+
+    public void setDepreciationRateYearly(BigDecimal depreciationRateYearly) {
+        this.depreciationRateYearly = depreciationRateYearly;
     }
 
     public DepreciationMethodDTO getDepreciationMethod() {
@@ -132,6 +143,7 @@ public class AssetCategoryDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", notes='" + getNotes() + "'" +
             ", remarks='" + getRemarks() + "'" +
+            ", depreciationRateYearly=" + getDepreciationRateYearly() +
             ", depreciationMethod=" + getDepreciationMethod() +
             ", placeholders=" + getPlaceholders() +
             "}";

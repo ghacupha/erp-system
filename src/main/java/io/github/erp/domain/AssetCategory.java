@@ -20,6 +20,7 @@ package io.github.erp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -59,6 +60,9 @@ public class AssetCategory implements Serializable {
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "remarks")
     private String remarks;
+
+    @Column(name = "depreciation_rate_yearly", precision = 21, scale = 2)
+    private BigDecimal depreciationRateYearly;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -142,6 +146,19 @@ public class AssetCategory implements Serializable {
         this.remarks = remarks;
     }
 
+    public BigDecimal getDepreciationRateYearly() {
+        return this.depreciationRateYearly;
+    }
+
+    public AssetCategory depreciationRateYearly(BigDecimal depreciationRateYearly) {
+        this.setDepreciationRateYearly(depreciationRateYearly);
+        return this;
+    }
+
+    public void setDepreciationRateYearly(BigDecimal depreciationRateYearly) {
+        this.depreciationRateYearly = depreciationRateYearly;
+    }
+
     public DepreciationMethod getDepreciationMethod() {
         return this.depreciationMethod;
     }
@@ -206,6 +223,7 @@ public class AssetCategory implements Serializable {
             ", description='" + getDescription() + "'" +
             ", notes='" + getNotes() + "'" +
             ", remarks='" + getRemarks() + "'" +
+            ", depreciationRateYearly=" + getDepreciationRateYearly() +
             "}";
     }
 }
