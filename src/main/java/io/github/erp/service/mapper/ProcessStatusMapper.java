@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark III No 16 (Caleb Series) Server ver 1.2.7
+ * Erp System - Mark IV No 1 (Ehud Series) Server ver 1.3.0
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.domain.ProcessStatus;
 import io.github.erp.service.dto.ProcessStatusDTO;
 import org.mapstruct.*;
