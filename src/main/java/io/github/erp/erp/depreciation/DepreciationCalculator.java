@@ -17,28 +17,36 @@ package io.github.erp.erp.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+import io.github.erp.domain.AssetCategory;
+import io.github.erp.domain.AssetRegistration;
+import io.github.erp.domain.DepreciationMethod;
+import io.github.erp.domain.DepreciationPeriod;
+import io.github.erp.domain.enumeration.DepreciationTypes;
+import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
 
-public class DepreciationCalculator {
+@Service("depreciationCalculator")
+public class DepreciationCalculator implements CalculatesDepreciation {
 
-    public static BigDecimal calculateStraightLineDepreciation(BigDecimal assetCost, BigDecimal residualValue, double depreciationRate) {
-        BigDecimal depreciableAmount = assetCost.subtract(residualValue);
-        BigDecimal depreciationPerPeriod = depreciableAmount.multiply(BigDecimal.valueOf(depreciationRate));
-        return depreciationPerPeriod;
+    private final ReducingBalanceDepreciationCalculator reducingBalanceDepreciationCalculator;
+    private final StraightLineDepreciationCalculator straightLineDepreciationCalculator;
+
+    public DepreciationCalculator(ReducingBalanceDepreciationCalculator reducingBalanceDepreciationCalculator, StraightLineDepreciationCalculator straightLineDepreciationCalculator) {
+        this.reducingBalanceDepreciationCalculator = reducingBalanceDepreciationCalculator;
+        this.straightLineDepreciationCalculator = straightLineDepreciationCalculator;
     }
 
-    // Test for Straight-Line Depreciation
-    public static void testStraightLineDepreciation() {
-        BigDecimal assetCost = BigDecimal.valueOf(100000);
-        BigDecimal residualValue = BigDecimal.valueOf(20000);
-        double depreciationRate = 0.2;
+    @Override
+    public BigDecimal calculateDepreciation(AssetRegistration asset, DepreciationPeriod period, AssetCategory assetCategory, DepreciationMethod depreciationMethod) {
 
-        BigDecimal depreciationPerPeriod = calculateStraightLineDepreciation(assetCost, residualValue, depreciationRate);
-
-        System.out.println("Straight-Line Depreciation Amount per Period: " + depreciationPerPeriod);
-    }
-
-    public static void main(String[] args) {
-        testStraightLineDepreciation();
+        if (depreciationMethod.getDepreciationType() == DepreciationTypes.STRAIGHT_LINE) {
+            return straightLineDepreciationCalculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod);
+        }
+        if (depreciationMethod.getDepreciationType() == DepreciationTypes.DECLINING_BALANCE) {
+            return reducingBalanceDepreciationCalculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod);
+        }
+        return BigDecimal.ZERO;
     }
 }

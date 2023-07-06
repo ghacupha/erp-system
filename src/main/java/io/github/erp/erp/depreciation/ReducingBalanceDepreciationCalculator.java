@@ -17,22 +17,35 @@ package io.github.erp.erp.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.service.dto.AssetCategoryDTO;
-import io.github.erp.service.dto.AssetRegistrationDTO;
-import io.github.erp.service.dto.DepreciationMethodDTO;
-import io.github.erp.service.dto.DepreciationPeriodDTO;
+import io.github.erp.domain.AssetCategory;
+import io.github.erp.domain.AssetRegistration;
+import io.github.erp.domain.DepreciationMethod;
+import io.github.erp.domain.DepreciationPeriod;
+import io.github.erp.domain.enumeration.DepreciationTypes;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 
-public class ReducingBalanceDepreciationCalculator implements CalculatesDepreciation {
+/**
+ * Calculates reducing balance depreciation for the period requested on a month-by-month basis
+ */
+@Service("reducingBalanceDepreciationCalculator")
+public class ReducingBalanceDepreciationCalculator extends AbstractDepreciationCalculator implements CalculatesDepreciation {
 
-    public static BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, DepreciationMethodDTO depreciationMethod, AssetCategoryDTO assetCategory) {
+    public BigDecimal calculateDepreciation(AssetRegistration asset, DepreciationPeriod period, AssetCategory assetCategory, DepreciationMethod depreciationMethod) {
+
+        // opt out
+        if (depreciationMethod.getDepreciationType() != DepreciationTypes.DECLINING_BALANCE ) {
+
+            return BigDecimal.ZERO;
+        }
+
         BigDecimal netBookValue = asset.getAssetCost();
-        // TODO BigDecimal depreciationRate = depreciationMethod.getDepreciationRate();
-        BigDecimal depreciationRate = getDepreciationRate();
-        // TODO int usefulLifeMonths = assetCategory.getUsefulLife() * 12;
+
+        // ADAPT TO MONTHLY UNITS
+        BigDecimal depreciationRate = assetCategory.getDepreciationRateYearly().divide(BigDecimal.valueOf(12));
         int elapsedMonths = calculateElapsedMonths(period);
 
         BigDecimal depreciationAmount = BigDecimal.ZERO;
@@ -48,19 +61,5 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
         return depreciationAmount;
     }
 
-    private static BigDecimal getDepreciationRate() {
-
-        // TODO USE MODEL FOR RATES (DEPRECIATION METHOD)
-        return BigDecimal.valueOf(0.03);
-    }
-
-    private static int calculateElapsedMonths(DepreciationPeriodDTO period) {
-        // Calculate the number of elapsed months between the start of the period and the current date.
-        // You can use appropriate date/time libraries to perform this calculation.
-        // Here's a simplified example assuming each period is a month:
-        LocalDate startDate = period.getStartDate();
-        LocalDate currentDate = LocalDate.now();
-        return Math.toIntExact(Period.between(startDate, currentDate).toTotalMonths());
-    }
 }
 
