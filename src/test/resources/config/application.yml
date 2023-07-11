@@ -13,12 +13,22 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+eureka:
+  client:
+    enabled: false
+  instance:
+    appname: erpSystem
+    instanceId: erpSystem:${spring.application.instance-id:${random.value}}
+
 spring:
   profiles:
     # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
     #active: testcontainers
   application:
     name: erpSystem
+  cloud:
+    config:
+      enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:h2:mem:erpsystem;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -100,6 +110,16 @@ jhipster:
         base64-secret: ZWMyYzI1MmU3Mzg1ZTU4ZjFmOTIzYjEzOWZkZWU1MWZhNGY4ZTA3ZTEwYmYxMzczOGE3NDZiZjNkMDE3NjNiYTBmMTE0ODBiYTcyZDI0ZTcyNmU5OTA2NGY4NDUwZGEyMWQwYThmMTgxNWJiMjQ2OGQ0NmIxMTQwNTE0MGFkNzA=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
+kafka:
+  bootstrap-servers: localhost:9092
+  consumer:
+    key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    group.id: erp-system
+    auto.offset.reset: earliest
+  producer:
+    key.serializer: org.apache.kafka.common.serialization.StringSerializer
+    value.serializer: org.apache.kafka.common.serialization.StringSerializer
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
