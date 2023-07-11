@@ -106,7 +106,7 @@
         <poiji.version>3.0.0</poiji.version>
         <jetbrains-annotations.version>23.0.0</jetbrains-annotations.version>
         <jasperreports.version>6.19.1</jasperreports.version>
-        <spring-kafka.version>3.0.8</spring-kafka.version>
+        <spring-kafka.version>2.9.4</spring-kafka.version>
         <!-- jhipster-needle-maven-property -->
     </properties>
 
