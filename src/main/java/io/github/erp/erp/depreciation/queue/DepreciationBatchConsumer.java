@@ -51,22 +51,22 @@ public class DepreciationBatchConsumer {
             BigDecimal initialCost = message.getInitialCost();
             BigDecimal residualValue = message.getResidualValue();
 
-            // todo depreciationCalculationService.depreciateBatch(message)
+            depreciationCalculationService.depreciateBatch(message);
 
             // Perform the depreciation calculations for the batch of assets
             for (String assetId : assetIds) {
                 // Retrieve the asset from the database using the assetId
-                // TODO AssetRegistration asset = assetRegistrationRepository.findById(assetId).orElse(null);
+                AssetRegistration asset = assetRegistrationRepository.findById(assetId).orElse(null);
 
-                // TODO if (asset != null) {
+                if (asset != null) {
                     // Calculate the depreciation amount using the DepreciationCalculator
-                    // TODO BigDecimal depreciationAmount = depreciationCalculator.calculateStraightLineDepreciation(initialCost, residualValue, usefulLifeYears);
+                    BigDecimal depreciationAmount = depreciationCalculator.calculateStraightLineDepreciation(initialCost, residualValue, usefulLifeYears);
 
                     // Update the asset's net book value and any other relevant data
                     // ...
 
                     // Save the updated asset to the database
-                    // TODO assetRegistrationRepository.save(asset);
+                    assetRegistrationRepository.save(asset);
                 }
             }
 
@@ -74,5 +74,6 @@ public class DepreciationBatchConsumer {
             // ...
         }
     }
+}
 
 

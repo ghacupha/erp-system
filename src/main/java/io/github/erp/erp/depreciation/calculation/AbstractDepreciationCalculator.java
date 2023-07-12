@@ -1,4 +1,4 @@
-package io.github.erp.erp.depreciation;
+package io.github.erp.erp.depreciation.calculation;
 
 /*-
  * Erp System - Mark IV No 1 (Ehud Series) Server ver 1.3.1
