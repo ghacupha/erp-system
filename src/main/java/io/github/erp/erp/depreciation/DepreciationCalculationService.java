@@ -23,6 +23,7 @@ import io.github.erp.domain.DepreciationJob;
 import io.github.erp.domain.DepreciationPeriod;
 import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import io.github.erp.domain.enumeration.DepreciationJobStatusType;
+import io.github.erp.erp.depreciation.calculation.CalculatesDepreciation;
 import io.github.erp.repository.AssetRegistrationRepository;
 import io.github.erp.repository.DepreciationBatchSequenceRepository;
 import io.github.erp.repository.DepreciationJobRepository;

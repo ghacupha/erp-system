@@ -1,4 +1,4 @@
-package io.github.erp.erp.depreciation;
+package io.github.erp.erp.depreciation.calculation;
 
 /*-
  * Erp System - Mark IV No 1 (Ehud Series) Server ver 1.3.1
@@ -22,12 +22,9 @@ import io.github.erp.domain.AssetRegistration;
 import io.github.erp.domain.DepreciationMethod;
 import io.github.erp.domain.DepreciationPeriod;
 import io.github.erp.domain.enumeration.DepreciationTypes;
-import io.github.erp.service.dto.DepreciationPeriodDTO;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.Period;
 
 /**
  * Calculate the depreciation for the monthly periods in the request

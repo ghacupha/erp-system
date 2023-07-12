@@ -1,4 +1,4 @@
-package io.github.erp.erp.depreciation;
+package io.github.erp.erp.depreciation.calculation;
 
 /*-
  * Erp System - Mark IV No 1 (Ehud Series) Server ver 1.3.1
@@ -17,7 +17,6 @@ package io.github.erp.erp.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.domain.AssetCategory;
 import io.github.erp.domain.AssetRegistration;
 import io.github.erp.domain.DepreciationMethod;
@@ -27,26 +26,38 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
-@Service("depreciationCalculator")
-public class DepreciationCalculator implements CalculatesDepreciation {
+/**
+ * Calculates reducing balance depreciation for the period requested on a month-by-month basis
+ */
+@Service("reducingBalanceDepreciationCalculator")
+public class ReducingBalanceDepreciationCalculator extends AbstractDepreciationCalculator implements CalculatesDepreciation {
 
-    private final ReducingBalanceDepreciationCalculator reducingBalanceDepreciationCalculator;
-    private final StraightLineDepreciationCalculator straightLineDepreciationCalculator;
-
-    public DepreciationCalculator(ReducingBalanceDepreciationCalculator reducingBalanceDepreciationCalculator, StraightLineDepreciationCalculator straightLineDepreciationCalculator) {
-        this.reducingBalanceDepreciationCalculator = reducingBalanceDepreciationCalculator;
-        this.straightLineDepreciationCalculator = straightLineDepreciationCalculator;
-    }
-
-    @Override
     public BigDecimal calculateDepreciation(AssetRegistration asset, DepreciationPeriod period, AssetCategory assetCategory, DepreciationMethod depreciationMethod) {
 
-        if (depreciationMethod.getDepreciationType() == DepreciationTypes.STRAIGHT_LINE) {
-            return straightLineDepreciationCalculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod);
+        // opt out
+        if (depreciationMethod.getDepreciationType() != DepreciationTypes.DECLINING_BALANCE ) {
+
+            return BigDecimal.ZERO;
         }
-        if (depreciationMethod.getDepreciationType() == DepreciationTypes.DECLINING_BALANCE) {
-            return reducingBalanceDepreciationCalculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod);
+
+        BigDecimal netBookValue = asset.getAssetCost();
+
+        // ADAPT TO MONTHLY UNITS
+        BigDecimal depreciationRate = assetCategory.getDepreciationRateYearly().divide(BigDecimal.valueOf(12));
+        int elapsedMonths = calculateElapsedMonths(period);
+
+        BigDecimal depreciationAmount = BigDecimal.ZERO;
+        for (int month = 1; month <= elapsedMonths; month++) {
+            BigDecimal monthlyDepreciation = netBookValue.multiply(depreciationRate);
+            depreciationAmount = depreciationAmount.add(monthlyDepreciation);
+            netBookValue = netBookValue.subtract(monthlyDepreciation);
+            if (netBookValue.compareTo(BigDecimal.ZERO) < 0) {
+                netBookValue = BigDecimal.ZERO;
+            }
         }
-        return BigDecimal.ZERO;
+
+        return depreciationAmount;
     }
+
 }
+
