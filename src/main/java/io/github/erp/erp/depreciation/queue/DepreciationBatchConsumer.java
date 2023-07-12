@@ -41,7 +41,7 @@ public class DepreciationBatchConsumer {
         this.depreciationCalculationService = depreciationCalculationService;
     }
 
-    @KafkaListener(topics = DEPRECIATION_BATCH_TOPIC)
+    @KafkaListener(topics = DEPRECIATION_BATCH_TOPIC, groupId = "erp-system")
     public void processDepreciationJobMessages(List<DepreciationBatchMessage> messages) {
         // Process the batch of depreciation job messages
         for (DepreciationBatchMessage message : messages) {
