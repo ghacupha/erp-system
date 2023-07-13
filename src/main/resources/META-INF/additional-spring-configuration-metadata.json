@@ -39,6 +39,46 @@
       "name": "app.reIndexer.interval",
       "type": "java.lang.String",
       "description": "Description for app.reIndexer.interval."
+    },
+    {
+      "name": "kafka.consumer.group.id",
+      "type": "java.lang.String",
+      "description": "Description for kafka.consumer.group.id."
+    },
+    {
+      "name": "kafka.consumer.key.deserializer",
+      "type": "java.lang.String",
+      "description": "Description for kafka.consumer.key.deserializer."
+    },
+    {
+      "name": "kafka.consumer.value.deserializer",
+      "type": "java.lang.String",
+      "description": "Description for kafka.consumer.value.deserializer."
+    },
+    {
+      "name": "kafka.consumer.auto.offset.reset",
+      "type": "java.lang.String",
+      "description": "Description for kafka.consumer.auto.offset.reset."
+    },
+    {
+      "name": "kafka.consumer.properties.spring.json.trusted.packages",
+      "type": "java.lang.String",
+      "description": "Description for kafka.consumer.properties.spring.json.trusted.packages."
+    },
+    {
+      "name": "kafka.producer.key.serializer",
+      "type": "java.lang.String",
+      "description": "Description for kafka.producer.key.serializer."
+    },
+    {
+      "name": "kafka.producer.value.serializer",
+      "type": "java.lang.String",
+      "description": "Description for kafka.producer.value.serializer."
+    },
+    {
+      "name": "kafka.depreciation-batch.topic.name",
+      "type": "java.lang.String",
+      "description": "Description for kafka.depreciation-batch.topic.name."
     }
   ]
 }

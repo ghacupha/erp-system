@@ -1,7 +1,7 @@
 package io.github.erp.erp.depreciation.calculation;
 
 /*-
- * Erp System - Mark IV No 1 (Ehud Series) Server ver 1.3.1
+ * Erp System - Mark IV No 2 (Ehud Series) Server ver 1.3.2
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.erp.depreciation.calculation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.domain.AssetCategory;
 import io.github.erp.domain.AssetRegistration;
 import io.github.erp.domain.DepreciationMethod;
