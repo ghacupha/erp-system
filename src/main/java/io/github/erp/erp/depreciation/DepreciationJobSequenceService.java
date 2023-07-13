@@ -1,7 +1,7 @@
 package io.github.erp.erp.depreciation;
 
 /*-
- * Erp System - Mark IV No 1 (Ehud Series) Server ver 1.3.1
+ * Erp System - Mark IV No 2 (Ehud Series) Server ver 1.3.2
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,6 +24,8 @@ import io.github.erp.domain.DepreciationPeriod;
 import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import io.github.erp.domain.enumeration.DepreciationJobStatusType;
 import io.github.erp.erp.depreciation.calculation.CalculatesDepreciation;
+import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
+import io.github.erp.erp.depreciation.queue.DepreciationBatchProducer;
 import io.github.erp.repository.AssetRegistrationRepository;
 import io.github.erp.repository.DepreciationBatchSequenceRepository;
 import io.github.erp.repository.DepreciationJobRepository;
@@ -32,46 +34,28 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 /**
- * the DepreciationService class triggers the depreciation process
- * when the triggerDepreciation method is called.
- * The service depends on repositories (DepreciationJobRepository, AssetRepository, DepreciationBatchSequenceRepository)
- * to access the database and the DepreciationCalculator for performing the depreciation calculations.
- *
- * The triggerDepreciation method performs the following steps:
- *
- * Uses the newly created DepreciationJob entity with the current run date and any other relevant properties.
- * Saves the DepreciationJob entity to the database.
- * Retrieves all the assets from the database.
- * Processes the assets in batches, with a specified batch size.
- * Calculates the depreciation amount for each asset using the DepreciationCalculator.
- * Updates the asset's net book value and other relevant data.
- * Saves the updated asset to the database.
- * Creates a DepreciationBatchSequence entity to track the processed batch and saves it to the database.
- * Repeats the process until all assets are processed.
- * Marks the depreciation run as completed and saves the DepreciationRun entity.
+ * Run the overall depreciation-sequence for a given depreciation-job request. The job is done in batches
+ * whose ordering is executed through the queue.
  */
 @Service
-public class DepreciationCalculationService {
+public class DepreciationJobSequenceService {
 
-    private static final Logger log = LoggerFactory.getLogger(DepreciationCalculationService.class);
+    private static final Logger log = LoggerFactory.getLogger(DepreciationJobSequenceService.class);
 
     private final DepreciationJobRepository depreciationJobRepository;
     private final AssetRegistrationRepository assetRepository;
     private final DepreciationBatchSequenceRepository depreciationBatchSequenceRepository;
-    private final CalculatesDepreciation depreciationCalculator;
+    private final DepreciationBatchProducer depreciationBatchProducer;
 
-    public DepreciationCalculationService(DepreciationJobRepository depreciationJobRepository,
-                                          AssetRegistrationRepository assetRepository,
-                                          DepreciationBatchSequenceRepository depreciationBatchSequenceRepository,
-                                          CalculatesDepreciation depreciationCalculator) {
-
+    public DepreciationJobSequenceService(DepreciationJobRepository depreciationJobRepository, AssetRegistrationRepository assetRepository, DepreciationBatchSequenceRepository depreciationBatchSequenceRepository, DepreciationBatchProducer depreciationBatchProducer) {
         this.depreciationJobRepository = depreciationJobRepository;
         this.assetRepository = assetRepository;
         this.depreciationBatchSequenceRepository = depreciationBatchSequenceRepository;
-        this.depreciationCalculator = depreciationCalculator;
+        this.depreciationBatchProducer = depreciationBatchProducer;
     }
 
     /**
@@ -79,8 +63,16 @@ public class DepreciationCalculationService {
      * This method retrieves the assets from the database, performs the depreciation calculations, and updates the necessary records.
      */
     public void triggerDepreciation(DepreciationJob depreciationJob) {
+        // !!! Check that the depreciationJob status
 
         DepreciationPeriod depreciationPeriod = depreciationJob.getDepreciationPeriod();
+
+        // TODO OPT OUT
+        // TODO if (depreciationPeriod.depreciationPeriodStatus == COMPLETE) {
+        // TODO     log.info("DepreciationPeriod id {} is status COMPLETE for job id {}. System opting out the depreciation sequence. Standby", depreciationPeriod.getId(), depreciationJob.getId(),);
+        // TODO     depreciationJob.setDepreciationJobStatus(DepreciationJobStatusType.COMPLETE);
+        //  todo return;
+        // TODO }
 
         // OPT OUT
         if (depreciationJob.getDepreciationJobStatus() == DepreciationJobStatusType.COMPLETE) {
@@ -95,12 +87,12 @@ public class DepreciationCalculationService {
 
         depreciationJobRepository.save(depreciationJob);
 
-        // Retrieve the assets from the database
+        // TODO room for improvement in memory-management issues . Retrieve the assets from the database
         List<AssetRegistration> assets = assetRepository.findAll();
 
         // Process the assets in batches
         // TODO Set the batch size as desired from properties file
-        int batchSize = 100;
+        int batchSize = 10;
         int totalAssets = assets.size();
         int processedCount = 0;
 
@@ -114,43 +106,29 @@ public class DepreciationCalculationService {
             List<AssetRegistration> currentBatch = assets.subList(startIndex, endIndex);
 
             // Create a DepreciationBatchSequence entity to track the processed batch
-            DepreciationBatchSequence batchSequence = depreciationBatchSequenceRepository.save(new DepreciationBatchSequence());
+            DepreciationBatchSequence batchSequence = new DepreciationBatchSequence();
             batchSequence.depreciationBatchStatus(DepreciationBatchStatusType.CREATED);
             batchSequence.setDepreciationJob(depreciationJob);
             batchSequence.setStartIndex(startIndex);
             batchSequence.setEndIndex(endIndex);
+            // TODO track last-batch batchSequence.lastBatchSequence(processedCount + batchSize < totalAssets);
 
-            depreciationBatchSequenceRepository.save(batchSequence);
+            DepreciationBatchSequence createdBatchSequence = depreciationBatchSequenceRepository.save(batchSequence);
 
             log.debug("Initiating batch sequence id {}, for depreciation-job id {}, depreciation-period id {}. Standby", batchSequence.getId(), depreciationJob.getId(), depreciationPeriod.getId());
 
-            batchSequence.depreciationBatchStatus(DepreciationBatchStatusType.RUNNING);
-            depreciationBatchSequenceRepository.save(batchSequence);
+            // TODO DepreciationBatchMessage
+            depreciationBatchProducer.sendDepreciationJobMessage(depreciationJob, currentBatch);
 
-            // Perform the depreciation calculations for the current batch
-            for (AssetRegistration asset : currentBatch) {
-                // Calculate the depreciation amount using the DepreciationCalculator
-                BigDecimal depreciationAmount = depreciationCalculator.calculateDepreciation(asset, depreciationPeriod, asset.getAssetCategory(), asset.getAssetCategory().getDepreciationMethod());
-
-                // TODO Update the asset's net book value and any other relevant data
-                // TODO Create and update depreciation-entry
-                // TODO Create and update netbook-value-entry
-
-                // Save the updated asset to the database
-                assetRepository.save(asset);
-            }
-
-            batchSequence.depreciationBatchStatus(DepreciationBatchStatusType.COMPLETED);
-
-            // Save the DepreciationBatchSequence entity to the database
-            depreciationBatchSequenceRepository.save(batchSequence);
+            createdBatchSequence.depreciationBatchStatus(DepreciationBatchStatusType.RUNNING);
+            depreciationBatchSequenceRepository.save(createdBatchSequence);
 
             processedCount += batchSize;
         }
 
         // Mark the depreciation run as completed
-        depreciationJob.setDepreciationJobStatus(DepreciationJobStatusType.COMPLETE);
-        depreciationJobRepository.save(depreciationJob);
+        // depreciationJob.setDepreciationJobStatus(DepreciationJobStatusType.COMPLETE);
+        // depreciationJobRepository.save(depreciationJob);
     }
 }
 

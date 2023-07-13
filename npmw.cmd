@@ -1,5 +1,5 @@
 @REM
-@REM Erp System - Mark IV No 1 (Ehud Series) Server ver 1.3.1
+@REM Erp System - Mark IV No 2 (Ehud Series) Server ver 1.3.2
 @REM Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 @REM
 @REM This program is free software: you can redistribute it and/or modify
