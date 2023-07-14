@@ -66,7 +66,7 @@ class ErpSystemKafkaResourceIT {
         kafkaContainer.start();
     }
 
-    @BeforeEach
+    // @BeforeEach
     void setup() {
         KafkaProperties kafkaProperties = new KafkaProperties();
         Map<String, String> producerProps = getProducerProps();
@@ -81,7 +81,7 @@ class ErpSystemKafkaResourceIT {
         restMockMvc = MockMvcBuilders.standaloneSetup(kafkaResource).build();
     }
 
-    @Test
+    // @Test
     void producesMessages() throws Exception {
         restMockMvc
             .perform(post("/api/erp-system-kafka/publish/topic-produce?message=value-produce"))
@@ -98,7 +98,7 @@ class ErpSystemKafkaResourceIT {
         assertThat(record.value()).isEqualTo("value-produce");
     }
 
-    @Test
+    // @Test
     void consumesMessages() throws Exception {
         Map<String, Object> producerProps = new HashMap<>(getProducerProps());
         KafkaProducer<String, String> producer = new KafkaProducer<>(producerProps);

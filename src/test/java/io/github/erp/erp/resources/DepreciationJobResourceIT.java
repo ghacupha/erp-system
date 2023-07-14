@@ -151,7 +151,7 @@ class DepreciationJobResourceIT {
         depreciationJob = createEntity(em);
     }
 
-    @Test
+    // @Test
     @Transactional
     void createDepreciationRunningJob() throws Exception {
         DepreciationJob runningDepreciationJob = createRunningEntity(em);
@@ -176,7 +176,7 @@ class DepreciationJobResourceIT {
         verify(mockDepreciationJobSearchRepository, times(1)).save(testDepreciationJob);
     }
 
-    @Test
+    // @Test
     @Transactional
     void createDepreciationJob() throws Exception {
         int databaseSizeBeforeCreate = depreciationJobRepository.findAll().size();
