@@ -83,6 +83,8 @@ public class DepreciationBatchSequenceService {
      */
     public void runDepreciation(DepreciationBatchMessage message) {
 
+        log.debug("Running depreciation for batch-id {}, standby...", message.getBatchId());
+
         String jobId = message.getJobId();
         List<String> assetIds = message.getAssetIds();
         BigDecimal initialCost = message.getInitialCost();
@@ -91,58 +93,70 @@ public class DepreciationBatchSequenceService {
         DepreciationJob depreciationJob = depreciationJobRepository.getById(Long.valueOf(jobId));
         DepreciationPeriod depreciationPeriod = depreciationJob.getDepreciationPeriod();
 
-        // TODO Update batch-sequence data
-
+        // TODO Update batch-sequence data in the caller
 
         // OPT OUT
         if (depreciationJob.getDepreciationJobStatus() == DepreciationJobStatusType.COMPLETE) {
 
-            log.info("DepreciationJob id {} is status COMPLETE for period id {}. System opting out the depreciation sequence. Standby", depreciationJob.getId(), depreciationPeriod.getId());
+            log.warn("DepreciationJob id {} is status COMPLETE for period id {}. System opting out the depreciation sequence. Standby", depreciationJob.getId(), depreciationPeriod.getId());
             return;
         }
 
+        // TODO opt out if period is CLOSED
+
+        log.debug("Standby for depreciation sequence on {} assets for batch id{}", assetIds.size(), message.getBatchId());
         // Perform the depreciation calculations for the batch of assets
         for (String assetId : assetIds) {
+
+            // TODO opt out if depreciated for a given period
+
+            // assetRepository.getById()
+
             // Retrieve the asset from the database using the assetId
-            AssetRegistration asset = assetRepository.findById(Long.valueOf(assetId)).orElse(null);
-            assert asset != null;
-            AssetCategory assetCategory = assetCategoryRepository.getById(asset.getAssetCategory().getId());
-            ServiceOutlet serviceOutlet = serviceOutletRepository.getById(asset.getMainServiceOutlet().getId());
+           assetRepository.findById(Long.valueOf(assetId)).ifPresentOrElse(
+               assetRegistration -> {
 
-            DepreciationMethod depreciationMethod = depreciationMethodRepository.getById(assetCategory.getDepreciationMethod().getId());
+                   log.debug("Asset id {} ready for depreciation sequence, standby for next update", assetRegistration.getId());
 
-            // Calculate the depreciation amount using the DepreciationCalculator
-            BigDecimal depreciationAmount = depreciationCalculatorService.calculateDepreciation(asset, depreciationPeriod, assetCategory, depreciationMethod);
+                   AssetCategory assetCategory = assetCategoryRepository.getById(assetRegistration.getAssetCategory().getId());
+                   ServiceOutlet serviceOutlet = serviceOutletRepository.getById(assetRegistration.getMainServiceOutlet().getId());
 
-            // Update the asset's net book value and any other relevant data
-            // ...
+                   DepreciationMethod depreciationMethod = depreciationMethodRepository.getById(assetCategory.getDepreciationMethod().getId());
 
-            // Save the depreciation to the database
-            DepreciationEntry depreciationEntry =
-                new DepreciationEntry()
-                    .depreciationAmount(depreciationAmount)
-                    .depreciationMethod(depreciationMethod)
-                    .depreciationPeriod(depreciationPeriod)
-                    .assetCategory(assetCategory)
-                    .assetNumber(Long.valueOf(asset.getAssetNumber()))
-                    .assetRegistration(asset)
-                    .postedAt(ZonedDateTime.now())
-                    .serviceOutlet(serviceOutlet);
+                   // Calculate the depreciation amount using the DepreciationCalculator
+                   BigDecimal depreciationAmount = depreciationCalculatorService.calculateDepreciation(assetRegistration, depreciationPeriod, assetCategory, depreciationMethod);
 
+                   // Update the asset's net book value and any other relevant data
+                   // ...
+
+                   // Save the depreciation to the database
+                   DepreciationEntry depreciationEntry =
+                       new DepreciationEntry()
+                           .depreciationAmount(depreciationAmount)
+                           .depreciationMethod(depreciationMethod)
+                           .depreciationPeriod(depreciationPeriod)
+                           .assetCategory(assetCategory)
+                           .assetNumber(Long.valueOf(assetRegistration.getAssetNumber()))
+                           .assetRegistration(assetRegistration)
+                           .postedAt(ZonedDateTime.now())
+                           .serviceOutlet(serviceOutlet);
+
+                   DepreciationEntry depreciation = depreciationEntryRepository.save(depreciationEntry);
+
+                   log.debug("depreciation-entry id {} saved to the database, standby for next update", depreciation.getId());
+           },
+           () -> log.warn("Asset-Registration id {} was not found...", assetId)
+          );
             // TODO Update the asset's net book value and any other relevant data
             // TODO Create and update depreciation-entry
             // TODO Create and update netbook-value-entry
-
-
-            DepreciationEntry depreciation = depreciationEntryRepository.save(depreciationEntry);
-
         }
 
-        DepreciationBatchSequence depreciationBatchSequence = depreciationBatchSequenceRepository.getById(Long.valueOf(message.getBatchId()));
-        depreciationBatchSequence.depreciationBatchStatus(DepreciationBatchStatusType.COMPLETED);
+        // DepreciationBatchSequence depreciationBatchSequence = depreciationBatchSequenceRepository.getById(Long.valueOf(message.getBatchId()));
+        // depreciationBatchSequence.depreciationBatchStatus(DepreciationBatchStatusType.COMPLETED);
 
         // Save the DepreciationBatchSequence entity to the database
-        depreciationBatchSequenceRepository.save(depreciationBatchSequence);
+        // depreciationBatchSequenceRepository.save(depreciationBatchSequence);
 
         // TODO Update if batch is final
         // log.info("Initiating DepreciationJob id {}, for depreciation-period id {}. Standby", depreciationJob.getId(), depreciationPeriod.getId());

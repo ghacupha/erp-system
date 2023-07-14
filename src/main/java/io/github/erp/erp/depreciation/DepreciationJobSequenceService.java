@@ -115,10 +115,10 @@ public class DepreciationJobSequenceService {
 
             DepreciationBatchSequence createdBatchSequence = depreciationBatchSequenceRepository.save(batchSequence);
 
-            log.debug("Initiating batch sequence id {}, for depreciation-job id {}, depreciation-period id {}. Standby", batchSequence.getId(), depreciationJob.getId(), depreciationPeriod.getId());
+            log.debug("Initiating batch sequence id {}, for depreciation-job id {}, depreciation-period id {}. Standby", createdBatchSequence.getId(), depreciationJob.getId(), depreciationPeriod.getId());
 
-            // TODO DepreciationBatchMessage
-            depreciationBatchProducer.sendDepreciationJobMessage(depreciationJob, currentBatch);
+            // Enqueuing the DepreciationBatchMessage
+            depreciationBatchProducer.sendDepreciationJobMessage(depreciationJob, currentBatch, createdBatchSequence);
 
             createdBatchSequence.depreciationBatchStatus(DepreciationBatchStatusType.RUNNING);
             depreciationBatchSequenceRepository.save(createdBatchSequence);

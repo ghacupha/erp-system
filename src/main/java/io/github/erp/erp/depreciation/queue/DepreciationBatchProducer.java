@@ -17,13 +17,10 @@ package io.github.erp.erp.depreciation.queue;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.erp.domain.AssetRegistration;
+import io.github.erp.domain.DepreciationBatchSequence;
 import io.github.erp.domain.DepreciationJob;
 import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
-import io.github.erp.service.dto.AssetRegistrationDTO;
-import io.github.erp.service.dto.DepreciationJobDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,6 +29,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,27 +42,28 @@ public class DepreciationBatchProducer {
     @Value("${kafka.depreciation-batch.topic.name}")
     private String topicName;
 
-    // public static final String DEPRECIATION_BATCH_TOPIC = "depreciation_batch_topic";
-
     private static final Logger log = LoggerFactory.getLogger(DepreciationBatchProducer.class);
 
     private final KafkaTemplate<String, DepreciationBatchMessage> kafkaTemplate;
-    private final ObjectMapper objectMapper;
 
     public DepreciationBatchProducer(
-        @Qualifier("DepreciationMessageKafkaTemplate") KafkaTemplate<String, DepreciationBatchMessage> kafkaTemplate,
-                                     ObjectMapper objectMapper) {
+        @Qualifier("depreciationMessageKafkaTemplate") KafkaTemplate<String, DepreciationBatchMessage> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
-        this.objectMapper = objectMapper;
     }
 
-    public void sendDepreciationJobMessage(DepreciationJob depreciationJob, List<AssetRegistration> assets) {
-        DepreciationBatchMessage depreciationJobMessage = new DepreciationBatchMessage();
-        depreciationJobMessage.setJobId(String.valueOf(depreciationJob.getId()));
-        depreciationJobMessage.setAssetIds(assets.stream().map(AssetRegistration::getId).map(String::valueOf).collect(Collectors.toList()));
-        depreciationJobMessage.setInitialCost(assets.stream().map(AssetRegistration::getAssetCost).reduce(BigDecimal::add).orElse(BigDecimal.ZERO));
+    public void sendDepreciationJobMessage(DepreciationJob depreciationJob, List<AssetRegistration> assets, DepreciationBatchSequence batchSequence) {
+        DepreciationBatchMessage depreciationJobMessage = DepreciationBatchMessage
+            .builder()
+            .batchId(String.valueOf(batchSequence.getId()))
+            .jobId(String.valueOf(depreciationJob.getId()))
+            .assetIds(assets.stream().map(AssetRegistration::getId).map(String::valueOf).collect(Collectors.toList()))
+            .initialCost(assets.stream().map(AssetRegistration::getAssetCost).reduce(BigDecimal::add).orElse(BigDecimal.ZERO))
+            // TODO .createdAt(batchSequence.getCreatedAt())
+            .startIndex(batchSequence.getStartIndex())
+            .endIndex(batchSequence.getEndIndex())
+            .createdAt(LocalDateTime.now())
+            .build();
 
-        // String messageValue = objectMapper.writeValueAsString(depreciationJobMessage);
         kafkaTemplate.send(topicName, depreciationJobMessage);
     }
 }

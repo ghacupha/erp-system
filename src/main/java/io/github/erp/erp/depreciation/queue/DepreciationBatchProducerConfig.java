@@ -57,15 +57,13 @@ public class DepreciationBatchProducerConfig {
     public Map<String, Object> producerConfigs() {
         Map<String, Object> properties = new HashMap<>();
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        // properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        // properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         // Add additional properties as needed
         return properties;
     }
 
     // Create KafkaTemplate for producing messages
     @SneakyThrows
-    @Bean("DepreciationMessageKafkaTemplate")
+    @Bean("depreciationMessageKafkaTemplate")
     public KafkaTemplate<String, DepreciationBatchMessage> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
