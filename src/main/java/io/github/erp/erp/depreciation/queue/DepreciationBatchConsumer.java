@@ -17,17 +17,16 @@ package io.github.erp.erp.depreciation.queue;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.AssetRegistration;
+import io.github.erp.domain.DepreciationBatchSequence;
+import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import io.github.erp.erp.depreciation.DepreciationBatchSequenceService;
-import io.github.erp.erp.depreciation.DepreciationJobSequenceService;
 import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
-import io.github.erp.repository.AssetRegistrationRepository;
+import io.github.erp.repository.DepreciationBatchSequenceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 // import static io.github.erp.erp.depreciation.queue.DepreciationBatchProducer.DEPRECIATION_BATCH_TOPIC;
@@ -37,9 +36,11 @@ public class DepreciationBatchConsumer {
 
     private static final Logger log = LoggerFactory.getLogger(DepreciationBatchConsumer.class);
 
+    private final DepreciationBatchSequenceRepository depreciationBatchSequenceRepository;
     private final DepreciationBatchSequenceService depreciationBatchSequenceService;
 
-    public DepreciationBatchConsumer(DepreciationBatchSequenceService depreciationBatchSequenceService) {
+    public DepreciationBatchConsumer(DepreciationBatchSequenceRepository depreciationBatchSequenceRepository, DepreciationBatchSequenceService depreciationBatchSequenceService) {
+        this.depreciationBatchSequenceRepository = depreciationBatchSequenceRepository;
         this.depreciationBatchSequenceService = depreciationBatchSequenceService;
     }
 
@@ -49,9 +50,15 @@ public class DepreciationBatchConsumer {
         for (DepreciationBatchMessage message : messages) {
             // Extract the necessary details from the message
 
-            log.info("Received message for batch-id id {}", message.getBatchId());
+            log.debug("Received message for batch-id id {}", message.getBatchId());
 
             depreciationBatchSequenceService.runDepreciation(message);
+
+            log.debug("Depreciation batch-id id {} complete, sequence status update begins...", message.getBatchId());
+
+            DepreciationBatchSequence sequence = depreciationBatchSequenceRepository.getById(Long.valueOf(message.getBatchId()));
+            sequence.setDepreciationBatchStatus(DepreciationBatchStatusType.COMPLETED);
+            depreciationBatchSequenceRepository.save(sequence);
 
         }
 

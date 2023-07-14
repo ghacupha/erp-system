@@ -42,4 +42,6 @@ public class DepreciationBatchMessage implements Serializable {
     private List<String> assetIds;
     private BigDecimal initialCost;
     private LocalDateTime createdAt;
+    private int startIndex;
+    private int endIndex;
 }
