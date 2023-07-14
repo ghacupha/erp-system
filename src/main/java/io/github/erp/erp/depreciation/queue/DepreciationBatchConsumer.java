@@ -17,6 +17,7 @@ package io.github.erp.erp.depreciation.queue;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.DepreciationBatchSequence;
 import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import io.github.erp.erp.depreciation.DepreciationBatchSequenceService;
@@ -56,14 +57,14 @@ public class DepreciationBatchConsumer {
 
             log.debug("Depreciation batch-id id {} complete, sequence status update begins...", message.getBatchId());
 
-            DepreciationBatchSequence sequence = depreciationBatchSequenceRepository.getById(Long.valueOf(message.getBatchId()));
-            sequence.setDepreciationBatchStatus(DepreciationBatchStatusType.COMPLETED);
-            depreciationBatchSequenceRepository.save(sequence);
-
+            depreciationBatchSequenceRepository.findById(Long.valueOf(message.getBatchId())).ifPresent(sequence -> {
+                sequence.setDepreciationBatchStatus(DepreciationBatchStatusType.COMPLETED);
+                depreciationBatchSequenceRepository.save(sequence);
+            });
         }
 
-            // Update the status or progress of the depreciation job, if needed
-            // ...
+        // Update the status or progress of the depreciation job, if needed
+        // ...
     }
 }
 
