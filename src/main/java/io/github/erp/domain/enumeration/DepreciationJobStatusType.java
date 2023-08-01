@@ -25,4 +25,5 @@ public enum DepreciationJobStatusType {
     RUNNING,
     CREATED,
     ERRORED,
+    ENQUEUED,
 }

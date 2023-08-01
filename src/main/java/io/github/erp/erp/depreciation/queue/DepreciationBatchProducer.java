@@ -17,10 +17,10 @@ package io.github.erp.erp.depreciation.queue;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.AssetRegistration;
-import io.github.erp.domain.DepreciationBatchSequence;
-import io.github.erp.domain.DepreciationJob;
 import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
+import io.github.erp.service.dto.AssetRegistrationDTO;
+import io.github.erp.service.dto.DepreciationBatchSequenceDTO;
+import io.github.erp.service.dto.DepreciationJobDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -51,13 +51,13 @@ public class DepreciationBatchProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendDepreciationJobMessage(DepreciationJob depreciationJob, List<AssetRegistration> assets, DepreciationBatchSequence batchSequence) {
+    public void sendDepreciationJobMessage(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> assets, DepreciationBatchSequenceDTO batchSequence) {
         DepreciationBatchMessage depreciationJobMessage = DepreciationBatchMessage
             .builder()
             .batchId(String.valueOf(batchSequence.getId()))
             .jobId(String.valueOf(depreciationJob.getId()))
-            .assetIds(assets.stream().map(AssetRegistration::getId).map(String::valueOf).collect(Collectors.toList()))
-            .initialCost(assets.stream().map(AssetRegistration::getAssetCost).reduce(BigDecimal::add).orElse(BigDecimal.ZERO))
+            .assetIds(assets.stream().map(AssetRegistrationDTO::getId).map(String::valueOf).collect(Collectors.toList()))
+            .initialCost(assets.stream().map(AssetRegistrationDTO::getAssetCost).reduce(BigDecimal::add).orElse(BigDecimal.ZERO))
             // TODO .createdAt(batchSequence.getCreatedAt())
             .startIndex(batchSequence.getStartIndex())
             .endIndex(batchSequence.getEndIndex())

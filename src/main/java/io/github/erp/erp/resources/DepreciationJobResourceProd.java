@@ -60,27 +60,15 @@ public class DepreciationJobResourceProd {
     private String applicationName;
 
     private final DepreciationJobService depreciationJobService;
-
     private final DepreciationJobRepository depreciationJobRepository;
-
     private final DepreciationJobQueryService depreciationJobQueryService;
-
     private final DepreciationJobSequenceService depreciationJobSequenceService;
 
-    private final DepreciationJobMapper depreciationJobMapper;
-
-    public DepreciationJobResourceProd(
-        DepreciationJobService depreciationJobService,
-        DepreciationJobRepository depreciationJobRepository,
-        DepreciationJobQueryService depreciationJobQueryService,
-        DepreciationJobSequenceService depreciationJobSequenceService,
-        DepreciationJobMapper depreciationJobMapper
-    ) {
+    public DepreciationJobResourceProd(DepreciationJobService depreciationJobService, DepreciationJobRepository depreciationJobRepository, DepreciationJobQueryService depreciationJobQueryService, DepreciationJobSequenceService depreciationJobSequenceService) {
         this.depreciationJobService = depreciationJobService;
         this.depreciationJobRepository = depreciationJobRepository;
         this.depreciationJobQueryService = depreciationJobQueryService;
         this.depreciationJobSequenceService = depreciationJobSequenceService;
-        this.depreciationJobMapper = depreciationJobMapper;
     }
 
     /**
@@ -100,7 +88,7 @@ public class DepreciationJobResourceProd {
         DepreciationJobDTO result = depreciationJobService.save(depreciationJobDTO);
 
         // starting depreciation...
-        depreciationJobSequenceService.triggerDepreciation(depreciationJobMapper.toEntity(result));
+        depreciationJobSequenceService.triggerDepreciation(result);
 
         return ResponseEntity
             .created(new URI("/api/depreciation-jobs/" + result.getId()))
