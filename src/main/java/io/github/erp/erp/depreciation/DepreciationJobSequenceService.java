@@ -23,6 +23,7 @@ import io.github.erp.domain.DepreciationJob;
 import io.github.erp.domain.DepreciationPeriod;
 import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import io.github.erp.domain.enumeration.DepreciationJobStatusType;
+import io.github.erp.domain.enumeration.DepreciationPeriodStatusTypes;
 import io.github.erp.erp.depreciation.calculation.CalculatesDepreciation;
 import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
 import io.github.erp.erp.depreciation.queue.DepreciationBatchProducer;
@@ -67,16 +68,15 @@ public class DepreciationJobSequenceService {
 
         DepreciationPeriod depreciationPeriod = depreciationJob.getDepreciationPeriod();
 
-        // TODO OPT OUT
-        // TODO if (depreciationPeriod.depreciationPeriodStatus == COMPLETE) {
-        // TODO     log.info("DepreciationPeriod id {} is status COMPLETE for job id {}. System opting out the depreciation sequence. Standby", depreciationPeriod.getId(), depreciationJob.getId(),);
-        // TODO     depreciationJob.setDepreciationJobStatus(DepreciationJobStatusType.COMPLETE);
-        //  todo return;
-        // TODO }
+        // OPT OUT
+        if (depreciationPeriod.getDepreciationPeriodStatus() == DepreciationPeriodStatusTypes.CLOSED) {
+          log.info("DepreciationPeriod id {} is status CLOSED for job id {}. System opting out the depreciation sequence. Standby", depreciationPeriod.getId(), depreciationJob.getId());
+          depreciationJob.setDepreciationJobStatus(DepreciationJobStatusType.COMPLETE);
+          return;
+        }
 
         // OPT OUT
         if (depreciationJob.getDepreciationJobStatus() == DepreciationJobStatusType.COMPLETE) {
-
             log.info("DepreciationJob id {} is status COMPLETE for period id {}. System opting out the depreciation sequence. Standby", depreciationJob.getId(), depreciationPeriod.getId());
             return;
         }
