@@ -191,6 +191,7 @@
     <include file="config/liquibase/changelog/20230705131419_added_depreciation_rate_yearly_to_asset_category_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230705135041_added_entity_constraints_DepreciationJob.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230705140128_added_entity_constraints_DepreciationBatchSequence.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230801082634_added_createdAt_to_DepreciationBatchSequence_changelog.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
