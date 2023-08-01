@@ -7,7 +7,7 @@
     {
       "fieldName": "depreciationJobStatus",
       "fieldType": "DepreciationJobStatusType",
-      "fieldValues": "COMPLETE,RUNNING,CREATED,ERRORED"
+      "fieldValues": "COMPLETE,RUNNING,CREATED,ERRORED,ENQUEUED"
     },
     {
       "fieldName": "description",
