@@ -52,7 +52,7 @@ import java.util.List;
 @Service
 public class DepreciationBatchSequenceService {
 
-    private static final Logger log = LoggerFactory.getLogger(DepreciationJobSequenceService.class);
+    private static final Logger log = LoggerFactory.getLogger(DepreciationJobSequenceServiceImpl.class);
 
     // TODO replace repositories with indexed services
     private final DepreciationJobRepository depreciationJobRepository;
