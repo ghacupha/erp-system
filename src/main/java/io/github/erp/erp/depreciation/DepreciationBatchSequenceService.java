@@ -54,6 +54,7 @@ public class DepreciationBatchSequenceService {
 
     private static final Logger log = LoggerFactory.getLogger(DepreciationJobSequenceService.class);
 
+    // TODO replace repositories with indexed services
     private final DepreciationJobRepository depreciationJobRepository;
     private final AssetRegistrationRepository assetRepository;
     private final DepreciationBatchSequenceRepository depreciationBatchSequenceRepository;
