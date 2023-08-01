@@ -9,6 +9,11 @@
       "fieldName": "endDate",
       "fieldType": "LocalDate",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "depreciationPeriodStatus",
+      "fieldType": "DepreciationPeriodStatusTypes",
+      "fieldValues": "OPEN,CLOSED,PROCESSING"
     }
   ],
   "relationships": [

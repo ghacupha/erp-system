@@ -1,5 +1,6 @@
 package io.github.erp.service.dto;
 
+import io.github.erp.domain.enumeration.DepreciationPeriodStatusTypes;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -17,6 +18,8 @@ public class DepreciationPeriodDTO implements Serializable {
 
     @NotNull
     private LocalDate endDate;
+
+    private DepreciationPeriodStatusTypes depreciationPeriodStatus;
 
     private DepreciationPeriodDTO previousPeriod;
 
@@ -42,6 +45,14 @@ public class DepreciationPeriodDTO implements Serializable {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public DepreciationPeriodStatusTypes getDepreciationPeriodStatus() {
+        return depreciationPeriodStatus;
+    }
+
+    public void setDepreciationPeriodStatus(DepreciationPeriodStatusTypes depreciationPeriodStatus) {
+        this.depreciationPeriodStatus = depreciationPeriodStatus;
     }
 
     public DepreciationPeriodDTO getPreviousPeriod() {
@@ -80,6 +91,7 @@ public class DepreciationPeriodDTO implements Serializable {
             "id=" + getId() +
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
+            ", depreciationPeriodStatus='" + getDepreciationPeriodStatus() + "'" +
             ", previousPeriod=" + getPreviousPeriod() +
             "}";
     }
