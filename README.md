@@ -190,14 +190,342 @@ to not simply give up or despair, but to try something else, or the same problem
 When these modules are done we will remember choosing to stay with the problem and embrace failure with open arms, repeat gruelling work whether feeling inspired or not inspired. Those words come to me every time. Caleb sets a lofty example seeking not that the 
 mountain be moved, or that his enemies be magically done away with, or for that to become someone else's problem. He chose to make the mountain his home. 
 
-[jhipster homepage and latest documentation]: https://www.jhipster.tech
-[jhipster 7.3.1 archive]: https://www.jhipster.tech/documentation-archive/v7.3.1
-[using jhipster in development]: https://www.jhipster.tech/documentation-archive/v7.3.1/development/
-[using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v7.3.1/docker-compose
-[using jhipster in production]: https://www.jhipster.tech/documentation-archive/v7.3.1/production/
-[running tests page]: https://www.jhipster.tech/documentation-archive/v7.3.1/running-tests/
-[code quality page]: https://www.jhipster.tech/documentation-archive/v7.3.1/code-quality/
-[setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v7.3.1/setting-up-ci/
-[node.js]: https://nodejs.org/
-[npm]: https://www.npmjs.com/
-[gatling]: https://gatling.io/
+## Important links
+
+ - [jhipster homepage and latest documentation](https://www.jhipster.tech)
+ - [jhipster 7.3.1 archive](https://www.jhipster.tech/documentation-archive/v7.3.1)
+ - [using jhipster in development](https://www.jhipster.tech/documentation-archive/v7.3.1/development/)
+ - [using docker and docker-compose](https://www.jhipster.tech/documentation-archive/v7.3.1/docker-compose)
+ - [using jhipster in production](https://www.jhipster.tech/documentation-archive/v7.3.1/production/)
+ - [running tests page](https://www.jhipster.tech/documentation-archive/v7.3.1/running-tests/)
+ - [code quality page](https://www.jhipster.tech/documentation-archive/v7.3.1/code-quality/)
+ - [setting up continuous integration](https://www.jhipster.tech/documentation-archive/v7.3.1/setting-up-ci/)
+ - [node.js](https://nodejs.org/)
+ - [npm](https://www.npmjs.com/)
+ - [gatling](https://gatling.io/)
+
+# DEVELOPMENT NOTES
+
+This an unstructured overview of various design patterns, policies and thoughts behind the patterns
+
+## Hybrid Approach to Depreciation of AssetRegistration Items
+The AssetRegistration entity is designed to record details about fixed assets. In the recent days
+we have been looking into implementing an pseudo autonomous process of depreciation of the same.
+Note that the assetCost field is not itself changing but it is used to come up with the appropriate
+value of depreciation at a given depreciationPeriod.
+
+In general the idea revolves around Martin Fowler's [accounting pattern](https://martinfowler.com/eaaDev/AccountingNarrative.html)
+in which depreciation is recorded as a series of subsequent depreciation records in a table. Should then
+one want to "see" how much depreciation has accrued for a given period, you simply run a query on that
+table with parameters for periodicity and there you have a depreciation report. Am accounting for the
+fact that SQL tables have become fast enough to run complex queries in a short amount of time. One
+is not therefore expected to derive entire datasets from repositories and then to manually managed
+then the entries upon queries like in the [accounting pattern](https://martinfowler.com/eaaDev/AccountingNarrative.html).
+Depreciation entries are created and stored in the database with the reference to the respective
+assetRegistration and thereby depreciation is noted to have taken place. That's the philosophy of 
+depreciation here.
+
+The challenge then is how to make such a process efficient in the face of large amount of instances
+and the need to view quick results. 
+At the heart of the matter is the depreciationCalculator and especially the reducingBalanceMethod calculator
+which would need to follow the following steps. With many subsequent adjustments made by the dev to 
+improve the process the code might not look exactly the same.
+
+To implement the most efficient reducing balance depreciation method when retrieving asset, depreciation method, asset category, and depreciation period data from a database, you can follow these steps:
+
+1. Retrieve the relevant data from the database:
+    - Fetch the asset data, including its initial cost, residual value, and asset category.
+    - Retrieve the depreciation method associated with the asset category.
+    - Fetch the depreciation periods for the asset, including their start and end dates.
+
+2. Calculate the depreciation for each period:
+    - Determine the elapsed time (in months) for each depreciation period based on the start and end dates.
+    - Apply the reducing balance depreciation formula to calculate the depreciation amount for each period. The formula typically involves multiplying the asset's net book value by a depreciation rate specific to the asset category.
+
+3. Update the asset's net book value:
+    - Subtract the depreciation amount from the asset's net book value for each period.
+    - Update the asset's net book value in the database after each depreciation calculation.
+
+Here's a high-level example of how the code flow could look:
+
+```java
+    // Retrieve asset data from the database
+    Asset asset = assetRepository.findById(assetId);
+    BigDecimal initialCost = asset.getInitialCost();
+    BigDecimal residualValue = asset.getResidualValue();
+    AssetCategory assetCategory = asset.getAssetCategory();
+    
+    // Retrieve depreciation method from the asset category
+    DepreciationMethod depreciationMethod = assetCategory.getDepreciationMethod();
+    
+    // Retrieve depreciation periods from the database
+    List<DepreciationPeriod> depreciationPeriods = depreciationPeriodRepository.findByAsset(asset);
+    
+    // Calculate reducing balance depreciation for each period
+    BigDecimal netBookValue = initialCost;
+    for (DepreciationPeriod depreciationPeriod : depreciationPeriods) {
+        BigDecimal depreciationAmount = netBookValue.multiply(depreciationMethod.getDepreciationRate());
+        
+        // Update the asset's net book value
+        netBookValue = netBookValue.subtract(depreciationAmount);
+        
+        // Perform any additional actions, such as storing the depreciation amount or updating the database
+        // ...
+}
+```
+
+Keep in mind that this is a simplified example and that there have been modifications based on our services and the structure repositories. I say "services"
+because our stack also runs a several search-index and the services are good at hiding the nature of that complexity and in fact look like exact replicas of repositories, but they are not.
+You would need to adjust the code to match your database schema, entity relationships, and persistence framework (e.g., Hibernate). Also I looked
+everywhere online and could not find anyone who had suggested a process for assets depreciation while interacting with an SQL sink. So some of the 
+overview ideas I generated with chatGPT. It was interesting to see that I could look at a general idea with this tool and scaffold the same in code
+and think about how to integrate that into ERP. Many designs and patterns failed, and I would reiterate again. So proper references do not exist at the moment, and this is really a shot in the dark.
+
+Ultimately I saw that such a process could not be done synchronously with the client waiting for the response. 
+Even when done asynchronously it would be too inefficient to attempt this with every single instance, because the 
+database I am thinking about should have like 10,000 instances. That could be weeks in processing a single
+depreciation period.
+
+We considered batching the database updates instead of performing them individually within the loop to reduce the number of database round-trips.
+Overall, by retrieving the necessary data from the database and efficiently calculating the reducing balance depreciation within the code, 
+I would (I thought) effectively manage asset depreciation for reporting purposes.
+Then I saw what happened to the RAM, and started remembering all those problems from the space-complexity notes. This thing would be
+fast, but would require an unfortunate amount of RAM.
+
+So I considered how I could do such a thing with the spring-batch library. Basically conjure up some batch
+process and let spring manage the process. By the way this is the same thing we do with uploading lists of data from a file. We upload an Excel file and then read the contents
+using [poiji library](https://github.com/ozlerhakan/poiji) into a list. Then initiate a spring-batch process and
+persist the list into appropriate entities using split up lists at the reader interface. 
+
+So in this case an event from the API creates a depreciation run entity, and utilizes Spring Batch to process the database of assets in batches while keeping track of the batches fetched using a depreciation batch sequence entity, in the following steps:
+
+1. Define the entities:
+
+    - `DepreciationRun`: Represents the depreciation run entity, which triggers the depreciation process. It may contain information such as the run ID, run date, and any other relevant details.
+
+    - `DepreciationBatchSequence`: Represents the entity used to track the batches of assets fetched during the depreciation process. It may include properties like the batch sequence ID, start index, end index, and the status of the batch (e.g., processed, pending).
+
+2. Create the Spring Batch job and steps:
+
+    - Define a Spring Batch job that encapsulates the depreciation process. This job will execute the depreciation in batches.
+
+    - Create a step within the job that processes a single batch of assets. The step should fetch the assets from the database within a specific range, perform the depreciation calculations for the batch, and update the necessary entities or records accordingly.
+
+3. Implement the service:
+
+    - Create a service class, such as `DepreciationService`, that orchestrates the depreciation process.
+
+    - Implement a method in the service, such as `triggerDepreciation`, that is invoked when a new `DepreciationRun` entity is created. This method starts the Spring Batch job and initiates the depreciation process.
+
+    - The `triggerDepreciation` method can perform additional tasks, such as initializing the depreciation batch sequence entity, setting the initial batch parameters, and persisting the entity in the database.
+
+4. Configure the Spring Batch job:
+
+    - Configure the Spring Batch job using Spring Batch configuration files, annotations, or Java configuration.
+
+    - Define the job parameters, steps, and any necessary listeners or processors for the depreciation batch processing.
+
+    - Implement the logic for fetching assets in batches, performing the depreciation calculations, and updating the database records.
+
+    - Use the depreciation batch sequence entity to keep track of the progress, such as updating the start and end indices of each batch, and marking batches as processed.
+
+The depreciation service orchestrates the process, and the depreciation batch sequence entity keeps track of the progress, allowing you to resume the depreciation process in case of failures or interruptions.
+
+You do have to configure the appropriate transaction management, error handling, and logging mechanisms to ensure the reliability and consistency of the depreciation process.
+
+However, the design of this platform would then become unbelievably complex, would have too much magic and would be hard to maintain. At the moment am still struggling to understand how to keep
+liquibase from dropping the spring-batch tables that I've been using for those Excel file uploads, and I felt I did not need this additional spanner to the works.
+
+This is a sample of how the `DepreciationService` would be implemented:
+
+```java
+@Service
+public class DepreciationService {
+
+    private final DepreciationRunRepository depreciationRunRepository;
+    private final AssetRepository assetRepository;
+    private final DepreciationBatchSequenceRepository depreciationBatchSequenceRepository;
+    private final DepreciationCalculator depreciationCalculator;
+
+    public DepreciationService(DepreciationRunRepository depreciationRunRepository,
+                               AssetRepository assetRepository,
+                               DepreciationBatchSequenceRepository depreciationBatchSequenceRepository,
+                               DepreciationCalculator depreciationCalculator) {
+        this.depreciationRunRepository = depreciationRunRepository;
+        this.assetRepository = assetRepository;
+        this.depreciationBatchSequenceRepository = depreciationBatchSequenceRepository;
+        this.depreciationCalculator = depreciationCalculator;
+    }
+
+    public void triggerDepreciation() {
+        // Create a new DepreciationRun entity
+        DepreciationRun depreciationRun = new DepreciationRun();
+        depreciationRun.setRunDate(LocalDate.now());
+        // Set other properties as needed
+
+        // Save the DepreciationRun entity to the database
+        depreciationRun = depreciationRunRepository.save(depreciationRun);
+
+        // Retrieve the assets from the database
+        List<Asset> assets = assetRepository.findAll();
+
+        // Process the assets in batches
+        int batchSize = 100; // Set the batch size as desired
+        int totalAssets = assets.size();
+        int processedCount = 0;
+
+        while (processedCount < totalAssets) {
+            int startIndex = processedCount;
+            int endIndex = Math.min(processedCount + batchSize, totalAssets);
+
+            // Get the current batch of assets
+            List<Asset> currentBatch = assets.subList(startIndex, endIndex);
+
+            // Perform the depreciation calculations for the current batch
+            for (Asset asset : currentBatch) {
+                // Calculate the depreciation amount using the DepreciationCalculator
+                BigDecimal depreciationAmount = depreciationCalculator.calculateStraightLineDepreciation(asset.getInitialCost(), asset.getResidualValue(), asset.getUsefulLifeYears());
+
+                // Update the asset's net book value and any other relevant data
+                // ...
+
+                // Save the updated asset to the database
+                assetRepository.save(asset);
+            }
+
+            // Create a DepreciationBatchSequence entity to track the processed batch
+            DepreciationBatchSequence batchSequence = new DepreciationBatchSequence();
+            batchSequence.setDepreciationRun(depreciationRun);
+            batchSequence.setStartIndex(startIndex);
+            batchSequence.setEndIndex(endIndex);
+            batchSequence.setStatus("Processed");
+
+            // Save the DepreciationBatchSequence entity to the database
+            depreciationBatchSequenceRepository.save(batchSequence);
+
+            processedCount += batchSize;
+        }
+
+        // Mark the depreciation run as completed
+        depreciationRun.setStatus("Completed");
+        depreciationRunRepository.save(depreciationRun);
+    }
+}
+```
+
+In this example, the `DepreciationService` class triggers the depreciation process when the `triggerDepreciation` method is called. The service depends on repositories (`DepreciationRunRepository`, `AssetRepository`, `DepreciationBatchSequenceRepository`) to access the database and the `DepreciationCalculator` for performing the depreciation calculations.
+
+The `triggerDepreciation` method performs the following steps:
+
+1. Creates a new `DepreciationRun` entity with the current run date and any other relevant properties.
+2. Saves the `DepreciationRun` entity to the database.
+3. Retrieves all the assets from the database.
+4. Processes the assets in batches, with a specified batch size.
+5. Calculates the depreciation amount for each asset using the `DepreciationCalculator`.
+6. Updates the asset's net book value and other relevant data.
+7. Saves
+
+the updated asset to the database.
+8. Creates a `DepreciationBatchSequence` entity to track the processed batch and saves it to the database.
+9. Repeats the process until all assets are processed.
+10. Marks the depreciation run as completed and saves the `DepreciationRun` entity.
+
+This is a sample of how the `DepreciationBatchSequence` entity would be defined:
+
+```java
+import javax.persistence.*;
+
+@Entity
+@Table(name = "depreciation_batch_sequence")
+public class DepreciationBatchSequence {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "depreciation_run_id")
+    private DepreciationRun depreciationRun;
+
+    @Column(name = "start_index")
+    private int startIndex;
+
+    @Column(name = "end_index")
+    private int endIndex;
+
+    @Column(name = "status")
+    private String status; // Indicates the status of the batch (e.g., processed, pending)
+
+    // Constructors, getters, and setters, bla! bla! bla!
+
+    // ...
+}
+```
+
+In this example, the `DepreciationBatchSequence` entity represents a batch sequence within a depreciation run. It includes the following properties:
+
+- `id`: Represents the primary key of the entity.
+- `depreciationRun`: Represents the association to the `DepreciationRun` entity using a Many-to-One relationship. It is annotated with `@ManyToOne` and `@JoinColumn` to establish the relationship.
+- `startIndex`: Represents the start index of the asset batch.
+- `endIndex`: Represents the end index of the asset batch.
+- `status`: Indicates the status of the batch, such as "processed" or "pending".
+
+Of course the actual implementation will include stuff we cannot include in this discussion.
+
+So to reduce complexity, I thought I would have to use kafka. Which brings us full circle. In the beginning
+of this project, kafka was thought of as an additional complexity item to the stack that would just slow the development process. 
+So I this time I made sure I have my justifications down.
+
+I considered the need for the depreciation process to run asynchronously without blocking the response to the client on the API.
+A message queue such as KAFKA would have the following utility:
+
+- Instead of directly triggering the depreciation process, you can publish a message to a message queue.
+- The API endpoint can quickly return a response to the client, indicating that the depreciation process has been scheduled for execution.
+- A separate worker process or a dedicated service subscribes to the message queue and processes the depreciation messages asynchronously.
+- The worker process can execute the depreciation process in the background, independently of the API request/response cycle.
+
+This approach decouples the API from the actual depreciation processing, allowing for scalability and fault tolerance.
+
+There is still the question of additional complexity to the system. You need to set up and manage a Kafka cluster, handle topics, and configure consumers and producers. 
+If the depreciation processing requirements are relatively simple and the volume is low, simple multithreading might be a more straightforward 
+approach without the overhead of managing a separate messaging system. 
+
+But the requirements here are not simple, and the volume is quite high. In fact the whole thing might be another fail if you dare enqueue items in a 
+one by one fashion.
+We want to achieve high processing speeds, but have limited RAM. To achieve high speeds you can send a single message to trigger the depreciationRun, then all those assets
+are read from the database and into the RAM and depreciation begins. To achieve very efficient use of RAM space we could trigger depreciation by sending messages to trigger
+depreciation of individual asset instances into the queue in a one by one fashion. But the process would then be slow, and the processor would run to the max as
+we are repeatedly serializing and deserializing individual items. These are my considerations.
+
+The choice between sending messages for individual assets or sending a single message to trigger the depreciation of all assets depends on the need for speed efficiencies, and space efficiencies
+and processing cheapness. We want it all.  Here are some considerations for both approaches:
+
+1. **Sending messages for individual assets:**
+
+    - **Advantages:**
+        - Flexibility: Sending individual messages allows for fine-grained control over each asset's depreciation process. You can process assets independently and potentially parallelize the depreciation calculations for improved performance.
+        - Reduced memory usage: Processing assets individually can help manage memory usage, especially if you have a large number of assets. You only need to load and process one asset at a time, which can be beneficial if you have limited RAM.
+
+    - **Considerations:**
+        - Message overhead: Sending individual messages for each asset incurs additional overhead due to message serialization, network communication, and the Kafka infrastructure itself. This can impact the overall processing speed, especially if there are a large number of assets.
+        - Message ordering: Depending on your requirements, processing assets individually may introduce ordering challenges. If asset order matters for the depreciation calculations, ensuring correct sequencing of messages can be complex.
+
+2. **Sending a single message for all assets:**
+
+    - **Advantages:**
+        - Reduced message overhead: Sending a single message to trigger the depreciation of all assets reduces the message serialization and communication overhead compared to sending individual messages. This can improve the overall processing speed.
+        - Simplified message ordering: With a single message, you can ensure the correct order of assets for depreciation calculations, as they are processed in a controlled batch sequence.
+
+    - **Considerations:**
+        - Increased memory usage: Processing all assets at once may require loading and keeping all assets in memory simultaneously, which can be memory-intensive. If you have limited RAM, this approach might not be feasible for a large number of assets.
+
+In terms of achieving high processing speed and considering limited RAM, processing assets in batches can be more efficient. It allows you to control the memory usage by loading and processing a subset of assets at a time. 
+However, the exact performance and resource trade-offs depend on factors such as the number of assets, the complexity of depreciation calculations, and the available hardware.
+
+So we strike a balance by using a hybrid approach: send messages in batches rather than for individual assets. This way, you can process assets in manageable batches while minimizing message overhead.
+
+Bear in mind that we are yet to attempt performance testing and profiling to evaluate the impact of each approach and optimize accordingly, but it seems like it might work. Of course there could be something that we've overlooked simultaneously
+wasting weeks of work and shooting ourselves on both feet with the level of complexity we are trying to put together here. When it is complete I will be sure to hide the kafka infrastructure behind opaque walls of
+interfaces to make sure we do not interact with the business code itself. 
+
+This is how the depreciation process has been designed to work.
