@@ -278,8 +278,10 @@ Keep in mind that this is a simplified example and that there have been modifica
 because our stack also runs a several search-index and the services are good at hiding the nature of that complexity and in fact look like exact replicas of repositories, but they are not.
 You would need to adjust the code to match your database schema, entity relationships, and persistence framework (e.g., Hibernate). Also I looked
 everywhere online and could not find anyone who had suggested a process for assets depreciation while interacting with an SQL sink. So some of the 
-overview ideas I generated with chatGPT. It was interesting to see that I could look at a general idea with this tool and scaffold the same in code
-and think about how to integrate that into ERP. Many designs and patterns failed, and I would reiterate again. So proper references do not exist at the moment, and this is really a shot in the dark.
+overview ideas I was working on while using chatGPT, as something like a `brain-storm partner`. Let's give credit where its due. 
+It was interesting to see that I could look at a general idea with this tool and scaffold the same in code
+and think about how to integrate that into ERP. It helped me look at many perspectives, and concepts and to "see" others
+which I had not considered. Many designs and patterns failed, and I would reiterate again. So proper references do not exist at the moment, and this is really a shot in the dark.
 
 Ultimately I saw that such a process could not be done synchronously with the client waiting for the response. 
 Even when done asynchronously it would be too inefficient to attempt this with every single instance, because the 
