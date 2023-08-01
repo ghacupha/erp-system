@@ -71,6 +71,8 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
 
     private LongFilter previousPeriodId;
 
+    private LongFilter createdById;
+
     private Boolean distinct;
 
     public DepreciationPeriodCriteria() {}
@@ -81,6 +83,7 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
         this.endDate = other.endDate == null ? null : other.endDate.copy();
         this.depreciationPeriodStatus = other.depreciationPeriodStatus == null ? null : other.depreciationPeriodStatus.copy();
         this.previousPeriodId = other.previousPeriodId == null ? null : other.previousPeriodId.copy();
+        this.createdById = other.createdById == null ? null : other.createdById.copy();
         this.distinct = other.distinct;
     }
 
@@ -164,6 +167,21 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
         this.previousPeriodId = previousPeriodId;
     }
 
+    public LongFilter getCreatedById() {
+        return createdById;
+    }
+
+    public LongFilter createdById() {
+        if (createdById == null) {
+            createdById = new LongFilter();
+        }
+        return createdById;
+    }
+
+    public void setCreatedById(LongFilter createdById) {
+        this.createdById = createdById;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -187,13 +205,14 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
             Objects.equals(endDate, that.endDate) &&
             Objects.equals(depreciationPeriodStatus, that.depreciationPeriodStatus) &&
             Objects.equals(previousPeriodId, that.previousPeriodId) &&
+            Objects.equals(createdById, that.createdById) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, startDate, endDate, depreciationPeriodStatus, previousPeriodId, distinct);
+        return Objects.hash(id, startDate, endDate, depreciationPeriodStatus, previousPeriodId, createdById, distinct);
     }
 
     // prettier-ignore
@@ -205,6 +224,7 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
             (endDate != null ? "endDate=" + endDate + ", " : "") +
             (depreciationPeriodStatus != null ? "depreciationPeriodStatus=" + depreciationPeriodStatus + ", " : "") +
             (previousPeriodId != null ? "previousPeriodId=" + previousPeriodId + ", " : "") +
+            (createdById != null ? "createdById=" + createdById + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

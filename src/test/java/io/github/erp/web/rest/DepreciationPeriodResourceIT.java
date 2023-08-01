@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.ApplicationUser;
 import io.github.erp.domain.DepreciationPeriod;
 import io.github.erp.domain.DepreciationPeriod;
 import io.github.erp.domain.enumeration.DepreciationPeriodStatusTypes;
@@ -570,6 +571,32 @@ class DepreciationPeriodResourceIT {
 
         // Get all the depreciationPeriodList where previousPeriod equals to (previousPeriodId + 1)
         defaultDepreciationPeriodShouldNotBeFound("previousPeriodId.equals=" + (previousPeriodId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationPeriodsByCreatedByIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
+        ApplicationUser createdBy;
+        if (TestUtil.findAll(em, ApplicationUser.class).isEmpty()) {
+            createdBy = ApplicationUserResourceIT.createEntity(em);
+            em.persist(createdBy);
+            em.flush();
+        } else {
+            createdBy = TestUtil.findAll(em, ApplicationUser.class).get(0);
+        }
+        em.persist(createdBy);
+        em.flush();
+        depreciationPeriod.setCreatedBy(createdBy);
+        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
+        Long createdById = createdBy.getId();
+
+        // Get all the depreciationPeriodList where createdBy equals to createdById
+        defaultDepreciationPeriodShouldBeFound("createdById.equals=" + createdById);
+
+        // Get all the depreciationPeriodList where createdBy equals to (createdById + 1)
+        defaultDepreciationPeriodShouldNotBeFound("createdById.equals=" + (createdById + 1));
     }
 
     /**
