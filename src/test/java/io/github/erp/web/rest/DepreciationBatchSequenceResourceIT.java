@@ -1,22 +1,6 @@
 package io.github.erp.web.rest;
 
-/*-
- * Erp System - Mark IV No 2 (Ehud Series) Server ver 1.3.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+import static io.github.erp.web.rest.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -32,6 +16,10 @@ import io.github.erp.repository.search.DepreciationBatchSequenceSearchRepository
 import io.github.erp.service.criteria.DepreciationBatchSequenceCriteria;
 import io.github.erp.service.dto.DepreciationBatchSequenceDTO;
 import io.github.erp.service.mapper.DepreciationBatchSequenceMapper;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -67,6 +55,10 @@ class DepreciationBatchSequenceResourceIT {
     private static final Integer DEFAULT_END_INDEX = 1;
     private static final Integer UPDATED_END_INDEX = 2;
     private static final Integer SMALLER_END_INDEX = 1 - 1;
+
+    private static final ZonedDateTime DEFAULT_CREATED_AT = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_CREATED_AT = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final ZonedDateTime SMALLER_CREATED_AT = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
 
     private static final DepreciationBatchStatusType DEFAULT_DEPRECIATION_BATCH_STATUS = DepreciationBatchStatusType.CREATED;
     private static final DepreciationBatchStatusType UPDATED_DEPRECIATION_BATCH_STATUS = DepreciationBatchStatusType.RUNNING;
@@ -110,6 +102,7 @@ class DepreciationBatchSequenceResourceIT {
         DepreciationBatchSequence depreciationBatchSequence = new DepreciationBatchSequence()
             .startIndex(DEFAULT_START_INDEX)
             .endIndex(DEFAULT_END_INDEX)
+            .createdAt(DEFAULT_CREATED_AT)
             .depreciationBatchStatus(DEFAULT_DEPRECIATION_BATCH_STATUS);
         return depreciationBatchSequence;
     }
@@ -124,6 +117,7 @@ class DepreciationBatchSequenceResourceIT {
         DepreciationBatchSequence depreciationBatchSequence = new DepreciationBatchSequence()
             .startIndex(UPDATED_START_INDEX)
             .endIndex(UPDATED_END_INDEX)
+            .createdAt(UPDATED_CREATED_AT)
             .depreciationBatchStatus(UPDATED_DEPRECIATION_BATCH_STATUS);
         return depreciationBatchSequence;
     }
@@ -155,6 +149,7 @@ class DepreciationBatchSequenceResourceIT {
         );
         assertThat(testDepreciationBatchSequence.getStartIndex()).isEqualTo(DEFAULT_START_INDEX);
         assertThat(testDepreciationBatchSequence.getEndIndex()).isEqualTo(DEFAULT_END_INDEX);
+        assertThat(testDepreciationBatchSequence.getCreatedAt()).isEqualTo(DEFAULT_CREATED_AT);
         assertThat(testDepreciationBatchSequence.getDepreciationBatchStatus()).isEqualTo(DEFAULT_DEPRECIATION_BATCH_STATUS);
 
         // Validate the DepreciationBatchSequence in Elasticsearch
@@ -201,6 +196,7 @@ class DepreciationBatchSequenceResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(depreciationBatchSequence.getId().intValue())))
             .andExpect(jsonPath("$.[*].startIndex").value(hasItem(DEFAULT_START_INDEX)))
             .andExpect(jsonPath("$.[*].endIndex").value(hasItem(DEFAULT_END_INDEX)))
+            .andExpect(jsonPath("$.[*].createdAt").value(hasItem(sameInstant(DEFAULT_CREATED_AT))))
             .andExpect(jsonPath("$.[*].depreciationBatchStatus").value(hasItem(DEFAULT_DEPRECIATION_BATCH_STATUS.toString())));
     }
 
@@ -218,6 +214,7 @@ class DepreciationBatchSequenceResourceIT {
             .andExpect(jsonPath("$.id").value(depreciationBatchSequence.getId().intValue()))
             .andExpect(jsonPath("$.startIndex").value(DEFAULT_START_INDEX))
             .andExpect(jsonPath("$.endIndex").value(DEFAULT_END_INDEX))
+            .andExpect(jsonPath("$.createdAt").value(sameInstant(DEFAULT_CREATED_AT)))
             .andExpect(jsonPath("$.depreciationBatchStatus").value(DEFAULT_DEPRECIATION_BATCH_STATUS.toString()));
     }
 
@@ -449,6 +446,110 @@ class DepreciationBatchSequenceResourceIT {
 
     @Test
     @Transactional
+    void getAllDepreciationBatchSequencesByCreatedAtIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where createdAt equals to DEFAULT_CREATED_AT
+        defaultDepreciationBatchSequenceShouldBeFound("createdAt.equals=" + DEFAULT_CREATED_AT);
+
+        // Get all the depreciationBatchSequenceList where createdAt equals to UPDATED_CREATED_AT
+        defaultDepreciationBatchSequenceShouldNotBeFound("createdAt.equals=" + UPDATED_CREATED_AT);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByCreatedAtIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where createdAt not equals to DEFAULT_CREATED_AT
+        defaultDepreciationBatchSequenceShouldNotBeFound("createdAt.notEquals=" + DEFAULT_CREATED_AT);
+
+        // Get all the depreciationBatchSequenceList where createdAt not equals to UPDATED_CREATED_AT
+        defaultDepreciationBatchSequenceShouldBeFound("createdAt.notEquals=" + UPDATED_CREATED_AT);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByCreatedAtIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where createdAt in DEFAULT_CREATED_AT or UPDATED_CREATED_AT
+        defaultDepreciationBatchSequenceShouldBeFound("createdAt.in=" + DEFAULT_CREATED_AT + "," + UPDATED_CREATED_AT);
+
+        // Get all the depreciationBatchSequenceList where createdAt equals to UPDATED_CREATED_AT
+        defaultDepreciationBatchSequenceShouldNotBeFound("createdAt.in=" + UPDATED_CREATED_AT);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByCreatedAtIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where createdAt is not null
+        defaultDepreciationBatchSequenceShouldBeFound("createdAt.specified=true");
+
+        // Get all the depreciationBatchSequenceList where createdAt is null
+        defaultDepreciationBatchSequenceShouldNotBeFound("createdAt.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByCreatedAtIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where createdAt is greater than or equal to DEFAULT_CREATED_AT
+        defaultDepreciationBatchSequenceShouldBeFound("createdAt.greaterThanOrEqual=" + DEFAULT_CREATED_AT);
+
+        // Get all the depreciationBatchSequenceList where createdAt is greater than or equal to UPDATED_CREATED_AT
+        defaultDepreciationBatchSequenceShouldNotBeFound("createdAt.greaterThanOrEqual=" + UPDATED_CREATED_AT);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByCreatedAtIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where createdAt is less than or equal to DEFAULT_CREATED_AT
+        defaultDepreciationBatchSequenceShouldBeFound("createdAt.lessThanOrEqual=" + DEFAULT_CREATED_AT);
+
+        // Get all the depreciationBatchSequenceList where createdAt is less than or equal to SMALLER_CREATED_AT
+        defaultDepreciationBatchSequenceShouldNotBeFound("createdAt.lessThanOrEqual=" + SMALLER_CREATED_AT);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByCreatedAtIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where createdAt is less than DEFAULT_CREATED_AT
+        defaultDepreciationBatchSequenceShouldNotBeFound("createdAt.lessThan=" + DEFAULT_CREATED_AT);
+
+        // Get all the depreciationBatchSequenceList where createdAt is less than UPDATED_CREATED_AT
+        defaultDepreciationBatchSequenceShouldBeFound("createdAt.lessThan=" + UPDATED_CREATED_AT);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByCreatedAtIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where createdAt is greater than DEFAULT_CREATED_AT
+        defaultDepreciationBatchSequenceShouldNotBeFound("createdAt.greaterThan=" + DEFAULT_CREATED_AT);
+
+        // Get all the depreciationBatchSequenceList where createdAt is greater than SMALLER_CREATED_AT
+        defaultDepreciationBatchSequenceShouldBeFound("createdAt.greaterThan=" + SMALLER_CREATED_AT);
+    }
+
+    @Test
+    @Transactional
     void getAllDepreciationBatchSequencesByDepreciationBatchStatusIsEqualToSomething() throws Exception {
         // Initialize the database
         depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
@@ -538,6 +639,7 @@ class DepreciationBatchSequenceResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(depreciationBatchSequence.getId().intValue())))
             .andExpect(jsonPath("$.[*].startIndex").value(hasItem(DEFAULT_START_INDEX)))
             .andExpect(jsonPath("$.[*].endIndex").value(hasItem(DEFAULT_END_INDEX)))
+            .andExpect(jsonPath("$.[*].createdAt").value(hasItem(sameInstant(DEFAULT_CREATED_AT))))
             .andExpect(jsonPath("$.[*].depreciationBatchStatus").value(hasItem(DEFAULT_DEPRECIATION_BATCH_STATUS.toString())));
 
         // Check, that the count call also returns 1
@@ -591,6 +693,7 @@ class DepreciationBatchSequenceResourceIT {
         updatedDepreciationBatchSequence
             .startIndex(UPDATED_START_INDEX)
             .endIndex(UPDATED_END_INDEX)
+            .createdAt(UPDATED_CREATED_AT)
             .depreciationBatchStatus(UPDATED_DEPRECIATION_BATCH_STATUS);
         DepreciationBatchSequenceDTO depreciationBatchSequenceDTO = depreciationBatchSequenceMapper.toDto(updatedDepreciationBatchSequence);
 
@@ -610,6 +713,7 @@ class DepreciationBatchSequenceResourceIT {
         );
         assertThat(testDepreciationBatchSequence.getStartIndex()).isEqualTo(UPDATED_START_INDEX);
         assertThat(testDepreciationBatchSequence.getEndIndex()).isEqualTo(UPDATED_END_INDEX);
+        assertThat(testDepreciationBatchSequence.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
         assertThat(testDepreciationBatchSequence.getDepreciationBatchStatus()).isEqualTo(UPDATED_DEPRECIATION_BATCH_STATUS);
 
         // Validate the DepreciationBatchSequence in Elasticsearch
@@ -706,6 +810,8 @@ class DepreciationBatchSequenceResourceIT {
         DepreciationBatchSequence partialUpdatedDepreciationBatchSequence = new DepreciationBatchSequence();
         partialUpdatedDepreciationBatchSequence.setId(depreciationBatchSequence.getId());
 
+        partialUpdatedDepreciationBatchSequence.depreciationBatchStatus(UPDATED_DEPRECIATION_BATCH_STATUS);
+
         restDepreciationBatchSequenceMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedDepreciationBatchSequence.getId())
@@ -722,7 +828,8 @@ class DepreciationBatchSequenceResourceIT {
         );
         assertThat(testDepreciationBatchSequence.getStartIndex()).isEqualTo(DEFAULT_START_INDEX);
         assertThat(testDepreciationBatchSequence.getEndIndex()).isEqualTo(DEFAULT_END_INDEX);
-        assertThat(testDepreciationBatchSequence.getDepreciationBatchStatus()).isEqualTo(DEFAULT_DEPRECIATION_BATCH_STATUS);
+        assertThat(testDepreciationBatchSequence.getCreatedAt()).isEqualTo(DEFAULT_CREATED_AT);
+        assertThat(testDepreciationBatchSequence.getDepreciationBatchStatus()).isEqualTo(UPDATED_DEPRECIATION_BATCH_STATUS);
     }
 
     @Test
@@ -740,6 +847,7 @@ class DepreciationBatchSequenceResourceIT {
         partialUpdatedDepreciationBatchSequence
             .startIndex(UPDATED_START_INDEX)
             .endIndex(UPDATED_END_INDEX)
+            .createdAt(UPDATED_CREATED_AT)
             .depreciationBatchStatus(UPDATED_DEPRECIATION_BATCH_STATUS);
 
         restDepreciationBatchSequenceMockMvc
@@ -758,6 +866,7 @@ class DepreciationBatchSequenceResourceIT {
         );
         assertThat(testDepreciationBatchSequence.getStartIndex()).isEqualTo(UPDATED_START_INDEX);
         assertThat(testDepreciationBatchSequence.getEndIndex()).isEqualTo(UPDATED_END_INDEX);
+        assertThat(testDepreciationBatchSequence.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
         assertThat(testDepreciationBatchSequence.getDepreciationBatchStatus()).isEqualTo(UPDATED_DEPRECIATION_BATCH_STATUS);
     }
 
@@ -877,6 +986,7 @@ class DepreciationBatchSequenceResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(depreciationBatchSequence.getId().intValue())))
             .andExpect(jsonPath("$.[*].startIndex").value(hasItem(DEFAULT_START_INDEX)))
             .andExpect(jsonPath("$.[*].endIndex").value(hasItem(DEFAULT_END_INDEX)))
+            .andExpect(jsonPath("$.[*].createdAt").value(hasItem(sameInstant(DEFAULT_CREATED_AT))))
             .andExpect(jsonPath("$.[*].depreciationBatchStatus").value(hasItem(DEFAULT_DEPRECIATION_BATCH_STATUS.toString())));
     }
 }

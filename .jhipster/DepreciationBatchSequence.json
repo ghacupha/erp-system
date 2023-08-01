@@ -9,9 +9,13 @@
       "fieldType": "Integer"
     },
     {
+      "fieldName": "createdAt",
+      "fieldType": "ZonedDateTime"
+    },
+    {
       "fieldName": "depreciationBatchStatus",
       "fieldType": "DepreciationBatchStatusType",
-      "fieldValues": "CREATED,RUNNING,COMPLETED,ERRORED"
+      "fieldValues": "CREATED,RUNNING,COMPLETED,ERRORED,ENQUEUED"
     }
   ],
   "relationships": [

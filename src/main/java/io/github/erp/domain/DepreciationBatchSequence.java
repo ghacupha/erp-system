@@ -1,25 +1,9 @@
 package io.github.erp.domain;
 
-/*-
- * Erp System - Mark IV No 2 (Ehud Series) Server ver 1.3.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -46,6 +30,9 @@ public class DepreciationBatchSequence implements Serializable {
 
     @Column(name = "end_index")
     private Integer endIndex;
+
+    @Column(name = "created_at")
+    private ZonedDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "depreciation_batch_status")
@@ -94,6 +81,19 @@ public class DepreciationBatchSequence implements Serializable {
 
     public void setEndIndex(Integer endIndex) {
         this.endIndex = endIndex;
+    }
+
+    public ZonedDateTime getCreatedAt() {
+        return this.createdAt;
+    }
+
+    public DepreciationBatchSequence createdAt(ZonedDateTime createdAt) {
+        this.setCreatedAt(createdAt);
+        return this;
+    }
+
+    public void setCreatedAt(ZonedDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public DepreciationBatchStatusType getDepreciationBatchStatus() {
@@ -148,6 +148,7 @@ public class DepreciationBatchSequence implements Serializable {
             "id=" + getId() +
             ", startIndex=" + getStartIndex() +
             ", endIndex=" + getEndIndex() +
+            ", createdAt='" + getCreatedAt() + "'" +
             ", depreciationBatchStatus='" + getDepreciationBatchStatus() + "'" +
             "}";
     }

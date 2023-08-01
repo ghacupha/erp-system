@@ -1,22 +1,5 @@
 package io.github.erp.service.criteria;
 
-/*-
- * Erp System - Mark IV No 2 (Ehud Series) Server ver 1.3.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import java.io.Serializable;
 import java.util.Objects;
@@ -28,6 +11,7 @@ import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
+import tech.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
  * Criteria class for the {@link io.github.erp.domain.DepreciationBatchSequence} entity. This class is used
@@ -65,6 +49,8 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
 
     private IntegerFilter endIndex;
 
+    private ZonedDateTimeFilter createdAt;
+
     private DepreciationBatchStatusTypeFilter depreciationBatchStatus;
 
     private LongFilter depreciationJobId;
@@ -77,6 +63,7 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
         this.id = other.id == null ? null : other.id.copy();
         this.startIndex = other.startIndex == null ? null : other.startIndex.copy();
         this.endIndex = other.endIndex == null ? null : other.endIndex.copy();
+        this.createdAt = other.createdAt == null ? null : other.createdAt.copy();
         this.depreciationBatchStatus = other.depreciationBatchStatus == null ? null : other.depreciationBatchStatus.copy();
         this.depreciationJobId = other.depreciationJobId == null ? null : other.depreciationJobId.copy();
         this.distinct = other.distinct;
@@ -132,6 +119,21 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
         this.endIndex = endIndex;
     }
 
+    public ZonedDateTimeFilter getCreatedAt() {
+        return createdAt;
+    }
+
+    public ZonedDateTimeFilter createdAt() {
+        if (createdAt == null) {
+            createdAt = new ZonedDateTimeFilter();
+        }
+        return createdAt;
+    }
+
+    public void setCreatedAt(ZonedDateTimeFilter createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public DepreciationBatchStatusTypeFilter getDepreciationBatchStatus() {
         return depreciationBatchStatus;
     }
@@ -183,6 +185,7 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
             Objects.equals(id, that.id) &&
             Objects.equals(startIndex, that.startIndex) &&
             Objects.equals(endIndex, that.endIndex) &&
+            Objects.equals(createdAt, that.createdAt) &&
             Objects.equals(depreciationBatchStatus, that.depreciationBatchStatus) &&
             Objects.equals(depreciationJobId, that.depreciationJobId) &&
             Objects.equals(distinct, that.distinct)
@@ -191,7 +194,7 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, startIndex, endIndex, depreciationBatchStatus, depreciationJobId, distinct);
+        return Objects.hash(id, startIndex, endIndex, createdAt, depreciationBatchStatus, depreciationJobId, distinct);
     }
 
     // prettier-ignore
@@ -201,6 +204,7 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
             (id != null ? "id=" + id + ", " : "") +
             (startIndex != null ? "startIndex=" + startIndex + ", " : "") +
             (endIndex != null ? "endIndex=" + endIndex + ", " : "") +
+            (createdAt != null ? "createdAt=" + createdAt + ", " : "") +
             (depreciationBatchStatus != null ? "depreciationBatchStatus=" + depreciationBatchStatus + ", " : "") +
             (depreciationJobId != null ? "depreciationJobId=" + depreciationJobId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
