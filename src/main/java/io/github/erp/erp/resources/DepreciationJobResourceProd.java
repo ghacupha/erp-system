@@ -62,9 +62,9 @@ public class DepreciationJobResourceProd {
     private final DepreciationJobService depreciationJobService;
     private final DepreciationJobRepository depreciationJobRepository;
     private final DepreciationJobQueryService depreciationJobQueryService;
-    private final DepreciationJobSequenceService depreciationJobSequenceService;
+    private final DepreciationJobSequenceService<DepreciationJobDTO> depreciationJobSequenceService;
 
-    public DepreciationJobResourceProd(DepreciationJobService depreciationJobService, DepreciationJobRepository depreciationJobRepository, DepreciationJobQueryService depreciationJobQueryService, DepreciationJobSequenceService depreciationJobSequenceService) {
+    public DepreciationJobResourceProd(DepreciationJobService depreciationJobService, DepreciationJobRepository depreciationJobRepository, DepreciationJobQueryService depreciationJobQueryService, DepreciationJobSequenceService<DepreciationJobDTO> depreciationJobSequenceService) {
         this.depreciationJobService = depreciationJobService;
         this.depreciationJobRepository = depreciationJobRepository;
         this.depreciationJobQueryService = depreciationJobQueryService;
