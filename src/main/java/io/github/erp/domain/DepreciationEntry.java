@@ -92,7 +92,7 @@ public class DepreciationEntry implements Serializable {
     private AssetRegistration assetRegistration;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "previousPeriod" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "previousPeriod", "createdBy" }, allowSetters = true)
     private DepreciationPeriod depreciationPeriod;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

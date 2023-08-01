@@ -56,10 +56,17 @@ public class DepreciationPeriod implements Serializable {
     @Column(name = "depreciation_period_status")
     private DepreciationPeriodStatusTypes depreciationPeriodStatus;
 
-    @JsonIgnoreProperties(value = { "previousPeriod" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "previousPeriod", "createdBy" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
     private DepreciationPeriod previousPeriod;
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = { "organization", "department", "securityClearance", "systemIdentity", "userProperties", "dealerIdentity", "placeholders" },
+        allowSetters = true
+    )
+    private ApplicationUser createdBy;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -125,6 +132,19 @@ public class DepreciationPeriod implements Serializable {
 
     public DepreciationPeriod previousPeriod(DepreciationPeriod depreciationPeriod) {
         this.setPreviousPeriod(depreciationPeriod);
+        return this;
+    }
+
+    public ApplicationUser getCreatedBy() {
+        return this.createdBy;
+    }
+
+    public void setCreatedBy(ApplicationUser applicationUser) {
+        this.createdBy = applicationUser;
+    }
+
+    public DepreciationPeriod createdBy(ApplicationUser applicationUser) {
+        this.setCreatedBy(applicationUser);
         return this;
     }
 

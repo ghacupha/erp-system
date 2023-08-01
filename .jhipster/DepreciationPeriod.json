@@ -25,6 +25,12 @@
       "ownerSide": true,
       "id": false,
       "otherEntityRelationshipName": "nextPeriod"
+    },
+    {
+      "relationshipName": "createdBy",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "applicationIdentity"
     }
   ],
   "service": "serviceImpl",

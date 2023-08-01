@@ -19,6 +19,7 @@ package io.github.erp.erp.resources;
  */
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.ApplicationUser;
 import io.github.erp.domain.DepreciationPeriod;
 import io.github.erp.domain.enumeration.DepreciationPeriodStatusTypes;
 import io.github.erp.repository.DepreciationPeriodRepository;
@@ -60,7 +61,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser(roles = {"FIXED_ASSETS_USER"})
+@WithMockUser
 class DepreciationPeriodResourceIT {
 
     private static final LocalDate DEFAULT_START_DATE = LocalDate.ofEpochDay(0L);
@@ -74,9 +75,9 @@ class DepreciationPeriodResourceIT {
     private static final DepreciationPeriodStatusTypes DEFAULT_DEPRECIATION_PERIOD_STATUS = DepreciationPeriodStatusTypes.OPEN;
     private static final DepreciationPeriodStatusTypes UPDATED_DEPRECIATION_PERIOD_STATUS = DepreciationPeriodStatusTypes.CLOSED;
 
-    private static final String ENTITY_API_URL = "/api/fixed-asset/depreciation-periods";
+    private static final String ENTITY_API_URL = "/api/depreciation-periods";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/fixed-asset/_search/depreciation-periods";
+    private static final String ENTITY_SEARCH_API_URL = "/api/_search/depreciation-periods";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
@@ -570,6 +571,32 @@ class DepreciationPeriodResourceIT {
 
         // Get all the depreciationPeriodList where previousPeriod equals to (previousPeriodId + 1)
         defaultDepreciationPeriodShouldNotBeFound("previousPeriodId.equals=" + (previousPeriodId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationPeriodsByCreatedByIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
+        ApplicationUser createdBy;
+        if (TestUtil.findAll(em, ApplicationUser.class).isEmpty()) {
+            createdBy = ApplicationUserResourceIT.createEntity(em);
+            em.persist(createdBy);
+            em.flush();
+        } else {
+            createdBy = TestUtil.findAll(em, ApplicationUser.class).get(0);
+        }
+        em.persist(createdBy);
+        em.flush();
+        depreciationPeriod.setCreatedBy(createdBy);
+        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
+        Long createdById = createdBy.getId();
+
+        // Get all the depreciationPeriodList where createdBy equals to createdById
+        defaultDepreciationPeriodShouldBeFound("createdById.equals=" + createdById);
+
+        // Get all the depreciationPeriodList where createdBy equals to (createdById + 1)
+        defaultDepreciationPeriodShouldNotBeFound("createdById.equals=" + (createdById + 1));
     }
 
     /**

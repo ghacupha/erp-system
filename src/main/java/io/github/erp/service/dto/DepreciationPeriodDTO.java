@@ -41,6 +41,8 @@ public class DepreciationPeriodDTO implements Serializable {
 
     private DepreciationPeriodDTO previousPeriod;
 
+    private ApplicationUserDTO createdBy;
+
     public Long getId() {
         return id;
     }
@@ -81,6 +83,14 @@ public class DepreciationPeriodDTO implements Serializable {
         this.previousPeriod = previousPeriod;
     }
 
+    public ApplicationUserDTO getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(ApplicationUserDTO createdBy) {
+        this.createdBy = createdBy;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -111,6 +121,7 @@ public class DepreciationPeriodDTO implements Serializable {
             ", endDate='" + getEndDate() + "'" +
             ", depreciationPeriodStatus='" + getDepreciationPeriodStatus() + "'" +
             ", previousPeriod=" + getPreviousPeriod() +
+            ", createdBy=" + getCreatedBy() +
             "}";
     }
 }
