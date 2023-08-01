@@ -104,6 +104,12 @@ public class DepreciationPeriodQueryService extends QueryService<DepreciationPer
             if (criteria.getEndDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getEndDate(), DepreciationPeriod_.endDate));
             }
+            if (criteria.getDepreciationPeriodStatus() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getDepreciationPeriodStatus(), DepreciationPeriod_.depreciationPeriodStatus)
+                    );
+            }
             if (criteria.getPreviousPeriodId() != null) {
                 specification =
                     specification.and(

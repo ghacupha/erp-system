@@ -1,6 +1,7 @@
 package io.github.erp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.github.erp.domain.enumeration.DepreciationPeriodStatusTypes;
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.*;
@@ -32,6 +33,10 @@ public class DepreciationPeriod implements Serializable {
     @NotNull
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "depreciation_period_status")
+    private DepreciationPeriodStatusTypes depreciationPeriodStatus;
 
     @JsonIgnoreProperties(value = { "previousPeriod" }, allowSetters = true)
     @OneToOne
@@ -79,6 +84,19 @@ public class DepreciationPeriod implements Serializable {
         this.endDate = endDate;
     }
 
+    public DepreciationPeriodStatusTypes getDepreciationPeriodStatus() {
+        return this.depreciationPeriodStatus;
+    }
+
+    public DepreciationPeriod depreciationPeriodStatus(DepreciationPeriodStatusTypes depreciationPeriodStatus) {
+        this.setDepreciationPeriodStatus(depreciationPeriodStatus);
+        return this;
+    }
+
+    public void setDepreciationPeriodStatus(DepreciationPeriodStatusTypes depreciationPeriodStatus) {
+        this.depreciationPeriodStatus = depreciationPeriodStatus;
+    }
+
     public DepreciationPeriod getPreviousPeriod() {
         return this.previousPeriod;
     }
@@ -118,6 +136,7 @@ public class DepreciationPeriod implements Serializable {
             "id=" + getId() +
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
+            ", depreciationPeriodStatus='" + getDepreciationPeriodStatus() + "'" +
             "}";
     }
 }

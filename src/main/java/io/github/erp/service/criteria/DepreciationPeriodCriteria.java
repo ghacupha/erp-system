@@ -1,5 +1,6 @@
 package io.github.erp.service.criteria;
 
+import io.github.erp.domain.enumeration.DepreciationPeriodStatusTypes;
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -23,6 +24,23 @@ import tech.jhipster.service.filter.StringFilter;
  */
 public class DepreciationPeriodCriteria implements Serializable, Criteria {
 
+    /**
+     * Class for filtering DepreciationPeriodStatusTypes
+     */
+    public static class DepreciationPeriodStatusTypesFilter extends Filter<DepreciationPeriodStatusTypes> {
+
+        public DepreciationPeriodStatusTypesFilter() {}
+
+        public DepreciationPeriodStatusTypesFilter(DepreciationPeriodStatusTypesFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public DepreciationPeriodStatusTypesFilter copy() {
+            return new DepreciationPeriodStatusTypesFilter(this);
+        }
+    }
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
@@ -30,6 +48,8 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
     private LocalDateFilter startDate;
 
     private LocalDateFilter endDate;
+
+    private DepreciationPeriodStatusTypesFilter depreciationPeriodStatus;
 
     private LongFilter previousPeriodId;
 
@@ -41,6 +61,7 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.startDate = other.startDate == null ? null : other.startDate.copy();
         this.endDate = other.endDate == null ? null : other.endDate.copy();
+        this.depreciationPeriodStatus = other.depreciationPeriodStatus == null ? null : other.depreciationPeriodStatus.copy();
         this.previousPeriodId = other.previousPeriodId == null ? null : other.previousPeriodId.copy();
         this.distinct = other.distinct;
     }
@@ -95,6 +116,21 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
         this.endDate = endDate;
     }
 
+    public DepreciationPeriodStatusTypesFilter getDepreciationPeriodStatus() {
+        return depreciationPeriodStatus;
+    }
+
+    public DepreciationPeriodStatusTypesFilter depreciationPeriodStatus() {
+        if (depreciationPeriodStatus == null) {
+            depreciationPeriodStatus = new DepreciationPeriodStatusTypesFilter();
+        }
+        return depreciationPeriodStatus;
+    }
+
+    public void setDepreciationPeriodStatus(DepreciationPeriodStatusTypesFilter depreciationPeriodStatus) {
+        this.depreciationPeriodStatus = depreciationPeriodStatus;
+    }
+
     public LongFilter getPreviousPeriodId() {
         return previousPeriodId;
     }
@@ -131,6 +167,7 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(startDate, that.startDate) &&
             Objects.equals(endDate, that.endDate) &&
+            Objects.equals(depreciationPeriodStatus, that.depreciationPeriodStatus) &&
             Objects.equals(previousPeriodId, that.previousPeriodId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -138,7 +175,7 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, startDate, endDate, previousPeriodId, distinct);
+        return Objects.hash(id, startDate, endDate, depreciationPeriodStatus, previousPeriodId, distinct);
     }
 
     // prettier-ignore
@@ -148,6 +185,7 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (startDate != null ? "startDate=" + startDate + ", " : "") +
             (endDate != null ? "endDate=" + endDate + ", " : "") +
+            (depreciationPeriodStatus != null ? "depreciationPeriodStatus=" + depreciationPeriodStatus + ", " : "") +
             (previousPeriodId != null ? "previousPeriodId=" + previousPeriodId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.DepreciationPeriod;
 import io.github.erp.domain.DepreciationPeriod;
+import io.github.erp.domain.enumeration.DepreciationPeriodStatusTypes;
 import io.github.erp.repository.DepreciationPeriodRepository;
 import io.github.erp.repository.search.DepreciationPeriodSearchRepository;
 import io.github.erp.service.criteria.DepreciationPeriodCriteria;
@@ -52,6 +53,9 @@ class DepreciationPeriodResourceIT {
     private static final LocalDate UPDATED_END_DATE = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_END_DATE = LocalDate.ofEpochDay(-1L);
 
+    private static final DepreciationPeriodStatusTypes DEFAULT_DEPRECIATION_PERIOD_STATUS = DepreciationPeriodStatusTypes.OPEN;
+    private static final DepreciationPeriodStatusTypes UPDATED_DEPRECIATION_PERIOD_STATUS = DepreciationPeriodStatusTypes.CLOSED;
+
     private static final String ENTITY_API_URL = "/api/depreciation-periods";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/depreciation-periods";
@@ -88,7 +92,10 @@ class DepreciationPeriodResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static DepreciationPeriod createEntity(EntityManager em) {
-        DepreciationPeriod depreciationPeriod = new DepreciationPeriod().startDate(DEFAULT_START_DATE).endDate(DEFAULT_END_DATE);
+        DepreciationPeriod depreciationPeriod = new DepreciationPeriod()
+            .startDate(DEFAULT_START_DATE)
+            .endDate(DEFAULT_END_DATE)
+            .depreciationPeriodStatus(DEFAULT_DEPRECIATION_PERIOD_STATUS);
         return depreciationPeriod;
     }
 
@@ -99,7 +106,10 @@ class DepreciationPeriodResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static DepreciationPeriod createUpdatedEntity(EntityManager em) {
-        DepreciationPeriod depreciationPeriod = new DepreciationPeriod().startDate(UPDATED_START_DATE).endDate(UPDATED_END_DATE);
+        DepreciationPeriod depreciationPeriod = new DepreciationPeriod()
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE)
+            .depreciationPeriodStatus(UPDATED_DEPRECIATION_PERIOD_STATUS);
         return depreciationPeriod;
     }
 
@@ -128,6 +138,7 @@ class DepreciationPeriodResourceIT {
         DepreciationPeriod testDepreciationPeriod = depreciationPeriodList.get(depreciationPeriodList.size() - 1);
         assertThat(testDepreciationPeriod.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testDepreciationPeriod.getEndDate()).isEqualTo(DEFAULT_END_DATE);
+        assertThat(testDepreciationPeriod.getDepreciationPeriodStatus()).isEqualTo(DEFAULT_DEPRECIATION_PERIOD_STATUS);
 
         // Validate the DepreciationPeriod in Elasticsearch
         verify(mockDepreciationPeriodSearchRepository, times(1)).save(testDepreciationPeriod);
@@ -216,7 +227,8 @@ class DepreciationPeriodResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(depreciationPeriod.getId().intValue())))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].depreciationPeriodStatus").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_STATUS.toString())));
     }
 
     @Test
@@ -232,7 +244,8 @@ class DepreciationPeriodResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(depreciationPeriod.getId().intValue()))
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
-            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()));
+            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()))
+            .andExpect(jsonPath("$.depreciationPeriodStatus").value(DEFAULT_DEPRECIATION_PERIOD_STATUS.toString()));
     }
 
     @Test
@@ -463,6 +476,60 @@ class DepreciationPeriodResourceIT {
 
     @Test
     @Transactional
+    void getAllDepreciationPeriodsByDepreciationPeriodStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
+
+        // Get all the depreciationPeriodList where depreciationPeriodStatus equals to DEFAULT_DEPRECIATION_PERIOD_STATUS
+        defaultDepreciationPeriodShouldBeFound("depreciationPeriodStatus.equals=" + DEFAULT_DEPRECIATION_PERIOD_STATUS);
+
+        // Get all the depreciationPeriodList where depreciationPeriodStatus equals to UPDATED_DEPRECIATION_PERIOD_STATUS
+        defaultDepreciationPeriodShouldNotBeFound("depreciationPeriodStatus.equals=" + UPDATED_DEPRECIATION_PERIOD_STATUS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationPeriodsByDepreciationPeriodStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
+
+        // Get all the depreciationPeriodList where depreciationPeriodStatus not equals to DEFAULT_DEPRECIATION_PERIOD_STATUS
+        defaultDepreciationPeriodShouldNotBeFound("depreciationPeriodStatus.notEquals=" + DEFAULT_DEPRECIATION_PERIOD_STATUS);
+
+        // Get all the depreciationPeriodList where depreciationPeriodStatus not equals to UPDATED_DEPRECIATION_PERIOD_STATUS
+        defaultDepreciationPeriodShouldBeFound("depreciationPeriodStatus.notEquals=" + UPDATED_DEPRECIATION_PERIOD_STATUS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationPeriodsByDepreciationPeriodStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
+
+        // Get all the depreciationPeriodList where depreciationPeriodStatus in DEFAULT_DEPRECIATION_PERIOD_STATUS or UPDATED_DEPRECIATION_PERIOD_STATUS
+        defaultDepreciationPeriodShouldBeFound(
+            "depreciationPeriodStatus.in=" + DEFAULT_DEPRECIATION_PERIOD_STATUS + "," + UPDATED_DEPRECIATION_PERIOD_STATUS
+        );
+
+        // Get all the depreciationPeriodList where depreciationPeriodStatus equals to UPDATED_DEPRECIATION_PERIOD_STATUS
+        defaultDepreciationPeriodShouldNotBeFound("depreciationPeriodStatus.in=" + UPDATED_DEPRECIATION_PERIOD_STATUS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationPeriodsByDepreciationPeriodStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
+
+        // Get all the depreciationPeriodList where depreciationPeriodStatus is not null
+        defaultDepreciationPeriodShouldBeFound("depreciationPeriodStatus.specified=true");
+
+        // Get all the depreciationPeriodList where depreciationPeriodStatus is null
+        defaultDepreciationPeriodShouldNotBeFound("depreciationPeriodStatus.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllDepreciationPeriodsByPreviousPeriodIsEqualToSomething() throws Exception {
         // Initialize the database
         depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
@@ -497,7 +564,8 @@ class DepreciationPeriodResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(depreciationPeriod.getId().intValue())))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].depreciationPeriodStatus").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_STATUS.toString())));
 
         // Check, that the count call also returns 1
         restDepreciationPeriodMockMvc
@@ -545,7 +613,10 @@ class DepreciationPeriodResourceIT {
         DepreciationPeriod updatedDepreciationPeriod = depreciationPeriodRepository.findById(depreciationPeriod.getId()).get();
         // Disconnect from session so that the updates on updatedDepreciationPeriod are not directly saved in db
         em.detach(updatedDepreciationPeriod);
-        updatedDepreciationPeriod.startDate(UPDATED_START_DATE).endDate(UPDATED_END_DATE);
+        updatedDepreciationPeriod
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE)
+            .depreciationPeriodStatus(UPDATED_DEPRECIATION_PERIOD_STATUS);
         DepreciationPeriodDTO depreciationPeriodDTO = depreciationPeriodMapper.toDto(updatedDepreciationPeriod);
 
         restDepreciationPeriodMockMvc
@@ -562,6 +633,7 @@ class DepreciationPeriodResourceIT {
         DepreciationPeriod testDepreciationPeriod = depreciationPeriodList.get(depreciationPeriodList.size() - 1);
         assertThat(testDepreciationPeriod.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testDepreciationPeriod.getEndDate()).isEqualTo(UPDATED_END_DATE);
+        assertThat(testDepreciationPeriod.getDepreciationPeriodStatus()).isEqualTo(UPDATED_DEPRECIATION_PERIOD_STATUS);
 
         // Validate the DepreciationPeriod in Elasticsearch
         verify(mockDepreciationPeriodSearchRepository).save(testDepreciationPeriod);
@@ -673,6 +745,7 @@ class DepreciationPeriodResourceIT {
         DepreciationPeriod testDepreciationPeriod = depreciationPeriodList.get(depreciationPeriodList.size() - 1);
         assertThat(testDepreciationPeriod.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testDepreciationPeriod.getEndDate()).isEqualTo(UPDATED_END_DATE);
+        assertThat(testDepreciationPeriod.getDepreciationPeriodStatus()).isEqualTo(DEFAULT_DEPRECIATION_PERIOD_STATUS);
     }
 
     @Test
@@ -687,7 +760,10 @@ class DepreciationPeriodResourceIT {
         DepreciationPeriod partialUpdatedDepreciationPeriod = new DepreciationPeriod();
         partialUpdatedDepreciationPeriod.setId(depreciationPeriod.getId());
 
-        partialUpdatedDepreciationPeriod.startDate(UPDATED_START_DATE).endDate(UPDATED_END_DATE);
+        partialUpdatedDepreciationPeriod
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE)
+            .depreciationPeriodStatus(UPDATED_DEPRECIATION_PERIOD_STATUS);
 
         restDepreciationPeriodMockMvc
             .perform(
@@ -703,6 +779,7 @@ class DepreciationPeriodResourceIT {
         DepreciationPeriod testDepreciationPeriod = depreciationPeriodList.get(depreciationPeriodList.size() - 1);
         assertThat(testDepreciationPeriod.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testDepreciationPeriod.getEndDate()).isEqualTo(UPDATED_END_DATE);
+        assertThat(testDepreciationPeriod.getDepreciationPeriodStatus()).isEqualTo(UPDATED_DEPRECIATION_PERIOD_STATUS);
     }
 
     @Test
@@ -820,6 +897,7 @@ class DepreciationPeriodResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(depreciationPeriod.getId().intValue())))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].depreciationPeriodStatus").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_STATUS.toString())));
     }
 }

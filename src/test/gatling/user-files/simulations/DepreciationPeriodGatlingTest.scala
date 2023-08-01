@@ -73,6 +73,7 @@ class DepreciationPeriodGatlingTest extends Simulation {
             .body(StringBody("""{
                 "startDate":"2020-01-01T00:00:00.000Z"
                 , "endDate":"2020-01-01T00:00:00.000Z"
+                , "depreciationPeriodStatus":"OPEN"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_depreciationPeriod_url"))).exitHereIfFailed
