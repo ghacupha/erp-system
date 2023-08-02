@@ -67,111 +67,6 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
     }
 
     /**
-     * Triggers the depreciation process by creating a new DepreciationRun entity and processing the assets in batches.
-     * This method retrieves the assets from the database, performs the depreciation calculations, and updates the necessary records.
-     */
-    //    public void triggerDepreciation(DepreciationJobDTO depreciationJob) {
-//        // !!! Check that the depreciationJob status
-//
-//        // todo migrate to depreciation-period-dto
-//        boolean depreciationPeriodExists = depreciationPeriodService.findOne(depreciationJob.getDepreciationPeriod().getId()).isPresent();
-//
-//        // Highly unlikely, but let's get pendantic and check
-//        if (!depreciationPeriodExists) {
-//
-//            log.debug("We are opting out of the depreciation-job id {} because depreciation-period {} does not exist", depreciationJob.getId(), depreciationJob.getDepreciationPeriod().getId());
-//            String message = "DepreciationJob id: " + depreciationJob.getDepreciationPeriod().getId() + " doth not exist";
-//            // TODO DEPRECIATION NOTICE OF DUE TO PERIOD STATE
-//            // TODO Update notice depreciationJobNoticeService.save(new DepreciationJobNoticeDTO(message, depreciationJob));
-//            return;
-//        }
-//
-//
-//        DepreciationPeriodDTO depreciationPeriod = depreciationPeriodService.findOne(depreciationJob.getDepreciationPeriod().getId()).get();
-//
-//        // OPT OUT
-//        if (depreciationPeriod.getDepreciationPeriodStatus() == DepreciationPeriodStatusTypes.CLOSED) {
-//            log.info("DepreciationPeriod id {} is status CLOSED for job id {}. System opting out the depreciation sequence. Standby", depreciationPeriod.getId(), depreciationJob.getId());
-//            depreciationJob.setDepreciationJobStatus(DepreciationJobStatusType.ERRORED);
-//
-//            String message = "DepreciationPeriod id: " + depreciationJob.getDepreciationPeriod().getId() + " is closed";
-//            // TODO DEPRECIATION NOTICE OF DUE TO PERIOD STATE
-//            // TODO Update notice depreciationJobNoticeService.save(new DepreciationJobNoticeDTO(message, depreciationJob));
-//            return;
-//        }
-//
-//        // OPT OUT
-//        if (depreciationJob.getDepreciationJobStatus() == DepreciationJobStatusType.COMPLETE) {
-//            log.info("DepreciationJob id {} is status COMPLETE for period id {}. System opting out the depreciation sequence. Standby", depreciationJob.getId(), depreciationPeriod.getId());
-//
-//            String message = "DepreciationJob id: " + depreciationJob.getId() + " is COMPLETE";
-//            // TODO DEPRECIATION NOTICE OF DUE TO PERIOD STATE
-//            // TODO Update notice depreciationJobNoticeService.save(new DepreciationJobNoticeDTO(message, depreciationJob));
-//            return;
-//        }
-//
-//        log.info("Initiating DepreciationJob id {}, for depreciation-period id {}. Standby...", depreciationJob.getId(), depreciationPeriod.getId());
-//
-//        depreciationJob.setDepreciationJobStatus(DepreciationJobStatusType.RUNNING);
-//
-//        depreciationJobService.save(depreciationJob);
-//
-//        // TODO room for improvement in memory-management issues . Retrieve the assets from the database
-//        List<AssetRegistrationDTO> assets = assetRegistrationService.findAll(Pageable.unpaged()).toList();
-//
-//        // Process the assets in batches
-//        // TODO Set the batch size as desired from properties file
-//        int batchSize = 10;
-//        int totalAssets = assets.size();
-//        int processedCount = 0;
-//
-//        log.info("System has retrieved {} assets for depreciation in batches of {}", assets.size(), batchSize);
-//
-//        while (processedCount < totalAssets) {
-//            int startIndex = processedCount;
-//            int endIndex = Math.min(processedCount + batchSize, totalAssets);
-//
-//            // Get the current batch of assets
-//            List<AssetRegistrationDTO> currentBatch = assets.subList(startIndex, endIndex);
-//
-//            // TODO track last-batch
-//            boolean isLastBatch = processedCount + batchSize >= totalAssets;
-//
-//            // Create a DepreciationBatchSequence entity to track the processed batch
-//            DepreciationBatchSequenceDTO batchSequence = new DepreciationBatchSequenceDTO();
-//            batchSequence.setDepreciationBatchStatus(DepreciationBatchStatusType.CREATED);
-//            batchSequence.setCreatedAt(ZonedDateTime.now());
-//            batchSequence.setDepreciationJob(depreciationJob);
-//            batchSequence.setStartIndex(startIndex);
-//            batchSequence.setEndIndex(endIndex);
-//            // TODO track last-batch batchSequence.isLastBatch(isLastBatch);
-//
-//            DepreciationBatchSequenceDTO createdBatchSequence = depreciationBatchSequenceService.save(batchSequence);
-//
-//            log.debug("Initiating batch sequence id {}, for depreciation-job id {}, depreciation-period id {}. Standby", createdBatchSequence.getId(), depreciationJob.getId(), depreciationPeriod.getId());
-//
-//            // Enqueuing the DepreciationBatchMessage
-//            depreciationBatchProducer.sendDepreciationJobMessage(depreciationJob, currentBatch, createdBatchSequence);
-//
-//            createdBatchSequence.setDepreciationBatchStatus(DepreciationBatchStatusType.ENQUEUED);
-//            depreciationBatchSequenceService.save(createdBatchSequence);
-//
-//            if (isLastBatch) {
-//                log.debug("The last depreciation-batch-sequence has been enqueued");
-//                depreciationJob.setDepreciationJobStatus(DepreciationJobStatusType.ENQUEUED);
-//                depreciationJobService.save(depreciationJob);
-//
-//            }
-//
-//            processedCount += batchSize;
-//        }
-//
-//        // Mark the depreciation run as completed
-//        // depreciationJob.setDepreciationJobStatus(DepreciationJobStatusType.COMPLETE);
-//        // depreciationJobRepository.save(depreciationJob);
-//    }
-
-    /**
      * Triggers the depreciation process for a given DepreciationJobDTO by processing assets in batches. This method fetches assets
      * from the database, checks for any opt-out conditions, and initiates the depreciation sequence by enqueuing depreciation batch
      * messages for processing.
@@ -201,7 +96,7 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
         processAssetsInBatches(depreciationJob, assets, batchSize);
 
         // Mark the depreciation job as complete
-        markDepreciationJobAsComplete(depreciationJob);
+        markDepreciationJobAsEnqueued(depreciationJob);
     }
 
     /**
@@ -327,8 +222,8 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
     /**
      * Marks the depreciation job as complete.
      */
-    private void markDepreciationJobAsComplete(DepreciationJobDTO depreciationJob) {
-        depreciationJob.setDepreciationJobStatus(DepreciationJobStatusType.COMPLETE);
+    private void markDepreciationJobAsEnqueued(DepreciationJobDTO depreciationJob) {
+        depreciationJob.setDepreciationJobStatus(DepreciationJobStatusType.ENQUEUED);
         depreciationJobService.save(depreciationJob);
     }
 }
