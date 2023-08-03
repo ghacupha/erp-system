@@ -1,8 +1,11 @@
 # Use the official Elasticsearch image as the base
 FROM docker.elastic.co/elasticsearch/elasticsearch:7.13.3
 
-# Create a non-root user inside the container
-RUN adduser --disabled-password nonrootuser
+# Copy the script to the container
+COPY create_user.sh /tmp/create_user.sh
+
+# Run the script to create the non-root user
+RUN /bin/bash /tmp/create_user.sh
 
 # Set the working directory and switch to the non-root user
 WORKDIR /usr/share/elasticsearch
