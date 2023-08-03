@@ -1,0 +1,15 @@
+# Use the official Elasticsearch image as the base
+FROM docker.elastic.co/elasticsearch/elasticsearch:7.13.3
+
+# Create a non-root user inside the container
+RUN adduser --disabled-password --gecos '' nonrootuser
+
+# Set the working directory and switch to the non-root user
+WORKDIR /usr/share/elasticsearch
+USER nonrootuser
+
+# Set the environment variable to the non-root user's home directory
+ENV HOME=/usr/share/elasticsearch
+
+# Start Elasticsearch when the container is run
+CMD ["elasticsearch"]
