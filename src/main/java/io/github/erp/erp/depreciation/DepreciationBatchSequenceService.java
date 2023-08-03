@@ -17,11 +17,23 @@ package io.github.erp.erp.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.*;
+
 import io.github.erp.domain.enumeration.DepreciationJobStatusType;
+import io.github.erp.domain.enumeration.DepreciationPeriodStatusTypes;
 import io.github.erp.erp.depreciation.calculation.DepreciationCalculatorService;
 import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
-import io.github.erp.repository.*;
+import io.github.erp.service.AssetCategoryService;
+import io.github.erp.service.AssetRegistrationService;
+import io.github.erp.service.DepreciationEntryService;
+import io.github.erp.service.DepreciationJobService;
+import io.github.erp.service.DepreciationMethodService;
+import io.github.erp.service.DepreciationPeriodService;
+import io.github.erp.service.ServiceOutletService;
+import io.github.erp.service.dto.AssetCategoryDTO;
+import io.github.erp.service.dto.DepreciationEntryDTO;
+import io.github.erp.service.dto.DepreciationJobDTO;
+import io.github.erp.service.dto.DepreciationPeriodDTO;
+import io.github.erp.service.dto.ServiceOutletDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -55,26 +67,24 @@ public class DepreciationBatchSequenceService {
     private static final Logger log = LoggerFactory.getLogger(DepreciationJobSequenceServiceImpl.class);
 
     // TODO replace repositories with indexed services
-    private final DepreciationJobRepository depreciationJobRepository;
-    private final AssetRegistrationRepository assetRepository;
-    private final DepreciationBatchSequenceRepository depreciationBatchSequenceRepository;
     private final DepreciationCalculatorService depreciationCalculatorService;
-    private final AssetCategoryRepository assetCategoryRepository;
-    private final DepreciationMethodRepository depreciationMethodRepository;
-    private final ServiceOutletRepository serviceOutletRepository;
-    private final DepreciationEntryRepository depreciationEntryRepository;
-    private final DepreciationPeriodRepository depreciationPeriodRepository;
+    private final DepreciationJobService depreciationJobService;
+    private final DepreciationPeriodService depreciationPeriodService;
+    private final AssetCategoryService assetCategoryService;
+    private final ServiceOutletService serviceOutletService;
+    private final AssetRegistrationService assetRegistrationService;
+    private final DepreciationMethodService depreciationMethodService;
+    private final DepreciationEntryService depreciationEntryService;
 
-    public DepreciationBatchSequenceService(DepreciationJobRepository depreciationJobRepository, AssetRegistrationRepository assetRepository, DepreciationBatchSequenceRepository depreciationBatchSequenceRepository, DepreciationCalculatorService depreciationCalculatorService, AssetCategoryRepository assetCategoryRepository, DepreciationMethodRepository depreciationMethodRepository, ServiceOutletRepository serviceOutletRepository, DepreciationEntryRepository depreciationEntryRepository, DepreciationPeriodRepository depreciationPeriodRepository) {
-        this.depreciationJobRepository = depreciationJobRepository;
-        this.assetRepository = assetRepository;
-        this.depreciationBatchSequenceRepository = depreciationBatchSequenceRepository;
+    public DepreciationBatchSequenceService(DepreciationCalculatorService depreciationCalculatorService, DepreciationJobService depreciationJobService, DepreciationPeriodService depreciationPeriodService, AssetCategoryService assetCategoryService, ServiceOutletService serviceOutletService, AssetRegistrationService assetRegistrationService, DepreciationMethodService depreciationMethodService, DepreciationEntryService depreciationEntryService) {
         this.depreciationCalculatorService = depreciationCalculatorService;
-        this.assetCategoryRepository = assetCategoryRepository;
-        this.depreciationMethodRepository = depreciationMethodRepository;
-        this.serviceOutletRepository = serviceOutletRepository;
-        this.depreciationEntryRepository = depreciationEntryRepository;
-        this.depreciationPeriodRepository = depreciationPeriodRepository;
+        this.depreciationJobService = depreciationJobService;
+        this.depreciationPeriodService = depreciationPeriodService;
+        this.assetCategoryService = assetCategoryService;
+        this.serviceOutletService = serviceOutletService;
+        this.assetRegistrationService = assetRegistrationService;
+        this.depreciationMethodService = depreciationMethodService;
+        this.depreciationEntryService = depreciationEntryService;
     }
 
     /**
@@ -87,87 +97,134 @@ public class DepreciationBatchSequenceService {
 
         String jobId = message.getJobId();
         List<String> assetIds = message.getAssetIds();
-        BigDecimal initialCost = message.getInitialCost();
+        // BigDecimal initialCost = message.getInitialCost();
 
         // fetch depreciationJob and depreciationPeriod from repo
-        depreciationJobRepository.findById(Long.valueOf(jobId)).ifPresent(depreciationJob -> {
+        // depreciationJobRepository.findById(Long.valueOf(jobId)).ifPresent(depreciationJob -> {
+        boolean depreciationJobDoesntExist = depreciationJobService.findOne(Long.valueOf(jobId)).isEmpty();
 
-            depreciationPeriodRepository.findById(depreciationJob.getDepreciationPeriod().getId()).ifPresent(depreciationPeriod -> {
+        if (depreciationJobDoesntExist) {
+            log.warn("Depreciation job id {} does not exist", jobId);
+            // TODO update the notification
 
-                // TODO Update batch-sequence data in the caller
+            return;
+        }
 
-                // OPT OUT
-                if (depreciationJob.getDepreciationJobStatus() == DepreciationJobStatusType.COMPLETE) {
+        DepreciationJobDTO depreciationJob = depreciationJobService.findOne(Long.valueOf(jobId)).get();
 
-                    log.warn("DepreciationJob id {} is status COMPLETE for period id {}. System opting out the depreciation sequence. Standby", depreciationJob.getId(), depreciationPeriod.getId());
-                    return;
-                }
+        log.debug("Commencing depreciation for depreciation-job id {}", depreciationJob.getId());
 
-                // TODO opt out if period is CLOSED
+        boolean depreciationPeriodDoesntExist = depreciationPeriodService.findOne(depreciationJob.getDepreciationPeriod().getId()).isEmpty();
 
-                log.debug("Standby for depreciation sequence on {} assets for batch id{}", assetIds.size(), message.getBatchId());
-                // Perform the depreciation calculations for the batch of assets
-                for (String assetId : assetIds) {
+        if (depreciationPeriodDoesntExist) {
+            log.warn("Depreciation period id {} does not exist, for depreciation-job id {}", depreciationJob.getDepreciationPeriod().getId(), depreciationJob.getId());
+            // TODO update the notification
 
-                    // TODO opt out if depreciated for a given period
+            return;
+        }
 
-                    // assetRepository.getById()
+        DepreciationPeriodDTO depreciationPeriod = depreciationPeriodService.findOne(depreciationJob.getDepreciationPeriod().getId()).get();
 
-                    // Retrieve the asset from the database using the assetId
-                    assetRepository.findById(Long.valueOf(assetId)).ifPresent(
-                        assetRegistration -> {
+        log.debug("Commencing depreciation for depreciation-job id {}, for depreciation-period {}. Standby...", depreciationJob.getId(), depreciationPeriod.getId());
 
-                            log.debug("Asset id {} ready for depreciation sequence, standby for next update", assetRegistration.getId());
+        if (depreciationPeriod.getDepreciationPeriodStatus() == DepreciationPeriodStatusTypes.CLOSED) {
 
-                            assetCategoryRepository.findById(assetRegistration.getAssetCategory().getId()).ifPresent(assetCategory -> {
+            log.warn("Depreciation-period id {} is status CLOSED for depreciation-period id {}. System opting out the depreciation sequence. Standby", depreciationPeriod.getId(), depreciationJob.getId());
+            // TODO update the notification
 
-                                serviceOutletRepository.findById(assetRegistration.getMainServiceOutlet().getId()).ifPresent(serviceOutlet -> {
+            return;
+        }
+        // TODO Update batch-sequence data in the caller
 
-                                    depreciationMethodRepository.findById(assetCategory.getDepreciationMethod().getId()).ifPresent(
-                                        depreciationMethod -> {
-                                            // Calculate the depreciation amount using the DepreciationCalculator
-                                            BigDecimal depreciationAmount = depreciationCalculatorService.calculateDepreciation(assetRegistration, depreciationPeriod, assetCategory, depreciationMethod);
+        // OPT OUT
+        if (depreciationJob.getDepreciationJobStatus() == DepreciationJobStatusType.COMPLETE) {
 
-                                            // Update the asset's net book value and any other relevant data
-                                            // ...
+            log.warn("DepreciationJob id {} is status COMPLETE for period id {}. System opting out the depreciation sequence. Standby", depreciationJob.getId(), depreciationPeriod.getId());
+            // TODO update notification
+            return;
+        }
 
-                                            // Save the depreciation to the database
-                                            DepreciationEntry depreciationEntry =
-                                                new DepreciationEntry()
-                                                    .depreciationAmount(depreciationAmount)
-                                                    .depreciationMethod(depreciationMethod)
-                                                    .depreciationPeriod(depreciationPeriod)
-                                                    .assetCategory(assetCategory)
-                                                    .assetNumber(Long.valueOf(assetRegistration.getAssetNumber()))
-                                                    .assetRegistration(assetRegistration)
-                                                    .postedAt(ZonedDateTime.now())
-                                                    .serviceOutlet(serviceOutlet);
+        log.debug("Standby for depreciation sequence on {} assets for batch id{}", assetIds.size(), message.getBatchId());
+        // Perform the depreciation calculations for the batch of assets
+        for (String assetId : assetIds) {
 
-                                            DepreciationEntry depreciation = depreciationEntryRepository.save(depreciationEntry);
+            // TODO opt out if depreciated for a given period
+            // TODO add depreciation period relation with an asset
 
-                                            log.debug("depreciation-entry id {} saved to the database, standby for next update", depreciation.getId());
-                                        });
-                                });
-                            });
+            // Retrieve the asset from the database using the assetId
+            assetRegistrationService.findOne(Long.valueOf(assetId)).ifPresent(
+                assetRegistration -> {
+
+                    log.debug("Asset id {} ready for depreciation sequence, standby for next update", assetRegistration.getId());
+
+                    // assetCategoryRepository.findById(assetRegistration.getAssetCategory().getId()).ifPresent(assetCategory -> {
+
+                    boolean assetCategoryDoesNotExist = assetCategoryService.findOne(assetRegistration.getAssetCategory().getId()).isEmpty();
+
+                    if (assetCategoryDoesNotExist) {
+
+                        log.warn("Asset Category id {} not found", assetRegistration.getAssetCategory().getId());
+                        // TODO update notification
+                        return;
+                    }
+
+                    AssetCategoryDTO assetCategory = assetCategoryService.findOne(assetRegistration.getMainServiceOutlet().getId()).get();
+
+                    boolean serviceOutletDoesNotExist = serviceOutletService.findOne(assetRegistration.getMainServiceOutlet().getId()).isEmpty();
+
+                    if (serviceOutletDoesNotExist) {
+
+                        log.warn("Service outlet id {} not found", assetRegistration.getMainServiceOutlet().getId());
+
+                        // TODO update notification
+                        return;
+                    }
+
+                    ServiceOutletDTO serviceOutlet = serviceOutletService.findOne(assetRegistration.getMainServiceOutlet().getId()).get();
+
+                    depreciationMethodService.findOne(assetCategory.getDepreciationMethod().getId()).ifPresent(
+                        depreciationMethod -> {
+                            // Calculate the depreciation amount using the DepreciationCalculator
+                            BigDecimal depreciationAmount = depreciationCalculatorService.calculateDepreciation(assetRegistration, depreciationPeriod, assetCategory, depreciationMethod);
+
+                            // TODO Update the asset's net book value and any other relevant data
+                            // NetBookValueDTO netBookValue = new NetBookValueDTO(depreciationAmount, assetRegistration, assetCategory, serviceOutlet, depreciationPeriod, depreciationJob)
+                            // NetBookValueDTO = netBookValueService.save(netBookValue)
+
+                            // Save the depreciation to the database
+                            DepreciationEntryDTO depreciationEntry = new DepreciationEntryDTO();
+                            depreciationEntry.setDepreciationAmount(depreciationAmount);
+                            depreciationEntry.setDepreciationMethod(depreciationMethod);
+                            depreciationEntry.setDepreciationPeriod(depreciationPeriod);
+                            depreciationEntry.setAssetCategory(assetCategory);
+                            depreciationEntry.setAssetNumber(Long.valueOf(assetRegistration.getAssetNumber()));
+                            depreciationEntry.setAssetRegistration(assetRegistration);
+                            depreciationEntry.setPostedAt(ZonedDateTime.now());
+                            depreciationEntry.setServiceOutlet(serviceOutlet);
+
+                            DepreciationEntryDTO depreciation = depreciationEntryService.save(depreciationEntry);
+
+                            log.debug("depreciation-entry id {} saved to the database, standby for next update", depreciation.getId());
                         });
-                    // TODO Update the asset's net book value and any other relevant data
-                    // TODO Create and update depreciation-entry
-                    // TODO Create and update netbook-value-entry
-                }
+                });
+            // TODO Update the asset's net book value and any other relevant data
+            // TODO Create and update depreciation-entry
+            // TODO Create and update netbook-value-entry
+        }
 
-                // DepreciationBatchSequence depreciationBatchSequence = depreciationBatchSequenceRepository.getById(Long.valueOf(message.getBatchId()));
-                // depreciationBatchSequence.depreciationBatchStatus(DepreciationBatchStatusType.COMPLETED);
+        // DepreciationBatchSequence depreciationBatchSequence = depreciationBatchSequenceRepository.getById(Long.valueOf(message.getBatchId()));
+        // depreciationBatchSequence.depreciationBatchStatus(DepreciationBatchStatusType.COMPLETED);
 
-                // Save the DepreciationBatchSequence entity to the database
-                // depreciationBatchSequenceRepository.save(depreciationBatchSequence);
+        // Save the DepreciationBatchSequence entity to the database
+        // depreciationBatchSequenceRepository.save(depreciationBatchSequence);
 
-                // TODO Update if batch is final
-                // log.info("Initiating DepreciationJob id {}, for depreciation-period id {}. Standby", depreciationJob.getId(), depreciationPeriod.getId());
+        // TODO Update if batch is final
+        // log.info("Initiating DepreciationJob id {}, for depreciation-period id {}. Standby", depreciationJob.getId(), depreciationPeriod.getId());
 
-                // depreciationJob.setDepreciationJobStatus(DepreciationJobStatusType.RUNNING);
+        // depreciationJob.setDepreciationJobStatus(DepreciationJobStatusType.RUNNING);
 
-                // depreciationJobRepository.save(depreciationJob);
-            });
-        });
+        // depreciationJobRepository.save(depreciationJob);
+
+
     }
 }
