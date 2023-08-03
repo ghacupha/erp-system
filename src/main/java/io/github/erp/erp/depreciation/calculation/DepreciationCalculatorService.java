@@ -17,14 +17,11 @@ package io.github.erp.erp.depreciation.calculation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.AssetCategory;
-import io.github.erp.domain.AssetRegistration;
-import io.github.erp.domain.DepreciationMethod;
-import io.github.erp.domain.DepreciationPeriod;
 import io.github.erp.domain.enumeration.DepreciationTypes;
-import io.github.erp.erp.depreciation.calculation.CalculatesDepreciation;
-import io.github.erp.erp.depreciation.calculation.ReducingBalanceDepreciationCalculator;
-import io.github.erp.erp.depreciation.calculation.StraightLineDepreciationCalculator;
+import io.github.erp.service.dto.AssetCategoryDTO;
+import io.github.erp.service.dto.AssetRegistrationDTO;
+import io.github.erp.service.dto.DepreciationMethodDTO;
+import io.github.erp.service.dto.DepreciationPeriodDTO;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -44,7 +41,7 @@ public class DepreciationCalculatorService implements CalculatesDepreciation {
     }
 
     @Override
-    public BigDecimal calculateDepreciation(AssetRegistration asset, DepreciationPeriod period, AssetCategory assetCategory, DepreciationMethod depreciationMethod) {
+    public BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) {
 
         if (depreciationMethod.getDepreciationType() == DepreciationTypes.STRAIGHT_LINE) {
             return straightLineDepreciationCalculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod);

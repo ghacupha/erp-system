@@ -17,10 +17,10 @@ package io.github.erp.erp.depreciation.calculation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.AssetCategory;
-import io.github.erp.domain.AssetRegistration;
-import io.github.erp.domain.DepreciationMethod;
-import io.github.erp.domain.DepreciationPeriod;
+import io.github.erp.service.dto.AssetCategoryDTO;
+import io.github.erp.service.dto.AssetRegistrationDTO;
+import io.github.erp.service.dto.DepreciationMethodDTO;
+import io.github.erp.service.dto.DepreciationPeriodDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -31,7 +31,7 @@ import java.time.Period;
  */
 public abstract class AbstractDepreciationCalculator {
 
-    protected int calculateElapsedMonths(DepreciationPeriod period) {
+    protected int calculateElapsedMonths(DepreciationPeriodDTO period) {
         // Calculate the number of elapsed months between the start of the period and the current date.
         // You can use appropriate date/time libraries to perform this calculation.
         // Here's a simplified example assuming each period is a month:
@@ -40,5 +40,5 @@ public abstract class AbstractDepreciationCalculator {
         return Math.toIntExact(Period.between(startDate, currentDate).toTotalMonths());
     }
 
-    public abstract BigDecimal calculateDepreciation(AssetRegistration asset, DepreciationPeriod period, AssetCategory assetCategory, DepreciationMethod depreciationMethod);
+    public abstract BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod);
 }

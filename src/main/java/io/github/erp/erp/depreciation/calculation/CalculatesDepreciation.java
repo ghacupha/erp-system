@@ -17,10 +17,6 @@ package io.github.erp.erp.depreciation.calculation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.AssetCategory;
-import io.github.erp.domain.AssetRegistration;
-import io.github.erp.domain.DepreciationMethod;
-import io.github.erp.domain.DepreciationPeriod;
 import io.github.erp.service.dto.AssetCategoryDTO;
 import io.github.erp.service.dto.AssetRegistrationDTO;
 import io.github.erp.service.dto.DepreciationMethodDTO;
@@ -47,5 +43,5 @@ import java.math.BigDecimal;
  */
 public interface CalculatesDepreciation {
 
-    BigDecimal calculateDepreciation(AssetRegistration asset, DepreciationPeriod period, AssetCategory assetCategory, DepreciationMethod depreciationMethod);
+    BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod);
 }
