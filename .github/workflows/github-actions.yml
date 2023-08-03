@@ -73,8 +73,6 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Publish Elasticsearch image
-        env:
-          PROJECT_NAME: erp-system
         run: |
           docker build -f src/main/docker/ESDockerfile -t ghacupha/erp-system-elastic-search:1.3.3 .
           docker push ghacupha/erp-system-elastic-search:1.3.3
