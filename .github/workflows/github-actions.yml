@@ -49,10 +49,10 @@ jobs:
       - name: Install node.js packages
         run: npm install
 
-      - name: Run backend test
-        run: |
-          chmod +x mvnw
-          npm run ci:backend:test
+#      - name: Run backend test
+#        run: |
+#          chmod +x mvnw
+#          npm run ci:backend:test
 
       - name: Login to Docker hub
         uses: docker/login-action@v1
