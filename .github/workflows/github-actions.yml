@@ -76,8 +76,5 @@ jobs:
         env:
           PROJECT_NAME: erp-system
         run: |
-          # Build the custom Elasticsearch image using the Dockerfile from src/main/docker/ESDockerfile
           docker build -f src/main/docker/ESDockerfile -t ghacupha/erp-system-elastic-search:1.3.3 .
-
-          # Push the custom Elasticsearch image to Docker Hub
           docker push ghacupha/erp-system-elastic-search:1.3.3
