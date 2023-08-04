@@ -8,11 +8,11 @@ COPY src/main/docker/create_user.sh /tmp/create_user.sh
 RUN chmod +x /tmp/create_user.sh
 
 # Run the script to create the non-root user
-RUN /bin/bash /tmp/create_user.sh
+# RUN /bin/bash /tmp/create_user.sh
 
 # Set the working directory and switch to the non-root user
-WORKDIR /usr/share/elasticsearch
-USER nonrootuser
+#WORKDIR /usr/share/elasticsearch
+#USER nonrootuser
 
 # Set the environment variable to the non-root user's home directory
 ENV HOME=/usr/share/elasticsearch
