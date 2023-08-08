@@ -168,7 +168,7 @@ public class DepreciationBatchSequenceService {
                         return;
                     }
 
-                    AssetCategoryDTO assetCategory = assetCategoryService.findOne(assetRegistration.getMainServiceOutlet().getId()).get();
+                    AssetCategoryDTO assetCategory = assetCategoryService.findOne(assetRegistration.getAssetCategory().getId()).get();
 
                     boolean serviceOutletDoesNotExist = serviceOutletService.findOne(assetRegistration.getMainServiceOutlet().getId()).isEmpty();
 
@@ -184,6 +184,8 @@ public class DepreciationBatchSequenceService {
 
                     depreciationMethodService.findOne(assetCategory.getDepreciationMethod().getId()).ifPresent(
                         depreciationMethod -> {
+                            // TODO note asset-category has null fields
+                            // TODO note ensure relevant fields are not null
                             // Calculate the depreciation amount using the DepreciationCalculator
                             BigDecimal depreciationAmount = depreciationCalculatorService.calculateDepreciation(assetRegistration, depreciationPeriod, assetCategory, depreciationMethod);
 

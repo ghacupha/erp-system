@@ -25,6 +25,7 @@ import io.github.erp.service.dto.DepreciationPeriodDTO;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 
 /**
  * Common methods in the depreciation sequence
@@ -33,11 +34,24 @@ public abstract class AbstractDepreciationCalculator {
 
     protected int calculateElapsedMonths(DepreciationPeriodDTO period) {
         // Calculate the number of elapsed months between the start of the period and the current date.
-        // You can use appropriate date/time libraries to perform this calculation.
         // Here's a simplified example assuming each period is a month:
         LocalDate startDate = period.getStartDate();
-        LocalDate currentDate = LocalDate.now();
-        return Math.toIntExact(Period.between(startDate, currentDate).toTotalMonths());
+        LocalDate endDate = period.getEndDate();
+//        return Math.toIntExact(Period.between(startDate, endDate).toTotalMonths());
+
+        return Math.toIntExact(calculateMonthsBetween(startDate, endDate));
+    }
+
+    private static long calculateMonthsBetween(LocalDate startDate, LocalDate endDate) {
+        long months = 0;
+        LocalDate current = startDate;
+
+        while (current.isBefore(endDate) || current.isEqual(endDate)) {
+            current = current.plusMonths(1);
+            months++;
+        }
+
+        return months; // Adjusting for the extra iteration
     }
 
     public abstract BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod);

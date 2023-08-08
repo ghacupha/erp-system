@@ -17,10 +17,6 @@ package io.github.erp.erp.depreciation.calculation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.AssetCategory;
-import io.github.erp.domain.AssetRegistration;
-import io.github.erp.domain.DepreciationMethod;
-import io.github.erp.domain.DepreciationPeriod;
 import io.github.erp.domain.enumeration.DepreciationTypes;
 import io.github.erp.service.dto.AssetCategoryDTO;
 import io.github.erp.service.dto.AssetRegistrationDTO;
@@ -30,12 +26,13 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 
 /**
  * Calculates reducing balance depreciation for the period requested on a month-by-month basis
  */
 @Service("reducingBalanceDepreciationCalculator")
-public class ReducingBalanceDepreciationCalculator extends AbstractDepreciationCalculator implements CalculatesDepreciation {
+public class ReducingBalanceDepreciationCalculator implements CalculatesDepreciation {
 
     public BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) {
 
@@ -62,6 +59,28 @@ public class ReducingBalanceDepreciationCalculator extends AbstractDepreciationC
         }
 
         return depreciationAmount;
+    }
+
+    private int calculateElapsedMonths(DepreciationPeriodDTO period) {
+        // Calculate the number of elapsed months between the start of the period and the current date.
+        // Here's a simplified example assuming each period is a month:
+        LocalDate startDate = period.getStartDate();
+        LocalDate endDate = period.getEndDate();
+//        return Math.toIntExact(Period.between(startDate, endDate).toTotalMonths());
+
+        return Math.toIntExact(calculateMonthsBetween(startDate, endDate));
+    }
+
+    private static long calculateMonthsBetween(LocalDate startDate, LocalDate endDate) {
+        long months = 0;
+        LocalDate current = startDate;
+
+        while (current.isBefore(endDate) || current.isEqual(endDate)) {
+            current = current.plusMonths(1);
+            months++;
+        }
+
+        return months; // Adjusting for the extra iteration
     }
 
 }
