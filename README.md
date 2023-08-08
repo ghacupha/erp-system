@@ -531,3 +531,199 @@ wasting weeks of work and shooting ourselves on both feet with the level of comp
 interfaces to make sure we do not interact with the business code itself. 
 
 This is how the depreciation process has been designed to work.
+
+#### Later date update, many many days later
+I think I seriosly underestimated the amount of structure needed to bring a reliable depreciation module to life. Again the culprit here is reducing-balance-depreciation
+because you need to efficiently calculate netBookValues before calculating the current date depreciation. Now am starting to see why people hate accountants.
+
+The structure I wanted to implement needed computational flexibility and that becomes the genesis of my issues. The workflow generally goes like this: the user creates a 
+depreciation-period instance, and then creates a depreciation-job with a specification of that instance effectively creating a one to one relationship between the depreciation-job
+and the depreciation-period.
+
+So then the reducing-balance-workflow ends up like this:
+
+```java
+
+@Service("reducingBalanceDepreciationCalculator")
+public class ReducingBalanceDepreciationCalculator implements CalculatesDepreciation {
+
+    private static final int DECIMAL_SCALE = 6;
+    private static final RoundingMode ROUNDING_MODE = RoundingMode.HALF_EVEN;
+    private static final int MONTHS_IN_YEAR = 12;
+
+    public BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) {
+
+        // opt out
+        if (depreciationMethod.getDepreciationType() != DepreciationTypes.DECLINING_BALANCE ) {
+
+            return BigDecimal.ZERO;
+        }
+
+        BigDecimal netBookValue = asset.getAssetCost();
+        BigDecimal depreciationRate = assetCategory.getDepreciationRateYearly().setScale(DECIMAL_SCALE, ROUNDING_MODE).divide(BigDecimal.valueOf(MONTHS_IN_YEAR), ROUNDING_MODE).setScale(DECIMAL_SCALE, ROUNDING_MODE);
+        LocalDate capitalizationDate = LocalDate.of(2023,6,6);
+        LocalDate periodStartDate = period.getStartDate();
+        LocalDate periodEndDate = period.getEndDate();
+
+        if (capitalizationDate.isAfter(periodEndDate)) {
+            return BigDecimal.ZERO; // No depreciation before capitalization
+        }
+
+        BigDecimal depreciationBeforeStartDate = BigDecimal.ZERO;
+        if (capitalizationDate.isBefore(periodStartDate)) {
+            int elapsedMonthsBeforeStart = Math.toIntExact(ChronoUnit.MONTHS.between(capitalizationDate, periodStartDate));
+            for (int month = 1; month <= elapsedMonthsBeforeStart; month++) {
+                BigDecimal monthlyDepreciation = netBookValue.multiply(depreciationRate).setScale(DECIMAL_SCALE, ROUNDING_MODE);
+                depreciationBeforeStartDate = depreciationBeforeStartDate.add(monthlyDepreciation);
+                netBookValue = netBookValue.subtract(monthlyDepreciation);
+                if (netBookValue.compareTo(BigDecimal.ZERO) < 0) {
+                    netBookValue = BigDecimal.ZERO;
+                }
+            }
+        }
+
+
+        int elapsedMonths = Math.toIntExact(ChronoUnit.MONTHS.between(periodStartDate, periodEndDate));
+
+        BigDecimal depreciationAmount = BigDecimal.ZERO;
+        for (int month = 1; month <= elapsedMonths; month++) {
+            BigDecimal monthlyDepreciation = netBookValue.multiply(depreciationRate).setScale(DECIMAL_SCALE, ROUNDING_MODE);
+            depreciationAmount = depreciationAmount.add(monthlyDepreciation);
+            netBookValue = netBookValue.subtract(monthlyDepreciation);
+            if (netBookValue.compareTo(BigDecimal.ZERO) < 0) {
+                netBookValue = BigDecimal.ZERO;
+            }
+        }
+
+        // TODO calculate accrued depreciation with net period start details
+        // TODO net period start is end-date + 1 day
+        // accruedDepreciation = depreciationAmount.add(depreciationBeforeStartDate);
+
+        // TODO let's not waste this expensive info. Throw it into a queue
+        // TODO enqueueNetBookValueUpdate(asset.getId(), netBookValue);
+        // todo enqueueAccruedDepreciationUpdate(asset.getId(), accruedDepreciation);
+
+
+        return depreciationAmount;
+    }
+
+//    private int calculateElapsedMonths(DepreciationPeriodDTO period) {
+//        return Math.toIntExact(ChronoUnit.MONTHS.between(period.getStartDate(), period.getEndDate()));
+//    }
+}
+
+
+```
+
+But there's a challenge: what do we do with all that juicy netBookValue information and that accruedDepreciation?
+So I thought I would other message queues (complicating the process even further), into which I would throw this information
+while maintaining the integrity of the method which is, to simply calculate the current period depreciation. 
+So again, I went the trusty chatGpt friend and asked what they thought. The poor thing started talking about the complexity that
+am now introducing into the code...
+
+Then I went like:
+
+You let me worry about the complexity of the message queue. But now it seems that we have an opportunity to optimize the depreciation 
+process further by  checking the database for these values if they align with the netBookValue before the startDate and the 
+accruedDepreciation before the startDate. How would we incorporate that into our present code, providing for the following: 
+we don't actually want to have a field tracking accrued depreciation amount or netBookValue amount in the assetRegistration as that would turn it into a 
+temporal object, and yet I need that object to remain independent of time except with respect to the capitalizationDate. In line with that I 
+intend to implement hibernate entities to represent accruedDepreciation  and netBookValue entities in a one-way one to many assetRegistration 
+to accruedDepreciation relationship and assetRegistration to netBookValueRelationship. This will have the benefit of keeping the 
+assetRegistration "ignorant" about the netBookValue and accruedDepreciation entities, which providing the latter entities a reference to the 
+assetRegistration to which they refer for reporting purposes. 
+
+Of course it's thoughts like these that often lead into rabbit holes but chatGpt easily gave gave me some rope to hang myself:
+
+It sounds like you want to optimize the depreciation calculation process by checking the database for pre-calculated values of net book value and accrued depreciation, while keeping the `AssetRegistration` object independent of these values in order to maintain its temporal nature. Additionally, you're planning to use Hibernate entities to represent `AccruedDepreciation` and `NetBookValue` while establishing relationships between these entities and `AssetRegistration`.
+
+Here's how you could incorporate these ideas into your design:
+
+1. **Hibernate Entities:**
+   Define `AccruedDepreciation` and `NetBookValue` Hibernate entities. Establish a one-to-many relationship between `AssetRegistration` and each of these entities.
+
+```java
+@Entity
+public class AssetRegistration {
+    // Other fields
+    
+    @OneToMany(mappedBy = "assetRegistration")
+    private List<AccruedDepreciation> accruedDepreciations;
+
+    @OneToMany(mappedBy = "assetRegistration")
+    private List<NetBookValue> netBookValues;
+
+    // Getters and setters
+}
+
+@Entity
+public class AccruedDepreciation {
+    @ManyToOne
+    @JoinColumn(name = "asset_registration_id")
+    private AssetRegistration assetRegistration;
+    
+    private BigDecimal value;
+    
+    // Other fields, getters and setters
+}
+
+@Entity
+public class NetBookValue {
+    @ManyToOne
+    @JoinColumn(name = "asset_registration_id")
+    private AssetRegistration assetRegistration;
+    
+    private BigDecimal value;
+    
+    // Other fields, getters and setters
+}
+```
+
+2. **Depreciation Calculation:**
+   Modify your `calculateDepreciation` method to first check the database for the values of `AccruedDepreciation` and `NetBookValue` before the `periodStartDate`. If the values exist, use them for the calculations. If not, perform the depreciation calculation as before and enqueue messages to update the database asynchronously.
+
+```java
+public BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) {
+    // Check database for accrued depreciation and net book value before periodStartDate
+    BigDecimal accruedDepreciationBeforeStart = fetchAccruedDepreciationFromDatabase(asset.getId(), period.getStartDate());
+    BigDecimal netBookValueBeforeStart = fetchNetBookValueFromDatabase(asset.getId(), period.getStartDate());
+
+    // If values exist, use them
+    if (accruedDepreciationBeforeStart != null && netBookValueBeforeStart != null) {
+        return accruedDepreciationBeforeStart;
+    }
+
+    // Calculate and return the depreciation for the specified period as before
+    BigDecimal calculatedDepreciation = calculateDepreciationForPeriod(asset, period, assetCategory, depreciationMethod);
+
+    // Enqueue messages to update accrued depreciation and net book value in the database
+    enqueueAccruedDepreciationUpdate(asset.getId(), period.getStartDate(), calculatedDepreciation);
+    enqueueNetBookValueUpdate(asset.getId(), period.getStartDate(), netBookValueForStart);
+
+    return calculatedDepreciation;
+}
+
+private BigDecimal calculateDepreciationForPeriod(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) {
+    // Your existing depreciation calculation logic here
+}
+
+private BigDecimal fetchAccruedDepreciationFromDatabase(Long assetId, LocalDate startDate) {
+    // Query database to fetch accrued depreciation before startDate for the given assetId
+    // Return null if not found, or the value if found
+}
+
+private BigDecimal fetchNetBookValueFromDatabase(Long assetId, LocalDate startDate) {
+    // Query database to fetch net book value before startDate for the given assetId
+    // Return null if not found, or the value if found
+}
+```
+
+This approach allows you to first check the database for pre-calculated values of accrued depreciation and net book value before the `periodStartDate`. 
+If these values exist, you can use them directly without recalculating. If not, you proceed with the depreciation calculation and asynchronously update 
+the database for future use.
+Remember to implement the database queries and enqueueing of update messages as needed in your application infrastructure.
+
+Thank you GPT. This is not what I wanted, because I needed for there to be actual ignorance about netBookValue and accruedDepreciation within the sphere
+of the assetRegistration. This is because it is becoming increasingly difficult to maintain that information in the search index and in fact some entities
+just plain refuse to save due to limits in the community elasticsearch engine am forced to use.
+From the look of things, the Ehud series will continue for a while longer, may be 2 to 3 weeks as we struggle with the depreciation module.
