@@ -22,6 +22,7 @@ import io.github.erp.service.dto.AssetCategoryDTO;
 import io.github.erp.service.dto.AssetRegistrationDTO;
 import io.github.erp.service.dto.DepreciationMethodDTO;
 import io.github.erp.service.dto.DepreciationPeriodDTO;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -41,6 +42,39 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
 
     public BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) {
 
+        // Check database for accrued depreciation and net book value before periodStartDate
+        BigDecimal accruedDepreciationBeforeStart = fetchAccruedDepreciationFromDatabase(asset.getId(), period.getStartDate());
+        BigDecimal netBookValueBeforeStart = fetchNetBookValueFromDatabase(asset.getId(), period.getStartDate());
+
+        // If values exist, use them
+        if (accruedDepreciationBeforeStart != null && netBookValueBeforeStart != null) {
+            return accruedDepreciationBeforeStart;
+        }
+
+        // Calculate and return the depreciation for the specified period as before
+        BigDecimal calculatedDepreciation = calculatedDepreciation(asset, period, assetCategory, depreciationMethod);
+
+        // TODO calculate accrued depreciation with net period start details
+        // TODO net period start is end-date + 1 day
+        BigDecimal accruedDepreciation = calculatedDepreciation.add(accruedDepreciationBeforeStart);
+        // After calculating depreciation, enqueue messages for updating net book value and accrued depreciation
+        enqueueNetBookValueUpdate(asset.getId(), period.getStartDate(), netBookValueBeforeStart);
+        enqueueAccruedDepreciationUpdate(asset.getId(), period.getStartDate(), calculatedDepreciation);
+
+        return calculatedDepreciation;
+
+    }
+
+    private void enqueueAccruedDepreciationUpdate(Long id, LocalDate startDate, BigDecimal calculatedDepreciation) {
+        // TODO See about that message queue
+    }
+
+    private void enqueueNetBookValueUpdate(Long id, LocalDate startDate, BigDecimal netBookValueBeforeStart) {
+        // TODO See about that message queue
+    }
+
+    @NotNull
+    private BigDecimal calculatedDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) {
         // opt out
         if (depreciationMethod.getDepreciationType() != DepreciationTypes.DECLINING_BALANCE ) {
 
@@ -48,12 +82,30 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
         }
 
         BigDecimal netBookValue = asset.getAssetCost();
-
-        // TODO incorporate capitalization-date
-
-        // ADAPT TO MONTHLY UNITS
         BigDecimal depreciationRate = assetCategory.getDepreciationRateYearly().setScale(DECIMAL_SCALE, ROUNDING_MODE).divide(BigDecimal.valueOf(MONTHS_IN_YEAR), ROUNDING_MODE).setScale(DECIMAL_SCALE, ROUNDING_MODE);
-        int elapsedMonths = calculateElapsedMonths(period);
+        LocalDate capitalizationDate = LocalDate.of(2023,6,6);
+        LocalDate periodStartDate = period.getStartDate();
+        LocalDate periodEndDate = period.getEndDate();
+
+        if (capitalizationDate.isAfter(periodEndDate)) {
+            return BigDecimal.ZERO; // No depreciation before capitalization
+        }
+
+        BigDecimal depreciationBeforeStartDate = BigDecimal.ZERO;
+        if (capitalizationDate.isBefore(periodStartDate)) {
+            int elapsedMonthsBeforeStart = Math.toIntExact(ChronoUnit.MONTHS.between(capitalizationDate, periodStartDate));
+            for (int month = 1; month <= elapsedMonthsBeforeStart; month++) {
+                BigDecimal monthlyDepreciation = netBookValue.multiply(depreciationRate).setScale(DECIMAL_SCALE, ROUNDING_MODE);
+                depreciationBeforeStartDate = depreciationBeforeStartDate.add(monthlyDepreciation);
+                netBookValue = netBookValue.subtract(monthlyDepreciation);
+                if (netBookValue.compareTo(BigDecimal.ZERO) < 0) {
+                    netBookValue = BigDecimal.ZERO;
+                }
+            }
+        }
+
+
+        int elapsedMonths = Math.toIntExact(ChronoUnit.MONTHS.between(periodStartDate, periodEndDate));
 
         BigDecimal depreciationAmount = BigDecimal.ZERO;
         for (int month = 1; month <= elapsedMonths; month++) {
@@ -68,8 +120,29 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
         return depreciationAmount;
     }
 
-    private int calculateElapsedMonths(DepreciationPeriodDTO period) {
-        return Math.toIntExact(ChronoUnit.MONTHS.between(period.getStartDate(), period.getEndDate()));
+    private BigDecimal calculateDepreciationForPeriod(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) {
+        // Your existing depreciation calculation logic here
+
+        return null;
     }
+
+    private BigDecimal fetchAccruedDepreciationFromDatabase(Long assetId, LocalDate startDate) {
+        // Query database to fetch accrued depreciation before startDate for the given assetId
+        // Return null if not found, or the value if found
+
+        return null;
+    }
+
+    private BigDecimal fetchNetBookValueFromDatabase(Long assetId, LocalDate startDate) {
+        // Query database to fetch net book value before startDate for the given assetId
+        // Return null if not found, or the value if found
+
+        return null;
+    }
+
+
+//    private int calculateElapsedMonths(DepreciationPeriodDTO period) {
+//        return Math.toIntExact(ChronoUnit.MONTHS.between(period.getStartDate(), period.getEndDate()));
+//    }
 }
 
