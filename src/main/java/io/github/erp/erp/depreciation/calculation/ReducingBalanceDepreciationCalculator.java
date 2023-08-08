@@ -27,12 +27,17 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 /**
  * Calculates reducing balance depreciation for the period requested on a month-by-month basis
  */
 @Service("reducingBalanceDepreciationCalculator")
 public class ReducingBalanceDepreciationCalculator implements CalculatesDepreciation {
+
+    private static final int DECIMAL_SCALE = 6;
+    private static final RoundingMode ROUNDING_MODE = RoundingMode.HALF_EVEN;
+    private static final int MONTHS_IN_YEAR = 12;
 
     public BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) {
 
@@ -44,13 +49,15 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
 
         BigDecimal netBookValue = asset.getAssetCost();
 
+        // TODO incorporate capitalization-date
+
         // ADAPT TO MONTHLY UNITS
-        BigDecimal depreciationRate = assetCategory.getDepreciationRateYearly().setScale(6, RoundingMode.HALF_EVEN).divide(BigDecimal.valueOf(12), RoundingMode.HALF_EVEN).setScale(6, RoundingMode.HALF_EVEN);
+        BigDecimal depreciationRate = assetCategory.getDepreciationRateYearly().setScale(DECIMAL_SCALE, ROUNDING_MODE).divide(BigDecimal.valueOf(MONTHS_IN_YEAR), ROUNDING_MODE).setScale(DECIMAL_SCALE, ROUNDING_MODE);
         int elapsedMonths = calculateElapsedMonths(period);
 
         BigDecimal depreciationAmount = BigDecimal.ZERO;
         for (int month = 1; month <= elapsedMonths; month++) {
-            BigDecimal monthlyDepreciation = netBookValue.multiply(depreciationRate).setScale(6, RoundingMode.HALF_EVEN);
+            BigDecimal monthlyDepreciation = netBookValue.multiply(depreciationRate).setScale(DECIMAL_SCALE, ROUNDING_MODE);
             depreciationAmount = depreciationAmount.add(monthlyDepreciation);
             netBookValue = netBookValue.subtract(monthlyDepreciation);
             if (netBookValue.compareTo(BigDecimal.ZERO) < 0) {
@@ -62,26 +69,7 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
     }
 
     private int calculateElapsedMonths(DepreciationPeriodDTO period) {
-        // Calculate the number of elapsed months between the start of the period and the current date.
-        // Here's a simplified example assuming each period is a month:
-        LocalDate startDate = period.getStartDate();
-        LocalDate endDate = period.getEndDate();
-//        return Math.toIntExact(Period.between(startDate, endDate).toTotalMonths());
-
-        return Math.toIntExact(calculateMonthsBetween(startDate, endDate));
+        return Math.toIntExact(ChronoUnit.MONTHS.between(period.getStartDate(), period.getEndDate()));
     }
-
-    private static long calculateMonthsBetween(LocalDate startDate, LocalDate endDate) {
-        long months = 0;
-        LocalDate current = startDate;
-
-        while (current.isBefore(endDate) || current.isEqual(endDate)) {
-            current = current.plusMonths(1);
-            months++;
-        }
-
-        return months; // Adjusting for the extra iteration
-    }
-
 }
 
