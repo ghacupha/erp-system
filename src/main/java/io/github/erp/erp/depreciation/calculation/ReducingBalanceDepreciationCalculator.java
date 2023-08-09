@@ -26,19 +26,16 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+
+import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.*;
 
 /**
  * Calculates reducing balance depreciation for the period requested on a month-by-month basis
  */
 @Service("reducingBalanceDepreciationCalculator")
 public class ReducingBalanceDepreciationCalculator implements CalculatesDepreciation {
-
-    private static final int DECIMAL_SCALE = 6;
-    private static final RoundingMode ROUNDING_MODE = RoundingMode.HALF_EVEN;
-    private static final int MONTHS_IN_YEAR = 12;
 
     public BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) {
 
@@ -67,7 +64,7 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
         // TODO enqueueNetBookValueUpdate(asset.getId(), period.getStartDate(), netBookValueBeforeStart);
         // TODO enqueueAccruedDepreciationUpdate(asset.getId(), period.getStartDate(), accruedDepreciation);
 
-        return calculatedDepreciation;
+        return calculatedDepreciation.setScale(MONEY_SCALE, ROUNDING_MODE);
 
     }
 
@@ -83,7 +80,8 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
     private BigDecimal calculatedDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) {
 
         BigDecimal netBookValue = asset.getAssetCost();
-        BigDecimal depreciationRate = assetCategory.getDepreciationRateYearly().setScale(DECIMAL_SCALE, ROUNDING_MODE).divide(BigDecimal.valueOf(MONTHS_IN_YEAR), ROUNDING_MODE).setScale(DECIMAL_SCALE, ROUNDING_MODE);
+        BigDecimal depreciationRate = assetCategory.getDepreciationRateYearly().setScale(DECIMAL_SCALE, ROUNDING_MODE).divide(MONTHS_IN_YEAR, ROUNDING_MODE).setScale(DECIMAL_SCALE, ROUNDING_MODE);
+        // TODO LocalDate capitalizationDate = asset.getCapitalizationDate();
         LocalDate capitalizationDate = LocalDate.of(2023,6,6);
         LocalDate periodStartDate = period.getStartDate();
         LocalDate periodEndDate = period.getEndDate();
@@ -106,7 +104,7 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
         }
 
 
-        int elapsedMonths = Math.toIntExact(ChronoUnit.MONTHS.between(periodStartDate, periodEndDate));
+        int elapsedMonths = Math.toIntExact(ChronoUnit.MONTHS.between(periodStartDate, periodEndDate)) + 1;
 
         BigDecimal depreciationAmount = BigDecimal.ZERO;
         for (int month = 1; month <= elapsedMonths; month++) {
