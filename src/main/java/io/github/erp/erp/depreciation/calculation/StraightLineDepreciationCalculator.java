@@ -17,10 +17,6 @@ package io.github.erp.erp.depreciation.calculation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.AssetCategory;
-import io.github.erp.domain.AssetRegistration;
-import io.github.erp.domain.DepreciationMethod;
-import io.github.erp.domain.DepreciationPeriod;
 import io.github.erp.domain.enumeration.DepreciationTypes;
 import io.github.erp.service.dto.AssetCategoryDTO;
 import io.github.erp.service.dto.AssetRegistrationDTO;
@@ -29,41 +25,61 @@ import io.github.erp.service.dto.DepreciationPeriodDTO;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
-/**
- * Calculate the depreciation for the monthly periods in the request
- */
+import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.*;
+
 @Service("straightLineDepreciationCalculator")
-public class StraightLineDepreciationCalculator extends AbstractDepreciationCalculator implements CalculatesDepreciation {
+public class StraightLineDepreciationCalculator implements CalculatesDepreciation {
 
     @Override
     public BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) {
 
         // OPT OUT
         if (depreciationMethod.getDepreciationType() != DepreciationTypes.STRAIGHT_LINE) {
-
             return BigDecimal.ZERO;
         }
 
-        BigDecimal netBookValue = asset.getAssetCost();
+        LocalDate startDate = period.getStartDate();
+        LocalDate endDate = period.getEndDate();
         BigDecimal assetCost = asset.getAssetCost();
-        // ADAPT TO MONTHLY UNITS
-        BigDecimal depreciationRate = assetCategory.getDepreciationRateYearly().setScale(6, RoundingMode.HALF_EVEN).divide(BigDecimal.valueOf(12), RoundingMode.HALF_EVEN).setScale(6, RoundingMode.HALF_EVEN);
-        int elapsedMonths = calculateElapsedMonths(period);
+        // TODO LocalDate capitalizationDate = asset.getCapitalizationDate();
+        LocalDate capitalizationDate = LocalDate.of(2023,1,1);
 
-        BigDecimal depreciationAmount = BigDecimal.ZERO;
-        for (int month = 1; month <= elapsedMonths; month++) {
-            BigDecimal monthlyDepreciation = assetCost.multiply(depreciationRate).setScale(6, RoundingMode.HALF_EVEN);
-            depreciationAmount = depreciationAmount.add(monthlyDepreciation);
-            netBookValue = netBookValue.subtract(monthlyDepreciation);
-            if (netBookValue.compareTo(BigDecimal.ZERO) < 0) {
-                netBookValue = BigDecimal.ZERO;
-            }
-        }
+        // Calculate the total number of months in the period
+        long elapsedMonths = ChronoUnit.MONTHS.between(startDate, endDate) + 1;
 
-        return depreciationAmount;
+        // Calculate the total number of months before beginning of the period and be sure to avoid overlap
+        long priorMonths = ChronoUnit.MONTHS.between(capitalizationDate, endDate) - elapsedMonths;
+
+        BigDecimal depreciationRate = calculateDepreciationRate(assetCategory);
+
+        BigDecimal netBookValueBeforeDepreciation = calculateNetBookValueBeforeDepreciation(assetCost, depreciationRate, priorMonths);
+
+        BigDecimal monthlyDepreciation = calculateMonthlyDepreciation(assetCost, depreciationRate);
+
+        BigDecimal depreciationAmount = calculateTotalDepreciation(monthlyDepreciation, elapsedMonths);
+
+        return depreciationAmount.min(netBookValueBeforeDepreciation);
     }
 
+    private BigDecimal calculateDepreciationRate(AssetCategoryDTO assetCategory) {
+        return assetCategory.getDepreciationRateYearly()
+            .divide(MONTHS_IN_YEAR, DECIMAL_SCALE, ROUNDING_MODE);
+    }
+
+    private BigDecimal calculateNetBookValueBeforeDepreciation(BigDecimal assetCost, BigDecimal depreciationRate, long priorMonths) {
+        return assetCost.subtract(assetCost.multiply(depreciationRate).multiply(BigDecimal.valueOf(priorMonths)).setScale(MONEY_SCALE, ROUNDING_MODE));
+    }
+
+    private BigDecimal calculateMonthlyDepreciation(BigDecimal assetCost, BigDecimal depreciationRate) {
+        return assetCost.multiply(depreciationRate).setScale(DECIMAL_SCALE, ROUNDING_MODE);
+    }
+
+    private BigDecimal calculateTotalDepreciation(BigDecimal monthlyDepreciation, long elapsedMonths) {
+        return monthlyDepreciation.multiply(BigDecimal.valueOf(elapsedMonths)).setScale(MONEY_SCALE, ROUNDING_MODE);
+    }
 }
+
 
