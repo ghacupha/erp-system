@@ -729,3 +729,52 @@ Thank you GPT. This is not what I wanted, because I needed for there to be actua
 of the assetRegistration. This is because it is becoming increasingly difficult to maintain that information in the search index and in fact some entities
 just plain refuse to save due to limits in the community elasticsearch engine am forced to use.
 From the look of things, the Ehud series will continue for a while longer, may be 2 to 3 weeks as we struggle with the depreciation module.
+
+
+#### Later date update (Ehud Series version 1.3.4)
+So somehow after unbelievable hours on the debugger, we finally managed to draft working algorithms
+for both straight-line depreciation and reducing-balance depreciation. We also added unit tests
+using a fake data generator. 
+Also we tested the results against live data and could see similarities between what is picked up
+by an excel calculation and what the system is computing.
+So then it seems the depreciation workflow is precipitating (at least in my mind) to look like this
+
+Step 1: **Create depreciation period**
+The user defines the start-date of the depreciation period and the end-date for the same
+
+Step 2: **Create a depreciation job**
+The user creates a depreciation job creation of which triggers the depreciation process. The situation
+here is that once the job has finished one can tell from the status of the instance that the 
+process is complete.
+
+I also wanted to have a way to tag with a label the depreciation-period for  reporting purposes.
+So I am going to create another entity and define it as periodLabel.
+This will essentially be part of step 1. But there's more to it.
+I think the option to create an independent PeriodLabel entity might be more appropriate because am 
+thinking in case of errors one might want to do something like void depreciation entries for a specific 
+period, and create another period for the same label which though it might be the same label could have 
+varying start and end dates. This would further support something like what-if analysis if you wanted 
+to test how depreciation might look like in a year, or how depreciation might look like for a given quarter.
+
+Creating an independent PeriodLabel entity sounds like a good choice given the additional flexibility 
+and potential benefits. This approach allows for better separation of concerns and makes it easier to manage 
+and track depreciation periods with specific labels.
+
+By having a separate entity, you're able to associate metadata and behavior with each label, which can be useful for auditing, reporting, error handling, and more. Here are a few benefits of using an independent PeriodLabel entity:
+
+**Flexibility for Label Management**: With an independent entity, you can easily manage and modify labels, associate descriptions or other metadata, and make changes without directly impacting the periods themselves.
+
+**Audit and Error Handling**: If you need to perform actions like voiding depreciation entries or making corrections, having a separate entity allows you to do this in a controlled manner while maintaining historical data.
+
+**What-If Analysis and Reporting**: You can use different periods with the same label to perform what-if analyses or generate reports with specific label-based filters.
+
+**Scalability**: If requirements evolve and you need to add more features or relationships related to period labeling, having a dedicated entity can accommodate those changes more easily.
+
+**Data Integrity**: Separating the label information from the core depreciation period information can contribute to data integrity and overall maintainability.
+
+I am noting this down so that it can be a record that explains why the depreciation procedure and input forms have been designed with too much user input detail; because am sure it's going to be costly in terms of UX.
+
+
+
+
+
