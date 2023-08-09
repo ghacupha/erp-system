@@ -635,7 +635,9 @@ assetRegistration to which they refer for reporting purposes.
 
 Of course it's thoughts like these that often lead into rabbit holes but chatGpt easily gave gave me some rope to hang myself:
 
-It sounds like you want to optimize the depreciation calculation process by checking the database for pre-calculated values of net book value and accrued depreciation, while keeping the `AssetRegistration` object independent of these values in order to maintain its temporal nature. Additionally, you're planning to use Hibernate entities to represent `AccruedDepreciation` and `NetBookValue` while establishing relationships between these entities and `AssetRegistration`.
+It sounds like you want to optimize the depreciation calculation process by checking the database for pre-calculated values of net book value and accrued depreciation, 
+while keeping the `AssetRegistration` object independent of these values in order to maintain its temporal nature. Additionally, you're planning to use 
+Hibernate entities to represent `AccruedDepreciation` and `NetBookValue` while establishing relationships between these entities and `AssetRegistration`.
 
 Here's how you could incorporate these ideas into your design:
 
