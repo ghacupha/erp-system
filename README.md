@@ -736,7 +736,8 @@ So somehow after unbelievable hours on the debugger, we finally managed to draft
 for both straight-line depreciation and reducing-balance depreciation. We also added unit tests
 using a fake data generator. 
 Also we tested the results against live data and could see similarities between what is picked up
-by an excel calculation and what the system is computing.
+by an excel calculation and what the system is computing. This is not to say that the coast is definitely
+clear
 So then it seems the depreciation workflow is precipitating (at least in my mind) to look like this
 
 Step 1: **Create depreciation period**
