@@ -34,7 +34,7 @@ public class TestAssetDataGenerator {
         asset.setAssetNumber(faker.number().digits(6));
         asset.setAssetTag(faker.lorem().word());
         asset.setAssetCost(new BigDecimal(faker.number().numberBetween(1000, 100000)));
-        // Set other properties as needed
+        // todo Set other properties as needed
         return asset;
     }
 }
