@@ -31,6 +31,11 @@ public interface DepreciationPeriodMapper extends EntityMapper<DepreciationPerio
     @Mapping(target = "createdBy", source = "createdBy", qualifiedByName = "applicationIdentity")
     DepreciationPeriodDTO toDto(DepreciationPeriod s);
 
+    @Named("id")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    DepreciationPeriodDTO toDtoId(DepreciationPeriod depreciationPeriod);
+
     @Named("endDate")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

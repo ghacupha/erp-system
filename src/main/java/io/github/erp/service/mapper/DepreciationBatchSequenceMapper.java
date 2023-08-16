@@ -29,4 +29,9 @@ import org.mapstruct.*;
 public interface DepreciationBatchSequenceMapper extends EntityMapper<DepreciationBatchSequenceDTO, DepreciationBatchSequence> {
     @Mapping(target = "depreciationJob", source = "depreciationJob", qualifiedByName = "id")
     DepreciationBatchSequenceDTO toDto(DepreciationBatchSequence s);
+
+    @Named("id")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    DepreciationBatchSequenceDTO toDtoId(DepreciationBatchSequence depreciationBatchSequence);
 }
