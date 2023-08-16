@@ -17,15 +17,18 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
 
 /**
  * A AssetRegistration.
@@ -71,6 +74,15 @@ public class AssetRegistration implements Serializable {
 
     @Column(name = "serial_number")
     private String serialNumber;
+
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Column(name = "remarks")
+    private String remarks;
+
+    @NotNull
+    @Column(name = "capitalization_date", nullable = false)
+    private LocalDate capitalizationDate;
 
     @ManyToMany
     @JoinTable(
@@ -406,6 +418,32 @@ public class AssetRegistration implements Serializable {
 
     public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
+    }
+
+    public String getRemarks() {
+        return this.remarks;
+    }
+
+    public AssetRegistration remarks(String remarks) {
+        this.setRemarks(remarks);
+        return this;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public LocalDate getCapitalizationDate() {
+        return this.capitalizationDate;
+    }
+
+    public AssetRegistration capitalizationDate(LocalDate capitalizationDate) {
+        this.setCapitalizationDate(capitalizationDate);
+        return this;
+    }
+
+    public void setCapitalizationDate(LocalDate capitalizationDate) {
+        this.capitalizationDate = capitalizationDate;
     }
 
     public Set<Placeholder> getPlaceholders() {
@@ -768,6 +806,8 @@ public class AssetRegistration implements Serializable {
             ", commentsContentType='" + getCommentsContentType() + "'" +
             ", modelNumber='" + getModelNumber() + "'" +
             ", serialNumber='" + getSerialNumber() + "'" +
+            ", remarks='" + getRemarks() + "'" +
+            ", capitalizationDate='" + getCapitalizationDate() + "'" +
             "}";
     }
 }

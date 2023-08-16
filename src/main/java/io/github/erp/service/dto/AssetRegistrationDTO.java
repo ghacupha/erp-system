@@ -17,8 +17,10 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -50,6 +52,12 @@ public class AssetRegistrationDTO implements Serializable {
     private String modelNumber;
 
     private String serialNumber;
+
+    @Lob
+    private String remarks;
+
+    @NotNull
+    private LocalDate capitalizationDate;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
@@ -153,6 +161,22 @@ public class AssetRegistrationDTO implements Serializable {
 
     public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public LocalDate getCapitalizationDate() {
+        return capitalizationDate;
+    }
+
+    public void setCapitalizationDate(LocalDate capitalizationDate) {
+        this.capitalizationDate = capitalizationDate;
     }
 
     public Set<PlaceholderDTO> getPlaceholders() {
@@ -316,6 +340,8 @@ public class AssetRegistrationDTO implements Serializable {
             ", comments='" + getComments() + "'" +
             ", modelNumber='" + getModelNumber() + "'" +
             ", serialNumber='" + getSerialNumber() + "'" +
+            ", remarks='" + getRemarks() + "'" +
+            ", capitalizationDate='" + getCapitalizationDate() + "'" +
             ", placeholders=" + getPlaceholders() +
             ", paymentInvoices=" + getPaymentInvoices() +
             ", serviceOutlets=" + getServiceOutlets() +

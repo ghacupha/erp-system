@@ -194,6 +194,7 @@
     <include file="config/liquibase/changelog/20230801082634_added_createdAt_to_DepreciationBatchSequence_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230801110541_added_enum_to_depreciationPeriod_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230801120041_added_createdBy_applicationUser_to_DepreciationPeriod.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230816084408_added_remarks_and_capitalization_date_to_asset_reg.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

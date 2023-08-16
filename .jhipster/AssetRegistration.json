@@ -33,6 +33,16 @@
     {
       "fieldName": "serialNumber",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "remarks",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "capitalizationDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
     }
   ],
   "incrementalChangelog": false,

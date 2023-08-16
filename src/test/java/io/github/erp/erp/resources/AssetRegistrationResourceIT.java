@@ -42,6 +42,8 @@ import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -87,6 +89,13 @@ public class AssetRegistrationResourceIT {
 
     private static final String DEFAULT_SERIAL_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_SERIAL_NUMBER = "BBBBBBBBBB";
+
+    private static final String DEFAULT_REMARKS = "AAAAAAAAAA";
+    private static final String UPDATED_REMARKS = "BBBBBBBBBB";
+
+    private static final LocalDate DEFAULT_CAPITALIZATION_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_CAPITALIZATION_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_CAPITALIZATION_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final String ENTITY_API_URL = "/api/fixed-asset/asset-registrations";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -138,7 +147,9 @@ public class AssetRegistrationResourceIT {
             .comments(DEFAULT_COMMENTS)
             .commentsContentType(DEFAULT_COMMENTS_CONTENT_TYPE)
             .modelNumber(DEFAULT_MODEL_NUMBER)
-            .serialNumber(DEFAULT_SERIAL_NUMBER);
+            .serialNumber(DEFAULT_SERIAL_NUMBER)
+            .remarks(DEFAULT_REMARKS)
+            .capitalizationDate(DEFAULT_CAPITALIZATION_DATE);
         // Add required entity
         Settlement settlement;
         if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
@@ -187,7 +198,9 @@ public class AssetRegistrationResourceIT {
             .comments(UPDATED_COMMENTS)
             .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE)
             .modelNumber(UPDATED_MODEL_NUMBER)
-            .serialNumber(UPDATED_SERIAL_NUMBER);
+            .serialNumber(UPDATED_SERIAL_NUMBER)
+            .remarks(UPDATED_REMARKS)
+            .capitalizationDate(UPDATED_CAPITALIZATION_DATE);
         // Add required entity
         Settlement settlement;
         if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
@@ -252,6 +265,8 @@ public class AssetRegistrationResourceIT {
         assertThat(testAssetRegistration.getCommentsContentType()).isEqualTo(DEFAULT_COMMENTS_CONTENT_TYPE);
         assertThat(testAssetRegistration.getModelNumber()).isEqualTo(DEFAULT_MODEL_NUMBER);
         assertThat(testAssetRegistration.getSerialNumber()).isEqualTo(DEFAULT_SERIAL_NUMBER);
+        assertThat(testAssetRegistration.getRemarks()).isEqualTo(DEFAULT_REMARKS);
+        assertThat(testAssetRegistration.getCapitalizationDate()).isEqualTo(DEFAULT_CAPITALIZATION_DATE);
 
         // Validate the AssetRegistration in Elasticsearch
         verify(mockAssetRegistrationSearchRepository, times(1)).save(testAssetRegistration);
@@ -351,6 +366,28 @@ public class AssetRegistrationResourceIT {
 
     @Test
     @Transactional
+    void checkCapitalizationDateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = assetRegistrationRepository.findAll().size();
+        // set the field null
+        assetRegistration.setCapitalizationDate(null);
+
+        // Create the AssetRegistration, which fails.
+        AssetRegistrationDTO assetRegistrationDTO = assetRegistrationMapper.toDto(assetRegistration);
+
+        restAssetRegistrationMockMvc
+            .perform(
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(assetRegistrationDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<AssetRegistration> assetRegistrationList = assetRegistrationRepository.findAll();
+        assertThat(assetRegistrationList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllAssetRegistrations() throws Exception {
         // Initialize the database
         assetRegistrationRepository.saveAndFlush(assetRegistration);
@@ -368,7 +405,9 @@ public class AssetRegistrationResourceIT {
             .andExpect(jsonPath("$.[*].commentsContentType").value(hasItem(DEFAULT_COMMENTS_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].comments").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMMENTS))))
             .andExpect(jsonPath("$.[*].modelNumber").value(hasItem(DEFAULT_MODEL_NUMBER)))
-            .andExpect(jsonPath("$.[*].serialNumber").value(hasItem(DEFAULT_SERIAL_NUMBER)));
+            .andExpect(jsonPath("$.[*].serialNumber").value(hasItem(DEFAULT_SERIAL_NUMBER)))
+            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())))
+            .andExpect(jsonPath("$.[*].capitalizationDate").value(hasItem(DEFAULT_CAPITALIZATION_DATE.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -408,7 +447,9 @@ public class AssetRegistrationResourceIT {
             .andExpect(jsonPath("$.commentsContentType").value(DEFAULT_COMMENTS_CONTENT_TYPE))
             .andExpect(jsonPath("$.comments").value(Base64Utils.encodeToString(DEFAULT_COMMENTS)))
             .andExpect(jsonPath("$.modelNumber").value(DEFAULT_MODEL_NUMBER))
-            .andExpect(jsonPath("$.serialNumber").value(DEFAULT_SERIAL_NUMBER));
+            .andExpect(jsonPath("$.serialNumber").value(DEFAULT_SERIAL_NUMBER))
+            .andExpect(jsonPath("$.remarks").value(DEFAULT_REMARKS.toString()))
+            .andExpect(jsonPath("$.capitalizationDate").value(DEFAULT_CAPITALIZATION_DATE.toString()));
     }
 
     @Test
@@ -925,6 +966,110 @@ public class AssetRegistrationResourceIT {
 
     @Test
     @Transactional
+    void getAllAssetRegistrationsByCapitalizationDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where capitalizationDate equals to DEFAULT_CAPITALIZATION_DATE
+        defaultAssetRegistrationShouldBeFound("capitalizationDate.equals=" + DEFAULT_CAPITALIZATION_DATE);
+
+        // Get all the assetRegistrationList where capitalizationDate equals to UPDATED_CAPITALIZATION_DATE
+        defaultAssetRegistrationShouldNotBeFound("capitalizationDate.equals=" + UPDATED_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByCapitalizationDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where capitalizationDate not equals to DEFAULT_CAPITALIZATION_DATE
+        defaultAssetRegistrationShouldNotBeFound("capitalizationDate.notEquals=" + DEFAULT_CAPITALIZATION_DATE);
+
+        // Get all the assetRegistrationList where capitalizationDate not equals to UPDATED_CAPITALIZATION_DATE
+        defaultAssetRegistrationShouldBeFound("capitalizationDate.notEquals=" + UPDATED_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByCapitalizationDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where capitalizationDate in DEFAULT_CAPITALIZATION_DATE or UPDATED_CAPITALIZATION_DATE
+        defaultAssetRegistrationShouldBeFound("capitalizationDate.in=" + DEFAULT_CAPITALIZATION_DATE + "," + UPDATED_CAPITALIZATION_DATE);
+
+        // Get all the assetRegistrationList where capitalizationDate equals to UPDATED_CAPITALIZATION_DATE
+        defaultAssetRegistrationShouldNotBeFound("capitalizationDate.in=" + UPDATED_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByCapitalizationDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where capitalizationDate is not null
+        defaultAssetRegistrationShouldBeFound("capitalizationDate.specified=true");
+
+        // Get all the assetRegistrationList where capitalizationDate is null
+        defaultAssetRegistrationShouldNotBeFound("capitalizationDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByCapitalizationDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where capitalizationDate is greater than or equal to DEFAULT_CAPITALIZATION_DATE
+        defaultAssetRegistrationShouldBeFound("capitalizationDate.greaterThanOrEqual=" + DEFAULT_CAPITALIZATION_DATE);
+
+        // Get all the assetRegistrationList where capitalizationDate is greater than or equal to UPDATED_CAPITALIZATION_DATE
+        defaultAssetRegistrationShouldNotBeFound("capitalizationDate.greaterThanOrEqual=" + UPDATED_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByCapitalizationDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where capitalizationDate is less than or equal to DEFAULT_CAPITALIZATION_DATE
+        defaultAssetRegistrationShouldBeFound("capitalizationDate.lessThanOrEqual=" + DEFAULT_CAPITALIZATION_DATE);
+
+        // Get all the assetRegistrationList where capitalizationDate is less than or equal to SMALLER_CAPITALIZATION_DATE
+        defaultAssetRegistrationShouldNotBeFound("capitalizationDate.lessThanOrEqual=" + SMALLER_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByCapitalizationDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where capitalizationDate is less than DEFAULT_CAPITALIZATION_DATE
+        defaultAssetRegistrationShouldNotBeFound("capitalizationDate.lessThan=" + DEFAULT_CAPITALIZATION_DATE);
+
+        // Get all the assetRegistrationList where capitalizationDate is less than UPDATED_CAPITALIZATION_DATE
+        defaultAssetRegistrationShouldBeFound("capitalizationDate.lessThan=" + UPDATED_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByCapitalizationDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where capitalizationDate is greater than DEFAULT_CAPITALIZATION_DATE
+        defaultAssetRegistrationShouldNotBeFound("capitalizationDate.greaterThan=" + DEFAULT_CAPITALIZATION_DATE);
+
+        // Get all the assetRegistrationList where capitalizationDate is greater than SMALLER_CAPITALIZATION_DATE
+        defaultAssetRegistrationShouldBeFound("capitalizationDate.greaterThan=" + SMALLER_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
     void getAllAssetRegistrationsByPlaceholderIsEqualToSomething() throws Exception {
         // Initialize the database
         assetRegistrationRepository.saveAndFlush(assetRegistration);
@@ -1355,7 +1500,9 @@ public class AssetRegistrationResourceIT {
             .andExpect(jsonPath("$.[*].commentsContentType").value(hasItem(DEFAULT_COMMENTS_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].comments").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMMENTS))))
             .andExpect(jsonPath("$.[*].modelNumber").value(hasItem(DEFAULT_MODEL_NUMBER)))
-            .andExpect(jsonPath("$.[*].serialNumber").value(hasItem(DEFAULT_SERIAL_NUMBER)));
+            .andExpect(jsonPath("$.[*].serialNumber").value(hasItem(DEFAULT_SERIAL_NUMBER)))
+            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())))
+            .andExpect(jsonPath("$.[*].capitalizationDate").value(hasItem(DEFAULT_CAPITALIZATION_DATE.toString())));
 
         // Check, that the count call also returns 1
         restAssetRegistrationMockMvc
@@ -1411,7 +1558,9 @@ public class AssetRegistrationResourceIT {
             .comments(UPDATED_COMMENTS)
             .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE)
             .modelNumber(UPDATED_MODEL_NUMBER)
-            .serialNumber(UPDATED_SERIAL_NUMBER);
+            .serialNumber(UPDATED_SERIAL_NUMBER)
+            .remarks(UPDATED_REMARKS)
+            .capitalizationDate(UPDATED_CAPITALIZATION_DATE);
         AssetRegistrationDTO assetRegistrationDTO = assetRegistrationMapper.toDto(updatedAssetRegistration);
 
         restAssetRegistrationMockMvc
@@ -1434,6 +1583,8 @@ public class AssetRegistrationResourceIT {
         assertThat(testAssetRegistration.getCommentsContentType()).isEqualTo(UPDATED_COMMENTS_CONTENT_TYPE);
         assertThat(testAssetRegistration.getModelNumber()).isEqualTo(UPDATED_MODEL_NUMBER);
         assertThat(testAssetRegistration.getSerialNumber()).isEqualTo(UPDATED_SERIAL_NUMBER);
+        assertThat(testAssetRegistration.getRemarks()).isEqualTo(UPDATED_REMARKS);
+        assertThat(testAssetRegistration.getCapitalizationDate()).isEqualTo(UPDATED_CAPITALIZATION_DATE);
 
         // Validate the AssetRegistration in Elasticsearch
         verify(mockAssetRegistrationSearchRepository).save(testAssetRegistration);
@@ -1532,7 +1683,9 @@ public class AssetRegistrationResourceIT {
             .assetCost(UPDATED_ASSET_COST)
             .comments(UPDATED_COMMENTS)
             .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE)
-            .serialNumber(UPDATED_SERIAL_NUMBER);
+            .serialNumber(UPDATED_SERIAL_NUMBER)
+            .remarks(UPDATED_REMARKS)
+            .capitalizationDate(UPDATED_CAPITALIZATION_DATE);
 
         restAssetRegistrationMockMvc
             .perform(
@@ -1554,6 +1707,8 @@ public class AssetRegistrationResourceIT {
         assertThat(testAssetRegistration.getCommentsContentType()).isEqualTo(UPDATED_COMMENTS_CONTENT_TYPE);
         assertThat(testAssetRegistration.getModelNumber()).isEqualTo(DEFAULT_MODEL_NUMBER);
         assertThat(testAssetRegistration.getSerialNumber()).isEqualTo(UPDATED_SERIAL_NUMBER);
+        assertThat(testAssetRegistration.getRemarks()).isEqualTo(UPDATED_REMARKS);
+        assertThat(testAssetRegistration.getCapitalizationDate()).isEqualTo(UPDATED_CAPITALIZATION_DATE);
     }
 
     @Test
@@ -1576,7 +1731,9 @@ public class AssetRegistrationResourceIT {
             .comments(UPDATED_COMMENTS)
             .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE)
             .modelNumber(UPDATED_MODEL_NUMBER)
-            .serialNumber(UPDATED_SERIAL_NUMBER);
+            .serialNumber(UPDATED_SERIAL_NUMBER)
+            .remarks(UPDATED_REMARKS)
+            .capitalizationDate(UPDATED_CAPITALIZATION_DATE);
 
         restAssetRegistrationMockMvc
             .perform(
@@ -1598,6 +1755,8 @@ public class AssetRegistrationResourceIT {
         assertThat(testAssetRegistration.getCommentsContentType()).isEqualTo(UPDATED_COMMENTS_CONTENT_TYPE);
         assertThat(testAssetRegistration.getModelNumber()).isEqualTo(UPDATED_MODEL_NUMBER);
         assertThat(testAssetRegistration.getSerialNumber()).isEqualTo(UPDATED_SERIAL_NUMBER);
+        assertThat(testAssetRegistration.getRemarks()).isEqualTo(UPDATED_REMARKS);
+        assertThat(testAssetRegistration.getCapitalizationDate()).isEqualTo(UPDATED_CAPITALIZATION_DATE);
     }
 
     @Test
@@ -1721,6 +1880,8 @@ public class AssetRegistrationResourceIT {
             .andExpect(jsonPath("$.[*].commentsContentType").value(hasItem(DEFAULT_COMMENTS_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].comments").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMMENTS))))
             .andExpect(jsonPath("$.[*].modelNumber").value(hasItem(DEFAULT_MODEL_NUMBER)))
-            .andExpect(jsonPath("$.[*].serialNumber").value(hasItem(DEFAULT_SERIAL_NUMBER)));
+            .andExpect(jsonPath("$.[*].serialNumber").value(hasItem(DEFAULT_SERIAL_NUMBER)))
+            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())))
+            .andExpect(jsonPath("$.[*].capitalizationDate").value(hasItem(DEFAULT_CAPITALIZATION_DATE.toString())));
     }
 }
