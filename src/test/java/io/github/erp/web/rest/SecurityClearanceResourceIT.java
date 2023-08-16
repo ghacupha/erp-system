@@ -1,7 +1,7 @@
 package io.github.erp.web.rest;
 
 /*-
- * Erp System - Mark IV No 4 (Ehud Series) Server ver 1.3.4
+ * Erp System - Mark IV No 5 (Ehud Series) Server ver 1.3.5
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -365,7 +365,7 @@ class SecurityClearanceResourceIT {
         Long grantedClearancesId = grantedClearances.getId();
 
         // Get all the securityClearanceList where grantedClearances equals to grantedClearancesId
-        // defaultSecurityClearanceShouldBeFound("grantedClearancesId.equals=" + grantedClearancesId);
+        defaultSecurityClearanceShouldBeFound("grantedClearancesId.equals=" + grantedClearancesId);
 
         // Get all the securityClearanceList where grantedClearances equals to (grantedClearancesId + 1)
         defaultSecurityClearanceShouldNotBeFound("grantedClearancesId.equals=" + (grantedClearancesId + 1));

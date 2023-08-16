@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark IV No 4 (Ehud Series) Server ver 1.3.4
+ * Erp System - Mark IV No 5 (Ehud Series) Server ver 1.3.5
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -46,7 +46,7 @@ import tech.jhipster.web.util.ResponseUtil;
 /**
  * REST controller for managing {@link io.github.erp.domain.PaymentCategory}.
  */
-@RestController("PaymentCategoryResourceProd")
+@RestController("paymentCategoryResourceProd")
 @RequestMapping("/api/payments")
 public class PaymentCategoryResourceProd {
 

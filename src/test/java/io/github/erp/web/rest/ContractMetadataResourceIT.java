@@ -1,7 +1,7 @@
 package io.github.erp.web.rest;
 
 /*-
- * Erp System - Mark IV No 4 (Ehud Series) Server ver 1.3.4
+ * Erp System - Mark IV No 5 (Ehud Series) Server ver 1.3.5
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -1079,7 +1079,7 @@ class ContractMetadataResourceIT {
         Long relatedContractsId = relatedContracts.getId();
 
         // Get all the contractMetadataList where relatedContracts equals to relatedContractsId
-        // defaultContractMetadataShouldBeFound("relatedContractsId.equals=" + relatedContractsId);
+        defaultContractMetadataShouldBeFound("relatedContractsId.equals=" + relatedContractsId);
 
         // Get all the contractMetadataList where relatedContracts equals to (relatedContractsId + 1)
         defaultContractMetadataShouldNotBeFound("relatedContractsId.equals=" + (relatedContractsId + 1));

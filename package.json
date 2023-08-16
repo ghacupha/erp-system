@@ -1,8 +1,8 @@
 {
   "name": "erp-system",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "private": true,
-  "description": "Back-end for the ERP System: Mark IV No 4 (Ehud Series) Server v1.3.4",
+  "description": "Back-end for the ERP System: Mark IV No 5 (Ehud Series) Server v1.3.5",
   "license": "GPLv3",
   "scripts": {
     "app:start": "./mvnw",

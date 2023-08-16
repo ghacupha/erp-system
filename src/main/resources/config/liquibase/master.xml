@@ -95,6 +95,8 @@
     <include file="config/liquibase/changelog/20230705135041_added_entity_DepreciationJob.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230705140128_added_entity_DepreciationBatchSequence.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230816114147_added_entity_FiscalYear.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230816125243_added_entity_FiscalQuarter.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230816131238_added_entity_FiscalMonth.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
@@ -198,6 +200,8 @@
     <include file="config/liquibase/changelog/20230816084408_added_remarks_and_capitalization_date_to_asset_reg.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230816105203_add_tracker_for_process_lock_and_depreciation_period_code.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230816114147_added_entity_constraints_FiscalYear.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230816125243_added_entity_constraints_FiscalQuarter.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230816131238_added_entity_constraints_FiscalMonth.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

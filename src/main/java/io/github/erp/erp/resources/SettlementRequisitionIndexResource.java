@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark IV No 4 (Ehud Series) Server ver 1.3.4
+ * Erp System - Mark IV No 5 (Ehud Series) Server ver 1.3.5
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -39,7 +39,7 @@ import tech.jhipster.web.util.PaginationUtil;
 import java.util.List;
 
 @Profile("!no-index")
-@RestController("SettlementRequisitionIndexResource")
+@RestController("settlementRequisitionIndexResource")
 @RequestMapping("/api/requisition")
 public class SettlementRequisitionIndexResource {
 
