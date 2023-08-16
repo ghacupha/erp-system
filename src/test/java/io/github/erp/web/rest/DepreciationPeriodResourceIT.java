@@ -75,6 +75,12 @@ class DepreciationPeriodResourceIT {
     private static final DepreciationPeriodStatusTypes DEFAULT_DEPRECIATION_PERIOD_STATUS = DepreciationPeriodStatusTypes.OPEN;
     private static final DepreciationPeriodStatusTypes UPDATED_DEPRECIATION_PERIOD_STATUS = DepreciationPeriodStatusTypes.CLOSED;
 
+    private static final String DEFAULT_PERIOD_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_PERIOD_CODE = "BBBBBBBBBB";
+
+    private static final Boolean DEFAULT_PROCESS_LOCKED = false;
+    private static final Boolean UPDATED_PROCESS_LOCKED = true;
+
     private static final String ENTITY_API_URL = "/api/depreciation-periods";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/depreciation-periods";
@@ -114,7 +120,9 @@ class DepreciationPeriodResourceIT {
         DepreciationPeriod depreciationPeriod = new DepreciationPeriod()
             .startDate(DEFAULT_START_DATE)
             .endDate(DEFAULT_END_DATE)
-            .depreciationPeriodStatus(DEFAULT_DEPRECIATION_PERIOD_STATUS);
+            .depreciationPeriodStatus(DEFAULT_DEPRECIATION_PERIOD_STATUS)
+            .periodCode(DEFAULT_PERIOD_CODE)
+            .processLocked(DEFAULT_PROCESS_LOCKED);
         return depreciationPeriod;
     }
 
@@ -128,7 +136,9 @@ class DepreciationPeriodResourceIT {
         DepreciationPeriod depreciationPeriod = new DepreciationPeriod()
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
-            .depreciationPeriodStatus(UPDATED_DEPRECIATION_PERIOD_STATUS);
+            .depreciationPeriodStatus(UPDATED_DEPRECIATION_PERIOD_STATUS)
+            .periodCode(UPDATED_PERIOD_CODE)
+            .processLocked(UPDATED_PROCESS_LOCKED);
         return depreciationPeriod;
     }
 
@@ -158,6 +168,8 @@ class DepreciationPeriodResourceIT {
         assertThat(testDepreciationPeriod.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testDepreciationPeriod.getEndDate()).isEqualTo(DEFAULT_END_DATE);
         assertThat(testDepreciationPeriod.getDepreciationPeriodStatus()).isEqualTo(DEFAULT_DEPRECIATION_PERIOD_STATUS);
+        assertThat(testDepreciationPeriod.getPeriodCode()).isEqualTo(DEFAULT_PERIOD_CODE);
+        assertThat(testDepreciationPeriod.getProcessLocked()).isEqualTo(DEFAULT_PROCESS_LOCKED);
 
         // Validate the DepreciationPeriod in Elasticsearch
         verify(mockDepreciationPeriodSearchRepository, times(1)).save(testDepreciationPeriod);
@@ -235,6 +247,28 @@ class DepreciationPeriodResourceIT {
 
     @Test
     @Transactional
+    void checkPeriodCodeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = depreciationPeriodRepository.findAll().size();
+        // set the field null
+        depreciationPeriod.setPeriodCode(null);
+
+        // Create the DepreciationPeriod, which fails.
+        DepreciationPeriodDTO depreciationPeriodDTO = depreciationPeriodMapper.toDto(depreciationPeriod);
+
+        restDepreciationPeriodMockMvc
+            .perform(
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(depreciationPeriodDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<DepreciationPeriod> depreciationPeriodList = depreciationPeriodRepository.findAll();
+        assertThat(depreciationPeriodList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllDepreciationPeriods() throws Exception {
         // Initialize the database
         depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
@@ -247,7 +281,9 @@ class DepreciationPeriodResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(depreciationPeriod.getId().intValue())))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
-            .andExpect(jsonPath("$.[*].depreciationPeriodStatus").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].depreciationPeriodStatus").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].periodCode").value(hasItem(DEFAULT_PERIOD_CODE)))
+            .andExpect(jsonPath("$.[*].processLocked").value(hasItem(DEFAULT_PROCESS_LOCKED.booleanValue())));
     }
 
     @Test
@@ -264,7 +300,9 @@ class DepreciationPeriodResourceIT {
             .andExpect(jsonPath("$.id").value(depreciationPeriod.getId().intValue()))
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
             .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()))
-            .andExpect(jsonPath("$.depreciationPeriodStatus").value(DEFAULT_DEPRECIATION_PERIOD_STATUS.toString()));
+            .andExpect(jsonPath("$.depreciationPeriodStatus").value(DEFAULT_DEPRECIATION_PERIOD_STATUS.toString()))
+            .andExpect(jsonPath("$.periodCode").value(DEFAULT_PERIOD_CODE))
+            .andExpect(jsonPath("$.processLocked").value(DEFAULT_PROCESS_LOCKED.booleanValue()));
     }
 
     @Test
@@ -549,6 +587,136 @@ class DepreciationPeriodResourceIT {
 
     @Test
     @Transactional
+    void getAllDepreciationPeriodsByPeriodCodeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
+
+        // Get all the depreciationPeriodList where periodCode equals to DEFAULT_PERIOD_CODE
+        defaultDepreciationPeriodShouldBeFound("periodCode.equals=" + DEFAULT_PERIOD_CODE);
+
+        // Get all the depreciationPeriodList where periodCode equals to UPDATED_PERIOD_CODE
+        defaultDepreciationPeriodShouldNotBeFound("periodCode.equals=" + UPDATED_PERIOD_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationPeriodsByPeriodCodeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
+
+        // Get all the depreciationPeriodList where periodCode not equals to DEFAULT_PERIOD_CODE
+        defaultDepreciationPeriodShouldNotBeFound("periodCode.notEquals=" + DEFAULT_PERIOD_CODE);
+
+        // Get all the depreciationPeriodList where periodCode not equals to UPDATED_PERIOD_CODE
+        defaultDepreciationPeriodShouldBeFound("periodCode.notEquals=" + UPDATED_PERIOD_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationPeriodsByPeriodCodeIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
+
+        // Get all the depreciationPeriodList where periodCode in DEFAULT_PERIOD_CODE or UPDATED_PERIOD_CODE
+        defaultDepreciationPeriodShouldBeFound("periodCode.in=" + DEFAULT_PERIOD_CODE + "," + UPDATED_PERIOD_CODE);
+
+        // Get all the depreciationPeriodList where periodCode equals to UPDATED_PERIOD_CODE
+        defaultDepreciationPeriodShouldNotBeFound("periodCode.in=" + UPDATED_PERIOD_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationPeriodsByPeriodCodeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
+
+        // Get all the depreciationPeriodList where periodCode is not null
+        defaultDepreciationPeriodShouldBeFound("periodCode.specified=true");
+
+        // Get all the depreciationPeriodList where periodCode is null
+        defaultDepreciationPeriodShouldNotBeFound("periodCode.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationPeriodsByPeriodCodeContainsSomething() throws Exception {
+        // Initialize the database
+        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
+
+        // Get all the depreciationPeriodList where periodCode contains DEFAULT_PERIOD_CODE
+        defaultDepreciationPeriodShouldBeFound("periodCode.contains=" + DEFAULT_PERIOD_CODE);
+
+        // Get all the depreciationPeriodList where periodCode contains UPDATED_PERIOD_CODE
+        defaultDepreciationPeriodShouldNotBeFound("periodCode.contains=" + UPDATED_PERIOD_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationPeriodsByPeriodCodeNotContainsSomething() throws Exception {
+        // Initialize the database
+        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
+
+        // Get all the depreciationPeriodList where periodCode does not contain DEFAULT_PERIOD_CODE
+        defaultDepreciationPeriodShouldNotBeFound("periodCode.doesNotContain=" + DEFAULT_PERIOD_CODE);
+
+        // Get all the depreciationPeriodList where periodCode does not contain UPDATED_PERIOD_CODE
+        defaultDepreciationPeriodShouldBeFound("periodCode.doesNotContain=" + UPDATED_PERIOD_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationPeriodsByProcessLockedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
+
+        // Get all the depreciationPeriodList where processLocked equals to DEFAULT_PROCESS_LOCKED
+        defaultDepreciationPeriodShouldBeFound("processLocked.equals=" + DEFAULT_PROCESS_LOCKED);
+
+        // Get all the depreciationPeriodList where processLocked equals to UPDATED_PROCESS_LOCKED
+        defaultDepreciationPeriodShouldNotBeFound("processLocked.equals=" + UPDATED_PROCESS_LOCKED);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationPeriodsByProcessLockedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
+
+        // Get all the depreciationPeriodList where processLocked not equals to DEFAULT_PROCESS_LOCKED
+        defaultDepreciationPeriodShouldNotBeFound("processLocked.notEquals=" + DEFAULT_PROCESS_LOCKED);
+
+        // Get all the depreciationPeriodList where processLocked not equals to UPDATED_PROCESS_LOCKED
+        defaultDepreciationPeriodShouldBeFound("processLocked.notEquals=" + UPDATED_PROCESS_LOCKED);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationPeriodsByProcessLockedIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
+
+        // Get all the depreciationPeriodList where processLocked in DEFAULT_PROCESS_LOCKED or UPDATED_PROCESS_LOCKED
+        defaultDepreciationPeriodShouldBeFound("processLocked.in=" + DEFAULT_PROCESS_LOCKED + "," + UPDATED_PROCESS_LOCKED);
+
+        // Get all the depreciationPeriodList where processLocked equals to UPDATED_PROCESS_LOCKED
+        defaultDepreciationPeriodShouldNotBeFound("processLocked.in=" + UPDATED_PROCESS_LOCKED);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationPeriodsByProcessLockedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
+
+        // Get all the depreciationPeriodList where processLocked is not null
+        defaultDepreciationPeriodShouldBeFound("processLocked.specified=true");
+
+        // Get all the depreciationPeriodList where processLocked is null
+        defaultDepreciationPeriodShouldNotBeFound("processLocked.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllDepreciationPeriodsByPreviousPeriodIsEqualToSomething() throws Exception {
         // Initialize the database
         depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
@@ -610,7 +778,9 @@ class DepreciationPeriodResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(depreciationPeriod.getId().intValue())))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
-            .andExpect(jsonPath("$.[*].depreciationPeriodStatus").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].depreciationPeriodStatus").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].periodCode").value(hasItem(DEFAULT_PERIOD_CODE)))
+            .andExpect(jsonPath("$.[*].processLocked").value(hasItem(DEFAULT_PROCESS_LOCKED.booleanValue())));
 
         // Check, that the count call also returns 1
         restDepreciationPeriodMockMvc
@@ -661,7 +831,9 @@ class DepreciationPeriodResourceIT {
         updatedDepreciationPeriod
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
-            .depreciationPeriodStatus(UPDATED_DEPRECIATION_PERIOD_STATUS);
+            .depreciationPeriodStatus(UPDATED_DEPRECIATION_PERIOD_STATUS)
+            .periodCode(UPDATED_PERIOD_CODE)
+            .processLocked(UPDATED_PROCESS_LOCKED);
         DepreciationPeriodDTO depreciationPeriodDTO = depreciationPeriodMapper.toDto(updatedDepreciationPeriod);
 
         restDepreciationPeriodMockMvc
@@ -679,6 +851,8 @@ class DepreciationPeriodResourceIT {
         assertThat(testDepreciationPeriod.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testDepreciationPeriod.getEndDate()).isEqualTo(UPDATED_END_DATE);
         assertThat(testDepreciationPeriod.getDepreciationPeriodStatus()).isEqualTo(UPDATED_DEPRECIATION_PERIOD_STATUS);
+        assertThat(testDepreciationPeriod.getPeriodCode()).isEqualTo(UPDATED_PERIOD_CODE);
+        assertThat(testDepreciationPeriod.getProcessLocked()).isEqualTo(UPDATED_PROCESS_LOCKED);
 
         // Validate the DepreciationPeriod in Elasticsearch
         verify(mockDepreciationPeriodSearchRepository).save(testDepreciationPeriod);
@@ -774,7 +948,7 @@ class DepreciationPeriodResourceIT {
         DepreciationPeriod partialUpdatedDepreciationPeriod = new DepreciationPeriod();
         partialUpdatedDepreciationPeriod.setId(depreciationPeriod.getId());
 
-        partialUpdatedDepreciationPeriod.startDate(UPDATED_START_DATE).endDate(UPDATED_END_DATE);
+        partialUpdatedDepreciationPeriod.startDate(UPDATED_START_DATE).endDate(UPDATED_END_DATE).processLocked(UPDATED_PROCESS_LOCKED);
 
         restDepreciationPeriodMockMvc
             .perform(
@@ -791,6 +965,8 @@ class DepreciationPeriodResourceIT {
         assertThat(testDepreciationPeriod.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testDepreciationPeriod.getEndDate()).isEqualTo(UPDATED_END_DATE);
         assertThat(testDepreciationPeriod.getDepreciationPeriodStatus()).isEqualTo(DEFAULT_DEPRECIATION_PERIOD_STATUS);
+        assertThat(testDepreciationPeriod.getPeriodCode()).isEqualTo(DEFAULT_PERIOD_CODE);
+        assertThat(testDepreciationPeriod.getProcessLocked()).isEqualTo(UPDATED_PROCESS_LOCKED);
     }
 
     @Test
@@ -808,7 +984,9 @@ class DepreciationPeriodResourceIT {
         partialUpdatedDepreciationPeriod
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
-            .depreciationPeriodStatus(UPDATED_DEPRECIATION_PERIOD_STATUS);
+            .depreciationPeriodStatus(UPDATED_DEPRECIATION_PERIOD_STATUS)
+            .periodCode(UPDATED_PERIOD_CODE)
+            .processLocked(UPDATED_PROCESS_LOCKED);
 
         restDepreciationPeriodMockMvc
             .perform(
@@ -825,6 +1003,8 @@ class DepreciationPeriodResourceIT {
         assertThat(testDepreciationPeriod.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testDepreciationPeriod.getEndDate()).isEqualTo(UPDATED_END_DATE);
         assertThat(testDepreciationPeriod.getDepreciationPeriodStatus()).isEqualTo(UPDATED_DEPRECIATION_PERIOD_STATUS);
+        assertThat(testDepreciationPeriod.getPeriodCode()).isEqualTo(UPDATED_PERIOD_CODE);
+        assertThat(testDepreciationPeriod.getProcessLocked()).isEqualTo(UPDATED_PROCESS_LOCKED);
     }
 
     @Test
@@ -943,6 +1123,8 @@ class DepreciationPeriodResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(depreciationPeriod.getId().intValue())))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
-            .andExpect(jsonPath("$.[*].depreciationPeriodStatus").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].depreciationPeriodStatus").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].periodCode").value(hasItem(DEFAULT_PERIOD_CODE)))
+            .andExpect(jsonPath("$.[*].processLocked").value(hasItem(DEFAULT_PROCESS_LOCKED.booleanValue())));
     }
 }

@@ -56,6 +56,13 @@ public class DepreciationPeriod implements Serializable {
     @Column(name = "depreciation_period_status")
     private DepreciationPeriodStatusTypes depreciationPeriodStatus;
 
+    @NotNull
+    @Column(name = "period_code", nullable = false, unique = true)
+    private String periodCode;
+
+    @Column(name = "process_locked")
+    private Boolean processLocked;
+
     @JsonIgnoreProperties(value = { "previousPeriod", "createdBy" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
@@ -122,6 +129,32 @@ public class DepreciationPeriod implements Serializable {
         this.depreciationPeriodStatus = depreciationPeriodStatus;
     }
 
+    public String getPeriodCode() {
+        return this.periodCode;
+    }
+
+    public DepreciationPeriod periodCode(String periodCode) {
+        this.setPeriodCode(periodCode);
+        return this;
+    }
+
+    public void setPeriodCode(String periodCode) {
+        this.periodCode = periodCode;
+    }
+
+    public Boolean getProcessLocked() {
+        return this.processLocked;
+    }
+
+    public DepreciationPeriod processLocked(Boolean processLocked) {
+        this.setProcessLocked(processLocked);
+        return this;
+    }
+
+    public void setProcessLocked(Boolean processLocked) {
+        this.processLocked = processLocked;
+    }
+
     public DepreciationPeriod getPreviousPeriod() {
         return this.previousPeriod;
     }
@@ -175,6 +208,8 @@ public class DepreciationPeriod implements Serializable {
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
             ", depreciationPeriodStatus='" + getDepreciationPeriodStatus() + "'" +
+            ", periodCode='" + getPeriodCode() + "'" +
+            ", processLocked='" + getProcessLocked() + "'" +
             "}";
     }
 }
