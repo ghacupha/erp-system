@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.repository.JobSheetRepository;
@@ -93,7 +94,7 @@ public class JobSheetResource {
         JobSheetDTO result = jobSheetService.save(jobSheetDTO);
         return ResponseEntity
             .created(new URI("/api/job-sheets/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -127,7 +128,7 @@ public class JobSheetResource {
         JobSheetDTO result = jobSheetService.save(jobSheetDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, jobSheetDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, jobSheetDTO.getId().toString()))
             .body(result);
     }
 
@@ -163,7 +164,7 @@ public class JobSheetResource {
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, jobSheetDTO.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, jobSheetDTO.getId().toString())
         );
     }
 
@@ -219,7 +220,7 @@ public class JobSheetResource {
         jobSheetService.delete(id);
         return ResponseEntity
             .noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
 

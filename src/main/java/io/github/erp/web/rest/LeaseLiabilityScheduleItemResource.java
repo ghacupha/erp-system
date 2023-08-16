@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.repository.LeaseLiabilityScheduleItemRepository;
@@ -95,7 +96,7 @@ public class LeaseLiabilityScheduleItemResource {
         LeaseLiabilityScheduleItemDTO result = leaseLiabilityScheduleItemService.save(leaseLiabilityScheduleItemDTO);
         return ResponseEntity
             .created(new URI("/api/lease-liability-schedule-items/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -130,7 +131,7 @@ public class LeaseLiabilityScheduleItemResource {
         return ResponseEntity
             .ok()
             .headers(
-                HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, leaseLiabilityScheduleItemDTO.getId().toString())
+                HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, leaseLiabilityScheduleItemDTO.getId().toString())
             )
             .body(result);
     }
@@ -167,7 +168,7 @@ public class LeaseLiabilityScheduleItemResource {
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, leaseLiabilityScheduleItemDTO.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, leaseLiabilityScheduleItemDTO.getId().toString())
         );
     }
 
@@ -226,7 +227,7 @@ public class LeaseLiabilityScheduleItemResource {
         leaseLiabilityScheduleItemService.delete(id);
         return ResponseEntity
             .noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
 

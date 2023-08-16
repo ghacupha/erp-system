@@ -17,6 +17,7 @@ package io.github.erp.service.criteria;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -26,6 +27,7 @@ import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
+import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 
@@ -55,6 +57,8 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
     private StringFilter modelNumber;
 
     private StringFilter serialNumber;
+
+    private LocalDateFilter capitalizationDate;
 
     private LongFilter placeholderId;
 
@@ -100,6 +104,7 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
         this.assetCost = other.assetCost == null ? null : other.assetCost.copy();
         this.modelNumber = other.modelNumber == null ? null : other.modelNumber.copy();
         this.serialNumber = other.serialNumber == null ? null : other.serialNumber.copy();
+        this.capitalizationDate = other.capitalizationDate == null ? null : other.capitalizationDate.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.paymentInvoicesId = other.paymentInvoicesId == null ? null : other.paymentInvoicesId.copy();
         this.serviceOutletId = other.serviceOutletId == null ? null : other.serviceOutletId.copy();
@@ -227,6 +232,21 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
 
     public void setSerialNumber(StringFilter serialNumber) {
         this.serialNumber = serialNumber;
+    }
+
+    public LocalDateFilter getCapitalizationDate() {
+        return capitalizationDate;
+    }
+
+    public LocalDateFilter capitalizationDate() {
+        if (capitalizationDate == null) {
+            capitalizationDate = new LocalDateFilter();
+        }
+        return capitalizationDate;
+    }
+
+    public void setCapitalizationDate(LocalDateFilter capitalizationDate) {
+        this.capitalizationDate = capitalizationDate;
     }
 
     public LongFilter getPlaceholderId() {
@@ -494,6 +514,7 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             Objects.equals(assetCost, that.assetCost) &&
             Objects.equals(modelNumber, that.modelNumber) &&
             Objects.equals(serialNumber, that.serialNumber) &&
+            Objects.equals(capitalizationDate, that.capitalizationDate) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(paymentInvoicesId, that.paymentInvoicesId) &&
             Objects.equals(serviceOutletId, that.serviceOutletId) &&
@@ -524,6 +545,7 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             assetCost,
             modelNumber,
             serialNumber,
+            capitalizationDate,
             placeholderId,
             paymentInvoicesId,
             serviceOutletId,
@@ -555,6 +577,7 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             (assetCost != null ? "assetCost=" + assetCost + ", " : "") +
             (modelNumber != null ? "modelNumber=" + modelNumber + ", " : "") +
             (serialNumber != null ? "serialNumber=" + serialNumber + ", " : "") +
+            (capitalizationDate != null ? "capitalizationDate=" + capitalizationDate + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (paymentInvoicesId != null ? "paymentInvoicesId=" + paymentInvoicesId + ", " : "") +
             (serviceOutletId != null ? "serviceOutletId=" + serviceOutletId + ", " : "") +

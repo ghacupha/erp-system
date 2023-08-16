@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.repository.FixedAssetDepreciationRepository;
@@ -93,7 +94,7 @@ public class FixedAssetDepreciationResource {
         FixedAssetDepreciationDTO result = fixedAssetDepreciationService.save(fixedAssetDepreciationDTO);
         return ResponseEntity
             .created(new URI("/api/fixed-asset-depreciations/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -127,7 +128,7 @@ public class FixedAssetDepreciationResource {
         FixedAssetDepreciationDTO result = fixedAssetDepreciationService.save(fixedAssetDepreciationDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, fixedAssetDepreciationDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, fixedAssetDepreciationDTO.getId().toString()))
             .body(result);
     }
 
@@ -163,7 +164,7 @@ public class FixedAssetDepreciationResource {
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, fixedAssetDepreciationDTO.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, fixedAssetDepreciationDTO.getId().toString())
         );
     }
 
@@ -222,7 +223,7 @@ public class FixedAssetDepreciationResource {
         fixedAssetDepreciationService.delete(id);
         return ResponseEntity
             .noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
 

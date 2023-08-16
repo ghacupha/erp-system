@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.repository.PrepaymentAccountRepository;
@@ -94,7 +95,7 @@ public class PrepaymentAccountResource {
         PrepaymentAccountDTO result = prepaymentAccountService.save(prepaymentAccountDTO);
         return ResponseEntity
             .created(new URI("/api/prepayment-accounts/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -128,7 +129,7 @@ public class PrepaymentAccountResource {
         PrepaymentAccountDTO result = prepaymentAccountService.save(prepaymentAccountDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, prepaymentAccountDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, prepaymentAccountDTO.getId().toString()))
             .body(result);
     }
 
@@ -164,7 +165,7 @@ public class PrepaymentAccountResource {
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, prepaymentAccountDTO.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, prepaymentAccountDTO.getId().toString())
         );
     }
 
@@ -220,7 +221,7 @@ public class PrepaymentAccountResource {
         prepaymentAccountService.delete(id);
         return ResponseEntity
             .noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
 
