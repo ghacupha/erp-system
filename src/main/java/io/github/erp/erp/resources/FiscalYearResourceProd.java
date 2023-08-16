@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark IV No 4 (Ehud Series) Server ver 1.3.4
+ * Erp System - Mark IV No 5 (Ehud Series) Server ver 1.3.5
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.repository.FiscalYearRepository;
 import io.github.erp.service.FiscalYearQueryService;
 import io.github.erp.service.FiscalYearService;
@@ -48,13 +47,13 @@ import java.util.Optional;
 /**
  * REST controller for managing {@link io.github.erp.domain.FiscalYear}.
  */
-@RestController
+@RestController("fiscalYearResourceProd")
 @RequestMapping("/api/app")
 public class FiscalYearResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(FiscalYearResourceProd.class);
 
-    private static final String ENTITY_NAME = "fiscalYear";
+    private static final String ENTITY_NAME = "fiscalYearProd";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
