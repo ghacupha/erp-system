@@ -128,6 +128,12 @@ public class DepreciationPeriodQueryService extends QueryService<DepreciationPer
                         buildSpecification(criteria.getDepreciationPeriodStatus(), DepreciationPeriod_.depreciationPeriodStatus)
                     );
             }
+            if (criteria.getPeriodCode() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getPeriodCode(), DepreciationPeriod_.periodCode));
+            }
+            if (criteria.getProcessLocked() != null) {
+                specification = specification.and(buildSpecification(criteria.getProcessLocked(), DepreciationPeriod_.processLocked));
+            }
             if (criteria.getPreviousPeriodId() != null) {
                 specification =
                     specification.and(

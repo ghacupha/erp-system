@@ -69,6 +69,10 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
 
     private DepreciationPeriodStatusTypesFilter depreciationPeriodStatus;
 
+    private StringFilter periodCode;
+
+    private BooleanFilter processLocked;
+
     private LongFilter previousPeriodId;
 
     private LongFilter createdById;
@@ -82,6 +86,8 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
         this.startDate = other.startDate == null ? null : other.startDate.copy();
         this.endDate = other.endDate == null ? null : other.endDate.copy();
         this.depreciationPeriodStatus = other.depreciationPeriodStatus == null ? null : other.depreciationPeriodStatus.copy();
+        this.periodCode = other.periodCode == null ? null : other.periodCode.copy();
+        this.processLocked = other.processLocked == null ? null : other.processLocked.copy();
         this.previousPeriodId = other.previousPeriodId == null ? null : other.previousPeriodId.copy();
         this.createdById = other.createdById == null ? null : other.createdById.copy();
         this.distinct = other.distinct;
@@ -152,6 +158,36 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
         this.depreciationPeriodStatus = depreciationPeriodStatus;
     }
 
+    public StringFilter getPeriodCode() {
+        return periodCode;
+    }
+
+    public StringFilter periodCode() {
+        if (periodCode == null) {
+            periodCode = new StringFilter();
+        }
+        return periodCode;
+    }
+
+    public void setPeriodCode(StringFilter periodCode) {
+        this.periodCode = periodCode;
+    }
+
+    public BooleanFilter getProcessLocked() {
+        return processLocked;
+    }
+
+    public BooleanFilter processLocked() {
+        if (processLocked == null) {
+            processLocked = new BooleanFilter();
+        }
+        return processLocked;
+    }
+
+    public void setProcessLocked(BooleanFilter processLocked) {
+        this.processLocked = processLocked;
+    }
+
     public LongFilter getPreviousPeriodId() {
         return previousPeriodId;
     }
@@ -204,6 +240,8 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
             Objects.equals(startDate, that.startDate) &&
             Objects.equals(endDate, that.endDate) &&
             Objects.equals(depreciationPeriodStatus, that.depreciationPeriodStatus) &&
+            Objects.equals(periodCode, that.periodCode) &&
+            Objects.equals(processLocked, that.processLocked) &&
             Objects.equals(previousPeriodId, that.previousPeriodId) &&
             Objects.equals(createdById, that.createdById) &&
             Objects.equals(distinct, that.distinct)
@@ -212,7 +250,17 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, startDate, endDate, depreciationPeriodStatus, previousPeriodId, createdById, distinct);
+        return Objects.hash(
+            id,
+            startDate,
+            endDate,
+            depreciationPeriodStatus,
+            periodCode,
+            processLocked,
+            previousPeriodId,
+            createdById,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -223,6 +271,8 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
             (startDate != null ? "startDate=" + startDate + ", " : "") +
             (endDate != null ? "endDate=" + endDate + ", " : "") +
             (depreciationPeriodStatus != null ? "depreciationPeriodStatus=" + depreciationPeriodStatus + ", " : "") +
+            (periodCode != null ? "periodCode=" + periodCode + ", " : "") +
+            (processLocked != null ? "processLocked=" + processLocked + ", " : "") +
             (previousPeriodId != null ? "previousPeriodId=" + previousPeriodId + ", " : "") +
             (createdById != null ? "createdById=" + createdById + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

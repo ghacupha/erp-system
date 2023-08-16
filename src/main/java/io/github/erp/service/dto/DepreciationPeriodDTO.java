@@ -39,6 +39,11 @@ public class DepreciationPeriodDTO implements Serializable {
 
     private DepreciationPeriodStatusTypes depreciationPeriodStatus;
 
+    @NotNull
+    private String periodCode;
+
+    private Boolean processLocked;
+
     private DepreciationPeriodDTO previousPeriod;
 
     private ApplicationUserDTO createdBy;
@@ -73,6 +78,22 @@ public class DepreciationPeriodDTO implements Serializable {
 
     public void setDepreciationPeriodStatus(DepreciationPeriodStatusTypes depreciationPeriodStatus) {
         this.depreciationPeriodStatus = depreciationPeriodStatus;
+    }
+
+    public String getPeriodCode() {
+        return periodCode;
+    }
+
+    public void setPeriodCode(String periodCode) {
+        this.periodCode = periodCode;
+    }
+
+    public Boolean getProcessLocked() {
+        return processLocked;
+    }
+
+    public void setProcessLocked(Boolean processLocked) {
+        this.processLocked = processLocked;
     }
 
     public DepreciationPeriodDTO getPreviousPeriod() {
@@ -120,6 +141,8 @@ public class DepreciationPeriodDTO implements Serializable {
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
             ", depreciationPeriodStatus='" + getDepreciationPeriodStatus() + "'" +
+            ", periodCode='" + getPeriodCode() + "'" +
+            ", processLocked='" + getProcessLocked() + "'" +
             ", previousPeriod=" + getPreviousPeriod() +
             ", createdBy=" + getCreatedBy() +
             "}";

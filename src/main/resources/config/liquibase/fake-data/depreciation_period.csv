@@ -1,11 +1,11 @@
-id;start_date;end_date;depreciation_period_status
-1;2023-07-03;2023-07-04;PROCESSING
-2;2023-07-04;2023-07-04;OPEN
-3;2023-07-03;2023-07-04;CLOSED
-4;2023-07-03;2023-07-03;CLOSED
-5;2023-07-04;2023-07-04;CLOSED
-6;2023-07-03;2023-07-04;CLOSED
-7;2023-07-04;2023-07-03;OPEN
-8;2023-07-04;2023-07-03;OPEN
-9;2023-07-03;2023-07-04;OPEN
-10;2023-07-04;2023-07-03;PROCESSING
+id;start_date;end_date;depreciation_period_status;period_code;process_locked
+1;2023-07-03;2023-07-04;PROCESSING;Fresh synthesize;true
+2;2023-07-04;2023-07-04;PROCESSING;interactive Ball;false
+3;2023-07-04;2023-07-04;PROCESSING;payment base HDD;true
+4;2023-07-04;2023-07-04;CLOSED;generating Security Fish;true
+5;2023-07-04;2023-07-03;PROCESSING;Denmark Universal;true
+6;2023-07-04;2023-07-04;OPEN;iterate Concrete Tuna;true
+7;2023-07-04;2023-07-04;OPEN;Plastic firewall;true
+8;2023-07-04;2023-07-04;CLOSED;Avon killer;false
+9;2023-07-04;2023-07-03;OPEN;Chief Granite Strategist;false
+10;2023-07-04;2023-07-03;PROCESSING;Jewelery withdrawal;false
