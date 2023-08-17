@@ -49,5 +49,11 @@
                                  constraintName="fk_rel_depreciation_job_notice___universally_unique_mappi_8e_id"
                                  referencedColumnNames="id"
                                  referencedTableName="universally_unique_mapping"/>
+
+        <addForeignKeyConstraint baseColumnNames="superintended_id"
+                                 baseTableName="depreciation_job_notice"
+                                 constraintName="fk_depreciation_job_notice__superintended_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_user"/>
     </changeSet>
 </databaseChangeLog>

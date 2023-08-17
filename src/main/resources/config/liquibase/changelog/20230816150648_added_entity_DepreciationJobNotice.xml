@@ -50,6 +50,9 @@
             <column name="depreciation_period_id" type="bigint">
                 <constraints nullable="true" />
             </column>
+            <column name="superintended_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
         <dropDefaultValue tableName="depreciation_job_notice" columnName="event_time_stamp" columnDataType="${datetimeType}"/>

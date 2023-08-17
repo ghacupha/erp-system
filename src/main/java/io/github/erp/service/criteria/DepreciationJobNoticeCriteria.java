@@ -87,6 +87,8 @@ public class DepreciationJobNoticeCriteria implements Serializable, Criteria {
 
     private LongFilter universallyUniqueMappingId;
 
+    private LongFilter superintendedId;
+
     private Boolean distinct;
 
     public DepreciationJobNoticeCriteria() {}
@@ -105,6 +107,7 @@ public class DepreciationJobNoticeCriteria implements Serializable, Criteria {
         this.depreciationPeriodId = other.depreciationPeriodId == null ? null : other.depreciationPeriodId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.universallyUniqueMappingId = other.universallyUniqueMappingId == null ? null : other.universallyUniqueMappingId.copy();
+        this.superintendedId = other.superintendedId == null ? null : other.superintendedId.copy();
         this.distinct = other.distinct;
     }
 
@@ -308,6 +311,21 @@ public class DepreciationJobNoticeCriteria implements Serializable, Criteria {
         this.universallyUniqueMappingId = universallyUniqueMappingId;
     }
 
+    public LongFilter getSuperintendedId() {
+        return superintendedId;
+    }
+
+    public LongFilter superintendedId() {
+        if (superintendedId == null) {
+            superintendedId = new LongFilter();
+        }
+        return superintendedId;
+    }
+
+    public void setSuperintendedId(LongFilter superintendedId) {
+        this.superintendedId = superintendedId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -339,6 +357,7 @@ public class DepreciationJobNoticeCriteria implements Serializable, Criteria {
             Objects.equals(depreciationPeriodId, that.depreciationPeriodId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(universallyUniqueMappingId, that.universallyUniqueMappingId) &&
+            Objects.equals(superintendedId, that.superintendedId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -359,6 +378,7 @@ public class DepreciationJobNoticeCriteria implements Serializable, Criteria {
             depreciationPeriodId,
             placeholderId,
             universallyUniqueMappingId,
+            superintendedId,
             distinct
         );
     }
@@ -380,6 +400,7 @@ public class DepreciationJobNoticeCriteria implements Serializable, Criteria {
             (depreciationPeriodId != null ? "depreciationPeriodId=" + depreciationPeriodId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (universallyUniqueMappingId != null ? "universallyUniqueMappingId=" + universallyUniqueMappingId + ", " : "") +
+            (superintendedId != null ? "superintendedId=" + superintendedId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
