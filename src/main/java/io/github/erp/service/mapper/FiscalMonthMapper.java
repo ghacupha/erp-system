@@ -32,6 +32,11 @@ public interface FiscalMonthMapper extends EntityMapper<FiscalMonthDTO, FiscalMo
     @Mapping(target = "universallyUniqueMappings", source = "universallyUniqueMappings", qualifiedByName = "universalKeySet")
     FiscalMonthDTO toDto(FiscalMonth s);
 
+    @Named("id")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    FiscalMonthDTO toDtoId(FiscalMonth fiscalMonth);
+
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removeUniversallyUniqueMapping", ignore = true)
     FiscalMonth toEntity(FiscalMonthDTO fiscalMonthDTO);

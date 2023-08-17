@@ -203,7 +203,7 @@
     <include file="config/liquibase/changelog/20230816114147_added_entity_constraints_FiscalYear.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230816125243_added_entity_constraints_FiscalQuarter.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230816131238_added_entity_constraints_FiscalMonth.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20230816150648_added_entity_constraints_DepreciationJobNotice.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230817085103_changelog.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

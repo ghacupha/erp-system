@@ -48,6 +48,12 @@ public class DepreciationPeriodDTO implements Serializable {
 
     private ApplicationUserDTO createdBy;
 
+    private FiscalYearDTO fiscalYear;
+
+    private FiscalMonthDTO fiscalMonth;
+
+    private FiscalQuarterDTO fiscalQuarter;
+
     public Long getId() {
         return id;
     }
@@ -112,6 +118,30 @@ public class DepreciationPeriodDTO implements Serializable {
         this.createdBy = createdBy;
     }
 
+    public FiscalYearDTO getFiscalYear() {
+        return fiscalYear;
+    }
+
+    public void setFiscalYear(FiscalYearDTO fiscalYear) {
+        this.fiscalYear = fiscalYear;
+    }
+
+    public FiscalMonthDTO getFiscalMonth() {
+        return fiscalMonth;
+    }
+
+    public void setFiscalMonth(FiscalMonthDTO fiscalMonth) {
+        this.fiscalMonth = fiscalMonth;
+    }
+
+    public FiscalQuarterDTO getFiscalQuarter() {
+        return fiscalQuarter;
+    }
+
+    public void setFiscalQuarter(FiscalQuarterDTO fiscalQuarter) {
+        this.fiscalQuarter = fiscalQuarter;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -145,6 +175,9 @@ public class DepreciationPeriodDTO implements Serializable {
             ", processLocked='" + getProcessLocked() + "'" +
             ", previousPeriod=" + getPreviousPeriod() +
             ", createdBy=" + getCreatedBy() +
+            ", fiscalYear=" + getFiscalYear() +
+            ", fiscalMonth=" + getFiscalMonth() +
+            ", fiscalQuarter=" + getFiscalQuarter() +
             "}";
     }
 }
