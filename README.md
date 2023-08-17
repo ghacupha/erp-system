@@ -813,7 +813,8 @@ In the Depreciation Module of our ERP system, we have carefully designed a set o
       (so you will need and SQL expert, who is also aware of the postgresql tables on the database), save the file with a new instance of report design, ensure the parameters in the report exist in the universally-unique-mapping entity and save the file.
       The end-user will then query the report-design when generating a report.
 
-By meticulously defining and integrating these entities, we achieve a comprehensive and streamlined solution for handling asset depreciation. This setup adheres to accounting standards, provides flexibility for different depreciation methods and time periods, supports efficient report generation, and ensures accuracy in financial reporting. The architecture is designed to accommodate future enhancements and is aimed at empowering our organization to make informed decisions regarding asset management and financial strategies.
+By meticulously defining and integrating these entities, we achieve a comprehensive and streamlined solution for handling asset depreciation. This setup adheres to accounting standards, provides flexibility for different depreciation methods and time periods, supports efficient report generation, 
+and ensures accuracy in financial reporting. The architecture is designed to accommodate future enhancements, therefore the final copy might look and work differently from the one implied in this discussion.
 
 
 
