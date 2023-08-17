@@ -775,7 +775,45 @@ By having a separate entity, you're able to associate metadata and behavior with
 
 I am noting this down so that it can be a record that explains why the depreciation procedure and input forms have been designed with too much user input detail; because am sure it's going to be costly in terms of UX.
 
+#### Update 2023-08-17
 
+**Explanation of Entities and Justifications in the Depreciation Module:**
+
+In the Depreciation Module of our ERP system, we have carefully designed a set of entities to facilitate accurate, efficient, repeatable, and relatable handling of asset depreciation calculations and reporting. These entities play a crucial role in managing the entire lifecycle of depreciation, ensuring compliance with accounting standards, and providing valuable insights for decision-making. Below, we provide an overview of each entity along with its justification:
+
+1. **AssetRegistration Entity:**
+    - **Justification:** This entity represents individual assets within our organization, allowing us to capture essential asset details such as cost, model number, and serial number. These details are pivotal for accurate depreciation calculations and financial reporting.
+
+2. **DepreciationMethod Entity:**
+    - **Justification:** The DepreciationMethod entity defines the various methods by which depreciation is calculated. This includes methods like straight-line depreciation and reducing balance depreciation. Defining methods ensures consistency and conformity with accounting principles.
+
+3. **DepreciationPeriod Entity:**
+    - **Justification:** The DepreciationPeriod entity allows us to segment the depreciation calculation into specific time periods, such as fiscal years, quarters, and months. This segmentation aligns with accounting practices and provides granularity for accurate financial reporting.
+      Further because each of these time segments have independent start and end dates, we can align the depreciation process to real life application, like for instance the case like mine when we do not actually carry out depreciation procedures at the dead end of the month but on designated
+      policy dates of from 20th to 21st, and yet report those numbers in the fiscal month that ends after 21st, leaving out all new assets purchased after the 21st. In such a case this model of operation would allow  one to carry out depreciation for new assets within those periods with
+      consistency, and but at the same time generate reports at the end of month with the recent purchases excluded from depreciation.
+
+4. **FiscalYear, FiscalQuarter, and FiscalMonth Entities:**
+    - **Justification:** These entities help us organize time periods for depreciation calculations. FiscalYear represents a full financial year, while FiscalQuarter and FiscalMonth further break down the year into manageable segments. This structure adheres to reporting standards and allows for better tracking and analysis.
+
+5. **DepreciationJob Entity:**
+    - **Justification:** The DepreciationJob entity serves as a container for grouping depreciation periods and initiating the calculation process. This entity streamlines the management of depreciation calculations, provides a clear audit trail, and allows for parallel processing if required.
+
+6. **DepreciationJobNotice Entity:**
+    - **Justification:** The DepreciationJobNotice entity captures events and issues that occur during the depreciation calculation process. This entity ensures transparency and accountability, enabling us to identify and address any anomalies or errors without interrupting the entire process.
+
+7. **ExcelReportExport Entity:**
+    - **Justification:** This entity handles the generation and storage of Jasper Reports, which provide detailed insights into the calculated depreciation values. ExcelReportExport allows us to create reports based on customizable templates and specific parameters, contributing to informed decision-making.
+      As of the date of writing the parameters for the jasper template are implemented through the universally-unique-mapping entity, which allows one to dynamically specify the parameter-name (has to match the parameter in the template), and the parameter value e.g. start date, report date, report period etc.
+      That's the best that could be done for dynamic runtime reports. We will endeavour to create more structured and repeatable reports with dedicated forms specifically for the fixed-assets registration module.
+
+8. **ReportDesign Entity:**
+    - **Justification:** The ReportDesign entity stores Jasper Report templates, which are used to generate depreciation reports. This separation of templates from data ensures modularity, ease of updates, and consistent formatting across different reports. This also allows users to define new reports and execute them
+      using parameters created in the universally-unique-mapping entity. This means basically that for someone to create a new report we would not need to stop the server to encode the new report, but simply to define the JRXML file (so you will need a jasper-reports expert), in which is contained the report query,
+      (so you will need and SQL expert, who is also aware of the postgresql tables on the database), save the file with a new instance of report design, ensure the parameters in the report exist in the universally-unique-mapping entity and save the file.
+      The end-user will then query the report-design when generating a report.
+
+By meticulously defining and integrating these entities, we achieve a comprehensive and streamlined solution for handling asset depreciation. This setup adheres to accounting standards, provides flexibility for different depreciation methods and time periods, supports efficient report generation, and ensures accuracy in financial reporting. The architecture is designed to accommodate future enhancements and is aimed at empowering our organization to make informed decisions regarding asset management and financial strategies.
 
 
 

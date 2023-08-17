@@ -77,6 +77,12 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
 
     private LongFilter createdById;
 
+    private LongFilter fiscalYearId;
+
+    private LongFilter fiscalMonthId;
+
+    private LongFilter fiscalQuarterId;
+
     private Boolean distinct;
 
     public DepreciationPeriodCriteria() {}
@@ -90,6 +96,9 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
         this.processLocked = other.processLocked == null ? null : other.processLocked.copy();
         this.previousPeriodId = other.previousPeriodId == null ? null : other.previousPeriodId.copy();
         this.createdById = other.createdById == null ? null : other.createdById.copy();
+        this.fiscalYearId = other.fiscalYearId == null ? null : other.fiscalYearId.copy();
+        this.fiscalMonthId = other.fiscalMonthId == null ? null : other.fiscalMonthId.copy();
+        this.fiscalQuarterId = other.fiscalQuarterId == null ? null : other.fiscalQuarterId.copy();
         this.distinct = other.distinct;
     }
 
@@ -218,6 +227,51 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
         this.createdById = createdById;
     }
 
+    public LongFilter getFiscalYearId() {
+        return fiscalYearId;
+    }
+
+    public LongFilter fiscalYearId() {
+        if (fiscalYearId == null) {
+            fiscalYearId = new LongFilter();
+        }
+        return fiscalYearId;
+    }
+
+    public void setFiscalYearId(LongFilter fiscalYearId) {
+        this.fiscalYearId = fiscalYearId;
+    }
+
+    public LongFilter getFiscalMonthId() {
+        return fiscalMonthId;
+    }
+
+    public LongFilter fiscalMonthId() {
+        if (fiscalMonthId == null) {
+            fiscalMonthId = new LongFilter();
+        }
+        return fiscalMonthId;
+    }
+
+    public void setFiscalMonthId(LongFilter fiscalMonthId) {
+        this.fiscalMonthId = fiscalMonthId;
+    }
+
+    public LongFilter getFiscalQuarterId() {
+        return fiscalQuarterId;
+    }
+
+    public LongFilter fiscalQuarterId() {
+        if (fiscalQuarterId == null) {
+            fiscalQuarterId = new LongFilter();
+        }
+        return fiscalQuarterId;
+    }
+
+    public void setFiscalQuarterId(LongFilter fiscalQuarterId) {
+        this.fiscalQuarterId = fiscalQuarterId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -244,6 +298,9 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
             Objects.equals(processLocked, that.processLocked) &&
             Objects.equals(previousPeriodId, that.previousPeriodId) &&
             Objects.equals(createdById, that.createdById) &&
+            Objects.equals(fiscalYearId, that.fiscalYearId) &&
+            Objects.equals(fiscalMonthId, that.fiscalMonthId) &&
+            Objects.equals(fiscalQuarterId, that.fiscalQuarterId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -259,6 +316,9 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
             processLocked,
             previousPeriodId,
             createdById,
+            fiscalYearId,
+            fiscalMonthId,
+            fiscalQuarterId,
             distinct
         );
     }
@@ -275,6 +335,9 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
             (processLocked != null ? "processLocked=" + processLocked + ", " : "") +
             (previousPeriodId != null ? "previousPeriodId=" + previousPeriodId + ", " : "") +
             (createdById != null ? "createdById=" + createdById + ", " : "") +
+            (fiscalYearId != null ? "fiscalYearId=" + fiscalYearId + ", " : "") +
+            (fiscalMonthId != null ? "fiscalMonthId=" + fiscalMonthId + ", " : "") +
+            (fiscalQuarterId != null ? "fiscalQuarterId=" + fiscalQuarterId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
