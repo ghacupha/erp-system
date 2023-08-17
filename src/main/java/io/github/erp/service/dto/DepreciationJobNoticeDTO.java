@@ -67,6 +67,8 @@ public class DepreciationJobNoticeDTO implements Serializable {
 
     private Set<UniversallyUniqueMappingDTO> universallyUniqueMappings = new HashSet<>();
 
+    private ApplicationUserDTO superintended;
+
     public Long getId() {
         return id;
     }
@@ -187,6 +189,14 @@ public class DepreciationJobNoticeDTO implements Serializable {
         this.universallyUniqueMappings = universallyUniqueMappings;
     }
 
+    public ApplicationUserDTO getSuperintended() {
+        return superintended;
+    }
+
+    public void setSuperintended(ApplicationUserDTO superintended) {
+        this.superintended = superintended;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -227,6 +237,7 @@ public class DepreciationJobNoticeDTO implements Serializable {
             ", depreciationPeriod=" + getDepreciationPeriod() +
             ", placeholders=" + getPlaceholders() +
             ", universallyUniqueMappings=" + getUniversallyUniqueMappings() +
+            ", superintended=" + getSuperintended() +
             "}";
     }
 }

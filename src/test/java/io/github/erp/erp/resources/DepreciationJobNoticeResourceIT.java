@@ -1060,6 +1060,32 @@ class DepreciationJobNoticeResourceIT {
         defaultDepreciationJobNoticeShouldNotBeFound("universallyUniqueMappingId.equals=" + (universallyUniqueMappingId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllDepreciationJobNoticesBySuperintendedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationJobNoticeRepository.saveAndFlush(depreciationJobNotice);
+        ApplicationUser superintended;
+        if (TestUtil.findAll(em, ApplicationUser.class).isEmpty()) {
+            superintended = ApplicationUserResourceIT.createEntity(em);
+            em.persist(superintended);
+            em.flush();
+        } else {
+            superintended = TestUtil.findAll(em, ApplicationUser.class).get(0);
+        }
+        em.persist(superintended);
+        em.flush();
+        depreciationJobNotice.setSuperintended(superintended);
+        depreciationJobNoticeRepository.saveAndFlush(depreciationJobNotice);
+        Long superintendedId = superintended.getId();
+
+        // Get all the depreciationJobNoticeList where superintended equals to superintendedId
+        defaultDepreciationJobNoticeShouldBeFound("superintendedId.equals=" + superintendedId);
+
+        // Get all the depreciationJobNoticeList where superintended equals to (superintendedId + 1)
+        defaultDepreciationJobNoticeShouldNotBeFound("superintendedId.equals=" + (superintendedId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
