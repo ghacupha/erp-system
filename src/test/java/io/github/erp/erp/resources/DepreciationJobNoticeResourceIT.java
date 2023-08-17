@@ -65,7 +65,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"FIXED_ASSETS_USER"})
 class DepreciationJobNoticeResourceIT {
 
     private static final String DEFAULT_EVENT_NARRATIVE = "AAAAAAAAAA";
@@ -96,9 +96,9 @@ class DepreciationJobNoticeResourceIT {
     private static final String DEFAULT_TECHNICAL_DETAILS = "AAAAAAAAAA";
     private static final String UPDATED_TECHNICAL_DETAILS = "BBBBBBBBBB";
 
-    private static final String ENTITY_API_URL = "/api/app/depreciation-job-notices";
+    private static final String ENTITY_API_URL = "/api/fixed-asset/depreciation-job-notices";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/app/_search/depreciation-job-notices";
+    private static final String ENTITY_SEARCH_API_URL = "/api/fixed-asset/_search/depreciation-job-notices";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

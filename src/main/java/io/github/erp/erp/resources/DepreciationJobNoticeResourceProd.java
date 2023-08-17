@@ -49,7 +49,7 @@ import java.util.Optional;
  * REST controller for managing {@link io.github.erp.domain.DepreciationJobNotice}.
  */
 @RestController("depreciationJobNoticeResourceProd")
-@RequestMapping("/api/app")
+@RequestMapping("/api/fixed-asset")
 public class DepreciationJobNoticeResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(DepreciationJobNoticeResourceProd.class);
