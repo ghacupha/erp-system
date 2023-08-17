@@ -3,7 +3,7 @@
     <changeSet author="edwin.njeru (generated)" id="1692175780408-4">
         <addColumn tableName="asset_registration">
             <column name="capitalization_date" type="date">
-                <constraints nullable="false"/>
+                <!--<constraints nullable="false"/>-->
             </column>
         </addColumn>
     </changeSet>
