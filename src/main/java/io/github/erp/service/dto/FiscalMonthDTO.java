@@ -41,6 +41,9 @@ public class FiscalMonthDTO implements Serializable {
     @NotNull
     private LocalDate endDate;
 
+    @NotNull
+    private String fiscalMonthCode;
+
     private FiscalYearDTO fiscalYear;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
@@ -77,6 +80,14 @@ public class FiscalMonthDTO implements Serializable {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public String getFiscalMonthCode() {
+        return fiscalMonthCode;
+    }
+
+    public void setFiscalMonthCode(String fiscalMonthCode) {
+        this.fiscalMonthCode = fiscalMonthCode;
     }
 
     public FiscalYearDTO getFiscalYear() {
@@ -132,6 +143,7 @@ public class FiscalMonthDTO implements Serializable {
             ", monthNumber=" + getMonthNumber() +
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
+            ", fiscalMonthCode='" + getFiscalMonthCode() + "'" +
             ", fiscalYear=" + getFiscalYear() +
             ", placeholders=" + getPlaceholders() +
             ", universallyUniqueMappings=" + getUniversallyUniqueMappings() +

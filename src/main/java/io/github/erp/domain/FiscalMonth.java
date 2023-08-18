@@ -57,6 +57,10 @@ public class FiscalMonth implements Serializable {
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
+    @NotNull
+    @Column(name = "fiscal_month_code", nullable = false, unique = true)
+    private String fiscalMonthCode;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = { "placeholders", "universallyUniqueMappings", "createdBy", "lastUpdatedBy" }, allowSetters = true)
@@ -134,6 +138,19 @@ public class FiscalMonth implements Serializable {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public String getFiscalMonthCode() {
+        return this.fiscalMonthCode;
+    }
+
+    public FiscalMonth fiscalMonthCode(String fiscalMonthCode) {
+        this.setFiscalMonthCode(fiscalMonthCode);
+        return this;
+    }
+
+    public void setFiscalMonthCode(String fiscalMonthCode) {
+        this.fiscalMonthCode = fiscalMonthCode;
     }
 
     public FiscalYear getFiscalYear() {
@@ -222,6 +239,7 @@ public class FiscalMonth implements Serializable {
             ", monthNumber=" + getMonthNumber() +
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
+            ", fiscalMonthCode='" + getFiscalMonthCode() + "'" +
             "}";
     }
 }

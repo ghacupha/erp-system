@@ -79,6 +79,9 @@ class FiscalQuarterResourceIT {
     private static final LocalDate UPDATED_END_DATE = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_END_DATE = LocalDate.ofEpochDay(-1L);
 
+    private static final String DEFAULT_FISCAL_QUARTER_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_FISCAL_QUARTER_CODE = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/app/fiscal-quarters";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/app/_search/fiscal-quarters";
@@ -124,7 +127,8 @@ class FiscalQuarterResourceIT {
         FiscalQuarter fiscalQuarter = new FiscalQuarter()
             .quarterNumber(DEFAULT_QUARTER_NUMBER)
             .startDate(DEFAULT_START_DATE)
-            .endDate(DEFAULT_END_DATE);
+            .endDate(DEFAULT_END_DATE)
+            .fiscalQuarterCode(DEFAULT_FISCAL_QUARTER_CODE);
         // Add required entity
         FiscalYear fiscalYear;
         if (TestUtil.findAll(em, FiscalYear.class).isEmpty()) {
@@ -148,7 +152,8 @@ class FiscalQuarterResourceIT {
         FiscalQuarter fiscalQuarter = new FiscalQuarter()
             .quarterNumber(UPDATED_QUARTER_NUMBER)
             .startDate(UPDATED_START_DATE)
-            .endDate(UPDATED_END_DATE);
+            .endDate(UPDATED_END_DATE)
+            .fiscalQuarterCode(UPDATED_FISCAL_QUARTER_CODE);
         // Add required entity
         FiscalYear fiscalYear;
         if (TestUtil.findAll(em, FiscalYear.class).isEmpty()) {
@@ -186,6 +191,7 @@ class FiscalQuarterResourceIT {
         assertThat(testFiscalQuarter.getQuarterNumber()).isEqualTo(DEFAULT_QUARTER_NUMBER);
         assertThat(testFiscalQuarter.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testFiscalQuarter.getEndDate()).isEqualTo(DEFAULT_END_DATE);
+        assertThat(testFiscalQuarter.getFiscalQuarterCode()).isEqualTo(DEFAULT_FISCAL_QUARTER_CODE);
 
         // Validate the FiscalQuarter in Elasticsearch
         verify(mockFiscalQuarterSearchRepository, times(1)).save(testFiscalQuarter);
@@ -277,6 +283,26 @@ class FiscalQuarterResourceIT {
 
     @Test
     @Transactional
+    void checkFiscalQuarterCodeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = fiscalQuarterRepository.findAll().size();
+        // set the field null
+        fiscalQuarter.setFiscalQuarterCode(null);
+
+        // Create the FiscalQuarter, which fails.
+        FiscalQuarterDTO fiscalQuarterDTO = fiscalQuarterMapper.toDto(fiscalQuarter);
+
+        restFiscalQuarterMockMvc
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(fiscalQuarterDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<FiscalQuarter> fiscalQuarterList = fiscalQuarterRepository.findAll();
+        assertThat(fiscalQuarterList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllFiscalQuarters() throws Exception {
         // Initialize the database
         fiscalQuarterRepository.saveAndFlush(fiscalQuarter);
@@ -289,7 +315,8 @@ class FiscalQuarterResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(fiscalQuarter.getId().intValue())))
             .andExpect(jsonPath("$.[*].quarterNumber").value(hasItem(DEFAULT_QUARTER_NUMBER)))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].fiscalQuarterCode").value(hasItem(DEFAULT_FISCAL_QUARTER_CODE)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -324,7 +351,8 @@ class FiscalQuarterResourceIT {
             .andExpect(jsonPath("$.id").value(fiscalQuarter.getId().intValue()))
             .andExpect(jsonPath("$.quarterNumber").value(DEFAULT_QUARTER_NUMBER))
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
-            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()));
+            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()))
+            .andExpect(jsonPath("$.fiscalQuarterCode").value(DEFAULT_FISCAL_QUARTER_CODE));
     }
 
     @Test
@@ -659,6 +687,84 @@ class FiscalQuarterResourceIT {
 
     @Test
     @Transactional
+    void getAllFiscalQuartersByFiscalQuarterCodeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        fiscalQuarterRepository.saveAndFlush(fiscalQuarter);
+
+        // Get all the fiscalQuarterList where fiscalQuarterCode equals to DEFAULT_FISCAL_QUARTER_CODE
+        defaultFiscalQuarterShouldBeFound("fiscalQuarterCode.equals=" + DEFAULT_FISCAL_QUARTER_CODE);
+
+        // Get all the fiscalQuarterList where fiscalQuarterCode equals to UPDATED_FISCAL_QUARTER_CODE
+        defaultFiscalQuarterShouldNotBeFound("fiscalQuarterCode.equals=" + UPDATED_FISCAL_QUARTER_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllFiscalQuartersByFiscalQuarterCodeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        fiscalQuarterRepository.saveAndFlush(fiscalQuarter);
+
+        // Get all the fiscalQuarterList where fiscalQuarterCode not equals to DEFAULT_FISCAL_QUARTER_CODE
+        defaultFiscalQuarterShouldNotBeFound("fiscalQuarterCode.notEquals=" + DEFAULT_FISCAL_QUARTER_CODE);
+
+        // Get all the fiscalQuarterList where fiscalQuarterCode not equals to UPDATED_FISCAL_QUARTER_CODE
+        defaultFiscalQuarterShouldBeFound("fiscalQuarterCode.notEquals=" + UPDATED_FISCAL_QUARTER_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllFiscalQuartersByFiscalQuarterCodeIsInShouldWork() throws Exception {
+        // Initialize the database
+        fiscalQuarterRepository.saveAndFlush(fiscalQuarter);
+
+        // Get all the fiscalQuarterList where fiscalQuarterCode in DEFAULT_FISCAL_QUARTER_CODE or UPDATED_FISCAL_QUARTER_CODE
+        defaultFiscalQuarterShouldBeFound("fiscalQuarterCode.in=" + DEFAULT_FISCAL_QUARTER_CODE + "," + UPDATED_FISCAL_QUARTER_CODE);
+
+        // Get all the fiscalQuarterList where fiscalQuarterCode equals to UPDATED_FISCAL_QUARTER_CODE
+        defaultFiscalQuarterShouldNotBeFound("fiscalQuarterCode.in=" + UPDATED_FISCAL_QUARTER_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllFiscalQuartersByFiscalQuarterCodeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        fiscalQuarterRepository.saveAndFlush(fiscalQuarter);
+
+        // Get all the fiscalQuarterList where fiscalQuarterCode is not null
+        defaultFiscalQuarterShouldBeFound("fiscalQuarterCode.specified=true");
+
+        // Get all the fiscalQuarterList where fiscalQuarterCode is null
+        defaultFiscalQuarterShouldNotBeFound("fiscalQuarterCode.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllFiscalQuartersByFiscalQuarterCodeContainsSomething() throws Exception {
+        // Initialize the database
+        fiscalQuarterRepository.saveAndFlush(fiscalQuarter);
+
+        // Get all the fiscalQuarterList where fiscalQuarterCode contains DEFAULT_FISCAL_QUARTER_CODE
+        defaultFiscalQuarterShouldBeFound("fiscalQuarterCode.contains=" + DEFAULT_FISCAL_QUARTER_CODE);
+
+        // Get all the fiscalQuarterList where fiscalQuarterCode contains UPDATED_FISCAL_QUARTER_CODE
+        defaultFiscalQuarterShouldNotBeFound("fiscalQuarterCode.contains=" + UPDATED_FISCAL_QUARTER_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllFiscalQuartersByFiscalQuarterCodeNotContainsSomething() throws Exception {
+        // Initialize the database
+        fiscalQuarterRepository.saveAndFlush(fiscalQuarter);
+
+        // Get all the fiscalQuarterList where fiscalQuarterCode does not contain DEFAULT_FISCAL_QUARTER_CODE
+        defaultFiscalQuarterShouldNotBeFound("fiscalQuarterCode.doesNotContain=" + DEFAULT_FISCAL_QUARTER_CODE);
+
+        // Get all the fiscalQuarterList where fiscalQuarterCode does not contain UPDATED_FISCAL_QUARTER_CODE
+        defaultFiscalQuarterShouldBeFound("fiscalQuarterCode.doesNotContain=" + UPDATED_FISCAL_QUARTER_CODE);
+    }
+
+    @Test
+    @Transactional
     void getAllFiscalQuartersByFiscalYearIsEqualToSomething() throws Exception {
         // Initialize the database
         fiscalQuarterRepository.saveAndFlush(fiscalQuarter);
@@ -746,7 +852,8 @@ class FiscalQuarterResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(fiscalQuarter.getId().intValue())))
             .andExpect(jsonPath("$.[*].quarterNumber").value(hasItem(DEFAULT_QUARTER_NUMBER)))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].fiscalQuarterCode").value(hasItem(DEFAULT_FISCAL_QUARTER_CODE)));
 
         // Check, that the count call also returns 1
         restFiscalQuarterMockMvc
@@ -794,7 +901,11 @@ class FiscalQuarterResourceIT {
         FiscalQuarter updatedFiscalQuarter = fiscalQuarterRepository.findById(fiscalQuarter.getId()).get();
         // Disconnect from session so that the updates on updatedFiscalQuarter are not directly saved in db
         em.detach(updatedFiscalQuarter);
-        updatedFiscalQuarter.quarterNumber(UPDATED_QUARTER_NUMBER).startDate(UPDATED_START_DATE).endDate(UPDATED_END_DATE);
+        updatedFiscalQuarter
+            .quarterNumber(UPDATED_QUARTER_NUMBER)
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE)
+            .fiscalQuarterCode(UPDATED_FISCAL_QUARTER_CODE);
         FiscalQuarterDTO fiscalQuarterDTO = fiscalQuarterMapper.toDto(updatedFiscalQuarter);
 
         restFiscalQuarterMockMvc
@@ -812,6 +923,7 @@ class FiscalQuarterResourceIT {
         assertThat(testFiscalQuarter.getQuarterNumber()).isEqualTo(UPDATED_QUARTER_NUMBER);
         assertThat(testFiscalQuarter.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testFiscalQuarter.getEndDate()).isEqualTo(UPDATED_END_DATE);
+        assertThat(testFiscalQuarter.getFiscalQuarterCode()).isEqualTo(UPDATED_FISCAL_QUARTER_CODE);
 
         // Validate the FiscalQuarter in Elasticsearch
         verify(mockFiscalQuarterSearchRepository).save(testFiscalQuarter);
@@ -905,7 +1017,10 @@ class FiscalQuarterResourceIT {
         FiscalQuarter partialUpdatedFiscalQuarter = new FiscalQuarter();
         partialUpdatedFiscalQuarter.setId(fiscalQuarter.getId());
 
-        partialUpdatedFiscalQuarter.quarterNumber(UPDATED_QUARTER_NUMBER).startDate(UPDATED_START_DATE);
+        partialUpdatedFiscalQuarter
+            .quarterNumber(UPDATED_QUARTER_NUMBER)
+            .startDate(UPDATED_START_DATE)
+            .fiscalQuarterCode(UPDATED_FISCAL_QUARTER_CODE);
 
         restFiscalQuarterMockMvc
             .perform(
@@ -922,6 +1037,7 @@ class FiscalQuarterResourceIT {
         assertThat(testFiscalQuarter.getQuarterNumber()).isEqualTo(UPDATED_QUARTER_NUMBER);
         assertThat(testFiscalQuarter.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testFiscalQuarter.getEndDate()).isEqualTo(DEFAULT_END_DATE);
+        assertThat(testFiscalQuarter.getFiscalQuarterCode()).isEqualTo(UPDATED_FISCAL_QUARTER_CODE);
     }
 
     @Test
@@ -936,7 +1052,11 @@ class FiscalQuarterResourceIT {
         FiscalQuarter partialUpdatedFiscalQuarter = new FiscalQuarter();
         partialUpdatedFiscalQuarter.setId(fiscalQuarter.getId());
 
-        partialUpdatedFiscalQuarter.quarterNumber(UPDATED_QUARTER_NUMBER).startDate(UPDATED_START_DATE).endDate(UPDATED_END_DATE);
+        partialUpdatedFiscalQuarter
+            .quarterNumber(UPDATED_QUARTER_NUMBER)
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE)
+            .fiscalQuarterCode(UPDATED_FISCAL_QUARTER_CODE);
 
         restFiscalQuarterMockMvc
             .perform(
@@ -953,6 +1073,7 @@ class FiscalQuarterResourceIT {
         assertThat(testFiscalQuarter.getQuarterNumber()).isEqualTo(UPDATED_QUARTER_NUMBER);
         assertThat(testFiscalQuarter.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testFiscalQuarter.getEndDate()).isEqualTo(UPDATED_END_DATE);
+        assertThat(testFiscalQuarter.getFiscalQuarterCode()).isEqualTo(UPDATED_FISCAL_QUARTER_CODE);
     }
 
     @Test
@@ -1071,6 +1192,7 @@ class FiscalQuarterResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(fiscalQuarter.getId().intValue())))
             .andExpect(jsonPath("$.[*].quarterNumber").value(hasItem(DEFAULT_QUARTER_NUMBER)))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].fiscalQuarterCode").value(hasItem(DEFAULT_FISCAL_QUARTER_CODE)));
     }
 }
