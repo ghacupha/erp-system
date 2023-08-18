@@ -57,6 +57,10 @@ public class FiscalQuarter implements Serializable {
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
+    @NotNull
+    @Column(name = "fiscal_quarter_code", nullable = false, unique = true)
+    private String fiscalQuarterCode;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = { "placeholders", "universallyUniqueMappings", "createdBy", "lastUpdatedBy" }, allowSetters = true)
@@ -134,6 +138,19 @@ public class FiscalQuarter implements Serializable {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public String getFiscalQuarterCode() {
+        return this.fiscalQuarterCode;
+    }
+
+    public FiscalQuarter fiscalQuarterCode(String fiscalQuarterCode) {
+        this.setFiscalQuarterCode(fiscalQuarterCode);
+        return this;
+    }
+
+    public void setFiscalQuarterCode(String fiscalQuarterCode) {
+        this.fiscalQuarterCode = fiscalQuarterCode;
     }
 
     public FiscalYear getFiscalYear() {
@@ -222,6 +239,7 @@ public class FiscalQuarter implements Serializable {
             ", quarterNumber=" + getQuarterNumber() +
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
+            ", fiscalQuarterCode='" + getFiscalQuarterCode() + "'" +
             "}";
     }
 }

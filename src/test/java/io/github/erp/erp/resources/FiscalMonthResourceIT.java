@@ -79,6 +79,9 @@ class FiscalMonthResourceIT {
     private static final LocalDate UPDATED_END_DATE = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_END_DATE = LocalDate.ofEpochDay(-1L);
 
+    private static final String DEFAULT_FISCAL_MONTH_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_FISCAL_MONTH_CODE = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/app/fiscal-months";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/app/_search/fiscal-months";
@@ -124,7 +127,8 @@ class FiscalMonthResourceIT {
         FiscalMonth fiscalMonth = new FiscalMonth()
             .monthNumber(DEFAULT_MONTH_NUMBER)
             .startDate(DEFAULT_START_DATE)
-            .endDate(DEFAULT_END_DATE);
+            .endDate(DEFAULT_END_DATE)
+            .fiscalMonthCode(DEFAULT_FISCAL_MONTH_CODE);
         // Add required entity
         FiscalYear fiscalYear;
         if (TestUtil.findAll(em, FiscalYear.class).isEmpty()) {
@@ -148,7 +152,8 @@ class FiscalMonthResourceIT {
         FiscalMonth fiscalMonth = new FiscalMonth()
             .monthNumber(UPDATED_MONTH_NUMBER)
             .startDate(UPDATED_START_DATE)
-            .endDate(UPDATED_END_DATE);
+            .endDate(UPDATED_END_DATE)
+            .fiscalMonthCode(UPDATED_FISCAL_MONTH_CODE);
         // Add required entity
         FiscalYear fiscalYear;
         if (TestUtil.findAll(em, FiscalYear.class).isEmpty()) {
@@ -186,6 +191,7 @@ class FiscalMonthResourceIT {
         assertThat(testFiscalMonth.getMonthNumber()).isEqualTo(DEFAULT_MONTH_NUMBER);
         assertThat(testFiscalMonth.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testFiscalMonth.getEndDate()).isEqualTo(DEFAULT_END_DATE);
+        assertThat(testFiscalMonth.getFiscalMonthCode()).isEqualTo(DEFAULT_FISCAL_MONTH_CODE);
 
         // Validate the FiscalMonth in Elasticsearch
         verify(mockFiscalMonthSearchRepository, times(1)).save(testFiscalMonth);
@@ -277,6 +283,26 @@ class FiscalMonthResourceIT {
 
     @Test
     @Transactional
+    void checkFiscalMonthCodeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = fiscalMonthRepository.findAll().size();
+        // set the field null
+        fiscalMonth.setFiscalMonthCode(null);
+
+        // Create the FiscalMonth, which fails.
+        FiscalMonthDTO fiscalMonthDTO = fiscalMonthMapper.toDto(fiscalMonth);
+
+        restFiscalMonthMockMvc
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(fiscalMonthDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<FiscalMonth> fiscalMonthList = fiscalMonthRepository.findAll();
+        assertThat(fiscalMonthList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllFiscalMonths() throws Exception {
         // Initialize the database
         fiscalMonthRepository.saveAndFlush(fiscalMonth);
@@ -289,7 +315,8 @@ class FiscalMonthResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(fiscalMonth.getId().intValue())))
             .andExpect(jsonPath("$.[*].monthNumber").value(hasItem(DEFAULT_MONTH_NUMBER)))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].fiscalMonthCode").value(hasItem(DEFAULT_FISCAL_MONTH_CODE)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -324,7 +351,8 @@ class FiscalMonthResourceIT {
             .andExpect(jsonPath("$.id").value(fiscalMonth.getId().intValue()))
             .andExpect(jsonPath("$.monthNumber").value(DEFAULT_MONTH_NUMBER))
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
-            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()));
+            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()))
+            .andExpect(jsonPath("$.fiscalMonthCode").value(DEFAULT_FISCAL_MONTH_CODE));
     }
 
     @Test
@@ -659,6 +687,84 @@ class FiscalMonthResourceIT {
 
     @Test
     @Transactional
+    void getAllFiscalMonthsByFiscalMonthCodeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        fiscalMonthRepository.saveAndFlush(fiscalMonth);
+
+        // Get all the fiscalMonthList where fiscalMonthCode equals to DEFAULT_FISCAL_MONTH_CODE
+        defaultFiscalMonthShouldBeFound("fiscalMonthCode.equals=" + DEFAULT_FISCAL_MONTH_CODE);
+
+        // Get all the fiscalMonthList where fiscalMonthCode equals to UPDATED_FISCAL_MONTH_CODE
+        defaultFiscalMonthShouldNotBeFound("fiscalMonthCode.equals=" + UPDATED_FISCAL_MONTH_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllFiscalMonthsByFiscalMonthCodeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        fiscalMonthRepository.saveAndFlush(fiscalMonth);
+
+        // Get all the fiscalMonthList where fiscalMonthCode not equals to DEFAULT_FISCAL_MONTH_CODE
+        defaultFiscalMonthShouldNotBeFound("fiscalMonthCode.notEquals=" + DEFAULT_FISCAL_MONTH_CODE);
+
+        // Get all the fiscalMonthList where fiscalMonthCode not equals to UPDATED_FISCAL_MONTH_CODE
+        defaultFiscalMonthShouldBeFound("fiscalMonthCode.notEquals=" + UPDATED_FISCAL_MONTH_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllFiscalMonthsByFiscalMonthCodeIsInShouldWork() throws Exception {
+        // Initialize the database
+        fiscalMonthRepository.saveAndFlush(fiscalMonth);
+
+        // Get all the fiscalMonthList where fiscalMonthCode in DEFAULT_FISCAL_MONTH_CODE or UPDATED_FISCAL_MONTH_CODE
+        defaultFiscalMonthShouldBeFound("fiscalMonthCode.in=" + DEFAULT_FISCAL_MONTH_CODE + "," + UPDATED_FISCAL_MONTH_CODE);
+
+        // Get all the fiscalMonthList where fiscalMonthCode equals to UPDATED_FISCAL_MONTH_CODE
+        defaultFiscalMonthShouldNotBeFound("fiscalMonthCode.in=" + UPDATED_FISCAL_MONTH_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllFiscalMonthsByFiscalMonthCodeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        fiscalMonthRepository.saveAndFlush(fiscalMonth);
+
+        // Get all the fiscalMonthList where fiscalMonthCode is not null
+        defaultFiscalMonthShouldBeFound("fiscalMonthCode.specified=true");
+
+        // Get all the fiscalMonthList where fiscalMonthCode is null
+        defaultFiscalMonthShouldNotBeFound("fiscalMonthCode.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllFiscalMonthsByFiscalMonthCodeContainsSomething() throws Exception {
+        // Initialize the database
+        fiscalMonthRepository.saveAndFlush(fiscalMonth);
+
+        // Get all the fiscalMonthList where fiscalMonthCode contains DEFAULT_FISCAL_MONTH_CODE
+        defaultFiscalMonthShouldBeFound("fiscalMonthCode.contains=" + DEFAULT_FISCAL_MONTH_CODE);
+
+        // Get all the fiscalMonthList where fiscalMonthCode contains UPDATED_FISCAL_MONTH_CODE
+        defaultFiscalMonthShouldNotBeFound("fiscalMonthCode.contains=" + UPDATED_FISCAL_MONTH_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllFiscalMonthsByFiscalMonthCodeNotContainsSomething() throws Exception {
+        // Initialize the database
+        fiscalMonthRepository.saveAndFlush(fiscalMonth);
+
+        // Get all the fiscalMonthList where fiscalMonthCode does not contain DEFAULT_FISCAL_MONTH_CODE
+        defaultFiscalMonthShouldNotBeFound("fiscalMonthCode.doesNotContain=" + DEFAULT_FISCAL_MONTH_CODE);
+
+        // Get all the fiscalMonthList where fiscalMonthCode does not contain UPDATED_FISCAL_MONTH_CODE
+        defaultFiscalMonthShouldBeFound("fiscalMonthCode.doesNotContain=" + UPDATED_FISCAL_MONTH_CODE);
+    }
+
+    @Test
+    @Transactional
     void getAllFiscalMonthsByFiscalYearIsEqualToSomething() throws Exception {
         // Initialize the database
         fiscalMonthRepository.saveAndFlush(fiscalMonth);
@@ -746,7 +852,8 @@ class FiscalMonthResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(fiscalMonth.getId().intValue())))
             .andExpect(jsonPath("$.[*].monthNumber").value(hasItem(DEFAULT_MONTH_NUMBER)))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].fiscalMonthCode").value(hasItem(DEFAULT_FISCAL_MONTH_CODE)));
 
         // Check, that the count call also returns 1
         restFiscalMonthMockMvc
@@ -794,7 +901,11 @@ class FiscalMonthResourceIT {
         FiscalMonth updatedFiscalMonth = fiscalMonthRepository.findById(fiscalMonth.getId()).get();
         // Disconnect from session so that the updates on updatedFiscalMonth are not directly saved in db
         em.detach(updatedFiscalMonth);
-        updatedFiscalMonth.monthNumber(UPDATED_MONTH_NUMBER).startDate(UPDATED_START_DATE).endDate(UPDATED_END_DATE);
+        updatedFiscalMonth
+            .monthNumber(UPDATED_MONTH_NUMBER)
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE)
+            .fiscalMonthCode(UPDATED_FISCAL_MONTH_CODE);
         FiscalMonthDTO fiscalMonthDTO = fiscalMonthMapper.toDto(updatedFiscalMonth);
 
         restFiscalMonthMockMvc
@@ -812,6 +923,7 @@ class FiscalMonthResourceIT {
         assertThat(testFiscalMonth.getMonthNumber()).isEqualTo(UPDATED_MONTH_NUMBER);
         assertThat(testFiscalMonth.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testFiscalMonth.getEndDate()).isEqualTo(UPDATED_END_DATE);
+        assertThat(testFiscalMonth.getFiscalMonthCode()).isEqualTo(UPDATED_FISCAL_MONTH_CODE);
 
         // Validate the FiscalMonth in Elasticsearch
         verify(mockFiscalMonthSearchRepository).save(testFiscalMonth);
@@ -920,6 +1032,7 @@ class FiscalMonthResourceIT {
         assertThat(testFiscalMonth.getMonthNumber()).isEqualTo(DEFAULT_MONTH_NUMBER);
         assertThat(testFiscalMonth.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testFiscalMonth.getEndDate()).isEqualTo(UPDATED_END_DATE);
+        assertThat(testFiscalMonth.getFiscalMonthCode()).isEqualTo(DEFAULT_FISCAL_MONTH_CODE);
     }
 
     @Test
@@ -934,7 +1047,11 @@ class FiscalMonthResourceIT {
         FiscalMonth partialUpdatedFiscalMonth = new FiscalMonth();
         partialUpdatedFiscalMonth.setId(fiscalMonth.getId());
 
-        partialUpdatedFiscalMonth.monthNumber(UPDATED_MONTH_NUMBER).startDate(UPDATED_START_DATE).endDate(UPDATED_END_DATE);
+        partialUpdatedFiscalMonth
+            .monthNumber(UPDATED_MONTH_NUMBER)
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE)
+            .fiscalMonthCode(UPDATED_FISCAL_MONTH_CODE);
 
         restFiscalMonthMockMvc
             .perform(
@@ -951,6 +1068,7 @@ class FiscalMonthResourceIT {
         assertThat(testFiscalMonth.getMonthNumber()).isEqualTo(UPDATED_MONTH_NUMBER);
         assertThat(testFiscalMonth.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testFiscalMonth.getEndDate()).isEqualTo(UPDATED_END_DATE);
+        assertThat(testFiscalMonth.getFiscalMonthCode()).isEqualTo(UPDATED_FISCAL_MONTH_CODE);
     }
 
     @Test
@@ -1067,6 +1185,7 @@ class FiscalMonthResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(fiscalMonth.getId().intValue())))
             .andExpect(jsonPath("$.[*].monthNumber").value(hasItem(DEFAULT_MONTH_NUMBER)))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].fiscalMonthCode").value(hasItem(DEFAULT_FISCAL_MONTH_CODE)));
     }
 }

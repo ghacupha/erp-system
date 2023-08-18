@@ -51,6 +51,8 @@ public class FiscalMonthCriteria implements Serializable, Criteria {
 
     private LocalDateFilter endDate;
 
+    private StringFilter fiscalMonthCode;
+
     private LongFilter fiscalYearId;
 
     private LongFilter placeholderId;
@@ -66,6 +68,7 @@ public class FiscalMonthCriteria implements Serializable, Criteria {
         this.monthNumber = other.monthNumber == null ? null : other.monthNumber.copy();
         this.startDate = other.startDate == null ? null : other.startDate.copy();
         this.endDate = other.endDate == null ? null : other.endDate.copy();
+        this.fiscalMonthCode = other.fiscalMonthCode == null ? null : other.fiscalMonthCode.copy();
         this.fiscalYearId = other.fiscalYearId == null ? null : other.fiscalYearId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.universallyUniqueMappingId = other.universallyUniqueMappingId == null ? null : other.universallyUniqueMappingId.copy();
@@ -137,6 +140,21 @@ public class FiscalMonthCriteria implements Serializable, Criteria {
         this.endDate = endDate;
     }
 
+    public StringFilter getFiscalMonthCode() {
+        return fiscalMonthCode;
+    }
+
+    public StringFilter fiscalMonthCode() {
+        if (fiscalMonthCode == null) {
+            fiscalMonthCode = new StringFilter();
+        }
+        return fiscalMonthCode;
+    }
+
+    public void setFiscalMonthCode(StringFilter fiscalMonthCode) {
+        this.fiscalMonthCode = fiscalMonthCode;
+    }
+
     public LongFilter getFiscalYearId() {
         return fiscalYearId;
     }
@@ -204,6 +222,7 @@ public class FiscalMonthCriteria implements Serializable, Criteria {
             Objects.equals(monthNumber, that.monthNumber) &&
             Objects.equals(startDate, that.startDate) &&
             Objects.equals(endDate, that.endDate) &&
+            Objects.equals(fiscalMonthCode, that.fiscalMonthCode) &&
             Objects.equals(fiscalYearId, that.fiscalYearId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(universallyUniqueMappingId, that.universallyUniqueMappingId) &&
@@ -213,7 +232,17 @@ public class FiscalMonthCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, monthNumber, startDate, endDate, fiscalYearId, placeholderId, universallyUniqueMappingId, distinct);
+        return Objects.hash(
+            id,
+            monthNumber,
+            startDate,
+            endDate,
+            fiscalMonthCode,
+            fiscalYearId,
+            placeholderId,
+            universallyUniqueMappingId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -224,6 +253,7 @@ public class FiscalMonthCriteria implements Serializable, Criteria {
             (monthNumber != null ? "monthNumber=" + monthNumber + ", " : "") +
             (startDate != null ? "startDate=" + startDate + ", " : "") +
             (endDate != null ? "endDate=" + endDate + ", " : "") +
+            (fiscalMonthCode != null ? "fiscalMonthCode=" + fiscalMonthCode + ", " : "") +
             (fiscalYearId != null ? "fiscalYearId=" + fiscalYearId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (universallyUniqueMappingId != null ? "universallyUniqueMappingId=" + universallyUniqueMappingId + ", " : "") +

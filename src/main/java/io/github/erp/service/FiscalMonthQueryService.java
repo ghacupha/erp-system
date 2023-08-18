@@ -125,6 +125,9 @@ public class FiscalMonthQueryService extends QueryService<FiscalMonth> {
             if (criteria.getEndDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getEndDate(), FiscalMonth_.endDate));
             }
+            if (criteria.getFiscalMonthCode() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getFiscalMonthCode(), FiscalMonth_.fiscalMonthCode));
+            }
             if (criteria.getFiscalYearId() != null) {
                 specification =
                     specification.and(
