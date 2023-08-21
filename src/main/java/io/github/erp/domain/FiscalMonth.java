@@ -86,6 +86,10 @@ public class FiscalMonth implements Serializable {
     @JsonIgnoreProperties(value = { "parentMapping", "placeholders" }, allowSetters = true)
     private Set<UniversallyUniqueMapping> universallyUniqueMappings = new HashSet<>();
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "fiscalYear", "placeholders", "universallyUniqueMappings" }, allowSetters = true)
+    private FiscalQuarter fiscalQuarter;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -209,6 +213,19 @@ public class FiscalMonth implements Serializable {
 
     public FiscalMonth removeUniversallyUniqueMapping(UniversallyUniqueMapping universallyUniqueMapping) {
         this.universallyUniqueMappings.remove(universallyUniqueMapping);
+        return this;
+    }
+
+    public FiscalQuarter getFiscalQuarter() {
+        return this.fiscalQuarter;
+    }
+
+    public void setFiscalQuarter(FiscalQuarter fiscalQuarter) {
+        this.fiscalQuarter = fiscalQuarter;
+    }
+
+    public FiscalMonth fiscalQuarter(FiscalQuarter fiscalQuarter) {
+        this.setFiscalQuarter(fiscalQuarter);
         return this;
     }
 

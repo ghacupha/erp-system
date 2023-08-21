@@ -208,6 +208,7 @@
     <include file="config/liquibase/changelog/20230818100921_added_fiscal_month_and_fiscal_quarter_codes.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230821092507_added_nonnull_capitalization_date_asset_registration.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230821103701_removed_unique_constraint_asset_tag.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230821111228_added_fiscal_quarter_to_fiscal_month.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

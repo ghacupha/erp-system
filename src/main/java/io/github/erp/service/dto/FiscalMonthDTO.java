@@ -50,6 +50,8 @@ public class FiscalMonthDTO implements Serializable {
 
     private Set<UniversallyUniqueMappingDTO> universallyUniqueMappings = new HashSet<>();
 
+    private FiscalQuarterDTO fiscalQuarter;
+
     public Long getId() {
         return id;
     }
@@ -114,6 +116,14 @@ public class FiscalMonthDTO implements Serializable {
         this.universallyUniqueMappings = universallyUniqueMappings;
     }
 
+    public FiscalQuarterDTO getFiscalQuarter() {
+        return fiscalQuarter;
+    }
+
+    public void setFiscalQuarter(FiscalQuarterDTO fiscalQuarter) {
+        this.fiscalQuarter = fiscalQuarter;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -147,6 +157,7 @@ public class FiscalMonthDTO implements Serializable {
             ", fiscalYear=" + getFiscalYear() +
             ", placeholders=" + getPlaceholders() +
             ", universallyUniqueMappings=" + getUniversallyUniqueMappings() +
+            ", fiscalQuarter=" + getFiscalQuarter() +
             "}";
     }
 }
