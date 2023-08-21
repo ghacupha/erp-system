@@ -62,6 +62,12 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
 
     private LongFilter depreciationPeriodId;
 
+    private LongFilter fiscalMonthId;
+
+    private LongFilter fiscalQuarterId;
+
+    private LongFilter fiscalYearId;
+
     private Boolean distinct;
 
     public DepreciationEntryCriteria() {}
@@ -76,6 +82,9 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
         this.depreciationMethodId = other.depreciationMethodId == null ? null : other.depreciationMethodId.copy();
         this.assetRegistrationId = other.assetRegistrationId == null ? null : other.assetRegistrationId.copy();
         this.depreciationPeriodId = other.depreciationPeriodId == null ? null : other.depreciationPeriodId.copy();
+        this.fiscalMonthId = other.fiscalMonthId == null ? null : other.fiscalMonthId.copy();
+        this.fiscalQuarterId = other.fiscalQuarterId == null ? null : other.fiscalQuarterId.copy();
+        this.fiscalYearId = other.fiscalYearId == null ? null : other.fiscalYearId.copy();
         this.distinct = other.distinct;
     }
 
@@ -219,6 +228,51 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
         this.depreciationPeriodId = depreciationPeriodId;
     }
 
+    public LongFilter getFiscalMonthId() {
+        return fiscalMonthId;
+    }
+
+    public LongFilter fiscalMonthId() {
+        if (fiscalMonthId == null) {
+            fiscalMonthId = new LongFilter();
+        }
+        return fiscalMonthId;
+    }
+
+    public void setFiscalMonthId(LongFilter fiscalMonthId) {
+        this.fiscalMonthId = fiscalMonthId;
+    }
+
+    public LongFilter getFiscalQuarterId() {
+        return fiscalQuarterId;
+    }
+
+    public LongFilter fiscalQuarterId() {
+        if (fiscalQuarterId == null) {
+            fiscalQuarterId = new LongFilter();
+        }
+        return fiscalQuarterId;
+    }
+
+    public void setFiscalQuarterId(LongFilter fiscalQuarterId) {
+        this.fiscalQuarterId = fiscalQuarterId;
+    }
+
+    public LongFilter getFiscalYearId() {
+        return fiscalYearId;
+    }
+
+    public LongFilter fiscalYearId() {
+        if (fiscalYearId == null) {
+            fiscalYearId = new LongFilter();
+        }
+        return fiscalYearId;
+    }
+
+    public void setFiscalYearId(LongFilter fiscalYearId) {
+        this.fiscalYearId = fiscalYearId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -246,6 +300,9 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             Objects.equals(depreciationMethodId, that.depreciationMethodId) &&
             Objects.equals(assetRegistrationId, that.assetRegistrationId) &&
             Objects.equals(depreciationPeriodId, that.depreciationPeriodId) &&
+            Objects.equals(fiscalMonthId, that.fiscalMonthId) &&
+            Objects.equals(fiscalQuarterId, that.fiscalQuarterId) &&
+            Objects.equals(fiscalYearId, that.fiscalYearId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -262,6 +319,9 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             depreciationMethodId,
             assetRegistrationId,
             depreciationPeriodId,
+            fiscalMonthId,
+            fiscalQuarterId,
+            fiscalYearId,
             distinct
         );
     }
@@ -279,6 +339,9 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             (depreciationMethodId != null ? "depreciationMethodId=" + depreciationMethodId + ", " : "") +
             (assetRegistrationId != null ? "assetRegistrationId=" + assetRegistrationId + ", " : "") +
             (depreciationPeriodId != null ? "depreciationPeriodId=" + depreciationPeriodId + ", " : "") +
+            (fiscalMonthId != null ? "fiscalMonthId=" + fiscalMonthId + ", " : "") +
+            (fiscalQuarterId != null ? "fiscalQuarterId=" + fiscalQuarterId + ", " : "") +
+            (fiscalYearId != null ? "fiscalYearId=" + fiscalYearId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

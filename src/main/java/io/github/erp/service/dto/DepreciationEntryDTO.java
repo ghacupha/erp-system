@@ -46,6 +46,12 @@ public class DepreciationEntryDTO implements Serializable {
 
     private DepreciationPeriodDTO depreciationPeriod;
 
+    private FiscalMonthDTO fiscalMonth;
+
+    private FiscalQuarterDTO fiscalQuarter;
+
+    private FiscalYearDTO fiscalYear;
+
     public Long getId() {
         return id;
     }
@@ -118,6 +124,30 @@ public class DepreciationEntryDTO implements Serializable {
         this.depreciationPeriod = depreciationPeriod;
     }
 
+    public FiscalMonthDTO getFiscalMonth() {
+        return fiscalMonth;
+    }
+
+    public void setFiscalMonth(FiscalMonthDTO fiscalMonth) {
+        this.fiscalMonth = fiscalMonth;
+    }
+
+    public FiscalQuarterDTO getFiscalQuarter() {
+        return fiscalQuarter;
+    }
+
+    public void setFiscalQuarter(FiscalQuarterDTO fiscalQuarter) {
+        this.fiscalQuarter = fiscalQuarter;
+    }
+
+    public FiscalYearDTO getFiscalYear() {
+        return fiscalYear;
+    }
+
+    public void setFiscalYear(FiscalYearDTO fiscalYear) {
+        this.fiscalYear = fiscalYear;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -152,6 +182,9 @@ public class DepreciationEntryDTO implements Serializable {
             ", depreciationMethod=" + getDepreciationMethod() +
             ", assetRegistration=" + getAssetRegistration() +
             ", depreciationPeriod=" + getDepreciationPeriod() +
+            ", fiscalMonth=" + getFiscalMonth() +
+            ", fiscalQuarter=" + getFiscalQuarter() +
+            ", fiscalYear=" + getFiscalYear() +
             "}";
     }
 }

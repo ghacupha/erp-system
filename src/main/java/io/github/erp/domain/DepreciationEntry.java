@@ -95,6 +95,18 @@ public class DepreciationEntry implements Serializable {
     @JsonIgnoreProperties(value = { "previousPeriod", "createdBy", "fiscalYear", "fiscalMonth", "fiscalQuarter" }, allowSetters = true)
     private DepreciationPeriod depreciationPeriod;
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "fiscalYear", "placeholders", "universallyUniqueMappings", "fiscalQuarter" }, allowSetters = true)
+    private FiscalMonth fiscalMonth;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "fiscalYear", "placeholders", "universallyUniqueMappings" }, allowSetters = true)
+    private FiscalQuarter fiscalQuarter;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "placeholders", "universallyUniqueMappings", "createdBy", "lastUpdatedBy" }, allowSetters = true)
+    private FiscalYear fiscalYear;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -211,6 +223,45 @@ public class DepreciationEntry implements Serializable {
 
     public DepreciationEntry depreciationPeriod(DepreciationPeriod depreciationPeriod) {
         this.setDepreciationPeriod(depreciationPeriod);
+        return this;
+    }
+
+    public FiscalMonth getFiscalMonth() {
+        return this.fiscalMonth;
+    }
+
+    public void setFiscalMonth(FiscalMonth fiscalMonth) {
+        this.fiscalMonth = fiscalMonth;
+    }
+
+    public DepreciationEntry fiscalMonth(FiscalMonth fiscalMonth) {
+        this.setFiscalMonth(fiscalMonth);
+        return this;
+    }
+
+    public FiscalQuarter getFiscalQuarter() {
+        return this.fiscalQuarter;
+    }
+
+    public void setFiscalQuarter(FiscalQuarter fiscalQuarter) {
+        this.fiscalQuarter = fiscalQuarter;
+    }
+
+    public DepreciationEntry fiscalQuarter(FiscalQuarter fiscalQuarter) {
+        this.setFiscalQuarter(fiscalQuarter);
+        return this;
+    }
+
+    public FiscalYear getFiscalYear() {
+        return this.fiscalYear;
+    }
+
+    public void setFiscalYear(FiscalYear fiscalYear) {
+        this.fiscalYear = fiscalYear;
+    }
+
+    public DepreciationEntry fiscalYear(FiscalYear fiscalYear) {
+        this.setFiscalYear(fiscalYear);
         return this;
     }
 
