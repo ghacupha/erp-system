@@ -52,7 +52,7 @@ public class AssetRegistration implements Serializable {
     private String assetNumber;
 
     @NotNull
-    @Column(name = "asset_tag", nullable = false, unique = true)
+    @Column(name = "asset_tag", nullable = false)
     private String assetTag;
 
     @Column(name = "asset_details")

@@ -10,7 +10,7 @@
     {
       "fieldName": "assetTag",
       "fieldType": "String",
-      "fieldValidateRules": ["required", "unique"]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "assetDetails",
