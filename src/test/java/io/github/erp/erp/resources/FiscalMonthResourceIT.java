@@ -19,10 +19,7 @@ package io.github.erp.erp.resources;
  */
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.FiscalMonth;
-import io.github.erp.domain.FiscalYear;
-import io.github.erp.domain.Placeholder;
-import io.github.erp.domain.UniversallyUniqueMapping;
+import io.github.erp.domain.*;
 import io.github.erp.repository.FiscalMonthRepository;
 import io.github.erp.repository.search.FiscalMonthSearchRepository;
 import io.github.erp.service.FiscalMonthService;
@@ -839,6 +836,32 @@ class FiscalMonthResourceIT {
 
         // Get all the fiscalMonthList where universallyUniqueMapping equals to (universallyUniqueMappingId + 1)
         defaultFiscalMonthShouldNotBeFound("universallyUniqueMappingId.equals=" + (universallyUniqueMappingId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllFiscalMonthsByFiscalQuarterIsEqualToSomething() throws Exception {
+        // Initialize the database
+        fiscalMonthRepository.saveAndFlush(fiscalMonth);
+        FiscalQuarter fiscalQuarter;
+        if (TestUtil.findAll(em, FiscalQuarter.class).isEmpty()) {
+            fiscalQuarter = FiscalQuarterResourceIT.createEntity(em);
+            em.persist(fiscalQuarter);
+            em.flush();
+        } else {
+            fiscalQuarter = TestUtil.findAll(em, FiscalQuarter.class).get(0);
+        }
+        em.persist(fiscalQuarter);
+        em.flush();
+        fiscalMonth.setFiscalQuarter(fiscalQuarter);
+        fiscalMonthRepository.saveAndFlush(fiscalMonth);
+        Long fiscalQuarterId = fiscalQuarter.getId();
+
+        // Get all the fiscalMonthList where fiscalQuarter equals to fiscalQuarterId
+        defaultFiscalMonthShouldBeFound("fiscalQuarterId.equals=" + fiscalQuarterId);
+
+        // Get all the fiscalMonthList where fiscalQuarter equals to (fiscalQuarterId + 1)
+        defaultFiscalMonthShouldNotBeFound("fiscalQuarterId.equals=" + (fiscalQuarterId + 1));
     }
 
     /**

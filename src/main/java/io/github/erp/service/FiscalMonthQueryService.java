@@ -155,6 +155,15 @@ public class FiscalMonthQueryService extends QueryService<FiscalMonth> {
                         )
                     );
             }
+            if (criteria.getFiscalQuarterId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getFiscalQuarterId(),
+                            root -> root.join(FiscalMonth_.fiscalQuarter, JoinType.LEFT).get(FiscalQuarter_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

@@ -59,6 +59,8 @@ public class FiscalMonthCriteria implements Serializable, Criteria {
 
     private LongFilter universallyUniqueMappingId;
 
+    private LongFilter fiscalQuarterId;
+
     private Boolean distinct;
 
     public FiscalMonthCriteria() {}
@@ -72,6 +74,7 @@ public class FiscalMonthCriteria implements Serializable, Criteria {
         this.fiscalYearId = other.fiscalYearId == null ? null : other.fiscalYearId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.universallyUniqueMappingId = other.universallyUniqueMappingId == null ? null : other.universallyUniqueMappingId.copy();
+        this.fiscalQuarterId = other.fiscalQuarterId == null ? null : other.fiscalQuarterId.copy();
         this.distinct = other.distinct;
     }
 
@@ -200,6 +203,21 @@ public class FiscalMonthCriteria implements Serializable, Criteria {
         this.universallyUniqueMappingId = universallyUniqueMappingId;
     }
 
+    public LongFilter getFiscalQuarterId() {
+        return fiscalQuarterId;
+    }
+
+    public LongFilter fiscalQuarterId() {
+        if (fiscalQuarterId == null) {
+            fiscalQuarterId = new LongFilter();
+        }
+        return fiscalQuarterId;
+    }
+
+    public void setFiscalQuarterId(LongFilter fiscalQuarterId) {
+        this.fiscalQuarterId = fiscalQuarterId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -226,6 +244,7 @@ public class FiscalMonthCriteria implements Serializable, Criteria {
             Objects.equals(fiscalYearId, that.fiscalYearId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(universallyUniqueMappingId, that.universallyUniqueMappingId) &&
+            Objects.equals(fiscalQuarterId, that.fiscalQuarterId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -241,6 +260,7 @@ public class FiscalMonthCriteria implements Serializable, Criteria {
             fiscalYearId,
             placeholderId,
             universallyUniqueMappingId,
+            fiscalQuarterId,
             distinct
         );
     }
@@ -257,6 +277,7 @@ public class FiscalMonthCriteria implements Serializable, Criteria {
             (fiscalYearId != null ? "fiscalYearId=" + fiscalYearId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (universallyUniqueMappingId != null ? "universallyUniqueMappingId=" + universallyUniqueMappingId + ", " : "") +
+            (fiscalQuarterId != null ? "fiscalQuarterId=" + fiscalQuarterId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

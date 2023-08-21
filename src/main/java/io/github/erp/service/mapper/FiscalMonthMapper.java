@@ -25,11 +25,15 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link FiscalMonth} and its DTO {@link FiscalMonthDTO}.
  */
-@Mapper(componentModel = "spring", uses = { FiscalYearMapper.class, PlaceholderMapper.class, UniversallyUniqueMappingMapper.class })
+@Mapper(
+    componentModel = "spring",
+    uses = { FiscalYearMapper.class, PlaceholderMapper.class, UniversallyUniqueMappingMapper.class, FiscalQuarterMapper.class }
+)
 public interface FiscalMonthMapper extends EntityMapper<FiscalMonthDTO, FiscalMonth> {
     @Mapping(target = "fiscalYear", source = "fiscalYear", qualifiedByName = "fiscalYearCode")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     @Mapping(target = "universallyUniqueMappings", source = "universallyUniqueMappings", qualifiedByName = "universalKeySet")
+    @Mapping(target = "fiscalQuarter", source = "fiscalQuarter", qualifiedByName = "fiscalQuarterCode")
     FiscalMonthDTO toDto(FiscalMonth s);
 
     @Named("id")
