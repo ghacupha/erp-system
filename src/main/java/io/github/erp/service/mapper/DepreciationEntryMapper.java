@@ -33,6 +33,9 @@ import org.mapstruct.*;
         DepreciationMethodMapper.class,
         AssetRegistrationMapper.class,
         DepreciationPeriodMapper.class,
+        FiscalMonthMapper.class,
+        FiscalQuarterMapper.class,
+        FiscalYearMapper.class,
     }
 )
 public interface DepreciationEntryMapper extends EntityMapper<DepreciationEntryDTO, DepreciationEntry> {
@@ -41,5 +44,8 @@ public interface DepreciationEntryMapper extends EntityMapper<DepreciationEntryD
     @Mapping(target = "depreciationMethod", source = "depreciationMethod", qualifiedByName = "depreciationMethodName")
     @Mapping(target = "assetRegistration", source = "assetRegistration", qualifiedByName = "assetNumber")
     @Mapping(target = "depreciationPeriod", source = "depreciationPeriod", qualifiedByName = "endDate")
+    @Mapping(target = "fiscalMonth", source = "fiscalMonth", qualifiedByName = "fiscalMonthCode")
+    @Mapping(target = "fiscalQuarter", source = "fiscalQuarter", qualifiedByName = "fiscalQuarterCode")
+    @Mapping(target = "fiscalYear", source = "fiscalYear", qualifiedByName = "fiscalYearCode")
     DepreciationEntryDTO toDto(DepreciationEntry s);
 }

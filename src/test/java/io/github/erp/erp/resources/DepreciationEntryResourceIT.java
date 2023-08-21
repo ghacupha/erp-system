@@ -17,6 +17,7 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
 import io.github.erp.repository.DepreciationEntryRepository;
@@ -683,6 +684,84 @@ class DepreciationEntryResourceIT {
 
         // Get all the depreciationEntryList where depreciationPeriod equals to (depreciationPeriodId + 1)
         defaultDepreciationEntryShouldNotBeFound("depreciationPeriodId.equals=" + (depreciationPeriodId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByFiscalMonthIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+        FiscalMonth fiscalMonth;
+        if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
+            fiscalMonth = FiscalMonthResourceIT.createEntity(em);
+            em.persist(fiscalMonth);
+            em.flush();
+        } else {
+            fiscalMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
+        }
+        em.persist(fiscalMonth);
+        em.flush();
+        depreciationEntry.setFiscalMonth(fiscalMonth);
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+        Long fiscalMonthId = fiscalMonth.getId();
+
+        // Get all the depreciationEntryList where fiscalMonth equals to fiscalMonthId
+        defaultDepreciationEntryShouldBeFound("fiscalMonthId.equals=" + fiscalMonthId);
+
+        // Get all the depreciationEntryList where fiscalMonth equals to (fiscalMonthId + 1)
+        defaultDepreciationEntryShouldNotBeFound("fiscalMonthId.equals=" + (fiscalMonthId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByFiscalQuarterIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+        FiscalQuarter fiscalQuarter;
+        if (TestUtil.findAll(em, FiscalQuarter.class).isEmpty()) {
+            fiscalQuarter = FiscalQuarterResourceIT.createEntity(em);
+            em.persist(fiscalQuarter);
+            em.flush();
+        } else {
+            fiscalQuarter = TestUtil.findAll(em, FiscalQuarter.class).get(0);
+        }
+        em.persist(fiscalQuarter);
+        em.flush();
+        depreciationEntry.setFiscalQuarter(fiscalQuarter);
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+        Long fiscalQuarterId = fiscalQuarter.getId();
+
+        // Get all the depreciationEntryList where fiscalQuarter equals to fiscalQuarterId
+        defaultDepreciationEntryShouldBeFound("fiscalQuarterId.equals=" + fiscalQuarterId);
+
+        // Get all the depreciationEntryList where fiscalQuarter equals to (fiscalQuarterId + 1)
+        defaultDepreciationEntryShouldNotBeFound("fiscalQuarterId.equals=" + (fiscalQuarterId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByFiscalYearIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+        FiscalYear fiscalYear;
+        if (TestUtil.findAll(em, FiscalYear.class).isEmpty()) {
+            fiscalYear = FiscalYearResourceIT.createEntity(em);
+            em.persist(fiscalYear);
+            em.flush();
+        } else {
+            fiscalYear = TestUtil.findAll(em, FiscalYear.class).get(0);
+        }
+        em.persist(fiscalYear);
+        em.flush();
+        depreciationEntry.setFiscalYear(fiscalYear);
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+        Long fiscalYearId = fiscalYear.getId();
+
+        // Get all the depreciationEntryList where fiscalYear equals to fiscalYearId
+        defaultDepreciationEntryShouldBeFound("fiscalYearId.equals=" + fiscalYearId);
+
+        // Get all the depreciationEntryList where fiscalYear equals to (fiscalYearId + 1)
+        defaultDepreciationEntryShouldNotBeFound("fiscalYearId.equals=" + (fiscalYearId + 1));
     }
 
     /**

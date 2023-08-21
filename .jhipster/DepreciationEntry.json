@@ -43,6 +43,24 @@
       "otherEntityName": "depreciationPeriod",
       "relationshipType": "many-to-one",
       "otherEntityField": "endDate"
+    },
+    {
+      "relationshipName": "fiscalMonth",
+      "otherEntityName": "fiscalMonth",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "fiscalMonthCode"
+    },
+    {
+      "relationshipName": "fiscalQuarter",
+      "otherEntityName": "fiscalQuarter",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "fiscalQuarterCode"
+    },
+    {
+      "relationshipName": "fiscalYear",
+      "otherEntityName": "fiscalYear",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "fiscalYearCode"
     }
   ],
   "service": "serviceImpl",

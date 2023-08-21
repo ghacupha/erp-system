@@ -171,6 +171,33 @@ public class DepreciationEntryQueryService extends QueryService<DepreciationEntr
                         )
                     );
             }
+            if (criteria.getFiscalMonthId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getFiscalMonthId(),
+                            root -> root.join(DepreciationEntry_.fiscalMonth, JoinType.LEFT).get(FiscalMonth_.id)
+                        )
+                    );
+            }
+            if (criteria.getFiscalQuarterId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getFiscalQuarterId(),
+                            root -> root.join(DepreciationEntry_.fiscalQuarter, JoinType.LEFT).get(FiscalQuarter_.id)
+                        )
+                    );
+            }
+            if (criteria.getFiscalYearId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getFiscalYearId(),
+                            root -> root.join(DepreciationEntry_.fiscalYear, JoinType.LEFT).get(FiscalYear_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }
