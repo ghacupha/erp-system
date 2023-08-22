@@ -18,20 +18,29 @@ package io.github.erp.erp.depreciation;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.enumeration.DepreciationJobStatusType;
+import io.github.erp.domain.enumeration.DepreciationNoticeStatusType;
 import io.github.erp.domain.enumeration.DepreciationPeriodStatusTypes;
 import io.github.erp.erp.depreciation.calculation.DepreciationCalculatorService;
 import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
 import io.github.erp.service.AssetCategoryService;
 import io.github.erp.service.AssetRegistrationService;
 import io.github.erp.service.DepreciationEntryService;
+import io.github.erp.service.DepreciationJobNoticeService;
 import io.github.erp.service.DepreciationJobService;
 import io.github.erp.service.DepreciationMethodService;
 import io.github.erp.service.DepreciationPeriodService;
+import io.github.erp.service.FiscalMonthService;
+import io.github.erp.service.FiscalQuarterService;
+import io.github.erp.service.FiscalYearService;
 import io.github.erp.service.ServiceOutletService;
 import io.github.erp.service.dto.AssetCategoryDTO;
 import io.github.erp.service.dto.DepreciationEntryDTO;
 import io.github.erp.service.dto.DepreciationJobDTO;
+import io.github.erp.service.dto.DepreciationJobNoticeDTO;
 import io.github.erp.service.dto.DepreciationPeriodDTO;
+import io.github.erp.service.dto.FiscalMonthDTO;
+import io.github.erp.service.dto.FiscalQuarterDTO;
+import io.github.erp.service.dto.FiscalYearDTO;
 import io.github.erp.service.dto.ServiceOutletDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,8 +83,12 @@ public class DepreciationBatchSequenceService {
     private final AssetRegistrationService assetRegistrationService;
     private final DepreciationMethodService depreciationMethodService;
     private final DepreciationEntryService depreciationEntryService;
+    private final FiscalYearService fiscalYearService;
+    private final FiscalQuarterService fiscalQuarterService;
+    private final FiscalMonthService fiscalMonthService;
+    private final DepreciationJobNoticeService depreciationJobNoticeService;
 
-    public DepreciationBatchSequenceService(DepreciationCalculatorService depreciationCalculatorService, DepreciationJobService depreciationJobService, DepreciationPeriodService depreciationPeriodService, AssetCategoryService assetCategoryService, ServiceOutletService serviceOutletService, AssetRegistrationService assetRegistrationService, DepreciationMethodService depreciationMethodService, DepreciationEntryService depreciationEntryService) {
+    public DepreciationBatchSequenceService(DepreciationCalculatorService depreciationCalculatorService, DepreciationJobService depreciationJobService, DepreciationPeriodService depreciationPeriodService, AssetCategoryService assetCategoryService, ServiceOutletService serviceOutletService, AssetRegistrationService assetRegistrationService, DepreciationMethodService depreciationMethodService, DepreciationEntryService depreciationEntryService, FiscalYearService fiscalYearService, FiscalQuarterService fiscalQuarterService, FiscalMonthService fiscalMonthService, DepreciationJobNoticeService depreciationJobNoticeService) {
         this.depreciationCalculatorService = depreciationCalculatorService;
         this.depreciationJobService = depreciationJobService;
         this.depreciationPeriodService = depreciationPeriodService;
@@ -84,6 +97,10 @@ public class DepreciationBatchSequenceService {
         this.assetRegistrationService = assetRegistrationService;
         this.depreciationMethodService = depreciationMethodService;
         this.depreciationEntryService = depreciationEntryService;
+        this.fiscalYearService = fiscalYearService;
+        this.fiscalQuarterService = fiscalQuarterService;
+        this.fiscalMonthService = fiscalMonthService;
+        this.depreciationJobNoticeService = depreciationJobNoticeService;
     }
 
     /**
@@ -104,7 +121,12 @@ public class DepreciationBatchSequenceService {
 
         if (depreciationJobDoesntExist) {
             log.warn("Depreciation job id {} does not exist", jobId);
-            // TODO update the notification
+
+            DepreciationJobNoticeDTO notice = new DepreciationJobNoticeDTO();
+            notice.setDepreciationNoticeStatus(DepreciationNoticeStatusType.ERROR);
+            notice.setEventNarrative("Depreciation job id: " + jobId +" doesn't exist");
+            notice.setEventTimeStamp(ZonedDateTime.now());
+            depreciationJobNoticeService.save(notice);
 
             return;
         }
@@ -117,7 +139,13 @@ public class DepreciationBatchSequenceService {
 
         if (depreciationPeriodDoesntExist) {
             log.warn("Depreciation period id {} does not exist, for depreciation-job id {}", depreciationJob.getDepreciationPeriod().getId(), depreciationJob.getId());
-            // TODO update the notification
+
+            DepreciationJobNoticeDTO notice = new DepreciationJobNoticeDTO();
+            notice.setDepreciationJob(depreciationJob);
+            notice.setDepreciationNoticeStatus(DepreciationNoticeStatusType.ERROR);
+            notice.setEventNarrative("Depreciation period id: " + depreciationJob.getDepreciationPeriod().getId() +" doesn't exist");
+            notice.setEventTimeStamp(ZonedDateTime.now());
+            depreciationJobNoticeService.save(notice);
 
             return;
         }
@@ -129,17 +157,86 @@ public class DepreciationBatchSequenceService {
         if (depreciationPeriod.getDepreciationPeriodStatus() == DepreciationPeriodStatusTypes.CLOSED) {
 
             log.warn("Depreciation-period id {} is status CLOSED for depreciation-period id {}. System opting out the depreciation sequence. Standby", depreciationPeriod.getId(), depreciationJob.getId());
-            // TODO update the notification
+
+            DepreciationJobNoticeDTO notice = new DepreciationJobNoticeDTO();
+            notice.setDepreciationJob(depreciationJob);
+            notice.setDepreciationPeriod(depreciationPeriod);
+            notice.setDepreciationNoticeStatus(DepreciationNoticeStatusType.ERROR);
+            notice.setEventNarrative("Depreciation period id: " + depreciationPeriod.getPeriodCode() +" is closed");
+            notice.setEventTimeStamp(ZonedDateTime.now());
+            depreciationJobNoticeService.save(notice);
 
             return;
         }
+        boolean fiscalYearDoesntExist = fiscalYearService.findOne(depreciationPeriod.getFiscalYear().getId()).isEmpty();
+
+        if (fiscalYearDoesntExist) {
+            // opt out
+            DepreciationJobNoticeDTO notice = new DepreciationJobNoticeDTO();
+            notice.setErrorMessage("Fiscal year id: " + depreciationPeriod.getFiscalYear().getId() +" doesn't exist");
+            notice.setDepreciationJob(depreciationJob);
+            notice.setDepreciationPeriod(depreciationPeriod);
+            notice.setDepreciationNoticeStatus(DepreciationNoticeStatusType.ERROR);
+            notice.setEventNarrative("Fiscal year id: " + depreciationPeriod.getFiscalYear().getId() +" doesn't exist");
+            notice.setEventTimeStamp(ZonedDateTime.now());
+            depreciationJobNoticeService.save(notice);
+
+            return;
+        }
+        FiscalYearDTO fiscalYear = fiscalYearService.findOne(depreciationPeriod.getFiscalYear().getId()).get();
+
+        boolean fiscalMonthDoesntExist = fiscalMonthService.findOne(depreciationPeriod.getFiscalMonth().getId()).isEmpty();
+
+        if (fiscalMonthDoesntExist) {
+            // opt out
+            DepreciationJobNoticeDTO notice = new DepreciationJobNoticeDTO();
+            notice.setErrorMessage("Fiscal month id: " + depreciationPeriod.getFiscalMonth().getId() +" doesn't exist");
+            notice.setDepreciationJob(depreciationJob);
+            notice.setDepreciationPeriod(depreciationPeriod);
+            notice.setDepreciationNoticeStatus(DepreciationNoticeStatusType.ERROR);
+            notice.setEventNarrative("Fiscal month id: " + depreciationPeriod.getFiscalMonth().getId() +" doesn't exist");
+            notice.setEventTimeStamp(ZonedDateTime.now());
+            depreciationJobNoticeService.save(notice);
+
+            return;
+        }
+
+
+        FiscalMonthDTO fiscalMonth = fiscalMonthService.findOne(depreciationPeriod.getFiscalMonth().getId()).get();
+
+        boolean fiscalQuarterDoesntExist = fiscalQuarterService.findOne(depreciationPeriod.getFiscalQuarter().getId()).isEmpty();
+
+        if (fiscalQuarterDoesntExist) {
+            // opt out
+            DepreciationJobNoticeDTO notice = new DepreciationJobNoticeDTO();
+            notice.setErrorMessage("Fiscal quarter id: " + depreciationPeriod.getFiscalQuarter().getId() +" doesn't exist");
+            notice.setDepreciationJob(depreciationJob);
+            notice.setDepreciationPeriod(depreciationPeriod);
+            notice.setDepreciationNoticeStatus(DepreciationNoticeStatusType.ERROR);
+            notice.setEventNarrative("Fiscal quarter id: " + depreciationPeriod.getFiscalQuarter().getId() +" doesn't exist");
+            notice.setEventTimeStamp(ZonedDateTime.now());
+            depreciationJobNoticeService.save(notice);
+
+            return;
+        }
+
+        FiscalQuarterDTO fiscalQuarter = fiscalQuarterService.findOne(depreciationPeriod.getFiscalQuarter().getId()).get();
         // TODO Update batch-sequence data in the caller
 
         // OPT OUT
         if (depreciationJob.getDepreciationJobStatus() == DepreciationJobStatusType.COMPLETE) {
 
             log.warn("DepreciationJob id {} is status COMPLETE for period id {}. System opting out the depreciation sequence. Standby", depreciationJob.getId(), depreciationPeriod.getId());
-            // TODO update notification
+
+            DepreciationJobNoticeDTO notice = new DepreciationJobNoticeDTO();
+            notice.setErrorMessage("Depreciation Job id: " + depreciationJob.getId() +" is status COMPLETE");
+            notice.setDepreciationJob(depreciationJob);
+            notice.setDepreciationPeriod(depreciationPeriod);
+            notice.setDepreciationNoticeStatus(DepreciationNoticeStatusType.ERROR);
+            notice.setEventNarrative("Depreciation Job id: " + depreciationJob.getId() +" is status COMPLETE");
+            notice.setEventTimeStamp(ZonedDateTime.now());
+            depreciationJobNoticeService.save(notice);
+
             return;
         }
 
@@ -156,14 +253,22 @@ public class DepreciationBatchSequenceService {
 
                     log.debug("Asset id {} ready for depreciation sequence, standby for next update", assetRegistration.getId());
 
-                    // assetCategoryRepository.findById(assetRegistration.getAssetCategory().getId()).ifPresent(assetCategory -> {
-
                     boolean assetCategoryDoesNotExist = assetCategoryService.findOne(assetRegistration.getAssetCategory().getId()).isEmpty();
 
                     if (assetCategoryDoesNotExist) {
 
                         log.warn("Asset Category id {} not found", assetRegistration.getAssetCategory().getId());
                         // TODO update notification
+
+                        DepreciationJobNoticeDTO notice = new DepreciationJobNoticeDTO();
+                        notice.setErrorMessage("Asset Category id: " + assetRegistration.getAssetCategory().getId() +" not found");
+                        notice.setDepreciationJob(depreciationJob);
+                        notice.setDepreciationPeriod(depreciationPeriod);
+                        notice.setDepreciationNoticeStatus(DepreciationNoticeStatusType.ERROR);
+                        notice.setEventNarrative("Asset Category id: " + assetRegistration.getAssetCategory().getId() +" not found");
+                        notice.setEventTimeStamp(ZonedDateTime.now());
+                        depreciationJobNoticeService.save(notice);
+
                         return;
                     }
 
@@ -175,7 +280,14 @@ public class DepreciationBatchSequenceService {
 
                         log.warn("Service outlet id {} not found", assetRegistration.getMainServiceOutlet().getId());
 
-                        // TODO update notification
+                        DepreciationJobNoticeDTO notice = new DepreciationJobNoticeDTO();
+                        notice.setErrorMessage("Service outlet id: " + assetRegistration.getMainServiceOutlet().getId() +" not found");
+                        notice.setDepreciationJob(depreciationJob);
+                        notice.setDepreciationPeriod(depreciationPeriod);
+                        notice.setDepreciationNoticeStatus(DepreciationNoticeStatusType.ERROR);
+                        notice.setEventNarrative("Service outlet id: " + assetRegistration.getMainServiceOutlet().getId() +" not found");
+                        notice.setEventTimeStamp(ZonedDateTime.now());
+                        depreciationJobNoticeService.save(notice);
                         return;
                     }
 
@@ -202,6 +314,9 @@ public class DepreciationBatchSequenceService {
                             depreciationEntry.setAssetRegistration(assetRegistration);
                             depreciationEntry.setPostedAt(ZonedDateTime.now());
                             depreciationEntry.setServiceOutlet(serviceOutlet);
+                            depreciationEntry.setFiscalYear(fiscalYear);
+                            depreciationEntry.setFiscalMonth(fiscalMonth);
+                            depreciationEntry.setFiscalQuarter(fiscalQuarter);
 
                             DepreciationEntryDTO depreciation = depreciationEntryService.save(depreciationEntry);
 
