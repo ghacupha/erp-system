@@ -92,6 +92,7 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
         List<AssetRegistrationDTO> assets = fetchAssets();
 
         // Process the assets in batches
+        // TODO externalize this setting, you definitely would not do this for 10,000 items
         int batchSize = 10;
         processAssetsInBatches(depreciationJob, assets, batchSize);
 
@@ -162,6 +163,8 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
 
         log.info("System is processing {} assets in batches of {}", totalAssets, batchSize);
 
+        // TODO check if the we can implement this lists on the repository itself using pages
+        // TODO so that we can pull only the size of the assets needed not the whole kingdom
         while (processedCount < totalAssets) {
             int startIndex = processedCount;
             int endIndex = Math.min(processedCount + batchSize, totalAssets);
@@ -210,13 +213,6 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
         // Update the batch sequence status to enqueued
         batchSequence.setDepreciationBatchStatus(DepreciationBatchStatusType.ENQUEUED);
         depreciationBatchSequenceService.save(batchSequence);
-
-        // Check if this is the last batch and update the depreciation job status accordingly
-        // TODO if (batchSequence.isLastBatch) {
-        // TODO     log.debug("The last depreciation-batch-sequence has been enqueued");
-        // TODO     depreciationJob.setDepreciationJobStatus(DepreciationJobStatusType.ENQUEUED);
-        // TODO     depreciationJobService.save(depreciationJob);
-        // TODO }
     }
 
     /**
