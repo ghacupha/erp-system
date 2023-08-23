@@ -17,42 +17,32 @@ package io.github.erp.erp.depreciation.queue;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.DepreciationBatchSequence;
-import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
-import io.github.erp.domain.enumeration.DepreciationJobStatusType;
 import io.github.erp.erp.depreciation.DepreciationBatchSequenceService;
-import io.github.erp.erp.depreciation.DepreciationCompleteCallback;
+import io.github.erp.erp.depreciation.DepreciationJobCompleteCallback;
+import io.github.erp.erp.depreciation.DepreciationJobErroredCallback;
 import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
-import io.github.erp.repository.DepreciationBatchSequenceRepository;
-import io.github.erp.repository.DepreciationJobRepository;
-import io.github.erp.service.DepreciationJobNoticeService;
-import io.github.erp.service.dto.DepreciationJobNoticeDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class DepreciationBatchConsumer {
 
     private static final Logger log = LoggerFactory.getLogger(DepreciationBatchConsumer.class);
 
-    private final DepreciationBatchSequenceRepository depreciationBatchSequenceRepository;
     private final DepreciationBatchSequenceService depreciationBatchSequenceService;
-    private final DepreciationJobRepository depreciationJobRepository;
-    private final DepreciationJobNoticeService depreciationJobNoticeService;
+    private final DepreciationJobCompleteCallback depreciationJobCompleteCallback;
+    private final DepreciationJobErroredCallback depreciationJobErroredCallback;
 
     private final Object sequenceLock = new Object(); // For concurrency control
 
-    public DepreciationBatchConsumer(DepreciationBatchSequenceRepository depreciationBatchSequenceRepository, DepreciationBatchSequenceService depreciationBatchSequenceService, DepreciationJobRepository depreciationJobRepository, DepreciationJobNoticeService depreciationJobNoticeService) {
-        this.depreciationBatchSequenceRepository = depreciationBatchSequenceRepository;
+    public DepreciationBatchConsumer(DepreciationBatchSequenceService depreciationBatchSequenceService, DepreciationJobCompleteCallback depreciationJobCompleteCallback, DepreciationJobErroredCallback depreciationJobErroredCallback) {
         this.depreciationBatchSequenceService = depreciationBatchSequenceService;
-        this.depreciationJobRepository = depreciationJobRepository;
-        this.depreciationJobNoticeService = depreciationJobNoticeService;
+        this.depreciationJobCompleteCallback = depreciationJobCompleteCallback;
+        this.depreciationJobErroredCallback = depreciationJobErroredCallback;
     }
 
     @KafkaListener(topics = "depreciation_batch_topic", groupId = "erp-system", concurrency ="8")
@@ -68,49 +58,14 @@ public class DepreciationBatchConsumer {
                     depreciationBatchSequenceService.runDepreciation(message);
 
                     if (message.isLastBatch()) {
-                        // todo now listen if you do this at the wrong time the whole process is done
-                        updateDepreciationJobStatus(message.getJobId(), DepreciationJobStatusType.COMPLETE);
+                        depreciationJobCompleteCallback.onComplete(message);
                     }
                 }
 
             } catch (Exception e) {
-                log.error("Error processing batch-id id {}", message.getBatchId(), e);
-                // Handle errors here, such as sending notifications or retries
-
-                DepreciationJobNoticeDTO jobNotice = new DepreciationJobNoticeDTO();
-                jobNotice.setEventTimeStamp(ZonedDateTime.now());
-                jobNotice.setEventNarrative("Error encountered processing batch-id id ,"+ message.getBatchId());
-                jobNotice.setErrorMessage(e.getMessage());
-                jobNotice.setSourceModule("DepreciationBatchConsumer");
-
-                depreciationJobNoticeService.save(jobNotice);
-
-                updateDepreciationJobStatus(message.getJobId(), DepreciationJobStatusType.ERRORED);
-                updateBatchSequenceStatus(message.getBatchId(), DepreciationBatchStatusType.ERRORED);
+                depreciationJobErroredCallback.onError(message, e);
             }
         }
-
-
-
-    }
-
-    private void updateDepreciationJobStatus(String jobId, DepreciationJobStatusType status) {
-        Long id = Long.valueOf(jobId);
-        depreciationJobRepository.findById(id).ifPresent(depreciationJob -> {
-            if (depreciationJob.getDepreciationJobStatus() != status) {
-                depreciationJob.setDepreciationJobStatus(status);
-                depreciationJobRepository.save(depreciationJob);
-
-                log.info("The depreciation job id: {} {}, has been completed", depreciationJob.getId(), depreciationJob.getDescription());
-            }
-        });
-    }
-
-    private void updateBatchSequenceStatus(String batchId, DepreciationBatchStatusType status) {
-        depreciationBatchSequenceRepository.findById(Long.valueOf(batchId)).ifPresent(sequence -> {
-            sequence.setDepreciationBatchStatus(status);
-            depreciationBatchSequenceRepository.save(sequence);
-        });
     }
 }
 
