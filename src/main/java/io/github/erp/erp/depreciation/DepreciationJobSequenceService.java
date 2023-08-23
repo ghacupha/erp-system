@@ -29,14 +29,14 @@ import io.github.erp.service.dto.DepreciationJobDTO;
  * such as closed depreciation periods, completed depreciation jobs, and missing depreciation periods. It takes care of creating
  * depreciation batch sequences and monitoring the enqueuing of batches.
  */
-public interface DepreciationJobSequenceService<J> {
+public interface DepreciationJobSequenceService<Job> {
 
     /**
      * Triggers the depreciation process for a given DepreciationJobDTO by processing assets in batches. This method fetches assets
      * from the database, checks for any opt-out conditions, and initiates the depreciation sequence by enqueuing depreciation batch
      * messages for processing.
      *
-     * @param J The DTO containing the details of the depreciation job to be processed.
+     * @param Job The DTO containing the details of the depreciation job to be processed.
      */
-    void  triggerDepreciation(J job);
+    void  triggerDepreciation(Job job);
 }

@@ -89,6 +89,7 @@ public class DepreciationBatchSequenceService {
     private final FiscalMonthService fiscalMonthService;
     private final DepreciationJobNoticeService depreciationJobNoticeService;
     private final io.github.erp.service.DepreciationBatchSequenceService batchSequenceService;
+    private final DepreciationCompleteCallback depreciationCompleteCallback;
 
     public DepreciationBatchSequenceService(
         DepreciationCalculatorService depreciationCalculatorService,
@@ -103,7 +104,7 @@ public class DepreciationBatchSequenceService {
         FiscalQuarterService fiscalQuarterService,
         FiscalMonthService fiscalMonthService,
         DepreciationJobNoticeService depreciationJobNoticeService,
-        io.github.erp.service.DepreciationBatchSequenceService batchSequenceService) {
+        io.github.erp.service.DepreciationBatchSequenceService batchSequenceService, DepreciationCompleteCallback depreciationCompleteCallback) {
         this.depreciationCalculatorService = depreciationCalculatorService;
         this.depreciationJobService = depreciationJobService;
         this.depreciationPeriodService = depreciationPeriodService;
@@ -117,6 +118,7 @@ public class DepreciationBatchSequenceService {
         this.fiscalMonthService = fiscalMonthService;
         this.depreciationJobNoticeService = depreciationJobNoticeService;
         this.batchSequenceService = batchSequenceService;
+        this.depreciationCompleteCallback = depreciationCompleteCallback;
     }
 
     /**
@@ -353,17 +355,10 @@ public class DepreciationBatchSequenceService {
                 // TODO Create and update netbook-value-entry
             }
 
-            updateBatchSequenceStatus(batchSequence, DepreciationBatchStatusType.COMPLETED);
+            depreciationCompleteCallback.onComplete(message);
        },
             () -> {
             throw new DepreciationBatchSequenceNotFound(message.getBatchId());
         });
-    }
-
-    private void updateBatchSequenceStatus(DepreciationBatchSequenceDTO depreciationBatchSequence, DepreciationBatchStatusType status) {
-        if (depreciationBatchSequence.getDepreciationBatchStatus() != status) {
-            depreciationBatchSequence.setDepreciationBatchStatus(status);
-            batchSequenceService.save(depreciationBatchSequence);
-        }
     }
 }

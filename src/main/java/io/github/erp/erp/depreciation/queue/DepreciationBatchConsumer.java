@@ -21,6 +21,7 @@ import io.github.erp.domain.DepreciationBatchSequence;
 import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import io.github.erp.domain.enumeration.DepreciationJobStatusType;
 import io.github.erp.erp.depreciation.DepreciationBatchSequenceService;
+import io.github.erp.erp.depreciation.DepreciationCompleteCallback;
 import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
 import io.github.erp.repository.DepreciationBatchSequenceRepository;
 import io.github.erp.repository.DepreciationJobRepository;
@@ -46,7 +47,6 @@ public class DepreciationBatchConsumer {
     private final DepreciationJobNoticeService depreciationJobNoticeService;
 
     private final Object sequenceLock = new Object(); // For concurrency control
-    private final AtomicInteger completedBatchCount = new AtomicInteger(0);
 
     public DepreciationBatchConsumer(DepreciationBatchSequenceRepository depreciationBatchSequenceRepository, DepreciationBatchSequenceService depreciationBatchSequenceService, DepreciationJobRepository depreciationJobRepository, DepreciationJobNoticeService depreciationJobNoticeService) {
         this.depreciationBatchSequenceRepository = depreciationBatchSequenceRepository;
@@ -66,20 +66,10 @@ public class DepreciationBatchConsumer {
                     // Process and update the batch sequence status
                     // TODO CALLBACK FOR SEQUENCE UPDATE
                     depreciationBatchSequenceService.runDepreciation(message);
-                    // updateBatchSequenceStatus(message.getBatchId(), DepreciationBatchStatusType.COMPLETED);
 
-                    completedBatchCount.incrementAndGet(); // Increment the completed batch count
-
-                    // Check if all batch sequences have completed
-                    if (completedBatchCount.get() == messages.size()) {
-                        // Check if all batch sequences have completed
-                        if (allBatchSequencesCompleted(messages)) {
-                            // todo check if last batch, and check if in sync
-                            if (message.isLastBatch()) {
-                                // todo now listen if you do this at the wrong time the whole process is done
-                                updateDepreciationJobStatus(message.getJobId(), DepreciationJobStatusType.COMPLETE);
-                            }
-                        }
+                    if (message.isLastBatch()) {
+                        // todo now listen if you do this at the wrong time the whole process is done
+                        updateDepreciationJobStatus(message.getJobId(), DepreciationJobStatusType.COMPLETE);
                     }
                 }
 
@@ -98,31 +88,10 @@ public class DepreciationBatchConsumer {
                 updateDepreciationJobStatus(message.getJobId(), DepreciationJobStatusType.ERRORED);
                 updateBatchSequenceStatus(message.getBatchId(), DepreciationBatchStatusType.ERRORED);
             }
-
-            // Check if all batch sequences have completed
-            if (completedBatchCount.get() == messages.size()) {
-                // Check if all batch sequences have completed
-                if (allBatchSequencesCompleted(messages)) {
-                    // todo check if last batch, and check if in sync
-                    // todo now listen if you do this at the wrong time the whole process is done
-                    // todo check if last batch, and check if in sync
-                    if (message.isLastBatch()) {
-                        updateDepreciationJobStatus(messages.get(0).getJobId(), DepreciationJobStatusType.COMPLETE);
-                    }
-                }
-            }
         }
 
 
 
-    }
-
-    private boolean allBatchSequencesCompleted(List<DepreciationBatchMessage> messages) {
-        return messages.stream()
-            .allMatch(message -> {
-                DepreciationBatchSequence sequence = depreciationBatchSequenceRepository.findById(Long.valueOf(message.getBatchId())).orElse(null);
-                return sequence != null && sequence.getDepreciationBatchStatus() == DepreciationBatchStatusType.COMPLETED;
-            });
     }
 
     private void updateDepreciationJobStatus(String jobId, DepreciationJobStatusType status) {
