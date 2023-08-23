@@ -1,5 +1,5 @@
 ---
-# Depreciation Module Documentation
+# EHUD SERIES (Depreciation Module) Documentation
 
 ## Overview
 
