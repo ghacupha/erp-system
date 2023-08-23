@@ -65,7 +65,7 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
 
         BigDecimal depreciationAmount = calculateTotalDepreciation(monthlyDepreciation, elapsedMonths);
 
-        return depreciationAmount.min(netBookValueBeforeDepreciation);
+        return depreciationAmount.min(netBookValueBeforeDepreciation).setScale(MONEY_SCALE, ROUNDING_MODE);
     }
 
     private BigDecimal calculateDepreciationRate(AssetCategoryDTO assetCategory) {
@@ -74,11 +74,12 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
         }
         return assetCategory.getDepreciationRateYearly()
             .divide(TEN_THOUSAND, DECIMAL_SCALE, ROUNDING_MODE)
-            .divide(MONTHS_IN_YEAR, DECIMAL_SCALE, ROUNDING_MODE);
+            .divide(MONTHS_IN_YEAR, DECIMAL_SCALE, ROUNDING_MODE)
+            .setScale(DECIMAL_SCALE, ROUNDING_MODE);
     }
 
     private BigDecimal calculateNetBookValueBeforeDepreciation(BigDecimal assetCost, BigDecimal depreciationRate, long priorMonths) {
-        return assetCost.subtract(assetCost.multiply(depreciationRate).multiply(BigDecimal.valueOf(priorMonths)).setScale(MONEY_SCALE, ROUNDING_MODE));
+        return assetCost.subtract(assetCost.multiply(depreciationRate).multiply(BigDecimal.valueOf(priorMonths)).setScale(DECIMAL_SCALE, ROUNDING_MODE));
     }
 
     private BigDecimal calculateMonthlyDepreciation(BigDecimal assetCost, BigDecimal depreciationRate) {
@@ -86,7 +87,7 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
     }
 
     private BigDecimal calculateTotalDepreciation(BigDecimal monthlyDepreciation, long elapsedMonths) {
-        return monthlyDepreciation.multiply(BigDecimal.valueOf(elapsedMonths)).setScale(MONEY_SCALE, ROUNDING_MODE);
+        return monthlyDepreciation.multiply(BigDecimal.valueOf(elapsedMonths)).setScale(DECIMAL_SCALE, ROUNDING_MODE);
     }
 }
 
