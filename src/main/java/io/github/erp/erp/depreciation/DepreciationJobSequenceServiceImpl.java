@@ -174,7 +174,7 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
             DepreciationBatchSequenceDTO batchSequence = createDepreciationBatchSequence(depreciationJob, startIndex, endIndex, isLastBatch);
 
             // Process and enqueue the current batch
-            processAndEnqueueBatch(depreciationJob, currentBatch, batchSequence);
+            processAndEnqueueBatch(depreciationJob, currentBatch, batchSequence, isLastBatch);
 
             processedCount += batchSize;
         }
@@ -203,9 +203,9 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
     /**
      * Processes and enqueues the current batch for depreciation.
      */
-    private void processAndEnqueueBatch(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> currentBatch, DepreciationBatchSequenceDTO batchSequence) {
+    private void processAndEnqueueBatch(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> currentBatch, DepreciationBatchSequenceDTO batchSequence, boolean isLastBatch) {
         // Enqueuing the DepreciationBatchMessage
-        depreciationBatchProducer.sendDepreciationJobMessage(depreciationJob, currentBatch, batchSequence);
+        depreciationBatchProducer.sendDepreciationJobMessage(depreciationJob, currentBatch, batchSequence, isLastBatch);
 
         // Update the batch sequence status to enqueued
         batchSequence.setDepreciationBatchStatus(DepreciationBatchStatusType.ENQUEUED);

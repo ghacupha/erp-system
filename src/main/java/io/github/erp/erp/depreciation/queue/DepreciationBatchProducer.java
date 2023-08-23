@@ -51,14 +51,15 @@ public class DepreciationBatchProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendDepreciationJobMessage(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> assets, DepreciationBatchSequenceDTO batchSequence) {
+    public void sendDepreciationJobMessage(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> assets, DepreciationBatchSequenceDTO batchSequence, boolean isLastBatch) {
         DepreciationBatchMessage depreciationJobMessage = DepreciationBatchMessage
             .builder()
             .batchId(String.valueOf(batchSequence.getId()))
             .jobId(String.valueOf(depreciationJob.getId()))
             .assetIds(assets.stream().map(AssetRegistrationDTO::getId).map(String::valueOf).collect(Collectors.toList()))
             .initialCost(assets.stream().map(AssetRegistrationDTO::getAssetCost).reduce(BigDecimal::add).orElse(BigDecimal.ZERO))
-            // TODO .createdAt(batchSequence.getCreatedAt())
+            .createdAt(LocalDateTime.from(batchSequence.getCreatedAt()))
+            .isLastBatch(isLastBatch)
             .startIndex(batchSequence.getStartIndex())
             .endIndex(batchSequence.getEndIndex())
             .createdAt(LocalDateTime.now())

@@ -44,4 +44,5 @@ public class DepreciationBatchMessage implements Serializable {
     private LocalDateTime createdAt;
     private int startIndex;
     private int endIndex;
+    private boolean isLastBatch;
 }
