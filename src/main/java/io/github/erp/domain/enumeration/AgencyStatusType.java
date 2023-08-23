@@ -1,7 +1,7 @@
 package io.github.erp.domain.enumeration;
 
 /*-
- * Erp System - Mark IV No 5 (Ehud Series) Server ver 1.3.5
+ * Erp System - Mark IV No 5 (Ehud Series) Server ver 1.3.6
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.domain.enumeration;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 /**
  * The AgencyStatusType enumeration.
  */
