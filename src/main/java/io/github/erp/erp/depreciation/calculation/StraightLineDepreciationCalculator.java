@@ -34,7 +34,7 @@ import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.*
 public class StraightLineDepreciationCalculator implements CalculatesDepreciation {
 
     @Override
-    public BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) {
+    public BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) throws DepreciationRateNotProvidedException {
 
         // OPT OUT
         if (depreciationMethod.getDepreciationType() != DepreciationTypes.STRAIGHT_LINE) {
@@ -65,6 +65,9 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
     }
 
     private BigDecimal calculateDepreciationRate(AssetCategoryDTO assetCategory) {
+        if (assetCategory.getDepreciationRateYearly() == null) {
+            throw new DepreciationRateNotProvidedException("Depreciation rate not provided", assetCategory);
+        }
         return assetCategory.getDepreciationRateYearly()
             .divide(MONTHS_IN_YEAR, DECIMAL_SCALE, ROUNDING_MODE);
     }
