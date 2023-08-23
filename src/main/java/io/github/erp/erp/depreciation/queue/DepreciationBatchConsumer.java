@@ -52,6 +52,8 @@ public class DepreciationBatchConsumer {
             try {
                 log.debug("Received message for batch-id id {}", message.getBatchId());
 
+                // TODO review if this method is introducing performance bottlenecks
+                // todo due to contention for the same lock
                 synchronized (sequenceLock) {
                     // Process and update the batch sequence status
                     // TODO CALLBACK FOR SEQUENCE UPDATE
