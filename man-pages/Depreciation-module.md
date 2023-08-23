@@ -1,3 +1,5 @@
+---
+
 ### Depreciation Module Usage Instructions
 
 User instructions for using the depreciation module 
@@ -5,6 +7,13 @@ with the new fiscal year, fiscal month, and fiscal quarter details integrated
 into the depreciation workflow:
 
 ---
+**Pre-checks**
+Before running the depreciation you need to ensure the following:
+ - The rate of depreciation is configured for each asset-category using basis points format
+   of the percentage per year depreciation. Failing which the depreciation process will be be discontinued
+   by a runtime exception.
+ - Ensure each asset registration item is configured with both the service outlet, and the asset-category
+   failing which the asset will not be depreciated
 
 **User Instructions: Depreciation Module with Fiscal Year, Month, and Quarter**
 
@@ -27,6 +36,12 @@ into the depreciation workflow:
     - Choose the fiscal year, fiscal quarter, and fiscal month to associate with this period.
     - If needed, provide additional information about the period.
     - Click "Save" to add the period to the job.
+    
+`NOTE`: the system design has been created for and with the mental frame of depreciation being done
+      for a single period. Even the UAT is being done with that consideration in mind. Choosing a depreciation-period
+      with more than one fiscal-month will not be ideal. If indeed that is the case, then it might be better
+      to pick the last fiscal-month within the depreciation-period because the fiscal month is merely a tool
+      with which we are framing reporting parameters for different periods.
 
 4. **Running the Depreciation Calculation:**
     - Once you have added the period for the job, you can create the job clicking the save button simultaneously initiating the depreciation sequence
