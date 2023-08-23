@@ -28,7 +28,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.*;
+import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.DECIMAL_SCALE;
+import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.MONEY_SCALE;
+import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.MONTHS_IN_YEAR;
+import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.ROUNDING_MODE;
+import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.TEN_THOUSAND;
 
 @Service("straightLineDepreciationCalculator")
 public class StraightLineDepreciationCalculator implements CalculatesDepreciation {
@@ -44,8 +48,8 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
         LocalDate startDate = period.getStartDate();
         LocalDate endDate = period.getEndDate();
         BigDecimal assetCost = asset.getAssetCost();
-        // TODO LocalDate capitalizationDate = asset.getCapitalizationDate();
-        LocalDate capitalizationDate = LocalDate.of(2023,1,1);
+        LocalDate capitalizationDate = asset.getCapitalizationDate();
+        // LocalDate capitalizationDate = LocalDate.of(2023,1,1);
 
         // Calculate the total number of months in the period
         long elapsedMonths = ChronoUnit.MONTHS.between(startDate, endDate) + 1;
@@ -69,6 +73,7 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
             throw new DepreciationRateNotProvidedException("Depreciation rate not provided", assetCategory);
         }
         return assetCategory.getDepreciationRateYearly()
+            .divide(TEN_THOUSAND, DECIMAL_SCALE, ROUNDING_MODE)
             .divide(MONTHS_IN_YEAR, DECIMAL_SCALE, ROUNDING_MODE);
     }
 

@@ -33,6 +33,7 @@ import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.D
 import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.MONEY_SCALE;
 import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.MONTHS_IN_YEAR;
 import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.ROUNDING_MODE;
+import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.TEN_THOUSAND;
 
 /**
  * Calculates reducing balance depreciation for the period requested on a month-by-month basis
@@ -87,7 +88,7 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
         if (depreciationRate == null) {
             throw new DepreciationRateNotProvidedException("Depreciation rate is not provided", assetCategory);
         }
-        depreciationRate = assetCategory.getDepreciationRateYearly().divide(MONTHS_IN_YEAR, DECIMAL_SCALE, ROUNDING_MODE);
+        depreciationRate = assetCategory.getDepreciationRateYearly().divide(TEN_THOUSAND, DECIMAL_SCALE, ROUNDING_MODE).divide(MONTHS_IN_YEAR, DECIMAL_SCALE, ROUNDING_MODE);
         LocalDate capitalizationDate = asset.getCapitalizationDate();
         // LocalDate capitalizationDate = LocalDate.of(2023,6,6);
         LocalDate periodStartDate = period.getStartDate();

@@ -43,5 +43,18 @@ import java.math.BigDecimal;
  */
 public interface CalculatesDepreciation {
 
+    /**
+     * Calculates depreciation amount based on the depreciation rate configured on the asset-category
+     * in which the asset-registration belongs. The depreciation rate is given in whole number basis points like instead
+     * f 12.5% we say 1250, and instead of 30% we say 3000. So the calculation converts the basis points to decimals before
+     * calculation
+     *
+     * @param asset
+     * @param period
+     * @param assetCategory
+     * @param depreciationMethod
+     * @return
+     * @throws DepreciationRateNotProvidedException
+     */
     BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) throws DepreciationRateNotProvidedException;
 }
