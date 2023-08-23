@@ -49,7 +49,6 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
         LocalDate endDate = period.getEndDate();
         BigDecimal assetCost = asset.getAssetCost();
         LocalDate capitalizationDate = asset.getCapitalizationDate();
-        // LocalDate capitalizationDate = LocalDate.of(2023,1,1);
 
         // Calculate the total number of months in the period
         long elapsedMonths = ChronoUnit.MONTHS.between(startDate, endDate) + 1;
@@ -57,38 +56,42 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
         // Calculate the total number of months before beginning of the period and be sure to avoid overlap
         long priorMonths = ChronoUnit.MONTHS.between(capitalizationDate, endDate) - elapsedMonths;
 
-        BigDecimal depreciationRate = calculateDepreciationRate(assetCategory);
+        BigDecimal depreciationRateYearly = calculateDepreciationRateYearly(assetCategory);
+        BigDecimal usefulLifeYears = calculateUsefulLife(depreciationRateYearly); // Calculate useful life from depreciation rate
 
-        BigDecimal netBookValueBeforeDepreciation = calculateNetBookValueBeforeDepreciation(assetCost, depreciationRate, priorMonths);
+        BigDecimal netBookValueBeforeDepreciation = calculateNetBookValueBeforeDepreciation(assetCost, usefulLifeYears, priorMonths);
 
-        BigDecimal monthlyDepreciation = calculateMonthlyDepreciation(assetCost, depreciationRate);
+        BigDecimal monthlyDepreciation = calculateMonthlyDepreciation(assetCost, usefulLifeYears); // Calculate monthly depreciation using useful life
 
         BigDecimal depreciationAmount = calculateTotalDepreciation(monthlyDepreciation, elapsedMonths);
 
         return depreciationAmount.min(netBookValueBeforeDepreciation).setScale(MONEY_SCALE, ROUNDING_MODE);
     }
 
-    private BigDecimal calculateDepreciationRate(AssetCategoryDTO assetCategory) {
+    private BigDecimal calculateDepreciationRateYearly(AssetCategoryDTO assetCategory) {
         if (assetCategory.getDepreciationRateYearly() == null) {
             throw new DepreciationRateNotProvidedException("Depreciation rate not provided", assetCategory);
         }
         return assetCategory.getDepreciationRateYearly()
-            .divide(TEN_THOUSAND, DECIMAL_SCALE, ROUNDING_MODE)
-            .divide(MONTHS_IN_YEAR, DECIMAL_SCALE, ROUNDING_MODE)
-            .setScale(DECIMAL_SCALE, ROUNDING_MODE);
+            .divide(TEN_THOUSAND, DECIMAL_SCALE, ROUNDING_MODE);
     }
 
-    private BigDecimal calculateNetBookValueBeforeDepreciation(BigDecimal assetCost, BigDecimal depreciationRate, long priorMonths) {
-        return assetCost.subtract(assetCost.multiply(depreciationRate).multiply(BigDecimal.valueOf(priorMonths)).setScale(DECIMAL_SCALE, ROUNDING_MODE));
+    private BigDecimal calculateUsefulLife(BigDecimal depreciationRateYearly) {
+        if (depreciationRateYearly.compareTo(BigDecimal.ZERO) == 0) {
+            throw new IllegalArgumentException("Depreciation rate must be non-zero");
+        }
+        return BigDecimal.ONE.divide(depreciationRateYearly, DECIMAL_SCALE, ROUNDING_MODE);
     }
 
-    private BigDecimal calculateMonthlyDepreciation(BigDecimal assetCost, BigDecimal depreciationRate) {
-        return assetCost.multiply(depreciationRate).setScale(DECIMAL_SCALE, ROUNDING_MODE);
+    private BigDecimal calculateNetBookValueBeforeDepreciation(BigDecimal assetCost, BigDecimal usefulLifeYears, long priorMonths) {
+        return calculateTotalDepreciation(assetCost.divide(usefulLifeYears.multiply(MONTHS_IN_YEAR), DECIMAL_SCALE, ROUNDING_MODE), priorMonths);
+    }
+
+    private BigDecimal calculateMonthlyDepreciation(BigDecimal assetCost, BigDecimal usefulLifeYears) {
+        return assetCost.divide(usefulLifeYears.multiply(MONTHS_IN_YEAR), DECIMAL_SCALE, ROUNDING_MODE);
     }
 
     private BigDecimal calculateTotalDepreciation(BigDecimal monthlyDepreciation, long elapsedMonths) {
         return monthlyDepreciation.multiply(BigDecimal.valueOf(elapsedMonths)).setScale(DECIMAL_SCALE, ROUNDING_MODE);
     }
 }
-
-
