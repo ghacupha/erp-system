@@ -126,6 +126,7 @@ public class DepreciationBatchSequenceService {
      * Triggers the depreciation process by creating a new DepreciationRun entity and processing the assets in batches.
      * This method retrieves the assets from the database, performs the depreciation calculations, and updates the necessary records.
      */
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public void runDepreciation(DepreciationBatchMessage message) {
 
         batchSequenceService.findOne(Long.valueOf(message.getBatchId())).ifPresentOrElse(batchSequence -> {
@@ -136,36 +137,33 @@ public class DepreciationBatchSequenceService {
                 List<String> assetIds = message.getAssetIds();
 
                 DepreciationJobDTO depreciationJob = getDepreciationJob(batchSequence, jobId);
-                if (depreciationJob == null) return;
+                if (depreciationJob == null) throw new DepreciationJobNotFoundException(message);
 
                 log.debug("Commencing depreciation for depreciation-job id {}", depreciationJob.getId());
 
 
                 DepreciationPeriodDTO depreciationPeriod = getDepreciationPeriod(batchSequence, depreciationJob);
-                if (depreciationPeriod == null) return;
+                if (depreciationPeriod == null) throw new DepreciationPeriodNotConfiguredException(message);
 
                 // OPT OUT
-                if (depreciationJobStatusIsComplete(batchSequence, depreciationJob, depreciationPeriod)) return;
+                if (depreciationJobStatusIsComplete(batchSequence, depreciationJob, depreciationPeriod)) throw new DepreciationJobStatusCompleteException(message);
 
                 log.debug("Commencing depreciation for depreciation-job id {}, for depreciation-period {}. Standby...", depreciationJob.getId(), depreciationPeriod.getId());
 
-                if (depreciationPeriodIsClosed(batchSequence, depreciationJob, depreciationPeriod)) return;
+                if (depreciationPeriodIsClosed(batchSequence, depreciationJob, depreciationPeriod)) throw new DepreciationPeriodClosedException(message);
 
                 FiscalYearDTO fiscalYear = getFiscalYear(batchSequence, depreciationJob, depreciationPeriod);
-                if (fiscalYear == null) return;
+                if (fiscalYear == null) throw new FiscalYearNotConfiguredException(message);
 
                 FiscalMonthDTO fiscalMonth = getFiscalMonth(batchSequence, depreciationJob, depreciationPeriod);
-                if (fiscalMonth == null) return;
+                if (fiscalMonth == null) throw new FiscalMonthNotConfiguredException(message);
 
                 FiscalQuarterDTO fiscalQuarter = getFiscalQuarter(batchSequence, depreciationJob, depreciationPeriod);
-                if (fiscalQuarter == null) return;
+                if (fiscalQuarter == null) throw new FiscalQuarterNotConfiguredException(message);
 
                 log.debug("Standby for depreciation sequence on {} assets for batch id{}", assetIds.size(), message.getBatchId());
                 // Perform the depreciation calculations for the batch of assets
                 for (String assetId : assetIds) {
-
-                    // TODO opt out if depreciated for a given period
-                    // TODO add depreciation period UNIQUE relation with fiscal-month
 
                     // Retrieve the asset from the database using the assetId
                     assetRegistrationService.findOne(Long.valueOf(assetId)).ifPresent(
@@ -173,11 +171,11 @@ public class DepreciationBatchSequenceService {
 
                             log.debug("Asset id {} ready for depreciation sequence, standby for next update", assetRegistration.getId());
 
-                            if (assetCategoryNotConfigured(batchSequence, depreciationJob, depreciationPeriod, assetRegistration)) return;
+                            if (assetCategoryNotConfigured(batchSequence, depreciationJob, depreciationPeriod, assetRegistration)) throw new AssetCategoryNotConfiguredException(assetRegistration, message);
 
                             AssetCategoryDTO assetCategory = assetCategoryService.findOne(assetRegistration.getAssetCategory().getId()).get();
 
-                            if (serviceOutletNotConfigured(batchSequence, depreciationJob, depreciationPeriod, assetRegistration)) return;
+                            if (serviceOutletNotConfigured(batchSequence, depreciationJob, depreciationPeriod, assetRegistration)) throw new ServiceOutletNotConfiguredException(assetRegistration, message);
 
                             ServiceOutletDTO serviceOutlet = serviceOutletService.findOne(assetRegistration.getMainServiceOutlet().getId()).get();
 
@@ -194,7 +192,6 @@ public class DepreciationBatchSequenceService {
                                 });
                         });
                     // TODO Update the asset's net book value and any other relevant data
-                    // TODO Create and update depreciation-entry
                     // TODO Create and update netbook-value-entry
                 }
 
@@ -281,7 +278,6 @@ public class DepreciationBatchSequenceService {
             notice.setDepreciationNoticeStatus(DepreciationNoticeStatusType.ERROR);
             notice.setEventNarrative("Depreciation Job id: " + depreciationJob.getId() + " is status COMPLETE");
             notice.setEventTimeStamp(ZonedDateTime.now());
-            // TODO update batch sequence
             notice.setDepreciationBatchSequence(batchSequence);
             depreciationJobNoticeService.save(notice);
 
@@ -335,6 +331,7 @@ public class DepreciationBatchSequenceService {
         return fiscalMonthService.findOne(depreciationPeriod.getFiscalMonth().getId()).get();
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Nullable
     private DepreciationPeriodDTO getDepreciationPeriod(DepreciationBatchSequenceDTO batchSequence, DepreciationJobDTO depreciationJob) {
         if (depreciationPeriodDoesntExist(batchSequence, depreciationJob)) return null;
@@ -342,6 +339,7 @@ public class DepreciationBatchSequenceService {
         return depreciationPeriodService.findOne(depreciationJob.getDepreciationPeriod().getId()).get();
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Nullable
     private DepreciationJobDTO getDepreciationJob(DepreciationBatchSequenceDTO batchSequence, String jobId) {
         if (depreciationJobDoesntExist(batchSequence, jobId)) return null;
