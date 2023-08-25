@@ -23,16 +23,21 @@ import io.github.erp.service.dto.AssetCategoryDTO;
 import io.github.erp.service.dto.AssetRegistrationDTO;
 import io.github.erp.service.dto.DepreciationMethodDTO;
 import io.github.erp.service.dto.DepreciationPeriodDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
-import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.*;
+import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.MONEY_SCALE;
+import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.ROUNDING_MODE;
+import static io.github.erp.erp.depreciation.calculation.DepreciationUtility.*;
 
 @Service("straightLineDepreciationCalculator")
 public class StraightLineDepreciationCalculator implements CalculatesDepreciation {
+
+    private static final Logger log = LoggerFactory.getLogger(StraightLineDepreciationCalculator.class);
 
     @Override
     public BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) throws DepreciationRateNotProvidedException {
@@ -47,54 +52,37 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
         BigDecimal assetCost = asset.getAssetCost();
         LocalDate capitalizationDate = asset.getCapitalizationDate();
 
-        // Calculate the total number of months in the period
-        long elapsedMonths = ChronoUnit.MONTHS.between(startDate, endDate) + 1;
+        long elapsedMonths = getEffectiveDepreciationPeriod(startDate, endDate, capitalizationDate);
 
-        // Calculate the total number of months before beginning of the period and be sure to avoid overlap
-        long priorMonths = ChronoUnit.MONTHS.between(capitalizationDate, endDate) - elapsedMonths;
+        long priorMonths = getPriorPeriodInMonths(endDate, capitalizationDate, elapsedMonths);
 
-        // Adjust elapsedMonths if the capitalization date is after the period start
-        if (capitalizationDate.isAfter(startDate)) {
-            elapsedMonths = ChronoUnit.MONTHS.between(capitalizationDate, endDate) + 1;
-        }
+        // Convert from basis points to depreciation rate
+        BigDecimal depreciationRateYearly = convertBasisPointsToDecimalDepreciationRate(assetCategory.getDepreciationRateYearly());
 
-        BigDecimal depreciationRateYearly = calculateDepreciationRateYearly(assetCategory);
-        BigDecimal usefulLifeYears = calculateUsefulLife(depreciationRateYearly); // Calculate useful life from depreciation rate
+        BigDecimal usefulLifeYears = calculateUsefulLifeMonths(depreciationRateYearly); // Calculate useful life from depreciation rate
 
-        BigDecimal netBookValueBeforeDepreciation = calculateNetBookValueBeforeDepreciation(assetCost, usefulLifeYears, priorMonths);
+        BigDecimal netBookValueBeforeDepreciation = calculateNetBookValueBeforeDepreciation(asset, depreciationRateYearly, priorMonths, startDate);
 
-        BigDecimal monthlyDepreciation = calculateMonthlyDepreciation(assetCost, usefulLifeYears); // Calculate monthly depreciation using useful life
+        BigDecimal monthlyDepreciation = calculateStraightLineMonthlyDepreciation(assetCost, depreciationRateYearly); // Calculate monthly depreciation using useful life
 
-        BigDecimal depreciationAmount = calculateTotalDepreciation(monthlyDepreciation, elapsedMonths);
+        BigDecimal depreciationAmount = calculateTotalStraightLineDepreciation(monthlyDepreciation, elapsedMonths);
+
+        log.debug("Capitalization date: {}", capitalizationDate);
+        log.debug("Depreciation period start: {}", startDate);
+        log.debug("Depreciation period end: {}", endDate);
+        log.debug("Useful life (years): {}", usefulLifeYears.toPlainString());
+        log.debug("NBV before depreciation: {}", netBookValueBeforeDepreciation.toPlainString());
+        log.debug("Monthly depreciation: {}", monthlyDepreciation.toPlainString());
+        log.debug("Depreciation amount: {}", depreciationAmount.toPlainString());
 
         return depreciationAmount.min(netBookValueBeforeDepreciation).max(BigDecimal.ZERO).setScale(MONEY_SCALE, ROUNDING_MODE);
     }
 
-    private BigDecimal calculateDepreciationRateYearly(AssetCategoryDTO assetCategory) {
-        BigDecimal depreciationRateYearly = assetCategory.getDepreciationRateYearly();
-        if (depreciationRateYearly == null || depreciationRateYearly.compareTo(BigDecimal.ZERO) == 0) {
-            throw new DepreciationRateNotProvidedException("Depreciation rate must be non-zero", assetCategory);
+    private BigDecimal calculateNetBookValueBeforeDepreciation(AssetRegistrationDTO asset, BigDecimal depreciationRateYearly, long priorMonths, LocalDate periodStartDate) {
+        // opt out
+        if (asset.getCapitalizationDate().isAfter(periodStartDate)) {
+            return asset.getAssetCost();
         }
-        return depreciationRateYearly.divide(TEN_THOUSAND, DECIMAL_SCALE, ROUNDING_MODE);
-    }
-
-    private BigDecimal calculateUsefulLife(BigDecimal depreciationRateYearly) {
-        if (depreciationRateYearly.compareTo(BigDecimal.ZERO) == 0) {
-            throw new IllegalArgumentException("Depreciation rate must be non-zero");
-        }
-        return BigDecimal.ONE.divide(depreciationRateYearly, DECIMAL_SCALE, ROUNDING_MODE);
-    }
-
-    private BigDecimal calculateNetBookValueBeforeDepreciation(BigDecimal assetCost, BigDecimal usefulLifeYears, long priorMonths) {
-        return calculateTotalDepreciation(calculateMonthlyDepreciation(assetCost, usefulLifeYears), priorMonths);
-    }
-
-    private BigDecimal calculateMonthlyDepreciation(BigDecimal assetCost, BigDecimal usefulLifeYears) {
-        BigDecimal usefulLifeMonths = usefulLifeYears.multiply(MONTHS_IN_YEAR).setScale(DECIMAL_SCALE, ROUNDING_MODE);
-        return assetCost.divide(usefulLifeMonths, DECIMAL_SCALE, ROUNDING_MODE);
-    }
-
-    private BigDecimal calculateTotalDepreciation(BigDecimal monthlyDepreciation, long elapsedMonths) {
-        return monthlyDepreciation.multiply(BigDecimal.valueOf(elapsedMonths)).setScale(DECIMAL_SCALE, ROUNDING_MODE);
+        return calculateTotalStraightLineDepreciation(calculateStraightLineMonthlyDepreciation(asset.getAssetCost(), depreciationRateYearly), priorMonths);
     }
 }
