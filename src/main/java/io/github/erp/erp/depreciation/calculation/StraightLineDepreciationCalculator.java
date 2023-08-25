@@ -71,11 +71,11 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
     }
 
     private BigDecimal calculateDepreciationRateYearly(AssetCategoryDTO assetCategory) {
-        if (assetCategory.getDepreciationRateYearly() == null) {
-            throw new DepreciationRateNotProvidedException("Depreciation rate not provided", assetCategory);
+        BigDecimal depreciationRateYearly = assetCategory.getDepreciationRateYearly();
+        if (depreciationRateYearly == null || depreciationRateYearly.compareTo(BigDecimal.ZERO) == 0) {
+            throw new DepreciationRateNotProvidedException("Depreciation rate must be non-zero", assetCategory);
         }
-        return assetCategory.getDepreciationRateYearly()
-            .divide(TEN_THOUSAND, DECIMAL_SCALE, ROUNDING_MODE);
+        return depreciationRateYearly.divide(TEN_THOUSAND, DECIMAL_SCALE, ROUNDING_MODE);
     }
 
     private BigDecimal calculateUsefulLife(BigDecimal depreciationRateYearly) {
@@ -86,11 +86,12 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
     }
 
     private BigDecimal calculateNetBookValueBeforeDepreciation(BigDecimal assetCost, BigDecimal usefulLifeYears, long priorMonths) {
-        return calculateTotalDepreciation(assetCost.divide(usefulLifeYears.multiply(MONTHS_IN_YEAR), DECIMAL_SCALE, ROUNDING_MODE), priorMonths);
+        return calculateTotalDepreciation(calculateMonthlyDepreciation(assetCost, usefulLifeYears), priorMonths);
     }
 
     private BigDecimal calculateMonthlyDepreciation(BigDecimal assetCost, BigDecimal usefulLifeYears) {
-        return assetCost.divide(usefulLifeYears.multiply(MONTHS_IN_YEAR), DECIMAL_SCALE, ROUNDING_MODE);
+        BigDecimal usefulLifeMonths = usefulLifeYears.multiply(MONTHS_IN_YEAR).setScale(DECIMAL_SCALE, ROUNDING_MODE);
+        return assetCost.divide(usefulLifeMonths, DECIMAL_SCALE, ROUNDING_MODE);
     }
 
     private BigDecimal calculateTotalDepreciation(BigDecimal monthlyDepreciation, long elapsedMonths) {
