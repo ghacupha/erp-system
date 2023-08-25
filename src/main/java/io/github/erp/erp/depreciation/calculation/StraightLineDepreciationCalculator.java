@@ -17,6 +17,7 @@ package io.github.erp.erp.depreciation.calculation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.enumeration.DepreciationTypes;
 import io.github.erp.service.dto.AssetCategoryDTO;
 import io.github.erp.service.dto.AssetRegistrationDTO;
@@ -28,11 +29,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.DECIMAL_SCALE;
-import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.MONEY_SCALE;
-import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.MONTHS_IN_YEAR;
-import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.ROUNDING_MODE;
-import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.TEN_THOUSAND;
+import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.*;
 
 @Service("straightLineDepreciationCalculator")
 public class StraightLineDepreciationCalculator implements CalculatesDepreciation {
@@ -56,6 +53,11 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
         // Calculate the total number of months before beginning of the period and be sure to avoid overlap
         long priorMonths = ChronoUnit.MONTHS.between(capitalizationDate, endDate) - elapsedMonths;
 
+        // Adjust elapsedMonths if the capitalization date is after the period start
+        if (capitalizationDate.isAfter(startDate)) {
+            elapsedMonths = ChronoUnit.MONTHS.between(capitalizationDate, endDate) + 1;
+        }
+
         BigDecimal depreciationRateYearly = calculateDepreciationRateYearly(assetCategory);
         BigDecimal usefulLifeYears = calculateUsefulLife(depreciationRateYearly); // Calculate useful life from depreciation rate
 
@@ -65,7 +67,7 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
 
         BigDecimal depreciationAmount = calculateTotalDepreciation(monthlyDepreciation, elapsedMonths);
 
-        return depreciationAmount.min(netBookValueBeforeDepreciation).setScale(MONEY_SCALE, ROUNDING_MODE);
+        return depreciationAmount.min(netBookValueBeforeDepreciation).max(BigDecimal.ZERO).setScale(MONEY_SCALE, ROUNDING_MODE);
     }
 
     private BigDecimal calculateDepreciationRateYearly(AssetCategoryDTO assetCategory) {
