@@ -17,21 +17,28 @@ package io.github.erp.erp.depreciation.calculation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.github.javafaker.Faker;
-import io.github.erp.service.dto.AssetCategoryDTO;
 import io.github.erp.service.dto.AssetRegistrationDTO;
 
 import java.math.BigDecimal;
+import java.time.ZoneId;
+import java.util.concurrent.TimeUnit;
 
 public class TestAssetDataGenerator {
 
-    private static final Faker faker = new Faker();
+    protected static final Faker faker = new Faker();
 
     public static AssetRegistrationDTO generateRandomAssetRegistration() {
         AssetRegistrationDTO asset = new AssetRegistrationDTO();
         asset.setAssetNumber(faker.number().digits(6));
         asset.setAssetTag(faker.lorem().word());
         asset.setAssetCost(new BigDecimal(faker.number().numberBetween(1000, 100000)));
+        asset.setCapitalizationDate(
+            faker.date().past(10000, TimeUnit.DAYS)
+                .toInstant().atZone(ZoneId.systemDefault())
+                .toLocalDate()
+        );
         // todo Set other properties as needed
         return asset;
     }
