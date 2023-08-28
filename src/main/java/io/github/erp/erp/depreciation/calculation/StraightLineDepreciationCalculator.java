@@ -61,7 +61,7 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
 
         BigDecimal usefulLifeYears = calculateUsefulLifeMonths(depreciationRateYearly); // Calculate useful life from depreciation rate
 
-        BigDecimal netBookValueBeforeDepreciation = calculateNetBookValueBeforeDepreciation(asset, depreciationRateYearly, priorMonths, startDate);
+        BigDecimal netBookValueBeforeDepreciation = calculateNetBookValueBeforeDepreciation(capitalizationDate, assetCost, depreciationRateYearly, priorMonths,startDate, endDate);
 
         BigDecimal monthlyDepreciation = calculateStraightLineMonthlyDepreciation(assetCost, depreciationRateYearly); // Calculate monthly depreciation using useful life
 
@@ -76,13 +76,5 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
         log.debug("Depreciation amount: {}", depreciationAmount.toPlainString());
 
         return depreciationAmount.min(netBookValueBeforeDepreciation).max(BigDecimal.ZERO).setScale(MONEY_SCALE, ROUNDING_MODE);
-    }
-
-    private BigDecimal calculateNetBookValueBeforeDepreciation(AssetRegistrationDTO asset, BigDecimal depreciationRateYearly, long priorMonths, LocalDate periodStartDate) {
-        // opt out
-        if (asset.getCapitalizationDate().isAfter(periodStartDate)) {
-            return asset.getAssetCost();
-        }
-        return calculateTotalStraightLineDepreciation(calculateStraightLineMonthlyDepreciation(asset.getAssetCost(), depreciationRateYearly), priorMonths);
     }
 }
