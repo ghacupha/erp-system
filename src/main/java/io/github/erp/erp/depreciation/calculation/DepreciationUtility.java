@@ -102,7 +102,9 @@ public class DepreciationUtility {
     }
 
     /**
-     * Total depreciation imputed in the depreciation period in the request
+     * Total depreciation imputed in the depreciation period in the request.
+     * When the effective months for depreciation are calculated as negative, the depreciation will be returned as
+     * zero.
      *
      * @param monthlyStraightLineDepreciation the depreciation amount repeated for every month in straight line depreciation
      * @param effectiveDepreciationMonths     the months in the depreciation period
@@ -110,7 +112,8 @@ public class DepreciationUtility {
      */
     public static BigDecimal calculateTotalStraightLineDepreciation(BigDecimal monthlyStraightLineDepreciation, long effectiveDepreciationMonths) {
         if (effectiveDepreciationMonths < 0) {
-            throw new IllegalArgumentException("The effective months determined for depreciation can not be negative");
+            // throw new IllegalArgumentException("The effective months determined for depreciation can not be negative");
+            return BigDecimal.ZERO;
         }
         return monthlyStraightLineDepreciation.multiply(BigDecimal.valueOf(effectiveDepreciationMonths)).setScale(DECIMAL_SCALE, ROUNDING_MODE);
     }
