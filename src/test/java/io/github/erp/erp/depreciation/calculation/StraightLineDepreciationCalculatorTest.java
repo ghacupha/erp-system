@@ -106,7 +106,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         Assertions.assertEquals(expectedDepreciation, calculatedDepreciation);
     }
 
-    // Review the error arising in this test @Test
+    @Test
     public void testCaseScenarioCapitalizationAfterPeriodEnd() {
         // Create specific asset data
         AssetRegistrationDTO asset = new AssetRegistrationDTO();
