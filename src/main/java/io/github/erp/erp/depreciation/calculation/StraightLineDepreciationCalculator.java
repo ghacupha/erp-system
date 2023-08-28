@@ -30,8 +30,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.MONEY_SCALE;
-import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.ROUNDING_MODE;
+import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.*;
 import static io.github.erp.erp.depreciation.calculation.DepreciationUtility.*;
 
 @Service("straightLineDepreciationCalculator")
@@ -58,6 +57,11 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
 
         // Convert from basis points to depreciation rate
         BigDecimal depreciationRateYearly = convertBasisPointsToDecimalDepreciationRate(assetCategory.getDepreciationRateYearly());
+
+        // OPT out for low or zero depreciation rates
+//        if(BigDecimal.ZERO.setScale(DECIMAL_SCALE,ROUNDING_MODE).compareTo(depreciationRateYearly) <= 0) {
+//            return BigDecimal.ZERO.setScale(MONEY_SCALE,ROUNDING_MODE);
+//        }
 
         BigDecimal usefulLifeYears = calculateUsefulLifeMonths(depreciationRateYearly); // Calculate useful life from depreciation rate
 

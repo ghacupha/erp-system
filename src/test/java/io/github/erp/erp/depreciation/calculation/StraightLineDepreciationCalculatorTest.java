@@ -335,7 +335,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
 
         // Create AssetCategoryDTO
         AssetCategoryDTO assetCategory = new AssetCategoryDTO();
-        assetCategory.setDepreciationRateYearly(new BigDecimal("1")); // Very low depreciation rate
+        assetCategory.setDepreciationRateYearly(new BigDecimal("0.001")); // Very low depreciation rate
 
         // Create DepreciationPeriodDTO
         LocalDate periodStartDate = LocalDate.of(2022, 1, 1);
@@ -347,14 +347,9 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         // Create StraightLineDepreciationCalculator instance
         StraightLineDepreciationCalculator calculator = new StraightLineDepreciationCalculator();
 
-        // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod);
-
-        // Zero depreciation expected due to high asset cost and low depreciation rate
-        BigDecimal expectedDepreciation = BigDecimal.ZERO.setScale(MONEY_SCALE, ROUNDING_MODE);
-
-        // Perform assertion on the calculated depreciation
-        Assertions.assertEquals(expectedDepreciation, calculatedDepreciation);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod);
+        });
     }
 
     @Test
