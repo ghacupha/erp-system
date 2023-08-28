@@ -52,6 +52,13 @@ public class DepreciationUtility {
         return depreciationRateYearlyInBasisPoints.divide(TEN_THOUSAND, DECIMAL_SCALE, ROUNDING_MODE);
     }
 
+    public static BigDecimal convertBasisPointsToDecimalMonthlyDepreciationRate(BigDecimal depreciationRateYearlyInBasisPoints) {
+        if (depreciationRateYearlyInBasisPoints == null || depreciationRateYearlyInBasisPoints.compareTo(BigDecimal.ZERO) == 0) {
+            throw new IllegalStateException("Depreciation rate must be non-zero");
+        }
+        return convertBasisPointsToDecimalDepreciationRate(depreciationRateYearlyInBasisPoints).divide(MONTHS_IN_YEAR, DECIMAL_SCALE, ROUNDING_MODE);
+    }
+
     /**
      * Given the useful life of an asset as decimal, this method converts the value into useful life
      * in months
@@ -139,5 +146,10 @@ public class DepreciationUtility {
         }
 
         return calculateTotalStraightLineDepreciation(calculateStraightLineMonthlyDepreciation(assetCost, depreciationRateYearly), priorMonths);
+    }
+
+    public static long calculateElapsedMonths(LocalDate periodStartDate, LocalDate periodEndDate) {
+
+        return ChronoUnit.MONTHS.between(periodEndDate, periodStartDate);
     }
 }

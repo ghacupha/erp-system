@@ -34,6 +34,7 @@ import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.M
 import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.MONTHS_IN_YEAR;
 import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.ROUNDING_MODE;
 import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.TEN_THOUSAND;
+import static io.github.erp.erp.depreciation.calculation.DepreciationUtility.convertBasisPointsToDecimalMonthlyDepreciationRate;
 
 /**
  * Calculates reducing balance depreciation for the period requested on a month-by-month basis
@@ -88,9 +89,8 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
         if (depreciationRate == null) {
             throw new DepreciationRateNotProvidedException("Depreciation rate is not provided", assetCategory);
         }
-        depreciationRate = assetCategory.getDepreciationRateYearly().divide(TEN_THOUSAND, DECIMAL_SCALE, ROUNDING_MODE).divide(MONTHS_IN_YEAR, DECIMAL_SCALE, ROUNDING_MODE);
+        depreciationRate = convertBasisPointsToDecimalMonthlyDepreciationRate(assetCategory.getDepreciationRateYearly());
         LocalDate capitalizationDate = asset.getCapitalizationDate();
-        // LocalDate capitalizationDate = LocalDate.of(2023,6,6);
         LocalDate periodStartDate = period.getStartDate();
         LocalDate periodEndDate = period.getEndDate();
 
@@ -98,7 +98,7 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
             return BigDecimal.ZERO; // No depreciation before capitalization
         }
 
-        BigDecimal depreciationBeforeStartDate = BigDecimal.ZERO.setScale(MONEY_SCALE, ROUNDING_MODE);
+        BigDecimal depreciationBeforeStartDate = BigDecimal.ZERO.setScale(DECIMAL_SCALE, ROUNDING_MODE);
         if (capitalizationDate.isBefore(periodStartDate)) {
             int elapsedMonthsBeforeStart = Math.toIntExact(ChronoUnit.MONTHS.between(capitalizationDate, periodStartDate)) + 1;
             for (int month = 1; month <= elapsedMonthsBeforeStart; month++) {
@@ -125,12 +125,6 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
         }
 
         return depreciationAmount;
-    }
-
-    private BigDecimal calculateDepreciationForPeriod(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) {
-        // Your existing depreciation calculation logic here
-
-        return BigDecimal.ZERO;
     }
 
     private BigDecimal fetchAccruedDepreciationFromDatabase(Long assetId, LocalDate startDate) {
