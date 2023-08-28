@@ -28,9 +28,11 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 
 import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.*;
+import static io.github.erp.erp.depreciation.calculation.DepreciationUtility.calculateUsefulLifeMonths;
 
 public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerator {
 
@@ -386,7 +388,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         });
     }
 
-    // TODO Review this failing @Test
+    @Test
     public void testShortDepreciationPeriod() {
         // Create specific asset data
         AssetRegistrationDTO asset = new AssetRegistrationDTO();
@@ -440,6 +442,221 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         // Perform assertion on the calculated depreciation
         Assertions.assertEquals(expectedDepreciation, calculatedDepreciation);
     }
+
+    @Test
+    public void testNetBookValueForFiscalMonthDepreciationPeriod() {
+        // Set up your asset, depreciation method, and asset category
+        // Create specific asset data
+        AssetRegistrationDTO asset = new AssetRegistrationDTO();
+        asset.setAssetCost(new BigDecimal("20000"));
+        asset.setCapitalizationDate(LocalDate.of(2022, 1, 1));
+
+        // Create DepreciationPeriodDTO for a fiscal month
+        LocalDate fiscalMonthStart = LocalDate.of(2022, 1, 1);
+        LocalDate fiscalMonthEnd = LocalDate.of(2022, 1, 31);
+        DepreciationPeriodDTO period = new DepreciationPeriodDTO();
+        period.setStartDate(fiscalMonthStart);
+        period.setEndDate(fiscalMonthEnd);
+
+        // Create AssetCategoryDTO
+        AssetCategoryDTO assetCategory = new AssetCategoryDTO();
+        assetCategory.setDepreciationRateYearly(new BigDecimal("800")); // Example depreciation rate
+
+        // Calculate the prior months based on the fiscal month period
+        long priorMonths = DepreciationUtility.getPriorPeriodInMonths(fiscalMonthEnd, asset.getCapitalizationDate(), 0);
+
+        // Calculate the net book value using your utility function
+        BigDecimal netBookValue = DepreciationUtility.calculateNetBookValueBeforeDepreciation(
+            asset.getCapitalizationDate(),
+            asset.getAssetCost(),
+            assetCategory.getDepreciationRateYearly(),
+            priorMonths,
+            period.getStartDate(),
+            period.getEndDate()
+        );
+
+        BigDecimal expectedNetBookValue = asset.getAssetCost();
+        long monthsInPeriod = ChronoUnit.MONTHS.between(period.getStartDate(), period.getEndDate());
+        BigDecimal usefulLifeMonths = calculateUsefulLifeMonths(assetCategory.getDepreciationRateYearly().divide(TEN_THOUSAND, DECIMAL_SCALE, ROUNDING_MODE));
+
+        System.out.println("Asset Cost: " + asset.getAssetCost());
+        System.out.println("Asset Capitalization Date: " + asset.getCapitalizationDate());
+        System.out.println("Depreciation Period Start: " + period.getStartDate());
+        System.out.println("Depreciation Period End: " + period.getEndDate());
+        System.out.println("Depreciation Rate: " + assetCategory.getDepreciationRateYearly());
+        System.out.println("Useful life (Months): " + usefulLifeMonths.toString());
+        System.out.println("Months in Period: " + monthsInPeriod);
+
+        System.out.println("Expected Depreciation: " + expectedNetBookValue);
+
+        System.out.println("Calculated Depreciation: " + netBookValue);
+
+        // Perform assertion on the calculated net book value
+        Assertions.assertEquals(expectedNetBookValue, netBookValue);
+    }
+
+    @Test
+    public void testNBVForFiscalMonthDepreciationPeriodAfterStartDate() {
+        // Set up your asset, depreciation method, and asset category
+        // Create specific asset data
+        AssetRegistrationDTO asset = new AssetRegistrationDTO();
+        asset.setAssetCost(new BigDecimal("20000"));
+        asset.setCapitalizationDate(LocalDate.of(2022, 1, 5));
+
+        // Create DepreciationPeriodDTO for a fiscal month
+        LocalDate fiscalMonthStart = LocalDate.of(2022, 1, 1);
+        LocalDate fiscalMonthEnd = LocalDate.of(2022, 1, 31);
+        DepreciationPeriodDTO period = new DepreciationPeriodDTO();
+        period.setStartDate(fiscalMonthStart);
+        period.setEndDate(fiscalMonthEnd);
+
+        // Create AssetCategoryDTO
+        AssetCategoryDTO assetCategory = new AssetCategoryDTO();
+        assetCategory.setDepreciationRateYearly(new BigDecimal("800")); // Example depreciation rate
+
+        // Calculate the prior months based on the fiscal month period
+        long priorMonths = DepreciationUtility.getPriorPeriodInMonths(fiscalMonthEnd, asset.getCapitalizationDate(), 0);
+
+        // Calculate the net book value using your utility function
+        BigDecimal netBookValue = DepreciationUtility.calculateNetBookValueBeforeDepreciation(
+            asset.getCapitalizationDate(),
+            asset.getAssetCost(),
+            assetCategory.getDepreciationRateYearly(),
+            priorMonths,
+            period.getStartDate(),
+            period.getEndDate()
+        );
+
+        // Calculate expected net book value for the fiscal month scenario
+        BigDecimal expectedNetBookValue = asset.getAssetCost();
+
+        long monthsInPeriod = ChronoUnit.MONTHS.between(period.getStartDate(), period.getEndDate());
+        BigDecimal usefulLifeMonths = calculateUsefulLifeMonths(assetCategory.getDepreciationRateYearly().divide(TEN_THOUSAND, DECIMAL_SCALE, ROUNDING_MODE));
+
+        System.out.println("Asset Cost: " + asset.getAssetCost());
+        System.out.println("Asset Capitalization Date: " + asset.getCapitalizationDate());
+        System.out.println("Depreciation Period Start: " + period.getStartDate());
+        System.out.println("Depreciation Period End: " + period.getEndDate());
+        System.out.println("Depreciation Rate: " + assetCategory.getDepreciationRateYearly());
+        System.out.println("Useful life (Months): " + usefulLifeMonths.toString());
+        System.out.println("Months in Period: " + monthsInPeriod);
+
+        System.out.println("Expected Depreciation: " + expectedNetBookValue);
+
+        System.out.println("Calculated Depreciation: " + netBookValue);
+
+        // Perform assertion on the calculated net book value
+        Assertions.assertEquals(expectedNetBookValue, netBookValue);
+    }
+
+    @Test
+    public void testNBVForFiscalMonthDepreciationPeriodOnStartDate() {
+        // Set up your asset, depreciation method, and asset category
+        // Create specific asset data
+        AssetRegistrationDTO asset = new AssetRegistrationDTO();
+        asset.setAssetCost(new BigDecimal("20000"));
+        asset.setCapitalizationDate(LocalDate.of(2022, 1, 1));
+
+        // Create DepreciationPeriodDTO for a fiscal month
+        LocalDate fiscalMonthStart = LocalDate.of(2022, 1, 1);
+        LocalDate fiscalMonthEnd = LocalDate.of(2022, 1, 31);
+        DepreciationPeriodDTO period = new DepreciationPeriodDTO();
+        period.setStartDate(fiscalMonthStart);
+        period.setEndDate(fiscalMonthEnd);
+
+        // Create AssetCategoryDTO
+        AssetCategoryDTO assetCategory = new AssetCategoryDTO();
+        assetCategory.setDepreciationRateYearly(new BigDecimal("800")); // Example depreciation rate
+
+        // Calculate the prior months based on the fiscal month period
+        long priorMonths = DepreciationUtility.getPriorPeriodInMonths(fiscalMonthEnd, asset.getCapitalizationDate(), 0);
+
+        // Calculate the net book value using your utility function
+        BigDecimal netBookValue = DepreciationUtility.calculateNetBookValueBeforeDepreciation(
+            asset.getCapitalizationDate(),
+            asset.getAssetCost(),
+            assetCategory.getDepreciationRateYearly(),
+            priorMonths,
+            period.getStartDate(),
+            period.getEndDate()
+        );
+
+        // Calculate expected net book value for the fiscal month scenario
+        BigDecimal expectedNetBookValue = asset.getAssetCost();
+
+        long monthsInPeriod = ChronoUnit.MONTHS.between(period.getStartDate(), period.getEndDate());
+        BigDecimal usefulLifeMonths = calculateUsefulLifeMonths(assetCategory.getDepreciationRateYearly().divide(TEN_THOUSAND, DECIMAL_SCALE, ROUNDING_MODE));
+
+        System.out.println("Asset Cost: " + asset.getAssetCost());
+        System.out.println("Asset Capitalization Date: " + asset.getCapitalizationDate());
+        System.out.println("Depreciation Period Start: " + period.getStartDate());
+        System.out.println("Depreciation Period End: " + period.getEndDate());
+        System.out.println("Depreciation Rate: " + assetCategory.getDepreciationRateYearly());
+        System.out.println("Useful life (Months): " + usefulLifeMonths.toString());
+        System.out.println("Months in Period: " + monthsInPeriod);
+
+        System.out.println("Expected Depreciation: " + expectedNetBookValue);
+
+        System.out.println("Calculated Depreciation: " + netBookValue);
+
+        // Perform assertion on the calculated net book value
+        Assertions.assertEquals(expectedNetBookValue, netBookValue);
+    }
+
+    @Test
+    public void testNBVForFiscalMonthDepreciationPeriodCapitalizedJustBeforeStartDate() {
+        // Set up your asset, depreciation method, and asset category
+        // Create specific asset data
+        AssetRegistrationDTO asset = new AssetRegistrationDTO();
+        asset.setAssetCost(new BigDecimal("20000"));
+        asset.setCapitalizationDate(LocalDate.of(2021, 12, 28));
+
+        // Create DepreciationPeriodDTO for a fiscal month
+        LocalDate fiscalMonthStart = LocalDate.of(2022, 1, 1);
+        LocalDate fiscalMonthEnd = LocalDate.of(2022, 1, 31);
+        DepreciationPeriodDTO period = new DepreciationPeriodDTO();
+        period.setStartDate(fiscalMonthStart);
+        period.setEndDate(fiscalMonthEnd);
+
+        // Create AssetCategoryDTO
+        AssetCategoryDTO assetCategory = new AssetCategoryDTO();
+        assetCategory.setDepreciationRateYearly(new BigDecimal("800")); // Example depreciation rate
+
+        // Calculate the prior months based on the fiscal month period
+        long priorMonths = DepreciationUtility.getPriorPeriodInMonths(fiscalMonthEnd, asset.getCapitalizationDate(), 0);
+
+        // Calculate the net book value using your utility function
+        BigDecimal netBookValue = DepreciationUtility.calculateNetBookValueBeforeDepreciation(
+            asset.getCapitalizationDate(),
+            asset.getAssetCost(),
+            assetCategory.getDepreciationRateYearly(),
+            priorMonths,
+            period.getStartDate(),
+            period.getEndDate()
+        );
+
+        // Calculate expected net book value for the fiscal month scenario
+        BigDecimal expectedNetBookValue = asset.getAssetCost();
+
+        long monthsInPeriod = ChronoUnit.MONTHS.between(period.getStartDate(), period.getEndDate());
+        BigDecimal usefulLifeMonths = calculateUsefulLifeMonths(assetCategory.getDepreciationRateYearly().divide(TEN_THOUSAND, DECIMAL_SCALE, ROUNDING_MODE));
+
+        System.out.println("Asset Cost: " + asset.getAssetCost());
+        System.out.println("Asset Capitalization Date: " + asset.getCapitalizationDate());
+        System.out.println("Depreciation Period Start: " + period.getStartDate());
+        System.out.println("Depreciation Period End: " + period.getEndDate());
+        System.out.println("Depreciation Rate: " + assetCategory.getDepreciationRateYearly());
+        System.out.println("Useful life (Months): " + usefulLifeMonths.toString());
+        System.out.println("Months in Period: " + monthsInPeriod);
+
+        System.out.println("Expected Depreciation: " + expectedNetBookValue);
+
+        System.out.println("Calculated Depreciation: " + netBookValue);
+
+        // Perform assertion on the calculated net book value
+        Assertions.assertEquals(expectedNetBookValue, netBookValue);
+    }
+
 
     // todo review this failing @Test
     public void testZeroDepreciationRate() {

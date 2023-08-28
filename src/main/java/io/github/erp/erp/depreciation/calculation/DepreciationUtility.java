@@ -2,6 +2,7 @@ package io.github.erp.erp.depreciation.calculation;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.temporal.ChronoUnit;
 
 import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.*;
@@ -111,10 +112,32 @@ public class DepreciationUtility {
      * @return Total aggregate depreciation amount in the depreciation-period from the request
      */
     public static BigDecimal calculateTotalStraightLineDepreciation(BigDecimal monthlyStraightLineDepreciation, long effectiveDepreciationMonths) {
-        if (effectiveDepreciationMonths < 0) {
+        if (effectiveDepreciationMonths <= 0) {
             // throw new IllegalArgumentException("The effective months determined for depreciation can not be negative");
             return BigDecimal.ZERO;
         }
         return monthlyStraightLineDepreciation.multiply(BigDecimal.valueOf(effectiveDepreciationMonths)).setScale(DECIMAL_SCALE, ROUNDING_MODE);
+    }
+
+    public static boolean isCapitalizedAfterAssumedPreviousDepreciation(LocalDate capitalizationDate, LocalDate assumedPreviousDepreciationEndDate) {
+        return capitalizationDate.isAfter(assumedPreviousDepreciationEndDate);
+    }
+
+    public static BigDecimal calculateNetBookValueBeforeDepreciation(LocalDate capitalizationDate, BigDecimal assetCost, BigDecimal depreciationRateYearly, long priorMonths, LocalDate periodStartDate, LocalDate periodEndDate) {
+
+        long monthsInDepreciationPeriod = ChronoUnit.MONTHS.between(periodStartDate, periodEndDate);
+        long fiscalMonthDuration = 1; // Assuming a fiscal month duration
+
+        // Opt out if:
+        // - capitalization date is after the period end date,
+        // - on/after the period start date (within the fiscal month), or
+        // - the duration of the depreciation period is equal to or less than the duration of the fiscal month
+        if (capitalizationDate.isAfter(periodEndDate) ||
+            !capitalizationDate.isBefore(periodStartDate) ||
+            monthsInDepreciationPeriod <= fiscalMonthDuration) {
+            return assetCost;
+        }
+
+        return calculateTotalStraightLineDepreciation(calculateStraightLineMonthlyDepreciation(assetCost, depreciationRateYearly), priorMonths);
     }
 }
