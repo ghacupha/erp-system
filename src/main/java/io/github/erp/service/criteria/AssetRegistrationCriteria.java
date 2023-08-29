@@ -17,6 +17,7 @@ package io.github.erp.service.criteria;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -58,6 +59,10 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
     private StringFilter serialNumber;
 
     private LocalDateFilter capitalizationDate;
+
+    private BigDecimalFilter historicalCost;
+
+    private LocalDateFilter registrationDate;
 
     private LongFilter placeholderId;
 
@@ -104,6 +109,8 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
         this.modelNumber = other.modelNumber == null ? null : other.modelNumber.copy();
         this.serialNumber = other.serialNumber == null ? null : other.serialNumber.copy();
         this.capitalizationDate = other.capitalizationDate == null ? null : other.capitalizationDate.copy();
+        this.historicalCost = other.historicalCost == null ? null : other.historicalCost.copy();
+        this.registrationDate = other.registrationDate == null ? null : other.registrationDate.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.paymentInvoicesId = other.paymentInvoicesId == null ? null : other.paymentInvoicesId.copy();
         this.serviceOutletId = other.serviceOutletId == null ? null : other.serviceOutletId.copy();
@@ -246,6 +253,36 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
 
     public void setCapitalizationDate(LocalDateFilter capitalizationDate) {
         this.capitalizationDate = capitalizationDate;
+    }
+
+    public BigDecimalFilter getHistoricalCost() {
+        return historicalCost;
+    }
+
+    public BigDecimalFilter historicalCost() {
+        if (historicalCost == null) {
+            historicalCost = new BigDecimalFilter();
+        }
+        return historicalCost;
+    }
+
+    public void setHistoricalCost(BigDecimalFilter historicalCost) {
+        this.historicalCost = historicalCost;
+    }
+
+    public LocalDateFilter getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public LocalDateFilter registrationDate() {
+        if (registrationDate == null) {
+            registrationDate = new LocalDateFilter();
+        }
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(LocalDateFilter registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
     public LongFilter getPlaceholderId() {
@@ -514,6 +551,8 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             Objects.equals(modelNumber, that.modelNumber) &&
             Objects.equals(serialNumber, that.serialNumber) &&
             Objects.equals(capitalizationDate, that.capitalizationDate) &&
+            Objects.equals(historicalCost, that.historicalCost) &&
+            Objects.equals(registrationDate, that.registrationDate) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(paymentInvoicesId, that.paymentInvoicesId) &&
             Objects.equals(serviceOutletId, that.serviceOutletId) &&
@@ -545,6 +584,8 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             modelNumber,
             serialNumber,
             capitalizationDate,
+            historicalCost,
+            registrationDate,
             placeholderId,
             paymentInvoicesId,
             serviceOutletId,
@@ -577,6 +618,8 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             (modelNumber != null ? "modelNumber=" + modelNumber + ", " : "") +
             (serialNumber != null ? "serialNumber=" + serialNumber + ", " : "") +
             (capitalizationDate != null ? "capitalizationDate=" + capitalizationDate + ", " : "") +
+            (historicalCost != null ? "historicalCost=" + historicalCost + ", " : "") +
+            (registrationDate != null ? "registrationDate=" + registrationDate + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (paymentInvoicesId != null ? "paymentInvoicesId=" + paymentInvoicesId + ", " : "") +
             (serviceOutletId != null ? "serviceOutletId=" + serviceOutletId + ", " : "") +

@@ -17,6 +17,7 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -57,6 +58,10 @@ public class AssetRegistrationDTO implements Serializable {
 
     @NotNull
     private LocalDate capitalizationDate;
+
+    private BigDecimal historicalCost;
+
+    private LocalDate registrationDate;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
@@ -176,6 +181,22 @@ public class AssetRegistrationDTO implements Serializable {
 
     public void setCapitalizationDate(LocalDate capitalizationDate) {
         this.capitalizationDate = capitalizationDate;
+    }
+
+    public BigDecimal getHistoricalCost() {
+        return historicalCost;
+    }
+
+    public void setHistoricalCost(BigDecimal historicalCost) {
+        this.historicalCost = historicalCost;
+    }
+
+    public LocalDate getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
     public Set<PlaceholderDTO> getPlaceholders() {
@@ -341,6 +362,8 @@ public class AssetRegistrationDTO implements Serializable {
             ", serialNumber='" + getSerialNumber() + "'" +
             ", remarks='" + getRemarks() + "'" +
             ", capitalizationDate='" + getCapitalizationDate() + "'" +
+            ", historicalCost=" + getHistoricalCost() +
+            ", registrationDate='" + getRegistrationDate() + "'" +
             ", placeholders=" + getPlaceholders() +
             ", paymentInvoices=" + getPaymentInvoices() +
             ", serviceOutlets=" + getServiceOutlets() +
