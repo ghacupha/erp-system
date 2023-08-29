@@ -210,6 +210,7 @@
     <include file="config/liquibase/changelog/20230821103701_removed_unique_constraint_asset_tag.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230821111228_added_fiscal_quarter_to_fiscal_month.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230821115805_added_time_periods_to_depreciation_entry.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230829155350_additional_cost_and_date_fields_for_assets.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

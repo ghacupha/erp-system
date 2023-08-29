@@ -1,11 +1,11 @@
-id;asset_number;asset_tag;asset_details;asset_cost;comments;comments_content_type;model_number;serial_number;remarks;capitalization_date;asset_category_id;dealer_id
-1;Fantastic;Berkshire;firewall;96225;../fake-data/blob/hipster.png;image/png;EXE;pink technologies;../fake-data/blob/hipster.txt;2022-04-13;1;1
-2;parsing end-to-end;parse;bifurcated;80506;../fake-data/blob/hipster.png;image/png;Rubber;Massachusetts;../fake-data/blob/hipster.txt;2022-04-12;2;2
-3;Samoa foreground Ngultrum;Frozen functionalities;withdrawal;63972;../fake-data/blob/hipster.png;image/png;mint hybrid;visualize green systems;../fake-data/blob/hipster.txt;2022-04-13;3;3
-4;virtual;Sports;Handcrafted;11022;../fake-data/blob/hipster.png;image/png;Soap;Mouse Rand;../fake-data/blob/hipster.txt;2022-04-13;4;4
-5;Practical;web-enabled Fresh 24/7;Awesome Liaison;75865;../fake-data/blob/hipster.png;image/png;XSS;technologies 24/365 tan;../fake-data/blob/hipster.txt;2022-04-13;5;5
-6;hack;Producer HDD Corner;neural-net solutions Rubber;75822;../fake-data/blob/hipster.png;image/png;Ranch Chips Robust;Cedi facilitate;../fake-data/blob/hipster.txt;2022-04-12;6;6
-7;Internal Angola;Liaison Sausages;Central paradigm;52074;../fake-data/blob/hipster.png;image/png;one-to-one calculate vertical;Marketing payment;../fake-data/blob/hipster.txt;2022-04-13;7;7
-8;sexy Washington;capability green;Frozen expedite homogeneous;30041;../fake-data/blob/hipster.png;image/png;eyeballs Account;monetize connecting;../fake-data/blob/hipster.txt;2022-04-13;8;8
-9;1080p Refined;next-generation;Account;39574;../fake-data/blob/hipster.png;image/png;Fiji mindshare;payment Home Norway;../fake-data/blob/hipster.txt;2022-04-12;9;9
-10;compress;Soap;hacking Gloves;99414;../fake-data/blob/hipster.png;image/png;matrix Trail;Agent Parkways;../fake-data/blob/hipster.txt;2022-04-12;10;10
+id;asset_number;asset_tag;asset_details;asset_cost;comments;comments_content_type;model_number;serial_number;remarks;capitalization_date;historical_cost;registration_date;asset_category_id;dealer_id
+1;Fantastic;Berkshire;firewall;96225;../fake-data/blob/hipster.png;image/png;EXE;pink technologies;../fake-data/blob/hipster.txt;2022-04-13;64382;2022-04-12;1;1
+2;Director Account Optimization;Granite;Rubber;327;../fake-data/blob/hipster.png;image/png;systems firewall;foreground Ngultrum;../fake-data/blob/hipster.txt;2022-04-13;13800;2022-04-12;2;2
+3;functionalities;withdrawal;deposit Gorgeous;59556;../fake-data/blob/hipster.png;image/png;visualize green systems;responsive conglomeration;../fake-data/blob/hipster.txt;2022-04-12;98223;2022-04-13;3;3
+4;El;Soap;Mouse Rand;23538;../fake-data/blob/hipster.png;image/png;Practical;web-enabled Fresh 24/7;../fake-data/blob/hipster.txt;2022-04-13;6137;2022-04-13;4;4
+5;optimize Bacon;XSS;technologies 24/365 tan;12680;../fake-data/blob/hipster.png;image/png;hack;Producer HDD Corner;../fake-data/blob/hipster.txt;2022-04-12;30738;2022-04-12;5;5
+6;solutions;pixel;synthesize Afghani;99091;../fake-data/blob/hipster.png;image/png;Robust;Cedi facilitate;../fake-data/blob/hipster.txt;2022-04-12;52182;2022-04-12;6;6
+7;Home Shoes Metal;COM Borders port;one-to-one calculate vertical;61423;../fake-data/blob/hipster.png;image/png;Fresh North Grenada;Washington Harbors Implementation;../fake-data/blob/hipster.txt;2022-04-12;70810;2022-04-13;7;7
+8;Officer expedite;Ford;eyeballs Account;65630;../fake-data/blob/hipster.png;image/png;Interface Ethiopia;1080p Refined;../fake-data/blob/hipster.txt;2022-04-13;35506;2022-04-12;8;8
+9;Kids;benchmark local panel;Poland Gibraltar;66597;../fake-data/blob/hipster.png;image/png;deposit;Supervisor;../fake-data/blob/hipster.txt;2022-04-13;35347;2022-04-13;9;9
+10;Soap projection Oklahoma;Trail productize Division;transmitter tan;84838;../fake-data/blob/hipster.png;image/png;Sports maximize;plum Versatile Specialist;../fake-data/blob/hipster.txt;2022-04-13;4754;2022-04-12;10;10

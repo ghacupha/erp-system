@@ -17,6 +17,7 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -82,6 +83,12 @@ public class AssetRegistration implements Serializable {
     @NotNull
     @Column(name = "capitalization_date", nullable = false)
     private LocalDate capitalizationDate;
+
+    @Column(name = "historical_cost", precision = 21, scale = 2)
+    private BigDecimal historicalCost;
+
+    @Column(name = "registration_date")
+    private LocalDate registrationDate;
 
     @ManyToMany
     @JoinTable(
@@ -443,6 +450,32 @@ public class AssetRegistration implements Serializable {
 
     public void setCapitalizationDate(LocalDate capitalizationDate) {
         this.capitalizationDate = capitalizationDate;
+    }
+
+    public BigDecimal getHistoricalCost() {
+        return this.historicalCost;
+    }
+
+    public AssetRegistration historicalCost(BigDecimal historicalCost) {
+        this.setHistoricalCost(historicalCost);
+        return this;
+    }
+
+    public void setHistoricalCost(BigDecimal historicalCost) {
+        this.historicalCost = historicalCost;
+    }
+
+    public LocalDate getRegistrationDate() {
+        return this.registrationDate;
+    }
+
+    public AssetRegistration registrationDate(LocalDate registrationDate) {
+        this.setRegistrationDate(registrationDate);
+        return this;
+    }
+
+    public void setRegistrationDate(LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
     public Set<Placeholder> getPlaceholders() {
@@ -807,6 +840,8 @@ public class AssetRegistration implements Serializable {
             ", serialNumber='" + getSerialNumber() + "'" +
             ", remarks='" + getRemarks() + "'" +
             ", capitalizationDate='" + getCapitalizationDate() + "'" +
+            ", historicalCost=" + getHistoricalCost() +
+            ", registrationDate='" + getRegistrationDate() + "'" +
             "}";
     }
 }

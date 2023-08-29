@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static io.github.erp.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -110,6 +111,14 @@ class AssetRegistrationResourceIT {
     private static final LocalDate UPDATED_CAPITALIZATION_DATE = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_CAPITALIZATION_DATE = LocalDate.ofEpochDay(-1L);
 
+    private static final BigDecimal DEFAULT_HISTORICAL_COST = new BigDecimal(1);
+    private static final BigDecimal UPDATED_HISTORICAL_COST = new BigDecimal(2);
+    private static final BigDecimal SMALLER_HISTORICAL_COST = new BigDecimal(1 - 1);
+
+    private static final LocalDate DEFAULT_REGISTRATION_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_REGISTRATION_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_REGISTRATION_DATE = LocalDate.ofEpochDay(-1L);
+
     private static final String ENTITY_API_URL = "/api/asset-registrations";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/asset-registrations";
@@ -162,7 +171,9 @@ class AssetRegistrationResourceIT {
             .modelNumber(DEFAULT_MODEL_NUMBER)
             .serialNumber(DEFAULT_SERIAL_NUMBER)
             .remarks(DEFAULT_REMARKS)
-            .capitalizationDate(DEFAULT_CAPITALIZATION_DATE);
+            .capitalizationDate(DEFAULT_CAPITALIZATION_DATE)
+            .historicalCost(DEFAULT_HISTORICAL_COST)
+            .registrationDate(DEFAULT_REGISTRATION_DATE);
         // Add required entity
         Settlement settlement;
         if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
@@ -213,7 +224,9 @@ class AssetRegistrationResourceIT {
             .modelNumber(UPDATED_MODEL_NUMBER)
             .serialNumber(UPDATED_SERIAL_NUMBER)
             .remarks(UPDATED_REMARKS)
-            .capitalizationDate(UPDATED_CAPITALIZATION_DATE);
+            .capitalizationDate(UPDATED_CAPITALIZATION_DATE)
+            .historicalCost(UPDATED_HISTORICAL_COST)
+            .registrationDate(UPDATED_REGISTRATION_DATE);
         // Add required entity
         Settlement settlement;
         if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
@@ -280,6 +293,8 @@ class AssetRegistrationResourceIT {
         assertThat(testAssetRegistration.getSerialNumber()).isEqualTo(DEFAULT_SERIAL_NUMBER);
         assertThat(testAssetRegistration.getRemarks()).isEqualTo(DEFAULT_REMARKS);
         assertThat(testAssetRegistration.getCapitalizationDate()).isEqualTo(DEFAULT_CAPITALIZATION_DATE);
+        assertThat(testAssetRegistration.getHistoricalCost()).isEqualByComparingTo(DEFAULT_HISTORICAL_COST);
+        assertThat(testAssetRegistration.getRegistrationDate()).isEqualTo(DEFAULT_REGISTRATION_DATE);
 
         // Validate the AssetRegistration in Elasticsearch
         verify(mockAssetRegistrationSearchRepository, times(1)).save(testAssetRegistration);
@@ -420,7 +435,9 @@ class AssetRegistrationResourceIT {
             .andExpect(jsonPath("$.[*].modelNumber").value(hasItem(DEFAULT_MODEL_NUMBER)))
             .andExpect(jsonPath("$.[*].serialNumber").value(hasItem(DEFAULT_SERIAL_NUMBER)))
             .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())))
-            .andExpect(jsonPath("$.[*].capitalizationDate").value(hasItem(DEFAULT_CAPITALIZATION_DATE.toString())));
+            .andExpect(jsonPath("$.[*].capitalizationDate").value(hasItem(DEFAULT_CAPITALIZATION_DATE.toString())))
+            .andExpect(jsonPath("$.[*].historicalCost").value(hasItem(sameNumber(DEFAULT_HISTORICAL_COST))))
+            .andExpect(jsonPath("$.[*].registrationDate").value(hasItem(DEFAULT_REGISTRATION_DATE.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -462,7 +479,9 @@ class AssetRegistrationResourceIT {
             .andExpect(jsonPath("$.modelNumber").value(DEFAULT_MODEL_NUMBER))
             .andExpect(jsonPath("$.serialNumber").value(DEFAULT_SERIAL_NUMBER))
             .andExpect(jsonPath("$.remarks").value(DEFAULT_REMARKS.toString()))
-            .andExpect(jsonPath("$.capitalizationDate").value(DEFAULT_CAPITALIZATION_DATE.toString()));
+            .andExpect(jsonPath("$.capitalizationDate").value(DEFAULT_CAPITALIZATION_DATE.toString()))
+            .andExpect(jsonPath("$.historicalCost").value(sameNumber(DEFAULT_HISTORICAL_COST)))
+            .andExpect(jsonPath("$.registrationDate").value(DEFAULT_REGISTRATION_DATE.toString()));
     }
 
     @Test
@@ -1083,6 +1102,214 @@ class AssetRegistrationResourceIT {
 
     @Test
     @Transactional
+    void getAllAssetRegistrationsByHistoricalCostIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where historicalCost equals to DEFAULT_HISTORICAL_COST
+        defaultAssetRegistrationShouldBeFound("historicalCost.equals=" + DEFAULT_HISTORICAL_COST);
+
+        // Get all the assetRegistrationList where historicalCost equals to UPDATED_HISTORICAL_COST
+        defaultAssetRegistrationShouldNotBeFound("historicalCost.equals=" + UPDATED_HISTORICAL_COST);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByHistoricalCostIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where historicalCost not equals to DEFAULT_HISTORICAL_COST
+        defaultAssetRegistrationShouldNotBeFound("historicalCost.notEquals=" + DEFAULT_HISTORICAL_COST);
+
+        // Get all the assetRegistrationList where historicalCost not equals to UPDATED_HISTORICAL_COST
+        defaultAssetRegistrationShouldBeFound("historicalCost.notEquals=" + UPDATED_HISTORICAL_COST);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByHistoricalCostIsInShouldWork() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where historicalCost in DEFAULT_HISTORICAL_COST or UPDATED_HISTORICAL_COST
+        defaultAssetRegistrationShouldBeFound("historicalCost.in=" + DEFAULT_HISTORICAL_COST + "," + UPDATED_HISTORICAL_COST);
+
+        // Get all the assetRegistrationList where historicalCost equals to UPDATED_HISTORICAL_COST
+        defaultAssetRegistrationShouldNotBeFound("historicalCost.in=" + UPDATED_HISTORICAL_COST);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByHistoricalCostIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where historicalCost is not null
+        defaultAssetRegistrationShouldBeFound("historicalCost.specified=true");
+
+        // Get all the assetRegistrationList where historicalCost is null
+        defaultAssetRegistrationShouldNotBeFound("historicalCost.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByHistoricalCostIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where historicalCost is greater than or equal to DEFAULT_HISTORICAL_COST
+        defaultAssetRegistrationShouldBeFound("historicalCost.greaterThanOrEqual=" + DEFAULT_HISTORICAL_COST);
+
+        // Get all the assetRegistrationList where historicalCost is greater than or equal to UPDATED_HISTORICAL_COST
+        defaultAssetRegistrationShouldNotBeFound("historicalCost.greaterThanOrEqual=" + UPDATED_HISTORICAL_COST);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByHistoricalCostIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where historicalCost is less than or equal to DEFAULT_HISTORICAL_COST
+        defaultAssetRegistrationShouldBeFound("historicalCost.lessThanOrEqual=" + DEFAULT_HISTORICAL_COST);
+
+        // Get all the assetRegistrationList where historicalCost is less than or equal to SMALLER_HISTORICAL_COST
+        defaultAssetRegistrationShouldNotBeFound("historicalCost.lessThanOrEqual=" + SMALLER_HISTORICAL_COST);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByHistoricalCostIsLessThanSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where historicalCost is less than DEFAULT_HISTORICAL_COST
+        defaultAssetRegistrationShouldNotBeFound("historicalCost.lessThan=" + DEFAULT_HISTORICAL_COST);
+
+        // Get all the assetRegistrationList where historicalCost is less than UPDATED_HISTORICAL_COST
+        defaultAssetRegistrationShouldBeFound("historicalCost.lessThan=" + UPDATED_HISTORICAL_COST);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByHistoricalCostIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where historicalCost is greater than DEFAULT_HISTORICAL_COST
+        defaultAssetRegistrationShouldNotBeFound("historicalCost.greaterThan=" + DEFAULT_HISTORICAL_COST);
+
+        // Get all the assetRegistrationList where historicalCost is greater than SMALLER_HISTORICAL_COST
+        defaultAssetRegistrationShouldBeFound("historicalCost.greaterThan=" + SMALLER_HISTORICAL_COST);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByRegistrationDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where registrationDate equals to DEFAULT_REGISTRATION_DATE
+        defaultAssetRegistrationShouldBeFound("registrationDate.equals=" + DEFAULT_REGISTRATION_DATE);
+
+        // Get all the assetRegistrationList where registrationDate equals to UPDATED_REGISTRATION_DATE
+        defaultAssetRegistrationShouldNotBeFound("registrationDate.equals=" + UPDATED_REGISTRATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByRegistrationDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where registrationDate not equals to DEFAULT_REGISTRATION_DATE
+        defaultAssetRegistrationShouldNotBeFound("registrationDate.notEquals=" + DEFAULT_REGISTRATION_DATE);
+
+        // Get all the assetRegistrationList where registrationDate not equals to UPDATED_REGISTRATION_DATE
+        defaultAssetRegistrationShouldBeFound("registrationDate.notEquals=" + UPDATED_REGISTRATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByRegistrationDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where registrationDate in DEFAULT_REGISTRATION_DATE or UPDATED_REGISTRATION_DATE
+        defaultAssetRegistrationShouldBeFound("registrationDate.in=" + DEFAULT_REGISTRATION_DATE + "," + UPDATED_REGISTRATION_DATE);
+
+        // Get all the assetRegistrationList where registrationDate equals to UPDATED_REGISTRATION_DATE
+        defaultAssetRegistrationShouldNotBeFound("registrationDate.in=" + UPDATED_REGISTRATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByRegistrationDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where registrationDate is not null
+        defaultAssetRegistrationShouldBeFound("registrationDate.specified=true");
+
+        // Get all the assetRegistrationList where registrationDate is null
+        defaultAssetRegistrationShouldNotBeFound("registrationDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByRegistrationDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where registrationDate is greater than or equal to DEFAULT_REGISTRATION_DATE
+        defaultAssetRegistrationShouldBeFound("registrationDate.greaterThanOrEqual=" + DEFAULT_REGISTRATION_DATE);
+
+        // Get all the assetRegistrationList where registrationDate is greater than or equal to UPDATED_REGISTRATION_DATE
+        defaultAssetRegistrationShouldNotBeFound("registrationDate.greaterThanOrEqual=" + UPDATED_REGISTRATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByRegistrationDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where registrationDate is less than or equal to DEFAULT_REGISTRATION_DATE
+        defaultAssetRegistrationShouldBeFound("registrationDate.lessThanOrEqual=" + DEFAULT_REGISTRATION_DATE);
+
+        // Get all the assetRegistrationList where registrationDate is less than or equal to SMALLER_REGISTRATION_DATE
+        defaultAssetRegistrationShouldNotBeFound("registrationDate.lessThanOrEqual=" + SMALLER_REGISTRATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByRegistrationDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where registrationDate is less than DEFAULT_REGISTRATION_DATE
+        defaultAssetRegistrationShouldNotBeFound("registrationDate.lessThan=" + DEFAULT_REGISTRATION_DATE);
+
+        // Get all the assetRegistrationList where registrationDate is less than UPDATED_REGISTRATION_DATE
+        defaultAssetRegistrationShouldBeFound("registrationDate.lessThan=" + UPDATED_REGISTRATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByRegistrationDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+
+        // Get all the assetRegistrationList where registrationDate is greater than DEFAULT_REGISTRATION_DATE
+        defaultAssetRegistrationShouldNotBeFound("registrationDate.greaterThan=" + DEFAULT_REGISTRATION_DATE);
+
+        // Get all the assetRegistrationList where registrationDate is greater than SMALLER_REGISTRATION_DATE
+        defaultAssetRegistrationShouldBeFound("registrationDate.greaterThan=" + SMALLER_REGISTRATION_DATE);
+    }
+
+    @Test
+    @Transactional
     void getAllAssetRegistrationsByPlaceholderIsEqualToSomething() throws Exception {
         // Initialize the database
         assetRegistrationRepository.saveAndFlush(assetRegistration);
@@ -1515,7 +1742,9 @@ class AssetRegistrationResourceIT {
             .andExpect(jsonPath("$.[*].modelNumber").value(hasItem(DEFAULT_MODEL_NUMBER)))
             .andExpect(jsonPath("$.[*].serialNumber").value(hasItem(DEFAULT_SERIAL_NUMBER)))
             .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())))
-            .andExpect(jsonPath("$.[*].capitalizationDate").value(hasItem(DEFAULT_CAPITALIZATION_DATE.toString())));
+            .andExpect(jsonPath("$.[*].capitalizationDate").value(hasItem(DEFAULT_CAPITALIZATION_DATE.toString())))
+            .andExpect(jsonPath("$.[*].historicalCost").value(hasItem(sameNumber(DEFAULT_HISTORICAL_COST))))
+            .andExpect(jsonPath("$.[*].registrationDate").value(hasItem(DEFAULT_REGISTRATION_DATE.toString())));
 
         // Check, that the count call also returns 1
         restAssetRegistrationMockMvc
@@ -1573,7 +1802,9 @@ class AssetRegistrationResourceIT {
             .modelNumber(UPDATED_MODEL_NUMBER)
             .serialNumber(UPDATED_SERIAL_NUMBER)
             .remarks(UPDATED_REMARKS)
-            .capitalizationDate(UPDATED_CAPITALIZATION_DATE);
+            .capitalizationDate(UPDATED_CAPITALIZATION_DATE)
+            .historicalCost(UPDATED_HISTORICAL_COST)
+            .registrationDate(UPDATED_REGISTRATION_DATE);
         AssetRegistrationDTO assetRegistrationDTO = assetRegistrationMapper.toDto(updatedAssetRegistration);
 
         restAssetRegistrationMockMvc
@@ -1598,6 +1829,8 @@ class AssetRegistrationResourceIT {
         assertThat(testAssetRegistration.getSerialNumber()).isEqualTo(UPDATED_SERIAL_NUMBER);
         assertThat(testAssetRegistration.getRemarks()).isEqualTo(UPDATED_REMARKS);
         assertThat(testAssetRegistration.getCapitalizationDate()).isEqualTo(UPDATED_CAPITALIZATION_DATE);
+        assertThat(testAssetRegistration.getHistoricalCost()).isEqualTo(UPDATED_HISTORICAL_COST);
+        assertThat(testAssetRegistration.getRegistrationDate()).isEqualTo(UPDATED_REGISTRATION_DATE);
 
         // Validate the AssetRegistration in Elasticsearch
         verify(mockAssetRegistrationSearchRepository).save(testAssetRegistration);
@@ -1698,7 +1931,8 @@ class AssetRegistrationResourceIT {
             .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE)
             .serialNumber(UPDATED_SERIAL_NUMBER)
             .remarks(UPDATED_REMARKS)
-            .capitalizationDate(UPDATED_CAPITALIZATION_DATE);
+            .capitalizationDate(UPDATED_CAPITALIZATION_DATE)
+            .registrationDate(UPDATED_REGISTRATION_DATE);
 
         restAssetRegistrationMockMvc
             .perform(
@@ -1722,6 +1956,8 @@ class AssetRegistrationResourceIT {
         assertThat(testAssetRegistration.getSerialNumber()).isEqualTo(UPDATED_SERIAL_NUMBER);
         assertThat(testAssetRegistration.getRemarks()).isEqualTo(UPDATED_REMARKS);
         assertThat(testAssetRegistration.getCapitalizationDate()).isEqualTo(UPDATED_CAPITALIZATION_DATE);
+        assertThat(testAssetRegistration.getHistoricalCost()).isEqualByComparingTo(DEFAULT_HISTORICAL_COST);
+        assertThat(testAssetRegistration.getRegistrationDate()).isEqualTo(UPDATED_REGISTRATION_DATE);
     }
 
     @Test
@@ -1746,7 +1982,9 @@ class AssetRegistrationResourceIT {
             .modelNumber(UPDATED_MODEL_NUMBER)
             .serialNumber(UPDATED_SERIAL_NUMBER)
             .remarks(UPDATED_REMARKS)
-            .capitalizationDate(UPDATED_CAPITALIZATION_DATE);
+            .capitalizationDate(UPDATED_CAPITALIZATION_DATE)
+            .historicalCost(UPDATED_HISTORICAL_COST)
+            .registrationDate(UPDATED_REGISTRATION_DATE);
 
         restAssetRegistrationMockMvc
             .perform(
@@ -1770,6 +2008,8 @@ class AssetRegistrationResourceIT {
         assertThat(testAssetRegistration.getSerialNumber()).isEqualTo(UPDATED_SERIAL_NUMBER);
         assertThat(testAssetRegistration.getRemarks()).isEqualTo(UPDATED_REMARKS);
         assertThat(testAssetRegistration.getCapitalizationDate()).isEqualTo(UPDATED_CAPITALIZATION_DATE);
+        assertThat(testAssetRegistration.getHistoricalCost()).isEqualByComparingTo(UPDATED_HISTORICAL_COST);
+        assertThat(testAssetRegistration.getRegistrationDate()).isEqualTo(UPDATED_REGISTRATION_DATE);
     }
 
     @Test
@@ -1895,6 +2135,8 @@ class AssetRegistrationResourceIT {
             .andExpect(jsonPath("$.[*].modelNumber").value(hasItem(DEFAULT_MODEL_NUMBER)))
             .andExpect(jsonPath("$.[*].serialNumber").value(hasItem(DEFAULT_SERIAL_NUMBER)))
             .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS.toString())))
-            .andExpect(jsonPath("$.[*].capitalizationDate").value(hasItem(DEFAULT_CAPITALIZATION_DATE.toString())));
+            .andExpect(jsonPath("$.[*].capitalizationDate").value(hasItem(DEFAULT_CAPITALIZATION_DATE.toString())))
+            .andExpect(jsonPath("$.[*].historicalCost").value(hasItem(sameNumber(DEFAULT_HISTORICAL_COST))))
+            .andExpect(jsonPath("$.[*].registrationDate").value(hasItem(DEFAULT_REGISTRATION_DATE.toString())));
     }
 }
