@@ -121,7 +121,7 @@ public class DepreciationUtility {
     public static BigDecimal calculateTotalStraightLineDepreciation(BigDecimal monthlyStraightLineDepreciation, long effectiveDepreciationMonths) {
         if (effectiveDepreciationMonths <= 0) {
             // throw new IllegalArgumentException("The effective months determined for depreciation can not be negative");
-            return BigDecimal.ZERO;
+            return ZERO;
         }
         return monthlyStraightLineDepreciation.multiply(BigDecimal.valueOf(effectiveDepreciationMonths)).setScale(DECIMAL_SCALE, ROUNDING_MODE);
     }

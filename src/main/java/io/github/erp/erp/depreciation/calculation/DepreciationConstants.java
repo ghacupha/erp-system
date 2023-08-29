@@ -27,4 +27,5 @@ public class DepreciationConstants {
     public static final RoundingMode ROUNDING_MODE = RoundingMode.HALF_EVEN;
     public static final BigDecimal MONTHS_IN_YEAR = BigDecimal.valueOf(12);
     public static final BigDecimal TEN_THOUSAND = BigDecimal.valueOf(10000);
+    public static final BigDecimal ZERO = new BigDecimal("0.00");
 }
