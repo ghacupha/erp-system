@@ -145,9 +145,9 @@ public class DepreciationUtilityTest {
         BigDecimal monthlyDepreciation = new BigDecimal("20.833333");
         long effectiveDepreciationMonths = -5;
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            DepreciationUtility.calculateTotalStraightLineDepreciation(monthlyDepreciation, effectiveDepreciationMonths);
-        });
+        Assertions.assertEquals(new BigDecimal("0.00"),
+            DepreciationUtility.calculateTotalStraightLineDepreciation(monthlyDepreciation, effectiveDepreciationMonths)
+        );
     }
 }
 
