@@ -59,9 +59,9 @@ public class DepreciationBatchConsumer {
                     // TODO CALLBACK FOR SEQUENCE UPDATE
                     depreciationBatchSequenceService.runDepreciation(message);
 
-                    if (message.isLastBatch()) {
-                        depreciationJobCompleteCallback.onComplete(message);
-                    }
+//                    if (message.isLastBatch()) {
+//                        depreciationJobCompleteCallback.onComplete(message);
+//                    }
                 }
 
             } catch (Exception e) {
