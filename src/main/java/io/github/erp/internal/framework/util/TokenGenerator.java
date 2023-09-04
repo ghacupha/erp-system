@@ -1,7 +1,7 @@
 package io.github.erp.internal.framework.util;
 
 /*-
- * Erp System - Mark IV No 5 (Ehud Series) Server ver 1.3.6
+ * Erp System - Mark IV No 6 (Ehud Series) Server ver 1.4.0
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
