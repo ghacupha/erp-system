@@ -33,7 +33,7 @@ public class DepreciationCompleteCallbackImpl implements DepreciationCompleteCal
 
     @Override
     public void onComplete(DepreciationBatchMessage message) {
-        // This method will be called after each depreciation is completed
+        // This method will be called after each depreciation batch is completed
         depreciationBatchSequenceService.findOne(Long.valueOf(message.getBatchId())).ifPresent(depreciationBatch -> {
             if (depreciationBatch.getDepreciationBatchStatus() != DepreciationBatchStatusType.COMPLETED) {
                 depreciationBatch.setDepreciationBatchStatus(DepreciationBatchStatusType.COMPLETED);
