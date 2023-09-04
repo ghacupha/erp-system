@@ -59,7 +59,7 @@ public class DepreciationBatchConsumer {
                     // TODO CALLBACK FOR SEQUENCE UPDATE
                     depreciationBatchSequenceService.runDepreciation(message);
 
-                    // TODO
+                    // TODO implement this in a way that supports parallelism
                     // if (message.isLastBatch()) {
                     //    depreciationJobCompleteCallback.onComplete(message);
                     // }

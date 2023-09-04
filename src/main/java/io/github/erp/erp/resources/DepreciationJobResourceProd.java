@@ -17,14 +17,11 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.DepreciationJob;
-import io.github.erp.erp.depreciation.DepreciationJobSequenceService;
 import io.github.erp.repository.DepreciationJobRepository;
 import io.github.erp.service.DepreciationJobQueryService;
 import io.github.erp.service.DepreciationJobService;
 import io.github.erp.service.criteria.DepreciationJobCriteria;
 import io.github.erp.service.dto.DepreciationJobDTO;
-import io.github.erp.service.mapper.DepreciationJobMapper;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,13 +59,11 @@ public class DepreciationJobResourceProd {
     private final DepreciationJobService depreciationJobService;
     private final DepreciationJobRepository depreciationJobRepository;
     private final DepreciationJobQueryService depreciationJobQueryService;
-    private final DepreciationJobSequenceService<DepreciationJobDTO> depreciationJobSequenceService;
 
-    public DepreciationJobResourceProd(DepreciationJobService depreciationJobService, DepreciationJobRepository depreciationJobRepository, DepreciationJobQueryService depreciationJobQueryService, DepreciationJobSequenceService<DepreciationJobDTO> depreciationJobSequenceService) {
+    public DepreciationJobResourceProd(DepreciationJobService depreciationJobService, DepreciationJobRepository depreciationJobRepository, DepreciationJobQueryService depreciationJobQueryService) {
         this.depreciationJobService = depreciationJobService;
         this.depreciationJobRepository = depreciationJobRepository;
         this.depreciationJobQueryService = depreciationJobQueryService;
-        this.depreciationJobSequenceService = depreciationJobSequenceService;
     }
 
     /**
@@ -86,9 +81,6 @@ public class DepreciationJobResourceProd {
             throw new BadRequestAlertException("A new depreciationJob cannot already have an ID", ENTITY_NAME, "idexists");
         }
         DepreciationJobDTO result = depreciationJobService.save(depreciationJobDTO);
-
-        // starting depreciation...
-        depreciationJobSequenceService.triggerDepreciation(result);
 
         return ResponseEntity
             .created(new URI("/api/depreciation-jobs/" + result.getId()))
