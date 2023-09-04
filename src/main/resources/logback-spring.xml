@@ -39,6 +39,7 @@
     <logger name="com.zaxxer.hikari.HikariConfig" level="WARN"/>
     <logger name="com.zaxxer.hikari.metrics" level="WARN"/>
     <logger name="com.zaxxer.hikari" level="WARN"/>
+    <logger name="io.github.erp.erp.index" level="OFF"/>
     <logger name="io.searchbox" level="WARN"/>
     <logger name="io.undertow" level="WARN"/>
     <logger name="io.undertow.websockets.jsr" level="ERROR"/>
