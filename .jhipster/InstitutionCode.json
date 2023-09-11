@@ -23,6 +23,18 @@
     {
       "fieldName": "institutionCategory",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "institutionOwnership",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dateLicensed",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "institutionStatus",
+      "fieldType": "String"
     }
   ],
   "incrementalChangelog": false,

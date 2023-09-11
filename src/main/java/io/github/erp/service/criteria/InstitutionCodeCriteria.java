@@ -26,6 +26,7 @@ import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
+import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 
@@ -54,6 +55,12 @@ public class InstitutionCodeCriteria implements Serializable, Criteria {
 
     private StringFilter institutionCategory;
 
+    private StringFilter institutionOwnership;
+
+    private LocalDateFilter dateLicensed;
+
+    private StringFilter institutionStatus;
+
     private LongFilter placeholderId;
 
     private Boolean distinct;
@@ -67,6 +74,9 @@ public class InstitutionCodeCriteria implements Serializable, Criteria {
         this.shortName = other.shortName == null ? null : other.shortName.copy();
         this.category = other.category == null ? null : other.category.copy();
         this.institutionCategory = other.institutionCategory == null ? null : other.institutionCategory.copy();
+        this.institutionOwnership = other.institutionOwnership == null ? null : other.institutionOwnership.copy();
+        this.dateLicensed = other.dateLicensed == null ? null : other.dateLicensed.copy();
+        this.institutionStatus = other.institutionStatus == null ? null : other.institutionStatus.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
     }
@@ -166,6 +176,51 @@ public class InstitutionCodeCriteria implements Serializable, Criteria {
         this.institutionCategory = institutionCategory;
     }
 
+    public StringFilter getInstitutionOwnership() {
+        return institutionOwnership;
+    }
+
+    public StringFilter institutionOwnership() {
+        if (institutionOwnership == null) {
+            institutionOwnership = new StringFilter();
+        }
+        return institutionOwnership;
+    }
+
+    public void setInstitutionOwnership(StringFilter institutionOwnership) {
+        this.institutionOwnership = institutionOwnership;
+    }
+
+    public LocalDateFilter getDateLicensed() {
+        return dateLicensed;
+    }
+
+    public LocalDateFilter dateLicensed() {
+        if (dateLicensed == null) {
+            dateLicensed = new LocalDateFilter();
+        }
+        return dateLicensed;
+    }
+
+    public void setDateLicensed(LocalDateFilter dateLicensed) {
+        this.dateLicensed = dateLicensed;
+    }
+
+    public StringFilter getInstitutionStatus() {
+        return institutionStatus;
+    }
+
+    public StringFilter institutionStatus() {
+        if (institutionStatus == null) {
+            institutionStatus = new StringFilter();
+        }
+        return institutionStatus;
+    }
+
+    public void setInstitutionStatus(StringFilter institutionStatus) {
+        this.institutionStatus = institutionStatus;
+    }
+
     public LongFilter getPlaceholderId() {
         return placeholderId;
     }
@@ -205,6 +260,9 @@ public class InstitutionCodeCriteria implements Serializable, Criteria {
             Objects.equals(shortName, that.shortName) &&
             Objects.equals(category, that.category) &&
             Objects.equals(institutionCategory, that.institutionCategory) &&
+            Objects.equals(institutionOwnership, that.institutionOwnership) &&
+            Objects.equals(dateLicensed, that.dateLicensed) &&
+            Objects.equals(institutionStatus, that.institutionStatus) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -212,7 +270,19 @@ public class InstitutionCodeCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, institutionCode, institutionName, shortName, category, institutionCategory, placeholderId, distinct);
+        return Objects.hash(
+            id,
+            institutionCode,
+            institutionName,
+            shortName,
+            category,
+            institutionCategory,
+            institutionOwnership,
+            dateLicensed,
+            institutionStatus,
+            placeholderId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -225,6 +295,9 @@ public class InstitutionCodeCriteria implements Serializable, Criteria {
             (shortName != null ? "shortName=" + shortName + ", " : "") +
             (category != null ? "category=" + category + ", " : "") +
             (institutionCategory != null ? "institutionCategory=" + institutionCategory + ", " : "") +
+            (institutionOwnership != null ? "institutionOwnership=" + institutionOwnership + ", " : "") +
+            (dateLicensed != null ? "dateLicensed=" + dateLicensed + ", " : "") +
+            (institutionStatus != null ? "institutionStatus=" + institutionStatus + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

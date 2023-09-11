@@ -19,6 +19,7 @@ package io.github.erp.service.dto;
  */
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -42,6 +43,12 @@ public class InstitutionCodeDTO implements Serializable {
     private String category;
 
     private String institutionCategory;
+
+    private String institutionOwnership;
+
+    private LocalDate dateLicensed;
+
+    private String institutionStatus;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
@@ -93,6 +100,30 @@ public class InstitutionCodeDTO implements Serializable {
         this.institutionCategory = institutionCategory;
     }
 
+    public String getInstitutionOwnership() {
+        return institutionOwnership;
+    }
+
+    public void setInstitutionOwnership(String institutionOwnership) {
+        this.institutionOwnership = institutionOwnership;
+    }
+
+    public LocalDate getDateLicensed() {
+        return dateLicensed;
+    }
+
+    public void setDateLicensed(LocalDate dateLicensed) {
+        this.dateLicensed = dateLicensed;
+    }
+
+    public String getInstitutionStatus() {
+        return institutionStatus;
+    }
+
+    public void setInstitutionStatus(String institutionStatus) {
+        this.institutionStatus = institutionStatus;
+    }
+
     public Set<PlaceholderDTO> getPlaceholders() {
         return placeholders;
     }
@@ -132,6 +163,9 @@ public class InstitutionCodeDTO implements Serializable {
             ", shortName='" + getShortName() + "'" +
             ", category='" + getCategory() + "'" +
             ", institutionCategory='" + getInstitutionCategory() + "'" +
+            ", institutionOwnership='" + getInstitutionOwnership() + "'" +
+            ", dateLicensed='" + getDateLicensed() + "'" +
+            ", institutionStatus='" + getInstitutionStatus() + "'" +
             ", placeholders=" + getPlaceholders() +
             "}";
     }

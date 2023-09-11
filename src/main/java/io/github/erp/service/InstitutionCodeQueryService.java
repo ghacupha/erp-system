@@ -134,6 +134,17 @@ public class InstitutionCodeQueryService extends QueryService<InstitutionCode> {
                 specification =
                     specification.and(buildStringSpecification(criteria.getInstitutionCategory(), InstitutionCode_.institutionCategory));
             }
+            if (criteria.getInstitutionOwnership() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getInstitutionOwnership(), InstitutionCode_.institutionOwnership));
+            }
+            if (criteria.getDateLicensed() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDateLicensed(), InstitutionCode_.dateLicensed));
+            }
+            if (criteria.getInstitutionStatus() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getInstitutionStatus(), InstitutionCode_.institutionStatus));
+            }
             if (criteria.getPlaceholderId() != null) {
                 specification =
                     specification.and(
