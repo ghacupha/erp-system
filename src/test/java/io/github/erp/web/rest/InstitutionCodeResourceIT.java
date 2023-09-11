@@ -33,6 +33,8 @@ import io.github.erp.service.InstitutionCodeService;
 import io.github.erp.service.criteria.InstitutionCodeCriteria;
 import io.github.erp.service.dto.InstitutionCodeDTO;
 import io.github.erp.service.mapper.InstitutionCodeMapper;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -76,6 +78,16 @@ class InstitutionCodeResourceIT {
 
     private static final String DEFAULT_INSTITUTION_CATEGORY = "AAAAAAAAAA";
     private static final String UPDATED_INSTITUTION_CATEGORY = "BBBBBBBBBB";
+
+    private static final String DEFAULT_INSTITUTION_OWNERSHIP = "AAAAAAAAAA";
+    private static final String UPDATED_INSTITUTION_OWNERSHIP = "BBBBBBBBBB";
+
+    private static final LocalDate DEFAULT_DATE_LICENSED = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE_LICENSED = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_DATE_LICENSED = LocalDate.ofEpochDay(-1L);
+
+    private static final String DEFAULT_INSTITUTION_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_INSTITUTION_STATUS = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/institution-codes";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -124,7 +136,10 @@ class InstitutionCodeResourceIT {
             .institutionName(DEFAULT_INSTITUTION_NAME)
             .shortName(DEFAULT_SHORT_NAME)
             .category(DEFAULT_CATEGORY)
-            .institutionCategory(DEFAULT_INSTITUTION_CATEGORY);
+            .institutionCategory(DEFAULT_INSTITUTION_CATEGORY)
+            .institutionOwnership(DEFAULT_INSTITUTION_OWNERSHIP)
+            .dateLicensed(DEFAULT_DATE_LICENSED)
+            .institutionStatus(DEFAULT_INSTITUTION_STATUS);
         return institutionCode;
     }
 
@@ -140,7 +155,10 @@ class InstitutionCodeResourceIT {
             .institutionName(UPDATED_INSTITUTION_NAME)
             .shortName(UPDATED_SHORT_NAME)
             .category(UPDATED_CATEGORY)
-            .institutionCategory(UPDATED_INSTITUTION_CATEGORY);
+            .institutionCategory(UPDATED_INSTITUTION_CATEGORY)
+            .institutionOwnership(UPDATED_INSTITUTION_OWNERSHIP)
+            .dateLicensed(UPDATED_DATE_LICENSED)
+            .institutionStatus(UPDATED_INSTITUTION_STATUS);
         return institutionCode;
     }
 
@@ -170,6 +188,9 @@ class InstitutionCodeResourceIT {
         assertThat(testInstitutionCode.getShortName()).isEqualTo(DEFAULT_SHORT_NAME);
         assertThat(testInstitutionCode.getCategory()).isEqualTo(DEFAULT_CATEGORY);
         assertThat(testInstitutionCode.getInstitutionCategory()).isEqualTo(DEFAULT_INSTITUTION_CATEGORY);
+        assertThat(testInstitutionCode.getInstitutionOwnership()).isEqualTo(DEFAULT_INSTITUTION_OWNERSHIP);
+        assertThat(testInstitutionCode.getDateLicensed()).isEqualTo(DEFAULT_DATE_LICENSED);
+        assertThat(testInstitutionCode.getInstitutionStatus()).isEqualTo(DEFAULT_INSTITUTION_STATUS);
 
         // Validate the InstitutionCode in Elasticsearch
         verify(mockInstitutionCodeSearchRepository, times(1)).save(testInstitutionCode);
@@ -255,7 +276,10 @@ class InstitutionCodeResourceIT {
             .andExpect(jsonPath("$.[*].institutionName").value(hasItem(DEFAULT_INSTITUTION_NAME)))
             .andExpect(jsonPath("$.[*].shortName").value(hasItem(DEFAULT_SHORT_NAME)))
             .andExpect(jsonPath("$.[*].category").value(hasItem(DEFAULT_CATEGORY)))
-            .andExpect(jsonPath("$.[*].institutionCategory").value(hasItem(DEFAULT_INSTITUTION_CATEGORY)));
+            .andExpect(jsonPath("$.[*].institutionCategory").value(hasItem(DEFAULT_INSTITUTION_CATEGORY)))
+            .andExpect(jsonPath("$.[*].institutionOwnership").value(hasItem(DEFAULT_INSTITUTION_OWNERSHIP)))
+            .andExpect(jsonPath("$.[*].dateLicensed").value(hasItem(DEFAULT_DATE_LICENSED.toString())))
+            .andExpect(jsonPath("$.[*].institutionStatus").value(hasItem(DEFAULT_INSTITUTION_STATUS)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -292,7 +316,10 @@ class InstitutionCodeResourceIT {
             .andExpect(jsonPath("$.institutionName").value(DEFAULT_INSTITUTION_NAME))
             .andExpect(jsonPath("$.shortName").value(DEFAULT_SHORT_NAME))
             .andExpect(jsonPath("$.category").value(DEFAULT_CATEGORY))
-            .andExpect(jsonPath("$.institutionCategory").value(DEFAULT_INSTITUTION_CATEGORY));
+            .andExpect(jsonPath("$.institutionCategory").value(DEFAULT_INSTITUTION_CATEGORY))
+            .andExpect(jsonPath("$.institutionOwnership").value(DEFAULT_INSTITUTION_OWNERSHIP))
+            .andExpect(jsonPath("$.dateLicensed").value(DEFAULT_DATE_LICENSED.toString()))
+            .andExpect(jsonPath("$.institutionStatus").value(DEFAULT_INSTITUTION_STATUS));
     }
 
     @Test
@@ -705,6 +732,268 @@ class InstitutionCodeResourceIT {
 
     @Test
     @Transactional
+    void getAllInstitutionCodesByInstitutionOwnershipIsEqualToSomething() throws Exception {
+        // Initialize the database
+        institutionCodeRepository.saveAndFlush(institutionCode);
+
+        // Get all the institutionCodeList where institutionOwnership equals to DEFAULT_INSTITUTION_OWNERSHIP
+        defaultInstitutionCodeShouldBeFound("institutionOwnership.equals=" + DEFAULT_INSTITUTION_OWNERSHIP);
+
+        // Get all the institutionCodeList where institutionOwnership equals to UPDATED_INSTITUTION_OWNERSHIP
+        defaultInstitutionCodeShouldNotBeFound("institutionOwnership.equals=" + UPDATED_INSTITUTION_OWNERSHIP);
+    }
+
+    @Test
+    @Transactional
+    void getAllInstitutionCodesByInstitutionOwnershipIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        institutionCodeRepository.saveAndFlush(institutionCode);
+
+        // Get all the institutionCodeList where institutionOwnership not equals to DEFAULT_INSTITUTION_OWNERSHIP
+        defaultInstitutionCodeShouldNotBeFound("institutionOwnership.notEquals=" + DEFAULT_INSTITUTION_OWNERSHIP);
+
+        // Get all the institutionCodeList where institutionOwnership not equals to UPDATED_INSTITUTION_OWNERSHIP
+        defaultInstitutionCodeShouldBeFound("institutionOwnership.notEquals=" + UPDATED_INSTITUTION_OWNERSHIP);
+    }
+
+    @Test
+    @Transactional
+    void getAllInstitutionCodesByInstitutionOwnershipIsInShouldWork() throws Exception {
+        // Initialize the database
+        institutionCodeRepository.saveAndFlush(institutionCode);
+
+        // Get all the institutionCodeList where institutionOwnership in DEFAULT_INSTITUTION_OWNERSHIP or UPDATED_INSTITUTION_OWNERSHIP
+        defaultInstitutionCodeShouldBeFound(
+            "institutionOwnership.in=" + DEFAULT_INSTITUTION_OWNERSHIP + "," + UPDATED_INSTITUTION_OWNERSHIP
+        );
+
+        // Get all the institutionCodeList where institutionOwnership equals to UPDATED_INSTITUTION_OWNERSHIP
+        defaultInstitutionCodeShouldNotBeFound("institutionOwnership.in=" + UPDATED_INSTITUTION_OWNERSHIP);
+    }
+
+    @Test
+    @Transactional
+    void getAllInstitutionCodesByInstitutionOwnershipIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        institutionCodeRepository.saveAndFlush(institutionCode);
+
+        // Get all the institutionCodeList where institutionOwnership is not null
+        defaultInstitutionCodeShouldBeFound("institutionOwnership.specified=true");
+
+        // Get all the institutionCodeList where institutionOwnership is null
+        defaultInstitutionCodeShouldNotBeFound("institutionOwnership.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllInstitutionCodesByInstitutionOwnershipContainsSomething() throws Exception {
+        // Initialize the database
+        institutionCodeRepository.saveAndFlush(institutionCode);
+
+        // Get all the institutionCodeList where institutionOwnership contains DEFAULT_INSTITUTION_OWNERSHIP
+        defaultInstitutionCodeShouldBeFound("institutionOwnership.contains=" + DEFAULT_INSTITUTION_OWNERSHIP);
+
+        // Get all the institutionCodeList where institutionOwnership contains UPDATED_INSTITUTION_OWNERSHIP
+        defaultInstitutionCodeShouldNotBeFound("institutionOwnership.contains=" + UPDATED_INSTITUTION_OWNERSHIP);
+    }
+
+    @Test
+    @Transactional
+    void getAllInstitutionCodesByInstitutionOwnershipNotContainsSomething() throws Exception {
+        // Initialize the database
+        institutionCodeRepository.saveAndFlush(institutionCode);
+
+        // Get all the institutionCodeList where institutionOwnership does not contain DEFAULT_INSTITUTION_OWNERSHIP
+        defaultInstitutionCodeShouldNotBeFound("institutionOwnership.doesNotContain=" + DEFAULT_INSTITUTION_OWNERSHIP);
+
+        // Get all the institutionCodeList where institutionOwnership does not contain UPDATED_INSTITUTION_OWNERSHIP
+        defaultInstitutionCodeShouldBeFound("institutionOwnership.doesNotContain=" + UPDATED_INSTITUTION_OWNERSHIP);
+    }
+
+    @Test
+    @Transactional
+    void getAllInstitutionCodesByDateLicensedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        institutionCodeRepository.saveAndFlush(institutionCode);
+
+        // Get all the institutionCodeList where dateLicensed equals to DEFAULT_DATE_LICENSED
+        defaultInstitutionCodeShouldBeFound("dateLicensed.equals=" + DEFAULT_DATE_LICENSED);
+
+        // Get all the institutionCodeList where dateLicensed equals to UPDATED_DATE_LICENSED
+        defaultInstitutionCodeShouldNotBeFound("dateLicensed.equals=" + UPDATED_DATE_LICENSED);
+    }
+
+    @Test
+    @Transactional
+    void getAllInstitutionCodesByDateLicensedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        institutionCodeRepository.saveAndFlush(institutionCode);
+
+        // Get all the institutionCodeList where dateLicensed not equals to DEFAULT_DATE_LICENSED
+        defaultInstitutionCodeShouldNotBeFound("dateLicensed.notEquals=" + DEFAULT_DATE_LICENSED);
+
+        // Get all the institutionCodeList where dateLicensed not equals to UPDATED_DATE_LICENSED
+        defaultInstitutionCodeShouldBeFound("dateLicensed.notEquals=" + UPDATED_DATE_LICENSED);
+    }
+
+    @Test
+    @Transactional
+    void getAllInstitutionCodesByDateLicensedIsInShouldWork() throws Exception {
+        // Initialize the database
+        institutionCodeRepository.saveAndFlush(institutionCode);
+
+        // Get all the institutionCodeList where dateLicensed in DEFAULT_DATE_LICENSED or UPDATED_DATE_LICENSED
+        defaultInstitutionCodeShouldBeFound("dateLicensed.in=" + DEFAULT_DATE_LICENSED + "," + UPDATED_DATE_LICENSED);
+
+        // Get all the institutionCodeList where dateLicensed equals to UPDATED_DATE_LICENSED
+        defaultInstitutionCodeShouldNotBeFound("dateLicensed.in=" + UPDATED_DATE_LICENSED);
+    }
+
+    @Test
+    @Transactional
+    void getAllInstitutionCodesByDateLicensedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        institutionCodeRepository.saveAndFlush(institutionCode);
+
+        // Get all the institutionCodeList where dateLicensed is not null
+        defaultInstitutionCodeShouldBeFound("dateLicensed.specified=true");
+
+        // Get all the institutionCodeList where dateLicensed is null
+        defaultInstitutionCodeShouldNotBeFound("dateLicensed.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllInstitutionCodesByDateLicensedIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        institutionCodeRepository.saveAndFlush(institutionCode);
+
+        // Get all the institutionCodeList where dateLicensed is greater than or equal to DEFAULT_DATE_LICENSED
+        defaultInstitutionCodeShouldBeFound("dateLicensed.greaterThanOrEqual=" + DEFAULT_DATE_LICENSED);
+
+        // Get all the institutionCodeList where dateLicensed is greater than or equal to UPDATED_DATE_LICENSED
+        defaultInstitutionCodeShouldNotBeFound("dateLicensed.greaterThanOrEqual=" + UPDATED_DATE_LICENSED);
+    }
+
+    @Test
+    @Transactional
+    void getAllInstitutionCodesByDateLicensedIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        institutionCodeRepository.saveAndFlush(institutionCode);
+
+        // Get all the institutionCodeList where dateLicensed is less than or equal to DEFAULT_DATE_LICENSED
+        defaultInstitutionCodeShouldBeFound("dateLicensed.lessThanOrEqual=" + DEFAULT_DATE_LICENSED);
+
+        // Get all the institutionCodeList where dateLicensed is less than or equal to SMALLER_DATE_LICENSED
+        defaultInstitutionCodeShouldNotBeFound("dateLicensed.lessThanOrEqual=" + SMALLER_DATE_LICENSED);
+    }
+
+    @Test
+    @Transactional
+    void getAllInstitutionCodesByDateLicensedIsLessThanSomething() throws Exception {
+        // Initialize the database
+        institutionCodeRepository.saveAndFlush(institutionCode);
+
+        // Get all the institutionCodeList where dateLicensed is less than DEFAULT_DATE_LICENSED
+        defaultInstitutionCodeShouldNotBeFound("dateLicensed.lessThan=" + DEFAULT_DATE_LICENSED);
+
+        // Get all the institutionCodeList where dateLicensed is less than UPDATED_DATE_LICENSED
+        defaultInstitutionCodeShouldBeFound("dateLicensed.lessThan=" + UPDATED_DATE_LICENSED);
+    }
+
+    @Test
+    @Transactional
+    void getAllInstitutionCodesByDateLicensedIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        institutionCodeRepository.saveAndFlush(institutionCode);
+
+        // Get all the institutionCodeList where dateLicensed is greater than DEFAULT_DATE_LICENSED
+        defaultInstitutionCodeShouldNotBeFound("dateLicensed.greaterThan=" + DEFAULT_DATE_LICENSED);
+
+        // Get all the institutionCodeList where dateLicensed is greater than SMALLER_DATE_LICENSED
+        defaultInstitutionCodeShouldBeFound("dateLicensed.greaterThan=" + SMALLER_DATE_LICENSED);
+    }
+
+    @Test
+    @Transactional
+    void getAllInstitutionCodesByInstitutionStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        institutionCodeRepository.saveAndFlush(institutionCode);
+
+        // Get all the institutionCodeList where institutionStatus equals to DEFAULT_INSTITUTION_STATUS
+        defaultInstitutionCodeShouldBeFound("institutionStatus.equals=" + DEFAULT_INSTITUTION_STATUS);
+
+        // Get all the institutionCodeList where institutionStatus equals to UPDATED_INSTITUTION_STATUS
+        defaultInstitutionCodeShouldNotBeFound("institutionStatus.equals=" + UPDATED_INSTITUTION_STATUS);
+    }
+
+    @Test
+    @Transactional
+    void getAllInstitutionCodesByInstitutionStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        institutionCodeRepository.saveAndFlush(institutionCode);
+
+        // Get all the institutionCodeList where institutionStatus not equals to DEFAULT_INSTITUTION_STATUS
+        defaultInstitutionCodeShouldNotBeFound("institutionStatus.notEquals=" + DEFAULT_INSTITUTION_STATUS);
+
+        // Get all the institutionCodeList where institutionStatus not equals to UPDATED_INSTITUTION_STATUS
+        defaultInstitutionCodeShouldBeFound("institutionStatus.notEquals=" + UPDATED_INSTITUTION_STATUS);
+    }
+
+    @Test
+    @Transactional
+    void getAllInstitutionCodesByInstitutionStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        institutionCodeRepository.saveAndFlush(institutionCode);
+
+        // Get all the institutionCodeList where institutionStatus in DEFAULT_INSTITUTION_STATUS or UPDATED_INSTITUTION_STATUS
+        defaultInstitutionCodeShouldBeFound("institutionStatus.in=" + DEFAULT_INSTITUTION_STATUS + "," + UPDATED_INSTITUTION_STATUS);
+
+        // Get all the institutionCodeList where institutionStatus equals to UPDATED_INSTITUTION_STATUS
+        defaultInstitutionCodeShouldNotBeFound("institutionStatus.in=" + UPDATED_INSTITUTION_STATUS);
+    }
+
+    @Test
+    @Transactional
+    void getAllInstitutionCodesByInstitutionStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        institutionCodeRepository.saveAndFlush(institutionCode);
+
+        // Get all the institutionCodeList where institutionStatus is not null
+        defaultInstitutionCodeShouldBeFound("institutionStatus.specified=true");
+
+        // Get all the institutionCodeList where institutionStatus is null
+        defaultInstitutionCodeShouldNotBeFound("institutionStatus.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllInstitutionCodesByInstitutionStatusContainsSomething() throws Exception {
+        // Initialize the database
+        institutionCodeRepository.saveAndFlush(institutionCode);
+
+        // Get all the institutionCodeList where institutionStatus contains DEFAULT_INSTITUTION_STATUS
+        defaultInstitutionCodeShouldBeFound("institutionStatus.contains=" + DEFAULT_INSTITUTION_STATUS);
+
+        // Get all the institutionCodeList where institutionStatus contains UPDATED_INSTITUTION_STATUS
+        defaultInstitutionCodeShouldNotBeFound("institutionStatus.contains=" + UPDATED_INSTITUTION_STATUS);
+    }
+
+    @Test
+    @Transactional
+    void getAllInstitutionCodesByInstitutionStatusNotContainsSomething() throws Exception {
+        // Initialize the database
+        institutionCodeRepository.saveAndFlush(institutionCode);
+
+        // Get all the institutionCodeList where institutionStatus does not contain DEFAULT_INSTITUTION_STATUS
+        defaultInstitutionCodeShouldNotBeFound("institutionStatus.doesNotContain=" + DEFAULT_INSTITUTION_STATUS);
+
+        // Get all the institutionCodeList where institutionStatus does not contain UPDATED_INSTITUTION_STATUS
+        defaultInstitutionCodeShouldBeFound("institutionStatus.doesNotContain=" + UPDATED_INSTITUTION_STATUS);
+    }
+
+    @Test
+    @Transactional
     void getAllInstitutionCodesByPlaceholderIsEqualToSomething() throws Exception {
         // Initialize the database
         institutionCodeRepository.saveAndFlush(institutionCode);
@@ -742,7 +1031,10 @@ class InstitutionCodeResourceIT {
             .andExpect(jsonPath("$.[*].institutionName").value(hasItem(DEFAULT_INSTITUTION_NAME)))
             .andExpect(jsonPath("$.[*].shortName").value(hasItem(DEFAULT_SHORT_NAME)))
             .andExpect(jsonPath("$.[*].category").value(hasItem(DEFAULT_CATEGORY)))
-            .andExpect(jsonPath("$.[*].institutionCategory").value(hasItem(DEFAULT_INSTITUTION_CATEGORY)));
+            .andExpect(jsonPath("$.[*].institutionCategory").value(hasItem(DEFAULT_INSTITUTION_CATEGORY)))
+            .andExpect(jsonPath("$.[*].institutionOwnership").value(hasItem(DEFAULT_INSTITUTION_OWNERSHIP)))
+            .andExpect(jsonPath("$.[*].dateLicensed").value(hasItem(DEFAULT_DATE_LICENSED.toString())))
+            .andExpect(jsonPath("$.[*].institutionStatus").value(hasItem(DEFAULT_INSTITUTION_STATUS)));
 
         // Check, that the count call also returns 1
         restInstitutionCodeMockMvc
@@ -795,7 +1087,10 @@ class InstitutionCodeResourceIT {
             .institutionName(UPDATED_INSTITUTION_NAME)
             .shortName(UPDATED_SHORT_NAME)
             .category(UPDATED_CATEGORY)
-            .institutionCategory(UPDATED_INSTITUTION_CATEGORY);
+            .institutionCategory(UPDATED_INSTITUTION_CATEGORY)
+            .institutionOwnership(UPDATED_INSTITUTION_OWNERSHIP)
+            .dateLicensed(UPDATED_DATE_LICENSED)
+            .institutionStatus(UPDATED_INSTITUTION_STATUS);
         InstitutionCodeDTO institutionCodeDTO = institutionCodeMapper.toDto(updatedInstitutionCode);
 
         restInstitutionCodeMockMvc
@@ -815,6 +1110,9 @@ class InstitutionCodeResourceIT {
         assertThat(testInstitutionCode.getShortName()).isEqualTo(UPDATED_SHORT_NAME);
         assertThat(testInstitutionCode.getCategory()).isEqualTo(UPDATED_CATEGORY);
         assertThat(testInstitutionCode.getInstitutionCategory()).isEqualTo(UPDATED_INSTITUTION_CATEGORY);
+        assertThat(testInstitutionCode.getInstitutionOwnership()).isEqualTo(UPDATED_INSTITUTION_OWNERSHIP);
+        assertThat(testInstitutionCode.getDateLicensed()).isEqualTo(UPDATED_DATE_LICENSED);
+        assertThat(testInstitutionCode.getInstitutionStatus()).isEqualTo(UPDATED_INSTITUTION_STATUS);
 
         // Validate the InstitutionCode in Elasticsearch
         verify(mockInstitutionCodeSearchRepository).save(testInstitutionCode);
@@ -911,7 +1209,8 @@ class InstitutionCodeResourceIT {
         partialUpdatedInstitutionCode
             .institutionCode(UPDATED_INSTITUTION_CODE)
             .institutionName(UPDATED_INSTITUTION_NAME)
-            .shortName(UPDATED_SHORT_NAME);
+            .shortName(UPDATED_SHORT_NAME)
+            .institutionOwnership(UPDATED_INSTITUTION_OWNERSHIP);
 
         restInstitutionCodeMockMvc
             .perform(
@@ -930,6 +1229,9 @@ class InstitutionCodeResourceIT {
         assertThat(testInstitutionCode.getShortName()).isEqualTo(UPDATED_SHORT_NAME);
         assertThat(testInstitutionCode.getCategory()).isEqualTo(DEFAULT_CATEGORY);
         assertThat(testInstitutionCode.getInstitutionCategory()).isEqualTo(DEFAULT_INSTITUTION_CATEGORY);
+        assertThat(testInstitutionCode.getInstitutionOwnership()).isEqualTo(UPDATED_INSTITUTION_OWNERSHIP);
+        assertThat(testInstitutionCode.getDateLicensed()).isEqualTo(DEFAULT_DATE_LICENSED);
+        assertThat(testInstitutionCode.getInstitutionStatus()).isEqualTo(DEFAULT_INSTITUTION_STATUS);
     }
 
     @Test
@@ -949,7 +1251,10 @@ class InstitutionCodeResourceIT {
             .institutionName(UPDATED_INSTITUTION_NAME)
             .shortName(UPDATED_SHORT_NAME)
             .category(UPDATED_CATEGORY)
-            .institutionCategory(UPDATED_INSTITUTION_CATEGORY);
+            .institutionCategory(UPDATED_INSTITUTION_CATEGORY)
+            .institutionOwnership(UPDATED_INSTITUTION_OWNERSHIP)
+            .dateLicensed(UPDATED_DATE_LICENSED)
+            .institutionStatus(UPDATED_INSTITUTION_STATUS);
 
         restInstitutionCodeMockMvc
             .perform(
@@ -968,6 +1273,9 @@ class InstitutionCodeResourceIT {
         assertThat(testInstitutionCode.getShortName()).isEqualTo(UPDATED_SHORT_NAME);
         assertThat(testInstitutionCode.getCategory()).isEqualTo(UPDATED_CATEGORY);
         assertThat(testInstitutionCode.getInstitutionCategory()).isEqualTo(UPDATED_INSTITUTION_CATEGORY);
+        assertThat(testInstitutionCode.getInstitutionOwnership()).isEqualTo(UPDATED_INSTITUTION_OWNERSHIP);
+        assertThat(testInstitutionCode.getDateLicensed()).isEqualTo(UPDATED_DATE_LICENSED);
+        assertThat(testInstitutionCode.getInstitutionStatus()).isEqualTo(UPDATED_INSTITUTION_STATUS);
     }
 
     @Test
@@ -1088,6 +1396,9 @@ class InstitutionCodeResourceIT {
             .andExpect(jsonPath("$.[*].institutionName").value(hasItem(DEFAULT_INSTITUTION_NAME)))
             .andExpect(jsonPath("$.[*].shortName").value(hasItem(DEFAULT_SHORT_NAME)))
             .andExpect(jsonPath("$.[*].category").value(hasItem(DEFAULT_CATEGORY)))
-            .andExpect(jsonPath("$.[*].institutionCategory").value(hasItem(DEFAULT_INSTITUTION_CATEGORY)));
+            .andExpect(jsonPath("$.[*].institutionCategory").value(hasItem(DEFAULT_INSTITUTION_CATEGORY)))
+            .andExpect(jsonPath("$.[*].institutionOwnership").value(hasItem(DEFAULT_INSTITUTION_OWNERSHIP)))
+            .andExpect(jsonPath("$.[*].dateLicensed").value(hasItem(DEFAULT_DATE_LICENSED.toString())))
+            .andExpect(jsonPath("$.[*].institutionStatus").value(hasItem(DEFAULT_INSTITUTION_STATUS)));
     }
 }

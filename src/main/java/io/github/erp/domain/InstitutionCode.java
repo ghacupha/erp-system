@@ -20,6 +20,7 @@ package io.github.erp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -60,6 +61,15 @@ public class InstitutionCode implements Serializable {
 
     @Column(name = "institution_category")
     private String institutionCategory;
+
+    @Column(name = "institution_ownership")
+    private String institutionOwnership;
+
+    @Column(name = "date_licensed")
+    private LocalDate dateLicensed;
+
+    @Column(name = "institution_status")
+    private String institutionStatus;
 
     @ManyToMany
     @JoinTable(
@@ -151,6 +161,45 @@ public class InstitutionCode implements Serializable {
         this.institutionCategory = institutionCategory;
     }
 
+    public String getInstitutionOwnership() {
+        return this.institutionOwnership;
+    }
+
+    public InstitutionCode institutionOwnership(String institutionOwnership) {
+        this.setInstitutionOwnership(institutionOwnership);
+        return this;
+    }
+
+    public void setInstitutionOwnership(String institutionOwnership) {
+        this.institutionOwnership = institutionOwnership;
+    }
+
+    public LocalDate getDateLicensed() {
+        return this.dateLicensed;
+    }
+
+    public InstitutionCode dateLicensed(LocalDate dateLicensed) {
+        this.setDateLicensed(dateLicensed);
+        return this;
+    }
+
+    public void setDateLicensed(LocalDate dateLicensed) {
+        this.dateLicensed = dateLicensed;
+    }
+
+    public String getInstitutionStatus() {
+        return this.institutionStatus;
+    }
+
+    public InstitutionCode institutionStatus(String institutionStatus) {
+        this.setInstitutionStatus(institutionStatus);
+        return this;
+    }
+
+    public void setInstitutionStatus(String institutionStatus) {
+        this.institutionStatus = institutionStatus;
+    }
+
     public Set<Placeholder> getPlaceholders() {
         return this.placeholders;
     }
@@ -203,6 +252,9 @@ public class InstitutionCode implements Serializable {
             ", shortName='" + getShortName() + "'" +
             ", category='" + getCategory() + "'" +
             ", institutionCategory='" + getInstitutionCategory() + "'" +
+            ", institutionOwnership='" + getInstitutionOwnership() + "'" +
+            ", dateLicensed='" + getDateLicensed() + "'" +
+            ", institutionStatus='" + getInstitutionStatus() + "'" +
             "}";
     }
 }
