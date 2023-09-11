@@ -98,6 +98,9 @@
     <include file="config/liquibase/changelog/20230816125243_added_entity_FiscalQuarter.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230816131238_added_entity_FiscalMonth.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230816150648_added_entity_DepreciationJobNotice.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230911151844_added_entity_CustomerType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230911154842_added_entity_LegalStatus.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230911155417_added_entity_InsiderCategoryTypes.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>

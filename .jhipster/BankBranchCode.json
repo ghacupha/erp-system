@@ -28,7 +28,7 @@
   "incrementalChangelog": false,
   "jpaMetamodelFiltering": true,
   "name": "BankBranchCode",
-  "pagination": "infinite-scroll",
+  "pagination": "pagination",
   "readOnly": false,
   "relationships": [
     {

@@ -1,0 +1,28 @@
+{
+  "fields": [
+    {
+      "fieldName": "insiderCategoryTypeCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "insiderCategoryTypeDetail",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "insiderCategoryDescription",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "InsiderCategoryTypes",
+  "changelogDate": "20230911155417",
+  "incrementalChangelog": false
+}
