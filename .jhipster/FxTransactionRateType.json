@@ -1,0 +1,28 @@
+{
+  "fields": [
+    {
+      "fieldName": "fxTransactionRateTypeCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "fxTransactionRateType",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "fxTransactionRateTypeDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "FxTransactionRateType",
+  "changelogDate": "20230912114648",
+  "incrementalChangelog": false
+}
