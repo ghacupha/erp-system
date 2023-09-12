@@ -1,0 +1,29 @@
+{
+  "fields": [
+    {
+      "fieldName": "cardCategoryFlag",
+      "fieldType": "CardCategoryFlag",
+      "fieldValues": "L,I",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "cardCategoryDescription",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "cardCategoryDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "CardCategoryType",
+  "changelogDate": "20230912112528",
+  "incrementalChangelog": false
+}

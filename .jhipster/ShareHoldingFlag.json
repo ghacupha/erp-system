@@ -1,0 +1,29 @@
+{
+  "fields": [
+    {
+      "fieldName": "shareholdingFlagTypeCode",
+      "fieldType": "ShareholdingFlagTypes",
+      "fieldValues": "Y,N",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "shareholdingFlagType",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "shareholdingTypeDescription",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "ShareHoldingFlag",
+  "changelogDate": "20230912144752",
+  "incrementalChangelog": false
+}

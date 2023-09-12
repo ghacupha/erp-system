@@ -1,0 +1,28 @@
+{
+  "fields": [
+    {
+      "fieldName": "customerComplaintStatusTypeCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "customerComplaintStatusType",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "customerComplaintStatusTypeDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "CustomerComplaintStatusType",
+  "changelogDate": "20230912113738",
+  "incrementalChangelog": false
+}
