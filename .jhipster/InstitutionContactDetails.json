@@ -1,0 +1,44 @@
+{
+  "fields": [
+    {
+      "fieldName": "entityId",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "entityName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "contactType",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "contactLevel",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "contactValue",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "contactName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "contactDesignation",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "InstitutionContactDetails",
+  "changelogDate": "20230912071437",
+  "incrementalChangelog": false
+}

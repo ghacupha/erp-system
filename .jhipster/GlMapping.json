@@ -1,0 +1,36 @@
+{
+  "fields": [
+    {
+      "fieldName": "subGLCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "subGLDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "mainGLCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "mainGLDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "glType",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "GlMapping",
+  "changelogDate": "20230912080431",
+  "incrementalChangelog": false
+}

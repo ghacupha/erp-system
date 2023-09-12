@@ -1,0 +1,38 @@
+{
+  "fields": [
+    {
+      "fieldName": "sectorTypeCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "mainSectorCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "mainSectorTypeName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "subSectorCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "subSectorName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "subSubSectorCodeSubSubSectorName",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "SnaSectorCode",
+  "changelogDate": "20230912072634",
+  "incrementalChangelog": false
+}

@@ -102,6 +102,23 @@
     <include file="config/liquibase/changelog/20230911154842_added_entity_LegalStatus.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230911155417_added_entity_InsiderCategoryTypes.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230911161057_added_entity_GenderType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230912071437_added_entity_InstitutionContactDetails.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230912072024_added_entity_IsicEconomicActivity.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230912072218_added_entity_InstitutionStatusType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230912072634_added_entity_SnaSectorCode.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230912072946_added_entity_BusinessSegmentTypes.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230912073538_added_entity_IsoCurrencyCode.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230912073810_added_entity_PartyRelationType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230912074203_added_entity_AccountType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230912074118_added_entity_ContractStatus.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230912074501_added_entity_AccountStatusType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230912074735_added_entity_AccountOwnershipType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230912074907_added_entity_LoanProductType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230912075425_added_entity_LoanPerformanceClassification.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230912075627_added_entity_ChartOfAccountsCode.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230912080225_added_entity_LoanRepaymentFrequency.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230912080431_added_entity_GlMapping.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230912080700_added_entity_MoratoriumItem.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
