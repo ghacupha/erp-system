@@ -1,0 +1,22 @@
+{
+  "fields": [
+    {
+      "fieldName": "bouncedChequeReasonsTypeCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "bouncedChequeReasonsType",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "ReasonsForBouncedCheque",
+  "changelogDate": "20230914080543",
+  "incrementalChangelog": false
+}

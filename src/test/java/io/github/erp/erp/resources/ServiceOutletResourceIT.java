@@ -19,6 +19,10 @@ package io.github.erp.erp.resources;
  */
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
+import io.github.erp.erp.resources.gdi.BankBranchCodeResourceIT;
+import io.github.erp.erp.resources.gdi.CountyCodeResourceIT;
+import io.github.erp.erp.resources.gdi.OutletStatusResourceIT;
+import io.github.erp.erp.resources.gdi.OutletTypeResourceIT;
 import io.github.erp.repository.ServiceOutletRepository;
 import io.github.erp.repository.search.ServiceOutletSearchRepository;
 import io.github.erp.service.ServiceOutletService;

@@ -154,6 +154,60 @@
     <include file="config/liquibase/changelog/20230912143632_added_entity_ExecutiveCategoryType.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230912144522_added_entity_DepartmentType.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230912144752_added_entity_ShareHoldingFlag.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914061228_added_entity_AnticipatedMaturityPeriood.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914061533_added_entity_InterestCalcMethod.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914061708_added_entity_SecurityType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914062426_added_entity_SecurityTenure.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914062606_added_entity_FinancialDerivativeTypeCode.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914062736_added_entity_SecurityClassificationType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914063200_added_entity_DerivativeSubType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914063523_added_entity_DerivativeUnderlyingAsset.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914063738_added_entity_CurrencyAuthenticityFlag.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914064020_added_entity_KenyanCurrencyDenomination.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914064245_added_entity_CurrencyServiceabilityFlag.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914073811_added_entity_RemittanceFlag.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914073929_added_entity_SourcesOfFundsTypeCode.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914075119_added_entity_SourceRemittancePurposeType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914075314_added_entity_StaffCurrentEmploymentStatus.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914075428_added_entity_StaffRoleType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914075717_added_entity_ManagementMemberType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914080105_added_entity_UltimateBeneficiaryTypes.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914080341_added_entity_BouncedChequeCategories.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914080543_added_entity_ReasonsForBouncedCheque.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914080732_added_entity_CrbAccountHolderType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914080926_added_entity_CrbAccountStatus.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914081144_added_entity_CrbSubmittingInstitutionCategory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914081359_added_entity_CrbAmountCategoryBand.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914081614_added_entity_CrbReportRequestReasons.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914081825_added_entity_CrbComplaintType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914082045_added_entity_CrbComplaintStatusType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914082304_added_entity_CrbRecordFileType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914082453_added_entity_CrbCreditApplicationStatus.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914082639_added_entity_CrbCustomerType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914082849_added_entity_CrbSubscriptionStatusTypeCode.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914083348_added_entity_CrbNatureOfInformation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914083553_added_entity_CrbSourceOfInformationType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914083924_added_entity_CrbProductServiceFeeType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914084202_added_entity_CrbFileTransmissionStatus.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914084425_added_entity_CrbAgentServiceType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914084620_added_entity_CrbCreditFacilityType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914085031_added_entity_CrbGlCode.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914085147_added_entity_CrbAgingBands.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914085349_added_entity_CrbReportViewBand.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914085526_added_entity_CrbDataSubmittingInstitutions.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914085816_added_entity_BankTransactionType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914090026_added_entity_AgriculturalEnterpriseActivityType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914090238_added_entity_InterbankSectorCode.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914090353_added_entity_UltimateBeneficiaryCategory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914090807_added_entity_IssuersOfSecurities.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914091202_added_entity_LoanAccountCategory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914091454_added_entity_CounterpartyType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914091713_added_entity_CounterPartyDealType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914091919_added_entity_CounterPartyCategory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914093702_added_entity_AcquiringIssuingFlag.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914093957_added_entity_CreditCardOwnership.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914094109_added_entity_CategoryOfSecurity.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230914094252_added_entity_NatureOfCustomerComplaints.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>

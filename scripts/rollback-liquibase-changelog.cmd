@@ -30,4 +30,4 @@
 
 @echo off
 git checkout HEAD~1 src/main/resources/config/liquibase/changelog/
-mvn clean compile liquibase:diff
+@REM TODO mvn clean compile liquibase:diff

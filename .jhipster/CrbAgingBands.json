@@ -1,0 +1,28 @@
+{
+  "fields": [
+    {
+      "fieldName": "agingBandCategoryCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "agingBandCategory",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "agingBandCategoryDetails",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "CrbAgingBands",
+  "changelogDate": "20230914085147",
+  "incrementalChangelog": false
+}
