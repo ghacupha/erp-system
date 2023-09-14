@@ -1,0 +1,28 @@
+{
+  "fields": [
+    {
+      "fieldName": "financialDerivativeSubTypeCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "financialDerivativeSubTye",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "financialDerivativeSubtypeDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "DerivativeSubType",
+  "changelogDate": "20230914063200",
+  "incrementalChangelog": false
+}

@@ -1,0 +1,28 @@
+{
+  "fields": [
+    {
+      "fieldName": "cardAcquiringIssuingFlagCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "cardAcquiringIssuingDescription",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "cardAcquiringIssuingDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "AcquiringIssuingFlag",
+  "changelogDate": "20230914093702",
+  "incrementalChangelog": false
+}

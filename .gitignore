@@ -305,3 +305,7 @@ dmypy.json
 
 #  Business Documents
 business-documents/
+
+# Work in Progress Documents
+man-pages/GDI-Proposal-writeup.md
+man-pages/GDI-Staging-Proposal.md
