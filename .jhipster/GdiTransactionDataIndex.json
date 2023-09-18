@@ -1,0 +1,57 @@
+{
+  "fields": [
+    {
+      "fieldName": "datasetName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "databaseName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "updateFrequency",
+      "fieldType": "UpdateFrequencyTypes",
+      "fieldValues": "DAILY,INTRA_DAY,MONTHLY,QUARTERLY,SEMI_ANNUAL,WEEKLY,OTHER",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "datasetBehavior",
+      "fieldType": "DatasetBehaviorTypes",
+      "fieldValues": "INSERT_AND_UPDATE,INSERT",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "minimumDatarowsPerRequest",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "maximumDataRowsPerRequest",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "datasetDescription",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "masterDataItem",
+      "otherEntityName": "gdiMasterDataIndex",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "entityName",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "gdiTransactionDataIndex"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "GdiTransactionDataIndex",
+  "changelogDate": "20230918125857",
+  "incrementalChangelog": false
+}

@@ -208,6 +208,8 @@
     <include file="config/liquibase/changelog/20230914093957_added_entity_CreditCardOwnership.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230914094109_added_entity_CategoryOfSecurity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230914094252_added_entity_NatureOfCustomerComplaints.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230918085621_added_entity_GdiMasterDataIndex.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230918125857_added_entity_GdiTransactionDataIndex.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
@@ -323,6 +325,7 @@
     <include file="config/liquibase/changelog/20230829155350_additional_cost_and_date_fields_for_assets.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230911163104_added_fields_institution_code.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230912144522_added_entity_constraints_DepartmentType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230918125857_added_entity_constraints_GdiTransactionDataIndex.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
