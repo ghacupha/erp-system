@@ -59,7 +59,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"GRANULAR_REPORTS_USER"})
 class CurrencyServiceabilityFlagResourceIT {
 
     private static final CurrencyServiceabilityFlagTypes DEFAULT_CURRENCY_SERVICEABILITY_FLAG = CurrencyServiceabilityFlagTypes.Y;
