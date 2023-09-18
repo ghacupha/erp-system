@@ -61,8 +61,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
-public
-class DealerResourceIT {
+public class DealerResourceIT {
 
     private static final String DEFAULT_DEALER_NAME = "AAAAAAAAAA";
     private static final String UPDATED_DEALER_NAME = "BBBBBBBBBB";
