@@ -132,14 +132,13 @@ public class SnaSectorCodeQueryService extends QueryService<SnaSectorCode> {
             if (criteria.getSubSectorName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getSubSectorName(), SnaSectorCode_.subSectorName));
             }
-            if (criteria.getSubSubSectorCodeSubSubSectorName() != null) {
+            if (criteria.getSubSubSectorCode() != null) {
                 specification =
-                    specification.and(
-                        buildStringSpecification(
-                            criteria.getSubSubSectorCodeSubSubSectorName(),
-                            SnaSectorCode_.subSubSectorCodeSubSubSectorName
-                        )
-                    );
+                    specification.and(buildStringSpecification(criteria.getSubSubSectorCode(), SnaSectorCode_.subSubSectorCode));
+            }
+            if (criteria.getSubSubSectorName() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getSubSubSectorName(), SnaSectorCode_.subSubSectorName));
             }
         }
         return specification;

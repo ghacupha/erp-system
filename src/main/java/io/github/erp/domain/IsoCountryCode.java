@@ -49,6 +49,15 @@ public class IsoCountryCode implements Serializable {
     @Column(name = "country_description")
     private String countryDescription;
 
+    @Column(name = "continent_code")
+    private String continentCode;
+
+    @Column(name = "continent_name")
+    private String continentName;
+
+    @Column(name = "sub_region")
+    private String subRegion;
+
     @ManyToMany
     @JoinTable(
         name = "rel_iso_country_code__placeholder",
@@ -100,6 +109,45 @@ public class IsoCountryCode implements Serializable {
         this.countryDescription = countryDescription;
     }
 
+    public String getContinentCode() {
+        return this.continentCode;
+    }
+
+    public IsoCountryCode continentCode(String continentCode) {
+        this.setContinentCode(continentCode);
+        return this;
+    }
+
+    public void setContinentCode(String continentCode) {
+        this.continentCode = continentCode;
+    }
+
+    public String getContinentName() {
+        return this.continentName;
+    }
+
+    public IsoCountryCode continentName(String continentName) {
+        this.setContinentName(continentName);
+        return this;
+    }
+
+    public void setContinentName(String continentName) {
+        this.continentName = continentName;
+    }
+
+    public String getSubRegion() {
+        return this.subRegion;
+    }
+
+    public IsoCountryCode subRegion(String subRegion) {
+        this.setSubRegion(subRegion);
+        return this;
+    }
+
+    public void setSubRegion(String subRegion) {
+        this.subRegion = subRegion;
+    }
+
     public Set<Placeholder> getPlaceholders() {
         return this.placeholders;
     }
@@ -149,6 +197,9 @@ public class IsoCountryCode implements Serializable {
             "id=" + getId() +
             ", countryCode='" + getCountryCode() + "'" +
             ", countryDescription='" + getCountryDescription() + "'" +
+            ", continentCode='" + getContinentCode() + "'" +
+            ", continentName='" + getContinentName() + "'" +
+            ", subRegion='" + getSubRegion() + "'" +
             "}";
     }
 }

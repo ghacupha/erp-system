@@ -74,8 +74,11 @@ class SnaSectorCodeResourceIT {
     private static final String DEFAULT_SUB_SECTOR_NAME = "AAAAAAAAAA";
     private static final String UPDATED_SUB_SECTOR_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_SUB_SUB_SECTOR_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_SUB_SUB_SECTOR_CODE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_SUB_SUB_SECTOR_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_SUB_SUB_SECTOR_NAME = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/sna-sector-codes";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -119,7 +122,8 @@ class SnaSectorCodeResourceIT {
             .mainSectorTypeName(DEFAULT_MAIN_SECTOR_TYPE_NAME)
             .subSectorCode(DEFAULT_SUB_SECTOR_CODE)
             .subSectorName(DEFAULT_SUB_SECTOR_NAME)
-            .subSubSectorCodeSubSubSectorName(DEFAULT_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME);
+            .subSubSectorCode(DEFAULT_SUB_SUB_SECTOR_CODE)
+            .subSubSectorName(DEFAULT_SUB_SUB_SECTOR_NAME);
         return snaSectorCode;
     }
 
@@ -136,7 +140,8 @@ class SnaSectorCodeResourceIT {
             .mainSectorTypeName(UPDATED_MAIN_SECTOR_TYPE_NAME)
             .subSectorCode(UPDATED_SUB_SECTOR_CODE)
             .subSectorName(UPDATED_SUB_SECTOR_NAME)
-            .subSubSectorCodeSubSubSectorName(UPDATED_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME);
+            .subSubSectorCode(UPDATED_SUB_SUB_SECTOR_CODE)
+            .subSubSectorName(UPDATED_SUB_SUB_SECTOR_NAME);
         return snaSectorCode;
     }
 
@@ -166,7 +171,8 @@ class SnaSectorCodeResourceIT {
         assertThat(testSnaSectorCode.getMainSectorTypeName()).isEqualTo(DEFAULT_MAIN_SECTOR_TYPE_NAME);
         assertThat(testSnaSectorCode.getSubSectorCode()).isEqualTo(DEFAULT_SUB_SECTOR_CODE);
         assertThat(testSnaSectorCode.getSubSectorName()).isEqualTo(DEFAULT_SUB_SECTOR_NAME);
-        assertThat(testSnaSectorCode.getSubSubSectorCodeSubSubSectorName()).isEqualTo(DEFAULT_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME);
+        assertThat(testSnaSectorCode.getSubSubSectorCode()).isEqualTo(DEFAULT_SUB_SUB_SECTOR_CODE);
+        assertThat(testSnaSectorCode.getSubSubSectorName()).isEqualTo(DEFAULT_SUB_SUB_SECTOR_NAME);
 
         // Validate the SnaSectorCode in Elasticsearch
         verify(mockSnaSectorCodeSearchRepository, times(1)).save(testSnaSectorCode);
@@ -233,7 +239,8 @@ class SnaSectorCodeResourceIT {
             .andExpect(jsonPath("$.[*].mainSectorTypeName").value(hasItem(DEFAULT_MAIN_SECTOR_TYPE_NAME)))
             .andExpect(jsonPath("$.[*].subSectorCode").value(hasItem(DEFAULT_SUB_SECTOR_CODE)))
             .andExpect(jsonPath("$.[*].subSectorName").value(hasItem(DEFAULT_SUB_SECTOR_NAME)))
-            .andExpect(jsonPath("$.[*].subSubSectorCodeSubSubSectorName").value(hasItem(DEFAULT_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME)));
+            .andExpect(jsonPath("$.[*].subSubSectorCode").value(hasItem(DEFAULT_SUB_SUB_SECTOR_CODE)))
+            .andExpect(jsonPath("$.[*].subSubSectorName").value(hasItem(DEFAULT_SUB_SUB_SECTOR_NAME)));
     }
 
     @Test
@@ -253,7 +260,8 @@ class SnaSectorCodeResourceIT {
             .andExpect(jsonPath("$.mainSectorTypeName").value(DEFAULT_MAIN_SECTOR_TYPE_NAME))
             .andExpect(jsonPath("$.subSectorCode").value(DEFAULT_SUB_SECTOR_CODE))
             .andExpect(jsonPath("$.subSectorName").value(DEFAULT_SUB_SECTOR_NAME))
-            .andExpect(jsonPath("$.subSubSectorCodeSubSubSectorName").value(DEFAULT_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME));
+            .andExpect(jsonPath("$.subSubSectorCode").value(DEFAULT_SUB_SUB_SECTOR_CODE))
+            .andExpect(jsonPath("$.subSubSectorName").value(DEFAULT_SUB_SUB_SECTOR_NAME));
     }
 
     @Test
@@ -666,93 +674,158 @@ class SnaSectorCodeResourceIT {
 
     @Test
     @Transactional
-    void getAllSnaSectorCodesBySubSubSectorCodeSubSubSectorNameIsEqualToSomething() throws Exception {
+    void getAllSnaSectorCodesBySubSubSectorCodeIsEqualToSomething() throws Exception {
         // Initialize the database
         snaSectorCodeRepository.saveAndFlush(snaSectorCode);
 
-        // Get all the snaSectorCodeList where subSubSectorCodeSubSubSectorName equals to DEFAULT_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME
-        defaultSnaSectorCodeShouldBeFound("subSubSectorCodeSubSubSectorName.equals=" + DEFAULT_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME);
+        // Get all the snaSectorCodeList where subSubSectorCode equals to DEFAULT_SUB_SUB_SECTOR_CODE
+        defaultSnaSectorCodeShouldBeFound("subSubSectorCode.equals=" + DEFAULT_SUB_SUB_SECTOR_CODE);
 
-        // Get all the snaSectorCodeList where subSubSectorCodeSubSubSectorName equals to UPDATED_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME
-        defaultSnaSectorCodeShouldNotBeFound("subSubSectorCodeSubSubSectorName.equals=" + UPDATED_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME);
+        // Get all the snaSectorCodeList where subSubSectorCode equals to UPDATED_SUB_SUB_SECTOR_CODE
+        defaultSnaSectorCodeShouldNotBeFound("subSubSectorCode.equals=" + UPDATED_SUB_SUB_SECTOR_CODE);
     }
 
     @Test
     @Transactional
-    void getAllSnaSectorCodesBySubSubSectorCodeSubSubSectorNameIsNotEqualToSomething() throws Exception {
+    void getAllSnaSectorCodesBySubSubSectorCodeIsNotEqualToSomething() throws Exception {
         // Initialize the database
         snaSectorCodeRepository.saveAndFlush(snaSectorCode);
 
-        // Get all the snaSectorCodeList where subSubSectorCodeSubSubSectorName not equals to DEFAULT_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME
-        defaultSnaSectorCodeShouldNotBeFound(
-            "subSubSectorCodeSubSubSectorName.notEquals=" + DEFAULT_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME
-        );
+        // Get all the snaSectorCodeList where subSubSectorCode not equals to DEFAULT_SUB_SUB_SECTOR_CODE
+        defaultSnaSectorCodeShouldNotBeFound("subSubSectorCode.notEquals=" + DEFAULT_SUB_SUB_SECTOR_CODE);
 
-        // Get all the snaSectorCodeList where subSubSectorCodeSubSubSectorName not equals to UPDATED_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME
-        defaultSnaSectorCodeShouldBeFound("subSubSectorCodeSubSubSectorName.notEquals=" + UPDATED_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME);
+        // Get all the snaSectorCodeList where subSubSectorCode not equals to UPDATED_SUB_SUB_SECTOR_CODE
+        defaultSnaSectorCodeShouldBeFound("subSubSectorCode.notEquals=" + UPDATED_SUB_SUB_SECTOR_CODE);
     }
 
     @Test
     @Transactional
-    void getAllSnaSectorCodesBySubSubSectorCodeSubSubSectorNameIsInShouldWork() throws Exception {
+    void getAllSnaSectorCodesBySubSubSectorCodeIsInShouldWork() throws Exception {
         // Initialize the database
         snaSectorCodeRepository.saveAndFlush(snaSectorCode);
 
-        // Get all the snaSectorCodeList where subSubSectorCodeSubSubSectorName in DEFAULT_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME or UPDATED_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME
-        defaultSnaSectorCodeShouldBeFound(
-            "subSubSectorCodeSubSubSectorName.in=" +
-            DEFAULT_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME +
-            "," +
-            UPDATED_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME
-        );
+        // Get all the snaSectorCodeList where subSubSectorCode in DEFAULT_SUB_SUB_SECTOR_CODE or UPDATED_SUB_SUB_SECTOR_CODE
+        defaultSnaSectorCodeShouldBeFound("subSubSectorCode.in=" + DEFAULT_SUB_SUB_SECTOR_CODE + "," + UPDATED_SUB_SUB_SECTOR_CODE);
 
-        // Get all the snaSectorCodeList where subSubSectorCodeSubSubSectorName equals to UPDATED_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME
-        defaultSnaSectorCodeShouldNotBeFound("subSubSectorCodeSubSubSectorName.in=" + UPDATED_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME);
+        // Get all the snaSectorCodeList where subSubSectorCode equals to UPDATED_SUB_SUB_SECTOR_CODE
+        defaultSnaSectorCodeShouldNotBeFound("subSubSectorCode.in=" + UPDATED_SUB_SUB_SECTOR_CODE);
     }
 
     @Test
     @Transactional
-    void getAllSnaSectorCodesBySubSubSectorCodeSubSubSectorNameIsNullOrNotNull() throws Exception {
+    void getAllSnaSectorCodesBySubSubSectorCodeIsNullOrNotNull() throws Exception {
         // Initialize the database
         snaSectorCodeRepository.saveAndFlush(snaSectorCode);
 
-        // Get all the snaSectorCodeList where subSubSectorCodeSubSubSectorName is not null
-        defaultSnaSectorCodeShouldBeFound("subSubSectorCodeSubSubSectorName.specified=true");
+        // Get all the snaSectorCodeList where subSubSectorCode is not null
+        defaultSnaSectorCodeShouldBeFound("subSubSectorCode.specified=true");
 
-        // Get all the snaSectorCodeList where subSubSectorCodeSubSubSectorName is null
-        defaultSnaSectorCodeShouldNotBeFound("subSubSectorCodeSubSubSectorName.specified=false");
+        // Get all the snaSectorCodeList where subSubSectorCode is null
+        defaultSnaSectorCodeShouldNotBeFound("subSubSectorCode.specified=false");
     }
 
     @Test
     @Transactional
-    void getAllSnaSectorCodesBySubSubSectorCodeSubSubSectorNameContainsSomething() throws Exception {
+    void getAllSnaSectorCodesBySubSubSectorCodeContainsSomething() throws Exception {
         // Initialize the database
         snaSectorCodeRepository.saveAndFlush(snaSectorCode);
 
-        // Get all the snaSectorCodeList where subSubSectorCodeSubSubSectorName contains DEFAULT_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME
-        defaultSnaSectorCodeShouldBeFound("subSubSectorCodeSubSubSectorName.contains=" + DEFAULT_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME);
+        // Get all the snaSectorCodeList where subSubSectorCode contains DEFAULT_SUB_SUB_SECTOR_CODE
+        defaultSnaSectorCodeShouldBeFound("subSubSectorCode.contains=" + DEFAULT_SUB_SUB_SECTOR_CODE);
 
-        // Get all the snaSectorCodeList where subSubSectorCodeSubSubSectorName contains UPDATED_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME
-        defaultSnaSectorCodeShouldNotBeFound(
-            "subSubSectorCodeSubSubSectorName.contains=" + UPDATED_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME
-        );
+        // Get all the snaSectorCodeList where subSubSectorCode contains UPDATED_SUB_SUB_SECTOR_CODE
+        defaultSnaSectorCodeShouldNotBeFound("subSubSectorCode.contains=" + UPDATED_SUB_SUB_SECTOR_CODE);
     }
 
     @Test
     @Transactional
-    void getAllSnaSectorCodesBySubSubSectorCodeSubSubSectorNameNotContainsSomething() throws Exception {
+    void getAllSnaSectorCodesBySubSubSectorCodeNotContainsSomething() throws Exception {
         // Initialize the database
         snaSectorCodeRepository.saveAndFlush(snaSectorCode);
 
-        // Get all the snaSectorCodeList where subSubSectorCodeSubSubSectorName does not contain DEFAULT_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME
-        defaultSnaSectorCodeShouldNotBeFound(
-            "subSubSectorCodeSubSubSectorName.doesNotContain=" + DEFAULT_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME
-        );
+        // Get all the snaSectorCodeList where subSubSectorCode does not contain DEFAULT_SUB_SUB_SECTOR_CODE
+        defaultSnaSectorCodeShouldNotBeFound("subSubSectorCode.doesNotContain=" + DEFAULT_SUB_SUB_SECTOR_CODE);
 
-        // Get all the snaSectorCodeList where subSubSectorCodeSubSubSectorName does not contain UPDATED_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME
-        defaultSnaSectorCodeShouldBeFound(
-            "subSubSectorCodeSubSubSectorName.doesNotContain=" + UPDATED_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME
-        );
+        // Get all the snaSectorCodeList where subSubSectorCode does not contain UPDATED_SUB_SUB_SECTOR_CODE
+        defaultSnaSectorCodeShouldBeFound("subSubSectorCode.doesNotContain=" + UPDATED_SUB_SUB_SECTOR_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllSnaSectorCodesBySubSubSectorNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        snaSectorCodeRepository.saveAndFlush(snaSectorCode);
+
+        // Get all the snaSectorCodeList where subSubSectorName equals to DEFAULT_SUB_SUB_SECTOR_NAME
+        defaultSnaSectorCodeShouldBeFound("subSubSectorName.equals=" + DEFAULT_SUB_SUB_SECTOR_NAME);
+
+        // Get all the snaSectorCodeList where subSubSectorName equals to UPDATED_SUB_SUB_SECTOR_NAME
+        defaultSnaSectorCodeShouldNotBeFound("subSubSectorName.equals=" + UPDATED_SUB_SUB_SECTOR_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllSnaSectorCodesBySubSubSectorNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        snaSectorCodeRepository.saveAndFlush(snaSectorCode);
+
+        // Get all the snaSectorCodeList where subSubSectorName not equals to DEFAULT_SUB_SUB_SECTOR_NAME
+        defaultSnaSectorCodeShouldNotBeFound("subSubSectorName.notEquals=" + DEFAULT_SUB_SUB_SECTOR_NAME);
+
+        // Get all the snaSectorCodeList where subSubSectorName not equals to UPDATED_SUB_SUB_SECTOR_NAME
+        defaultSnaSectorCodeShouldBeFound("subSubSectorName.notEquals=" + UPDATED_SUB_SUB_SECTOR_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllSnaSectorCodesBySubSubSectorNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        snaSectorCodeRepository.saveAndFlush(snaSectorCode);
+
+        // Get all the snaSectorCodeList where subSubSectorName in DEFAULT_SUB_SUB_SECTOR_NAME or UPDATED_SUB_SUB_SECTOR_NAME
+        defaultSnaSectorCodeShouldBeFound("subSubSectorName.in=" + DEFAULT_SUB_SUB_SECTOR_NAME + "," + UPDATED_SUB_SUB_SECTOR_NAME);
+
+        // Get all the snaSectorCodeList where subSubSectorName equals to UPDATED_SUB_SUB_SECTOR_NAME
+        defaultSnaSectorCodeShouldNotBeFound("subSubSectorName.in=" + UPDATED_SUB_SUB_SECTOR_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllSnaSectorCodesBySubSubSectorNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        snaSectorCodeRepository.saveAndFlush(snaSectorCode);
+
+        // Get all the snaSectorCodeList where subSubSectorName is not null
+        defaultSnaSectorCodeShouldBeFound("subSubSectorName.specified=true");
+
+        // Get all the snaSectorCodeList where subSubSectorName is null
+        defaultSnaSectorCodeShouldNotBeFound("subSubSectorName.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllSnaSectorCodesBySubSubSectorNameContainsSomething() throws Exception {
+        // Initialize the database
+        snaSectorCodeRepository.saveAndFlush(snaSectorCode);
+
+        // Get all the snaSectorCodeList where subSubSectorName contains DEFAULT_SUB_SUB_SECTOR_NAME
+        defaultSnaSectorCodeShouldBeFound("subSubSectorName.contains=" + DEFAULT_SUB_SUB_SECTOR_NAME);
+
+        // Get all the snaSectorCodeList where subSubSectorName contains UPDATED_SUB_SUB_SECTOR_NAME
+        defaultSnaSectorCodeShouldNotBeFound("subSubSectorName.contains=" + UPDATED_SUB_SUB_SECTOR_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllSnaSectorCodesBySubSubSectorNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        snaSectorCodeRepository.saveAndFlush(snaSectorCode);
+
+        // Get all the snaSectorCodeList where subSubSectorName does not contain DEFAULT_SUB_SUB_SECTOR_NAME
+        defaultSnaSectorCodeShouldNotBeFound("subSubSectorName.doesNotContain=" + DEFAULT_SUB_SUB_SECTOR_NAME);
+
+        // Get all the snaSectorCodeList where subSubSectorName does not contain UPDATED_SUB_SUB_SECTOR_NAME
+        defaultSnaSectorCodeShouldBeFound("subSubSectorName.doesNotContain=" + UPDATED_SUB_SUB_SECTOR_NAME);
     }
 
     /**
@@ -769,7 +842,8 @@ class SnaSectorCodeResourceIT {
             .andExpect(jsonPath("$.[*].mainSectorTypeName").value(hasItem(DEFAULT_MAIN_SECTOR_TYPE_NAME)))
             .andExpect(jsonPath("$.[*].subSectorCode").value(hasItem(DEFAULT_SUB_SECTOR_CODE)))
             .andExpect(jsonPath("$.[*].subSectorName").value(hasItem(DEFAULT_SUB_SECTOR_NAME)))
-            .andExpect(jsonPath("$.[*].subSubSectorCodeSubSubSectorName").value(hasItem(DEFAULT_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME)));
+            .andExpect(jsonPath("$.[*].subSubSectorCode").value(hasItem(DEFAULT_SUB_SUB_SECTOR_CODE)))
+            .andExpect(jsonPath("$.[*].subSubSectorName").value(hasItem(DEFAULT_SUB_SUB_SECTOR_NAME)));
 
         // Check, that the count call also returns 1
         restSnaSectorCodeMockMvc
@@ -823,7 +897,8 @@ class SnaSectorCodeResourceIT {
             .mainSectorTypeName(UPDATED_MAIN_SECTOR_TYPE_NAME)
             .subSectorCode(UPDATED_SUB_SECTOR_CODE)
             .subSectorName(UPDATED_SUB_SECTOR_NAME)
-            .subSubSectorCodeSubSubSectorName(UPDATED_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME);
+            .subSubSectorCode(UPDATED_SUB_SUB_SECTOR_CODE)
+            .subSubSectorName(UPDATED_SUB_SUB_SECTOR_NAME);
         SnaSectorCodeDTO snaSectorCodeDTO = snaSectorCodeMapper.toDto(updatedSnaSectorCode);
 
         restSnaSectorCodeMockMvc
@@ -843,7 +918,8 @@ class SnaSectorCodeResourceIT {
         assertThat(testSnaSectorCode.getMainSectorTypeName()).isEqualTo(UPDATED_MAIN_SECTOR_TYPE_NAME);
         assertThat(testSnaSectorCode.getSubSectorCode()).isEqualTo(UPDATED_SUB_SECTOR_CODE);
         assertThat(testSnaSectorCode.getSubSectorName()).isEqualTo(UPDATED_SUB_SECTOR_NAME);
-        assertThat(testSnaSectorCode.getSubSubSectorCodeSubSubSectorName()).isEqualTo(UPDATED_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME);
+        assertThat(testSnaSectorCode.getSubSubSectorCode()).isEqualTo(UPDATED_SUB_SUB_SECTOR_CODE);
+        assertThat(testSnaSectorCode.getSubSubSectorName()).isEqualTo(UPDATED_SUB_SUB_SECTOR_NAME);
 
         // Validate the SnaSectorCode in Elasticsearch
         verify(mockSnaSectorCodeSearchRepository).save(testSnaSectorCode);
@@ -941,7 +1017,7 @@ class SnaSectorCodeResourceIT {
             .sectorTypeCode(UPDATED_SECTOR_TYPE_CODE)
             .mainSectorTypeName(UPDATED_MAIN_SECTOR_TYPE_NAME)
             .subSectorCode(UPDATED_SUB_SECTOR_CODE)
-            .subSubSectorCodeSubSubSectorName(UPDATED_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME);
+            .subSubSectorCode(UPDATED_SUB_SUB_SECTOR_CODE);
 
         restSnaSectorCodeMockMvc
             .perform(
@@ -960,7 +1036,8 @@ class SnaSectorCodeResourceIT {
         assertThat(testSnaSectorCode.getMainSectorTypeName()).isEqualTo(UPDATED_MAIN_SECTOR_TYPE_NAME);
         assertThat(testSnaSectorCode.getSubSectorCode()).isEqualTo(UPDATED_SUB_SECTOR_CODE);
         assertThat(testSnaSectorCode.getSubSectorName()).isEqualTo(DEFAULT_SUB_SECTOR_NAME);
-        assertThat(testSnaSectorCode.getSubSubSectorCodeSubSubSectorName()).isEqualTo(UPDATED_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME);
+        assertThat(testSnaSectorCode.getSubSubSectorCode()).isEqualTo(UPDATED_SUB_SUB_SECTOR_CODE);
+        assertThat(testSnaSectorCode.getSubSubSectorName()).isEqualTo(DEFAULT_SUB_SUB_SECTOR_NAME);
     }
 
     @Test
@@ -981,7 +1058,8 @@ class SnaSectorCodeResourceIT {
             .mainSectorTypeName(UPDATED_MAIN_SECTOR_TYPE_NAME)
             .subSectorCode(UPDATED_SUB_SECTOR_CODE)
             .subSectorName(UPDATED_SUB_SECTOR_NAME)
-            .subSubSectorCodeSubSubSectorName(UPDATED_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME);
+            .subSubSectorCode(UPDATED_SUB_SUB_SECTOR_CODE)
+            .subSubSectorName(UPDATED_SUB_SUB_SECTOR_NAME);
 
         restSnaSectorCodeMockMvc
             .perform(
@@ -1000,7 +1078,8 @@ class SnaSectorCodeResourceIT {
         assertThat(testSnaSectorCode.getMainSectorTypeName()).isEqualTo(UPDATED_MAIN_SECTOR_TYPE_NAME);
         assertThat(testSnaSectorCode.getSubSectorCode()).isEqualTo(UPDATED_SUB_SECTOR_CODE);
         assertThat(testSnaSectorCode.getSubSectorName()).isEqualTo(UPDATED_SUB_SECTOR_NAME);
-        assertThat(testSnaSectorCode.getSubSubSectorCodeSubSubSectorName()).isEqualTo(UPDATED_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME);
+        assertThat(testSnaSectorCode.getSubSubSectorCode()).isEqualTo(UPDATED_SUB_SUB_SECTOR_CODE);
+        assertThat(testSnaSectorCode.getSubSubSectorName()).isEqualTo(UPDATED_SUB_SUB_SECTOR_NAME);
     }
 
     @Test
@@ -1122,6 +1201,7 @@ class SnaSectorCodeResourceIT {
             .andExpect(jsonPath("$.[*].mainSectorTypeName").value(hasItem(DEFAULT_MAIN_SECTOR_TYPE_NAME)))
             .andExpect(jsonPath("$.[*].subSectorCode").value(hasItem(DEFAULT_SUB_SECTOR_CODE)))
             .andExpect(jsonPath("$.[*].subSectorName").value(hasItem(DEFAULT_SUB_SECTOR_NAME)))
-            .andExpect(jsonPath("$.[*].subSubSectorCodeSubSubSectorName").value(hasItem(DEFAULT_SUB_SUB_SECTOR_CODE_SUB_SUB_SECTOR_NAME)));
+            .andExpect(jsonPath("$.[*].subSubSectorCode").value(hasItem(DEFAULT_SUB_SUB_SECTOR_CODE)))
+            .andExpect(jsonPath("$.[*].subSubSectorName").value(hasItem(DEFAULT_SUB_SUB_SECTOR_NAME)));
     }
 }
