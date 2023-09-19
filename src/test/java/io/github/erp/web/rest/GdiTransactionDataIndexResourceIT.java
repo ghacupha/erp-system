@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -87,6 +88,11 @@ class GdiTransactionDataIndexResourceIT {
     private static final String DEFAULT_DATASET_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DATASET_DESCRIPTION = "BBBBBBBBBB";
 
+    private static final byte[] DEFAULT_DATA_TEMPLATE = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_DATA_TEMPLATE = TestUtil.createByteArray(1, "1");
+    private static final String DEFAULT_DATA_TEMPLATE_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_DATA_TEMPLATE_CONTENT_TYPE = "image/png";
+
     private static final String ENTITY_API_URL = "/api/gdi-transaction-data-indices";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/gdi-transaction-data-indices";
@@ -136,7 +142,9 @@ class GdiTransactionDataIndexResourceIT {
             .datasetBehavior(DEFAULT_DATASET_BEHAVIOR)
             .minimumDatarowsPerRequest(DEFAULT_MINIMUM_DATAROWS_PER_REQUEST)
             .maximumDataRowsPerRequest(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST)
-            .datasetDescription(DEFAULT_DATASET_DESCRIPTION);
+            .datasetDescription(DEFAULT_DATASET_DESCRIPTION)
+            .dataTemplate(DEFAULT_DATA_TEMPLATE)
+            .dataTemplateContentType(DEFAULT_DATA_TEMPLATE_CONTENT_TYPE);
         return gdiTransactionDataIndex;
     }
 
@@ -154,7 +162,9 @@ class GdiTransactionDataIndexResourceIT {
             .datasetBehavior(UPDATED_DATASET_BEHAVIOR)
             .minimumDatarowsPerRequest(UPDATED_MINIMUM_DATAROWS_PER_REQUEST)
             .maximumDataRowsPerRequest(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST)
-            .datasetDescription(UPDATED_DATASET_DESCRIPTION);
+            .datasetDescription(UPDATED_DATASET_DESCRIPTION)
+            .dataTemplate(UPDATED_DATA_TEMPLATE)
+            .dataTemplateContentType(UPDATED_DATA_TEMPLATE_CONTENT_TYPE);
         return gdiTransactionDataIndex;
     }
 
@@ -188,6 +198,8 @@ class GdiTransactionDataIndexResourceIT {
         assertThat(testGdiTransactionDataIndex.getMinimumDatarowsPerRequest()).isEqualTo(DEFAULT_MINIMUM_DATAROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getMaximumDataRowsPerRequest()).isEqualTo(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getDatasetDescription()).isEqualTo(DEFAULT_DATASET_DESCRIPTION);
+        assertThat(testGdiTransactionDataIndex.getDataTemplate()).isEqualTo(DEFAULT_DATA_TEMPLATE);
+        assertThat(testGdiTransactionDataIndex.getDataTemplateContentType()).isEqualTo(DEFAULT_DATA_TEMPLATE_CONTENT_TYPE);
 
         // Validate the GdiTransactionDataIndex in Elasticsearch
         verify(mockGdiTransactionDataIndexSearchRepository, times(1)).save(testGdiTransactionDataIndex);
@@ -325,7 +337,9 @@ class GdiTransactionDataIndexResourceIT {
             .andExpect(jsonPath("$.[*].datasetBehavior").value(hasItem(DEFAULT_DATASET_BEHAVIOR.toString())))
             .andExpect(jsonPath("$.[*].minimumDatarowsPerRequest").value(hasItem(DEFAULT_MINIMUM_DATAROWS_PER_REQUEST)))
             .andExpect(jsonPath("$.[*].maximumDataRowsPerRequest").value(hasItem(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST)))
-            .andExpect(jsonPath("$.[*].datasetDescription").value(hasItem(DEFAULT_DATASET_DESCRIPTION.toString())));
+            .andExpect(jsonPath("$.[*].datasetDescription").value(hasItem(DEFAULT_DATASET_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].dataTemplateContentType").value(hasItem(DEFAULT_DATA_TEMPLATE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].dataTemplate").value(hasItem(Base64Utils.encodeToString(DEFAULT_DATA_TEMPLATE))));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -364,7 +378,9 @@ class GdiTransactionDataIndexResourceIT {
             .andExpect(jsonPath("$.datasetBehavior").value(DEFAULT_DATASET_BEHAVIOR.toString()))
             .andExpect(jsonPath("$.minimumDatarowsPerRequest").value(DEFAULT_MINIMUM_DATAROWS_PER_REQUEST))
             .andExpect(jsonPath("$.maximumDataRowsPerRequest").value(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST))
-            .andExpect(jsonPath("$.datasetDescription").value(DEFAULT_DATASET_DESCRIPTION.toString()));
+            .andExpect(jsonPath("$.datasetDescription").value(DEFAULT_DATASET_DESCRIPTION.toString()))
+            .andExpect(jsonPath("$.dataTemplateContentType").value(DEFAULT_DATA_TEMPLATE_CONTENT_TYPE))
+            .andExpect(jsonPath("$.dataTemplate").value(Base64Utils.encodeToString(DEFAULT_DATA_TEMPLATE)));
     }
 
     @Test
@@ -906,7 +922,9 @@ class GdiTransactionDataIndexResourceIT {
             .andExpect(jsonPath("$.[*].datasetBehavior").value(hasItem(DEFAULT_DATASET_BEHAVIOR.toString())))
             .andExpect(jsonPath("$.[*].minimumDatarowsPerRequest").value(hasItem(DEFAULT_MINIMUM_DATAROWS_PER_REQUEST)))
             .andExpect(jsonPath("$.[*].maximumDataRowsPerRequest").value(hasItem(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST)))
-            .andExpect(jsonPath("$.[*].datasetDescription").value(hasItem(DEFAULT_DATASET_DESCRIPTION.toString())));
+            .andExpect(jsonPath("$.[*].datasetDescription").value(hasItem(DEFAULT_DATASET_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].dataTemplateContentType").value(hasItem(DEFAULT_DATA_TEMPLATE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].dataTemplate").value(hasItem(Base64Utils.encodeToString(DEFAULT_DATA_TEMPLATE))));
 
         // Check, that the count call also returns 1
         restGdiTransactionDataIndexMockMvc
@@ -963,7 +981,9 @@ class GdiTransactionDataIndexResourceIT {
             .datasetBehavior(UPDATED_DATASET_BEHAVIOR)
             .minimumDatarowsPerRequest(UPDATED_MINIMUM_DATAROWS_PER_REQUEST)
             .maximumDataRowsPerRequest(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST)
-            .datasetDescription(UPDATED_DATASET_DESCRIPTION);
+            .datasetDescription(UPDATED_DATASET_DESCRIPTION)
+            .dataTemplate(UPDATED_DATA_TEMPLATE)
+            .dataTemplateContentType(UPDATED_DATA_TEMPLATE_CONTENT_TYPE);
         GdiTransactionDataIndexDTO gdiTransactionDataIndexDTO = gdiTransactionDataIndexMapper.toDto(updatedGdiTransactionDataIndex);
 
         restGdiTransactionDataIndexMockMvc
@@ -985,6 +1005,8 @@ class GdiTransactionDataIndexResourceIT {
         assertThat(testGdiTransactionDataIndex.getMinimumDatarowsPerRequest()).isEqualTo(UPDATED_MINIMUM_DATAROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getMaximumDataRowsPerRequest()).isEqualTo(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getDatasetDescription()).isEqualTo(UPDATED_DATASET_DESCRIPTION);
+        assertThat(testGdiTransactionDataIndex.getDataTemplate()).isEqualTo(UPDATED_DATA_TEMPLATE);
+        assertThat(testGdiTransactionDataIndex.getDataTemplateContentType()).isEqualTo(UPDATED_DATA_TEMPLATE_CONTENT_TYPE);
 
         // Validate the GdiTransactionDataIndex in Elasticsearch
         verify(mockGdiTransactionDataIndexSearchRepository).save(testGdiTransactionDataIndex);
@@ -1085,7 +1107,9 @@ class GdiTransactionDataIndexResourceIT {
             .databaseName(UPDATED_DATABASE_NAME)
             .updateFrequency(UPDATED_UPDATE_FREQUENCY)
             .maximumDataRowsPerRequest(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST)
-            .datasetDescription(UPDATED_DATASET_DESCRIPTION);
+            .datasetDescription(UPDATED_DATASET_DESCRIPTION)
+            .dataTemplate(UPDATED_DATA_TEMPLATE)
+            .dataTemplateContentType(UPDATED_DATA_TEMPLATE_CONTENT_TYPE);
 
         restGdiTransactionDataIndexMockMvc
             .perform(
@@ -1106,6 +1130,8 @@ class GdiTransactionDataIndexResourceIT {
         assertThat(testGdiTransactionDataIndex.getMinimumDatarowsPerRequest()).isEqualTo(DEFAULT_MINIMUM_DATAROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getMaximumDataRowsPerRequest()).isEqualTo(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getDatasetDescription()).isEqualTo(UPDATED_DATASET_DESCRIPTION);
+        assertThat(testGdiTransactionDataIndex.getDataTemplate()).isEqualTo(UPDATED_DATA_TEMPLATE);
+        assertThat(testGdiTransactionDataIndex.getDataTemplateContentType()).isEqualTo(UPDATED_DATA_TEMPLATE_CONTENT_TYPE);
     }
 
     @Test
@@ -1127,7 +1153,9 @@ class GdiTransactionDataIndexResourceIT {
             .datasetBehavior(UPDATED_DATASET_BEHAVIOR)
             .minimumDatarowsPerRequest(UPDATED_MINIMUM_DATAROWS_PER_REQUEST)
             .maximumDataRowsPerRequest(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST)
-            .datasetDescription(UPDATED_DATASET_DESCRIPTION);
+            .datasetDescription(UPDATED_DATASET_DESCRIPTION)
+            .dataTemplate(UPDATED_DATA_TEMPLATE)
+            .dataTemplateContentType(UPDATED_DATA_TEMPLATE_CONTENT_TYPE);
 
         restGdiTransactionDataIndexMockMvc
             .perform(
@@ -1148,6 +1176,8 @@ class GdiTransactionDataIndexResourceIT {
         assertThat(testGdiTransactionDataIndex.getMinimumDatarowsPerRequest()).isEqualTo(UPDATED_MINIMUM_DATAROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getMaximumDataRowsPerRequest()).isEqualTo(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getDatasetDescription()).isEqualTo(UPDATED_DATASET_DESCRIPTION);
+        assertThat(testGdiTransactionDataIndex.getDataTemplate()).isEqualTo(UPDATED_DATA_TEMPLATE);
+        assertThat(testGdiTransactionDataIndex.getDataTemplateContentType()).isEqualTo(UPDATED_DATA_TEMPLATE_CONTENT_TYPE);
     }
 
     @Test
@@ -1270,6 +1300,8 @@ class GdiTransactionDataIndexResourceIT {
             .andExpect(jsonPath("$.[*].datasetBehavior").value(hasItem(DEFAULT_DATASET_BEHAVIOR.toString())))
             .andExpect(jsonPath("$.[*].minimumDatarowsPerRequest").value(hasItem(DEFAULT_MINIMUM_DATAROWS_PER_REQUEST)))
             .andExpect(jsonPath("$.[*].maximumDataRowsPerRequest").value(hasItem(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST)))
-            .andExpect(jsonPath("$.[*].datasetDescription").value(hasItem(DEFAULT_DATASET_DESCRIPTION.toString())));
+            .andExpect(jsonPath("$.[*].datasetDescription").value(hasItem(DEFAULT_DATASET_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].dataTemplateContentType").value(hasItem(DEFAULT_DATA_TEMPLATE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].dataTemplate").value(hasItem(Base64Utils.encodeToString(DEFAULT_DATA_TEMPLATE))));
     }
 }

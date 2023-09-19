@@ -17,6 +17,7 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.enumeration.DatasetBehaviorTypes;
 import io.github.erp.domain.enumeration.UpdateFrequencyTypes;
 import java.io.Serializable;
@@ -73,6 +74,13 @@ public class GdiTransactionDataIndex implements Serializable {
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "dataset_description")
     private String datasetDescription;
+
+    @Lob
+    @Column(name = "data_template")
+    private byte[] dataTemplate;
+
+    @Column(name = "data_template_content_type")
+    private String dataTemplateContentType;
 
     @ManyToMany
     @JoinTable(
@@ -189,6 +197,32 @@ public class GdiTransactionDataIndex implements Serializable {
         this.datasetDescription = datasetDescription;
     }
 
+    public byte[] getDataTemplate() {
+        return this.dataTemplate;
+    }
+
+    public GdiTransactionDataIndex dataTemplate(byte[] dataTemplate) {
+        this.setDataTemplate(dataTemplate);
+        return this;
+    }
+
+    public void setDataTemplate(byte[] dataTemplate) {
+        this.dataTemplate = dataTemplate;
+    }
+
+    public String getDataTemplateContentType() {
+        return this.dataTemplateContentType;
+    }
+
+    public GdiTransactionDataIndex dataTemplateContentType(String dataTemplateContentType) {
+        this.dataTemplateContentType = dataTemplateContentType;
+        return this;
+    }
+
+    public void setDataTemplateContentType(String dataTemplateContentType) {
+        this.dataTemplateContentType = dataTemplateContentType;
+    }
+
     public Set<GdiMasterDataIndex> getMasterDataItems() {
         return this.masterDataItems;
     }
@@ -243,6 +277,8 @@ public class GdiTransactionDataIndex implements Serializable {
             ", minimumDatarowsPerRequest=" + getMinimumDatarowsPerRequest() +
             ", maximumDataRowsPerRequest=" + getMaximumDataRowsPerRequest() +
             ", datasetDescription='" + getDatasetDescription() + "'" +
+            ", dataTemplate='" + getDataTemplate() + "'" +
+            ", dataTemplateContentType='" + getDataTemplateContentType() + "'" +
             "}";
     }
 }

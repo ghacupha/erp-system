@@ -17,6 +17,7 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.enumeration.DatasetBehaviorTypes;
 import io.github.erp.domain.enumeration.UpdateFrequencyTypes;
 import java.io.Serializable;
@@ -52,6 +53,10 @@ public class GdiTransactionDataIndexDTO implements Serializable {
     @Lob
     private String datasetDescription;
 
+    @Lob
+    private byte[] dataTemplate;
+
+    private String dataTemplateContentType;
     private Set<GdiMasterDataIndexDTO> masterDataItems = new HashSet<>();
 
     public Long getId() {
@@ -118,6 +123,22 @@ public class GdiTransactionDataIndexDTO implements Serializable {
         this.datasetDescription = datasetDescription;
     }
 
+    public byte[] getDataTemplate() {
+        return dataTemplate;
+    }
+
+    public void setDataTemplate(byte[] dataTemplate) {
+        this.dataTemplate = dataTemplate;
+    }
+
+    public String getDataTemplateContentType() {
+        return dataTemplateContentType;
+    }
+
+    public void setDataTemplateContentType(String dataTemplateContentType) {
+        this.dataTemplateContentType = dataTemplateContentType;
+    }
+
     public Set<GdiMasterDataIndexDTO> getMasterDataItems() {
         return masterDataItems;
     }
@@ -159,6 +180,7 @@ public class GdiTransactionDataIndexDTO implements Serializable {
             ", minimumDatarowsPerRequest=" + getMinimumDatarowsPerRequest() +
             ", maximumDataRowsPerRequest=" + getMaximumDataRowsPerRequest() +
             ", datasetDescription='" + getDatasetDescription() + "'" +
+            ", dataTemplate='" + getDataTemplate() + "'" +
             ", masterDataItems=" + getMasterDataItems() +
             "}";
     }
