@@ -17,6 +17,7 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.enumeration.CurrencyAuthenticityFlags;
 import io.github.erp.domain.enumeration.CurrencyAuthenticityTypes;
 import java.io.Serializable;
