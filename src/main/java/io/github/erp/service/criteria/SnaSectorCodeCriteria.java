@@ -54,7 +54,9 @@ public class SnaSectorCodeCriteria implements Serializable, Criteria {
 
     private StringFilter subSectorName;
 
-    private StringFilter subSubSectorCodeSubSubSectorName;
+    private StringFilter subSubSectorCode;
+
+    private StringFilter subSubSectorName;
 
     private Boolean distinct;
 
@@ -67,8 +69,8 @@ public class SnaSectorCodeCriteria implements Serializable, Criteria {
         this.mainSectorTypeName = other.mainSectorTypeName == null ? null : other.mainSectorTypeName.copy();
         this.subSectorCode = other.subSectorCode == null ? null : other.subSectorCode.copy();
         this.subSectorName = other.subSectorName == null ? null : other.subSectorName.copy();
-        this.subSubSectorCodeSubSubSectorName =
-            other.subSubSectorCodeSubSubSectorName == null ? null : other.subSubSectorCodeSubSubSectorName.copy();
+        this.subSubSectorCode = other.subSubSectorCode == null ? null : other.subSubSectorCode.copy();
+        this.subSubSectorName = other.subSubSectorName == null ? null : other.subSubSectorName.copy();
         this.distinct = other.distinct;
     }
 
@@ -167,19 +169,34 @@ public class SnaSectorCodeCriteria implements Serializable, Criteria {
         this.subSectorName = subSectorName;
     }
 
-    public StringFilter getSubSubSectorCodeSubSubSectorName() {
-        return subSubSectorCodeSubSubSectorName;
+    public StringFilter getSubSubSectorCode() {
+        return subSubSectorCode;
     }
 
-    public StringFilter subSubSectorCodeSubSubSectorName() {
-        if (subSubSectorCodeSubSubSectorName == null) {
-            subSubSectorCodeSubSubSectorName = new StringFilter();
+    public StringFilter subSubSectorCode() {
+        if (subSubSectorCode == null) {
+            subSubSectorCode = new StringFilter();
         }
-        return subSubSectorCodeSubSubSectorName;
+        return subSubSectorCode;
     }
 
-    public void setSubSubSectorCodeSubSubSectorName(StringFilter subSubSectorCodeSubSubSectorName) {
-        this.subSubSectorCodeSubSubSectorName = subSubSectorCodeSubSubSectorName;
+    public void setSubSubSectorCode(StringFilter subSubSectorCode) {
+        this.subSubSectorCode = subSubSectorCode;
+    }
+
+    public StringFilter getSubSubSectorName() {
+        return subSubSectorName;
+    }
+
+    public StringFilter subSubSectorName() {
+        if (subSubSectorName == null) {
+            subSubSectorName = new StringFilter();
+        }
+        return subSubSectorName;
+    }
+
+    public void setSubSubSectorName(StringFilter subSubSectorName) {
+        this.subSubSectorName = subSubSectorName;
     }
 
     public Boolean getDistinct() {
@@ -206,7 +223,8 @@ public class SnaSectorCodeCriteria implements Serializable, Criteria {
             Objects.equals(mainSectorTypeName, that.mainSectorTypeName) &&
             Objects.equals(subSectorCode, that.subSectorCode) &&
             Objects.equals(subSectorName, that.subSectorName) &&
-            Objects.equals(subSubSectorCodeSubSubSectorName, that.subSubSectorCodeSubSubSectorName) &&
+            Objects.equals(subSubSectorCode, that.subSubSectorCode) &&
+            Objects.equals(subSubSectorName, that.subSubSectorName) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -220,7 +238,8 @@ public class SnaSectorCodeCriteria implements Serializable, Criteria {
             mainSectorTypeName,
             subSectorCode,
             subSectorName,
-            subSubSectorCodeSubSubSectorName,
+            subSubSectorCode,
+            subSubSectorName,
             distinct
         );
     }
@@ -235,7 +254,8 @@ public class SnaSectorCodeCriteria implements Serializable, Criteria {
             (mainSectorTypeName != null ? "mainSectorTypeName=" + mainSectorTypeName + ", " : "") +
             (subSectorCode != null ? "subSectorCode=" + subSectorCode + ", " : "") +
             (subSectorName != null ? "subSectorName=" + subSectorName + ", " : "") +
-            (subSubSectorCodeSubSubSectorName != null ? "subSubSectorCodeSubSubSectorName=" + subSubSectorCodeSubSubSectorName + ", " : "") +
+            (subSubSectorCode != null ? "subSubSectorCode=" + subSubSectorCode + ", " : "") +
+            (subSubSectorName != null ? "subSubSectorName=" + subSubSectorName + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

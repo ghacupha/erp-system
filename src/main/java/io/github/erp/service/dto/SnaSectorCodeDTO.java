@@ -40,7 +40,9 @@ public class SnaSectorCodeDTO implements Serializable {
 
     private String subSectorName;
 
-    private String subSubSectorCodeSubSubSectorName;
+    private String subSubSectorCode;
+
+    private String subSubSectorName;
 
     public Long getId() {
         return id;
@@ -90,12 +92,20 @@ public class SnaSectorCodeDTO implements Serializable {
         this.subSectorName = subSectorName;
     }
 
-    public String getSubSubSectorCodeSubSubSectorName() {
-        return subSubSectorCodeSubSubSectorName;
+    public String getSubSubSectorCode() {
+        return subSubSectorCode;
     }
 
-    public void setSubSubSectorCodeSubSubSectorName(String subSubSectorCodeSubSubSectorName) {
-        this.subSubSectorCodeSubSubSectorName = subSubSectorCodeSubSubSectorName;
+    public void setSubSubSectorCode(String subSubSectorCode) {
+        this.subSubSectorCode = subSubSectorCode;
+    }
+
+    public String getSubSubSectorName() {
+        return subSubSectorName;
+    }
+
+    public void setSubSubSectorName(String subSubSectorName) {
+        this.subSubSectorName = subSubSectorName;
     }
 
     @Override
@@ -129,7 +139,8 @@ public class SnaSectorCodeDTO implements Serializable {
             ", mainSectorTypeName='" + getMainSectorTypeName() + "'" +
             ", subSectorCode='" + getSubSectorCode() + "'" +
             ", subSectorName='" + getSubSectorName() + "'" +
-            ", subSubSectorCodeSubSubSectorName='" + getSubSubSectorCodeSubSubSectorName() + "'" +
+            ", subSubSectorCode='" + getSubSubSectorCode() + "'" +
+            ", subSubSectorName='" + getSubSubSectorName() + "'" +
             "}";
     }
 }

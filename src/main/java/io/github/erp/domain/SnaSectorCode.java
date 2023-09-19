@@ -57,8 +57,11 @@ public class SnaSectorCode implements Serializable {
     @Column(name = "sub_sector_name")
     private String subSectorName;
 
-    @Column(name = "sub_sub_sector_code_sub_sub_sector_name")
-    private String subSubSectorCodeSubSubSectorName;
+    @Column(name = "sub_sub_sector_code")
+    private String subSubSectorCode;
+
+    @Column(name = "sub_sub_sector_name")
+    private String subSubSectorName;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -140,17 +143,30 @@ public class SnaSectorCode implements Serializable {
         this.subSectorName = subSectorName;
     }
 
-    public String getSubSubSectorCodeSubSubSectorName() {
-        return this.subSubSectorCodeSubSubSectorName;
+    public String getSubSubSectorCode() {
+        return this.subSubSectorCode;
     }
 
-    public SnaSectorCode subSubSectorCodeSubSubSectorName(String subSubSectorCodeSubSubSectorName) {
-        this.setSubSubSectorCodeSubSubSectorName(subSubSectorCodeSubSubSectorName);
+    public SnaSectorCode subSubSectorCode(String subSubSectorCode) {
+        this.setSubSubSectorCode(subSubSectorCode);
         return this;
     }
 
-    public void setSubSubSectorCodeSubSubSectorName(String subSubSectorCodeSubSubSectorName) {
-        this.subSubSectorCodeSubSubSectorName = subSubSectorCodeSubSubSectorName;
+    public void setSubSubSectorCode(String subSubSectorCode) {
+        this.subSubSectorCode = subSubSectorCode;
+    }
+
+    public String getSubSubSectorName() {
+        return this.subSubSectorName;
+    }
+
+    public SnaSectorCode subSubSectorName(String subSubSectorName) {
+        this.setSubSubSectorName(subSubSectorName);
+        return this;
+    }
+
+    public void setSubSubSectorName(String subSubSectorName) {
+        this.subSubSectorName = subSubSectorName;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -182,7 +198,8 @@ public class SnaSectorCode implements Serializable {
             ", mainSectorTypeName='" + getMainSectorTypeName() + "'" +
             ", subSectorCode='" + getSubSectorCode() + "'" +
             ", subSectorName='" + getSubSectorName() + "'" +
-            ", subSubSectorCodeSubSubSectorName='" + getSubSubSectorCodeSubSubSectorName() + "'" +
+            ", subSubSectorCode='" + getSubSubSectorCode() + "'" +
+            ", subSubSectorName='" + getSubSubSectorName() + "'" +
             "}";
     }
 }

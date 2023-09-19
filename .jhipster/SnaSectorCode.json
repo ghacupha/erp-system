@@ -22,7 +22,11 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "subSubSectorCodeSubSubSectorName",
+      "fieldName": "subSubSectorCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "subSubSectorName",
       "fieldType": "String"
     }
   ],
