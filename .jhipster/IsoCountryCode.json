@@ -16,15 +16,6 @@
   "name": "IsoCountryCode",
   "pagination": "infinite-scroll",
   "readOnly": false,
-  "relationships": [
-    {
-      "otherEntityField": "description",
-      "otherEntityName": "placeholder",
-      "otherEntityRelationshipName": "isoCountryCode",
-      "ownerSide": true,
-      "relationshipName": "placeholder",
-      "relationshipType": "many-to-many"
-    }
-  ],
+  "relationships": [],
   "service": "serviceImpl"
 }

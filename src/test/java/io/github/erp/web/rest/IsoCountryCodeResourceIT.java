@@ -68,15 +68,6 @@ class IsoCountryCodeResourceIT {
     private static final String DEFAULT_COUNTRY_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_COUNTRY_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final String DEFAULT_CONTINENT_CODE = "AAAAAAAAAA";
-    private static final String UPDATED_CONTINENT_CODE = "BBBBBBBBBB";
-
-    private static final String DEFAULT_CONTINENT_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_CONTINENT_NAME = "BBBBBBBBBB";
-
-    private static final String DEFAULT_SUB_REGION = "AAAAAAAAAA";
-    private static final String UPDATED_SUB_REGION = "BBBBBBBBBB";
-
     private static final String ENTITY_API_URL = "/api/iso-country-codes";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/iso-country-codes";
@@ -121,10 +112,7 @@ class IsoCountryCodeResourceIT {
     public static IsoCountryCode createEntity(EntityManager em) {
         IsoCountryCode isoCountryCode = new IsoCountryCode()
             .countryCode(DEFAULT_COUNTRY_CODE)
-            .countryDescription(DEFAULT_COUNTRY_DESCRIPTION)
-            .continentCode(DEFAULT_CONTINENT_CODE)
-            .continentName(DEFAULT_CONTINENT_NAME)
-            .subRegion(DEFAULT_SUB_REGION);
+            .countryDescription(DEFAULT_COUNTRY_DESCRIPTION);
         return isoCountryCode;
     }
 
@@ -137,10 +125,7 @@ class IsoCountryCodeResourceIT {
     public static IsoCountryCode createUpdatedEntity(EntityManager em) {
         IsoCountryCode isoCountryCode = new IsoCountryCode()
             .countryCode(UPDATED_COUNTRY_CODE)
-            .countryDescription(UPDATED_COUNTRY_DESCRIPTION)
-            .continentCode(UPDATED_CONTINENT_CODE)
-            .continentName(UPDATED_CONTINENT_NAME)
-            .subRegion(UPDATED_SUB_REGION);
+            .countryDescription(UPDATED_COUNTRY_DESCRIPTION);
         return isoCountryCode;
     }
 
@@ -167,9 +152,6 @@ class IsoCountryCodeResourceIT {
         IsoCountryCode testIsoCountryCode = isoCountryCodeList.get(isoCountryCodeList.size() - 1);
         assertThat(testIsoCountryCode.getCountryCode()).isEqualTo(DEFAULT_COUNTRY_CODE);
         assertThat(testIsoCountryCode.getCountryDescription()).isEqualTo(DEFAULT_COUNTRY_DESCRIPTION);
-        assertThat(testIsoCountryCode.getContinentCode()).isEqualTo(DEFAULT_CONTINENT_CODE);
-        assertThat(testIsoCountryCode.getContinentName()).isEqualTo(DEFAULT_CONTINENT_NAME);
-        assertThat(testIsoCountryCode.getSubRegion()).isEqualTo(DEFAULT_SUB_REGION);
 
         // Validate the IsoCountryCode in Elasticsearch
         verify(mockIsoCountryCodeSearchRepository, times(1)).save(testIsoCountryCode);
@@ -212,10 +194,7 @@ class IsoCountryCodeResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(isoCountryCode.getId().intValue())))
             .andExpect(jsonPath("$.[*].countryCode").value(hasItem(DEFAULT_COUNTRY_CODE)))
-            .andExpect(jsonPath("$.[*].countryDescription").value(hasItem(DEFAULT_COUNTRY_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].continentCode").value(hasItem(DEFAULT_CONTINENT_CODE)))
-            .andExpect(jsonPath("$.[*].continentName").value(hasItem(DEFAULT_CONTINENT_NAME)))
-            .andExpect(jsonPath("$.[*].subRegion").value(hasItem(DEFAULT_SUB_REGION)));
+            .andExpect(jsonPath("$.[*].countryDescription").value(hasItem(DEFAULT_COUNTRY_DESCRIPTION)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -249,10 +228,7 @@ class IsoCountryCodeResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(isoCountryCode.getId().intValue()))
             .andExpect(jsonPath("$.countryCode").value(DEFAULT_COUNTRY_CODE))
-            .andExpect(jsonPath("$.countryDescription").value(DEFAULT_COUNTRY_DESCRIPTION))
-            .andExpect(jsonPath("$.continentCode").value(DEFAULT_CONTINENT_CODE))
-            .andExpect(jsonPath("$.continentName").value(DEFAULT_CONTINENT_NAME))
-            .andExpect(jsonPath("$.subRegion").value(DEFAULT_SUB_REGION));
+            .andExpect(jsonPath("$.countryDescription").value(DEFAULT_COUNTRY_DESCRIPTION));
     }
 
     @Test
@@ -431,240 +407,6 @@ class IsoCountryCodeResourceIT {
 
     @Test
     @Transactional
-    void getAllIsoCountryCodesByContinentCodeIsEqualToSomething() throws Exception {
-        // Initialize the database
-        isoCountryCodeRepository.saveAndFlush(isoCountryCode);
-
-        // Get all the isoCountryCodeList where continentCode equals to DEFAULT_CONTINENT_CODE
-        defaultIsoCountryCodeShouldBeFound("continentCode.equals=" + DEFAULT_CONTINENT_CODE);
-
-        // Get all the isoCountryCodeList where continentCode equals to UPDATED_CONTINENT_CODE
-        defaultIsoCountryCodeShouldNotBeFound("continentCode.equals=" + UPDATED_CONTINENT_CODE);
-    }
-
-    @Test
-    @Transactional
-    void getAllIsoCountryCodesByContinentCodeIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        isoCountryCodeRepository.saveAndFlush(isoCountryCode);
-
-        // Get all the isoCountryCodeList where continentCode not equals to DEFAULT_CONTINENT_CODE
-        defaultIsoCountryCodeShouldNotBeFound("continentCode.notEquals=" + DEFAULT_CONTINENT_CODE);
-
-        // Get all the isoCountryCodeList where continentCode not equals to UPDATED_CONTINENT_CODE
-        defaultIsoCountryCodeShouldBeFound("continentCode.notEquals=" + UPDATED_CONTINENT_CODE);
-    }
-
-    @Test
-    @Transactional
-    void getAllIsoCountryCodesByContinentCodeIsInShouldWork() throws Exception {
-        // Initialize the database
-        isoCountryCodeRepository.saveAndFlush(isoCountryCode);
-
-        // Get all the isoCountryCodeList where continentCode in DEFAULT_CONTINENT_CODE or UPDATED_CONTINENT_CODE
-        defaultIsoCountryCodeShouldBeFound("continentCode.in=" + DEFAULT_CONTINENT_CODE + "," + UPDATED_CONTINENT_CODE);
-
-        // Get all the isoCountryCodeList where continentCode equals to UPDATED_CONTINENT_CODE
-        defaultIsoCountryCodeShouldNotBeFound("continentCode.in=" + UPDATED_CONTINENT_CODE);
-    }
-
-    @Test
-    @Transactional
-    void getAllIsoCountryCodesByContinentCodeIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        isoCountryCodeRepository.saveAndFlush(isoCountryCode);
-
-        // Get all the isoCountryCodeList where continentCode is not null
-        defaultIsoCountryCodeShouldBeFound("continentCode.specified=true");
-
-        // Get all the isoCountryCodeList where continentCode is null
-        defaultIsoCountryCodeShouldNotBeFound("continentCode.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllIsoCountryCodesByContinentCodeContainsSomething() throws Exception {
-        // Initialize the database
-        isoCountryCodeRepository.saveAndFlush(isoCountryCode);
-
-        // Get all the isoCountryCodeList where continentCode contains DEFAULT_CONTINENT_CODE
-        defaultIsoCountryCodeShouldBeFound("continentCode.contains=" + DEFAULT_CONTINENT_CODE);
-
-        // Get all the isoCountryCodeList where continentCode contains UPDATED_CONTINENT_CODE
-        defaultIsoCountryCodeShouldNotBeFound("continentCode.contains=" + UPDATED_CONTINENT_CODE);
-    }
-
-    @Test
-    @Transactional
-    void getAllIsoCountryCodesByContinentCodeNotContainsSomething() throws Exception {
-        // Initialize the database
-        isoCountryCodeRepository.saveAndFlush(isoCountryCode);
-
-        // Get all the isoCountryCodeList where continentCode does not contain DEFAULT_CONTINENT_CODE
-        defaultIsoCountryCodeShouldNotBeFound("continentCode.doesNotContain=" + DEFAULT_CONTINENT_CODE);
-
-        // Get all the isoCountryCodeList where continentCode does not contain UPDATED_CONTINENT_CODE
-        defaultIsoCountryCodeShouldBeFound("continentCode.doesNotContain=" + UPDATED_CONTINENT_CODE);
-    }
-
-    @Test
-    @Transactional
-    void getAllIsoCountryCodesByContinentNameIsEqualToSomething() throws Exception {
-        // Initialize the database
-        isoCountryCodeRepository.saveAndFlush(isoCountryCode);
-
-        // Get all the isoCountryCodeList where continentName equals to DEFAULT_CONTINENT_NAME
-        defaultIsoCountryCodeShouldBeFound("continentName.equals=" + DEFAULT_CONTINENT_NAME);
-
-        // Get all the isoCountryCodeList where continentName equals to UPDATED_CONTINENT_NAME
-        defaultIsoCountryCodeShouldNotBeFound("continentName.equals=" + UPDATED_CONTINENT_NAME);
-    }
-
-    @Test
-    @Transactional
-    void getAllIsoCountryCodesByContinentNameIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        isoCountryCodeRepository.saveAndFlush(isoCountryCode);
-
-        // Get all the isoCountryCodeList where continentName not equals to DEFAULT_CONTINENT_NAME
-        defaultIsoCountryCodeShouldNotBeFound("continentName.notEquals=" + DEFAULT_CONTINENT_NAME);
-
-        // Get all the isoCountryCodeList where continentName not equals to UPDATED_CONTINENT_NAME
-        defaultIsoCountryCodeShouldBeFound("continentName.notEquals=" + UPDATED_CONTINENT_NAME);
-    }
-
-    @Test
-    @Transactional
-    void getAllIsoCountryCodesByContinentNameIsInShouldWork() throws Exception {
-        // Initialize the database
-        isoCountryCodeRepository.saveAndFlush(isoCountryCode);
-
-        // Get all the isoCountryCodeList where continentName in DEFAULT_CONTINENT_NAME or UPDATED_CONTINENT_NAME
-        defaultIsoCountryCodeShouldBeFound("continentName.in=" + DEFAULT_CONTINENT_NAME + "," + UPDATED_CONTINENT_NAME);
-
-        // Get all the isoCountryCodeList where continentName equals to UPDATED_CONTINENT_NAME
-        defaultIsoCountryCodeShouldNotBeFound("continentName.in=" + UPDATED_CONTINENT_NAME);
-    }
-
-    @Test
-    @Transactional
-    void getAllIsoCountryCodesByContinentNameIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        isoCountryCodeRepository.saveAndFlush(isoCountryCode);
-
-        // Get all the isoCountryCodeList where continentName is not null
-        defaultIsoCountryCodeShouldBeFound("continentName.specified=true");
-
-        // Get all the isoCountryCodeList where continentName is null
-        defaultIsoCountryCodeShouldNotBeFound("continentName.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllIsoCountryCodesByContinentNameContainsSomething() throws Exception {
-        // Initialize the database
-        isoCountryCodeRepository.saveAndFlush(isoCountryCode);
-
-        // Get all the isoCountryCodeList where continentName contains DEFAULT_CONTINENT_NAME
-        defaultIsoCountryCodeShouldBeFound("continentName.contains=" + DEFAULT_CONTINENT_NAME);
-
-        // Get all the isoCountryCodeList where continentName contains UPDATED_CONTINENT_NAME
-        defaultIsoCountryCodeShouldNotBeFound("continentName.contains=" + UPDATED_CONTINENT_NAME);
-    }
-
-    @Test
-    @Transactional
-    void getAllIsoCountryCodesByContinentNameNotContainsSomething() throws Exception {
-        // Initialize the database
-        isoCountryCodeRepository.saveAndFlush(isoCountryCode);
-
-        // Get all the isoCountryCodeList where continentName does not contain DEFAULT_CONTINENT_NAME
-        defaultIsoCountryCodeShouldNotBeFound("continentName.doesNotContain=" + DEFAULT_CONTINENT_NAME);
-
-        // Get all the isoCountryCodeList where continentName does not contain UPDATED_CONTINENT_NAME
-        defaultIsoCountryCodeShouldBeFound("continentName.doesNotContain=" + UPDATED_CONTINENT_NAME);
-    }
-
-    @Test
-    @Transactional
-    void getAllIsoCountryCodesBySubRegionIsEqualToSomething() throws Exception {
-        // Initialize the database
-        isoCountryCodeRepository.saveAndFlush(isoCountryCode);
-
-        // Get all the isoCountryCodeList where subRegion equals to DEFAULT_SUB_REGION
-        defaultIsoCountryCodeShouldBeFound("subRegion.equals=" + DEFAULT_SUB_REGION);
-
-        // Get all the isoCountryCodeList where subRegion equals to UPDATED_SUB_REGION
-        defaultIsoCountryCodeShouldNotBeFound("subRegion.equals=" + UPDATED_SUB_REGION);
-    }
-
-    @Test
-    @Transactional
-    void getAllIsoCountryCodesBySubRegionIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        isoCountryCodeRepository.saveAndFlush(isoCountryCode);
-
-        // Get all the isoCountryCodeList where subRegion not equals to DEFAULT_SUB_REGION
-        defaultIsoCountryCodeShouldNotBeFound("subRegion.notEquals=" + DEFAULT_SUB_REGION);
-
-        // Get all the isoCountryCodeList where subRegion not equals to UPDATED_SUB_REGION
-        defaultIsoCountryCodeShouldBeFound("subRegion.notEquals=" + UPDATED_SUB_REGION);
-    }
-
-    @Test
-    @Transactional
-    void getAllIsoCountryCodesBySubRegionIsInShouldWork() throws Exception {
-        // Initialize the database
-        isoCountryCodeRepository.saveAndFlush(isoCountryCode);
-
-        // Get all the isoCountryCodeList where subRegion in DEFAULT_SUB_REGION or UPDATED_SUB_REGION
-        defaultIsoCountryCodeShouldBeFound("subRegion.in=" + DEFAULT_SUB_REGION + "," + UPDATED_SUB_REGION);
-
-        // Get all the isoCountryCodeList where subRegion equals to UPDATED_SUB_REGION
-        defaultIsoCountryCodeShouldNotBeFound("subRegion.in=" + UPDATED_SUB_REGION);
-    }
-
-    @Test
-    @Transactional
-    void getAllIsoCountryCodesBySubRegionIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        isoCountryCodeRepository.saveAndFlush(isoCountryCode);
-
-        // Get all the isoCountryCodeList where subRegion is not null
-        defaultIsoCountryCodeShouldBeFound("subRegion.specified=true");
-
-        // Get all the isoCountryCodeList where subRegion is null
-        defaultIsoCountryCodeShouldNotBeFound("subRegion.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllIsoCountryCodesBySubRegionContainsSomething() throws Exception {
-        // Initialize the database
-        isoCountryCodeRepository.saveAndFlush(isoCountryCode);
-
-        // Get all the isoCountryCodeList where subRegion contains DEFAULT_SUB_REGION
-        defaultIsoCountryCodeShouldBeFound("subRegion.contains=" + DEFAULT_SUB_REGION);
-
-        // Get all the isoCountryCodeList where subRegion contains UPDATED_SUB_REGION
-        defaultIsoCountryCodeShouldNotBeFound("subRegion.contains=" + UPDATED_SUB_REGION);
-    }
-
-    @Test
-    @Transactional
-    void getAllIsoCountryCodesBySubRegionNotContainsSomething() throws Exception {
-        // Initialize the database
-        isoCountryCodeRepository.saveAndFlush(isoCountryCode);
-
-        // Get all the isoCountryCodeList where subRegion does not contain DEFAULT_SUB_REGION
-        defaultIsoCountryCodeShouldNotBeFound("subRegion.doesNotContain=" + DEFAULT_SUB_REGION);
-
-        // Get all the isoCountryCodeList where subRegion does not contain UPDATED_SUB_REGION
-        defaultIsoCountryCodeShouldBeFound("subRegion.doesNotContain=" + UPDATED_SUB_REGION);
-    }
-
-    @Test
-    @Transactional
     void getAllIsoCountryCodesByPlaceholderIsEqualToSomething() throws Exception {
         // Initialize the database
         isoCountryCodeRepository.saveAndFlush(isoCountryCode);
@@ -699,10 +441,7 @@ class IsoCountryCodeResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(isoCountryCode.getId().intValue())))
             .andExpect(jsonPath("$.[*].countryCode").value(hasItem(DEFAULT_COUNTRY_CODE)))
-            .andExpect(jsonPath("$.[*].countryDescription").value(hasItem(DEFAULT_COUNTRY_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].continentCode").value(hasItem(DEFAULT_CONTINENT_CODE)))
-            .andExpect(jsonPath("$.[*].continentName").value(hasItem(DEFAULT_CONTINENT_NAME)))
-            .andExpect(jsonPath("$.[*].subRegion").value(hasItem(DEFAULT_SUB_REGION)));
+            .andExpect(jsonPath("$.[*].countryDescription").value(hasItem(DEFAULT_COUNTRY_DESCRIPTION)));
 
         // Check, that the count call also returns 1
         restIsoCountryCodeMockMvc
@@ -750,12 +489,7 @@ class IsoCountryCodeResourceIT {
         IsoCountryCode updatedIsoCountryCode = isoCountryCodeRepository.findById(isoCountryCode.getId()).get();
         // Disconnect from session so that the updates on updatedIsoCountryCode are not directly saved in db
         em.detach(updatedIsoCountryCode);
-        updatedIsoCountryCode
-            .countryCode(UPDATED_COUNTRY_CODE)
-            .countryDescription(UPDATED_COUNTRY_DESCRIPTION)
-            .continentCode(UPDATED_CONTINENT_CODE)
-            .continentName(UPDATED_CONTINENT_NAME)
-            .subRegion(UPDATED_SUB_REGION);
+        updatedIsoCountryCode.countryCode(UPDATED_COUNTRY_CODE).countryDescription(UPDATED_COUNTRY_DESCRIPTION);
         IsoCountryCodeDTO isoCountryCodeDTO = isoCountryCodeMapper.toDto(updatedIsoCountryCode);
 
         restIsoCountryCodeMockMvc
@@ -772,9 +506,6 @@ class IsoCountryCodeResourceIT {
         IsoCountryCode testIsoCountryCode = isoCountryCodeList.get(isoCountryCodeList.size() - 1);
         assertThat(testIsoCountryCode.getCountryCode()).isEqualTo(UPDATED_COUNTRY_CODE);
         assertThat(testIsoCountryCode.getCountryDescription()).isEqualTo(UPDATED_COUNTRY_DESCRIPTION);
-        assertThat(testIsoCountryCode.getContinentCode()).isEqualTo(UPDATED_CONTINENT_CODE);
-        assertThat(testIsoCountryCode.getContinentName()).isEqualTo(UPDATED_CONTINENT_NAME);
-        assertThat(testIsoCountryCode.getSubRegion()).isEqualTo(UPDATED_SUB_REGION);
 
         // Validate the IsoCountryCode in Elasticsearch
         verify(mockIsoCountryCodeSearchRepository).save(testIsoCountryCode);
@@ -884,9 +615,6 @@ class IsoCountryCodeResourceIT {
         IsoCountryCode testIsoCountryCode = isoCountryCodeList.get(isoCountryCodeList.size() - 1);
         assertThat(testIsoCountryCode.getCountryCode()).isEqualTo(UPDATED_COUNTRY_CODE);
         assertThat(testIsoCountryCode.getCountryDescription()).isEqualTo(DEFAULT_COUNTRY_DESCRIPTION);
-        assertThat(testIsoCountryCode.getContinentCode()).isEqualTo(DEFAULT_CONTINENT_CODE);
-        assertThat(testIsoCountryCode.getContinentName()).isEqualTo(DEFAULT_CONTINENT_NAME);
-        assertThat(testIsoCountryCode.getSubRegion()).isEqualTo(DEFAULT_SUB_REGION);
     }
 
     @Test
@@ -901,12 +629,7 @@ class IsoCountryCodeResourceIT {
         IsoCountryCode partialUpdatedIsoCountryCode = new IsoCountryCode();
         partialUpdatedIsoCountryCode.setId(isoCountryCode.getId());
 
-        partialUpdatedIsoCountryCode
-            .countryCode(UPDATED_COUNTRY_CODE)
-            .countryDescription(UPDATED_COUNTRY_DESCRIPTION)
-            .continentCode(UPDATED_CONTINENT_CODE)
-            .continentName(UPDATED_CONTINENT_NAME)
-            .subRegion(UPDATED_SUB_REGION);
+        partialUpdatedIsoCountryCode.countryCode(UPDATED_COUNTRY_CODE).countryDescription(UPDATED_COUNTRY_DESCRIPTION);
 
         restIsoCountryCodeMockMvc
             .perform(
@@ -922,9 +645,6 @@ class IsoCountryCodeResourceIT {
         IsoCountryCode testIsoCountryCode = isoCountryCodeList.get(isoCountryCodeList.size() - 1);
         assertThat(testIsoCountryCode.getCountryCode()).isEqualTo(UPDATED_COUNTRY_CODE);
         assertThat(testIsoCountryCode.getCountryDescription()).isEqualTo(UPDATED_COUNTRY_DESCRIPTION);
-        assertThat(testIsoCountryCode.getContinentCode()).isEqualTo(UPDATED_CONTINENT_CODE);
-        assertThat(testIsoCountryCode.getContinentName()).isEqualTo(UPDATED_CONTINENT_NAME);
-        assertThat(testIsoCountryCode.getSubRegion()).isEqualTo(UPDATED_SUB_REGION);
     }
 
     @Test
@@ -1042,9 +762,6 @@ class IsoCountryCodeResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(isoCountryCode.getId().intValue())))
             .andExpect(jsonPath("$.[*].countryCode").value(hasItem(DEFAULT_COUNTRY_CODE)))
-            .andExpect(jsonPath("$.[*].countryDescription").value(hasItem(DEFAULT_COUNTRY_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].continentCode").value(hasItem(DEFAULT_CONTINENT_CODE)))
-            .andExpect(jsonPath("$.[*].continentName").value(hasItem(DEFAULT_CONTINENT_NAME)))
-            .andExpect(jsonPath("$.[*].subRegion").value(hasItem(DEFAULT_SUB_REGION)));
+            .andExpect(jsonPath("$.[*].countryDescription").value(hasItem(DEFAULT_COUNTRY_DESCRIPTION)));
     }
 }

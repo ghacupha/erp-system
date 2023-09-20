@@ -34,12 +34,6 @@ public class IsoCountryCodeDTO implements Serializable {
 
     private String countryDescription;
 
-    private String continentCode;
-
-    private String continentName;
-
-    private String subRegion;
-
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     public Long getId() {
@@ -64,30 +58,6 @@ public class IsoCountryCodeDTO implements Serializable {
 
     public void setCountryDescription(String countryDescription) {
         this.countryDescription = countryDescription;
-    }
-
-    public String getContinentCode() {
-        return continentCode;
-    }
-
-    public void setContinentCode(String continentCode) {
-        this.continentCode = continentCode;
-    }
-
-    public String getContinentName() {
-        return continentName;
-    }
-
-    public void setContinentName(String continentName) {
-        this.continentName = continentName;
-    }
-
-    public String getSubRegion() {
-        return subRegion;
-    }
-
-    public void setSubRegion(String subRegion) {
-        this.subRegion = subRegion;
     }
 
     public Set<PlaceholderDTO> getPlaceholders() {
@@ -126,9 +96,6 @@ public class IsoCountryCodeDTO implements Serializable {
             "id=" + getId() +
             ", countryCode='" + getCountryCode() + "'" +
             ", countryDescription='" + getCountryDescription() + "'" +
-            ", continentCode='" + getContinentCode() + "'" +
-            ", continentName='" + getContinentName() + "'" +
-            ", subRegion='" + getSubRegion() + "'" +
             ", placeholders=" + getPlaceholders() +
             "}";
     }

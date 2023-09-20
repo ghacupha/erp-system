@@ -36,6 +36,7 @@ public class BankBranchCodeDTO implements Serializable {
     @NotNull
     private String bankName;
 
+    @NotNull
     private String branchCode;
 
     private String branchName;

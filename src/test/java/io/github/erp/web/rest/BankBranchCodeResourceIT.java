@@ -221,6 +221,26 @@ class BankBranchCodeResourceIT {
 
     @Test
     @Transactional
+    void checkBranchCodeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = bankBranchCodeRepository.findAll().size();
+        // set the field null
+        bankBranchCode.setBranchCode(null);
+
+        // Create the BankBranchCode, which fails.
+        BankBranchCodeDTO bankBranchCodeDTO = bankBranchCodeMapper.toDto(bankBranchCode);
+
+        restBankBranchCodeMockMvc
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(bankBranchCodeDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<BankBranchCode> bankBranchCodeList = bankBranchCodeRepository.findAll();
+        assertThat(bankBranchCodeList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllBankBranchCodes() throws Exception {
         // Initialize the database
         bankBranchCodeRepository.saveAndFlush(bankBranchCode);

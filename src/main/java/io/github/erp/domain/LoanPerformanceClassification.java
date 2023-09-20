@@ -47,7 +47,7 @@ public class LoanPerformanceClassification implements Serializable {
     private String loanPerformanceClassificationCode;
 
     @NotNull
-    @Column(name = "loan_performance_classification_type", nullable = false, unique = true)
+    @Column(name = "loan_performance_classification_type", nullable = false)
     private String loanPerformanceClassificationType;
 
     @Lob

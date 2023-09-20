@@ -53,11 +53,11 @@ public class CountyCode implements Serializable {
     private String countyName;
 
     @NotNull
-    @Column(name = "sub_county_code", nullable = false, unique = true)
+    @Column(name = "sub_county_code", nullable = false)
     private Integer subCountyCode;
 
     @NotNull
-    @Column(name = "sub_county_name", nullable = false, unique = true)
+    @Column(name = "sub_county_name", nullable = false)
     private String subCountyName;
 
     @ManyToMany

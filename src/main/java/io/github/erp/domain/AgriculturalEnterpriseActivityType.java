@@ -47,7 +47,7 @@ public class AgriculturalEnterpriseActivityType implements Serializable {
     private String agriculturalEnterpriseActivityTypeCode;
 
     @NotNull
-    @Column(name = "agricultural_enterprise_activity_type", nullable = false, unique = true)
+    @Column(name = "agricultural_enterprise_activity_type", nullable = false)
     private String agriculturalEnterpriseActivityType;
 
     @Lob

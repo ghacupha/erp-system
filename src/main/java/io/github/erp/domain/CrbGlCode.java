@@ -46,7 +46,7 @@ public class CrbGlCode implements Serializable {
     private String glCode;
 
     @NotNull
-    @Column(name = "gl_description", nullable = false, unique = true)
+    @Column(name = "gl_description", nullable = false)
     private String glDescription;
 
     @NotNull
@@ -54,7 +54,7 @@ public class CrbGlCode implements Serializable {
     private String glType;
 
     @NotNull
-    @Column(name = "institution_category", nullable = false, unique = true)
+    @Column(name = "institution_category", nullable = false)
     private String institutionCategory;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

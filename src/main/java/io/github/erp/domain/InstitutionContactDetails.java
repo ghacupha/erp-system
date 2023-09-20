@@ -42,11 +42,11 @@ public class InstitutionContactDetails implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "entity_id", nullable = false, unique = true)
+    @Column(name = "entity_id", nullable = false)
     private String entityId;
 
     @NotNull
-    @Column(name = "entity_name", nullable = false, unique = true)
+    @Column(name = "entity_name", nullable = false)
     private String entityName;
 
     @NotNull

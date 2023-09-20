@@ -47,7 +47,7 @@ public class CrbReportRequestReasons implements Serializable {
     private String creditReportRequestReasonTypeCode;
 
     @NotNull
-    @Column(name = "credit_report_request_reason_type", nullable = false, unique = true)
+    @Column(name = "credit_report_request_reason_type", nullable = false)
     private String creditReportRequestReasonType;
 
     @Lob

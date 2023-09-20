@@ -47,7 +47,7 @@ public class StaffCurrentEmploymentStatus implements Serializable {
     private String staffCurrentEmploymentStatusTypeCode;
 
     @NotNull
-    @Column(name = "staff_current_employment_status_type", nullable = false, unique = true)
+    @Column(name = "staff_current_employment_status_type", nullable = false)
     private String staffCurrentEmploymentStatusType;
 
     @Lob

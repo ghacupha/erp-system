@@ -47,7 +47,7 @@ public class CrbSubmittingInstitutionCategory implements Serializable {
     private String submittingInstitutionCategoryTypeCode;
 
     @NotNull
-    @Column(name = "submitting_institution_category_type", nullable = false, unique = true)
+    @Column(name = "submitting_institution_category_type", nullable = false)
     private String submittingInstitutionCategoryType;
 
     @Lob
