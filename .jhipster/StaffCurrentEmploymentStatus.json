@@ -8,7 +8,7 @@
     {
       "fieldName": "staffCurrentEmploymentStatusType",
       "fieldType": "String",
-      "fieldValidateRules": ["required", "unique"]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "staffCurrentEmploymentStatusTypeDetails",

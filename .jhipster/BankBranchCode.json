@@ -14,7 +14,7 @@
     {
       "fieldName": "branchCode",
       "fieldType": "String",
-      "fieldValidateRules": ["unique"]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "branchName",

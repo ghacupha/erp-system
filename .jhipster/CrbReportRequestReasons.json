@@ -8,7 +8,7 @@
     {
       "fieldName": "creditReportRequestReasonType",
       "fieldType": "String",
-      "fieldValidateRules": ["required", "unique"]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "creditReportRequestDetails",

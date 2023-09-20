@@ -8,7 +8,7 @@
     {
       "fieldName": "glDescription",
       "fieldType": "String",
-      "fieldValidateRules": ["required", "unique"]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "glType",
@@ -18,7 +18,7 @@
     {
       "fieldName": "institutionCategory",
       "fieldType": "String",
-      "fieldValidateRules": ["required", "unique"]
+      "fieldValidateRules": ["required"]
     }
   ],
   "relationships": [],
