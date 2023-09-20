@@ -96,15 +96,11 @@ public class IsoCountryCodeServiceImpl implements IsoCountryCodeService {
         return isoCountryCodeRepository.findAll(pageable).map(isoCountryCodeMapper::toDto);
     }
 
-    public Page<IsoCountryCodeDTO> findAllWithEagerRelationships(Pageable pageable) {
-        return isoCountryCodeRepository.findAllWithEagerRelationships(pageable).map(isoCountryCodeMapper::toDto);
-    }
-
     @Override
     @Transactional(readOnly = true)
     public Optional<IsoCountryCodeDTO> findOne(Long id) {
         log.debug("Request to get IsoCountryCode : {}", id);
-        return isoCountryCodeRepository.findOneWithEagerRelationships(id).map(isoCountryCodeMapper::toDto);
+        return isoCountryCodeRepository.findById(id).map(isoCountryCodeMapper::toDto);
     }
 
     @Override

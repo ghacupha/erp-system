@@ -52,14 +52,6 @@ public interface IsoCountryCodeService {
     Page<IsoCountryCodeDTO> findAll(Pageable pageable);
 
     /**
-     * Get all the isoCountryCodes with eager load of many-to-many relationships.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    Page<IsoCountryCodeDTO> findAllWithEagerRelationships(Pageable pageable);
-
-    /**
      * Get the "id" isoCountryCode.
      *
      * @param id the id of the entity.

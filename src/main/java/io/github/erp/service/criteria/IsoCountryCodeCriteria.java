@@ -48,7 +48,11 @@ public class IsoCountryCodeCriteria implements Serializable, Criteria {
 
     private StringFilter countryDescription;
 
-    private LongFilter placeholderId;
+    private StringFilter continentCode;
+
+    private StringFilter continentName;
+
+    private StringFilter subRegion;
 
     private Boolean distinct;
 
@@ -58,7 +62,9 @@ public class IsoCountryCodeCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.countryCode = other.countryCode == null ? null : other.countryCode.copy();
         this.countryDescription = other.countryDescription == null ? null : other.countryDescription.copy();
-        this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.continentCode = other.continentCode == null ? null : other.continentCode.copy();
+        this.continentName = other.continentName == null ? null : other.continentName.copy();
+        this.subRegion = other.subRegion == null ? null : other.subRegion.copy();
         this.distinct = other.distinct;
     }
 
@@ -112,19 +118,49 @@ public class IsoCountryCodeCriteria implements Serializable, Criteria {
         this.countryDescription = countryDescription;
     }
 
-    public LongFilter getPlaceholderId() {
-        return placeholderId;
+    public StringFilter getContinentCode() {
+        return continentCode;
     }
 
-    public LongFilter placeholderId() {
-        if (placeholderId == null) {
-            placeholderId = new LongFilter();
+    public StringFilter continentCode() {
+        if (continentCode == null) {
+            continentCode = new StringFilter();
         }
-        return placeholderId;
+        return continentCode;
     }
 
-    public void setPlaceholderId(LongFilter placeholderId) {
-        this.placeholderId = placeholderId;
+    public void setContinentCode(StringFilter continentCode) {
+        this.continentCode = continentCode;
+    }
+
+    public StringFilter getContinentName() {
+        return continentName;
+    }
+
+    public StringFilter continentName() {
+        if (continentName == null) {
+            continentName = new StringFilter();
+        }
+        return continentName;
+    }
+
+    public void setContinentName(StringFilter continentName) {
+        this.continentName = continentName;
+    }
+
+    public StringFilter getSubRegion() {
+        return subRegion;
+    }
+
+    public StringFilter subRegion() {
+        if (subRegion == null) {
+            subRegion = new StringFilter();
+        }
+        return subRegion;
+    }
+
+    public void setSubRegion(StringFilter subRegion) {
+        this.subRegion = subRegion;
     }
 
     public Boolean getDistinct() {
@@ -148,14 +184,16 @@ public class IsoCountryCodeCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(countryCode, that.countryCode) &&
             Objects.equals(countryDescription, that.countryDescription) &&
-            Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(continentCode, that.continentCode) &&
+            Objects.equals(continentName, that.continentName) &&
+            Objects.equals(subRegion, that.subRegion) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, countryCode, countryDescription, placeholderId, distinct);
+        return Objects.hash(id, countryCode, countryDescription, continentCode, continentName, subRegion, distinct);
     }
 
     // prettier-ignore
@@ -165,7 +203,9 @@ public class IsoCountryCodeCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (countryCode != null ? "countryCode=" + countryCode + ", " : "") +
             (countryDescription != null ? "countryDescription=" + countryDescription + ", " : "") +
-            (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (continentCode != null ? "continentCode=" + continentCode + ", " : "") +
+            (continentName != null ? "continentName=" + continentName + ", " : "") +
+            (subRegion != null ? "subRegion=" + subRegion + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

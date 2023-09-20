@@ -25,11 +25,5 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link IsoCountryCode} and its DTO {@link IsoCountryCodeDTO}.
  */
-@Mapper(componentModel = "spring", uses = { PlaceholderMapper.class })
-public interface IsoCountryCodeMapper extends EntityMapper<IsoCountryCodeDTO, IsoCountryCode> {
-    @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
-    IsoCountryCodeDTO toDto(IsoCountryCode s);
-
-    @Mapping(target = "removePlaceholder", ignore = true)
-    IsoCountryCode toEntity(IsoCountryCodeDTO isoCountryCodeDTO);
-}
+@Mapper(componentModel = "spring", uses = {})
+public interface IsoCountryCodeMapper extends EntityMapper<IsoCountryCodeDTO, IsoCountryCode> {}

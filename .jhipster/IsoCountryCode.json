@@ -9,6 +9,18 @@
     {
       "fieldName": "countryDescription",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "continentCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "continentName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "subRegion",
+      "fieldType": "String"
     }
   ],
   "incrementalChangelog": false,
