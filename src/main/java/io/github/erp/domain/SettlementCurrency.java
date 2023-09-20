@@ -46,7 +46,7 @@ public class SettlementCurrency implements Serializable {
 
     @NotNull
     @Size(min = 3, max = 3)
-    @Column(name = "iso_4217_currency_code", length = 3, nullable = false, unique = true)
+    @Column(name = "iso_4217_currency_code", length = 3, nullable = false)
     private String iso4217CurrencyCode;
 
     @NotNull

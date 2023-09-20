@@ -47,7 +47,7 @@ public class CustomerComplaintStatusType implements Serializable {
     private String customerComplaintStatusTypeCode;
 
     @NotNull
-    @Column(name = "customer_complaint_status_type", nullable = false, unique = true)
+    @Column(name = "customer_complaint_status_type", nullable = false)
     private String customerComplaintStatusType;
 
     @Lob

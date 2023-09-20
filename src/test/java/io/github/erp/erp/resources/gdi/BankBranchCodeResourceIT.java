@@ -17,6 +17,7 @@ package io.github.erp.erp.resources.gdi;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.BankBranchCode;
 import io.github.erp.domain.Placeholder;
@@ -26,6 +27,7 @@ import io.github.erp.repository.search.BankBranchCodeSearchRepository;
 import io.github.erp.service.BankBranchCodeService;
 import io.github.erp.service.dto.BankBranchCodeDTO;
 import io.github.erp.service.mapper.BankBranchCodeMapper;
+import io.github.erp.web.rest.BankBranchCodeResource;
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,7 +57,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the BankBranchCodeResource REST controller.
+ * Integration tests for the {@link BankBranchCodeResource} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -78,9 +80,9 @@ public class BankBranchCodeResourceIT {
     private static final String DEFAULT_NOTES = "AAAAAAAAAA";
     private static final String UPDATED_NOTES = "BBBBBBBBBB";
 
-    private static final String ENTITY_API_URL = "/api/granular-data/bank-branch-codes";
+    private static final String ENTITY_API_URL = "/api/bank-branch-codes";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/granular-data/_search/bank-branch-codes";
+    private static final String ENTITY_SEARCH_API_URL = "/api/_search/bank-branch-codes";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
@@ -206,6 +208,26 @@ public class BankBranchCodeResourceIT {
         int databaseSizeBeforeTest = bankBranchCodeRepository.findAll().size();
         // set the field null
         bankBranchCode.setBankName(null);
+
+        // Create the BankBranchCode, which fails.
+        BankBranchCodeDTO bankBranchCodeDTO = bankBranchCodeMapper.toDto(bankBranchCode);
+
+        restBankBranchCodeMockMvc
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(bankBranchCodeDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<BankBranchCode> bankBranchCodeList = bankBranchCodeRepository.findAll();
+        assertThat(bankBranchCodeList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkBranchCodeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = bankBranchCodeRepository.findAll().size();
+        // set the field null
+        bankBranchCode.setBranchCode(null);
 
         // Create the BankBranchCode, which fails.
         BankBranchCodeDTO bankBranchCodeDTO = bankBranchCodeMapper.toDto(bankBranchCode);

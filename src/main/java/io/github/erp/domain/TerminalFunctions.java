@@ -23,7 +23,6 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Type;
 
 /**
  * A TerminalFunctions.
@@ -49,11 +48,6 @@ public class TerminalFunctions implements Serializable {
     @NotNull
     @Column(name = "terminal_functionality", nullable = false)
     private String terminalFunctionality;
-
-    @Lob
-    @Type(type = "org.hibernate.type.TextType")
-    @Column(name = "terminal_functionality_description")
-    private String terminalFunctionalityDescription;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -96,19 +90,6 @@ public class TerminalFunctions implements Serializable {
         this.terminalFunctionality = terminalFunctionality;
     }
 
-    public String getTerminalFunctionalityDescription() {
-        return this.terminalFunctionalityDescription;
-    }
-
-    public TerminalFunctions terminalFunctionalityDescription(String terminalFunctionalityDescription) {
-        this.setTerminalFunctionalityDescription(terminalFunctionalityDescription);
-        return this;
-    }
-
-    public void setTerminalFunctionalityDescription(String terminalFunctionalityDescription) {
-        this.terminalFunctionalityDescription = terminalFunctionalityDescription;
-    }
-
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -135,7 +116,6 @@ public class TerminalFunctions implements Serializable {
             "id=" + getId() +
             ", functionCode='" + getFunctionCode() + "'" +
             ", terminalFunctionality='" + getTerminalFunctionality() + "'" +
-            ", terminalFunctionalityDescription='" + getTerminalFunctionalityDescription() + "'" +
             "}";
     }
 }

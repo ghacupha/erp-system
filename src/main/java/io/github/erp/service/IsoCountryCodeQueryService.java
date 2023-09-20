@@ -123,15 +123,6 @@ public class IsoCountryCodeQueryService extends QueryService<IsoCountryCode> {
                 specification =
                     specification.and(buildStringSpecification(criteria.getCountryDescription(), IsoCountryCode_.countryDescription));
             }
-            if (criteria.getContinentCode() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getContinentCode(), IsoCountryCode_.continentCode));
-            }
-            if (criteria.getContinentName() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getContinentName(), IsoCountryCode_.continentName));
-            }
-            if (criteria.getSubRegion() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getSubRegion(), IsoCountryCode_.subRegion));
-            }
             if (criteria.getPlaceholderId() != null) {
                 specification =
                     specification.and(

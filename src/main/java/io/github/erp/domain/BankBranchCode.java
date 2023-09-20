@@ -51,7 +51,8 @@ public class BankBranchCode implements Serializable {
     @Column(name = "bank_name", nullable = false)
     private String bankName;
 
-    @Column(name = "branch_code", unique = true)
+    @NotNull
+    @Column(name = "branch_code", nullable = false)
     private String branchCode;
 
     @Column(name = "branch_name")

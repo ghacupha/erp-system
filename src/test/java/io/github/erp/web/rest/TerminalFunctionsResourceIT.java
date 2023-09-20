@@ -49,7 +49,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Base64Utils;
 
 /**
  * Integration tests for the {@link TerminalFunctionsResource} REST controller.
@@ -65,9 +64,6 @@ class TerminalFunctionsResourceIT {
 
     private static final String DEFAULT_TERMINAL_FUNCTIONALITY = "AAAAAAAAAA";
     private static final String UPDATED_TERMINAL_FUNCTIONALITY = "BBBBBBBBBB";
-
-    private static final String DEFAULT_TERMINAL_FUNCTIONALITY_DESCRIPTION = "AAAAAAAAAA";
-    private static final String UPDATED_TERMINAL_FUNCTIONALITY_DESCRIPTION = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/terminal-functions";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -107,8 +103,7 @@ class TerminalFunctionsResourceIT {
     public static TerminalFunctions createEntity(EntityManager em) {
         TerminalFunctions terminalFunctions = new TerminalFunctions()
             .functionCode(DEFAULT_FUNCTION_CODE)
-            .terminalFunctionality(DEFAULT_TERMINAL_FUNCTIONALITY)
-            .terminalFunctionalityDescription(DEFAULT_TERMINAL_FUNCTIONALITY_DESCRIPTION);
+            .terminalFunctionality(DEFAULT_TERMINAL_FUNCTIONALITY);
         return terminalFunctions;
     }
 
@@ -121,8 +116,7 @@ class TerminalFunctionsResourceIT {
     public static TerminalFunctions createUpdatedEntity(EntityManager em) {
         TerminalFunctions terminalFunctions = new TerminalFunctions()
             .functionCode(UPDATED_FUNCTION_CODE)
-            .terminalFunctionality(UPDATED_TERMINAL_FUNCTIONALITY)
-            .terminalFunctionalityDescription(UPDATED_TERMINAL_FUNCTIONALITY_DESCRIPTION);
+            .terminalFunctionality(UPDATED_TERMINAL_FUNCTIONALITY);
         return terminalFunctions;
     }
 
@@ -151,7 +145,6 @@ class TerminalFunctionsResourceIT {
         TerminalFunctions testTerminalFunctions = terminalFunctionsList.get(terminalFunctionsList.size() - 1);
         assertThat(testTerminalFunctions.getFunctionCode()).isEqualTo(DEFAULT_FUNCTION_CODE);
         assertThat(testTerminalFunctions.getTerminalFunctionality()).isEqualTo(DEFAULT_TERMINAL_FUNCTIONALITY);
-        assertThat(testTerminalFunctions.getTerminalFunctionalityDescription()).isEqualTo(DEFAULT_TERMINAL_FUNCTIONALITY_DESCRIPTION);
 
         // Validate the TerminalFunctions in Elasticsearch
         verify(mockTerminalFunctionsSearchRepository, times(1)).save(testTerminalFunctions);
@@ -240,10 +233,7 @@ class TerminalFunctionsResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(terminalFunctions.getId().intValue())))
             .andExpect(jsonPath("$.[*].functionCode").value(hasItem(DEFAULT_FUNCTION_CODE)))
-            .andExpect(jsonPath("$.[*].terminalFunctionality").value(hasItem(DEFAULT_TERMINAL_FUNCTIONALITY)))
-            .andExpect(
-                jsonPath("$.[*].terminalFunctionalityDescription").value(hasItem(DEFAULT_TERMINAL_FUNCTIONALITY_DESCRIPTION.toString()))
-            );
+            .andExpect(jsonPath("$.[*].terminalFunctionality").value(hasItem(DEFAULT_TERMINAL_FUNCTIONALITY)));
     }
 
     @Test
@@ -259,8 +249,7 @@ class TerminalFunctionsResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(terminalFunctions.getId().intValue()))
             .andExpect(jsonPath("$.functionCode").value(DEFAULT_FUNCTION_CODE))
-            .andExpect(jsonPath("$.terminalFunctionality").value(DEFAULT_TERMINAL_FUNCTIONALITY))
-            .andExpect(jsonPath("$.terminalFunctionalityDescription").value(DEFAULT_TERMINAL_FUNCTIONALITY_DESCRIPTION.toString()));
+            .andExpect(jsonPath("$.terminalFunctionality").value(DEFAULT_TERMINAL_FUNCTIONALITY));
     }
 
     @Test
@@ -449,10 +438,7 @@ class TerminalFunctionsResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(terminalFunctions.getId().intValue())))
             .andExpect(jsonPath("$.[*].functionCode").value(hasItem(DEFAULT_FUNCTION_CODE)))
-            .andExpect(jsonPath("$.[*].terminalFunctionality").value(hasItem(DEFAULT_TERMINAL_FUNCTIONALITY)))
-            .andExpect(
-                jsonPath("$.[*].terminalFunctionalityDescription").value(hasItem(DEFAULT_TERMINAL_FUNCTIONALITY_DESCRIPTION.toString()))
-            );
+            .andExpect(jsonPath("$.[*].terminalFunctionality").value(hasItem(DEFAULT_TERMINAL_FUNCTIONALITY)));
 
         // Check, that the count call also returns 1
         restTerminalFunctionsMockMvc
@@ -500,10 +486,7 @@ class TerminalFunctionsResourceIT {
         TerminalFunctions updatedTerminalFunctions = terminalFunctionsRepository.findById(terminalFunctions.getId()).get();
         // Disconnect from session so that the updates on updatedTerminalFunctions are not directly saved in db
         em.detach(updatedTerminalFunctions);
-        updatedTerminalFunctions
-            .functionCode(UPDATED_FUNCTION_CODE)
-            .terminalFunctionality(UPDATED_TERMINAL_FUNCTIONALITY)
-            .terminalFunctionalityDescription(UPDATED_TERMINAL_FUNCTIONALITY_DESCRIPTION);
+        updatedTerminalFunctions.functionCode(UPDATED_FUNCTION_CODE).terminalFunctionality(UPDATED_TERMINAL_FUNCTIONALITY);
         TerminalFunctionsDTO terminalFunctionsDTO = terminalFunctionsMapper.toDto(updatedTerminalFunctions);
 
         restTerminalFunctionsMockMvc
@@ -520,7 +503,6 @@ class TerminalFunctionsResourceIT {
         TerminalFunctions testTerminalFunctions = terminalFunctionsList.get(terminalFunctionsList.size() - 1);
         assertThat(testTerminalFunctions.getFunctionCode()).isEqualTo(UPDATED_FUNCTION_CODE);
         assertThat(testTerminalFunctions.getTerminalFunctionality()).isEqualTo(UPDATED_TERMINAL_FUNCTIONALITY);
-        assertThat(testTerminalFunctions.getTerminalFunctionalityDescription()).isEqualTo(UPDATED_TERMINAL_FUNCTIONALITY_DESCRIPTION);
 
         // Validate the TerminalFunctions in Elasticsearch
         verify(mockTerminalFunctionsSearchRepository).save(testTerminalFunctions);
@@ -614,8 +596,6 @@ class TerminalFunctionsResourceIT {
         TerminalFunctions partialUpdatedTerminalFunctions = new TerminalFunctions();
         partialUpdatedTerminalFunctions.setId(terminalFunctions.getId());
 
-        partialUpdatedTerminalFunctions.terminalFunctionalityDescription(UPDATED_TERMINAL_FUNCTIONALITY_DESCRIPTION);
-
         restTerminalFunctionsMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedTerminalFunctions.getId())
@@ -630,7 +610,6 @@ class TerminalFunctionsResourceIT {
         TerminalFunctions testTerminalFunctions = terminalFunctionsList.get(terminalFunctionsList.size() - 1);
         assertThat(testTerminalFunctions.getFunctionCode()).isEqualTo(DEFAULT_FUNCTION_CODE);
         assertThat(testTerminalFunctions.getTerminalFunctionality()).isEqualTo(DEFAULT_TERMINAL_FUNCTIONALITY);
-        assertThat(testTerminalFunctions.getTerminalFunctionalityDescription()).isEqualTo(UPDATED_TERMINAL_FUNCTIONALITY_DESCRIPTION);
     }
 
     @Test
@@ -645,10 +624,7 @@ class TerminalFunctionsResourceIT {
         TerminalFunctions partialUpdatedTerminalFunctions = new TerminalFunctions();
         partialUpdatedTerminalFunctions.setId(terminalFunctions.getId());
 
-        partialUpdatedTerminalFunctions
-            .functionCode(UPDATED_FUNCTION_CODE)
-            .terminalFunctionality(UPDATED_TERMINAL_FUNCTIONALITY)
-            .terminalFunctionalityDescription(UPDATED_TERMINAL_FUNCTIONALITY_DESCRIPTION);
+        partialUpdatedTerminalFunctions.functionCode(UPDATED_FUNCTION_CODE).terminalFunctionality(UPDATED_TERMINAL_FUNCTIONALITY);
 
         restTerminalFunctionsMockMvc
             .perform(
@@ -664,7 +640,6 @@ class TerminalFunctionsResourceIT {
         TerminalFunctions testTerminalFunctions = terminalFunctionsList.get(terminalFunctionsList.size() - 1);
         assertThat(testTerminalFunctions.getFunctionCode()).isEqualTo(UPDATED_FUNCTION_CODE);
         assertThat(testTerminalFunctions.getTerminalFunctionality()).isEqualTo(UPDATED_TERMINAL_FUNCTIONALITY);
-        assertThat(testTerminalFunctions.getTerminalFunctionalityDescription()).isEqualTo(UPDATED_TERMINAL_FUNCTIONALITY_DESCRIPTION);
     }
 
     @Test
@@ -782,9 +757,6 @@ class TerminalFunctionsResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(terminalFunctions.getId().intValue())))
             .andExpect(jsonPath("$.[*].functionCode").value(hasItem(DEFAULT_FUNCTION_CODE)))
-            .andExpect(jsonPath("$.[*].terminalFunctionality").value(hasItem(DEFAULT_TERMINAL_FUNCTIONALITY)))
-            .andExpect(
-                jsonPath("$.[*].terminalFunctionalityDescription").value(hasItem(DEFAULT_TERMINAL_FUNCTIONALITY_DESCRIPTION.toString()))
-            );
+            .andExpect(jsonPath("$.[*].terminalFunctionality").value(hasItem(DEFAULT_TERMINAL_FUNCTIONALITY)));
     }
 }

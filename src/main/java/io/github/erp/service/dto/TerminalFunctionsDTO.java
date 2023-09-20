@@ -20,7 +20,6 @@ package io.github.erp.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Lob;
 import javax.validation.constraints.*;
 
 /**
@@ -35,9 +34,6 @@ public class TerminalFunctionsDTO implements Serializable {
 
     @NotNull
     private String terminalFunctionality;
-
-    @Lob
-    private String terminalFunctionalityDescription;
 
     public Long getId() {
         return id;
@@ -61,14 +57,6 @@ public class TerminalFunctionsDTO implements Serializable {
 
     public void setTerminalFunctionality(String terminalFunctionality) {
         this.terminalFunctionality = terminalFunctionality;
-    }
-
-    public String getTerminalFunctionalityDescription() {
-        return terminalFunctionalityDescription;
-    }
-
-    public void setTerminalFunctionalityDescription(String terminalFunctionalityDescription) {
-        this.terminalFunctionalityDescription = terminalFunctionalityDescription;
     }
 
     @Override
@@ -99,7 +87,6 @@ public class TerminalFunctionsDTO implements Serializable {
             "id=" + getId() +
             ", functionCode='" + getFunctionCode() + "'" +
             ", terminalFunctionality='" + getTerminalFunctionality() + "'" +
-            ", terminalFunctionalityDescription='" + getTerminalFunctionalityDescription() + "'" +
             "}";
     }
 }
