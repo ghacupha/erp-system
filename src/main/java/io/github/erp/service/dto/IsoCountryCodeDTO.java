@@ -19,9 +19,7 @@ package io.github.erp.service.dto;
  */
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * A DTO for the {@link io.github.erp.domain.IsoCountryCode} entity.
@@ -34,7 +32,11 @@ public class IsoCountryCodeDTO implements Serializable {
 
     private String countryDescription;
 
-    private Set<PlaceholderDTO> placeholders = new HashSet<>();
+    private String continentCode;
+
+    private String continentName;
+
+    private String subRegion;
 
     public Long getId() {
         return id;
@@ -60,12 +62,28 @@ public class IsoCountryCodeDTO implements Serializable {
         this.countryDescription = countryDescription;
     }
 
-    public Set<PlaceholderDTO> getPlaceholders() {
-        return placeholders;
+    public String getContinentCode() {
+        return continentCode;
     }
 
-    public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
-        this.placeholders = placeholders;
+    public void setContinentCode(String continentCode) {
+        this.continentCode = continentCode;
+    }
+
+    public String getContinentName() {
+        return continentName;
+    }
+
+    public void setContinentName(String continentName) {
+        this.continentName = continentName;
+    }
+
+    public String getSubRegion() {
+        return subRegion;
+    }
+
+    public void setSubRegion(String subRegion) {
+        this.subRegion = subRegion;
     }
 
     @Override
@@ -96,7 +114,9 @@ public class IsoCountryCodeDTO implements Serializable {
             "id=" + getId() +
             ", countryCode='" + getCountryCode() + "'" +
             ", countryDescription='" + getCountryDescription() + "'" +
-            ", placeholders=" + getPlaceholders() +
+            ", continentCode='" + getContinentCode() + "'" +
+            ", continentName='" + getContinentName() + "'" +
+            ", subRegion='" + getSubRegion() + "'" +
             "}";
     }
 }

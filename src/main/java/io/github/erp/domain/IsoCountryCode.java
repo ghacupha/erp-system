@@ -18,10 +18,7 @@ package io.github.erp.domain;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -49,15 +46,14 @@ public class IsoCountryCode implements Serializable {
     @Column(name = "country_description")
     private String countryDescription;
 
-    @ManyToMany
-    @JoinTable(
-        name = "rel_iso_country_code__placeholder",
-        joinColumns = @JoinColumn(name = "iso_country_code_id"),
-        inverseJoinColumns = @JoinColumn(name = "placeholder_id")
-    )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
-    private Set<Placeholder> placeholders = new HashSet<>();
+    @Column(name = "continent_code")
+    private String continentCode;
+
+    @Column(name = "continent_name")
+    private String continentName;
+
+    @Column(name = "sub_region")
+    private String subRegion;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -100,27 +96,43 @@ public class IsoCountryCode implements Serializable {
         this.countryDescription = countryDescription;
     }
 
-    public Set<Placeholder> getPlaceholders() {
-        return this.placeholders;
+    public String getContinentCode() {
+        return this.continentCode;
     }
 
-    public void setPlaceholders(Set<Placeholder> placeholders) {
-        this.placeholders = placeholders;
-    }
-
-    public IsoCountryCode placeholders(Set<Placeholder> placeholders) {
-        this.setPlaceholders(placeholders);
+    public IsoCountryCode continentCode(String continentCode) {
+        this.setContinentCode(continentCode);
         return this;
     }
 
-    public IsoCountryCode addPlaceholder(Placeholder placeholder) {
-        this.placeholders.add(placeholder);
+    public void setContinentCode(String continentCode) {
+        this.continentCode = continentCode;
+    }
+
+    public String getContinentName() {
+        return this.continentName;
+    }
+
+    public IsoCountryCode continentName(String continentName) {
+        this.setContinentName(continentName);
         return this;
     }
 
-    public IsoCountryCode removePlaceholder(Placeholder placeholder) {
-        this.placeholders.remove(placeholder);
+    public void setContinentName(String continentName) {
+        this.continentName = continentName;
+    }
+
+    public String getSubRegion() {
+        return this.subRegion;
+    }
+
+    public IsoCountryCode subRegion(String subRegion) {
+        this.setSubRegion(subRegion);
         return this;
+    }
+
+    public void setSubRegion(String subRegion) {
+        this.subRegion = subRegion;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -149,6 +161,9 @@ public class IsoCountryCode implements Serializable {
             "id=" + getId() +
             ", countryCode='" + getCountryCode() + "'" +
             ", countryDescription='" + getCountryDescription() + "'" +
+            ", continentCode='" + getContinentCode() + "'" +
+            ", continentName='" + getContinentName() + "'" +
+            ", subRegion='" + getSubRegion() + "'" +
             "}";
     }
 }
