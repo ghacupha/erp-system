@@ -15,12 +15,12 @@
     {
       "fieldName": "subCountyCode",
       "fieldType": "Integer",
-      "fieldValidateRules": ["required", "unique"]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "subCountyName",
       "fieldType": "String",
-      "fieldValidateRules": ["required", "unique"]
+      "fieldValidateRules": ["required"]
     }
   ],
   "incrementalChangelog": false,

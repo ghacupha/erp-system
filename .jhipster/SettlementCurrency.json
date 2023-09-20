@@ -5,7 +5,7 @@
     {
       "fieldName": "iso4217CurrencyCode",
       "fieldType": "String",
-      "fieldValidateRules": ["required", "unique", "minlength", "maxlength"],
+      "fieldValidateRules": ["required", "minlength", "maxlength"],
       "fieldValidateRulesMaxlength": "3",
       "fieldValidateRulesMinlength": "3"
     },
