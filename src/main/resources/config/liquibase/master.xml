@@ -210,6 +210,7 @@
     <include file="config/liquibase/changelog/20230914094252_added_entity_NatureOfCustomerComplaints.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230918085621_added_entity_GdiMasterDataIndex.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230918125857_added_entity_GdiTransactionDataIndex.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230921063733_added_entity_ProductType.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
