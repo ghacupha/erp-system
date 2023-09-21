@@ -1,11 +1,11 @@
-id;security_type_code;security_type;security_type_details;security_type_description
-1;Isle parse Metrics;fresh-thinking;../fake-data/blob/hipster.txt;yellow
-2;purple;Idaho payment;../fake-data/blob/hipster.txt;Checking Investor e-services
-3;Liaison;Handcrafted benchmark analyzing;../fake-data/blob/hipster.txt;transition function
-4;Account Gorgeous;cross-platform;../fake-data/blob/hipster.txt;Meadows up
-5;Account invoice;User Land;../fake-data/blob/hipster.txt;Human Cotton
-6;definition bluetooth parse;Cotton;../fake-data/blob/hipster.txt;Tools
-7;Tasty Fresh;Berkshire;../fake-data/blob/hipster.txt;sky cohesive
-8;(EURCO);Mountains;../fake-data/blob/hipster.txt;sensor
-9;Loan Agent;Analyst Engineer reintermediate;../fake-data/blob/hipster.txt;Games initiatives
-10;invoice Forward Chips;Pre-emptive;../fake-data/blob/hipster.txt;blue
+id;security_type_code;security_type;security_type_details
+1;Isle parse Metrics;fresh-thinking;../fake-data/blob/hipster.txt
+2;yellow;purple;../fake-data/blob/hipster.txt
+3;Idaho payment;Checking Investor e-services;../fake-data/blob/hipster.txt
+4;Liaison;Handcrafted benchmark analyzing;../fake-data/blob/hipster.txt
+5;transition function;Account Gorgeous;../fake-data/blob/hipster.txt
+6;cross-platform;Meadows up;../fake-data/blob/hipster.txt
+7;Account invoice;User Land;../fake-data/blob/hipster.txt
+8;Human Cotton;definition bluetooth parse;../fake-data/blob/hipster.txt
+9;Cotton;Tools;../fake-data/blob/hipster.txt
+10;Tasty Fresh;Berkshire;../fake-data/blob/hipster.txt

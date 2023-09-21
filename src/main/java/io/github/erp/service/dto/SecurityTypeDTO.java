@@ -39,8 +39,6 @@ public class SecurityTypeDTO implements Serializable {
     @Lob
     private String securityTypeDetails;
 
-    private String securityTypeDescription;
-
     public Long getId() {
         return id;
     }
@@ -73,14 +71,6 @@ public class SecurityTypeDTO implements Serializable {
         this.securityTypeDetails = securityTypeDetails;
     }
 
-    public String getSecurityTypeDescription() {
-        return securityTypeDescription;
-    }
-
-    public void setSecurityTypeDescription(String securityTypeDescription) {
-        this.securityTypeDescription = securityTypeDescription;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -110,7 +100,6 @@ public class SecurityTypeDTO implements Serializable {
             ", securityTypeCode='" + getSecurityTypeCode() + "'" +
             ", securityType='" + getSecurityType() + "'" +
             ", securityTypeDetails='" + getSecurityTypeDetails() + "'" +
-            ", securityTypeDescription='" + getSecurityTypeDescription() + "'" +
             "}";
     }
 }

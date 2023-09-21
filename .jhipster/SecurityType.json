@@ -14,10 +14,6 @@
       "fieldName": "securityTypeDetails",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "text"
-    },
-    {
-      "fieldName": "securityTypeDescription",
-      "fieldType": "String"
     }
   ],
   "relationships": [],
