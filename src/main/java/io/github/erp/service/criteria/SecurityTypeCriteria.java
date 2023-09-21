@@ -48,8 +48,6 @@ public class SecurityTypeCriteria implements Serializable, Criteria {
 
     private StringFilter securityType;
 
-    private StringFilter securityTypeDescription;
-
     private Boolean distinct;
 
     public SecurityTypeCriteria() {}
@@ -58,7 +56,6 @@ public class SecurityTypeCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.securityTypeCode = other.securityTypeCode == null ? null : other.securityTypeCode.copy();
         this.securityType = other.securityType == null ? null : other.securityType.copy();
-        this.securityTypeDescription = other.securityTypeDescription == null ? null : other.securityTypeDescription.copy();
         this.distinct = other.distinct;
     }
 
@@ -112,21 +109,6 @@ public class SecurityTypeCriteria implements Serializable, Criteria {
         this.securityType = securityType;
     }
 
-    public StringFilter getSecurityTypeDescription() {
-        return securityTypeDescription;
-    }
-
-    public StringFilter securityTypeDescription() {
-        if (securityTypeDescription == null) {
-            securityTypeDescription = new StringFilter();
-        }
-        return securityTypeDescription;
-    }
-
-    public void setSecurityTypeDescription(StringFilter securityTypeDescription) {
-        this.securityTypeDescription = securityTypeDescription;
-    }
-
     public Boolean getDistinct() {
         return distinct;
     }
@@ -148,14 +130,13 @@ public class SecurityTypeCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(securityTypeCode, that.securityTypeCode) &&
             Objects.equals(securityType, that.securityType) &&
-            Objects.equals(securityTypeDescription, that.securityTypeDescription) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, securityTypeCode, securityType, securityTypeDescription, distinct);
+        return Objects.hash(id, securityTypeCode, securityType, distinct);
     }
 
     // prettier-ignore
@@ -165,7 +146,6 @@ public class SecurityTypeCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (securityTypeCode != null ? "securityTypeCode=" + securityTypeCode + ", " : "") +
             (securityType != null ? "securityType=" + securityType + ", " : "") +
-            (securityTypeDescription != null ? "securityTypeDescription=" + securityTypeDescription + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

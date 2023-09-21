@@ -122,12 +122,6 @@ public class SecurityTypeQueryService extends QueryService<SecurityType> {
             if (criteria.getSecurityType() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getSecurityType(), SecurityType_.securityType));
             }
-            if (criteria.getSecurityTypeDescription() != null) {
-                specification =
-                    specification.and(
-                        buildStringSpecification(criteria.getSecurityTypeDescription(), SecurityType_.securityTypeDescription)
-                    );
-            }
         }
         return specification;
     }

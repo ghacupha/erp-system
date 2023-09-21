@@ -330,6 +330,7 @@
     <include file="config/liquibase/changelog/20230919121305_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230920133748_drop_various_gdi_ux_constraints.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230920150207_drop_iso_country_code_placeholder_rel.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230920155842_drop_security_type_description.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

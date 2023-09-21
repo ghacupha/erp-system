@@ -17,11 +17,6 @@ package io.github.erp.erp.resources.gdi;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.SecurityType;
@@ -29,12 +24,6 @@ import io.github.erp.repository.SecurityTypeRepository;
 import io.github.erp.repository.search.SecurityTypeSearchRepository;
 import io.github.erp.service.dto.SecurityTypeDTO;
 import io.github.erp.service.mapper.SecurityTypeMapper;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
-
 import io.github.erp.web.rest.SecurityTypeResource;
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,6 +38,18 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link SecurityTypeResource} REST controller.
@@ -67,9 +68,6 @@ class SecurityTypeResourceIT {
 
     private static final String DEFAULT_SECURITY_TYPE_DETAILS = "AAAAAAAAAA";
     private static final String UPDATED_SECURITY_TYPE_DETAILS = "BBBBBBBBBB";
-
-    private static final String DEFAULT_SECURITY_TYPE_DESCRIPTION = "AAAAAAAAAA";
-    private static final String UPDATED_SECURITY_TYPE_DESCRIPTION = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/granular-data/security-types";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -110,8 +108,7 @@ class SecurityTypeResourceIT {
         SecurityType securityType = new SecurityType()
             .securityTypeCode(DEFAULT_SECURITY_TYPE_CODE)
             .securityType(DEFAULT_SECURITY_TYPE)
-            .securityTypeDetails(DEFAULT_SECURITY_TYPE_DETAILS)
-            .securityTypeDescription(DEFAULT_SECURITY_TYPE_DESCRIPTION);
+            .securityTypeDetails(DEFAULT_SECURITY_TYPE_DETAILS);
         return securityType;
     }
 
@@ -125,8 +122,7 @@ class SecurityTypeResourceIT {
         SecurityType securityType = new SecurityType()
             .securityTypeCode(UPDATED_SECURITY_TYPE_CODE)
             .securityType(UPDATED_SECURITY_TYPE)
-            .securityTypeDetails(UPDATED_SECURITY_TYPE_DETAILS)
-            .securityTypeDescription(UPDATED_SECURITY_TYPE_DESCRIPTION);
+            .securityTypeDetails(UPDATED_SECURITY_TYPE_DETAILS);
         return securityType;
     }
 
@@ -154,7 +150,6 @@ class SecurityTypeResourceIT {
         assertThat(testSecurityType.getSecurityTypeCode()).isEqualTo(DEFAULT_SECURITY_TYPE_CODE);
         assertThat(testSecurityType.getSecurityType()).isEqualTo(DEFAULT_SECURITY_TYPE);
         assertThat(testSecurityType.getSecurityTypeDetails()).isEqualTo(DEFAULT_SECURITY_TYPE_DETAILS);
-        assertThat(testSecurityType.getSecurityTypeDescription()).isEqualTo(DEFAULT_SECURITY_TYPE_DESCRIPTION);
 
         // Validate the SecurityType in Elasticsearch
         verify(mockSecurityTypeSearchRepository, times(1)).save(testSecurityType);
@@ -238,8 +233,7 @@ class SecurityTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(securityType.getId().intValue())))
             .andExpect(jsonPath("$.[*].securityTypeCode").value(hasItem(DEFAULT_SECURITY_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].securityType").value(hasItem(DEFAULT_SECURITY_TYPE)))
-            .andExpect(jsonPath("$.[*].securityTypeDetails").value(hasItem(DEFAULT_SECURITY_TYPE_DETAILS.toString())))
-            .andExpect(jsonPath("$.[*].securityTypeDescription").value(hasItem(DEFAULT_SECURITY_TYPE_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].securityTypeDetails").value(hasItem(DEFAULT_SECURITY_TYPE_DETAILS.toString())));
     }
 
     @Test
@@ -256,8 +250,7 @@ class SecurityTypeResourceIT {
             .andExpect(jsonPath("$.id").value(securityType.getId().intValue()))
             .andExpect(jsonPath("$.securityTypeCode").value(DEFAULT_SECURITY_TYPE_CODE))
             .andExpect(jsonPath("$.securityType").value(DEFAULT_SECURITY_TYPE))
-            .andExpect(jsonPath("$.securityTypeDetails").value(DEFAULT_SECURITY_TYPE_DETAILS.toString()))
-            .andExpect(jsonPath("$.securityTypeDescription").value(DEFAULT_SECURITY_TYPE_DESCRIPTION));
+            .andExpect(jsonPath("$.securityTypeDetails").value(DEFAULT_SECURITY_TYPE_DETAILS.toString()));
     }
 
     @Test
@@ -434,86 +427,6 @@ class SecurityTypeResourceIT {
         defaultSecurityTypeShouldBeFound("securityType.doesNotContain=" + UPDATED_SECURITY_TYPE);
     }
 
-    @Test
-    @Transactional
-    void getAllSecurityTypesBySecurityTypeDescriptionIsEqualToSomething() throws Exception {
-        // Initialize the database
-        securityTypeRepository.saveAndFlush(securityType);
-
-        // Get all the securityTypeList where securityTypeDescription equals to DEFAULT_SECURITY_TYPE_DESCRIPTION
-        defaultSecurityTypeShouldBeFound("securityTypeDescription.equals=" + DEFAULT_SECURITY_TYPE_DESCRIPTION);
-
-        // Get all the securityTypeList where securityTypeDescription equals to UPDATED_SECURITY_TYPE_DESCRIPTION
-        defaultSecurityTypeShouldNotBeFound("securityTypeDescription.equals=" + UPDATED_SECURITY_TYPE_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    void getAllSecurityTypesBySecurityTypeDescriptionIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        securityTypeRepository.saveAndFlush(securityType);
-
-        // Get all the securityTypeList where securityTypeDescription not equals to DEFAULT_SECURITY_TYPE_DESCRIPTION
-        defaultSecurityTypeShouldNotBeFound("securityTypeDescription.notEquals=" + DEFAULT_SECURITY_TYPE_DESCRIPTION);
-
-        // Get all the securityTypeList where securityTypeDescription not equals to UPDATED_SECURITY_TYPE_DESCRIPTION
-        defaultSecurityTypeShouldBeFound("securityTypeDescription.notEquals=" + UPDATED_SECURITY_TYPE_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    void getAllSecurityTypesBySecurityTypeDescriptionIsInShouldWork() throws Exception {
-        // Initialize the database
-        securityTypeRepository.saveAndFlush(securityType);
-
-        // Get all the securityTypeList where securityTypeDescription in DEFAULT_SECURITY_TYPE_DESCRIPTION or UPDATED_SECURITY_TYPE_DESCRIPTION
-        defaultSecurityTypeShouldBeFound(
-            "securityTypeDescription.in=" + DEFAULT_SECURITY_TYPE_DESCRIPTION + "," + UPDATED_SECURITY_TYPE_DESCRIPTION
-        );
-
-        // Get all the securityTypeList where securityTypeDescription equals to UPDATED_SECURITY_TYPE_DESCRIPTION
-        defaultSecurityTypeShouldNotBeFound("securityTypeDescription.in=" + UPDATED_SECURITY_TYPE_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    void getAllSecurityTypesBySecurityTypeDescriptionIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        securityTypeRepository.saveAndFlush(securityType);
-
-        // Get all the securityTypeList where securityTypeDescription is not null
-        defaultSecurityTypeShouldBeFound("securityTypeDescription.specified=true");
-
-        // Get all the securityTypeList where securityTypeDescription is null
-        defaultSecurityTypeShouldNotBeFound("securityTypeDescription.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllSecurityTypesBySecurityTypeDescriptionContainsSomething() throws Exception {
-        // Initialize the database
-        securityTypeRepository.saveAndFlush(securityType);
-
-        // Get all the securityTypeList where securityTypeDescription contains DEFAULT_SECURITY_TYPE_DESCRIPTION
-        defaultSecurityTypeShouldBeFound("securityTypeDescription.contains=" + DEFAULT_SECURITY_TYPE_DESCRIPTION);
-
-        // Get all the securityTypeList where securityTypeDescription contains UPDATED_SECURITY_TYPE_DESCRIPTION
-        defaultSecurityTypeShouldNotBeFound("securityTypeDescription.contains=" + UPDATED_SECURITY_TYPE_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    void getAllSecurityTypesBySecurityTypeDescriptionNotContainsSomething() throws Exception {
-        // Initialize the database
-        securityTypeRepository.saveAndFlush(securityType);
-
-        // Get all the securityTypeList where securityTypeDescription does not contain DEFAULT_SECURITY_TYPE_DESCRIPTION
-        defaultSecurityTypeShouldNotBeFound("securityTypeDescription.doesNotContain=" + DEFAULT_SECURITY_TYPE_DESCRIPTION);
-
-        // Get all the securityTypeList where securityTypeDescription does not contain UPDATED_SECURITY_TYPE_DESCRIPTION
-        defaultSecurityTypeShouldBeFound("securityTypeDescription.doesNotContain=" + UPDATED_SECURITY_TYPE_DESCRIPTION);
-    }
-
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -525,8 +438,7 @@ class SecurityTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(securityType.getId().intValue())))
             .andExpect(jsonPath("$.[*].securityTypeCode").value(hasItem(DEFAULT_SECURITY_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].securityType").value(hasItem(DEFAULT_SECURITY_TYPE)))
-            .andExpect(jsonPath("$.[*].securityTypeDetails").value(hasItem(DEFAULT_SECURITY_TYPE_DETAILS.toString())))
-            .andExpect(jsonPath("$.[*].securityTypeDescription").value(hasItem(DEFAULT_SECURITY_TYPE_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].securityTypeDetails").value(hasItem(DEFAULT_SECURITY_TYPE_DETAILS.toString())));
 
         // Check, that the count call also returns 1
         restSecurityTypeMockMvc
@@ -577,8 +489,7 @@ class SecurityTypeResourceIT {
         updatedSecurityType
             .securityTypeCode(UPDATED_SECURITY_TYPE_CODE)
             .securityType(UPDATED_SECURITY_TYPE)
-            .securityTypeDetails(UPDATED_SECURITY_TYPE_DETAILS)
-            .securityTypeDescription(UPDATED_SECURITY_TYPE_DESCRIPTION);
+            .securityTypeDetails(UPDATED_SECURITY_TYPE_DETAILS);
         SecurityTypeDTO securityTypeDTO = securityTypeMapper.toDto(updatedSecurityType);
 
         restSecurityTypeMockMvc
@@ -596,7 +507,6 @@ class SecurityTypeResourceIT {
         assertThat(testSecurityType.getSecurityTypeCode()).isEqualTo(UPDATED_SECURITY_TYPE_CODE);
         assertThat(testSecurityType.getSecurityType()).isEqualTo(UPDATED_SECURITY_TYPE);
         assertThat(testSecurityType.getSecurityTypeDetails()).isEqualTo(UPDATED_SECURITY_TYPE_DETAILS);
-        assertThat(testSecurityType.getSecurityTypeDescription()).isEqualTo(UPDATED_SECURITY_TYPE_DESCRIPTION);
 
         // Validate the SecurityType in Elasticsearch
         verify(mockSecurityTypeSearchRepository).save(testSecurityType);
@@ -690,10 +600,7 @@ class SecurityTypeResourceIT {
         SecurityType partialUpdatedSecurityType = new SecurityType();
         partialUpdatedSecurityType.setId(securityType.getId());
 
-        partialUpdatedSecurityType
-            .securityTypeCode(UPDATED_SECURITY_TYPE_CODE)
-            .securityTypeDetails(UPDATED_SECURITY_TYPE_DETAILS)
-            .securityTypeDescription(UPDATED_SECURITY_TYPE_DESCRIPTION);
+        partialUpdatedSecurityType.securityTypeCode(UPDATED_SECURITY_TYPE_CODE).securityTypeDetails(UPDATED_SECURITY_TYPE_DETAILS);
 
         restSecurityTypeMockMvc
             .perform(
@@ -710,7 +617,6 @@ class SecurityTypeResourceIT {
         assertThat(testSecurityType.getSecurityTypeCode()).isEqualTo(UPDATED_SECURITY_TYPE_CODE);
         assertThat(testSecurityType.getSecurityType()).isEqualTo(DEFAULT_SECURITY_TYPE);
         assertThat(testSecurityType.getSecurityTypeDetails()).isEqualTo(UPDATED_SECURITY_TYPE_DETAILS);
-        assertThat(testSecurityType.getSecurityTypeDescription()).isEqualTo(UPDATED_SECURITY_TYPE_DESCRIPTION);
     }
 
     @Test
@@ -728,8 +634,7 @@ class SecurityTypeResourceIT {
         partialUpdatedSecurityType
             .securityTypeCode(UPDATED_SECURITY_TYPE_CODE)
             .securityType(UPDATED_SECURITY_TYPE)
-            .securityTypeDetails(UPDATED_SECURITY_TYPE_DETAILS)
-            .securityTypeDescription(UPDATED_SECURITY_TYPE_DESCRIPTION);
+            .securityTypeDetails(UPDATED_SECURITY_TYPE_DETAILS);
 
         restSecurityTypeMockMvc
             .perform(
@@ -746,7 +651,6 @@ class SecurityTypeResourceIT {
         assertThat(testSecurityType.getSecurityTypeCode()).isEqualTo(UPDATED_SECURITY_TYPE_CODE);
         assertThat(testSecurityType.getSecurityType()).isEqualTo(UPDATED_SECURITY_TYPE);
         assertThat(testSecurityType.getSecurityTypeDetails()).isEqualTo(UPDATED_SECURITY_TYPE_DETAILS);
-        assertThat(testSecurityType.getSecurityTypeDescription()).isEqualTo(UPDATED_SECURITY_TYPE_DESCRIPTION);
     }
 
     @Test
@@ -865,7 +769,6 @@ class SecurityTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(securityType.getId().intValue())))
             .andExpect(jsonPath("$.[*].securityTypeCode").value(hasItem(DEFAULT_SECURITY_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].securityType").value(hasItem(DEFAULT_SECURITY_TYPE)))
-            .andExpect(jsonPath("$.[*].securityTypeDetails").value(hasItem(DEFAULT_SECURITY_TYPE_DETAILS.toString())))
-            .andExpect(jsonPath("$.[*].securityTypeDescription").value(hasItem(DEFAULT_SECURITY_TYPE_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].securityTypeDetails").value(hasItem(DEFAULT_SECURITY_TYPE_DETAILS.toString())));
     }
 }

@@ -55,9 +55,6 @@ public class SecurityType implements Serializable {
     @Column(name = "security_type_details")
     private String securityTypeDetails;
 
-    @Column(name = "security_type_description")
-    private String securityTypeDescription;
-
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -112,19 +109,6 @@ public class SecurityType implements Serializable {
         this.securityTypeDetails = securityTypeDetails;
     }
 
-    public String getSecurityTypeDescription() {
-        return this.securityTypeDescription;
-    }
-
-    public SecurityType securityTypeDescription(String securityTypeDescription) {
-        this.setSecurityTypeDescription(securityTypeDescription);
-        return this;
-    }
-
-    public void setSecurityTypeDescription(String securityTypeDescription) {
-        this.securityTypeDescription = securityTypeDescription;
-    }
-
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -152,7 +136,6 @@ public class SecurityType implements Serializable {
             ", securityTypeCode='" + getSecurityTypeCode() + "'" +
             ", securityType='" + getSecurityType() + "'" +
             ", securityTypeDetails='" + getSecurityTypeDetails() + "'" +
-            ", securityTypeDescription='" + getSecurityTypeDescription() + "'" +
             "}";
     }
 }
