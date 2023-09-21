@@ -6,12 +6,12 @@
     <changeSet author="edwin.njeru (generated)" id="1695217403184-18">
         <dropUniqueConstraint constraintName="ux_crb_credit_application_statu__crb_credit_application_stat_e7" tableName="crb_credit_application_status"/>
     </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1695217403184-19">
+    <!-- <changeSet author="edwin.njeru (generated)" id="1695217403184-19">
         <dropUniqueConstraint constraintName="ux_crb_gl_code__gl_description" tableName="crb_gl_code"/>
-    </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1695217403184-20">
+    </changeSet> -->
+    <!-- <changeSet author="edwin.njeru (generated)" id="1695217403184-20">
         <dropUniqueConstraint constraintName="ux_crb_gl_code__institution_category" tableName="crb_gl_code"/>
-    </changeSet>
+    </changeSet> -->
     <changeSet author="edwin.njeru (generated)" id="1695217403184-21">
         <dropUniqueConstraint constraintName="ux_crb_report_request_reasons__credit_report_request_reason__19" tableName="crb_report_request_reasons"/>
     </changeSet>
