@@ -145,50 +145,68 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
-## Artaxerxes Series?
-Well the idea of breaking down versions into series sounds corny, but it's sort of a workaround for versioning the docker images. I figured, I do not have a lot of resources to keep up with semantic versioning especially because both the license headers
-which are important to me, and the container versions read the code version from the project object model (pom) file. This means I cannot just start changing the versions because each change would likely produce an additional partition in the docker repository and
-there can only be so much free space, and soon would need to start paying that service.
-Since this is not a project I get paid for, "free = good" and so with every release we overwrite the previous version but still maintain the "0.0.1-SNAPSHOT" tag.
-So versioning is not important here, but I still needed a way to mark progress and milestone achievements and then I got my inspiration from Matrix (the 1999 movie). I'll give you some time to roll your eyes...
+## PROJECT TITLES
 
+### Artaxerxes Series (ERP System Mark I)
+In the context of versioning Docker images and maintaining project progress, the author drew inspiration
+from the movie "Matrix" and its depiction of the hovercraft Nebuchadnezzar. 
+This vessel's inscription, "Mark III No 11 Nebuchadnezzar Made in USA YEAR 2060," inspired the idea 
+that ambitious projects require both development and marketing to succeed. The author applied 
+this concept to their software project, emphasizing the importance of releasing and using the
+product while continuous development occurs. They named this project phase "Artaxerxes" to highlight 
+the Achaemenid people's affinity for records, drawing parallels to the biblical story of 
+King Artaxerxes and Mordecai, where records played a critical role in saving a faithful servant. 
+The goal of the "Artaxerxes" phase is to develop a system that efficiently tracks business 
+transactions, generates flexible reports, ensures record security, and allows for easy access. 
+Once these objectives are met, the milestone is considered complete.
 
-Are you done? Good welcome back. So you recall that scene as Neo is introduced, by Morpheus to the crew of the ship Nebuchadnezzar, and there's this inscription on the hull of the ship "Mark III No 11 Nebuchadnezzar Made in USA YEAR 2060". I figured of course, if someone was going to
-run a project as ambitious as a hovercraft that size, a vehicle that completely denies the existence of gravity, carry the weight of that engine, the weaponry, the ammunition, food, creature comforts for the crew, communication equipment and still fly at that speed, 
-you are going to need to be able to make money from the project in order to fuel the production of the product. That is you will need to be able to
-see the product hit the market, at the earliest opportunity, while still creating the product and the goal is not perfection, and there's probably no end goal except to make it better. What there is though, is this short list of MVP specifications which once achieved you start marketing the product while the production and even research is
-still on going. So you don't wait to finish the product, you use it as soon as you can while continuing the development. It's a research-in-motion kind of thing. Of course the trilogy likely uses that production code to hint at (I believe) the idea of Neo being "the One",
-because if you look at that particular verse it says (Mark 3:11) "you are the Son of God", and Neo in these movies, is a savior whose gifts enable him to achieve the overarching goal of saving humanity. 
-As for me, I am (AFAIK) to my knowledge the user of ERP and because of resource and time constraints have developed a non-finished product which I use in office as I develop better techniques, carry out more research and produce both client and server images with better enhanced
-features in record keeping and reporting. So why did I use the title Artaxerxes? 
+### Baruch Series (ERP System Mark II)
+Baruch, the faithful servant of Jeremiah the prophet, serves as the inspiration for this series. 
+Baruch's unwavering commitment to recording and preserving the prophet's messages, even in the 
+face of adversity, highlights the importance of data persistence and accuracy. In this series, 
+the author aims to establish data stability within the database, ensuring consistency despite code changes. The overarching theme centers on the persistence of data, the preservation of information integrity, and the profound implications of accurate information.
 
-Well the Achaemenid people were known to be lovers of records, it is a generally accepted historical opinion that distinguishes them from their predecessors. For instance in the book of Esther(the Bible again) you see the Queen has been fasting and interceding for the salvation of the people of Israel.
-Unbeknownst to them Haman the main antagonist in the book is plotting the death of Mordecai. Am imagining a conversation in heaven as the powers that be discussed how they were going to save Mordecai and disrupt Haman's plans, and an idea comes up: let's give the King a sleepless night, 
-and we know how much he loves his records. Right? He will likely start going through the records and in them will find the story of Mordecai, how this servant had uncovered another plot to kill the king and had saved the king's life from those who were plotting evil against him and in the end, no reward was given to the
-faithful servant. The king might then be prompted to do something in the servant's favor, knowing that he owed him one, making it impossible, and if not, politically inexpedient for Haman to hang to death the same man for whatever reason.Of course, you know how that unfolds (if not, it's a nice story, read it), because the king found
-himself sleepless at night, and sure enough he calls his servants to have them read through records. If you don't find that attachment to records odd, ask yourself this: when was the last time that you lacked sleep in the night and so you decided to go get some business
-records for entertainment (or whatever)? Not many will answer in the affirmative, and I will tell you why. Not many will you find keeping logs of their transactions, receipts, contracts and so on and so forth. When one of your appliances break down, you find you don't even know where you left
-the warranty document. If you do keep such records, how many sleepless nights did you find yourself perusing them for whatever reason as opposed to tv, Facebook, Twitter; most will not even leave the bed. So if you were king instead, Mordecai would hang despite all the good he's done for you.
-So that's what it about, a desire to keep track of my personal day-to-day transactions at the office and have a way of recalling that information quickly when needed. So you will find all kinds of entities, for all my various concerns in my own work. This milestone describes a system with
-the ability to do that, and the flexibility to fashion reports as desired and have them produced quickly and as needed. We are able to define reports and run them without recompiling the code, ensure security of records and access them at any time, thanks to the search functionality (by the way big ups to Elasticsearch on that one!) 
-Once that basic need is fulfilled, the milestone is complete. 
+### Caleb Series (ERP System Mark III)
+The 'Caleb' series pays homage to a remarkable individual whose story serves as a constant source of motivation to tackle formidable challenges. Drawing inspiration from the biblical account of 'little faith' moving mountains, we encounter the extraordinary character of Caleb. In the context of the Israelites' settlement into Canaan, facing a land inhabited by formidable residents, Caleb's unwavering determination stands out. He does not seek divine intervention to remove his obstacles; instead, he boldly declares, 'Give me this mountain!' This spirit of determination and resilience resonates with the persistence required in overcoming modern challenges.
 
-Oh, and that king was called Artaxerxes.
+The 'Caleb' series embodies the essence of Caleb's unwavering resolve. It represents the relentless pursuit of solutions in the face of adversity, much like the challenges encountered in software development—be it debugging errors, addressing null pointer exceptions, navigating frontend-backend disparities, or other complex issues. This series aims to enhance the system further by placing reporting modules at the forefront. Additionally, it ventures into the intricate domains of lease accounting in IFRS 16, contract management, and fixed assets management and reporting.
 
-## Caleb Series?
-The Caleb series designation is a hats off recognition of a certain person whose story keeps motivating me to keep on taking on difficult challenges. If you are a person of the book then you know of the person with little faith whose command given in faith could move a mountain and cast it into the sea and
-thereby perhaps clearing their way, or establishing a suitable settlement, or surmounting some great challenge. I often wonder, that if such a powerful act is orchestrated by a person with little faith, what wonders would great faith manifest?
-We meet such a person in Caleb. As Israelites settled into Caanan, there was a challenge in that though the land was "theirs" as per the promise to Abraham, the residents were not magically removed to
-"make way" for them. They had to deal with the reality that they would have to take the land by conquest. 
-The last time a company had been sent to "measure up the enemy" the spies were truly freaked out and scared the crowd into a frenzy so much so that they were sent back into the desert for disobedience and lack of faith.
-And even now when they came back, this time under the leadership of Joshua, these giants and well-fed residents of Canaan had gone nowhere. The Lord had not removed them to prepare a place for this special people.
-So this is where the character of Caleb inspires, in that the man is not going to pray his obstacles away. No. Instead, he says "give me this mountain!". That inspiration drives my persistence through overwhelming failure.
-Obstacles exist, training may not suffice, errors without proper logs, null pointer exceptions, stack overflows, front end systems that disagree with your backend thinking, the list goes on. The challenges I seek to surmount will have to be addressed by someone eventually. 
-In this series I seek to improve the system further by keeping reporting modules front and centre. Additionally, I make my life even harder by trying to address the challenges posed by lease accounting in IFRS 16, contract management,
-and fixed assets management and reporting. This calls for that much extra dose of courage to take on a task that could lead you into one rabbit hole today; that you get out of in like a month having achieved nothing, and having the tenacity
-to not simply give up or despair, but to try something else, or the same problem differently.
-When these modules are done we will remember choosing to stay with the problem and embrace failure with open arms, repeat gruelling work whether feeling inspired or not inspired. Those words come to me every time. Caleb sets a lofty example seeking not that the 
-mountain be moved, or that his enemies be magically done away with, or for that to become someone else's problem. He chose to make the mountain his home. 
+Through this series, we celebrate the courage to confront challenges head-on, even when success seems elusive. It symbolizes the commitment to persevere, whether feeling inspired or not, and to embrace failure as an opportunity to try again or approach the problem from a different angle. Caleb's enduring determination echoes in our pursuit not to move mountains or wish away obstacles but to make these challenges our own.
+
+The goals of the 'Caleb' series revolve around the implementation of a robust reporting framework, leveraging the Jasper reporting library. This framework empowers database administrators to structure and create reusable reports without necessitating changes to the system's underlying code. Just as Caleb chose to make the mountain his home, we aim to conquer challenges, provide enduring solutions, and, in the process, draw inspiration from Caleb's unwavering spirit.
+
+### David Series (ERP System Mark IV)
+The 'David' series embodies the spirit of daring to attempt the seemingly impossible, reminiscent of the young man who faced a giant with unwavering resolve. In this series, the authors take on formidable challenges, such as upgrading the project to the latest Angular framework, reaching Angular 16 from Angular 12—a daunting endeavor that ultimately resulted in valuable lessons.
+
+The 'David' series also reflects the audacity to explore multiple front-end support options, including ReactJS, despite encountering obstacles like containerization and dynamic environment configuration. While these attempts faced difficulties and failures, they served as rich sources of knowledge and a return to the basics.
+
+Despite knowing the daunting nature of the tasks, the authors remained undeterred, demonstrating the courage to embrace challenges head-on. The 'David' series stands as a testament to the pursuit of the extraordinary and the invaluable lessons learned along the way
+
+### Ehud Series (ERP System Mark V)
+The 'Ehud' series represents a significant accomplishment in the establishment of a fixed assets depreciation framework. Although not yet fully complete, this framework addresses essential aspects such as accrued values, net book values, and accounting depreciation records. The journey involved rigorous experimentation, including the depreciation of over 10,000 asset records in the shortest possible time.
+
+The 'Ehud' series explores the versatility of depreciation methods, offering options for both straight-line and reducing-balance depreciation, with dynamic front-end configuration. This exploration led to the integration of new tools like Kafka and a workflow management framework, underscoring the adaptability required for complex projects.
+
+The title of this series draws inspiration from Ehud's unique trait of being left-handed, which positioned him for leadership opportunities. It serves as a reminder that in situations where one feels like they don't fit in, there lies potential for leadership and positive community impact. Similarly, the project encountered a lack of open standards, specifications, and design patterns for depreciation workflows, necessitating creative solutions and problem-solving akin to Ehud's resourcefulness.
+
+The 'Ehud' series exemplifies the author's commitment to research and development, with ongoing efforts to enhance feasibility and robustness, enabling the framework to handle even larger volumes of records within acceptable timeframes. The series parallels Ehud's ability to draw a sword with his left arm, allowing him to navigate challenging situations strategically. This determination and focus on precise standards have paved the way for project success and leadership.
+
+### Phoebe Series (ERP System Mark VI)
+The 'Phoebe' series is named in honor of an astute deaconess from biblical times, introduced in the book of Acts, 
+who exemplifies excellence in service and support. This title reflects the core values of dedication, commitment, community, 
+and collaboration—qualities that resonate with the Mark VI series.
+
+In this phase of development, the primary focus is on GDI (Granular Data Integration) work, which plays 
+a pivotal role in supporting users and customers effectively. The series entails the creation of multiple 
+entities to facilitate data updates, particularly in the context of central banks' requirements for 
+granular data integration. 
+
+The 'Phoebe' series is designed to streamline the data staging process across various organizational departments, 
+including financial institutions, payment service providers, credit reference bureaus, and forex bureaus. 
+Additionally, it strives to implement validation and submission mechanisms through authenticated and encrypted APIs.
+
+As Phoebe's role as a deaconess exemplified unwavering service and support, this series embodies a commitment to 
+providing reliable and collaborative solutions for data integration, echoing Phoebe's legacy of excellence.
 
 ## Important links
 
