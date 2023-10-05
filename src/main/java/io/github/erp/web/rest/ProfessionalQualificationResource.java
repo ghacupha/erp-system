@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.repository.ProfessionalQualificationRepository;
@@ -56,7 +57,7 @@ public class ProfessionalQualificationResource {
 
     private final Logger log = LoggerFactory.getLogger(ProfessionalQualificationResource.class);
 
-    private static final String ENTITY_NAME = "professionalQualification";
+    private static final String ENTITY_NAME = "gdiDataProfessionalQualification";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

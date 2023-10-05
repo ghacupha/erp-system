@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.CollateralType;
 import io.github.erp.service.dto.CollateralTypeDTO;
 import org.mapstruct.*;
@@ -25,4 +26,10 @@ import org.mapstruct.*;
  * Mapper for the entity {@link CollateralType} and its DTO {@link CollateralTypeDTO}.
  */
 @Mapper(componentModel = "spring", uses = {})
-public interface CollateralTypeMapper extends EntityMapper<CollateralTypeDTO, CollateralType> {}
+public interface CollateralTypeMapper extends EntityMapper<CollateralTypeDTO, CollateralType> {
+    @Named("collateralType")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "collateralType", source = "collateralType")
+    CollateralTypeDTO toDtoCollateralType(CollateralType collateralType);
+}

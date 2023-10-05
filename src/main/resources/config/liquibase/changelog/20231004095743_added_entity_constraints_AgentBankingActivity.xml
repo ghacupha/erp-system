@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity AgentBankingActivity.
+    -->
+    <changeSet id="20231004095743-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="bank_code_id"
+                                 baseTableName="agent_banking_activity"
+                                 constraintName="fk_agent_banking_activity__bank_code_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="institution_code"/>
+
+        <addForeignKeyConstraint baseColumnNames="branch_code_id"
+                                 baseTableName="agent_banking_activity"
+                                 constraintName="fk_agent_banking_activity__branch_code_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="bank_branch_code"/>
+
+        <addForeignKeyConstraint baseColumnNames="transaction_type_id"
+                                 baseTableName="agent_banking_activity"
+                                 constraintName="fk_agent_banking_activity__transaction_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="bank_transaction_type"/>
+    </changeSet>
+</databaseChangeLog>

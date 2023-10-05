@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity PerformanceOfForeignSubsidiaries.
+    -->
+    <changeSet id="20231004090122-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="bank_code_id"
+                                 baseTableName="foreign_subsidiary_performance"
+                                 constraintName="fk_foreign_subsidiary_performance__bank_code_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="institution_code"/>
+
+        <addForeignKeyConstraint baseColumnNames="subsidiary_country_code_id"
+                                 baseTableName="foreign_subsidiary_performance"
+                                 constraintName="fk_foreign_subsidiary_performance__subsidiary_country_code_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="iso_country_code"/>
+    </changeSet>
+</databaseChangeLog>

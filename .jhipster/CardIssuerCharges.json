@@ -1,0 +1,68 @@
+{
+  "clientRootFolder": "gdi-data",
+  "fields": [
+    {
+      "fieldName": "reportingDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "cardFeeChargeInLCY",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": 0
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "bankCode",
+      "otherEntityName": "institutionCode",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "institutionName"
+    },
+    {
+      "relationshipName": "cardCategory",
+      "otherEntityName": "cardCategoryType",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "cardCategoryDescription"
+    },
+    {
+      "relationshipName": "cardType",
+      "otherEntityName": "cardTypes",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "cardType"
+    },
+    {
+      "relationshipName": "cardBrand",
+      "otherEntityName": "cardBrandType",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "cardBrandType"
+    },
+    {
+      "relationshipName": "cardClass",
+      "otherEntityName": "cardClassType",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "cardClassType"
+    },
+    {
+      "relationshipName": "cardChargeType",
+      "otherEntityName": "cardCharges",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "cardChargeTypeName"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "CardIssuerCharges",
+  "changelogDate": "20231004103003",
+  "incrementalChangelog": false
+}

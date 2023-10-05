@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.GdiMasterDataIndex;
 import io.github.erp.service.dto.GdiMasterDataIndexDTO;
 import java.util.Set;
@@ -27,6 +28,11 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring", uses = {})
 public interface GdiMasterDataIndexMapper extends EntityMapper<GdiMasterDataIndexDTO, GdiMasterDataIndex> {
+    @Named("id")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    GdiMasterDataIndexDTO toDtoId(GdiMasterDataIndex gdiMasterDataIndex);
+
     @Named("entityNameSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

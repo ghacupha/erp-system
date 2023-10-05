@@ -25,8 +25,6 @@ import io.github.erp.repository.CountyCodeRepository;
 import io.github.erp.repository.search.CountyCodeSearchRepository;
 import io.github.erp.service.CountyCodeService;
 import io.github.erp.service.dto.CountyCodeDTO;
-import io.github.erp.service.mapper.CountyCodeMapper;
-import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,6 +38,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import io.github.erp.service.mapper.CountyCodeMapper;
+import io.github.erp.web.rest.TestUtil;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;

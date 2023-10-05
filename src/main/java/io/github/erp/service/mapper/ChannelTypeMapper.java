@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.ChannelType;
 import io.github.erp.service.dto.ChannelTypeDTO;
 import org.mapstruct.*;
@@ -25,4 +26,10 @@ import org.mapstruct.*;
  * Mapper for the entity {@link ChannelType} and its DTO {@link ChannelTypeDTO}.
  */
 @Mapper(componentModel = "spring", uses = {})
-public interface ChannelTypeMapper extends EntityMapper<ChannelTypeDTO, ChannelType> {}
+public interface ChannelTypeMapper extends EntityMapper<ChannelTypeDTO, ChannelType> {
+    @Named("channelTypes")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "channelTypes", source = "channelTypes")
+    ChannelTypeDTO toDtoChannelTypes(ChannelType channelType);
+}

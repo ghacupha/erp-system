@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.CardBrandType;
 import io.github.erp.service.dto.CardBrandTypeDTO;
 import org.mapstruct.*;
@@ -25,4 +26,10 @@ import org.mapstruct.*;
  * Mapper for the entity {@link CardBrandType} and its DTO {@link CardBrandTypeDTO}.
  */
 @Mapper(componentModel = "spring", uses = {})
-public interface CardBrandTypeMapper extends EntityMapper<CardBrandTypeDTO, CardBrandType> {}
+public interface CardBrandTypeMapper extends EntityMapper<CardBrandTypeDTO, CardBrandType> {
+    @Named("cardBrandType")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "cardBrandType", source = "cardBrandType")
+    CardBrandTypeDTO toDtoCardBrandType(CardBrandType cardBrandType);
+}

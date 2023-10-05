@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.AccountOwnershipType;
 import io.github.erp.service.dto.AccountOwnershipTypeDTO;
 import org.mapstruct.*;
@@ -25,4 +26,10 @@ import org.mapstruct.*;
  * Mapper for the entity {@link AccountOwnershipType} and its DTO {@link AccountOwnershipTypeDTO}.
  */
 @Mapper(componentModel = "spring", uses = {})
-public interface AccountOwnershipTypeMapper extends EntityMapper<AccountOwnershipTypeDTO, AccountOwnershipType> {}
+public interface AccountOwnershipTypeMapper extends EntityMapper<AccountOwnershipTypeDTO, AccountOwnershipType> {
+    @Named("accountOwnershipType")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "accountOwnershipType", source = "accountOwnershipType")
+    AccountOwnershipTypeDTO toDtoAccountOwnershipType(AccountOwnershipType accountOwnershipType);
+}
