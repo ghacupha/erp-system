@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.IsoCountryCode;
 import io.github.erp.service.dto.IsoCountryCodeDTO;
 import org.mapstruct.*;
@@ -25,4 +26,10 @@ import org.mapstruct.*;
  * Mapper for the entity {@link IsoCountryCode} and its DTO {@link IsoCountryCodeDTO}.
  */
 @Mapper(componentModel = "spring", uses = {})
-public interface IsoCountryCodeMapper extends EntityMapper<IsoCountryCodeDTO, IsoCountryCode> {}
+public interface IsoCountryCodeMapper extends EntityMapper<IsoCountryCodeDTO, IsoCountryCode> {
+    @Named("countryDescription")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "countryDescription", source = "countryDescription")
+    IsoCountryCodeDTO toDtoCountryDescription(IsoCountryCode isoCountryCode);
+}

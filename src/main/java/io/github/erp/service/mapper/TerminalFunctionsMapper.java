@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.TerminalFunctions;
 import io.github.erp.service.dto.TerminalFunctionsDTO;
 import org.mapstruct.*;
@@ -25,4 +26,10 @@ import org.mapstruct.*;
  * Mapper for the entity {@link TerminalFunctions} and its DTO {@link TerminalFunctionsDTO}.
  */
 @Mapper(componentModel = "spring", uses = {})
-public interface TerminalFunctionsMapper extends EntityMapper<TerminalFunctionsDTO, TerminalFunctions> {}
+public interface TerminalFunctionsMapper extends EntityMapper<TerminalFunctionsDTO, TerminalFunctions> {
+    @Named("terminalFunctionality")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "terminalFunctionality", source = "terminalFunctionality")
+    TerminalFunctionsDTO toDtoTerminalFunctionality(TerminalFunctions terminalFunctions);
+}

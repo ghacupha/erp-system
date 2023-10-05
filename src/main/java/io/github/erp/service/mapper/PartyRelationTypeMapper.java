@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.PartyRelationType;
 import io.github.erp.service.dto.PartyRelationTypeDTO;
 import org.mapstruct.*;
@@ -25,4 +26,9 @@ import org.mapstruct.*;
  * Mapper for the entity {@link PartyRelationType} and its DTO {@link PartyRelationTypeDTO}.
  */
 @Mapper(componentModel = "spring", uses = {})
-public interface PartyRelationTypeMapper extends EntityMapper<PartyRelationTypeDTO, PartyRelationType> {}
+public interface PartyRelationTypeMapper extends EntityMapper<PartyRelationTypeDTO, PartyRelationType> {
+    @Named("id")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    PartyRelationTypeDTO toDtoId(PartyRelationType partyRelationType);
+}

@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.repository.CardStatusFlagRepository;
@@ -56,7 +57,7 @@ public class CardStatusFlagResource {
 
     private final Logger log = LoggerFactory.getLogger(CardStatusFlagResource.class);
 
-    private static final String ENTITY_NAME = "cardStatusFlag";
+    private static final String ENTITY_NAME = "gdiDataCardStatusFlag";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

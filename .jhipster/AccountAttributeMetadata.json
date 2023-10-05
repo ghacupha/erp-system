@@ -1,0 +1,78 @@
+{
+  "fields": [
+    {
+      "fieldName": "precedence",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "columnName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "shortName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "detailedDefinition",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "dataType",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "length",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "columnIndex",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "mandatoryFieldFlag",
+      "fieldType": "MandatoryFieldFlagTypes",
+      "fieldValues": "Y,N",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "businessValidation",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "technicalValidation",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "dbColumnName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "metadataVersion",
+      "fieldType": "Integer"
+    }
+  ],
+  "clientRootFolder": "gdi-data",
+  "relationships": [
+    {
+      "relationshipName": "standardInputTemplate",
+      "otherEntityName": "gdiMasterDataIndex",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "AccountAttributeMetadata",
+  "changelogDate": "20231003131804",
+  "incrementalChangelog": false
+}

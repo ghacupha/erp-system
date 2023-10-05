@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.IsoCurrencyCode;
 import io.github.erp.service.dto.IsoCurrencyCodeDTO;
 import org.mapstruct.*;
@@ -25,4 +26,10 @@ import org.mapstruct.*;
  * Mapper for the entity {@link IsoCurrencyCode} and its DTO {@link IsoCurrencyCodeDTO}.
  */
 @Mapper(componentModel = "spring", uses = {})
-public interface IsoCurrencyCodeMapper extends EntityMapper<IsoCurrencyCodeDTO, IsoCurrencyCode> {}
+public interface IsoCurrencyCodeMapper extends EntityMapper<IsoCurrencyCodeDTO, IsoCurrencyCode> {
+    @Named("alphabeticCode")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "alphabeticCode", source = "alphabeticCode")
+    IsoCurrencyCodeDTO toDtoAlphabeticCode(IsoCurrencyCode isoCurrencyCode);
+}

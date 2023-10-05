@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.repository.CrbSubscriptionStatusTypeCodeRepository;
@@ -56,7 +57,7 @@ public class CrbSubscriptionStatusTypeCodeResource {
 
     private final Logger log = LoggerFactory.getLogger(CrbSubscriptionStatusTypeCodeResource.class);
 
-    private static final String ENTITY_NAME = "crbSubscriptionStatusTypeCode";
+    private static final String ENTITY_NAME = "gdiDataCrbSubscriptionStatusTypeCode";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

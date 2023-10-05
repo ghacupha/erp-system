@@ -211,6 +211,25 @@
     <include file="config/liquibase/changelog/20230918085621_added_entity_GdiMasterDataIndex.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230918125857_added_entity_GdiTransactionDataIndex.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230921063733_added_entity_ProductType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231003130755_added_entity_AccountAttribute.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231003131804_added_entity_AccountAttributeMetadata.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231003140605_added_entity_ExchangeRate.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004053154_added_entity_ParticularsOfOutlet.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004054815_added_entity_WeeklyCounterfeitHolding.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004061118_added_entity_WeeklyCashHolding.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004062159_added_entity_CountySubCountyCode.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004065545_added_entity_RelatedPartyRelationship.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004070943_added_entity_TerminalsAndPOS.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004090122_added_entity_PerformanceOfForeignSubsidiaries.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004091106_added_entity_AccountBalance.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004095743_added_entity_AgentBankingActivity.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004102823_added_entity_CardAcquiringTransaction.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004103003_added_entity_CardIssuerCharges.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004103408_added_entity_CardFraudInformation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004121919_added_entity_CardUsageInformation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004123713_added_entity_CollateralInformation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004124958_added_entity_CreditCardFacility.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004131702_added_entity_CardState.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
@@ -332,6 +351,21 @@
     <include file="config/liquibase/changelog/20230920133748_drop_various_gdi_ux_constraints.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230920150207_drop_iso_country_code_placeholder_rel.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230920155842_drop_security_type_description.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231003130755_added_entity_constraints_AccountAttribute.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231003131804_added_entity_constraints_AccountAttributeMetadata.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231003140605_added_entity_constraints_ExchangeRate.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004053154_added_entity_constraints_ParticularsOfOutlet.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004061118_added_entity_constraints_WeeklyCashHolding.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004065545_added_entity_constraints_RelatedPartyRelationship.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004070943_added_entity_constraints_TerminalsAndPOS.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004090122_added_entity_constraints_PerformanceOfForeignSubsidiaries.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004091106_added_entity_constraints_AccountBalance.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004095743_added_entity_constraints_AgentBankingActivity.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004102823_added_entity_constraints_CardAcquiringTransaction.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004103003_added_entity_constraints_CardIssuerCharges.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004121919_added_entity_constraints_CardUsageInformation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004123713_added_entity_constraints_CollateralInformation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231004124958_added_entity_constraints_CreditCardFacility.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

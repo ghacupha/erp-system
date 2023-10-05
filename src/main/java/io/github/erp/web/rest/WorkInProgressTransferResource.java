@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.repository.WorkInProgressTransferRepository;
@@ -54,7 +55,7 @@ public class WorkInProgressTransferResource {
 
     private final Logger log = LoggerFactory.getLogger(WorkInProgressTransferResource.class);
 
-    private static final String ENTITY_NAME = "workInProgressTransfer";
+    private static final String ENTITY_NAME = "gdiDataWorkInProgressTransfer";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

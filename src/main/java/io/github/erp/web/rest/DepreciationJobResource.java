@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.repository.DepreciationJobRepository;
@@ -54,7 +55,7 @@ public class DepreciationJobResource {
 
     private final Logger log = LoggerFactory.getLogger(DepreciationJobResource.class);
 
-    private static final String ENTITY_NAME = "depreciationJob";
+    private static final String ENTITY_NAME = "gdiDataDepreciationJob";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

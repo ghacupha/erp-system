@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.InstitutionCode;
 import io.github.erp.service.dto.InstitutionCodeDTO;
 import org.mapstruct.*;
@@ -31,4 +32,16 @@ public interface InstitutionCodeMapper extends EntityMapper<InstitutionCodeDTO, 
 
     @Mapping(target = "removePlaceholder", ignore = true)
     InstitutionCode toEntity(InstitutionCodeDTO institutionCodeDTO);
+
+    @Named("institutionName")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "institutionName", source = "institutionName")
+    InstitutionCodeDTO toDtoInstitutionName(InstitutionCode institutionCode);
+
+    @Named("institutionCode")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "institutionCode", source = "institutionCode")
+    InstitutionCodeDTO toDtoInstitutionCode(InstitutionCode institutionCode);
 }

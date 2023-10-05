@@ -1,0 +1,11 @@
+id;reporting_date;customer_number;account_contract_number;account_name;account_opening_date;account_closing_date;debit_interest_rate;credit_interest_rate;sanctioned_account_limit_fcy;sanctioned_account_limit_lcy;account_status_change_date;expiry_date;bank_code_id;branch_code_id;account_ownership_type_id
+1;2023-10-02;navigating Granite;Coordinator Fish reciprocal;Savings Account;2023-10-02;2023-10-03;27186;93450;416;87075;2023-10-02;2023-10-03;1;1;1
+2;2023-10-03;Sausages Chief;management Corporate;Checking Account;2023-10-03;2023-10-02;40755;65000;72765;49939;2023-10-02;2023-10-02;2;2;2
+3;2023-10-02;platforms;payment Division;Credit Card Account;2023-10-02;2023-10-03;73107;89915;77572;23864;2023-10-03;2023-10-02;3;3;3
+4;2023-10-03;calculating;Intelligent;Savings Account;2023-10-02;2023-10-02;34735;79020;92469;81556;2023-10-03;2023-10-02;4;4;4
+5;2023-10-02;Web Turnpike;Computer North;Auto Loan Account;2023-10-02;2023-10-03;16887;75864;32370;43403;2023-10-03;2023-10-03;5;5;5
+6;2023-10-02;Global bluetooth magenta;Rubber Refined wireless;Checking Account;2023-10-03;2023-10-03;71496;56197;97927;59045;2023-10-03;2023-10-03;6;6;6
+7;2023-10-02;connect microchip copy;Optional;Home Loan Account;2023-10-03;2023-10-02;76156;50497;83079;76490;2023-10-02;2023-10-02;7;7;7
+8;2023-10-03;Micronesia;purple analyzing;Personal Loan Account;2023-10-02;2023-10-03;47984;26641;5705;61964;2023-10-02;2023-10-02;8;8;8
+9;2023-10-03;Real efficient;deposit;Personal Loan Account;2023-10-02;2023-10-02;20585;17657;57378;51959;2023-10-03;2023-10-03;9;9;9
+10;2023-10-02;process;instruction New strategize;Savings Account;2023-10-03;2023-10-03;3684;35048;75207;47765;2023-10-02;2023-10-02;10;10;10

@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.BankTransactionType;
 import io.github.erp.service.dto.BankTransactionTypeDTO;
 import org.mapstruct.*;
@@ -25,4 +26,16 @@ import org.mapstruct.*;
  * Mapper for the entity {@link BankTransactionType} and its DTO {@link BankTransactionTypeDTO}.
  */
 @Mapper(componentModel = "spring", uses = {})
-public interface BankTransactionTypeMapper extends EntityMapper<BankTransactionTypeDTO, BankTransactionType> {}
+public interface BankTransactionTypeMapper extends EntityMapper<BankTransactionTypeDTO, BankTransactionType> {
+    @Named("transactionTypeCode")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "transactionTypeCode", source = "transactionTypeCode")
+    BankTransactionTypeDTO toDtoTransactionTypeCode(BankTransactionType bankTransactionType);
+
+    @Named("transactionTypeDetails")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "transactionTypeDetails", source = "transactionTypeDetails")
+    BankTransactionTypeDTO toDtoTransactionTypeDetails(BankTransactionType bankTransactionType);
+}
