@@ -57,7 +57,7 @@ public class LeaseModelMetadataResource {
 
     private final Logger log = LoggerFactory.getLogger(LeaseModelMetadataResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataLeaseModelMetadata";
+    private static final String ENTITY_NAME = "leaseModelMetadata";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

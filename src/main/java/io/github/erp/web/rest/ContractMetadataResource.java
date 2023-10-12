@@ -57,7 +57,7 @@ public class ContractMetadataResource {
 
     private final Logger log = LoggerFactory.getLogger(ContractMetadataResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataContractMetadata";
+    private static final String ENTITY_NAME = "contractMetadata";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

@@ -57,7 +57,7 @@ public class BusinessDocumentResource {
 
     private final Logger log = LoggerFactory.getLogger(BusinessDocumentResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataBusinessDocument";
+    private static final String ENTITY_NAME = "businessDocument";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

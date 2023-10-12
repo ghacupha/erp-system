@@ -57,7 +57,7 @@ public class IssuersOfSecuritiesResource {
 
     private final Logger log = LoggerFactory.getLogger(IssuersOfSecuritiesResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataIssuersOfSecurities";
+    private static final String ENTITY_NAME = "issuersOfSecurities";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

@@ -57,7 +57,7 @@ public class BusinessSegmentTypesResource {
 
     private final Logger log = LoggerFactory.getLogger(BusinessSegmentTypesResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataBusinessSegmentTypes";
+    private static final String ENTITY_NAME = "businessSegmentTypes";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

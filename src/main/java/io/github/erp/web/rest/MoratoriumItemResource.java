@@ -57,7 +57,7 @@ public class MoratoriumItemResource {
 
     private final Logger log = LoggerFactory.getLogger(MoratoriumItemResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataMoratoriumItem";
+    private static final String ENTITY_NAME = "moratoriumItem";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

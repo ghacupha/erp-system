@@ -57,7 +57,7 @@ public class PaymentLabelResource {
 
     private final Logger log = LoggerFactory.getLogger(PaymentLabelResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataPaymentLabel";
+    private static final String ENTITY_NAME = "paymentLabel";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

@@ -57,7 +57,7 @@ public class AgencyNoticeResource {
 
     private final Logger log = LoggerFactory.getLogger(AgencyNoticeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataAgencyNotice";
+    private static final String ENTITY_NAME = "agencyNotice";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

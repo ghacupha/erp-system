@@ -57,7 +57,7 @@ public class FxReceiptPurposeTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(FxReceiptPurposeTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataFxReceiptPurposeType";
+    private static final String ENTITY_NAME = "fxReceiptPurposeType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

@@ -57,7 +57,7 @@ public class DerivativeSubTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(DerivativeSubTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataDerivativeSubType";
+    private static final String ENTITY_NAME = "derivativeSubType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

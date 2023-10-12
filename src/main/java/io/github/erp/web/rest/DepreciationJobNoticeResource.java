@@ -57,7 +57,7 @@ public class DepreciationJobNoticeResource {
 
     private final Logger log = LoggerFactory.getLogger(DepreciationJobNoticeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataDepreciationJobNotice";
+    private static final String ENTITY_NAME = "depreciationJobNotice";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

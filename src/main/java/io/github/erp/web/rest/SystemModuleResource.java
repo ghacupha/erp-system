@@ -57,7 +57,7 @@ public class SystemModuleResource {
 
     private final Logger log = LoggerFactory.getLogger(SystemModuleResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataSystemModule";
+    private static final String ENTITY_NAME = "systemModule";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

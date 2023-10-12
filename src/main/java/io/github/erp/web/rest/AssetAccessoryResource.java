@@ -57,7 +57,7 @@ public class AssetAccessoryResource {
 
     private final Logger log = LoggerFactory.getLogger(AssetAccessoryResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataAssetAccessory";
+    private static final String ENTITY_NAME = "assetAccessory";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

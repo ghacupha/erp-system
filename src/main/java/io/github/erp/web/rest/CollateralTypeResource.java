@@ -57,7 +57,7 @@ public class CollateralTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(CollateralTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCollateralType";
+    private static final String ENTITY_NAME = "collateralType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

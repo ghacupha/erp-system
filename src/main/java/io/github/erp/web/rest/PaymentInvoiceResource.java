@@ -57,7 +57,7 @@ public class PaymentInvoiceResource {
 
     private final Logger log = LoggerFactory.getLogger(PaymentInvoiceResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataPaymentInvoice";
+    private static final String ENTITY_NAME = "paymentInvoice";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

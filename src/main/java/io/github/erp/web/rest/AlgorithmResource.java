@@ -57,7 +57,7 @@ public class AlgorithmResource {
 
     private final Logger log = LoggerFactory.getLogger(AlgorithmResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataAlgorithm";
+    private static final String ENTITY_NAME = "algorithm";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

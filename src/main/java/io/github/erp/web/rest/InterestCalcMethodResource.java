@@ -57,7 +57,7 @@ public class InterestCalcMethodResource {
 
     private final Logger log = LoggerFactory.getLogger(InterestCalcMethodResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataInterestCalcMethod";
+    private static final String ENTITY_NAME = "interestCalcMethod";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

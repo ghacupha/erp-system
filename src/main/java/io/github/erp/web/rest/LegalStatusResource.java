@@ -57,7 +57,7 @@ public class LegalStatusResource {
 
     private final Logger log = LoggerFactory.getLogger(LegalStatusResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataLegalStatus";
+    private static final String ENTITY_NAME = "legalStatus";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

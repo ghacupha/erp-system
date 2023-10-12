@@ -57,7 +57,7 @@ public class DeliveryNoteResource {
 
     private final Logger log = LoggerFactory.getLogger(DeliveryNoteResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataDeliveryNote";
+    private static final String ENTITY_NAME = "deliveryNote";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

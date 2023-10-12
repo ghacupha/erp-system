@@ -57,7 +57,7 @@ public class ShareHoldingFlagResource {
 
     private final Logger log = LoggerFactory.getLogger(ShareHoldingFlagResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataShareHoldingFlag";
+    private static final String ENTITY_NAME = "shareHoldingFlag";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

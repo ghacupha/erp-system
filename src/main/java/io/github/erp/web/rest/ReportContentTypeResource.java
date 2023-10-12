@@ -57,7 +57,7 @@ public class ReportContentTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(ReportContentTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataReportContentType";
+    private static final String ENTITY_NAME = "reportContentType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

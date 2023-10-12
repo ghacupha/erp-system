@@ -57,7 +57,7 @@ public class DealerResource {
 
     private final Logger log = LoggerFactory.getLogger(DealerResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataDealer";
+    private static final String ENTITY_NAME = "dealersDealer";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

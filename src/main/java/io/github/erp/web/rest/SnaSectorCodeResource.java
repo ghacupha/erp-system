@@ -57,7 +57,7 @@ public class SnaSectorCodeResource {
 
     private final Logger log = LoggerFactory.getLogger(SnaSectorCodeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataSnaSectorCode";
+    private static final String ENTITY_NAME = "snaSectorCode";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

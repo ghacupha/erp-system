@@ -57,7 +57,7 @@ public class LoanRestructureFlagResource {
 
     private final Logger log = LoggerFactory.getLogger(LoanRestructureFlagResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataLoanRestructureFlag";
+    private static final String ENTITY_NAME = "loanRestructureFlag";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

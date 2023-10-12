@@ -57,7 +57,7 @@ public class AmortizationRecurrenceResource {
 
     private final Logger log = LoggerFactory.getLogger(AmortizationRecurrenceResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataAmortizationRecurrence";
+    private static final String ENTITY_NAME = "amortizationRecurrence";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

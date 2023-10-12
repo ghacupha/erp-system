@@ -57,7 +57,7 @@ public class CommitteeTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(CommitteeTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCommitteeType";
+    private static final String ENTITY_NAME = "committeeType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

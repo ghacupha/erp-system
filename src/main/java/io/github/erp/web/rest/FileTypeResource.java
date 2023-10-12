@@ -57,7 +57,7 @@ public class FileTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(FileTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataFileType";
+    private static final String ENTITY_NAME = "filesFileType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

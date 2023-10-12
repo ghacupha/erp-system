@@ -55,7 +55,7 @@ public class WorkInProgressTransferResource {
 
     private final Logger log = LoggerFactory.getLogger(WorkInProgressTransferResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataWorkInProgressTransfer";
+    private static final String ENTITY_NAME = "workInProgressTransfer";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

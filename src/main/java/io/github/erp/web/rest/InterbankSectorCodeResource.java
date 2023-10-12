@@ -57,7 +57,7 @@ public class InterbankSectorCodeResource {
 
     private final Logger log = LoggerFactory.getLogger(InterbankSectorCodeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataInterbankSectorCode";
+    private static final String ENTITY_NAME = "interbankSectorCode";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

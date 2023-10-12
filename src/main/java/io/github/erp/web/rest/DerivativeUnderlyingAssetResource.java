@@ -57,7 +57,7 @@ public class DerivativeUnderlyingAssetResource {
 
     private final Logger log = LoggerFactory.getLogger(DerivativeUnderlyingAssetResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataDerivativeUnderlyingAsset";
+    private static final String ENTITY_NAME = "derivativeUnderlyingAsset";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

@@ -57,7 +57,7 @@ public class PrepaymentMappingResource {
 
     private final Logger log = LoggerFactory.getLogger(PrepaymentMappingResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataPrepaymentMapping";
+    private static final String ENTITY_NAME = "prepaymentMapping";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

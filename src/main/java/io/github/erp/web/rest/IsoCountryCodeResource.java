@@ -55,7 +55,7 @@ public class IsoCountryCodeResource {
 
     private final Logger log = LoggerFactory.getLogger(IsoCountryCodeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataIsoCountryCode";
+    private static final String ENTITY_NAME = "isoCountryCode";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

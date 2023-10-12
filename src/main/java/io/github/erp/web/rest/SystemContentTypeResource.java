@@ -57,7 +57,7 @@ public class SystemContentTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(SystemContentTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataSystemContentType";
+    private static final String ENTITY_NAME = "systemContentType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

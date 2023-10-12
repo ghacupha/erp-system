@@ -27,15 +27,15 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring", uses = {})
 public interface BankTransactionTypeMapper extends EntityMapper<BankTransactionTypeDTO, BankTransactionType> {
-    @Named("transactionTypeCode")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "transactionTypeCode", source = "transactionTypeCode")
-    BankTransactionTypeDTO toDtoTransactionTypeCode(BankTransactionType bankTransactionType);
-
     @Named("transactionTypeDetails")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "transactionTypeDetails", source = "transactionTypeDetails")
     BankTransactionTypeDTO toDtoTransactionTypeDetails(BankTransactionType bankTransactionType);
+
+    @Named("transactionTypeCode")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "transactionTypeCode", source = "transactionTypeCode")
+    BankTransactionTypeDTO toDtoTransactionTypeCode(BankTransactionType bankTransactionType);
 }

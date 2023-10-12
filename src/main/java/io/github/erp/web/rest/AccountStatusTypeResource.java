@@ -57,7 +57,7 @@ public class AccountStatusTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(AccountStatusTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataAccountStatusType";
+    private static final String ENTITY_NAME = "accountStatusType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

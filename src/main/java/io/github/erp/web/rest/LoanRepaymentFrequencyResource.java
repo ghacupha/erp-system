@@ -57,7 +57,7 @@ public class LoanRepaymentFrequencyResource {
 
     private final Logger log = LoggerFactory.getLogger(LoanRepaymentFrequencyResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataLoanRepaymentFrequency";
+    private static final String ENTITY_NAME = "loanRepaymentFrequency";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

@@ -57,7 +57,7 @@ public class CreditNoteResource {
 
     private final Logger log = LoggerFactory.getLogger(CreditNoteResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCreditNote";
+    private static final String ENTITY_NAME = "creditNote";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

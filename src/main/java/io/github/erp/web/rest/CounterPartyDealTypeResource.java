@@ -57,7 +57,7 @@ public class CounterPartyDealTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(CounterPartyDealTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCounterPartyDealType";
+    private static final String ENTITY_NAME = "counterPartyDealType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

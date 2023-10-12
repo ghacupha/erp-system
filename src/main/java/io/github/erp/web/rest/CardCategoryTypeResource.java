@@ -57,7 +57,7 @@ public class CardCategoryTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(CardCategoryTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCardCategoryType";
+    private static final String ENTITY_NAME = "cardCategoryType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

@@ -57,7 +57,7 @@ public class AnticipatedMaturityPerioodResource {
 
     private final Logger log = LoggerFactory.getLogger(AnticipatedMaturityPerioodResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataAnticipatedMaturityPeriood";
+    private static final String ENTITY_NAME = "anticipatedMaturityPeriood";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

@@ -57,7 +57,7 @@ public class GlMappingResource {
 
     private final Logger log = LoggerFactory.getLogger(GlMappingResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataGlMapping";
+    private static final String ENTITY_NAME = "glMapping";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

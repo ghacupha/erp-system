@@ -57,7 +57,7 @@ public class FixedAssetAcquisitionResource {
 
     private final Logger log = LoggerFactory.getLogger(FixedAssetAcquisitionResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataFixedAssetAcquisition";
+    private static final String ENTITY_NAME = "assetsFixedAssetAcquisition";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

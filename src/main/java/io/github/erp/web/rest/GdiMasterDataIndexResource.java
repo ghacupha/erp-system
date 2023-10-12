@@ -57,7 +57,7 @@ public class GdiMasterDataIndexResource {
 
     private final Logger log = LoggerFactory.getLogger(GdiMasterDataIndexResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataGdiMasterDataIndex";
+    private static final String ENTITY_NAME = "gdiMasterDataIndex";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

@@ -57,7 +57,7 @@ public class SecurityTenureResource {
 
     private final Logger log = LoggerFactory.getLogger(SecurityTenureResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataSecurityTenure";
+    private static final String ENTITY_NAME = "securityTenure";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

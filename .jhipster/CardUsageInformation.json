@@ -58,7 +58,7 @@
       "otherEntityName": "cardCategoryType",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
-      "otherEntityField": "cardCategoryTypeDescription"
+      "otherEntityField": "cardCategoryDescription"
     },
     {
       "relationshipName": "transactionType",

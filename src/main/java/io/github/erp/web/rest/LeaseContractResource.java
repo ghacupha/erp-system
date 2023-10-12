@@ -57,7 +57,7 @@ public class LeaseContractResource {
 
     private final Logger log = LoggerFactory.getLogger(LeaseContractResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataLeaseContract";
+    private static final String ENTITY_NAME = "leaseContract";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

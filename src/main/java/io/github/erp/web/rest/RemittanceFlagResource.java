@@ -57,7 +57,7 @@ public class RemittanceFlagResource {
 
     private final Logger log = LoggerFactory.getLogger(RemittanceFlagResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataRemittanceFlag";
+    private static final String ENTITY_NAME = "remittanceFlag";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

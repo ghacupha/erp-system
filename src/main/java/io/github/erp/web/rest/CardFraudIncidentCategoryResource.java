@@ -57,7 +57,7 @@ public class CardFraudIncidentCategoryResource {
 
     private final Logger log = LoggerFactory.getLogger(CardFraudIncidentCategoryResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCardFraudIncidentCategory";
+    private static final String ENTITY_NAME = "cardFraudIncidentCategory";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

@@ -18,9 +18,7 @@ package io.github.erp.service.mapper;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.domain.CardCategoryType;
 import io.github.erp.domain.CardUsageInformation;
-import io.github.erp.service.dto.CardCategoryTypeDTO;
 import io.github.erp.service.dto.CardUsageInformationDTO;
 import org.mapstruct.*;
 
@@ -43,15 +41,9 @@ public interface CardUsageInformationMapper extends EntityMapper<CardUsageInform
     @Mapping(target = "bankCode", source = "bankCode", qualifiedByName = "institutionName")
     @Mapping(target = "cardType", source = "cardType", qualifiedByName = "cardType")
     @Mapping(target = "cardBrand", source = "cardBrand", qualifiedByName = "cardBrandType")
-    @Mapping(target = "cardCategoryType", source = "cardCategoryType", qualifiedByName = "cardCategoryTypeDescription")
+    @Mapping(target = "cardCategoryType", source = "cardCategoryType", qualifiedByName = "cardCategoryDescription")
     @Mapping(target = "transactionType", source = "transactionType", qualifiedByName = "transactionTypeDetails")
     @Mapping(target = "channelType", source = "channelType", qualifiedByName = "channelTypes")
     @Mapping(target = "cardState", source = "cardState", qualifiedByName = "cardStateFlagDetails")
     CardUsageInformationDTO toDto(CardUsageInformation s);
-
-    @Named("cardCategoryTypeDescription")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "cardCategoryDescription", source = "cardCategoryDescription")
-    CardCategoryTypeDTO toDtoCardCategoryDescription(CardCategoryType cardCategoryType);
 }

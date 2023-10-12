@@ -57,7 +57,7 @@ public class LoanAccountCategoryResource {
 
     private final Logger log = LoggerFactory.getLogger(LoanAccountCategoryResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataLoanAccountCategory";
+    private static final String ENTITY_NAME = "loanAccountCategory";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

@@ -57,7 +57,7 @@ public class StaffRoleTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(StaffRoleTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataStaffRoleType";
+    private static final String ENTITY_NAME = "staffRoleType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

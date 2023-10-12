@@ -57,7 +57,7 @@ public class PartyRelationTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(PartyRelationTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataPartyRelationType";
+    private static final String ENTITY_NAME = "partyRelationType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

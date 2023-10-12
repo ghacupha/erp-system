@@ -57,7 +57,7 @@ public class FxRateTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(FxRateTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataFxRateType";
+    private static final String ENTITY_NAME = "fxRateType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

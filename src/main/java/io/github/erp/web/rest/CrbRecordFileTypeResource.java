@@ -57,7 +57,7 @@ public class CrbRecordFileTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(CrbRecordFileTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCrbRecordFileType";
+    private static final String ENTITY_NAME = "crbRecordFileType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

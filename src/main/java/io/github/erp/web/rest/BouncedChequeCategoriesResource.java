@@ -57,7 +57,7 @@ public class BouncedChequeCategoriesResource {
 
     private final Logger log = LoggerFactory.getLogger(BouncedChequeCategoriesResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataBouncedChequeCategories";
+    private static final String ENTITY_NAME = "bouncedChequeCategories";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

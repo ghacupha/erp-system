@@ -57,7 +57,7 @@ public class CrbDataSubmittingInstitutionsResource {
 
     private final Logger log = LoggerFactory.getLogger(CrbDataSubmittingInstitutionsResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCrbDataSubmittingInstitutions";
+    private static final String ENTITY_NAME = "crbDataSubmittingInstitutions";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

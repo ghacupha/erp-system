@@ -57,7 +57,7 @@ public class ProcessStatusResource {
 
     private final Logger log = LoggerFactory.getLogger(ProcessStatusResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataProcessStatus";
+    private static final String ENTITY_NAME = "processStatus";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

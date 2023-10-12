@@ -57,7 +57,7 @@ public class CrbFileTransmissionStatusResource {
 
     private final Logger log = LoggerFactory.getLogger(CrbFileTransmissionStatusResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCrbFileTransmissionStatus";
+    private static final String ENTITY_NAME = "crbFileTransmissionStatus";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

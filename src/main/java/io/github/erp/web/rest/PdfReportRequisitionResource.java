@@ -57,7 +57,7 @@ public class PdfReportRequisitionResource {
 
     private final Logger log = LoggerFactory.getLogger(PdfReportRequisitionResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataPdfReportRequisition";
+    private static final String ENTITY_NAME = "pdfReportRequisition";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

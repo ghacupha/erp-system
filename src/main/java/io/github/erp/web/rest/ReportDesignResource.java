@@ -57,7 +57,7 @@ public class ReportDesignResource {
 
     private final Logger log = LoggerFactory.getLogger(ReportDesignResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataReportDesign";
+    private static final String ENTITY_NAME = "reportDesign";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

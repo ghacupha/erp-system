@@ -57,7 +57,7 @@ public class PrepaymentMarshallingResource {
 
     private final Logger log = LoggerFactory.getLogger(PrepaymentMarshallingResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataPrepaymentMarshalling";
+    private static final String ENTITY_NAME = "prepaymentMarshalling";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

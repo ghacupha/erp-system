@@ -57,7 +57,7 @@ public class FxTransactionChannelTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(FxTransactionChannelTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataFxTransactionChannelType";
+    private static final String ENTITY_NAME = "fxTransactionChannelType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

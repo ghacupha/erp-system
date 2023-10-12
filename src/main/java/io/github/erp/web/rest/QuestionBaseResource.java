@@ -57,7 +57,7 @@ public class QuestionBaseResource {
 
     private final Logger log = LoggerFactory.getLogger(QuestionBaseResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataQuestionBase";
+    private static final String ENTITY_NAME = "questionBase";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

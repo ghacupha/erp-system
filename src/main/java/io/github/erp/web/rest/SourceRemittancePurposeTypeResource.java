@@ -57,7 +57,7 @@ public class SourceRemittancePurposeTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(SourceRemittancePurposeTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataSourceRemittancePurposeType";
+    private static final String ENTITY_NAME = "sourceRemittancePurposeType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

@@ -57,7 +57,7 @@ public class ChartOfAccountsCodeResource {
 
     private final Logger log = LoggerFactory.getLogger(ChartOfAccountsCodeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataChartOfAccountsCode";
+    private static final String ENTITY_NAME = "chartOfAccountsCode";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

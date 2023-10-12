@@ -55,7 +55,7 @@ public class TaxRuleResource {
 
     private final Logger log = LoggerFactory.getLogger(TaxRuleResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataTaxRule";
+    private static final String ENTITY_NAME = "paymentsTaxRule";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
