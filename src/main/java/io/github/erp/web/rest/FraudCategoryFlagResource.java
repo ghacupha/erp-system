@@ -55,7 +55,7 @@ public class FraudCategoryFlagResource {
 
     private final Logger log = LoggerFactory.getLogger(FraudCategoryFlagResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataFraudCategoryFlag";
+    private static final String ENTITY_NAME = "fraudCategoryFlag";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

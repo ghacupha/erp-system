@@ -57,7 +57,7 @@ public class AmortizationSequenceResource {
 
     private final Logger log = LoggerFactory.getLogger(AmortizationSequenceResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataAmortizationSequence";
+    private static final String ENTITY_NAME = "amortizationSequence";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

@@ -57,7 +57,7 @@ public class OutletStatusResource {
 
     private final Logger log = LoggerFactory.getLogger(OutletStatusResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataOutletStatus";
+    private static final String ENTITY_NAME = "outletStatus";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

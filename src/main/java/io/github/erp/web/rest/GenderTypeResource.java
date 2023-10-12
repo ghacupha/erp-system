@@ -57,7 +57,7 @@ public class GenderTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(GenderTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataGenderType";
+    private static final String ENTITY_NAME = "genderType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

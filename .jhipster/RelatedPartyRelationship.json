@@ -37,7 +37,7 @@
       "otherEntityName": "partyRelationType",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
-      "otherEntityField": "partyRelationshipType"
+      "otherEntityField": "partyRelationType"
     }
   ],
   "service": "serviceImpl",

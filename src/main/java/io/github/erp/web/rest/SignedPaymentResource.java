@@ -57,7 +57,7 @@ public class SignedPaymentResource {
 
     private final Logger log = LoggerFactory.getLogger(SignedPaymentResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataSignedPayment";
+    private static final String ENTITY_NAME = "signedPayment";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

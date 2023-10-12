@@ -57,7 +57,7 @@ public class MerchantTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(MerchantTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataMerchantType";
+    private static final String ENTITY_NAME = "merchantType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

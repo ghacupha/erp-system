@@ -57,7 +57,7 @@ public class DepreciationMethodResource {
 
     private final Logger log = LoggerFactory.getLogger(DepreciationMethodResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataDepreciationMethod";
+    private static final String ENTITY_NAME = "depreciationMethod";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

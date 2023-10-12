@@ -57,7 +57,7 @@ public class BankBranchCodeResource {
 
     private final Logger log = LoggerFactory.getLogger(BankBranchCodeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataBankBranchCode";
+    private static final String ENTITY_NAME = "bankBranchCode";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

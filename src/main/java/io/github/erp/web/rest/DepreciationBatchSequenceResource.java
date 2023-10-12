@@ -55,7 +55,7 @@ public class DepreciationBatchSequenceResource {
 
     private final Logger log = LoggerFactory.getLogger(DepreciationBatchSequenceResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataDepreciationBatchSequence";
+    private static final String ENTITY_NAME = "depreciationBatchSequence";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

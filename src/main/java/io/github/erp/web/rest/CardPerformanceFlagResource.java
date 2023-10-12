@@ -57,7 +57,7 @@ public class CardPerformanceFlagResource {
 
     private final Logger log = LoggerFactory.getLogger(CardPerformanceFlagResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCardPerformanceFlag";
+    private static final String ENTITY_NAME = "cardPerformanceFlag";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

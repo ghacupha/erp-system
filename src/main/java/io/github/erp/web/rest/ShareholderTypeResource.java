@@ -57,7 +57,7 @@ public class ShareholderTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(ShareholderTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataShareholderType";
+    private static final String ENTITY_NAME = "shareholderType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

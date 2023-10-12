@@ -57,7 +57,7 @@ public class ChannelTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(ChannelTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataChannelType";
+    private static final String ENTITY_NAME = "channelType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

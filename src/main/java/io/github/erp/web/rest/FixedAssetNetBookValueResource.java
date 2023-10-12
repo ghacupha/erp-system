@@ -55,7 +55,7 @@ public class FixedAssetNetBookValueResource {
 
     private final Logger log = LoggerFactory.getLogger(FixedAssetNetBookValueResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataFixedAssetNetBookValue";
+    private static final String ENTITY_NAME = "assetsFixedAssetNetBookValue";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

@@ -27,8 +27,9 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring", uses = {})
 public interface PartyRelationTypeMapper extends EntityMapper<PartyRelationTypeDTO, PartyRelationType> {
-    @Named("id")
+    @Named("partyRelationType")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    PartyRelationTypeDTO toDtoId(PartyRelationType partyRelationType);
+    @Mapping(target = "partyRelationType", source = "partyRelationType")
+    PartyRelationTypeDTO toDtoPartyRelationType(PartyRelationType partyRelationType);
 }

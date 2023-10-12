@@ -57,7 +57,7 @@ public class CrbProductServiceFeeTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(CrbProductServiceFeeTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCrbProductServiceFeeType";
+    private static final String ENTITY_NAME = "crbProductServiceFeeType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

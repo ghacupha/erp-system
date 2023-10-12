@@ -57,7 +57,7 @@ public class PlaceholderResource {
 
     private final Logger log = LoggerFactory.getLogger(PlaceholderResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataPlaceholder";
+    private static final String ENTITY_NAME = "erpServicePlaceholder";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

@@ -57,7 +57,7 @@ public class TerminalFunctionsResource {
 
     private final Logger log = LoggerFactory.getLogger(TerminalFunctionsResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataTerminalFunctions";
+    private static final String ENTITY_NAME = "terminalFunctions";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

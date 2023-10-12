@@ -57,7 +57,7 @@ public class BankTransactionTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(BankTransactionTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataBankTransactionType";
+    private static final String ENTITY_NAME = "bankTransactionType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

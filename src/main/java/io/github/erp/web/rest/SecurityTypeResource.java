@@ -57,7 +57,7 @@ public class SecurityTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(SecurityTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataSecurityType";
+    private static final String ENTITY_NAME = "securityType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

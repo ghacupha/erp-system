@@ -18,9 +18,7 @@ package io.github.erp.service.mapper;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.domain.PartyRelationType;
 import io.github.erp.domain.RelatedPartyRelationship;
-import io.github.erp.service.dto.PartyRelationTypeDTO;
 import io.github.erp.service.dto.RelatedPartyRelationshipDTO;
 import org.mapstruct.*;
 
@@ -31,12 +29,6 @@ import org.mapstruct.*;
 public interface RelatedPartyRelationshipMapper extends EntityMapper<RelatedPartyRelationshipDTO, RelatedPartyRelationship> {
     @Mapping(target = "bankCode", source = "bankCode", qualifiedByName = "institutionName")
     @Mapping(target = "branchId", source = "branchId", qualifiedByName = "branchCode")
-    @Mapping(target = "relationshipType", source = "relationshipType", qualifiedByName = "partyRelationshipType")
+    @Mapping(target = "relationshipType", source = "relationshipType", qualifiedByName = "partyRelationType")
     RelatedPartyRelationshipDTO toDto(RelatedPartyRelationship s);
-
-    @Named("partyRelationshipType")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "partyRelationType", source = "partyRelationType")
-    PartyRelationTypeDTO toDtoId(PartyRelationType partyRelationType);
 }

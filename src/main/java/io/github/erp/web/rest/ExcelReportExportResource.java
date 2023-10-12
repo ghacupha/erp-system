@@ -57,7 +57,7 @@ public class ExcelReportExportResource {
 
     private final Logger log = LoggerFactory.getLogger(ExcelReportExportResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataExcelReportExport";
+    private static final String ENTITY_NAME = "excelReportExport";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

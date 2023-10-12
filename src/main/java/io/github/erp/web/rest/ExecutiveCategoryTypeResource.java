@@ -57,7 +57,7 @@ public class ExecutiveCategoryTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(ExecutiveCategoryTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataExecutiveCategoryType";
+    private static final String ENTITY_NAME = "executiveCategoryType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

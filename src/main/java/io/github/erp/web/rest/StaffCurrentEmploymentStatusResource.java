@@ -57,7 +57,7 @@ public class StaffCurrentEmploymentStatusResource {
 
     private final Logger log = LoggerFactory.getLogger(StaffCurrentEmploymentStatusResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataStaffCurrentEmploymentStatus";
+    private static final String ENTITY_NAME = "staffCurrentEmploymentStatus";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

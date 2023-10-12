@@ -57,7 +57,7 @@ public class ServiceOutletResource {
 
     private final Logger log = LoggerFactory.getLogger(ServiceOutletResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataServiceOutlet";
+    private static final String ENTITY_NAME = "serviceOutlet";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

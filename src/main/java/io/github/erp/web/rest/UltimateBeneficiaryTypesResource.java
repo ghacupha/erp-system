@@ -57,7 +57,7 @@ public class UltimateBeneficiaryTypesResource {
 
     private final Logger log = LoggerFactory.getLogger(UltimateBeneficiaryTypesResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataUltimateBeneficiaryTypes";
+    private static final String ENTITY_NAME = "ultimateBeneficiaryTypes";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

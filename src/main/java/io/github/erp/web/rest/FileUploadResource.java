@@ -57,7 +57,7 @@ public class FileUploadResource {
 
     private final Logger log = LoggerFactory.getLogger(FileUploadResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataFileUpload";
+    private static final String ENTITY_NAME = "filesFileUpload";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

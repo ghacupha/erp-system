@@ -55,7 +55,7 @@ public class MfbBranchCodeResource {
 
     private final Logger log = LoggerFactory.getLogger(MfbBranchCodeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataMfbBranchCode";
+    private static final String ENTITY_NAME = "mfbBranchCode";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

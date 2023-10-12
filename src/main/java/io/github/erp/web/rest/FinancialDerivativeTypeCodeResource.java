@@ -57,7 +57,7 @@ public class FinancialDerivativeTypeCodeResource {
 
     private final Logger log = LoggerFactory.getLogger(FinancialDerivativeTypeCodeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataFinancialDerivativeTypeCode";
+    private static final String ENTITY_NAME = "financialDerivativeTypeCode";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

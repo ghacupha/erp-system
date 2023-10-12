@@ -57,7 +57,7 @@ public class SettlementCurrencyResource {
 
     private final Logger log = LoggerFactory.getLogger(SettlementCurrencyResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataSettlementCurrency";
+    private static final String ENTITY_NAME = "settlementCurrency";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

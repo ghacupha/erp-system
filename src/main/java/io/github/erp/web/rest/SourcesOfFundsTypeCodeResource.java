@@ -57,7 +57,7 @@ public class SourcesOfFundsTypeCodeResource {
 
     private final Logger log = LoggerFactory.getLogger(SourcesOfFundsTypeCodeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataSourcesOfFundsTypeCode";
+    private static final String ENTITY_NAME = "sourcesOfFundsTypeCode";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

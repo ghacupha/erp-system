@@ -57,7 +57,7 @@ public class SettlementResource {
 
     private final Logger log = LoggerFactory.getLogger(SettlementResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataSettlement";
+    private static final String ENTITY_NAME = "settlement";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

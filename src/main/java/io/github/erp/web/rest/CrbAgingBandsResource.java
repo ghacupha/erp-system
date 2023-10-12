@@ -57,7 +57,7 @@ public class CrbAgingBandsResource {
 
     private final Logger log = LoggerFactory.getLogger(CrbAgingBandsResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCrbAgingBands";
+    private static final String ENTITY_NAME = "crbAgingBands";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

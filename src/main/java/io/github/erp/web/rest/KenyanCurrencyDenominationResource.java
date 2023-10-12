@@ -57,7 +57,7 @@ public class KenyanCurrencyDenominationResource {
 
     private final Logger log = LoggerFactory.getLogger(KenyanCurrencyDenominationResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataKenyanCurrencyDenomination";
+    private static final String ENTITY_NAME = "kenyanCurrencyDenomination";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

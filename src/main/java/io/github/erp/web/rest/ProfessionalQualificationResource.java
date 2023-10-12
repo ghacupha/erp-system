@@ -57,7 +57,7 @@ public class ProfessionalQualificationResource {
 
     private final Logger log = LoggerFactory.getLogger(ProfessionalQualificationResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataProfessionalQualification";
+    private static final String ENTITY_NAME = "professionalQualification";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

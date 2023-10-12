@@ -57,7 +57,7 @@ public class CustomerIDDocumentTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(CustomerIDDocumentTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCustomerIdDocumentType";
+    private static final String ENTITY_NAME = "customerIDDocumentType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

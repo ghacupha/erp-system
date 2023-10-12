@@ -57,7 +57,7 @@ public class InsiderCategoryTypesResource {
 
     private final Logger log = LoggerFactory.getLogger(InsiderCategoryTypesResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataInsiderCategoryTypes";
+    private static final String ENTITY_NAME = "insiderCategoryTypes";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

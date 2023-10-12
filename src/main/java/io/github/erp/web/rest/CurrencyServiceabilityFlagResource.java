@@ -57,7 +57,7 @@ public class CurrencyServiceabilityFlagResource {
 
     private final Logger log = LoggerFactory.getLogger(CurrencyServiceabilityFlagResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCurrencyServiceabilityFlag";
+    private static final String ENTITY_NAME = "currencyServiceabilityFlag";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

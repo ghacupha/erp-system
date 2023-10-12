@@ -57,7 +57,7 @@ public class WorkInProgressRegistrationResource {
 
     private final Logger log = LoggerFactory.getLogger(WorkInProgressRegistrationResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataWorkInProgressRegistration";
+    private static final String ENTITY_NAME = "workInProgressRegistration";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

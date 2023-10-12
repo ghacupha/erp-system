@@ -57,7 +57,7 @@ public class ApplicationUserResource {
 
     private final Logger log = LoggerFactory.getLogger(ApplicationUserResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataApplicationUser";
+    private static final String ENTITY_NAME = "applicationUser";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

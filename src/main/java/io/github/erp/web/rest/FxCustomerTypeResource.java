@@ -57,7 +57,7 @@ public class FxCustomerTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(FxCustomerTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataFxCustomerType";
+    private static final String ENTITY_NAME = "fxCustomerType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

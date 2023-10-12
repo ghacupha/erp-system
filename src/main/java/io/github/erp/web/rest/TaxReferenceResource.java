@@ -57,7 +57,7 @@ public class TaxReferenceResource {
 
     private final Logger log = LoggerFactory.getLogger(TaxReferenceResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataTaxReference";
+    private static final String ENTITY_NAME = "paymentsTaxReference";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

@@ -57,7 +57,7 @@ public class IsicEconomicActivityResource {
 
     private final Logger log = LoggerFactory.getLogger(IsicEconomicActivityResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataIsicEconomicActivity";
+    private static final String ENTITY_NAME = "isicEconomicActivity";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

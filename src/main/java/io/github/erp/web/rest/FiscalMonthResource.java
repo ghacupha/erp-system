@@ -57,7 +57,7 @@ public class FiscalMonthResource {
 
     private final Logger log = LoggerFactory.getLogger(FiscalMonthResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataFiscalMonth";
+    private static final String ENTITY_NAME = "fiscalMonth";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

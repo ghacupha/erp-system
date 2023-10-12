@@ -57,7 +57,7 @@ public class CrbSubscriptionStatusTypeCodeResource {
 
     private final Logger log = LoggerFactory.getLogger(CrbSubscriptionStatusTypeCodeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCrbSubscriptionStatusTypeCode";
+    private static final String ENTITY_NAME = "crbSubscriptionStatusTypeCode";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

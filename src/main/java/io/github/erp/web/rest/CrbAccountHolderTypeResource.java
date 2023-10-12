@@ -57,7 +57,7 @@ public class CrbAccountHolderTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(CrbAccountHolderTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCrbAccountHolderType";
+    private static final String ENTITY_NAME = "crbAccountHolderType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

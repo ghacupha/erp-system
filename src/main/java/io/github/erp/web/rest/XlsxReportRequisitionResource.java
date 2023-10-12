@@ -57,7 +57,7 @@ public class XlsxReportRequisitionResource {
 
     private final Logger log = LoggerFactory.getLogger(XlsxReportRequisitionResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataXlsxReportRequisition";
+    private static final String ENTITY_NAME = "xlsxReportRequisition";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

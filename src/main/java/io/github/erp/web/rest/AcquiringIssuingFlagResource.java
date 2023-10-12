@@ -57,7 +57,7 @@ public class AcquiringIssuingFlagResource {
 
     private final Logger log = LoggerFactory.getLogger(AcquiringIssuingFlagResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataAcquiringIssuingFlag";
+    private static final String ENTITY_NAME = "acquiringIssuingFlag";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

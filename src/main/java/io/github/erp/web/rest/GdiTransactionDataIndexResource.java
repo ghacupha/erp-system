@@ -57,7 +57,7 @@ public class GdiTransactionDataIndexResource {
 
     private final Logger log = LoggerFactory.getLogger(GdiTransactionDataIndexResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataGdiTransactionDataIndex";
+    private static final String ENTITY_NAME = "gdiTransactionDataIndex";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

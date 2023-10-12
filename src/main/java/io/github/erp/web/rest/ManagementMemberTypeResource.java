@@ -57,7 +57,7 @@ public class ManagementMemberTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(ManagementMemberTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataManagementMemberType";
+    private static final String ENTITY_NAME = "managementMemberType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

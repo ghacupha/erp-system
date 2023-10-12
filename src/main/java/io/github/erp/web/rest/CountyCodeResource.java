@@ -57,7 +57,7 @@ public class CountyCodeResource {
 
     private final Logger log = LoggerFactory.getLogger(CountyCodeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCountyCode";
+    private static final String ENTITY_NAME = "countyCode";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

@@ -57,7 +57,7 @@ public class CrbReportViewBandResource {
 
     private final Logger log = LoggerFactory.getLogger(CrbReportViewBandResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCrbReportViewBand";
+    private static final String ENTITY_NAME = "crbReportViewBand";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

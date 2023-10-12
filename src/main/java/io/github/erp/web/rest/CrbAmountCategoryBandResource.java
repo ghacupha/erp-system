@@ -57,7 +57,7 @@ public class CrbAmountCategoryBandResource {
 
     private final Logger log = LoggerFactory.getLogger(CrbAmountCategoryBandResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCrbAmountCategoryBand";
+    private static final String ENTITY_NAME = "crbAmountCategoryBand";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

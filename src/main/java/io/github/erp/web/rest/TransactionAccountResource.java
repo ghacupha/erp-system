@@ -57,7 +57,7 @@ public class TransactionAccountResource {
 
     private final Logger log = LoggerFactory.getLogger(TransactionAccountResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataTransactionAccount";
+    private static final String ENTITY_NAME = "transactionAccount";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

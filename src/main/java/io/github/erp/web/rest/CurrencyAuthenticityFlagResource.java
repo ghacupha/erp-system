@@ -57,7 +57,7 @@ public class CurrencyAuthenticityFlagResource {
 
     private final Logger log = LoggerFactory.getLogger(CurrencyAuthenticityFlagResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCurrencyAuthenticityFlag";
+    private static final String ENTITY_NAME = "currencyAuthenticityFlag";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

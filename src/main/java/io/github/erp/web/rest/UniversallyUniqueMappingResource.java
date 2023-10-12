@@ -57,7 +57,7 @@ public class UniversallyUniqueMappingResource {
 
     private final Logger log = LoggerFactory.getLogger(UniversallyUniqueMappingResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataUniversallyUniqueMapping";
+    private static final String ENTITY_NAME = "universallyUniqueMapping";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

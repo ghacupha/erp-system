@@ -57,7 +57,7 @@ public class SecurityClearanceResource {
 
     private final Logger log = LoggerFactory.getLogger(SecurityClearanceResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataSecurityClearance";
+    private static final String ENTITY_NAME = "securityClearance";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

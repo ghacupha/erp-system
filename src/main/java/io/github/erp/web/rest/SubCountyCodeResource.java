@@ -55,7 +55,7 @@ public class SubCountyCodeResource {
 
     private final Logger log = LoggerFactory.getLogger(SubCountyCodeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataSubCountyCode";
+    private static final String ENTITY_NAME = "subCountyCode";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

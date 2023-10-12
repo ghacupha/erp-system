@@ -57,7 +57,7 @@ public class NatureOfCustomerComplaintsResource {
 
     private final Logger log = LoggerFactory.getLogger(NatureOfCustomerComplaintsResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataNatureOfCustomerComplaints";
+    private static final String ENTITY_NAME = "natureOfCustomerComplaints";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

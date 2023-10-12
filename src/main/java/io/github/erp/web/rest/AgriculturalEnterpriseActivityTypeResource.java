@@ -57,7 +57,7 @@ public class AgriculturalEnterpriseActivityTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(AgriculturalEnterpriseActivityTypeResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataAgriculturalEnterpriseActivityType";
+    private static final String ENTITY_NAME = "agriculturalEnterpriseActivityType";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

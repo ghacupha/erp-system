@@ -57,7 +57,7 @@ public class AssetWarrantyResource {
 
     private final Logger log = LoggerFactory.getLogger(AssetWarrantyResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataAssetWarranty";
+    private static final String ENTITY_NAME = "assetWarranty";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

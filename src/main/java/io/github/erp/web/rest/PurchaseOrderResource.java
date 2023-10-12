@@ -57,7 +57,7 @@ public class PurchaseOrderResource {
 
     private final Logger log = LoggerFactory.getLogger(PurchaseOrderResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataPurchaseOrder";
+    private static final String ENTITY_NAME = "purchaseOrder";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

@@ -57,7 +57,7 @@ public class CardChargesResource {
 
     private final Logger log = LoggerFactory.getLogger(CardChargesResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCardCharges";
+    private static final String ENTITY_NAME = "cardCharges";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

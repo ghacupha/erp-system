@@ -57,7 +57,7 @@ public class CreditCardOwnershipResource {
 
     private final Logger log = LoggerFactory.getLogger(CreditCardOwnershipResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataCreditCardOwnership";
+    private static final String ENTITY_NAME = "creditCardOwnership";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

@@ -27,11 +27,6 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring", uses = {})
 public interface CardCategoryTypeMapper extends EntityMapper<CardCategoryTypeDTO, CardCategoryType> {
-    @Named("id")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    CardCategoryTypeDTO toDtoId(CardCategoryType cardCategoryType);
-
     @Named("cardCategoryDescription")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

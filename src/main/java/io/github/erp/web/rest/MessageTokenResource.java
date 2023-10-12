@@ -57,7 +57,7 @@ public class MessageTokenResource {
 
     private final Logger log = LoggerFactory.getLogger(MessageTokenResource.class);
 
-    private static final String ENTITY_NAME = "gdiDataMessageToken";
+    private static final String ENTITY_NAME = "filesMessageToken";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
