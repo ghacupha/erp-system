@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity LeaseModelMetadata.
+    -->
+    <changeSet id="20230328100320-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="lease_model_metadata_id"
+                                 baseTableName="rel_lease_model_metadata__placeholder"
+                                 constraintName="fk_rel_lease_model_metadata__pl__lease_model_metadata_a6_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lease_model_metadata"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_lease_model_metadata__placeholder"
+                                 constraintName="fk_rel_lease_model_metadata__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="lease_model_metadata_id"
+                                 baseTableName="rel_lease_model_metadata__lease_mapping"
+                                 constraintName="fk_rel_lease_model_metadata__le__lease_model_metadata_4b_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lease_model_metadata"/>
+
+        <addForeignKeyConstraint baseColumnNames="lease_mapping_id"
+                                 baseTableName="rel_lease_model_metadata__lease_mapping"
+                                 constraintName="fk_rel_lease_model_metadata__lease_mapping__lease_mapping_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="universally_unique_mapping"/>
+
+        <addForeignKeyConstraint baseColumnNames="lease_contract_id"
+                                 baseTableName="lease_model_metadata"
+                                 constraintName="fk_lease_model_metadata__lease_contract_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lease_contract"/>
+
+        <addForeignKeyConstraint baseColumnNames="predecessor_id"
+                                 baseTableName="lease_model_metadata"
+                                 constraintName="fk_lease_model_metadata__predecessor_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lease_model_metadata"/>
+
+        <addForeignKeyConstraint baseColumnNames="liability_currency_id"
+                                 baseTableName="lease_model_metadata"
+                                 constraintName="fk_lease_model_metadata__liability_currency_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="settlement_currency"/>
+
+        <addForeignKeyConstraint baseColumnNames="rou_asset_currency_id"
+                                 baseTableName="lease_model_metadata"
+                                 constraintName="fk_lease_model_metadata__rou_asset_currency_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="settlement_currency"/>
+
+        <addForeignKeyConstraint baseColumnNames="model_attachments_id"
+                                 baseTableName="lease_model_metadata"
+                                 constraintName="fk_lease_model_metadata__model_attachments_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="business_document"/>
+
+        <addForeignKeyConstraint baseColumnNames="security_clearance_id"
+                                 baseTableName="lease_model_metadata"
+                                 constraintName="fk_lease_model_metadata__security_clearance_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="security_clearance"/>
+
+        <addForeignKeyConstraint baseColumnNames="lease_liability_account_id"
+                                 baseTableName="lease_model_metadata"
+                                 constraintName="fk_lease_model_metadata__lease_liability_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="interest_payable_account_id"
+                                 baseTableName="lease_model_metadata"
+                                 constraintName="fk_lease_model_metadata__interest_payable_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="interest_expense_account_id"
+                                 baseTableName="lease_model_metadata"
+                                 constraintName="fk_lease_model_metadata__interest_expense_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="rou_asset_account_id"
+                                 baseTableName="lease_model_metadata"
+                                 constraintName="fk_lease_model_metadata__rou_asset_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="rou_depreciation_account_id"
+                                 baseTableName="lease_model_metadata"
+                                 constraintName="fk_lease_model_metadata__rou_depreciation_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="accrued_depreciation_account_id"
+                                 baseTableName="lease_model_metadata"
+                                 constraintName="fk_lease_model_metadata__accrued_depreciation_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,28 @@
+{
+  "fields": [
+    {
+      "fieldName": "institutionCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "institutionName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "institutionCategory",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "CrbDataSubmittingInstitutions",
+  "changelogDate": "20230914085526",
+  "incrementalChangelog": false
+}

@@ -1,0 +1,13 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru" id="1655391124889-4">
+        <addColumn tableName="report_requisition">
+            <column name="report_content_type_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru" id="1655391124889-7">
+        <addForeignKeyConstraint baseColumnNames="report_content_type_id" baseTableName="report_requisition" constraintName="FKgri47gqnp4m1too83nkx08pc8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="report_content_type" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

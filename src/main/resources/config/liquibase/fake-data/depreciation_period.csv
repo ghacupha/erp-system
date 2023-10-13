@@ -1,0 +1,11 @@
+id;start_date;end_date;depreciation_period_status;period_code;process_locked;fiscal_year_id;fiscal_month_id;fiscal_quarter_id
+1;2023-07-03;2023-07-04;PROCESSING;Fresh synthesize;true;1;1;1
+2;2023-07-04;2023-07-04;PROCESSING;interactive Ball;false;2;2;2
+3;2023-07-04;2023-07-04;PROCESSING;payment base HDD;true;3;3;3
+4;2023-07-04;2023-07-04;CLOSED;generating Security Fish;true;4;4;4
+5;2023-07-04;2023-07-03;PROCESSING;Denmark Universal;true;5;5;5
+6;2023-07-04;2023-07-04;OPEN;iterate Concrete Tuna;true;6;6;6
+7;2023-07-04;2023-07-04;OPEN;Plastic firewall;true;7;7;7
+8;2023-07-04;2023-07-04;CLOSED;Avon killer;false;8;8;8
+9;2023-07-04;2023-07-03;OPEN;Chief Granite Strategist;false;9;9;9
+10;2023-07-04;2023-07-03;PROCESSING;Jewelery withdrawal;false;10;10;10

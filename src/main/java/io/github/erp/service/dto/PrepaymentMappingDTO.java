@@ -1,0 +1,118 @@
+package io.github.erp.service.dto;
+
+/*-
+ * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
+ * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
+import javax.validation.constraints.*;
+
+/**
+ * A DTO for the {@link io.github.erp.domain.PrepaymentMapping} entity.
+ */
+public class PrepaymentMappingDTO implements Serializable {
+
+    private Long id;
+
+    @NotNull
+    private String parameterKey;
+
+    @NotNull
+    private UUID parameterGuid;
+
+    @NotNull
+    private String parameter;
+
+    private Set<PlaceholderDTO> placeholders = new HashSet<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getParameterKey() {
+        return parameterKey;
+    }
+
+    public void setParameterKey(String parameterKey) {
+        this.parameterKey = parameterKey;
+    }
+
+    public UUID getParameterGuid() {
+        return parameterGuid;
+    }
+
+    public void setParameterGuid(UUID parameterGuid) {
+        this.parameterGuid = parameterGuid;
+    }
+
+    public String getParameter() {
+        return parameter;
+    }
+
+    public void setParameter(String parameter) {
+        this.parameter = parameter;
+    }
+
+    public Set<PlaceholderDTO> getPlaceholders() {
+        return placeholders;
+    }
+
+    public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
+        this.placeholders = placeholders;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof PrepaymentMappingDTO)) {
+            return false;
+        }
+
+        PrepaymentMappingDTO prepaymentMappingDTO = (PrepaymentMappingDTO) o;
+        if (this.id == null) {
+            return false;
+        }
+        return Objects.equals(this.id, prepaymentMappingDTO.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id);
+    }
+
+    // prettier-ignore
+    @Override
+    public String toString() {
+        return "PrepaymentMappingDTO{" +
+            "id=" + getId() +
+            ", parameterKey='" + getParameterKey() + "'" +
+            ", parameterGuid='" + getParameterGuid() + "'" +
+            ", parameter='" + getParameter() + "'" +
+            ", placeholders=" + getPlaceholders() +
+            "}";
+    }
+}

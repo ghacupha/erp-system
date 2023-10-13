@@ -1,0 +1,48 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="edwin.njeru" id="1647436965349-7">
+        <addColumn tableName="asset_category">
+            <column name="remarks" type="text"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru" id="1647436965349-8">
+        <addColumn tableName="business_stamp">
+            <column name="remarks" type="text"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru" id="1647436965349-9">
+        <addColumn tableName="dealer">
+            <column name="remarks" type="text"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru" id="1647436965349-10">
+        <addColumn tableName="delivery_note">
+            <column name="remarks" type="text"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru" id="1647436965349-11">
+        <addColumn tableName="depreciation_method">
+            <column name="remarks" type="text"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru" id="1647436965349-12">
+        <addColumn tableName="payment_invoice">
+            <column name="remarks" type="text"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru" id="1647436965349-13">
+        <addColumn tableName="payment_label">
+            <column name="remarks" type="text"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru" id="1647436965349-14">
+        <addColumn tableName="purchase_order">
+            <column name="remarks" type="text"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru" id="1647436965349-15">
+        <addColumn tableName="settlement">
+            <column name="remarks" type="text"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

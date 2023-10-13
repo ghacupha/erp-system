@@ -1,0 +1,11 @@
+id;dataset_name;database_name;update_frequency;dataset_behavior;minimum_datarows_per_request;maximum_data_rows_per_request;dataset_description;data_template;data_template_content_type
+1;Ranch Garden;Nebraska plum PCI;WEEKLY;INSERT;84112;20064;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png
+2;implement;Internal Bedfordshire;MONTHLY;INSERT;59888;34410;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png
+3;Monaco Sleek;quantify withdrawal;WEEKLY;INSERT;92604;19630;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png
+4;wireless olive;port;QUARTERLY;INSERT_AND_UPDATE;72619;29978;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png
+5;Right-sized orchid Handmade;dot-com Buckinghamshire back;INTRA_DAY;INSERT_AND_UPDATE;51622;5647;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png
+6;Franc;throughput override;MONTHLY;INSERT;10918;98706;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png
+7;Computer Shoes Human;Towels Guarani Kansas;INTRA_DAY;INSERT;59203;8045;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png
+8;Metal International;transmitter;SEMI_ANNUAL;INSERT;51724;50165;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png
+9;redundant Motorway Card;Sleek payment redundant;OTHER;INSERT;35750;3399;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png
+10;Wooden;Louisiana Steel Avenue;MONTHLY;INSERT;69623;86883;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png

@@ -1,0 +1,74 @@
+{
+  "fields": [
+    {
+      "fieldName": "postedAt",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "depreciationAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "assetNumber",
+      "fieldType": "Long"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "serviceOutlet",
+      "otherEntityName": "serviceOutlet",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "outletCode"
+    },
+    {
+      "relationshipName": "assetCategory",
+      "otherEntityName": "assetCategory",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "assetCategoryName"
+    },
+    {
+      "relationshipName": "depreciationMethod",
+      "otherEntityName": "depreciationMethod",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "depreciationMethodName"
+    },
+    {
+      "relationshipName": "assetRegistration",
+      "otherEntityName": "assetRegistration",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "assetNumber"
+    },
+    {
+      "relationshipName": "depreciationPeriod",
+      "otherEntityName": "depreciationPeriod",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "endDate"
+    },
+    {
+      "relationshipName": "fiscalMonth",
+      "otherEntityName": "fiscalMonth",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "fiscalMonthCode"
+    },
+    {
+      "relationshipName": "fiscalQuarter",
+      "otherEntityName": "fiscalQuarter",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "fiscalQuarterCode"
+    },
+    {
+      "relationshipName": "fiscalYear",
+      "otherEntityName": "fiscalYear",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "fiscalYearCode"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "DepreciationEntry",
+  "changelogDate": "20230704162523",
+  "incrementalChangelog": false
+}

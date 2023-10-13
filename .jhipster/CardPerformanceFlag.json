@@ -1,0 +1,29 @@
+{
+  "fields": [
+    {
+      "fieldName": "cardPerformanceFlag",
+      "fieldType": "CardPerformanceFlags",
+      "fieldValues": "Y,N",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "cardPerformanceFlagDescription",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "cardPerformanceFlagDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "CardPerformanceFlag",
+  "changelogDate": "20230912112951",
+  "incrementalChangelog": false
+}

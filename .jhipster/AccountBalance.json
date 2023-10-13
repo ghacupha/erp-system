@@ -1,0 +1,74 @@
+{
+  "clientRootFolder": "gdi-data",
+  "fields": [
+    {
+      "fieldName": "reportingDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "customerId",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "accountContractNumber",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "minlength", "maxlength", "pattern"],
+      "fieldValidateRulesMinlength": "12",
+      "fieldValidateRulesMaxlength": "16",
+      "fieldValidateRulesPattern": "^\\d{15}$"
+    },
+    {
+      "fieldName": "accruedInterestBalanceFCY",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "accruedInterestBalanceLCY",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "accountBalanceFCY",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "accountBalanceLCY",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "bankCode",
+      "otherEntityName": "institutionCode",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "institutionName"
+    },
+    {
+      "relationshipName": "branchId",
+      "otherEntityName": "bankBranchCode",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "branchCode"
+    },
+    {
+      "relationshipName": "currencyCode",
+      "otherEntityName": "isoCurrencyCode",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "alphabeticCode"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "AccountBalance",
+  "changelogDate": "20231004091106",
+  "incrementalChangelog": false
+}

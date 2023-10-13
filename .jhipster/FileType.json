@@ -1,0 +1,54 @@
+{
+  "changelogDate": "20210414144455",
+  "clientRootFolder": "files",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "file_type",
+  "fields": [
+    {
+      "fieldName": "fileTypeName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "fileMediumType",
+      "fieldType": "FileMediumTypes",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "EXCEL,EXCEL_XLS,EXCEL_XLSX,EXCEL_XLSB,EXCEL_CSV,EXCEL_XML,PDF,POWERPOINT,DOC,TEXT,JSON,HTML5"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fileTemplate",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "fileType",
+      "fieldType": "FileModelType",
+      "fieldValidateRules": ["required", "unique"],
+      "fieldValues": "CURRENCY_LIST,FIXED_ASSET_ACQUISITION,FIXED_ASSET_DEPRECIATION,FIXED_ASSET_NBV,PAYMENT_LABEL,PAYMENT_CATEGORY,PAYMENT,DEALER,SIGNED_PAYMENT,INVOICE"
+    }
+  ],
+  "fluentMethods": true,
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "erpService",
+  "name": "FileType",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "elasticsearch",
+  "service": "serviceClass"
+}

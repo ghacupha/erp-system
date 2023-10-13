@@ -1,0 +1,30 @@
+{
+  "fields": [
+    {
+      "fieldName": "currencyAuthenticityFlag",
+      "fieldType": "CurrencyAuthenticityFlags",
+      "fieldValues": "Y,N",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "currencyAuthenticityType",
+      "fieldType": "CurrencyAuthenticityTypes",
+      "fieldValues": "GENUINE,COUNTERFEIT",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "currencyAuthenticityTypeDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "CurrencyAuthenticityFlag",
+  "changelogDate": "20230914063738",
+  "incrementalChangelog": false
+}

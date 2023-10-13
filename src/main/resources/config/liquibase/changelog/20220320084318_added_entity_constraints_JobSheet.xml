@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity JobSheet.
+    -->
+    <changeSet id="20220320084318-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="biller_id"
+                                 baseTableName="job_sheet"
+                                 constraintName="fk_job_sheet__biller_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="job_sheet_id"
+                                 baseTableName="rel_job_sheet__signatories"
+                                 constraintName="fk_rel_job_sheet__signatories__job_sheet_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="job_sheet"/>
+
+        <addForeignKeyConstraint baseColumnNames="signatories_id"
+                                 baseTableName="rel_job_sheet__signatories"
+                                 constraintName="fk_rel_job_sheet__signatories__signatories_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="contact_person_id"
+                                 baseTableName="job_sheet"
+                                 constraintName="fk_job_sheet__contact_person_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="job_sheet_id"
+                                 baseTableName="rel_job_sheet__business_stamps"
+                                 constraintName="fk_rel_job_sheet__business_stamps__job_sheet_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="job_sheet"/>
+
+        <addForeignKeyConstraint baseColumnNames="business_stamps_id"
+                                 baseTableName="rel_job_sheet__business_stamps"
+                                 constraintName="fk_rel_job_sheet__business_stamps__business_stamps_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="business_stamp"/>
+
+        <addForeignKeyConstraint baseColumnNames="job_sheet_id"
+                                 baseTableName="rel_job_sheet__placeholder"
+                                 constraintName="fk_rel_job_sheet__placeholder__job_sheet_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="job_sheet"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_job_sheet__placeholder"
+                                 constraintName="fk_rel_job_sheet__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="job_sheet_id"
+                                 baseTableName="rel_job_sheet__payment_label"
+                                 constraintName="fk_rel_job_sheet__payment_label__job_sheet_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="job_sheet"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_label_id"
+                                 baseTableName="rel_job_sheet__payment_label"
+                                 constraintName="fk_rel_job_sheet__payment_label__payment_label_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_label"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,854 @@
+application {
+  config {
+    applicationType monolith
+    authenticationType jwt
+    baseName gdiStaging
+    blueprints []
+    buildTool maven
+    cacheProvider ehcache
+    clientFramework react
+    clientPackageManager npm
+    clientTheme litera
+    clientThemeVariant dark
+    creationTimestamp 1695818761758
+    databaseType sql
+    devDatabaseType sql
+    dtoSuffix DTO
+    enableGradleEnterprise false
+    enableHibernateCache true
+    enableSwaggerCodegen false
+    enableTranslation false
+    gradleEnterpriseHost ""
+    jhiPrefix jhi
+    jhipsterVersion "7.3.1"
+    languages [en, fr]
+    messageBroker false
+    nativeLanguage en
+    otherModules []
+    packageName com.mycompany.myapp
+    prodDatabaseType sql
+    reactive false
+    searchEngine elasticsearch
+    serverPort 8980
+    serviceDiscoveryType eureka
+    skipClient false
+    skipServer true
+    skipUserManagement false
+    testFrameworks []
+    websocket spring-websocket
+    withAdminUi true
+  }
+
+  entities AcademicQualification, AccountOwnershipType, AccountStatusType, AccountType, AcquiringIssuingFlag, AgriculturalEnterpriseActivityType, AnticipatedMaturityPeriood, BankBranchCode, BankTransactionType, BouncedChequeCategories, BusinessSegmentTypes, CardBrandType, CardCategoryType, CardCharges, CardClassType, CardFraudIncidentCategory, CardPerformanceFlag, CardStatusFlag, CardTypes, CategoryOfSecurity, ChannelType, ChartOfAccountsCode, CollateralType, CommitteeType, ContractStatus, CounterPartyCategory, CounterPartyDealType, CounterpartyType, CountyCode, CrbAccountHolderType, CrbAccountStatus, CrbAgentServiceType, CrbAgingBands, CrbAmountCategoryBand, CrbComplaintStatusType, CrbComplaintType, CrbCreditApplicationStatus, CrbCreditFacilityType, CrbCustomerType, CrbDataSubmittingInstitutions, CrbFileTransmissionStatus, CrbGlCode, CrbNatureOfInformation, CrbProductServiceFeeType, CrbRecordFileType, CrbReportRequestReasons, CrbReportViewBand, CrbSourceOfInformationType, CrbSubmittingInstitutionCategory, CrbSubscriptionStatusTypeCode, CreditCardOwnership, CurrencyAuthenticityFlag, CurrencyServiceabilityFlag, CustomerComplaintStatusType, CustomerIDDocumentType, CustomerType, DepartmentType, DerivativeSubType, DerivativeUnderlyingAsset, EmploymentTerms, ExecutiveCategoryType, FinancialDerivativeTypeCode, FraudCategoryFlag, FraudType, FxCustomerType, FxRateType, FxReceiptPurposeType, FxTransactionChannelType, FxTransactionRateType, FxTransactionType, GdiMasterDataIndex, GdiTransactionDataIndex, GenderType, GlMapping, InsiderCategoryTypes, InstitutionCode, InstitutionContactDetails, InstitutionStatusType, InterbankSectorCode, InterestCalcMethod, IsicEconomicActivity, IsoCountryCode, IsoCurrencyCode, IssuersOfSecurities, KenyanCurrencyDenomination, LegalStatus, LoanAccountCategory, LoanApplicationStatus, LoanApplicationType, LoanDeclineReason, LoanPerformanceClassification, LoanProductType, LoanRepaymentFrequency, LoanRestructureFlag, LoanRestructureItem, ManagementMemberType, MerchantType, MfbBranchCode, MoratoriumItem, NatureOfCustomerComplaints, OutletStatus, OutletType, PartyRelationType, Placeholder, ProductType, ProfessionalQualification, ReasonsForBouncedCheque, RemittanceFlag, SecurityClassificationType, SecurityTenure, SecurityType, ServiceOutlet, SettlementCurrency, ShareholderType, ShareHoldingFlag, SnaSectorCode, SourceRemittancePurposeType, SourcesOfFundsTypeCode, StaffCurrentEmploymentStatus, StaffRoleType, SubCountyCode, TerminalFunctions, TerminalTypes, UltimateBeneficiaryCategory, UltimateBeneficiaryTypes, UniversallyUniqueMapping
+}
+
+entity AcademicQualification {
+  academicQualificationsCode String required unique
+  academicQualificationType String required unique
+  academicQualificationTypeDetail TextBlob
+}
+entity AccountOwnershipType {
+  accountOwnershipTypeCode String required unique
+  accountOwnershipType String required
+  description TextBlob
+}
+entity AccountStatusType {
+  accountStatusCode String required unique
+  accountStatusType AccountStatusTypes required
+  accountStatusDescription TextBlob
+}
+entity AccountType {
+  accountTypeCode String required unique
+  accountType String
+  description TextBlob
+}
+entity AcquiringIssuingFlag {
+  cardAcquiringIssuingFlagCode String required unique
+  cardAcquiringIssuingDescription String required unique
+  cardAcquiringIssuingDetails TextBlob
+}
+entity AgriculturalEnterpriseActivityType {
+  agriculturalEnterpriseActivityTypeCode String required unique
+  agriculturalEnterpriseActivityType String required
+  agriculturalEnterpriseActivityTypeDescription TextBlob
+}
+entity AnticipatedMaturityPeriood {
+  anticipatedMaturityTenorCode String required unique
+  aniticipatedMaturityTenorType String required unique
+  anticipatedMaturityTenorDetails TextBlob
+}
+entity BankBranchCode {
+  bankCode String
+  bankName String required
+  branchCode String required
+  branchName String
+  notes String
+}
+entity BankTransactionType {
+  transactionTypeCode String required unique
+  transactionTypeDetails String required
+}
+entity BouncedChequeCategories {
+  bouncedChequeCategoryTypeCode String required unique
+  bouncedChequeCategoryType String required unique
+}
+entity BusinessSegmentTypes {
+  businessEconomicSegmentCode String required unique
+  businessEconomicSegment String required
+  details TextBlob
+}
+entity CardBrandType {
+  cardBrandTypeCode String required unique
+  cardBrandType String required unique
+  cardBrandTypeDetails TextBlob
+}
+entity CardCategoryType {
+  cardCategoryFlag CardCategoryFlag required
+  cardCategoryDescription String required unique
+  cardCategoryDetails TextBlob
+}
+entity CardCharges {
+  cardChargeType String required unique
+  cardChargeTypeName String required unique
+  cardChargeDetails TextBlob
+}
+entity CardClassType {
+  cardClassTypeCode String required unique
+  cardClassType String required unique
+  cardClassDetails TextBlob
+}
+entity CardFraudIncidentCategory {
+  cardFraudCategoryTypeCode String required unique
+  cardFraudCategoryType String required unique
+  cardFraudCategoryTypeDescription TextBlob
+}
+entity CardPerformanceFlag {
+  cardPerformanceFlag CardPerformanceFlags required
+  cardPerformanceFlagDescription String required unique
+  cardPerformanceFlagDetails TextBlob
+}
+entity CardStatusFlag {
+  cardStatusFlag FlagCodes required
+  cardStatusFlagDescription String required
+  cardStatusFlagDetails String
+}
+entity CardTypes {
+  cardTypeCode String required unique
+  cardType String required unique
+  cardTypeDetails TextBlob
+}
+entity CategoryOfSecurity {
+  categoryOfSecurity String required unique
+  categoryOfSecurityDetails String required unique
+  categoryOfSecurityDescription TextBlob
+}
+entity ChannelType {
+  channelsTypeCode String required unique
+  channelTypes String required unique
+  channelTypeDetails TextBlob
+}
+entity ChartOfAccountsCode {
+  chartOfAccountsCode String required unique
+  chartOfAccountsClass String required
+  description TextBlob
+}
+entity CollateralType {
+  collateralTypeCode String required unique
+  collateralType String required
+  collateralTypeDescription TextBlob
+}
+entity CommitteeType {
+  committeeTypeCode String required unique
+  committeeType String
+  committeeTypeDetails TextBlob
+}
+entity ContractStatus {
+  contractStatusCode String required unique
+  contractStatusType String required
+  contractStatusTypeDescription TextBlob
+}
+entity CounterPartyCategory {
+  counterpartyCategoryCode String required unique
+  counterpartyCategoryCodeDetails CounterpartyCategory required
+  counterpartyCategoryDescription TextBlob
+}
+entity CounterPartyDealType {
+  counterpartyDealCode String required unique
+  counterpartyDealTypeDetails String required unique
+  counterpartyDealTypeDescription TextBlob
+}
+entity CounterpartyType {
+  counterpartyTypeCode String required unique
+  counterPartyType String required unique
+  counterpartyTypeDescription TextBlob
+}
+entity CountyCode {
+  countyCode Integer required
+  countyName String required
+  subCountyCode Integer required
+  subCountyName String required
+}
+entity CrbAccountHolderType {
+  accountHolderCategoryTypeCode String required unique
+  accountHolderCategoryType String required unique
+}
+entity CrbAccountStatus {
+  accountStatusTypeCode String required unique
+  accountStatusType String required unique
+  accountStatusTypeDetails TextBlob
+}
+entity CrbAgentServiceType {
+  agentServiceTypeCode String required unique
+  agentServiceTypeDetails TextBlob
+}
+entity CrbAgingBands {
+  agingBandCategoryCode String required unique
+  agingBandCategory String required unique
+  agingBandCategoryDetails String required
+}
+entity CrbAmountCategoryBand {
+  amountCategoryBandCode String required unique
+  amountCategoryBand String required unique
+  amountCategoryBandDetails TextBlob
+}
+entity CrbComplaintStatusType {
+  complaintStatusTypeCode String required unique
+  complaintStatusType String required unique
+  complaintStatusDetails TextBlob
+}
+entity CrbComplaintType {
+  complaintTypeCode String required unique
+  complaintType String required unique
+  complaintTypeDetails TextBlob
+}
+entity CrbCreditApplicationStatus {
+  crbCreditApplicationStatusTypeCode String required unique
+  crbCreditApplicationStatusType String required unique
+  crbCreditApplicationStatusDetails TextBlob
+}
+entity CrbCreditFacilityType {
+  creditFacilityTypeCode String required unique
+  creditFacilityType String required unique
+  creditFacilityDescription TextBlob
+}
+entity CrbCustomerType {
+  customerTypeCode String required unique
+  customerType String required unique
+  description TextBlob
+}
+entity CrbDataSubmittingInstitutions {
+  institutionCode String required unique
+  institutionName String required unique
+  institutionCategory String required
+}
+entity CrbFileTransmissionStatus {
+  submittedFileStatusTypeCode String required unique
+  submittedFileStatusType SubmittedFileStatusTypes required
+  submittedFileStatusTypeDescription TextBlob
+}
+entity CrbGlCode {
+  glCode String required unique
+  glDescription String required
+  glType String required
+  institutionCategory String required
+}
+entity CrbNatureOfInformation {
+  natureOfInformationTypeCode String required unique
+  natureOfInformationType String required unique
+  natureOfInformationTypeDescription TextBlob
+}
+entity CrbProductServiceFeeType {
+  chargeTypeCode String required unique
+  chargeTypeDescription String unique
+  chargeTypeCategory String required unique
+}
+entity CrbRecordFileType {
+  recordFileTypeCode String required unique
+  recordFileType String required unique
+  recordFileTypeDetails TextBlob
+}
+entity CrbReportRequestReasons {
+  creditReportRequestReasonTypeCode String required unique
+  creditReportRequestReasonType String required
+  creditReportRequestDetails TextBlob
+}
+entity CrbReportViewBand {
+  reportViewCode String required unique
+  reportViewCategory String required unique
+  reportViewCategoryDescription TextBlob
+}
+entity CrbSourceOfInformationType {
+  sourceOfInformationTypeCode String required unique
+  sourceOfInformationTypeDescription String unique
+}
+entity CrbSubmittingInstitutionCategory {
+  submittingInstitutionCategoryTypeCode String required unique
+  submittingInstitutionCategoryType String required
+  submittingInstitutionCategoryDetails TextBlob
+}
+entity CrbSubscriptionStatusTypeCode {
+  subscriptionStatusTypeCode String required unique
+  subscriptionStatusType String required unique
+  subscriptionStatusTypeDescription TextBlob
+}
+entity CreditCardOwnership {
+  creditCardOwnershipCategoryCode String required unique
+  creditCardOwnershipCategoryType CreditCardOwnershipTypes required
+  description TextBlob
+}
+entity CurrencyAuthenticityFlag {
+  currencyAuthenticityFlag CurrencyAuthenticityFlags required
+  currencyAuthenticityType CurrencyAuthenticityTypes required
+  currencyAuthenticityTypeDetails TextBlob
+}
+entity CurrencyServiceabilityFlag {
+  currencyServiceabilityFlag CurrencyServiceabilityFlagTypes required
+  currencyServiceability CurrencyServiceability required
+  currencyServiceabilityFlagDetails TextBlob
+}
+entity CustomerComplaintStatusType {
+  customerComplaintStatusTypeCode String required unique
+  customerComplaintStatusType String required
+  customerComplaintStatusTypeDetails TextBlob
+}
+entity CustomerIDDocumentType {
+  documentCode String required unique
+  documentType String required unique
+  documentTypeDescription String
+}
+entity CustomerType {
+  customerTypeCode String unique
+  customerType String unique
+  customerTypeDescription TextBlob
+}
+entity DepartmentType {
+  departmentTypeCode String required unique
+  departmentType String required unique
+  departmentTypeDetails TextBlob
+}
+entity DerivativeSubType {
+  financialDerivativeSubTypeCode String required unique
+  financialDerivativeSubTye String required unique
+  financialDerivativeSubtypeDetails TextBlob
+}
+entity DerivativeUnderlyingAsset {
+  derivativeUnderlyingAssetTypeCode String required unique
+  financialDerivativeUnderlyingAssetType String required unique
+  derivativeUnderlyingAssetTypeDetails TextBlob
+}
+entity EmploymentTerms {
+  employmentTermsCode String required unique
+  employmentTermsStatus String required unique
+}
+entity ExecutiveCategoryType {
+  directorCategoryTypeCode String required unique
+  directorCategoryType String required unique
+  directorCategoryTypeDetails TextBlob
+}
+entity FinancialDerivativeTypeCode {
+  financialDerivativeTypeCode String required unique
+  financialDerivativeType String required unique
+  financialDerivativeTypeDetails TextBlob
+}
+entity FraudCategoryFlag {
+  fraudCategoryFlag FlagCodes required
+  fraudCategoryTypeDetails String
+}
+entity FraudType {
+  fraudTypeCode String required unique
+  fraudType String required unique
+  fraudTypeDetails TextBlob
+}
+entity FxCustomerType {
+  foreignExchangeCustomerTypeCode String required unique
+  foreignCustomerType String required unique
+}
+entity FxRateType {
+  fxRateCode String required unique
+  fxRateType String required unique
+  fxRateDetails TextBlob
+}
+entity FxReceiptPurposeType {
+  itemCode String required unique
+  attribute1ReceiptPaymentPurposeCode String
+  attribute1ReceiptPaymentPurposeType String
+  attribute2ReceiptPaymentPurposeCode String
+  attribute2ReceiptPaymentPurposeDescription String
+  attribute3ReceiptPaymentPurposeCode String
+  attribute3ReceiptPaymentPurposeDescription String
+  attribute4ReceiptPaymentPurposeCode String
+  attribute4ReceiptPaymentPurposeDescription String
+  attribute5ReceiptPaymentPurposeCode String
+  attribute5ReceiptPaymentPurposeDescription String
+  lastChild String
+}
+entity FxTransactionChannelType {
+  fxTransactionChannelCode String required unique
+  fxTransactionChannelType String required unique
+  fxChannelTypeDetails TextBlob
+}
+entity FxTransactionRateType {
+  fxTransactionRateTypeCode String required unique
+  fxTransactionRateType String required unique
+  fxTransactionRateTypeDetails TextBlob
+}
+entity FxTransactionType {
+  fxTransactionTypeCode String required unique
+  fxTransactionType String required unique
+  fxTransactionTypeDescription TextBlob
+}
+entity GdiMasterDataIndex {
+  entityName String required unique
+  databaseName String required unique
+  businessDescription TextBlob
+}
+entity GdiTransactionDataIndex {
+  datasetName String required unique
+  databaseName String required unique
+  updateFrequency UpdateFrequencyTypes required
+  datasetBehavior DatasetBehaviorTypes required
+  minimumDatarowsPerRequest Integer
+  maximumDataRowsPerRequest Integer
+  datasetDescription TextBlob
+  dataTemplate AnyBlob
+}
+entity GenderType {
+  genderCode String required unique
+  genderType genderTypes required unique
+  genderDescription TextBlob
+}
+entity GlMapping {
+  subGLCode String required unique
+  subGLDescription String
+  mainGLCode String required
+  mainGLDescription String
+  glType String required
+}
+entity InsiderCategoryTypes {
+  insiderCategoryTypeCode String required unique
+  insiderCategoryTypeDetail String required
+  insiderCategoryDescription TextBlob
+}
+entity InstitutionCode {
+  institutionCode String required unique
+  institutionName String required unique
+  shortName String
+  category String
+  institutionCategory String
+  institutionOwnership String
+  dateLicensed LocalDate
+  institutionStatus String
+}
+entity InstitutionContactDetails {
+  entityId String required
+  entityName String required
+  contactType String required
+  contactLevel String
+  contactValue String
+  contactName String
+  contactDesignation String
+}
+entity InstitutionStatusType {
+  institutionStatusCode String required unique
+  institutionStatusType String
+  insitutionStatusTypeDescription TextBlob
+}
+entity InterbankSectorCode {
+  interbankSectorCode String required unique
+  interbankSectorCodeDescription TextBlob
+}
+entity InterestCalcMethod {
+  interestCalculationMethodCode String required unique
+  interestCalculationMthodType String required unique
+  interestCalculationMethodDetails TextBlob
+}
+entity IsicEconomicActivity {
+  businessEconomicActivityCode String required unique
+  section String required
+  sectionLabel String required
+  division String required
+  divisionLabel String required
+  groupCode String
+  groupLabel String required
+  classCode String required
+  businessEconomicActivityType String
+  businessEconomicActivityTypeDescription TextBlob
+}
+entity IsoCountryCode {
+  countryCode String
+  countryDescription String
+  continentCode String
+  continentName String
+  subRegion String
+}
+entity IsoCurrencyCode {
+  alphabeticCode String required
+  numericCode String required
+  minorUnit String required
+  currency String required
+  country String
+}
+entity IssuersOfSecurities {
+  issuerOfSecuritiesCode String required unique
+  issuerOfSecurities String required unique
+  issuerOfSecuritiesDescription TextBlob
+}
+entity KenyanCurrencyDenomination {
+  currencyDenominationCode String required unique
+  currencyDenominationType String required
+  currencyDenominationTypeDetails String
+}
+entity LegalStatus {
+  legalStatusCode String required unique
+  legalStatusType String required
+  legalStatusDescription TextBlob
+}
+entity LoanAccountCategory {
+  loanAccountMutationCode String required unique
+  loanAccountMutationType LoanAccountMutationTypes required
+  loanAccountMutationDetails String required unique
+  loanAccountMutationDescription TextBlob
+}
+entity LoanApplicationStatus {
+  loanApplicationStatusTypeCode String required unique
+  loanApplicationStatusType String required unique
+  loanApplicationStatusDetails TextBlob
+}
+entity LoanApplicationType {
+  loanApplicationTypeCode String required unique
+  loanApplicationType String required unique
+  loanApplicationDetails TextBlob
+}
+entity LoanDeclineReason {
+  loanDeclineReasonTypeCode String required unique
+  loanDeclineReasonType String required unique
+  loanDeclineReasonDetails TextBlob
+}
+entity LoanPerformanceClassification {
+  loanPerformanceClassificationCode String required unique
+  loanPerformanceClassificationType String required
+  commercialBankDescription TextBlob
+  microfinanceDescription TextBlob
+}
+entity LoanProductType {
+  productCode String required unique
+  productType String required
+  productTypeDescription TextBlob
+}
+entity LoanRepaymentFrequency {
+  frequencyTypeCode String required unique
+  frequencyType String required unique
+  frequencyTypeDetails TextBlob
+}
+entity LoanRestructureFlag {
+  loanRestructureFlagCode FlagCodes required
+  loanRestructureFlagType String required unique
+  loanRestructureFlagDetails TextBlob
+}
+entity LoanRestructureItem {
+  loanRestructureItemCode String required unique
+  loanRestructureItemType String required unique
+  loanRestructureItemDetails TextBlob
+}
+entity ManagementMemberType {
+  managementMemberTypeCode String required unique
+  managementMemberType String required unique
+}
+entity MerchantType {
+  merchantTypeCode String required unique
+  merchantType String required unique
+  merchantTypeDetails TextBlob
+}
+entity MfbBranchCode {
+  bankCode String
+  bankName String
+  branchCode String
+  branchName String
+}
+entity MoratoriumItem {
+  moratoriumItemTypeCode String required unique
+  moratoriumItemType String required
+  moratoriumTypeDetails TextBlob
+}
+entity NatureOfCustomerComplaints {
+  natureOfComplaintTypeCode String required unique
+  natureOfComplaintType String required unique
+  natureOfComplaintTypeDetails TextBlob
+}
+entity OutletStatus {
+  branchStatusTypeCode String required unique
+  branchStatusType BranchStatusType required unique
+  branchStatusTypeDescription String
+}
+entity OutletType {
+  outletTypeCode String required unique
+  outletType String required unique
+  outletTypeDetails String
+}
+entity PartyRelationType {
+  partyRelationTypeCode String required unique
+  partyRelationType String required
+  partyRelationTypeDescription TextBlob
+}
+entity Placeholder {
+  description String required unique
+  token String unique
+}
+entity ProductType {
+  productCode String required unique
+  productType String
+  productTypeDescription TextBlob
+}
+entity ProfessionalQualification {
+  professionalQualificationsCode String required unique
+  professionalQualificationsType String required unique
+  professionalQualificationsDetails TextBlob
+}
+entity ReasonsForBouncedCheque {
+  bouncedChequeReasonsTypeCode String required unique
+  bouncedChequeReasonsType String
+}
+entity RemittanceFlag {
+  remittanceTypeFlag RemittanceTypeFlag required
+  remittanceType RemittanceType required
+  remittanceTypeDetails TextBlob
+}
+entity SecurityClassificationType {
+  securityClassificationTypeCode String required unique
+  securityClassificationType String required unique
+  securityClassificationDetails TextBlob
+}
+entity SecurityTenure {
+  securityTenureCode String required unique
+  securityTenureType String required unique
+  securityTenureDetails TextBlob
+}
+entity SecurityType {
+  securityTypeCode String required unique
+  securityType String required unique
+  securityTypeDetails TextBlob
+  securityTypeDescription String
+}
+entity ServiceOutlet {
+  outletCode String required unique
+  outletName String required unique
+  town String
+  parliamentaryConstituency String
+  gpsCoordinates String
+  outletOpeningDate LocalDate
+  regulatorApprovalDate LocalDate
+  outletClosureDate LocalDate
+  dateLastModified LocalDate
+  licenseFeePayable BigDecimal
+}
+entity SettlementCurrency {
+  iso4217CurrencyCode String required minlength(3) maxlength(3)
+  currencyName String required
+  country String required
+  numericCode String
+  minorUnit String
+  fileUploadToken String
+  compilationToken String
+}
+entity ShareholderType {
+  shareHolderTypeCode String required unique
+  shareHolderType ShareHolderTypes required
+}
+entity ShareHoldingFlag {
+  shareholdingFlagTypeCode ShareholdingFlagTypes required
+  shareholdingFlagType String required unique
+  shareholdingTypeDescription TextBlob
+}
+entity SnaSectorCode {
+  sectorTypeCode String required unique
+  mainSectorCode String
+  mainSectorTypeName String
+  subSectorCode String
+  subSectorName String
+  subSubSectorCode String
+  subSubSectorName String
+}
+entity SourceRemittancePurposeType {
+  sourceOrPurposeTypeCode String required unique
+  sourceOrPurposeOfRemittanceFlag SourceOrPurposeOfRemittancFlag required
+  sourceOrPurposeOfRemittanceType String required
+  remittancePurposeTypeDetails TextBlob
+}
+entity SourcesOfFundsTypeCode {
+  sourceOfFundsTypeCode String required unique
+  sourceOfFundsType String required unique
+  sourceOfFundsTypeDetails TextBlob
+}
+entity StaffCurrentEmploymentStatus {
+  staffCurrentEmploymentStatusTypeCode String required unique
+  staffCurrentEmploymentStatusType String required
+  staffCurrentEmploymentStatusTypeDetails TextBlob
+}
+entity StaffRoleType {
+  staffRoleTypeCode String required unique
+  staffRoleType String required unique
+  staffRoleTypeDetails TextBlob
+}
+entity SubCountyCode {
+  countyCode String
+  countyName String
+  subCountyCode String
+  subCountyName String
+}
+entity TerminalFunctions {
+  functionCode String required unique
+  terminalFunctionality String required
+}
+entity TerminalTypes {
+  txnTerminalTypeCode String required unique
+  txnChannelType String required unique
+  txnChannelTypeDetails TextBlob
+}
+entity UltimateBeneficiaryCategory {
+  ultimateBeneficiaryCategoryTypeCode String required unique
+  ultimateBeneficiaryType String required
+  ultimateBeneficiaryCategoryTypeDetails TextBlob
+}
+entity UltimateBeneficiaryTypes {
+  ultimateBeneficiaryTypeCode String required unique
+  ultimateBeneficiaryType String required unique
+  ultimateBeneficiaryTypeDetails TextBlob
+}
+entity UniversallyUniqueMapping {
+  universalKey String required unique
+  mappedValue String
+}
+enum AccountStatusTypes {
+  ACTIVE,
+  INACTIVE,
+  DORMANT,
+  CLOSED
+}
+enum CardCategoryFlag {
+  L,
+  I
+}
+enum CardPerformanceFlags {
+  Y,
+  N
+}
+enum FlagCodes {
+  Y,
+  N
+}
+enum CounterpartyCategory {
+  LOCAL,
+  FOREIGN
+}
+enum SubmittedFileStatusTypes {
+  CORRECT,
+  INCORRECT,
+  DID_NOT_SUBMIT
+}
+enum CreditCardOwnershipTypes {
+  INDIVIDUAL,
+  CORPORATE,
+  NONRESIDENTS
+}
+enum CurrencyAuthenticityFlags {
+  Y,
+  N
+}
+enum CurrencyAuthenticityTypes {
+  GENUINE,
+  COUNTERFEIT
+}
+enum CurrencyServiceabilityFlagTypes {
+  Y,
+  N
+}
+enum CurrencyServiceability {
+  FIT,
+  UNFIT
+}
+enum UpdateFrequencyTypes {
+  DAILY,
+  INTRA_DAY,
+  MONTHLY,
+  QUARTERLY,
+  SEMI_ANNUAL,
+  WEEKLY,
+  OTHER
+}
+enum DatasetBehaviorTypes {
+  INSERT_AND_UPDATE,
+  INSERT
+}
+enum genderTypes {
+  MALE,
+  FEMALE,
+  CORPORATE,
+  INTERSEX,
+  OTHERS
+}
+enum LoanAccountMutationTypes {
+  RESTRUCTURED,
+  WRITTEN_OFF,
+  NPL_RECOVERY
+}
+enum BranchStatusType {
+  ACTIVE,
+  INACTIVE,
+  CLOSED
+}
+enum RemittanceTypeFlag {
+  RMTIN,
+  RMTOUT
+}
+enum RemittanceType {
+  INFLOWS,
+  OUTFLOWS
+}
+enum ShareHolderTypes {
+  INDIVIDUAL,
+  PARTNERSHIP,
+  CORPORATE
+}
+enum ShareholdingFlagTypes {
+  Y,
+  N
+}
+enum SourceOrPurposeOfRemittancFlag {
+  PURPOSE_OF_REMITTANCE,
+  SOURCE_OF_FUNDS
+}
+
+relationship ManyToOne {
+  Placeholder{containingPlaceholder(description)} to Placeholder
+  ServiceOutlet{bankCode(branchCode)} to BankBranchCode
+  ServiceOutlet{outletType(outletType)} to OutletType
+  ServiceOutlet{outletStatus(branchStatusType)} to OutletStatus
+  ServiceOutlet{countyName(countyName)} to CountyCode
+  ServiceOutlet{subCountyName(subCountyName)} to CountyCode
+  UniversallyUniqueMapping{parentMapping(universalKey)} to UniversallyUniqueMapping
+}
+relationship ManyToMany {
+  BankBranchCode{placeholder(description)} to Placeholder
+  CountyCode{placeholder(description)} to Placeholder
+  CustomerIDDocumentType{placeholder(description)} to Placeholder
+  DepartmentType{placeholder} to Placeholder
+  GdiTransactionDataIndex{masterDataItem(entityName)} to GdiMasterDataIndex
+  InstitutionCode{placeholder(description)} to Placeholder
+  MfbBranchCode{placeholder(description)} to Placeholder
+  OutletStatus{placeholder(description)} to Placeholder
+  OutletType{placeholder(description)} to Placeholder
+  ServiceOutlet{placeholder(description)} to Placeholder
+  SettlementCurrency{placeholder(description)} to Placeholder
+  SubCountyCode{placeholder(description)} to Placeholder
+  UniversallyUniqueMapping{placeholder(description)} to Placeholder
+}
+
+dto AcademicQualification, AccountOwnershipType, AccountStatusType, AccountType, AcquiringIssuingFlag, AgriculturalEnterpriseActivityType, AnticipatedMaturityPeriood, BankBranchCode, BankTransactionType, BouncedChequeCategories, BusinessSegmentTypes, CardBrandType, CardCategoryType, CardCharges, CardClassType, CardFraudIncidentCategory, CardPerformanceFlag, CardStatusFlag, CardTypes, CategoryOfSecurity, ChannelType, ChartOfAccountsCode, CollateralType, CommitteeType, ContractStatus, CounterPartyCategory, CounterPartyDealType, CounterpartyType, CountyCode, CrbAccountHolderType, CrbAccountStatus, CrbAgentServiceType, CrbAgingBands, CrbAmountCategoryBand, CrbComplaintStatusType, CrbComplaintType, CrbCreditApplicationStatus, CrbCreditFacilityType, CrbCustomerType, CrbDataSubmittingInstitutions, CrbFileTransmissionStatus, CrbGlCode, CrbNatureOfInformation, CrbProductServiceFeeType, CrbRecordFileType, CrbReportRequestReasons, CrbReportViewBand, CrbSourceOfInformationType, CrbSubmittingInstitutionCategory, CrbSubscriptionStatusTypeCode, CreditCardOwnership, CurrencyAuthenticityFlag, CurrencyServiceabilityFlag, CustomerComplaintStatusType, CustomerIDDocumentType, CustomerType, DepartmentType, DerivativeSubType, DerivativeUnderlyingAsset, EmploymentTerms, ExecutiveCategoryType, FinancialDerivativeTypeCode, FraudCategoryFlag, FraudType, FxCustomerType, FxRateType, FxReceiptPurposeType, FxTransactionChannelType, FxTransactionRateType, FxTransactionType, GdiMasterDataIndex, GdiTransactionDataIndex, GenderType, GlMapping, InsiderCategoryTypes, InstitutionCode, InstitutionContactDetails, InstitutionStatusType, InterbankSectorCode, InterestCalcMethod, IsicEconomicActivity, IsoCountryCode, IsoCurrencyCode, IssuersOfSecurities, KenyanCurrencyDenomination, LegalStatus, LoanAccountCategory, LoanApplicationStatus, LoanApplicationType, LoanDeclineReason, LoanPerformanceClassification, LoanProductType, LoanRepaymentFrequency, LoanRestructureFlag, LoanRestructureItem, ManagementMemberType, MerchantType, MfbBranchCode, MoratoriumItem, NatureOfCustomerComplaints, OutletStatus, OutletType, PartyRelationType, Placeholder, ProductType, ProfessionalQualification, ReasonsForBouncedCheque, RemittanceFlag, SecurityClassificationType, SecurityTenure, SecurityType, ServiceOutlet, SettlementCurrency, ShareholderType, ShareHoldingFlag, SnaSectorCode, SourceRemittancePurposeType, SourcesOfFundsTypeCode, StaffCurrentEmploymentStatus, StaffRoleType, SubCountyCode, TerminalFunctions, TerminalTypes, UltimateBeneficiaryCategory, UltimateBeneficiaryTypes, UniversallyUniqueMapping with mapstruct
+paginate AcademicQualification, AccountOwnershipType, AccountStatusType, AccountType, AcquiringIssuingFlag, AgriculturalEnterpriseActivityType, AnticipatedMaturityPeriood, BankBranchCode, BankTransactionType, BouncedChequeCategories, BusinessSegmentTypes, CardBrandType, CardCategoryType, CardCharges, CardClassType, CardFraudIncidentCategory, CardPerformanceFlag, CardStatusFlag, CardTypes, CategoryOfSecurity, ChannelType, ChartOfAccountsCode, CollateralType, CommitteeType, ContractStatus, CounterPartyCategory, CounterPartyDealType, CounterpartyType, CrbAccountHolderType, CrbAccountStatus, CrbAgentServiceType, CrbAgingBands, CrbAmountCategoryBand, CrbComplaintStatusType, CrbComplaintType, CrbCreditApplicationStatus, CrbCreditFacilityType, CrbCustomerType, CrbDataSubmittingInstitutions, CrbFileTransmissionStatus, CrbGlCode, CrbNatureOfInformation, CrbProductServiceFeeType, CrbRecordFileType, CrbReportRequestReasons, CrbReportViewBand, CrbSourceOfInformationType, CrbSubmittingInstitutionCategory, CrbSubscriptionStatusTypeCode, CreditCardOwnership, CurrencyAuthenticityFlag, CurrencyServiceabilityFlag, CustomerComplaintStatusType, CustomerIDDocumentType, CustomerType, DepartmentType, DerivativeSubType, DerivativeUnderlyingAsset, EmploymentTerms, ExecutiveCategoryType, FinancialDerivativeTypeCode, FraudCategoryFlag, FraudType, FxCustomerType, FxRateType, FxReceiptPurposeType, FxTransactionChannelType, FxTransactionRateType, FxTransactionType, GdiMasterDataIndex, GdiTransactionDataIndex, GenderType, GlMapping, InsiderCategoryTypes, InstitutionCode, InstitutionContactDetails, InstitutionStatusType, InterbankSectorCode, InterestCalcMethod, IsicEconomicActivity, IsoCurrencyCode, IssuersOfSecurities, KenyanCurrencyDenomination, LegalStatus, LoanAccountCategory, LoanApplicationStatus, LoanApplicationType, LoanDeclineReason, LoanPerformanceClassification, LoanProductType, LoanRepaymentFrequency, LoanRestructureFlag, LoanRestructureItem, ManagementMemberType, MerchantType, MfbBranchCode, MoratoriumItem, NatureOfCustomerComplaints, OutletStatus, OutletType, PartyRelationType, Placeholder, ProductType, ProfessionalQualification, ReasonsForBouncedCheque, RemittanceFlag, SecurityClassificationType, SecurityTenure, SecurityType, SettlementCurrency, ShareholderType, ShareHoldingFlag, SnaSectorCode, SourceRemittancePurposeType, SourcesOfFundsTypeCode, StaffCurrentEmploymentStatus, StaffRoleType, SubCountyCode, TerminalFunctions, TerminalTypes, UltimateBeneficiaryCategory, UltimateBeneficiaryTypes, UniversallyUniqueMapping with pagination
+paginate CountyCode, IsoCountryCode, ServiceOutlet with infinite-scroll
+service AcademicQualification, AccountOwnershipType, AccountStatusType, AccountType, AcquiringIssuingFlag, AgriculturalEnterpriseActivityType, AnticipatedMaturityPeriood, BankBranchCode, BankTransactionType, BusinessSegmentTypes, CardBrandType, CardCategoryType, CardCharges, CardClassType, CardFraudIncidentCategory, CardPerformanceFlag, CardTypes, CategoryOfSecurity, ChannelType, ChartOfAccountsCode, CollateralType, CommitteeType, ContractStatus, CounterPartyCategory, CounterPartyDealType, CounterpartyType, CountyCode, CrbAccountHolderType, CrbAccountStatus, CrbAgentServiceType, CrbAgingBands, CrbAmountCategoryBand, CrbComplaintStatusType, CrbComplaintType, CrbCreditApplicationStatus, CrbCreditFacilityType, CrbCustomerType, CrbDataSubmittingInstitutions, CrbGlCode, CrbNatureOfInformation, CrbProductServiceFeeType, CrbRecordFileType, CrbReportRequestReasons, CrbReportViewBand, CrbSourceOfInformationType, CrbSubmittingInstitutionCategory, CrbSubscriptionStatusTypeCode, CreditCardOwnership, CurrencyAuthenticityFlag, CurrencyServiceabilityFlag, CustomerComplaintStatusType, CustomerIDDocumentType, CustomerType, DepartmentType, DerivativeSubType, DerivativeUnderlyingAsset, EmploymentTerms, ExecutiveCategoryType, FinancialDerivativeTypeCode, FraudCategoryFlag, FraudType, FxCustomerType, FxRateType, FxReceiptPurposeType, FxTransactionChannelType, FxTransactionRateType, FxTransactionType, GdiMasterDataIndex, GdiTransactionDataIndex, GenderType, GlMapping, InsiderCategoryTypes, InstitutionCode, InstitutionContactDetails, InstitutionStatusType, InterbankSectorCode, InterestCalcMethod, IsicEconomicActivity, IsoCountryCode, IsoCurrencyCode, IssuersOfSecurities, KenyanCurrencyDenomination, LegalStatus, LoanAccountCategory, LoanApplicationStatus, LoanApplicationType, LoanPerformanceClassification, LoanProductType, LoanRepaymentFrequency, LoanRestructureFlag, LoanRestructureItem, ManagementMemberType, MerchantType, MfbBranchCode, MoratoriumItem, NatureOfCustomerComplaints, OutletStatus, OutletType, PartyRelationType, Placeholder, ProductType, ProfessionalQualification, ReasonsForBouncedCheque, RemittanceFlag, SecurityClassificationType, SecurityTenure, SecurityType, ServiceOutlet, SettlementCurrency, ShareholderType, ShareHoldingFlag, SnaSectorCode, SourceRemittancePurposeType, SourcesOfFundsTypeCode, StaffCurrentEmploymentStatus, StaffRoleType, SubCountyCode, TerminalFunctions, TerminalTypes, UltimateBeneficiaryCategory, UltimateBeneficiaryTypes, UniversallyUniqueMapping with serviceImpl
+service BouncedChequeCategories, CardStatusFlag, CrbFileTransmissionStatus, LoanDeclineReason with serviceClass
+filter AcademicQualification, AccountOwnershipType, AccountStatusType, AccountType, AcquiringIssuingFlag, AgriculturalEnterpriseActivityType, AnticipatedMaturityPeriood, BankBranchCode, BankTransactionType, BouncedChequeCategories, BusinessSegmentTypes, CardBrandType, CardCategoryType, CardCharges, CardClassType, CardFraudIncidentCategory, CardPerformanceFlag, CardStatusFlag, CardTypes, CategoryOfSecurity, ChannelType, ChartOfAccountsCode, CollateralType, CommitteeType, ContractStatus, CounterPartyCategory, CounterPartyDealType, CounterpartyType, CountyCode, CrbAccountHolderType, CrbAccountStatus, CrbAgentServiceType, CrbAgingBands, CrbAmountCategoryBand, CrbComplaintStatusType, CrbComplaintType, CrbCreditApplicationStatus, CrbCreditFacilityType, CrbCustomerType, CrbDataSubmittingInstitutions, CrbFileTransmissionStatus, CrbGlCode, CrbNatureOfInformation, CrbProductServiceFeeType, CrbRecordFileType, CrbReportRequestReasons, CrbReportViewBand, CrbSourceOfInformationType, CrbSubmittingInstitutionCategory, CrbSubscriptionStatusTypeCode, CreditCardOwnership, CurrencyAuthenticityFlag, CurrencyServiceabilityFlag, CustomerComplaintStatusType, CustomerIDDocumentType, CustomerType, DepartmentType, DerivativeSubType, DerivativeUnderlyingAsset, EmploymentTerms, ExecutiveCategoryType, FinancialDerivativeTypeCode, FraudType, FxCustomerType, FxRateType, FxReceiptPurposeType, FxTransactionChannelType, FxTransactionRateType, FxTransactionType, GdiMasterDataIndex, GdiTransactionDataIndex, GenderType, GlMapping, InsiderCategoryTypes, InstitutionCode, InstitutionContactDetails, InstitutionStatusType, InterbankSectorCode, InterestCalcMethod, IsicEconomicActivity, IsoCountryCode, IsoCurrencyCode, IssuersOfSecurities, KenyanCurrencyDenomination, LegalStatus, LoanAccountCategory, LoanApplicationStatus, LoanApplicationType, LoanDeclineReason, LoanPerformanceClassification, LoanProductType, LoanRepaymentFrequency, LoanRestructureFlag, LoanRestructureItem, ManagementMemberType, MerchantType, MfbBranchCode, MoratoriumItem, NatureOfCustomerComplaints, OutletStatus, OutletType, PartyRelationType, Placeholder, ProductType, ProfessionalQualification, ReasonsForBouncedCheque, RemittanceFlag, SecurityClassificationType, SecurityTenure, SecurityType, ServiceOutlet, SettlementCurrency, ShareholderType, ShareHoldingFlag, SnaSectorCode, SourceRemittancePurposeType, SourcesOfFundsTypeCode, StaffCurrentEmploymentStatus, StaffRoleType, SubCountyCode, TerminalFunctions, TerminalTypes, UltimateBeneficiaryCategory, UltimateBeneficiaryTypes, UniversallyUniqueMapping
+readOnly AccountOwnershipType
+search Placeholder, SettlementCurrency with elasticsearch
+clientRootFolder Placeholder, UniversallyUniqueMapping with service

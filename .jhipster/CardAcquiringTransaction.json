@@ -1,0 +1,72 @@
+{
+  "clientRootFolder": "gdi-data",
+  "fields": [
+    {
+      "fieldName": "reportingDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "terminalId",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "numberOfTransactions",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": 0
+    },
+    {
+      "fieldName": "valueOfTransactionsInLCY",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": 0
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "bankCode",
+      "otherEntityName": "institutionCode",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "institutionName"
+    },
+    {
+      "relationshipName": "channelType",
+      "otherEntityName": "channelType",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "channelTypes"
+    },
+    {
+      "relationshipName": "cardBrandType",
+      "otherEntityName": "cardBrandType",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "cardBrandType"
+    },
+    {
+      "relationshipName": "currencyOfTransaction",
+      "otherEntityName": "isoCurrencyCode",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "alphabeticCode"
+    },
+    {
+      "relationshipName": "cardIssuerCategory",
+      "otherEntityName": "cardCategoryType",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "cardCategoryDescription"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "CardAcquiringTransaction",
+  "changelogDate": "20231004102823",
+  "incrementalChangelog": false
+}

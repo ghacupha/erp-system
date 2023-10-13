@@ -1,0 +1,37 @@
+{
+  "fields": [
+    {
+      "fieldName": "startIndex",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "endIndex",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "depreciationBatchStatus",
+      "fieldType": "DepreciationBatchStatusType",
+      "fieldValues": "CREATED,RUNNING,COMPLETED,ERRORED,ENQUEUED"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "depreciationJob",
+      "otherEntityName": "depreciationJob",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "DepreciationBatchSequence",
+  "changelogDate": "20230705140128",
+  "incrementalChangelog": false
+}
