@@ -132,10 +132,10 @@ public class GdiTransactionDataIndexQueryService extends QueryService<GdiTransac
                 specification =
                     specification.and(buildSpecification(criteria.getDatasetBehavior(), GdiTransactionDataIndex_.datasetBehavior));
             }
-            if (criteria.getMinimumDatarowsPerRequest() != null) {
+            if (criteria.getMinimumDataRowsPerRequest() != null) {
                 specification =
                     specification.and(
-                        buildRangeSpecification(criteria.getMinimumDatarowsPerRequest(), GdiTransactionDataIndex_.minimumDatarowsPerRequest)
+                        buildRangeSpecification(criteria.getMinimumDataRowsPerRequest(), GdiTransactionDataIndex_.minimumDataRowsPerRequest)
                     );
             }
             if (criteria.getMaximumDataRowsPerRequest() != null) {
@@ -143,6 +143,9 @@ public class GdiTransactionDataIndexQueryService extends QueryService<GdiTransac
                     specification.and(
                         buildRangeSpecification(criteria.getMaximumDataRowsPerRequest(), GdiTransactionDataIndex_.maximumDataRowsPerRequest)
                     );
+            }
+            if (criteria.getDataPath() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDataPath(), GdiTransactionDataIndex_.dataPath));
             }
             if (criteria.getMasterDataItemId() != null) {
                 specification =

@@ -39,6 +39,8 @@ public class GdiMasterDataIndexDTO implements Serializable {
     @Lob
     private String businessDescription;
 
+    private String dataPath;
+
     public Long getId() {
         return id;
     }
@@ -71,6 +73,14 @@ public class GdiMasterDataIndexDTO implements Serializable {
         this.businessDescription = businessDescription;
     }
 
+    public String getDataPath() {
+        return dataPath;
+    }
+
+    public void setDataPath(String dataPath) {
+        this.dataPath = dataPath;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -100,6 +110,7 @@ public class GdiMasterDataIndexDTO implements Serializable {
             ", entityName='" + getEntityName() + "'" +
             ", databaseName='" + getDatabaseName() + "'" +
             ", businessDescription='" + getBusinessDescription() + "'" +
+            ", dataPath='" + getDataPath() + "'" +
             "}";
     }
 }

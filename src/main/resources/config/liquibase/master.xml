@@ -294,6 +294,7 @@
     <include file="config/liquibase/changelog/20220701140751_added_entity_constraints_ReportDesign.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220726145438_added_entity_constraints_PrepaymentMapping.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220801130650_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231016113736_added_datapath_to_index_tables.xml" relativeToChangelogFile="false"/>
     <!--<include file="config/liquibase/changelog/20220726153626_changelog.xml" relativeToChangelogFile="false"/>-->
     <include file="config/liquibase/changelog/20220802070433_added_entity_constraints_AmortizationRecurrence.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220802080530_added_entity_constraints_AmortizationSequence.xml" relativeToChangelogFile="false"/>
