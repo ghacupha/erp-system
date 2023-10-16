@@ -1,6 +1,6 @@
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
+ * Erp System - Mark VI No 2 (Phoebe Series) Server ver 1.5.3
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 /*-
  * Erp System - Mark V No 8 (Ehud Series) Server ver 1.5.1
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
