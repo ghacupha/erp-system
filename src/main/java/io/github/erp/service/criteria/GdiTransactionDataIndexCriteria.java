@@ -88,9 +88,11 @@ public class GdiTransactionDataIndexCriteria implements Serializable, Criteria {
 
     private DatasetBehaviorTypesFilter datasetBehavior;
 
-    private IntegerFilter minimumDatarowsPerRequest;
+    private IntegerFilter minimumDataRowsPerRequest;
 
     private IntegerFilter maximumDataRowsPerRequest;
+
+    private StringFilter dataPath;
 
     private LongFilter masterDataItemId;
 
@@ -104,8 +106,9 @@ public class GdiTransactionDataIndexCriteria implements Serializable, Criteria {
         this.databaseName = other.databaseName == null ? null : other.databaseName.copy();
         this.updateFrequency = other.updateFrequency == null ? null : other.updateFrequency.copy();
         this.datasetBehavior = other.datasetBehavior == null ? null : other.datasetBehavior.copy();
-        this.minimumDatarowsPerRequest = other.minimumDatarowsPerRequest == null ? null : other.minimumDatarowsPerRequest.copy();
+        this.minimumDataRowsPerRequest = other.minimumDataRowsPerRequest == null ? null : other.minimumDataRowsPerRequest.copy();
         this.maximumDataRowsPerRequest = other.maximumDataRowsPerRequest == null ? null : other.maximumDataRowsPerRequest.copy();
+        this.dataPath = other.dataPath == null ? null : other.dataPath.copy();
         this.masterDataItemId = other.masterDataItemId == null ? null : other.masterDataItemId.copy();
         this.distinct = other.distinct;
     }
@@ -190,19 +193,19 @@ public class GdiTransactionDataIndexCriteria implements Serializable, Criteria {
         this.datasetBehavior = datasetBehavior;
     }
 
-    public IntegerFilter getMinimumDatarowsPerRequest() {
-        return minimumDatarowsPerRequest;
+    public IntegerFilter getMinimumDataRowsPerRequest() {
+        return minimumDataRowsPerRequest;
     }
 
-    public IntegerFilter minimumDatarowsPerRequest() {
-        if (minimumDatarowsPerRequest == null) {
-            minimumDatarowsPerRequest = new IntegerFilter();
+    public IntegerFilter minimumDataRowsPerRequest() {
+        if (minimumDataRowsPerRequest == null) {
+            minimumDataRowsPerRequest = new IntegerFilter();
         }
-        return minimumDatarowsPerRequest;
+        return minimumDataRowsPerRequest;
     }
 
-    public void setMinimumDatarowsPerRequest(IntegerFilter minimumDatarowsPerRequest) {
-        this.minimumDatarowsPerRequest = minimumDatarowsPerRequest;
+    public void setMinimumDataRowsPerRequest(IntegerFilter minimumDataRowsPerRequest) {
+        this.minimumDataRowsPerRequest = minimumDataRowsPerRequest;
     }
 
     public IntegerFilter getMaximumDataRowsPerRequest() {
@@ -218,6 +221,21 @@ public class GdiTransactionDataIndexCriteria implements Serializable, Criteria {
 
     public void setMaximumDataRowsPerRequest(IntegerFilter maximumDataRowsPerRequest) {
         this.maximumDataRowsPerRequest = maximumDataRowsPerRequest;
+    }
+
+    public StringFilter getDataPath() {
+        return dataPath;
+    }
+
+    public StringFilter dataPath() {
+        if (dataPath == null) {
+            dataPath = new StringFilter();
+        }
+        return dataPath;
+    }
+
+    public void setDataPath(StringFilter dataPath) {
+        this.dataPath = dataPath;
     }
 
     public LongFilter getMasterDataItemId() {
@@ -258,8 +276,9 @@ public class GdiTransactionDataIndexCriteria implements Serializable, Criteria {
             Objects.equals(databaseName, that.databaseName) &&
             Objects.equals(updateFrequency, that.updateFrequency) &&
             Objects.equals(datasetBehavior, that.datasetBehavior) &&
-            Objects.equals(minimumDatarowsPerRequest, that.minimumDatarowsPerRequest) &&
+            Objects.equals(minimumDataRowsPerRequest, that.minimumDataRowsPerRequest) &&
             Objects.equals(maximumDataRowsPerRequest, that.maximumDataRowsPerRequest) &&
+            Objects.equals(dataPath, that.dataPath) &&
             Objects.equals(masterDataItemId, that.masterDataItemId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -273,8 +292,9 @@ public class GdiTransactionDataIndexCriteria implements Serializable, Criteria {
             databaseName,
             updateFrequency,
             datasetBehavior,
-            minimumDatarowsPerRequest,
+            minimumDataRowsPerRequest,
             maximumDataRowsPerRequest,
+            dataPath,
             masterDataItemId,
             distinct
         );
@@ -289,8 +309,9 @@ public class GdiTransactionDataIndexCriteria implements Serializable, Criteria {
             (databaseName != null ? "databaseName=" + databaseName + ", " : "") +
             (updateFrequency != null ? "updateFrequency=" + updateFrequency + ", " : "") +
             (datasetBehavior != null ? "datasetBehavior=" + datasetBehavior + ", " : "") +
-            (minimumDatarowsPerRequest != null ? "minimumDatarowsPerRequest=" + minimumDatarowsPerRequest + ", " : "") +
+            (minimumDataRowsPerRequest != null ? "minimumDataRowsPerRequest=" + minimumDataRowsPerRequest + ", " : "") +
             (maximumDataRowsPerRequest != null ? "maximumDataRowsPerRequest=" + maximumDataRowsPerRequest + ", " : "") +
+            (dataPath != null ? "dataPath=" + dataPath + ", " : "") +
             (masterDataItemId != null ? "masterDataItemId=" + masterDataItemId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

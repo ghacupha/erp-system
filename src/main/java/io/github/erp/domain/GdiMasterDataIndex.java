@@ -55,6 +55,9 @@ public class GdiMasterDataIndex implements Serializable {
     @Column(name = "business_description")
     private String businessDescription;
 
+    @Column(name = "data_path")
+    private String dataPath;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -109,6 +112,19 @@ public class GdiMasterDataIndex implements Serializable {
         this.businessDescription = businessDescription;
     }
 
+    public String getDataPath() {
+        return this.dataPath;
+    }
+
+    public GdiMasterDataIndex dataPath(String dataPath) {
+        this.setDataPath(dataPath);
+        return this;
+    }
+
+    public void setDataPath(String dataPath) {
+        this.dataPath = dataPath;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -136,6 +152,7 @@ public class GdiMasterDataIndex implements Serializable {
             ", entityName='" + getEntityName() + "'" +
             ", databaseName='" + getDatabaseName() + "'" +
             ", businessDescription='" + getBusinessDescription() + "'" +
+            ", dataPath='" + getDataPath() + "'" +
             "}";
     }
 }

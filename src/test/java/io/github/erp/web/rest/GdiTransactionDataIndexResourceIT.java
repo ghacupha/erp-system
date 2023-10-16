@@ -77,9 +77,9 @@ class GdiTransactionDataIndexResourceIT {
     private static final DatasetBehaviorTypes DEFAULT_DATASET_BEHAVIOR = DatasetBehaviorTypes.INSERT_AND_UPDATE;
     private static final DatasetBehaviorTypes UPDATED_DATASET_BEHAVIOR = DatasetBehaviorTypes.INSERT;
 
-    private static final Integer DEFAULT_MINIMUM_DATAROWS_PER_REQUEST = 1;
-    private static final Integer UPDATED_MINIMUM_DATAROWS_PER_REQUEST = 2;
-    private static final Integer SMALLER_MINIMUM_DATAROWS_PER_REQUEST = 1 - 1;
+    private static final Integer DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST = 1;
+    private static final Integer UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST = 2;
+    private static final Integer SMALLER_MINIMUM_DATA_ROWS_PER_REQUEST = 1 - 1;
 
     private static final Integer DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST = 1;
     private static final Integer UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST = 2;
@@ -92,6 +92,9 @@ class GdiTransactionDataIndexResourceIT {
     private static final byte[] UPDATED_DATA_TEMPLATE = TestUtil.createByteArray(1, "1");
     private static final String DEFAULT_DATA_TEMPLATE_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_DATA_TEMPLATE_CONTENT_TYPE = "image/png";
+
+    private static final String DEFAULT_DATA_PATH = "AAAAAAAAAA";
+    private static final String UPDATED_DATA_PATH = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/gdi-transaction-data-indices";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -140,11 +143,12 @@ class GdiTransactionDataIndexResourceIT {
             .databaseName(DEFAULT_DATABASE_NAME)
             .updateFrequency(DEFAULT_UPDATE_FREQUENCY)
             .datasetBehavior(DEFAULT_DATASET_BEHAVIOR)
-            .minimumDatarowsPerRequest(DEFAULT_MINIMUM_DATAROWS_PER_REQUEST)
+            .minimumDataRowsPerRequest(DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST)
             .maximumDataRowsPerRequest(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST)
             .datasetDescription(DEFAULT_DATASET_DESCRIPTION)
             .dataTemplate(DEFAULT_DATA_TEMPLATE)
-            .dataTemplateContentType(DEFAULT_DATA_TEMPLATE_CONTENT_TYPE);
+            .dataTemplateContentType(DEFAULT_DATA_TEMPLATE_CONTENT_TYPE)
+            .dataPath(DEFAULT_DATA_PATH);
         return gdiTransactionDataIndex;
     }
 
@@ -160,11 +164,12 @@ class GdiTransactionDataIndexResourceIT {
             .databaseName(UPDATED_DATABASE_NAME)
             .updateFrequency(UPDATED_UPDATE_FREQUENCY)
             .datasetBehavior(UPDATED_DATASET_BEHAVIOR)
-            .minimumDatarowsPerRequest(UPDATED_MINIMUM_DATAROWS_PER_REQUEST)
+            .minimumDataRowsPerRequest(UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST)
             .maximumDataRowsPerRequest(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST)
             .datasetDescription(UPDATED_DATASET_DESCRIPTION)
             .dataTemplate(UPDATED_DATA_TEMPLATE)
-            .dataTemplateContentType(UPDATED_DATA_TEMPLATE_CONTENT_TYPE);
+            .dataTemplateContentType(UPDATED_DATA_TEMPLATE_CONTENT_TYPE)
+            .dataPath(UPDATED_DATA_PATH);
         return gdiTransactionDataIndex;
     }
 
@@ -195,11 +200,12 @@ class GdiTransactionDataIndexResourceIT {
         assertThat(testGdiTransactionDataIndex.getDatabaseName()).isEqualTo(DEFAULT_DATABASE_NAME);
         assertThat(testGdiTransactionDataIndex.getUpdateFrequency()).isEqualTo(DEFAULT_UPDATE_FREQUENCY);
         assertThat(testGdiTransactionDataIndex.getDatasetBehavior()).isEqualTo(DEFAULT_DATASET_BEHAVIOR);
-        assertThat(testGdiTransactionDataIndex.getMinimumDatarowsPerRequest()).isEqualTo(DEFAULT_MINIMUM_DATAROWS_PER_REQUEST);
+        assertThat(testGdiTransactionDataIndex.getMinimumDataRowsPerRequest()).isEqualTo(DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getMaximumDataRowsPerRequest()).isEqualTo(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getDatasetDescription()).isEqualTo(DEFAULT_DATASET_DESCRIPTION);
         assertThat(testGdiTransactionDataIndex.getDataTemplate()).isEqualTo(DEFAULT_DATA_TEMPLATE);
         assertThat(testGdiTransactionDataIndex.getDataTemplateContentType()).isEqualTo(DEFAULT_DATA_TEMPLATE_CONTENT_TYPE);
+        assertThat(testGdiTransactionDataIndex.getDataPath()).isEqualTo(DEFAULT_DATA_PATH);
 
         // Validate the GdiTransactionDataIndex in Elasticsearch
         verify(mockGdiTransactionDataIndexSearchRepository, times(1)).save(testGdiTransactionDataIndex);
@@ -335,11 +341,12 @@ class GdiTransactionDataIndexResourceIT {
             .andExpect(jsonPath("$.[*].databaseName").value(hasItem(DEFAULT_DATABASE_NAME)))
             .andExpect(jsonPath("$.[*].updateFrequency").value(hasItem(DEFAULT_UPDATE_FREQUENCY.toString())))
             .andExpect(jsonPath("$.[*].datasetBehavior").value(hasItem(DEFAULT_DATASET_BEHAVIOR.toString())))
-            .andExpect(jsonPath("$.[*].minimumDatarowsPerRequest").value(hasItem(DEFAULT_MINIMUM_DATAROWS_PER_REQUEST)))
+            .andExpect(jsonPath("$.[*].minimumDataRowsPerRequest").value(hasItem(DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST)))
             .andExpect(jsonPath("$.[*].maximumDataRowsPerRequest").value(hasItem(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST)))
             .andExpect(jsonPath("$.[*].datasetDescription").value(hasItem(DEFAULT_DATASET_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].dataTemplateContentType").value(hasItem(DEFAULT_DATA_TEMPLATE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].dataTemplate").value(hasItem(Base64Utils.encodeToString(DEFAULT_DATA_TEMPLATE))));
+            .andExpect(jsonPath("$.[*].dataTemplate").value(hasItem(Base64Utils.encodeToString(DEFAULT_DATA_TEMPLATE))))
+            .andExpect(jsonPath("$.[*].dataPath").value(hasItem(DEFAULT_DATA_PATH)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -376,11 +383,12 @@ class GdiTransactionDataIndexResourceIT {
             .andExpect(jsonPath("$.databaseName").value(DEFAULT_DATABASE_NAME))
             .andExpect(jsonPath("$.updateFrequency").value(DEFAULT_UPDATE_FREQUENCY.toString()))
             .andExpect(jsonPath("$.datasetBehavior").value(DEFAULT_DATASET_BEHAVIOR.toString()))
-            .andExpect(jsonPath("$.minimumDatarowsPerRequest").value(DEFAULT_MINIMUM_DATAROWS_PER_REQUEST))
+            .andExpect(jsonPath("$.minimumDataRowsPerRequest").value(DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST))
             .andExpect(jsonPath("$.maximumDataRowsPerRequest").value(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST))
             .andExpect(jsonPath("$.datasetDescription").value(DEFAULT_DATASET_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.dataTemplateContentType").value(DEFAULT_DATA_TEMPLATE_CONTENT_TYPE))
-            .andExpect(jsonPath("$.dataTemplate").value(Base64Utils.encodeToString(DEFAULT_DATA_TEMPLATE)));
+            .andExpect(jsonPath("$.dataTemplate").value(Base64Utils.encodeToString(DEFAULT_DATA_TEMPLATE)))
+            .andExpect(jsonPath("$.dataPath").value(DEFAULT_DATA_PATH));
     }
 
     @Test
@@ -663,110 +671,114 @@ class GdiTransactionDataIndexResourceIT {
 
     @Test
     @Transactional
-    void getAllGdiTransactionDataIndicesByMinimumDatarowsPerRequestIsEqualToSomething() throws Exception {
+    void getAllGdiTransactionDataIndicesByMinimumDataRowsPerRequestIsEqualToSomething() throws Exception {
         // Initialize the database
         gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
 
-        // Get all the gdiTransactionDataIndexList where minimumDatarowsPerRequest equals to DEFAULT_MINIMUM_DATAROWS_PER_REQUEST
-        defaultGdiTransactionDataIndexShouldBeFound("minimumDatarowsPerRequest.equals=" + DEFAULT_MINIMUM_DATAROWS_PER_REQUEST);
+        // Get all the gdiTransactionDataIndexList where minimumDataRowsPerRequest equals to DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST
+        defaultGdiTransactionDataIndexShouldBeFound("minimumDataRowsPerRequest.equals=" + DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST);
 
-        // Get all the gdiTransactionDataIndexList where minimumDatarowsPerRequest equals to UPDATED_MINIMUM_DATAROWS_PER_REQUEST
-        defaultGdiTransactionDataIndexShouldNotBeFound("minimumDatarowsPerRequest.equals=" + UPDATED_MINIMUM_DATAROWS_PER_REQUEST);
+        // Get all the gdiTransactionDataIndexList where minimumDataRowsPerRequest equals to UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST
+        defaultGdiTransactionDataIndexShouldNotBeFound("minimumDataRowsPerRequest.equals=" + UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST);
     }
 
     @Test
     @Transactional
-    void getAllGdiTransactionDataIndicesByMinimumDatarowsPerRequestIsNotEqualToSomething() throws Exception {
+    void getAllGdiTransactionDataIndicesByMinimumDataRowsPerRequestIsNotEqualToSomething() throws Exception {
         // Initialize the database
         gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
 
-        // Get all the gdiTransactionDataIndexList where minimumDatarowsPerRequest not equals to DEFAULT_MINIMUM_DATAROWS_PER_REQUEST
-        defaultGdiTransactionDataIndexShouldNotBeFound("minimumDatarowsPerRequest.notEquals=" + DEFAULT_MINIMUM_DATAROWS_PER_REQUEST);
+        // Get all the gdiTransactionDataIndexList where minimumDataRowsPerRequest not equals to DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST
+        defaultGdiTransactionDataIndexShouldNotBeFound("minimumDataRowsPerRequest.notEquals=" + DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST);
 
-        // Get all the gdiTransactionDataIndexList where minimumDatarowsPerRequest not equals to UPDATED_MINIMUM_DATAROWS_PER_REQUEST
-        defaultGdiTransactionDataIndexShouldBeFound("minimumDatarowsPerRequest.notEquals=" + UPDATED_MINIMUM_DATAROWS_PER_REQUEST);
+        // Get all the gdiTransactionDataIndexList where minimumDataRowsPerRequest not equals to UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST
+        defaultGdiTransactionDataIndexShouldBeFound("minimumDataRowsPerRequest.notEquals=" + UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST);
     }
 
     @Test
     @Transactional
-    void getAllGdiTransactionDataIndicesByMinimumDatarowsPerRequestIsInShouldWork() throws Exception {
+    void getAllGdiTransactionDataIndicesByMinimumDataRowsPerRequestIsInShouldWork() throws Exception {
         // Initialize the database
         gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
 
-        // Get all the gdiTransactionDataIndexList where minimumDatarowsPerRequest in DEFAULT_MINIMUM_DATAROWS_PER_REQUEST or UPDATED_MINIMUM_DATAROWS_PER_REQUEST
+        // Get all the gdiTransactionDataIndexList where minimumDataRowsPerRequest in DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST or UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST
         defaultGdiTransactionDataIndexShouldBeFound(
-            "minimumDatarowsPerRequest.in=" + DEFAULT_MINIMUM_DATAROWS_PER_REQUEST + "," + UPDATED_MINIMUM_DATAROWS_PER_REQUEST
+            "minimumDataRowsPerRequest.in=" + DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST + "," + UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST
         );
 
-        // Get all the gdiTransactionDataIndexList where minimumDatarowsPerRequest equals to UPDATED_MINIMUM_DATAROWS_PER_REQUEST
-        defaultGdiTransactionDataIndexShouldNotBeFound("minimumDatarowsPerRequest.in=" + UPDATED_MINIMUM_DATAROWS_PER_REQUEST);
+        // Get all the gdiTransactionDataIndexList where minimumDataRowsPerRequest equals to UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST
+        defaultGdiTransactionDataIndexShouldNotBeFound("minimumDataRowsPerRequest.in=" + UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST);
     }
 
     @Test
     @Transactional
-    void getAllGdiTransactionDataIndicesByMinimumDatarowsPerRequestIsNullOrNotNull() throws Exception {
+    void getAllGdiTransactionDataIndicesByMinimumDataRowsPerRequestIsNullOrNotNull() throws Exception {
         // Initialize the database
         gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
 
-        // Get all the gdiTransactionDataIndexList where minimumDatarowsPerRequest is not null
-        defaultGdiTransactionDataIndexShouldBeFound("minimumDatarowsPerRequest.specified=true");
+        // Get all the gdiTransactionDataIndexList where minimumDataRowsPerRequest is not null
+        defaultGdiTransactionDataIndexShouldBeFound("minimumDataRowsPerRequest.specified=true");
 
-        // Get all the gdiTransactionDataIndexList where minimumDatarowsPerRequest is null
-        defaultGdiTransactionDataIndexShouldNotBeFound("minimumDatarowsPerRequest.specified=false");
+        // Get all the gdiTransactionDataIndexList where minimumDataRowsPerRequest is null
+        defaultGdiTransactionDataIndexShouldNotBeFound("minimumDataRowsPerRequest.specified=false");
     }
 
     @Test
     @Transactional
-    void getAllGdiTransactionDataIndicesByMinimumDatarowsPerRequestIsGreaterThanOrEqualToSomething() throws Exception {
+    void getAllGdiTransactionDataIndicesByMinimumDataRowsPerRequestIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
 
-        // Get all the gdiTransactionDataIndexList where minimumDatarowsPerRequest is greater than or equal to DEFAULT_MINIMUM_DATAROWS_PER_REQUEST
-        defaultGdiTransactionDataIndexShouldBeFound("minimumDatarowsPerRequest.greaterThanOrEqual=" + DEFAULT_MINIMUM_DATAROWS_PER_REQUEST);
+        // Get all the gdiTransactionDataIndexList where minimumDataRowsPerRequest is greater than or equal to DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST
+        defaultGdiTransactionDataIndexShouldBeFound(
+            "minimumDataRowsPerRequest.greaterThanOrEqual=" + DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST
+        );
 
-        // Get all the gdiTransactionDataIndexList where minimumDatarowsPerRequest is greater than or equal to UPDATED_MINIMUM_DATAROWS_PER_REQUEST
+        // Get all the gdiTransactionDataIndexList where minimumDataRowsPerRequest is greater than or equal to UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST
         defaultGdiTransactionDataIndexShouldNotBeFound(
-            "minimumDatarowsPerRequest.greaterThanOrEqual=" + UPDATED_MINIMUM_DATAROWS_PER_REQUEST
+            "minimumDataRowsPerRequest.greaterThanOrEqual=" + UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST
         );
     }
 
     @Test
     @Transactional
-    void getAllGdiTransactionDataIndicesByMinimumDatarowsPerRequestIsLessThanOrEqualToSomething() throws Exception {
+    void getAllGdiTransactionDataIndicesByMinimumDataRowsPerRequestIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
         gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
 
-        // Get all the gdiTransactionDataIndexList where minimumDatarowsPerRequest is less than or equal to DEFAULT_MINIMUM_DATAROWS_PER_REQUEST
-        defaultGdiTransactionDataIndexShouldBeFound("minimumDatarowsPerRequest.lessThanOrEqual=" + DEFAULT_MINIMUM_DATAROWS_PER_REQUEST);
+        // Get all the gdiTransactionDataIndexList where minimumDataRowsPerRequest is less than or equal to DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST
+        defaultGdiTransactionDataIndexShouldBeFound("minimumDataRowsPerRequest.lessThanOrEqual=" + DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST);
 
-        // Get all the gdiTransactionDataIndexList where minimumDatarowsPerRequest is less than or equal to SMALLER_MINIMUM_DATAROWS_PER_REQUEST
-        defaultGdiTransactionDataIndexShouldNotBeFound("minimumDatarowsPerRequest.lessThanOrEqual=" + SMALLER_MINIMUM_DATAROWS_PER_REQUEST);
+        // Get all the gdiTransactionDataIndexList where minimumDataRowsPerRequest is less than or equal to SMALLER_MINIMUM_DATA_ROWS_PER_REQUEST
+        defaultGdiTransactionDataIndexShouldNotBeFound(
+            "minimumDataRowsPerRequest.lessThanOrEqual=" + SMALLER_MINIMUM_DATA_ROWS_PER_REQUEST
+        );
     }
 
     @Test
     @Transactional
-    void getAllGdiTransactionDataIndicesByMinimumDatarowsPerRequestIsLessThanSomething() throws Exception {
+    void getAllGdiTransactionDataIndicesByMinimumDataRowsPerRequestIsLessThanSomething() throws Exception {
         // Initialize the database
         gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
 
-        // Get all the gdiTransactionDataIndexList where minimumDatarowsPerRequest is less than DEFAULT_MINIMUM_DATAROWS_PER_REQUEST
-        defaultGdiTransactionDataIndexShouldNotBeFound("minimumDatarowsPerRequest.lessThan=" + DEFAULT_MINIMUM_DATAROWS_PER_REQUEST);
+        // Get all the gdiTransactionDataIndexList where minimumDataRowsPerRequest is less than DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST
+        defaultGdiTransactionDataIndexShouldNotBeFound("minimumDataRowsPerRequest.lessThan=" + DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST);
 
-        // Get all the gdiTransactionDataIndexList where minimumDatarowsPerRequest is less than UPDATED_MINIMUM_DATAROWS_PER_REQUEST
-        defaultGdiTransactionDataIndexShouldBeFound("minimumDatarowsPerRequest.lessThan=" + UPDATED_MINIMUM_DATAROWS_PER_REQUEST);
+        // Get all the gdiTransactionDataIndexList where minimumDataRowsPerRequest is less than UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST
+        defaultGdiTransactionDataIndexShouldBeFound("minimumDataRowsPerRequest.lessThan=" + UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST);
     }
 
     @Test
     @Transactional
-    void getAllGdiTransactionDataIndicesByMinimumDatarowsPerRequestIsGreaterThanSomething() throws Exception {
+    void getAllGdiTransactionDataIndicesByMinimumDataRowsPerRequestIsGreaterThanSomething() throws Exception {
         // Initialize the database
         gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
 
-        // Get all the gdiTransactionDataIndexList where minimumDatarowsPerRequest is greater than DEFAULT_MINIMUM_DATAROWS_PER_REQUEST
-        defaultGdiTransactionDataIndexShouldNotBeFound("minimumDatarowsPerRequest.greaterThan=" + DEFAULT_MINIMUM_DATAROWS_PER_REQUEST);
+        // Get all the gdiTransactionDataIndexList where minimumDataRowsPerRequest is greater than DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST
+        defaultGdiTransactionDataIndexShouldNotBeFound("minimumDataRowsPerRequest.greaterThan=" + DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST);
 
-        // Get all the gdiTransactionDataIndexList where minimumDatarowsPerRequest is greater than SMALLER_MINIMUM_DATAROWS_PER_REQUEST
-        defaultGdiTransactionDataIndexShouldBeFound("minimumDatarowsPerRequest.greaterThan=" + SMALLER_MINIMUM_DATAROWS_PER_REQUEST);
+        // Get all the gdiTransactionDataIndexList where minimumDataRowsPerRequest is greater than SMALLER_MINIMUM_DATA_ROWS_PER_REQUEST
+        defaultGdiTransactionDataIndexShouldBeFound("minimumDataRowsPerRequest.greaterThan=" + SMALLER_MINIMUM_DATA_ROWS_PER_REQUEST);
     }
 
     @Test
@@ -883,6 +895,84 @@ class GdiTransactionDataIndexResourceIT {
 
     @Test
     @Transactional
+    void getAllGdiTransactionDataIndicesByDataPathIsEqualToSomething() throws Exception {
+        // Initialize the database
+        gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
+
+        // Get all the gdiTransactionDataIndexList where dataPath equals to DEFAULT_DATA_PATH
+        defaultGdiTransactionDataIndexShouldBeFound("dataPath.equals=" + DEFAULT_DATA_PATH);
+
+        // Get all the gdiTransactionDataIndexList where dataPath equals to UPDATED_DATA_PATH
+        defaultGdiTransactionDataIndexShouldNotBeFound("dataPath.equals=" + UPDATED_DATA_PATH);
+    }
+
+    @Test
+    @Transactional
+    void getAllGdiTransactionDataIndicesByDataPathIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
+
+        // Get all the gdiTransactionDataIndexList where dataPath not equals to DEFAULT_DATA_PATH
+        defaultGdiTransactionDataIndexShouldNotBeFound("dataPath.notEquals=" + DEFAULT_DATA_PATH);
+
+        // Get all the gdiTransactionDataIndexList where dataPath not equals to UPDATED_DATA_PATH
+        defaultGdiTransactionDataIndexShouldBeFound("dataPath.notEquals=" + UPDATED_DATA_PATH);
+    }
+
+    @Test
+    @Transactional
+    void getAllGdiTransactionDataIndicesByDataPathIsInShouldWork() throws Exception {
+        // Initialize the database
+        gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
+
+        // Get all the gdiTransactionDataIndexList where dataPath in DEFAULT_DATA_PATH or UPDATED_DATA_PATH
+        defaultGdiTransactionDataIndexShouldBeFound("dataPath.in=" + DEFAULT_DATA_PATH + "," + UPDATED_DATA_PATH);
+
+        // Get all the gdiTransactionDataIndexList where dataPath equals to UPDATED_DATA_PATH
+        defaultGdiTransactionDataIndexShouldNotBeFound("dataPath.in=" + UPDATED_DATA_PATH);
+    }
+
+    @Test
+    @Transactional
+    void getAllGdiTransactionDataIndicesByDataPathIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
+
+        // Get all the gdiTransactionDataIndexList where dataPath is not null
+        defaultGdiTransactionDataIndexShouldBeFound("dataPath.specified=true");
+
+        // Get all the gdiTransactionDataIndexList where dataPath is null
+        defaultGdiTransactionDataIndexShouldNotBeFound("dataPath.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllGdiTransactionDataIndicesByDataPathContainsSomething() throws Exception {
+        // Initialize the database
+        gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
+
+        // Get all the gdiTransactionDataIndexList where dataPath contains DEFAULT_DATA_PATH
+        defaultGdiTransactionDataIndexShouldBeFound("dataPath.contains=" + DEFAULT_DATA_PATH);
+
+        // Get all the gdiTransactionDataIndexList where dataPath contains UPDATED_DATA_PATH
+        defaultGdiTransactionDataIndexShouldNotBeFound("dataPath.contains=" + UPDATED_DATA_PATH);
+    }
+
+    @Test
+    @Transactional
+    void getAllGdiTransactionDataIndicesByDataPathNotContainsSomething() throws Exception {
+        // Initialize the database
+        gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
+
+        // Get all the gdiTransactionDataIndexList where dataPath does not contain DEFAULT_DATA_PATH
+        defaultGdiTransactionDataIndexShouldNotBeFound("dataPath.doesNotContain=" + DEFAULT_DATA_PATH);
+
+        // Get all the gdiTransactionDataIndexList where dataPath does not contain UPDATED_DATA_PATH
+        defaultGdiTransactionDataIndexShouldBeFound("dataPath.doesNotContain=" + UPDATED_DATA_PATH);
+    }
+
+    @Test
+    @Transactional
     void getAllGdiTransactionDataIndicesByMasterDataItemIsEqualToSomething() throws Exception {
         // Initialize the database
         gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
@@ -920,11 +1010,12 @@ class GdiTransactionDataIndexResourceIT {
             .andExpect(jsonPath("$.[*].databaseName").value(hasItem(DEFAULT_DATABASE_NAME)))
             .andExpect(jsonPath("$.[*].updateFrequency").value(hasItem(DEFAULT_UPDATE_FREQUENCY.toString())))
             .andExpect(jsonPath("$.[*].datasetBehavior").value(hasItem(DEFAULT_DATASET_BEHAVIOR.toString())))
-            .andExpect(jsonPath("$.[*].minimumDatarowsPerRequest").value(hasItem(DEFAULT_MINIMUM_DATAROWS_PER_REQUEST)))
+            .andExpect(jsonPath("$.[*].minimumDataRowsPerRequest").value(hasItem(DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST)))
             .andExpect(jsonPath("$.[*].maximumDataRowsPerRequest").value(hasItem(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST)))
             .andExpect(jsonPath("$.[*].datasetDescription").value(hasItem(DEFAULT_DATASET_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].dataTemplateContentType").value(hasItem(DEFAULT_DATA_TEMPLATE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].dataTemplate").value(hasItem(Base64Utils.encodeToString(DEFAULT_DATA_TEMPLATE))));
+            .andExpect(jsonPath("$.[*].dataTemplate").value(hasItem(Base64Utils.encodeToString(DEFAULT_DATA_TEMPLATE))))
+            .andExpect(jsonPath("$.[*].dataPath").value(hasItem(DEFAULT_DATA_PATH)));
 
         // Check, that the count call also returns 1
         restGdiTransactionDataIndexMockMvc
@@ -979,11 +1070,12 @@ class GdiTransactionDataIndexResourceIT {
             .databaseName(UPDATED_DATABASE_NAME)
             .updateFrequency(UPDATED_UPDATE_FREQUENCY)
             .datasetBehavior(UPDATED_DATASET_BEHAVIOR)
-            .minimumDatarowsPerRequest(UPDATED_MINIMUM_DATAROWS_PER_REQUEST)
+            .minimumDataRowsPerRequest(UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST)
             .maximumDataRowsPerRequest(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST)
             .datasetDescription(UPDATED_DATASET_DESCRIPTION)
             .dataTemplate(UPDATED_DATA_TEMPLATE)
-            .dataTemplateContentType(UPDATED_DATA_TEMPLATE_CONTENT_TYPE);
+            .dataTemplateContentType(UPDATED_DATA_TEMPLATE_CONTENT_TYPE)
+            .dataPath(UPDATED_DATA_PATH);
         GdiTransactionDataIndexDTO gdiTransactionDataIndexDTO = gdiTransactionDataIndexMapper.toDto(updatedGdiTransactionDataIndex);
 
         restGdiTransactionDataIndexMockMvc
@@ -1002,11 +1094,12 @@ class GdiTransactionDataIndexResourceIT {
         assertThat(testGdiTransactionDataIndex.getDatabaseName()).isEqualTo(UPDATED_DATABASE_NAME);
         assertThat(testGdiTransactionDataIndex.getUpdateFrequency()).isEqualTo(UPDATED_UPDATE_FREQUENCY);
         assertThat(testGdiTransactionDataIndex.getDatasetBehavior()).isEqualTo(UPDATED_DATASET_BEHAVIOR);
-        assertThat(testGdiTransactionDataIndex.getMinimumDatarowsPerRequest()).isEqualTo(UPDATED_MINIMUM_DATAROWS_PER_REQUEST);
+        assertThat(testGdiTransactionDataIndex.getMinimumDataRowsPerRequest()).isEqualTo(UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getMaximumDataRowsPerRequest()).isEqualTo(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getDatasetDescription()).isEqualTo(UPDATED_DATASET_DESCRIPTION);
         assertThat(testGdiTransactionDataIndex.getDataTemplate()).isEqualTo(UPDATED_DATA_TEMPLATE);
         assertThat(testGdiTransactionDataIndex.getDataTemplateContentType()).isEqualTo(UPDATED_DATA_TEMPLATE_CONTENT_TYPE);
+        assertThat(testGdiTransactionDataIndex.getDataPath()).isEqualTo(UPDATED_DATA_PATH);
 
         // Validate the GdiTransactionDataIndex in Elasticsearch
         verify(mockGdiTransactionDataIndexSearchRepository).save(testGdiTransactionDataIndex);
@@ -1109,7 +1202,8 @@ class GdiTransactionDataIndexResourceIT {
             .maximumDataRowsPerRequest(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST)
             .datasetDescription(UPDATED_DATASET_DESCRIPTION)
             .dataTemplate(UPDATED_DATA_TEMPLATE)
-            .dataTemplateContentType(UPDATED_DATA_TEMPLATE_CONTENT_TYPE);
+            .dataTemplateContentType(UPDATED_DATA_TEMPLATE_CONTENT_TYPE)
+            .dataPath(UPDATED_DATA_PATH);
 
         restGdiTransactionDataIndexMockMvc
             .perform(
@@ -1127,11 +1221,12 @@ class GdiTransactionDataIndexResourceIT {
         assertThat(testGdiTransactionDataIndex.getDatabaseName()).isEqualTo(UPDATED_DATABASE_NAME);
         assertThat(testGdiTransactionDataIndex.getUpdateFrequency()).isEqualTo(UPDATED_UPDATE_FREQUENCY);
         assertThat(testGdiTransactionDataIndex.getDatasetBehavior()).isEqualTo(DEFAULT_DATASET_BEHAVIOR);
-        assertThat(testGdiTransactionDataIndex.getMinimumDatarowsPerRequest()).isEqualTo(DEFAULT_MINIMUM_DATAROWS_PER_REQUEST);
+        assertThat(testGdiTransactionDataIndex.getMinimumDataRowsPerRequest()).isEqualTo(DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getMaximumDataRowsPerRequest()).isEqualTo(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getDatasetDescription()).isEqualTo(UPDATED_DATASET_DESCRIPTION);
         assertThat(testGdiTransactionDataIndex.getDataTemplate()).isEqualTo(UPDATED_DATA_TEMPLATE);
         assertThat(testGdiTransactionDataIndex.getDataTemplateContentType()).isEqualTo(UPDATED_DATA_TEMPLATE_CONTENT_TYPE);
+        assertThat(testGdiTransactionDataIndex.getDataPath()).isEqualTo(UPDATED_DATA_PATH);
     }
 
     @Test
@@ -1151,11 +1246,12 @@ class GdiTransactionDataIndexResourceIT {
             .databaseName(UPDATED_DATABASE_NAME)
             .updateFrequency(UPDATED_UPDATE_FREQUENCY)
             .datasetBehavior(UPDATED_DATASET_BEHAVIOR)
-            .minimumDatarowsPerRequest(UPDATED_MINIMUM_DATAROWS_PER_REQUEST)
+            .minimumDataRowsPerRequest(UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST)
             .maximumDataRowsPerRequest(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST)
             .datasetDescription(UPDATED_DATASET_DESCRIPTION)
             .dataTemplate(UPDATED_DATA_TEMPLATE)
-            .dataTemplateContentType(UPDATED_DATA_TEMPLATE_CONTENT_TYPE);
+            .dataTemplateContentType(UPDATED_DATA_TEMPLATE_CONTENT_TYPE)
+            .dataPath(UPDATED_DATA_PATH);
 
         restGdiTransactionDataIndexMockMvc
             .perform(
@@ -1173,11 +1269,12 @@ class GdiTransactionDataIndexResourceIT {
         assertThat(testGdiTransactionDataIndex.getDatabaseName()).isEqualTo(UPDATED_DATABASE_NAME);
         assertThat(testGdiTransactionDataIndex.getUpdateFrequency()).isEqualTo(UPDATED_UPDATE_FREQUENCY);
         assertThat(testGdiTransactionDataIndex.getDatasetBehavior()).isEqualTo(UPDATED_DATASET_BEHAVIOR);
-        assertThat(testGdiTransactionDataIndex.getMinimumDatarowsPerRequest()).isEqualTo(UPDATED_MINIMUM_DATAROWS_PER_REQUEST);
+        assertThat(testGdiTransactionDataIndex.getMinimumDataRowsPerRequest()).isEqualTo(UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getMaximumDataRowsPerRequest()).isEqualTo(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getDatasetDescription()).isEqualTo(UPDATED_DATASET_DESCRIPTION);
         assertThat(testGdiTransactionDataIndex.getDataTemplate()).isEqualTo(UPDATED_DATA_TEMPLATE);
         assertThat(testGdiTransactionDataIndex.getDataTemplateContentType()).isEqualTo(UPDATED_DATA_TEMPLATE_CONTENT_TYPE);
+        assertThat(testGdiTransactionDataIndex.getDataPath()).isEqualTo(UPDATED_DATA_PATH);
     }
 
     @Test
@@ -1298,10 +1395,11 @@ class GdiTransactionDataIndexResourceIT {
             .andExpect(jsonPath("$.[*].databaseName").value(hasItem(DEFAULT_DATABASE_NAME)))
             .andExpect(jsonPath("$.[*].updateFrequency").value(hasItem(DEFAULT_UPDATE_FREQUENCY.toString())))
             .andExpect(jsonPath("$.[*].datasetBehavior").value(hasItem(DEFAULT_DATASET_BEHAVIOR.toString())))
-            .andExpect(jsonPath("$.[*].minimumDatarowsPerRequest").value(hasItem(DEFAULT_MINIMUM_DATAROWS_PER_REQUEST)))
+            .andExpect(jsonPath("$.[*].minimumDataRowsPerRequest").value(hasItem(DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST)))
             .andExpect(jsonPath("$.[*].maximumDataRowsPerRequest").value(hasItem(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST)))
             .andExpect(jsonPath("$.[*].datasetDescription").value(hasItem(DEFAULT_DATASET_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].dataTemplateContentType").value(hasItem(DEFAULT_DATA_TEMPLATE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].dataTemplate").value(hasItem(Base64Utils.encodeToString(DEFAULT_DATA_TEMPLATE))));
+            .andExpect(jsonPath("$.[*].dataTemplate").value(hasItem(Base64Utils.encodeToString(DEFAULT_DATA_TEMPLATE))))
+            .andExpect(jsonPath("$.[*].dataPath").value(hasItem(DEFAULT_DATA_PATH)));
     }
 }

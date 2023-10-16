@@ -46,7 +46,7 @@ public class GdiTransactionDataIndexDTO implements Serializable {
     @NotNull
     private DatasetBehaviorTypes datasetBehavior;
 
-    private Integer minimumDatarowsPerRequest;
+    private Integer minimumDataRowsPerRequest;
 
     private Integer maximumDataRowsPerRequest;
 
@@ -57,6 +57,8 @@ public class GdiTransactionDataIndexDTO implements Serializable {
     private byte[] dataTemplate;
 
     private String dataTemplateContentType;
+    private String dataPath;
+
     private Set<GdiMasterDataIndexDTO> masterDataItems = new HashSet<>();
 
     public Long getId() {
@@ -99,12 +101,12 @@ public class GdiTransactionDataIndexDTO implements Serializable {
         this.datasetBehavior = datasetBehavior;
     }
 
-    public Integer getMinimumDatarowsPerRequest() {
-        return minimumDatarowsPerRequest;
+    public Integer getMinimumDataRowsPerRequest() {
+        return minimumDataRowsPerRequest;
     }
 
-    public void setMinimumDatarowsPerRequest(Integer minimumDatarowsPerRequest) {
-        this.minimumDatarowsPerRequest = minimumDatarowsPerRequest;
+    public void setMinimumDataRowsPerRequest(Integer minimumDataRowsPerRequest) {
+        this.minimumDataRowsPerRequest = minimumDataRowsPerRequest;
     }
 
     public Integer getMaximumDataRowsPerRequest() {
@@ -137,6 +139,14 @@ public class GdiTransactionDataIndexDTO implements Serializable {
 
     public void setDataTemplateContentType(String dataTemplateContentType) {
         this.dataTemplateContentType = dataTemplateContentType;
+    }
+
+    public String getDataPath() {
+        return dataPath;
+    }
+
+    public void setDataPath(String dataPath) {
+        this.dataPath = dataPath;
     }
 
     public Set<GdiMasterDataIndexDTO> getMasterDataItems() {
@@ -177,10 +187,11 @@ public class GdiTransactionDataIndexDTO implements Serializable {
             ", databaseName='" + getDatabaseName() + "'" +
             ", updateFrequency='" + getUpdateFrequency() + "'" +
             ", datasetBehavior='" + getDatasetBehavior() + "'" +
-            ", minimumDatarowsPerRequest=" + getMinimumDatarowsPerRequest() +
+            ", minimumDataRowsPerRequest=" + getMinimumDataRowsPerRequest() +
             ", maximumDataRowsPerRequest=" + getMaximumDataRowsPerRequest() +
             ", datasetDescription='" + getDatasetDescription() + "'" +
             ", dataTemplate='" + getDataTemplate() + "'" +
+            ", dataPath='" + getDataPath() + "'" +
             ", masterDataItems=" + getMasterDataItems() +
             "}";
     }

@@ -122,6 +122,9 @@ public class GdiMasterDataIndexQueryService extends QueryService<GdiMasterDataIn
             if (criteria.getDatabaseName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDatabaseName(), GdiMasterDataIndex_.databaseName));
             }
+            if (criteria.getDataPath() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDataPath(), GdiMasterDataIndex_.dataPath));
+            }
         }
         return specification;
     }

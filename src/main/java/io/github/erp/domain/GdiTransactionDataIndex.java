@@ -64,8 +64,8 @@ public class GdiTransactionDataIndex implements Serializable {
     @Column(name = "dataset_behavior", nullable = false)
     private DatasetBehaviorTypes datasetBehavior;
 
-    @Column(name = "minimum_datarows_per_request")
-    private Integer minimumDatarowsPerRequest;
+    @Column(name = "minimum_data_rows_per_request")
+    private Integer minimumDataRowsPerRequest;
 
     @Column(name = "maximum_data_rows_per_request")
     private Integer maximumDataRowsPerRequest;
@@ -81,6 +81,9 @@ public class GdiTransactionDataIndex implements Serializable {
 
     @Column(name = "data_template_content_type")
     private String dataTemplateContentType;
+
+    @Column(name = "data_path")
+    private String dataPath;
 
     @ManyToMany
     @JoinTable(
@@ -158,17 +161,17 @@ public class GdiTransactionDataIndex implements Serializable {
         this.datasetBehavior = datasetBehavior;
     }
 
-    public Integer getMinimumDatarowsPerRequest() {
-        return this.minimumDatarowsPerRequest;
+    public Integer getMinimumDataRowsPerRequest() {
+        return this.minimumDataRowsPerRequest;
     }
 
-    public GdiTransactionDataIndex minimumDatarowsPerRequest(Integer minimumDatarowsPerRequest) {
-        this.setMinimumDatarowsPerRequest(minimumDatarowsPerRequest);
+    public GdiTransactionDataIndex minimumDataRowsPerRequest(Integer minimumDataRowsPerRequest) {
+        this.setMinimumDataRowsPerRequest(minimumDataRowsPerRequest);
         return this;
     }
 
-    public void setMinimumDatarowsPerRequest(Integer minimumDatarowsPerRequest) {
-        this.minimumDatarowsPerRequest = minimumDatarowsPerRequest;
+    public void setMinimumDataRowsPerRequest(Integer minimumDataRowsPerRequest) {
+        this.minimumDataRowsPerRequest = minimumDataRowsPerRequest;
     }
 
     public Integer getMaximumDataRowsPerRequest() {
@@ -223,6 +226,19 @@ public class GdiTransactionDataIndex implements Serializable {
         this.dataTemplateContentType = dataTemplateContentType;
     }
 
+    public String getDataPath() {
+        return this.dataPath;
+    }
+
+    public GdiTransactionDataIndex dataPath(String dataPath) {
+        this.setDataPath(dataPath);
+        return this;
+    }
+
+    public void setDataPath(String dataPath) {
+        this.dataPath = dataPath;
+    }
+
     public Set<GdiMasterDataIndex> getMasterDataItems() {
         return this.masterDataItems;
     }
@@ -274,11 +290,12 @@ public class GdiTransactionDataIndex implements Serializable {
             ", databaseName='" + getDatabaseName() + "'" +
             ", updateFrequency='" + getUpdateFrequency() + "'" +
             ", datasetBehavior='" + getDatasetBehavior() + "'" +
-            ", minimumDatarowsPerRequest=" + getMinimumDatarowsPerRequest() +
+            ", minimumDataRowsPerRequest=" + getMinimumDataRowsPerRequest() +
             ", maximumDataRowsPerRequest=" + getMaximumDataRowsPerRequest() +
             ", datasetDescription='" + getDatasetDescription() + "'" +
             ", dataTemplate='" + getDataTemplate() + "'" +
             ", dataTemplateContentType='" + getDataTemplateContentType() + "'" +
+            ", dataPath='" + getDataPath() + "'" +
             "}";
     }
 }

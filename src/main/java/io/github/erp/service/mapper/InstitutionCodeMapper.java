@@ -33,15 +33,15 @@ public interface InstitutionCodeMapper extends EntityMapper<InstitutionCodeDTO, 
     @Mapping(target = "removePlaceholder", ignore = true)
     InstitutionCode toEntity(InstitutionCodeDTO institutionCodeDTO);
 
-    @Named("institutionName")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "institutionName", source = "institutionName")
-    InstitutionCodeDTO toDtoInstitutionName(InstitutionCode institutionCode);
-
     @Named("institutionCode")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "institutionCode", source = "institutionCode")
     InstitutionCodeDTO toDtoInstitutionCode(InstitutionCode institutionCode);
+
+    @Named("institutionName")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "institutionName", source = "institutionName")
+    InstitutionCodeDTO toDtoInstitutionName(InstitutionCode institutionCode);
 }

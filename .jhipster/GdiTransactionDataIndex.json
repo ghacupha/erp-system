@@ -23,7 +23,7 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "minimumDatarowsPerRequest",
+      "fieldName": "minimumDataRowsPerRequest",
       "fieldType": "Integer"
     },
     {
@@ -39,6 +39,10 @@
       "fieldName": "dataTemplate",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "dataPath",
+      "fieldType": "String"
     }
   ],
   "relationships": [
