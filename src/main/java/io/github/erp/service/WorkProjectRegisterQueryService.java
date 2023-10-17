@@ -1,7 +1,7 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark VI No 2 (Phoebe Series) Server ver 1.5.3
+ * Erp System - Mark VI No 3 (Phoebe Series) Server ver 1.5.4
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -119,6 +119,9 @@ public class WorkProjectRegisterQueryService extends QueryService<WorkProjectReg
             if (criteria.getCatalogueNumber() != null) {
                 specification =
                     specification.and(buildStringSpecification(criteria.getCatalogueNumber(), WorkProjectRegister_.catalogueNumber));
+            }
+            if (criteria.getProjectTitle() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getProjectTitle(), WorkProjectRegister_.projectTitle));
             }
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), WorkProjectRegister_.description));
