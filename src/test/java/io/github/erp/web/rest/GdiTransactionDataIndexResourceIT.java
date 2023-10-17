@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -24,8 +25,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.BusinessDocument;
+import io.github.erp.domain.BusinessTeam;
 import io.github.erp.domain.GdiMasterDataIndex;
 import io.github.erp.domain.GdiTransactionDataIndex;
+import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.enumeration.DatasetBehaviorTypes;
 import io.github.erp.domain.enumeration.UpdateFrequencyTypes;
 import io.github.erp.repository.GdiTransactionDataIndexRepository;
@@ -87,11 +91,6 @@ class GdiTransactionDataIndexResourceIT {
     private static final String DEFAULT_DATASET_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DATASET_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final byte[] DEFAULT_DATA_TEMPLATE = TestUtil.createByteArray(1, "0");
-    private static final byte[] UPDATED_DATA_TEMPLATE = TestUtil.createByteArray(1, "1");
-    private static final String DEFAULT_DATA_TEMPLATE_CONTENT_TYPE = "image/jpg";
-    private static final String UPDATED_DATA_TEMPLATE_CONTENT_TYPE = "image/png";
-
     private static final String DEFAULT_DATA_PATH = "AAAAAAAAAA";
     private static final String UPDATED_DATA_PATH = "BBBBBBBBBB";
 
@@ -145,8 +144,6 @@ class GdiTransactionDataIndexResourceIT {
             .minimumDataRowsPerRequest(DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST)
             .maximumDataRowsPerRequest(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST)
             .datasetDescription(DEFAULT_DATASET_DESCRIPTION)
-            .dataTemplate(DEFAULT_DATA_TEMPLATE)
-            .dataTemplateContentType(DEFAULT_DATA_TEMPLATE_CONTENT_TYPE)
             .dataPath(DEFAULT_DATA_PATH);
         return gdiTransactionDataIndex;
     }
@@ -166,8 +163,6 @@ class GdiTransactionDataIndexResourceIT {
             .minimumDataRowsPerRequest(UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST)
             .maximumDataRowsPerRequest(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST)
             .datasetDescription(UPDATED_DATASET_DESCRIPTION)
-            .dataTemplate(UPDATED_DATA_TEMPLATE)
-            .dataTemplateContentType(UPDATED_DATA_TEMPLATE_CONTENT_TYPE)
             .dataPath(UPDATED_DATA_PATH);
         return gdiTransactionDataIndex;
     }
@@ -202,8 +197,6 @@ class GdiTransactionDataIndexResourceIT {
         assertThat(testGdiTransactionDataIndex.getMinimumDataRowsPerRequest()).isEqualTo(DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getMaximumDataRowsPerRequest()).isEqualTo(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getDatasetDescription()).isEqualTo(DEFAULT_DATASET_DESCRIPTION);
-        assertThat(testGdiTransactionDataIndex.getDataTemplate()).isEqualTo(DEFAULT_DATA_TEMPLATE);
-        assertThat(testGdiTransactionDataIndex.getDataTemplateContentType()).isEqualTo(DEFAULT_DATA_TEMPLATE_CONTENT_TYPE);
         assertThat(testGdiTransactionDataIndex.getDataPath()).isEqualTo(DEFAULT_DATA_PATH);
 
         // Validate the GdiTransactionDataIndex in Elasticsearch
@@ -343,8 +336,6 @@ class GdiTransactionDataIndexResourceIT {
             .andExpect(jsonPath("$.[*].minimumDataRowsPerRequest").value(hasItem(DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST)))
             .andExpect(jsonPath("$.[*].maximumDataRowsPerRequest").value(hasItem(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST)))
             .andExpect(jsonPath("$.[*].datasetDescription").value(hasItem(DEFAULT_DATASET_DESCRIPTION.toString())))
-            .andExpect(jsonPath("$.[*].dataTemplateContentType").value(hasItem(DEFAULT_DATA_TEMPLATE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].dataTemplate").value(hasItem(Base64Utils.encodeToString(DEFAULT_DATA_TEMPLATE))))
             .andExpect(jsonPath("$.[*].dataPath").value(hasItem(DEFAULT_DATA_PATH)));
     }
 
@@ -385,8 +376,6 @@ class GdiTransactionDataIndexResourceIT {
             .andExpect(jsonPath("$.minimumDataRowsPerRequest").value(DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST))
             .andExpect(jsonPath("$.maximumDataRowsPerRequest").value(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST))
             .andExpect(jsonPath("$.datasetDescription").value(DEFAULT_DATASET_DESCRIPTION.toString()))
-            .andExpect(jsonPath("$.dataTemplateContentType").value(DEFAULT_DATA_TEMPLATE_CONTENT_TYPE))
-            .andExpect(jsonPath("$.dataTemplate").value(Base64Utils.encodeToString(DEFAULT_DATA_TEMPLATE)))
             .andExpect(jsonPath("$.dataPath").value(DEFAULT_DATA_PATH));
     }
 
@@ -996,6 +985,84 @@ class GdiTransactionDataIndexResourceIT {
         defaultGdiTransactionDataIndexShouldNotBeFound("masterDataItemId.equals=" + (masterDataItemId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllGdiTransactionDataIndicesByBusinessTeamIsEqualToSomething() throws Exception {
+        // Initialize the database
+        gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
+        BusinessTeam businessTeam;
+        if (TestUtil.findAll(em, BusinessTeam.class).isEmpty()) {
+            businessTeam = BusinessTeamResourceIT.createEntity(em);
+            em.persist(businessTeam);
+            em.flush();
+        } else {
+            businessTeam = TestUtil.findAll(em, BusinessTeam.class).get(0);
+        }
+        em.persist(businessTeam);
+        em.flush();
+        gdiTransactionDataIndex.setBusinessTeam(businessTeam);
+        gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
+        Long businessTeamId = businessTeam.getId();
+
+        // Get all the gdiTransactionDataIndexList where businessTeam equals to businessTeamId
+        defaultGdiTransactionDataIndexShouldBeFound("businessTeamId.equals=" + businessTeamId);
+
+        // Get all the gdiTransactionDataIndexList where businessTeam equals to (businessTeamId + 1)
+        defaultGdiTransactionDataIndexShouldNotBeFound("businessTeamId.equals=" + (businessTeamId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllGdiTransactionDataIndicesByDataSetTemplateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
+        BusinessDocument dataSetTemplate;
+        if (TestUtil.findAll(em, BusinessDocument.class).isEmpty()) {
+            dataSetTemplate = BusinessDocumentResourceIT.createEntity(em);
+            em.persist(dataSetTemplate);
+            em.flush();
+        } else {
+            dataSetTemplate = TestUtil.findAll(em, BusinessDocument.class).get(0);
+        }
+        em.persist(dataSetTemplate);
+        em.flush();
+        gdiTransactionDataIndex.setDataSetTemplate(dataSetTemplate);
+        gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
+        Long dataSetTemplateId = dataSetTemplate.getId();
+
+        // Get all the gdiTransactionDataIndexList where dataSetTemplate equals to dataSetTemplateId
+        defaultGdiTransactionDataIndexShouldBeFound("dataSetTemplateId.equals=" + dataSetTemplateId);
+
+        // Get all the gdiTransactionDataIndexList where dataSetTemplate equals to (dataSetTemplateId + 1)
+        defaultGdiTransactionDataIndexShouldNotBeFound("dataSetTemplateId.equals=" + (dataSetTemplateId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllGdiTransactionDataIndicesByPlaceholderIsEqualToSomething() throws Exception {
+        // Initialize the database
+        gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
+        Placeholder placeholder;
+        if (TestUtil.findAll(em, Placeholder.class).isEmpty()) {
+            placeholder = PlaceholderResourceIT.createEntity(em);
+            em.persist(placeholder);
+            em.flush();
+        } else {
+            placeholder = TestUtil.findAll(em, Placeholder.class).get(0);
+        }
+        em.persist(placeholder);
+        em.flush();
+        gdiTransactionDataIndex.addPlaceholder(placeholder);
+        gdiTransactionDataIndexRepository.saveAndFlush(gdiTransactionDataIndex);
+        Long placeholderId = placeholder.getId();
+
+        // Get all the gdiTransactionDataIndexList where placeholder equals to placeholderId
+        defaultGdiTransactionDataIndexShouldBeFound("placeholderId.equals=" + placeholderId);
+
+        // Get all the gdiTransactionDataIndexList where placeholder equals to (placeholderId + 1)
+        defaultGdiTransactionDataIndexShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1012,8 +1079,6 @@ class GdiTransactionDataIndexResourceIT {
             .andExpect(jsonPath("$.[*].minimumDataRowsPerRequest").value(hasItem(DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST)))
             .andExpect(jsonPath("$.[*].maximumDataRowsPerRequest").value(hasItem(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST)))
             .andExpect(jsonPath("$.[*].datasetDescription").value(hasItem(DEFAULT_DATASET_DESCRIPTION.toString())))
-            .andExpect(jsonPath("$.[*].dataTemplateContentType").value(hasItem(DEFAULT_DATA_TEMPLATE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].dataTemplate").value(hasItem(Base64Utils.encodeToString(DEFAULT_DATA_TEMPLATE))))
             .andExpect(jsonPath("$.[*].dataPath").value(hasItem(DEFAULT_DATA_PATH)));
 
         // Check, that the count call also returns 1
@@ -1072,8 +1137,6 @@ class GdiTransactionDataIndexResourceIT {
             .minimumDataRowsPerRequest(UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST)
             .maximumDataRowsPerRequest(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST)
             .datasetDescription(UPDATED_DATASET_DESCRIPTION)
-            .dataTemplate(UPDATED_DATA_TEMPLATE)
-            .dataTemplateContentType(UPDATED_DATA_TEMPLATE_CONTENT_TYPE)
             .dataPath(UPDATED_DATA_PATH);
         GdiTransactionDataIndexDTO gdiTransactionDataIndexDTO = gdiTransactionDataIndexMapper.toDto(updatedGdiTransactionDataIndex);
 
@@ -1096,8 +1159,6 @@ class GdiTransactionDataIndexResourceIT {
         assertThat(testGdiTransactionDataIndex.getMinimumDataRowsPerRequest()).isEqualTo(UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getMaximumDataRowsPerRequest()).isEqualTo(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getDatasetDescription()).isEqualTo(UPDATED_DATASET_DESCRIPTION);
-        assertThat(testGdiTransactionDataIndex.getDataTemplate()).isEqualTo(UPDATED_DATA_TEMPLATE);
-        assertThat(testGdiTransactionDataIndex.getDataTemplateContentType()).isEqualTo(UPDATED_DATA_TEMPLATE_CONTENT_TYPE);
         assertThat(testGdiTransactionDataIndex.getDataPath()).isEqualTo(UPDATED_DATA_PATH);
 
         // Validate the GdiTransactionDataIndex in Elasticsearch
@@ -1200,8 +1261,6 @@ class GdiTransactionDataIndexResourceIT {
             .updateFrequency(UPDATED_UPDATE_FREQUENCY)
             .maximumDataRowsPerRequest(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST)
             .datasetDescription(UPDATED_DATASET_DESCRIPTION)
-            .dataTemplate(UPDATED_DATA_TEMPLATE)
-            .dataTemplateContentType(UPDATED_DATA_TEMPLATE_CONTENT_TYPE)
             .dataPath(UPDATED_DATA_PATH);
 
         restGdiTransactionDataIndexMockMvc
@@ -1223,8 +1282,6 @@ class GdiTransactionDataIndexResourceIT {
         assertThat(testGdiTransactionDataIndex.getMinimumDataRowsPerRequest()).isEqualTo(DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getMaximumDataRowsPerRequest()).isEqualTo(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getDatasetDescription()).isEqualTo(UPDATED_DATASET_DESCRIPTION);
-        assertThat(testGdiTransactionDataIndex.getDataTemplate()).isEqualTo(UPDATED_DATA_TEMPLATE);
-        assertThat(testGdiTransactionDataIndex.getDataTemplateContentType()).isEqualTo(UPDATED_DATA_TEMPLATE_CONTENT_TYPE);
         assertThat(testGdiTransactionDataIndex.getDataPath()).isEqualTo(UPDATED_DATA_PATH);
     }
 
@@ -1248,8 +1305,6 @@ class GdiTransactionDataIndexResourceIT {
             .minimumDataRowsPerRequest(UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST)
             .maximumDataRowsPerRequest(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST)
             .datasetDescription(UPDATED_DATASET_DESCRIPTION)
-            .dataTemplate(UPDATED_DATA_TEMPLATE)
-            .dataTemplateContentType(UPDATED_DATA_TEMPLATE_CONTENT_TYPE)
             .dataPath(UPDATED_DATA_PATH);
 
         restGdiTransactionDataIndexMockMvc
@@ -1271,8 +1326,6 @@ class GdiTransactionDataIndexResourceIT {
         assertThat(testGdiTransactionDataIndex.getMinimumDataRowsPerRequest()).isEqualTo(UPDATED_MINIMUM_DATA_ROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getMaximumDataRowsPerRequest()).isEqualTo(UPDATED_MAXIMUM_DATA_ROWS_PER_REQUEST);
         assertThat(testGdiTransactionDataIndex.getDatasetDescription()).isEqualTo(UPDATED_DATASET_DESCRIPTION);
-        assertThat(testGdiTransactionDataIndex.getDataTemplate()).isEqualTo(UPDATED_DATA_TEMPLATE);
-        assertThat(testGdiTransactionDataIndex.getDataTemplateContentType()).isEqualTo(UPDATED_DATA_TEMPLATE_CONTENT_TYPE);
         assertThat(testGdiTransactionDataIndex.getDataPath()).isEqualTo(UPDATED_DATA_PATH);
     }
 
@@ -1397,8 +1450,6 @@ class GdiTransactionDataIndexResourceIT {
             .andExpect(jsonPath("$.[*].minimumDataRowsPerRequest").value(hasItem(DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST)))
             .andExpect(jsonPath("$.[*].maximumDataRowsPerRequest").value(hasItem(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST)))
             .andExpect(jsonPath("$.[*].datasetDescription").value(hasItem(DEFAULT_DATASET_DESCRIPTION.toString())))
-            .andExpect(jsonPath("$.[*].dataTemplateContentType").value(hasItem(DEFAULT_DATA_TEMPLATE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].dataTemplate").value(hasItem(Base64Utils.encodeToString(DEFAULT_DATA_TEMPLATE))))
             .andExpect(jsonPath("$.[*].dataPath").value(hasItem(DEFAULT_DATA_PATH)));
     }
 }

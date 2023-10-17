@@ -17,6 +17,7 @@ package io.github.erp.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.GdiTransactionDataIndex;
 import java.util.List;
 import java.util.Optional;
@@ -33,18 +34,18 @@ import org.springframework.stereotype.Repository;
 public interface GdiTransactionDataIndexRepository
     extends JpaRepository<GdiTransactionDataIndex, Long>, JpaSpecificationExecutor<GdiTransactionDataIndex> {
     @Query(
-        value = "select distinct gdiTransactionDataIndex from GdiTransactionDataIndex gdiTransactionDataIndex left join fetch gdiTransactionDataIndex.masterDataItems",
+        value = "select distinct gdiTransactionDataIndex from GdiTransactionDataIndex gdiTransactionDataIndex left join fetch gdiTransactionDataIndex.masterDataItems left join fetch gdiTransactionDataIndex.placeholders",
         countQuery = "select count(distinct gdiTransactionDataIndex) from GdiTransactionDataIndex gdiTransactionDataIndex"
     )
     Page<GdiTransactionDataIndex> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct gdiTransactionDataIndex from GdiTransactionDataIndex gdiTransactionDataIndex left join fetch gdiTransactionDataIndex.masterDataItems"
+        "select distinct gdiTransactionDataIndex from GdiTransactionDataIndex gdiTransactionDataIndex left join fetch gdiTransactionDataIndex.masterDataItems left join fetch gdiTransactionDataIndex.placeholders"
     )
     List<GdiTransactionDataIndex> findAllWithEagerRelationships();
 
     @Query(
-        "select gdiTransactionDataIndex from GdiTransactionDataIndex gdiTransactionDataIndex left join fetch gdiTransactionDataIndex.masterDataItems where gdiTransactionDataIndex.id =:id"
+        "select gdiTransactionDataIndex from GdiTransactionDataIndex gdiTransactionDataIndex left join fetch gdiTransactionDataIndex.masterDataItems left join fetch gdiTransactionDataIndex.placeholders where gdiTransactionDataIndex.id =:id"
     )
     Optional<GdiTransactionDataIndex> findOneWithEagerRelationships(@Param("id") Long id);
 }

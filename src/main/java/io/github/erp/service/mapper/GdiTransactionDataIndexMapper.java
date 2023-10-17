@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.GdiTransactionDataIndex;
 import io.github.erp.service.dto.GdiTransactionDataIndexDTO;
 import org.mapstruct.*;
@@ -24,11 +25,18 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link GdiTransactionDataIndex} and its DTO {@link GdiTransactionDataIndexDTO}.
  */
-@Mapper(componentModel = "spring", uses = { GdiMasterDataIndexMapper.class })
+@Mapper(
+    componentModel = "spring",
+    uses = { GdiMasterDataIndexMapper.class, BusinessTeamMapper.class, BusinessDocumentMapper.class, PlaceholderMapper.class }
+)
 public interface GdiTransactionDataIndexMapper extends EntityMapper<GdiTransactionDataIndexDTO, GdiTransactionDataIndex> {
     @Mapping(target = "masterDataItems", source = "masterDataItems", qualifiedByName = "entityNameSet")
+    @Mapping(target = "businessTeam", source = "businessTeam", qualifiedByName = "businessTeam")
+    @Mapping(target = "dataSetTemplate", source = "dataSetTemplate", qualifiedByName = "documentTitle")
+    @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     GdiTransactionDataIndexDTO toDto(GdiTransactionDataIndex s);
 
     @Mapping(target = "removeMasterDataItem", ignore = true)
+    @Mapping(target = "removePlaceholder", ignore = true)
     GdiTransactionDataIndex toEntity(GdiTransactionDataIndexDTO gdiTransactionDataIndexDTO);
 }

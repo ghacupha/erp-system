@@ -17,6 +17,7 @@ package io.github.erp.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.*; // for static metamodels
 import io.github.erp.domain.GdiTransactionDataIndex;
 import io.github.erp.repository.GdiTransactionDataIndexRepository;
@@ -152,6 +153,33 @@ public class GdiTransactionDataIndexQueryService extends QueryService<GdiTransac
                         buildSpecification(
                             criteria.getMasterDataItemId(),
                             root -> root.join(GdiTransactionDataIndex_.masterDataItems, JoinType.LEFT).get(GdiMasterDataIndex_.id)
+                        )
+                    );
+            }
+            if (criteria.getBusinessTeamId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getBusinessTeamId(),
+                            root -> root.join(GdiTransactionDataIndex_.businessTeam, JoinType.LEFT).get(BusinessTeam_.id)
+                        )
+                    );
+            }
+            if (criteria.getDataSetTemplateId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getDataSetTemplateId(),
+                            root -> root.join(GdiTransactionDataIndex_.dataSetTemplate, JoinType.LEFT).get(BusinessDocument_.id)
+                        )
+                    );
+            }
+            if (criteria.getPlaceholderId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPlaceholderId(),
+                            root -> root.join(GdiTransactionDataIndex_.placeholders, JoinType.LEFT).get(Placeholder_.id)
                         )
                     );
             }
