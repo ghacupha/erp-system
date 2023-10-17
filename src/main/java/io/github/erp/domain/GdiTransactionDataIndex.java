@@ -17,6 +17,8 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.github.erp.domain.enumeration.DatasetBehaviorTypes;
 import io.github.erp.domain.enumeration.UpdateFrequencyTypes;
 import java.io.Serializable;
@@ -74,13 +76,6 @@ public class GdiTransactionDataIndex implements Serializable {
     @Column(name = "dataset_description")
     private String datasetDescription;
 
-    @Lob
-    @Column(name = "data_template")
-    private byte[] dataTemplate;
-
-    @Column(name = "data_template_content_type")
-    private String dataTemplateContentType;
-
     @Column(name = "data_path")
     private String dataPath;
 
@@ -92,6 +87,36 @@ public class GdiTransactionDataIndex implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<GdiMasterDataIndex> masterDataItems = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "teamMembers" }, allowSetters = true)
+    private BusinessTeam businessTeam;
+
+    @JsonIgnoreProperties(
+        value = {
+            "createdBy",
+            "lastModifiedBy",
+            "originatingDepartment",
+            "applicationMappings",
+            "placeholders",
+            "fileChecksumAlgorithm",
+            "securityClearance",
+        },
+        allowSetters = true
+    )
+    @OneToOne
+    @JoinColumn(unique = true)
+    private BusinessDocument dataSetTemplate;
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_gdi_transaction_data_index__placeholder",
+        joinColumns = @JoinColumn(name = "gdi_transaction_data_index_id"),
+        inverseJoinColumns = @JoinColumn(name = "placeholder_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
+    private Set<Placeholder> placeholders = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -199,32 +224,6 @@ public class GdiTransactionDataIndex implements Serializable {
         this.datasetDescription = datasetDescription;
     }
 
-    public byte[] getDataTemplate() {
-        return this.dataTemplate;
-    }
-
-    public GdiTransactionDataIndex dataTemplate(byte[] dataTemplate) {
-        this.setDataTemplate(dataTemplate);
-        return this;
-    }
-
-    public void setDataTemplate(byte[] dataTemplate) {
-        this.dataTemplate = dataTemplate;
-    }
-
-    public String getDataTemplateContentType() {
-        return this.dataTemplateContentType;
-    }
-
-    public GdiTransactionDataIndex dataTemplateContentType(String dataTemplateContentType) {
-        this.dataTemplateContentType = dataTemplateContentType;
-        return this;
-    }
-
-    public void setDataTemplateContentType(String dataTemplateContentType) {
-        this.dataTemplateContentType = dataTemplateContentType;
-    }
-
     public String getDataPath() {
         return this.dataPath;
     }
@@ -261,6 +260,55 @@ public class GdiTransactionDataIndex implements Serializable {
         return this;
     }
 
+    public BusinessTeam getBusinessTeam() {
+        return this.businessTeam;
+    }
+
+    public void setBusinessTeam(BusinessTeam businessTeam) {
+        this.businessTeam = businessTeam;
+    }
+
+    public GdiTransactionDataIndex businessTeam(BusinessTeam businessTeam) {
+        this.setBusinessTeam(businessTeam);
+        return this;
+    }
+
+    public BusinessDocument getDataSetTemplate() {
+        return this.dataSetTemplate;
+    }
+
+    public void setDataSetTemplate(BusinessDocument businessDocument) {
+        this.dataSetTemplate = businessDocument;
+    }
+
+    public GdiTransactionDataIndex dataSetTemplate(BusinessDocument businessDocument) {
+        this.setDataSetTemplate(businessDocument);
+        return this;
+    }
+
+    public Set<Placeholder> getPlaceholders() {
+        return this.placeholders;
+    }
+
+    public void setPlaceholders(Set<Placeholder> placeholders) {
+        this.placeholders = placeholders;
+    }
+
+    public GdiTransactionDataIndex placeholders(Set<Placeholder> placeholders) {
+        this.setPlaceholders(placeholders);
+        return this;
+    }
+
+    public GdiTransactionDataIndex addPlaceholder(Placeholder placeholder) {
+        this.placeholders.add(placeholder);
+        return this;
+    }
+
+    public GdiTransactionDataIndex removePlaceholder(Placeholder placeholder) {
+        this.placeholders.remove(placeholder);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -292,8 +340,6 @@ public class GdiTransactionDataIndex implements Serializable {
             ", minimumDataRowsPerRequest=" + getMinimumDataRowsPerRequest() +
             ", maximumDataRowsPerRequest=" + getMaximumDataRowsPerRequest() +
             ", datasetDescription='" + getDatasetDescription() + "'" +
-            ", dataTemplate='" + getDataTemplate() + "'" +
-            ", dataTemplateContentType='" + getDataTemplateContentType() + "'" +
             ", dataPath='" + getDataPath() + "'" +
             "}";
     }

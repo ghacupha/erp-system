@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.BusinessDocument;
 import io.github.erp.service.dto.BusinessDocumentDTO;
 import java.util.Set;
@@ -50,15 +51,15 @@ public interface BusinessDocumentMapper extends EntityMapper<BusinessDocumentDTO
     @Mapping(target = "removePlaceholder", ignore = true)
     BusinessDocument toEntity(BusinessDocumentDTO businessDocumentDTO);
 
-    @Named("documentTitleSet")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "documentTitle", source = "documentTitle")
-    Set<BusinessDocumentDTO> toDtoDocumentTitleSet(Set<BusinessDocument> businessDocument);
-
     @Named("documentTitle")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "documentTitle", source = "documentTitle")
     BusinessDocumentDTO toDtoDocumentTitle(BusinessDocument businessDocument);
+
+    @Named("documentTitleSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "documentTitle", source = "documentTitle")
+    Set<BusinessDocumentDTO> toDtoDocumentTitleSet(Set<BusinessDocument> businessDocument);
 }

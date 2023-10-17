@@ -17,6 +17,7 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.enumeration.DatasetBehaviorTypes;
 import io.github.erp.domain.enumeration.UpdateFrequencyTypes;
 import java.io.Serializable;
@@ -52,13 +53,15 @@ public class GdiTransactionDataIndexDTO implements Serializable {
     @Lob
     private String datasetDescription;
 
-    @Lob
-    private byte[] dataTemplate;
-
-    private String dataTemplateContentType;
     private String dataPath;
 
     private Set<GdiMasterDataIndexDTO> masterDataItems = new HashSet<>();
+
+    private BusinessTeamDTO businessTeam;
+
+    private BusinessDocumentDTO dataSetTemplate;
+
+    private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -124,22 +127,6 @@ public class GdiTransactionDataIndexDTO implements Serializable {
         this.datasetDescription = datasetDescription;
     }
 
-    public byte[] getDataTemplate() {
-        return dataTemplate;
-    }
-
-    public void setDataTemplate(byte[] dataTemplate) {
-        this.dataTemplate = dataTemplate;
-    }
-
-    public String getDataTemplateContentType() {
-        return dataTemplateContentType;
-    }
-
-    public void setDataTemplateContentType(String dataTemplateContentType) {
-        this.dataTemplateContentType = dataTemplateContentType;
-    }
-
     public String getDataPath() {
         return dataPath;
     }
@@ -154,6 +141,30 @@ public class GdiTransactionDataIndexDTO implements Serializable {
 
     public void setMasterDataItems(Set<GdiMasterDataIndexDTO> masterDataItems) {
         this.masterDataItems = masterDataItems;
+    }
+
+    public BusinessTeamDTO getBusinessTeam() {
+        return businessTeam;
+    }
+
+    public void setBusinessTeam(BusinessTeamDTO businessTeam) {
+        this.businessTeam = businessTeam;
+    }
+
+    public BusinessDocumentDTO getDataSetTemplate() {
+        return dataSetTemplate;
+    }
+
+    public void setDataSetTemplate(BusinessDocumentDTO dataSetTemplate) {
+        this.dataSetTemplate = dataSetTemplate;
+    }
+
+    public Set<PlaceholderDTO> getPlaceholders() {
+        return placeholders;
+    }
+
+    public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
+        this.placeholders = placeholders;
     }
 
     @Override
@@ -189,9 +200,11 @@ public class GdiTransactionDataIndexDTO implements Serializable {
             ", minimumDataRowsPerRequest=" + getMinimumDataRowsPerRequest() +
             ", maximumDataRowsPerRequest=" + getMaximumDataRowsPerRequest() +
             ", datasetDescription='" + getDatasetDescription() + "'" +
-            ", dataTemplate='" + getDataTemplate() + "'" +
             ", dataPath='" + getDataPath() + "'" +
             ", masterDataItems=" + getMasterDataItems() +
+            ", businessTeam=" + getBusinessTeam() +
+            ", dataSetTemplate=" + getDataSetTemplate() +
+            ", placeholders=" + getPlaceholders() +
             "}";
     }
 }

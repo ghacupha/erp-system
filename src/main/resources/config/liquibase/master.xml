@@ -230,6 +230,7 @@
     <include file="config/liquibase/changelog/20231004123713_added_entity_CollateralInformation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231004124958_added_entity_CreditCardFacility.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231004131702_added_entity_CardState.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231017081151_added_entity_BusinessTeam.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
@@ -367,6 +368,8 @@
     <include file="config/liquibase/changelog/20231004121919_added_entity_constraints_CardUsageInformation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231004123713_added_entity_constraints_CollateralInformation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231004124958_added_entity_constraints_CreditCardFacility.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231017081151_added_entity_constraints_BusinessTeam.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231017092242_various_changes_gdi_index.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
