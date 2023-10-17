@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark VI No 2 (Phoebe Series) Server ver 1.5.3
+ * Erp System - Mark VI No 3 (Phoebe Series) Server ver 1.5.4
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -51,15 +51,15 @@ public interface BusinessDocumentMapper extends EntityMapper<BusinessDocumentDTO
     @Mapping(target = "removePlaceholder", ignore = true)
     BusinessDocument toEntity(BusinessDocumentDTO businessDocumentDTO);
 
-    @Named("documentTitle")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "documentTitle", source = "documentTitle")
-    BusinessDocumentDTO toDtoDocumentTitle(BusinessDocument businessDocument);
-
     @Named("documentTitleSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "documentTitle", source = "documentTitle")
     Set<BusinessDocumentDTO> toDtoDocumentTitleSet(Set<BusinessDocument> businessDocument);
+
+    @Named("documentTitle")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "documentTitle", source = "documentTitle")
+    BusinessDocumentDTO toDtoDocumentTitle(BusinessDocument businessDocument);
 }

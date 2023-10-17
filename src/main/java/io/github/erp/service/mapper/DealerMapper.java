@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark VI No 2 (Phoebe Series) Server ver 1.5.3
+ * Erp System - Mark VI No 3 (Phoebe Series) Server ver 1.5.4
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -37,15 +37,15 @@ public interface DealerMapper extends EntityMapper<DealerDTO, Dealer> {
     @Mapping(target = "removePlaceholder", ignore = true)
     Dealer toEntity(DealerDTO dealerDTO);
 
-    @Named("dealerName")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "dealerName", source = "dealerName")
-    DealerDTO toDtoDealerName(Dealer dealer);
-
     @Named("dealerNameSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "dealerName", source = "dealerName")
     Set<DealerDTO> toDtoDealerNameSet(Set<Dealer> dealer);
+
+    @Named("dealerName")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "dealerName", source = "dealerName")
+    DealerDTO toDtoDealerName(Dealer dealer);
 }

@@ -1,7 +1,7 @@
 package io.github.erp.web.rest;
 
 /*-
- * Erp System - Mark VI No 2 (Phoebe Series) Server ver 1.5.3
+ * Erp System - Mark VI No 3 (Phoebe Series) Server ver 1.5.4
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -71,6 +71,9 @@ class WorkProjectRegisterResourceIT {
     private static final String DEFAULT_CATALOGUE_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_CATALOGUE_NUMBER = "BBBBBBBBBB";
 
+    private static final String DEFAULT_PROJECT_TITLE = "AAAAAAAAAA";
+    private static final String UPDATED_PROJECT_TITLE = "BBBBBBBBBB";
+
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
@@ -132,6 +135,7 @@ class WorkProjectRegisterResourceIT {
     public static WorkProjectRegister createEntity(EntityManager em) {
         WorkProjectRegister workProjectRegister = new WorkProjectRegister()
             .catalogueNumber(DEFAULT_CATALOGUE_NUMBER)
+            .projectTitle(DEFAULT_PROJECT_TITLE)
             .description(DEFAULT_DESCRIPTION)
             .details(DEFAULT_DETAILS)
             .detailsContentType(DEFAULT_DETAILS_CONTENT_TYPE)
@@ -160,6 +164,7 @@ class WorkProjectRegisterResourceIT {
     public static WorkProjectRegister createUpdatedEntity(EntityManager em) {
         WorkProjectRegister workProjectRegister = new WorkProjectRegister()
             .catalogueNumber(UPDATED_CATALOGUE_NUMBER)
+            .projectTitle(UPDATED_PROJECT_TITLE)
             .description(UPDATED_DESCRIPTION)
             .details(UPDATED_DETAILS)
             .detailsContentType(UPDATED_DETAILS_CONTENT_TYPE)
@@ -203,6 +208,7 @@ class WorkProjectRegisterResourceIT {
         assertThat(workProjectRegisterList).hasSize(databaseSizeBeforeCreate + 1);
         WorkProjectRegister testWorkProjectRegister = workProjectRegisterList.get(workProjectRegisterList.size() - 1);
         assertThat(testWorkProjectRegister.getCatalogueNumber()).isEqualTo(DEFAULT_CATALOGUE_NUMBER);
+        assertThat(testWorkProjectRegister.getProjectTitle()).isEqualTo(DEFAULT_PROJECT_TITLE);
         assertThat(testWorkProjectRegister.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testWorkProjectRegister.getDetails()).isEqualTo(DEFAULT_DETAILS);
         assertThat(testWorkProjectRegister.getDetailsContentType()).isEqualTo(DEFAULT_DETAILS_CONTENT_TYPE);
@@ -264,28 +270,6 @@ class WorkProjectRegisterResourceIT {
 
     @Test
     @Transactional
-    void checkDescriptionIsRequired() throws Exception {
-        int databaseSizeBeforeTest = workProjectRegisterRepository.findAll().size();
-        // set the field null
-        workProjectRegister.setDescription(null);
-
-        // Create the WorkProjectRegister, which fails.
-        WorkProjectRegisterDTO workProjectRegisterDTO = workProjectRegisterMapper.toDto(workProjectRegister);
-
-        restWorkProjectRegisterMockMvc
-            .perform(
-                post(ENTITY_API_URL)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(workProjectRegisterDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<WorkProjectRegister> workProjectRegisterList = workProjectRegisterRepository.findAll();
-        assertThat(workProjectRegisterList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllWorkProjectRegisters() throws Exception {
         // Initialize the database
         workProjectRegisterRepository.saveAndFlush(workProjectRegister);
@@ -297,6 +281,7 @@ class WorkProjectRegisterResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(workProjectRegister.getId().intValue())))
             .andExpect(jsonPath("$.[*].catalogueNumber").value(hasItem(DEFAULT_CATALOGUE_NUMBER)))
+            .andExpect(jsonPath("$.[*].projectTitle").value(hasItem(DEFAULT_PROJECT_TITLE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].detailsContentType").value(hasItem(DEFAULT_DETAILS_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].details").value(hasItem(Base64Utils.encodeToString(DEFAULT_DETAILS))))
@@ -336,6 +321,7 @@ class WorkProjectRegisterResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(workProjectRegister.getId().intValue()))
             .andExpect(jsonPath("$.catalogueNumber").value(DEFAULT_CATALOGUE_NUMBER))
+            .andExpect(jsonPath("$.projectTitle").value(DEFAULT_PROJECT_TITLE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.detailsContentType").value(DEFAULT_DETAILS_CONTENT_TYPE))
             .andExpect(jsonPath("$.details").value(Base64Utils.encodeToString(DEFAULT_DETAILS)))
@@ -438,6 +424,84 @@ class WorkProjectRegisterResourceIT {
 
         // Get all the workProjectRegisterList where catalogueNumber does not contain UPDATED_CATALOGUE_NUMBER
         defaultWorkProjectRegisterShouldBeFound("catalogueNumber.doesNotContain=" + UPDATED_CATALOGUE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkProjectRegistersByProjectTitleIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workProjectRegisterRepository.saveAndFlush(workProjectRegister);
+
+        // Get all the workProjectRegisterList where projectTitle equals to DEFAULT_PROJECT_TITLE
+        defaultWorkProjectRegisterShouldBeFound("projectTitle.equals=" + DEFAULT_PROJECT_TITLE);
+
+        // Get all the workProjectRegisterList where projectTitle equals to UPDATED_PROJECT_TITLE
+        defaultWorkProjectRegisterShouldNotBeFound("projectTitle.equals=" + UPDATED_PROJECT_TITLE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkProjectRegistersByProjectTitleIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        workProjectRegisterRepository.saveAndFlush(workProjectRegister);
+
+        // Get all the workProjectRegisterList where projectTitle not equals to DEFAULT_PROJECT_TITLE
+        defaultWorkProjectRegisterShouldNotBeFound("projectTitle.notEquals=" + DEFAULT_PROJECT_TITLE);
+
+        // Get all the workProjectRegisterList where projectTitle not equals to UPDATED_PROJECT_TITLE
+        defaultWorkProjectRegisterShouldBeFound("projectTitle.notEquals=" + UPDATED_PROJECT_TITLE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkProjectRegistersByProjectTitleIsInShouldWork() throws Exception {
+        // Initialize the database
+        workProjectRegisterRepository.saveAndFlush(workProjectRegister);
+
+        // Get all the workProjectRegisterList where projectTitle in DEFAULT_PROJECT_TITLE or UPDATED_PROJECT_TITLE
+        defaultWorkProjectRegisterShouldBeFound("projectTitle.in=" + DEFAULT_PROJECT_TITLE + "," + UPDATED_PROJECT_TITLE);
+
+        // Get all the workProjectRegisterList where projectTitle equals to UPDATED_PROJECT_TITLE
+        defaultWorkProjectRegisterShouldNotBeFound("projectTitle.in=" + UPDATED_PROJECT_TITLE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkProjectRegistersByProjectTitleIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        workProjectRegisterRepository.saveAndFlush(workProjectRegister);
+
+        // Get all the workProjectRegisterList where projectTitle is not null
+        defaultWorkProjectRegisterShouldBeFound("projectTitle.specified=true");
+
+        // Get all the workProjectRegisterList where projectTitle is null
+        defaultWorkProjectRegisterShouldNotBeFound("projectTitle.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkProjectRegistersByProjectTitleContainsSomething() throws Exception {
+        // Initialize the database
+        workProjectRegisterRepository.saveAndFlush(workProjectRegister);
+
+        // Get all the workProjectRegisterList where projectTitle contains DEFAULT_PROJECT_TITLE
+        defaultWorkProjectRegisterShouldBeFound("projectTitle.contains=" + DEFAULT_PROJECT_TITLE);
+
+        // Get all the workProjectRegisterList where projectTitle contains UPDATED_PROJECT_TITLE
+        defaultWorkProjectRegisterShouldNotBeFound("projectTitle.contains=" + UPDATED_PROJECT_TITLE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkProjectRegistersByProjectTitleNotContainsSomething() throws Exception {
+        // Initialize the database
+        workProjectRegisterRepository.saveAndFlush(workProjectRegister);
+
+        // Get all the workProjectRegisterList where projectTitle does not contain DEFAULT_PROJECT_TITLE
+        defaultWorkProjectRegisterShouldNotBeFound("projectTitle.doesNotContain=" + DEFAULT_PROJECT_TITLE);
+
+        // Get all the workProjectRegisterList where projectTitle does not contain UPDATED_PROJECT_TITLE
+        defaultWorkProjectRegisterShouldBeFound("projectTitle.doesNotContain=" + UPDATED_PROJECT_TITLE);
     }
 
     @Test
@@ -736,6 +800,7 @@ class WorkProjectRegisterResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(workProjectRegister.getId().intValue())))
             .andExpect(jsonPath("$.[*].catalogueNumber").value(hasItem(DEFAULT_CATALOGUE_NUMBER)))
+            .andExpect(jsonPath("$.[*].projectTitle").value(hasItem(DEFAULT_PROJECT_TITLE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].detailsContentType").value(hasItem(DEFAULT_DETAILS_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].details").value(hasItem(Base64Utils.encodeToString(DEFAULT_DETAILS))))
@@ -791,6 +856,7 @@ class WorkProjectRegisterResourceIT {
         em.detach(updatedWorkProjectRegister);
         updatedWorkProjectRegister
             .catalogueNumber(UPDATED_CATALOGUE_NUMBER)
+            .projectTitle(UPDATED_PROJECT_TITLE)
             .description(UPDATED_DESCRIPTION)
             .details(UPDATED_DETAILS)
             .detailsContentType(UPDATED_DETAILS_CONTENT_TYPE)
@@ -812,6 +878,7 @@ class WorkProjectRegisterResourceIT {
         assertThat(workProjectRegisterList).hasSize(databaseSizeBeforeUpdate);
         WorkProjectRegister testWorkProjectRegister = workProjectRegisterList.get(workProjectRegisterList.size() - 1);
         assertThat(testWorkProjectRegister.getCatalogueNumber()).isEqualTo(UPDATED_CATALOGUE_NUMBER);
+        assertThat(testWorkProjectRegister.getProjectTitle()).isEqualTo(UPDATED_PROJECT_TITLE);
         assertThat(testWorkProjectRegister.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testWorkProjectRegister.getDetails()).isEqualTo(UPDATED_DETAILS);
         assertThat(testWorkProjectRegister.getDetailsContentType()).isEqualTo(UPDATED_DETAILS_CONTENT_TYPE);
@@ -915,8 +982,11 @@ class WorkProjectRegisterResourceIT {
 
         partialUpdatedWorkProjectRegister
             .catalogueNumber(UPDATED_CATALOGUE_NUMBER)
-            .description(UPDATED_DESCRIPTION)
-            .totalProjectCost(UPDATED_TOTAL_PROJECT_COST);
+            .projectTitle(UPDATED_PROJECT_TITLE)
+            .details(UPDATED_DETAILS)
+            .detailsContentType(UPDATED_DETAILS_CONTENT_TYPE)
+            .additionalNotes(UPDATED_ADDITIONAL_NOTES)
+            .additionalNotesContentType(UPDATED_ADDITIONAL_NOTES_CONTENT_TYPE);
 
         restWorkProjectRegisterMockMvc
             .perform(
@@ -931,12 +1001,13 @@ class WorkProjectRegisterResourceIT {
         assertThat(workProjectRegisterList).hasSize(databaseSizeBeforeUpdate);
         WorkProjectRegister testWorkProjectRegister = workProjectRegisterList.get(workProjectRegisterList.size() - 1);
         assertThat(testWorkProjectRegister.getCatalogueNumber()).isEqualTo(UPDATED_CATALOGUE_NUMBER);
-        assertThat(testWorkProjectRegister.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testWorkProjectRegister.getDetails()).isEqualTo(DEFAULT_DETAILS);
-        assertThat(testWorkProjectRegister.getDetailsContentType()).isEqualTo(DEFAULT_DETAILS_CONTENT_TYPE);
-        assertThat(testWorkProjectRegister.getTotalProjectCost()).isEqualByComparingTo(UPDATED_TOTAL_PROJECT_COST);
-        assertThat(testWorkProjectRegister.getAdditionalNotes()).isEqualTo(DEFAULT_ADDITIONAL_NOTES);
-        assertThat(testWorkProjectRegister.getAdditionalNotesContentType()).isEqualTo(DEFAULT_ADDITIONAL_NOTES_CONTENT_TYPE);
+        assertThat(testWorkProjectRegister.getProjectTitle()).isEqualTo(UPDATED_PROJECT_TITLE);
+        assertThat(testWorkProjectRegister.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testWorkProjectRegister.getDetails()).isEqualTo(UPDATED_DETAILS);
+        assertThat(testWorkProjectRegister.getDetailsContentType()).isEqualTo(UPDATED_DETAILS_CONTENT_TYPE);
+        assertThat(testWorkProjectRegister.getTotalProjectCost()).isEqualByComparingTo(DEFAULT_TOTAL_PROJECT_COST);
+        assertThat(testWorkProjectRegister.getAdditionalNotes()).isEqualTo(UPDATED_ADDITIONAL_NOTES);
+        assertThat(testWorkProjectRegister.getAdditionalNotesContentType()).isEqualTo(UPDATED_ADDITIONAL_NOTES_CONTENT_TYPE);
     }
 
     @Test
@@ -953,6 +1024,7 @@ class WorkProjectRegisterResourceIT {
 
         partialUpdatedWorkProjectRegister
             .catalogueNumber(UPDATED_CATALOGUE_NUMBER)
+            .projectTitle(UPDATED_PROJECT_TITLE)
             .description(UPDATED_DESCRIPTION)
             .details(UPDATED_DETAILS)
             .detailsContentType(UPDATED_DETAILS_CONTENT_TYPE)
@@ -973,6 +1045,7 @@ class WorkProjectRegisterResourceIT {
         assertThat(workProjectRegisterList).hasSize(databaseSizeBeforeUpdate);
         WorkProjectRegister testWorkProjectRegister = workProjectRegisterList.get(workProjectRegisterList.size() - 1);
         assertThat(testWorkProjectRegister.getCatalogueNumber()).isEqualTo(UPDATED_CATALOGUE_NUMBER);
+        assertThat(testWorkProjectRegister.getProjectTitle()).isEqualTo(UPDATED_PROJECT_TITLE);
         assertThat(testWorkProjectRegister.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testWorkProjectRegister.getDetails()).isEqualTo(UPDATED_DETAILS);
         assertThat(testWorkProjectRegister.getDetailsContentType()).isEqualTo(UPDATED_DETAILS_CONTENT_TYPE);
@@ -1096,6 +1169,7 @@ class WorkProjectRegisterResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(workProjectRegister.getId().intValue())))
             .andExpect(jsonPath("$.[*].catalogueNumber").value(hasItem(DEFAULT_CATALOGUE_NUMBER)))
+            .andExpect(jsonPath("$.[*].projectTitle").value(hasItem(DEFAULT_PROJECT_TITLE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].detailsContentType").value(hasItem(DEFAULT_DETAILS_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].details").value(hasItem(Base64Utils.encodeToString(DEFAULT_DETAILS))))
