@@ -34,18 +34,18 @@ import org.springframework.stereotype.Repository;
 public interface WorkInProgressTransferRepository
     extends JpaRepository<WorkInProgressTransfer, Long>, JpaSpecificationExecutor<WorkInProgressTransfer> {
     @Query(
-        value = "select distinct workInProgressTransfer from WorkInProgressTransfer workInProgressTransfer left join fetch workInProgressTransfer.workInProgressRegistrations left join fetch workInProgressTransfer.placeholders left join fetch workInProgressTransfer.businessDocuments",
+        value = "select distinct workInProgressTransfer from WorkInProgressTransfer workInProgressTransfer left join fetch workInProgressTransfer.placeholders left join fetch workInProgressTransfer.businessDocuments",
         countQuery = "select count(distinct workInProgressTransfer) from WorkInProgressTransfer workInProgressTransfer"
     )
     Page<WorkInProgressTransfer> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct workInProgressTransfer from WorkInProgressTransfer workInProgressTransfer left join fetch workInProgressTransfer.workInProgressRegistrations left join fetch workInProgressTransfer.placeholders left join fetch workInProgressTransfer.businessDocuments"
+        "select distinct workInProgressTransfer from WorkInProgressTransfer workInProgressTransfer left join fetch workInProgressTransfer.placeholders left join fetch workInProgressTransfer.businessDocuments"
     )
     List<WorkInProgressTransfer> findAllWithEagerRelationships();
 
     @Query(
-        "select workInProgressTransfer from WorkInProgressTransfer workInProgressTransfer left join fetch workInProgressTransfer.workInProgressRegistrations left join fetch workInProgressTransfer.placeholders left join fetch workInProgressTransfer.businessDocuments where workInProgressTransfer.id =:id"
+        "select workInProgressTransfer from WorkInProgressTransfer workInProgressTransfer left join fetch workInProgressTransfer.placeholders left join fetch workInProgressTransfer.businessDocuments where workInProgressTransfer.id =:id"
     )
     Optional<WorkInProgressTransfer> findOneWithEagerRelationships(@Param("id") Long id);
 }

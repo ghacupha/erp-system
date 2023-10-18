@@ -7,7 +7,8 @@
     },
     {
       "fieldName": "projectTitle",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
     },
     {
       "fieldName": "description",

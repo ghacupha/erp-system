@@ -18,6 +18,7 @@ package io.github.erp.web.rest;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import static io.github.erp.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -25,16 +26,24 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.AssetCategory;
 import io.github.erp.domain.BusinessDocument;
 import io.github.erp.domain.Placeholder;
+import io.github.erp.domain.ServiceOutlet;
+import io.github.erp.domain.Settlement;
 import io.github.erp.domain.WorkInProgressRegistration;
 import io.github.erp.domain.WorkInProgressTransfer;
+import io.github.erp.domain.WorkProjectRegister;
+import io.github.erp.domain.enumeration.WorkInProgressTransferType;
 import io.github.erp.repository.WorkInProgressTransferRepository;
 import io.github.erp.repository.search.WorkInProgressTransferSearchRepository;
 import io.github.erp.service.WorkInProgressTransferService;
 import io.github.erp.service.criteria.WorkInProgressTransferCriteria;
 import io.github.erp.service.dto.WorkInProgressTransferDTO;
 import io.github.erp.service.mapper.WorkInProgressTransferMapper;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -69,6 +78,17 @@ class WorkInProgressTransferResourceIT {
 
     private static final String DEFAULT_TARGET_ASSET_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_TARGET_ASSET_NUMBER = "BBBBBBBBBB";
+
+    private static final BigDecimal DEFAULT_TRANSFER_AMOUNT = new BigDecimal(0);
+    private static final BigDecimal UPDATED_TRANSFER_AMOUNT = new BigDecimal(1);
+    private static final BigDecimal SMALLER_TRANSFER_AMOUNT = new BigDecimal(0 - 1);
+
+    private static final LocalDate DEFAULT_TRANSFER_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_TRANSFER_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_TRANSFER_DATE = LocalDate.ofEpochDay(-1L);
+
+    private static final WorkInProgressTransferType DEFAULT_TRANSFER_TYPE = WorkInProgressTransferType.DEBIT_TRANSFER;
+    private static final WorkInProgressTransferType UPDATED_TRANSFER_TYPE = WorkInProgressTransferType.REVERSAL;
 
     private static final String ENTITY_API_URL = "/api/work-in-progress-transfers";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -114,7 +134,10 @@ class WorkInProgressTransferResourceIT {
     public static WorkInProgressTransfer createEntity(EntityManager em) {
         WorkInProgressTransfer workInProgressTransfer = new WorkInProgressTransfer()
             .description(DEFAULT_DESCRIPTION)
-            .targetAssetNumber(DEFAULT_TARGET_ASSET_NUMBER);
+            .targetAssetNumber(DEFAULT_TARGET_ASSET_NUMBER)
+            .transferAmount(DEFAULT_TRANSFER_AMOUNT)
+            .transferDate(DEFAULT_TRANSFER_DATE)
+            .transferType(DEFAULT_TRANSFER_TYPE);
         return workInProgressTransfer;
     }
 
@@ -127,7 +150,10 @@ class WorkInProgressTransferResourceIT {
     public static WorkInProgressTransfer createUpdatedEntity(EntityManager em) {
         WorkInProgressTransfer workInProgressTransfer = new WorkInProgressTransfer()
             .description(UPDATED_DESCRIPTION)
-            .targetAssetNumber(UPDATED_TARGET_ASSET_NUMBER);
+            .targetAssetNumber(UPDATED_TARGET_ASSET_NUMBER)
+            .transferAmount(UPDATED_TRANSFER_AMOUNT)
+            .transferDate(UPDATED_TRANSFER_DATE)
+            .transferType(UPDATED_TRANSFER_TYPE);
         return workInProgressTransfer;
     }
 
@@ -156,6 +182,9 @@ class WorkInProgressTransferResourceIT {
         WorkInProgressTransfer testWorkInProgressTransfer = workInProgressTransferList.get(workInProgressTransferList.size() - 1);
         assertThat(testWorkInProgressTransfer.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testWorkInProgressTransfer.getTargetAssetNumber()).isEqualTo(DEFAULT_TARGET_ASSET_NUMBER);
+        assertThat(testWorkInProgressTransfer.getTransferAmount()).isEqualByComparingTo(DEFAULT_TRANSFER_AMOUNT);
+        assertThat(testWorkInProgressTransfer.getTransferDate()).isEqualTo(DEFAULT_TRANSFER_DATE);
+        assertThat(testWorkInProgressTransfer.getTransferType()).isEqualTo(DEFAULT_TRANSFER_TYPE);
 
         // Validate the WorkInProgressTransfer in Elasticsearch
         verify(mockWorkInProgressTransferSearchRepository, times(1)).save(testWorkInProgressTransfer);
@@ -189,6 +218,72 @@ class WorkInProgressTransferResourceIT {
 
     @Test
     @Transactional
+    void checkTransferAmountIsRequired() throws Exception {
+        int databaseSizeBeforeTest = workInProgressTransferRepository.findAll().size();
+        // set the field null
+        workInProgressTransfer.setTransferAmount(null);
+
+        // Create the WorkInProgressTransfer, which fails.
+        WorkInProgressTransferDTO workInProgressTransferDTO = workInProgressTransferMapper.toDto(workInProgressTransfer);
+
+        restWorkInProgressTransferMockMvc
+            .perform(
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(workInProgressTransferDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<WorkInProgressTransfer> workInProgressTransferList = workInProgressTransferRepository.findAll();
+        assertThat(workInProgressTransferList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkTransferDateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = workInProgressTransferRepository.findAll().size();
+        // set the field null
+        workInProgressTransfer.setTransferDate(null);
+
+        // Create the WorkInProgressTransfer, which fails.
+        WorkInProgressTransferDTO workInProgressTransferDTO = workInProgressTransferMapper.toDto(workInProgressTransfer);
+
+        restWorkInProgressTransferMockMvc
+            .perform(
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(workInProgressTransferDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<WorkInProgressTransfer> workInProgressTransferList = workInProgressTransferRepository.findAll();
+        assertThat(workInProgressTransferList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkTransferTypeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = workInProgressTransferRepository.findAll().size();
+        // set the field null
+        workInProgressTransfer.setTransferType(null);
+
+        // Create the WorkInProgressTransfer, which fails.
+        WorkInProgressTransferDTO workInProgressTransferDTO = workInProgressTransferMapper.toDto(workInProgressTransfer);
+
+        restWorkInProgressTransferMockMvc
+            .perform(
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(workInProgressTransferDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<WorkInProgressTransfer> workInProgressTransferList = workInProgressTransferRepository.findAll();
+        assertThat(workInProgressTransferList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllWorkInProgressTransfers() throws Exception {
         // Initialize the database
         workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
@@ -200,7 +295,10 @@ class WorkInProgressTransferResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(workInProgressTransfer.getId().intValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].targetAssetNumber").value(hasItem(DEFAULT_TARGET_ASSET_NUMBER)));
+            .andExpect(jsonPath("$.[*].targetAssetNumber").value(hasItem(DEFAULT_TARGET_ASSET_NUMBER)))
+            .andExpect(jsonPath("$.[*].transferAmount").value(hasItem(sameNumber(DEFAULT_TRANSFER_AMOUNT))))
+            .andExpect(jsonPath("$.[*].transferDate").value(hasItem(DEFAULT_TRANSFER_DATE.toString())))
+            .andExpect(jsonPath("$.[*].transferType").value(hasItem(DEFAULT_TRANSFER_TYPE.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -234,7 +332,10 @@ class WorkInProgressTransferResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(workInProgressTransfer.getId().intValue()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.targetAssetNumber").value(DEFAULT_TARGET_ASSET_NUMBER));
+            .andExpect(jsonPath("$.targetAssetNumber").value(DEFAULT_TARGET_ASSET_NUMBER))
+            .andExpect(jsonPath("$.transferAmount").value(sameNumber(DEFAULT_TRANSFER_AMOUNT)))
+            .andExpect(jsonPath("$.transferDate").value(DEFAULT_TRANSFER_DATE.toString()))
+            .andExpect(jsonPath("$.transferType").value(DEFAULT_TRANSFER_TYPE.toString()));
     }
 
     @Test
@@ -415,28 +516,262 @@ class WorkInProgressTransferResourceIT {
 
     @Test
     @Transactional
-    void getAllWorkInProgressTransfersByWorkInProgressRegistrationIsEqualToSomething() throws Exception {
+    void getAllWorkInProgressTransfersByTransferAmountIsEqualToSomething() throws Exception {
         // Initialize the database
         workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
-        WorkInProgressRegistration workInProgressRegistration;
-        if (TestUtil.findAll(em, WorkInProgressRegistration.class).isEmpty()) {
-            workInProgressRegistration = WorkInProgressRegistrationResourceIT.createEntity(em);
-            em.persist(workInProgressRegistration);
-            em.flush();
-        } else {
-            workInProgressRegistration = TestUtil.findAll(em, WorkInProgressRegistration.class).get(0);
-        }
-        em.persist(workInProgressRegistration);
-        em.flush();
-        workInProgressTransfer.addWorkInProgressRegistration(workInProgressRegistration);
+
+        // Get all the workInProgressTransferList where transferAmount equals to DEFAULT_TRANSFER_AMOUNT
+        defaultWorkInProgressTransferShouldBeFound("transferAmount.equals=" + DEFAULT_TRANSFER_AMOUNT);
+
+        // Get all the workInProgressTransferList where transferAmount equals to UPDATED_TRANSFER_AMOUNT
+        defaultWorkInProgressTransferShouldNotBeFound("transferAmount.equals=" + UPDATED_TRANSFER_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByTransferAmountIsNotEqualToSomething() throws Exception {
+        // Initialize the database
         workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
-        Long workInProgressRegistrationId = workInProgressRegistration.getId();
 
-        // Get all the workInProgressTransferList where workInProgressRegistration equals to workInProgressRegistrationId
-        defaultWorkInProgressTransferShouldBeFound("workInProgressRegistrationId.equals=" + workInProgressRegistrationId);
+        // Get all the workInProgressTransferList where transferAmount not equals to DEFAULT_TRANSFER_AMOUNT
+        defaultWorkInProgressTransferShouldNotBeFound("transferAmount.notEquals=" + DEFAULT_TRANSFER_AMOUNT);
 
-        // Get all the workInProgressTransferList where workInProgressRegistration equals to (workInProgressRegistrationId + 1)
-        defaultWorkInProgressTransferShouldNotBeFound("workInProgressRegistrationId.equals=" + (workInProgressRegistrationId + 1));
+        // Get all the workInProgressTransferList where transferAmount not equals to UPDATED_TRANSFER_AMOUNT
+        defaultWorkInProgressTransferShouldBeFound("transferAmount.notEquals=" + UPDATED_TRANSFER_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByTransferAmountIsInShouldWork() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+
+        // Get all the workInProgressTransferList where transferAmount in DEFAULT_TRANSFER_AMOUNT or UPDATED_TRANSFER_AMOUNT
+        defaultWorkInProgressTransferShouldBeFound("transferAmount.in=" + DEFAULT_TRANSFER_AMOUNT + "," + UPDATED_TRANSFER_AMOUNT);
+
+        // Get all the workInProgressTransferList where transferAmount equals to UPDATED_TRANSFER_AMOUNT
+        defaultWorkInProgressTransferShouldNotBeFound("transferAmount.in=" + UPDATED_TRANSFER_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByTransferAmountIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+
+        // Get all the workInProgressTransferList where transferAmount is not null
+        defaultWorkInProgressTransferShouldBeFound("transferAmount.specified=true");
+
+        // Get all the workInProgressTransferList where transferAmount is null
+        defaultWorkInProgressTransferShouldNotBeFound("transferAmount.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByTransferAmountIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+
+        // Get all the workInProgressTransferList where transferAmount is greater than or equal to DEFAULT_TRANSFER_AMOUNT
+        defaultWorkInProgressTransferShouldBeFound("transferAmount.greaterThanOrEqual=" + DEFAULT_TRANSFER_AMOUNT);
+
+        // Get all the workInProgressTransferList where transferAmount is greater than or equal to UPDATED_TRANSFER_AMOUNT
+        defaultWorkInProgressTransferShouldNotBeFound("transferAmount.greaterThanOrEqual=" + UPDATED_TRANSFER_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByTransferAmountIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+
+        // Get all the workInProgressTransferList where transferAmount is less than or equal to DEFAULT_TRANSFER_AMOUNT
+        defaultWorkInProgressTransferShouldBeFound("transferAmount.lessThanOrEqual=" + DEFAULT_TRANSFER_AMOUNT);
+
+        // Get all the workInProgressTransferList where transferAmount is less than or equal to SMALLER_TRANSFER_AMOUNT
+        defaultWorkInProgressTransferShouldNotBeFound("transferAmount.lessThanOrEqual=" + SMALLER_TRANSFER_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByTransferAmountIsLessThanSomething() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+
+        // Get all the workInProgressTransferList where transferAmount is less than DEFAULT_TRANSFER_AMOUNT
+        defaultWorkInProgressTransferShouldNotBeFound("transferAmount.lessThan=" + DEFAULT_TRANSFER_AMOUNT);
+
+        // Get all the workInProgressTransferList where transferAmount is less than UPDATED_TRANSFER_AMOUNT
+        defaultWorkInProgressTransferShouldBeFound("transferAmount.lessThan=" + UPDATED_TRANSFER_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByTransferAmountIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+
+        // Get all the workInProgressTransferList where transferAmount is greater than DEFAULT_TRANSFER_AMOUNT
+        defaultWorkInProgressTransferShouldNotBeFound("transferAmount.greaterThan=" + DEFAULT_TRANSFER_AMOUNT);
+
+        // Get all the workInProgressTransferList where transferAmount is greater than SMALLER_TRANSFER_AMOUNT
+        defaultWorkInProgressTransferShouldBeFound("transferAmount.greaterThan=" + SMALLER_TRANSFER_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByTransferDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+
+        // Get all the workInProgressTransferList where transferDate equals to DEFAULT_TRANSFER_DATE
+        defaultWorkInProgressTransferShouldBeFound("transferDate.equals=" + DEFAULT_TRANSFER_DATE);
+
+        // Get all the workInProgressTransferList where transferDate equals to UPDATED_TRANSFER_DATE
+        defaultWorkInProgressTransferShouldNotBeFound("transferDate.equals=" + UPDATED_TRANSFER_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByTransferDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+
+        // Get all the workInProgressTransferList where transferDate not equals to DEFAULT_TRANSFER_DATE
+        defaultWorkInProgressTransferShouldNotBeFound("transferDate.notEquals=" + DEFAULT_TRANSFER_DATE);
+
+        // Get all the workInProgressTransferList where transferDate not equals to UPDATED_TRANSFER_DATE
+        defaultWorkInProgressTransferShouldBeFound("transferDate.notEquals=" + UPDATED_TRANSFER_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByTransferDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+
+        // Get all the workInProgressTransferList where transferDate in DEFAULT_TRANSFER_DATE or UPDATED_TRANSFER_DATE
+        defaultWorkInProgressTransferShouldBeFound("transferDate.in=" + DEFAULT_TRANSFER_DATE + "," + UPDATED_TRANSFER_DATE);
+
+        // Get all the workInProgressTransferList where transferDate equals to UPDATED_TRANSFER_DATE
+        defaultWorkInProgressTransferShouldNotBeFound("transferDate.in=" + UPDATED_TRANSFER_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByTransferDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+
+        // Get all the workInProgressTransferList where transferDate is not null
+        defaultWorkInProgressTransferShouldBeFound("transferDate.specified=true");
+
+        // Get all the workInProgressTransferList where transferDate is null
+        defaultWorkInProgressTransferShouldNotBeFound("transferDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByTransferDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+
+        // Get all the workInProgressTransferList where transferDate is greater than or equal to DEFAULT_TRANSFER_DATE
+        defaultWorkInProgressTransferShouldBeFound("transferDate.greaterThanOrEqual=" + DEFAULT_TRANSFER_DATE);
+
+        // Get all the workInProgressTransferList where transferDate is greater than or equal to UPDATED_TRANSFER_DATE
+        defaultWorkInProgressTransferShouldNotBeFound("transferDate.greaterThanOrEqual=" + UPDATED_TRANSFER_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByTransferDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+
+        // Get all the workInProgressTransferList where transferDate is less than or equal to DEFAULT_TRANSFER_DATE
+        defaultWorkInProgressTransferShouldBeFound("transferDate.lessThanOrEqual=" + DEFAULT_TRANSFER_DATE);
+
+        // Get all the workInProgressTransferList where transferDate is less than or equal to SMALLER_TRANSFER_DATE
+        defaultWorkInProgressTransferShouldNotBeFound("transferDate.lessThanOrEqual=" + SMALLER_TRANSFER_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByTransferDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+
+        // Get all the workInProgressTransferList where transferDate is less than DEFAULT_TRANSFER_DATE
+        defaultWorkInProgressTransferShouldNotBeFound("transferDate.lessThan=" + DEFAULT_TRANSFER_DATE);
+
+        // Get all the workInProgressTransferList where transferDate is less than UPDATED_TRANSFER_DATE
+        defaultWorkInProgressTransferShouldBeFound("transferDate.lessThan=" + UPDATED_TRANSFER_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByTransferDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+
+        // Get all the workInProgressTransferList where transferDate is greater than DEFAULT_TRANSFER_DATE
+        defaultWorkInProgressTransferShouldNotBeFound("transferDate.greaterThan=" + DEFAULT_TRANSFER_DATE);
+
+        // Get all the workInProgressTransferList where transferDate is greater than SMALLER_TRANSFER_DATE
+        defaultWorkInProgressTransferShouldBeFound("transferDate.greaterThan=" + SMALLER_TRANSFER_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByTransferTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+
+        // Get all the workInProgressTransferList where transferType equals to DEFAULT_TRANSFER_TYPE
+        defaultWorkInProgressTransferShouldBeFound("transferType.equals=" + DEFAULT_TRANSFER_TYPE);
+
+        // Get all the workInProgressTransferList where transferType equals to UPDATED_TRANSFER_TYPE
+        defaultWorkInProgressTransferShouldNotBeFound("transferType.equals=" + UPDATED_TRANSFER_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByTransferTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+
+        // Get all the workInProgressTransferList where transferType not equals to DEFAULT_TRANSFER_TYPE
+        defaultWorkInProgressTransferShouldNotBeFound("transferType.notEquals=" + DEFAULT_TRANSFER_TYPE);
+
+        // Get all the workInProgressTransferList where transferType not equals to UPDATED_TRANSFER_TYPE
+        defaultWorkInProgressTransferShouldBeFound("transferType.notEquals=" + UPDATED_TRANSFER_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByTransferTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+
+        // Get all the workInProgressTransferList where transferType in DEFAULT_TRANSFER_TYPE or UPDATED_TRANSFER_TYPE
+        defaultWorkInProgressTransferShouldBeFound("transferType.in=" + DEFAULT_TRANSFER_TYPE + "," + UPDATED_TRANSFER_TYPE);
+
+        // Get all the workInProgressTransferList where transferType equals to UPDATED_TRANSFER_TYPE
+        defaultWorkInProgressTransferShouldNotBeFound("transferType.in=" + UPDATED_TRANSFER_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByTransferTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+
+        // Get all the workInProgressTransferList where transferType is not null
+        defaultWorkInProgressTransferShouldBeFound("transferType.specified=true");
+
+        // Get all the workInProgressTransferList where transferType is null
+        defaultWorkInProgressTransferShouldNotBeFound("transferType.specified=false");
     }
 
     @Test
@@ -491,6 +826,136 @@ class WorkInProgressTransferResourceIT {
         defaultWorkInProgressTransferShouldNotBeFound("businessDocumentId.equals=" + (businessDocumentId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByAssetCategoryIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+        AssetCategory assetCategory;
+        if (TestUtil.findAll(em, AssetCategory.class).isEmpty()) {
+            assetCategory = AssetCategoryResourceIT.createEntity(em);
+            em.persist(assetCategory);
+            em.flush();
+        } else {
+            assetCategory = TestUtil.findAll(em, AssetCategory.class).get(0);
+        }
+        em.persist(assetCategory);
+        em.flush();
+        workInProgressTransfer.setAssetCategory(assetCategory);
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+        Long assetCategoryId = assetCategory.getId();
+
+        // Get all the workInProgressTransferList where assetCategory equals to assetCategoryId
+        defaultWorkInProgressTransferShouldBeFound("assetCategoryId.equals=" + assetCategoryId);
+
+        // Get all the workInProgressTransferList where assetCategory equals to (assetCategoryId + 1)
+        defaultWorkInProgressTransferShouldNotBeFound("assetCategoryId.equals=" + (assetCategoryId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByWorkInProgressRegistrationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+        WorkInProgressRegistration workInProgressRegistration;
+        if (TestUtil.findAll(em, WorkInProgressRegistration.class).isEmpty()) {
+            workInProgressRegistration = WorkInProgressRegistrationResourceIT.createEntity(em);
+            em.persist(workInProgressRegistration);
+            em.flush();
+        } else {
+            workInProgressRegistration = TestUtil.findAll(em, WorkInProgressRegistration.class).get(0);
+        }
+        em.persist(workInProgressRegistration);
+        em.flush();
+        workInProgressTransfer.setWorkInProgressRegistration(workInProgressRegistration);
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+        Long workInProgressRegistrationId = workInProgressRegistration.getId();
+
+        // Get all the workInProgressTransferList where workInProgressRegistration equals to workInProgressRegistrationId
+        defaultWorkInProgressTransferShouldBeFound("workInProgressRegistrationId.equals=" + workInProgressRegistrationId);
+
+        // Get all the workInProgressTransferList where workInProgressRegistration equals to (workInProgressRegistrationId + 1)
+        defaultWorkInProgressTransferShouldNotBeFound("workInProgressRegistrationId.equals=" + (workInProgressRegistrationId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByServiceOutletIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+        ServiceOutlet serviceOutlet;
+        if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
+            serviceOutlet = ServiceOutletResourceIT.createEntity(em);
+            em.persist(serviceOutlet);
+            em.flush();
+        } else {
+            serviceOutlet = TestUtil.findAll(em, ServiceOutlet.class).get(0);
+        }
+        em.persist(serviceOutlet);
+        em.flush();
+        workInProgressTransfer.setServiceOutlet(serviceOutlet);
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+        Long serviceOutletId = serviceOutlet.getId();
+
+        // Get all the workInProgressTransferList where serviceOutlet equals to serviceOutletId
+        defaultWorkInProgressTransferShouldBeFound("serviceOutletId.equals=" + serviceOutletId);
+
+        // Get all the workInProgressTransferList where serviceOutlet equals to (serviceOutletId + 1)
+        defaultWorkInProgressTransferShouldNotBeFound("serviceOutletId.equals=" + (serviceOutletId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersBySettlementIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+        Settlement settlement;
+        if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
+            settlement = SettlementResourceIT.createEntity(em);
+            em.persist(settlement);
+            em.flush();
+        } else {
+            settlement = TestUtil.findAll(em, Settlement.class).get(0);
+        }
+        em.persist(settlement);
+        em.flush();
+        workInProgressTransfer.setSettlement(settlement);
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+        Long settlementId = settlement.getId();
+
+        // Get all the workInProgressTransferList where settlement equals to settlementId
+        defaultWorkInProgressTransferShouldBeFound("settlementId.equals=" + settlementId);
+
+        // Get all the workInProgressTransferList where settlement equals to (settlementId + 1)
+        defaultWorkInProgressTransferShouldNotBeFound("settlementId.equals=" + (settlementId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByWorkProjectRegisterIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+        WorkProjectRegister workProjectRegister;
+        if (TestUtil.findAll(em, WorkProjectRegister.class).isEmpty()) {
+            workProjectRegister = WorkProjectRegisterResourceIT.createEntity(em);
+            em.persist(workProjectRegister);
+            em.flush();
+        } else {
+            workProjectRegister = TestUtil.findAll(em, WorkProjectRegister.class).get(0);
+        }
+        em.persist(workProjectRegister);
+        em.flush();
+        workInProgressTransfer.setWorkProjectRegister(workProjectRegister);
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+        Long workProjectRegisterId = workProjectRegister.getId();
+
+        // Get all the workInProgressTransferList where workProjectRegister equals to workProjectRegisterId
+        defaultWorkInProgressTransferShouldBeFound("workProjectRegisterId.equals=" + workProjectRegisterId);
+
+        // Get all the workInProgressTransferList where workProjectRegister equals to (workProjectRegisterId + 1)
+        defaultWorkInProgressTransferShouldNotBeFound("workProjectRegisterId.equals=" + (workProjectRegisterId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -501,7 +966,10 @@ class WorkInProgressTransferResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(workInProgressTransfer.getId().intValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].targetAssetNumber").value(hasItem(DEFAULT_TARGET_ASSET_NUMBER)));
+            .andExpect(jsonPath("$.[*].targetAssetNumber").value(hasItem(DEFAULT_TARGET_ASSET_NUMBER)))
+            .andExpect(jsonPath("$.[*].transferAmount").value(hasItem(sameNumber(DEFAULT_TRANSFER_AMOUNT))))
+            .andExpect(jsonPath("$.[*].transferDate").value(hasItem(DEFAULT_TRANSFER_DATE.toString())))
+            .andExpect(jsonPath("$.[*].transferType").value(hasItem(DEFAULT_TRANSFER_TYPE.toString())));
 
         // Check, that the count call also returns 1
         restWorkInProgressTransferMockMvc
@@ -551,7 +1019,12 @@ class WorkInProgressTransferResourceIT {
             .get();
         // Disconnect from session so that the updates on updatedWorkInProgressTransfer are not directly saved in db
         em.detach(updatedWorkInProgressTransfer);
-        updatedWorkInProgressTransfer.description(UPDATED_DESCRIPTION).targetAssetNumber(UPDATED_TARGET_ASSET_NUMBER);
+        updatedWorkInProgressTransfer
+            .description(UPDATED_DESCRIPTION)
+            .targetAssetNumber(UPDATED_TARGET_ASSET_NUMBER)
+            .transferAmount(UPDATED_TRANSFER_AMOUNT)
+            .transferDate(UPDATED_TRANSFER_DATE)
+            .transferType(UPDATED_TRANSFER_TYPE);
         WorkInProgressTransferDTO workInProgressTransferDTO = workInProgressTransferMapper.toDto(updatedWorkInProgressTransfer);
 
         restWorkInProgressTransferMockMvc
@@ -568,6 +1041,9 @@ class WorkInProgressTransferResourceIT {
         WorkInProgressTransfer testWorkInProgressTransfer = workInProgressTransferList.get(workInProgressTransferList.size() - 1);
         assertThat(testWorkInProgressTransfer.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testWorkInProgressTransfer.getTargetAssetNumber()).isEqualTo(UPDATED_TARGET_ASSET_NUMBER);
+        assertThat(testWorkInProgressTransfer.getTransferAmount()).isEqualTo(UPDATED_TRANSFER_AMOUNT);
+        assertThat(testWorkInProgressTransfer.getTransferDate()).isEqualTo(UPDATED_TRANSFER_DATE);
+        assertThat(testWorkInProgressTransfer.getTransferType()).isEqualTo(UPDATED_TRANSFER_TYPE);
 
         // Validate the WorkInProgressTransfer in Elasticsearch
         verify(mockWorkInProgressTransferSearchRepository).save(testWorkInProgressTransfer);
@@ -663,6 +1139,8 @@ class WorkInProgressTransferResourceIT {
         WorkInProgressTransfer partialUpdatedWorkInProgressTransfer = new WorkInProgressTransfer();
         partialUpdatedWorkInProgressTransfer.setId(workInProgressTransfer.getId());
 
+        partialUpdatedWorkInProgressTransfer.transferDate(UPDATED_TRANSFER_DATE).transferType(UPDATED_TRANSFER_TYPE);
+
         restWorkInProgressTransferMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedWorkInProgressTransfer.getId())
@@ -677,6 +1155,9 @@ class WorkInProgressTransferResourceIT {
         WorkInProgressTransfer testWorkInProgressTransfer = workInProgressTransferList.get(workInProgressTransferList.size() - 1);
         assertThat(testWorkInProgressTransfer.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testWorkInProgressTransfer.getTargetAssetNumber()).isEqualTo(DEFAULT_TARGET_ASSET_NUMBER);
+        assertThat(testWorkInProgressTransfer.getTransferAmount()).isEqualByComparingTo(DEFAULT_TRANSFER_AMOUNT);
+        assertThat(testWorkInProgressTransfer.getTransferDate()).isEqualTo(UPDATED_TRANSFER_DATE);
+        assertThat(testWorkInProgressTransfer.getTransferType()).isEqualTo(UPDATED_TRANSFER_TYPE);
     }
 
     @Test
@@ -691,7 +1172,12 @@ class WorkInProgressTransferResourceIT {
         WorkInProgressTransfer partialUpdatedWorkInProgressTransfer = new WorkInProgressTransfer();
         partialUpdatedWorkInProgressTransfer.setId(workInProgressTransfer.getId());
 
-        partialUpdatedWorkInProgressTransfer.description(UPDATED_DESCRIPTION).targetAssetNumber(UPDATED_TARGET_ASSET_NUMBER);
+        partialUpdatedWorkInProgressTransfer
+            .description(UPDATED_DESCRIPTION)
+            .targetAssetNumber(UPDATED_TARGET_ASSET_NUMBER)
+            .transferAmount(UPDATED_TRANSFER_AMOUNT)
+            .transferDate(UPDATED_TRANSFER_DATE)
+            .transferType(UPDATED_TRANSFER_TYPE);
 
         restWorkInProgressTransferMockMvc
             .perform(
@@ -707,6 +1193,9 @@ class WorkInProgressTransferResourceIT {
         WorkInProgressTransfer testWorkInProgressTransfer = workInProgressTransferList.get(workInProgressTransferList.size() - 1);
         assertThat(testWorkInProgressTransfer.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testWorkInProgressTransfer.getTargetAssetNumber()).isEqualTo(UPDATED_TARGET_ASSET_NUMBER);
+        assertThat(testWorkInProgressTransfer.getTransferAmount()).isEqualByComparingTo(UPDATED_TRANSFER_AMOUNT);
+        assertThat(testWorkInProgressTransfer.getTransferDate()).isEqualTo(UPDATED_TRANSFER_DATE);
+        assertThat(testWorkInProgressTransfer.getTransferType()).isEqualTo(UPDATED_TRANSFER_TYPE);
     }
 
     @Test
@@ -824,6 +1313,9 @@ class WorkInProgressTransferResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(workInProgressTransfer.getId().intValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].targetAssetNumber").value(hasItem(DEFAULT_TARGET_ASSET_NUMBER)));
+            .andExpect(jsonPath("$.[*].targetAssetNumber").value(hasItem(DEFAULT_TARGET_ASSET_NUMBER)))
+            .andExpect(jsonPath("$.[*].transferAmount").value(hasItem(sameNumber(DEFAULT_TRANSFER_AMOUNT))))
+            .andExpect(jsonPath("$.[*].transferDate").value(hasItem(DEFAULT_TRANSFER_DATE.toString())))
+            .andExpect(jsonPath("$.[*].transferType").value(hasItem(DEFAULT_TRANSFER_TYPE.toString())));
     }
 }

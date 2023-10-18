@@ -270,6 +270,28 @@ class WorkProjectRegisterResourceIT {
 
     @Test
     @Transactional
+    void checkProjectTitleIsRequired() throws Exception {
+        int databaseSizeBeforeTest = workProjectRegisterRepository.findAll().size();
+        // set the field null
+        workProjectRegister.setProjectTitle(null);
+
+        // Create the WorkProjectRegister, which fails.
+        WorkProjectRegisterDTO workProjectRegisterDTO = workProjectRegisterMapper.toDto(workProjectRegister);
+
+        restWorkProjectRegisterMockMvc
+            .perform(
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(workProjectRegisterDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<WorkProjectRegister> workProjectRegisterList = workProjectRegisterRepository.findAll();
+        assertThat(workProjectRegisterList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllWorkProjectRegisters() throws Exception {
         // Initialize the database
         workProjectRegisterRepository.saveAndFlush(workProjectRegister);

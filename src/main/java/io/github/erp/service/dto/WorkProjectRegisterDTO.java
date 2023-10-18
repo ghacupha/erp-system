@@ -36,6 +36,7 @@ public class WorkProjectRegisterDTO implements Serializable {
     @NotNull
     private String catalogueNumber;
 
+    @NotNull
     private String projectTitle;
 
     private String description;

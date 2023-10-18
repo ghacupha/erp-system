@@ -18,10 +18,14 @@ package io.github.erp.service.dto;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.domain.enumeration.WorkInProgressTransferType;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link io.github.erp.domain.WorkInProgressTransfer} entity.
@@ -34,11 +38,29 @@ public class WorkInProgressTransferDTO implements Serializable {
 
     private String targetAssetNumber;
 
-    private Set<WorkInProgressRegistrationDTO> workInProgressRegistrations = new HashSet<>();
+    @NotNull
+    @DecimalMin(value = "0")
+    private BigDecimal transferAmount;
+
+    @NotNull
+    private LocalDate transferDate;
+
+    @NotNull
+    private WorkInProgressTransferType transferType;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     private Set<BusinessDocumentDTO> businessDocuments = new HashSet<>();
+
+    private AssetCategoryDTO assetCategory;
+
+    private WorkInProgressRegistrationDTO workInProgressRegistration;
+
+    private ServiceOutletDTO serviceOutlet;
+
+    private SettlementDTO settlement;
+
+    private WorkProjectRegisterDTO workProjectRegister;
 
     public Long getId() {
         return id;
@@ -64,12 +86,28 @@ public class WorkInProgressTransferDTO implements Serializable {
         this.targetAssetNumber = targetAssetNumber;
     }
 
-    public Set<WorkInProgressRegistrationDTO> getWorkInProgressRegistrations() {
-        return workInProgressRegistrations;
+    public BigDecimal getTransferAmount() {
+        return transferAmount;
     }
 
-    public void setWorkInProgressRegistrations(Set<WorkInProgressRegistrationDTO> workInProgressRegistrations) {
-        this.workInProgressRegistrations = workInProgressRegistrations;
+    public void setTransferAmount(BigDecimal transferAmount) {
+        this.transferAmount = transferAmount;
+    }
+
+    public LocalDate getTransferDate() {
+        return transferDate;
+    }
+
+    public void setTransferDate(LocalDate transferDate) {
+        this.transferDate = transferDate;
+    }
+
+    public WorkInProgressTransferType getTransferType() {
+        return transferType;
+    }
+
+    public void setTransferType(WorkInProgressTransferType transferType) {
+        this.transferType = transferType;
     }
 
     public Set<PlaceholderDTO> getPlaceholders() {
@@ -86,6 +124,46 @@ public class WorkInProgressTransferDTO implements Serializable {
 
     public void setBusinessDocuments(Set<BusinessDocumentDTO> businessDocuments) {
         this.businessDocuments = businessDocuments;
+    }
+
+    public AssetCategoryDTO getAssetCategory() {
+        return assetCategory;
+    }
+
+    public void setAssetCategory(AssetCategoryDTO assetCategory) {
+        this.assetCategory = assetCategory;
+    }
+
+    public WorkInProgressRegistrationDTO getWorkInProgressRegistration() {
+        return workInProgressRegistration;
+    }
+
+    public void setWorkInProgressRegistration(WorkInProgressRegistrationDTO workInProgressRegistration) {
+        this.workInProgressRegistration = workInProgressRegistration;
+    }
+
+    public ServiceOutletDTO getServiceOutlet() {
+        return serviceOutlet;
+    }
+
+    public void setServiceOutlet(ServiceOutletDTO serviceOutlet) {
+        this.serviceOutlet = serviceOutlet;
+    }
+
+    public SettlementDTO getSettlement() {
+        return settlement;
+    }
+
+    public void setSettlement(SettlementDTO settlement) {
+        this.settlement = settlement;
+    }
+
+    public WorkProjectRegisterDTO getWorkProjectRegister() {
+        return workProjectRegister;
+    }
+
+    public void setWorkProjectRegister(WorkProjectRegisterDTO workProjectRegister) {
+        this.workProjectRegister = workProjectRegister;
     }
 
     @Override
@@ -116,9 +194,16 @@ public class WorkInProgressTransferDTO implements Serializable {
             "id=" + getId() +
             ", description='" + getDescription() + "'" +
             ", targetAssetNumber='" + getTargetAssetNumber() + "'" +
-            ", workInProgressRegistrations=" + getWorkInProgressRegistrations() +
+            ", transferAmount=" + getTransferAmount() +
+            ", transferDate='" + getTransferDate() + "'" +
+            ", transferType='" + getTransferType() + "'" +
             ", placeholders=" + getPlaceholders() +
             ", businessDocuments=" + getBusinessDocuments() +
+            ", assetCategory=" + getAssetCategory() +
+            ", workInProgressRegistration=" + getWorkInProgressRegistration() +
+            ", serviceOutlet=" + getServiceOutlet() +
+            ", settlement=" + getSettlement() +
+            ", workProjectRegister=" + getWorkProjectRegister() +
             "}";
     }
 }

@@ -49,7 +49,8 @@ public class WorkProjectRegister implements Serializable {
     @Column(name = "catalogue_number", nullable = false, unique = true)
     private String catalogueNumber;
 
-    @Column(name = "project_title")
+    @NotNull
+    @Column(name = "project_title", nullable = false, unique = true)
     private String projectTitle;
 
     @Column(name = "description")

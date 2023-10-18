@@ -123,17 +123,16 @@ public class WorkInProgressTransferQueryService extends QueryService<WorkInProgr
                 specification =
                     specification.and(buildStringSpecification(criteria.getTargetAssetNumber(), WorkInProgressTransfer_.targetAssetNumber));
             }
-            if (criteria.getWorkInProgressRegistrationId() != null) {
+            if (criteria.getTransferAmount() != null) {
                 specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getWorkInProgressRegistrationId(),
-                            root ->
-                                root
-                                    .join(WorkInProgressTransfer_.workInProgressRegistrations, JoinType.LEFT)
-                                    .get(WorkInProgressRegistration_.id)
-                        )
-                    );
+                    specification.and(buildRangeSpecification(criteria.getTransferAmount(), WorkInProgressTransfer_.transferAmount));
+            }
+            if (criteria.getTransferDate() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getTransferDate(), WorkInProgressTransfer_.transferDate));
+            }
+            if (criteria.getTransferType() != null) {
+                specification = specification.and(buildSpecification(criteria.getTransferType(), WorkInProgressTransfer_.transferType));
             }
             if (criteria.getPlaceholderId() != null) {
                 specification =
@@ -150,6 +149,54 @@ public class WorkInProgressTransferQueryService extends QueryService<WorkInProgr
                         buildSpecification(
                             criteria.getBusinessDocumentId(),
                             root -> root.join(WorkInProgressTransfer_.businessDocuments, JoinType.LEFT).get(BusinessDocument_.id)
+                        )
+                    );
+            }
+            if (criteria.getAssetCategoryId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getAssetCategoryId(),
+                            root -> root.join(WorkInProgressTransfer_.assetCategory, JoinType.LEFT).get(AssetCategory_.id)
+                        )
+                    );
+            }
+            if (criteria.getWorkInProgressRegistrationId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getWorkInProgressRegistrationId(),
+                            root ->
+                                root
+                                    .join(WorkInProgressTransfer_.workInProgressRegistration, JoinType.LEFT)
+                                    .get(WorkInProgressRegistration_.id)
+                        )
+                    );
+            }
+            if (criteria.getServiceOutletId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getServiceOutletId(),
+                            root -> root.join(WorkInProgressTransfer_.serviceOutlet, JoinType.LEFT).get(ServiceOutlet_.id)
+                        )
+                    );
+            }
+            if (criteria.getSettlementId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getSettlementId(),
+                            root -> root.join(WorkInProgressTransfer_.settlement, JoinType.LEFT).get(Settlement_.id)
+                        )
+                    );
+            }
+            if (criteria.getWorkProjectRegisterId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getWorkProjectRegisterId(),
+                            root -> root.join(WorkInProgressTransfer_.workProjectRegister, JoinType.LEFT).get(WorkProjectRegister_.id)
                         )
                     );
             }
