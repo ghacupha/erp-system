@@ -25,14 +25,28 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link WorkInProgressTransfer} and its DTO {@link WorkInProgressTransferDTO}.
  */
-@Mapper(componentModel = "spring", uses = { WorkInProgressRegistrationMapper.class, PlaceholderMapper.class, BusinessDocumentMapper.class })
+@Mapper(
+    componentModel = "spring",
+    uses = {
+        PlaceholderMapper.class,
+        BusinessDocumentMapper.class,
+        AssetCategoryMapper.class,
+        WorkInProgressRegistrationMapper.class,
+        ServiceOutletMapper.class,
+        SettlementMapper.class,
+        WorkProjectRegisterMapper.class,
+    }
+)
 public interface WorkInProgressTransferMapper extends EntityMapper<WorkInProgressTransferDTO, WorkInProgressTransfer> {
-    @Mapping(target = "workInProgressRegistrations", source = "workInProgressRegistrations", qualifiedByName = "idSet")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     @Mapping(target = "businessDocuments", source = "businessDocuments", qualifiedByName = "documentTitleSet")
+    @Mapping(target = "assetCategory", source = "assetCategory", qualifiedByName = "assetCategoryName")
+    @Mapping(target = "workInProgressRegistration", source = "workInProgressRegistration", qualifiedByName = "sequenceNumber")
+    @Mapping(target = "serviceOutlet", source = "serviceOutlet", qualifiedByName = "outletCode")
+    @Mapping(target = "settlement", source = "settlement", qualifiedByName = "paymentNumber")
+    @Mapping(target = "workProjectRegister", source = "workProjectRegister", qualifiedByName = "projectTitle")
     WorkInProgressTransferDTO toDto(WorkInProgressTransfer s);
 
-    @Mapping(target = "removeWorkInProgressRegistration", ignore = true)
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removeBusinessDocument", ignore = true)
     WorkInProgressTransfer toEntity(WorkInProgressTransferDTO workInProgressTransferDTO);

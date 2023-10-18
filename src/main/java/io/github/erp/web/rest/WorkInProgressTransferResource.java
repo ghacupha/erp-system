@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -85,7 +87,7 @@ public class WorkInProgressTransferResource {
      */
     @PostMapping("/work-in-progress-transfers")
     public ResponseEntity<WorkInProgressTransferDTO> createWorkInProgressTransfer(
-        @RequestBody WorkInProgressTransferDTO workInProgressTransferDTO
+        @Valid @RequestBody WorkInProgressTransferDTO workInProgressTransferDTO
     ) throws URISyntaxException {
         log.debug("REST request to save WorkInProgressTransfer : {}", workInProgressTransferDTO);
         if (workInProgressTransferDTO.getId() != null) {
@@ -111,7 +113,7 @@ public class WorkInProgressTransferResource {
     @PutMapping("/work-in-progress-transfers/{id}")
     public ResponseEntity<WorkInProgressTransferDTO> updateWorkInProgressTransfer(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody WorkInProgressTransferDTO workInProgressTransferDTO
+        @Valid @RequestBody WorkInProgressTransferDTO workInProgressTransferDTO
     ) throws URISyntaxException {
         log.debug("REST request to update WorkInProgressTransfer : {}, {}", id, workInProgressTransferDTO);
         if (workInProgressTransferDTO.getId() == null) {
@@ -146,7 +148,7 @@ public class WorkInProgressTransferResource {
     @PatchMapping(value = "/work-in-progress-transfers/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<WorkInProgressTransferDTO> partialUpdateWorkInProgressTransfer(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody WorkInProgressTransferDTO workInProgressTransferDTO
+        @NotNull @RequestBody WorkInProgressTransferDTO workInProgressTransferDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update WorkInProgressTransfer partially : {}, {}", id, workInProgressTransferDTO);
         if (workInProgressTransferDTO.getId() == null) {
