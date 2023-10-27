@@ -50,6 +50,12 @@ public interface DeliveryNoteMapper extends EntityMapper<DeliveryNoteDTO, Delive
     @Mapping(target = "removeBusinessDocument", ignore = true)
     DeliveryNote toEntity(DeliveryNoteDTO deliveryNoteDTO);
 
+    @Named("deliveryNoteNumber")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "deliveryNoteNumber", source = "deliveryNoteNumber")
+    DeliveryNoteDTO toDtoDeliveryNoteNumber(DeliveryNote deliveryNote);
+
     @Named("deliveryNoteNumberSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

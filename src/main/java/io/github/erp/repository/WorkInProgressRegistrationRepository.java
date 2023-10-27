@@ -34,18 +34,18 @@ import org.springframework.stereotype.Repository;
 public interface WorkInProgressRegistrationRepository
     extends JpaRepository<WorkInProgressRegistration, Long>, JpaSpecificationExecutor<WorkInProgressRegistration> {
     @Query(
-        value = "select distinct workInProgressRegistration from WorkInProgressRegistration workInProgressRegistration left join fetch workInProgressRegistration.placeholders left join fetch workInProgressRegistration.paymentInvoices left join fetch workInProgressRegistration.serviceOutlets left join fetch workInProgressRegistration.settlements left join fetch workInProgressRegistration.purchaseOrders left join fetch workInProgressRegistration.deliveryNotes left join fetch workInProgressRegistration.jobSheets left join fetch workInProgressRegistration.businessDocuments left join fetch workInProgressRegistration.assetAccessories left join fetch workInProgressRegistration.assetWarranties",
+        value = "select distinct workInProgressRegistration from WorkInProgressRegistration workInProgressRegistration left join fetch workInProgressRegistration.placeholders left join fetch workInProgressRegistration.businessDocuments left join fetch workInProgressRegistration.assetAccessories left join fetch workInProgressRegistration.assetWarranties",
         countQuery = "select count(distinct workInProgressRegistration) from WorkInProgressRegistration workInProgressRegistration"
     )
     Page<WorkInProgressRegistration> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct workInProgressRegistration from WorkInProgressRegistration workInProgressRegistration left join fetch workInProgressRegistration.placeholders left join fetch workInProgressRegistration.paymentInvoices left join fetch workInProgressRegistration.serviceOutlets left join fetch workInProgressRegistration.settlements left join fetch workInProgressRegistration.purchaseOrders left join fetch workInProgressRegistration.deliveryNotes left join fetch workInProgressRegistration.jobSheets left join fetch workInProgressRegistration.businessDocuments left join fetch workInProgressRegistration.assetAccessories left join fetch workInProgressRegistration.assetWarranties"
+        "select distinct workInProgressRegistration from WorkInProgressRegistration workInProgressRegistration left join fetch workInProgressRegistration.placeholders left join fetch workInProgressRegistration.businessDocuments left join fetch workInProgressRegistration.assetAccessories left join fetch workInProgressRegistration.assetWarranties"
     )
     List<WorkInProgressRegistration> findAllWithEagerRelationships();
 
     @Query(
-        "select workInProgressRegistration from WorkInProgressRegistration workInProgressRegistration left join fetch workInProgressRegistration.placeholders left join fetch workInProgressRegistration.paymentInvoices left join fetch workInProgressRegistration.serviceOutlets left join fetch workInProgressRegistration.settlements left join fetch workInProgressRegistration.purchaseOrders left join fetch workInProgressRegistration.deliveryNotes left join fetch workInProgressRegistration.jobSheets left join fetch workInProgressRegistration.businessDocuments left join fetch workInProgressRegistration.assetAccessories left join fetch workInProgressRegistration.assetWarranties where workInProgressRegistration.id =:id"
+        "select workInProgressRegistration from WorkInProgressRegistration workInProgressRegistration left join fetch workInProgressRegistration.placeholders left join fetch workInProgressRegistration.businessDocuments left join fetch workInProgressRegistration.assetAccessories left join fetch workInProgressRegistration.assetWarranties where workInProgressRegistration.id =:id"
     )
     Optional<WorkInProgressRegistration> findOneWithEagerRelationships(@Param("id") Long id);
 }

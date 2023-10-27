@@ -41,15 +41,15 @@ public interface WorkProjectRegisterMapper extends EntityMapper<WorkProjectRegis
     @Mapping(target = "removeBusinessDocument", ignore = true)
     WorkProjectRegister toEntity(WorkProjectRegisterDTO workProjectRegisterDTO);
 
-    @Named("projectTitle")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "projectTitle", source = "projectTitle")
-    WorkProjectRegisterDTO toDtoProjectTitle(WorkProjectRegister workProjectRegister);
-
     @Named("catalogueNumber")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "catalogueNumber", source = "catalogueNumber")
     WorkProjectRegisterDTO toDtoCatalogueNumber(WorkProjectRegister workProjectRegister);
+
+    @Named("projectTitle")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "projectTitle", source = "projectTitle")
+    WorkProjectRegisterDTO toDtoProjectTitle(WorkProjectRegister workProjectRegister);
 }
