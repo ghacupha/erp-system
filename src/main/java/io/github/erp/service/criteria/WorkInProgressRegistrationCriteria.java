@@ -51,21 +51,11 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
 
     private BigDecimalFilter instalmentAmount;
 
+    private DoubleFilter levelOfCompletion;
+
+    private BooleanFilter completed;
+
     private LongFilter placeholderId;
-
-    private LongFilter paymentInvoicesId;
-
-    private LongFilter serviceOutletId;
-
-    private LongFilter settlementId;
-
-    private LongFilter purchaseOrderId;
-
-    private LongFilter deliveryNoteId;
-
-    private LongFilter jobSheetId;
-
-    private LongFilter dealerId;
 
     private LongFilter workInProgressGroupId;
 
@@ -79,6 +69,20 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
 
     private LongFilter assetWarrantyId;
 
+    private LongFilter invoiceId;
+
+    private LongFilter outletCodeId;
+
+    private LongFilter settlementTransactionId;
+
+    private LongFilter purchaseOrderId;
+
+    private LongFilter deliveryNoteId;
+
+    private LongFilter jobSheetId;
+
+    private LongFilter dealerId;
+
     private Boolean distinct;
 
     public WorkInProgressRegistrationCriteria() {}
@@ -88,20 +92,22 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
         this.sequenceNumber = other.sequenceNumber == null ? null : other.sequenceNumber.copy();
         this.particulars = other.particulars == null ? null : other.particulars.copy();
         this.instalmentAmount = other.instalmentAmount == null ? null : other.instalmentAmount.copy();
+        this.levelOfCompletion = other.levelOfCompletion == null ? null : other.levelOfCompletion.copy();
+        this.completed = other.completed == null ? null : other.completed.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
-        this.paymentInvoicesId = other.paymentInvoicesId == null ? null : other.paymentInvoicesId.copy();
-        this.serviceOutletId = other.serviceOutletId == null ? null : other.serviceOutletId.copy();
-        this.settlementId = other.settlementId == null ? null : other.settlementId.copy();
-        this.purchaseOrderId = other.purchaseOrderId == null ? null : other.purchaseOrderId.copy();
-        this.deliveryNoteId = other.deliveryNoteId == null ? null : other.deliveryNoteId.copy();
-        this.jobSheetId = other.jobSheetId == null ? null : other.jobSheetId.copy();
-        this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
         this.workInProgressGroupId = other.workInProgressGroupId == null ? null : other.workInProgressGroupId.copy();
         this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
         this.workProjectRegisterId = other.workProjectRegisterId == null ? null : other.workProjectRegisterId.copy();
         this.businessDocumentId = other.businessDocumentId == null ? null : other.businessDocumentId.copy();
         this.assetAccessoryId = other.assetAccessoryId == null ? null : other.assetAccessoryId.copy();
         this.assetWarrantyId = other.assetWarrantyId == null ? null : other.assetWarrantyId.copy();
+        this.invoiceId = other.invoiceId == null ? null : other.invoiceId.copy();
+        this.outletCodeId = other.outletCodeId == null ? null : other.outletCodeId.copy();
+        this.settlementTransactionId = other.settlementTransactionId == null ? null : other.settlementTransactionId.copy();
+        this.purchaseOrderId = other.purchaseOrderId == null ? null : other.purchaseOrderId.copy();
+        this.deliveryNoteId = other.deliveryNoteId == null ? null : other.deliveryNoteId.copy();
+        this.jobSheetId = other.jobSheetId == null ? null : other.jobSheetId.copy();
+        this.dealerId = other.dealerId == null ? null : other.dealerId.copy();
         this.distinct = other.distinct;
     }
 
@@ -170,6 +176,36 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
         this.instalmentAmount = instalmentAmount;
     }
 
+    public DoubleFilter getLevelOfCompletion() {
+        return levelOfCompletion;
+    }
+
+    public DoubleFilter levelOfCompletion() {
+        if (levelOfCompletion == null) {
+            levelOfCompletion = new DoubleFilter();
+        }
+        return levelOfCompletion;
+    }
+
+    public void setLevelOfCompletion(DoubleFilter levelOfCompletion) {
+        this.levelOfCompletion = levelOfCompletion;
+    }
+
+    public BooleanFilter getCompleted() {
+        return completed;
+    }
+
+    public BooleanFilter completed() {
+        if (completed == null) {
+            completed = new BooleanFilter();
+        }
+        return completed;
+    }
+
+    public void setCompleted(BooleanFilter completed) {
+        this.completed = completed;
+    }
+
     public LongFilter getPlaceholderId() {
         return placeholderId;
     }
@@ -183,111 +219,6 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
 
     public void setPlaceholderId(LongFilter placeholderId) {
         this.placeholderId = placeholderId;
-    }
-
-    public LongFilter getPaymentInvoicesId() {
-        return paymentInvoicesId;
-    }
-
-    public LongFilter paymentInvoicesId() {
-        if (paymentInvoicesId == null) {
-            paymentInvoicesId = new LongFilter();
-        }
-        return paymentInvoicesId;
-    }
-
-    public void setPaymentInvoicesId(LongFilter paymentInvoicesId) {
-        this.paymentInvoicesId = paymentInvoicesId;
-    }
-
-    public LongFilter getServiceOutletId() {
-        return serviceOutletId;
-    }
-
-    public LongFilter serviceOutletId() {
-        if (serviceOutletId == null) {
-            serviceOutletId = new LongFilter();
-        }
-        return serviceOutletId;
-    }
-
-    public void setServiceOutletId(LongFilter serviceOutletId) {
-        this.serviceOutletId = serviceOutletId;
-    }
-
-    public LongFilter getSettlementId() {
-        return settlementId;
-    }
-
-    public LongFilter settlementId() {
-        if (settlementId == null) {
-            settlementId = new LongFilter();
-        }
-        return settlementId;
-    }
-
-    public void setSettlementId(LongFilter settlementId) {
-        this.settlementId = settlementId;
-    }
-
-    public LongFilter getPurchaseOrderId() {
-        return purchaseOrderId;
-    }
-
-    public LongFilter purchaseOrderId() {
-        if (purchaseOrderId == null) {
-            purchaseOrderId = new LongFilter();
-        }
-        return purchaseOrderId;
-    }
-
-    public void setPurchaseOrderId(LongFilter purchaseOrderId) {
-        this.purchaseOrderId = purchaseOrderId;
-    }
-
-    public LongFilter getDeliveryNoteId() {
-        return deliveryNoteId;
-    }
-
-    public LongFilter deliveryNoteId() {
-        if (deliveryNoteId == null) {
-            deliveryNoteId = new LongFilter();
-        }
-        return deliveryNoteId;
-    }
-
-    public void setDeliveryNoteId(LongFilter deliveryNoteId) {
-        this.deliveryNoteId = deliveryNoteId;
-    }
-
-    public LongFilter getJobSheetId() {
-        return jobSheetId;
-    }
-
-    public LongFilter jobSheetId() {
-        if (jobSheetId == null) {
-            jobSheetId = new LongFilter();
-        }
-        return jobSheetId;
-    }
-
-    public void setJobSheetId(LongFilter jobSheetId) {
-        this.jobSheetId = jobSheetId;
-    }
-
-    public LongFilter getDealerId() {
-        return dealerId;
-    }
-
-    public LongFilter dealerId() {
-        if (dealerId == null) {
-            dealerId = new LongFilter();
-        }
-        return dealerId;
-    }
-
-    public void setDealerId(LongFilter dealerId) {
-        this.dealerId = dealerId;
     }
 
     public LongFilter getWorkInProgressGroupId() {
@@ -380,6 +311,111 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
         this.assetWarrantyId = assetWarrantyId;
     }
 
+    public LongFilter getInvoiceId() {
+        return invoiceId;
+    }
+
+    public LongFilter invoiceId() {
+        if (invoiceId == null) {
+            invoiceId = new LongFilter();
+        }
+        return invoiceId;
+    }
+
+    public void setInvoiceId(LongFilter invoiceId) {
+        this.invoiceId = invoiceId;
+    }
+
+    public LongFilter getOutletCodeId() {
+        return outletCodeId;
+    }
+
+    public LongFilter outletCodeId() {
+        if (outletCodeId == null) {
+            outletCodeId = new LongFilter();
+        }
+        return outletCodeId;
+    }
+
+    public void setOutletCodeId(LongFilter outletCodeId) {
+        this.outletCodeId = outletCodeId;
+    }
+
+    public LongFilter getSettlementTransactionId() {
+        return settlementTransactionId;
+    }
+
+    public LongFilter settlementTransactionId() {
+        if (settlementTransactionId == null) {
+            settlementTransactionId = new LongFilter();
+        }
+        return settlementTransactionId;
+    }
+
+    public void setSettlementTransactionId(LongFilter settlementTransactionId) {
+        this.settlementTransactionId = settlementTransactionId;
+    }
+
+    public LongFilter getPurchaseOrderId() {
+        return purchaseOrderId;
+    }
+
+    public LongFilter purchaseOrderId() {
+        if (purchaseOrderId == null) {
+            purchaseOrderId = new LongFilter();
+        }
+        return purchaseOrderId;
+    }
+
+    public void setPurchaseOrderId(LongFilter purchaseOrderId) {
+        this.purchaseOrderId = purchaseOrderId;
+    }
+
+    public LongFilter getDeliveryNoteId() {
+        return deliveryNoteId;
+    }
+
+    public LongFilter deliveryNoteId() {
+        if (deliveryNoteId == null) {
+            deliveryNoteId = new LongFilter();
+        }
+        return deliveryNoteId;
+    }
+
+    public void setDeliveryNoteId(LongFilter deliveryNoteId) {
+        this.deliveryNoteId = deliveryNoteId;
+    }
+
+    public LongFilter getJobSheetId() {
+        return jobSheetId;
+    }
+
+    public LongFilter jobSheetId() {
+        if (jobSheetId == null) {
+            jobSheetId = new LongFilter();
+        }
+        return jobSheetId;
+    }
+
+    public void setJobSheetId(LongFilter jobSheetId) {
+        this.jobSheetId = jobSheetId;
+    }
+
+    public LongFilter getDealerId() {
+        return dealerId;
+    }
+
+    public LongFilter dealerId() {
+        if (dealerId == null) {
+            dealerId = new LongFilter();
+        }
+        return dealerId;
+    }
+
+    public void setDealerId(LongFilter dealerId) {
+        this.dealerId = dealerId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -402,20 +438,22 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
             Objects.equals(sequenceNumber, that.sequenceNumber) &&
             Objects.equals(particulars, that.particulars) &&
             Objects.equals(instalmentAmount, that.instalmentAmount) &&
+            Objects.equals(levelOfCompletion, that.levelOfCompletion) &&
+            Objects.equals(completed, that.completed) &&
             Objects.equals(placeholderId, that.placeholderId) &&
-            Objects.equals(paymentInvoicesId, that.paymentInvoicesId) &&
-            Objects.equals(serviceOutletId, that.serviceOutletId) &&
-            Objects.equals(settlementId, that.settlementId) &&
-            Objects.equals(purchaseOrderId, that.purchaseOrderId) &&
-            Objects.equals(deliveryNoteId, that.deliveryNoteId) &&
-            Objects.equals(jobSheetId, that.jobSheetId) &&
-            Objects.equals(dealerId, that.dealerId) &&
             Objects.equals(workInProgressGroupId, that.workInProgressGroupId) &&
             Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
             Objects.equals(workProjectRegisterId, that.workProjectRegisterId) &&
             Objects.equals(businessDocumentId, that.businessDocumentId) &&
             Objects.equals(assetAccessoryId, that.assetAccessoryId) &&
             Objects.equals(assetWarrantyId, that.assetWarrantyId) &&
+            Objects.equals(invoiceId, that.invoiceId) &&
+            Objects.equals(outletCodeId, that.outletCodeId) &&
+            Objects.equals(settlementTransactionId, that.settlementTransactionId) &&
+            Objects.equals(purchaseOrderId, that.purchaseOrderId) &&
+            Objects.equals(deliveryNoteId, that.deliveryNoteId) &&
+            Objects.equals(jobSheetId, that.jobSheetId) &&
+            Objects.equals(dealerId, that.dealerId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -427,20 +465,22 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
             sequenceNumber,
             particulars,
             instalmentAmount,
+            levelOfCompletion,
+            completed,
             placeholderId,
-            paymentInvoicesId,
-            serviceOutletId,
-            settlementId,
-            purchaseOrderId,
-            deliveryNoteId,
-            jobSheetId,
-            dealerId,
             workInProgressGroupId,
             settlementCurrencyId,
             workProjectRegisterId,
             businessDocumentId,
             assetAccessoryId,
             assetWarrantyId,
+            invoiceId,
+            outletCodeId,
+            settlementTransactionId,
+            purchaseOrderId,
+            deliveryNoteId,
+            jobSheetId,
+            dealerId,
             distinct
         );
     }
@@ -453,20 +493,22 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
             (sequenceNumber != null ? "sequenceNumber=" + sequenceNumber + ", " : "") +
             (particulars != null ? "particulars=" + particulars + ", " : "") +
             (instalmentAmount != null ? "instalmentAmount=" + instalmentAmount + ", " : "") +
+            (levelOfCompletion != null ? "levelOfCompletion=" + levelOfCompletion + ", " : "") +
+            (completed != null ? "completed=" + completed + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
-            (paymentInvoicesId != null ? "paymentInvoicesId=" + paymentInvoicesId + ", " : "") +
-            (serviceOutletId != null ? "serviceOutletId=" + serviceOutletId + ", " : "") +
-            (settlementId != null ? "settlementId=" + settlementId + ", " : "") +
-            (purchaseOrderId != null ? "purchaseOrderId=" + purchaseOrderId + ", " : "") +
-            (deliveryNoteId != null ? "deliveryNoteId=" + deliveryNoteId + ", " : "") +
-            (jobSheetId != null ? "jobSheetId=" + jobSheetId + ", " : "") +
-            (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             (workInProgressGroupId != null ? "workInProgressGroupId=" + workInProgressGroupId + ", " : "") +
             (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
             (workProjectRegisterId != null ? "workProjectRegisterId=" + workProjectRegisterId + ", " : "") +
             (businessDocumentId != null ? "businessDocumentId=" + businessDocumentId + ", " : "") +
             (assetAccessoryId != null ? "assetAccessoryId=" + assetAccessoryId + ", " : "") +
             (assetWarrantyId != null ? "assetWarrantyId=" + assetWarrantyId + ", " : "") +
+            (invoiceId != null ? "invoiceId=" + invoiceId + ", " : "") +
+            (outletCodeId != null ? "outletCodeId=" + outletCodeId + ", " : "") +
+            (settlementTransactionId != null ? "settlementTransactionId=" + settlementTransactionId + ", " : "") +
+            (purchaseOrderId != null ? "purchaseOrderId=" + purchaseOrderId + ", " : "") +
+            (deliveryNoteId != null ? "deliveryNoteId=" + deliveryNoteId + ", " : "") +
+            (jobSheetId != null ? "jobSheetId=" + jobSheetId + ", " : "") +
+            (dealerId != null ? "dealerId=" + dealerId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

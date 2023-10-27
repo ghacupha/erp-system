@@ -106,19 +106,19 @@ public class WorkInProgressTransfer implements Serializable {
     @JsonIgnoreProperties(
         value = {
             "placeholders",
-            "paymentInvoices",
-            "serviceOutlets",
-            "settlements",
-            "purchaseOrders",
-            "deliveryNotes",
-            "jobSheets",
-            "dealer",
             "workInProgressGroup",
             "settlementCurrency",
             "workProjectRegister",
             "businessDocuments",
             "assetAccessories",
             "assetWarranties",
+            "invoice",
+            "outletCode",
+            "settlementTransaction",
+            "purchaseOrder",
+            "deliveryNote",
+            "jobSheet",
+            "dealer",
         },
         allowSetters = true
     )

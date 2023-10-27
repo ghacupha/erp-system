@@ -58,6 +58,12 @@ public interface PaymentInvoiceMapper extends EntityMapper<PaymentInvoiceDTO, Pa
     @Mapping(target = "removeBusinessDocument", ignore = true)
     PaymentInvoice toEntity(PaymentInvoiceDTO paymentInvoiceDTO);
 
+    @Named("invoiceNumber")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "invoiceNumber", source = "invoiceNumber")
+    PaymentInvoiceDTO toDtoInvoiceNumber(PaymentInvoice paymentInvoice);
+
     @Named("invoiceNumberSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

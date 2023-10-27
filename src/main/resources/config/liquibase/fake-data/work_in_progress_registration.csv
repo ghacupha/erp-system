@@ -1,11 +1,11 @@
-id;sequence_number;particulars;instalment_amount;comments;comments_content_type
-1;reboot;24/365 bluetooth;29467;../fake-data/blob/hipster.png;image/png
-2;Toys;Oregon;5272;../fake-data/blob/hipster.png;image/png
-3;Chief withdrawal teal;Concrete Versatile synergies;3931;../fake-data/blob/hipster.png;image/png
-4;unleash defect Helena;Stand-alone;37338;../fake-data/blob/hipster.png;image/png
-5;Usability Automated;Sausages ubiquitous;3595;../fake-data/blob/hipster.png;image/png
-6;portals;Walk program system-worthy;53736;../fake-data/blob/hipster.png;image/png
-7;system Money;standardization Steel initiatives;69803;../fake-data/blob/hipster.png;image/png
-8;scalable calculating;content-based Movies magenta;34327;../fake-data/blob/hipster.png;image/png
-9;e-tailers;Mouse;21306;../fake-data/blob/hipster.png;image/png
-10;Refined JSON;Practical Incredible;47472;../fake-data/blob/hipster.png;image/png
+id;sequence_number;particulars;instalment_amount;comments;comments_content_type;level_of_completion;completed
+1;reboot;24/365 bluetooth;29467;../fake-data/blob/hipster.png;image/png;18801;false
+2;Senior alarm;Chief withdrawal teal;97723;../fake-data/blob/hipster.png;image/png;13317;false
+3;Versatile;Baby Identity;7006;../fake-data/blob/hipster.png;image/png;28045;true
+4;Helena Fresh;Usability Automated;40893;../fake-data/blob/hipster.png;image/png;4353;true
+5;Human National maroon;indexing Jewelery;83369;../fake-data/blob/hipster.png;image/png;29346;true
+6;Kazakhstan Fall;Frozen;85857;../fake-data/blob/hipster.png;image/png;49572;false
+7;Michigan;Zealand Fantastic quantify;27377;../fake-data/blob/hipster.png;image/png;24153;false
+8;Concrete;Intuitive Bike;16716;../fake-data/blob/hipster.png;image/png;33909;false
+9;Refined JSON;Practical Incredible;47472;../fake-data/blob/hipster.png;image/png;22815;false
+10;AI;Gabon Books architect;15957;../fake-data/blob/hipster.png;image/png;62940;false

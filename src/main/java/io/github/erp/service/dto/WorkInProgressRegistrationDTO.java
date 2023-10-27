@@ -44,21 +44,11 @@ public class WorkInProgressRegistrationDTO implements Serializable {
     private byte[] comments;
 
     private String commentsContentType;
+    private Double levelOfCompletion;
+
+    private Boolean completed;
+
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
-
-    private Set<PaymentInvoiceDTO> paymentInvoices = new HashSet<>();
-
-    private Set<ServiceOutletDTO> serviceOutlets = new HashSet<>();
-
-    private Set<SettlementDTO> settlements = new HashSet<>();
-
-    private Set<PurchaseOrderDTO> purchaseOrders = new HashSet<>();
-
-    private Set<DeliveryNoteDTO> deliveryNotes = new HashSet<>();
-
-    private Set<JobSheetDTO> jobSheets = new HashSet<>();
-
-    private DealerDTO dealer;
 
     private WorkInProgressRegistrationDTO workInProgressGroup;
 
@@ -71,6 +61,20 @@ public class WorkInProgressRegistrationDTO implements Serializable {
     private Set<AssetAccessoryDTO> assetAccessories = new HashSet<>();
 
     private Set<AssetWarrantyDTO> assetWarranties = new HashSet<>();
+
+    private PaymentInvoiceDTO invoice;
+
+    private ServiceOutletDTO outletCode;
+
+    private SettlementDTO settlementTransaction;
+
+    private PurchaseOrderDTO purchaseOrder;
+
+    private DeliveryNoteDTO deliveryNote;
+
+    private JobSheetDTO jobSheet;
+
+    private DealerDTO dealer;
 
     public Long getId() {
         return id;
@@ -120,68 +124,28 @@ public class WorkInProgressRegistrationDTO implements Serializable {
         this.commentsContentType = commentsContentType;
     }
 
+    public Double getLevelOfCompletion() {
+        return levelOfCompletion;
+    }
+
+    public void setLevelOfCompletion(Double levelOfCompletion) {
+        this.levelOfCompletion = levelOfCompletion;
+    }
+
+    public Boolean getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(Boolean completed) {
+        this.completed = completed;
+    }
+
     public Set<PlaceholderDTO> getPlaceholders() {
         return placeholders;
     }
 
     public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
         this.placeholders = placeholders;
-    }
-
-    public Set<PaymentInvoiceDTO> getPaymentInvoices() {
-        return paymentInvoices;
-    }
-
-    public void setPaymentInvoices(Set<PaymentInvoiceDTO> paymentInvoices) {
-        this.paymentInvoices = paymentInvoices;
-    }
-
-    public Set<ServiceOutletDTO> getServiceOutlets() {
-        return serviceOutlets;
-    }
-
-    public void setServiceOutlets(Set<ServiceOutletDTO> serviceOutlets) {
-        this.serviceOutlets = serviceOutlets;
-    }
-
-    public Set<SettlementDTO> getSettlements() {
-        return settlements;
-    }
-
-    public void setSettlements(Set<SettlementDTO> settlements) {
-        this.settlements = settlements;
-    }
-
-    public Set<PurchaseOrderDTO> getPurchaseOrders() {
-        return purchaseOrders;
-    }
-
-    public void setPurchaseOrders(Set<PurchaseOrderDTO> purchaseOrders) {
-        this.purchaseOrders = purchaseOrders;
-    }
-
-    public Set<DeliveryNoteDTO> getDeliveryNotes() {
-        return deliveryNotes;
-    }
-
-    public void setDeliveryNotes(Set<DeliveryNoteDTO> deliveryNotes) {
-        this.deliveryNotes = deliveryNotes;
-    }
-
-    public Set<JobSheetDTO> getJobSheets() {
-        return jobSheets;
-    }
-
-    public void setJobSheets(Set<JobSheetDTO> jobSheets) {
-        this.jobSheets = jobSheets;
-    }
-
-    public DealerDTO getDealer() {
-        return dealer;
-    }
-
-    public void setDealer(DealerDTO dealer) {
-        this.dealer = dealer;
     }
 
     public WorkInProgressRegistrationDTO getWorkInProgressGroup() {
@@ -232,6 +196,62 @@ public class WorkInProgressRegistrationDTO implements Serializable {
         this.assetWarranties = assetWarranties;
     }
 
+    public PaymentInvoiceDTO getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(PaymentInvoiceDTO invoice) {
+        this.invoice = invoice;
+    }
+
+    public ServiceOutletDTO getOutletCode() {
+        return outletCode;
+    }
+
+    public void setOutletCode(ServiceOutletDTO outletCode) {
+        this.outletCode = outletCode;
+    }
+
+    public SettlementDTO getSettlementTransaction() {
+        return settlementTransaction;
+    }
+
+    public void setSettlementTransaction(SettlementDTO settlementTransaction) {
+        this.settlementTransaction = settlementTransaction;
+    }
+
+    public PurchaseOrderDTO getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
+    public void setPurchaseOrder(PurchaseOrderDTO purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
+    }
+
+    public DeliveryNoteDTO getDeliveryNote() {
+        return deliveryNote;
+    }
+
+    public void setDeliveryNote(DeliveryNoteDTO deliveryNote) {
+        this.deliveryNote = deliveryNote;
+    }
+
+    public JobSheetDTO getJobSheet() {
+        return jobSheet;
+    }
+
+    public void setJobSheet(JobSheetDTO jobSheet) {
+        this.jobSheet = jobSheet;
+    }
+
+    public DealerDTO getDealer() {
+        return dealer;
+    }
+
+    public void setDealer(DealerDTO dealer) {
+        this.dealer = dealer;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -262,20 +282,22 @@ public class WorkInProgressRegistrationDTO implements Serializable {
             ", particulars='" + getParticulars() + "'" +
             ", instalmentAmount=" + getInstalmentAmount() +
             ", comments='" + getComments() + "'" +
+            ", levelOfCompletion=" + getLevelOfCompletion() +
+            ", completed='" + getCompleted() + "'" +
             ", placeholders=" + getPlaceholders() +
-            ", paymentInvoices=" + getPaymentInvoices() +
-            ", serviceOutlets=" + getServiceOutlets() +
-            ", settlements=" + getSettlements() +
-            ", purchaseOrders=" + getPurchaseOrders() +
-            ", deliveryNotes=" + getDeliveryNotes() +
-            ", jobSheets=" + getJobSheets() +
-            ", dealer=" + getDealer() +
             ", workInProgressGroup=" + getWorkInProgressGroup() +
             ", settlementCurrency=" + getSettlementCurrency() +
             ", workProjectRegister=" + getWorkProjectRegister() +
             ", businessDocuments=" + getBusinessDocuments() +
             ", assetAccessories=" + getAssetAccessories() +
             ", assetWarranties=" + getAssetWarranties() +
+            ", invoice=" + getInvoice() +
+            ", outletCode=" + getOutletCode() +
+            ", settlementTransaction=" + getSettlementTransaction() +
+            ", purchaseOrder=" + getPurchaseOrder() +
+            ", deliveryNote=" + getDeliveryNote() +
+            ", jobSheet=" + getJobSheet() +
+            ", dealer=" + getDealer() +
             "}";
     }
 }

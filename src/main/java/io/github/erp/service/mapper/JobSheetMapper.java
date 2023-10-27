@@ -49,6 +49,12 @@ public interface JobSheetMapper extends EntityMapper<JobSheetDTO, JobSheet> {
     @Mapping(target = "removeBusinessDocument", ignore = true)
     JobSheet toEntity(JobSheetDTO jobSheetDTO);
 
+    @Named("serialNumber")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "serialNumber", source = "serialNumber")
+    JobSheetDTO toDtoSerialNumber(JobSheet jobSheet);
+
     @Named("serialNumberSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
