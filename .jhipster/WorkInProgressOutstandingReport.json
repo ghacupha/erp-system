@@ -1,0 +1,41 @@
+{
+  "fields": [
+    {
+      "fieldName": "sequenceNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "particulars",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dealerName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "iso4217Code",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "instalmentAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "totalTransferAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "outstandingAmount",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": true,
+  "pagination": "pagination",
+  "name": "WorkInProgressOutstandingReport",
+  "changelogDate": "20231030075738",
+  "incrementalChangelog": false
+}
