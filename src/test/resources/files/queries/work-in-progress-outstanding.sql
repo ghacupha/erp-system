@@ -34,7 +34,7 @@ FROM work_in_progress_registration w
          JOIN settlement s ON s.id = w.settlement_transaction_id
          LEFT JOIN work_in_progress_transfer ta ON ta.work_in_progress_registration_id = w.id
 WHERE s.payment_date <= '2014-12-31'
-  AND (ta.transfer_date IS NULL OR ta.transfer_date <= '2014-12-31') -- Only consider transfers on or before the reporting date
+  AND (ta.transfer_date IS NULL OR ta.transfer_date <= '2014-12-31')
 GROUP BY w.id, w.sequence_number, w.particulars, d.dealer_name, c.iso_4217_currency_code, w.instalment_amount
 ORDER BY w.id;
 
