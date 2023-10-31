@@ -18,7 +18,6 @@ package io.github.erp.erp.resources;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.domain.WorkInProgressOutstandingReport;
 import io.github.erp.internal.repository.InternalWIPOutstandingReportRepository;
 import io.github.erp.repository.WorkInProgressOutstandingReportRepository;
 import io.github.erp.service.WorkInProgressOutstandingReportQueryService;
@@ -39,7 +38,6 @@ import tech.jhipster.web.util.ResponseUtil;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing {@link io.github.erp.domain.WorkInProgressOutstandingReport}.
@@ -63,11 +61,13 @@ public class WorkInProgressOutstandingReportResourceProd {
     public WorkInProgressOutstandingReportResourceProd(
         WorkInProgressOutstandingReportService workInProgressOutstandingReportService,
         WorkInProgressOutstandingReportRepository workInProgressOutstandingReportRepository,
-        WorkInProgressOutstandingReportQueryService workInProgressOutstandingReportQueryService
-    ) {
+        WorkInProgressOutstandingReportQueryService workInProgressOutstandingReportQueryService,
+        InternalWIPOutstandingReportRepository internalWIPOutstandingReportRepository, WorkInProgressOutstandingReportMapper workInProgressOutstandingReportMapper) {
         this.workInProgressOutstandingReportService = workInProgressOutstandingReportService;
         this.workInProgressOutstandingReportRepository = workInProgressOutstandingReportRepository;
         this.workInProgressOutstandingReportQueryService = workInProgressOutstandingReportQueryService;
+        this.internalWIPOutstandingReportRepository = internalWIPOutstandingReportRepository;
+        this.workInProgressOutstandingReportMapper = workInProgressOutstandingReportMapper;
     }
 
     /**
