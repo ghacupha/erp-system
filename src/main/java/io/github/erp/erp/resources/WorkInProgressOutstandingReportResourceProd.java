@@ -81,6 +81,24 @@ public class WorkInProgressOutstandingReportResourceProd {
     }
 
     /**
+     * {@code GET  /work-in-progress-outstanding-reports} : get all the workInProgressOutstandingReports.
+     *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of workInProgressOutstandingReports in body.
+     */
+    @GetMapping("/work-in-progress-outstanding-reports")
+    public ResponseEntity<List<WorkInProgressOutstandingReportDTO>> getAllWorkInProgressOutstandingReportsByReportDate(
+        WorkInProgressOutstandingReportCriteria criteria,
+        Pageable pageable
+    ) {
+        log.debug("REST request to get WorkInProgressOutstandingReports by criteria: {}", criteria);
+        Page<WorkInProgressOutstandingReportDTO> page = workInProgressOutstandingReportQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
      * {@code GET  /work-in-progress-outstanding-reports/count} : count all the workInProgressOutstandingReports.
      *
      * @param criteria the criteria which the requested entities should match.
