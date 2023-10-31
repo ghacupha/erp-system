@@ -93,9 +93,9 @@ public class WorkInProgressOutstandingReportResourceProd {
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of workInProgressOutstandingReports in body.
      */
-    @GetMapping("/work-in-progress-outstanding-reports")
+    @GetMapping("/work-in-progress-outstanding-reports/reported")
     public ResponseEntity<List<WorkInProgressOutstandingReportDTO>> getAllWorkInProgressOutstandingReportsByReportDate(
-        String reportDate,
+        @RequestParam("reportDate") String reportDate,
         Pageable pageable
     ) {
         log.debug("REST request to get WorkInProgressOutstandingReports by criteria, report-date: {}", reportDate);
