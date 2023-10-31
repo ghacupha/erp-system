@@ -2,6 +2,8 @@ package io.github.erp.internal.repository;
 
 import io.github.erp.domain.WorkInProgressOutstandingReport;
 import io.github.erp.repository.WorkInProgressOutstandingReportRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -32,5 +34,5 @@ public interface InternalWIPOutstandingReportRepository extends
         "  AND (ta.transferDate IS NULL OR ta.transferDate <= '2014-12-31')\n" +
         "GROUP BY w.id, w.sequenceNumber, w.particulars, d.dealerName, c.iso4217CurrencyCode, w.instalmentAmount\n" +
         "ORDER BY w.id")
-    List<WorkInProgressOutstandingReport> findByReportDate(@Param("reportDate") String reportDate);
+    Page<WorkInProgressOutstandingReport> findByReportDate(@Param("reportDate") String reportDate, Pageable pageable);
 }

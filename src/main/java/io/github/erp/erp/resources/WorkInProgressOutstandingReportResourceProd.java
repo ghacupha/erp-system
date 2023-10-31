@@ -18,11 +18,14 @@ package io.github.erp.erp.resources;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.domain.WorkInProgressOutstandingReport;
+import io.github.erp.internal.repository.InternalWIPOutstandingReportRepository;
 import io.github.erp.repository.WorkInProgressOutstandingReportRepository;
 import io.github.erp.service.WorkInProgressOutstandingReportQueryService;
 import io.github.erp.service.WorkInProgressOutstandingReportService;
 import io.github.erp.service.criteria.WorkInProgressOutstandingReportCriteria;
 import io.github.erp.service.dto.WorkInProgressOutstandingReportDTO;
+import io.github.erp.service.mapper.WorkInProgressOutstandingReportMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -36,6 +39,7 @@ import tech.jhipster.web.util.ResponseUtil;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing {@link io.github.erp.domain.WorkInProgressOutstandingReport}.
@@ -51,6 +55,10 @@ public class WorkInProgressOutstandingReportResourceProd {
     private final WorkInProgressOutstandingReportRepository workInProgressOutstandingReportRepository;
 
     private final WorkInProgressOutstandingReportQueryService workInProgressOutstandingReportQueryService;
+
+    private final InternalWIPOutstandingReportRepository internalWIPOutstandingReportRepository;
+
+    private final WorkInProgressOutstandingReportMapper workInProgressOutstandingReportMapper;
 
     public WorkInProgressOutstandingReportResourceProd(
         WorkInProgressOutstandingReportService workInProgressOutstandingReportService,
@@ -83,17 +91,18 @@ public class WorkInProgressOutstandingReportResourceProd {
     /**
      * {@code GET  /work-in-progress-outstanding-reports} : get all the workInProgressOutstandingReports.
      *
-     * @param pageable the pagination information.
-     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of workInProgressOutstandingReports in body.
      */
     @GetMapping("/work-in-progress-outstanding-reports")
     public ResponseEntity<List<WorkInProgressOutstandingReportDTO>> getAllWorkInProgressOutstandingReportsByReportDate(
-        WorkInProgressOutstandingReportCriteria criteria,
+        String reportDate,
         Pageable pageable
     ) {
-        log.debug("REST request to get WorkInProgressOutstandingReports by criteria: {}", criteria);
-        Page<WorkInProgressOutstandingReportDTO> page = workInProgressOutstandingReportQueryService.findByCriteria(criteria, pageable);
+        log.debug("REST request to get WorkInProgressOutstandingReports by criteria, report-date: {}", reportDate);
+        Page<WorkInProgressOutstandingReportDTO> page =
+            internalWIPOutstandingReportRepository.findByReportDate(reportDate, pageable)
+            .map(workInProgressOutstandingReportMapper::toDto);
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
