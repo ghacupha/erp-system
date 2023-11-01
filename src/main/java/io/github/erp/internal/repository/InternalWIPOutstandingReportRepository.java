@@ -43,8 +43,8 @@ public interface InternalWIPOutstandingReportRepository extends
         "d.dealerName, " +
         "c.iso4217CurrencyCode, " +
         "w.instalmentAmount, " +
-        "ta.transferAmount, " +
-        "ta.transferAmount) " +
+        "CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal) AS totalTransferAmount, " +
+        "w.instalmentAmount ) " +
         "FROM WorkInProgressRegistration w " +
         "JOIN Dealer d ON d.id = w.dealer.id " +
         "JOIN SettlementCurrency c ON c.id = w.settlementCurrency.id " +
@@ -52,7 +52,7 @@ public interface InternalWIPOutstandingReportRepository extends
         "LEFT JOIN WorkInProgressTransfer ta ON ta.workInProgressRegistration.id = w.id " +
         "WHERE s.paymentDate <= :reportDate " +
         "AND (ta.transferDate IS NULL OR ta.transferDate <= :reportDate) " +
-        "GROUP BY w.id, w.sequenceNumber, w.particulars, d.dealerName, c.iso4217CurrencyCode, w.instalmentAmount, ta.transferAmount, ta.transferAmount")
+        "GROUP BY w.id, w.sequenceNumber, w.particulars, d.dealerName, c.iso4217CurrencyCode, w.instalmentAmount")
     Page<WorkInProgressOutstandingReportREPO> findByReportDate(@Param("reportDate") LocalDate reportDate, Pageable pageable);
 
 }
