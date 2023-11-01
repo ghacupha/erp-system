@@ -18,6 +18,7 @@ package io.github.erp.erp.resources;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.domain.WorkInProgressOutstandingReportREPO;
 import io.github.erp.internal.repository.InternalWIPOutstandingReportRepository;
 import io.github.erp.repository.WorkInProgressOutstandingReportRepository;
 import io.github.erp.service.WorkInProgressOutstandingReportQueryService;
@@ -28,6 +29,7 @@ import io.github.erp.service.mapper.WorkInProgressOutstandingReportMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +38,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing {@link io.github.erp.domain.WorkInProgressOutstandingReport}.
@@ -99,12 +104,35 @@ public class WorkInProgressOutstandingReportResourceProd {
         Pageable pageable
     ) {
         log.debug("REST request to get WorkInProgressOutstandingReports by criteria, report-date: {}", reportDate);
-        Page<WorkInProgressOutstandingReportDTO> page =
-            internalWIPOutstandingReportRepository.findByReportDate(reportDate, pageable)
-            .map(workInProgressOutstandingReportMapper::toDto);
+//        Page<WorkInProgressOutstandingReportDTO> page =
+//            internalWIPOutstandingReportRepository.findByReportDate(LocalDate.parse(reportDate), pageable)
+//            .map(workInProgressOutstandingReportMapper::toDto);
+
+        List<WorkInProgressOutstandingReportDTO> dtos =
+            internalWIPOutstandingReportRepository.findByReportDate(LocalDate.parse(reportDate), pageable)
+                .stream()
+                .map(WorkInProgressOutstandingReportResourceProd::convertToDTO)
+            .collect(Collectors.toList());
+
+        Page<WorkInProgressOutstandingReportDTO> page = new PageImpl<>(dtos, pageable, pageable.getPageSize());
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    private static WorkInProgressOutstandingReportDTO convertToDTO(WorkInProgressOutstandingReportREPO repo) {
+        WorkInProgressOutstandingReportDTO dto = new WorkInProgressOutstandingReportDTO();
+
+        dto.setId(repo.getId());
+        dto.setSequenceNumber(repo.getSequenceNumber());
+        dto.setParticulars(repo.getParticulars());
+        dto.setDealerName(repo.getDealerName());
+        dto.setIso4217Code(repo.getIso4217Code());
+        dto.setInstalmentAmount(repo.getInstalmentAmount());
+        dto.setTotalTransferAmount(repo.getTotalTransferAmount());
+        dto.setOutstandingAmount(repo.getOutstandingAmount());
+
+        return dto;
     }
 
     /**
