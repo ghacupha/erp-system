@@ -104,17 +104,10 @@ public class WorkInProgressOutstandingReportResourceProd {
         Pageable pageable
     ) {
         log.debug("REST request to get WorkInProgressOutstandingReports by criteria, report-date: {}", reportDate);
-//        Page<WorkInProgressOutstandingReportDTO> page =
-//            internalWIPOutstandingReportRepository.findByReportDate(LocalDate.parse(reportDate), pageable)
-//            .map(workInProgressOutstandingReportMapper::toDto);
 
-        List<WorkInProgressOutstandingReportDTO> dtos =
+        Page<WorkInProgressOutstandingReportDTO> page =
             internalWIPOutstandingReportRepository.findByReportDate(LocalDate.parse(reportDate), pageable)
-                .stream()
-                .map(WorkInProgressOutstandingReportResourceProd::convertToDTO)
-            .collect(Collectors.toList());
-
-        Page<WorkInProgressOutstandingReportDTO> page = new PageImpl<>(dtos, pageable, pageable.getPageSize());
+                .map(WorkInProgressOutstandingReportResourceProd::convertToDTO);
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
