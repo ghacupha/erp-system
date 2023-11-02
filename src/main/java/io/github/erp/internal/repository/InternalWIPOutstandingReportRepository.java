@@ -85,7 +85,7 @@ public interface InternalWIPOutstandingReportRepository extends
         "c.iso4217CurrencyCode, " +
         "w.instalmentAmount, " +
         "CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal) AS totalTransferAmount, " +
-        "w.instalmentAmount ) " +
+        "w.instalmentAmount - (CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal)) ) " +
         "FROM WorkInProgressRegistration w " +
            "JOIN Dealer d ON d.id = w.dealer.id " +
            "JOIN SettlementCurrency c ON c.id = w.settlementCurrency.id " +
