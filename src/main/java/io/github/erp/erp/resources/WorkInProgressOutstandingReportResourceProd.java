@@ -156,6 +156,26 @@ public class WorkInProgressOutstandingReportResourceProd {
     }
 
     /**
+     * {@code GET  /work-in-progress-outstanding-reports/:id} : get the "id" workInProgressOutstandingReport.
+     *
+     * @param id the id of the workInProgressOutstandingReportDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the workInProgressOutstandingReportDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/work-in-progress-outstanding-reports/reported/{id}")
+    public ResponseEntity<WorkInProgressOutstandingReportDTO> getWorkInProgressOutstandingReportByDate(
+        @RequestParam("reportDate") String reportDate,
+        @PathVariable Long id) {
+        log.debug("REST request to get WorkInProgressOutstandingReport : {}", id);
+
+        Optional<WorkInProgressOutstandingReportDTO> workInProgressOutstandingReportDTO =
+            internalWIPOutstandingReportRepository.findByReportDate(LocalDate.parse(reportDate), id)
+            .map(WorkInProgressOutstandingReportResourceProd::convertToDTO);
+
+
+        return ResponseUtil.wrapOrNotFound(workInProgressOutstandingReportDTO);
+    }
+
+    /**
      * {@code SEARCH  /_search/work-in-progress-outstanding-reports?query=:query} : search for the workInProgressOutstandingReport corresponding
      * to the query.
      *
