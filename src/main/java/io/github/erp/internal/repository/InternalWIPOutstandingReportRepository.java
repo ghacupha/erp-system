@@ -17,66 +17,6 @@ public interface InternalWIPOutstandingReportRepository extends
     JpaRepository<WorkInProgressOutstandingReport, Long>,
     JpaSpecificationExecutor<WorkInProgressOutstandingReport> {
 
-//    @Query("SELECT\n" +
-//        "    w.id,\n" +
-//        "    w.sequenceNumber,\n" +
-//        "    w.particulars,\n" +
-//        "    d.dealerName,\n" +
-//        "    c.iso4217CurrencyCode,\n" +
-//        "    w.instalmentAmount as im,\n" +
-//        "    COALESCE(SUM(ta.transferAmount), 0) AS totalTransferAmount,\n" +
-//        "    (w.instalmentAmount - COALESCE(SUM(ta.transferAmount), 0)) AS outstandingAmount\n" +
-//        "FROM WorkInProgressRegistration w\n" +
-//        "         JOIN Dealer d ON d.id = w.dealer.id\n" +
-//        "         JOIN SettlementCurrency c ON c.id = w.settlementCurrency.id\n" +
-//        "         JOIN Settlement s ON s.id = w.settlementTransaction.id\n" +
-//        "         LEFT JOIN WorkInProgressTransfer ta ON ta.workInProgressRegistration.id = w.id\n" +
-//        "WHERE s.paymentDate <= '2014-12-31'\n" +
-//        "  AND (ta.transferDate IS NULL OR ta.transferDate <= '2014-12-31')\n" +
-//        "GROUP BY w.id, w.sequenceNumber, w.particulars, d.dealerName, c.iso4217CurrencyCode, w.instalmentAmount\n")
-//    Page<WorkInProgressOutstandingReport> findByReportDate(@Param("reportDate") String reportDate, Pageable pageable);
-
-//    @Query("SELECT NEW io.github.erp.domain.WorkInProgressOutstandingReportREPO(" +
-//        "w.id, " +
-//        "w.sequenceNumber, " +
-//        "w.particulars, " +
-//        "d.dealerName, " +
-//        "c.iso4217CurrencyCode, " +
-//        "w.instalmentAmount, " +
-//        "CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal) AS totalTransferAmount, " +
-//        "CAST(COALESCE(w.instalmentAmount - totalTransferAmount,0.0) AS java.math.BigDecimal)) " +
-//        "FROM WorkInProgressRegistration w " +
-//        "JOIN Dealer d ON d.id = w.dealer.id " +
-//        "JOIN SettlementCurrency c ON c.id = w.settlementCurrency.id " +
-//        "JOIN Settlement s ON s.id = w.settlementTransaction.id " +
-//        "LEFT JOIN WorkInProgressTransfer ta ON ta.workInProgressRegistration.id = w.id " +
-//        "WHERE s.paymentDate <= :reportDate " +
-//        "AND (ta.transferDate IS NULL OR ta.transferDate <= :reportDate) " +
-//        "GROUP BY w.id, w.sequenceNumber, w.particulars, d.dealerName, c.iso4217CurrencyCode, w.instalmentAmount")
-//    Page<WorkInProgressOutstandingReportREPO> findByReportDate(@Param("reportDate") LocalDate reportDate, Pageable pageable);
-
-//    @Query("SELECT NEW io.github.erp.domain.WorkInProgressOutstandingReportREPO(" +
-//        "w.id, " +
-//        "w.sequenceNumber, " +
-//        "w.particulars, " +
-//        "d.dealerName, " +
-//        "c.iso4217CurrencyCode, " +
-//        "w.instalmentAmount, " +
-//        "(w.instalmentAmount - COALESCE(totalTransferAmount, 0.0)) AS outstandingAmount) " +
-//        "FROM WorkInProgressRegistration w " +
-//        "JOIN Dealer d ON d.id = w.dealer.id " +
-//        "JOIN SettlementCurrency c ON c.id = w.settlementCurrency.id " +
-//        "JOIN Settlement s ON s.id = w.settlementTransaction.id " +
-//        "LEFT JOIN (SELECT w.id AS id, COALESCE(SUM(ta.transferAmount), 0.0) AS totalTransferAmount " +
-//        "           FROM WorkInProgressRegistration w " +
-//        "           LEFT JOIN WorkInProgressTransfer ta ON ta.workInProgressRegistration.id = w.id " +
-//        "           WHERE ta.transferDate IS NULL OR ta.transferDate <= :reportDate " +
-//        "           GROUP BY w.id) subq " +
-//        "ON subq.id = w.id " +
-//        "WHERE s.paymentDate <= :reportDate")
-//    Page<WorkInProgressOutstandingReportREPO> findByReportDate(@Param("reportDate") LocalDate reportDate, Pageable pageable);
-
-
     @Query("SELECT NEW io.github.erp.domain.WorkInProgressOutstandingReportREPO(" +
         "w.id, " +
         "w.sequenceNumber, " +
