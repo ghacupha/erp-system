@@ -1,8 +1,8 @@
 {
   "name": "erp-system",
-  "version": "1.5.2",
+  "version": "1.5.5",
   "private": true,
-  "description": "Back-end for the ERP System: Mark VI No 1 (Phoebe Series) Server v1.5.2",
+  "description": "Back-end for the ERP System: Mark VII No 1 (Gideon Series) Server v1.5.5",
   "license": "GPLv3",
   "scripts": {
     "app:start": "./mvnw",
