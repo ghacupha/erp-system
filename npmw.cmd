@@ -1,5 +1,5 @@
 @REM
-@REM Erp System - Mark VI No 3 (Phoebe Series) Server ver 1.5.4
+@REM Erp System - Mark VII No 1 (Gideon Series) Server ver 1.5.5
 @REM Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 @REM
 @REM This program is free software: you can redistribute it and/or modify
