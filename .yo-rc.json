@@ -237,7 +237,8 @@
       "CreditCardFacility",
       "CardState",
       "BusinessTeam",
-      "WorkInProgressOutstandingReport"
+      "WorkInProgressOutstandingReport",
+      "WorkInProgressReport"
     ],
     "entitySuffix": "",
     "incrementalChangelog": false,
