@@ -1,7 +1,7 @@
 package io.github.erp.internal.repository;
 
 /*-
- * Erp System - Mark VII No 1 (Gideon Series) Server ver 1.5.5
+ * Erp System - Mark VII No 2 (Gideon Series) Server ver 1.5.6
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.internal.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.domain.WorkInProgressRegistration;
 import io.github.erp.domain.WorkInProgressReport;
 import io.github.erp.domain.WorkInProgressReportREPO;
