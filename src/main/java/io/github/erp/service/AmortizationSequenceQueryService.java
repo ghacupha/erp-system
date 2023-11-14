@@ -1,7 +1,7 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark VII No 3 (Gideon Series) Server ver 1.5.7
+ * Erp System - Mark VII No 4 (Gideon Series) Server ver 1.5.8
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.domain.*; // for static metamodels
 import io.github.erp.domain.AmortizationSequence;
 import io.github.erp.repository.AmortizationSequenceRepository;
