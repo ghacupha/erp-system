@@ -33,7 +33,6 @@
     <logger name="com.hazelcast" level="WARN"/>
     <logger name="org.apache.kafka" level="INFO"/>
     <logger name="jdk.event.security" level="OFF"/>
-    <logger name="com.netflix.discovery" level="DEBUG"/>
     <logger name="com.ryantenney" level="WARN"/>
     <logger name="com.sun" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
@@ -49,7 +48,7 @@
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
     <logger name="org.bson" level="WARN"/>
     <logger name="org.elasticsearch" level="OFF"/>
-    <logger name="com.netflix" level="WARN"/>
+    <logger name="com.netflix" level="ERROR"/>
     <!-- <logger name="org.hibernate.validator" level="WARN"/> -->
     <logger name="org.hibernate" level="WARN"/>
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
