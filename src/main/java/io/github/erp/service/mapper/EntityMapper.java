@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.util.List;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.MappingTarget;
