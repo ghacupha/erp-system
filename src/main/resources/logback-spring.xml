@@ -33,6 +33,7 @@
     <logger name="com.hazelcast" level="WARN"/>
     <logger name="org.apache.kafka" level="INFO"/>
     <logger name="jdk.event.security" level="OFF"/>
+    <logger name="com.netflix.discovery" level="DEBUG"/>
     <logger name="com.ryantenney" level="WARN"/>
     <logger name="com.sun" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
