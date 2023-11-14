@@ -1,7 +1,7 @@
 package io.github.erp.internal.framework.model;
 
 /*-
- * Erp System - Mark VII No 2 (Gideon Series) Server ver 1.5.6
+ * Erp System - Mark VII No 3 (Gideon Series) Server ver 1.5.7
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
