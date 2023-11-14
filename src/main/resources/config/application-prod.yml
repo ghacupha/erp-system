@@ -45,7 +45,8 @@ spring:
         initial-interval: 1000
         max-interval: 2000
         max-attempts: 100
-      uri: http://admin:${jhipster.registry.password}@localhost:8761/config
+      #uri: http://admin:${jhipster.registry.password}@localhost:8761/config
+      uri: ${SPRING_CLOUD_CONFIG_URI}
       # name of the config server's property source (file.yml) that we want to use
       name: erpSystem
       profile: prod
@@ -164,6 +165,7 @@ jhipster:
       queue-size: 512
   registry:
     password: admin
+    # host: ${JHIPSTER_REGISTRY_HOST}
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

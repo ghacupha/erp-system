@@ -138,6 +138,7 @@ jhipster:
       queue-size: 512
   registry:
     password: admin
+    host: ${JHIPSTER_REGISTRY_HOST}
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
