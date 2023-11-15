@@ -1,7 +1,7 @@
 package io.github.erp.internal.repository;
 
 /*-
- * Erp System - Mark VII No 4 (Gideon Series) Server ver 1.5.8
+ * Erp System - Mark VII No 5 (Gideon Series) Server ver 1.5.9
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -33,7 +33,7 @@ public interface InternalWorkInProgressOverviewRepository extends
     JpaRepository<WorkInProgressOverview, Long>
 {
     @Query("SELECT NEW io.github.erp.domain.WorkInProgressOverviewDTO (" +
-        "c.iso4217CurrencyCode AS currencyCode, " +
+        "COALESCE(COUNT(w.id),0) AS numberOfItems, " +
         "CAST(COALESCE(SUM(w.instalmentAmount), 0.0) AS java.math.BigDecimal) AS instalmentAmount, " +
         "CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal) AS totalTransferAmount, " +
         "CAST(COALESCE(SUM(w.instalmentAmount), 0.0) AS java.math.BigDecimal) - CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal) ) " +

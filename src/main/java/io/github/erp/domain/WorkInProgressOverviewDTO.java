@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark VII No 4 (Gideon Series) Server ver 1.5.8
+ * Erp System - Mark VII No 5 (Gideon Series) Server ver 1.5.9
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,7 +30,7 @@ import java.math.BigDecimal;
 @Builder
 public class WorkInProgressOverviewDTO {
 
-    private String currencyCode;
+    private Long numberOfItems;
 
     private BigDecimal instalmentAmount;
 

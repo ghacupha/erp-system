@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark VII No 4 (Gideon Series) Server ver 1.5.8
+ * Erp System - Mark VII No 5 (Gideon Series) Server ver 1.5.9
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -40,6 +40,9 @@ public class WorkInProgressOverview implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "number_of_items")
+    private Long numberOfItems;
+
     @Column(name = "instalment_amount", precision = 21, scale = 2)
     private BigDecimal instalmentAmount;
 
@@ -48,9 +51,6 @@ public class WorkInProgressOverview implements Serializable {
 
     @Column(name = "outstanding_amount", precision = 21, scale = 2)
     private BigDecimal outstandingAmount;
-
-    @Column(name = "currency_code")
-    private String currencyCode;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -65,6 +65,19 @@ public class WorkInProgressOverview implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getNumberOfItems() {
+        return this.numberOfItems;
+    }
+
+    public WorkInProgressOverview numberOfItems(Long numberOfItems) {
+        this.setNumberOfItems(numberOfItems);
+        return this;
+    }
+
+    public void setNumberOfItems(Long numberOfItems) {
+        this.numberOfItems = numberOfItems;
     }
 
     public BigDecimal getInstalmentAmount() {
@@ -106,19 +119,6 @@ public class WorkInProgressOverview implements Serializable {
         this.outstandingAmount = outstandingAmount;
     }
 
-    public String getCurrencyCode() {
-        return this.currencyCode;
-    }
-
-    public WorkInProgressOverview currencyCode(String currencyCode) {
-        this.setCurrencyCode(currencyCode);
-        return this;
-    }
-
-    public void setCurrencyCode(String currencyCode) {
-        this.currencyCode = currencyCode;
-    }
-
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -143,10 +143,10 @@ public class WorkInProgressOverview implements Serializable {
     public String toString() {
         return "WorkInProgressOverview{" +
             "id=" + getId() +
+            ", numberOfItems=" + getNumberOfItems() +
             ", instalmentAmount=" + getInstalmentAmount() +
             ", totalTransferAmount=" + getTotalTransferAmount() +
             ", outstandingAmount=" + getOutstandingAmount() +
-            ", currencyCode='" + getCurrencyCode() + "'" +
             "}";
     }
 }

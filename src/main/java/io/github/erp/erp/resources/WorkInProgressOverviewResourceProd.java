@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark VII No 4 (Gideon Series) Server ver 1.5.8
+ * Erp System - Mark VII No 5 (Gideon Series) Server ver 1.5.9
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -64,7 +64,7 @@ public class WorkInProgressOverviewResourceProd {
         log.debug("REST request to get WorkInProgressOverview for date: {}", reportDate);
         Optional<WorkInProgressOverview> workInProgressOverview = workInProgressOverviewRepository.findByReportDate(LocalDate.parse(reportDate))
             .map(workInProgressOverviewDTO -> new WorkInProgressOverview()
-                .currencyCode(workInProgressOverviewDTO.getCurrencyCode())
+                .numberOfItems(workInProgressOverviewDTO.getNumberOfItems())
                 .instalmentAmount(workInProgressOverviewDTO.getInstalmentAmount())
                 .totalTransferAmount(workInProgressOverviewDTO.getTotalTransferAmount())
                 .outstandingAmount(workInProgressOverviewDTO.getOutstandingAmount()));
