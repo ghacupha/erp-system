@@ -376,6 +376,7 @@
     <include file="config/liquibase/changelog/20231017123351_various_changes_work_project_register.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231018125319_various_changes_work_in_progress_transfer.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231027094030_wip_registration_m21_changes.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231115083520_wip_overview_changes.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

@@ -1,7 +1,7 @@
 package io.github.erp.erp.depreciation.model;
 
 /*-
- * Erp System - Mark VII No 4 (Gideon Series) Server ver 1.5.8
+ * Erp System - Mark VII No 5 (Gideon Series) Server ver 1.5.9
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify

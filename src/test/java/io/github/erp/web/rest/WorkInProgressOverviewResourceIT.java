@@ -1,7 +1,7 @@
 package io.github.erp.web.rest;
 
 /*-
- * Erp System - Mark VII No 4 (Gideon Series) Server ver 1.5.8
+ * Erp System - Mark VII No 5 (Gideon Series) Server ver 1.5.9
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -57,6 +57,9 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class WorkInProgressOverviewResourceIT {
 
+    private static final Long DEFAULT_NUMBER_OF_ITEMS = 1L;
+    private static final Long UPDATED_NUMBER_OF_ITEMS = 2L;
+
     private static final BigDecimal DEFAULT_INSTALMENT_AMOUNT = new BigDecimal(1);
     private static final BigDecimal UPDATED_INSTALMENT_AMOUNT = new BigDecimal(2);
 
@@ -65,9 +68,6 @@ class WorkInProgressOverviewResourceIT {
 
     private static final BigDecimal DEFAULT_OUTSTANDING_AMOUNT = new BigDecimal(1);
     private static final BigDecimal UPDATED_OUTSTANDING_AMOUNT = new BigDecimal(2);
-
-    private static final String DEFAULT_CURRENCY_CODE = "AAAAAAAAAA";
-    private static final String UPDATED_CURRENCY_CODE = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/work-in-progress-overviews";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -103,10 +103,10 @@ class WorkInProgressOverviewResourceIT {
      */
     public static WorkInProgressOverview createEntity(EntityManager em) {
         WorkInProgressOverview workInProgressOverview = new WorkInProgressOverview()
+            .numberOfItems(DEFAULT_NUMBER_OF_ITEMS)
             .instalmentAmount(DEFAULT_INSTALMENT_AMOUNT)
             .totalTransferAmount(DEFAULT_TOTAL_TRANSFER_AMOUNT)
-            .outstandingAmount(DEFAULT_OUTSTANDING_AMOUNT)
-            .currencyCode(DEFAULT_CURRENCY_CODE);
+            .outstandingAmount(DEFAULT_OUTSTANDING_AMOUNT);
         return workInProgressOverview;
     }
 
@@ -118,10 +118,10 @@ class WorkInProgressOverviewResourceIT {
      */
     public static WorkInProgressOverview createUpdatedEntity(EntityManager em) {
         WorkInProgressOverview workInProgressOverview = new WorkInProgressOverview()
+            .numberOfItems(UPDATED_NUMBER_OF_ITEMS)
             .instalmentAmount(UPDATED_INSTALMENT_AMOUNT)
             .totalTransferAmount(UPDATED_TOTAL_TRANSFER_AMOUNT)
-            .outstandingAmount(UPDATED_OUTSTANDING_AMOUNT)
-            .currencyCode(UPDATED_CURRENCY_CODE);
+            .outstandingAmount(UPDATED_OUTSTANDING_AMOUNT);
         return workInProgressOverview;
     }
 
@@ -142,10 +142,10 @@ class WorkInProgressOverviewResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(workInProgressOverview.getId().intValue())))
+            .andExpect(jsonPath("$.[*].numberOfItems").value(hasItem(DEFAULT_NUMBER_OF_ITEMS.intValue())))
             .andExpect(jsonPath("$.[*].instalmentAmount").value(hasItem(sameNumber(DEFAULT_INSTALMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].totalTransferAmount").value(hasItem(sameNumber(DEFAULT_TOTAL_TRANSFER_AMOUNT))))
-            .andExpect(jsonPath("$.[*].outstandingAmount").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_AMOUNT))))
-            .andExpect(jsonPath("$.[*].currencyCode").value(hasItem(DEFAULT_CURRENCY_CODE)));
+            .andExpect(jsonPath("$.[*].outstandingAmount").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_AMOUNT))));
     }
 
     @Test
@@ -160,10 +160,10 @@ class WorkInProgressOverviewResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(workInProgressOverview.getId().intValue()))
+            .andExpect(jsonPath("$.numberOfItems").value(DEFAULT_NUMBER_OF_ITEMS.intValue()))
             .andExpect(jsonPath("$.instalmentAmount").value(sameNumber(DEFAULT_INSTALMENT_AMOUNT)))
             .andExpect(jsonPath("$.totalTransferAmount").value(sameNumber(DEFAULT_TOTAL_TRANSFER_AMOUNT)))
-            .andExpect(jsonPath("$.outstandingAmount").value(sameNumber(DEFAULT_OUTSTANDING_AMOUNT)))
-            .andExpect(jsonPath("$.currencyCode").value(DEFAULT_CURRENCY_CODE));
+            .andExpect(jsonPath("$.outstandingAmount").value(sameNumber(DEFAULT_OUTSTANDING_AMOUNT)));
     }
 
     @Test
@@ -188,9 +188,9 @@ class WorkInProgressOverviewResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(workInProgressOverview.getId().intValue())))
+            .andExpect(jsonPath("$.[*].numberOfItems").value(hasItem(DEFAULT_NUMBER_OF_ITEMS.intValue())))
             .andExpect(jsonPath("$.[*].instalmentAmount").value(hasItem(sameNumber(DEFAULT_INSTALMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].totalTransferAmount").value(hasItem(sameNumber(DEFAULT_TOTAL_TRANSFER_AMOUNT))))
-            .andExpect(jsonPath("$.[*].outstandingAmount").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_AMOUNT))))
-            .andExpect(jsonPath("$.[*].currencyCode").value(hasItem(DEFAULT_CURRENCY_CODE)));
+            .andExpect(jsonPath("$.[*].outstandingAmount").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_AMOUNT))));
     }
 }
