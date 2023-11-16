@@ -6,9 +6,6 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet author="edwin.njeru (generated)" id="1699543036003-22">
-        <dropTable tableName="work_in_progress_overview"/>
-    </changeSet>
     <!--
         Added the entity WorkInProgressOverview.
     -->

@@ -18,3 +18,10 @@ WHERE s.payment_date <= '2014-12-31'
   AND (ta.transfer_date IS NULL OR ta.transfer_date <= '2014-12-31') -- Only consider transfers on or before the reporting date
 GROUP BY w.id, w.sequence_number, w.particulars, d.dealer_name, c.iso_4217_currency_code, w.instalment_amount, s.payment_date, s.payment_number
 ORDER BY s.payment_date;
+
+-- -- Unallocated Transfers
+--
+-- SELECT *
+-- FROM work_in_progress_transfer w
+-- WHERE W.work_in_progress_registration_id IS NULL
+--   AND w.transfer_date <= '2014-12-31';
