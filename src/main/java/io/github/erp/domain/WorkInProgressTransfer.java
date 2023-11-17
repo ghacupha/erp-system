@@ -53,7 +53,6 @@ public class WorkInProgressTransfer implements Serializable {
     private String targetAssetNumber;
 
     @NotNull
-    @DecimalMin(value = "0")
     @Column(name = "transfer_amount", precision = 21, scale = 2, nullable = false)
     private BigDecimal transferAmount;
 

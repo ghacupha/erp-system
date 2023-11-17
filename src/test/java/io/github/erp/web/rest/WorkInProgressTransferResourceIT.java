@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static io.github.erp.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -78,9 +79,9 @@ class WorkInProgressTransferResourceIT {
     private static final String DEFAULT_TARGET_ASSET_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_TARGET_ASSET_NUMBER = "BBBBBBBBBB";
 
-    private static final BigDecimal DEFAULT_TRANSFER_AMOUNT = new BigDecimal(0);
-    private static final BigDecimal UPDATED_TRANSFER_AMOUNT = new BigDecimal(1);
-    private static final BigDecimal SMALLER_TRANSFER_AMOUNT = new BigDecimal(0 - 1);
+    private static final BigDecimal DEFAULT_TRANSFER_AMOUNT = new BigDecimal(1);
+    private static final BigDecimal UPDATED_TRANSFER_AMOUNT = new BigDecimal(2);
+    private static final BigDecimal SMALLER_TRANSFER_AMOUNT = new BigDecimal(1 - 1);
 
     private static final LocalDate DEFAULT_TRANSFER_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_TRANSFER_DATE = LocalDate.now(ZoneId.systemDefault());

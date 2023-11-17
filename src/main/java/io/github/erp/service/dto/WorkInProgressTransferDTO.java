@@ -17,6 +17,7 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.enumeration.WorkInProgressTransferType;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -38,7 +39,6 @@ public class WorkInProgressTransferDTO implements Serializable {
     private String targetAssetNumber;
 
     @NotNull
-    @DecimalMin(value = "0")
     private BigDecimal transferAmount;
 
     @NotNull
