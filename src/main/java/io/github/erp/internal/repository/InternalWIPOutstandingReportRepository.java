@@ -35,6 +35,39 @@ public interface InternalWIPOutstandingReportRepository extends
     JpaRepository<WorkInProgressOutstandingReport, Long>,
     JpaSpecificationExecutor<WorkInProgressOutstandingReport> {
 
+//    @Query(value = "SELECT " +
+//        "wipr.id, " +
+//        "wipr.sequence_number, " +
+//        "wipr.particulars, " +
+//        "d.dealer_name, " +
+//        "c.iso_4217_currency_code, " +
+//        "COALESCE(wipr.total_instalment_amount, 0) as total_instalment_amount, " +
+//        "COALESCE(wipt.total_transfer_amount, 0) AS total_transfer_amount, " +
+//        "(COALESCE(wipr.total_instalment_amount, 0) - COALESCE(wipt.total_transfer_amount, 0)) AS total_outstanding_amount " +
+//        "FROM (SELECT " +
+//        "wip.id, " +
+//        "wip.sequence_number, " +
+//        "wip.particulars, " +
+//        "wip.settlement_currency_id, " +
+//        "wip.settlement_transaction_id, " +
+//        "wip.dealer_id, " +
+//        "SUM(wip.instalment_amount) as total_instalment_amount " +
+//        "FROM work_in_progress_registration wip " +
+//        "GROUP BY wip.id, wip.sequence_number, wip.particulars, wip.settlement_currency_id, wip.settlement_transaction_id, wip.dealer_id ) wipr " +
+//        "LEFT JOIN dealer d ON d.id = wipr.dealer_id " +
+//        "LEFT JOIN settlement_currency c ON c.id = wipr.settlement_currency_id " +
+//        "LEFT JOIN (SELECT " +
+//        "work_in_progress_registration_id, " +
+//        "SUM(transfer_amount) AS total_transfer_amount " +
+//        "FROM work_in_progress_transfer " +
+//        "GROUP BY work_in_progress_registration_id) wipt ON wipt.work_in_progress_registration_id = wipr.id " +
+//        "LEFT JOIN settlement s ON s.id = wipr.settlement_transaction_id " +
+//        "WHERE s.payment_date <= :reportDate " +
+//        "ORDER BY s.payment_date",
+//        nativeQuery = true)
+//    Page<WorkInProgressOutstandingReportREPO> findByReportDate(@Param("reportDate") LocalDate reportDate, Pageable pageable);
+
+
     @Query("SELECT NEW io.github.erp.domain.WorkInProgressOutstandingReportREPO(" +
         "w.id, " +
         "w.sequenceNumber, " +
@@ -60,7 +93,7 @@ public interface InternalWIPOutstandingReportRepository extends
         "w.particulars, " +
         "d.dealerName, " +
         "c.iso4217CurrencyCode, " +
-        "CAST(COALESCE(SUM(w.instalmentAmount), 0.0) AS java.math.BigDecimal) AS totalInstalmentAmount, " +
+        "w.instalmentAmount, " +
         "CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal) AS totalTransferAmount, " +
         "w.instalmentAmount - (CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal)) ) " +
         "FROM WorkInProgressRegistration w " +

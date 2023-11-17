@@ -36,25 +36,6 @@ public interface InternalWIPProjectDealerSummaryReportRepository extends
     JpaRepository<WorkInProgressReport, Long>,
     JpaSpecificationExecutor<WorkInProgressReport> {
 
-//    @Query("SELECT " +
-//        "d.id, " +
-//        "wr.projectTitle AS projectTitle, " +
-//        "d.dealerName AS dealerName, " +
-//        "COUNT(CASE WHEN st.paymentDate <= :reportDate THEN 1 ELSE NULL END) AS numberOfItems, " +
-//        "CAST(SUM(w.instalmentAmount) AS java.math.BigDecimal) AS totalInstalmentAmount, " +
-//        "CAST(SUM(COALESCE(ta.transferAmount, 0.0)) AS java.math.BigDecimal) AS totalTransferAmount, " +
-//        "CAST(SUM(w.instalmentAmount) - SUM(COALESCE(ta.transferAmount, 0.0)) AS java.math.BigDecimal) AS outstandingAmount " +
-//        "FROM WorkInProgressRegistration r " +
-//        "LEFT JOIN Dealer d ON d.id = w.dealer.id " +
-//        "LEFT JOIN WorkProjectRegister wr ON wr.id = r.workProjectRegister.id " +
-//        "LEFT JOIN WorkInProgressTransfer ta ON ta.workInProgressRegistration.id = w.id " +
-//        "LEFT JOIN Settlement st ON w.settlementTransaction.id = st.id " +
-//        "WHERE st.paymentDate <= :reportDate " +
-//        "AND w.settlementTransaction.paymentDate <= :reportDate " +
-//        "GROUP BY wr.id, wr.projectTitle, d.id, d.dealerName " +
-//        "ORDER BY wr.projectTitle, d.dealerName")
-//    Page<WorkInProgressReportREPO> findSummaryByReportDate(@Param("reportDate") LocalDate reportDate, Pageable pageable);
-
     @Query("SELECT " +
         "wr.projectTitle AS projectTitle, " +
         "d.dealerName AS dealerName, " +
