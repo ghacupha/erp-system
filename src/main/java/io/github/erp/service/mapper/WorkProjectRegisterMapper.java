@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.WorkProjectRegister;
 import io.github.erp.service.dto.WorkProjectRegisterDTO;
 import org.mapstruct.*;
@@ -40,15 +41,15 @@ public interface WorkProjectRegisterMapper extends EntityMapper<WorkProjectRegis
     @Mapping(target = "removeBusinessDocument", ignore = true)
     WorkProjectRegister toEntity(WorkProjectRegisterDTO workProjectRegisterDTO);
 
-    @Named("catalogueNumber")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "catalogueNumber", source = "catalogueNumber")
-    WorkProjectRegisterDTO toDtoCatalogueNumber(WorkProjectRegister workProjectRegister);
-
     @Named("projectTitle")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "projectTitle", source = "projectTitle")
     WorkProjectRegisterDTO toDtoProjectTitle(WorkProjectRegister workProjectRegister);
+
+    @Named("catalogueNumber")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "catalogueNumber", source = "catalogueNumber")
+    WorkProjectRegisterDTO toDtoCatalogueNumber(WorkProjectRegister workProjectRegister);
 }

@@ -11,8 +11,7 @@
     {
       "fieldName": "transferAmount",
       "fieldType": "BigDecimal",
-      "fieldValidateRules": ["required", "min"],
-      "fieldValidateRulesMin": 0
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "transferDate",
