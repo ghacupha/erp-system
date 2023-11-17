@@ -17,6 +17,7 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.domain.WorkInProgressOutstandingOptionalReport;
 import io.github.erp.domain.WorkInProgressOutstandingReportREPO;
 import io.github.erp.internal.repository.InternalWIPOutstandingReportRepository;
 import io.github.erp.repository.WorkInProgressOutstandingReportRepository;
@@ -113,6 +114,21 @@ public class WorkInProgressOutstandingReportResourceProd {
     }
 
     private static WorkInProgressOutstandingReportDTO convertToDTO(WorkInProgressOutstandingReportREPO repo) {
+        WorkInProgressOutstandingReportDTO dto = new WorkInProgressOutstandingReportDTO();
+
+        dto.setId(repo.getId());
+        dto.setSequenceNumber(repo.getSequenceNumber());
+        dto.setParticulars(repo.getParticulars());
+        dto.setDealerName(repo.getDealerName());
+        dto.setIso4217Code(repo.getIso4217Code());
+        dto.setInstalmentAmount(repo.getInstalmentAmount());
+        dto.setTotalTransferAmount(repo.getTotalTransferAmount());
+        dto.setOutstandingAmount(repo.getOutstandingAmount());
+
+        return dto;
+    }
+
+    private static WorkInProgressOutstandingReportDTO convertOptionalToDTO(WorkInProgressOutstandingOptionalReport repo) {
         WorkInProgressOutstandingReportDTO dto = new WorkInProgressOutstandingReportDTO();
 
         dto.setId(repo.getId());

@@ -32,16 +32,26 @@ public interface InternalWorkInProgressOverviewRepository extends
     WorkInProgressOverviewRepository,
     JpaRepository<WorkInProgressOverview, Long>
 {
+//    @Query("SELECT NEW io.github.erp.domain.WorkInProgressOverviewDTO (" +
+//        "COALESCE(COUNT(w.sequenceNumber),0) AS numberOfItems, " +
+//        "CAST(COALESCE(SUM(w.instalmentAmount), 0.0) AS java.math.BigDecimal) AS instalmentAmount, " +
+//        "CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal) AS totalTransferAmount, " +
+//        "CAST(COALESCE(SUM(w.instalmentAmount), 0.0) AS java.math.BigDecimal) - CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal) ) " +
+//        "FROM WorkInProgressRegistration w " +
+//        "JOIN Settlement s ON s.id = w.settlementTransaction.id " +
+//        "LEFT JOIN WorkInProgressTransfer ta ON ta.workInProgressRegistration.id = w.id " +
+//        "WHERE s.paymentDate <= :reportDate")
+//    Optional<WorkInProgressOverviewDTO> findByReportDate(@Param("reportDate") LocalDate reportDate);
+
     @Query("SELECT NEW io.github.erp.domain.WorkInProgressOverviewDTO (" +
-        "COALESCE(COUNT(w.id),0) AS numberOfItems, " +
-        "CAST(COALESCE(SUM(w.instalmentAmount), 0.0) AS java.math.BigDecimal) AS instalmentAmount, " +
-        "CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal) AS totalTransferAmount, " +
-        "CAST(COALESCE(SUM(w.instalmentAmount), 0.0) AS java.math.BigDecimal) - CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal) ) " +
+        "COALESCE(COUNT(DISTINCT w.sequenceNumber), 0) AS numberOfItems, " +
+        "COALESCE(SUM(w.instalmentAmount), 0.0) AS instalmentAmount, " +
+        "COALESCE(SUM(ta.transferAmount), 0.0) AS totalTransferAmount, " +
+        "(COALESCE(SUM(w.instalmentAmount), 0.0) - COALESCE(SUM(ta.transferAmount), 0.0)) AS outstandingAmount) " +
         "FROM WorkInProgressRegistration w " +
-        "JOIN Settlement s ON s.id = w.settlementTransaction.id " +
+        "LEFT JOIN w.settlementTransaction s " +
         "LEFT JOIN WorkInProgressTransfer ta ON ta.workInProgressRegistration.id = w.id " +
-        "WHERE s.paymentDate <= :reportDate " +
-        "AND (ta.transferDate IS NULL OR ta.transferDate <= :reportDate)")
+        "WHERE s.paymentDate <= :reportDate")
     Optional<WorkInProgressOverviewDTO> findByReportDate(@Param("reportDate") LocalDate reportDate);
 
 }
