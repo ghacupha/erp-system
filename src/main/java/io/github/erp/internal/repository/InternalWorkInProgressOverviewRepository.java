@@ -38,12 +38,10 @@ public interface InternalWorkInProgressOverviewRepository extends
         "CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal) AS totalTransferAmount, " +
         "CAST(COALESCE(SUM(w.instalmentAmount), 0.0) AS java.math.BigDecimal) - CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal) ) " +
         "FROM WorkInProgressRegistration w " +
-        "JOIN SettlementCurrency c ON c.id = w.settlementCurrency.id " +
         "JOIN Settlement s ON s.id = w.settlementTransaction.id " +
         "LEFT JOIN WorkInProgressTransfer ta ON ta.workInProgressRegistration.id = w.id " +
         "WHERE s.paymentDate <= :reportDate " +
-        "AND (ta.transferDate IS NULL OR ta.transferDate <= :reportDate) " +
-        "GROUP BY c.iso4217CurrencyCode")
+        "AND (ta.transferDate IS NULL OR ta.transferDate <= :reportDate)")
     Optional<WorkInProgressOverviewDTO> findByReportDate(@Param("reportDate") LocalDate reportDate);
 
 }

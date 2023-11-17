@@ -60,7 +60,7 @@ public interface InternalWIPOutstandingReportRepository extends
         "w.particulars, " +
         "d.dealerName, " +
         "c.iso4217CurrencyCode, " +
-        "w.instalmentAmount, " +
+        "CAST(COALESCE(SUM(w.instalmentAmount), 0.0) AS java.math.BigDecimal) AS totalInstalmentAmount, " +
         "CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal) AS totalTransferAmount, " +
         "w.instalmentAmount - (CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal)) ) " +
         "FROM WorkInProgressRegistration w " +
