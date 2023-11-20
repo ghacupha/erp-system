@@ -19,6 +19,7 @@ package io.github.erp.internal.repository;
  */
 import io.github.erp.domain.WorkInProgressOutstandingReport;
 import io.github.erp.domain.WorkInProgressOutstandingReportREPO;
+import io.github.erp.erp.resources.WorkInProgressOutstandingReportTuple;
 import io.github.erp.repository.WorkInProgressOutstandingReportRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +37,7 @@ public interface InternalWIPOutstandingReportRepository extends
     JpaSpecificationExecutor<WorkInProgressOutstandingReport> {
 
 //    @Query(value = "SELECT " +
-//        "wipr.id, " +
+//        "w.id, " +
 //        "wipr.sequence_number, " +
 //        "wipr.particulars, " +
 //        "d.dealer_name, " +
@@ -44,28 +45,48 @@ public interface InternalWIPOutstandingReportRepository extends
 //        "COALESCE(wipr.total_instalment_amount, 0) as total_instalment_amount, " +
 //        "COALESCE(wipt.total_transfer_amount, 0) AS total_transfer_amount, " +
 //        "(COALESCE(wipr.total_instalment_amount, 0) - COALESCE(wipt.total_transfer_amount, 0)) AS total_outstanding_amount " +
+//
 //        "FROM (SELECT " +
-//        "wip.id, " +
-//        "wip.sequence_number, " +
-//        "wip.particulars, " +
-//        "wip.settlement_currency_id, " +
-//        "wip.settlement_transaction_id, " +
-//        "wip.dealer_id, " +
-//        "SUM(wip.instalment_amount) as total_instalment_amount " +
-//        "FROM work_in_progress_registration wip " +
-//        "GROUP BY wip.id, wip.sequence_number, wip.particulars, wip.settlement_currency_id, wip.settlement_transaction_id, wip.dealer_id ) wipr " +
-//        "LEFT JOIN dealer d ON d.id = wipr.dealer_id " +
+//        "wp.id," +
+//        "wp.sequence_number," +
+//        "wp.particulars," +
+//        "wp.dealer_id," +
+//        "wp.settlement_transaction_id," +
+//        "wp.settlement_currency_id," +
+//        "SUM(wp.instalment_amount) as total_instalment_amount " +
+//        "FROM work_in_progress_registration wp " +
+//        "GROUP BY " +
+//        "wp.id, " +
+//        "wp.sequence_number, " +
+//        "wp.particulars, " +
+//        "wp.dealer_id, " +
+//        "wp.settlement_currency_id, " +
+//        "wp.settlement_transaction_id ) wipr " +
+//
+//        "JOIN work_in_progress_registration w ON w.id = wipr.id " +
+//
+//        "JOIN dealer d ON d.id = wipr.dealer_id " +
+//
 //        "LEFT JOIN settlement_currency c ON c.id = wipr.settlement_currency_id " +
+//
 //        "LEFT JOIN (SELECT " +
-//        "work_in_progress_registration_id, " +
-//        "SUM(transfer_amount) AS total_transfer_amount " +
-//        "FROM work_in_progress_transfer " +
-//        "GROUP BY work_in_progress_registration_id) wipt ON wipt.work_in_progress_registration_id = wipr.id " +
+//        "wipr.id AS wipr_id, " +
+//        "SUM(wpt.transfer_amount) AS total_transfer_amount " +
+//        "FROM work_in_progress_registration wipr " +
+//        "LEFT JOIN work_in_progress_transfer wpt ON wipr.id = wpt.work_in_progress_registration_id " +
+//        "GROUP BY wipr.id) wipt ON wipt.wipr_id = wipr.id " +
+//
 //        "LEFT JOIN settlement s ON s.id = wipr.settlement_transaction_id " +
+//
 //        "WHERE s.payment_date <= :reportDate " +
-//        "ORDER BY s.payment_date",
+//
+//        "ORDER BY s.payment_date, wipr.id ASC",
+//
+//        countQuery = "SELECT COUNT(wp.id) FROM work_in_progress_registration wp",
+//
 //        nativeQuery = true)
-//    Page<WorkInProgressOutstandingReportREPO> findByReportDate(@Param("reportDate") LocalDate reportDate, Pageable pageable);
+//    Page<WorkInProgressOutstandingReportTuple> findByReportDate(@Param("reportDate") LocalDate reportDate, Pageable pageable);
+
 
 
     @Query("SELECT NEW io.github.erp.domain.WorkInProgressOutstandingReportREPO(" +
