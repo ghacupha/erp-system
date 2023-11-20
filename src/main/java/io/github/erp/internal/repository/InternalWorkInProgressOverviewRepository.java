@@ -20,6 +20,7 @@ package io.github.erp.internal.repository;
 import io.github.erp.domain.WorkInProgressOutstandingReportREPO;
 import io.github.erp.domain.WorkInProgressOverview;
 import io.github.erp.domain.WorkInProgressOverviewDTO;
+import io.github.erp.domain.WorkInProgressOverviewTuple;
 import io.github.erp.repository.WorkInProgressOverviewRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -32,26 +33,17 @@ public interface InternalWorkInProgressOverviewRepository extends
     WorkInProgressOverviewRepository,
     JpaRepository<WorkInProgressOverview, Long>
 {
-//    @Query("SELECT NEW io.github.erp.domain.WorkInProgressOverviewDTO (" +
-//        "COALESCE(COUNT(w.sequenceNumber),0) AS numberOfItems, " +
-//        "CAST(COALESCE(SUM(w.instalmentAmount), 0.0) AS java.math.BigDecimal) AS instalmentAmount, " +
-//        "CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal) AS totalTransferAmount, " +
-//        "CAST(COALESCE(SUM(w.instalmentAmount), 0.0) AS java.math.BigDecimal) - CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal) ) " +
-//        "FROM WorkInProgressRegistration w " +
-//        "JOIN Settlement s ON s.id = w.settlementTransaction.id " +
-//        "LEFT JOIN WorkInProgressTransfer ta ON ta.workInProgressRegistration.id = w.id " +
-//        "WHERE s.paymentDate <= :reportDate")
-//    Optional<WorkInProgressOverviewDTO> findByReportDate(@Param("reportDate") LocalDate reportDate);
 
-    @Query("SELECT NEW io.github.erp.domain.WorkInProgressOverviewDTO (" +
-        "COALESCE(COUNT(DISTINCT w.sequenceNumber), 0) AS numberOfItems, " +
-        "COALESCE(SUM(w.instalmentAmount), 0.0) AS instalmentAmount, " +
-        "COALESCE(SUM(ta.transferAmount), 0.0) AS totalTransferAmount, " +
-        "(COALESCE(SUM(w.instalmentAmount), 0.0) - COALESCE(SUM(ta.transferAmount), 0.0)) AS outstandingAmount) " +
-        "FROM WorkInProgressRegistration w " +
-        "LEFT JOIN w.settlementTransaction s " +
-        "LEFT JOIN WorkInProgressTransfer ta ON ta.workInProgressRegistration.id = w.id " +
-        "WHERE s.paymentDate <= :reportDate")
-    Optional<WorkInProgressOverviewDTO> findByReportDate(@Param("reportDate") LocalDate reportDate);
+    @Query(value = "SELECT " +
+        "COALESCE(COUNT(DISTINCT w.sequence_number), 0) AS numberOfItems, " +
+        "COALESCE(SUM(wir.instalment_amount), 0.0) AS instalmentAmount, " +
+        "COALESCE(SUM(ta.transfer_amount), 0.0) AS totalTransferAmount, " +
+        "(COALESCE(SUM(wir.instalment_amount), 0.0) - COALESCE(SUM(ta.transfer_amount), 0.0)) AS outstandingAmount " +
+        "FROM work_in_progress_registration w " +
+        "LEFT JOIN Settlement s ON w.settlement_transaction_id = s.id " +
+        "LEFT JOIN (SELECT work_in_progress_registration_id, SUM(transfer_amount) AS transfer_amount FROM work_in_progress_transfer GROUP BY work_in_progress_registration_id) ta ON ta.work_in_progress_registration_id = w.id " +
+        "LEFT JOIN work_in_progress_registration wir ON wir.id = w.id " +
+        "WHERE s.payment_date <= :reportDate", nativeQuery = true)
+    Optional<WorkInProgressOverviewTuple> findByReportDate(@Param("reportDate") LocalDate reportDate);
 
 }
