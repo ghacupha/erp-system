@@ -17,8 +17,8 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -34,13 +34,17 @@ public class PrepaymentMarshallingDTO implements Serializable {
     @NotNull
     private Boolean inactive;
 
-    private LocalDate amortizationCommencementDate;
-
     private Integer amortizationPeriods;
+
+    private Boolean processed;
 
     private PrepaymentAccountDTO prepaymentAccount;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
+
+    private FiscalMonthDTO firstFiscalMonth;
+
+    private FiscalMonthDTO lastFiscalMonth;
 
     public Long getId() {
         return id;
@@ -58,20 +62,20 @@ public class PrepaymentMarshallingDTO implements Serializable {
         this.inactive = inactive;
     }
 
-    public LocalDate getAmortizationCommencementDate() {
-        return amortizationCommencementDate;
-    }
-
-    public void setAmortizationCommencementDate(LocalDate amortizationCommencementDate) {
-        this.amortizationCommencementDate = amortizationCommencementDate;
-    }
-
     public Integer getAmortizationPeriods() {
         return amortizationPeriods;
     }
 
     public void setAmortizationPeriods(Integer amortizationPeriods) {
         this.amortizationPeriods = amortizationPeriods;
+    }
+
+    public Boolean getProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(Boolean processed) {
+        this.processed = processed;
     }
 
     public PrepaymentAccountDTO getPrepaymentAccount() {
@@ -88,6 +92,22 @@ public class PrepaymentMarshallingDTO implements Serializable {
 
     public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
         this.placeholders = placeholders;
+    }
+
+    public FiscalMonthDTO getFirstFiscalMonth() {
+        return firstFiscalMonth;
+    }
+
+    public void setFirstFiscalMonth(FiscalMonthDTO firstFiscalMonth) {
+        this.firstFiscalMonth = firstFiscalMonth;
+    }
+
+    public FiscalMonthDTO getLastFiscalMonth() {
+        return lastFiscalMonth;
+    }
+
+    public void setLastFiscalMonth(FiscalMonthDTO lastFiscalMonth) {
+        this.lastFiscalMonth = lastFiscalMonth;
     }
 
     @Override
@@ -117,10 +137,12 @@ public class PrepaymentMarshallingDTO implements Serializable {
         return "PrepaymentMarshallingDTO{" +
             "id=" + getId() +
             ", inactive='" + getInactive() + "'" +
-            ", amortizationCommencementDate='" + getAmortizationCommencementDate() + "'" +
             ", amortizationPeriods=" + getAmortizationPeriods() +
+            ", processed='" + getProcessed() + "'" +
             ", prepaymentAccount=" + getPrepaymentAccount() +
             ", placeholders=" + getPlaceholders() +
+            ", firstFiscalMonth=" + getFirstFiscalMonth() +
+            ", lastFiscalMonth=" + getLastFiscalMonth() +
             "}";
     }
 }
