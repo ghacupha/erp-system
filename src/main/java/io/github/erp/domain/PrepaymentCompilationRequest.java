@@ -1,4 +1,4 @@
-package io.github.erp.service.dto;
+package io.github.erp.domain;
 
 /*-
  * Erp System - Mark VIII No 1 (Hilkiah Series) Server ver 1.6.0
@@ -21,23 +21,46 @@ package io.github.erp.service.dto;
 import io.github.erp.domain.enumeration.CompilationStatusTypes;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
-import java.util.Objects;
+import javax.persistence.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * A DTO for the {@link io.github.erp.domain.PrepaymentCompilationRequest} entity.
+ * A PrepaymentCompilationRequest.
  */
-public class PrepaymentCompilationRequestDTO implements Serializable {
+@Entity
+@Table(name = "prepayment_compilation_request")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "prepaymentcompilationrequest")
+public class PrepaymentCompilationRequest implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "time_of_request")
     private ZonedDateTime timeOfRequest;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "compilation_status")
     private CompilationStatusTypes compilationStatus;
 
+    @Column(name = "items_processed")
     private Integer itemsProcessed;
 
+    // jhipster-needle-entity-add-field - JHipster will add fields here
+
     public Long getId() {
-        return id;
+        return this.id;
+    }
+
+    public PrepaymentCompilationRequest id(Long id) {
+        this.setId(id);
+        return this;
     }
 
     public void setId(Long id) {
@@ -45,7 +68,12 @@ public class PrepaymentCompilationRequestDTO implements Serializable {
     }
 
     public ZonedDateTime getTimeOfRequest() {
-        return timeOfRequest;
+        return this.timeOfRequest;
+    }
+
+    public PrepaymentCompilationRequest timeOfRequest(ZonedDateTime timeOfRequest) {
+        this.setTimeOfRequest(timeOfRequest);
+        return this;
     }
 
     public void setTimeOfRequest(ZonedDateTime timeOfRequest) {
@@ -53,7 +81,12 @@ public class PrepaymentCompilationRequestDTO implements Serializable {
     }
 
     public CompilationStatusTypes getCompilationStatus() {
-        return compilationStatus;
+        return this.compilationStatus;
+    }
+
+    public PrepaymentCompilationRequest compilationStatus(CompilationStatusTypes compilationStatus) {
+        this.setCompilationStatus(compilationStatus);
+        return this;
     }
 
     public void setCompilationStatus(CompilationStatusTypes compilationStatus) {
@@ -61,38 +94,41 @@ public class PrepaymentCompilationRequestDTO implements Serializable {
     }
 
     public Integer getItemsProcessed() {
-        return itemsProcessed;
+        return this.itemsProcessed;
+    }
+
+    public PrepaymentCompilationRequest itemsProcessed(Integer itemsProcessed) {
+        this.setItemsProcessed(itemsProcessed);
+        return this;
     }
 
     public void setItemsProcessed(Integer itemsProcessed) {
         this.itemsProcessed = itemsProcessed;
     }
 
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof PrepaymentCompilationRequestDTO)) {
+        if (!(o instanceof PrepaymentCompilationRequest)) {
             return false;
         }
-
-        PrepaymentCompilationRequestDTO prepaymentCompilationRequestDTO = (PrepaymentCompilationRequestDTO) o;
-        if (this.id == null) {
-            return false;
-        }
-        return Objects.equals(this.id, prepaymentCompilationRequestDTO.id);
+        return id != null && id.equals(((PrepaymentCompilationRequest) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id);
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
     }
 
     // prettier-ignore
     @Override
     public String toString() {
-        return "PrepaymentCompilationRequestDTO{" +
+        return "PrepaymentCompilationRequest{" +
             "id=" + getId() +
             ", timeOfRequest='" + getTimeOfRequest() + "'" +
             ", compilationStatus='" + getCompilationStatus() + "'" +
