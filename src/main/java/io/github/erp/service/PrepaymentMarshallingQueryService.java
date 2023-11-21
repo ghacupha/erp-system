@@ -17,6 +17,7 @@ package io.github.erp.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.*; // for static metamodels
 import io.github.erp.domain.PrepaymentMarshalling;
 import io.github.erp.repository.PrepaymentMarshallingRepository;
@@ -118,20 +119,14 @@ public class PrepaymentMarshallingQueryService extends QueryService<PrepaymentMa
             if (criteria.getInactive() != null) {
                 specification = specification.and(buildSpecification(criteria.getInactive(), PrepaymentMarshalling_.inactive));
             }
-            if (criteria.getAmortizationCommencementDate() != null) {
-                specification =
-                    specification.and(
-                        buildRangeSpecification(
-                            criteria.getAmortizationCommencementDate(),
-                            PrepaymentMarshalling_.amortizationCommencementDate
-                        )
-                    );
-            }
             if (criteria.getAmortizationPeriods() != null) {
                 specification =
                     specification.and(
                         buildRangeSpecification(criteria.getAmortizationPeriods(), PrepaymentMarshalling_.amortizationPeriods)
                     );
+            }
+            if (criteria.getProcessed() != null) {
+                specification = specification.and(buildSpecification(criteria.getProcessed(), PrepaymentMarshalling_.processed));
             }
             if (criteria.getPrepaymentAccountId() != null) {
                 specification =
@@ -148,6 +143,24 @@ public class PrepaymentMarshallingQueryService extends QueryService<PrepaymentMa
                         buildSpecification(
                             criteria.getPlaceholderId(),
                             root -> root.join(PrepaymentMarshalling_.placeholders, JoinType.LEFT).get(Placeholder_.id)
+                        )
+                    );
+            }
+            if (criteria.getFirstFiscalMonthId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getFirstFiscalMonthId(),
+                            root -> root.join(PrepaymentMarshalling_.firstFiscalMonth, JoinType.LEFT).get(FiscalMonth_.id)
+                        )
+                    );
+            }
+            if (criteria.getLastFiscalMonthId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLastFiscalMonthId(),
+                            root -> root.join(PrepaymentMarshalling_.lastFiscalMonth, JoinType.LEFT).get(FiscalMonth_.id)
                         )
                     );
             }

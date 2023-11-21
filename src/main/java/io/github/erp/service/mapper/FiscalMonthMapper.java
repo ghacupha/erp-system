@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.FiscalMonth;
 import io.github.erp.service.dto.FiscalMonthDTO;
 import org.mapstruct.*;
@@ -43,6 +44,18 @@ public interface FiscalMonthMapper extends EntityMapper<FiscalMonthDTO, FiscalMo
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removeUniversallyUniqueMapping", ignore = true)
     FiscalMonth toEntity(FiscalMonthDTO fiscalMonthDTO);
+
+    @Named("startDate")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "startDate", source = "startDate")
+    FiscalMonthDTO toDtoStartDate(FiscalMonth fiscalMonth);
+
+    @Named("endDate")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "endDate", source = "endDate")
+    FiscalMonthDTO toDtoEndDate(FiscalMonth fiscalMonth);
 
     @Named("fiscalMonthCode")
     @BeanMapping(ignoreByDefault = true)

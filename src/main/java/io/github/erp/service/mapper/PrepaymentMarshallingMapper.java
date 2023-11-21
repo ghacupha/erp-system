@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.PrepaymentMarshalling;
 import io.github.erp.service.dto.PrepaymentMarshallingDTO;
 import org.mapstruct.*;
@@ -24,10 +25,12 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link PrepaymentMarshalling} and its DTO {@link PrepaymentMarshallingDTO}.
  */
-@Mapper(componentModel = "spring", uses = { PrepaymentAccountMapper.class, PlaceholderMapper.class })
+@Mapper(componentModel = "spring", uses = { PrepaymentAccountMapper.class, PlaceholderMapper.class, FiscalMonthMapper.class })
 public interface PrepaymentMarshallingMapper extends EntityMapper<PrepaymentMarshallingDTO, PrepaymentMarshalling> {
     @Mapping(target = "prepaymentAccount", source = "prepaymentAccount", qualifiedByName = "catalogueNumber")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
+    @Mapping(target = "firstFiscalMonth", source = "firstFiscalMonth", qualifiedByName = "startDate")
+    @Mapping(target = "lastFiscalMonth", source = "lastFiscalMonth", qualifiedByName = "endDate")
     PrepaymentMarshallingDTO toDto(PrepaymentMarshalling s);
 
     @Mapping(target = "removePlaceholder", ignore = true)
