@@ -1,7 +1,7 @@
 package io.github.erp.internal.service;
 
 /*-
- * Erp System - Mark VII No 5 (Gideon Series) Server ver 1.5.9
+ * Erp System - Mark VIII No 1 (Hilkiah Series) Server ver 1.6.0
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
