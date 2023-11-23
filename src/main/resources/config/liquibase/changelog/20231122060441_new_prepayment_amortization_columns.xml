@@ -1,0 +1,69 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1700633175643-4">
+        <addColumn tableName="work_in_progress_report">
+            <column name="dealer_name" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1700633175643-5">
+        <addColumn tableName="prepayment_amortization">
+            <column name="fiscal_month_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1700633175643-6">
+        <addColumn tableName="prepayment_amortization">
+            <column name="prepayment_compilation_request_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1700633175643-7">
+        <addColumn tableName="work_in_progress_report">
+            <column name="project_title" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1700633175643-9">
+        <addUniqueConstraint columnNames="period_code" constraintName="UC_DEPRECIATION_PERIODPERIOD_CODE_COL" tableName="depreciation_period"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1700633175643-10">
+        <addUniqueConstraint columnNames="fiscal_month_code" constraintName="UC_FISCAL_MONTHFISCAL_MONTH_CODE_COL" tableName="fiscal_month"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1700633175643-11">
+        <addUniqueConstraint columnNames="fiscal_quarter_code" constraintName="UC_FISCAL_QUARTERFISCAL_QUARTER_CODE_COL" tableName="fiscal_quarter"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1700633175643-12">
+        <addForeignKeyConstraint baseColumnNames="fiscal_month_id" baseTableName="depreciation_entry" constraintName="FK5j0n01dct8yyqla29e7w9162i" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fiscal_month" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1700633175643-13">
+        <addForeignKeyConstraint baseColumnNames="fiscal_month_id" baseTableName="prepayment_amortization" constraintName="FK78qlntb2fwf3qnld9yduwlaji" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fiscal_month" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1700633175643-14">
+        <addForeignKeyConstraint baseColumnNames="fiscal_quarter_id" baseTableName="depreciation_entry" constraintName="FK8klwh1cd98j4av2h6ln0kccfb" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fiscal_quarter" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1700633175643-15">
+        <addForeignKeyConstraint baseColumnNames="fiscal_quarter_id" baseTableName="fiscal_month" constraintName="FKakr4ut1ruvsnc4h9qklmsnlvj" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fiscal_quarter" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1700633175643-16">
+        <addForeignKeyConstraint baseColumnNames="job_sheet_id" baseTableName="work_in_progress_registration" constraintName="FKbk3nxi7ao8ie3qttfac1g6k0e" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="job_sheet" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1700633175643-17">
+        <addForeignKeyConstraint baseColumnNames="prepayment_compilation_request_id" baseTableName="prepayment_amortization" constraintName="FKhvl3b5wtylhlx5qdl0jpbnry2" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="prepayment_compilation_request" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1700633175643-18">
+        <addForeignKeyConstraint baseColumnNames="fiscal_year_id" baseTableName="depreciation_entry" constraintName="FKikr22ljpuss49y4j1us9oo9k8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fiscal_year" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1700633175643-19">
+        <dropForeignKeyConstraint baseTableName="work_in_progress_report" constraintName="fk_work_in_progress_report__dealer_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1700633175643-20">
+        <dropForeignKeyConstraint baseTableName="work_in_progress_report" constraintName="fk_work_in_progress_report__work_project_register_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1700633175643-32">
+        <dropColumn columnName="dealer_id" tableName="work_in_progress_report"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1700633175643-33">
+        <dropColumn columnName="work_project_register_id" tableName="work_in_progress_report"/>
+    </changeSet>
+</databaseChangeLog>

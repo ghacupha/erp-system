@@ -175,6 +175,27 @@ public class PrepaymentAmortizationQueryService extends QueryService<PrepaymentA
                         )
                     );
             }
+            if (criteria.getFiscalMonthId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getFiscalMonthId(),
+                            root -> root.join(PrepaymentAmortization_.fiscalMonth, JoinType.LEFT).get(FiscalMonth_.id)
+                        )
+                    );
+            }
+            if (criteria.getPrepaymentCompilationRequestId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPrepaymentCompilationRequestId(),
+                            root ->
+                                root
+                                    .join(PrepaymentAmortization_.prepaymentCompilationRequest, JoinType.LEFT)
+                                    .get(PrepaymentCompilationRequest_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

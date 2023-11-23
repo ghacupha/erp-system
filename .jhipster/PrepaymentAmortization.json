@@ -49,6 +49,20 @@
       "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "prepaymentAmortization"
+    },
+    {
+      "relationshipName": "fiscalMonth",
+      "otherEntityName": "fiscalMonth",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "endDate"
+    },
+    {
+      "relationshipName": "prepaymentCompilationRequest",
+      "otherEntityName": "prepaymentCompilationRequest",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "id"
     }
   ],
   "service": "serviceImpl",

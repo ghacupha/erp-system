@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link io.github.erp.domain.PrepaymentAmortization} entity.
@@ -49,6 +50,10 @@ public class PrepaymentAmortizationDTO implements Serializable {
     private TransactionAccountDTO creditAccount;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
+
+    private FiscalMonthDTO fiscalMonth;
+
+    private PrepaymentCompilationRequestDTO prepaymentCompilationRequest;
 
     public Long getId() {
         return id;
@@ -130,6 +135,22 @@ public class PrepaymentAmortizationDTO implements Serializable {
         this.placeholders = placeholders;
     }
 
+    public FiscalMonthDTO getFiscalMonth() {
+        return fiscalMonth;
+    }
+
+    public void setFiscalMonth(FiscalMonthDTO fiscalMonth) {
+        this.fiscalMonth = fiscalMonth;
+    }
+
+    public PrepaymentCompilationRequestDTO getPrepaymentCompilationRequest() {
+        return prepaymentCompilationRequest;
+    }
+
+    public void setPrepaymentCompilationRequest(PrepaymentCompilationRequestDTO prepaymentCompilationRequest) {
+        this.prepaymentCompilationRequest = prepaymentCompilationRequest;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -165,6 +186,8 @@ public class PrepaymentAmortizationDTO implements Serializable {
             ", debitAccount=" + getDebitAccount() +
             ", creditAccount=" + getCreditAccount() +
             ", placeholders=" + getPlaceholders() +
+            ", fiscalMonth=" + getFiscalMonth() +
+            ", prepaymentCompilationRequest=" + getPrepaymentCompilationRequest() +
             "}";
     }
 }

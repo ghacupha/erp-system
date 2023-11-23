@@ -379,6 +379,7 @@
     <include file="config/liquibase/changelog/20231027094030_wip_registration_m21_changes.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231115083520_wip_overview_changes.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231121111852_changelog_prepayment_marshalling.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231122060441_new_prepayment_amortization_columns.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

@@ -64,6 +64,10 @@ public class PrepaymentAmortizationCriteria implements Serializable, Criteria {
 
     private LongFilter placeholderId;
 
+    private LongFilter fiscalMonthId;
+
+    private LongFilter prepaymentCompilationRequestId;
+
     private Boolean distinct;
 
     public PrepaymentAmortizationCriteria() {}
@@ -79,6 +83,9 @@ public class PrepaymentAmortizationCriteria implements Serializable, Criteria {
         this.debitAccountId = other.debitAccountId == null ? null : other.debitAccountId.copy();
         this.creditAccountId = other.creditAccountId == null ? null : other.creditAccountId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.fiscalMonthId = other.fiscalMonthId == null ? null : other.fiscalMonthId.copy();
+        this.prepaymentCompilationRequestId =
+            other.prepaymentCompilationRequestId == null ? null : other.prepaymentCompilationRequestId.copy();
         this.distinct = other.distinct;
     }
 
@@ -237,6 +244,36 @@ public class PrepaymentAmortizationCriteria implements Serializable, Criteria {
         this.placeholderId = placeholderId;
     }
 
+    public LongFilter getFiscalMonthId() {
+        return fiscalMonthId;
+    }
+
+    public LongFilter fiscalMonthId() {
+        if (fiscalMonthId == null) {
+            fiscalMonthId = new LongFilter();
+        }
+        return fiscalMonthId;
+    }
+
+    public void setFiscalMonthId(LongFilter fiscalMonthId) {
+        this.fiscalMonthId = fiscalMonthId;
+    }
+
+    public LongFilter getPrepaymentCompilationRequestId() {
+        return prepaymentCompilationRequestId;
+    }
+
+    public LongFilter prepaymentCompilationRequestId() {
+        if (prepaymentCompilationRequestId == null) {
+            prepaymentCompilationRequestId = new LongFilter();
+        }
+        return prepaymentCompilationRequestId;
+    }
+
+    public void setPrepaymentCompilationRequestId(LongFilter prepaymentCompilationRequestId) {
+        this.prepaymentCompilationRequestId = prepaymentCompilationRequestId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -265,6 +302,8 @@ public class PrepaymentAmortizationCriteria implements Serializable, Criteria {
             Objects.equals(debitAccountId, that.debitAccountId) &&
             Objects.equals(creditAccountId, that.creditAccountId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(fiscalMonthId, that.fiscalMonthId) &&
+            Objects.equals(prepaymentCompilationRequestId, that.prepaymentCompilationRequestId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -282,6 +321,8 @@ public class PrepaymentAmortizationCriteria implements Serializable, Criteria {
             debitAccountId,
             creditAccountId,
             placeholderId,
+            fiscalMonthId,
+            prepaymentCompilationRequestId,
             distinct
         );
     }
@@ -300,6 +341,8 @@ public class PrepaymentAmortizationCriteria implements Serializable, Criteria {
             (debitAccountId != null ? "debitAccountId=" + debitAccountId + ", " : "") +
             (creditAccountId != null ? "creditAccountId=" + creditAccountId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (fiscalMonthId != null ? "fiscalMonthId=" + fiscalMonthId + ", " : "") +
+            (prepaymentCompilationRequestId != null ? "prepaymentCompilationRequestId=" + prepaymentCompilationRequestId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
