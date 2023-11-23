@@ -29,6 +29,7 @@ import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
+import tech.jhipster.service.filter.UUIDFilter;
 import tech.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
@@ -69,6 +70,10 @@ public class PrepaymentCompilationRequestCriteria implements Serializable, Crite
 
     private IntegerFilter itemsProcessed;
 
+    private UUIDFilter compilationToken;
+
+    private LongFilter placeholderId;
+
     private Boolean distinct;
 
     public PrepaymentCompilationRequestCriteria() {}
@@ -78,6 +83,8 @@ public class PrepaymentCompilationRequestCriteria implements Serializable, Crite
         this.timeOfRequest = other.timeOfRequest == null ? null : other.timeOfRequest.copy();
         this.compilationStatus = other.compilationStatus == null ? null : other.compilationStatus.copy();
         this.itemsProcessed = other.itemsProcessed == null ? null : other.itemsProcessed.copy();
+        this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
+        this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
     }
 
@@ -146,6 +153,36 @@ public class PrepaymentCompilationRequestCriteria implements Serializable, Crite
         this.itemsProcessed = itemsProcessed;
     }
 
+    public UUIDFilter getCompilationToken() {
+        return compilationToken;
+    }
+
+    public UUIDFilter compilationToken() {
+        if (compilationToken == null) {
+            compilationToken = new UUIDFilter();
+        }
+        return compilationToken;
+    }
+
+    public void setCompilationToken(UUIDFilter compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
+    public LongFilter getPlaceholderId() {
+        return placeholderId;
+    }
+
+    public LongFilter placeholderId() {
+        if (placeholderId == null) {
+            placeholderId = new LongFilter();
+        }
+        return placeholderId;
+    }
+
+    public void setPlaceholderId(LongFilter placeholderId) {
+        this.placeholderId = placeholderId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -168,13 +205,15 @@ public class PrepaymentCompilationRequestCriteria implements Serializable, Crite
             Objects.equals(timeOfRequest, that.timeOfRequest) &&
             Objects.equals(compilationStatus, that.compilationStatus) &&
             Objects.equals(itemsProcessed, that.itemsProcessed) &&
+            Objects.equals(compilationToken, that.compilationToken) &&
+            Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, timeOfRequest, compilationStatus, itemsProcessed, distinct);
+        return Objects.hash(id, timeOfRequest, compilationStatus, itemsProcessed, compilationToken, placeholderId, distinct);
     }
 
     // prettier-ignore
@@ -185,6 +224,8 @@ public class PrepaymentCompilationRequestCriteria implements Serializable, Crite
             (timeOfRequest != null ? "timeOfRequest=" + timeOfRequest + ", " : "") +
             (compilationStatus != null ? "compilationStatus=" + compilationStatus + ", " : "") +
             (itemsProcessed != null ? "itemsProcessed=" + itemsProcessed + ", " : "") +
+            (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
+            (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

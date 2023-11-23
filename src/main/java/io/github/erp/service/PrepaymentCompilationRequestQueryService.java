@@ -128,6 +128,19 @@ public class PrepaymentCompilationRequestQueryService extends QueryService<Prepa
                 specification =
                     specification.and(buildRangeSpecification(criteria.getItemsProcessed(), PrepaymentCompilationRequest_.itemsProcessed));
             }
+            if (criteria.getCompilationToken() != null) {
+                specification =
+                    specification.and(buildSpecification(criteria.getCompilationToken(), PrepaymentCompilationRequest_.compilationToken));
+            }
+            if (criteria.getPlaceholderId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPlaceholderId(),
+                            root -> root.join(PrepaymentCompilationRequest_.placeholders, JoinType.LEFT).get(Placeholder_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

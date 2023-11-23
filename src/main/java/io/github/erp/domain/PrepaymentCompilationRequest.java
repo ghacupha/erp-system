@@ -18,10 +18,15 @@ package io.github.erp.domain;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.github.erp.domain.enumeration.CompilationStatusTypes;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -51,6 +56,20 @@ public class PrepaymentCompilationRequest implements Serializable {
 
     @Column(name = "items_processed")
     private Integer itemsProcessed;
+
+    @NotNull
+    @Column(name = "compilation_token", nullable = false, unique = true)
+    private UUID compilationToken;
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_prepayment_compilation_request__placeholder",
+        joinColumns = @JoinColumn(name = "prepayment_compilation_request_id"),
+        inverseJoinColumns = @JoinColumn(name = "placeholder_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
+    private Set<Placeholder> placeholders = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -106,6 +125,42 @@ public class PrepaymentCompilationRequest implements Serializable {
         this.itemsProcessed = itemsProcessed;
     }
 
+    public UUID getCompilationToken() {
+        return this.compilationToken;
+    }
+
+    public PrepaymentCompilationRequest compilationToken(UUID compilationToken) {
+        this.setCompilationToken(compilationToken);
+        return this;
+    }
+
+    public void setCompilationToken(UUID compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
+    public Set<Placeholder> getPlaceholders() {
+        return this.placeholders;
+    }
+
+    public void setPlaceholders(Set<Placeholder> placeholders) {
+        this.placeholders = placeholders;
+    }
+
+    public PrepaymentCompilationRequest placeholders(Set<Placeholder> placeholders) {
+        this.setPlaceholders(placeholders);
+        return this;
+    }
+
+    public PrepaymentCompilationRequest addPlaceholder(Placeholder placeholder) {
+        this.placeholders.add(placeholder);
+        return this;
+    }
+
+    public PrepaymentCompilationRequest removePlaceholder(Placeholder placeholder) {
+        this.placeholders.remove(placeholder);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -133,6 +188,7 @@ public class PrepaymentCompilationRequest implements Serializable {
             ", timeOfRequest='" + getTimeOfRequest() + "'" +
             ", compilationStatus='" + getCompilationStatus() + "'" +
             ", itemsProcessed=" + getItemsProcessed() +
+            ", compilationToken='" + getCompilationToken() + "'" +
             "}";
     }
 }

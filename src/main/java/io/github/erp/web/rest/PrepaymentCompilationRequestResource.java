@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -85,7 +87,7 @@ public class PrepaymentCompilationRequestResource {
      */
     @PostMapping("/prepayment-compilation-requests")
     public ResponseEntity<PrepaymentCompilationRequestDTO> createPrepaymentCompilationRequest(
-        @RequestBody PrepaymentCompilationRequestDTO prepaymentCompilationRequestDTO
+        @Valid @RequestBody PrepaymentCompilationRequestDTO prepaymentCompilationRequestDTO
     ) throws URISyntaxException {
         log.debug("REST request to save PrepaymentCompilationRequest : {}", prepaymentCompilationRequestDTO);
         if (prepaymentCompilationRequestDTO.getId() != null) {
@@ -111,7 +113,7 @@ public class PrepaymentCompilationRequestResource {
     @PutMapping("/prepayment-compilation-requests/{id}")
     public ResponseEntity<PrepaymentCompilationRequestDTO> updatePrepaymentCompilationRequest(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody PrepaymentCompilationRequestDTO prepaymentCompilationRequestDTO
+        @Valid @RequestBody PrepaymentCompilationRequestDTO prepaymentCompilationRequestDTO
     ) throws URISyntaxException {
         log.debug("REST request to update PrepaymentCompilationRequest : {}, {}", id, prepaymentCompilationRequestDTO);
         if (prepaymentCompilationRequestDTO.getId() == null) {
@@ -148,7 +150,7 @@ public class PrepaymentCompilationRequestResource {
     @PatchMapping(value = "/prepayment-compilation-requests/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<PrepaymentCompilationRequestDTO> partialUpdatePrepaymentCompilationRequest(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody PrepaymentCompilationRequestDTO prepaymentCompilationRequestDTO
+        @NotNull @RequestBody PrepaymentCompilationRequestDTO prepaymentCompilationRequestDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update PrepaymentCompilationRequest partially : {}, {}", id, prepaymentCompilationRequestDTO);
         if (prepaymentCompilationRequestDTO.getId() == null) {

@@ -98,11 +98,17 @@ public class PrepaymentCompilationRequestServiceImpl implements PrepaymentCompil
         return prepaymentCompilationRequestRepository.findAll(pageable).map(prepaymentCompilationRequestMapper::toDto);
     }
 
+    public Page<PrepaymentCompilationRequestDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return prepaymentCompilationRequestRepository
+            .findAllWithEagerRelationships(pageable)
+            .map(prepaymentCompilationRequestMapper::toDto);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<PrepaymentCompilationRequestDTO> findOne(Long id) {
         log.debug("Request to get PrepaymentCompilationRequest : {}", id);
-        return prepaymentCompilationRequestRepository.findById(id).map(prepaymentCompilationRequestMapper::toDto);
+        return prepaymentCompilationRequestRepository.findOneWithEagerRelationships(id).map(prepaymentCompilationRequestMapper::toDto);
     }
 
     @Override

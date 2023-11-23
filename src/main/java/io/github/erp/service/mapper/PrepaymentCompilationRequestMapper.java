@@ -25,10 +25,16 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link PrepaymentCompilationRequest} and its DTO {@link PrepaymentCompilationRequestDTO}.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = { PlaceholderMapper.class })
 public interface PrepaymentCompilationRequestMapper extends EntityMapper<PrepaymentCompilationRequestDTO, PrepaymentCompilationRequest> {
+    @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
+    PrepaymentCompilationRequestDTO toDto(PrepaymentCompilationRequest s);
+
     @Named("id")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     PrepaymentCompilationRequestDTO toDtoId(PrepaymentCompilationRequest prepaymentCompilationRequest);
+
+    @Mapping(target = "removePlaceholder", ignore = true)
+    PrepaymentCompilationRequest toEntity(PrepaymentCompilationRequestDTO prepaymentCompilationRequestDTO);
 }
