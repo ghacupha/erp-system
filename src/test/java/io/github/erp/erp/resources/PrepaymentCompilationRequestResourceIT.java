@@ -19,17 +19,19 @@ package io.github.erp.erp.resources;
  */
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.PrepaymentCompilationRequest;
 import io.github.erp.domain.enumeration.CompilationStatusTypes;
 import io.github.erp.repository.PrepaymentCompilationRequestRepository;
 import io.github.erp.repository.search.PrepaymentCompilationRequestSearchRepository;
+import io.github.erp.service.PrepaymentCompilationRequestService;
 import io.github.erp.service.dto.PrepaymentCompilationRequestDTO;
 import io.github.erp.service.mapper.PrepaymentCompilationRequestMapper;
-import io.github.erp.web.rest.PrepaymentCompilationRequestResource;
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -45,9 +47,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static io.github.erp.web.rest.TestUtil.sameInstant;
@@ -58,7 +58,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link PrepaymentCompilationRequestResource} REST controller.
+ * Integration tests for the PrepaymentCompilationRequestResourceProd REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -77,6 +77,9 @@ class PrepaymentCompilationRequestResourceIT {
     private static final Integer UPDATED_ITEMS_PROCESSED = 2;
     private static final Integer SMALLER_ITEMS_PROCESSED = 1 - 1;
 
+    private static final UUID DEFAULT_COMPILATION_TOKEN = UUID.randomUUID();
+    private static final UUID UPDATED_COMPILATION_TOKEN = UUID.randomUUID();
+
     private static final String ENTITY_API_URL = "/api/prepayments/prepayment-compilation-requests";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/prepayments/_search/prepayment-compilation-requests";
@@ -87,8 +90,14 @@ class PrepaymentCompilationRequestResourceIT {
     @Autowired
     private PrepaymentCompilationRequestRepository prepaymentCompilationRequestRepository;
 
+    @Mock
+    private PrepaymentCompilationRequestRepository prepaymentCompilationRequestRepositoryMock;
+
     @Autowired
     private PrepaymentCompilationRequestMapper prepaymentCompilationRequestMapper;
+
+    @Mock
+    private PrepaymentCompilationRequestService prepaymentCompilationRequestServiceMock;
 
     /**
      * This repository is mocked in the io.github.erp.repository.search test package.
@@ -116,7 +125,8 @@ class PrepaymentCompilationRequestResourceIT {
         PrepaymentCompilationRequest prepaymentCompilationRequest = new PrepaymentCompilationRequest()
             .timeOfRequest(DEFAULT_TIME_OF_REQUEST)
             .compilationStatus(DEFAULT_COMPILATION_STATUS)
-            .itemsProcessed(DEFAULT_ITEMS_PROCESSED);
+            .itemsProcessed(DEFAULT_ITEMS_PROCESSED)
+            .compilationToken(DEFAULT_COMPILATION_TOKEN);
         return prepaymentCompilationRequest;
     }
 
@@ -130,7 +140,8 @@ class PrepaymentCompilationRequestResourceIT {
         PrepaymentCompilationRequest prepaymentCompilationRequest = new PrepaymentCompilationRequest()
             .timeOfRequest(UPDATED_TIME_OF_REQUEST)
             .compilationStatus(UPDATED_COMPILATION_STATUS)
-            .itemsProcessed(UPDATED_ITEMS_PROCESSED);
+            .itemsProcessed(UPDATED_ITEMS_PROCESSED)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         return prepaymentCompilationRequest;
     }
 
@@ -164,6 +175,7 @@ class PrepaymentCompilationRequestResourceIT {
         assertThat(testPrepaymentCompilationRequest.getTimeOfRequest()).isEqualTo(DEFAULT_TIME_OF_REQUEST);
         assertThat(testPrepaymentCompilationRequest.getCompilationStatus()).isEqualTo(DEFAULT_COMPILATION_STATUS);
         assertThat(testPrepaymentCompilationRequest.getItemsProcessed()).isEqualTo(DEFAULT_ITEMS_PROCESSED);
+        assertThat(testPrepaymentCompilationRequest.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
 
         // Validate the PrepaymentCompilationRequest in Elasticsearch
         verify(mockPrepaymentCompilationRequestSearchRepository, times(1)).save(testPrepaymentCompilationRequest);
@@ -199,6 +211,30 @@ class PrepaymentCompilationRequestResourceIT {
 
     @Test
     @Transactional
+    void checkCompilationTokenIsRequired() throws Exception {
+        int databaseSizeBeforeTest = prepaymentCompilationRequestRepository.findAll().size();
+        // set the field null
+        prepaymentCompilationRequest.setCompilationToken(null);
+
+        // Create the PrepaymentCompilationRequest, which fails.
+        PrepaymentCompilationRequestDTO prepaymentCompilationRequestDTO = prepaymentCompilationRequestMapper.toDto(
+            prepaymentCompilationRequest
+        );
+
+        restPrepaymentCompilationRequestMockMvc
+            .perform(
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(prepaymentCompilationRequestDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<PrepaymentCompilationRequest> prepaymentCompilationRequestList = prepaymentCompilationRequestRepository.findAll();
+        assertThat(prepaymentCompilationRequestList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllPrepaymentCompilationRequests() throws Exception {
         // Initialize the database
         prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
@@ -211,7 +247,26 @@ class PrepaymentCompilationRequestResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentCompilationRequest.getId().intValue())))
             .andExpect(jsonPath("$.[*].timeOfRequest").value(hasItem(sameInstant(DEFAULT_TIME_OF_REQUEST))))
             .andExpect(jsonPath("$.[*].compilationStatus").value(hasItem(DEFAULT_COMPILATION_STATUS.toString())))
-            .andExpect(jsonPath("$.[*].itemsProcessed").value(hasItem(DEFAULT_ITEMS_PROCESSED)));
+            .andExpect(jsonPath("$.[*].itemsProcessed").value(hasItem(DEFAULT_ITEMS_PROCESSED)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN.toString())));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllPrepaymentCompilationRequestsWithEagerRelationshipsIsEnabled() throws Exception {
+        when(prepaymentCompilationRequestServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restPrepaymentCompilationRequestMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(prepaymentCompilationRequestServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllPrepaymentCompilationRequestsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(prepaymentCompilationRequestServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restPrepaymentCompilationRequestMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(prepaymentCompilationRequestServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -228,7 +283,8 @@ class PrepaymentCompilationRequestResourceIT {
             .andExpect(jsonPath("$.id").value(prepaymentCompilationRequest.getId().intValue()))
             .andExpect(jsonPath("$.timeOfRequest").value(sameInstant(DEFAULT_TIME_OF_REQUEST)))
             .andExpect(jsonPath("$.compilationStatus").value(DEFAULT_COMPILATION_STATUS.toString()))
-            .andExpect(jsonPath("$.itemsProcessed").value(DEFAULT_ITEMS_PROCESSED));
+            .andExpect(jsonPath("$.itemsProcessed").value(DEFAULT_ITEMS_PROCESSED))
+            .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN.toString()));
     }
 
     @Test
@@ -511,6 +567,86 @@ class PrepaymentCompilationRequestResourceIT {
         defaultPrepaymentCompilationRequestShouldBeFound("itemsProcessed.greaterThan=" + SMALLER_ITEMS_PROCESSED);
     }
 
+    @Test
+    @Transactional
+    void getAllPrepaymentCompilationRequestsByCompilationTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
+
+        // Get all the prepaymentCompilationRequestList where compilationToken equals to DEFAULT_COMPILATION_TOKEN
+        defaultPrepaymentCompilationRequestShouldBeFound("compilationToken.equals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the prepaymentCompilationRequestList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultPrepaymentCompilationRequestShouldNotBeFound("compilationToken.equals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentCompilationRequestsByCompilationTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
+
+        // Get all the prepaymentCompilationRequestList where compilationToken not equals to DEFAULT_COMPILATION_TOKEN
+        defaultPrepaymentCompilationRequestShouldNotBeFound("compilationToken.notEquals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the prepaymentCompilationRequestList where compilationToken not equals to UPDATED_COMPILATION_TOKEN
+        defaultPrepaymentCompilationRequestShouldBeFound("compilationToken.notEquals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentCompilationRequestsByCompilationTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
+
+        // Get all the prepaymentCompilationRequestList where compilationToken in DEFAULT_COMPILATION_TOKEN or UPDATED_COMPILATION_TOKEN
+        defaultPrepaymentCompilationRequestShouldBeFound(
+            "compilationToken.in=" + DEFAULT_COMPILATION_TOKEN + "," + UPDATED_COMPILATION_TOKEN
+        );
+
+        // Get all the prepaymentCompilationRequestList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultPrepaymentCompilationRequestShouldNotBeFound("compilationToken.in=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentCompilationRequestsByCompilationTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
+
+        // Get all the prepaymentCompilationRequestList where compilationToken is not null
+        defaultPrepaymentCompilationRequestShouldBeFound("compilationToken.specified=true");
+
+        // Get all the prepaymentCompilationRequestList where compilationToken is null
+        defaultPrepaymentCompilationRequestShouldNotBeFound("compilationToken.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentCompilationRequestsByPlaceholderIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
+        Placeholder placeholder;
+        if (TestUtil.findAll(em, Placeholder.class).isEmpty()) {
+            placeholder = PlaceholderResourceIT.createEntity(em);
+            em.persist(placeholder);
+            em.flush();
+        } else {
+            placeholder = TestUtil.findAll(em, Placeholder.class).get(0);
+        }
+        em.persist(placeholder);
+        em.flush();
+        prepaymentCompilationRequest.addPlaceholder(placeholder);
+        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
+        Long placeholderId = placeholder.getId();
+
+        // Get all the prepaymentCompilationRequestList where placeholder equals to placeholderId
+        defaultPrepaymentCompilationRequestShouldBeFound("placeholderId.equals=" + placeholderId);
+
+        // Get all the prepaymentCompilationRequestList where placeholder equals to (placeholderId + 1)
+        defaultPrepaymentCompilationRequestShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -522,7 +658,8 @@ class PrepaymentCompilationRequestResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentCompilationRequest.getId().intValue())))
             .andExpect(jsonPath("$.[*].timeOfRequest").value(hasItem(sameInstant(DEFAULT_TIME_OF_REQUEST))))
             .andExpect(jsonPath("$.[*].compilationStatus").value(hasItem(DEFAULT_COMPILATION_STATUS.toString())))
-            .andExpect(jsonPath("$.[*].itemsProcessed").value(hasItem(DEFAULT_ITEMS_PROCESSED)));
+            .andExpect(jsonPath("$.[*].itemsProcessed").value(hasItem(DEFAULT_ITEMS_PROCESSED)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN.toString())));
 
         // Check, that the count call also returns 1
         restPrepaymentCompilationRequestMockMvc
@@ -575,7 +712,8 @@ class PrepaymentCompilationRequestResourceIT {
         updatedPrepaymentCompilationRequest
             .timeOfRequest(UPDATED_TIME_OF_REQUEST)
             .compilationStatus(UPDATED_COMPILATION_STATUS)
-            .itemsProcessed(UPDATED_ITEMS_PROCESSED);
+            .itemsProcessed(UPDATED_ITEMS_PROCESSED)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         PrepaymentCompilationRequestDTO prepaymentCompilationRequestDTO = prepaymentCompilationRequestMapper.toDto(
             updatedPrepaymentCompilationRequest
         );
@@ -597,6 +735,7 @@ class PrepaymentCompilationRequestResourceIT {
         assertThat(testPrepaymentCompilationRequest.getTimeOfRequest()).isEqualTo(UPDATED_TIME_OF_REQUEST);
         assertThat(testPrepaymentCompilationRequest.getCompilationStatus()).isEqualTo(UPDATED_COMPILATION_STATUS);
         assertThat(testPrepaymentCompilationRequest.getItemsProcessed()).isEqualTo(UPDATED_ITEMS_PROCESSED);
+        assertThat(testPrepaymentCompilationRequest.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
 
         // Validate the PrepaymentCompilationRequest in Elasticsearch
         verify(mockPrepaymentCompilationRequestSearchRepository).save(testPrepaymentCompilationRequest);
@@ -715,6 +854,7 @@ class PrepaymentCompilationRequestResourceIT {
         assertThat(testPrepaymentCompilationRequest.getTimeOfRequest()).isEqualTo(DEFAULT_TIME_OF_REQUEST);
         assertThat(testPrepaymentCompilationRequest.getCompilationStatus()).isEqualTo(DEFAULT_COMPILATION_STATUS);
         assertThat(testPrepaymentCompilationRequest.getItemsProcessed()).isEqualTo(DEFAULT_ITEMS_PROCESSED);
+        assertThat(testPrepaymentCompilationRequest.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
     }
 
     @Test
@@ -732,7 +872,8 @@ class PrepaymentCompilationRequestResourceIT {
         partialUpdatedPrepaymentCompilationRequest
             .timeOfRequest(UPDATED_TIME_OF_REQUEST)
             .compilationStatus(UPDATED_COMPILATION_STATUS)
-            .itemsProcessed(UPDATED_ITEMS_PROCESSED);
+            .itemsProcessed(UPDATED_ITEMS_PROCESSED)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
 
         restPrepaymentCompilationRequestMockMvc
             .perform(
@@ -751,6 +892,7 @@ class PrepaymentCompilationRequestResourceIT {
         assertThat(testPrepaymentCompilationRequest.getTimeOfRequest()).isEqualTo(UPDATED_TIME_OF_REQUEST);
         assertThat(testPrepaymentCompilationRequest.getCompilationStatus()).isEqualTo(UPDATED_COMPILATION_STATUS);
         assertThat(testPrepaymentCompilationRequest.getItemsProcessed()).isEqualTo(UPDATED_ITEMS_PROCESSED);
+        assertThat(testPrepaymentCompilationRequest.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
 
     @Test
@@ -875,6 +1017,7 @@ class PrepaymentCompilationRequestResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentCompilationRequest.getId().intValue())))
             .andExpect(jsonPath("$.[*].timeOfRequest").value(hasItem(sameInstant(DEFAULT_TIME_OF_REQUEST))))
             .andExpect(jsonPath("$.[*].compilationStatus").value(hasItem(DEFAULT_COMPILATION_STATUS.toString())))
-            .andExpect(jsonPath("$.[*].itemsProcessed").value(hasItem(DEFAULT_ITEMS_PROCESSED)));
+            .andExpect(jsonPath("$.[*].itemsProcessed").value(hasItem(DEFAULT_ITEMS_PROCESSED)))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN.toString())));
     }
 }

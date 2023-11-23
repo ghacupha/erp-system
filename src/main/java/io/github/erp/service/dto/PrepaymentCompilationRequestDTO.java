@@ -21,7 +21,11 @@ package io.github.erp.service.dto;
 import io.github.erp.domain.enumeration.CompilationStatusTypes;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link io.github.erp.domain.PrepaymentCompilationRequest} entity.
@@ -35,6 +39,11 @@ public class PrepaymentCompilationRequestDTO implements Serializable {
     private CompilationStatusTypes compilationStatus;
 
     private Integer itemsProcessed;
+
+    @NotNull
+    private UUID compilationToken;
+
+    private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -68,6 +77,22 @@ public class PrepaymentCompilationRequestDTO implements Serializable {
         this.itemsProcessed = itemsProcessed;
     }
 
+    public UUID getCompilationToken() {
+        return compilationToken;
+    }
+
+    public void setCompilationToken(UUID compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
+    public Set<PlaceholderDTO> getPlaceholders() {
+        return placeholders;
+    }
+
+    public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
+        this.placeholders = placeholders;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -97,6 +122,8 @@ public class PrepaymentCompilationRequestDTO implements Serializable {
             ", timeOfRequest='" + getTimeOfRequest() + "'" +
             ", compilationStatus='" + getCompilationStatus() + "'" +
             ", itemsProcessed=" + getItemsProcessed() +
+            ", compilationToken='" + getCompilationToken() + "'" +
+            ", placeholders=" + getPlaceholders() +
             "}";
     }
 }
