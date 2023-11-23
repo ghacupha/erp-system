@@ -128,6 +128,10 @@ public class PrepaymentMarshallingQueryService extends QueryService<PrepaymentMa
             if (criteria.getProcessed() != null) {
                 specification = specification.and(buildSpecification(criteria.getProcessed(), PrepaymentMarshalling_.processed));
             }
+            if (criteria.getCompilationToken() != null) {
+                specification =
+                    specification.and(buildSpecification(criteria.getCompilationToken(), PrepaymentMarshalling_.compilationToken));
+            }
             if (criteria.getPrepaymentAccountId() != null) {
                 specification =
                     specification.and(

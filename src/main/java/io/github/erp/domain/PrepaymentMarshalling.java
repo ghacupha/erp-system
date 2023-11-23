@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -53,6 +54,9 @@ public class PrepaymentMarshalling implements Serializable {
 
     @Column(name = "processed")
     private Boolean processed;
+
+    @Column(name = "compilation_token", unique = true)
+    private UUID compilationToken;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -147,6 +151,19 @@ public class PrepaymentMarshalling implements Serializable {
         this.processed = processed;
     }
 
+    public UUID getCompilationToken() {
+        return this.compilationToken;
+    }
+
+    public PrepaymentMarshalling compilationToken(UUID compilationToken) {
+        this.setCompilationToken(compilationToken);
+        return this;
+    }
+
+    public void setCompilationToken(UUID compilationToken) {
+        this.compilationToken = compilationToken;
+    }
+
     public PrepaymentAccount getPrepaymentAccount() {
         return this.prepaymentAccount;
     }
@@ -236,6 +253,7 @@ public class PrepaymentMarshalling implements Serializable {
             ", inactive='" + getInactive() + "'" +
             ", amortizationPeriods=" + getAmortizationPeriods() +
             ", processed='" + getProcessed() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             "}";
     }
 }

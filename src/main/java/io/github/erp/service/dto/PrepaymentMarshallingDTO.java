@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import javax.validation.constraints.*;
 
 /**
@@ -37,6 +38,8 @@ public class PrepaymentMarshallingDTO implements Serializable {
     private Integer amortizationPeriods;
 
     private Boolean processed;
+
+    private UUID compilationToken;
 
     private PrepaymentAccountDTO prepaymentAccount;
 
@@ -76,6 +79,14 @@ public class PrepaymentMarshallingDTO implements Serializable {
 
     public void setProcessed(Boolean processed) {
         this.processed = processed;
+    }
+
+    public UUID getCompilationToken() {
+        return compilationToken;
+    }
+
+    public void setCompilationToken(UUID compilationToken) {
+        this.compilationToken = compilationToken;
     }
 
     public PrepaymentAccountDTO getPrepaymentAccount() {
@@ -139,6 +150,7 @@ public class PrepaymentMarshallingDTO implements Serializable {
             ", inactive='" + getInactive() + "'" +
             ", amortizationPeriods=" + getAmortizationPeriods() +
             ", processed='" + getProcessed() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             ", prepaymentAccount=" + getPrepaymentAccount() +
             ", placeholders=" + getPlaceholders() +
             ", firstFiscalMonth=" + getFirstFiscalMonth() +
