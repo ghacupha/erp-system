@@ -27,7 +27,14 @@ import org.mapstruct.*;
  */
 @Mapper(
     componentModel = "spring",
-    uses = { PrepaymentAccountMapper.class, SettlementCurrencyMapper.class, TransactionAccountMapper.class, PlaceholderMapper.class }
+    uses = {
+        PrepaymentAccountMapper.class,
+        SettlementCurrencyMapper.class,
+        TransactionAccountMapper.class,
+        PlaceholderMapper.class,
+        FiscalMonthMapper.class,
+        PrepaymentCompilationRequestMapper.class,
+    }
 )
 public interface PrepaymentAmortizationMapper extends EntityMapper<PrepaymentAmortizationDTO, PrepaymentAmortization> {
     @Mapping(target = "prepaymentAccount", source = "prepaymentAccount", qualifiedByName = "catalogueNumber")
@@ -35,6 +42,8 @@ public interface PrepaymentAmortizationMapper extends EntityMapper<PrepaymentAmo
     @Mapping(target = "debitAccount", source = "debitAccount", qualifiedByName = "accountNumber")
     @Mapping(target = "creditAccount", source = "creditAccount", qualifiedByName = "accountNumber")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
+    @Mapping(target = "fiscalMonth", source = "fiscalMonth", qualifiedByName = "endDate")
+    @Mapping(target = "prepaymentCompilationRequest", source = "prepaymentCompilationRequest", qualifiedByName = "id")
     PrepaymentAmortizationDTO toDto(PrepaymentAmortization s);
 
     @Mapping(target = "removePlaceholder", ignore = true)

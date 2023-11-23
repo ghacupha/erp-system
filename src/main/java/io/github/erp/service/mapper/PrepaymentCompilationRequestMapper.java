@@ -26,4 +26,9 @@ import org.mapstruct.*;
  * Mapper for the entity {@link PrepaymentCompilationRequest} and its DTO {@link PrepaymentCompilationRequestDTO}.
  */
 @Mapper(componentModel = "spring", uses = {})
-public interface PrepaymentCompilationRequestMapper extends EntityMapper<PrepaymentCompilationRequestDTO, PrepaymentCompilationRequest> {}
+public interface PrepaymentCompilationRequestMapper extends EntityMapper<PrepaymentCompilationRequestDTO, PrepaymentCompilationRequest> {
+    @Named("id")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    PrepaymentCompilationRequestDTO toDtoId(PrepaymentCompilationRequest prepaymentCompilationRequest);
+}

@@ -26,9 +26,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.FiscalMonth;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.PrepaymentAccount;
 import io.github.erp.domain.PrepaymentAmortization;
+import io.github.erp.domain.PrepaymentCompilationRequest;
 import io.github.erp.domain.SettlementCurrency;
 import io.github.erp.domain.TransactionAccount;
 import io.github.erp.repository.PrepaymentAmortizationRepository;
@@ -130,6 +132,26 @@ class PrepaymentAmortizationResourceIT {
             .prepaymentPeriod(DEFAULT_PREPAYMENT_PERIOD)
             .prepaymentAmount(DEFAULT_PREPAYMENT_AMOUNT)
             .inactive(DEFAULT_INACTIVE);
+        // Add required entity
+        FiscalMonth fiscalMonth;
+        if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
+            fiscalMonth = FiscalMonthResourceIT.createEntity(em);
+            em.persist(fiscalMonth);
+            em.flush();
+        } else {
+            fiscalMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
+        }
+        prepaymentAmortization.setFiscalMonth(fiscalMonth);
+        // Add required entity
+        PrepaymentCompilationRequest prepaymentCompilationRequest;
+        if (TestUtil.findAll(em, PrepaymentCompilationRequest.class).isEmpty()) {
+            prepaymentCompilationRequest = PrepaymentCompilationRequestResourceIT.createEntity(em);
+            em.persist(prepaymentCompilationRequest);
+            em.flush();
+        } else {
+            prepaymentCompilationRequest = TestUtil.findAll(em, PrepaymentCompilationRequest.class).get(0);
+        }
+        prepaymentAmortization.setPrepaymentCompilationRequest(prepaymentCompilationRequest);
         return prepaymentAmortization;
     }
 
@@ -145,6 +167,26 @@ class PrepaymentAmortizationResourceIT {
             .prepaymentPeriod(UPDATED_PREPAYMENT_PERIOD)
             .prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT)
             .inactive(UPDATED_INACTIVE);
+        // Add required entity
+        FiscalMonth fiscalMonth;
+        if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
+            fiscalMonth = FiscalMonthResourceIT.createUpdatedEntity(em);
+            em.persist(fiscalMonth);
+            em.flush();
+        } else {
+            fiscalMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
+        }
+        prepaymentAmortization.setFiscalMonth(fiscalMonth);
+        // Add required entity
+        PrepaymentCompilationRequest prepaymentCompilationRequest;
+        if (TestUtil.findAll(em, PrepaymentCompilationRequest.class).isEmpty()) {
+            prepaymentCompilationRequest = PrepaymentCompilationRequestResourceIT.createUpdatedEntity(em);
+            em.persist(prepaymentCompilationRequest);
+            em.flush();
+        } else {
+            prepaymentCompilationRequest = TestUtil.findAll(em, PrepaymentCompilationRequest.class).get(0);
+        }
+        prepaymentAmortization.setPrepaymentCompilationRequest(prepaymentCompilationRequest);
         return prepaymentAmortization;
     }
 
@@ -744,6 +786,58 @@ class PrepaymentAmortizationResourceIT {
 
         // Get all the prepaymentAmortizationList where placeholder equals to (placeholderId + 1)
         defaultPrepaymentAmortizationShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAmortizationsByFiscalMonthIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAmortizationRepository.saveAndFlush(prepaymentAmortization);
+        FiscalMonth fiscalMonth;
+        if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
+            fiscalMonth = FiscalMonthResourceIT.createEntity(em);
+            em.persist(fiscalMonth);
+            em.flush();
+        } else {
+            fiscalMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
+        }
+        em.persist(fiscalMonth);
+        em.flush();
+        prepaymentAmortization.setFiscalMonth(fiscalMonth);
+        prepaymentAmortizationRepository.saveAndFlush(prepaymentAmortization);
+        Long fiscalMonthId = fiscalMonth.getId();
+
+        // Get all the prepaymentAmortizationList where fiscalMonth equals to fiscalMonthId
+        defaultPrepaymentAmortizationShouldBeFound("fiscalMonthId.equals=" + fiscalMonthId);
+
+        // Get all the prepaymentAmortizationList where fiscalMonth equals to (fiscalMonthId + 1)
+        defaultPrepaymentAmortizationShouldNotBeFound("fiscalMonthId.equals=" + (fiscalMonthId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAmortizationsByPrepaymentCompilationRequestIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAmortizationRepository.saveAndFlush(prepaymentAmortization);
+        PrepaymentCompilationRequest prepaymentCompilationRequest;
+        if (TestUtil.findAll(em, PrepaymentCompilationRequest.class).isEmpty()) {
+            prepaymentCompilationRequest = PrepaymentCompilationRequestResourceIT.createEntity(em);
+            em.persist(prepaymentCompilationRequest);
+            em.flush();
+        } else {
+            prepaymentCompilationRequest = TestUtil.findAll(em, PrepaymentCompilationRequest.class).get(0);
+        }
+        em.persist(prepaymentCompilationRequest);
+        em.flush();
+        prepaymentAmortization.setPrepaymentCompilationRequest(prepaymentCompilationRequest);
+        prepaymentAmortizationRepository.saveAndFlush(prepaymentAmortization);
+        Long prepaymentCompilationRequestId = prepaymentCompilationRequest.getId();
+
+        // Get all the prepaymentAmortizationList where prepaymentCompilationRequest equals to prepaymentCompilationRequestId
+        defaultPrepaymentAmortizationShouldBeFound("prepaymentCompilationRequestId.equals=" + prepaymentCompilationRequestId);
+
+        // Get all the prepaymentAmortizationList where prepaymentCompilationRequest equals to (prepaymentCompilationRequestId + 1)
+        defaultPrepaymentAmortizationShouldNotBeFound("prepaymentCompilationRequestId.equals=" + (prepaymentCompilationRequestId + 1));
     }
 
     /**

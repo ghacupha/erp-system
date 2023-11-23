@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -96,6 +97,15 @@ public class PrepaymentAmortization implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "fiscalYear", "placeholders", "universallyUniqueMappings", "fiscalQuarter" }, allowSetters = true)
+    private FiscalMonth fiscalMonth;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    private PrepaymentCompilationRequest prepaymentCompilationRequest;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -236,6 +246,32 @@ public class PrepaymentAmortization implements Serializable {
 
     public PrepaymentAmortization removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
+        return this;
+    }
+
+    public FiscalMonth getFiscalMonth() {
+        return this.fiscalMonth;
+    }
+
+    public void setFiscalMonth(FiscalMonth fiscalMonth) {
+        this.fiscalMonth = fiscalMonth;
+    }
+
+    public PrepaymentAmortization fiscalMonth(FiscalMonth fiscalMonth) {
+        this.setFiscalMonth(fiscalMonth);
+        return this;
+    }
+
+    public PrepaymentCompilationRequest getPrepaymentCompilationRequest() {
+        return this.prepaymentCompilationRequest;
+    }
+
+    public void setPrepaymentCompilationRequest(PrepaymentCompilationRequest prepaymentCompilationRequest) {
+        this.prepaymentCompilationRequest = prepaymentCompilationRequest;
+    }
+
+    public PrepaymentAmortization prepaymentCompilationRequest(PrepaymentCompilationRequest prepaymentCompilationRequest) {
+        this.setPrepaymentCompilationRequest(prepaymentCompilationRequest);
         return this;
     }
 

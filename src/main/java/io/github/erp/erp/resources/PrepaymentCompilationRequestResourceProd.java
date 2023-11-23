@@ -18,9 +18,11 @@ package io.github.erp.erp.resources;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.domain.enumeration.CompilationStatusTypes;
+import io.github.erp.internal.service.InternalPrepaymentCompilationRequestService;
+import io.github.erp.internal.service.PrepaymentCompilationService;
 import io.github.erp.repository.PrepaymentCompilationRequestRepository;
 import io.github.erp.service.PrepaymentCompilationRequestQueryService;
-import io.github.erp.service.PrepaymentCompilationRequestService;
 import io.github.erp.service.criteria.PrepaymentCompilationRequestCriteria;
 import io.github.erp.service.dto.PrepaymentCompilationRequestDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
@@ -31,6 +33,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -57,17 +60,21 @@ public class PrepaymentCompilationRequestResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final PrepaymentCompilationRequestService prepaymentCompilationRequestService;
+    private final PrepaymentCompilationService prepaymentCompilationService;
+
+    private final InternalPrepaymentCompilationRequestService prepaymentCompilationRequestService;
 
     private final PrepaymentCompilationRequestRepository prepaymentCompilationRequestRepository;
 
     private final PrepaymentCompilationRequestQueryService prepaymentCompilationRequestQueryService;
 
     public PrepaymentCompilationRequestResourceProd(
-        PrepaymentCompilationRequestService prepaymentCompilationRequestService,
+        PrepaymentCompilationService prepaymentCompilationService,
+        InternalPrepaymentCompilationRequestService prepaymentCompilationRequestService,
         PrepaymentCompilationRequestRepository prepaymentCompilationRequestRepository,
         PrepaymentCompilationRequestQueryService prepaymentCompilationRequestQueryService
     ) {
+        this.prepaymentCompilationService = prepaymentCompilationService;
         this.prepaymentCompilationRequestService = prepaymentCompilationRequestService;
         this.prepaymentCompilationRequestRepository = prepaymentCompilationRequestRepository;
         this.prepaymentCompilationRequestQueryService = prepaymentCompilationRequestQueryService;
@@ -89,10 +96,19 @@ public class PrepaymentCompilationRequestResourceProd {
             throw new BadRequestAlertException("A new prepaymentCompilationRequest cannot already have an ID", ENTITY_NAME, "idexists");
         }
         PrepaymentCompilationRequestDTO result = prepaymentCompilationRequestService.save(prepaymentCompilationRequestDTO);
+
+        compilationSequence(result);
+
+
         return ResponseEntity
             .created(new URI("/api/prepayment-compilation-requests/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    @Async
+    void compilationSequence(PrepaymentCompilationRequestDTO result) {
+        prepaymentCompilationService.compile(result);
     }
 
     /**

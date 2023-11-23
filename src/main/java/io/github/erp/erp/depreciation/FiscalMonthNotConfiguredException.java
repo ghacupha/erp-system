@@ -17,9 +17,21 @@ package io.github.erp.erp.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.domain.PrepaymentMarshalling;
 import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class FiscalMonthNotConfiguredException extends IllegalStateException {
     public FiscalMonthNotConfiguredException(DepreciationBatchMessage message) {
+    }
+
+    public FiscalMonthNotConfiguredException(PrepaymentMarshalling marshalling, LocalDate startDate, LocalDate endDate) {
+
+        super("Fiscal month not configured for start-date: " +
+            startDate.format(DateTimeFormatter.ISO_DATE) + " and end-date: " +
+            endDate.format(DateTimeFormatter.ISO_DATE) +
+            " While marshalling item catalogued # " + marshalling.getPrepaymentAccount().getCatalogueNumber());
     }
 }

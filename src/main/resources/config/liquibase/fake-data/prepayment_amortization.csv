@@ -1,11 +1,11 @@
-id;description;prepayment_period;prepayment_amount;inactive
-1;multi-state Automotive Bedfordshire;2022-05-03;49312;false
-2;generate microchip;2022-05-03;14138;true
-3;cross-platform bluetooth;2022-05-03;6841;false
-4;Pound responsive;2022-05-02;74937;true
-5;Designer Borders;2022-05-02;11644;true
-6;zero;2022-05-02;6652;false
-7;Toys customized COM;2022-05-03;33762;true
-8;eco-centric;2022-05-03;65646;false
-9;Data;2022-05-03;77830;false
-10;payment;2022-05-02;1608;false
+id;description;prepayment_period;prepayment_amount;inactive;fiscal_month_id;prepayment_compilation_request_id
+1;multi-state Automotive Bedfordshire;2022-05-03;49312;false;1;1
+2;generate microchip;2022-05-03;14138;true;2;2
+3;cross-platform bluetooth;2022-05-03;6841;false;3;3
+4;Pound responsive;2022-05-02;74937;true;4;4
+5;Designer Borders;2022-05-02;11644;true;5;5
+6;zero;2022-05-02;6652;false;6;6
+7;Toys customized COM;2022-05-03;33762;true;7;7
+8;eco-centric;2022-05-03;65646;false;8;8
+9;Data;2022-05-03;77830;false;9;9
+10;payment;2022-05-02;1608;false;10;10
