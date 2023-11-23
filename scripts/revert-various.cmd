@@ -16,15 +16,8 @@
 @REM along with this program. If not, see <http://www.gnu.org/licenses/>.
 @REM
 
-@REM ----------------------------------------------------------------------------
-@REM Stashing of failing resource IT tests
-@REM
-@REM This is necessitated by the generation of failing tests in the case of entities
-@REM that have self parent relationships
-@REM ----------------------------------------------------------------------------
-
 @echo off
 git stash -- src/test/java/io/github/erp/web/rest/ContractMetadataResourceIT.java
 git stash -- src/main/java/io/github/erp/erp/resources/PrepaymentCompilationRequestResourceProd.java
 git stash -- src/test/java/io/github/erp/web/rest/SecurityClearanceResourceIT.java
-
+git checkout HEAD~1 src/main/resources/config/liquibase/changelog/

@@ -12,6 +12,11 @@
     {
       "fieldName": "processed",
       "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique"]
     }
   ],
   "relationships": [
