@@ -79,6 +79,7 @@ public class PrepaymentCompilationServiceImpl implements PrepaymentCompilationSe
             .filter(marshal -> !marshal.getInactive())
             .filter(marshal -> !marshal.getProcessed())
             .peek(prepaymentMarshalling -> prepaymentMarshalling.setProcessed(true))
+            .peek(prepaymentMarshalling -> prepaymentMarshalling.setCompilationToken(compilationRequest.getCompilationToken()))
             .flatMap(marshal -> mapIntermediateMarshallingItem(marshal, compilationRequest))
             .map(prepaymentAmortizationService::save)
             .count();

@@ -55,7 +55,7 @@ public class PrepaymentMarshalling implements Serializable {
     @Column(name = "processed")
     private Boolean processed;
 
-    @Column(name = "compilation_token", unique = true)
+    @Column(name = "compilation_token")
     private UUID compilationToken;
 
     @ManyToOne(optional = false)
