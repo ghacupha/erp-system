@@ -15,8 +15,7 @@
     },
     {
       "fieldName": "compilationToken",
-      "fieldType": "UUID",
-      "fieldValidateRules": ["unique"]
+      "fieldType": "UUID"
     }
   ],
   "relationships": [

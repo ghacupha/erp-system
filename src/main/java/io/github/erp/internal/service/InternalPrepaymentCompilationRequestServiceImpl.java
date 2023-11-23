@@ -20,10 +20,10 @@ package io.github.erp.internal.service;
 
 import io.github.erp.domain.PrepaymentCompilationRequest;
 import io.github.erp.internal.repository.InternalPrepaymentAmortizationRepository;
+import io.github.erp.internal.repository.InternalPrepaymentMarshallingRepository;
 import io.github.erp.repository.PrepaymentCompilationRequestRepository;
 import io.github.erp.repository.search.PrepaymentCompilationRequestSearchRepository;
 import io.github.erp.service.PrepaymentAmortizationService;
-import io.github.erp.service.PrepaymentCompilationRequestService;
 import io.github.erp.service.dto.PrepaymentCompilationRequestDTO;
 import io.github.erp.service.mapper.PrepaymentCompilationRequestMapper;
 import org.slf4j.Logger;
@@ -41,13 +41,15 @@ public class InternalPrepaymentCompilationRequestServiceImpl implements Internal
 
     private final Logger log = LoggerFactory.getLogger(InternalPrepaymentCompilationRequestServiceImpl.class);
 
+    private final InternalPrepaymentMarshallingRepository prepaymentMarshallingRepository;
     private final PrepaymentAmortizationService prepaymentAmortizationService;
     private final InternalPrepaymentAmortizationRepository prepaymentAmortizationRepository;
     private final PrepaymentCompilationRequestRepository prepaymentCompilationRequestRepository;
     private final PrepaymentCompilationRequestMapper prepaymentCompilationRequestMapper;
     private final PrepaymentCompilationRequestSearchRepository prepaymentCompilationRequestSearchRepository;
 
-    public InternalPrepaymentCompilationRequestServiceImpl(PrepaymentAmortizationService prepaymentAmortizationService, InternalPrepaymentAmortizationRepository prepaymentAmortizationRepository, PrepaymentCompilationRequestRepository prepaymentCompilationRequestRepository, PrepaymentCompilationRequestMapper prepaymentCompilationRequestMapper, PrepaymentCompilationRequestSearchRepository prepaymentCompilationRequestSearchRepository) {
+    public InternalPrepaymentCompilationRequestServiceImpl(InternalPrepaymentMarshallingRepository prepaymentMarshallingRepository, PrepaymentAmortizationService prepaymentAmortizationService, InternalPrepaymentAmortizationRepository prepaymentAmortizationRepository, PrepaymentCompilationRequestRepository prepaymentCompilationRequestRepository, PrepaymentCompilationRequestMapper prepaymentCompilationRequestMapper, PrepaymentCompilationRequestSearchRepository prepaymentCompilationRequestSearchRepository) {
+        this.prepaymentMarshallingRepository = prepaymentMarshallingRepository;
         this.prepaymentAmortizationService = prepaymentAmortizationService;
         this.prepaymentAmortizationRepository = prepaymentAmortizationRepository;
         this.prepaymentCompilationRequestRepository = prepaymentCompilationRequestRepository;
@@ -109,6 +111,11 @@ public class InternalPrepaymentCompilationRequestServiceImpl implements Internal
             // Delete related amortization items
             prepaymentAmortizationRepository.findAllByPrepaymentCompilationRequest(compilationRequest).forEach(prepaymentAmortization -> {
                 prepaymentAmortizationService.delete(prepaymentAmortization.getId());
+            });
+
+            // Update related marshalling items as not processed
+            prepaymentMarshallingRepository.findPrepaymentMarshallingsByCompilationTokenEquals(compilationRequest.getCompilationToken()).forEach(marshalling -> {
+                marshalling.setProcessed(false);
             });
 
             prepaymentCompilationRequestRepository.deleteById(id);
