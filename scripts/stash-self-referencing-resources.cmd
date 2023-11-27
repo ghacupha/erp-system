@@ -24,7 +24,5 @@
 @REM ----------------------------------------------------------------------------
 
 @echo off
-git stash -- src/test/java/io/github/erp/web/rest/ContractMetadataResourceIT.java
-git stash -- src/main/java/io/github/erp/erp/resources/PrepaymentCompilationRequestResourceProd.java
-git stash -- src/test/java/io/github/erp/web/rest/SecurityClearanceResourceIT.java
+git stash -- src/test/java/io/github/erp/web/rest/ContractMetadataResourceIT.java src/main/java/io/github/erp/erp/resources/PrepaymentCompilationRequestResourceProd.java src/test/java/io/github/erp/web/rest/SecurityClearanceResourceIT.java
 
