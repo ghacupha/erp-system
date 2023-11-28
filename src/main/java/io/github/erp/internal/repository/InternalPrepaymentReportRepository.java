@@ -29,6 +29,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * Spring Data SQL repository for the PrepaymentReport entity.
@@ -77,4 +78,37 @@ public interface InternalPrepaymentReportRepository extends
         "    c.iso_4217_currency_code," +
         "    p.prepayment_amount", nativeQuery = true)
     Page<PrepaymentReportTuple> findAllByReportDate(@Param("reportDate") LocalDate reportDate, Pageable page);
+
+
+    @Query(value = "SELECT" +
+        "    p.id, " +
+        "    p.catalogue_number as CatalogueNumber, " +
+        "    p.particulars, " +
+        "    d.dealer_name as DealerName, " +
+        "    s.payment_number as PaymentNumber, " +
+        "    s.payment_date as PaymentDate, " +
+        "    c.iso_4217_currency_code as CurrencyCode, " +
+        "    COALESCE(p.prepayment_amount, 0) as PrepaymentAmount, " +
+        "    COALESCE(SUM(pa.prepayment_amount), 0) as AmortisedAmount, " +
+        "    COALESCE(p.prepayment_amount, 0) - COALESCE(SUM(pa.prepayment_amount), 0) as OutstandingAmount " +
+        "FROM prepayment_account p " +
+        "LEFT JOIN dealer d ON d.id = p.dealer_id " +
+        "LEFT JOIN settlement_currency c ON c.id = p.settlement_currency_id " +
+        "LEFT JOIN settlement s ON s.id = p.prepayment_transaction_id " +
+        "LEFT JOIN (" +
+        "    SELECT pa.prepayment_account_id," +
+        "           SUM(pa.prepayment_amount) AS AmortisedAmount " +
+        "    FROM prepayment_amortization pa " +
+        "    WHERE pa.fiscal_month_id IN (" +
+        "        SELECT fm.id " +
+        "        FROM fiscal_month fm " +
+        "        WHERE fm.end_date <= :reportDate " +
+        "    )" +
+        "    GROUP BY pa.prepayment_account_id " +
+        ") pa ON p.id = pa.prepayment_account_id " +
+        "WHERE " +
+        "    (s.payment_date <= :reportDate OR s.payment_date IS NULL) " +
+        "    AND (pa.prepayment_account_id IS NOT NULL OR s.payment_date IS NULL) " +
+        "    AND p.id = :id", nativeQuery = true)
+    Optional<PrepaymentReportTuple> findOneByReportDate(@Param("reportDate") LocalDate reportDate, @Param("id") long id);
 }
