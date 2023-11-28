@@ -1,7 +1,7 @@
 package io.github.erp.internal.service;
 
 /*-
- * Erp System - Mark VIII No 1 (Hilkiah Series) Server ver 1.6.0
+ * Erp System - Mark VIII No 2 (Hilkiah Series) Server ver 1.6.1
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.internal.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.domain.FiscalMonth;
 import io.github.erp.domain.PrepaymentMarshalling;
 import io.github.erp.erp.depreciation.FiscalMonthNotConfiguredException;
@@ -103,7 +102,7 @@ public class PrepaymentCompilationServiceImpl implements PrepaymentCompilationSe
         List<PrepaymentAmortizationDTO> amortizationDTOList = new ArrayList<>();
 
 
-        for (int period = 1; period <= marshalItem.getAmortizationPeriods(); period++) {
+        for (int period = 0; period <= marshalItem.getAmortizationPeriods() - 1; period++) {
 
             PrepaymentAmortizationDTO dto = new PrepaymentAmortizationDTO();
             dto.setPrepaymentAmount(prepaymentAnon.account.getPrepaymentAmount().divide(BigDecimal.valueOf(marshalItem.getAmortizationPeriods()), RoundingMode.HALF_EVEN));
@@ -134,14 +133,6 @@ public class PrepaymentCompilationServiceImpl implements PrepaymentCompilationSe
         final FiscalMonthDTO[] fiscalMonthDTO = {null};
 
         fiscalMonthRepository.findFiscalMonthByStartDateAndEndDate(startDate, endDate).ifPresentOrElse(month -> {
-            month.getPlaceholders().forEach(i -> {
-                    log.trace("Placeholder item {}", i.getToken());
-                }
-            );
-            month.getUniversallyUniqueMappings().forEach(i -> {
-                    log.trace("Mapping item key {}", i.getUniversalKey());
-                }
-            );
 
             log.trace("Fiscal month extracted for year: {}, in quarter: {}", month.getFiscalYear().getFiscalYearCode(), month.getFiscalQuarter().getFiscalQuarterCode());
 
