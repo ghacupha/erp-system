@@ -136,6 +136,22 @@ public class PrepaymentReportResourceProd {
      * @param id the id of the prepaymentReportDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the prepaymentReportDTO, or with status {@code 404 (Not Found)}.
      */
+    @GetMapping("/prepayment-reports/reported/{id}")
+    public ResponseEntity<PrepaymentReportDTO> getPrepaymentReportByReportDate(@RequestParam("reportDate") String reportDate, @PathVariable Long id) {
+        log.debug("REST request to get PrepaymentReport : {}, dated: {}", id, reportDate);
+        Optional<PrepaymentReportDTO> prepaymentReportDTO =
+            internalPrepaymentReportRepository.findOneByReportDate(LocalDate.parse(reportDate), id)
+                .map(PrepaymentReportResourceProd::mapPrepaymentReport);
+
+        return ResponseUtil.wrapOrNotFound(prepaymentReportDTO);
+    }
+
+    /**
+     * {@code GET  /prepayment-reports/:id} : get the "id" prepaymentReport.
+     *
+     * @param id the id of the prepaymentReportDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the prepaymentReportDTO, or with status {@code 404 (Not Found)}.
+     */
     @GetMapping("/prepayment-reports/{id}")
     public ResponseEntity<PrepaymentReportDTO> getPrepaymentReport(@PathVariable Long id) {
         log.debug("REST request to get PrepaymentReport : {}", id);
