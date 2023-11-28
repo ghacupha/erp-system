@@ -81,16 +81,16 @@ public interface InternalPrepaymentReportRepository extends
 
 
     @Query(value = "SELECT" +
-        "    p.id, " +
-        "    p.catalogue_number as CatalogueNumber, " +
+        "    p.id," +
+        "    p.catalogue_number AS CatalogueNumber, " +
         "    p.particulars, " +
-        "    d.dealer_name as DealerName, " +
-        "    s.payment_number as PaymentNumber, " +
-        "    s.payment_date as PaymentDate, " +
-        "    c.iso_4217_currency_code as CurrencyCode, " +
-        "    COALESCE(p.prepayment_amount, 0) as PrepaymentAmount, " +
-        "    COALESCE(SUM(pa.prepayment_amount), 0) as AmortisedAmount, " +
-        "    COALESCE(p.prepayment_amount, 0) - COALESCE(SUM(pa.prepayment_amount), 0) as OutstandingAmount " +
+        "    d.dealer_name AS DealerName, " +
+        "    s.payment_number AS PaymentNumber, " +
+        "    s.payment_date AS PaymentDate, " +
+        "    c.iso_4217_currency_code AS CurrencyCode, " +
+        "    COALESCE(p.prepayment_amount, 0) AS PrepaymentAmount, " +
+        "    COALESCE(pa.AmortisedAmount, 0) AS AmortisedAmount, " +
+        "    COALESCE(p.prepayment_amount, 0) - COALESCE(pa.AmortisedAmount, 0) AS OutstandingAmount " +
         "FROM prepayment_account p " +
         "LEFT JOIN dealer d ON d.id = p.dealer_id " +
         "LEFT JOIN settlement_currency c ON c.id = p.settlement_currency_id " +
