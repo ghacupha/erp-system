@@ -17,34 +17,14 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import static io.github.erp.web.rest.TestUtil.sameNumber;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.Placeholder;
-import io.github.erp.domain.PrepaymentAccount;
-import io.github.erp.domain.PrepaymentAmortization;
-import io.github.erp.domain.SettlementCurrency;
-import io.github.erp.domain.TransactionAccount;
+import io.github.erp.domain.*;
 import io.github.erp.repository.PrepaymentAmortizationRepository;
 import io.github.erp.repository.search.PrepaymentAmortizationSearchRepository;
 import io.github.erp.service.PrepaymentAmortizationService;
 import io.github.erp.service.dto.PrepaymentAmortizationDTO;
 import io.github.erp.service.mapper.PrepaymentAmortizationMapper;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
-
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,6 +39,23 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static io.github.erp.web.rest.TestUtil.sameNumber;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link PrepaymentAmortizationResourceProd} REST controller.
@@ -130,6 +127,26 @@ public class PrepaymentAmortizationResourceIT {
             .prepaymentPeriod(DEFAULT_PREPAYMENT_PERIOD)
             .prepaymentAmount(DEFAULT_PREPAYMENT_AMOUNT)
             .inactive(DEFAULT_INACTIVE);
+        // Add required entity
+        FiscalMonth fiscalMonth;
+        if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
+            fiscalMonth = FiscalMonthResourceIT.createEntity(em);
+            em.persist(fiscalMonth);
+            em.flush();
+        } else {
+            fiscalMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
+        }
+        prepaymentAmortization.setFiscalMonth(fiscalMonth);
+        // Add required entity
+        PrepaymentCompilationRequest prepaymentCompilationRequest;
+        if (TestUtil.findAll(em, PrepaymentCompilationRequest.class).isEmpty()) {
+            prepaymentCompilationRequest = PrepaymentCompilationRequestResourceIT.createEntity(em);
+            em.persist(prepaymentCompilationRequest);
+            em.flush();
+        } else {
+            prepaymentCompilationRequest = TestUtil.findAll(em, PrepaymentCompilationRequest.class).get(0);
+        }
+        prepaymentAmortization.setPrepaymentCompilationRequest(prepaymentCompilationRequest);
         return prepaymentAmortization;
     }
 
@@ -145,6 +162,26 @@ public class PrepaymentAmortizationResourceIT {
             .prepaymentPeriod(UPDATED_PREPAYMENT_PERIOD)
             .prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT)
             .inactive(UPDATED_INACTIVE);
+        // Add required entity
+        FiscalMonth fiscalMonth;
+        if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
+            fiscalMonth = FiscalMonthResourceIT.createUpdatedEntity(em);
+            em.persist(fiscalMonth);
+            em.flush();
+        } else {
+            fiscalMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
+        }
+        prepaymentAmortization.setFiscalMonth(fiscalMonth);
+        // Add required entity
+        PrepaymentCompilationRequest prepaymentCompilationRequest;
+        if (TestUtil.findAll(em, PrepaymentCompilationRequest.class).isEmpty()) {
+            prepaymentCompilationRequest = PrepaymentCompilationRequestResourceIT.createUpdatedEntity(em);
+            em.persist(prepaymentCompilationRequest);
+            em.flush();
+        } else {
+            prepaymentCompilationRequest = TestUtil.findAll(em, PrepaymentCompilationRequest.class).get(0);
+        }
+        prepaymentAmortization.setPrepaymentCompilationRequest(prepaymentCompilationRequest);
         return prepaymentAmortization;
     }
 
@@ -744,6 +781,58 @@ public class PrepaymentAmortizationResourceIT {
 
         // Get all the prepaymentAmortizationList where placeholder equals to (placeholderId + 1)
         defaultPrepaymentAmortizationShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAmortizationsByFiscalMonthIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAmortizationRepository.saveAndFlush(prepaymentAmortization);
+        FiscalMonth fiscalMonth;
+        if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
+            fiscalMonth = FiscalMonthResourceIT.createEntity(em);
+            em.persist(fiscalMonth);
+            em.flush();
+        } else {
+            fiscalMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
+        }
+        em.persist(fiscalMonth);
+        em.flush();
+        prepaymentAmortization.setFiscalMonth(fiscalMonth);
+        prepaymentAmortizationRepository.saveAndFlush(prepaymentAmortization);
+        Long fiscalMonthId = fiscalMonth.getId();
+
+        // Get all the prepaymentAmortizationList where fiscalMonth equals to fiscalMonthId
+        defaultPrepaymentAmortizationShouldBeFound("fiscalMonthId.equals=" + fiscalMonthId);
+
+        // Get all the prepaymentAmortizationList where fiscalMonth equals to (fiscalMonthId + 1)
+        defaultPrepaymentAmortizationShouldNotBeFound("fiscalMonthId.equals=" + (fiscalMonthId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAmortizationsByPrepaymentCompilationRequestIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAmortizationRepository.saveAndFlush(prepaymentAmortization);
+        PrepaymentCompilationRequest prepaymentCompilationRequest;
+        if (TestUtil.findAll(em, PrepaymentCompilationRequest.class).isEmpty()) {
+            prepaymentCompilationRequest = PrepaymentCompilationRequestResourceIT.createEntity(em);
+            em.persist(prepaymentCompilationRequest);
+            em.flush();
+        } else {
+            prepaymentCompilationRequest = TestUtil.findAll(em, PrepaymentCompilationRequest.class).get(0);
+        }
+        em.persist(prepaymentCompilationRequest);
+        em.flush();
+        prepaymentAmortization.setPrepaymentCompilationRequest(prepaymentCompilationRequest);
+        prepaymentAmortizationRepository.saveAndFlush(prepaymentAmortization);
+        Long prepaymentCompilationRequestId = prepaymentCompilationRequest.getId();
+
+        // Get all the prepaymentAmortizationList where prepaymentCompilationRequest equals to prepaymentCompilationRequestId
+        defaultPrepaymentAmortizationShouldBeFound("prepaymentCompilationRequestId.equals=" + prepaymentCompilationRequestId);
+
+        // Get all the prepaymentAmortizationList where prepaymentCompilationRequest equals to (prepaymentCompilationRequestId + 1)
+        defaultPrepaymentAmortizationShouldNotBeFound("prepaymentCompilationRequestId.equals=" + (prepaymentCompilationRequestId + 1));
     }
 
     /**

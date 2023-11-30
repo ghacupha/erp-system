@@ -1,0 +1,37 @@
+{
+  "fields": [
+    {
+      "fieldName": "prepaymentAccount",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "prepaymentAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "amortisedAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "outstandingAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "numberOfPrepaymentAccounts",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "numberOfAmortisedItems",
+      "fieldType": "Integer"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": true,
+  "pagination": "infinite-scroll",
+  "name": "PrepaymentAccountReport",
+  "changelogDate": "20231128140040",
+  "incrementalChangelog": false
+}

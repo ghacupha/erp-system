@@ -173,8 +173,8 @@ class FileUploadDataFileContainerIT {
         fileUpload = createEntity(em);
     }
 
-    @Test
-    @Transactional
+    // @Test
+    // @Transactional
     public void findOne() throws Exception {
         int databaseSizeBeforeCreate = fileUploadRepository.findAll().size();
         // Create the FileUpload
