@@ -1,4 +1,4 @@
-package io.github.erp.domain;
+package io.github.erp.repository;
 
 /*-
  * Erp System - Mark VIII No 2 (Hilkiah Series) Server ver 1.6.1
@@ -18,21 +18,13 @@ package io.github.erp.domain;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import java.math.BigDecimal;
+import io.github.erp.domain.PrepaymentOutstandingOverviewReport;
+import org.springframework.data.jpa.repository.*;
+import org.springframework.stereotype.Repository;
 
-public interface PrepaymentAccountReportTuple {
-
-    Long getId();
-
-    String getPrepaymentAccount();
-
-    BigDecimal getPrepaymentAmount();
-
-    BigDecimal getAmortisedAmount();
-
-    BigDecimal getOutstandingAmount();
-
-    Integer getNumberOfPrepaymentAccounts();
-
-    Integer getNumberOfAmortisedItems();
-}
+/**
+ * Spring Data SQL repository for the PrepaymentOutstandingOverviewReport entity.
+ */
+@SuppressWarnings("unused")
+@Repository
+public interface PrepaymentOutstandingOverviewReportRepository extends JpaRepository<PrepaymentOutstandingOverviewReport, Long> {}
