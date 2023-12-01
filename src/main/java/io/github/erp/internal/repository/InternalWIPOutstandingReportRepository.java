@@ -19,7 +19,6 @@ package io.github.erp.internal.repository;
  */
 import io.github.erp.domain.WorkInProgressOutstandingReport;
 import io.github.erp.domain.WorkInProgressOutstandingReportREPO;
-import io.github.erp.erp.resources.WorkInProgressOutstandingReportTuple;
 import io.github.erp.repository.WorkInProgressOutstandingReportRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

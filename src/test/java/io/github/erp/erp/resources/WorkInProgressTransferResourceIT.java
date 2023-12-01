@@ -20,6 +20,7 @@ package io.github.erp.erp.resources;
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
 import io.github.erp.domain.enumeration.WorkInProgressTransferType;
+import io.github.erp.erp.resources.wip.WorkInProgressTransferResourceProd;
 import io.github.erp.repository.WorkInProgressTransferRepository;
 import io.github.erp.repository.search.WorkInProgressTransferSearchRepository;
 import io.github.erp.service.WorkInProgressTransferService;

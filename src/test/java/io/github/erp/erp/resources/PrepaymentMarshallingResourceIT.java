@@ -22,6 +22,7 @@ import io.github.erp.domain.FiscalMonth;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.PrepaymentAccount;
 import io.github.erp.domain.PrepaymentMarshalling;
+import io.github.erp.erp.resources.prepayments.PrepaymentMarshallingResourceProd;
 import io.github.erp.repository.PrepaymentMarshallingRepository;
 import io.github.erp.repository.search.PrepaymentMarshallingSearchRepository;
 import io.github.erp.service.PrepaymentMarshallingService;

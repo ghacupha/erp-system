@@ -19,6 +19,7 @@ package io.github.erp.erp.resources;
  */
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
+import io.github.erp.erp.resources.wip.WorkProjectRegisterResourceProd;
 import io.github.erp.repository.WorkProjectRegisterRepository;
 import io.github.erp.repository.search.WorkProjectRegisterSearchRepository;
 import io.github.erp.service.WorkProjectRegisterService;

@@ -1,4 +1,4 @@
-package io.github.erp.erp.resources;
+package io.github.erp.erp.resources.wip;
 
 /*-
  * Erp System - Mark VIII No 2 (Hilkiah Series) Server ver 1.6.1
@@ -19,22 +19,14 @@ package io.github.erp.erp.resources;
  */
 import io.github.erp.domain.WorkInProgressOverview;
 import io.github.erp.internal.repository.InternalWorkInProgressOverviewRepository;
-import io.github.erp.repository.WorkInProgressOverviewRepository;
-import io.github.erp.repository.search.WorkInProgressOverviewSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 /**

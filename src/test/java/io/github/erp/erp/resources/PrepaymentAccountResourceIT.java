@@ -19,6 +19,7 @@ package io.github.erp.erp.resources;
  */
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
+import io.github.erp.erp.resources.prepayments.PrepaymentAccountResourceProd;
 import io.github.erp.repository.PrepaymentAccountRepository;
 import io.github.erp.repository.search.PrepaymentAccountSearchRepository;
 import io.github.erp.service.PrepaymentAccountService;

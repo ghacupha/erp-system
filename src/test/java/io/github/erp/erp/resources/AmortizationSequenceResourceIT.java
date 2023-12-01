@@ -19,6 +19,7 @@ package io.github.erp.erp.resources;
  */
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
+import io.github.erp.erp.resources.prepayments.AmortizationSequenceResourceProd;
 import io.github.erp.repository.AmortizationSequenceRepository;
 import io.github.erp.repository.search.AmortizationSequenceSearchRepository;
 import io.github.erp.service.AmortizationSequenceService;

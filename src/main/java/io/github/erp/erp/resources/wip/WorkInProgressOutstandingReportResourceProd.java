@@ -1,4 +1,4 @@
-package io.github.erp.erp.resources;
+package io.github.erp.erp.resources.wip;
 
 /*-
  * Erp System - Mark VIII No 2 (Hilkiah Series) Server ver 1.6.1
@@ -29,7 +29,6 @@ import io.github.erp.service.mapper.WorkInProgressOutstandingReportMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -38,11 +37,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing {@link io.github.erp.domain.WorkInProgressOutstandingReport}.
