@@ -20,6 +20,7 @@ package io.github.erp.erp.resources;
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.PrepaymentMapping;
+import io.github.erp.erp.resources.prepayments.PrepaymentMappingResourceProd;
 import io.github.erp.repository.PrepaymentMappingRepository;
 import io.github.erp.repository.search.PrepaymentMappingSearchRepository;
 import io.github.erp.service.PrepaymentMappingService;

@@ -1,4 +1,4 @@
-package io.github.erp.erp.resources;
+package io.github.erp.erp.resources.prepayments;
 
 /*-
  * Erp System - Mark VIII No 2 (Hilkiah Series) Server ver 1.6.1
@@ -20,13 +20,11 @@ package io.github.erp.erp.resources;
 import io.github.erp.internal.service.InternalPrepaymentMappingService;
 import io.github.erp.repository.PrepaymentMappingRepository;
 import io.github.erp.service.PrepaymentMappingQueryService;
-import io.github.erp.service.PrepaymentMappingService;
 import io.github.erp.service.criteria.PrepaymentMappingCriteria;
 import io.github.erp.service.dto.PrepaymentMappingDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

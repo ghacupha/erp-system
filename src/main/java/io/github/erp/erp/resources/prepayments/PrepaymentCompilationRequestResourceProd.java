@@ -1,4 +1,4 @@
-package io.github.erp.erp.resources;
+package io.github.erp.erp.resources.prepayments;
 
 /*-
  * Erp System - Mark VIII No 2 (Hilkiah Series) Server ver 1.6.1
@@ -17,7 +17,6 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.enumeration.CompilationStatusTypes;
 import io.github.erp.internal.service.InternalPrepaymentCompilationRequestService;
 import io.github.erp.internal.service.PrepaymentCompilationService;
 import io.github.erp.repository.PrepaymentCompilationRequestRepository;

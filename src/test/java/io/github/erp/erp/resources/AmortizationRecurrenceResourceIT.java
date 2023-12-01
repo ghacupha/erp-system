@@ -20,6 +20,7 @@ package io.github.erp.erp.resources;
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
 import io.github.erp.domain.enumeration.recurrenceFrequency;
+import io.github.erp.erp.resources.prepayments.AmortizationRecurrenceResourceProd;
 import io.github.erp.repository.AmortizationRecurrenceRepository;
 import io.github.erp.repository.search.AmortizationRecurrenceSearchRepository;
 import io.github.erp.service.AmortizationRecurrenceService;

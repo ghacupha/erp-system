@@ -20,6 +20,7 @@ package io.github.erp.erp.resources;
 
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
+import io.github.erp.erp.resources.prepayments.PrepaymentAmortizationResourceProd;
 import io.github.erp.repository.PrepaymentAmortizationRepository;
 import io.github.erp.repository.search.PrepaymentAmortizationSearchRepository;
 import io.github.erp.service.PrepaymentAmortizationService;

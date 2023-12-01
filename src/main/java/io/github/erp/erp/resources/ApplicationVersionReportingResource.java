@@ -39,17 +39,21 @@ public class ApplicationVersionReportingResource {
 
     private static final Logger log = LoggerFactory.getLogger(ApplicationVersionReportingResource.class);
 
-    @Value("${git.commit.id.abbrev:}")
-    private static String build;
+    private final String build;
+    private final String version;
+    // private final String profile;
+    private final String branch;
 
-    @Value("${git.commit.id.describe:}")
-    private static String version;
-
-    @Value("${spring.profiles.active}")
-    private static String profile;
-
-    @Value("${git.branch:}")
-    private static String branch;
+    public ApplicationVersionReportingResource(
+        @Value("${git.commit.id.abbrev:}") String build,
+        @Value("${git.commit.id.describe:}") String version,
+        // @Value("${spring.profiles.active}") String profile,
+        @Value("${git.branch:}") String branch) {
+        this.build = build;
+        this.version = version;
+        // this.profile = profile;
+        this.branch = branch;
+    }
 
     /**
      * {@code GET  /application-users/:id} : get the "id" applicationUser.
@@ -63,7 +67,7 @@ public class ApplicationVersionReportingResource {
             ApplicationStatus.builder()
                 .build(build)
                 .version(version)
-                .profile(profile)
+                // .profile(profile)
                 .branch(branch)
                 .build());
         return ResponseUtil.wrapOrNotFound(applicationUserDTO);
