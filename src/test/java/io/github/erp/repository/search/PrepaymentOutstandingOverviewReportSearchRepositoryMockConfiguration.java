@@ -1,4 +1,4 @@
-package io.github.erp.domain;
+package io.github.erp.repository.search;
 
 /*-
  * Erp System - Mark VIII No 2 (Hilkiah Series) Server ver 1.6.1
@@ -18,21 +18,16 @@ package io.github.erp.domain;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import java.math.BigDecimal;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Configuration;
 
-public interface PrepaymentAccountReportTuple {
+/**
+ * Configure a Mock version of {@link PrepaymentOutstandingOverviewReportSearchRepository} to test the
+ * application without starting Elasticsearch.
+ */
+@Configuration
+public class PrepaymentOutstandingOverviewReportSearchRepositoryMockConfiguration {
 
-    Long getId();
-
-    String getPrepaymentAccount();
-
-    BigDecimal getPrepaymentAmount();
-
-    BigDecimal getAmortisedAmount();
-
-    BigDecimal getOutstandingAmount();
-
-    Integer getNumberOfPrepaymentAccounts();
-
-    Integer getNumberOfAmortisedItems();
+    @MockBean
+    private PrepaymentOutstandingOverviewReportSearchRepository mockPrepaymentOutstandingOverviewReportSearchRepository;
 }
