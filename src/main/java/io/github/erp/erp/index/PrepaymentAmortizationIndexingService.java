@@ -17,17 +17,18 @@ package io.github.erp.erp.index;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
-import io.github.erp.repository.search.PrepaymentMappingSearchRepository;
-import io.github.erp.service.PrepaymentMappingService;
-import io.github.erp.service.mapper.PrepaymentMappingMapper;
+import io.github.erp.repository.search.PrepaymentAmortizationSearchRepository;
+import io.github.erp.repository.search.PrepaymentMarshallingSearchRepository;
+import io.github.erp.service.PrepaymentAmortizationService;
+import io.github.erp.service.PrepaymentMarshallingService;
+import io.github.erp.service.mapper.PrepaymentAmortizationMapper;
+import io.github.erp.service.mapper.PrepaymentMarshallingMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -38,19 +39,17 @@ import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @Transactional
-public class PrepaymentMappingIndexingService extends AbstractStartupRegisteredIndexService {
+public class PrepaymentAmortizationIndexingService extends AbstractStartupRegisteredIndexService {
 
-    private static final String TAG = "PrepaymentMappingIndex";
+
+    private static final String TAG = "PrepaymentAmortizationIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
 
-    private final PrepaymentMappingMapper mapper;
-    private final PrepaymentMappingService service;
-    private final PrepaymentMappingSearchRepository searchRepository;
+    private final PrepaymentAmortizationMapper mapper;
+    private final PrepaymentAmortizationService service;
+    private final PrepaymentAmortizationSearchRepository searchRepository;
 
-    public PrepaymentMappingIndexingService(
-        PrepaymentMappingMapper mapper,
-        PrepaymentMappingService service,
-        PrepaymentMappingSearchRepository searchRepository) {
+    public PrepaymentAmortizationIndexingService(PrepaymentAmortizationMapper mapper, PrepaymentAmortizationService service, PrepaymentAmortizationSearchRepository searchRepository) {
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;
@@ -104,5 +103,4 @@ public class PrepaymentMappingIndexingService extends AbstractStartupRegisteredI
             log.trace("{} ReIndexer: Concurrent reindexing attempt", TAG);
         }
     }
-
 }
