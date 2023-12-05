@@ -1,6 +1,6 @@
 @REM
-@REM Erp System - Mark VIII No 2 (Hilkiah Series) Server ver 1.6.1
-@REM Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+@REM Erp System - Mark VIII No 3 (Hilkiah Series) Server ver 1.6.2
+@REM Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
 @REM
 @REM This program is free software: you can redistribute it and/or modify
 @REM it under the terms of the GNU General Public License as published by
