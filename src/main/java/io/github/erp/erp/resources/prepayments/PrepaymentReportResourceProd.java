@@ -107,7 +107,7 @@ public class PrepaymentReportResourceProd {
             .map(PrepaymentReportResourceProd::mapPrepaymentReport);
 
         // TODO session cache to avoid re-runs on the same parameters
-        exportCSVReport(LocalDate.parse(reportDate), "test-report");
+        exportCSVReport(LocalDate.parse(reportDate), "prepayments-outstanding-report");
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
@@ -117,7 +117,8 @@ public class PrepaymentReportResourceProd {
     void exportCSVReport(LocalDate reportDate, String reportName) {
 
         try {
-            prepaymentReportExportService.findAllByReportDate(reportDate, reportName);
+            // TODO Persist autonomous report details
+            prepaymentReportExportService.getCSVFilenameByReportDate(reportDate, reportName);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -18,38 +18,67 @@ package io.github.erp.internal.service;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.map.IMap;
 import io.github.erp.domain.PrepaymentReportTuple;
 import io.github.erp.internal.report.ReportsProperties;
 import io.github.erp.internal.repository.InternalPrepaymentReportRepository;
 import io.github.erp.service.dto.PrepaymentReportDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Transactional
 @Service("prepaymentReportExportService")
-public class PrepaymentReportExportServiceImpl extends ReportListCSVExportService<PrepaymentReportDTO> implements DatedReportExportService {
+public class PrepaymentReportExportServiceImpl extends ReportListCSVExportService<PrepaymentReportDTO, String> implements DatedReportExportService {
 
     private final InternalPrepaymentReportRepository prepaymentReportRepository;
 
-    public PrepaymentReportExportServiceImpl(ReportsProperties reportsProperties, InternalPrepaymentReportRepository prepaymentReportRepository) {
+    private final HazelcastInstance hazelcastInstance;
+
+    public PrepaymentReportExportServiceImpl(ReportsProperties reportsProperties,
+                                             InternalPrepaymentReportRepository prepaymentReportRepository,
+                                             HazelcastInstance hazelcastInstance) {
         super(reportsProperties);
         this.prepaymentReportRepository = prepaymentReportRepository;
+        this.hazelcastInstance = hazelcastInstance;
     }
 
     @Override
-    public void findAllByReportDate(LocalDate reportDate, String reportName) throws IOException {
+    public void getCSVFilenameByReportDate(LocalDate reportDate, String reportName) throws IOException {
 
+        String cacheKey = reportDate.format(DateTimeFormatter.ISO_DATE) + "-" + reportName;
+
+        IMap<String, String> reportsCache = hazelcastInstance.getMap("reportsCache");
+
+        String cachedReport = reportsCache.get(cacheKey);
+
+        String fileName = java.util.UUID.randomUUID().toString();
+
+        if (cachedReport == null) {
+            executeReport(reportDate, fileName, reportName);
+            return;
+        }
+
+        if (!cachedReport.equalsIgnoreCase(reportName)) {
+
+            executeReport(reportDate, fileName, reportName);
+        }
+
+    }
+
+    private void executeReport(LocalDate reportDate, String fileName, String reportName) throws IOException {
         Page<PrepaymentReportDTO> result = prepaymentReportRepository.findAllByReportDate(reportDate, PageRequest.of(0, Integer.MAX_VALUE))
             .map(PrepaymentReportExportServiceImpl::mapPrepaymentReport);
 
-        super.exportToCSVFile(reportName, result.getContent());
+        super.exportToCSVFile(fileName, result.getContent());
 
+        cacheReport(reportDate, reportName);
     }
 
     private static PrepaymentReportDTO mapPrepaymentReport(PrepaymentReportTuple prepaymentReportTuple) {
@@ -67,5 +96,9 @@ public class PrepaymentReportExportServiceImpl extends ReportListCSVExportServic
         report.setOutstandingAmount(prepaymentReportTuple.getOutstandingAmount());
 
         return report;
+    }
+
+    public IMap<String, String> getHazelcastInstanceMap() {
+        return hazelcastInstance.getMap("reportsCache");
     }
 }
