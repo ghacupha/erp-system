@@ -18,14 +18,18 @@ package io.github.erp.internal.service;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.map.IMap;
 import io.github.erp.internal.report.ReportsProperties;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class ReportListCSVExportService<T> {
+public abstract class ReportListCSVExportService<T, S> {
 
     private final ReportsProperties reportsProperties;
 
@@ -42,4 +46,12 @@ public class ReportListCSVExportService<T> {
             csvByteArray.writeTo(fileOutputStream);
         }
     }
+
+    public void cacheReport(LocalDate reportDate, S reportMetadata) {
+        IMap<String, S> reportsCache = getHazelcastInstanceMap();
+        String cacheKey = reportDate.format(DateTimeFormatter.ISO_DATE) + "-" + reportMetadata;
+        reportsCache.put(cacheKey, reportMetadata);
+    }
+
+    protected abstract IMap<String,S> getHazelcastInstanceMap();
 }

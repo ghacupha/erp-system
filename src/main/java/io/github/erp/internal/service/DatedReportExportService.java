@@ -23,5 +23,5 @@ import java.time.LocalDate;
 
 public interface DatedReportExportService {
 
-    void findAllByReportDate(LocalDate reportDate, String reportName) throws IOException;
+    void getCSVFilenameByReportDate(LocalDate reportDate, String reportName) throws IOException;
 }
