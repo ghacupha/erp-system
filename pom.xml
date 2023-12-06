@@ -7,7 +7,7 @@
 
     <groupId>io.github.erp</groupId>
     <artifactId>erp-system</artifactId>
-    <version>1.6.2</version>
+    <version>1.6.3</version>
     <packaging>jar</packaging>
     <name>Erp System</name>
     <!--<description>Mark III No 6 (Caleb Series) Server ver 0.3.0-SNAPSHOT</description>-->
@@ -25,8 +25,8 @@
 
     <properties>
         <!-- Build properties -->
-        <ERP_SYSTEM_DEPLOYMENT_SERIES>Hilkiah Series</ERP_SYSTEM_DEPLOYMENT_SERIES>
-        <ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>Mark VIII No 3 </ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>
+        <ERP_SYSTEM_DEPLOYMENT_SERIES>Iddo Series</ERP_SYSTEM_DEPLOYMENT_SERIES>
+        <ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>Mark IX No 1 </ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>
         <ERP_SYSTEM_DEPLOYMENT_VERSION>${project.version}</ERP_SYSTEM_DEPLOYMENT_VERSION>
         <ERP_SYSTEM_DEPLOYMENT_TITLE>${ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER} (${ERP_SYSTEM_DEPLOYMENT_SERIES}) Server ver ${ERP_SYSTEM_DEPLOYMENT_VERSION}</ERP_SYSTEM_DEPLOYMENT_TITLE>
         <maven.version>3.3.9</maven.version>
@@ -107,6 +107,7 @@
         <jetbrains-annotations.version>23.0.0</jetbrains-annotations.version>
         <jasperreports.version>6.19.1</jasperreports.version>
         <spring-kafka.version>2.6.0</spring-kafka.version>
+        <opencsv.version>5.9</opencsv.version>
         <!-- jhipster-needle-maven-property -->
     </properties>
 
@@ -129,6 +130,12 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.opencsv/opencsv -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>${opencsv.version}</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.yaml/snakeyaml -->
         <dependency>
             <groupId>org.yaml</groupId>

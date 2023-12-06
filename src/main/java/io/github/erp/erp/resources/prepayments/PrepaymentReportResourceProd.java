@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources.prepayments;
 
 /*-
- * Erp System - Mark VIII No 3 (Hilkiah Series) Server ver 1.6.2
+ * Erp System - Mark IX No 1 (Iddo Series) Server ver 1.6.3
  * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,6 +19,8 @@ package io.github.erp.erp.resources.prepayments;
  */
 import io.github.erp.domain.PrepaymentReportTuple;
 import io.github.erp.internal.repository.InternalPrepaymentReportRepository;
+import io.github.erp.internal.service.CSVDynamicConverterService;
+import io.github.erp.internal.service.DatedReportExportService;
 import io.github.erp.repository.PrepaymentReportRepository;
 import io.github.erp.service.PrepaymentReportQueryService;
 import io.github.erp.service.PrepaymentReportService;
@@ -26,15 +28,18 @@ import io.github.erp.service.criteria.PrepaymentReportCriteria;
 import io.github.erp.service.dto.PrepaymentReportDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -56,15 +61,19 @@ public class PrepaymentReportResourceProd {
 
     private final InternalPrepaymentReportRepository internalPrepaymentReportRepository;
 
+    private final DatedReportExportService prepaymentReportExportService;
+
     public PrepaymentReportResourceProd(
         PrepaymentReportService prepaymentReportService,
         PrepaymentReportRepository prepaymentReportRepository,
         PrepaymentReportQueryService prepaymentReportQueryService,
-        InternalPrepaymentReportRepository internalPrepaymentReportRepository) {
+        InternalPrepaymentReportRepository internalPrepaymentReportRepository,
+        @Qualifier("prepaymentReportExportService") DatedReportExportService prepaymentReportExportService) {
         this.prepaymentReportService = prepaymentReportService;
         this.prepaymentReportRepository = prepaymentReportRepository;
         this.prepaymentReportQueryService = prepaymentReportQueryService;
         this.internalPrepaymentReportRepository = internalPrepaymentReportRepository;
+        this.prepaymentReportExportService = prepaymentReportExportService;
     }
 
     /**
@@ -97,8 +106,21 @@ public class PrepaymentReportResourceProd {
             internalPrepaymentReportRepository.findAllByReportDate(LocalDate.parse(reportDate), pageable)
             .map(PrepaymentReportResourceProd::mapPrepaymentReport);
 
+        // TODO session cache to avoid re-runs on the same parameters
+        exportCSVReport(LocalDate.parse(reportDate), "test-report");
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @Async
+    void exportCSVReport(LocalDate reportDate, String reportName) {
+
+        try {
+            prepaymentReportExportService.findAllByReportDate(reportDate, reportName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static PrepaymentReportDTO mapPrepaymentReport(PrepaymentReportTuple prepaymentReportTuple) {

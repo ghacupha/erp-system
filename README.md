@@ -216,7 +216,7 @@ In this phase, we have achieved a comprehensive understanding of work-in-progres
 
 The 'Gideon' series sets the stage for enhanced insights into work-in-progress items, drawing inspiration from the biblical leader's courage and tenacity. With Phase 1 now complete, we look forward to future milestones in our ongoing journey.
 
-### Hilkiah: Advancement Odyssey Series (ERP System Mark VIII)
+### Hilkiah Series: Advancement Odyssey Series (ERP System Mark VIII)
 
 "The 'Hilkiah: Advancement Odyssey' series heralds the introduction of the prepayments module within our ERP system. Inspired by Hilkiah's rediscovery of the Book of the Law, this series embodies a journey toward progress and exploration within the realm of financial management.
 
@@ -230,6 +230,17 @@ This module marks a pivotal step in our ERP system's evolution, embracing Hilkia
 
 This summary highlights the key aspects and significance of the "Hilkiah: Advancement Odyssey" series in implementing the prepayments module within the ERP system.
 
+### Iddo Series: Report Realm Architects (ERP System Mark IX) 2023.12.06
+
+The 'Iddo: Report Realm Architects' series introduces a pioneering autonomous reporting module, drawing inspiration from Iddo, the revered biblical priest and seer known for his meticulous chronicling of historical events.
+
+Much like Iddo's careful recording of history, this module operates behind the scenes, akin to a vigilant seer, creating comprehensive reports asynchronously and unobtrusively, mirroring Iddo's detailed and meticulous fashion of documenting chronicles.
+
+In technical terms, this module functions like a silent daemon, generating detailed reports in the background as users request specific reports. It operates autonomously, seamlessly crafting CSV-formatted reports without pagination, ensuring comprehensive data capture without interrupting the user experience.
+
+Similar to Iddo's dedication to meticulous documentation, this module captures and stores detailed parameters, user information, and report specifics in a dedicated registration entity. It anticipates user needs, preemptively generating thorough reports for export upon user request.
+
+This innovative reporting framework embodies Iddo's commitment to meticulous recording, showcasing proactive foresight and detailed documentation. The module's silent operations and comprehensive data handling echo Iddo's legacy of detailed chronicles, establishing an advanced reporting system designed for seamless functionality and thorough data provision
 
 ## Important links
 
