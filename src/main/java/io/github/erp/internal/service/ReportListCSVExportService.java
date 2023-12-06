@@ -18,7 +18,6 @@ package io.github.erp.internal.service;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import io.github.erp.internal.report.ReportsProperties;
 

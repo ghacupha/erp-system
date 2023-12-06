@@ -19,9 +19,7 @@ package io.github.erp.erp.resources.prepayments;
  */
 import io.github.erp.domain.PrepaymentReportTuple;
 import io.github.erp.internal.repository.InternalPrepaymentReportRepository;
-import io.github.erp.internal.service.CSVDynamicConverterService;
 import io.github.erp.internal.service.DatedReportExportService;
-import io.github.erp.repository.PrepaymentReportRepository;
 import io.github.erp.service.PrepaymentReportQueryService;
 import io.github.erp.service.PrepaymentReportService;
 import io.github.erp.service.criteria.PrepaymentReportCriteria;
@@ -55,8 +53,6 @@ public class PrepaymentReportResourceProd {
 
     private final PrepaymentReportService prepaymentReportService;
 
-    private final PrepaymentReportRepository prepaymentReportRepository;
-
     private final PrepaymentReportQueryService prepaymentReportQueryService;
 
     private final InternalPrepaymentReportRepository internalPrepaymentReportRepository;
@@ -65,12 +61,10 @@ public class PrepaymentReportResourceProd {
 
     public PrepaymentReportResourceProd(
         PrepaymentReportService prepaymentReportService,
-        PrepaymentReportRepository prepaymentReportRepository,
         PrepaymentReportQueryService prepaymentReportQueryService,
         InternalPrepaymentReportRepository internalPrepaymentReportRepository,
         @Qualifier("prepaymentReportExportService") DatedReportExportService prepaymentReportExportService) {
         this.prepaymentReportService = prepaymentReportService;
-        this.prepaymentReportRepository = prepaymentReportRepository;
         this.prepaymentReportQueryService = prepaymentReportQueryService;
         this.internalPrepaymentReportRepository = internalPrepaymentReportRepository;
         this.prepaymentReportExportService = prepaymentReportExportService;

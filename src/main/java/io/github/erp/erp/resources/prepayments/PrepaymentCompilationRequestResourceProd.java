@@ -17,6 +17,7 @@ package io.github.erp.erp.resources.prepayments;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import com.hazelcast.map.IMap;
 import io.github.erp.internal.service.InternalPrepaymentCompilationRequestService;
 import io.github.erp.internal.service.PrepaymentCompilationService;
 import io.github.erp.repository.PrepaymentCompilationRequestRepository;
@@ -58,6 +59,8 @@ public class PrepaymentCompilationRequestResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    public final IMap<String, String> prepaymentsReportCache;
+
     private final PrepaymentCompilationService prepaymentCompilationService;
 
     private final InternalPrepaymentCompilationRequestService prepaymentCompilationRequestService;
@@ -67,11 +70,12 @@ public class PrepaymentCompilationRequestResourceProd {
     private final PrepaymentCompilationRequestQueryService prepaymentCompilationRequestQueryService;
 
     public PrepaymentCompilationRequestResourceProd(
-        PrepaymentCompilationService prepaymentCompilationService,
+        IMap<String, String> prepaymentsReportCache, PrepaymentCompilationService prepaymentCompilationService,
         InternalPrepaymentCompilationRequestService prepaymentCompilationRequestService,
         PrepaymentCompilationRequestRepository prepaymentCompilationRequestRepository,
         PrepaymentCompilationRequestQueryService prepaymentCompilationRequestQueryService
     ) {
+        this.prepaymentsReportCache = prepaymentsReportCache;
         this.prepaymentCompilationService = prepaymentCompilationService;
         this.prepaymentCompilationRequestService = prepaymentCompilationRequestService;
         this.prepaymentCompilationRequestRepository = prepaymentCompilationRequestRepository;
@@ -97,6 +101,8 @@ public class PrepaymentCompilationRequestResourceProd {
 
         compilationSequence(result);
 
+        // reset report cache
+        prepaymentsReportCache.clear();
 
         return ResponseEntity
             .created(new URI("/api/prepayment-compilation-requests/" + result.getId()))
@@ -236,6 +242,10 @@ public class PrepaymentCompilationRequestResourceProd {
     public ResponseEntity<Void> deletePrepaymentCompilationRequest(@PathVariable Long id) {
         log.debug("REST request to delete PrepaymentCompilationRequest : {}", id);
         prepaymentCompilationRequestService.delete(id);
+
+        // reset report cache
+        prepaymentsReportCache.clear();
+
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

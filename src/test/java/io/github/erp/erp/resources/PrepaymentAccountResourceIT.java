@@ -19,7 +19,6 @@ package io.github.erp.erp.resources;
  */
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
-import io.github.erp.erp.resources.prepayments.PrepaymentAccountResourceProd;
 import io.github.erp.repository.PrepaymentAccountRepository;
 import io.github.erp.repository.search.PrepaymentAccountSearchRepository;
 import io.github.erp.service.PrepaymentAccountService;
@@ -53,7 +52,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link PrepaymentAccountResourceProd} REST controller.
+ * Integration tests for the PrepaymentAccountResourceProd REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
