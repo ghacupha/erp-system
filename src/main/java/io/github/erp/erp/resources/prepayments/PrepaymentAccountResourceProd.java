@@ -17,6 +17,7 @@ package io.github.erp.erp.resources.prepayments;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import com.hazelcast.map.IMap;
 import io.github.erp.repository.PrepaymentAccountRepository;
 import io.github.erp.service.PrepaymentAccountQueryService;
 import io.github.erp.service.PrepaymentAccountService;
@@ -63,14 +64,17 @@ public class PrepaymentAccountResourceProd {
 
     private final PrepaymentAccountQueryService prepaymentAccountQueryService;
 
+    public final IMap<String, String> prepaymentsReportCache;
+
     public PrepaymentAccountResourceProd(
         PrepaymentAccountService prepaymentAccountService,
         PrepaymentAccountRepository prepaymentAccountRepository,
-        PrepaymentAccountQueryService prepaymentAccountQueryService
-    ) {
+        PrepaymentAccountQueryService prepaymentAccountQueryService,
+        IMap<String, String> prepaymentsReportCache) {
         this.prepaymentAccountService = prepaymentAccountService;
         this.prepaymentAccountRepository = prepaymentAccountRepository;
         this.prepaymentAccountQueryService = prepaymentAccountQueryService;
+        this.prepaymentsReportCache = prepaymentsReportCache;
     }
 
     /**
@@ -88,6 +92,10 @@ public class PrepaymentAccountResourceProd {
             throw new BadRequestAlertException("A new prepaymentAccount cannot already have an ID", ENTITY_NAME, "idexists");
         }
         PrepaymentAccountDTO result = prepaymentAccountService.save(prepaymentAccountDTO);
+
+        // reset report cache
+        prepaymentsReportCache.clear();
+
         return ResponseEntity
             .created(new URI("/api/prepayment-accounts/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -122,6 +130,10 @@ public class PrepaymentAccountResourceProd {
         }
 
         PrepaymentAccountDTO result = prepaymentAccountService.save(prepaymentAccountDTO);
+
+        // reset report cache
+        prepaymentsReportCache.clear();
+
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, prepaymentAccountDTO.getId().toString()))
@@ -157,6 +169,9 @@ public class PrepaymentAccountResourceProd {
         }
 
         Optional<PrepaymentAccountDTO> result = prepaymentAccountService.partialUpdate(prepaymentAccountDTO);
+
+        // reset report cache
+        prepaymentsReportCache.clear();
 
         return ResponseUtil.wrapOrNotFound(
             result,
@@ -214,6 +229,10 @@ public class PrepaymentAccountResourceProd {
     public ResponseEntity<Void> deletePrepaymentAccount(@PathVariable Long id) {
         log.debug("REST request to delete PrepaymentAccount : {}", id);
         prepaymentAccountService.delete(id);
+
+        // reset report cache
+        prepaymentsReportCache.clear();
+
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

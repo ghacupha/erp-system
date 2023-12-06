@@ -17,6 +17,7 @@ package io.github.erp.erp.resources.prepayments;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import com.hazelcast.map.IMap;
 import io.github.erp.repository.PrepaymentAmortizationRepository;
 import io.github.erp.service.PrepaymentAmortizationQueryService;
 import io.github.erp.service.PrepaymentAmortizationService;
@@ -56,6 +57,8 @@ public class PrepaymentAmortizationResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    public final IMap<String, String> prepaymentsReportCache;
+
     private final PrepaymentAmortizationService prepaymentAmortizationService;
 
     private final PrepaymentAmortizationRepository prepaymentAmortizationRepository;
@@ -63,10 +66,11 @@ public class PrepaymentAmortizationResourceProd {
     private final PrepaymentAmortizationQueryService prepaymentAmortizationQueryService;
 
     public PrepaymentAmortizationResourceProd(
-        PrepaymentAmortizationService prepaymentAmortizationService,
+        IMap<String, String> prepaymentsReportCache, PrepaymentAmortizationService prepaymentAmortizationService,
         PrepaymentAmortizationRepository prepaymentAmortizationRepository,
         PrepaymentAmortizationQueryService prepaymentAmortizationQueryService
     ) {
+        this.prepaymentsReportCache = prepaymentsReportCache;
         this.prepaymentAmortizationService = prepaymentAmortizationService;
         this.prepaymentAmortizationRepository = prepaymentAmortizationRepository;
         this.prepaymentAmortizationQueryService = prepaymentAmortizationQueryService;
@@ -88,6 +92,10 @@ public class PrepaymentAmortizationResourceProd {
             throw new BadRequestAlertException("A new prepaymentAmortization cannot already have an ID", ENTITY_NAME, "idexists");
         }
         PrepaymentAmortizationDTO result = prepaymentAmortizationService.save(prepaymentAmortizationDTO);
+
+        // reset report cache
+        prepaymentsReportCache.clear();
+
         return ResponseEntity
             .created(new URI("/api/prepayment-amortizations/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -122,6 +130,10 @@ public class PrepaymentAmortizationResourceProd {
         }
 
         PrepaymentAmortizationDTO result = prepaymentAmortizationService.save(prepaymentAmortizationDTO);
+
+        // reset report cache
+        prepaymentsReportCache.clear();
+
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, prepaymentAmortizationDTO.getId().toString()))
@@ -157,6 +169,9 @@ public class PrepaymentAmortizationResourceProd {
         }
 
         Optional<PrepaymentAmortizationDTO> result = prepaymentAmortizationService.partialUpdate(prepaymentAmortizationDTO);
+
+        // reset report cache
+        prepaymentsReportCache.clear();
 
         return ResponseUtil.wrapOrNotFound(
             result,
@@ -217,6 +232,10 @@ public class PrepaymentAmortizationResourceProd {
     public ResponseEntity<Void> deletePrepaymentAmortization(@PathVariable Long id) {
         log.debug("REST request to delete PrepaymentAmortization : {}", id);
         prepaymentAmortizationService.delete(id);
+
+        // reset report cache
+        prepaymentsReportCache.clear();
+
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

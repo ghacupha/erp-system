@@ -18,7 +18,6 @@ package io.github.erp.internal.service;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import io.github.erp.domain.PrepaymentReportTuple;
 import io.github.erp.internal.report.ReportsProperties;
@@ -39,14 +38,14 @@ public class PrepaymentReportExportServiceImpl extends ReportListCSVExportServic
 
     private final InternalPrepaymentReportRepository prepaymentReportRepository;
 
-    private final HazelcastInstance hazelcastInstance;
+    public final IMap<String, String> prepaymentsReportCache;
 
     public PrepaymentReportExportServiceImpl(ReportsProperties reportsProperties,
                                              InternalPrepaymentReportRepository prepaymentReportRepository,
-                                             HazelcastInstance hazelcastInstance) {
+                                             IMap<String, String> prepaymentsReportCache) {
         super(reportsProperties);
         this.prepaymentReportRepository = prepaymentReportRepository;
-        this.hazelcastInstance = hazelcastInstance;
+        this.prepaymentsReportCache = prepaymentsReportCache;
     }
 
     @Override
@@ -54,9 +53,7 @@ public class PrepaymentReportExportServiceImpl extends ReportListCSVExportServic
 
         String cacheKey = reportDate.format(DateTimeFormatter.ISO_DATE) + "-" + reportName;
 
-        IMap<String, String> reportsCache = hazelcastInstance.getMap("reportsCache");
-
-        String cachedReport = reportsCache.get(cacheKey);
+        String cachedReport = prepaymentsReportCache.get(cacheKey);
 
         String fileName = java.util.UUID.randomUUID().toString();
 
@@ -99,6 +96,6 @@ public class PrepaymentReportExportServiceImpl extends ReportListCSVExportServic
     }
 
     public IMap<String, String> getHazelcastInstanceMap() {
-        return hazelcastInstance.getMap("reportsCache");
+        return prepaymentsReportCache;
     }
 }
