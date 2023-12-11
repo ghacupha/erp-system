@@ -8,7 +8,7 @@
     {
       "fieldName": "applicationIdentity",
       "fieldType": "String",
-      "fieldValidateRules": ["required", "unique"]
+      "fieldValidateRules": ["required"]
     }
   ],
   "relationships": [
