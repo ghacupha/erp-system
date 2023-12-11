@@ -238,6 +238,7 @@
     <include file="config/liquibase/changelog/20231128072021_added_entity_PrepaymentReport.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231128140040_added_entity_PrepaymentAccountReport.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231130132010_added_entity_PrepaymentOutstandingOverviewReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231207063650_added_entity_AutonomousReport.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
@@ -387,6 +388,7 @@
     <include file="config/liquibase/changelog/20231123055611_prepayment_compilation_request_changes.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231123064452_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231123083910_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231207063650_added_entity_constraints_AutonomousReport.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
