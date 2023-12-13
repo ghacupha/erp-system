@@ -1,8 +1,8 @@
 {
   "name": "erp-system",
-  "version": "1.6.2",
+  "version": "1.6.4",
   "private": true,
-  "description": "Back-end for the ERP System: Mark VIII No 3 (Hilkiah Series) Server v1.6.2",
+  "description": "Back-end for the ERP System: Mark IX No 2 (Iddo Series) Server v1.6.4",
   "license": "GPLv3",
   "scripts": {
     "app:start": "./mvnw",
