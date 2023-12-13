@@ -22,10 +22,7 @@ import io.github.erp.internal.repository.InternalReportStatusRepository;
 import io.github.erp.internal.report.assemblies.ReportAssemblyService;
 import io.github.erp.internal.report.attachment.ReportAttachmentService;
 import io.github.erp.service.*;
-import io.github.erp.service.dto.ExcelReportExportDTO;
-import io.github.erp.service.dto.PdfReportRequisitionDTO;
-import io.github.erp.service.dto.ReportRequisitionDTO;
-import io.github.erp.service.dto.XlsxReportRequisitionDTO;
+import io.github.erp.service.dto.*;
 import io.github.erp.service.mapper.ReportStatusMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -76,6 +73,9 @@ public class ReportingAspectConfiguration {
     @Autowired
     private ReportAttachmentService<ExcelReportExportDTO> excelReportExportReportAttachmentService;
 
+    @Autowired
+    private ReportAttachmentService<AutonomousReportDTO> autonomousReportAttachmentService;
+
     @Bean
     public ReportRequisitionInterceptor reportRequisitionInterceptor() {
 
@@ -107,5 +107,10 @@ public class ReportingAspectConfiguration {
     @Bean
     public ExcelReportExportAttachmentInterceptor excelReportExportAttachmentInterceptor() {
         return new ExcelReportExportAttachmentInterceptor(excelReportExportReportAttachmentService);
+    }
+
+    @Bean
+    public AutonomousReportAttachmentInterceptor autonomousReportAttachmentInterceptor() {
+        return new AutonomousReportAttachmentInterceptor(autonomousReportAttachmentService);
     }
 }

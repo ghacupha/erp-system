@@ -25,7 +25,9 @@ public interface AttachedReport<DTO> extends HasChecksum {
 
     AttachedReport<DTO> setReportAttachment(byte[] reportResource);
 
+    // TODO check if this is the physical filename
     String getReportName();
 
+    // TODO check if this is the physical filename
     UUID getReportId();
 }

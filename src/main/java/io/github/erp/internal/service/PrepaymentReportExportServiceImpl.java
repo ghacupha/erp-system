@@ -19,12 +19,14 @@ package io.github.erp.internal.service;
  */
 import com.hazelcast.map.IMap;
 import io.github.erp.domain.PrepaymentReportTuple;
+import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.report.ReportsProperties;
 import io.github.erp.internal.repository.InternalPrepaymentReportRepository;
 import io.github.erp.service.AutonomousReportService;
 import io.github.erp.service.dto.AutonomousReportDTO;
 import io.github.erp.service.dto.PrepaymentReportDTO;
 import io.github.erp.service.mapper.ApplicationUserMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -48,15 +50,22 @@ public class PrepaymentReportExportServiceImpl extends ReportListCSVExportServic
     private final InternalUserDetailService userDetailService;
     private final ApplicationUserMapper applicationUserMapper;
 
+    private final FileStorageService fileStorageService;
+
     public PrepaymentReportExportServiceImpl(ReportsProperties reportsProperties,
                                              InternalPrepaymentReportRepository prepaymentReportRepository,
-                                             IMap<String, String> prepaymentsReportCache, AutonomousReportService autonomousReportService, InternalUserDetailService userDetailService, ApplicationUserMapper applicationUserMapper) {
+                                             IMap<String, String> prepaymentsReportCache,
+                                             AutonomousReportService autonomousReportService,
+                                             InternalUserDetailService userDetailService,
+                                             ApplicationUserMapper applicationUserMapper,
+                                             @Qualifier("reportsFSStorageService") FileStorageService fileStorageService) {
         super(reportsProperties);
         this.prepaymentReportRepository = prepaymentReportRepository;
         this.prepaymentsReportCache = prepaymentsReportCache;
         this.autonomousReportService = autonomousReportService;
         this.userDetailService = userDetailService;
         this.applicationUserMapper = applicationUserMapper;
+        this.fileStorageService = fileStorageService;
     }
 
     @Override
@@ -82,26 +91,29 @@ public class PrepaymentReportExportServiceImpl extends ReportListCSVExportServic
 
     private void executeReport(LocalDate reportDate, String fileName, String reportName) throws IOException {
 
-        if (userDetailService.getCurrentApplicationUser().isPresent()) {
-            AutonomousReportDTO autoReport = new AutonomousReportDTO();
-                autoReport.setReportName(reportName);
-                autoReport.setReportParameters("Report Date: " + reportDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
-                autoReport.setCreatedAt(ZonedDateTime.now());
-                autoReport.setReportFilename(UUID.fromString(fileName));
-                autoReport.setReportFileContentType("text/csv");
-                autoReport.setCreatedBy(
-                    applicationUserMapper.toDto(
-                        userDetailService.getCurrentApplicationUser().get()));
-            // Save report
-            autonomousReportService.save(autoReport);
-        }
-
         Page<PrepaymentReportDTO> result = prepaymentReportRepository.findAllByReportDate(reportDate, PageRequest.of(0, Integer.MAX_VALUE))
             .map(PrepaymentReportExportServiceImpl::mapPrepaymentReport);
 
         super.exportToCSVFile(fileName, result.getContent());
 
         super.cacheReport(reportDate, reportName);
+
+        String fileChecksum = fileStorageService.calculateMD5CheckSum(fileName + ".csv");
+
+        if (userDetailService.getCurrentApplicationUser().isPresent()) {
+            AutonomousReportDTO autoReport = new AutonomousReportDTO();
+            autoReport.setReportName(reportName);
+            autoReport.setReportParameters("Report Date: " + reportDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
+            autoReport.setCreatedAt(ZonedDateTime.now());
+            autoReport.setReportFilename(UUID.fromString(fileName));
+            autoReport.setReportFileContentType("text/csv");
+            autoReport.setCreatedBy(
+                applicationUserMapper.toDto(
+                    userDetailService.getCurrentApplicationUser().get()));
+            // TODO autoReport.setFileChecksum(fileChecksum);
+            // Save report
+            autonomousReportService.save(autoReport);
+        }
     }
 
     private static PrepaymentReportDTO mapPrepaymentReport(PrepaymentReportTuple prepaymentReportTuple) {
