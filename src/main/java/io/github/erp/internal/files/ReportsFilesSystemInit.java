@@ -47,18 +47,23 @@ public class ReportsFilesSystemInit implements ApplicationListener<ApplicationRe
     private final XlsxReportRequisitionService xlsxReportRequisitionService;
     private final ExcelReportExportService excelReportExportService;
     private final ReportStatusService reportStatusService;
+    private final AutonomousReportService autonomousReportService;
 
     public ReportsFilesSystemInit(
         @Qualifier("reportsFSStorageService") FileStorageService storageService,
         PdfReportRequisitionService pdfReportRequisitionService,
         ReportRequisitionService reportRequisitionService,
-        XlsxReportRequisitionService xlsxReportRequisitionService, ExcelReportExportService excelReportExportService, ReportStatusService reportStatusService) {
+        XlsxReportRequisitionService xlsxReportRequisitionService,
+        ExcelReportExportService excelReportExportService,
+        ReportStatusService reportStatusService,
+        AutonomousReportService autonomousReportService) {
         this.storageService = storageService;
         this.pdfReportRequisitionService = pdfReportRequisitionService;
         this.reportRequisitionService = reportRequisitionService;
         this.xlsxReportRequisitionService = xlsxReportRequisitionService;
         this.excelReportExportService = excelReportExportService;
         this.reportStatusService = reportStatusService;
+        this.autonomousReportService = autonomousReportService;
     }
 
     @Override
@@ -81,6 +86,9 @@ public class ReportsFilesSystemInit implements ApplicationListener<ApplicationRe
 
         reportStatusService.findAll(Pageable.unpaged())
             .forEach(report -> reportStatusService.delete(report.getId()));
+
+        autonomousReportService.findAll(Pageable.unpaged())
+            .forEach(report -> autonomousReportService.delete(report.getId()));
 
         log.info("All report metadata has been deleted, removing old files from the reports directory. Standby...");
 
