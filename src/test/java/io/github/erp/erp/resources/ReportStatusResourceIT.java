@@ -21,6 +21,7 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.ProcessStatus;
 import io.github.erp.domain.ReportStatus;
+import io.github.erp.erp.resources.reports.ReportStatusResourceProd;
 import io.github.erp.repository.ReportStatusRepository;
 import io.github.erp.repository.search.ReportStatusSearchRepository;
 import io.github.erp.service.ReportStatusService;

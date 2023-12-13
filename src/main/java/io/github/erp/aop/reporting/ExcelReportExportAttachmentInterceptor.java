@@ -98,7 +98,7 @@ public class ExcelReportExportAttachmentInterceptor {
     /**
      * Pointcut for report-requisition file attachment
      */
-    @Pointcut("execution(* io.github.erp.erp.resources.ExcelReportExportResourceProd.getExcelReportExport(..))")
+    @Pointcut("execution(* io.github.erp.erp.resources.reports.ExcelReportExportResourceProd.getExcelReportExport(..))")
     public void reportResponsePointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }

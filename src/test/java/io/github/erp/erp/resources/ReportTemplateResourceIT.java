@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.ReportTemplate;
+import io.github.erp.erp.resources.reports.ReportTemplateResourceProd;
 import io.github.erp.repository.ReportTemplateRepository;
 import io.github.erp.repository.search.ReportTemplateSearchRepository;
 import io.github.erp.service.ReportTemplateService;

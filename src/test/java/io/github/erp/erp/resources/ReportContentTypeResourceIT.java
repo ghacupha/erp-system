@@ -21,6 +21,7 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.ReportContentType;
 import io.github.erp.domain.SystemContentType;
+import io.github.erp.erp.resources.reports.ReportContentTypeResourceProd;
 import io.github.erp.repository.ReportContentTypeRepository;
 import io.github.erp.repository.search.ReportContentTypeSearchRepository;
 import io.github.erp.service.ReportContentTypeService;

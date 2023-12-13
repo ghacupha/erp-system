@@ -22,6 +22,7 @@ import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.ReportTemplate;
 import io.github.erp.domain.XlsxReportRequisition;
 import io.github.erp.domain.enumeration.ReportStatusTypes;
+import io.github.erp.erp.resources.reports.XlsxReportRequisitionResourceProd;
 import io.github.erp.repository.XlsxReportRequisitionRepository;
 import io.github.erp.repository.search.XlsxReportRequisitionSearchRepository;
 import io.github.erp.service.XlsxReportRequisitionService;

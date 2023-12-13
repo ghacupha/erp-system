@@ -20,6 +20,7 @@ package io.github.erp.erp.resources;
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
 import io.github.erp.domain.enumeration.ReportStatusTypes;
+import io.github.erp.erp.resources.reports.ReportRequisitionResourceProd;
 import io.github.erp.repository.ReportRequisitionRepository;
 import io.github.erp.repository.search.ReportRequisitionSearchRepository;
 import io.github.erp.service.ReportRequisitionService;

@@ -19,6 +19,7 @@ package io.github.erp.erp.resources;
  */
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
+import io.github.erp.erp.resources.reports.ReportDesignResourceProd;
 import io.github.erp.repository.ReportDesignRepository;
 import io.github.erp.repository.search.ReportDesignSearchRepository;
 import io.github.erp.service.ReportDesignService;
