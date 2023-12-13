@@ -18,6 +18,10 @@ package io.github.erp.erp.resources;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.domain.ApplicationUser;
+import io.github.erp.domain.User;
+import io.github.erp.internal.repository.InternalApplicationUserRepository;
+import io.github.erp.internal.service.InternalUserDetailService;
 import io.github.erp.repository.AutonomousReportRepository;
 import io.github.erp.service.AutonomousReportQueryService;
 import io.github.erp.service.AutonomousReportService;
@@ -65,14 +69,20 @@ public class AutonomousReportResourceProd {
 
     private final AutonomousReportQueryService autonomousReportQueryService;
 
+    private final InternalUserDetailService userDetailService;
+
+    private final InternalApplicationUserRepository internalApplicationUserRepository;
+
     public AutonomousReportResourceProd(
         AutonomousReportService autonomousReportService,
         AutonomousReportRepository autonomousReportRepository,
-        AutonomousReportQueryService autonomousReportQueryService
-    ) {
+        AutonomousReportQueryService autonomousReportQueryService,
+        InternalUserDetailService userDetailService, InternalApplicationUserRepository internalApplicationUserRepository) {
         this.autonomousReportService = autonomousReportService;
         this.autonomousReportRepository = autonomousReportRepository;
         this.autonomousReportQueryService = autonomousReportQueryService;
+        this.userDetailService = userDetailService;
+        this.internalApplicationUserRepository = internalApplicationUserRepository;
     }
 
     /**
@@ -89,11 +99,6 @@ public class AutonomousReportResourceProd {
         if (autonomousReportDTO.getId() != null) {
             throw new BadRequestAlertException("A new autonomousReport cannot already have an ID", ENTITY_NAME, "idexists");
         }
-
-        // TODO acquire the corresponding user account
-
-
-
         AutonomousReportDTO result = autonomousReportService.save(autonomousReportDTO);
         return ResponseEntity
             .created(new URI("/api/autonomous-reports/" + result.getId()))
