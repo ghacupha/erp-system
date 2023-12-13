@@ -83,7 +83,7 @@ public class PrepaymentReportExportServiceImpl extends ReportListCSVExportServic
 
     private void executeReport(LocalDate reportDate, String fileName, String reportName) throws IOException {
 
-        if (userDetailService.getCorrespondingApplicationUser().isPresent()) {
+        if (userDetailService.getCurrentApplicationUser().isPresent()) {
             AutonomousReportDTO autoReport = new AutonomousReportDTO();
                 autoReport.setReportName(reportName);
                 autoReport.setReportParameters("Report Date: " + reportDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
@@ -92,7 +92,7 @@ public class PrepaymentReportExportServiceImpl extends ReportListCSVExportServic
                 autoReport.setReportFileContentType("text/csv");
                 autoReport.setCreatedBy(
                     applicationUserMapper.toDto(
-                        userDetailService.getCorrespondingApplicationUser().get()));
+                        userDetailService.getCurrentApplicationUser().get()));
             // Save report
             autonomousReportService.save(autoReport);
         }
