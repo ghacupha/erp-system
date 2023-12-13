@@ -35,7 +35,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.CustomerIDDocumentType;
 import io.github.erp.domain.Placeholder;
-import io.github.erp.erp.resources.CustomerIDDocumentTypeResourceProd;
 import io.github.erp.erp.resources.PlaceholderResourceIT;
 import io.github.erp.repository.CustomerIDDocumentTypeRepository;
 import io.github.erp.repository.search.CustomerIDDocumentTypeSearchRepository;

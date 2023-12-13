@@ -19,12 +19,10 @@ package io.github.erp.erp.resources.gdi;
  */
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.InsiderCategoryTypes;
-import io.github.erp.erp.resources.InsiderCategoryTypesResourceProd;
 import io.github.erp.repository.InsiderCategoryTypesRepository;
 import io.github.erp.repository.search.InsiderCategoryTypesSearchRepository;
 import io.github.erp.service.dto.InsiderCategoryTypesDTO;
 import io.github.erp.service.mapper.InsiderCategoryTypesMapper;
-import io.github.erp.web.rest.InsiderCategoryTypesResource;
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

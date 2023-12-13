@@ -19,12 +19,10 @@ package io.github.erp.erp.resources.gdi;
  */
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.CustomerType;
-import io.github.erp.erp.resources.CustomerTypeResourceProd;
 import io.github.erp.repository.CustomerTypeRepository;
 import io.github.erp.repository.search.CustomerTypeSearchRepository;
 import io.github.erp.service.dto.CustomerTypeDTO;
 import io.github.erp.service.mapper.CustomerTypeMapper;
-import io.github.erp.web.rest.CustomerTypeResource;
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
