@@ -27,7 +27,6 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.SubCountyCode;
 import io.github.erp.erp.resources.PlaceholderResourceIT;
-import io.github.erp.erp.resources.SubCountyCodeResourceProd;
 import io.github.erp.repository.SubCountyCodeRepository;
 import io.github.erp.repository.search.SubCountyCodeSearchRepository;
 import io.github.erp.service.SubCountyCodeService;

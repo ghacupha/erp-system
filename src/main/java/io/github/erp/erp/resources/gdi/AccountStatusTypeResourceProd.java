@@ -1,4 +1,4 @@
-package io.github.erp.erp.resources;
+package io.github.erp.erp.resources.gdi;
 
 /*-
  * Erp System - Mark IX No 2 (Iddo Series) Server ver 1.6.4

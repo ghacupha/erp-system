@@ -25,6 +25,7 @@ import io.github.erp.domain.PdfReportRequisition;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.ReportTemplate;
 import io.github.erp.domain.enumeration.ReportStatusTypes;
+import io.github.erp.erp.resources.reports.PdfReportRequisitionResourceProd;
 import io.github.erp.repository.PdfReportRequisitionRepository;
 import io.github.erp.repository.search.PdfReportRequisitionSearchRepository;
 import io.github.erp.service.PdfReportRequisitionService;

@@ -26,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.MfbBranchCode;
 import io.github.erp.domain.Placeholder;
-import io.github.erp.erp.resources.MfbBranchCodeResourceProd;
 import io.github.erp.erp.resources.PlaceholderResourceIT;
 import io.github.erp.repository.MfbBranchCodeRepository;
 import io.github.erp.repository.search.MfbBranchCodeSearchRepository;
