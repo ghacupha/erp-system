@@ -1,4 +1,4 @@
-package io.github.erp.erp.resources;
+package io.github.erp.erp.resources.reports;
 
 /*-
  * Erp System - Mark IX No 2 (Iddo Series) Server ver 1.6.4
@@ -17,8 +17,6 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.ApplicationUser;
-import io.github.erp.domain.User;
 import io.github.erp.internal.repository.InternalApplicationUserRepository;
 import io.github.erp.internal.service.InternalUserDetailService;
 import io.github.erp.repository.AutonomousReportRepository;

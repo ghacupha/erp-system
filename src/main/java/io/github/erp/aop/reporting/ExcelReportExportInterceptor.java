@@ -61,7 +61,7 @@ public class ExcelReportExportInterceptor {
     }
 
     @AfterReturning(
-        pointcut="execution(* io.github.erp.erp.resources.ExcelReportExportResourceProd.createExcelReportExport(..))",
+        pointcut="execution(* io.github.erp.erp.resources.reports.ExcelReportExportResourceProd.createExcelReportExport(..))",
         returning="response")
     public void getCreatedReportInfo(JoinPoint joinPoint, ResponseEntity<ExcelReportExportDTO> response) {
 

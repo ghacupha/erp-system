@@ -19,6 +19,7 @@ package io.github.erp.erp.resources;
  */
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
+import io.github.erp.erp.resources.reports.ExcelReportExportResourceProd;
 import io.github.erp.repository.ExcelReportExportRepository;
 import io.github.erp.repository.search.ExcelReportExportSearchRepository;
 import io.github.erp.service.ExcelReportExportService;

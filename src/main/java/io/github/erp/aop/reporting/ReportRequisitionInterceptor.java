@@ -53,7 +53,7 @@ public class ReportRequisitionInterceptor {
     }
 
     @AfterReturning(
-        pointcut="execution(* io.github.erp.erp.resources.ReportRequisitionResourceProd.createReportRequisition(..))",
+        pointcut="execution(* io.github.erp.erp.resources.reports.ReportRequisitionResourceProd.createReportRequisition(..))",
         returning="response")
     public void getCreatedReportInfo(JoinPoint joinPoint, ResponseEntity<ReportRequisitionDTO> response) {
 
