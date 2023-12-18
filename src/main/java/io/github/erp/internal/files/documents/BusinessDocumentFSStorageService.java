@@ -100,6 +100,11 @@ public class BusinessDocumentFSStorageService implements FileStorageService {
     }
 
     @Override
+    public String calculateSha512CheckSum(String filename) {
+        return FileUtils.calculateSha512CheckSum(root, filename);
+    }
+
+    @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(root.toFile());
     }
@@ -134,5 +139,10 @@ public class BusinessDocumentFSStorageService implements FileStorageService {
                 return FileUtils.calculateSha512CheckSum(root, fileName);
             }
         }
+    }
+
+    @Override
+    public boolean fileRemainsUnTampered(String fileName, String originalChecksum) {
+        return FileUtils.calculateSha512CheckSum(root, fileName).equalsIgnoreCase(originalChecksum);
     }
 }

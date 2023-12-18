@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -69,22 +70,20 @@ public class PrepaymentReportExportServiceImpl extends ReportListCSVExportServic
     }
 
     @Override
-    public void getCSVFilenameByReportDate(LocalDate reportDate, String reportName) throws IOException {
+    public void exportReportByDate(LocalDate reportDate, String reportName) throws IOException {
 
         String cacheKey = reportDate.format(DateTimeFormatter.ISO_DATE) + "-" + reportName;
 
         String cachedReport = prepaymentsReportCache.get(cacheKey);
 
-        String fileName = java.util.UUID.randomUUID().toString();
-
         if (cachedReport == null) {
-            executeReport(reportDate, fileName, reportName);
+            executeReport(reportDate, java.util.UUID.randomUUID().toString(), reportName);
             return;
         }
 
         if (!cachedReport.equalsIgnoreCase(reportName)) {
 
-            executeReport(reportDate, fileName, reportName);
+            executeReport(reportDate, java.util.UUID.randomUUID().toString(), reportName);
         }
 
     }
@@ -98,7 +97,7 @@ public class PrepaymentReportExportServiceImpl extends ReportListCSVExportServic
 
         super.cacheReport(reportDate, reportName);
 
-        String fileChecksum = fileStorageService.calculateMD5CheckSum(fileName + ".csv");
+        String fileChecksum = fileStorageService.calculateSha512CheckSum(fileName + ".csv");
 
         if (userDetailService.getCurrentApplicationUser().isPresent()) {
             AutonomousReportDTO autoReport = new AutonomousReportDTO();
@@ -110,9 +109,12 @@ public class PrepaymentReportExportServiceImpl extends ReportListCSVExportServic
             autoReport.setCreatedBy(
                 applicationUserMapper.toDto(
                     userDetailService.getCurrentApplicationUser().get()));
-            // TODO autoReport.setFileChecksum(fileChecksum);
+            autoReport.setFileChecksum(fileChecksum);
+            autoReport.setReportTampered(false);
             // Save report
             autonomousReportService.save(autoReport);
+        } else {
+            throw new ApplicationUserNotFoundException("Could not retrieve user from security framework");
         }
     }
 

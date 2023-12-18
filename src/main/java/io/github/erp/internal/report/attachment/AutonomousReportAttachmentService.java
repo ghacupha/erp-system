@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AutonomousReportAttachmentService
-    extends AbstractReportAttachmentService<AutonomousReportDTO>
+    extends AbstractUnTamperedReportAttachmentService<AutonomousReportDTO>
     implements ReportAttachmentService<AutonomousReportDTO> {
 
     private final Mapping<AutonomousReportDTO, AttachedAutonomousReportDTO> mapping;

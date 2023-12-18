@@ -36,31 +36,49 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AttachedAutonomousReportDTO implements AttachedReport<AutonomousReportDTO>, HasChecksum {
-
+public class AttachedAutonomousReportDTO implements AttachedUnTamperedReport<AutonomousReportDTO>, HasChecksum {
 
     @Override
     public void setChecksum(String fileChecksum) {
-        // TODO this.fileCheckSum = fileChecksum;
+        this.fileCheckSum = fileChecksum;
     }
 
     @Override
     public String getFileChecksum() {
-        // todo return this.fileCheckSum;
-        return "";
+        return this.fileCheckSum;
     }
 
     @Override
-    public AttachedReport<AutonomousReportDTO> setReportAttachment(byte[] reportResource) {
+    public AttachedUnTamperedReport<AutonomousReportDTO> setReportAttachment(byte[] reportResource) {
         this.reportFile = reportResource;
         return this;
     }
 
     @Override
+    public void setReportTampered(boolean reportIsTampered) {
+
+        this.reportTampered = reportIsTampered;
+
+    }
+
+    @Override
+    public boolean getReportTampered() {
+        return reportTampered;
+    }
+
+    /**
+     *
+     * @return Report name in the DB
+     */
+    @Override
     public String getReportName() {
         return this.reportName;
     }
 
+    /**
+     *
+     * @return Report file name as UUID
+     */
     @Override
     public UUID getReportId() {
         return this.reportFilename;
@@ -82,10 +100,13 @@ public class AttachedAutonomousReportDTO implements AttachedReport<AutonomousRep
     @Lob
     private byte[] reportFile;
 
-    private String reportFileContentType;
-    private Set<UniversallyUniqueMappingDTO> reportMappings = new HashSet<>();
+    private boolean reportTampered;
 
-    private Set<PlaceholderDTO> placeholders = new HashSet<>();
+    private String reportFileContentType;
+
+    private Set<UniversallyUniqueMappingDTO> reportMappings;
+
+    private Set<PlaceholderDTO> placeholders;
 
     private ApplicationUserDTO createdBy;
 

@@ -68,6 +68,14 @@ public interface FileStorageService {
     String calculateMD5CheckSum(String filename);
 
     /**
+     * Calculates the SHA512 sum of the filename provided from the working folder
+     *
+     * @param filename
+     * @return
+     */
+    String calculateSha512CheckSum(String filename);
+
+    /**
      * Calculates checksum given a fileName
      *
      * @param fileName fileName whose checksum we'll compute
@@ -75,4 +83,14 @@ public interface FileStorageService {
      * @return file checksum
      */
     String calculateCheckSum(String fileName, String algorithmName);
+
+    /**
+     * This methods return true if the file in the file system is not tampered. It checks
+     * the the current SHA512 file checkSum against the calculated one from the file system.
+     *
+     * @param fileName Filename from the file system
+     * @param originalChecksum Original checksum calculated when saving the file
+     * @return TRUE if the file is uncompromised.
+     */
+    boolean fileRemainsUnTampered(String fileName, String originalChecksum);
 }
