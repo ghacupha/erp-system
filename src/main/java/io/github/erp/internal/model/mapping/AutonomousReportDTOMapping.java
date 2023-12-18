@@ -45,7 +45,8 @@ public class AutonomousReportDTOMapping implements Mapping<AutonomousReportDTO, 
         dto.setReportMappings(vs.getReportMappings());
         dto.setPlaceholders(vs.getPlaceholders());
         dto.setCreatedBy(vs.getCreatedBy());
-
+        dto.setFileChecksum(vs.getFileChecksum());
+        dto.setReportTampered(vs.getReportTampered());
 
         return dto;
     }
@@ -56,7 +57,6 @@ public class AutonomousReportDTOMapping implements Mapping<AutonomousReportDTO, 
         if ( vs == null ) {
             return null;
         }
-
 
         return AttachedAutonomousReportDTO.builder()
             .id(vs.getId())
@@ -69,7 +69,8 @@ public class AutonomousReportDTOMapping implements Mapping<AutonomousReportDTO, 
             .reportMappings(vs.getReportMappings())
             .placeholders(vs.getPlaceholders())
             .createdBy(vs.getCreatedBy())
-            // TODO .fileCheckSum(vs.fileChecksum)
+            .fileCheckSum(vs.getFileChecksum())
+            .reportTampered(vs.getReportTampered())
             .build();
     }
 }

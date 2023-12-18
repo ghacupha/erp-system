@@ -107,6 +107,11 @@ public class ReportsFSStorageService implements FileStorageService {
     }
 
     @Override
+    public String calculateSha512CheckSum(String filename) {
+        return FileUtils.calculateSha512CheckSum(root, filename);
+    }
+
+    @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(root.toFile());
     }
@@ -130,5 +135,13 @@ public class ReportsFSStorageService implements FileStorageService {
     @Override
     public String calculateCheckSum(String fileName, String algorithmName) {
         return this.calculateMD5CheckSum(fileName);
+    }
+
+    @Override
+    public boolean fileRemainsUnTampered(String fileName, String originalChecksum) {
+
+        String currentChecksum = FileUtils.calculateSha512CheckSum(root, fileName);
+
+        return currentChecksum.equalsIgnoreCase(originalChecksum);
     }
 }

@@ -49,6 +49,8 @@ import java.util.Optional;
 @RequestMapping("/api/prepayments")
 public class PrepaymentReportResourceProd {
 
+    private final static String REPORT_NAME = "prepayments-outstanding-report";
+
     private final Logger log = LoggerFactory.getLogger(PrepaymentReportResourceProd.class);
 
     private final PrepaymentReportService prepaymentReportService;
@@ -100,19 +102,18 @@ public class PrepaymentReportResourceProd {
             internalPrepaymentReportRepository.findAllByReportDate(LocalDate.parse(reportDate), pageable)
             .map(PrepaymentReportResourceProd::mapPrepaymentReport);
 
-        // TODO session cache to avoid re-runs on the same parameters
-        exportCSVReport(LocalDate.parse(reportDate), "prepayments-outstanding-report");
+        exportCSVReport(LocalDate.parse(reportDate));
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     @Async
-    void exportCSVReport(LocalDate reportDate, String reportName) {
+    void exportCSVReport(LocalDate reportDate) {
 
         try {
             // TODO Persist autonomous report details
-            prepaymentReportExportService.getCSVFilenameByReportDate(reportDate, reportName);
+            prepaymentReportExportService.exportReportByDate(reportDate, REPORT_NAME);
         } catch (IOException e) {
             e.printStackTrace();
         }
