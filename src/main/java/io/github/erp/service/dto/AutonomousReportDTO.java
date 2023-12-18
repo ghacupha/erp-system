@@ -17,6 +17,7 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
@@ -48,6 +49,12 @@ public class AutonomousReportDTO implements Serializable {
     private byte[] reportFile;
 
     private String reportFileContentType;
+
+    @NotNull
+    private String fileChecksum;
+
+    private Boolean reportTampered;
+
     private Set<UniversallyUniqueMappingDTO> reportMappings = new HashSet<>();
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
@@ -110,6 +117,22 @@ public class AutonomousReportDTO implements Serializable {
         this.reportFileContentType = reportFileContentType;
     }
 
+    public String getFileChecksum() {
+        return fileChecksum;
+    }
+
+    public void setFileChecksum(String fileChecksum) {
+        this.fileChecksum = fileChecksum;
+    }
+
+    public Boolean getReportTampered() {
+        return reportTampered;
+    }
+
+    public void setReportTampered(Boolean reportTampered) {
+        this.reportTampered = reportTampered;
+    }
+
     public Set<UniversallyUniqueMappingDTO> getReportMappings() {
         return reportMappings;
     }
@@ -165,6 +188,8 @@ public class AutonomousReportDTO implements Serializable {
             ", createdAt='" + getCreatedAt() + "'" +
             ", reportFilename='" + getReportFilename() + "'" +
             ", reportFile='" + getReportFile() + "'" +
+            ", fileChecksum='" + getFileChecksum() + "'" +
+            ", reportTampered='" + getReportTampered() + "'" +
             ", reportMappings=" + getReportMappings() +
             ", placeholders=" + getPlaceholders() +
             ", createdBy=" + getCreatedBy() +

@@ -1,11 +1,11 @@
-id;report_name;report_parameters;created_at;report_filename;report_file;report_file_content_type
-1;Avon;conglomeration task-force;2023-12-06T14:08:03;0b933b7e-3300-4294-976c-917789767208;../fake-data/blob/hipster.png;image/png
-2;Salad;groupware;2023-12-06T18:59:56;d7ef4823-535c-4bd9-b5a2-e1f6a3ef13a2;../fake-data/blob/hipster.png;image/png
-3;feed Rustic sticky;connect Metal mindshare;2023-12-06T21:39:35;349c9aa5-234b-40dd-bc2f-aa47d3efcfb7;../fake-data/blob/hipster.png;image/png
-4;invoice;Israel cross-platform;2023-12-06T09:03:55;f324db99-e2d6-4e02-87a5-ce374e847c04;../fake-data/blob/hipster.png;image/png
-5;Sports;Account;2023-12-06T23:28:30;72c4d214-050f-43cc-852b-7c65b3b365ce;../fake-data/blob/hipster.png;image/png
-6;implementation Salad;RSS;2023-12-07T05:41:32;76b53609-c0a4-406b-a4f7-a3e2c74e53b1;../fake-data/blob/hipster.png;image/png
-7;invoice Electronics Director;systems Kentucky;2023-12-06T16:45:14;5cd18f0f-7f60-4793-a9d5-c602d375ae33;../fake-data/blob/hipster.png;image/png
-8;capacitor grey Licensed;Steel;2023-12-06T19:26:24;4862727c-4862-4c8f-9ea5-e68554f2e699;../fake-data/blob/hipster.png;image/png
-9;encryption Multi-layered;JSON;2023-12-07T05:37:46;bbf1fc03-f987-4bb1-9d5d-a8438b5fd78c;../fake-data/blob/hipster.png;image/png
-10;orange New AI;Concrete Metrics;2023-12-06T21:13:19;d73a67e3-0fcd-491e-9874-e8fc6b29e91c;../fake-data/blob/hipster.png;image/png
+id;report_name;report_parameters;created_at;report_filename;report_file;report_file_content_type;file_checksum;report_tampered
+1;Avon;conglomeration task-force;2023-12-06T14:08:03;0b933b7e-3300-4294-976c-917789767208;../fake-data/blob/hipster.png;image/png;Salad;false
+2;synthesize;Unions impactful orange;2023-12-06T23:05:40;cbd9f5a2-e1f6-4a3e-b13a-2fba512a536f;../fake-data/blob/hipster.png;image/png;Locks withdrawal circuit;false
+3;Loan;New black;2023-12-07T05:33:02;dd7c2faa-47d3-4efc-bb71-ac358675aaef;../fake-data/blob/hipster.png;image/png;Plastic;true
+4;Personal redundant;Plastic;2023-12-06T14:57:19;5ce374e8-47c0-4450-9a09-7a472c4d2140;../fake-data/blob/hipster.png;image/png;Bacon;false
+5;Fish;seize magenta facilitate;2023-12-06T08:13:24;647f2ee3-e740-476b-9360-9c0a406ba4f7;../fake-data/blob/hipster.png;image/png;cyan connect Product;true
+6;Branding;Electronics Director;2023-12-06T19:52:53;69195995-cd18-4f0f-bf60-793a9d5c602d;../fake-data/blob/hipster.png;image/png;Hills;true
+7;ivory;Savings yellow Paradigm;2023-12-07T05:23:40;f7486272-7c48-462c-8f1e-a5e68554f2e6;../fake-data/blob/hipster.png;image/png;Home interface;false
+8;solution;Handmade;2023-12-06T08:03:49;c03f987b-b11d-45da-8438-b5fd78cc3558;../fake-data/blob/hipster.png;image/png;Cambridgeshire payment Enterprise-wide;true
+9;generate orchid;SSL Consultant;2023-12-06T16:37:49;1e5874e8-fc6b-429e-91c0-8b53ac3a5264;../fake-data/blob/hipster.png;image/png;Frozen Cotton Burg;false
+10;value-added Fresh;incubate incentivize;2023-12-06T09:55:41;913d473a-ca14-4643-8631-b8a50eb4ae73;../fake-data/blob/hipster.png;image/png;copy;true
