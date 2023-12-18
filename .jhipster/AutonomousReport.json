@@ -23,6 +23,15 @@
       "fieldName": "reportFile",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "fileChecksum",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "reportTampered",
+      "fieldType": "Boolean"
     }
   ],
   "relationships": [

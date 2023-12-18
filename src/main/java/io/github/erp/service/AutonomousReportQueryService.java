@@ -17,6 +17,7 @@ package io.github.erp.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.*; // for static metamodels
 import io.github.erp.domain.AutonomousReport;
 import io.github.erp.repository.AutonomousReportRepository;
@@ -127,6 +128,12 @@ public class AutonomousReportQueryService extends QueryService<AutonomousReport>
             }
             if (criteria.getReportFilename() != null) {
                 specification = specification.and(buildSpecification(criteria.getReportFilename(), AutonomousReport_.reportFilename));
+            }
+            if (criteria.getFileChecksum() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getFileChecksum(), AutonomousReport_.fileChecksum));
+            }
+            if (criteria.getReportTampered() != null) {
+                specification = specification.and(buildSpecification(criteria.getReportTampered(), AutonomousReport_.reportTampered));
             }
             if (criteria.getReportMappingId() != null) {
                 specification =

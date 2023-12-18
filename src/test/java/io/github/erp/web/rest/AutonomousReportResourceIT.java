@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static io.github.erp.web.rest.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -88,6 +89,12 @@ class AutonomousReportResourceIT {
     private static final String DEFAULT_REPORT_FILE_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_REPORT_FILE_CONTENT_TYPE = "image/png";
 
+    private static final String DEFAULT_FILE_CHECKSUM = "AAAAAAAAAA";
+    private static final String UPDATED_FILE_CHECKSUM = "BBBBBBBBBB";
+
+    private static final Boolean DEFAULT_REPORT_TAMPERED = false;
+    private static final Boolean UPDATED_REPORT_TAMPERED = true;
+
     private static final String ENTITY_API_URL = "/api/autonomous-reports";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/autonomous-reports";
@@ -136,7 +143,9 @@ class AutonomousReportResourceIT {
             .createdAt(DEFAULT_CREATED_AT)
             .reportFilename(DEFAULT_REPORT_FILENAME)
             .reportFile(DEFAULT_REPORT_FILE)
-            .reportFileContentType(DEFAULT_REPORT_FILE_CONTENT_TYPE);
+            .reportFileContentType(DEFAULT_REPORT_FILE_CONTENT_TYPE)
+            .fileChecksum(DEFAULT_FILE_CHECKSUM)
+            .reportTampered(DEFAULT_REPORT_TAMPERED);
         return autonomousReport;
     }
 
@@ -153,7 +162,9 @@ class AutonomousReportResourceIT {
             .createdAt(UPDATED_CREATED_AT)
             .reportFilename(UPDATED_REPORT_FILENAME)
             .reportFile(UPDATED_REPORT_FILE)
-            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE);
+            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE)
+            .fileChecksum(UPDATED_FILE_CHECKSUM)
+            .reportTampered(UPDATED_REPORT_TAMPERED);
         return autonomousReport;
     }
 
@@ -184,6 +195,8 @@ class AutonomousReportResourceIT {
         assertThat(testAutonomousReport.getReportFilename()).isEqualTo(DEFAULT_REPORT_FILENAME);
         assertThat(testAutonomousReport.getReportFile()).isEqualTo(DEFAULT_REPORT_FILE);
         assertThat(testAutonomousReport.getReportFileContentType()).isEqualTo(DEFAULT_REPORT_FILE_CONTENT_TYPE);
+        assertThat(testAutonomousReport.getFileChecksum()).isEqualTo(DEFAULT_FILE_CHECKSUM);
+        assertThat(testAutonomousReport.getReportTampered()).isEqualTo(DEFAULT_REPORT_TAMPERED);
 
         // Validate the AutonomousReport in Elasticsearch
         verify(mockAutonomousReportSearchRepository, times(1)).save(testAutonomousReport);
@@ -275,6 +288,26 @@ class AutonomousReportResourceIT {
 
     @Test
     @Transactional
+    void checkFileChecksumIsRequired() throws Exception {
+        int databaseSizeBeforeTest = autonomousReportRepository.findAll().size();
+        // set the field null
+        autonomousReport.setFileChecksum(null);
+
+        // Create the AutonomousReport, which fails.
+        AutonomousReportDTO autonomousReportDTO = autonomousReportMapper.toDto(autonomousReport);
+
+        restAutonomousReportMockMvc
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(autonomousReportDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<AutonomousReport> autonomousReportList = autonomousReportRepository.findAll();
+        assertThat(autonomousReportList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllAutonomousReports() throws Exception {
         // Initialize the database
         autonomousReportRepository.saveAndFlush(autonomousReport);
@@ -290,7 +323,9 @@ class AutonomousReportResourceIT {
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(sameInstant(DEFAULT_CREATED_AT))))
             .andExpect(jsonPath("$.[*].reportFilename").value(hasItem(DEFAULT_REPORT_FILENAME.toString())))
             .andExpect(jsonPath("$.[*].reportFileContentType").value(hasItem(DEFAULT_REPORT_FILE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))));
+            .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))))
+            .andExpect(jsonPath("$.[*].fileChecksum").value(hasItem(DEFAULT_FILE_CHECKSUM)))
+            .andExpect(jsonPath("$.[*].reportTampered").value(hasItem(DEFAULT_REPORT_TAMPERED.booleanValue())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -328,7 +363,9 @@ class AutonomousReportResourceIT {
             .andExpect(jsonPath("$.createdAt").value(sameInstant(DEFAULT_CREATED_AT)))
             .andExpect(jsonPath("$.reportFilename").value(DEFAULT_REPORT_FILENAME.toString()))
             .andExpect(jsonPath("$.reportFileContentType").value(DEFAULT_REPORT_FILE_CONTENT_TYPE))
-            .andExpect(jsonPath("$.reportFile").value(Base64Utils.encodeToString(DEFAULT_REPORT_FILE)));
+            .andExpect(jsonPath("$.reportFile").value(Base64Utils.encodeToString(DEFAULT_REPORT_FILE)))
+            .andExpect(jsonPath("$.fileChecksum").value(DEFAULT_FILE_CHECKSUM))
+            .andExpect(jsonPath("$.reportTampered").value(DEFAULT_REPORT_TAMPERED.booleanValue()));
     }
 
     @Test
@@ -663,6 +700,136 @@ class AutonomousReportResourceIT {
 
     @Test
     @Transactional
+    void getAllAutonomousReportsByFileChecksumIsEqualToSomething() throws Exception {
+        // Initialize the database
+        autonomousReportRepository.saveAndFlush(autonomousReport);
+
+        // Get all the autonomousReportList where fileChecksum equals to DEFAULT_FILE_CHECKSUM
+        defaultAutonomousReportShouldBeFound("fileChecksum.equals=" + DEFAULT_FILE_CHECKSUM);
+
+        // Get all the autonomousReportList where fileChecksum equals to UPDATED_FILE_CHECKSUM
+        defaultAutonomousReportShouldNotBeFound("fileChecksum.equals=" + UPDATED_FILE_CHECKSUM);
+    }
+
+    @Test
+    @Transactional
+    void getAllAutonomousReportsByFileChecksumIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        autonomousReportRepository.saveAndFlush(autonomousReport);
+
+        // Get all the autonomousReportList where fileChecksum not equals to DEFAULT_FILE_CHECKSUM
+        defaultAutonomousReportShouldNotBeFound("fileChecksum.notEquals=" + DEFAULT_FILE_CHECKSUM);
+
+        // Get all the autonomousReportList where fileChecksum not equals to UPDATED_FILE_CHECKSUM
+        defaultAutonomousReportShouldBeFound("fileChecksum.notEquals=" + UPDATED_FILE_CHECKSUM);
+    }
+
+    @Test
+    @Transactional
+    void getAllAutonomousReportsByFileChecksumIsInShouldWork() throws Exception {
+        // Initialize the database
+        autonomousReportRepository.saveAndFlush(autonomousReport);
+
+        // Get all the autonomousReportList where fileChecksum in DEFAULT_FILE_CHECKSUM or UPDATED_FILE_CHECKSUM
+        defaultAutonomousReportShouldBeFound("fileChecksum.in=" + DEFAULT_FILE_CHECKSUM + "," + UPDATED_FILE_CHECKSUM);
+
+        // Get all the autonomousReportList where fileChecksum equals to UPDATED_FILE_CHECKSUM
+        defaultAutonomousReportShouldNotBeFound("fileChecksum.in=" + UPDATED_FILE_CHECKSUM);
+    }
+
+    @Test
+    @Transactional
+    void getAllAutonomousReportsByFileChecksumIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        autonomousReportRepository.saveAndFlush(autonomousReport);
+
+        // Get all the autonomousReportList where fileChecksum is not null
+        defaultAutonomousReportShouldBeFound("fileChecksum.specified=true");
+
+        // Get all the autonomousReportList where fileChecksum is null
+        defaultAutonomousReportShouldNotBeFound("fileChecksum.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllAutonomousReportsByFileChecksumContainsSomething() throws Exception {
+        // Initialize the database
+        autonomousReportRepository.saveAndFlush(autonomousReport);
+
+        // Get all the autonomousReportList where fileChecksum contains DEFAULT_FILE_CHECKSUM
+        defaultAutonomousReportShouldBeFound("fileChecksum.contains=" + DEFAULT_FILE_CHECKSUM);
+
+        // Get all the autonomousReportList where fileChecksum contains UPDATED_FILE_CHECKSUM
+        defaultAutonomousReportShouldNotBeFound("fileChecksum.contains=" + UPDATED_FILE_CHECKSUM);
+    }
+
+    @Test
+    @Transactional
+    void getAllAutonomousReportsByFileChecksumNotContainsSomething() throws Exception {
+        // Initialize the database
+        autonomousReportRepository.saveAndFlush(autonomousReport);
+
+        // Get all the autonomousReportList where fileChecksum does not contain DEFAULT_FILE_CHECKSUM
+        defaultAutonomousReportShouldNotBeFound("fileChecksum.doesNotContain=" + DEFAULT_FILE_CHECKSUM);
+
+        // Get all the autonomousReportList where fileChecksum does not contain UPDATED_FILE_CHECKSUM
+        defaultAutonomousReportShouldBeFound("fileChecksum.doesNotContain=" + UPDATED_FILE_CHECKSUM);
+    }
+
+    @Test
+    @Transactional
+    void getAllAutonomousReportsByReportTamperedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        autonomousReportRepository.saveAndFlush(autonomousReport);
+
+        // Get all the autonomousReportList where reportTampered equals to DEFAULT_REPORT_TAMPERED
+        defaultAutonomousReportShouldBeFound("reportTampered.equals=" + DEFAULT_REPORT_TAMPERED);
+
+        // Get all the autonomousReportList where reportTampered equals to UPDATED_REPORT_TAMPERED
+        defaultAutonomousReportShouldNotBeFound("reportTampered.equals=" + UPDATED_REPORT_TAMPERED);
+    }
+
+    @Test
+    @Transactional
+    void getAllAutonomousReportsByReportTamperedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        autonomousReportRepository.saveAndFlush(autonomousReport);
+
+        // Get all the autonomousReportList where reportTampered not equals to DEFAULT_REPORT_TAMPERED
+        defaultAutonomousReportShouldNotBeFound("reportTampered.notEquals=" + DEFAULT_REPORT_TAMPERED);
+
+        // Get all the autonomousReportList where reportTampered not equals to UPDATED_REPORT_TAMPERED
+        defaultAutonomousReportShouldBeFound("reportTampered.notEquals=" + UPDATED_REPORT_TAMPERED);
+    }
+
+    @Test
+    @Transactional
+    void getAllAutonomousReportsByReportTamperedIsInShouldWork() throws Exception {
+        // Initialize the database
+        autonomousReportRepository.saveAndFlush(autonomousReport);
+
+        // Get all the autonomousReportList where reportTampered in DEFAULT_REPORT_TAMPERED or UPDATED_REPORT_TAMPERED
+        defaultAutonomousReportShouldBeFound("reportTampered.in=" + DEFAULT_REPORT_TAMPERED + "," + UPDATED_REPORT_TAMPERED);
+
+        // Get all the autonomousReportList where reportTampered equals to UPDATED_REPORT_TAMPERED
+        defaultAutonomousReportShouldNotBeFound("reportTampered.in=" + UPDATED_REPORT_TAMPERED);
+    }
+
+    @Test
+    @Transactional
+    void getAllAutonomousReportsByReportTamperedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        autonomousReportRepository.saveAndFlush(autonomousReport);
+
+        // Get all the autonomousReportList where reportTampered is not null
+        defaultAutonomousReportShouldBeFound("reportTampered.specified=true");
+
+        // Get all the autonomousReportList where reportTampered is null
+        defaultAutonomousReportShouldNotBeFound("reportTampered.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllAutonomousReportsByReportMappingIsEqualToSomething() throws Exception {
         // Initialize the database
         autonomousReportRepository.saveAndFlush(autonomousReport);
@@ -753,7 +920,9 @@ class AutonomousReportResourceIT {
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(sameInstant(DEFAULT_CREATED_AT))))
             .andExpect(jsonPath("$.[*].reportFilename").value(hasItem(DEFAULT_REPORT_FILENAME.toString())))
             .andExpect(jsonPath("$.[*].reportFileContentType").value(hasItem(DEFAULT_REPORT_FILE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))));
+            .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))))
+            .andExpect(jsonPath("$.[*].fileChecksum").value(hasItem(DEFAULT_FILE_CHECKSUM)))
+            .andExpect(jsonPath("$.[*].reportTampered").value(hasItem(DEFAULT_REPORT_TAMPERED.booleanValue())));
 
         // Check, that the count call also returns 1
         restAutonomousReportMockMvc
@@ -807,7 +976,9 @@ class AutonomousReportResourceIT {
             .createdAt(UPDATED_CREATED_AT)
             .reportFilename(UPDATED_REPORT_FILENAME)
             .reportFile(UPDATED_REPORT_FILE)
-            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE);
+            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE)
+            .fileChecksum(UPDATED_FILE_CHECKSUM)
+            .reportTampered(UPDATED_REPORT_TAMPERED);
         AutonomousReportDTO autonomousReportDTO = autonomousReportMapper.toDto(updatedAutonomousReport);
 
         restAutonomousReportMockMvc
@@ -828,6 +999,8 @@ class AutonomousReportResourceIT {
         assertThat(testAutonomousReport.getReportFilename()).isEqualTo(UPDATED_REPORT_FILENAME);
         assertThat(testAutonomousReport.getReportFile()).isEqualTo(UPDATED_REPORT_FILE);
         assertThat(testAutonomousReport.getReportFileContentType()).isEqualTo(UPDATED_REPORT_FILE_CONTENT_TYPE);
+        assertThat(testAutonomousReport.getFileChecksum()).isEqualTo(UPDATED_FILE_CHECKSUM);
+        assertThat(testAutonomousReport.getReportTampered()).isEqualTo(UPDATED_REPORT_TAMPERED);
 
         // Validate the AutonomousReport in Elasticsearch
         verify(mockAutonomousReportSearchRepository).save(testAutonomousReport);
@@ -941,6 +1114,8 @@ class AutonomousReportResourceIT {
         assertThat(testAutonomousReport.getReportFilename()).isEqualTo(DEFAULT_REPORT_FILENAME);
         assertThat(testAutonomousReport.getReportFile()).isEqualTo(DEFAULT_REPORT_FILE);
         assertThat(testAutonomousReport.getReportFileContentType()).isEqualTo(DEFAULT_REPORT_FILE_CONTENT_TYPE);
+        assertThat(testAutonomousReport.getFileChecksum()).isEqualTo(DEFAULT_FILE_CHECKSUM);
+        assertThat(testAutonomousReport.getReportTampered()).isEqualTo(DEFAULT_REPORT_TAMPERED);
     }
 
     @Test
@@ -961,7 +1136,9 @@ class AutonomousReportResourceIT {
             .createdAt(UPDATED_CREATED_AT)
             .reportFilename(UPDATED_REPORT_FILENAME)
             .reportFile(UPDATED_REPORT_FILE)
-            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE);
+            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE)
+            .fileChecksum(UPDATED_FILE_CHECKSUM)
+            .reportTampered(UPDATED_REPORT_TAMPERED);
 
         restAutonomousReportMockMvc
             .perform(
@@ -981,6 +1158,8 @@ class AutonomousReportResourceIT {
         assertThat(testAutonomousReport.getReportFilename()).isEqualTo(UPDATED_REPORT_FILENAME);
         assertThat(testAutonomousReport.getReportFile()).isEqualTo(UPDATED_REPORT_FILE);
         assertThat(testAutonomousReport.getReportFileContentType()).isEqualTo(UPDATED_REPORT_FILE_CONTENT_TYPE);
+        assertThat(testAutonomousReport.getFileChecksum()).isEqualTo(UPDATED_FILE_CHECKSUM);
+        assertThat(testAutonomousReport.getReportTampered()).isEqualTo(UPDATED_REPORT_TAMPERED);
     }
 
     @Test
@@ -1102,6 +1281,8 @@ class AutonomousReportResourceIT {
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(sameInstant(DEFAULT_CREATED_AT))))
             .andExpect(jsonPath("$.[*].reportFilename").value(hasItem(DEFAULT_REPORT_FILENAME.toString())))
             .andExpect(jsonPath("$.[*].reportFileContentType").value(hasItem(DEFAULT_REPORT_FILE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))));
+            .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))))
+            .andExpect(jsonPath("$.[*].fileChecksum").value(hasItem(DEFAULT_FILE_CHECKSUM)))
+            .andExpect(jsonPath("$.[*].reportTampered").value(hasItem(DEFAULT_REPORT_TAMPERED.booleanValue())));
     }
 }

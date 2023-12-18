@@ -17,6 +17,7 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
@@ -66,6 +67,13 @@ public class AutonomousReport implements Serializable {
 
     @Column(name = "report_file_content_type")
     private String reportFileContentType;
+
+    @NotNull
+    @Column(name = "file_checksum", nullable = false, unique = true)
+    private String fileChecksum;
+
+    @Column(name = "report_tampered")
+    private Boolean reportTampered;
 
     @ManyToMany
     @JoinTable(
@@ -187,6 +195,32 @@ public class AutonomousReport implements Serializable {
         this.reportFileContentType = reportFileContentType;
     }
 
+    public String getFileChecksum() {
+        return this.fileChecksum;
+    }
+
+    public AutonomousReport fileChecksum(String fileChecksum) {
+        this.setFileChecksum(fileChecksum);
+        return this;
+    }
+
+    public void setFileChecksum(String fileChecksum) {
+        this.fileChecksum = fileChecksum;
+    }
+
+    public Boolean getReportTampered() {
+        return this.reportTampered;
+    }
+
+    public AutonomousReport reportTampered(Boolean reportTampered) {
+        this.setReportTampered(reportTampered);
+        return this;
+    }
+
+    public void setReportTampered(Boolean reportTampered) {
+        this.reportTampered = reportTampered;
+    }
+
     public Set<UniversallyUniqueMapping> getReportMappings() {
         return this.reportMappings;
     }
@@ -276,6 +310,8 @@ public class AutonomousReport implements Serializable {
             ", reportFilename='" + getReportFilename() + "'" +
             ", reportFile='" + getReportFile() + "'" +
             ", reportFileContentType='" + getReportFileContentType() + "'" +
+            ", fileChecksum='" + getFileChecksum() + "'" +
+            ", reportTampered='" + getReportTampered() + "'" +
             "}";
     }
 }

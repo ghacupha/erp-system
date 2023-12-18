@@ -17,6 +17,7 @@ package io.github.erp.service.criteria;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -53,6 +54,10 @@ public class AutonomousReportCriteria implements Serializable, Criteria {
 
     private UUIDFilter reportFilename;
 
+    private StringFilter fileChecksum;
+
+    private BooleanFilter reportTampered;
+
     private LongFilter reportMappingId;
 
     private LongFilter placeholderId;
@@ -69,6 +74,8 @@ public class AutonomousReportCriteria implements Serializable, Criteria {
         this.reportParameters = other.reportParameters == null ? null : other.reportParameters.copy();
         this.createdAt = other.createdAt == null ? null : other.createdAt.copy();
         this.reportFilename = other.reportFilename == null ? null : other.reportFilename.copy();
+        this.fileChecksum = other.fileChecksum == null ? null : other.fileChecksum.copy();
+        this.reportTampered = other.reportTampered == null ? null : other.reportTampered.copy();
         this.reportMappingId = other.reportMappingId == null ? null : other.reportMappingId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.createdById = other.createdById == null ? null : other.createdById.copy();
@@ -155,6 +162,36 @@ public class AutonomousReportCriteria implements Serializable, Criteria {
         this.reportFilename = reportFilename;
     }
 
+    public StringFilter getFileChecksum() {
+        return fileChecksum;
+    }
+
+    public StringFilter fileChecksum() {
+        if (fileChecksum == null) {
+            fileChecksum = new StringFilter();
+        }
+        return fileChecksum;
+    }
+
+    public void setFileChecksum(StringFilter fileChecksum) {
+        this.fileChecksum = fileChecksum;
+    }
+
+    public BooleanFilter getReportTampered() {
+        return reportTampered;
+    }
+
+    public BooleanFilter reportTampered() {
+        if (reportTampered == null) {
+            reportTampered = new BooleanFilter();
+        }
+        return reportTampered;
+    }
+
+    public void setReportTampered(BooleanFilter reportTampered) {
+        this.reportTampered = reportTampered;
+    }
+
     public LongFilter getReportMappingId() {
         return reportMappingId;
     }
@@ -223,6 +260,8 @@ public class AutonomousReportCriteria implements Serializable, Criteria {
             Objects.equals(reportParameters, that.reportParameters) &&
             Objects.equals(createdAt, that.createdAt) &&
             Objects.equals(reportFilename, that.reportFilename) &&
+            Objects.equals(fileChecksum, that.fileChecksum) &&
+            Objects.equals(reportTampered, that.reportTampered) &&
             Objects.equals(reportMappingId, that.reportMappingId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(createdById, that.createdById) &&
@@ -238,6 +277,8 @@ public class AutonomousReportCriteria implements Serializable, Criteria {
             reportParameters,
             createdAt,
             reportFilename,
+            fileChecksum,
+            reportTampered,
             reportMappingId,
             placeholderId,
             createdById,
@@ -254,6 +295,8 @@ public class AutonomousReportCriteria implements Serializable, Criteria {
             (reportParameters != null ? "reportParameters=" + reportParameters + ", " : "") +
             (createdAt != null ? "createdAt=" + createdAt + ", " : "") +
             (reportFilename != null ? "reportFilename=" + reportFilename + ", " : "") +
+            (fileChecksum != null ? "fileChecksum=" + fileChecksum + ", " : "") +
+            (reportTampered != null ? "reportTampered=" + reportTampered + ", " : "") +
             (reportMappingId != null ? "reportMappingId=" + reportMappingId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (createdById != null ? "createdById=" + createdById + ", " : "") +
