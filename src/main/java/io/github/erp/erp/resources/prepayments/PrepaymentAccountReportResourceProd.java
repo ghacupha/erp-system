@@ -18,7 +18,9 @@ package io.github.erp.erp.resources.prepayments;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.PrepaymentAccountReportTuple;
+import io.github.erp.internal.framework.Mapping;
 import io.github.erp.internal.repository.InternalPrepaymentAccountReportRepository;
+import io.github.erp.internal.service.autonomousReport.DatedReportExportService;
 import io.github.erp.repository.PrepaymentAccountReportRepository;
 import io.github.erp.service.PrepaymentAccountReportQueryService;
 import io.github.erp.service.PrepaymentAccountReportService;
@@ -26,15 +28,18 @@ import io.github.erp.service.criteria.PrepaymentAccountReportCriteria;
 import io.github.erp.service.dto.PrepaymentAccountReportDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -46,25 +51,32 @@ import java.util.Optional;
 @RequestMapping("/api/prepayments")
 public class PrepaymentAccountReportResourceProd {
 
+    private final static String REPORT_NAME = "prepayments-by-accounts-outstanding-report";
+
     private final Logger log = LoggerFactory.getLogger(PrepaymentAccountReportResourceProd.class);
 
     private final PrepaymentAccountReportService prepaymentAccountReportService;
-
-    private final PrepaymentAccountReportRepository prepaymentAccountReportRepository;
 
     private final PrepaymentAccountReportQueryService prepaymentAccountReportQueryService;
 
     private final InternalPrepaymentAccountReportRepository internalPrepaymentAccountReportRepository;
 
+    private final DatedReportExportService prepaymentReportExportService;
+
+    private final Mapping<PrepaymentAccountReportTuple, PrepaymentAccountReportDTO> prepaymentAccountReportDTOMapping;
+
     public PrepaymentAccountReportResourceProd(
+        @Qualifier("prepaymentByAccountReportListCSVExportService") DatedReportExportService prepaymentReportExportService,
         PrepaymentAccountReportService prepaymentAccountReportService,
-        PrepaymentAccountReportRepository prepaymentAccountReportRepository,
         PrepaymentAccountReportQueryService prepaymentAccountReportQueryService,
-        InternalPrepaymentAccountReportRepository internalPrepaymentAccountReportRepository) {
+        InternalPrepaymentAccountReportRepository internalPrepaymentAccountReportRepository, Mapping<PrepaymentAccountReportTuple,
+        PrepaymentAccountReportDTO> prepaymentAccountReportDTOMapping) {
         this.prepaymentAccountReportService = prepaymentAccountReportService;
-        this.prepaymentAccountReportRepository = prepaymentAccountReportRepository;
         this.prepaymentAccountReportQueryService = prepaymentAccountReportQueryService;
         this.internalPrepaymentAccountReportRepository = internalPrepaymentAccountReportRepository;
+
+        this.prepaymentReportExportService = prepaymentReportExportService;
+        this.prepaymentAccountReportDTOMapping = prepaymentAccountReportDTOMapping;
     }
 
     /**
@@ -101,24 +113,22 @@ public class PrepaymentAccountReportResourceProd {
 
         Page<PrepaymentAccountReportDTO> page =
             internalPrepaymentAccountReportRepository.findAllByReportDate(LocalDate.parse(reportDate), pageable)
-            .map(PrepaymentAccountReportResourceProd::mapPrepaymentAccountReport);
+            .map(prepaymentAccountReportDTOMapping::toValue2);
+
+        exportCSVReport(LocalDate.parse(reportDate));
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
-    private static PrepaymentAccountReportDTO mapPrepaymentAccountReport(PrepaymentAccountReportTuple prepaymentAccountReportTuple) {
+    @Async
+    void exportCSVReport(LocalDate reportDate) {
 
-        PrepaymentAccountReportDTO report = new PrepaymentAccountReportDTO();
-        report.setId(prepaymentAccountReportTuple.getId());
-        report.setPrepaymentAccount(prepaymentAccountReportTuple.getPrepaymentAccount());
-        report.setPrepaymentAmount(prepaymentAccountReportTuple.getPrepaymentAmount());
-        report.setAmortisedAmount(prepaymentAccountReportTuple.getAmortisedAmount());
-        report.setOutstandingAmount(prepaymentAccountReportTuple.getOutstandingAmount());
-        report.setNumberOfPrepaymentAccounts(prepaymentAccountReportTuple.getNumberOfPrepaymentAccounts());
-        report.setNumberOfAmortisedItems(prepaymentAccountReportTuple.getNumberOfAmortisedItems());
-
-        return report;
+        try {
+            prepaymentReportExportService.exportReportByDate(reportDate, REPORT_NAME);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -158,7 +168,7 @@ public class PrepaymentAccountReportResourceProd {
         log.debug("REST request to get PrepaymentAccountReport : {}", id);
         Optional<PrepaymentAccountReportDTO> prepaymentAccountReportDTO =
             internalPrepaymentAccountReportRepository.findOneByReportDate(LocalDate.parse(reportDate), id)
-            .map(PrepaymentAccountReportResourceProd::mapPrepaymentAccountReport);
+            .map(prepaymentAccountReportDTOMapping::toValue2);
 
         return ResponseUtil.wrapOrNotFound(prepaymentAccountReportDTO);
     }

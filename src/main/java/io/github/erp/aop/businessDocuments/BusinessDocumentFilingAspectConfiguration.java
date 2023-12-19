@@ -165,7 +165,7 @@ import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.files.documents.FileAttachmentService;
 import io.github.erp.internal.model.BusinessDocumentFSO;
 import io.github.erp.internal.model.mapping.BusinessDocumentFSOMapping;
-import io.github.erp.internal.service.InternalUserDetailService;
+import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.service.BusinessDocumentService;
 import io.github.erp.service.mapper.ApplicationUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -190,7 +190,7 @@ public class BusinessDocumentFilingAspectConfiguration {
     private FileAttachmentService<BusinessDocumentFSO> businessDocumentFileAttachmentService;
 
     @Autowired
-    private InternalUserDetailService userDetailService;
+    private InternalApplicationUserDetailService userDetailService;
 
     @Autowired
     private ApplicationUserMapper applicationUserMapper;

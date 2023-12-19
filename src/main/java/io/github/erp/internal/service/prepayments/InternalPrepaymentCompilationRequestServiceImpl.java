@@ -1,4 +1,4 @@
-package io.github.erp.internal.service;
+package io.github.erp.internal.service.prepayments;
 
 /*-
  * Erp System - Mark IX No 3 (Iddo Series) Server ver 1.6.5

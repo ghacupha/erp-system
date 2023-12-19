@@ -18,8 +18,8 @@ package io.github.erp.erp.resources.prepayments;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import com.hazelcast.map.IMap;
-import io.github.erp.internal.service.InternalPrepaymentCompilationRequestService;
-import io.github.erp.internal.service.PrepaymentCompilationService;
+import io.github.erp.internal.service.prepayments.InternalPrepaymentCompilationRequestService;
+import io.github.erp.internal.service.prepayments.PrepaymentCompilationService;
 import io.github.erp.repository.PrepaymentCompilationRequestRepository;
 import io.github.erp.service.PrepaymentCompilationRequestQueryService;
 import io.github.erp.service.criteria.PrepaymentCompilationRequestCriteria;

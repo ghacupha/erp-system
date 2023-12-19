@@ -18,8 +18,9 @@ package io.github.erp.erp.resources.prepayments;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.PrepaymentReportTuple;
+import io.github.erp.internal.framework.Mapping;
 import io.github.erp.internal.repository.InternalPrepaymentReportRepository;
-import io.github.erp.internal.service.DatedReportExportService;
+import io.github.erp.internal.service.autonomousReport.DatedReportExportService;
 import io.github.erp.service.PrepaymentReportQueryService;
 import io.github.erp.service.PrepaymentReportService;
 import io.github.erp.service.criteria.PrepaymentReportCriteria;
@@ -61,15 +62,19 @@ public class PrepaymentReportResourceProd {
 
     private final DatedReportExportService prepaymentReportExportService;
 
+    private final Mapping<PrepaymentReportTuple, PrepaymentReportDTO> prepaymentReportDTOMapping;
+
     public PrepaymentReportResourceProd(
         PrepaymentReportService prepaymentReportService,
         PrepaymentReportQueryService prepaymentReportQueryService,
         InternalPrepaymentReportRepository internalPrepaymentReportRepository,
-        @Qualifier("prepaymentReportExportService") DatedReportExportService prepaymentReportExportService) {
+        @Qualifier("prepaymentReportExportService") DatedReportExportService prepaymentReportExportService,
+        Mapping<PrepaymentReportTuple, PrepaymentReportDTO> prepaymentReportDTOMapping) {
         this.prepaymentReportService = prepaymentReportService;
         this.prepaymentReportQueryService = prepaymentReportQueryService;
         this.internalPrepaymentReportRepository = internalPrepaymentReportRepository;
         this.prepaymentReportExportService = prepaymentReportExportService;
+        this.prepaymentReportDTOMapping = prepaymentReportDTOMapping;
     }
 
     /**
@@ -100,7 +105,7 @@ public class PrepaymentReportResourceProd {
 
         Page<PrepaymentReportDTO> page =
             internalPrepaymentReportRepository.findAllByReportDate(LocalDate.parse(reportDate), pageable)
-            .map(PrepaymentReportResourceProd::mapPrepaymentReport);
+            .map(prepaymentReportDTOMapping::toValue2);
 
         exportCSVReport(LocalDate.parse(reportDate));
 
@@ -119,22 +124,22 @@ public class PrepaymentReportResourceProd {
         }
     }
 
-    private static PrepaymentReportDTO mapPrepaymentReport(PrepaymentReportTuple prepaymentReportTuple) {
-
-        PrepaymentReportDTO report = new PrepaymentReportDTO();
-        report.setId(prepaymentReportTuple.getId());
-        report.setCatalogueNumber(prepaymentReportTuple.getCatalogueNumber());
-        report.setParticulars(prepaymentReportTuple.getParticulars());
-        report.setDealerName(prepaymentReportTuple.getDealerName());
-        report.setPaymentNumber(prepaymentReportTuple.getPaymentNumber());
-        report.setPaymentDate(prepaymentReportTuple.getPaymentDate());
-        report.setCurrencyCode(prepaymentReportTuple.getCurrencyCode());
-        report.setPrepaymentAmount(prepaymentReportTuple.getPrepaymentAmount());
-        report.setAmortisedAmount(prepaymentReportTuple.getAmortisedAmount());
-        report.setOutstandingAmount(prepaymentReportTuple.getOutstandingAmount());
-
-        return report;
-    }
+//    private static PrepaymentReportDTO mapPrepaymentReport(PrepaymentReportTuple prepaymentReportTuple) {
+//
+//        PrepaymentReportDTO report = new PrepaymentReportDTO();
+//        report.setId(prepaymentReportTuple.getId());
+//        report.setCatalogueNumber(prepaymentReportTuple.getCatalogueNumber());
+//        report.setParticulars(prepaymentReportTuple.getParticulars());
+//        report.setDealerName(prepaymentReportTuple.getDealerName());
+//        report.setPaymentNumber(prepaymentReportTuple.getPaymentNumber());
+//        report.setPaymentDate(prepaymentReportTuple.getPaymentDate());
+//        report.setCurrencyCode(prepaymentReportTuple.getCurrencyCode());
+//        report.setPrepaymentAmount(prepaymentReportTuple.getPrepaymentAmount());
+//        report.setAmortisedAmount(prepaymentReportTuple.getAmortisedAmount());
+//        report.setOutstandingAmount(prepaymentReportTuple.getOutstandingAmount());
+//
+//        return report;
+//    }
 
     /**
      * {@code GET  /prepayment-reports/count} : count all the prepaymentReports.
@@ -159,7 +164,7 @@ public class PrepaymentReportResourceProd {
         log.debug("REST request to get PrepaymentReport : {}, dated: {}", id, reportDate);
         Optional<PrepaymentReportDTO> prepaymentReportDTO =
             internalPrepaymentReportRepository.findOneByReportDate(LocalDate.parse(reportDate), id)
-                .map(PrepaymentReportResourceProd::mapPrepaymentReport);
+                .map(prepaymentReportDTOMapping::toValue2);
 
         return ResponseUtil.wrapOrNotFound(prepaymentReportDTO);
     }

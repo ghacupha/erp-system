@@ -1,4 +1,4 @@
-package io.github.erp.internal.service;
+package io.github.erp.internal.service.prepayments;
 
 /*-
  * Erp System - Mark IX No 3 (Iddo Series) Server ver 1.6.5
@@ -17,7 +17,6 @@ package io.github.erp.internal.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.FiscalMonth;
 import io.github.erp.domain.PrepaymentMarshalling;
 import io.github.erp.erp.depreciation.FiscalMonthNotConfiguredException;
 import io.github.erp.internal.repository.InternalFiscalMonthRepository;
@@ -41,7 +40,6 @@ import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**

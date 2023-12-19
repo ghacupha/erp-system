@@ -1,4 +1,4 @@
-package io.github.erp.internal.service;
+package io.github.erp.internal.service.autonomousReport;
 
 /*-
  * Erp System - Mark IX No 3 (Iddo Series) Server ver 1.6.5
@@ -27,6 +27,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Dynamically converts a list into a CSV file
+ */
 public class CSVDynamicConverterService {
 
     public static <T> ByteArrayOutputStream convertToCSV(List<T> dataList) throws IOException {

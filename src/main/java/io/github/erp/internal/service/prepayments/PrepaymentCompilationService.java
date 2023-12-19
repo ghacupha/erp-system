@@ -1,4 +1,4 @@
-package io.github.erp.internal.service;
+package io.github.erp.internal.service.prepayments;
 
 /*-
  * Erp System - Mark IX No 3 (Iddo Series) Server ver 1.6.5
@@ -17,5 +17,10 @@ package io.github.erp.internal.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-public interface PrepaymentCompilationCompleteSequence {
+import io.github.erp.service.dto.PrepaymentCompilationRequestDTO;
+import org.springframework.scheduling.annotation.Async;
+
+public interface PrepaymentCompilationService {
+    @Async
+    void compile(PrepaymentCompilationRequestDTO compilationRequest);
 }
