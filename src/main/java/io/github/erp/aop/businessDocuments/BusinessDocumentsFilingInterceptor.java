@@ -430,11 +430,15 @@
  */
 package io.github.erp.aop.businessDocuments;
 
+import io.github.erp.domain.ApplicationUser;
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.model.BusinessDocumentFSO;
 import io.github.erp.internal.model.mapping.BusinessDocumentFSOMapping;
+import io.github.erp.internal.service.ApplicationUserNotFoundException;
+import io.github.erp.internal.service.InternalUserDetailService;
 import io.github.erp.service.BusinessDocumentService;
 import io.github.erp.service.dto.BusinessDocumentDTO;
+import io.github.erp.service.mapper.ApplicationUserMapper;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -448,7 +452,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * This advise intercepts the BusinessDocuments#createBusinessDocument method processes and stores
@@ -467,13 +473,21 @@ public class BusinessDocumentsFilingInterceptor {
 
     private final FileStorageService fileStorageService;
 
+    private final InternalUserDetailService userDetailService;
+
+    private final ApplicationUserMapper applicationUserMapper;
+
     public BusinessDocumentsFilingInterceptor(
+        ApplicationUserMapper applicationUserMapper,
+        InternalUserDetailService userDetailService,
         BusinessDocumentService businessDocumentService,
         BusinessDocumentFSOMapping businessDocumentFSOMapping,
         @Qualifier("businessDocumentFSStorageService") FileStorageService fileStorageService) {
         this.businessDocumentService = businessDocumentService;
         this.businessDocumentFSOMapping = businessDocumentFSOMapping;
         this.fileStorageService = fileStorageService;
+        this.applicationUserMapper = applicationUserMapper;
+        this.userDetailService = userDetailService;
     }
 
     @Around(value = "filingResponsePointcut()")
@@ -484,8 +498,25 @@ public class BusinessDocumentsFilingInterceptor {
         if (log.isDebugEnabled()) {
             log.debug("Enter: {}() with argument[s] = {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
         }
+
         BusinessDocumentFSO bDoc = (BusinessDocumentFSO) joinPoint.getArgs()[0];
+
+        Optional<ApplicationUser> optionalUser = userDetailService.getCurrentApplicationUser();
+
+        if (optionalUser.isPresent()) {
+            bDoc.setLastModifiedBy(applicationUserMapper.toDto(optionalUser.get()));
+            bDoc.setLastModified(ZonedDateTime.now());
+            bDoc.setCreatedBy(applicationUserMapper.toDto(optionalUser.get()));
+            bDoc.setOriginatingDepartment(
+                applicationUserMapper.toDto(optionalUser.get()).getDepartment()
+            );
+            bDoc.setSecurityClearance(
+                applicationUserMapper.toDto(optionalUser.get()).getSecurityClearance()
+            );
+        }
+
         BusinessDocumentDTO result = businessDocumentService.save(businessDocumentFSOMapping.toValue2(bDoc));
+
         try {
 
             log.debug("REST request intercepted to save BusinessDocument serial: {}", bDoc.getDocumentSerial());

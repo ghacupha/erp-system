@@ -23,6 +23,8 @@ import io.github.erp.domain.User;
 import io.github.erp.repository.ApplicationUserRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
@@ -32,5 +34,14 @@ public interface InternalApplicationUserRepository
     JpaRepository<ApplicationUser, Long>,
     JpaSpecificationExecutor<ApplicationUser>{
 
-    Optional<ApplicationUser> findApplicationUserBySystemIdentity(User systemIdentity);
+    @Query("SELECT " +
+        "au " +
+        "FROM ApplicationUser au " +
+        "LEFT JOIN FETCH au.systemIdentity u " +
+        "LEFT JOIN FETCH au.department " +
+        "LEFT JOIN FETCH au.placeholders " +
+        "LEFT JOIN FETCH au.securityClearance " +
+        "LEFT JOIN FETCH au.userProperties " +
+        "WHERE au.systemIdentity = :user")
+    Optional<ApplicationUser> findApplicationUserBySystemIdentity(@Param("user") User systemIdentity);
 }
