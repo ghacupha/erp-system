@@ -18,7 +18,7 @@ package io.github.erp.erp.resources.reports;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.internal.repository.InternalApplicationUserRepository;
-import io.github.erp.internal.service.InternalUserDetailService;
+import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.repository.AutonomousReportRepository;
 import io.github.erp.service.AutonomousReportQueryService;
 import io.github.erp.service.AutonomousReportService;
@@ -34,6 +34,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -66,7 +67,7 @@ public class AutonomousReportResourceProd {
 
     private final AutonomousReportQueryService autonomousReportQueryService;
 
-    private final InternalUserDetailService userDetailService;
+    private final InternalApplicationUserDetailService userDetailService;
 
     private final InternalApplicationUserRepository internalApplicationUserRepository;
 
@@ -74,7 +75,7 @@ public class AutonomousReportResourceProd {
         AutonomousReportService autonomousReportService,
         AutonomousReportRepository autonomousReportRepository,
         AutonomousReportQueryService autonomousReportQueryService,
-        InternalUserDetailService userDetailService, InternalApplicationUserRepository internalApplicationUserRepository) {
+        InternalApplicationUserDetailService userDetailService, InternalApplicationUserRepository internalApplicationUserRepository) {
         this.autonomousReportService = autonomousReportService;
         this.autonomousReportRepository = autonomousReportRepository;
         this.autonomousReportQueryService = autonomousReportQueryService;
@@ -187,6 +188,15 @@ public class AutonomousReportResourceProd {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
+
+//    private AutonomousReportCriteria criteria() {
+//        AutonomousReportCriteria criteria = new AutonomousReportCriteria();
+//        LongFilter createdByIdFilter = new LongFilter();
+//        createdByIdFilter.setEquals(userDetailService.getCurrentApplicationUser().get().getId());
+//        criteria.setCreatedById(createdByIdFilter);
+//
+//        return criteria;
+//    }
 
     /**
      * {@code GET  /autonomous-reports/count} : count all the autonomousReports.

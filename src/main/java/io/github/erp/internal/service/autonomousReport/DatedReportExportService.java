@@ -1,4 +1,4 @@
-package io.github.erp.internal.service;
+package io.github.erp.internal.service.autonomousReport;
 
 /*-
  * Erp System - Mark IX No 3 (Iddo Series) Server ver 1.6.5
@@ -17,11 +17,23 @@ package io.github.erp.internal.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.ApplicationUser;
+import org.springframework.scheduling.annotation.Async;
 
-import java.util.Optional;
+import java.io.IOException;
+import java.time.LocalDate;
 
-public interface InternalUserDetailService {
+/**
+ * This interface is used to extract a report base on a parameter date,
+ * exporting it essential to CSV format
+ */
+public interface DatedReportExportService {
 
-    Optional<ApplicationUser> getCurrentApplicationUser();
+    /**
+     * Exports report in the implementation format the parameter being the report-date
+     *
+     * @param reportDate Report-date of the report
+     * @param reportName Report name saved in the database
+     * @throws IOException It happens
+     */
+    void exportReportByDate(LocalDate reportDate, String reportName) throws IOException;
 }

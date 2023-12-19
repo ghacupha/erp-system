@@ -49,6 +49,7 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController("prepaymentAccountResourceProd")
 @RequestMapping("/api/prepayments")
+@Deprecated
 public class PrepaymentAccountResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(PrepaymentAccountResourceProd.class);

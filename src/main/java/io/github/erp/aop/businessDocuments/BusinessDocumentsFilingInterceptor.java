@@ -452,8 +452,7 @@ import io.github.erp.domain.ApplicationUser;
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.model.BusinessDocumentFSO;
 import io.github.erp.internal.model.mapping.BusinessDocumentFSOMapping;
-import io.github.erp.internal.service.ApplicationUserNotFoundException;
-import io.github.erp.internal.service.InternalUserDetailService;
+import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.service.BusinessDocumentService;
 import io.github.erp.service.dto.BusinessDocumentDTO;
 import io.github.erp.service.mapper.ApplicationUserMapper;
@@ -491,13 +490,13 @@ public class BusinessDocumentsFilingInterceptor {
 
     private final FileStorageService fileStorageService;
 
-    private final InternalUserDetailService userDetailService;
+    private final InternalApplicationUserDetailService userDetailService;
 
     private final ApplicationUserMapper applicationUserMapper;
 
     public BusinessDocumentsFilingInterceptor(
         ApplicationUserMapper applicationUserMapper,
-        InternalUserDetailService userDetailService,
+        InternalApplicationUserDetailService userDetailService,
         BusinessDocumentService businessDocumentService,
         BusinessDocumentFSOMapping businessDocumentFSOMapping,
         @Qualifier("businessDocumentFSStorageService") FileStorageService fileStorageService) {

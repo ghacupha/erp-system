@@ -17,7 +17,7 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.internal.service.InternalUserDetailService;
+import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.repository.ApplicationUserRepository;
 import io.github.erp.service.ApplicationUserQueryService;
 import io.github.erp.service.ApplicationUserService;
@@ -66,7 +66,7 @@ public class ApplicationUserResourceProd {
 
     private final ApplicationUserQueryService applicationUserQueryService;
 
-    private final InternalUserDetailService userDetailService;
+    private final InternalApplicationUserDetailService userDetailService;
 
     private final ApplicationUserMapper applicationUserMapper;
 
@@ -74,7 +74,7 @@ public class ApplicationUserResourceProd {
         ApplicationUserService applicationUserService,
         ApplicationUserRepository applicationUserRepository,
         ApplicationUserQueryService applicationUserQueryService,
-        InternalUserDetailService userDetailService,
+        InternalApplicationUserDetailService userDetailService,
         ApplicationUserMapper applicationUserMapper) {
         this.applicationUserService = applicationUserService;
         this.applicationUserRepository = applicationUserRepository;

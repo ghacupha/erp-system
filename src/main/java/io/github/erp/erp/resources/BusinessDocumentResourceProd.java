@@ -19,7 +19,7 @@ package io.github.erp.erp.resources;
  */
 import io.github.erp.internal.model.BusinessDocumentFSO;
 import io.github.erp.internal.model.mapping.BusinessDocumentFSOMapping;
-import io.github.erp.internal.service.InternalUserDetailService;
+import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.repository.BusinessDocumentRepository;
 import io.github.erp.service.BusinessDocumentQueryService;
 import io.github.erp.service.BusinessDocumentService;
@@ -80,7 +80,7 @@ public class BusinessDocumentResourceProd {
 
     private final BusinessDocumentFSOMapping businessDocumentFSOMapping;
 
-    private final InternalUserDetailService userDetailService;
+    private final InternalApplicationUserDetailService userDetailService;
 
     private final ApplicationUserMapper applicationUserMapper;
 
@@ -89,7 +89,7 @@ public class BusinessDocumentResourceProd {
         BusinessDocumentRepository businessDocumentRepository,
         BusinessDocumentQueryService businessDocumentQueryService,
         BusinessDocumentFSOMapping businessDocumentFSOMapping,
-        InternalUserDetailService userDetailService,
+        InternalApplicationUserDetailService userDetailService,
         ApplicationUserMapper applicationUserMapper) {
         this.businessDocumentService = businessDocumentService;
         this.businessDocumentRepository = businessDocumentRepository;

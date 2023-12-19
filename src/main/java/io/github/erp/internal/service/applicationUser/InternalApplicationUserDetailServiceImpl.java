@@ -1,4 +1,4 @@
-package io.github.erp.internal.service;
+package io.github.erp.internal.service.applicationUser;
 
 /*-
  * Erp System - Mark IX No 3 (Iddo Series) Server ver 1.6.5
@@ -30,13 +30,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Transactional
-@Service
-public class InternalUserDetailServiceImpl implements InternalUserDetailService {
+@Service("internalUserDetailService")
+public class InternalApplicationUserDetailServiceImpl implements InternalApplicationUserDetailService {
 
     private final UserRepository userRepository;
     private final InternalApplicationUserRepository internalApplicationUserRepository;
 
-    public InternalUserDetailServiceImpl(UserRepository userRepository, InternalApplicationUserRepository internalApplicationUserRepository) {
+    public InternalApplicationUserDetailServiceImpl(UserRepository userRepository, InternalApplicationUserRepository internalApplicationUserRepository) {
         this.userRepository = userRepository;
         this.internalApplicationUserRepository = internalApplicationUserRepository;
     }
