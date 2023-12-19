@@ -1,7 +1,7 @@
 package io.github.erp.repository.search;
 
 /*-
- * Erp System - Mark IX No 2 (Iddo Series) Server ver 1.6.4
+ * Erp System - Mark IX No 3 (Iddo Series) Server ver 1.6.5
  * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.repository.search;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 import io.github.erp.domain.ServiceOutlet;
