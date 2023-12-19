@@ -17,11 +17,13 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.service.InternalUserDetailService;
 import io.github.erp.repository.ApplicationUserRepository;
 import io.github.erp.service.ApplicationUserQueryService;
 import io.github.erp.service.ApplicationUserService;
 import io.github.erp.service.criteria.ApplicationUserCriteria;
 import io.github.erp.service.dto.ApplicationUserDTO;
+import io.github.erp.service.mapper.ApplicationUserMapper;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,14 +66,21 @@ public class ApplicationUserResourceProd {
 
     private final ApplicationUserQueryService applicationUserQueryService;
 
+    private final InternalUserDetailService userDetailService;
+
+    private final ApplicationUserMapper applicationUserMapper;
+
     public ApplicationUserResourceProd(
         ApplicationUserService applicationUserService,
         ApplicationUserRepository applicationUserRepository,
-        ApplicationUserQueryService applicationUserQueryService
-    ) {
+        ApplicationUserQueryService applicationUserQueryService,
+        InternalUserDetailService userDetailService,
+        ApplicationUserMapper applicationUserMapper) {
         this.applicationUserService = applicationUserService;
         this.applicationUserRepository = applicationUserRepository;
         this.applicationUserQueryService = applicationUserQueryService;
+        this.userDetailService = userDetailService;
+        this.applicationUserMapper = applicationUserMapper;
     }
 
     /**
@@ -202,6 +211,19 @@ public class ApplicationUserResourceProd {
     public ResponseEntity<ApplicationUserDTO> getApplicationUser(@PathVariable Long id) {
         log.debug("REST request to get ApplicationUser : {}", id);
         Optional<ApplicationUserDTO> applicationUserDTO = applicationUserService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(applicationUserDTO);
+    }
+
+    /**
+     * {@code GET  /application-users/current} : get the current applicationUser.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the applicationUserDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/application-users/current")
+    public ResponseEntity<ApplicationUserDTO> getCurrentUser() {
+        log.debug("REST request to get current ApplicationUser");
+        Optional<ApplicationUserDTO> applicationUserDTO = userDetailService.getCurrentApplicationUser()
+            .map(applicationUserMapper::toDto);
         return ResponseUtil.wrapOrNotFound(applicationUserDTO);
     }
 
