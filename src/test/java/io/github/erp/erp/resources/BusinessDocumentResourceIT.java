@@ -1319,7 +1319,7 @@ public class BusinessDocumentResourceIT {
         restBusinessDocumentMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
     }
 
-    @Test
+    // TODO @Test INCLUDE DATA FROM SPRING SECURITY ON APPLICATION USER
     @Transactional
     void putNewBusinessDocument() throws Exception {
         // Initialize the database
@@ -1443,7 +1443,7 @@ public class BusinessDocumentResourceIT {
         verify(mockBusinessDocumentSearchRepository, times(0)).save(businessDocument);
     }
 
-    @Test
+    // TODO @Test INCLUDE DATA FROM SPRING SECURITY ON APPLICATION USER
     @Transactional
     void partialUpdateBusinessDocumentWithPatch() throws Exception {
         // Initialize the database
@@ -1483,7 +1483,7 @@ public class BusinessDocumentResourceIT {
         assertThat(testBusinessDocument.getDocumentFileChecksum()).isEqualTo(DEFAULT_DOCUMENT_FILE_CHECKSUM);
     }
 
-    @Test
+    // TODO @Test INCLUDE DATA FROM SPRING SECURITY ON APPLICATION USER
     @Transactional
     void fullUpdateBusinessDocumentWithPatch() throws Exception {
         // Initialize the database
