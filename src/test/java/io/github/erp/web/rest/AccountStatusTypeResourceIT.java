@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -73,8 +74,8 @@ class AccountStatusTypeResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/account-status-types";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private AccountStatusTypeRepository accountStatusTypeRepository;
@@ -241,7 +242,7 @@ class AccountStatusTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(accountStatusType.getId().intValue())))
             .andExpect(jsonPath("$.[*].accountStatusCode").value(hasItem(DEFAULT_ACCOUNT_STATUS_CODE)))
             .andExpect(jsonPath("$.[*].accountStatusType").value(hasItem(DEFAULT_ACCOUNT_STATUS_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].accountStatusDescription").value(hasItem(DEFAULT_ACCOUNT_STATUS_DESCRIPTION.toString())));
+            .andExpect(jsonPath("$.[*].accountStatusDescription").value(hasItem(DEFAULT_ACCOUNT_STATUS_DESCRIPTION)));
     }
 
     @Test
@@ -258,7 +259,7 @@ class AccountStatusTypeResourceIT {
             .andExpect(jsonPath("$.id").value(accountStatusType.getId().intValue()))
             .andExpect(jsonPath("$.accountStatusCode").value(DEFAULT_ACCOUNT_STATUS_CODE))
             .andExpect(jsonPath("$.accountStatusType").value(DEFAULT_ACCOUNT_STATUS_TYPE.toString()))
-            .andExpect(jsonPath("$.accountStatusDescription").value(DEFAULT_ACCOUNT_STATUS_DESCRIPTION.toString()));
+            .andExpect(jsonPath("$.accountStatusDescription").value(DEFAULT_ACCOUNT_STATUS_DESCRIPTION));
     }
 
     @Test
@@ -420,7 +421,7 @@ class AccountStatusTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(accountStatusType.getId().intValue())))
             .andExpect(jsonPath("$.[*].accountStatusCode").value(hasItem(DEFAULT_ACCOUNT_STATUS_CODE)))
             .andExpect(jsonPath("$.[*].accountStatusType").value(hasItem(DEFAULT_ACCOUNT_STATUS_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].accountStatusDescription").value(hasItem(DEFAULT_ACCOUNT_STATUS_DESCRIPTION.toString())));
+            .andExpect(jsonPath("$.[*].accountStatusDescription").value(hasItem(DEFAULT_ACCOUNT_STATUS_DESCRIPTION)));
 
         // Check, that the count call also returns 1
         restAccountStatusTypeMockMvc
@@ -751,6 +752,6 @@ class AccountStatusTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(accountStatusType.getId().intValue())))
             .andExpect(jsonPath("$.[*].accountStatusCode").value(hasItem(DEFAULT_ACCOUNT_STATUS_CODE)))
             .andExpect(jsonPath("$.[*].accountStatusType").value(hasItem(DEFAULT_ACCOUNT_STATUS_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].accountStatusDescription").value(hasItem(DEFAULT_ACCOUNT_STATUS_DESCRIPTION.toString())));
+            .andExpect(jsonPath("$.[*].accountStatusDescription").value(hasItem(DEFAULT_ACCOUNT_STATUS_DESCRIPTION)));
     }
 }

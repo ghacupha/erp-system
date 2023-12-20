@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class LoanRestructureItemResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/loan-restructure-items";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private LoanRestructureItemRepository loanRestructureItemRepository;
@@ -240,7 +241,7 @@ class LoanRestructureItemResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(loanRestructureItem.getId().intValue())))
             .andExpect(jsonPath("$.[*].loanRestructureItemCode").value(hasItem(DEFAULT_LOAN_RESTRUCTURE_ITEM_CODE)))
             .andExpect(jsonPath("$.[*].loanRestructureItemType").value(hasItem(DEFAULT_LOAN_RESTRUCTURE_ITEM_TYPE)))
-            .andExpect(jsonPath("$.[*].loanRestructureItemDetails").value(hasItem(DEFAULT_LOAN_RESTRUCTURE_ITEM_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].loanRestructureItemDetails").value(hasItem(DEFAULT_LOAN_RESTRUCTURE_ITEM_DETAILS)));
     }
 
     @Test
@@ -257,7 +258,7 @@ class LoanRestructureItemResourceIT {
             .andExpect(jsonPath("$.id").value(loanRestructureItem.getId().intValue()))
             .andExpect(jsonPath("$.loanRestructureItemCode").value(DEFAULT_LOAN_RESTRUCTURE_ITEM_CODE))
             .andExpect(jsonPath("$.loanRestructureItemType").value(DEFAULT_LOAN_RESTRUCTURE_ITEM_TYPE))
-            .andExpect(jsonPath("$.loanRestructureItemDetails").value(DEFAULT_LOAN_RESTRUCTURE_ITEM_DETAILS.toString()));
+            .andExpect(jsonPath("$.loanRestructureItemDetails").value(DEFAULT_LOAN_RESTRUCTURE_ITEM_DETAILS));
     }
 
     @Test
@@ -449,7 +450,7 @@ class LoanRestructureItemResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(loanRestructureItem.getId().intValue())))
             .andExpect(jsonPath("$.[*].loanRestructureItemCode").value(hasItem(DEFAULT_LOAN_RESTRUCTURE_ITEM_CODE)))
             .andExpect(jsonPath("$.[*].loanRestructureItemType").value(hasItem(DEFAULT_LOAN_RESTRUCTURE_ITEM_TYPE)))
-            .andExpect(jsonPath("$.[*].loanRestructureItemDetails").value(hasItem(DEFAULT_LOAN_RESTRUCTURE_ITEM_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].loanRestructureItemDetails").value(hasItem(DEFAULT_LOAN_RESTRUCTURE_ITEM_DETAILS)));
 
         // Check, that the count call also returns 1
         restLoanRestructureItemMockMvc
@@ -782,6 +783,6 @@ class LoanRestructureItemResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(loanRestructureItem.getId().intValue())))
             .andExpect(jsonPath("$.[*].loanRestructureItemCode").value(hasItem(DEFAULT_LOAN_RESTRUCTURE_ITEM_CODE)))
             .andExpect(jsonPath("$.[*].loanRestructureItemType").value(hasItem(DEFAULT_LOAN_RESTRUCTURE_ITEM_TYPE)))
-            .andExpect(jsonPath("$.[*].loanRestructureItemDetails").value(hasItem(DEFAULT_LOAN_RESTRUCTURE_ITEM_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].loanRestructureItemDetails").value(hasItem(DEFAULT_LOAN_RESTRUCTURE_ITEM_DETAILS)));
     }
 }

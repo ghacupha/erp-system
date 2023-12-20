@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class FxTransactionRateTypeResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/fx-transaction-rate-types";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private FxTransactionRateTypeRepository fxTransactionRateTypeRepository;
@@ -240,7 +241,7 @@ class FxTransactionRateTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(fxTransactionRateType.getId().intValue())))
             .andExpect(jsonPath("$.[*].fxTransactionRateTypeCode").value(hasItem(DEFAULT_FX_TRANSACTION_RATE_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].fxTransactionRateType").value(hasItem(DEFAULT_FX_TRANSACTION_RATE_TYPE)))
-            .andExpect(jsonPath("$.[*].fxTransactionRateTypeDetails").value(hasItem(DEFAULT_FX_TRANSACTION_RATE_TYPE_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].fxTransactionRateTypeDetails").value(hasItem(DEFAULT_FX_TRANSACTION_RATE_TYPE_DETAILS)));
     }
 
     @Test
@@ -257,7 +258,7 @@ class FxTransactionRateTypeResourceIT {
             .andExpect(jsonPath("$.id").value(fxTransactionRateType.getId().intValue()))
             .andExpect(jsonPath("$.fxTransactionRateTypeCode").value(DEFAULT_FX_TRANSACTION_RATE_TYPE_CODE))
             .andExpect(jsonPath("$.fxTransactionRateType").value(DEFAULT_FX_TRANSACTION_RATE_TYPE))
-            .andExpect(jsonPath("$.fxTransactionRateTypeDetails").value(DEFAULT_FX_TRANSACTION_RATE_TYPE_DETAILS.toString()));
+            .andExpect(jsonPath("$.fxTransactionRateTypeDetails").value(DEFAULT_FX_TRANSACTION_RATE_TYPE_DETAILS));
     }
 
     @Test
@@ -449,7 +450,7 @@ class FxTransactionRateTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(fxTransactionRateType.getId().intValue())))
             .andExpect(jsonPath("$.[*].fxTransactionRateTypeCode").value(hasItem(DEFAULT_FX_TRANSACTION_RATE_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].fxTransactionRateType").value(hasItem(DEFAULT_FX_TRANSACTION_RATE_TYPE)))
-            .andExpect(jsonPath("$.[*].fxTransactionRateTypeDetails").value(hasItem(DEFAULT_FX_TRANSACTION_RATE_TYPE_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].fxTransactionRateTypeDetails").value(hasItem(DEFAULT_FX_TRANSACTION_RATE_TYPE_DETAILS)));
 
         // Check, that the count call also returns 1
         restFxTransactionRateTypeMockMvc
@@ -784,6 +785,6 @@ class FxTransactionRateTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(fxTransactionRateType.getId().intValue())))
             .andExpect(jsonPath("$.[*].fxTransactionRateTypeCode").value(hasItem(DEFAULT_FX_TRANSACTION_RATE_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].fxTransactionRateType").value(hasItem(DEFAULT_FX_TRANSACTION_RATE_TYPE)))
-            .andExpect(jsonPath("$.[*].fxTransactionRateTypeDetails").value(hasItem(DEFAULT_FX_TRANSACTION_RATE_TYPE_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].fxTransactionRateTypeDetails").value(hasItem(DEFAULT_FX_TRANSACTION_RATE_TYPE_DETAILS)));
     }
 }

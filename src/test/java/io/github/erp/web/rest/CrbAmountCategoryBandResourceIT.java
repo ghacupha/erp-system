@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class CrbAmountCategoryBandResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/crb-amount-category-bands";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private CrbAmountCategoryBandRepository crbAmountCategoryBandRepository;
@@ -240,7 +241,7 @@ class CrbAmountCategoryBandResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(crbAmountCategoryBand.getId().intValue())))
             .andExpect(jsonPath("$.[*].amountCategoryBandCode").value(hasItem(DEFAULT_AMOUNT_CATEGORY_BAND_CODE)))
             .andExpect(jsonPath("$.[*].amountCategoryBand").value(hasItem(DEFAULT_AMOUNT_CATEGORY_BAND)))
-            .andExpect(jsonPath("$.[*].amountCategoryBandDetails").value(hasItem(DEFAULT_AMOUNT_CATEGORY_BAND_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].amountCategoryBandDetails").value(hasItem(DEFAULT_AMOUNT_CATEGORY_BAND_DETAILS)));
     }
 
     @Test
@@ -257,7 +258,7 @@ class CrbAmountCategoryBandResourceIT {
             .andExpect(jsonPath("$.id").value(crbAmountCategoryBand.getId().intValue()))
             .andExpect(jsonPath("$.amountCategoryBandCode").value(DEFAULT_AMOUNT_CATEGORY_BAND_CODE))
             .andExpect(jsonPath("$.amountCategoryBand").value(DEFAULT_AMOUNT_CATEGORY_BAND))
-            .andExpect(jsonPath("$.amountCategoryBandDetails").value(DEFAULT_AMOUNT_CATEGORY_BAND_DETAILS.toString()));
+            .andExpect(jsonPath("$.amountCategoryBandDetails").value(DEFAULT_AMOUNT_CATEGORY_BAND_DETAILS));
     }
 
     @Test
@@ -449,7 +450,7 @@ class CrbAmountCategoryBandResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(crbAmountCategoryBand.getId().intValue())))
             .andExpect(jsonPath("$.[*].amountCategoryBandCode").value(hasItem(DEFAULT_AMOUNT_CATEGORY_BAND_CODE)))
             .andExpect(jsonPath("$.[*].amountCategoryBand").value(hasItem(DEFAULT_AMOUNT_CATEGORY_BAND)))
-            .andExpect(jsonPath("$.[*].amountCategoryBandDetails").value(hasItem(DEFAULT_AMOUNT_CATEGORY_BAND_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].amountCategoryBandDetails").value(hasItem(DEFAULT_AMOUNT_CATEGORY_BAND_DETAILS)));
 
         // Check, that the count call also returns 1
         restCrbAmountCategoryBandMockMvc
@@ -782,6 +783,6 @@ class CrbAmountCategoryBandResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(crbAmountCategoryBand.getId().intValue())))
             .andExpect(jsonPath("$.[*].amountCategoryBandCode").value(hasItem(DEFAULT_AMOUNT_CATEGORY_BAND_CODE)))
             .andExpect(jsonPath("$.[*].amountCategoryBand").value(hasItem(DEFAULT_AMOUNT_CATEGORY_BAND)))
-            .andExpect(jsonPath("$.[*].amountCategoryBandDetails").value(hasItem(DEFAULT_AMOUNT_CATEGORY_BAND_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].amountCategoryBandDetails").value(hasItem(DEFAULT_AMOUNT_CATEGORY_BAND_DETAILS)));
     }
 }

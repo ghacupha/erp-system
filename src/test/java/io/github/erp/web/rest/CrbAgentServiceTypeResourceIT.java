@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -69,8 +70,8 @@ class CrbAgentServiceTypeResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/crb-agent-service-types";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private CrbAgentServiceTypeRepository crbAgentServiceTypeRepository;
@@ -211,7 +212,7 @@ class CrbAgentServiceTypeResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(crbAgentServiceType.getId().intValue())))
             .andExpect(jsonPath("$.[*].agentServiceTypeCode").value(hasItem(DEFAULT_AGENT_SERVICE_TYPE_CODE)))
-            .andExpect(jsonPath("$.[*].agentServiceTypeDetails").value(hasItem(DEFAULT_AGENT_SERVICE_TYPE_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].agentServiceTypeDetails").value(hasItem(DEFAULT_AGENT_SERVICE_TYPE_DETAILS)));
     }
 
     @Test
@@ -227,7 +228,7 @@ class CrbAgentServiceTypeResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(crbAgentServiceType.getId().intValue()))
             .andExpect(jsonPath("$.agentServiceTypeCode").value(DEFAULT_AGENT_SERVICE_TYPE_CODE))
-            .andExpect(jsonPath("$.agentServiceTypeDetails").value(DEFAULT_AGENT_SERVICE_TYPE_DETAILS.toString()));
+            .andExpect(jsonPath("$.agentServiceTypeDetails").value(DEFAULT_AGENT_SERVICE_TYPE_DETAILS));
     }
 
     @Test
@@ -338,7 +339,7 @@ class CrbAgentServiceTypeResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(crbAgentServiceType.getId().intValue())))
             .andExpect(jsonPath("$.[*].agentServiceTypeCode").value(hasItem(DEFAULT_AGENT_SERVICE_TYPE_CODE)))
-            .andExpect(jsonPath("$.[*].agentServiceTypeDetails").value(hasItem(DEFAULT_AGENT_SERVICE_TYPE_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].agentServiceTypeDetails").value(hasItem(DEFAULT_AGENT_SERVICE_TYPE_DETAILS)));
 
         // Check, that the count call also returns 1
         restCrbAgentServiceTypeMockMvc
@@ -667,6 +668,6 @@ class CrbAgentServiceTypeResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(crbAgentServiceType.getId().intValue())))
             .andExpect(jsonPath("$.[*].agentServiceTypeCode").value(hasItem(DEFAULT_AGENT_SERVICE_TYPE_CODE)))
-            .andExpect(jsonPath("$.[*].agentServiceTypeDetails").value(hasItem(DEFAULT_AGENT_SERVICE_TYPE_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].agentServiceTypeDetails").value(hasItem(DEFAULT_AGENT_SERVICE_TYPE_DETAILS)));
     }
 }
