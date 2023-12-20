@@ -18,6 +18,7 @@ package io.github.erp.erp.resources.wip;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.WorkInProgressReport;
+import io.github.erp.domain.WorkInProgressReportREPO;
 import io.github.erp.internal.repository.InternalWIPProjectDealerSummaryReportRepository;
 import io.github.erp.repository.WorkInProgressReportRepository;
 import io.github.erp.repository.search.WorkInProgressReportSearchRepository;
@@ -47,18 +48,40 @@ public class WorkInProgressReportResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(WorkInProgressReportResourceProd.class);
 
+    private final InternalWIPProjectDealerSummaryReportRepository internalWIPOutstandingReportRepository;
     private final WorkInProgressReportRepository workInProgressReportRepository;
     private final InternalWIPProjectDealerSummaryReportRepository internalWIPProjectDealerSummaryReportRepository;
     private final WorkInProgressReportSearchRepository workInProgressReportSearchRepository;
 
     public WorkInProgressReportResourceProd(
-        WorkInProgressReportRepository workInProgressReportRepository,
+        InternalWIPProjectDealerSummaryReportRepository internalWIPOutstandingReportRepository, WorkInProgressReportRepository workInProgressReportRepository,
         InternalWIPProjectDealerSummaryReportRepository internalWIPProjectDealerSummaryReportRepository,
         WorkInProgressReportSearchRepository workInProgressReportSearchRepository
     ) {
+        this.internalWIPOutstandingReportRepository = internalWIPOutstandingReportRepository;
         this.workInProgressReportRepository = workInProgressReportRepository;
         this.internalWIPProjectDealerSummaryReportRepository = internalWIPProjectDealerSummaryReportRepository;
         this.workInProgressReportSearchRepository = workInProgressReportSearchRepository;
+    }
+
+    /**
+     * {@code GET  /work-in-progress-summary/reported} : get all the workInProgressReports.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of WorkInProgressReportREPO in body.
+     */
+    @GetMapping("/work-in-progress-summary/reported")
+    public ResponseEntity<List<WorkInProgressReportREPO>> getAllWorkInProgressReportsByReportDate(
+        @RequestParam("reportDate") String reportDate,
+        Pageable pageable
+    ) {
+        log.debug("REST request to get WorkInProgressOutstandingReports by criteria, report-date: {}", reportDate);
+
+        // todo implement autonomous report here
+        Page<WorkInProgressReportREPO> page =
+            internalWIPOutstandingReportRepository.findAllByReportDate(LocalDate.parse(reportDate), pageable);
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
