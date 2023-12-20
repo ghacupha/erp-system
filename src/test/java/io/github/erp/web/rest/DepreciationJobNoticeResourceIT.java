@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static io.github.erp.web.rest.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -105,8 +106,8 @@ class DepreciationJobNoticeResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/depreciation-job-notices";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private DepreciationJobNoticeRepository depreciationJobNoticeRepository;
@@ -323,9 +324,9 @@ class DepreciationJobNoticeResourceIT {
             .andExpect(jsonPath("$.[*].sourceModule").value(hasItem(DEFAULT_SOURCE_MODULE)))
             .andExpect(jsonPath("$.[*].sourceEntity").value(hasItem(DEFAULT_SOURCE_ENTITY)))
             .andExpect(jsonPath("$.[*].errorCode").value(hasItem(DEFAULT_ERROR_CODE)))
-            .andExpect(jsonPath("$.[*].errorMessage").value(hasItem(DEFAULT_ERROR_MESSAGE.toString())))
+            .andExpect(jsonPath("$.[*].errorMessage").value(hasItem(DEFAULT_ERROR_MESSAGE)))
             .andExpect(jsonPath("$.[*].userAction").value(hasItem(DEFAULT_USER_ACTION)))
-            .andExpect(jsonPath("$.[*].technicalDetails").value(hasItem(DEFAULT_TECHNICAL_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].technicalDetails").value(hasItem(DEFAULT_TECHNICAL_DETAILS)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -364,9 +365,9 @@ class DepreciationJobNoticeResourceIT {
             .andExpect(jsonPath("$.sourceModule").value(DEFAULT_SOURCE_MODULE))
             .andExpect(jsonPath("$.sourceEntity").value(DEFAULT_SOURCE_ENTITY))
             .andExpect(jsonPath("$.errorCode").value(DEFAULT_ERROR_CODE))
-            .andExpect(jsonPath("$.errorMessage").value(DEFAULT_ERROR_MESSAGE.toString()))
+            .andExpect(jsonPath("$.errorMessage").value(DEFAULT_ERROR_MESSAGE))
             .andExpect(jsonPath("$.userAction").value(DEFAULT_USER_ACTION))
-            .andExpect(jsonPath("$.technicalDetails").value(DEFAULT_TECHNICAL_DETAILS.toString()));
+            .andExpect(jsonPath("$.technicalDetails").value(DEFAULT_TECHNICAL_DETAILS));
     }
 
     @Test
@@ -1106,9 +1107,9 @@ class DepreciationJobNoticeResourceIT {
             .andExpect(jsonPath("$.[*].sourceModule").value(hasItem(DEFAULT_SOURCE_MODULE)))
             .andExpect(jsonPath("$.[*].sourceEntity").value(hasItem(DEFAULT_SOURCE_ENTITY)))
             .andExpect(jsonPath("$.[*].errorCode").value(hasItem(DEFAULT_ERROR_CODE)))
-            .andExpect(jsonPath("$.[*].errorMessage").value(hasItem(DEFAULT_ERROR_MESSAGE.toString())))
+            .andExpect(jsonPath("$.[*].errorMessage").value(hasItem(DEFAULT_ERROR_MESSAGE)))
             .andExpect(jsonPath("$.[*].userAction").value(hasItem(DEFAULT_USER_ACTION)))
-            .andExpect(jsonPath("$.[*].technicalDetails").value(hasItem(DEFAULT_TECHNICAL_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].technicalDetails").value(hasItem(DEFAULT_TECHNICAL_DETAILS)));
 
         // Check, that the count call also returns 1
         restDepreciationJobNoticeMockMvc
@@ -1478,8 +1479,8 @@ class DepreciationJobNoticeResourceIT {
             .andExpect(jsonPath("$.[*].sourceModule").value(hasItem(DEFAULT_SOURCE_MODULE)))
             .andExpect(jsonPath("$.[*].sourceEntity").value(hasItem(DEFAULT_SOURCE_ENTITY)))
             .andExpect(jsonPath("$.[*].errorCode").value(hasItem(DEFAULT_ERROR_CODE)))
-            .andExpect(jsonPath("$.[*].errorMessage").value(hasItem(DEFAULT_ERROR_MESSAGE.toString())))
+            .andExpect(jsonPath("$.[*].errorMessage").value(hasItem(DEFAULT_ERROR_MESSAGE)))
             .andExpect(jsonPath("$.[*].userAction").value(hasItem(DEFAULT_USER_ACTION)))
-            .andExpect(jsonPath("$.[*].technicalDetails").value(hasItem(DEFAULT_TECHNICAL_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].technicalDetails").value(hasItem(DEFAULT_TECHNICAL_DETAILS)));
     }
 }

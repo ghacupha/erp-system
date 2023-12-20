@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class SecurityClassificationTypeResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/security-classification-types";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private SecurityClassificationTypeRepository securityClassificationTypeRepository;
@@ -242,7 +243,7 @@ class SecurityClassificationTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(securityClassificationType.getId().intValue())))
             .andExpect(jsonPath("$.[*].securityClassificationTypeCode").value(hasItem(DEFAULT_SECURITY_CLASSIFICATION_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].securityClassificationType").value(hasItem(DEFAULT_SECURITY_CLASSIFICATION_TYPE)))
-            .andExpect(jsonPath("$.[*].securityClassificationDetails").value(hasItem(DEFAULT_SECURITY_CLASSIFICATION_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].securityClassificationDetails").value(hasItem(DEFAULT_SECURITY_CLASSIFICATION_DETAILS)));
     }
 
     @Test
@@ -259,7 +260,7 @@ class SecurityClassificationTypeResourceIT {
             .andExpect(jsonPath("$.id").value(securityClassificationType.getId().intValue()))
             .andExpect(jsonPath("$.securityClassificationTypeCode").value(DEFAULT_SECURITY_CLASSIFICATION_TYPE_CODE))
             .andExpect(jsonPath("$.securityClassificationType").value(DEFAULT_SECURITY_CLASSIFICATION_TYPE))
-            .andExpect(jsonPath("$.securityClassificationDetails").value(DEFAULT_SECURITY_CLASSIFICATION_DETAILS.toString()));
+            .andExpect(jsonPath("$.securityClassificationDetails").value(DEFAULT_SECURITY_CLASSIFICATION_DETAILS));
     }
 
     @Test
@@ -472,7 +473,7 @@ class SecurityClassificationTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(securityClassificationType.getId().intValue())))
             .andExpect(jsonPath("$.[*].securityClassificationTypeCode").value(hasItem(DEFAULT_SECURITY_CLASSIFICATION_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].securityClassificationType").value(hasItem(DEFAULT_SECURITY_CLASSIFICATION_TYPE)))
-            .andExpect(jsonPath("$.[*].securityClassificationDetails").value(hasItem(DEFAULT_SECURITY_CLASSIFICATION_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].securityClassificationDetails").value(hasItem(DEFAULT_SECURITY_CLASSIFICATION_DETAILS)));
 
         // Check, that the count call also returns 1
         restSecurityClassificationTypeMockMvc
@@ -817,6 +818,6 @@ class SecurityClassificationTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(securityClassificationType.getId().intValue())))
             .andExpect(jsonPath("$.[*].securityClassificationTypeCode").value(hasItem(DEFAULT_SECURITY_CLASSIFICATION_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].securityClassificationType").value(hasItem(DEFAULT_SECURITY_CLASSIFICATION_TYPE)))
-            .andExpect(jsonPath("$.[*].securityClassificationDetails").value(hasItem(DEFAULT_SECURITY_CLASSIFICATION_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].securityClassificationDetails").value(hasItem(DEFAULT_SECURITY_CLASSIFICATION_DETAILS)));
     }
 }

@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -76,8 +77,8 @@ class LoanAccountCategoryResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/loan-account-categories";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private LoanAccountCategoryRepository loanAccountCategoryRepository;
@@ -271,7 +272,7 @@ class LoanAccountCategoryResourceIT {
             .andExpect(jsonPath("$.[*].loanAccountMutationType").value(hasItem(DEFAULT_LOAN_ACCOUNT_MUTATION_TYPE.toString())))
             .andExpect(jsonPath("$.[*].loanAccountMutationDetails").value(hasItem(DEFAULT_LOAN_ACCOUNT_MUTATION_DETAILS)))
             .andExpect(
-                jsonPath("$.[*].loanAccountMutationDescription").value(hasItem(DEFAULT_LOAN_ACCOUNT_MUTATION_DESCRIPTION.toString()))
+                jsonPath("$.[*].loanAccountMutationDescription").value(hasItem(DEFAULT_LOAN_ACCOUNT_MUTATION_DESCRIPTION))
             );
     }
 
@@ -290,7 +291,7 @@ class LoanAccountCategoryResourceIT {
             .andExpect(jsonPath("$.loanAccountMutationCode").value(DEFAULT_LOAN_ACCOUNT_MUTATION_CODE))
             .andExpect(jsonPath("$.loanAccountMutationType").value(DEFAULT_LOAN_ACCOUNT_MUTATION_TYPE.toString()))
             .andExpect(jsonPath("$.loanAccountMutationDetails").value(DEFAULT_LOAN_ACCOUNT_MUTATION_DETAILS))
-            .andExpect(jsonPath("$.loanAccountMutationDescription").value(DEFAULT_LOAN_ACCOUNT_MUTATION_DESCRIPTION.toString()));
+            .andExpect(jsonPath("$.loanAccountMutationDescription").value(DEFAULT_LOAN_ACCOUNT_MUTATION_DESCRIPTION));
     }
 
     @Test
@@ -538,7 +539,7 @@ class LoanAccountCategoryResourceIT {
             .andExpect(jsonPath("$.[*].loanAccountMutationType").value(hasItem(DEFAULT_LOAN_ACCOUNT_MUTATION_TYPE.toString())))
             .andExpect(jsonPath("$.[*].loanAccountMutationDetails").value(hasItem(DEFAULT_LOAN_ACCOUNT_MUTATION_DETAILS)))
             .andExpect(
-                jsonPath("$.[*].loanAccountMutationDescription").value(hasItem(DEFAULT_LOAN_ACCOUNT_MUTATION_DESCRIPTION.toString()))
+                jsonPath("$.[*].loanAccountMutationDescription").value(hasItem(DEFAULT_LOAN_ACCOUNT_MUTATION_DESCRIPTION))
             );
 
         // Check, that the count call also returns 1
@@ -879,7 +880,7 @@ class LoanAccountCategoryResourceIT {
             .andExpect(jsonPath("$.[*].loanAccountMutationType").value(hasItem(DEFAULT_LOAN_ACCOUNT_MUTATION_TYPE.toString())))
             .andExpect(jsonPath("$.[*].loanAccountMutationDetails").value(hasItem(DEFAULT_LOAN_ACCOUNT_MUTATION_DETAILS)))
             .andExpect(
-                jsonPath("$.[*].loanAccountMutationDescription").value(hasItem(DEFAULT_LOAN_ACCOUNT_MUTATION_DESCRIPTION.toString()))
+                jsonPath("$.[*].loanAccountMutationDescription").value(hasItem(DEFAULT_LOAN_ACCOUNT_MUTATION_DESCRIPTION))
             );
     }
 }

@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class ChannelTypeResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/channel-types";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private ChannelTypeRepository channelTypeRepository;
@@ -232,7 +233,7 @@ class ChannelTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(channelType.getId().intValue())))
             .andExpect(jsonPath("$.[*].channelsTypeCode").value(hasItem(DEFAULT_CHANNELS_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].channelTypes").value(hasItem(DEFAULT_CHANNEL_TYPES)))
-            .andExpect(jsonPath("$.[*].channelTypeDetails").value(hasItem(DEFAULT_CHANNEL_TYPE_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].channelTypeDetails").value(hasItem(DEFAULT_CHANNEL_TYPE_DETAILS)));
     }
 
     @Test
@@ -249,7 +250,7 @@ class ChannelTypeResourceIT {
             .andExpect(jsonPath("$.id").value(channelType.getId().intValue()))
             .andExpect(jsonPath("$.channelsTypeCode").value(DEFAULT_CHANNELS_TYPE_CODE))
             .andExpect(jsonPath("$.channelTypes").value(DEFAULT_CHANNEL_TYPES))
-            .andExpect(jsonPath("$.channelTypeDetails").value(DEFAULT_CHANNEL_TYPE_DETAILS.toString()));
+            .andExpect(jsonPath("$.channelTypeDetails").value(DEFAULT_CHANNEL_TYPE_DETAILS));
     }
 
     @Test
@@ -437,7 +438,7 @@ class ChannelTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(channelType.getId().intValue())))
             .andExpect(jsonPath("$.[*].channelsTypeCode").value(hasItem(DEFAULT_CHANNELS_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].channelTypes").value(hasItem(DEFAULT_CHANNEL_TYPES)))
-            .andExpect(jsonPath("$.[*].channelTypeDetails").value(hasItem(DEFAULT_CHANNEL_TYPE_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].channelTypeDetails").value(hasItem(DEFAULT_CHANNEL_TYPE_DETAILS)));
 
         // Check, that the count call also returns 1
         restChannelTypeMockMvc
@@ -764,6 +765,6 @@ class ChannelTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(channelType.getId().intValue())))
             .andExpect(jsonPath("$.[*].channelsTypeCode").value(hasItem(DEFAULT_CHANNELS_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].channelTypes").value(hasItem(DEFAULT_CHANNEL_TYPES)))
-            .andExpect(jsonPath("$.[*].channelTypeDetails").value(hasItem(DEFAULT_CHANNEL_TYPE_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].channelTypeDetails").value(hasItem(DEFAULT_CHANNEL_TYPE_DETAILS)));
     }
 }

@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -74,8 +75,8 @@ class RemittanceFlagResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/remittance-flags";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private RemittanceFlagRepository remittanceFlagRepository;
@@ -234,7 +235,7 @@ class RemittanceFlagResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(remittanceFlag.getId().intValue())))
             .andExpect(jsonPath("$.[*].remittanceTypeFlag").value(hasItem(DEFAULT_REMITTANCE_TYPE_FLAG.toString())))
             .andExpect(jsonPath("$.[*].remittanceType").value(hasItem(DEFAULT_REMITTANCE_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].remittanceTypeDetails").value(hasItem(DEFAULT_REMITTANCE_TYPE_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].remittanceTypeDetails").value(hasItem(DEFAULT_REMITTANCE_TYPE_DETAILS)));
     }
 
     @Test
@@ -251,7 +252,7 @@ class RemittanceFlagResourceIT {
             .andExpect(jsonPath("$.id").value(remittanceFlag.getId().intValue()))
             .andExpect(jsonPath("$.remittanceTypeFlag").value(DEFAULT_REMITTANCE_TYPE_FLAG.toString()))
             .andExpect(jsonPath("$.remittanceType").value(DEFAULT_REMITTANCE_TYPE.toString()))
-            .andExpect(jsonPath("$.remittanceTypeDetails").value(DEFAULT_REMITTANCE_TYPE_DETAILS.toString()));
+            .andExpect(jsonPath("$.remittanceTypeDetails").value(DEFAULT_REMITTANCE_TYPE_DETAILS));
     }
 
     @Test
@@ -387,7 +388,7 @@ class RemittanceFlagResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(remittanceFlag.getId().intValue())))
             .andExpect(jsonPath("$.[*].remittanceTypeFlag").value(hasItem(DEFAULT_REMITTANCE_TYPE_FLAG.toString())))
             .andExpect(jsonPath("$.[*].remittanceType").value(hasItem(DEFAULT_REMITTANCE_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].remittanceTypeDetails").value(hasItem(DEFAULT_REMITTANCE_TYPE_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].remittanceTypeDetails").value(hasItem(DEFAULT_REMITTANCE_TYPE_DETAILS)));
 
         // Check, that the count call also returns 1
         restRemittanceFlagMockMvc
@@ -718,6 +719,6 @@ class RemittanceFlagResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(remittanceFlag.getId().intValue())))
             .andExpect(jsonPath("$.[*].remittanceTypeFlag").value(hasItem(DEFAULT_REMITTANCE_TYPE_FLAG.toString())))
             .andExpect(jsonPath("$.[*].remittanceType").value(hasItem(DEFAULT_REMITTANCE_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].remittanceTypeDetails").value(hasItem(DEFAULT_REMITTANCE_TYPE_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].remittanceTypeDetails").value(hasItem(DEFAULT_REMITTANCE_TYPE_DETAILS)));
     }
 }

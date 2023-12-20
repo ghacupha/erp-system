@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class CounterpartyTypeResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/counterparty-types";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private CounterpartyTypeRepository counterpartyTypeRepository;
@@ -232,7 +233,7 @@ class CounterpartyTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(counterpartyType.getId().intValue())))
             .andExpect(jsonPath("$.[*].counterpartyTypeCode").value(hasItem(DEFAULT_COUNTERPARTY_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].counterPartyType").value(hasItem(DEFAULT_COUNTER_PARTY_TYPE)))
-            .andExpect(jsonPath("$.[*].counterpartyTypeDescription").value(hasItem(DEFAULT_COUNTERPARTY_TYPE_DESCRIPTION.toString())));
+            .andExpect(jsonPath("$.[*].counterpartyTypeDescription").value(hasItem(DEFAULT_COUNTERPARTY_TYPE_DESCRIPTION)));
     }
 
     @Test
@@ -249,7 +250,7 @@ class CounterpartyTypeResourceIT {
             .andExpect(jsonPath("$.id").value(counterpartyType.getId().intValue()))
             .andExpect(jsonPath("$.counterpartyTypeCode").value(DEFAULT_COUNTERPARTY_TYPE_CODE))
             .andExpect(jsonPath("$.counterPartyType").value(DEFAULT_COUNTER_PARTY_TYPE))
-            .andExpect(jsonPath("$.counterpartyTypeDescription").value(DEFAULT_COUNTERPARTY_TYPE_DESCRIPTION.toString()));
+            .andExpect(jsonPath("$.counterpartyTypeDescription").value(DEFAULT_COUNTERPARTY_TYPE_DESCRIPTION));
     }
 
     @Test
@@ -439,7 +440,7 @@ class CounterpartyTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(counterpartyType.getId().intValue())))
             .andExpect(jsonPath("$.[*].counterpartyTypeCode").value(hasItem(DEFAULT_COUNTERPARTY_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].counterPartyType").value(hasItem(DEFAULT_COUNTER_PARTY_TYPE)))
-            .andExpect(jsonPath("$.[*].counterpartyTypeDescription").value(hasItem(DEFAULT_COUNTERPARTY_TYPE_DESCRIPTION.toString())));
+            .andExpect(jsonPath("$.[*].counterpartyTypeDescription").value(hasItem(DEFAULT_COUNTERPARTY_TYPE_DESCRIPTION)));
 
         // Check, that the count call also returns 1
         restCounterpartyTypeMockMvc
@@ -768,6 +769,6 @@ class CounterpartyTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(counterpartyType.getId().intValue())))
             .andExpect(jsonPath("$.[*].counterpartyTypeCode").value(hasItem(DEFAULT_COUNTERPARTY_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].counterPartyType").value(hasItem(DEFAULT_COUNTER_PARTY_TYPE)))
-            .andExpect(jsonPath("$.[*].counterpartyTypeDescription").value(hasItem(DEFAULT_COUNTERPARTY_TYPE_DESCRIPTION.toString())));
+            .andExpect(jsonPath("$.[*].counterpartyTypeDescription").value(hasItem(DEFAULT_COUNTERPARTY_TYPE_DESCRIPTION)));
     }
 }

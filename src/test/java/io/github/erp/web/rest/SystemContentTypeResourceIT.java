@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -80,8 +81,8 @@ class SystemContentTypeResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/system-content-types";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private SystemContentTypeRepository systemContentTypeRepository;
@@ -279,7 +280,7 @@ class SystemContentTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(systemContentType.getId().intValue())))
             .andExpect(jsonPath("$.[*].contentTypeName").value(hasItem(DEFAULT_CONTENT_TYPE_NAME)))
             .andExpect(jsonPath("$.[*].contentTypeHeader").value(hasItem(DEFAULT_CONTENT_TYPE_HEADER)))
-            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())))
+            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS)))
             .andExpect(jsonPath("$.[*].availability").value(hasItem(DEFAULT_AVAILABILITY.toString())));
     }
 
@@ -315,7 +316,7 @@ class SystemContentTypeResourceIT {
             .andExpect(jsonPath("$.id").value(systemContentType.getId().intValue()))
             .andExpect(jsonPath("$.contentTypeName").value(DEFAULT_CONTENT_TYPE_NAME))
             .andExpect(jsonPath("$.contentTypeHeader").value(DEFAULT_CONTENT_TYPE_HEADER))
-            .andExpect(jsonPath("$.comments").value(DEFAULT_COMMENTS.toString()))
+            .andExpect(jsonPath("$.comments").value(DEFAULT_COMMENTS))
             .andExpect(jsonPath("$.availability").value(DEFAULT_AVAILABILITY.toString()));
     }
 
@@ -608,7 +609,7 @@ class SystemContentTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(systemContentType.getId().intValue())))
             .andExpect(jsonPath("$.[*].contentTypeName").value(hasItem(DEFAULT_CONTENT_TYPE_NAME)))
             .andExpect(jsonPath("$.[*].contentTypeHeader").value(hasItem(DEFAULT_CONTENT_TYPE_HEADER)))
-            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())))
+            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS)))
             .andExpect(jsonPath("$.[*].availability").value(hasItem(DEFAULT_AVAILABILITY.toString())));
 
         // Check, that the count call also returns 1
@@ -945,7 +946,7 @@ class SystemContentTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(systemContentType.getId().intValue())))
             .andExpect(jsonPath("$.[*].contentTypeName").value(hasItem(DEFAULT_CONTENT_TYPE_NAME)))
             .andExpect(jsonPath("$.[*].contentTypeHeader").value(hasItem(DEFAULT_CONTENT_TYPE_HEADER)))
-            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())))
+            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS)))
             .andExpect(jsonPath("$.[*].availability").value(hasItem(DEFAULT_AVAILABILITY.toString())));
     }
 }

@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class CommitteeTypeResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/committee-types";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private CommitteeTypeRepository committeeTypeRepository;
@@ -212,7 +213,7 @@ class CommitteeTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(committeeType.getId().intValue())))
             .andExpect(jsonPath("$.[*].committeeTypeCode").value(hasItem(DEFAULT_COMMITTEE_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].committeeType").value(hasItem(DEFAULT_COMMITTEE_TYPE)))
-            .andExpect(jsonPath("$.[*].committeeTypeDetails").value(hasItem(DEFAULT_COMMITTEE_TYPE_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].committeeTypeDetails").value(hasItem(DEFAULT_COMMITTEE_TYPE_DETAILS)));
     }
 
     @Test
@@ -229,7 +230,7 @@ class CommitteeTypeResourceIT {
             .andExpect(jsonPath("$.id").value(committeeType.getId().intValue()))
             .andExpect(jsonPath("$.committeeTypeCode").value(DEFAULT_COMMITTEE_TYPE_CODE))
             .andExpect(jsonPath("$.committeeType").value(DEFAULT_COMMITTEE_TYPE))
-            .andExpect(jsonPath("$.committeeTypeDetails").value(DEFAULT_COMMITTEE_TYPE_DETAILS.toString()));
+            .andExpect(jsonPath("$.committeeTypeDetails").value(DEFAULT_COMMITTEE_TYPE_DETAILS));
     }
 
     @Test
@@ -417,7 +418,7 @@ class CommitteeTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(committeeType.getId().intValue())))
             .andExpect(jsonPath("$.[*].committeeTypeCode").value(hasItem(DEFAULT_COMMITTEE_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].committeeType").value(hasItem(DEFAULT_COMMITTEE_TYPE)))
-            .andExpect(jsonPath("$.[*].committeeTypeDetails").value(hasItem(DEFAULT_COMMITTEE_TYPE_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].committeeTypeDetails").value(hasItem(DEFAULT_COMMITTEE_TYPE_DETAILS)));
 
         // Check, that the count call also returns 1
         restCommitteeTypeMockMvc
@@ -748,6 +749,6 @@ class CommitteeTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(committeeType.getId().intValue())))
             .andExpect(jsonPath("$.[*].committeeTypeCode").value(hasItem(DEFAULT_COMMITTEE_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].committeeType").value(hasItem(DEFAULT_COMMITTEE_TYPE)))
-            .andExpect(jsonPath("$.[*].committeeTypeDetails").value(hasItem(DEFAULT_COMMITTEE_TYPE_DETAILS.toString())));
+            .andExpect(jsonPath("$.[*].committeeTypeDetails").value(hasItem(DEFAULT_COMMITTEE_TYPE_DETAILS)));
     }
 }

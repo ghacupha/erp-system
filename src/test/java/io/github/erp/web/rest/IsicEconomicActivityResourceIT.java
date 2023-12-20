@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -93,8 +94,8 @@ class IsicEconomicActivityResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/isic-economic-activities";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private IsicEconomicActivityRepository isicEconomicActivityRepository;
@@ -402,7 +403,7 @@ class IsicEconomicActivityResourceIT {
             .andExpect(jsonPath("$.[*].businessEconomicActivityType").value(hasItem(DEFAULT_BUSINESS_ECONOMIC_ACTIVITY_TYPE)))
             .andExpect(
                 jsonPath("$.[*].businessEconomicActivityTypeDescription")
-                    .value(hasItem(DEFAULT_BUSINESS_ECONOMIC_ACTIVITY_TYPE_DESCRIPTION.toString()))
+                    .value(hasItem(DEFAULT_BUSINESS_ECONOMIC_ACTIVITY_TYPE_DESCRIPTION))
             );
     }
 
@@ -428,7 +429,7 @@ class IsicEconomicActivityResourceIT {
             .andExpect(jsonPath("$.classCode").value(DEFAULT_CLASS_CODE))
             .andExpect(jsonPath("$.businessEconomicActivityType").value(DEFAULT_BUSINESS_ECONOMIC_ACTIVITY_TYPE))
             .andExpect(
-                jsonPath("$.businessEconomicActivityTypeDescription").value(DEFAULT_BUSINESS_ECONOMIC_ACTIVITY_TYPE_DESCRIPTION.toString())
+                jsonPath("$.businessEconomicActivityTypeDescription").value(DEFAULT_BUSINESS_ECONOMIC_ACTIVITY_TYPE_DESCRIPTION)
             );
     }
 
@@ -1180,7 +1181,7 @@ class IsicEconomicActivityResourceIT {
             .andExpect(jsonPath("$.[*].businessEconomicActivityType").value(hasItem(DEFAULT_BUSINESS_ECONOMIC_ACTIVITY_TYPE)))
             .andExpect(
                 jsonPath("$.[*].businessEconomicActivityTypeDescription")
-                    .value(hasItem(DEFAULT_BUSINESS_ECONOMIC_ACTIVITY_TYPE_DESCRIPTION.toString()))
+                    .value(hasItem(DEFAULT_BUSINESS_ECONOMIC_ACTIVITY_TYPE_DESCRIPTION))
             );
 
         // Check, that the count call also returns 1
@@ -1568,7 +1569,7 @@ class IsicEconomicActivityResourceIT {
             .andExpect(jsonPath("$.[*].businessEconomicActivityType").value(hasItem(DEFAULT_BUSINESS_ECONOMIC_ACTIVITY_TYPE)))
             .andExpect(
                 jsonPath("$.[*].businessEconomicActivityTypeDescription")
-                    .value(hasItem(DEFAULT_BUSINESS_ECONOMIC_ACTIVITY_TYPE_DESCRIPTION.toString()))
+                    .value(hasItem(DEFAULT_BUSINESS_ECONOMIC_ACTIVITY_TYPE_DESCRIPTION))
             );
     }
 }

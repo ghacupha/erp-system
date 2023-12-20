@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class CrbSubmittingInstitutionCategoryResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/crb-submitting-institution-categories";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private CrbSubmittingInstitutionCategoryRepository crbSubmittingInstitutionCategoryRepository;
@@ -257,7 +258,7 @@ class CrbSubmittingInstitutionCategoryResourceIT {
             .andExpect(jsonPath("$.[*].submittingInstitutionCategoryType").value(hasItem(DEFAULT_SUBMITTING_INSTITUTION_CATEGORY_TYPE)))
             .andExpect(
                 jsonPath("$.[*].submittingInstitutionCategoryDetails")
-                    .value(hasItem(DEFAULT_SUBMITTING_INSTITUTION_CATEGORY_DETAILS.toString()))
+                    .value(hasItem(DEFAULT_SUBMITTING_INSTITUTION_CATEGORY_DETAILS))
             );
     }
 
@@ -276,7 +277,7 @@ class CrbSubmittingInstitutionCategoryResourceIT {
             .andExpect(jsonPath("$.submittingInstitutionCategoryTypeCode").value(DEFAULT_SUBMITTING_INSTITUTION_CATEGORY_TYPE_CODE))
             .andExpect(jsonPath("$.submittingInstitutionCategoryType").value(DEFAULT_SUBMITTING_INSTITUTION_CATEGORY_TYPE))
             .andExpect(
-                jsonPath("$.submittingInstitutionCategoryDetails").value(DEFAULT_SUBMITTING_INSTITUTION_CATEGORY_DETAILS.toString())
+                jsonPath("$.submittingInstitutionCategoryDetails").value(DEFAULT_SUBMITTING_INSTITUTION_CATEGORY_DETAILS)
             );
     }
 
@@ -515,7 +516,7 @@ class CrbSubmittingInstitutionCategoryResourceIT {
             .andExpect(jsonPath("$.[*].submittingInstitutionCategoryType").value(hasItem(DEFAULT_SUBMITTING_INSTITUTION_CATEGORY_TYPE)))
             .andExpect(
                 jsonPath("$.[*].submittingInstitutionCategoryDetails")
-                    .value(hasItem(DEFAULT_SUBMITTING_INSTITUTION_CATEGORY_DETAILS.toString()))
+                    .value(hasItem(DEFAULT_SUBMITTING_INSTITUTION_CATEGORY_DETAILS))
             );
 
         // Check, that the count call also returns 1
@@ -887,7 +888,7 @@ class CrbSubmittingInstitutionCategoryResourceIT {
             .andExpect(jsonPath("$.[*].submittingInstitutionCategoryType").value(hasItem(DEFAULT_SUBMITTING_INSTITUTION_CATEGORY_TYPE)))
             .andExpect(
                 jsonPath("$.[*].submittingInstitutionCategoryDetails")
-                    .value(hasItem(DEFAULT_SUBMITTING_INSTITUTION_CATEGORY_DETAILS.toString()))
+                    .value(hasItem(DEFAULT_SUBMITTING_INSTITUTION_CATEGORY_DETAILS))
             );
     }
 }

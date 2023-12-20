@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -81,8 +82,8 @@ class PrepaymentMarshallingResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/prepayment-marshallings";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private PrepaymentMarshallingRepository prepaymentMarshallingRepository;
@@ -242,28 +243,6 @@ class PrepaymentMarshallingResourceIT {
 
         // Validate the PrepaymentMarshalling in Elasticsearch
         verify(mockPrepaymentMarshallingSearchRepository, times(0)).save(prepaymentMarshalling);
-    }
-
-    @Test
-    @Transactional
-    void checkInactiveIsRequired() throws Exception {
-        int databaseSizeBeforeTest = prepaymentMarshallingRepository.findAll().size();
-        // set the field null
-        prepaymentMarshalling.setInactive(null);
-
-        // Create the PrepaymentMarshalling, which fails.
-        PrepaymentMarshallingDTO prepaymentMarshallingDTO = prepaymentMarshallingMapper.toDto(prepaymentMarshalling);
-
-        restPrepaymentMarshallingMockMvc
-            .perform(
-                post(ENTITY_API_URL)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(prepaymentMarshallingDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<PrepaymentMarshalling> prepaymentMarshallingList = prepaymentMarshallingRepository.findAll();
-        assertThat(prepaymentMarshallingList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test

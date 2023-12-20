@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -97,8 +98,8 @@ class GdiTransactionDataIndexResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/gdi-transaction-data-indices";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private GdiTransactionDataIndexRepository gdiTransactionDataIndexRepository;
@@ -334,7 +335,7 @@ class GdiTransactionDataIndexResourceIT {
             .andExpect(jsonPath("$.[*].datasetBehavior").value(hasItem(DEFAULT_DATASET_BEHAVIOR.toString())))
             .andExpect(jsonPath("$.[*].minimumDataRowsPerRequest").value(hasItem(DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST)))
             .andExpect(jsonPath("$.[*].maximumDataRowsPerRequest").value(hasItem(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST)))
-            .andExpect(jsonPath("$.[*].datasetDescription").value(hasItem(DEFAULT_DATASET_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].datasetDescription").value(hasItem(DEFAULT_DATASET_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].dataPath").value(hasItem(DEFAULT_DATA_PATH)));
     }
 
@@ -374,7 +375,7 @@ class GdiTransactionDataIndexResourceIT {
             .andExpect(jsonPath("$.datasetBehavior").value(DEFAULT_DATASET_BEHAVIOR.toString()))
             .andExpect(jsonPath("$.minimumDataRowsPerRequest").value(DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST))
             .andExpect(jsonPath("$.maximumDataRowsPerRequest").value(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST))
-            .andExpect(jsonPath("$.datasetDescription").value(DEFAULT_DATASET_DESCRIPTION.toString()))
+            .andExpect(jsonPath("$.datasetDescription").value(DEFAULT_DATASET_DESCRIPTION))
             .andExpect(jsonPath("$.dataPath").value(DEFAULT_DATA_PATH));
     }
 
@@ -1077,7 +1078,7 @@ class GdiTransactionDataIndexResourceIT {
             .andExpect(jsonPath("$.[*].datasetBehavior").value(hasItem(DEFAULT_DATASET_BEHAVIOR.toString())))
             .andExpect(jsonPath("$.[*].minimumDataRowsPerRequest").value(hasItem(DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST)))
             .andExpect(jsonPath("$.[*].maximumDataRowsPerRequest").value(hasItem(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST)))
-            .andExpect(jsonPath("$.[*].datasetDescription").value(hasItem(DEFAULT_DATASET_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].datasetDescription").value(hasItem(DEFAULT_DATASET_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].dataPath").value(hasItem(DEFAULT_DATA_PATH)));
 
         // Check, that the count call also returns 1
@@ -1448,7 +1449,7 @@ class GdiTransactionDataIndexResourceIT {
             .andExpect(jsonPath("$.[*].datasetBehavior").value(hasItem(DEFAULT_DATASET_BEHAVIOR.toString())))
             .andExpect(jsonPath("$.[*].minimumDataRowsPerRequest").value(hasItem(DEFAULT_MINIMUM_DATA_ROWS_PER_REQUEST)))
             .andExpect(jsonPath("$.[*].maximumDataRowsPerRequest").value(hasItem(DEFAULT_MAXIMUM_DATA_ROWS_PER_REQUEST)))
-            .andExpect(jsonPath("$.[*].datasetDescription").value(hasItem(DEFAULT_DATASET_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].datasetDescription").value(hasItem(DEFAULT_DATASET_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].dataPath").value(hasItem(DEFAULT_DATA_PATH)));
     }
 }
