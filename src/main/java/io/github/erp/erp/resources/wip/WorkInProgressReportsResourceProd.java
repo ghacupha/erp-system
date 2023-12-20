@@ -35,34 +35,18 @@ import tech.jhipster.web.util.PaginationUtil;
 import java.time.LocalDate;
 import java.util.List;
 
+@Deprecated
 @RestController
 @RequestMapping("/api/fixed-asset")
 public class WorkInProgressReportsResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(WorkInProgressReportsResourceProd.class);
 
-    private final InternalWIPProjectDealerSummaryReportRepository internalWIPOutstandingReportRepository;
 
-    public WorkInProgressReportsResourceProd(InternalWIPProjectDealerSummaryReportRepository internalWIPOutstandingReportRepository) {
-        this.internalWIPOutstandingReportRepository = internalWIPOutstandingReportRepository;
-    }
 
-    /**
-     * {@code GET  /work-in-progress-summary/reported} : get all the workInProgressReports.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of WorkInProgressReportREPO in body.
-     */
-    @GetMapping("/work-in-progress-summary/reported")
-    public ResponseEntity<List<WorkInProgressReportREPO>> getAllWorkInProgressReportsByReportDate(
-        @RequestParam("reportDate") String reportDate,
-        Pageable pageable
-    ) {
-        log.debug("REST request to get WorkInProgressOutstandingReports by criteria, report-date: {}", reportDate);
+//    public WorkInProgressReportsResourceProd(InternalWIPProjectDealerSummaryReportRepository internalWIPOutstandingReportRepository) {
+//        this.internalWIPOutstandingReportRepository = internalWIPOutstandingReportRepository;
+//    }
 
-        Page<WorkInProgressReportREPO> page =
-            internalWIPOutstandingReportRepository.findAllByReportDate(LocalDate.parse(reportDate), pageable);
 
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
 }
