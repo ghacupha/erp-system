@@ -1,4 +1,4 @@
-package io.github.erp.domain;
+package io.github.erp.service.mapper;
 
 /*-
  * Erp System - Mark IX No 5 (Iddo Series) Server ver 1.6.7
@@ -18,20 +18,12 @@ package io.github.erp.domain;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import java.math.BigDecimal;
+import io.github.erp.domain.AmortizationPostingReport;
+import io.github.erp.service.dto.AmortizationPostingReportDTO;
+import org.mapstruct.*;
 
-public interface AmortizationPostingReportInternal {
-
-    Long getId();
-
-    String getCatalogueNumber();
-
-    String getDebitAccount();
-
-    String getCreditAccount();
-
-    String getDescription();
-
-    BigDecimal getAmortizationAmount();
-
-}
+/**
+ * Mapper for the entity {@link AmortizationPostingReport} and its DTO {@link AmortizationPostingReportDTO}.
+ */
+@Mapper(componentModel = "spring", uses = {})
+public interface AmortizationPostingReportMapper extends EntityMapper<AmortizationPostingReportDTO, AmortizationPostingReport> {}
