@@ -1,15 +1,12 @@
-package io.github.erp.internal.service.autonomousReport;
+package io.github.erp.internal.service.autonomousReport.reportListExport;
 
-import io.github.erp.domain.WorkInProgressReportREPO;
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.report.ReportsProperties;
-import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
+import io.github.erp.internal.service.autonomousReport.CSVDynamicConverterService;
+import io.github.erp.internal.service.autonomousReport.reportListExport.ReportListExportService;
 import io.github.erp.service.AutonomousReportService;
 import io.github.erp.service.dto.ApplicationUserDTO;
 import io.github.erp.service.dto.AutonomousReportDTO;
-import io.github.erp.service.mapper.ApplicationUserMapper;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -20,27 +17,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
-@Service("wipSummaryDealerProjectReportListCSVExportService")
-public class WIPSummaryDealerProjectReportListCSVExportService implements ReportListExportService<WIPByDealerProjectDTO> {
+public abstract class AbstractReportListCSVExportService<T> implements ReportListExportService<T> {
 
     private final ReportsProperties reportsProperties;
     private final FileStorageService fileStorageService;
     private final AutonomousReportService autonomousReportService;
-    private final InternalApplicationUserDetailService userDetailService;
-    private final ApplicationUserMapper applicationUserMapper;
 
-
-    public WIPSummaryDealerProjectReportListCSVExportService(
-        ReportsProperties reportsProperties,
-        @Qualifier("reportsFSStorageService") FileStorageService fileStorageService,
-        AutonomousReportService autonomousReportService,
-        InternalApplicationUserDetailService userDetailService,
-        ApplicationUserMapper applicationUserMapper) {
+    public AbstractReportListCSVExportService(ReportsProperties reportsProperties, FileStorageService fileStorageService, AutonomousReportService autonomousReportService) {
         this.reportsProperties = reportsProperties;
         this.fileStorageService = fileStorageService;
         this.autonomousReportService = autonomousReportService;
-        this.userDetailService = userDetailService;
-        this.applicationUserMapper = applicationUserMapper;
     }
 
     /**
@@ -51,7 +37,7 @@ public class WIPSummaryDealerProjectReportListCSVExportService implements Report
      * @throws IOException can happen
      */
     @Override
-    public void executeReport(List<WIPByDealerProjectDTO> reportList, LocalDate reportDate, String fileName, String reportName) throws IOException {
+    public void executeReport(List<T> reportList, LocalDate reportDate, String fileName, String reportName) throws IOException {
 
         ByteArrayOutputStream csvByteArray = CSVDynamicConverterService.convertToCSV(reportList);
 
@@ -71,12 +57,12 @@ public class WIPSummaryDealerProjectReportListCSVExportService implements Report
         autoReport.setReportFileContentType("text/csv");
         autoReport.setCreatedBy(getCreatedBy());
         autoReport.setFileChecksum(fileChecksum);
+
+        // todo CHECK report for tamper
         autoReport.setReportTampered(false);
         // Save report
         autonomousReportService.save(autoReport);
     }
 
-    protected ApplicationUserDTO getCreatedBy() {
-        return applicationUserMapper.toDto(userDetailService.getCurrentApplicationUser().get());
-    }
+    protected abstract ApplicationUserDTO getCreatedBy();
 }
