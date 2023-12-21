@@ -59,7 +59,14 @@ public class PrepaymentCompilationServiceImpl implements PrepaymentCompilationSe
     private final FiscalMonthMapper fiscalMonthMapper;
     private final PrepaymentCompilationCompleteSequence prepaymentCompilationCompleteSequence;
 
-    public PrepaymentCompilationServiceImpl(PrepaymentMarshallingRepository prepaymentMarshallingRepository, PrepaymentAccountRepository prepaymentAccountRepository, PrepaymentAmortizationService prepaymentAmortizationService, PrepaymentAccountMapper prepaymentAccountMapper, InternalFiscalMonthRepository fiscalMonthRepository, FiscalMonthMapper fiscalMonthMapper, PrepaymentCompilationCompleteSequence prepaymentCompilationCompleteSequence) {
+    public PrepaymentCompilationServiceImpl(
+        PrepaymentMarshallingRepository prepaymentMarshallingRepository,
+        PrepaymentAccountRepository prepaymentAccountRepository,
+        PrepaymentAmortizationService prepaymentAmortizationService,
+        PrepaymentAccountMapper prepaymentAccountMapper,
+        InternalFiscalMonthRepository fiscalMonthRepository,
+        FiscalMonthMapper fiscalMonthMapper,
+        PrepaymentCompilationCompleteSequence prepaymentCompilationCompleteSequence) {
         this.prepaymentMarshallingRepository = prepaymentMarshallingRepository;
         this.prepaymentAccountRepository = prepaymentAccountRepository;
         this.prepaymentAmortizationService = prepaymentAmortizationService;

@@ -29,8 +29,13 @@ public class ReportsConfiguration {
     @Autowired
     private HazelcastInstance hazelcastInstance;
 
-    @Bean
+    @Bean("prepaymentsReportCache")
     public IMap<String, String> prepaymentsReportCache() {
         return hazelcastInstance.getMap("prepaymentsReportCache");
+    }
+
+    @Bean("workInProgressReportCache")
+    public IMap<String, String> workInProgressReportCache() {
+        return hazelcastInstance.getMap("workInProgressReportCache");
     }
 }

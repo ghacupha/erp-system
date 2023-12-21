@@ -60,7 +60,7 @@ public class PrepaymentReportResourceProd {
 
     private final InternalPrepaymentReportRepository internalPrepaymentReportRepository;
 
-    private final DatedReportExportService prepaymentReportExportService;
+    private final DatedReportExportService<PrepaymentReportDTO> prepaymentReportExportService;
 
     private final Mapping<PrepaymentReportTuple, PrepaymentReportDTO> prepaymentReportDTOMapping;
 
@@ -68,7 +68,7 @@ public class PrepaymentReportResourceProd {
         PrepaymentReportService prepaymentReportService,
         PrepaymentReportQueryService prepaymentReportQueryService,
         InternalPrepaymentReportRepository internalPrepaymentReportRepository,
-        @Qualifier("prepaymentReportExportService") DatedReportExportService prepaymentReportExportService,
+        DatedReportExportService<PrepaymentReportDTO> prepaymentReportExportService,
         Mapping<PrepaymentReportTuple, PrepaymentReportDTO> prepaymentReportDTOMapping) {
         this.prepaymentReportService = prepaymentReportService;
         this.prepaymentReportQueryService = prepaymentReportQueryService;
