@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class LoanApplicationStatusResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/loan-application-statuses";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private LoanApplicationStatusRepository loanApplicationStatusRepository;
@@ -240,7 +241,7 @@ class LoanApplicationStatusResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(loanApplicationStatus.getId().intValue())))
             .andExpect(jsonPath("$.[*].loanApplicationStatusTypeCode").value(hasItem(DEFAULT_LOAN_APPLICATION_STATUS_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].loanApplicationStatusType").value(hasItem(DEFAULT_LOAN_APPLICATION_STATUS_TYPE)))
-            .andExpect(jsonPath("$.[*].loanApplicationStatusDetails").value(hasItem(DEFAULT_LOAN_APPLICATION_STATUS_DETAILS)));
+            .andExpect(jsonPath("$.[*].loanApplicationStatusDetails").value(hasItem(DEFAULT_LOAN_APPLICATION_STATUS_DETAILS.toString())));
     }
 
     @Test
@@ -257,7 +258,7 @@ class LoanApplicationStatusResourceIT {
             .andExpect(jsonPath("$.id").value(loanApplicationStatus.getId().intValue()))
             .andExpect(jsonPath("$.loanApplicationStatusTypeCode").value(DEFAULT_LOAN_APPLICATION_STATUS_TYPE_CODE))
             .andExpect(jsonPath("$.loanApplicationStatusType").value(DEFAULT_LOAN_APPLICATION_STATUS_TYPE))
-            .andExpect(jsonPath("$.loanApplicationStatusDetails").value(DEFAULT_LOAN_APPLICATION_STATUS_DETAILS));
+            .andExpect(jsonPath("$.loanApplicationStatusDetails").value(DEFAULT_LOAN_APPLICATION_STATUS_DETAILS.toString()));
     }
 
     @Test
@@ -458,7 +459,7 @@ class LoanApplicationStatusResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(loanApplicationStatus.getId().intValue())))
             .andExpect(jsonPath("$.[*].loanApplicationStatusTypeCode").value(hasItem(DEFAULT_LOAN_APPLICATION_STATUS_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].loanApplicationStatusType").value(hasItem(DEFAULT_LOAN_APPLICATION_STATUS_TYPE)))
-            .andExpect(jsonPath("$.[*].loanApplicationStatusDetails").value(hasItem(DEFAULT_LOAN_APPLICATION_STATUS_DETAILS)));
+            .andExpect(jsonPath("$.[*].loanApplicationStatusDetails").value(hasItem(DEFAULT_LOAN_APPLICATION_STATUS_DETAILS.toString())));
 
         // Check, that the count call also returns 1
         restLoanApplicationStatusMockMvc
@@ -793,6 +794,6 @@ class LoanApplicationStatusResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(loanApplicationStatus.getId().intValue())))
             .andExpect(jsonPath("$.[*].loanApplicationStatusTypeCode").value(hasItem(DEFAULT_LOAN_APPLICATION_STATUS_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].loanApplicationStatusType").value(hasItem(DEFAULT_LOAN_APPLICATION_STATUS_TYPE)))
-            .andExpect(jsonPath("$.[*].loanApplicationStatusDetails").value(hasItem(DEFAULT_LOAN_APPLICATION_STATUS_DETAILS)));
+            .andExpect(jsonPath("$.[*].loanApplicationStatusDetails").value(hasItem(DEFAULT_LOAN_APPLICATION_STATUS_DETAILS.toString())));
     }
 }

@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class InsiderCategoryTypesResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/insider-category-types";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private InsiderCategoryTypesRepository insiderCategoryTypesRepository;
@@ -240,7 +241,7 @@ class InsiderCategoryTypesResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(insiderCategoryTypes.getId().intValue())))
             .andExpect(jsonPath("$.[*].insiderCategoryTypeCode").value(hasItem(DEFAULT_INSIDER_CATEGORY_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].insiderCategoryTypeDetail").value(hasItem(DEFAULT_INSIDER_CATEGORY_TYPE_DETAIL)))
-            .andExpect(jsonPath("$.[*].insiderCategoryDescription").value(hasItem(DEFAULT_INSIDER_CATEGORY_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].insiderCategoryDescription").value(hasItem(DEFAULT_INSIDER_CATEGORY_DESCRIPTION.toString())));
     }
 
     @Test
@@ -257,7 +258,7 @@ class InsiderCategoryTypesResourceIT {
             .andExpect(jsonPath("$.id").value(insiderCategoryTypes.getId().intValue()))
             .andExpect(jsonPath("$.insiderCategoryTypeCode").value(DEFAULT_INSIDER_CATEGORY_TYPE_CODE))
             .andExpect(jsonPath("$.insiderCategoryTypeDetail").value(DEFAULT_INSIDER_CATEGORY_TYPE_DETAIL))
-            .andExpect(jsonPath("$.insiderCategoryDescription").value(DEFAULT_INSIDER_CATEGORY_DESCRIPTION));
+            .andExpect(jsonPath("$.insiderCategoryDescription").value(DEFAULT_INSIDER_CATEGORY_DESCRIPTION.toString()));
     }
 
     @Test
@@ -449,7 +450,7 @@ class InsiderCategoryTypesResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(insiderCategoryTypes.getId().intValue())))
             .andExpect(jsonPath("$.[*].insiderCategoryTypeCode").value(hasItem(DEFAULT_INSIDER_CATEGORY_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].insiderCategoryTypeDetail").value(hasItem(DEFAULT_INSIDER_CATEGORY_TYPE_DETAIL)))
-            .andExpect(jsonPath("$.[*].insiderCategoryDescription").value(hasItem(DEFAULT_INSIDER_CATEGORY_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].insiderCategoryDescription").value(hasItem(DEFAULT_INSIDER_CATEGORY_DESCRIPTION.toString())));
 
         // Check, that the count call also returns 1
         restInsiderCategoryTypesMockMvc
@@ -784,6 +785,6 @@ class InsiderCategoryTypesResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(insiderCategoryTypes.getId().intValue())))
             .andExpect(jsonPath("$.[*].insiderCategoryTypeCode").value(hasItem(DEFAULT_INSIDER_CATEGORY_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].insiderCategoryTypeDetail").value(hasItem(DEFAULT_INSIDER_CATEGORY_TYPE_DETAIL)))
-            .andExpect(jsonPath("$.[*].insiderCategoryDescription").value(hasItem(DEFAULT_INSIDER_CATEGORY_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].insiderCategoryDescription").value(hasItem(DEFAULT_INSIDER_CATEGORY_DESCRIPTION.toString())));
     }
 }

@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class SourcesOfFundsTypeCodeResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/sources-of-funds-type-codes";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private SourcesOfFundsTypeCodeRepository sourcesOfFundsTypeCodeRepository;
@@ -240,7 +241,7 @@ class SourcesOfFundsTypeCodeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(sourcesOfFundsTypeCode.getId().intValue())))
             .andExpect(jsonPath("$.[*].sourceOfFundsTypeCode").value(hasItem(DEFAULT_SOURCE_OF_FUNDS_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].sourceOfFundsType").value(hasItem(DEFAULT_SOURCE_OF_FUNDS_TYPE)))
-            .andExpect(jsonPath("$.[*].sourceOfFundsTypeDetails").value(hasItem(DEFAULT_SOURCE_OF_FUNDS_TYPE_DETAILS)));
+            .andExpect(jsonPath("$.[*].sourceOfFundsTypeDetails").value(hasItem(DEFAULT_SOURCE_OF_FUNDS_TYPE_DETAILS.toString())));
     }
 
     @Test
@@ -257,7 +258,7 @@ class SourcesOfFundsTypeCodeResourceIT {
             .andExpect(jsonPath("$.id").value(sourcesOfFundsTypeCode.getId().intValue()))
             .andExpect(jsonPath("$.sourceOfFundsTypeCode").value(DEFAULT_SOURCE_OF_FUNDS_TYPE_CODE))
             .andExpect(jsonPath("$.sourceOfFundsType").value(DEFAULT_SOURCE_OF_FUNDS_TYPE))
-            .andExpect(jsonPath("$.sourceOfFundsTypeDetails").value(DEFAULT_SOURCE_OF_FUNDS_TYPE_DETAILS));
+            .andExpect(jsonPath("$.sourceOfFundsTypeDetails").value(DEFAULT_SOURCE_OF_FUNDS_TYPE_DETAILS.toString()));
     }
 
     @Test
@@ -449,7 +450,7 @@ class SourcesOfFundsTypeCodeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(sourcesOfFundsTypeCode.getId().intValue())))
             .andExpect(jsonPath("$.[*].sourceOfFundsTypeCode").value(hasItem(DEFAULT_SOURCE_OF_FUNDS_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].sourceOfFundsType").value(hasItem(DEFAULT_SOURCE_OF_FUNDS_TYPE)))
-            .andExpect(jsonPath("$.[*].sourceOfFundsTypeDetails").value(hasItem(DEFAULT_SOURCE_OF_FUNDS_TYPE_DETAILS)));
+            .andExpect(jsonPath("$.[*].sourceOfFundsTypeDetails").value(hasItem(DEFAULT_SOURCE_OF_FUNDS_TYPE_DETAILS.toString())));
 
         // Check, that the count call also returns 1
         restSourcesOfFundsTypeCodeMockMvc
@@ -782,6 +783,6 @@ class SourcesOfFundsTypeCodeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(sourcesOfFundsTypeCode.getId().intValue())))
             .andExpect(jsonPath("$.[*].sourceOfFundsTypeCode").value(hasItem(DEFAULT_SOURCE_OF_FUNDS_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].sourceOfFundsType").value(hasItem(DEFAULT_SOURCE_OF_FUNDS_TYPE)))
-            .andExpect(jsonPath("$.[*].sourceOfFundsTypeDetails").value(hasItem(DEFAULT_SOURCE_OF_FUNDS_TYPE_DETAILS)));
+            .andExpect(jsonPath("$.[*].sourceOfFundsTypeDetails").value(hasItem(DEFAULT_SOURCE_OF_FUNDS_TYPE_DETAILS.toString())));
     }
 }

@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class AccountOwnershipTypeResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/account-ownership-types";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private AccountOwnershipTypeRepository accountOwnershipTypeRepository;
@@ -144,7 +145,7 @@ class AccountOwnershipTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(accountOwnershipType.getId().intValue())))
             .andExpect(jsonPath("$.[*].accountOwnershipTypeCode").value(hasItem(DEFAULT_ACCOUNT_OWNERSHIP_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].accountOwnershipType").value(hasItem(DEFAULT_ACCOUNT_OWNERSHIP_TYPE)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
     }
 
     @Test
@@ -161,7 +162,7 @@ class AccountOwnershipTypeResourceIT {
             .andExpect(jsonPath("$.id").value(accountOwnershipType.getId().intValue()))
             .andExpect(jsonPath("$.accountOwnershipTypeCode").value(DEFAULT_ACCOUNT_OWNERSHIP_TYPE_CODE))
             .andExpect(jsonPath("$.accountOwnershipType").value(DEFAULT_ACCOUNT_OWNERSHIP_TYPE))
-            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION));
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
     }
 
     @Test
@@ -353,7 +354,7 @@ class AccountOwnershipTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(accountOwnershipType.getId().intValue())))
             .andExpect(jsonPath("$.[*].accountOwnershipTypeCode").value(hasItem(DEFAULT_ACCOUNT_OWNERSHIP_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].accountOwnershipType").value(hasItem(DEFAULT_ACCOUNT_OWNERSHIP_TYPE)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
 
         // Check, that the count call also returns 1
         restAccountOwnershipTypeMockMvc
@@ -406,6 +407,6 @@ class AccountOwnershipTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(accountOwnershipType.getId().intValue())))
             .andExpect(jsonPath("$.[*].accountOwnershipTypeCode").value(hasItem(DEFAULT_ACCOUNT_OWNERSHIP_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].accountOwnershipType").value(hasItem(DEFAULT_ACCOUNT_OWNERSHIP_TYPE)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
     }
 }

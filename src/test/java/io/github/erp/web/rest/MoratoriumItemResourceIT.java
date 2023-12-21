@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class MoratoriumItemResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/moratorium-items";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private MoratoriumItemRepository moratoriumItemRepository;
@@ -232,7 +233,7 @@ class MoratoriumItemResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(moratoriumItem.getId().intValue())))
             .andExpect(jsonPath("$.[*].moratoriumItemTypeCode").value(hasItem(DEFAULT_MORATORIUM_ITEM_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].moratoriumItemType").value(hasItem(DEFAULT_MORATORIUM_ITEM_TYPE)))
-            .andExpect(jsonPath("$.[*].moratoriumTypeDetails").value(hasItem(DEFAULT_MORATORIUM_TYPE_DETAILS)));
+            .andExpect(jsonPath("$.[*].moratoriumTypeDetails").value(hasItem(DEFAULT_MORATORIUM_TYPE_DETAILS.toString())));
     }
 
     @Test
@@ -249,7 +250,7 @@ class MoratoriumItemResourceIT {
             .andExpect(jsonPath("$.id").value(moratoriumItem.getId().intValue()))
             .andExpect(jsonPath("$.moratoriumItemTypeCode").value(DEFAULT_MORATORIUM_ITEM_TYPE_CODE))
             .andExpect(jsonPath("$.moratoriumItemType").value(DEFAULT_MORATORIUM_ITEM_TYPE))
-            .andExpect(jsonPath("$.moratoriumTypeDetails").value(DEFAULT_MORATORIUM_TYPE_DETAILS));
+            .andExpect(jsonPath("$.moratoriumTypeDetails").value(DEFAULT_MORATORIUM_TYPE_DETAILS.toString()));
     }
 
     @Test
@@ -439,7 +440,7 @@ class MoratoriumItemResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(moratoriumItem.getId().intValue())))
             .andExpect(jsonPath("$.[*].moratoriumItemTypeCode").value(hasItem(DEFAULT_MORATORIUM_ITEM_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].moratoriumItemType").value(hasItem(DEFAULT_MORATORIUM_ITEM_TYPE)))
-            .andExpect(jsonPath("$.[*].moratoriumTypeDetails").value(hasItem(DEFAULT_MORATORIUM_TYPE_DETAILS)));
+            .andExpect(jsonPath("$.[*].moratoriumTypeDetails").value(hasItem(DEFAULT_MORATORIUM_TYPE_DETAILS.toString())));
 
         // Check, that the count call also returns 1
         restMoratoriumItemMockMvc
@@ -772,6 +773,6 @@ class MoratoriumItemResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(moratoriumItem.getId().intValue())))
             .andExpect(jsonPath("$.[*].moratoriumItemTypeCode").value(hasItem(DEFAULT_MORATORIUM_ITEM_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].moratoriumItemType").value(hasItem(DEFAULT_MORATORIUM_ITEM_TYPE)))
-            .andExpect(jsonPath("$.[*].moratoriumTypeDetails").value(hasItem(DEFAULT_MORATORIUM_TYPE_DETAILS)));
+            .andExpect(jsonPath("$.[*].moratoriumTypeDetails").value(hasItem(DEFAULT_MORATORIUM_TYPE_DETAILS.toString())));
     }
 }

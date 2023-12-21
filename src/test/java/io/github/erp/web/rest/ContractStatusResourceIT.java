@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class ContractStatusResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/contract-statuses";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private ContractStatusRepository contractStatusRepository;
@@ -232,7 +233,7 @@ class ContractStatusResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(contractStatus.getId().intValue())))
             .andExpect(jsonPath("$.[*].contractStatusCode").value(hasItem(DEFAULT_CONTRACT_STATUS_CODE)))
             .andExpect(jsonPath("$.[*].contractStatusType").value(hasItem(DEFAULT_CONTRACT_STATUS_TYPE)))
-            .andExpect(jsonPath("$.[*].contractStatusTypeDescription").value(hasItem(DEFAULT_CONTRACT_STATUS_TYPE_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].contractStatusTypeDescription").value(hasItem(DEFAULT_CONTRACT_STATUS_TYPE_DESCRIPTION.toString())));
     }
 
     @Test
@@ -249,7 +250,7 @@ class ContractStatusResourceIT {
             .andExpect(jsonPath("$.id").value(contractStatus.getId().intValue()))
             .andExpect(jsonPath("$.contractStatusCode").value(DEFAULT_CONTRACT_STATUS_CODE))
             .andExpect(jsonPath("$.contractStatusType").value(DEFAULT_CONTRACT_STATUS_TYPE))
-            .andExpect(jsonPath("$.contractStatusTypeDescription").value(DEFAULT_CONTRACT_STATUS_TYPE_DESCRIPTION));
+            .andExpect(jsonPath("$.contractStatusTypeDescription").value(DEFAULT_CONTRACT_STATUS_TYPE_DESCRIPTION.toString()));
     }
 
     @Test
@@ -437,7 +438,7 @@ class ContractStatusResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(contractStatus.getId().intValue())))
             .andExpect(jsonPath("$.[*].contractStatusCode").value(hasItem(DEFAULT_CONTRACT_STATUS_CODE)))
             .andExpect(jsonPath("$.[*].contractStatusType").value(hasItem(DEFAULT_CONTRACT_STATUS_TYPE)))
-            .andExpect(jsonPath("$.[*].contractStatusTypeDescription").value(hasItem(DEFAULT_CONTRACT_STATUS_TYPE_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].contractStatusTypeDescription").value(hasItem(DEFAULT_CONTRACT_STATUS_TYPE_DESCRIPTION.toString())));
 
         // Check, that the count call also returns 1
         restContractStatusMockMvc
@@ -771,6 +772,6 @@ class ContractStatusResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(contractStatus.getId().intValue())))
             .andExpect(jsonPath("$.[*].contractStatusCode").value(hasItem(DEFAULT_CONTRACT_STATUS_CODE)))
             .andExpect(jsonPath("$.[*].contractStatusType").value(hasItem(DEFAULT_CONTRACT_STATUS_TYPE)))
-            .andExpect(jsonPath("$.[*].contractStatusTypeDescription").value(hasItem(DEFAULT_CONTRACT_STATUS_TYPE_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].contractStatusTypeDescription").value(hasItem(DEFAULT_CONTRACT_STATUS_TYPE_DESCRIPTION.toString())));
     }
 }

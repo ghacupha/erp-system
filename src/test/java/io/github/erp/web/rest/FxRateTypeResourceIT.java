@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class FxRateTypeResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/fx-rate-types";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private FxRateTypeRepository fxRateTypeRepository;
@@ -224,7 +225,7 @@ class FxRateTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(fxRateType.getId().intValue())))
             .andExpect(jsonPath("$.[*].fxRateCode").value(hasItem(DEFAULT_FX_RATE_CODE)))
             .andExpect(jsonPath("$.[*].fxRateType").value(hasItem(DEFAULT_FX_RATE_TYPE)))
-            .andExpect(jsonPath("$.[*].fxRateDetails").value(hasItem(DEFAULT_FX_RATE_DETAILS)));
+            .andExpect(jsonPath("$.[*].fxRateDetails").value(hasItem(DEFAULT_FX_RATE_DETAILS.toString())));
     }
 
     @Test
@@ -241,7 +242,7 @@ class FxRateTypeResourceIT {
             .andExpect(jsonPath("$.id").value(fxRateType.getId().intValue()))
             .andExpect(jsonPath("$.fxRateCode").value(DEFAULT_FX_RATE_CODE))
             .andExpect(jsonPath("$.fxRateType").value(DEFAULT_FX_RATE_TYPE))
-            .andExpect(jsonPath("$.fxRateDetails").value(DEFAULT_FX_RATE_DETAILS));
+            .andExpect(jsonPath("$.fxRateDetails").value(DEFAULT_FX_RATE_DETAILS.toString()));
     }
 
     @Test
@@ -429,7 +430,7 @@ class FxRateTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(fxRateType.getId().intValue())))
             .andExpect(jsonPath("$.[*].fxRateCode").value(hasItem(DEFAULT_FX_RATE_CODE)))
             .andExpect(jsonPath("$.[*].fxRateType").value(hasItem(DEFAULT_FX_RATE_TYPE)))
-            .andExpect(jsonPath("$.[*].fxRateDetails").value(hasItem(DEFAULT_FX_RATE_DETAILS)));
+            .andExpect(jsonPath("$.[*].fxRateDetails").value(hasItem(DEFAULT_FX_RATE_DETAILS.toString())));
 
         // Check, that the count call also returns 1
         restFxRateTypeMockMvc
@@ -750,6 +751,6 @@ class FxRateTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(fxRateType.getId().intValue())))
             .andExpect(jsonPath("$.[*].fxRateCode").value(hasItem(DEFAULT_FX_RATE_CODE)))
             .andExpect(jsonPath("$.[*].fxRateType").value(hasItem(DEFAULT_FX_RATE_TYPE)))
-            .andExpect(jsonPath("$.[*].fxRateDetails").value(hasItem(DEFAULT_FX_RATE_DETAILS)));
+            .andExpect(jsonPath("$.[*].fxRateDetails").value(hasItem(DEFAULT_FX_RATE_DETAILS.toString())));
     }
 }

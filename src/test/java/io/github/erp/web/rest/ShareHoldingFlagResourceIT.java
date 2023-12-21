@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -73,8 +74,8 @@ class ShareHoldingFlagResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/share-holding-flags";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private ShareHoldingFlagRepository shareHoldingFlagRepository;
@@ -233,7 +234,7 @@ class ShareHoldingFlagResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(shareHoldingFlag.getId().intValue())))
             .andExpect(jsonPath("$.[*].shareholdingFlagTypeCode").value(hasItem(DEFAULT_SHAREHOLDING_FLAG_TYPE_CODE.toString())))
             .andExpect(jsonPath("$.[*].shareholdingFlagType").value(hasItem(DEFAULT_SHAREHOLDING_FLAG_TYPE)))
-            .andExpect(jsonPath("$.[*].shareholdingTypeDescription").value(hasItem(DEFAULT_SHAREHOLDING_TYPE_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].shareholdingTypeDescription").value(hasItem(DEFAULT_SHAREHOLDING_TYPE_DESCRIPTION.toString())));
     }
 
     @Test
@@ -250,7 +251,7 @@ class ShareHoldingFlagResourceIT {
             .andExpect(jsonPath("$.id").value(shareHoldingFlag.getId().intValue()))
             .andExpect(jsonPath("$.shareholdingFlagTypeCode").value(DEFAULT_SHAREHOLDING_FLAG_TYPE_CODE.toString()))
             .andExpect(jsonPath("$.shareholdingFlagType").value(DEFAULT_SHAREHOLDING_FLAG_TYPE))
-            .andExpect(jsonPath("$.shareholdingTypeDescription").value(DEFAULT_SHAREHOLDING_TYPE_DESCRIPTION));
+            .andExpect(jsonPath("$.shareholdingTypeDescription").value(DEFAULT_SHAREHOLDING_TYPE_DESCRIPTION.toString()));
     }
 
     @Test
@@ -416,7 +417,7 @@ class ShareHoldingFlagResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(shareHoldingFlag.getId().intValue())))
             .andExpect(jsonPath("$.[*].shareholdingFlagTypeCode").value(hasItem(DEFAULT_SHAREHOLDING_FLAG_TYPE_CODE.toString())))
             .andExpect(jsonPath("$.[*].shareholdingFlagType").value(hasItem(DEFAULT_SHAREHOLDING_FLAG_TYPE)))
-            .andExpect(jsonPath("$.[*].shareholdingTypeDescription").value(hasItem(DEFAULT_SHAREHOLDING_TYPE_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].shareholdingTypeDescription").value(hasItem(DEFAULT_SHAREHOLDING_TYPE_DESCRIPTION.toString())));
 
         // Check, that the count call also returns 1
         restShareHoldingFlagMockMvc
@@ -747,6 +748,6 @@ class ShareHoldingFlagResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(shareHoldingFlag.getId().intValue())))
             .andExpect(jsonPath("$.[*].shareholdingFlagTypeCode").value(hasItem(DEFAULT_SHAREHOLDING_FLAG_TYPE_CODE.toString())))
             .andExpect(jsonPath("$.[*].shareholdingFlagType").value(hasItem(DEFAULT_SHAREHOLDING_FLAG_TYPE)))
-            .andExpect(jsonPath("$.[*].shareholdingTypeDescription").value(hasItem(DEFAULT_SHAREHOLDING_TYPE_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].shareholdingTypeDescription").value(hasItem(DEFAULT_SHAREHOLDING_TYPE_DESCRIPTION.toString())));
     }
 }

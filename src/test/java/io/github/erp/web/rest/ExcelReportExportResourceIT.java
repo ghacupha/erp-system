@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static io.github.erp.web.rest.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -106,8 +107,8 @@ class ExcelReportExportResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/excel-report-exports";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private ExcelReportExportRepository excelReportExportRepository;
@@ -468,7 +469,7 @@ class ExcelReportExportResourceIT {
             .andExpect(jsonPath("$.[*].reportPassword").value(hasItem(DEFAULT_REPORT_PASSWORD)))
             .andExpect(jsonPath("$.[*].reportNotesContentType").value(hasItem(DEFAULT_REPORT_NOTES_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].reportNotes").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_NOTES))))
-            .andExpect(jsonPath("$.[*].fileCheckSum").value(hasItem(DEFAULT_FILE_CHECK_SUM)))
+            .andExpect(jsonPath("$.[*].fileCheckSum").value(hasItem(DEFAULT_FILE_CHECK_SUM.toString())))
             .andExpect(jsonPath("$.[*].reportFileContentType").value(hasItem(DEFAULT_REPORT_FILE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))))
             .andExpect(jsonPath("$.[*].reportTimeStamp").value(hasItem(sameInstant(DEFAULT_REPORT_TIME_STAMP))))
@@ -509,7 +510,7 @@ class ExcelReportExportResourceIT {
             .andExpect(jsonPath("$.reportPassword").value(DEFAULT_REPORT_PASSWORD))
             .andExpect(jsonPath("$.reportNotesContentType").value(DEFAULT_REPORT_NOTES_CONTENT_TYPE))
             .andExpect(jsonPath("$.reportNotes").value(Base64Utils.encodeToString(DEFAULT_REPORT_NOTES)))
-            .andExpect(jsonPath("$.fileCheckSum").value(DEFAULT_FILE_CHECK_SUM))
+            .andExpect(jsonPath("$.fileCheckSum").value(DEFAULT_FILE_CHECK_SUM.toString()))
             .andExpect(jsonPath("$.reportFileContentType").value(DEFAULT_REPORT_FILE_CONTENT_TYPE))
             .andExpect(jsonPath("$.reportFile").value(Base64Utils.encodeToString(DEFAULT_REPORT_FILE)))
             .andExpect(jsonPath("$.reportTimeStamp").value(sameInstant(DEFAULT_REPORT_TIME_STAMP)))
@@ -1119,7 +1120,7 @@ class ExcelReportExportResourceIT {
             .andExpect(jsonPath("$.[*].reportPassword").value(hasItem(DEFAULT_REPORT_PASSWORD)))
             .andExpect(jsonPath("$.[*].reportNotesContentType").value(hasItem(DEFAULT_REPORT_NOTES_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].reportNotes").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_NOTES))))
-            .andExpect(jsonPath("$.[*].fileCheckSum").value(hasItem(DEFAULT_FILE_CHECK_SUM)))
+            .andExpect(jsonPath("$.[*].fileCheckSum").value(hasItem(DEFAULT_FILE_CHECK_SUM.toString())))
             .andExpect(jsonPath("$.[*].reportFileContentType").value(hasItem(DEFAULT_REPORT_FILE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))))
             .andExpect(jsonPath("$.[*].reportTimeStamp").value(hasItem(sameInstant(DEFAULT_REPORT_TIME_STAMP))))
@@ -1486,7 +1487,7 @@ class ExcelReportExportResourceIT {
             .andExpect(jsonPath("$.[*].reportPassword").value(hasItem(DEFAULT_REPORT_PASSWORD)))
             .andExpect(jsonPath("$.[*].reportNotesContentType").value(hasItem(DEFAULT_REPORT_NOTES_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].reportNotes").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_NOTES))))
-            .andExpect(jsonPath("$.[*].fileCheckSum").value(hasItem(DEFAULT_FILE_CHECK_SUM)))
+            .andExpect(jsonPath("$.[*].fileCheckSum").value(hasItem(DEFAULT_FILE_CHECK_SUM.toString())))
             .andExpect(jsonPath("$.[*].reportFileContentType").value(hasItem(DEFAULT_REPORT_FILE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))))
             .andExpect(jsonPath("$.[*].reportTimeStamp").value(hasItem(sameInstant(DEFAULT_REPORT_TIME_STAMP))))

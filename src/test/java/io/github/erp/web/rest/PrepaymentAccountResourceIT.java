@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static io.github.erp.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -93,8 +94,8 @@ class PrepaymentAccountResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/prepayment-accounts";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private PrepaymentAccountRepository prepaymentAccountRepository;
@@ -273,7 +274,7 @@ class PrepaymentAccountResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentAccount.getId().intValue())))
             .andExpect(jsonPath("$.[*].catalogueNumber").value(hasItem(DEFAULT_CATALOGUE_NUMBER)))
             .andExpect(jsonPath("$.[*].particulars").value(hasItem(DEFAULT_PARTICULARS)))
-            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES)))
+            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES.toString())))
             .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].prepaymentGuid").value(hasItem(DEFAULT_PREPAYMENT_GUID.toString())));
     }
@@ -310,7 +311,7 @@ class PrepaymentAccountResourceIT {
             .andExpect(jsonPath("$.id").value(prepaymentAccount.getId().intValue()))
             .andExpect(jsonPath("$.catalogueNumber").value(DEFAULT_CATALOGUE_NUMBER))
             .andExpect(jsonPath("$.particulars").value(DEFAULT_PARTICULARS))
-            .andExpect(jsonPath("$.notes").value(DEFAULT_NOTES))
+            .andExpect(jsonPath("$.notes").value(DEFAULT_NOTES.toString()))
             .andExpect(jsonPath("$.prepaymentAmount").value(sameNumber(DEFAULT_PREPAYMENT_AMOUNT)))
             .andExpect(jsonPath("$.prepaymentGuid").value(DEFAULT_PREPAYMENT_GUID.toString()));
     }
@@ -916,7 +917,7 @@ class PrepaymentAccountResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentAccount.getId().intValue())))
             .andExpect(jsonPath("$.[*].catalogueNumber").value(hasItem(DEFAULT_CATALOGUE_NUMBER)))
             .andExpect(jsonPath("$.[*].particulars").value(hasItem(DEFAULT_PARTICULARS)))
-            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES)))
+            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES.toString())))
             .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].prepaymentGuid").value(hasItem(DEFAULT_PREPAYMENT_GUID.toString())));
 
@@ -1262,7 +1263,7 @@ class PrepaymentAccountResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentAccount.getId().intValue())))
             .andExpect(jsonPath("$.[*].catalogueNumber").value(hasItem(DEFAULT_CATALOGUE_NUMBER)))
             .andExpect(jsonPath("$.[*].particulars").value(hasItem(DEFAULT_PARTICULARS)))
-            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES)))
+            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES.toString())))
             .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].prepaymentGuid").value(hasItem(DEFAULT_PREPAYMENT_GUID.toString())));
     }

@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class DerivativeSubTypeResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/derivative-sub-types";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private DerivativeSubTypeRepository derivativeSubTypeRepository;
@@ -241,7 +242,7 @@ class DerivativeSubTypeResourceIT {
             .andExpect(jsonPath("$.[*].financialDerivativeSubTypeCode").value(hasItem(DEFAULT_FINANCIAL_DERIVATIVE_SUB_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].financialDerivativeSubTye").value(hasItem(DEFAULT_FINANCIAL_DERIVATIVE_SUB_TYE)))
             .andExpect(
-                jsonPath("$.[*].financialDerivativeSubtypeDetails").value(hasItem(DEFAULT_FINANCIAL_DERIVATIVE_SUBTYPE_DETAILS))
+                jsonPath("$.[*].financialDerivativeSubtypeDetails").value(hasItem(DEFAULT_FINANCIAL_DERIVATIVE_SUBTYPE_DETAILS.toString()))
             );
     }
 
@@ -259,7 +260,7 @@ class DerivativeSubTypeResourceIT {
             .andExpect(jsonPath("$.id").value(derivativeSubType.getId().intValue()))
             .andExpect(jsonPath("$.financialDerivativeSubTypeCode").value(DEFAULT_FINANCIAL_DERIVATIVE_SUB_TYPE_CODE))
             .andExpect(jsonPath("$.financialDerivativeSubTye").value(DEFAULT_FINANCIAL_DERIVATIVE_SUB_TYE))
-            .andExpect(jsonPath("$.financialDerivativeSubtypeDetails").value(DEFAULT_FINANCIAL_DERIVATIVE_SUBTYPE_DETAILS));
+            .andExpect(jsonPath("$.financialDerivativeSubtypeDetails").value(DEFAULT_FINANCIAL_DERIVATIVE_SUBTYPE_DETAILS.toString()));
     }
 
     @Test
@@ -459,7 +460,7 @@ class DerivativeSubTypeResourceIT {
             .andExpect(jsonPath("$.[*].financialDerivativeSubTypeCode").value(hasItem(DEFAULT_FINANCIAL_DERIVATIVE_SUB_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].financialDerivativeSubTye").value(hasItem(DEFAULT_FINANCIAL_DERIVATIVE_SUB_TYE)))
             .andExpect(
-                jsonPath("$.[*].financialDerivativeSubtypeDetails").value(hasItem(DEFAULT_FINANCIAL_DERIVATIVE_SUBTYPE_DETAILS))
+                jsonPath("$.[*].financialDerivativeSubtypeDetails").value(hasItem(DEFAULT_FINANCIAL_DERIVATIVE_SUBTYPE_DETAILS.toString()))
             );
 
         // Check, that the count call also returns 1
@@ -795,7 +796,7 @@ class DerivativeSubTypeResourceIT {
             .andExpect(jsonPath("$.[*].financialDerivativeSubTypeCode").value(hasItem(DEFAULT_FINANCIAL_DERIVATIVE_SUB_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].financialDerivativeSubTye").value(hasItem(DEFAULT_FINANCIAL_DERIVATIVE_SUB_TYE)))
             .andExpect(
-                jsonPath("$.[*].financialDerivativeSubtypeDetails").value(hasItem(DEFAULT_FINANCIAL_DERIVATIVE_SUBTYPE_DETAILS))
+                jsonPath("$.[*].financialDerivativeSubtypeDetails").value(hasItem(DEFAULT_FINANCIAL_DERIVATIVE_SUBTYPE_DETAILS.toString()))
             );
     }
 }

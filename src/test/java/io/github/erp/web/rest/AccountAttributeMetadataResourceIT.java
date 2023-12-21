@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -104,8 +105,8 @@ class AccountAttributeMetadataResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/account-attribute-metadata";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private AccountAttributeMetadataRepository accountAttributeMetadataRepository;
@@ -366,13 +367,13 @@ class AccountAttributeMetadataResourceIT {
             .andExpect(jsonPath("$.[*].precedence").value(hasItem(DEFAULT_PRECEDENCE)))
             .andExpect(jsonPath("$.[*].columnName").value(hasItem(DEFAULT_COLUMN_NAME)))
             .andExpect(jsonPath("$.[*].shortName").value(hasItem(DEFAULT_SHORT_NAME)))
-            .andExpect(jsonPath("$.[*].detailedDefinition").value(hasItem(DEFAULT_DETAILED_DEFINITION)))
+            .andExpect(jsonPath("$.[*].detailedDefinition").value(hasItem(DEFAULT_DETAILED_DEFINITION.toString())))
             .andExpect(jsonPath("$.[*].dataType").value(hasItem(DEFAULT_DATA_TYPE)))
             .andExpect(jsonPath("$.[*].length").value(hasItem(DEFAULT_LENGTH)))
             .andExpect(jsonPath("$.[*].columnIndex").value(hasItem(DEFAULT_COLUMN_INDEX)))
             .andExpect(jsonPath("$.[*].mandatoryFieldFlag").value(hasItem(DEFAULT_MANDATORY_FIELD_FLAG.toString())))
-            .andExpect(jsonPath("$.[*].businessValidation").value(hasItem(DEFAULT_BUSINESS_VALIDATION)))
-            .andExpect(jsonPath("$.[*].technicalValidation").value(hasItem(DEFAULT_TECHNICAL_VALIDATION)))
+            .andExpect(jsonPath("$.[*].businessValidation").value(hasItem(DEFAULT_BUSINESS_VALIDATION.toString())))
+            .andExpect(jsonPath("$.[*].technicalValidation").value(hasItem(DEFAULT_TECHNICAL_VALIDATION.toString())))
             .andExpect(jsonPath("$.[*].dbColumnName").value(hasItem(DEFAULT_DB_COLUMN_NAME)))
             .andExpect(jsonPath("$.[*].metadataVersion").value(hasItem(DEFAULT_METADATA_VERSION)));
     }
@@ -392,13 +393,13 @@ class AccountAttributeMetadataResourceIT {
             .andExpect(jsonPath("$.precedence").value(DEFAULT_PRECEDENCE))
             .andExpect(jsonPath("$.columnName").value(DEFAULT_COLUMN_NAME))
             .andExpect(jsonPath("$.shortName").value(DEFAULT_SHORT_NAME))
-            .andExpect(jsonPath("$.detailedDefinition").value(DEFAULT_DETAILED_DEFINITION))
+            .andExpect(jsonPath("$.detailedDefinition").value(DEFAULT_DETAILED_DEFINITION.toString()))
             .andExpect(jsonPath("$.dataType").value(DEFAULT_DATA_TYPE))
             .andExpect(jsonPath("$.length").value(DEFAULT_LENGTH))
             .andExpect(jsonPath("$.columnIndex").value(DEFAULT_COLUMN_INDEX))
             .andExpect(jsonPath("$.mandatoryFieldFlag").value(DEFAULT_MANDATORY_FIELD_FLAG.toString()))
-            .andExpect(jsonPath("$.businessValidation").value(DEFAULT_BUSINESS_VALIDATION))
-            .andExpect(jsonPath("$.technicalValidation").value(DEFAULT_TECHNICAL_VALIDATION))
+            .andExpect(jsonPath("$.businessValidation").value(DEFAULT_BUSINESS_VALIDATION.toString()))
+            .andExpect(jsonPath("$.technicalValidation").value(DEFAULT_TECHNICAL_VALIDATION.toString()))
             .andExpect(jsonPath("$.dbColumnName").value(DEFAULT_DB_COLUMN_NAME))
             .andExpect(jsonPath("$.metadataVersion").value(DEFAULT_METADATA_VERSION));
     }
@@ -1215,13 +1216,13 @@ class AccountAttributeMetadataResourceIT {
             .andExpect(jsonPath("$.[*].precedence").value(hasItem(DEFAULT_PRECEDENCE)))
             .andExpect(jsonPath("$.[*].columnName").value(hasItem(DEFAULT_COLUMN_NAME)))
             .andExpect(jsonPath("$.[*].shortName").value(hasItem(DEFAULT_SHORT_NAME)))
-            .andExpect(jsonPath("$.[*].detailedDefinition").value(hasItem(DEFAULT_DETAILED_DEFINITION)))
+            .andExpect(jsonPath("$.[*].detailedDefinition").value(hasItem(DEFAULT_DETAILED_DEFINITION.toString())))
             .andExpect(jsonPath("$.[*].dataType").value(hasItem(DEFAULT_DATA_TYPE)))
             .andExpect(jsonPath("$.[*].length").value(hasItem(DEFAULT_LENGTH)))
             .andExpect(jsonPath("$.[*].columnIndex").value(hasItem(DEFAULT_COLUMN_INDEX)))
             .andExpect(jsonPath("$.[*].mandatoryFieldFlag").value(hasItem(DEFAULT_MANDATORY_FIELD_FLAG.toString())))
-            .andExpect(jsonPath("$.[*].businessValidation").value(hasItem(DEFAULT_BUSINESS_VALIDATION)))
-            .andExpect(jsonPath("$.[*].technicalValidation").value(hasItem(DEFAULT_TECHNICAL_VALIDATION)))
+            .andExpect(jsonPath("$.[*].businessValidation").value(hasItem(DEFAULT_BUSINESS_VALIDATION.toString())))
+            .andExpect(jsonPath("$.[*].technicalValidation").value(hasItem(DEFAULT_TECHNICAL_VALIDATION.toString())))
             .andExpect(jsonPath("$.[*].dbColumnName").value(hasItem(DEFAULT_DB_COLUMN_NAME)))
             .andExpect(jsonPath("$.[*].metadataVersion").value(hasItem(DEFAULT_METADATA_VERSION)));
 
@@ -1612,13 +1613,13 @@ class AccountAttributeMetadataResourceIT {
             .andExpect(jsonPath("$.[*].precedence").value(hasItem(DEFAULT_PRECEDENCE)))
             .andExpect(jsonPath("$.[*].columnName").value(hasItem(DEFAULT_COLUMN_NAME)))
             .andExpect(jsonPath("$.[*].shortName").value(hasItem(DEFAULT_SHORT_NAME)))
-            .andExpect(jsonPath("$.[*].detailedDefinition").value(hasItem(DEFAULT_DETAILED_DEFINITION)))
+            .andExpect(jsonPath("$.[*].detailedDefinition").value(hasItem(DEFAULT_DETAILED_DEFINITION.toString())))
             .andExpect(jsonPath("$.[*].dataType").value(hasItem(DEFAULT_DATA_TYPE)))
             .andExpect(jsonPath("$.[*].length").value(hasItem(DEFAULT_LENGTH)))
             .andExpect(jsonPath("$.[*].columnIndex").value(hasItem(DEFAULT_COLUMN_INDEX)))
             .andExpect(jsonPath("$.[*].mandatoryFieldFlag").value(hasItem(DEFAULT_MANDATORY_FIELD_FLAG.toString())))
-            .andExpect(jsonPath("$.[*].businessValidation").value(hasItem(DEFAULT_BUSINESS_VALIDATION)))
-            .andExpect(jsonPath("$.[*].technicalValidation").value(hasItem(DEFAULT_TECHNICAL_VALIDATION)))
+            .andExpect(jsonPath("$.[*].businessValidation").value(hasItem(DEFAULT_BUSINESS_VALIDATION.toString())))
+            .andExpect(jsonPath("$.[*].technicalValidation").value(hasItem(DEFAULT_TECHNICAL_VALIDATION.toString())))
             .andExpect(jsonPath("$.[*].dbColumnName").value(hasItem(DEFAULT_DB_COLUMN_NAME)))
             .andExpect(jsonPath("$.[*].metadataVersion").value(hasItem(DEFAULT_METADATA_VERSION)));
     }

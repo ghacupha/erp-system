@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -73,8 +74,8 @@ class CardPerformanceFlagResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/card-performance-flags";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private CardPerformanceFlagRepository cardPerformanceFlagRepository;
@@ -241,7 +242,7 @@ class CardPerformanceFlagResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(cardPerformanceFlag.getId().intValue())))
             .andExpect(jsonPath("$.[*].cardPerformanceFlag").value(hasItem(DEFAULT_CARD_PERFORMANCE_FLAG.toString())))
             .andExpect(jsonPath("$.[*].cardPerformanceFlagDescription").value(hasItem(DEFAULT_CARD_PERFORMANCE_FLAG_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].cardPerformanceFlagDetails").value(hasItem(DEFAULT_CARD_PERFORMANCE_FLAG_DETAILS)));
+            .andExpect(jsonPath("$.[*].cardPerformanceFlagDetails").value(hasItem(DEFAULT_CARD_PERFORMANCE_FLAG_DETAILS.toString())));
     }
 
     @Test
@@ -258,7 +259,7 @@ class CardPerformanceFlagResourceIT {
             .andExpect(jsonPath("$.id").value(cardPerformanceFlag.getId().intValue()))
             .andExpect(jsonPath("$.cardPerformanceFlag").value(DEFAULT_CARD_PERFORMANCE_FLAG.toString()))
             .andExpect(jsonPath("$.cardPerformanceFlagDescription").value(DEFAULT_CARD_PERFORMANCE_FLAG_DESCRIPTION))
-            .andExpect(jsonPath("$.cardPerformanceFlagDetails").value(DEFAULT_CARD_PERFORMANCE_FLAG_DETAILS));
+            .andExpect(jsonPath("$.cardPerformanceFlagDetails").value(DEFAULT_CARD_PERFORMANCE_FLAG_DETAILS.toString()));
     }
 
     @Test
@@ -431,7 +432,7 @@ class CardPerformanceFlagResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(cardPerformanceFlag.getId().intValue())))
             .andExpect(jsonPath("$.[*].cardPerformanceFlag").value(hasItem(DEFAULT_CARD_PERFORMANCE_FLAG.toString())))
             .andExpect(jsonPath("$.[*].cardPerformanceFlagDescription").value(hasItem(DEFAULT_CARD_PERFORMANCE_FLAG_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].cardPerformanceFlagDetails").value(hasItem(DEFAULT_CARD_PERFORMANCE_FLAG_DETAILS)));
+            .andExpect(jsonPath("$.[*].cardPerformanceFlagDetails").value(hasItem(DEFAULT_CARD_PERFORMANCE_FLAG_DETAILS.toString())));
 
         // Check, that the count call also returns 1
         restCardPerformanceFlagMockMvc
@@ -764,6 +765,6 @@ class CardPerformanceFlagResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(cardPerformanceFlag.getId().intValue())))
             .andExpect(jsonPath("$.[*].cardPerformanceFlag").value(hasItem(DEFAULT_CARD_PERFORMANCE_FLAG.toString())))
             .andExpect(jsonPath("$.[*].cardPerformanceFlagDescription").value(hasItem(DEFAULT_CARD_PERFORMANCE_FLAG_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].cardPerformanceFlagDetails").value(hasItem(DEFAULT_CARD_PERFORMANCE_FLAG_DETAILS)));
+            .andExpect(jsonPath("$.[*].cardPerformanceFlagDetails").value(hasItem(DEFAULT_CARD_PERFORMANCE_FLAG_DETAILS.toString())));
     }
 }
