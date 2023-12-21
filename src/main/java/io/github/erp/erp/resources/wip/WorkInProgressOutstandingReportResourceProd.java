@@ -17,9 +17,10 @@ package io.github.erp.erp.resources.wip;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.WorkInProgressOutstandingOptionalReport;
 import io.github.erp.domain.WorkInProgressOutstandingReportREPO;
+import io.github.erp.internal.framework.Mapping;
 import io.github.erp.internal.repository.InternalWIPOutstandingReportRepository;
+import io.github.erp.internal.service.autonomousReport.DatedReportExportService;
 import io.github.erp.repository.WorkInProgressOutstandingReportRepository;
 import io.github.erp.service.WorkInProgressOutstandingReportQueryService;
 import io.github.erp.service.WorkInProgressOutstandingReportService;
@@ -32,11 +33,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -48,28 +51,30 @@ import java.util.Optional;
 @RequestMapping("/api/fixed-asset")
 public class WorkInProgressOutstandingReportResourceProd {
 
+    private final static String WIP_OUTSTANDING_REPORT_ID = "WIP-outstanding-report";
     private final Logger log = LoggerFactory.getLogger(WorkInProgressOutstandingReportResourceProd.class);
 
     private final WorkInProgressOutstandingReportService workInProgressOutstandingReportService;
-
-    private final WorkInProgressOutstandingReportRepository workInProgressOutstandingReportRepository;
 
     private final WorkInProgressOutstandingReportQueryService workInProgressOutstandingReportQueryService;
 
     private final InternalWIPOutstandingReportRepository internalWIPOutstandingReportRepository;
 
-    private final WorkInProgressOutstandingReportMapper workInProgressOutstandingReportMapper;
+    private final DatedReportExportService<WorkInProgressOutstandingReportDTO> datedReportExportService;
+
+    private final Mapping<WorkInProgressOutstandingReportREPO, WorkInProgressOutstandingReportDTO> workInProgressOutstandingReportDTOMapping;
 
     public WorkInProgressOutstandingReportResourceProd(
         WorkInProgressOutstandingReportService workInProgressOutstandingReportService,
-        WorkInProgressOutstandingReportRepository workInProgressOutstandingReportRepository,
         WorkInProgressOutstandingReportQueryService workInProgressOutstandingReportQueryService,
-        InternalWIPOutstandingReportRepository internalWIPOutstandingReportRepository, WorkInProgressOutstandingReportMapper workInProgressOutstandingReportMapper) {
+        InternalWIPOutstandingReportRepository internalWIPOutstandingReportRepository,
+        DatedReportExportService<WorkInProgressOutstandingReportDTO> datedReportExportService,
+        Mapping<WorkInProgressOutstandingReportREPO, WorkInProgressOutstandingReportDTO> workInProgressOutstandingReportDTOMapping) {
         this.workInProgressOutstandingReportService = workInProgressOutstandingReportService;
-        this.workInProgressOutstandingReportRepository = workInProgressOutstandingReportRepository;
         this.workInProgressOutstandingReportQueryService = workInProgressOutstandingReportQueryService;
         this.internalWIPOutstandingReportRepository = internalWIPOutstandingReportRepository;
-        this.workInProgressOutstandingReportMapper = workInProgressOutstandingReportMapper;
+        this.datedReportExportService = datedReportExportService;
+        this.workInProgressOutstandingReportDTOMapping = workInProgressOutstandingReportDTOMapping;
     }
 
     /**
@@ -99,46 +104,24 @@ public class WorkInProgressOutstandingReportResourceProd {
     public ResponseEntity<List<WorkInProgressOutstandingReportDTO>> getAllWorkInProgressOutstandingReportsByReportDate(
         @RequestParam("reportDate") String reportDate,
         Pageable pageable
-    ) {
+    ) throws IOException {
         log.debug("REST request to get WorkInProgressOutstandingReports by criteria, report-date: {}", reportDate);
 
         Page<WorkInProgressOutstandingReportDTO> page =
             internalWIPOutstandingReportRepository.findByReportDate(LocalDate.parse(reportDate), pageable)
-                .map(WorkInProgressOutstandingReportResourceProd::convertToDTO);
+            .map(workInProgressOutstandingReportDTOMapping::toValue2);
+
+        exportCSVReport(LocalDate.parse(reportDate));
+
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
-    private static WorkInProgressOutstandingReportDTO convertToDTO(WorkInProgressOutstandingReportREPO repo) {
-        WorkInProgressOutstandingReportDTO dto = new WorkInProgressOutstandingReportDTO();
-
-        dto.setId(repo.getId());
-        dto.setSequenceNumber(repo.getSequenceNumber());
-        dto.setParticulars(repo.getParticulars());
-        dto.setDealerName(repo.getDealerName());
-        dto.setIso4217Code(repo.getIso4217Code());
-        dto.setInstalmentAmount(repo.getInstalmentAmount());
-        dto.setTotalTransferAmount(repo.getTotalTransferAmount());
-        dto.setOutstandingAmount(repo.getOutstandingAmount());
-
-        return dto;
+    @Async void exportCSVReport(LocalDate reportDate) throws IOException {
+        datedReportExportService.exportReportByDate(reportDate, WIP_OUTSTANDING_REPORT_ID);
     }
 
-    private static WorkInProgressOutstandingReportDTO convertOptionalToDTO(WorkInProgressOutstandingOptionalReport repo) {
-        WorkInProgressOutstandingReportDTO dto = new WorkInProgressOutstandingReportDTO();
-
-        dto.setId(repo.getId());
-        dto.setSequenceNumber(repo.getSequenceNumber());
-        dto.setParticulars(repo.getParticulars());
-        dto.setDealerName(repo.getDealerName());
-        dto.setIso4217Code(repo.getIso4217Code());
-        dto.setInstalmentAmount(repo.getInstalmentAmount());
-        dto.setTotalTransferAmount(repo.getTotalTransferAmount());
-        dto.setOutstandingAmount(repo.getOutstandingAmount());
-
-        return dto;
-    }
 
     /**
      * {@code GET  /work-in-progress-outstanding-reports/count} : count all the workInProgressOutstandingReports.
@@ -181,7 +164,7 @@ public class WorkInProgressOutstandingReportResourceProd {
 
         Optional<WorkInProgressOutstandingReportDTO> workInProgressOutstandingReportDTO =
             internalWIPOutstandingReportRepository.findByReportDate(LocalDate.parse(reportDate), id)
-            .map(WorkInProgressOutstandingReportResourceProd::convertToDTO);
+            .map(workInProgressOutstandingReportDTOMapping::toValue2);
 
 
         return ResponseUtil.wrapOrNotFound(workInProgressOutstandingReportDTO);

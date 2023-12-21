@@ -1,4 +1,4 @@
-package io.github.erp.internal.service.autonomousReport;
+package io.github.erp.internal.service.autonomousReport._maps;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
