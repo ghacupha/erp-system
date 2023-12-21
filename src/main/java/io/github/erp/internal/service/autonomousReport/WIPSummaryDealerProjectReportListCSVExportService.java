@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service("wipSummaryDealerProjectReportListCSVExportService")
-public class WIPSummaryDealerProjectReportListCSVExportService implements ReportListExportService<WorkInProgressReportREPO> {
+public class WIPSummaryDealerProjectReportListCSVExportService implements ReportListExportService<WIPByDealerProjectDTO> {
 
     private final ReportsProperties reportsProperties;
     private final FileStorageService fileStorageService;
@@ -51,7 +51,7 @@ public class WIPSummaryDealerProjectReportListCSVExportService implements Report
      * @throws IOException can happen
      */
     @Override
-    public void executeReport(List<WorkInProgressReportREPO> reportList, LocalDate reportDate, String fileName, String reportName) throws IOException {
+    public void executeReport(List<WIPByDealerProjectDTO> reportList, LocalDate reportDate, String fileName, String reportName) throws IOException {
 
         ByteArrayOutputStream csvByteArray = CSVDynamicConverterService.convertToCSV(reportList);
 

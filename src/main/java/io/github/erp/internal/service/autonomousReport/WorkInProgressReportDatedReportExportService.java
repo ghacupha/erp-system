@@ -2,6 +2,7 @@ package io.github.erp.internal.service.autonomousReport;
 
 import com.hazelcast.map.IMap;
 import io.github.erp.domain.WorkInProgressReportREPO;
+import io.github.erp.internal.framework.Mapping;
 import io.github.erp.internal.repository.InternalWIPProjectDealerSummaryReportRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -17,21 +18,24 @@ import java.time.format.DateTimeFormatter;
 @Service("workInProgressReportDatedReportExportService")
 public class WorkInProgressReportDatedReportExportService implements DatedReportExportService<WorkInProgressReportREPO> {
 
-    private final ReportListExportService<WorkInProgressReportREPO> reportListExportService;
+    private final ReportListExportService<WIPByDealerProjectDTO> reportListExportService;
 
     private final InternalWIPProjectDealerSummaryReportRepository internalWIPOutstandingReportRepository;
 
     private final IMap<String, String> workInProgressReportCache;
 
+    private final Mapping<WorkInProgressReportREPO, WIPByDealerProjectDTO> workInProgressReportREPOMapper;
+
 
     public WorkInProgressReportDatedReportExportService(
         InternalWIPProjectDealerSummaryReportRepository internalWIPOutstandingReportRepository,
         @Qualifier("workInProgressReportCache") IMap<String, String> workInProgressReportCache,
-        @Qualifier("wipSummaryDealerProjectReportListCSVExportService") ReportListExportService<WorkInProgressReportREPO> reportListExportService
-        ) {
+        ReportListExportService<WIPByDealerProjectDTO> reportListExportService,
+        Mapping<WorkInProgressReportREPO, WIPByDealerProjectDTO> workInProgressReportREPOMapper) {
         this.internalWIPOutstandingReportRepository = internalWIPOutstandingReportRepository;
         this.workInProgressReportCache = workInProgressReportCache;
         this.reportListExportService = reportListExportService;
+        this.workInProgressReportREPOMapper = workInProgressReportREPOMapper;
     }
 
     @Override
@@ -58,7 +62,8 @@ public class WorkInProgressReportDatedReportExportService implements DatedReport
     private void runAndCacheReport(LocalDate reportDate, String reportName) throws IOException {
         cacheReport(reportDate, reportName);
 
-        Page<WorkInProgressReportREPO> result = internalWIPOutstandingReportRepository.findAllByReportDate(reportDate, PageRequest.of(0, Integer.MAX_VALUE));
+        Page<WIPByDealerProjectDTO> result = internalWIPOutstandingReportRepository.findAllByReportDate(reportDate, PageRequest.of(0, Integer.MAX_VALUE))
+            .map(workInProgressReportREPOMapper::toValue2);
 
         reportListExportService.executeReport(result.getContent(), reportDate, java.util.UUID.randomUUID().toString(), reportName);
     }
