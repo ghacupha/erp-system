@@ -50,7 +50,7 @@ import java.time.format.DateTimeFormatter;
 
 @Transactional
 @Service("prepaymentReportExportService")
-public class PrepaymentAccountExportService implements DatedReportExportService {
+public class PrepaymentAccountExportService implements DatedReportExportService<PrepaymentReportDTO> {
 
     private final ReportListExportService<PrepaymentReportDTO> reportListExportService;
 

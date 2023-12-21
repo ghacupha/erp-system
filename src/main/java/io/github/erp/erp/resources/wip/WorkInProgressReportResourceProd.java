@@ -20,20 +20,24 @@ package io.github.erp.erp.resources.wip;
 import io.github.erp.domain.WorkInProgressReport;
 import io.github.erp.domain.WorkInProgressReportREPO;
 import io.github.erp.internal.repository.InternalWIPProjectDealerSummaryReportRepository;
+import io.github.erp.internal.service.autonomousReport.DatedReportExportService;
 import io.github.erp.repository.WorkInProgressReportRepository;
 import io.github.erp.repository.search.WorkInProgressReportSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -48,20 +52,26 @@ public class WorkInProgressReportResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(WorkInProgressReportResourceProd.class);
 
+    private final static String WIP_OUTSTANDING_REPORT = "work-in-progress-outstanding-report";
+    private final static String WIP_OUTSTANDING_BY_DEALER_PROJECT = "WIP-outstanding-by_dealer_project_report";
+
     private final InternalWIPProjectDealerSummaryReportRepository internalWIPOutstandingReportRepository;
     private final WorkInProgressReportRepository workInProgressReportRepository;
     private final InternalWIPProjectDealerSummaryReportRepository internalWIPProjectDealerSummaryReportRepository;
     private final WorkInProgressReportSearchRepository workInProgressReportSearchRepository;
 
+    private final DatedReportExportService datedReportExportService;
+
     public WorkInProgressReportResourceProd(
         InternalWIPProjectDealerSummaryReportRepository internalWIPOutstandingReportRepository, WorkInProgressReportRepository workInProgressReportRepository,
         InternalWIPProjectDealerSummaryReportRepository internalWIPProjectDealerSummaryReportRepository,
-        WorkInProgressReportSearchRepository workInProgressReportSearchRepository
-    ) {
+        WorkInProgressReportSearchRepository workInProgressReportSearchRepository,
+        DatedReportExportService<WorkInProgressReportREPO> datedReportExportService) {
         this.internalWIPOutstandingReportRepository = internalWIPOutstandingReportRepository;
         this.workInProgressReportRepository = workInProgressReportRepository;
         this.internalWIPProjectDealerSummaryReportRepository = internalWIPProjectDealerSummaryReportRepository;
         this.workInProgressReportSearchRepository = workInProgressReportSearchRepository;
+        this.datedReportExportService = datedReportExportService;
     }
 
     /**
@@ -73,15 +83,22 @@ public class WorkInProgressReportResourceProd {
     public ResponseEntity<List<WorkInProgressReportREPO>> getAllWorkInProgressReportsByReportDate(
         @RequestParam("reportDate") String reportDate,
         Pageable pageable
-    ) {
+    ) throws IOException {
         log.debug("REST request to get WorkInProgressOutstandingReports by criteria, report-date: {}", reportDate);
 
         // todo implement autonomous report here
         Page<WorkInProgressReportREPO> page =
             internalWIPOutstandingReportRepository.findAllByReportDate(LocalDate.parse(reportDate), pageable);
 
+        exportCSVReport(LocalDate.parse(reportDate));
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    // TODO mapper <WorkInProgressReportREPO>
+    @Async void exportCSVReport(LocalDate reportDate) throws IOException {
+        datedReportExportService.exportReportByDate(reportDate, WIP_OUTSTANDING_BY_DEALER_PROJECT);
     }
 
     /**

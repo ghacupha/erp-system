@@ -44,7 +44,7 @@ import java.time.LocalDate;
  * This interface is used to extract a report base on a parameter date,
  * exporting it essential to CSV format
  */
-public interface DatedReportExportService {
+public interface DatedReportExportService<T> {
 
     /**
      * Exports report in the implementation format the parameter being the report-date

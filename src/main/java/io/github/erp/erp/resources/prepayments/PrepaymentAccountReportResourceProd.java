@@ -61,12 +61,12 @@ public class PrepaymentAccountReportResourceProd {
 
     private final InternalPrepaymentAccountReportRepository internalPrepaymentAccountReportRepository;
 
-    private final DatedReportExportService prepaymentReportExportService;
+    private final DatedReportExportService<PrepaymentAccountReportDTO> prepaymentReportExportService;
 
     private final Mapping<PrepaymentAccountReportTuple, PrepaymentAccountReportDTO> prepaymentAccountReportDTOMapping;
 
     public PrepaymentAccountReportResourceProd(
-        @Qualifier("prepaymentByAccountReportListCSVExportService") DatedReportExportService prepaymentReportExportService,
+        DatedReportExportService<PrepaymentAccountReportDTO> prepaymentReportExportService,
         PrepaymentAccountReportService prepaymentAccountReportService,
         PrepaymentAccountReportQueryService prepaymentAccountReportQueryService,
         InternalPrepaymentAccountReportRepository internalPrepaymentAccountReportRepository, Mapping<PrepaymentAccountReportTuple,

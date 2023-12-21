@@ -35,7 +35,7 @@ import java.time.format.DateTimeFormatter;
 
 @Transactional
 @Service("prepaymentByAccountReportListCSVExportService")
-public class PrepaymentByAccountReportListCSVExportService implements DatedReportExportService {
+public class PrepaymentByAccountReportListCSVExportService implements DatedReportExportService<PrepaymentAccountReportDTO> {
 
     private final InternalPrepaymentAccountReportRepository internalPrepaymentAccountReportRepository;
 

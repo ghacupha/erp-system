@@ -2,8 +2,7 @@
   "fields": [
     {
       "fieldName": "inactive",
-      "fieldType": "Boolean",
-      "fieldValidateRules": ["required"]
+      "fieldType": "Boolean"
     },
     {
       "fieldName": "amortizationPeriods",
