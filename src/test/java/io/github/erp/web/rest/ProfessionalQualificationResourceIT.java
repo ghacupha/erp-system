@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class ProfessionalQualificationResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/professional-qualifications";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private ProfessionalQualificationRepository professionalQualificationRepository;
@@ -244,7 +245,7 @@ class ProfessionalQualificationResourceIT {
             .andExpect(jsonPath("$.[*].professionalQualificationsCode").value(hasItem(DEFAULT_PROFESSIONAL_QUALIFICATIONS_CODE)))
             .andExpect(jsonPath("$.[*].professionalQualificationsType").value(hasItem(DEFAULT_PROFESSIONAL_QUALIFICATIONS_TYPE)))
             .andExpect(
-                jsonPath("$.[*].professionalQualificationsDetails").value(hasItem(DEFAULT_PROFESSIONAL_QUALIFICATIONS_DETAILS))
+                jsonPath("$.[*].professionalQualificationsDetails").value(hasItem(DEFAULT_PROFESSIONAL_QUALIFICATIONS_DETAILS.toString()))
             );
     }
 
@@ -262,7 +263,7 @@ class ProfessionalQualificationResourceIT {
             .andExpect(jsonPath("$.id").value(professionalQualification.getId().intValue()))
             .andExpect(jsonPath("$.professionalQualificationsCode").value(DEFAULT_PROFESSIONAL_QUALIFICATIONS_CODE))
             .andExpect(jsonPath("$.professionalQualificationsType").value(DEFAULT_PROFESSIONAL_QUALIFICATIONS_TYPE))
-            .andExpect(jsonPath("$.professionalQualificationsDetails").value(DEFAULT_PROFESSIONAL_QUALIFICATIONS_DETAILS));
+            .andExpect(jsonPath("$.professionalQualificationsDetails").value(DEFAULT_PROFESSIONAL_QUALIFICATIONS_DETAILS.toString()));
     }
 
     @Test
@@ -483,7 +484,7 @@ class ProfessionalQualificationResourceIT {
             .andExpect(jsonPath("$.[*].professionalQualificationsCode").value(hasItem(DEFAULT_PROFESSIONAL_QUALIFICATIONS_CODE)))
             .andExpect(jsonPath("$.[*].professionalQualificationsType").value(hasItem(DEFAULT_PROFESSIONAL_QUALIFICATIONS_TYPE)))
             .andExpect(
-                jsonPath("$.[*].professionalQualificationsDetails").value(hasItem(DEFAULT_PROFESSIONAL_QUALIFICATIONS_DETAILS))
+                jsonPath("$.[*].professionalQualificationsDetails").value(hasItem(DEFAULT_PROFESSIONAL_QUALIFICATIONS_DETAILS.toString()))
             );
 
         // Check, that the count call also returns 1
@@ -829,7 +830,7 @@ class ProfessionalQualificationResourceIT {
             .andExpect(jsonPath("$.[*].professionalQualificationsCode").value(hasItem(DEFAULT_PROFESSIONAL_QUALIFICATIONS_CODE)))
             .andExpect(jsonPath("$.[*].professionalQualificationsType").value(hasItem(DEFAULT_PROFESSIONAL_QUALIFICATIONS_TYPE)))
             .andExpect(
-                jsonPath("$.[*].professionalQualificationsDetails").value(hasItem(DEFAULT_PROFESSIONAL_QUALIFICATIONS_DETAILS))
+                jsonPath("$.[*].professionalQualificationsDetails").value(hasItem(DEFAULT_PROFESSIONAL_QUALIFICATIONS_DETAILS.toString()))
             );
     }
 }

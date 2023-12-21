@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -75,8 +76,8 @@ class LoanPerformanceClassificationResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/loan-performance-classifications";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private LoanPerformanceClassificationRepository loanPerformanceClassificationRepository;
@@ -258,8 +259,8 @@ class LoanPerformanceClassificationResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(loanPerformanceClassification.getId().intValue())))
             .andExpect(jsonPath("$.[*].loanPerformanceClassificationCode").value(hasItem(DEFAULT_LOAN_PERFORMANCE_CLASSIFICATION_CODE)))
             .andExpect(jsonPath("$.[*].loanPerformanceClassificationType").value(hasItem(DEFAULT_LOAN_PERFORMANCE_CLASSIFICATION_TYPE)))
-            .andExpect(jsonPath("$.[*].commercialBankDescription").value(hasItem(DEFAULT_COMMERCIAL_BANK_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].microfinanceDescription").value(hasItem(DEFAULT_MICROFINANCE_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].commercialBankDescription").value(hasItem(DEFAULT_COMMERCIAL_BANK_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].microfinanceDescription").value(hasItem(DEFAULT_MICROFINANCE_DESCRIPTION.toString())));
     }
 
     @Test
@@ -276,8 +277,8 @@ class LoanPerformanceClassificationResourceIT {
             .andExpect(jsonPath("$.id").value(loanPerformanceClassification.getId().intValue()))
             .andExpect(jsonPath("$.loanPerformanceClassificationCode").value(DEFAULT_LOAN_PERFORMANCE_CLASSIFICATION_CODE))
             .andExpect(jsonPath("$.loanPerformanceClassificationType").value(DEFAULT_LOAN_PERFORMANCE_CLASSIFICATION_TYPE))
-            .andExpect(jsonPath("$.commercialBankDescription").value(DEFAULT_COMMERCIAL_BANK_DESCRIPTION))
-            .andExpect(jsonPath("$.microfinanceDescription").value(DEFAULT_MICROFINANCE_DESCRIPTION));
+            .andExpect(jsonPath("$.commercialBankDescription").value(DEFAULT_COMMERCIAL_BANK_DESCRIPTION.toString()))
+            .andExpect(jsonPath("$.microfinanceDescription").value(DEFAULT_MICROFINANCE_DESCRIPTION.toString()));
     }
 
     @Test
@@ -511,8 +512,8 @@ class LoanPerformanceClassificationResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(loanPerformanceClassification.getId().intValue())))
             .andExpect(jsonPath("$.[*].loanPerformanceClassificationCode").value(hasItem(DEFAULT_LOAN_PERFORMANCE_CLASSIFICATION_CODE)))
             .andExpect(jsonPath("$.[*].loanPerformanceClassificationType").value(hasItem(DEFAULT_LOAN_PERFORMANCE_CLASSIFICATION_TYPE)))
-            .andExpect(jsonPath("$.[*].commercialBankDescription").value(hasItem(DEFAULT_COMMERCIAL_BANK_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].microfinanceDescription").value(hasItem(DEFAULT_MICROFINANCE_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].commercialBankDescription").value(hasItem(DEFAULT_COMMERCIAL_BANK_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].microfinanceDescription").value(hasItem(DEFAULT_MICROFINANCE_DESCRIPTION.toString())));
 
         // Check, that the count call also returns 1
         restLoanPerformanceClassificationMockMvc
@@ -880,7 +881,7 @@ class LoanPerformanceClassificationResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(loanPerformanceClassification.getId().intValue())))
             .andExpect(jsonPath("$.[*].loanPerformanceClassificationCode").value(hasItem(DEFAULT_LOAN_PERFORMANCE_CLASSIFICATION_CODE)))
             .andExpect(jsonPath("$.[*].loanPerformanceClassificationType").value(hasItem(DEFAULT_LOAN_PERFORMANCE_CLASSIFICATION_TYPE)))
-            .andExpect(jsonPath("$.[*].commercialBankDescription").value(hasItem(DEFAULT_COMMERCIAL_BANK_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].microfinanceDescription").value(hasItem(DEFAULT_MICROFINANCE_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].commercialBankDescription").value(hasItem(DEFAULT_COMMERCIAL_BANK_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].microfinanceDescription").value(hasItem(DEFAULT_MICROFINANCE_DESCRIPTION.toString())));
     }
 }

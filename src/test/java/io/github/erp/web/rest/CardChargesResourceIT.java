@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class CardChargesResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/card-charges";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private CardChargesRepository cardChargesRepository;
@@ -232,7 +233,7 @@ class CardChargesResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(cardCharges.getId().intValue())))
             .andExpect(jsonPath("$.[*].cardChargeType").value(hasItem(DEFAULT_CARD_CHARGE_TYPE)))
             .andExpect(jsonPath("$.[*].cardChargeTypeName").value(hasItem(DEFAULT_CARD_CHARGE_TYPE_NAME)))
-            .andExpect(jsonPath("$.[*].cardChargeDetails").value(hasItem(DEFAULT_CARD_CHARGE_DETAILS)));
+            .andExpect(jsonPath("$.[*].cardChargeDetails").value(hasItem(DEFAULT_CARD_CHARGE_DETAILS.toString())));
     }
 
     @Test
@@ -249,7 +250,7 @@ class CardChargesResourceIT {
             .andExpect(jsonPath("$.id").value(cardCharges.getId().intValue()))
             .andExpect(jsonPath("$.cardChargeType").value(DEFAULT_CARD_CHARGE_TYPE))
             .andExpect(jsonPath("$.cardChargeTypeName").value(DEFAULT_CARD_CHARGE_TYPE_NAME))
-            .andExpect(jsonPath("$.cardChargeDetails").value(DEFAULT_CARD_CHARGE_DETAILS));
+            .andExpect(jsonPath("$.cardChargeDetails").value(DEFAULT_CARD_CHARGE_DETAILS.toString()));
     }
 
     @Test
@@ -437,7 +438,7 @@ class CardChargesResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(cardCharges.getId().intValue())))
             .andExpect(jsonPath("$.[*].cardChargeType").value(hasItem(DEFAULT_CARD_CHARGE_TYPE)))
             .andExpect(jsonPath("$.[*].cardChargeTypeName").value(hasItem(DEFAULT_CARD_CHARGE_TYPE_NAME)))
-            .andExpect(jsonPath("$.[*].cardChargeDetails").value(hasItem(DEFAULT_CARD_CHARGE_DETAILS)));
+            .andExpect(jsonPath("$.[*].cardChargeDetails").value(hasItem(DEFAULT_CARD_CHARGE_DETAILS.toString())));
 
         // Check, that the count call also returns 1
         restCardChargesMockMvc
@@ -764,6 +765,6 @@ class CardChargesResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(cardCharges.getId().intValue())))
             .andExpect(jsonPath("$.[*].cardChargeType").value(hasItem(DEFAULT_CARD_CHARGE_TYPE)))
             .andExpect(jsonPath("$.[*].cardChargeTypeName").value(hasItem(DEFAULT_CARD_CHARGE_TYPE_NAME)))
-            .andExpect(jsonPath("$.[*].cardChargeDetails").value(hasItem(DEFAULT_CARD_CHARGE_DETAILS)));
+            .andExpect(jsonPath("$.[*].cardChargeDetails").value(hasItem(DEFAULT_CARD_CHARGE_DETAILS.toString())));
     }
 }

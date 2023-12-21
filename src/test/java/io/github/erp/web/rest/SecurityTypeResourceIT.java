@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class SecurityTypeResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/security-types";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private SecurityTypeRepository securityTypeRepository;
@@ -232,7 +233,7 @@ class SecurityTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(securityType.getId().intValue())))
             .andExpect(jsonPath("$.[*].securityTypeCode").value(hasItem(DEFAULT_SECURITY_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].securityType").value(hasItem(DEFAULT_SECURITY_TYPE)))
-            .andExpect(jsonPath("$.[*].securityTypeDetails").value(hasItem(DEFAULT_SECURITY_TYPE_DETAILS)));
+            .andExpect(jsonPath("$.[*].securityTypeDetails").value(hasItem(DEFAULT_SECURITY_TYPE_DETAILS.toString())));
     }
 
     @Test
@@ -249,7 +250,7 @@ class SecurityTypeResourceIT {
             .andExpect(jsonPath("$.id").value(securityType.getId().intValue()))
             .andExpect(jsonPath("$.securityTypeCode").value(DEFAULT_SECURITY_TYPE_CODE))
             .andExpect(jsonPath("$.securityType").value(DEFAULT_SECURITY_TYPE))
-            .andExpect(jsonPath("$.securityTypeDetails").value(DEFAULT_SECURITY_TYPE_DETAILS));
+            .andExpect(jsonPath("$.securityTypeDetails").value(DEFAULT_SECURITY_TYPE_DETAILS.toString()));
     }
 
     @Test
@@ -437,7 +438,7 @@ class SecurityTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(securityType.getId().intValue())))
             .andExpect(jsonPath("$.[*].securityTypeCode").value(hasItem(DEFAULT_SECURITY_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].securityType").value(hasItem(DEFAULT_SECURITY_TYPE)))
-            .andExpect(jsonPath("$.[*].securityTypeDetails").value(hasItem(DEFAULT_SECURITY_TYPE_DETAILS)));
+            .andExpect(jsonPath("$.[*].securityTypeDetails").value(hasItem(DEFAULT_SECURITY_TYPE_DETAILS.toString())));
 
         // Check, that the count call also returns 1
         restSecurityTypeMockMvc
@@ -768,6 +769,6 @@ class SecurityTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(securityType.getId().intValue())))
             .andExpect(jsonPath("$.[*].securityTypeCode").value(hasItem(DEFAULT_SECURITY_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].securityType").value(hasItem(DEFAULT_SECURITY_TYPE)))
-            .andExpect(jsonPath("$.[*].securityTypeDetails").value(hasItem(DEFAULT_SECURITY_TYPE_DETAILS)));
+            .andExpect(jsonPath("$.[*].securityTypeDetails").value(hasItem(DEFAULT_SECURITY_TYPE_DETAILS.toString())));
     }
 }

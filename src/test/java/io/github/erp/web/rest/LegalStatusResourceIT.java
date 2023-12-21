@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class LegalStatusResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/legal-statuses";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private LegalStatusRepository legalStatusRepository;
@@ -232,7 +233,7 @@ class LegalStatusResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(legalStatus.getId().intValue())))
             .andExpect(jsonPath("$.[*].legalStatusCode").value(hasItem(DEFAULT_LEGAL_STATUS_CODE)))
             .andExpect(jsonPath("$.[*].legalStatusType").value(hasItem(DEFAULT_LEGAL_STATUS_TYPE)))
-            .andExpect(jsonPath("$.[*].legalStatusDescription").value(hasItem(DEFAULT_LEGAL_STATUS_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].legalStatusDescription").value(hasItem(DEFAULT_LEGAL_STATUS_DESCRIPTION.toString())));
     }
 
     @Test
@@ -249,7 +250,7 @@ class LegalStatusResourceIT {
             .andExpect(jsonPath("$.id").value(legalStatus.getId().intValue()))
             .andExpect(jsonPath("$.legalStatusCode").value(DEFAULT_LEGAL_STATUS_CODE))
             .andExpect(jsonPath("$.legalStatusType").value(DEFAULT_LEGAL_STATUS_TYPE))
-            .andExpect(jsonPath("$.legalStatusDescription").value(DEFAULT_LEGAL_STATUS_DESCRIPTION));
+            .andExpect(jsonPath("$.legalStatusDescription").value(DEFAULT_LEGAL_STATUS_DESCRIPTION.toString()));
     }
 
     @Test
@@ -437,7 +438,7 @@ class LegalStatusResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(legalStatus.getId().intValue())))
             .andExpect(jsonPath("$.[*].legalStatusCode").value(hasItem(DEFAULT_LEGAL_STATUS_CODE)))
             .andExpect(jsonPath("$.[*].legalStatusType").value(hasItem(DEFAULT_LEGAL_STATUS_TYPE)))
-            .andExpect(jsonPath("$.[*].legalStatusDescription").value(hasItem(DEFAULT_LEGAL_STATUS_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].legalStatusDescription").value(hasItem(DEFAULT_LEGAL_STATUS_DESCRIPTION.toString())));
 
         // Check, that the count call also returns 1
         restLegalStatusMockMvc
@@ -764,6 +765,6 @@ class LegalStatusResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(legalStatus.getId().intValue())))
             .andExpect(jsonPath("$.[*].legalStatusCode").value(hasItem(DEFAULT_LEGAL_STATUS_CODE)))
             .andExpect(jsonPath("$.[*].legalStatusType").value(hasItem(DEFAULT_LEGAL_STATUS_TYPE)))
-            .andExpect(jsonPath("$.[*].legalStatusDescription").value(hasItem(DEFAULT_LEGAL_STATUS_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].legalStatusDescription").value(hasItem(DEFAULT_LEGAL_STATUS_DESCRIPTION.toString())));
     }
 }

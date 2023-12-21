@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -69,8 +70,8 @@ class InterbankSectorCodeResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/interbank-sector-codes";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private InterbankSectorCodeRepository interbankSectorCodeRepository;
@@ -212,7 +213,7 @@ class InterbankSectorCodeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(interbankSectorCode.getId().intValue())))
             .andExpect(jsonPath("$.[*].interbankSectorCode").value(hasItem(DEFAULT_INTERBANK_SECTOR_CODE)))
             .andExpect(
-                jsonPath("$.[*].interbankSectorCodeDescription").value(hasItem(DEFAULT_INTERBANK_SECTOR_CODE_DESCRIPTION))
+                jsonPath("$.[*].interbankSectorCodeDescription").value(hasItem(DEFAULT_INTERBANK_SECTOR_CODE_DESCRIPTION.toString()))
             );
     }
 
@@ -229,7 +230,7 @@ class InterbankSectorCodeResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(interbankSectorCode.getId().intValue()))
             .andExpect(jsonPath("$.interbankSectorCode").value(DEFAULT_INTERBANK_SECTOR_CODE))
-            .andExpect(jsonPath("$.interbankSectorCodeDescription").value(DEFAULT_INTERBANK_SECTOR_CODE_DESCRIPTION));
+            .andExpect(jsonPath("$.interbankSectorCodeDescription").value(DEFAULT_INTERBANK_SECTOR_CODE_DESCRIPTION.toString()));
     }
 
     @Test
@@ -341,7 +342,7 @@ class InterbankSectorCodeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(interbankSectorCode.getId().intValue())))
             .andExpect(jsonPath("$.[*].interbankSectorCode").value(hasItem(DEFAULT_INTERBANK_SECTOR_CODE)))
             .andExpect(
-                jsonPath("$.[*].interbankSectorCodeDescription").value(hasItem(DEFAULT_INTERBANK_SECTOR_CODE_DESCRIPTION))
+                jsonPath("$.[*].interbankSectorCodeDescription").value(hasItem(DEFAULT_INTERBANK_SECTOR_CODE_DESCRIPTION.toString()))
             );
 
         // Check, that the count call also returns 1
@@ -670,7 +671,7 @@ class InterbankSectorCodeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(interbankSectorCode.getId().intValue())))
             .andExpect(jsonPath("$.[*].interbankSectorCode").value(hasItem(DEFAULT_INTERBANK_SECTOR_CODE)))
             .andExpect(
-                jsonPath("$.[*].interbankSectorCodeDescription").value(hasItem(DEFAULT_INTERBANK_SECTOR_CODE_DESCRIPTION))
+                jsonPath("$.[*].interbankSectorCodeDescription").value(hasItem(DEFAULT_INTERBANK_SECTOR_CODE_DESCRIPTION.toString()))
             );
     }
 }

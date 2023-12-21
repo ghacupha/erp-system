@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -73,8 +74,8 @@ class CardCategoryTypeResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/card-category-types";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private CardCategoryTypeRepository cardCategoryTypeRepository;
@@ -233,7 +234,7 @@ class CardCategoryTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(cardCategoryType.getId().intValue())))
             .andExpect(jsonPath("$.[*].cardCategoryFlag").value(hasItem(DEFAULT_CARD_CATEGORY_FLAG.toString())))
             .andExpect(jsonPath("$.[*].cardCategoryDescription").value(hasItem(DEFAULT_CARD_CATEGORY_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].cardCategoryDetails").value(hasItem(DEFAULT_CARD_CATEGORY_DETAILS)));
+            .andExpect(jsonPath("$.[*].cardCategoryDetails").value(hasItem(DEFAULT_CARD_CATEGORY_DETAILS.toString())));
     }
 
     @Test
@@ -250,7 +251,7 @@ class CardCategoryTypeResourceIT {
             .andExpect(jsonPath("$.id").value(cardCategoryType.getId().intValue()))
             .andExpect(jsonPath("$.cardCategoryFlag").value(DEFAULT_CARD_CATEGORY_FLAG.toString()))
             .andExpect(jsonPath("$.cardCategoryDescription").value(DEFAULT_CARD_CATEGORY_DESCRIPTION))
-            .andExpect(jsonPath("$.cardCategoryDetails").value(DEFAULT_CARD_CATEGORY_DETAILS));
+            .andExpect(jsonPath("$.cardCategoryDetails").value(DEFAULT_CARD_CATEGORY_DETAILS.toString()));
     }
 
     @Test
@@ -414,7 +415,7 @@ class CardCategoryTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(cardCategoryType.getId().intValue())))
             .andExpect(jsonPath("$.[*].cardCategoryFlag").value(hasItem(DEFAULT_CARD_CATEGORY_FLAG.toString())))
             .andExpect(jsonPath("$.[*].cardCategoryDescription").value(hasItem(DEFAULT_CARD_CATEGORY_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].cardCategoryDetails").value(hasItem(DEFAULT_CARD_CATEGORY_DETAILS)));
+            .andExpect(jsonPath("$.[*].cardCategoryDetails").value(hasItem(DEFAULT_CARD_CATEGORY_DETAILS.toString())));
 
         // Check, that the count call also returns 1
         restCardCategoryTypeMockMvc
@@ -745,6 +746,6 @@ class CardCategoryTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(cardCategoryType.getId().intValue())))
             .andExpect(jsonPath("$.[*].cardCategoryFlag").value(hasItem(DEFAULT_CARD_CATEGORY_FLAG.toString())))
             .andExpect(jsonPath("$.[*].cardCategoryDescription").value(hasItem(DEFAULT_CARD_CATEGORY_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].cardCategoryDetails").value(hasItem(DEFAULT_CARD_CATEGORY_DETAILS)));
+            .andExpect(jsonPath("$.[*].cardCategoryDetails").value(hasItem(DEFAULT_CARD_CATEGORY_DETAILS.toString())));
     }
 }

@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class CrbRecordFileTypeResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/crb-record-file-types";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private CrbRecordFileTypeRepository crbRecordFileTypeRepository;
@@ -240,7 +241,7 @@ class CrbRecordFileTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(crbRecordFileType.getId().intValue())))
             .andExpect(jsonPath("$.[*].recordFileTypeCode").value(hasItem(DEFAULT_RECORD_FILE_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].recordFileType").value(hasItem(DEFAULT_RECORD_FILE_TYPE)))
-            .andExpect(jsonPath("$.[*].recordFileTypeDetails").value(hasItem(DEFAULT_RECORD_FILE_TYPE_DETAILS)));
+            .andExpect(jsonPath("$.[*].recordFileTypeDetails").value(hasItem(DEFAULT_RECORD_FILE_TYPE_DETAILS.toString())));
     }
 
     @Test
@@ -257,7 +258,7 @@ class CrbRecordFileTypeResourceIT {
             .andExpect(jsonPath("$.id").value(crbRecordFileType.getId().intValue()))
             .andExpect(jsonPath("$.recordFileTypeCode").value(DEFAULT_RECORD_FILE_TYPE_CODE))
             .andExpect(jsonPath("$.recordFileType").value(DEFAULT_RECORD_FILE_TYPE))
-            .andExpect(jsonPath("$.recordFileTypeDetails").value(DEFAULT_RECORD_FILE_TYPE_DETAILS));
+            .andExpect(jsonPath("$.recordFileTypeDetails").value(DEFAULT_RECORD_FILE_TYPE_DETAILS.toString()));
     }
 
     @Test
@@ -447,7 +448,7 @@ class CrbRecordFileTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(crbRecordFileType.getId().intValue())))
             .andExpect(jsonPath("$.[*].recordFileTypeCode").value(hasItem(DEFAULT_RECORD_FILE_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].recordFileType").value(hasItem(DEFAULT_RECORD_FILE_TYPE)))
-            .andExpect(jsonPath("$.[*].recordFileTypeDetails").value(hasItem(DEFAULT_RECORD_FILE_TYPE_DETAILS)));
+            .andExpect(jsonPath("$.[*].recordFileTypeDetails").value(hasItem(DEFAULT_RECORD_FILE_TYPE_DETAILS.toString())));
 
         // Check, that the count call also returns 1
         restCrbRecordFileTypeMockMvc
@@ -778,6 +779,6 @@ class CrbRecordFileTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(crbRecordFileType.getId().intValue())))
             .andExpect(jsonPath("$.[*].recordFileTypeCode").value(hasItem(DEFAULT_RECORD_FILE_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].recordFileType").value(hasItem(DEFAULT_RECORD_FILE_TYPE)))
-            .andExpect(jsonPath("$.[*].recordFileTypeDetails").value(hasItem(DEFAULT_RECORD_FILE_TYPE_DETAILS)));
+            .andExpect(jsonPath("$.[*].recordFileTypeDetails").value(hasItem(DEFAULT_RECORD_FILE_TYPE_DETAILS.toString())));
     }
 }

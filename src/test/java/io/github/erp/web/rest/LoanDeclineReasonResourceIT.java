@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class LoanDeclineReasonResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/loan-decline-reasons";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private LoanDeclineReasonRepository loanDeclineReasonRepository;
@@ -240,7 +241,7 @@ class LoanDeclineReasonResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(loanDeclineReason.getId().intValue())))
             .andExpect(jsonPath("$.[*].loanDeclineReasonTypeCode").value(hasItem(DEFAULT_LOAN_DECLINE_REASON_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].loanDeclineReasonType").value(hasItem(DEFAULT_LOAN_DECLINE_REASON_TYPE)))
-            .andExpect(jsonPath("$.[*].loanDeclineReasonDetails").value(hasItem(DEFAULT_LOAN_DECLINE_REASON_DETAILS)));
+            .andExpect(jsonPath("$.[*].loanDeclineReasonDetails").value(hasItem(DEFAULT_LOAN_DECLINE_REASON_DETAILS.toString())));
     }
 
     @Test
@@ -257,7 +258,7 @@ class LoanDeclineReasonResourceIT {
             .andExpect(jsonPath("$.id").value(loanDeclineReason.getId().intValue()))
             .andExpect(jsonPath("$.loanDeclineReasonTypeCode").value(DEFAULT_LOAN_DECLINE_REASON_TYPE_CODE))
             .andExpect(jsonPath("$.loanDeclineReasonType").value(DEFAULT_LOAN_DECLINE_REASON_TYPE))
-            .andExpect(jsonPath("$.loanDeclineReasonDetails").value(DEFAULT_LOAN_DECLINE_REASON_DETAILS));
+            .andExpect(jsonPath("$.loanDeclineReasonDetails").value(DEFAULT_LOAN_DECLINE_REASON_DETAILS.toString()));
     }
 
     @Test
@@ -449,7 +450,7 @@ class LoanDeclineReasonResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(loanDeclineReason.getId().intValue())))
             .andExpect(jsonPath("$.[*].loanDeclineReasonTypeCode").value(hasItem(DEFAULT_LOAN_DECLINE_REASON_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].loanDeclineReasonType").value(hasItem(DEFAULT_LOAN_DECLINE_REASON_TYPE)))
-            .andExpect(jsonPath("$.[*].loanDeclineReasonDetails").value(hasItem(DEFAULT_LOAN_DECLINE_REASON_DETAILS)));
+            .andExpect(jsonPath("$.[*].loanDeclineReasonDetails").value(hasItem(DEFAULT_LOAN_DECLINE_REASON_DETAILS.toString())));
 
         // Check, that the count call also returns 1
         restLoanDeclineReasonMockMvc
@@ -782,6 +783,6 @@ class LoanDeclineReasonResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(loanDeclineReason.getId().intValue())))
             .andExpect(jsonPath("$.[*].loanDeclineReasonTypeCode").value(hasItem(DEFAULT_LOAN_DECLINE_REASON_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].loanDeclineReasonType").value(hasItem(DEFAULT_LOAN_DECLINE_REASON_TYPE)))
-            .andExpect(jsonPath("$.[*].loanDeclineReasonDetails").value(hasItem(DEFAULT_LOAN_DECLINE_REASON_DETAILS)));
+            .andExpect(jsonPath("$.[*].loanDeclineReasonDetails").value(hasItem(DEFAULT_LOAN_DECLINE_REASON_DETAILS.toString())));
     }
 }

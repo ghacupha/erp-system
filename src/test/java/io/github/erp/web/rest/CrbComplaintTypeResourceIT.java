@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class CrbComplaintTypeResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/crb-complaint-types";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private CrbComplaintTypeRepository crbComplaintTypeRepository;
@@ -232,7 +233,7 @@ class CrbComplaintTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(crbComplaintType.getId().intValue())))
             .andExpect(jsonPath("$.[*].complaintTypeCode").value(hasItem(DEFAULT_COMPLAINT_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].complaintType").value(hasItem(DEFAULT_COMPLAINT_TYPE)))
-            .andExpect(jsonPath("$.[*].complaintTypeDetails").value(hasItem(DEFAULT_COMPLAINT_TYPE_DETAILS)));
+            .andExpect(jsonPath("$.[*].complaintTypeDetails").value(hasItem(DEFAULT_COMPLAINT_TYPE_DETAILS.toString())));
     }
 
     @Test
@@ -249,7 +250,7 @@ class CrbComplaintTypeResourceIT {
             .andExpect(jsonPath("$.id").value(crbComplaintType.getId().intValue()))
             .andExpect(jsonPath("$.complaintTypeCode").value(DEFAULT_COMPLAINT_TYPE_CODE))
             .andExpect(jsonPath("$.complaintType").value(DEFAULT_COMPLAINT_TYPE))
-            .andExpect(jsonPath("$.complaintTypeDetails").value(DEFAULT_COMPLAINT_TYPE_DETAILS));
+            .andExpect(jsonPath("$.complaintTypeDetails").value(DEFAULT_COMPLAINT_TYPE_DETAILS.toString()));
     }
 
     @Test
@@ -437,7 +438,7 @@ class CrbComplaintTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(crbComplaintType.getId().intValue())))
             .andExpect(jsonPath("$.[*].complaintTypeCode").value(hasItem(DEFAULT_COMPLAINT_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].complaintType").value(hasItem(DEFAULT_COMPLAINT_TYPE)))
-            .andExpect(jsonPath("$.[*].complaintTypeDetails").value(hasItem(DEFAULT_COMPLAINT_TYPE_DETAILS)));
+            .andExpect(jsonPath("$.[*].complaintTypeDetails").value(hasItem(DEFAULT_COMPLAINT_TYPE_DETAILS.toString())));
 
         // Check, that the count call also returns 1
         restCrbComplaintTypeMockMvc
@@ -768,6 +769,6 @@ class CrbComplaintTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(crbComplaintType.getId().intValue())))
             .andExpect(jsonPath("$.[*].complaintTypeCode").value(hasItem(DEFAULT_COMPLAINT_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].complaintType").value(hasItem(DEFAULT_COMPLAINT_TYPE)))
-            .andExpect(jsonPath("$.[*].complaintTypeDetails").value(hasItem(DEFAULT_COMPLAINT_TYPE_DETAILS)));
+            .andExpect(jsonPath("$.[*].complaintTypeDetails").value(hasItem(DEFAULT_COMPLAINT_TYPE_DETAILS.toString())));
     }
 }

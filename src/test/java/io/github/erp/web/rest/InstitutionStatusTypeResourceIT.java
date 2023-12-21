@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class InstitutionStatusTypeResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/institution-status-types";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private InstitutionStatusTypeRepository institutionStatusTypeRepository;
@@ -219,7 +220,7 @@ class InstitutionStatusTypeResourceIT {
             .andExpect(jsonPath("$.[*].institutionStatusCode").value(hasItem(DEFAULT_INSTITUTION_STATUS_CODE)))
             .andExpect(jsonPath("$.[*].institutionStatusType").value(hasItem(DEFAULT_INSTITUTION_STATUS_TYPE)))
             .andExpect(
-                jsonPath("$.[*].insitutionStatusTypeDescription").value(hasItem(DEFAULT_INSITUTION_STATUS_TYPE_DESCRIPTION))
+                jsonPath("$.[*].insitutionStatusTypeDescription").value(hasItem(DEFAULT_INSITUTION_STATUS_TYPE_DESCRIPTION.toString()))
             );
     }
 
@@ -237,7 +238,7 @@ class InstitutionStatusTypeResourceIT {
             .andExpect(jsonPath("$.id").value(institutionStatusType.getId().intValue()))
             .andExpect(jsonPath("$.institutionStatusCode").value(DEFAULT_INSTITUTION_STATUS_CODE))
             .andExpect(jsonPath("$.institutionStatusType").value(DEFAULT_INSTITUTION_STATUS_TYPE))
-            .andExpect(jsonPath("$.insitutionStatusTypeDescription").value(DEFAULT_INSITUTION_STATUS_TYPE_DESCRIPTION));
+            .andExpect(jsonPath("$.insitutionStatusTypeDescription").value(DEFAULT_INSITUTION_STATUS_TYPE_DESCRIPTION.toString()));
     }
 
     @Test
@@ -430,7 +431,7 @@ class InstitutionStatusTypeResourceIT {
             .andExpect(jsonPath("$.[*].institutionStatusCode").value(hasItem(DEFAULT_INSTITUTION_STATUS_CODE)))
             .andExpect(jsonPath("$.[*].institutionStatusType").value(hasItem(DEFAULT_INSTITUTION_STATUS_TYPE)))
             .andExpect(
-                jsonPath("$.[*].insitutionStatusTypeDescription").value(hasItem(DEFAULT_INSITUTION_STATUS_TYPE_DESCRIPTION))
+                jsonPath("$.[*].insitutionStatusTypeDescription").value(hasItem(DEFAULT_INSITUTION_STATUS_TYPE_DESCRIPTION.toString()))
             );
 
         // Check, that the count call also returns 1
@@ -767,7 +768,7 @@ class InstitutionStatusTypeResourceIT {
             .andExpect(jsonPath("$.[*].institutionStatusCode").value(hasItem(DEFAULT_INSTITUTION_STATUS_CODE)))
             .andExpect(jsonPath("$.[*].institutionStatusType").value(hasItem(DEFAULT_INSTITUTION_STATUS_TYPE)))
             .andExpect(
-                jsonPath("$.[*].insitutionStatusTypeDescription").value(hasItem(DEFAULT_INSITUTION_STATUS_TYPE_DESCRIPTION))
+                jsonPath("$.[*].insitutionStatusTypeDescription").value(hasItem(DEFAULT_INSITUTION_STATUS_TYPE_DESCRIPTION.toString()))
             );
     }
 }

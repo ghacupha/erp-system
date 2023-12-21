@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -72,8 +73,8 @@ class CategoryOfSecurityResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/category-of-securities";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private CategoryOfSecurityRepository categoryOfSecurityRepository;
@@ -240,7 +241,7 @@ class CategoryOfSecurityResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(categoryOfSecurity.getId().intValue())))
             .andExpect(jsonPath("$.[*].categoryOfSecurity").value(hasItem(DEFAULT_CATEGORY_OF_SECURITY)))
             .andExpect(jsonPath("$.[*].categoryOfSecurityDetails").value(hasItem(DEFAULT_CATEGORY_OF_SECURITY_DETAILS)))
-            .andExpect(jsonPath("$.[*].categoryOfSecurityDescription").value(hasItem(DEFAULT_CATEGORY_OF_SECURITY_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].categoryOfSecurityDescription").value(hasItem(DEFAULT_CATEGORY_OF_SECURITY_DESCRIPTION.toString())));
     }
 
     @Test
@@ -257,7 +258,7 @@ class CategoryOfSecurityResourceIT {
             .andExpect(jsonPath("$.id").value(categoryOfSecurity.getId().intValue()))
             .andExpect(jsonPath("$.categoryOfSecurity").value(DEFAULT_CATEGORY_OF_SECURITY))
             .andExpect(jsonPath("$.categoryOfSecurityDetails").value(DEFAULT_CATEGORY_OF_SECURITY_DETAILS))
-            .andExpect(jsonPath("$.categoryOfSecurityDescription").value(DEFAULT_CATEGORY_OF_SECURITY_DESCRIPTION));
+            .andExpect(jsonPath("$.categoryOfSecurityDescription").value(DEFAULT_CATEGORY_OF_SECURITY_DESCRIPTION.toString()));
     }
 
     @Test
@@ -449,7 +450,7 @@ class CategoryOfSecurityResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(categoryOfSecurity.getId().intValue())))
             .andExpect(jsonPath("$.[*].categoryOfSecurity").value(hasItem(DEFAULT_CATEGORY_OF_SECURITY)))
             .andExpect(jsonPath("$.[*].categoryOfSecurityDetails").value(hasItem(DEFAULT_CATEGORY_OF_SECURITY_DETAILS)))
-            .andExpect(jsonPath("$.[*].categoryOfSecurityDescription").value(hasItem(DEFAULT_CATEGORY_OF_SECURITY_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].categoryOfSecurityDescription").value(hasItem(DEFAULT_CATEGORY_OF_SECURITY_DESCRIPTION.toString())));
 
         // Check, that the count call also returns 1
         restCategoryOfSecurityMockMvc
@@ -785,6 +786,6 @@ class CategoryOfSecurityResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(categoryOfSecurity.getId().intValue())))
             .andExpect(jsonPath("$.[*].categoryOfSecurity").value(hasItem(DEFAULT_CATEGORY_OF_SECURITY)))
             .andExpect(jsonPath("$.[*].categoryOfSecurityDetails").value(hasItem(DEFAULT_CATEGORY_OF_SECURITY_DETAILS)))
-            .andExpect(jsonPath("$.[*].categoryOfSecurityDescription").value(hasItem(DEFAULT_CATEGORY_OF_SECURITY_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].categoryOfSecurityDescription").value(hasItem(DEFAULT_CATEGORY_OF_SECURITY_DESCRIPTION.toString())));
     }
 }
