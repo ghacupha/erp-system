@@ -1,4 +1,4 @@
-package io.github.erp.domain;
+package io.github.erp.service.mapper;
 
 /*-
  * Erp System - Mark IX No 5 (Iddo Series) Server ver 1.6.7
@@ -18,20 +18,17 @@ package io.github.erp.domain;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import java.math.BigDecimal;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public interface AmortizationPostingReportInternal {
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-    Long getId();
+class AmortizationPostingReportMapperTest {
 
-    String getCatalogueNumber();
+    private AmortizationPostingReportMapper amortizationPostingReportMapper;
 
-    String getDebitAccount();
-
-    String getCreditAccount();
-
-    String getDescription();
-
-    BigDecimal getAmortizationAmount();
-
+    @BeforeEach
+    public void setUp() {
+        amortizationPostingReportMapper = new AmortizationPostingReportMapperImpl();
+    }
 }

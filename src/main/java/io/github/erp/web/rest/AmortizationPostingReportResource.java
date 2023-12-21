@@ -20,16 +20,17 @@ package io.github.erp.web.rest;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
-import io.github.erp.domain.AmortizationPostingReport;
 import io.github.erp.repository.AmortizationPostingReportRepository;
-import io.github.erp.repository.search.AmortizationPostingReportSearchRepository;
+import io.github.erp.service.AmortizationPostingReportQueryService;
+import io.github.erp.service.AmortizationPostingReportService;
+import io.github.erp.service.criteria.AmortizationPostingReportCriteria;
+import io.github.erp.service.dto.AmortizationPostingReportDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -51,48 +51,67 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class AmortizationPostingReportResource {
 
     private final Logger log = LoggerFactory.getLogger(AmortizationPostingReportResource.class);
 
+    private final AmortizationPostingReportService amortizationPostingReportService;
+
     private final AmortizationPostingReportRepository amortizationPostingReportRepository;
 
-    private final AmortizationPostingReportSearchRepository amortizationPostingReportSearchRepository;
+    private final AmortizationPostingReportQueryService amortizationPostingReportQueryService;
 
     public AmortizationPostingReportResource(
+        AmortizationPostingReportService amortizationPostingReportService,
         AmortizationPostingReportRepository amortizationPostingReportRepository,
-        AmortizationPostingReportSearchRepository amortizationPostingReportSearchRepository
+        AmortizationPostingReportQueryService amortizationPostingReportQueryService
     ) {
+        this.amortizationPostingReportService = amortizationPostingReportService;
         this.amortizationPostingReportRepository = amortizationPostingReportRepository;
-        this.amortizationPostingReportSearchRepository = amortizationPostingReportSearchRepository;
+        this.amortizationPostingReportQueryService = amortizationPostingReportQueryService;
     }
 
     /**
      * {@code GET  /amortization-posting-reports} : get all the amortizationPostingReports.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of amortizationPostingReports in body.
      */
     @GetMapping("/amortization-posting-reports")
-    public ResponseEntity<List<AmortizationPostingReport>> getAllAmortizationPostingReports(Pageable pageable) {
-        log.debug("REST request to get a page of AmortizationPostingReports");
-        Page<AmortizationPostingReport> page = amortizationPostingReportRepository.findAll(pageable);
+    public ResponseEntity<List<AmortizationPostingReportDTO>> getAllAmortizationPostingReports(
+        AmortizationPostingReportCriteria criteria,
+        Pageable pageable
+    ) {
+        log.debug("REST request to get AmortizationPostingReports by criteria: {}", criteria);
+        Page<AmortizationPostingReportDTO> page = amortizationPostingReportQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
+     * {@code GET  /amortization-posting-reports/count} : count all the amortizationPostingReports.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/amortization-posting-reports/count")
+    public ResponseEntity<Long> countAmortizationPostingReports(AmortizationPostingReportCriteria criteria) {
+        log.debug("REST request to count AmortizationPostingReports by criteria: {}", criteria);
+        return ResponseEntity.ok().body(amortizationPostingReportQueryService.countByCriteria(criteria));
+    }
+
+    /**
      * {@code GET  /amortization-posting-reports/:id} : get the "id" amortizationPostingReport.
      *
-     * @param id the id of the amortizationPostingReport to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the amortizationPostingReport, or with status {@code 404 (Not Found)}.
+     * @param id the id of the amortizationPostingReportDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the amortizationPostingReportDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/amortization-posting-reports/{id}")
-    public ResponseEntity<AmortizationPostingReport> getAmortizationPostingReport(@PathVariable Long id) {
+    public ResponseEntity<AmortizationPostingReportDTO> getAmortizationPostingReport(@PathVariable Long id) {
         log.debug("REST request to get AmortizationPostingReport : {}", id);
-        Optional<AmortizationPostingReport> amortizationPostingReport = amortizationPostingReportRepository.findById(id);
-        return ResponseUtil.wrapOrNotFound(amortizationPostingReport);
+        Optional<AmortizationPostingReportDTO> amortizationPostingReportDTO = amortizationPostingReportService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(amortizationPostingReportDTO);
     }
 
     /**
@@ -104,9 +123,12 @@ public class AmortizationPostingReportResource {
      * @return the result of the search.
      */
     @GetMapping("/_search/amortization-posting-reports")
-    public ResponseEntity<List<AmortizationPostingReport>> searchAmortizationPostingReports(@RequestParam String query, Pageable pageable) {
+    public ResponseEntity<List<AmortizationPostingReportDTO>> searchAmortizationPostingReports(
+        @RequestParam String query,
+        Pageable pageable
+    ) {
         log.debug("REST request to search for a page of AmortizationPostingReports for query {}", query);
-        Page<AmortizationPostingReport> page = amortizationPostingReportSearchRepository.search(query, pageable);
+        Page<AmortizationPostingReportDTO> page = amortizationPostingReportService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

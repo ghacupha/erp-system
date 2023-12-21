@@ -27,4 +27,5 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface AmortizationPostingReportRepository extends JpaRepository<AmortizationPostingReport, Long> {}
+public interface AmortizationPostingReportRepository
+    extends JpaRepository<AmortizationPostingReport, Long>, JpaSpecificationExecutor<AmortizationPostingReport> {}
