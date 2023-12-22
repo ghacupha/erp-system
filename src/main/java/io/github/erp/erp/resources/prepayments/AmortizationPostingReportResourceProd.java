@@ -21,6 +21,7 @@ package io.github.erp.erp.resources.prepayments;
 import io.github.erp.domain.AmortizationPostingReportInternal;
 import io.github.erp.internal.framework.Mapping;
 import io.github.erp.internal.repository.InternalAmortizationPostingRepository;
+import io.github.erp.internal.service.autonomousReport.DatedReportExportService;
 import io.github.erp.repository.AmortizationPostingReportRepository;
 import io.github.erp.service.AmortizationPostingReportQueryService;
 import io.github.erp.service.AmortizationPostingReportService;
@@ -32,11 +33,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +50,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/prepayments")
 public class AmortizationPostingReportResourceProd {
+
+    private final static String REPORT_NAME = "amortization-posting-report";
 
     private final Logger log = LoggerFactory.getLogger(AmortizationPostingReportResourceProd.class);
 
@@ -60,16 +65,21 @@ public class AmortizationPostingReportResourceProd {
 
     private final Mapping<AmortizationPostingReportInternal, AmortizationPostingReportDTO> amortizationPostingReportDTOMapping;
 
+    private final DatedReportExportService<AmortizationPostingReportDTO> amortizationPostingReportExportService;
+
     public AmortizationPostingReportResourceProd(
         AmortizationPostingReportService amortizationPostingReportService,
         AmortizationPostingReportRepository amortizationPostingReportRepository,
         AmortizationPostingReportQueryService amortizationPostingReportQueryService,
-        InternalAmortizationPostingRepository internalAmortizationPostingRepository, Mapping<AmortizationPostingReportInternal, AmortizationPostingReportDTO> amortizationPostingReportDTOMapping) {
+        InternalAmortizationPostingRepository internalAmortizationPostingRepository,
+        Mapping<AmortizationPostingReportInternal, AmortizationPostingReportDTO> amortizationPostingReportDTOMapping,
+        DatedReportExportService<AmortizationPostingReportDTO> amortizationPostingReportExportService) {
         this.amortizationPostingReportService = amortizationPostingReportService;
         this.amortizationPostingReportRepository = amortizationPostingReportRepository;
         this.amortizationPostingReportQueryService = amortizationPostingReportQueryService;
         this.internalAmortizationPostingRepository = internalAmortizationPostingRepository;
         this.amortizationPostingReportDTOMapping = amortizationPostingReportDTOMapping;
+        this.amortizationPostingReportExportService = amortizationPostingReportExportService;
     }
 
     /**
@@ -82,16 +92,23 @@ public class AmortizationPostingReportResourceProd {
     public ResponseEntity<List<AmortizationPostingReportDTO>> getAllAmortizationPostingReports(
         @RequestParam("reportDate") String reportDate,
         Pageable pageable
-    ) {
+    ) throws IOException {
         log.debug("REST request to get AmortizationPostingReports by criteria: {}", reportDate);
 
         Page<AmortizationPostingReportDTO> page =
             internalAmortizationPostingRepository.findByReportDate(LocalDate.parse(reportDate), pageable)
             .map(amortizationPostingReportDTOMapping::toValue2);
 
+        createCSVReport(reportDate);
+
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @Async void createCSVReport(String reportDate) throws IOException {
+
+        amortizationPostingReportExportService.exportReportByDate(LocalDate.parse(reportDate), REPORT_NAME);
     }
 
     /**
