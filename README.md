@@ -242,6 +242,26 @@ Similar to Iddo's dedication to meticulous documentation, this module captures a
 
 This innovative reporting framework embodies Iddo's commitment to meticulous recording, showcasing proactive foresight and detailed documentation. The module's silent operations and comprehensive data handling echo Iddo's legacy of detailed chronicles, establishing an advanced reporting system designed for seamless functionality and thorough data provision
 
+### Jehoiada: Lease Automation Vanguard series (ERP System Mark X) 2023.12.27
+
+The 'Jehoiada: Lease Automation Vanguard' series embarks on a transformative journey to implement an IFRS 16 leases module, drawing inspiration from Jehoiada's influential leadership in ancient Judah's religious reforms.
+
+This series represents a pioneering step towards automated lease management in alignment with IFRS 16 standards. The focus lies on meticulously maintaining lease accounts and streamlining reporting procedures.
+
+The planned implementation encompasses automation for reconciling lease liability accounts and accurately managing right-of-use depreciation. The aim is to establish a robust framework that automates these processes, ensuring compliance with IFRS 16 regulations while optimizing efficiency and accuracy.
+
+There are many aspects of automating management of leases but this series focusses on that which is considered a major pain point when adopting IFRS 16. It's not necessarily the part of reading a contract and classifying the lease, or from the same coming up with a full schedule of all future payments. 
+
+There are systems that can come up with that in a second and we would be re-inventing the wheel. Just to be clear a lot of this work re-invents the wheel, and we do not see it as a vice. However the major challenge remains after all the bells and whistles, and after the developers have packaged the system and left
+
+your organization, the pain points begin to show up, especially in the maintenance of leases liability. Because what you envisioned in the beginning of the lease may not become the reality of implementation. The invoices by the vendors, or providers may be late, or amended to reflect changing economic environment, and environments
+
+are changing. How do we ensure we can reconcile and explain and then report such changes, and also explain how the accounting system does not adhere to our initial models? How can we reliably report in each reporting period and present auditable data? Such questions are the hum drum of this series; maintenance, reporting, and auditable evidence.
+
+The envisioned module will revolutionize lease management by automating the reconciliation of accounts, minimizing manual intervention, and ensuring precision in right-of-use depreciation calculations. It reflects Jehoiada's leadership qualities by initiating transformative changes in lease accounting procedures.
+
+This series signifies a commitment to embracing automation as a vanguard in lease management, ensuring adherence to IFRS 16 standards while optimizing accuracy, efficiency, and compliance in lease account maintenance and reporting.
+
 ## Important links
 
  - [jhipster homepage and latest documentation](https://www.jhipster.tech)
