@@ -37,6 +37,8 @@ public class WorkInProgressOutstandingReportREPOMapper implements Mapping<WorkIn
             .instalmentAmount(vs.getInstalmentAmount())
             .totalTransferAmount(vs.getTotalTransferAmount())
             .outstandingAmount(vs.getOutstandingAmount())
+            .instalmentTransactionNumber(vs.getInstalmentTransactionNumber())
+            .instalmentTransactionDate(vs.getInstalmentTransactionDate())
             .build();
     }
 
@@ -52,6 +54,8 @@ public class WorkInProgressOutstandingReportREPOMapper implements Mapping<WorkIn
         dto.setInstalmentAmount(vs.getInstalmentAmount());
         dto.setTotalTransferAmount(vs.getTotalTransferAmount());
         dto.setOutstandingAmount(vs.getOutstandingAmount());
+        dto.setInstalmentTransactionNumber(vs.getInstalmentTransactionNumber());
+        dto.setInstalmentTransactionDate(vs.getInstalmentTransactionDate());
 
         return dto;
     }

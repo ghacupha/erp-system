@@ -1,4 +1,4 @@
-package io.github.erp.erp.resources.wip;
+package io.github.erp.domain;
 
 /*-
  * Erp System - Mark IX No 5 (Iddo Series) Server ver 1.6.7
@@ -18,6 +18,7 @@ package io.github.erp.erp.resources.wip;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public interface WorkInProgressOutstandingReportTuple {
 
@@ -28,6 +29,10 @@ public interface WorkInProgressOutstandingReportTuple {
     String getParticulars();
 
     String getDealerName();
+
+    String getInstalmentTransactionNumber();
+
+    LocalDate getInstalmentTransactionDate();
 
     String getIso4217Code();
 

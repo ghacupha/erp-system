@@ -27,6 +27,7 @@ import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
+import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 
@@ -59,6 +60,10 @@ public class WorkInProgressOutstandingReportCriteria implements Serializable, Cr
 
     private BigDecimalFilter outstandingAmount;
 
+    private StringFilter instalmentTransactionNumber;
+
+    private LocalDateFilter instalmentTransactionDate;
+
     private Boolean distinct;
 
     public WorkInProgressOutstandingReportCriteria() {}
@@ -72,6 +77,8 @@ public class WorkInProgressOutstandingReportCriteria implements Serializable, Cr
         this.instalmentAmount = other.instalmentAmount == null ? null : other.instalmentAmount.copy();
         this.totalTransferAmount = other.totalTransferAmount == null ? null : other.totalTransferAmount.copy();
         this.outstandingAmount = other.outstandingAmount == null ? null : other.outstandingAmount.copy();
+        this.instalmentTransactionNumber = other.instalmentTransactionNumber == null ? null : other.instalmentTransactionNumber.copy();
+        this.instalmentTransactionDate = other.instalmentTransactionDate == null ? null : other.instalmentTransactionDate.copy();
         this.distinct = other.distinct;
     }
 
@@ -200,6 +207,36 @@ public class WorkInProgressOutstandingReportCriteria implements Serializable, Cr
         this.outstandingAmount = outstandingAmount;
     }
 
+    public StringFilter getInstalmentTransactionNumber() {
+        return instalmentTransactionNumber;
+    }
+
+    public StringFilter instalmentTransactionNumber() {
+        if (instalmentTransactionNumber == null) {
+            instalmentTransactionNumber = new StringFilter();
+        }
+        return instalmentTransactionNumber;
+    }
+
+    public void setInstalmentTransactionNumber(StringFilter instalmentTransactionNumber) {
+        this.instalmentTransactionNumber = instalmentTransactionNumber;
+    }
+
+    public LocalDateFilter getInstalmentTransactionDate() {
+        return instalmentTransactionDate;
+    }
+
+    public LocalDateFilter instalmentTransactionDate() {
+        if (instalmentTransactionDate == null) {
+            instalmentTransactionDate = new LocalDateFilter();
+        }
+        return instalmentTransactionDate;
+    }
+
+    public void setInstalmentTransactionDate(LocalDateFilter instalmentTransactionDate) {
+        this.instalmentTransactionDate = instalmentTransactionDate;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -226,6 +263,8 @@ public class WorkInProgressOutstandingReportCriteria implements Serializable, Cr
             Objects.equals(instalmentAmount, that.instalmentAmount) &&
             Objects.equals(totalTransferAmount, that.totalTransferAmount) &&
             Objects.equals(outstandingAmount, that.outstandingAmount) &&
+            Objects.equals(instalmentTransactionNumber, that.instalmentTransactionNumber) &&
+            Objects.equals(instalmentTransactionDate, that.instalmentTransactionDate) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -241,6 +280,8 @@ public class WorkInProgressOutstandingReportCriteria implements Serializable, Cr
             instalmentAmount,
             totalTransferAmount,
             outstandingAmount,
+            instalmentTransactionNumber,
+            instalmentTransactionDate,
             distinct
         );
     }
@@ -257,6 +298,8 @@ public class WorkInProgressOutstandingReportCriteria implements Serializable, Cr
             (instalmentAmount != null ? "instalmentAmount=" + instalmentAmount + ", " : "") +
             (totalTransferAmount != null ? "totalTransferAmount=" + totalTransferAmount + ", " : "") +
             (outstandingAmount != null ? "outstandingAmount=" + outstandingAmount + ", " : "") +
+            (instalmentTransactionNumber != null ? "instalmentTransactionNumber=" + instalmentTransactionNumber + ", " : "") +
+            (instalmentTransactionDate != null ? "instalmentTransactionDate=" + instalmentTransactionDate + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

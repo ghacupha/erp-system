@@ -20,6 +20,7 @@ package io.github.erp.service.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -34,6 +35,10 @@ public class WorkInProgressOutstandingReportDTO implements Serializable {
     private String particulars;
 
     private String dealerName;
+
+    private String instalmentTransactionNumber;
+
+    private LocalDate instalmentTransactionDate;
 
     private String iso4217Code;
 
@@ -107,6 +112,22 @@ public class WorkInProgressOutstandingReportDTO implements Serializable {
         this.outstandingAmount = outstandingAmount;
     }
 
+    public String getInstalmentTransactionNumber() {
+        return instalmentTransactionNumber;
+    }
+
+    public void setInstalmentTransactionNumber(String instalmentTransactionNumber) {
+        this.instalmentTransactionNumber = instalmentTransactionNumber;
+    }
+
+    public LocalDate getInstalmentTransactionDate() {
+        return instalmentTransactionDate;
+    }
+
+    public void setInstalmentTransactionDate(LocalDate instalmentTransactionDate) {
+        this.instalmentTransactionDate = instalmentTransactionDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -140,6 +161,8 @@ public class WorkInProgressOutstandingReportDTO implements Serializable {
             ", instalmentAmount=" + getInstalmentAmount() +
             ", totalTransferAmount=" + getTotalTransferAmount() +
             ", outstandingAmount=" + getOutstandingAmount() +
+            ", instalmentTransactionNumber='" + getInstalmentTransactionNumber() + "'" +
+            ", instalmentTransactionDate='" + getInstalmentTransactionDate() + "'" +
             "}";
     }
 }

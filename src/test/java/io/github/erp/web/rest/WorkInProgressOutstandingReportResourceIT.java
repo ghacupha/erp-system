@@ -33,6 +33,8 @@ import io.github.erp.service.criteria.WorkInProgressOutstandingReportCriteria;
 import io.github.erp.service.dto.WorkInProgressOutstandingReportDTO;
 import io.github.erp.service.mapper.WorkInProgressOutstandingReportMapper;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -85,6 +87,13 @@ class WorkInProgressOutstandingReportResourceIT {
     private static final BigDecimal UPDATED_OUTSTANDING_AMOUNT = new BigDecimal(2);
     private static final BigDecimal SMALLER_OUTSTANDING_AMOUNT = new BigDecimal(1 - 1);
 
+    private static final String DEFAULT_INSTALMENT_TRANSACTION_NUMBER = "AAAAAAAAAA";
+    private static final String UPDATED_INSTALMENT_TRANSACTION_NUMBER = "BBBBBBBBBB";
+
+    private static final LocalDate DEFAULT_INSTALMENT_TRANSACTION_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_INSTALMENT_TRANSACTION_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_INSTALMENT_TRANSACTION_DATE = LocalDate.ofEpochDay(-1L);
+
     private static final String ENTITY_API_URL = "/api/work-in-progress-outstanding-reports";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/work-in-progress-outstanding-reports";
@@ -128,7 +137,9 @@ class WorkInProgressOutstandingReportResourceIT {
             .iso4217Code(DEFAULT_ISO_4217_CODE)
             .instalmentAmount(DEFAULT_INSTALMENT_AMOUNT)
             .totalTransferAmount(DEFAULT_TOTAL_TRANSFER_AMOUNT)
-            .outstandingAmount(DEFAULT_OUTSTANDING_AMOUNT);
+            .outstandingAmount(DEFAULT_OUTSTANDING_AMOUNT)
+            .instalmentTransactionNumber(DEFAULT_INSTALMENT_TRANSACTION_NUMBER)
+            .instalmentTransactionDate(DEFAULT_INSTALMENT_TRANSACTION_DATE);
         return workInProgressOutstandingReport;
     }
 
@@ -146,7 +157,9 @@ class WorkInProgressOutstandingReportResourceIT {
             .iso4217Code(UPDATED_ISO_4217_CODE)
             .instalmentAmount(UPDATED_INSTALMENT_AMOUNT)
             .totalTransferAmount(UPDATED_TOTAL_TRANSFER_AMOUNT)
-            .outstandingAmount(UPDATED_OUTSTANDING_AMOUNT);
+            .outstandingAmount(UPDATED_OUTSTANDING_AMOUNT)
+            .instalmentTransactionNumber(UPDATED_INSTALMENT_TRANSACTION_NUMBER)
+            .instalmentTransactionDate(UPDATED_INSTALMENT_TRANSACTION_DATE);
         return workInProgressOutstandingReport;
     }
 
@@ -173,7 +186,9 @@ class WorkInProgressOutstandingReportResourceIT {
             .andExpect(jsonPath("$.[*].iso4217Code").value(hasItem(DEFAULT_ISO_4217_CODE)))
             .andExpect(jsonPath("$.[*].instalmentAmount").value(hasItem(sameNumber(DEFAULT_INSTALMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].totalTransferAmount").value(hasItem(sameNumber(DEFAULT_TOTAL_TRANSFER_AMOUNT))))
-            .andExpect(jsonPath("$.[*].outstandingAmount").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_AMOUNT))));
+            .andExpect(jsonPath("$.[*].outstandingAmount").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_AMOUNT))))
+            .andExpect(jsonPath("$.[*].instalmentTransactionNumber").value(hasItem(DEFAULT_INSTALMENT_TRANSACTION_NUMBER)))
+            .andExpect(jsonPath("$.[*].instalmentTransactionDate").value(hasItem(DEFAULT_INSTALMENT_TRANSACTION_DATE.toString())));
     }
 
     @Test
@@ -194,7 +209,9 @@ class WorkInProgressOutstandingReportResourceIT {
             .andExpect(jsonPath("$.iso4217Code").value(DEFAULT_ISO_4217_CODE))
             .andExpect(jsonPath("$.instalmentAmount").value(sameNumber(DEFAULT_INSTALMENT_AMOUNT)))
             .andExpect(jsonPath("$.totalTransferAmount").value(sameNumber(DEFAULT_TOTAL_TRANSFER_AMOUNT)))
-            .andExpect(jsonPath("$.outstandingAmount").value(sameNumber(DEFAULT_OUTSTANDING_AMOUNT)));
+            .andExpect(jsonPath("$.outstandingAmount").value(sameNumber(DEFAULT_OUTSTANDING_AMOUNT)))
+            .andExpect(jsonPath("$.instalmentTransactionNumber").value(DEFAULT_INSTALMENT_TRANSACTION_NUMBER))
+            .andExpect(jsonPath("$.instalmentTransactionDate").value(DEFAULT_INSTALMENT_TRANSACTION_DATE.toString()));
     }
 
     @Test
@@ -845,6 +862,218 @@ class WorkInProgressOutstandingReportResourceIT {
         defaultWorkInProgressOutstandingReportShouldBeFound("outstandingAmount.greaterThan=" + SMALLER_OUTSTANDING_AMOUNT);
     }
 
+    @Test
+    @Transactional
+    void getAllWorkInProgressOutstandingReportsByInstalmentTransactionNumberIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressOutstandingReportRepository.saveAndFlush(workInProgressOutstandingReport);
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionNumber equals to DEFAULT_INSTALMENT_TRANSACTION_NUMBER
+        defaultWorkInProgressOutstandingReportShouldBeFound("instalmentTransactionNumber.equals=" + DEFAULT_INSTALMENT_TRANSACTION_NUMBER);
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionNumber equals to UPDATED_INSTALMENT_TRANSACTION_NUMBER
+        defaultWorkInProgressOutstandingReportShouldNotBeFound(
+            "instalmentTransactionNumber.equals=" + UPDATED_INSTALMENT_TRANSACTION_NUMBER
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressOutstandingReportsByInstalmentTransactionNumberIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressOutstandingReportRepository.saveAndFlush(workInProgressOutstandingReport);
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionNumber not equals to DEFAULT_INSTALMENT_TRANSACTION_NUMBER
+        defaultWorkInProgressOutstandingReportShouldNotBeFound(
+            "instalmentTransactionNumber.notEquals=" + DEFAULT_INSTALMENT_TRANSACTION_NUMBER
+        );
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionNumber not equals to UPDATED_INSTALMENT_TRANSACTION_NUMBER
+        defaultWorkInProgressOutstandingReportShouldBeFound(
+            "instalmentTransactionNumber.notEquals=" + UPDATED_INSTALMENT_TRANSACTION_NUMBER
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressOutstandingReportsByInstalmentTransactionNumberIsInShouldWork() throws Exception {
+        // Initialize the database
+        workInProgressOutstandingReportRepository.saveAndFlush(workInProgressOutstandingReport);
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionNumber in DEFAULT_INSTALMENT_TRANSACTION_NUMBER or UPDATED_INSTALMENT_TRANSACTION_NUMBER
+        defaultWorkInProgressOutstandingReportShouldBeFound(
+            "instalmentTransactionNumber.in=" + DEFAULT_INSTALMENT_TRANSACTION_NUMBER + "," + UPDATED_INSTALMENT_TRANSACTION_NUMBER
+        );
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionNumber equals to UPDATED_INSTALMENT_TRANSACTION_NUMBER
+        defaultWorkInProgressOutstandingReportShouldNotBeFound("instalmentTransactionNumber.in=" + UPDATED_INSTALMENT_TRANSACTION_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressOutstandingReportsByInstalmentTransactionNumberIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        workInProgressOutstandingReportRepository.saveAndFlush(workInProgressOutstandingReport);
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionNumber is not null
+        defaultWorkInProgressOutstandingReportShouldBeFound("instalmentTransactionNumber.specified=true");
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionNumber is null
+        defaultWorkInProgressOutstandingReportShouldNotBeFound("instalmentTransactionNumber.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressOutstandingReportsByInstalmentTransactionNumberContainsSomething() throws Exception {
+        // Initialize the database
+        workInProgressOutstandingReportRepository.saveAndFlush(workInProgressOutstandingReport);
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionNumber contains DEFAULT_INSTALMENT_TRANSACTION_NUMBER
+        defaultWorkInProgressOutstandingReportShouldBeFound(
+            "instalmentTransactionNumber.contains=" + DEFAULT_INSTALMENT_TRANSACTION_NUMBER
+        );
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionNumber contains UPDATED_INSTALMENT_TRANSACTION_NUMBER
+        defaultWorkInProgressOutstandingReportShouldNotBeFound(
+            "instalmentTransactionNumber.contains=" + UPDATED_INSTALMENT_TRANSACTION_NUMBER
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressOutstandingReportsByInstalmentTransactionNumberNotContainsSomething() throws Exception {
+        // Initialize the database
+        workInProgressOutstandingReportRepository.saveAndFlush(workInProgressOutstandingReport);
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionNumber does not contain DEFAULT_INSTALMENT_TRANSACTION_NUMBER
+        defaultWorkInProgressOutstandingReportShouldNotBeFound(
+            "instalmentTransactionNumber.doesNotContain=" + DEFAULT_INSTALMENT_TRANSACTION_NUMBER
+        );
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionNumber does not contain UPDATED_INSTALMENT_TRANSACTION_NUMBER
+        defaultWorkInProgressOutstandingReportShouldBeFound(
+            "instalmentTransactionNumber.doesNotContain=" + UPDATED_INSTALMENT_TRANSACTION_NUMBER
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressOutstandingReportsByInstalmentTransactionDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressOutstandingReportRepository.saveAndFlush(workInProgressOutstandingReport);
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionDate equals to DEFAULT_INSTALMENT_TRANSACTION_DATE
+        defaultWorkInProgressOutstandingReportShouldBeFound("instalmentTransactionDate.equals=" + DEFAULT_INSTALMENT_TRANSACTION_DATE);
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionDate equals to UPDATED_INSTALMENT_TRANSACTION_DATE
+        defaultWorkInProgressOutstandingReportShouldNotBeFound("instalmentTransactionDate.equals=" + UPDATED_INSTALMENT_TRANSACTION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressOutstandingReportsByInstalmentTransactionDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressOutstandingReportRepository.saveAndFlush(workInProgressOutstandingReport);
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionDate not equals to DEFAULT_INSTALMENT_TRANSACTION_DATE
+        defaultWorkInProgressOutstandingReportShouldNotBeFound(
+            "instalmentTransactionDate.notEquals=" + DEFAULT_INSTALMENT_TRANSACTION_DATE
+        );
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionDate not equals to UPDATED_INSTALMENT_TRANSACTION_DATE
+        defaultWorkInProgressOutstandingReportShouldBeFound("instalmentTransactionDate.notEquals=" + UPDATED_INSTALMENT_TRANSACTION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressOutstandingReportsByInstalmentTransactionDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        workInProgressOutstandingReportRepository.saveAndFlush(workInProgressOutstandingReport);
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionDate in DEFAULT_INSTALMENT_TRANSACTION_DATE or UPDATED_INSTALMENT_TRANSACTION_DATE
+        defaultWorkInProgressOutstandingReportShouldBeFound(
+            "instalmentTransactionDate.in=" + DEFAULT_INSTALMENT_TRANSACTION_DATE + "," + UPDATED_INSTALMENT_TRANSACTION_DATE
+        );
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionDate equals to UPDATED_INSTALMENT_TRANSACTION_DATE
+        defaultWorkInProgressOutstandingReportShouldNotBeFound("instalmentTransactionDate.in=" + UPDATED_INSTALMENT_TRANSACTION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressOutstandingReportsByInstalmentTransactionDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        workInProgressOutstandingReportRepository.saveAndFlush(workInProgressOutstandingReport);
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionDate is not null
+        defaultWorkInProgressOutstandingReportShouldBeFound("instalmentTransactionDate.specified=true");
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionDate is null
+        defaultWorkInProgressOutstandingReportShouldNotBeFound("instalmentTransactionDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressOutstandingReportsByInstalmentTransactionDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressOutstandingReportRepository.saveAndFlush(workInProgressOutstandingReport);
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionDate is greater than or equal to DEFAULT_INSTALMENT_TRANSACTION_DATE
+        defaultWorkInProgressOutstandingReportShouldBeFound(
+            "instalmentTransactionDate.greaterThanOrEqual=" + DEFAULT_INSTALMENT_TRANSACTION_DATE
+        );
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionDate is greater than or equal to UPDATED_INSTALMENT_TRANSACTION_DATE
+        defaultWorkInProgressOutstandingReportShouldNotBeFound(
+            "instalmentTransactionDate.greaterThanOrEqual=" + UPDATED_INSTALMENT_TRANSACTION_DATE
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressOutstandingReportsByInstalmentTransactionDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressOutstandingReportRepository.saveAndFlush(workInProgressOutstandingReport);
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionDate is less than or equal to DEFAULT_INSTALMENT_TRANSACTION_DATE
+        defaultWorkInProgressOutstandingReportShouldBeFound(
+            "instalmentTransactionDate.lessThanOrEqual=" + DEFAULT_INSTALMENT_TRANSACTION_DATE
+        );
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionDate is less than or equal to SMALLER_INSTALMENT_TRANSACTION_DATE
+        defaultWorkInProgressOutstandingReportShouldNotBeFound(
+            "instalmentTransactionDate.lessThanOrEqual=" + SMALLER_INSTALMENT_TRANSACTION_DATE
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressOutstandingReportsByInstalmentTransactionDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        workInProgressOutstandingReportRepository.saveAndFlush(workInProgressOutstandingReport);
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionDate is less than DEFAULT_INSTALMENT_TRANSACTION_DATE
+        defaultWorkInProgressOutstandingReportShouldNotBeFound("instalmentTransactionDate.lessThan=" + DEFAULT_INSTALMENT_TRANSACTION_DATE);
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionDate is less than UPDATED_INSTALMENT_TRANSACTION_DATE
+        defaultWorkInProgressOutstandingReportShouldBeFound("instalmentTransactionDate.lessThan=" + UPDATED_INSTALMENT_TRANSACTION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressOutstandingReportsByInstalmentTransactionDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        workInProgressOutstandingReportRepository.saveAndFlush(workInProgressOutstandingReport);
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionDate is greater than DEFAULT_INSTALMENT_TRANSACTION_DATE
+        defaultWorkInProgressOutstandingReportShouldNotBeFound(
+            "instalmentTransactionDate.greaterThan=" + DEFAULT_INSTALMENT_TRANSACTION_DATE
+        );
+
+        // Get all the workInProgressOutstandingReportList where instalmentTransactionDate is greater than SMALLER_INSTALMENT_TRANSACTION_DATE
+        defaultWorkInProgressOutstandingReportShouldBeFound("instalmentTransactionDate.greaterThan=" + SMALLER_INSTALMENT_TRANSACTION_DATE);
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -860,7 +1089,9 @@ class WorkInProgressOutstandingReportResourceIT {
             .andExpect(jsonPath("$.[*].iso4217Code").value(hasItem(DEFAULT_ISO_4217_CODE)))
             .andExpect(jsonPath("$.[*].instalmentAmount").value(hasItem(sameNumber(DEFAULT_INSTALMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].totalTransferAmount").value(hasItem(sameNumber(DEFAULT_TOTAL_TRANSFER_AMOUNT))))
-            .andExpect(jsonPath("$.[*].outstandingAmount").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_AMOUNT))));
+            .andExpect(jsonPath("$.[*].outstandingAmount").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_AMOUNT))))
+            .andExpect(jsonPath("$.[*].instalmentTransactionNumber").value(hasItem(DEFAULT_INSTALMENT_TRANSACTION_NUMBER)))
+            .andExpect(jsonPath("$.[*].instalmentTransactionDate").value(hasItem(DEFAULT_INSTALMENT_TRANSACTION_DATE.toString())));
 
         // Check, that the count call also returns 1
         restWorkInProgressOutstandingReportMockMvc
@@ -922,6 +1153,8 @@ class WorkInProgressOutstandingReportResourceIT {
             .andExpect(jsonPath("$.[*].iso4217Code").value(hasItem(DEFAULT_ISO_4217_CODE)))
             .andExpect(jsonPath("$.[*].instalmentAmount").value(hasItem(sameNumber(DEFAULT_INSTALMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].totalTransferAmount").value(hasItem(sameNumber(DEFAULT_TOTAL_TRANSFER_AMOUNT))))
-            .andExpect(jsonPath("$.[*].outstandingAmount").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_AMOUNT))));
+            .andExpect(jsonPath("$.[*].outstandingAmount").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_AMOUNT))))
+            .andExpect(jsonPath("$.[*].instalmentTransactionNumber").value(hasItem(DEFAULT_INSTALMENT_TRANSACTION_NUMBER)))
+            .andExpect(jsonPath("$.[*].instalmentTransactionDate").value(hasItem(DEFAULT_INSTALMENT_TRANSACTION_DATE.toString())));
     }
 }

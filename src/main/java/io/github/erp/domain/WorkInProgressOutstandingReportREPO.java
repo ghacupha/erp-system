@@ -17,16 +17,12 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Builder
 public class WorkInProgressOutstandingReportREPO {
@@ -39,6 +35,10 @@ public class WorkInProgressOutstandingReportREPO {
 
     private String dealerName;
 
+    private String instalmentTransactionNumber;
+
+    private LocalDate instalmentTransactionDate;
+
     private String iso4217Code;
 
     private BigDecimal instalmentAmount;
@@ -47,4 +47,19 @@ public class WorkInProgressOutstandingReportREPO {
 
     private BigDecimal outstandingAmount;
 
+    public WorkInProgressOutstandingReportREPO() {
+    }
+
+    public WorkInProgressOutstandingReportREPO(long id, String sequenceNumber, String particulars, String dealerName, String instalmentTransactionNumber, LocalDate instalmentTransactionDate, String iso4217Code, BigDecimal instalmentAmount, BigDecimal totalTransferAmount, BigDecimal outstandingAmount) {
+        this.id = id;
+        this.sequenceNumber = sequenceNumber;
+        this.particulars = particulars;
+        this.dealerName = dealerName;
+        this.instalmentTransactionNumber = instalmentTransactionNumber;
+        this.instalmentTransactionDate = instalmentTransactionDate;
+        this.iso4217Code = iso4217Code;
+        this.instalmentAmount = instalmentAmount;
+        this.totalTransferAmount = totalTransferAmount;
+        this.outstandingAmount = outstandingAmount;
+    }
 }

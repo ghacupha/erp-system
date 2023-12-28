@@ -13,6 +13,14 @@
       "fieldType": "String"
     },
     {
+      "fieldName": "instalmentTransactionNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "instalmentTransactionDate",
+      "fieldType": "LocalDate"
+    },
+    {
       "fieldName": "iso4217Code",
       "fieldType": "String"
     },
