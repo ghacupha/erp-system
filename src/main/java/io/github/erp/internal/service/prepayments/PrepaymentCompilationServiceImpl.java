@@ -17,18 +17,15 @@ package io.github.erp.internal.service.prepayments;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.PrepaymentMarshalling;
+import io.github.erp.domain.*;
 import io.github.erp.erp.depreciation.FiscalMonthNotConfiguredException;
 import io.github.erp.internal.repository.InternalFiscalMonthRepository;
 import io.github.erp.repository.PrepaymentAccountRepository;
+import io.github.erp.repository.PrepaymentAmortizationRepository;
 import io.github.erp.repository.PrepaymentMarshallingRepository;
-import io.github.erp.service.PrepaymentAmortizationService;
-import io.github.erp.service.dto.FiscalMonthDTO;
-import io.github.erp.service.dto.PrepaymentAccountDTO;
-import io.github.erp.service.dto.PrepaymentAmortizationDTO;
+import io.github.erp.repository.search.PrepaymentAmortizationSearchRepository;
 import io.github.erp.service.dto.PrepaymentCompilationRequestDTO;
-import io.github.erp.service.mapper.FiscalMonthMapper;
-import io.github.erp.service.mapper.PrepaymentAccountMapper;
+import io.github.erp.service.mapper.PrepaymentCompilationRequestMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -44,6 +41,10 @@ import java.util.stream.Stream;
 
 /**
  * asynchronous processing of compilation request with callback
+ * Update 2023.12.28
+ * We have changed the data access to use direct repositories instead of
+ * services, so that we might have access to the transactional facility in the
+ * event of failure
  */
 @Service
 @Transactional
@@ -53,26 +54,26 @@ public class PrepaymentCompilationServiceImpl implements PrepaymentCompilationSe
 
     private final PrepaymentMarshallingRepository prepaymentMarshallingRepository;
     private final PrepaymentAccountRepository prepaymentAccountRepository;
-    private final PrepaymentAmortizationService prepaymentAmortizationService;
-    private final PrepaymentAccountMapper prepaymentAccountMapper;
     private final InternalFiscalMonthRepository fiscalMonthRepository;
-    private final FiscalMonthMapper fiscalMonthMapper;
+    private final PrepaymentCompilationRequestMapper prepaymentCompilationRequestMapper;
     private final PrepaymentCompilationCompleteSequence prepaymentCompilationCompleteSequence;
+    private final PrepaymentAmortizationRepository prepaymentAmortizationRepository;
+    private final PrepaymentAmortizationSearchRepository prepaymentAmortizationSearchRepository;
 
     public PrepaymentCompilationServiceImpl(
         PrepaymentMarshallingRepository prepaymentMarshallingRepository,
         PrepaymentAccountRepository prepaymentAccountRepository,
-        PrepaymentAmortizationService prepaymentAmortizationService,
-        PrepaymentAccountMapper prepaymentAccountMapper,
         InternalFiscalMonthRepository fiscalMonthRepository,
-        FiscalMonthMapper fiscalMonthMapper,
-        PrepaymentCompilationCompleteSequence prepaymentCompilationCompleteSequence) {
+        PrepaymentCompilationRequestMapper prepaymentCompilationRequestMapper,
+        PrepaymentCompilationCompleteSequence prepaymentCompilationCompleteSequence,
+        PrepaymentAmortizationRepository prepaymentAmortizationRepository,
+        PrepaymentAmortizationSearchRepository prepaymentAmortizationSearchRepository) {
         this.prepaymentMarshallingRepository = prepaymentMarshallingRepository;
         this.prepaymentAccountRepository = prepaymentAccountRepository;
-        this.prepaymentAmortizationService = prepaymentAmortizationService;
-        this.prepaymentAccountMapper = prepaymentAccountMapper;
+        this.prepaymentCompilationRequestMapper = prepaymentCompilationRequestMapper;
+        this.prepaymentAmortizationRepository = prepaymentAmortizationRepository;
+        this.prepaymentAmortizationSearchRepository = prepaymentAmortizationSearchRepository;
         this.fiscalMonthRepository = fiscalMonthRepository;
-        this.fiscalMonthMapper = fiscalMonthMapper;
         this.prepaymentCompilationCompleteSequence = prepaymentCompilationCompleteSequence;
     }
 
@@ -84,8 +85,9 @@ public class PrepaymentCompilationServiceImpl implements PrepaymentCompilationSe
             .filter(marshal -> !marshal.getProcessed())
             .peek(prepaymentMarshalling -> prepaymentMarshalling.setProcessed(true))
             .peek(prepaymentMarshalling -> prepaymentMarshalling.setCompilationToken(compilationRequest.getCompilationToken()))
-            .flatMap(marshal -> mapIntermediateMarshallingItem(marshal, compilationRequest))
-            .map(prepaymentAmortizationService::save)
+            .flatMap(marshal -> mapIntermediateMarshallingItem(marshal, prepaymentCompilationRequestMapper.toEntity(compilationRequest)))
+            .map(prepaymentAmortizationRepository::save) // we also need to ensure the data is in the search index
+            .map(prepaymentAmortizationSearchRepository::save)
             .count();
 
         compilationRequest.setItemsProcessed(Math.toIntExact(numberOfProcessedItems));
@@ -94,22 +96,22 @@ public class PrepaymentCompilationServiceImpl implements PrepaymentCompilationSe
         prepaymentCompilationCompleteSequence.compilationComplete(compilationRequest);
     }
 
-    private Stream<PrepaymentAmortizationDTO> mapIntermediateMarshallingItem(PrepaymentMarshalling marshalItem, PrepaymentCompilationRequestDTO prepaymentCompilationRequest) {
+    private Stream<PrepaymentAmortization> mapIntermediateMarshallingItem(PrepaymentMarshalling marshalItem, PrepaymentCompilationRequest prepaymentCompilationRequest) {
 
         var prepaymentAnon = new Object() {
-            PrepaymentAccountDTO account = null;
+            PrepaymentAccount account = null;
         };
 
         prepaymentAccountRepository.findOneWithEagerRelationships(marshalItem.getPrepaymentAccount().getId()).ifPresent(prepayment -> {
-            prepaymentAnon.account = prepaymentAccountMapper.toDto(prepayment);
+            prepaymentAnon.account = prepayment;
         });
 
-        List<PrepaymentAmortizationDTO> amortizationDTOList = new ArrayList<>();
+        List<PrepaymentAmortization> amortizationDTOList = new ArrayList<>();
 
 
         for (int period = 0; period <= marshalItem.getAmortizationPeriods() - 1; period++) {
 
-            PrepaymentAmortizationDTO dto = new PrepaymentAmortizationDTO();
+            PrepaymentAmortization dto = new PrepaymentAmortization();
             dto.setPrepaymentAmount(prepaymentAnon.account.getPrepaymentAmount().divide(BigDecimal.valueOf(marshalItem.getAmortizationPeriods()), RoundingMode.HALF_EVEN));
             dto.setFiscalMonth(incrementFiscalMonth(marshalItem, period));
             dto.setPrepaymentCompilationRequest(prepaymentCompilationRequest);
@@ -129,22 +131,22 @@ public class PrepaymentCompilationServiceImpl implements PrepaymentCompilationSe
     /**
      * Gets fiscal-month and then increments the period to the next period
      */
-    private FiscalMonthDTO incrementFiscalMonth(PrepaymentMarshalling marshalling, int period) {
+    private FiscalMonth incrementFiscalMonth(PrepaymentMarshalling marshalling, int period) {
 
         LocalDate startDate = marshalling.getFirstFiscalMonth().getStartDate().plusMonths(period).with(TemporalAdjusters.firstDayOfMonth());
 
         LocalDate endDate = startDate.with(TemporalAdjusters.lastDayOfMonth());
 
-        final FiscalMonthDTO[] fiscalMonthDTO = {null};
+        final FiscalMonth[] fiscalMonth = {null};
 
         fiscalMonthRepository.findFiscalMonthByStartDateAndEndDate(startDate, endDate).ifPresentOrElse(month -> {
 
             log.trace("Fiscal month extracted for year: {}, in quarter: {}", month.getFiscalYear().getFiscalYearCode(), month.getFiscalQuarter().getFiscalQuarterCode());
 
-            fiscalMonthDTO[0] = fiscalMonthMapper.toDto(month);
+            fiscalMonth[0] = month;
         },
             () -> { throw new FiscalMonthNotConfiguredException(marshalling, startDate, endDate); });
 
-        return fiscalMonthDTO[0];
+        return fiscalMonth[0];
     }
 }
