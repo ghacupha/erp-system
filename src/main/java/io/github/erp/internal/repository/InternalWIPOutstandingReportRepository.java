@@ -39,7 +39,9 @@ public interface InternalWIPOutstandingReportRepository extends
         "w.id, " +
         "w.sequenceNumber, " +
         "w.particulars, " +
-        "d.dealerName, " +
+        "d.dealerName as dealerName," +
+        "s.paymentNumber AS instalmentTransactionNumber," +
+        "s.paymentDate AS instalmentTransactionDate, " +
         "c.iso4217CurrencyCode, " +
         "w.instalmentAmount, " +
         "CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal) AS totalTransferAmount, " +
@@ -51,7 +53,7 @@ public interface InternalWIPOutstandingReportRepository extends
            "LEFT JOIN WorkInProgressTransfer ta ON ta.workInProgressRegistration.id = w.id " +
         "WHERE s.paymentDate <= :reportDate " +
             "AND (ta.transferDate IS NULL OR ta.transferDate <= :reportDate) " +
-        "GROUP BY w.id, w.sequenceNumber, w.particulars, d.dealerName, c.iso4217CurrencyCode, w.instalmentAmount")
+        "GROUP BY w.id, w.sequenceNumber, w.particulars, d.dealerName, s.paymentNumber, s.paymentDate, c.iso4217CurrencyCode, w.instalmentAmount")
     Page<WorkInProgressOutstandingReportREPO> findByReportDate(@Param("reportDate") LocalDate reportDate, Pageable pageable);
 
     @Query("SELECT NEW io.github.erp.domain.WorkInProgressOutstandingReportREPO(" +
@@ -59,6 +61,8 @@ public interface InternalWIPOutstandingReportRepository extends
         "w.sequenceNumber, " +
         "w.particulars, " +
         "d.dealerName, " +
+        "s.paymentNumber AS instalmentTransactionNumber," +
+        "s.paymentDate AS instalmentTransactionDate, " +
         "c.iso4217CurrencyCode, " +
         "w.instalmentAmount, " +
         "CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal) AS totalTransferAmount, " +
@@ -71,7 +75,7 @@ public interface InternalWIPOutstandingReportRepository extends
         "WHERE s.paymentDate <= :reportDate " +
             "AND (ta.transferDate IS NULL OR ta.transferDate <= :reportDate) " +
             "AND w.id = :id " +
-        "GROUP BY w.id, w.sequenceNumber, w.particulars, d.dealerName, c.iso4217CurrencyCode, w.instalmentAmount")
+        "GROUP BY w.id, w.sequenceNumber, w.particulars, d.dealerName, s.paymentNumber, s.paymentDate, c.iso4217CurrencyCode, w.instalmentAmount")
     Optional<WorkInProgressOutstandingReportREPO> findByReportDate(@Param("reportDate") LocalDate reportDate, @Param("id") Long id);
 
 }

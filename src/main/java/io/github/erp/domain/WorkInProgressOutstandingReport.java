@@ -20,7 +20,9 @@ package io.github.erp.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import javax.persistence.*;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -50,6 +52,12 @@ public class WorkInProgressOutstandingReport implements Serializable {
     @Column(name = "dealer_name")
     private String dealerName;
 
+    @Column(name = "instalment_transaction_number")
+    private String instalmentTransactionNumber;
+
+    @Column(name = "instalment_transaction_date")
+    private LocalDate instalmentTransactionDate;
+
     @Column(name = "iso_4217_code")
     private String iso4217Code;
 
@@ -61,6 +69,22 @@ public class WorkInProgressOutstandingReport implements Serializable {
 
     @Column(name = "outstanding_amount", precision = 21, scale = 2)
     private BigDecimal outstandingAmount;
+
+    public WorkInProgressOutstandingReport() {
+    }
+
+    public WorkInProgressOutstandingReport(Long id, String sequenceNumber, String particulars, String dealerName, String instalmentTransactionNumber, LocalDate instalmentTransactionDate, String iso4217Code, BigDecimal instalmentAmount, BigDecimal totalTransferAmount, BigDecimal outstandingAmount) {
+        this.id = id;
+        this.sequenceNumber = sequenceNumber;
+        this.particulars = particulars;
+        this.dealerName = dealerName;
+        this.instalmentTransactionNumber = instalmentTransactionNumber;
+        this.instalmentTransactionDate = instalmentTransactionDate;
+        this.iso4217Code = iso4217Code;
+        this.instalmentAmount = instalmentAmount;
+        this.totalTransferAmount = totalTransferAmount;
+        this.outstandingAmount = outstandingAmount;
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -168,6 +192,32 @@ public class WorkInProgressOutstandingReport implements Serializable {
         this.outstandingAmount = outstandingAmount;
     }
 
+    public String getInstalmentTransactionNumber() {
+        return this.instalmentTransactionNumber;
+    }
+
+    public WorkInProgressOutstandingReport instalmentTransactionNumber(String instalmentTransactionNumber) {
+        this.setInstalmentTransactionNumber(instalmentTransactionNumber);
+        return this;
+    }
+
+    public void setInstalmentTransactionNumber(String instalmentTransactionNumber) {
+        this.instalmentTransactionNumber = instalmentTransactionNumber;
+    }
+
+    public LocalDate getInstalmentTransactionDate() {
+        return this.instalmentTransactionDate;
+    }
+
+    public WorkInProgressOutstandingReport instalmentTransactionDate(LocalDate instalmentTransactionDate) {
+        this.setInstalmentTransactionDate(instalmentTransactionDate);
+        return this;
+    }
+
+    public void setInstalmentTransactionDate(LocalDate instalmentTransactionDate) {
+        this.instalmentTransactionDate = instalmentTransactionDate;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -199,6 +249,8 @@ public class WorkInProgressOutstandingReport implements Serializable {
             ", instalmentAmount=" + getInstalmentAmount() +
             ", totalTransferAmount=" + getTotalTransferAmount() +
             ", outstandingAmount=" + getOutstandingAmount() +
+            ", instalmentTransactionNumber='" + getInstalmentTransactionNumber() + "'" +
+            ", instalmentTransactionDate='" + getInstalmentTransactionDate() + "'" +
             "}";
     }
 }

@@ -17,5 +17,5 @@
 @REM
 
 @echo off
-git checkout HEAD~1 src/test/java/io/github/erp/web/rest/ContractMetadataResourceIT.java src/test/java/io/github/erp/web/rest/SecurityClearanceResourceIT.java src/test/java/io/github/erp/web/rest/PrepaymentCompilationRequestResourceIT.java
+git checkout HEAD~1 src/test/java/io/github/erp/web/rest/ContractMetadataResourceIT.java src/test/java/io/github/erp/web/rest/SecurityClearanceResourceIT.java src/test/java/io/github/erp/web/rest/PrepaymentCompilationRequestResourceIT.java src/main/java/io/github/erp/service/dto/WorkInProgressOutstandingReportDTO.java
 git checkout HEAD~1 src/main/resources/config/liquibase/changelog/

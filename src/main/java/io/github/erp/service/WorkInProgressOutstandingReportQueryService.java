@@ -152,6 +152,24 @@ public class WorkInProgressOutstandingReportQueryService extends QueryService<Wo
                         buildRangeSpecification(criteria.getOutstandingAmount(), WorkInProgressOutstandingReport_.outstandingAmount)
                     );
             }
+            if (criteria.getInstalmentTransactionNumber() != null) {
+                specification =
+                    specification.and(
+                        buildStringSpecification(
+                            criteria.getInstalmentTransactionNumber(),
+                            WorkInProgressOutstandingReport_.instalmentTransactionNumber
+                        )
+                    );
+            }
+            if (criteria.getInstalmentTransactionDate() != null) {
+                specification =
+                    specification.and(
+                        buildRangeSpecification(
+                            criteria.getInstalmentTransactionDate(),
+                            WorkInProgressOutstandingReport_.instalmentTransactionDate
+                        )
+                    );
+            }
         }
         return specification;
     }
