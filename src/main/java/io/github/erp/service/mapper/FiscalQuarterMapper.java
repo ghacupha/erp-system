@@ -32,11 +32,6 @@ public interface FiscalQuarterMapper extends EntityMapper<FiscalQuarterDTO, Fisc
     @Mapping(target = "universallyUniqueMappings", source = "universallyUniqueMappings", qualifiedByName = "universalKeySet")
     FiscalQuarterDTO toDto(FiscalQuarter s);
 
-    @Named("id")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    FiscalQuarterDTO toDtoId(FiscalQuarter fiscalQuarter);
-
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removeUniversallyUniqueMapping", ignore = true)
     FiscalQuarter toEntity(FiscalQuarterDTO fiscalQuarterDTO);

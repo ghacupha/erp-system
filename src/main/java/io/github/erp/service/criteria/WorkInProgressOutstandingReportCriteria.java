@@ -52,6 +52,10 @@ public class WorkInProgressOutstandingReportCriteria implements Serializable, Cr
 
     private StringFilter dealerName;
 
+    private StringFilter instalmentTransactionNumber;
+
+    private LocalDateFilter instalmentTransactionDate;
+
     private StringFilter iso4217Code;
 
     private BigDecimalFilter instalmentAmount;
@@ -59,10 +63,6 @@ public class WorkInProgressOutstandingReportCriteria implements Serializable, Cr
     private BigDecimalFilter totalTransferAmount;
 
     private BigDecimalFilter outstandingAmount;
-
-    private StringFilter instalmentTransactionNumber;
-
-    private LocalDateFilter instalmentTransactionDate;
 
     private Boolean distinct;
 
@@ -73,12 +73,12 @@ public class WorkInProgressOutstandingReportCriteria implements Serializable, Cr
         this.sequenceNumber = other.sequenceNumber == null ? null : other.sequenceNumber.copy();
         this.particulars = other.particulars == null ? null : other.particulars.copy();
         this.dealerName = other.dealerName == null ? null : other.dealerName.copy();
+        this.instalmentTransactionNumber = other.instalmentTransactionNumber == null ? null : other.instalmentTransactionNumber.copy();
+        this.instalmentTransactionDate = other.instalmentTransactionDate == null ? null : other.instalmentTransactionDate.copy();
         this.iso4217Code = other.iso4217Code == null ? null : other.iso4217Code.copy();
         this.instalmentAmount = other.instalmentAmount == null ? null : other.instalmentAmount.copy();
         this.totalTransferAmount = other.totalTransferAmount == null ? null : other.totalTransferAmount.copy();
         this.outstandingAmount = other.outstandingAmount == null ? null : other.outstandingAmount.copy();
-        this.instalmentTransactionNumber = other.instalmentTransactionNumber == null ? null : other.instalmentTransactionNumber.copy();
-        this.instalmentTransactionDate = other.instalmentTransactionDate == null ? null : other.instalmentTransactionDate.copy();
         this.distinct = other.distinct;
     }
 
@@ -147,6 +147,36 @@ public class WorkInProgressOutstandingReportCriteria implements Serializable, Cr
         this.dealerName = dealerName;
     }
 
+    public StringFilter getInstalmentTransactionNumber() {
+        return instalmentTransactionNumber;
+    }
+
+    public StringFilter instalmentTransactionNumber() {
+        if (instalmentTransactionNumber == null) {
+            instalmentTransactionNumber = new StringFilter();
+        }
+        return instalmentTransactionNumber;
+    }
+
+    public void setInstalmentTransactionNumber(StringFilter instalmentTransactionNumber) {
+        this.instalmentTransactionNumber = instalmentTransactionNumber;
+    }
+
+    public LocalDateFilter getInstalmentTransactionDate() {
+        return instalmentTransactionDate;
+    }
+
+    public LocalDateFilter instalmentTransactionDate() {
+        if (instalmentTransactionDate == null) {
+            instalmentTransactionDate = new LocalDateFilter();
+        }
+        return instalmentTransactionDate;
+    }
+
+    public void setInstalmentTransactionDate(LocalDateFilter instalmentTransactionDate) {
+        this.instalmentTransactionDate = instalmentTransactionDate;
+    }
+
     public StringFilter getIso4217Code() {
         return iso4217Code;
     }
@@ -207,36 +237,6 @@ public class WorkInProgressOutstandingReportCriteria implements Serializable, Cr
         this.outstandingAmount = outstandingAmount;
     }
 
-    public StringFilter getInstalmentTransactionNumber() {
-        return instalmentTransactionNumber;
-    }
-
-    public StringFilter instalmentTransactionNumber() {
-        if (instalmentTransactionNumber == null) {
-            instalmentTransactionNumber = new StringFilter();
-        }
-        return instalmentTransactionNumber;
-    }
-
-    public void setInstalmentTransactionNumber(StringFilter instalmentTransactionNumber) {
-        this.instalmentTransactionNumber = instalmentTransactionNumber;
-    }
-
-    public LocalDateFilter getInstalmentTransactionDate() {
-        return instalmentTransactionDate;
-    }
-
-    public LocalDateFilter instalmentTransactionDate() {
-        if (instalmentTransactionDate == null) {
-            instalmentTransactionDate = new LocalDateFilter();
-        }
-        return instalmentTransactionDate;
-    }
-
-    public void setInstalmentTransactionDate(LocalDateFilter instalmentTransactionDate) {
-        this.instalmentTransactionDate = instalmentTransactionDate;
-    }
-
     public Boolean getDistinct() {
         return distinct;
     }
@@ -259,12 +259,12 @@ public class WorkInProgressOutstandingReportCriteria implements Serializable, Cr
             Objects.equals(sequenceNumber, that.sequenceNumber) &&
             Objects.equals(particulars, that.particulars) &&
             Objects.equals(dealerName, that.dealerName) &&
+            Objects.equals(instalmentTransactionNumber, that.instalmentTransactionNumber) &&
+            Objects.equals(instalmentTransactionDate, that.instalmentTransactionDate) &&
             Objects.equals(iso4217Code, that.iso4217Code) &&
             Objects.equals(instalmentAmount, that.instalmentAmount) &&
             Objects.equals(totalTransferAmount, that.totalTransferAmount) &&
             Objects.equals(outstandingAmount, that.outstandingAmount) &&
-            Objects.equals(instalmentTransactionNumber, that.instalmentTransactionNumber) &&
-            Objects.equals(instalmentTransactionDate, that.instalmentTransactionDate) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -276,12 +276,12 @@ public class WorkInProgressOutstandingReportCriteria implements Serializable, Cr
             sequenceNumber,
             particulars,
             dealerName,
+            instalmentTransactionNumber,
+            instalmentTransactionDate,
             iso4217Code,
             instalmentAmount,
             totalTransferAmount,
             outstandingAmount,
-            instalmentTransactionNumber,
-            instalmentTransactionDate,
             distinct
         );
     }
@@ -294,12 +294,12 @@ public class WorkInProgressOutstandingReportCriteria implements Serializable, Cr
             (sequenceNumber != null ? "sequenceNumber=" + sequenceNumber + ", " : "") +
             (particulars != null ? "particulars=" + particulars + ", " : "") +
             (dealerName != null ? "dealerName=" + dealerName + ", " : "") +
+            (instalmentTransactionNumber != null ? "instalmentTransactionNumber=" + instalmentTransactionNumber + ", " : "") +
+            (instalmentTransactionDate != null ? "instalmentTransactionDate=" + instalmentTransactionDate + ", " : "") +
             (iso4217Code != null ? "iso4217Code=" + iso4217Code + ", " : "") +
             (instalmentAmount != null ? "instalmentAmount=" + instalmentAmount + ", " : "") +
             (totalTransferAmount != null ? "totalTransferAmount=" + totalTransferAmount + ", " : "") +
             (outstandingAmount != null ? "outstandingAmount=" + outstandingAmount + ", " : "") +
-            (instalmentTransactionNumber != null ? "instalmentTransactionNumber=" + instalmentTransactionNumber + ", " : "") +
-            (instalmentTransactionDate != null ? "instalmentTransactionDate=" + instalmentTransactionDate + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

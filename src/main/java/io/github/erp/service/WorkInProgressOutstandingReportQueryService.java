@@ -130,6 +130,24 @@ public class WorkInProgressOutstandingReportQueryService extends QueryService<Wo
                 specification =
                     specification.and(buildStringSpecification(criteria.getDealerName(), WorkInProgressOutstandingReport_.dealerName));
             }
+            if (criteria.getInstalmentTransactionNumber() != null) {
+                specification =
+                    specification.and(
+                        buildStringSpecification(
+                            criteria.getInstalmentTransactionNumber(),
+                            WorkInProgressOutstandingReport_.instalmentTransactionNumber
+                        )
+                    );
+            }
+            if (criteria.getInstalmentTransactionDate() != null) {
+                specification =
+                    specification.and(
+                        buildRangeSpecification(
+                            criteria.getInstalmentTransactionDate(),
+                            WorkInProgressOutstandingReport_.instalmentTransactionDate
+                        )
+                    );
+            }
             if (criteria.getIso4217Code() != null) {
                 specification =
                     specification.and(buildStringSpecification(criteria.getIso4217Code(), WorkInProgressOutstandingReport_.iso4217Code));
@@ -150,24 +168,6 @@ public class WorkInProgressOutstandingReportQueryService extends QueryService<Wo
                 specification =
                     specification.and(
                         buildRangeSpecification(criteria.getOutstandingAmount(), WorkInProgressOutstandingReport_.outstandingAmount)
-                    );
-            }
-            if (criteria.getInstalmentTransactionNumber() != null) {
-                specification =
-                    specification.and(
-                        buildStringSpecification(
-                            criteria.getInstalmentTransactionNumber(),
-                            WorkInProgressOutstandingReport_.instalmentTransactionNumber
-                        )
-                    );
-            }
-            if (criteria.getInstalmentTransactionDate() != null) {
-                specification =
-                    specification.and(
-                        buildRangeSpecification(
-                            criteria.getInstalmentTransactionDate(),
-                            WorkInProgressOutstandingReport_.instalmentTransactionDate
-                        )
                     );
             }
         }
