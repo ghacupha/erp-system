@@ -1,4 +1,4 @@
-package io.github.erp.erp.resources;
+package io.github.erp.erp.resources.depreciation;
 
 /*-
  * Erp System - Mark IX No 5 (Iddo Series) Server ver 1.6.7
@@ -17,11 +17,14 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.repository.DepreciationPeriodRepository;
 import io.github.erp.service.DepreciationPeriodQueryService;
 import io.github.erp.service.DepreciationPeriodService;
 import io.github.erp.service.criteria.DepreciationPeriodCriteria;
+import io.github.erp.service.dto.ApplicationUserDTO;
 import io.github.erp.service.dto.DepreciationPeriodDTO;
+import io.github.erp.service.mapper.ApplicationUserMapper;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,14 +67,20 @@ public class DepreciationPeriodResourceProd {
 
     private final DepreciationPeriodQueryService depreciationPeriodQueryService;
 
+    private final InternalApplicationUserDetailService userDetailService;
+
+    private final ApplicationUserMapper applicationUserMapper;
+
     public DepreciationPeriodResourceProd(
         DepreciationPeriodService depreciationPeriodService,
         DepreciationPeriodRepository depreciationPeriodRepository,
-        DepreciationPeriodQueryService depreciationPeriodQueryService
-    ) {
+        DepreciationPeriodQueryService depreciationPeriodQueryService,
+        InternalApplicationUserDetailService userDetailService, ApplicationUserMapper applicationUserMapper) {
         this.depreciationPeriodService = depreciationPeriodService;
         this.depreciationPeriodRepository = depreciationPeriodRepository;
         this.depreciationPeriodQueryService = depreciationPeriodQueryService;
+        this.userDetailService = userDetailService;
+        this.applicationUserMapper = applicationUserMapper;
     }
 
     /**
@@ -88,7 +97,22 @@ public class DepreciationPeriodResourceProd {
         if (depreciationPeriodDTO.getId() != null) {
             throw new BadRequestAlertException("A new depreciationPeriod cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        DepreciationPeriodDTO result = depreciationPeriodService.save(depreciationPeriodDTO);
+
+        Optional<ApplicationUserDTO> applicationUserDTO = userDetailService.getCurrentApplicationUser()
+            .map(applicationUserMapper::toDto);
+
+        DepreciationPeriodDTO result = null;
+
+        if (applicationUserDTO.isPresent()) {
+
+            depreciationPeriodDTO.setCreatedBy(applicationUserDTO.get());
+
+            result = depreciationPeriodService.save(depreciationPeriodDTO);
+
+        } else {
+            throw new BadRequestAlertException("The current user does not exist on record", ENTITY_NAME, "appusermissing");
+        }
+
         return ResponseEntity
             .created(new URI("/api/depreciation-periods/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
