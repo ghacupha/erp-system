@@ -53,14 +53,14 @@
       "otherEntityName": "fiscalMonth",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
-      "otherEntityField": "id"
+      "otherEntityField": "fiscalMonthCode"
     },
     {
       "relationshipName": "fiscalQuarter",
       "otherEntityName": "fiscalQuarter",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
-      "otherEntityField": "id"
+      "otherEntityField": "fiscalQuarterCode"
     }
   ],
   "service": "serviceImpl",

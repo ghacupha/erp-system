@@ -33,8 +33,8 @@ public interface DepreciationPeriodMapper extends EntityMapper<DepreciationPerio
     @Mapping(target = "previousPeriod", source = "previousPeriod", qualifiedByName = "endDate")
     @Mapping(target = "createdBy", source = "createdBy", qualifiedByName = "applicationIdentity")
     @Mapping(target = "fiscalYear", source = "fiscalYear", qualifiedByName = "fiscalYearCode")
-    @Mapping(target = "fiscalMonth", source = "fiscalMonth", qualifiedByName = "id")
-    @Mapping(target = "fiscalQuarter", source = "fiscalQuarter", qualifiedByName = "id")
+    @Mapping(target = "fiscalMonth", source = "fiscalMonth", qualifiedByName = "fiscalMonthCode")
+    @Mapping(target = "fiscalQuarter", source = "fiscalQuarter", qualifiedByName = "fiscalQuarterCode")
     DepreciationPeriodDTO toDto(DepreciationPeriod s);
 
     @Named("id")
