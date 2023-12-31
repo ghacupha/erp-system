@@ -1,4 +1,4 @@
-package io.github.erp.erp.resources;
+package io.github.erp.erp.resources.depreciation;
 
 /*-
  * Erp System - Mark IX No 5 (Iddo Series) Server ver 1.6.7

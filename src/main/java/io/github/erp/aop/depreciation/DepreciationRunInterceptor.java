@@ -42,7 +42,7 @@ public class DepreciationRunInterceptor {
     }
 
     @AfterReturning(
-        pointcut = "execution(* io.github.erp.erp.resources.DepreciationJobResourceProd.createDepreciationJob(..))",
+        pointcut = "execution(* io.github.erp.erp.resources.depreciation.DepreciationJobResourceProd.createDepreciationJob(..))",
         returning = "response")
     @SneakyThrows
     @Async
