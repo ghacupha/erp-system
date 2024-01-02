@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.Objects;
+import java.util.UUID;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link io.github.erp.domain.DepreciationEntry} entity.
@@ -35,6 +37,14 @@ public class DepreciationEntryDTO implements Serializable {
     private BigDecimal depreciationAmount;
 
     private Long assetNumber;
+
+    private UUID depreciationPeriodIdentifier;
+
+    private UUID depreciationJobIdentifier;
+
+    private UUID fiscalMonthIdentifier;
+
+    private UUID fiscalQuarterIdentifier;
 
     private ServiceOutletDTO serviceOutlet;
 
@@ -82,6 +92,38 @@ public class DepreciationEntryDTO implements Serializable {
 
     public void setAssetNumber(Long assetNumber) {
         this.assetNumber = assetNumber;
+    }
+
+    public UUID getDepreciationPeriodIdentifier() {
+        return depreciationPeriodIdentifier;
+    }
+
+    public void setDepreciationPeriodIdentifier(UUID depreciationPeriodIdentifier) {
+        this.depreciationPeriodIdentifier = depreciationPeriodIdentifier;
+    }
+
+    public UUID getDepreciationJobIdentifier() {
+        return depreciationJobIdentifier;
+    }
+
+    public void setDepreciationJobIdentifier(UUID depreciationJobIdentifier) {
+        this.depreciationJobIdentifier = depreciationJobIdentifier;
+    }
+
+    public UUID getFiscalMonthIdentifier() {
+        return fiscalMonthIdentifier;
+    }
+
+    public void setFiscalMonthIdentifier(UUID fiscalMonthIdentifier) {
+        this.fiscalMonthIdentifier = fiscalMonthIdentifier;
+    }
+
+    public UUID getFiscalQuarterIdentifier() {
+        return fiscalQuarterIdentifier;
+    }
+
+    public void setFiscalQuarterIdentifier(UUID fiscalQuarterIdentifier) {
+        this.fiscalQuarterIdentifier = fiscalQuarterIdentifier;
     }
 
     public ServiceOutletDTO getServiceOutlet() {
@@ -177,6 +219,10 @@ public class DepreciationEntryDTO implements Serializable {
             ", postedAt='" + getPostedAt() + "'" +
             ", depreciationAmount=" + getDepreciationAmount() +
             ", assetNumber=" + getAssetNumber() +
+            ", depreciationPeriodIdentifier='" + getDepreciationPeriodIdentifier() + "'" +
+            ", depreciationJobIdentifier='" + getDepreciationJobIdentifier() + "'" +
+            ", fiscalMonthIdentifier='" + getFiscalMonthIdentifier() + "'" +
+            ", fiscalQuarterIdentifier='" + getFiscalQuarterIdentifier() + "'" +
             ", serviceOutlet=" + getServiceOutlet() +
             ", assetCategory=" + getAssetCategory() +
             ", depreciationMethod=" + getDepreciationMethod() +

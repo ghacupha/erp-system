@@ -29,6 +29,7 @@ import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
+import tech.jhipster.service.filter.UUIDFilter;
 import tech.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
@@ -71,6 +72,14 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
 
     private DepreciationBatchStatusTypeFilter depreciationBatchStatus;
 
+    private UUIDFilter depreciationPeriodIdentifier;
+
+    private UUIDFilter depreciationJobIdentifier;
+
+    private UUIDFilter fiscalMonthIdentifier;
+
+    private UUIDFilter fiscalQuarterIdentifier;
+
     private LongFilter depreciationJobId;
 
     private Boolean distinct;
@@ -83,6 +92,10 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
         this.endIndex = other.endIndex == null ? null : other.endIndex.copy();
         this.createdAt = other.createdAt == null ? null : other.createdAt.copy();
         this.depreciationBatchStatus = other.depreciationBatchStatus == null ? null : other.depreciationBatchStatus.copy();
+        this.depreciationPeriodIdentifier = other.depreciationPeriodIdentifier == null ? null : other.depreciationPeriodIdentifier.copy();
+        this.depreciationJobIdentifier = other.depreciationJobIdentifier == null ? null : other.depreciationJobIdentifier.copy();
+        this.fiscalMonthIdentifier = other.fiscalMonthIdentifier == null ? null : other.fiscalMonthIdentifier.copy();
+        this.fiscalQuarterIdentifier = other.fiscalQuarterIdentifier == null ? null : other.fiscalQuarterIdentifier.copy();
         this.depreciationJobId = other.depreciationJobId == null ? null : other.depreciationJobId.copy();
         this.distinct = other.distinct;
     }
@@ -167,6 +180,66 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
         this.depreciationBatchStatus = depreciationBatchStatus;
     }
 
+    public UUIDFilter getDepreciationPeriodIdentifier() {
+        return depreciationPeriodIdentifier;
+    }
+
+    public UUIDFilter depreciationPeriodIdentifier() {
+        if (depreciationPeriodIdentifier == null) {
+            depreciationPeriodIdentifier = new UUIDFilter();
+        }
+        return depreciationPeriodIdentifier;
+    }
+
+    public void setDepreciationPeriodIdentifier(UUIDFilter depreciationPeriodIdentifier) {
+        this.depreciationPeriodIdentifier = depreciationPeriodIdentifier;
+    }
+
+    public UUIDFilter getDepreciationJobIdentifier() {
+        return depreciationJobIdentifier;
+    }
+
+    public UUIDFilter depreciationJobIdentifier() {
+        if (depreciationJobIdentifier == null) {
+            depreciationJobIdentifier = new UUIDFilter();
+        }
+        return depreciationJobIdentifier;
+    }
+
+    public void setDepreciationJobIdentifier(UUIDFilter depreciationJobIdentifier) {
+        this.depreciationJobIdentifier = depreciationJobIdentifier;
+    }
+
+    public UUIDFilter getFiscalMonthIdentifier() {
+        return fiscalMonthIdentifier;
+    }
+
+    public UUIDFilter fiscalMonthIdentifier() {
+        if (fiscalMonthIdentifier == null) {
+            fiscalMonthIdentifier = new UUIDFilter();
+        }
+        return fiscalMonthIdentifier;
+    }
+
+    public void setFiscalMonthIdentifier(UUIDFilter fiscalMonthIdentifier) {
+        this.fiscalMonthIdentifier = fiscalMonthIdentifier;
+    }
+
+    public UUIDFilter getFiscalQuarterIdentifier() {
+        return fiscalQuarterIdentifier;
+    }
+
+    public UUIDFilter fiscalQuarterIdentifier() {
+        if (fiscalQuarterIdentifier == null) {
+            fiscalQuarterIdentifier = new UUIDFilter();
+        }
+        return fiscalQuarterIdentifier;
+    }
+
+    public void setFiscalQuarterIdentifier(UUIDFilter fiscalQuarterIdentifier) {
+        this.fiscalQuarterIdentifier = fiscalQuarterIdentifier;
+    }
+
     public LongFilter getDepreciationJobId() {
         return depreciationJobId;
     }
@@ -205,6 +278,10 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
             Objects.equals(endIndex, that.endIndex) &&
             Objects.equals(createdAt, that.createdAt) &&
             Objects.equals(depreciationBatchStatus, that.depreciationBatchStatus) &&
+            Objects.equals(depreciationPeriodIdentifier, that.depreciationPeriodIdentifier) &&
+            Objects.equals(depreciationJobIdentifier, that.depreciationJobIdentifier) &&
+            Objects.equals(fiscalMonthIdentifier, that.fiscalMonthIdentifier) &&
+            Objects.equals(fiscalQuarterIdentifier, that.fiscalQuarterIdentifier) &&
             Objects.equals(depreciationJobId, that.depreciationJobId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -212,7 +289,19 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, startIndex, endIndex, createdAt, depreciationBatchStatus, depreciationJobId, distinct);
+        return Objects.hash(
+            id,
+            startIndex,
+            endIndex,
+            createdAt,
+            depreciationBatchStatus,
+            depreciationPeriodIdentifier,
+            depreciationJobIdentifier,
+            fiscalMonthIdentifier,
+            fiscalQuarterIdentifier,
+            depreciationJobId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -224,6 +313,10 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
             (endIndex != null ? "endIndex=" + endIndex + ", " : "") +
             (createdAt != null ? "createdAt=" + createdAt + ", " : "") +
             (depreciationBatchStatus != null ? "depreciationBatchStatus=" + depreciationBatchStatus + ", " : "") +
+            (depreciationPeriodIdentifier != null ? "depreciationPeriodIdentifier=" + depreciationPeriodIdentifier + ", " : "") +
+            (depreciationJobIdentifier != null ? "depreciationJobIdentifier=" + depreciationJobIdentifier + ", " : "") +
+            (fiscalMonthIdentifier != null ? "fiscalMonthIdentifier=" + fiscalMonthIdentifier + ", " : "") +
+            (fiscalQuarterIdentifier != null ? "fiscalQuarterIdentifier=" + fiscalQuarterIdentifier + ", " : "") +
             (depreciationJobId != null ? "depreciationJobId=" + depreciationJobId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

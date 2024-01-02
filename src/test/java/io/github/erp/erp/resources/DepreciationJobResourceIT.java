@@ -118,19 +118,6 @@ class DepreciationJobResourceIT {
             .description(DEFAULT_DESCRIPTION);
         return depreciationJob;
     }
-    /**
-     * Create an entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static DepreciationJob createRunningEntity(EntityManager em) {
-        DepreciationJob depreciationJob = new DepreciationJob()
-            .timeOfCommencement(DEFAULT_TIME_OF_COMMENCEMENT)
-            .depreciationJobStatus(UPDATED_DEPRECIATION_JOB_STATUS)
-            .description(DEFAULT_DESCRIPTION);
-        return depreciationJob;
-    }
 
     /**
      * Create an updated entity for this test.
@@ -149,31 +136,6 @@ class DepreciationJobResourceIT {
     @BeforeEach
     public void initTest() {
         depreciationJob = createEntity(em);
-    }
-
-    // @Test
-    @Transactional
-    void createDepreciationRunningJob() throws Exception {
-        DepreciationJob runningDepreciationJob = createRunningEntity(em);
-        int databaseSizeBeforeCreate = depreciationJobRepository.findAll().size();
-        // Create the DepreciationJob
-        DepreciationJobDTO depreciationJobDTO = depreciationJobMapper.toDto(runningDepreciationJob);
-        restDepreciationJobMockMvc
-            .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(depreciationJobDTO))
-            )
-            .andExpect(status().isCreated());
-
-        // Validate the DepreciationJob in the database
-        List<DepreciationJob> depreciationJobList = depreciationJobRepository.findAll();
-        assertThat(depreciationJobList).hasSize(databaseSizeBeforeCreate + 1);
-        DepreciationJob testDepreciationJob = depreciationJobList.get(depreciationJobList.size() - 1);
-        assertThat(testDepreciationJob.getTimeOfCommencement()).isEqualTo(DEFAULT_TIME_OF_COMMENCEMENT);
-        assertThat(testDepreciationJob.getDepreciationJobStatus()).isEqualTo(DEFAULT_DEPRECIATION_JOB_STATUS);
-        assertThat(testDepreciationJob.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-
-        // Validate the DepreciationJob in Elasticsearch
-        verify(mockDepreciationJobSearchRepository, times(1)).save(testDepreciationJob);
     }
 
     // @Test

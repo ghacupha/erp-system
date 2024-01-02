@@ -22,7 +22,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -51,6 +53,18 @@ public class DepreciationEntry implements Serializable {
 
     @Column(name = "asset_number")
     private Long assetNumber;
+
+    @Column(name = "depreciation_period_identifier", unique = true)
+    private UUID depreciationPeriodIdentifier;
+
+    @Column(name = "depreciation_job_identifier", unique = true)
+    private UUID depreciationJobIdentifier;
+
+    @Column(name = "fiscal_month_identifier", unique = true)
+    private UUID fiscalMonthIdentifier;
+
+    @Column(name = "fiscal_quarter_identifier", unique = true)
+    private UUID fiscalQuarterIdentifier;
 
     @ManyToOne
     @JsonIgnoreProperties(
@@ -159,6 +173,58 @@ public class DepreciationEntry implements Serializable {
 
     public void setAssetNumber(Long assetNumber) {
         this.assetNumber = assetNumber;
+    }
+
+    public UUID getDepreciationPeriodIdentifier() {
+        return this.depreciationPeriodIdentifier;
+    }
+
+    public DepreciationEntry depreciationPeriodIdentifier(UUID depreciationPeriodIdentifier) {
+        this.setDepreciationPeriodIdentifier(depreciationPeriodIdentifier);
+        return this;
+    }
+
+    public void setDepreciationPeriodIdentifier(UUID depreciationPeriodIdentifier) {
+        this.depreciationPeriodIdentifier = depreciationPeriodIdentifier;
+    }
+
+    public UUID getDepreciationJobIdentifier() {
+        return this.depreciationJobIdentifier;
+    }
+
+    public DepreciationEntry depreciationJobIdentifier(UUID depreciationJobIdentifier) {
+        this.setDepreciationJobIdentifier(depreciationJobIdentifier);
+        return this;
+    }
+
+    public void setDepreciationJobIdentifier(UUID depreciationJobIdentifier) {
+        this.depreciationJobIdentifier = depreciationJobIdentifier;
+    }
+
+    public UUID getFiscalMonthIdentifier() {
+        return this.fiscalMonthIdentifier;
+    }
+
+    public DepreciationEntry fiscalMonthIdentifier(UUID fiscalMonthIdentifier) {
+        this.setFiscalMonthIdentifier(fiscalMonthIdentifier);
+        return this;
+    }
+
+    public void setFiscalMonthIdentifier(UUID fiscalMonthIdentifier) {
+        this.fiscalMonthIdentifier = fiscalMonthIdentifier;
+    }
+
+    public UUID getFiscalQuarterIdentifier() {
+        return this.fiscalQuarterIdentifier;
+    }
+
+    public DepreciationEntry fiscalQuarterIdentifier(UUID fiscalQuarterIdentifier) {
+        this.setFiscalQuarterIdentifier(fiscalQuarterIdentifier);
+        return this;
+    }
+
+    public void setFiscalQuarterIdentifier(UUID fiscalQuarterIdentifier) {
+        this.fiscalQuarterIdentifier = fiscalQuarterIdentifier;
     }
 
     public ServiceOutlet getServiceOutlet() {
@@ -292,6 +358,10 @@ public class DepreciationEntry implements Serializable {
             ", postedAt='" + getPostedAt() + "'" +
             ", depreciationAmount=" + getDepreciationAmount() +
             ", assetNumber=" + getAssetNumber() +
+            ", depreciationPeriodIdentifier='" + getDepreciationPeriodIdentifier() + "'" +
+            ", depreciationJobIdentifier='" + getDepreciationJobIdentifier() + "'" +
+            ", fiscalMonthIdentifier='" + getFiscalMonthIdentifier() + "'" +
+            ", fiscalQuarterIdentifier='" + getFiscalQuarterIdentifier() + "'" +
             "}";
     }
 }

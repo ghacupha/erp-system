@@ -29,6 +29,7 @@ import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
+import tech.jhipster.service.filter.UUIDFilter;
 import tech.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
@@ -51,6 +52,14 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
     private BigDecimalFilter depreciationAmount;
 
     private LongFilter assetNumber;
+
+    private UUIDFilter depreciationPeriodIdentifier;
+
+    private UUIDFilter depreciationJobIdentifier;
+
+    private UUIDFilter fiscalMonthIdentifier;
+
+    private UUIDFilter fiscalQuarterIdentifier;
 
     private LongFilter serviceOutletId;
 
@@ -77,6 +86,10 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
         this.postedAt = other.postedAt == null ? null : other.postedAt.copy();
         this.depreciationAmount = other.depreciationAmount == null ? null : other.depreciationAmount.copy();
         this.assetNumber = other.assetNumber == null ? null : other.assetNumber.copy();
+        this.depreciationPeriodIdentifier = other.depreciationPeriodIdentifier == null ? null : other.depreciationPeriodIdentifier.copy();
+        this.depreciationJobIdentifier = other.depreciationJobIdentifier == null ? null : other.depreciationJobIdentifier.copy();
+        this.fiscalMonthIdentifier = other.fiscalMonthIdentifier == null ? null : other.fiscalMonthIdentifier.copy();
+        this.fiscalQuarterIdentifier = other.fiscalQuarterIdentifier == null ? null : other.fiscalQuarterIdentifier.copy();
         this.serviceOutletId = other.serviceOutletId == null ? null : other.serviceOutletId.copy();
         this.assetCategoryId = other.assetCategoryId == null ? null : other.assetCategoryId.copy();
         this.depreciationMethodId = other.depreciationMethodId == null ? null : other.depreciationMethodId.copy();
@@ -151,6 +164,66 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
 
     public void setAssetNumber(LongFilter assetNumber) {
         this.assetNumber = assetNumber;
+    }
+
+    public UUIDFilter getDepreciationPeriodIdentifier() {
+        return depreciationPeriodIdentifier;
+    }
+
+    public UUIDFilter depreciationPeriodIdentifier() {
+        if (depreciationPeriodIdentifier == null) {
+            depreciationPeriodIdentifier = new UUIDFilter();
+        }
+        return depreciationPeriodIdentifier;
+    }
+
+    public void setDepreciationPeriodIdentifier(UUIDFilter depreciationPeriodIdentifier) {
+        this.depreciationPeriodIdentifier = depreciationPeriodIdentifier;
+    }
+
+    public UUIDFilter getDepreciationJobIdentifier() {
+        return depreciationJobIdentifier;
+    }
+
+    public UUIDFilter depreciationJobIdentifier() {
+        if (depreciationJobIdentifier == null) {
+            depreciationJobIdentifier = new UUIDFilter();
+        }
+        return depreciationJobIdentifier;
+    }
+
+    public void setDepreciationJobIdentifier(UUIDFilter depreciationJobIdentifier) {
+        this.depreciationJobIdentifier = depreciationJobIdentifier;
+    }
+
+    public UUIDFilter getFiscalMonthIdentifier() {
+        return fiscalMonthIdentifier;
+    }
+
+    public UUIDFilter fiscalMonthIdentifier() {
+        if (fiscalMonthIdentifier == null) {
+            fiscalMonthIdentifier = new UUIDFilter();
+        }
+        return fiscalMonthIdentifier;
+    }
+
+    public void setFiscalMonthIdentifier(UUIDFilter fiscalMonthIdentifier) {
+        this.fiscalMonthIdentifier = fiscalMonthIdentifier;
+    }
+
+    public UUIDFilter getFiscalQuarterIdentifier() {
+        return fiscalQuarterIdentifier;
+    }
+
+    public UUIDFilter fiscalQuarterIdentifier() {
+        if (fiscalQuarterIdentifier == null) {
+            fiscalQuarterIdentifier = new UUIDFilter();
+        }
+        return fiscalQuarterIdentifier;
+    }
+
+    public void setFiscalQuarterIdentifier(UUIDFilter fiscalQuarterIdentifier) {
+        this.fiscalQuarterIdentifier = fiscalQuarterIdentifier;
     }
 
     public LongFilter getServiceOutletId() {
@@ -295,6 +368,10 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             Objects.equals(postedAt, that.postedAt) &&
             Objects.equals(depreciationAmount, that.depreciationAmount) &&
             Objects.equals(assetNumber, that.assetNumber) &&
+            Objects.equals(depreciationPeriodIdentifier, that.depreciationPeriodIdentifier) &&
+            Objects.equals(depreciationJobIdentifier, that.depreciationJobIdentifier) &&
+            Objects.equals(fiscalMonthIdentifier, that.fiscalMonthIdentifier) &&
+            Objects.equals(fiscalQuarterIdentifier, that.fiscalQuarterIdentifier) &&
             Objects.equals(serviceOutletId, that.serviceOutletId) &&
             Objects.equals(assetCategoryId, that.assetCategoryId) &&
             Objects.equals(depreciationMethodId, that.depreciationMethodId) &&
@@ -314,6 +391,10 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             postedAt,
             depreciationAmount,
             assetNumber,
+            depreciationPeriodIdentifier,
+            depreciationJobIdentifier,
+            fiscalMonthIdentifier,
+            fiscalQuarterIdentifier,
             serviceOutletId,
             assetCategoryId,
             depreciationMethodId,
@@ -334,6 +415,10 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             (postedAt != null ? "postedAt=" + postedAt + ", " : "") +
             (depreciationAmount != null ? "depreciationAmount=" + depreciationAmount + ", " : "") +
             (assetNumber != null ? "assetNumber=" + assetNumber + ", " : "") +
+            (depreciationPeriodIdentifier != null ? "depreciationPeriodIdentifier=" + depreciationPeriodIdentifier + ", " : "") +
+            (depreciationJobIdentifier != null ? "depreciationJobIdentifier=" + depreciationJobIdentifier + ", " : "") +
+            (fiscalMonthIdentifier != null ? "fiscalMonthIdentifier=" + fiscalMonthIdentifier + ", " : "") +
+            (fiscalQuarterIdentifier != null ? "fiscalQuarterIdentifier=" + fiscalQuarterIdentifier + ", " : "") +
             (serviceOutletId != null ? "serviceOutletId=" + serviceOutletId + ", " : "") +
             (assetCategoryId != null ? "assetCategoryId=" + assetCategoryId + ", " : "") +
             (depreciationMethodId != null ? "depreciationMethodId=" + depreciationMethodId + ", " : "") +

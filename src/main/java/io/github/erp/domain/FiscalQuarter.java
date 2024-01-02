@@ -50,11 +50,11 @@ public class FiscalQuarter implements Serializable {
     private Integer quarterNumber;
 
     @NotNull
-    @Column(name = "start_date", nullable = false)
+    @Column(name = "start_date", nullable = false, unique = true)
     private LocalDate startDate;
 
     @NotNull
-    @Column(name = "end_date", nullable = false)
+    @Column(name = "end_date", nullable = false, unique = true)
     private LocalDate endDate;
 
     @NotNull
