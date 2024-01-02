@@ -92,7 +92,7 @@ public class DepreciationEntry implements Serializable {
     private AssetRegistration assetRegistration;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "previousPeriod", "createdBy", "fiscalYear", "fiscalMonth", "fiscalQuarter" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "previousPeriod", "createdBy", "fiscalMonth" }, allowSetters = true)
     private DepreciationPeriod depreciationPeriod;
 
     @ManyToOne

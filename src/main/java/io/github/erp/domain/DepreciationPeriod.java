@@ -63,7 +63,7 @@ public class DepreciationPeriod implements Serializable {
     @Column(name = "process_locked")
     private Boolean processLocked;
 
-    @JsonIgnoreProperties(value = { "previousPeriod", "createdBy", "fiscalYear", "fiscalMonth", "fiscalQuarter" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "previousPeriod", "createdBy", "fiscalMonth" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
     private DepreciationPeriod previousPeriod;
@@ -77,18 +77,8 @@ public class DepreciationPeriod implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "placeholders", "universallyUniqueMappings", "createdBy", "lastUpdatedBy" }, allowSetters = true)
-    private FiscalYear fiscalYear;
-
-    @ManyToOne(optional = false)
-    @NotNull
     @JsonIgnoreProperties(value = { "fiscalYear", "placeholders", "universallyUniqueMappings", "fiscalQuarter" }, allowSetters = true)
     private FiscalMonth fiscalMonth;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties(value = { "fiscalYear", "placeholders", "universallyUniqueMappings" }, allowSetters = true)
-    private FiscalQuarter fiscalQuarter;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -196,19 +186,6 @@ public class DepreciationPeriod implements Serializable {
         return this;
     }
 
-    public FiscalYear getFiscalYear() {
-        return this.fiscalYear;
-    }
-
-    public void setFiscalYear(FiscalYear fiscalYear) {
-        this.fiscalYear = fiscalYear;
-    }
-
-    public DepreciationPeriod fiscalYear(FiscalYear fiscalYear) {
-        this.setFiscalYear(fiscalYear);
-        return this;
-    }
-
     public FiscalMonth getFiscalMonth() {
         return this.fiscalMonth;
     }
@@ -219,19 +196,6 @@ public class DepreciationPeriod implements Serializable {
 
     public DepreciationPeriod fiscalMonth(FiscalMonth fiscalMonth) {
         this.setFiscalMonth(fiscalMonth);
-        return this;
-    }
-
-    public FiscalQuarter getFiscalQuarter() {
-        return this.fiscalQuarter;
-    }
-
-    public void setFiscalQuarter(FiscalQuarter fiscalQuarter) {
-        this.fiscalQuarter = fiscalQuarter;
-    }
-
-    public DepreciationPeriod fiscalQuarter(FiscalQuarter fiscalQuarter) {
-        this.setFiscalQuarter(fiscalQuarter);
         return this;
     }
 
