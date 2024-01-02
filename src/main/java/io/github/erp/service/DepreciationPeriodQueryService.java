@@ -152,30 +152,12 @@ public class DepreciationPeriodQueryService extends QueryService<DepreciationPer
                         )
                     );
             }
-            if (criteria.getFiscalYearId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getFiscalYearId(),
-                            root -> root.join(DepreciationPeriod_.fiscalYear, JoinType.LEFT).get(FiscalYear_.id)
-                        )
-                    );
-            }
             if (criteria.getFiscalMonthId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
                             criteria.getFiscalMonthId(),
                             root -> root.join(DepreciationPeriod_.fiscalMonth, JoinType.LEFT).get(FiscalMonth_.id)
-                        )
-                    );
-            }
-            if (criteria.getFiscalQuarterId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getFiscalQuarterId(),
-                            root -> root.join(DepreciationPeriod_.fiscalQuarter, JoinType.LEFT).get(FiscalQuarter_.id)
                         )
                     );
             }

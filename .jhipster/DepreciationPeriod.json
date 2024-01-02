@@ -42,25 +42,11 @@
       "otherEntityField": "applicationIdentity"
     },
     {
-      "relationshipName": "fiscalYear",
-      "otherEntityName": "fiscalYear",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "fiscalYearCode"
-    },
-    {
       "relationshipName": "fiscalMonth",
       "otherEntityName": "fiscalMonth",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
       "otherEntityField": "fiscalMonthCode"
-    },
-    {
-      "relationshipName": "fiscalQuarter",
-      "otherEntityName": "fiscalQuarter",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "fiscalQuarterCode"
     }
   ],
   "service": "serviceImpl",

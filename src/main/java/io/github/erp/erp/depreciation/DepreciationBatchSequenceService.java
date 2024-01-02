@@ -287,16 +287,16 @@ public class DepreciationBatchSequenceService {
 
     @Nullable
     private FiscalQuarterDTO getFiscalQuarter(DepreciationBatchSequenceDTO batchSequence, DepreciationJobDTO depreciationJob, DepreciationPeriodDTO depreciationPeriod) {
-        boolean fiscalQuarterDoesntExist = fiscalQuarterService.findOne(depreciationPeriod.getFiscalQuarter().getId()).isEmpty();
+        boolean fiscalQuarterDoesntExist = fiscalQuarterService.findOne(depreciationPeriod.getFiscalMonth().getFiscalQuarter().getId()).isEmpty();
 
         if (fiscalQuarterDoesntExist) {
             // opt out
             DepreciationJobNoticeDTO notice = new DepreciationJobNoticeDTO();
-            notice.setErrorMessage("Fiscal quarter id: " + depreciationPeriod.getFiscalQuarter().getId() + " doesn't exist");
+            notice.setErrorMessage("Fiscal quarter id: " + depreciationPeriod.getFiscalMonth().getFiscalQuarter().getId() + " doesn't exist");
             notice.setDepreciationJob(depreciationJob);
             notice.setDepreciationPeriod(depreciationPeriod);
             notice.setDepreciationNoticeStatus(DepreciationNoticeStatusType.ERROR);
-            notice.setEventNarrative("Fiscal quarter id: " + depreciationPeriod.getFiscalQuarter().getId() + " doesn't exist");
+            notice.setEventNarrative("Fiscal quarter id: " + depreciationPeriod.getFiscalMonth().getFiscalQuarter().getId() + " doesn't exist");
             notice.setEventTimeStamp(ZonedDateTime.now());
             notice.setDepreciationBatchSequence(batchSequence);
             depreciationJobNoticeService.save(notice);
@@ -304,7 +304,7 @@ public class DepreciationBatchSequenceService {
             return null;
         }
 
-        return fiscalQuarterService.findOne(depreciationPeriod.getFiscalQuarter().getId()).get();
+        return fiscalQuarterService.findOne(depreciationPeriod.getFiscalMonth().getFiscalQuarter().getId()).get();
     }
 
     @Nullable
@@ -348,23 +348,23 @@ public class DepreciationBatchSequenceService {
 
     @Nullable
     private FiscalYearDTO getFiscalYear(DepreciationBatchSequenceDTO batchSequence, DepreciationJobDTO depreciationJob, DepreciationPeriodDTO depreciationPeriod) {
-        boolean fiscalYearDoesntExist = fiscalYearService.findOne(depreciationPeriod.getFiscalYear().getId()).isEmpty();
+        boolean fiscalYearDoesntExist = fiscalYearService.findOne(depreciationPeriod.getFiscalMonth().getFiscalYear().getId()).isEmpty();
 
         if (fiscalYearDoesntExist) {
             // opt out
             DepreciationJobNoticeDTO notice = new DepreciationJobNoticeDTO();
-            notice.setErrorMessage("Fiscal year id: " + depreciationPeriod.getFiscalYear().getId() + " doesn't exist");
+            notice.setErrorMessage("Fiscal year id: " + depreciationPeriod.getFiscalMonth().getFiscalYear().getId() + " doesn't exist");
             notice.setDepreciationJob(depreciationJob);
             notice.setDepreciationPeriod(depreciationPeriod);
             notice.setDepreciationNoticeStatus(DepreciationNoticeStatusType.ERROR);
-            notice.setEventNarrative("Fiscal year id: " + depreciationPeriod.getFiscalYear().getId() + " doesn't exist");
+            notice.setEventNarrative("Fiscal year id: " + depreciationPeriod.getFiscalMonth().getFiscalYear().getId() + " doesn't exist");
             notice.setEventTimeStamp(ZonedDateTime.now());
             notice.setDepreciationBatchSequence(batchSequence);
             depreciationJobNoticeService.save(notice);
 
             return null;
         }
-        return fiscalYearService.findOne(depreciationPeriod.getFiscalYear().getId()).get();
+        return fiscalYearService.findOne(depreciationPeriod.getFiscalMonth().getFiscalYear().getId()).get();
     }
 
     private boolean depreciationPeriodIsClosed(DepreciationBatchSequenceDTO batchSequence, DepreciationJobDTO depreciationJob, DepreciationPeriodDTO depreciationPeriod) {

@@ -60,7 +60,7 @@ public class DepreciationJob implements Serializable {
     )
     private ApplicationUser createdBy;
 
-    @JsonIgnoreProperties(value = { "previousPeriod", "createdBy", "fiscalYear", "fiscalMonth", "fiscalQuarter" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "previousPeriod", "createdBy", "fiscalMonth" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
     private DepreciationPeriod depreciationPeriod;

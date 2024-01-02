@@ -29,8 +29,6 @@ import io.github.erp.domain.ApplicationUser;
 import io.github.erp.domain.DepreciationPeriod;
 import io.github.erp.domain.DepreciationPeriod;
 import io.github.erp.domain.FiscalMonth;
-import io.github.erp.domain.FiscalQuarter;
-import io.github.erp.domain.FiscalYear;
 import io.github.erp.domain.enumeration.DepreciationPeriodStatusTypes;
 import io.github.erp.repository.DepreciationPeriodRepository;
 import io.github.erp.repository.search.DepreciationPeriodSearchRepository;
@@ -127,16 +125,6 @@ class DepreciationPeriodResourceIT {
             .periodCode(DEFAULT_PERIOD_CODE)
             .processLocked(DEFAULT_PROCESS_LOCKED);
         // Add required entity
-        FiscalYear fiscalYear;
-        if (TestUtil.findAll(em, FiscalYear.class).isEmpty()) {
-            fiscalYear = FiscalYearResourceIT.createEntity(em);
-            em.persist(fiscalYear);
-            em.flush();
-        } else {
-            fiscalYear = TestUtil.findAll(em, FiscalYear.class).get(0);
-        }
-        depreciationPeriod.setFiscalYear(fiscalYear);
-        // Add required entity
         FiscalMonth fiscalMonth;
         if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
             fiscalMonth = FiscalMonthResourceIT.createEntity(em);
@@ -146,16 +134,6 @@ class DepreciationPeriodResourceIT {
             fiscalMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
         }
         depreciationPeriod.setFiscalMonth(fiscalMonth);
-        // Add required entity
-        FiscalQuarter fiscalQuarter;
-        if (TestUtil.findAll(em, FiscalQuarter.class).isEmpty()) {
-            fiscalQuarter = FiscalQuarterResourceIT.createEntity(em);
-            em.persist(fiscalQuarter);
-            em.flush();
-        } else {
-            fiscalQuarter = TestUtil.findAll(em, FiscalQuarter.class).get(0);
-        }
-        depreciationPeriod.setFiscalQuarter(fiscalQuarter);
         return depreciationPeriod;
     }
 
@@ -173,16 +151,6 @@ class DepreciationPeriodResourceIT {
             .periodCode(UPDATED_PERIOD_CODE)
             .processLocked(UPDATED_PROCESS_LOCKED);
         // Add required entity
-        FiscalYear fiscalYear;
-        if (TestUtil.findAll(em, FiscalYear.class).isEmpty()) {
-            fiscalYear = FiscalYearResourceIT.createUpdatedEntity(em);
-            em.persist(fiscalYear);
-            em.flush();
-        } else {
-            fiscalYear = TestUtil.findAll(em, FiscalYear.class).get(0);
-        }
-        depreciationPeriod.setFiscalYear(fiscalYear);
-        // Add required entity
         FiscalMonth fiscalMonth;
         if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
             fiscalMonth = FiscalMonthResourceIT.createUpdatedEntity(em);
@@ -192,16 +160,6 @@ class DepreciationPeriodResourceIT {
             fiscalMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
         }
         depreciationPeriod.setFiscalMonth(fiscalMonth);
-        // Add required entity
-        FiscalQuarter fiscalQuarter;
-        if (TestUtil.findAll(em, FiscalQuarter.class).isEmpty()) {
-            fiscalQuarter = FiscalQuarterResourceIT.createUpdatedEntity(em);
-            em.persist(fiscalQuarter);
-            em.flush();
-        } else {
-            fiscalQuarter = TestUtil.findAll(em, FiscalQuarter.class).get(0);
-        }
-        depreciationPeriod.setFiscalQuarter(fiscalQuarter);
         return depreciationPeriod;
     }
 
@@ -832,32 +790,6 @@ class DepreciationPeriodResourceIT {
 
     @Test
     @Transactional
-    void getAllDepreciationPeriodsByFiscalYearIsEqualToSomething() throws Exception {
-        // Initialize the database
-        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
-        FiscalYear fiscalYear;
-        if (TestUtil.findAll(em, FiscalYear.class).isEmpty()) {
-            fiscalYear = FiscalYearResourceIT.createEntity(em);
-            em.persist(fiscalYear);
-            em.flush();
-        } else {
-            fiscalYear = TestUtil.findAll(em, FiscalYear.class).get(0);
-        }
-        em.persist(fiscalYear);
-        em.flush();
-        depreciationPeriod.setFiscalYear(fiscalYear);
-        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
-        Long fiscalYearId = fiscalYear.getId();
-
-        // Get all the depreciationPeriodList where fiscalYear equals to fiscalYearId
-        defaultDepreciationPeriodShouldBeFound("fiscalYearId.equals=" + fiscalYearId);
-
-        // Get all the depreciationPeriodList where fiscalYear equals to (fiscalYearId + 1)
-        defaultDepreciationPeriodShouldNotBeFound("fiscalYearId.equals=" + (fiscalYearId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllDepreciationPeriodsByFiscalMonthIsEqualToSomething() throws Exception {
         // Initialize the database
         depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
@@ -880,32 +812,6 @@ class DepreciationPeriodResourceIT {
 
         // Get all the depreciationPeriodList where fiscalMonth equals to (fiscalMonthId + 1)
         defaultDepreciationPeriodShouldNotBeFound("fiscalMonthId.equals=" + (fiscalMonthId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllDepreciationPeriodsByFiscalQuarterIsEqualToSomething() throws Exception {
-        // Initialize the database
-        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
-        FiscalQuarter fiscalQuarter;
-        if (TestUtil.findAll(em, FiscalQuarter.class).isEmpty()) {
-            fiscalQuarter = FiscalQuarterResourceIT.createEntity(em);
-            em.persist(fiscalQuarter);
-            em.flush();
-        } else {
-            fiscalQuarter = TestUtil.findAll(em, FiscalQuarter.class).get(0);
-        }
-        em.persist(fiscalQuarter);
-        em.flush();
-        depreciationPeriod.setFiscalQuarter(fiscalQuarter);
-        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
-        Long fiscalQuarterId = fiscalQuarter.getId();
-
-        // Get all the depreciationPeriodList where fiscalQuarter equals to fiscalQuarterId
-        defaultDepreciationPeriodShouldBeFound("fiscalQuarterId.equals=" + fiscalQuarterId);
-
-        // Get all the depreciationPeriodList where fiscalQuarter equals to (fiscalQuarterId + 1)
-        defaultDepreciationPeriodShouldNotBeFound("fiscalQuarterId.equals=" + (fiscalQuarterId + 1));
     }
 
     /**

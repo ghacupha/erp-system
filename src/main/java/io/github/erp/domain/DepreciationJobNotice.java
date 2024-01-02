@@ -91,7 +91,7 @@ public class DepreciationJobNotice implements Serializable {
     private DepreciationBatchSequence depreciationBatchSequence;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "previousPeriod", "createdBy", "fiscalYear", "fiscalMonth", "fiscalQuarter" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "previousPeriod", "createdBy", "fiscalMonth" }, allowSetters = true)
     private DepreciationPeriod depreciationPeriod;
 
     @ManyToMany

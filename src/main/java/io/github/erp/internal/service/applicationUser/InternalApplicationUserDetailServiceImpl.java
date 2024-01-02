@@ -93,7 +93,7 @@ public class InternalApplicationUserDetailServiceImpl implements InternalApplica
             user -> internalApplicationUserRepository.findApplicationUserBySystemIdentity(user)
                 .ifPresentOrElse(
                     applicationUser -> ref.reportUser = Optional.of(applicationUser),
-                    () -> {throw new UsernameNotFoundException("We do not an application-user-id corresponding to user : " + user.getFirstName());}
+                    () -> {throw new UsernameNotFoundException("We do not have an application-user-id corresponding to user : " + user.getFirstName());}
                 ),
             () -> {throw new UsernameNotFoundException("We could not retrieve user by username: " + userDetails.getUsername());}
         );
