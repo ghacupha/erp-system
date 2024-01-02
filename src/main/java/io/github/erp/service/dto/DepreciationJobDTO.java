@@ -22,6 +22,7 @@ import io.github.erp.domain.enumeration.DepreciationJobStatusType;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Objects;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link io.github.erp.domain.DepreciationJob} entity.
@@ -34,6 +35,7 @@ public class DepreciationJobDTO implements Serializable {
 
     private DepreciationJobStatusType depreciationJobStatus;
 
+    @NotNull
     private String description;
 
     private ApplicationUserDTO createdBy;

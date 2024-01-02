@@ -23,6 +23,7 @@ import io.github.erp.domain.enumeration.DepreciationJobStatusType;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -50,7 +51,8 @@ public class DepreciationJob implements Serializable {
     @Column(name = "depreciation_job_status")
     private DepreciationJobStatusType depreciationJobStatus;
 
-    @Column(name = "description")
+    @NotNull
+    @Column(name = "description", nullable = false, unique = true)
     private String description;
 
     @ManyToOne

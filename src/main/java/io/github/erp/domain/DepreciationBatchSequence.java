@@ -22,7 +22,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -55,6 +57,18 @@ public class DepreciationBatchSequence implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "depreciation_batch_status")
     private DepreciationBatchStatusType depreciationBatchStatus;
+
+    @Column(name = "depreciation_period_identifier", unique = true)
+    private UUID depreciationPeriodIdentifier;
+
+    @Column(name = "depreciation_job_identifier", unique = true)
+    private UUID depreciationJobIdentifier;
+
+    @Column(name = "fiscal_month_identifier", unique = true)
+    private UUID fiscalMonthIdentifier;
+
+    @Column(name = "fiscal_quarter_identifier", unique = true)
+    private UUID fiscalQuarterIdentifier;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "createdBy", "depreciationPeriod" }, allowSetters = true)
@@ -127,6 +141,58 @@ public class DepreciationBatchSequence implements Serializable {
         this.depreciationBatchStatus = depreciationBatchStatus;
     }
 
+    public UUID getDepreciationPeriodIdentifier() {
+        return this.depreciationPeriodIdentifier;
+    }
+
+    public DepreciationBatchSequence depreciationPeriodIdentifier(UUID depreciationPeriodIdentifier) {
+        this.setDepreciationPeriodIdentifier(depreciationPeriodIdentifier);
+        return this;
+    }
+
+    public void setDepreciationPeriodIdentifier(UUID depreciationPeriodIdentifier) {
+        this.depreciationPeriodIdentifier = depreciationPeriodIdentifier;
+    }
+
+    public UUID getDepreciationJobIdentifier() {
+        return this.depreciationJobIdentifier;
+    }
+
+    public DepreciationBatchSequence depreciationJobIdentifier(UUID depreciationJobIdentifier) {
+        this.setDepreciationJobIdentifier(depreciationJobIdentifier);
+        return this;
+    }
+
+    public void setDepreciationJobIdentifier(UUID depreciationJobIdentifier) {
+        this.depreciationJobIdentifier = depreciationJobIdentifier;
+    }
+
+    public UUID getFiscalMonthIdentifier() {
+        return this.fiscalMonthIdentifier;
+    }
+
+    public DepreciationBatchSequence fiscalMonthIdentifier(UUID fiscalMonthIdentifier) {
+        this.setFiscalMonthIdentifier(fiscalMonthIdentifier);
+        return this;
+    }
+
+    public void setFiscalMonthIdentifier(UUID fiscalMonthIdentifier) {
+        this.fiscalMonthIdentifier = fiscalMonthIdentifier;
+    }
+
+    public UUID getFiscalQuarterIdentifier() {
+        return this.fiscalQuarterIdentifier;
+    }
+
+    public DepreciationBatchSequence fiscalQuarterIdentifier(UUID fiscalQuarterIdentifier) {
+        this.setFiscalQuarterIdentifier(fiscalQuarterIdentifier);
+        return this;
+    }
+
+    public void setFiscalQuarterIdentifier(UUID fiscalQuarterIdentifier) {
+        this.fiscalQuarterIdentifier = fiscalQuarterIdentifier;
+    }
+
     public DepreciationJob getDepreciationJob() {
         return this.depreciationJob;
     }
@@ -168,6 +234,10 @@ public class DepreciationBatchSequence implements Serializable {
             ", endIndex=" + getEndIndex() +
             ", createdAt='" + getCreatedAt() + "'" +
             ", depreciationBatchStatus='" + getDepreciationBatchStatus() + "'" +
+            ", depreciationPeriodIdentifier='" + getDepreciationPeriodIdentifier() + "'" +
+            ", depreciationJobIdentifier='" + getDepreciationJobIdentifier() + "'" +
+            ", fiscalMonthIdentifier='" + getFiscalMonthIdentifier() + "'" +
+            ", fiscalQuarterIdentifier='" + getFiscalQuarterIdentifier() + "'" +
             "}";
     }
 }

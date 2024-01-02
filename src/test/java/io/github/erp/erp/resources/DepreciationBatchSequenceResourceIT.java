@@ -17,6 +17,7 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.DepreciationBatchSequence;
 import io.github.erp.domain.DepreciationJob;
@@ -25,6 +26,7 @@ import io.github.erp.repository.DepreciationBatchSequenceRepository;
 import io.github.erp.repository.search.DepreciationBatchSequenceSearchRepository;
 import io.github.erp.service.dto.DepreciationBatchSequenceDTO;
 import io.github.erp.service.mapper.DepreciationBatchSequenceMapper;
+import io.github.erp.web.rest.DepreciationBatchSequenceResource;
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,6 +49,7 @@ import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static io.github.erp.web.rest.TestUtil.sameInstant;
@@ -79,6 +82,18 @@ class DepreciationBatchSequenceResourceIT {
 
     private static final DepreciationBatchStatusType DEFAULT_DEPRECIATION_BATCH_STATUS = DepreciationBatchStatusType.CREATED;
     private static final DepreciationBatchStatusType UPDATED_DEPRECIATION_BATCH_STATUS = DepreciationBatchStatusType.RUNNING;
+
+    private static final UUID DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER = UUID.randomUUID();
+    private static final UUID UPDATED_DEPRECIATION_PERIOD_IDENTIFIER = UUID.randomUUID();
+
+    private static final UUID DEFAULT_DEPRECIATION_JOB_IDENTIFIER = UUID.randomUUID();
+    private static final UUID UPDATED_DEPRECIATION_JOB_IDENTIFIER = UUID.randomUUID();
+
+    private static final UUID DEFAULT_FISCAL_MONTH_IDENTIFIER = UUID.randomUUID();
+    private static final UUID UPDATED_FISCAL_MONTH_IDENTIFIER = UUID.randomUUID();
+
+    private static final UUID DEFAULT_FISCAL_QUARTER_IDENTIFIER = UUID.randomUUID();
+    private static final UUID UPDATED_FISCAL_QUARTER_IDENTIFIER = UUID.randomUUID();
 
     private static final String ENTITY_API_URL = "/api/fixed-asset/depreciation-batch-sequences";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -120,7 +135,11 @@ class DepreciationBatchSequenceResourceIT {
             .startIndex(DEFAULT_START_INDEX)
             .endIndex(DEFAULT_END_INDEX)
             .createdAt(DEFAULT_CREATED_AT)
-            .depreciationBatchStatus(DEFAULT_DEPRECIATION_BATCH_STATUS);
+            .depreciationBatchStatus(DEFAULT_DEPRECIATION_BATCH_STATUS)
+            .depreciationPeriodIdentifier(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER)
+            .depreciationJobIdentifier(DEFAULT_DEPRECIATION_JOB_IDENTIFIER)
+            .fiscalMonthIdentifier(DEFAULT_FISCAL_MONTH_IDENTIFIER)
+            .fiscalQuarterIdentifier(DEFAULT_FISCAL_QUARTER_IDENTIFIER);
         return depreciationBatchSequence;
     }
 
@@ -135,7 +154,11 @@ class DepreciationBatchSequenceResourceIT {
             .startIndex(UPDATED_START_INDEX)
             .endIndex(UPDATED_END_INDEX)
             .createdAt(UPDATED_CREATED_AT)
-            .depreciationBatchStatus(UPDATED_DEPRECIATION_BATCH_STATUS);
+            .depreciationBatchStatus(UPDATED_DEPRECIATION_BATCH_STATUS)
+            .depreciationPeriodIdentifier(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER)
+            .depreciationJobIdentifier(UPDATED_DEPRECIATION_JOB_IDENTIFIER)
+            .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER)
+            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER);
         return depreciationBatchSequence;
     }
 
@@ -168,6 +191,10 @@ class DepreciationBatchSequenceResourceIT {
         assertThat(testDepreciationBatchSequence.getEndIndex()).isEqualTo(DEFAULT_END_INDEX);
         assertThat(testDepreciationBatchSequence.getCreatedAt()).isEqualTo(DEFAULT_CREATED_AT);
         assertThat(testDepreciationBatchSequence.getDepreciationBatchStatus()).isEqualTo(DEFAULT_DEPRECIATION_BATCH_STATUS);
+        assertThat(testDepreciationBatchSequence.getDepreciationPeriodIdentifier()).isEqualTo(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER);
+        assertThat(testDepreciationBatchSequence.getDepreciationJobIdentifier()).isEqualTo(DEFAULT_DEPRECIATION_JOB_IDENTIFIER);
+        assertThat(testDepreciationBatchSequence.getFiscalMonthIdentifier()).isEqualTo(DEFAULT_FISCAL_MONTH_IDENTIFIER);
+        assertThat(testDepreciationBatchSequence.getFiscalQuarterIdentifier()).isEqualTo(DEFAULT_FISCAL_QUARTER_IDENTIFIER);
 
         // Validate the DepreciationBatchSequence in Elasticsearch
         verify(mockDepreciationBatchSequenceSearchRepository, times(1)).save(testDepreciationBatchSequence);
@@ -214,7 +241,11 @@ class DepreciationBatchSequenceResourceIT {
             .andExpect(jsonPath("$.[*].startIndex").value(hasItem(DEFAULT_START_INDEX)))
             .andExpect(jsonPath("$.[*].endIndex").value(hasItem(DEFAULT_END_INDEX)))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(sameInstant(DEFAULT_CREATED_AT))))
-            .andExpect(jsonPath("$.[*].depreciationBatchStatus").value(hasItem(DEFAULT_DEPRECIATION_BATCH_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].depreciationBatchStatus").value(hasItem(DEFAULT_DEPRECIATION_BATCH_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].depreciationPeriodIdentifier").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].depreciationJobIdentifier").value(hasItem(DEFAULT_DEPRECIATION_JOB_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].fiscalMonthIdentifier").value(hasItem(DEFAULT_FISCAL_MONTH_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())));
     }
 
     @Test
@@ -232,7 +263,11 @@ class DepreciationBatchSequenceResourceIT {
             .andExpect(jsonPath("$.startIndex").value(DEFAULT_START_INDEX))
             .andExpect(jsonPath("$.endIndex").value(DEFAULT_END_INDEX))
             .andExpect(jsonPath("$.createdAt").value(sameInstant(DEFAULT_CREATED_AT)))
-            .andExpect(jsonPath("$.depreciationBatchStatus").value(DEFAULT_DEPRECIATION_BATCH_STATUS.toString()));
+            .andExpect(jsonPath("$.depreciationBatchStatus").value(DEFAULT_DEPRECIATION_BATCH_STATUS.toString()))
+            .andExpect(jsonPath("$.depreciationPeriodIdentifier").value(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER.toString()))
+            .andExpect(jsonPath("$.depreciationJobIdentifier").value(DEFAULT_DEPRECIATION_JOB_IDENTIFIER.toString()))
+            .andExpect(jsonPath("$.fiscalMonthIdentifier").value(DEFAULT_FISCAL_MONTH_IDENTIFIER.toString()))
+            .andExpect(jsonPath("$.fiscalQuarterIdentifier").value(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString()));
     }
 
     @Test
@@ -621,6 +656,224 @@ class DepreciationBatchSequenceResourceIT {
 
     @Test
     @Transactional
+    void getAllDepreciationBatchSequencesByDepreciationPeriodIdentifierIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where depreciationPeriodIdentifier equals to DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldBeFound("depreciationPeriodIdentifier.equals=" + DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER);
+
+        // Get all the depreciationBatchSequenceList where depreciationPeriodIdentifier equals to UPDATED_DEPRECIATION_PERIOD_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldNotBeFound("depreciationPeriodIdentifier.equals=" + UPDATED_DEPRECIATION_PERIOD_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByDepreciationPeriodIdentifierIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where depreciationPeriodIdentifier not equals to DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldNotBeFound(
+            "depreciationPeriodIdentifier.notEquals=" + DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER
+        );
+
+        // Get all the depreciationBatchSequenceList where depreciationPeriodIdentifier not equals to UPDATED_DEPRECIATION_PERIOD_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldBeFound("depreciationPeriodIdentifier.notEquals=" + UPDATED_DEPRECIATION_PERIOD_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByDepreciationPeriodIdentifierIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where depreciationPeriodIdentifier in DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER or UPDATED_DEPRECIATION_PERIOD_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldBeFound(
+            "depreciationPeriodIdentifier.in=" + DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER + "," + UPDATED_DEPRECIATION_PERIOD_IDENTIFIER
+        );
+
+        // Get all the depreciationBatchSequenceList where depreciationPeriodIdentifier equals to UPDATED_DEPRECIATION_PERIOD_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldNotBeFound("depreciationPeriodIdentifier.in=" + UPDATED_DEPRECIATION_PERIOD_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByDepreciationPeriodIdentifierIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where depreciationPeriodIdentifier is not null
+        defaultDepreciationBatchSequenceShouldBeFound("depreciationPeriodIdentifier.specified=true");
+
+        // Get all the depreciationBatchSequenceList where depreciationPeriodIdentifier is null
+        defaultDepreciationBatchSequenceShouldNotBeFound("depreciationPeriodIdentifier.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByDepreciationJobIdentifierIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where depreciationJobIdentifier equals to DEFAULT_DEPRECIATION_JOB_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldBeFound("depreciationJobIdentifier.equals=" + DEFAULT_DEPRECIATION_JOB_IDENTIFIER);
+
+        // Get all the depreciationBatchSequenceList where depreciationJobIdentifier equals to UPDATED_DEPRECIATION_JOB_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldNotBeFound("depreciationJobIdentifier.equals=" + UPDATED_DEPRECIATION_JOB_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByDepreciationJobIdentifierIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where depreciationJobIdentifier not equals to DEFAULT_DEPRECIATION_JOB_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldNotBeFound("depreciationJobIdentifier.notEquals=" + DEFAULT_DEPRECIATION_JOB_IDENTIFIER);
+
+        // Get all the depreciationBatchSequenceList where depreciationJobIdentifier not equals to UPDATED_DEPRECIATION_JOB_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldBeFound("depreciationJobIdentifier.notEquals=" + UPDATED_DEPRECIATION_JOB_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByDepreciationJobIdentifierIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where depreciationJobIdentifier in DEFAULT_DEPRECIATION_JOB_IDENTIFIER or UPDATED_DEPRECIATION_JOB_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldBeFound(
+            "depreciationJobIdentifier.in=" + DEFAULT_DEPRECIATION_JOB_IDENTIFIER + "," + UPDATED_DEPRECIATION_JOB_IDENTIFIER
+        );
+
+        // Get all the depreciationBatchSequenceList where depreciationJobIdentifier equals to UPDATED_DEPRECIATION_JOB_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldNotBeFound("depreciationJobIdentifier.in=" + UPDATED_DEPRECIATION_JOB_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByDepreciationJobIdentifierIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where depreciationJobIdentifier is not null
+        defaultDepreciationBatchSequenceShouldBeFound("depreciationJobIdentifier.specified=true");
+
+        // Get all the depreciationBatchSequenceList where depreciationJobIdentifier is null
+        defaultDepreciationBatchSequenceShouldNotBeFound("depreciationJobIdentifier.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByFiscalMonthIdentifierIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where fiscalMonthIdentifier equals to DEFAULT_FISCAL_MONTH_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldBeFound("fiscalMonthIdentifier.equals=" + DEFAULT_FISCAL_MONTH_IDENTIFIER);
+
+        // Get all the depreciationBatchSequenceList where fiscalMonthIdentifier equals to UPDATED_FISCAL_MONTH_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldNotBeFound("fiscalMonthIdentifier.equals=" + UPDATED_FISCAL_MONTH_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByFiscalMonthIdentifierIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where fiscalMonthIdentifier not equals to DEFAULT_FISCAL_MONTH_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldNotBeFound("fiscalMonthIdentifier.notEquals=" + DEFAULT_FISCAL_MONTH_IDENTIFIER);
+
+        // Get all the depreciationBatchSequenceList where fiscalMonthIdentifier not equals to UPDATED_FISCAL_MONTH_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldBeFound("fiscalMonthIdentifier.notEquals=" + UPDATED_FISCAL_MONTH_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByFiscalMonthIdentifierIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where fiscalMonthIdentifier in DEFAULT_FISCAL_MONTH_IDENTIFIER or UPDATED_FISCAL_MONTH_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldBeFound(
+            "fiscalMonthIdentifier.in=" + DEFAULT_FISCAL_MONTH_IDENTIFIER + "," + UPDATED_FISCAL_MONTH_IDENTIFIER
+        );
+
+        // Get all the depreciationBatchSequenceList where fiscalMonthIdentifier equals to UPDATED_FISCAL_MONTH_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldNotBeFound("fiscalMonthIdentifier.in=" + UPDATED_FISCAL_MONTH_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByFiscalMonthIdentifierIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where fiscalMonthIdentifier is not null
+        defaultDepreciationBatchSequenceShouldBeFound("fiscalMonthIdentifier.specified=true");
+
+        // Get all the depreciationBatchSequenceList where fiscalMonthIdentifier is null
+        defaultDepreciationBatchSequenceShouldNotBeFound("fiscalMonthIdentifier.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByFiscalQuarterIdentifierIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where fiscalQuarterIdentifier equals to DEFAULT_FISCAL_QUARTER_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldBeFound("fiscalQuarterIdentifier.equals=" + DEFAULT_FISCAL_QUARTER_IDENTIFIER);
+
+        // Get all the depreciationBatchSequenceList where fiscalQuarterIdentifier equals to UPDATED_FISCAL_QUARTER_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldNotBeFound("fiscalQuarterIdentifier.equals=" + UPDATED_FISCAL_QUARTER_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByFiscalQuarterIdentifierIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where fiscalQuarterIdentifier not equals to DEFAULT_FISCAL_QUARTER_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldNotBeFound("fiscalQuarterIdentifier.notEquals=" + DEFAULT_FISCAL_QUARTER_IDENTIFIER);
+
+        // Get all the depreciationBatchSequenceList where fiscalQuarterIdentifier not equals to UPDATED_FISCAL_QUARTER_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldBeFound("fiscalQuarterIdentifier.notEquals=" + UPDATED_FISCAL_QUARTER_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByFiscalQuarterIdentifierIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where fiscalQuarterIdentifier in DEFAULT_FISCAL_QUARTER_IDENTIFIER or UPDATED_FISCAL_QUARTER_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldBeFound(
+            "fiscalQuarterIdentifier.in=" + DEFAULT_FISCAL_QUARTER_IDENTIFIER + "," + UPDATED_FISCAL_QUARTER_IDENTIFIER
+        );
+
+        // Get all the depreciationBatchSequenceList where fiscalQuarterIdentifier equals to UPDATED_FISCAL_QUARTER_IDENTIFIER
+        defaultDepreciationBatchSequenceShouldNotBeFound("fiscalQuarterIdentifier.in=" + UPDATED_FISCAL_QUARTER_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByFiscalQuarterIdentifierIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where fiscalQuarterIdentifier is not null
+        defaultDepreciationBatchSequenceShouldBeFound("fiscalQuarterIdentifier.specified=true");
+
+        // Get all the depreciationBatchSequenceList where fiscalQuarterIdentifier is null
+        defaultDepreciationBatchSequenceShouldNotBeFound("fiscalQuarterIdentifier.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllDepreciationBatchSequencesByDepreciationJobIsEqualToSomething() throws Exception {
         // Initialize the database
         depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
@@ -657,7 +910,11 @@ class DepreciationBatchSequenceResourceIT {
             .andExpect(jsonPath("$.[*].startIndex").value(hasItem(DEFAULT_START_INDEX)))
             .andExpect(jsonPath("$.[*].endIndex").value(hasItem(DEFAULT_END_INDEX)))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(sameInstant(DEFAULT_CREATED_AT))))
-            .andExpect(jsonPath("$.[*].depreciationBatchStatus").value(hasItem(DEFAULT_DEPRECIATION_BATCH_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].depreciationBatchStatus").value(hasItem(DEFAULT_DEPRECIATION_BATCH_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].depreciationPeriodIdentifier").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].depreciationJobIdentifier").value(hasItem(DEFAULT_DEPRECIATION_JOB_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].fiscalMonthIdentifier").value(hasItem(DEFAULT_FISCAL_MONTH_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())));
 
         // Check, that the count call also returns 1
         restDepreciationBatchSequenceMockMvc
@@ -711,7 +968,11 @@ class DepreciationBatchSequenceResourceIT {
             .startIndex(UPDATED_START_INDEX)
             .endIndex(UPDATED_END_INDEX)
             .createdAt(UPDATED_CREATED_AT)
-            .depreciationBatchStatus(UPDATED_DEPRECIATION_BATCH_STATUS);
+            .depreciationBatchStatus(UPDATED_DEPRECIATION_BATCH_STATUS)
+            .depreciationPeriodIdentifier(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER)
+            .depreciationJobIdentifier(UPDATED_DEPRECIATION_JOB_IDENTIFIER)
+            .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER)
+            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER);
         DepreciationBatchSequenceDTO depreciationBatchSequenceDTO = depreciationBatchSequenceMapper.toDto(updatedDepreciationBatchSequence);
 
         restDepreciationBatchSequenceMockMvc
@@ -732,6 +993,10 @@ class DepreciationBatchSequenceResourceIT {
         assertThat(testDepreciationBatchSequence.getEndIndex()).isEqualTo(UPDATED_END_INDEX);
         assertThat(testDepreciationBatchSequence.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
         assertThat(testDepreciationBatchSequence.getDepreciationBatchStatus()).isEqualTo(UPDATED_DEPRECIATION_BATCH_STATUS);
+        assertThat(testDepreciationBatchSequence.getDepreciationPeriodIdentifier()).isEqualTo(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER);
+        assertThat(testDepreciationBatchSequence.getDepreciationJobIdentifier()).isEqualTo(UPDATED_DEPRECIATION_JOB_IDENTIFIER);
+        assertThat(testDepreciationBatchSequence.getFiscalMonthIdentifier()).isEqualTo(UPDATED_FISCAL_MONTH_IDENTIFIER);
+        assertThat(testDepreciationBatchSequence.getFiscalQuarterIdentifier()).isEqualTo(UPDATED_FISCAL_QUARTER_IDENTIFIER);
 
         // Validate the DepreciationBatchSequence in Elasticsearch
         verify(mockDepreciationBatchSequenceSearchRepository).save(testDepreciationBatchSequence);
@@ -827,7 +1092,10 @@ class DepreciationBatchSequenceResourceIT {
         DepreciationBatchSequence partialUpdatedDepreciationBatchSequence = new DepreciationBatchSequence();
         partialUpdatedDepreciationBatchSequence.setId(depreciationBatchSequence.getId());
 
-        partialUpdatedDepreciationBatchSequence.depreciationBatchStatus(UPDATED_DEPRECIATION_BATCH_STATUS);
+        partialUpdatedDepreciationBatchSequence
+            .depreciationBatchStatus(UPDATED_DEPRECIATION_BATCH_STATUS)
+            .depreciationJobIdentifier(UPDATED_DEPRECIATION_JOB_IDENTIFIER)
+            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER);
 
         restDepreciationBatchSequenceMockMvc
             .perform(
@@ -847,6 +1115,10 @@ class DepreciationBatchSequenceResourceIT {
         assertThat(testDepreciationBatchSequence.getEndIndex()).isEqualTo(DEFAULT_END_INDEX);
         assertThat(testDepreciationBatchSequence.getCreatedAt()).isEqualTo(DEFAULT_CREATED_AT);
         assertThat(testDepreciationBatchSequence.getDepreciationBatchStatus()).isEqualTo(UPDATED_DEPRECIATION_BATCH_STATUS);
+        assertThat(testDepreciationBatchSequence.getDepreciationPeriodIdentifier()).isEqualTo(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER);
+        assertThat(testDepreciationBatchSequence.getDepreciationJobIdentifier()).isEqualTo(UPDATED_DEPRECIATION_JOB_IDENTIFIER);
+        assertThat(testDepreciationBatchSequence.getFiscalMonthIdentifier()).isEqualTo(DEFAULT_FISCAL_MONTH_IDENTIFIER);
+        assertThat(testDepreciationBatchSequence.getFiscalQuarterIdentifier()).isEqualTo(UPDATED_FISCAL_QUARTER_IDENTIFIER);
     }
 
     @Test
@@ -865,7 +1137,11 @@ class DepreciationBatchSequenceResourceIT {
             .startIndex(UPDATED_START_INDEX)
             .endIndex(UPDATED_END_INDEX)
             .createdAt(UPDATED_CREATED_AT)
-            .depreciationBatchStatus(UPDATED_DEPRECIATION_BATCH_STATUS);
+            .depreciationBatchStatus(UPDATED_DEPRECIATION_BATCH_STATUS)
+            .depreciationPeriodIdentifier(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER)
+            .depreciationJobIdentifier(UPDATED_DEPRECIATION_JOB_IDENTIFIER)
+            .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER)
+            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER);
 
         restDepreciationBatchSequenceMockMvc
             .perform(
@@ -885,6 +1161,10 @@ class DepreciationBatchSequenceResourceIT {
         assertThat(testDepreciationBatchSequence.getEndIndex()).isEqualTo(UPDATED_END_INDEX);
         assertThat(testDepreciationBatchSequence.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
         assertThat(testDepreciationBatchSequence.getDepreciationBatchStatus()).isEqualTo(UPDATED_DEPRECIATION_BATCH_STATUS);
+        assertThat(testDepreciationBatchSequence.getDepreciationPeriodIdentifier()).isEqualTo(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER);
+        assertThat(testDepreciationBatchSequence.getDepreciationJobIdentifier()).isEqualTo(UPDATED_DEPRECIATION_JOB_IDENTIFIER);
+        assertThat(testDepreciationBatchSequence.getFiscalMonthIdentifier()).isEqualTo(UPDATED_FISCAL_MONTH_IDENTIFIER);
+        assertThat(testDepreciationBatchSequence.getFiscalQuarterIdentifier()).isEqualTo(UPDATED_FISCAL_QUARTER_IDENTIFIER);
     }
 
     @Test
@@ -1004,6 +1284,10 @@ class DepreciationBatchSequenceResourceIT {
             .andExpect(jsonPath("$.[*].startIndex").value(hasItem(DEFAULT_START_INDEX)))
             .andExpect(jsonPath("$.[*].endIndex").value(hasItem(DEFAULT_END_INDEX)))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(sameInstant(DEFAULT_CREATED_AT))))
-            .andExpect(jsonPath("$.[*].depreciationBatchStatus").value(hasItem(DEFAULT_DEPRECIATION_BATCH_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].depreciationBatchStatus").value(hasItem(DEFAULT_DEPRECIATION_BATCH_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].depreciationPeriodIdentifier").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].depreciationJobIdentifier").value(hasItem(DEFAULT_DEPRECIATION_JOB_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].fiscalMonthIdentifier").value(hasItem(DEFAULT_FISCAL_MONTH_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())));
     }
 }

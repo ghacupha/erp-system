@@ -189,6 +189,26 @@ class DepreciationJobResourceIT {
 
     @Test
     @Transactional
+    void checkDescriptionIsRequired() throws Exception {
+        int databaseSizeBeforeTest = depreciationJobRepository.findAll().size();
+        // set the field null
+        depreciationJob.setDescription(null);
+
+        // Create the DepreciationJob, which fails.
+        DepreciationJobDTO depreciationJobDTO = depreciationJobMapper.toDto(depreciationJob);
+
+        restDepreciationJobMockMvc
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(depreciationJobDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<DepreciationJob> depreciationJobList = depreciationJobRepository.findAll();
+        assertThat(depreciationJobList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllDepreciationJobs() throws Exception {
         // Initialize the database
         depreciationJobRepository.saveAndFlush(depreciationJob);

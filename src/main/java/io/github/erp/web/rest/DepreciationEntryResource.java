@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -84,7 +86,7 @@ public class DepreciationEntryResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/depreciation-entries")
-    public ResponseEntity<DepreciationEntryDTO> createDepreciationEntry(@RequestBody DepreciationEntryDTO depreciationEntryDTO)
+    public ResponseEntity<DepreciationEntryDTO> createDepreciationEntry(@Valid @RequestBody DepreciationEntryDTO depreciationEntryDTO)
         throws URISyntaxException {
         log.debug("REST request to save DepreciationEntry : {}", depreciationEntryDTO);
         if (depreciationEntryDTO.getId() != null) {
@@ -110,7 +112,7 @@ public class DepreciationEntryResource {
     @PutMapping("/depreciation-entries/{id}")
     public ResponseEntity<DepreciationEntryDTO> updateDepreciationEntry(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody DepreciationEntryDTO depreciationEntryDTO
+        @Valid @RequestBody DepreciationEntryDTO depreciationEntryDTO
     ) throws URISyntaxException {
         log.debug("REST request to update DepreciationEntry : {}, {}", id, depreciationEntryDTO);
         if (depreciationEntryDTO.getId() == null) {
@@ -145,7 +147,7 @@ public class DepreciationEntryResource {
     @PatchMapping(value = "/depreciation-entries/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<DepreciationEntryDTO> partialUpdateDepreciationEntry(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody DepreciationEntryDTO depreciationEntryDTO
+        @NotNull @RequestBody DepreciationEntryDTO depreciationEntryDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update DepreciationEntry partially : {}, {}", id, depreciationEntryDTO);
         if (depreciationEntryDTO.getId() == null) {

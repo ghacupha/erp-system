@@ -126,6 +126,28 @@ public class DepreciationEntryQueryService extends QueryService<DepreciationEntr
             if (criteria.getAssetNumber() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getAssetNumber(), DepreciationEntry_.assetNumber));
             }
+            if (criteria.getDepreciationPeriodIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getDepreciationPeriodIdentifier(), DepreciationEntry_.depreciationPeriodIdentifier)
+                    );
+            }
+            if (criteria.getDepreciationJobIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getDepreciationJobIdentifier(), DepreciationEntry_.depreciationJobIdentifier)
+                    );
+            }
+            if (criteria.getFiscalMonthIdentifier() != null) {
+                specification =
+                    specification.and(buildSpecification(criteria.getFiscalMonthIdentifier(), DepreciationEntry_.fiscalMonthIdentifier));
+            }
+            if (criteria.getFiscalQuarterIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getFiscalQuarterIdentifier(), DepreciationEntry_.fiscalQuarterIdentifier)
+                    );
+            }
             if (criteria.getServiceOutletId() != null) {
                 specification =
                     specification.and(

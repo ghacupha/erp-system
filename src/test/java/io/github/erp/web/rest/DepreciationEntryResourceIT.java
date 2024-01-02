@@ -49,6 +49,7 @@ import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -85,6 +86,18 @@ class DepreciationEntryResourceIT {
     private static final Long DEFAULT_ASSET_NUMBER = 1L;
     private static final Long UPDATED_ASSET_NUMBER = 2L;
     private static final Long SMALLER_ASSET_NUMBER = 1L - 1L;
+
+    private static final UUID DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER = UUID.randomUUID();
+    private static final UUID UPDATED_DEPRECIATION_PERIOD_IDENTIFIER = UUID.randomUUID();
+
+    private static final UUID DEFAULT_DEPRECIATION_JOB_IDENTIFIER = UUID.randomUUID();
+    private static final UUID UPDATED_DEPRECIATION_JOB_IDENTIFIER = UUID.randomUUID();
+
+    private static final UUID DEFAULT_FISCAL_MONTH_IDENTIFIER = UUID.randomUUID();
+    private static final UUID UPDATED_FISCAL_MONTH_IDENTIFIER = UUID.randomUUID();
+
+    private static final UUID DEFAULT_FISCAL_QUARTER_IDENTIFIER = UUID.randomUUID();
+    private static final UUID UPDATED_FISCAL_QUARTER_IDENTIFIER = UUID.randomUUID();
 
     private static final String ENTITY_API_URL = "/api/depreciation-entries";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -125,7 +138,11 @@ class DepreciationEntryResourceIT {
         DepreciationEntry depreciationEntry = new DepreciationEntry()
             .postedAt(DEFAULT_POSTED_AT)
             .depreciationAmount(DEFAULT_DEPRECIATION_AMOUNT)
-            .assetNumber(DEFAULT_ASSET_NUMBER);
+            .assetNumber(DEFAULT_ASSET_NUMBER)
+            .depreciationPeriodIdentifier(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER)
+            .depreciationJobIdentifier(DEFAULT_DEPRECIATION_JOB_IDENTIFIER)
+            .fiscalMonthIdentifier(DEFAULT_FISCAL_MONTH_IDENTIFIER)
+            .fiscalQuarterIdentifier(DEFAULT_FISCAL_QUARTER_IDENTIFIER);
         return depreciationEntry;
     }
 
@@ -139,7 +156,11 @@ class DepreciationEntryResourceIT {
         DepreciationEntry depreciationEntry = new DepreciationEntry()
             .postedAt(UPDATED_POSTED_AT)
             .depreciationAmount(UPDATED_DEPRECIATION_AMOUNT)
-            .assetNumber(UPDATED_ASSET_NUMBER);
+            .assetNumber(UPDATED_ASSET_NUMBER)
+            .depreciationPeriodIdentifier(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER)
+            .depreciationJobIdentifier(UPDATED_DEPRECIATION_JOB_IDENTIFIER)
+            .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER)
+            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER);
         return depreciationEntry;
     }
 
@@ -169,6 +190,10 @@ class DepreciationEntryResourceIT {
         assertThat(testDepreciationEntry.getPostedAt()).isEqualTo(DEFAULT_POSTED_AT);
         assertThat(testDepreciationEntry.getDepreciationAmount()).isEqualByComparingTo(DEFAULT_DEPRECIATION_AMOUNT);
         assertThat(testDepreciationEntry.getAssetNumber()).isEqualTo(DEFAULT_ASSET_NUMBER);
+        assertThat(testDepreciationEntry.getDepreciationPeriodIdentifier()).isEqualTo(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER);
+        assertThat(testDepreciationEntry.getDepreciationJobIdentifier()).isEqualTo(DEFAULT_DEPRECIATION_JOB_IDENTIFIER);
+        assertThat(testDepreciationEntry.getFiscalMonthIdentifier()).isEqualTo(DEFAULT_FISCAL_MONTH_IDENTIFIER);
+        assertThat(testDepreciationEntry.getFiscalQuarterIdentifier()).isEqualTo(DEFAULT_FISCAL_QUARTER_IDENTIFIER);
 
         // Validate the DepreciationEntry in Elasticsearch
         verify(mockDepreciationEntrySearchRepository, times(1)).save(testDepreciationEntry);
@@ -214,7 +239,11 @@ class DepreciationEntryResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(depreciationEntry.getId().intValue())))
             .andExpect(jsonPath("$.[*].postedAt").value(hasItem(sameInstant(DEFAULT_POSTED_AT))))
             .andExpect(jsonPath("$.[*].depreciationAmount").value(hasItem(sameNumber(DEFAULT_DEPRECIATION_AMOUNT))))
-            .andExpect(jsonPath("$.[*].assetNumber").value(hasItem(DEFAULT_ASSET_NUMBER.intValue())));
+            .andExpect(jsonPath("$.[*].assetNumber").value(hasItem(DEFAULT_ASSET_NUMBER.intValue())))
+            .andExpect(jsonPath("$.[*].depreciationPeriodIdentifier").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].depreciationJobIdentifier").value(hasItem(DEFAULT_DEPRECIATION_JOB_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].fiscalMonthIdentifier").value(hasItem(DEFAULT_FISCAL_MONTH_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())));
     }
 
     @Test
@@ -231,7 +260,11 @@ class DepreciationEntryResourceIT {
             .andExpect(jsonPath("$.id").value(depreciationEntry.getId().intValue()))
             .andExpect(jsonPath("$.postedAt").value(sameInstant(DEFAULT_POSTED_AT)))
             .andExpect(jsonPath("$.depreciationAmount").value(sameNumber(DEFAULT_DEPRECIATION_AMOUNT)))
-            .andExpect(jsonPath("$.assetNumber").value(DEFAULT_ASSET_NUMBER.intValue()));
+            .andExpect(jsonPath("$.assetNumber").value(DEFAULT_ASSET_NUMBER.intValue()))
+            .andExpect(jsonPath("$.depreciationPeriodIdentifier").value(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER.toString()))
+            .andExpect(jsonPath("$.depreciationJobIdentifier").value(DEFAULT_DEPRECIATION_JOB_IDENTIFIER.toString()))
+            .andExpect(jsonPath("$.fiscalMonthIdentifier").value(DEFAULT_FISCAL_MONTH_IDENTIFIER.toString()))
+            .andExpect(jsonPath("$.fiscalQuarterIdentifier").value(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString()));
     }
 
     @Test
@@ -566,6 +599,222 @@ class DepreciationEntryResourceIT {
 
     @Test
     @Transactional
+    void getAllDepreciationEntriesByDepreciationPeriodIdentifierIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationPeriodIdentifier equals to DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER
+        defaultDepreciationEntryShouldBeFound("depreciationPeriodIdentifier.equals=" + DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER);
+
+        // Get all the depreciationEntryList where depreciationPeriodIdentifier equals to UPDATED_DEPRECIATION_PERIOD_IDENTIFIER
+        defaultDepreciationEntryShouldNotBeFound("depreciationPeriodIdentifier.equals=" + UPDATED_DEPRECIATION_PERIOD_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationPeriodIdentifierIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationPeriodIdentifier not equals to DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER
+        defaultDepreciationEntryShouldNotBeFound("depreciationPeriodIdentifier.notEquals=" + DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER);
+
+        // Get all the depreciationEntryList where depreciationPeriodIdentifier not equals to UPDATED_DEPRECIATION_PERIOD_IDENTIFIER
+        defaultDepreciationEntryShouldBeFound("depreciationPeriodIdentifier.notEquals=" + UPDATED_DEPRECIATION_PERIOD_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationPeriodIdentifierIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationPeriodIdentifier in DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER or UPDATED_DEPRECIATION_PERIOD_IDENTIFIER
+        defaultDepreciationEntryShouldBeFound(
+            "depreciationPeriodIdentifier.in=" + DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER + "," + UPDATED_DEPRECIATION_PERIOD_IDENTIFIER
+        );
+
+        // Get all the depreciationEntryList where depreciationPeriodIdentifier equals to UPDATED_DEPRECIATION_PERIOD_IDENTIFIER
+        defaultDepreciationEntryShouldNotBeFound("depreciationPeriodIdentifier.in=" + UPDATED_DEPRECIATION_PERIOD_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationPeriodIdentifierIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationPeriodIdentifier is not null
+        defaultDepreciationEntryShouldBeFound("depreciationPeriodIdentifier.specified=true");
+
+        // Get all the depreciationEntryList where depreciationPeriodIdentifier is null
+        defaultDepreciationEntryShouldNotBeFound("depreciationPeriodIdentifier.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationJobIdentifierIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationJobIdentifier equals to DEFAULT_DEPRECIATION_JOB_IDENTIFIER
+        defaultDepreciationEntryShouldBeFound("depreciationJobIdentifier.equals=" + DEFAULT_DEPRECIATION_JOB_IDENTIFIER);
+
+        // Get all the depreciationEntryList where depreciationJobIdentifier equals to UPDATED_DEPRECIATION_JOB_IDENTIFIER
+        defaultDepreciationEntryShouldNotBeFound("depreciationJobIdentifier.equals=" + UPDATED_DEPRECIATION_JOB_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationJobIdentifierIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationJobIdentifier not equals to DEFAULT_DEPRECIATION_JOB_IDENTIFIER
+        defaultDepreciationEntryShouldNotBeFound("depreciationJobIdentifier.notEquals=" + DEFAULT_DEPRECIATION_JOB_IDENTIFIER);
+
+        // Get all the depreciationEntryList where depreciationJobIdentifier not equals to UPDATED_DEPRECIATION_JOB_IDENTIFIER
+        defaultDepreciationEntryShouldBeFound("depreciationJobIdentifier.notEquals=" + UPDATED_DEPRECIATION_JOB_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationJobIdentifierIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationJobIdentifier in DEFAULT_DEPRECIATION_JOB_IDENTIFIER or UPDATED_DEPRECIATION_JOB_IDENTIFIER
+        defaultDepreciationEntryShouldBeFound(
+            "depreciationJobIdentifier.in=" + DEFAULT_DEPRECIATION_JOB_IDENTIFIER + "," + UPDATED_DEPRECIATION_JOB_IDENTIFIER
+        );
+
+        // Get all the depreciationEntryList where depreciationJobIdentifier equals to UPDATED_DEPRECIATION_JOB_IDENTIFIER
+        defaultDepreciationEntryShouldNotBeFound("depreciationJobIdentifier.in=" + UPDATED_DEPRECIATION_JOB_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationJobIdentifierIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationJobIdentifier is not null
+        defaultDepreciationEntryShouldBeFound("depreciationJobIdentifier.specified=true");
+
+        // Get all the depreciationEntryList where depreciationJobIdentifier is null
+        defaultDepreciationEntryShouldNotBeFound("depreciationJobIdentifier.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByFiscalMonthIdentifierIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where fiscalMonthIdentifier equals to DEFAULT_FISCAL_MONTH_IDENTIFIER
+        defaultDepreciationEntryShouldBeFound("fiscalMonthIdentifier.equals=" + DEFAULT_FISCAL_MONTH_IDENTIFIER);
+
+        // Get all the depreciationEntryList where fiscalMonthIdentifier equals to UPDATED_FISCAL_MONTH_IDENTIFIER
+        defaultDepreciationEntryShouldNotBeFound("fiscalMonthIdentifier.equals=" + UPDATED_FISCAL_MONTH_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByFiscalMonthIdentifierIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where fiscalMonthIdentifier not equals to DEFAULT_FISCAL_MONTH_IDENTIFIER
+        defaultDepreciationEntryShouldNotBeFound("fiscalMonthIdentifier.notEquals=" + DEFAULT_FISCAL_MONTH_IDENTIFIER);
+
+        // Get all the depreciationEntryList where fiscalMonthIdentifier not equals to UPDATED_FISCAL_MONTH_IDENTIFIER
+        defaultDepreciationEntryShouldBeFound("fiscalMonthIdentifier.notEquals=" + UPDATED_FISCAL_MONTH_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByFiscalMonthIdentifierIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where fiscalMonthIdentifier in DEFAULT_FISCAL_MONTH_IDENTIFIER or UPDATED_FISCAL_MONTH_IDENTIFIER
+        defaultDepreciationEntryShouldBeFound(
+            "fiscalMonthIdentifier.in=" + DEFAULT_FISCAL_MONTH_IDENTIFIER + "," + UPDATED_FISCAL_MONTH_IDENTIFIER
+        );
+
+        // Get all the depreciationEntryList where fiscalMonthIdentifier equals to UPDATED_FISCAL_MONTH_IDENTIFIER
+        defaultDepreciationEntryShouldNotBeFound("fiscalMonthIdentifier.in=" + UPDATED_FISCAL_MONTH_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByFiscalMonthIdentifierIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where fiscalMonthIdentifier is not null
+        defaultDepreciationEntryShouldBeFound("fiscalMonthIdentifier.specified=true");
+
+        // Get all the depreciationEntryList where fiscalMonthIdentifier is null
+        defaultDepreciationEntryShouldNotBeFound("fiscalMonthIdentifier.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByFiscalQuarterIdentifierIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where fiscalQuarterIdentifier equals to DEFAULT_FISCAL_QUARTER_IDENTIFIER
+        defaultDepreciationEntryShouldBeFound("fiscalQuarterIdentifier.equals=" + DEFAULT_FISCAL_QUARTER_IDENTIFIER);
+
+        // Get all the depreciationEntryList where fiscalQuarterIdentifier equals to UPDATED_FISCAL_QUARTER_IDENTIFIER
+        defaultDepreciationEntryShouldNotBeFound("fiscalQuarterIdentifier.equals=" + UPDATED_FISCAL_QUARTER_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByFiscalQuarterIdentifierIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where fiscalQuarterIdentifier not equals to DEFAULT_FISCAL_QUARTER_IDENTIFIER
+        defaultDepreciationEntryShouldNotBeFound("fiscalQuarterIdentifier.notEquals=" + DEFAULT_FISCAL_QUARTER_IDENTIFIER);
+
+        // Get all the depreciationEntryList where fiscalQuarterIdentifier not equals to UPDATED_FISCAL_QUARTER_IDENTIFIER
+        defaultDepreciationEntryShouldBeFound("fiscalQuarterIdentifier.notEquals=" + UPDATED_FISCAL_QUARTER_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByFiscalQuarterIdentifierIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where fiscalQuarterIdentifier in DEFAULT_FISCAL_QUARTER_IDENTIFIER or UPDATED_FISCAL_QUARTER_IDENTIFIER
+        defaultDepreciationEntryShouldBeFound(
+            "fiscalQuarterIdentifier.in=" + DEFAULT_FISCAL_QUARTER_IDENTIFIER + "," + UPDATED_FISCAL_QUARTER_IDENTIFIER
+        );
+
+        // Get all the depreciationEntryList where fiscalQuarterIdentifier equals to UPDATED_FISCAL_QUARTER_IDENTIFIER
+        defaultDepreciationEntryShouldNotBeFound("fiscalQuarterIdentifier.in=" + UPDATED_FISCAL_QUARTER_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByFiscalQuarterIdentifierIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where fiscalQuarterIdentifier is not null
+        defaultDepreciationEntryShouldBeFound("fiscalQuarterIdentifier.specified=true");
+
+        // Get all the depreciationEntryList where fiscalQuarterIdentifier is null
+        defaultDepreciationEntryShouldNotBeFound("fiscalQuarterIdentifier.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllDepreciationEntriesByServiceOutletIsEqualToSomething() throws Exception {
         // Initialize the database
         depreciationEntryRepository.saveAndFlush(depreciationEntry);
@@ -783,7 +1032,11 @@ class DepreciationEntryResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(depreciationEntry.getId().intValue())))
             .andExpect(jsonPath("$.[*].postedAt").value(hasItem(sameInstant(DEFAULT_POSTED_AT))))
             .andExpect(jsonPath("$.[*].depreciationAmount").value(hasItem(sameNumber(DEFAULT_DEPRECIATION_AMOUNT))))
-            .andExpect(jsonPath("$.[*].assetNumber").value(hasItem(DEFAULT_ASSET_NUMBER.intValue())));
+            .andExpect(jsonPath("$.[*].assetNumber").value(hasItem(DEFAULT_ASSET_NUMBER.intValue())))
+            .andExpect(jsonPath("$.[*].depreciationPeriodIdentifier").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].depreciationJobIdentifier").value(hasItem(DEFAULT_DEPRECIATION_JOB_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].fiscalMonthIdentifier").value(hasItem(DEFAULT_FISCAL_MONTH_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())));
 
         // Check, that the count call also returns 1
         restDepreciationEntryMockMvc
@@ -834,7 +1087,11 @@ class DepreciationEntryResourceIT {
         updatedDepreciationEntry
             .postedAt(UPDATED_POSTED_AT)
             .depreciationAmount(UPDATED_DEPRECIATION_AMOUNT)
-            .assetNumber(UPDATED_ASSET_NUMBER);
+            .assetNumber(UPDATED_ASSET_NUMBER)
+            .depreciationPeriodIdentifier(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER)
+            .depreciationJobIdentifier(UPDATED_DEPRECIATION_JOB_IDENTIFIER)
+            .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER)
+            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER);
         DepreciationEntryDTO depreciationEntryDTO = depreciationEntryMapper.toDto(updatedDepreciationEntry);
 
         restDepreciationEntryMockMvc
@@ -852,6 +1109,10 @@ class DepreciationEntryResourceIT {
         assertThat(testDepreciationEntry.getPostedAt()).isEqualTo(UPDATED_POSTED_AT);
         assertThat(testDepreciationEntry.getDepreciationAmount()).isEqualTo(UPDATED_DEPRECIATION_AMOUNT);
         assertThat(testDepreciationEntry.getAssetNumber()).isEqualTo(UPDATED_ASSET_NUMBER);
+        assertThat(testDepreciationEntry.getDepreciationPeriodIdentifier()).isEqualTo(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER);
+        assertThat(testDepreciationEntry.getDepreciationJobIdentifier()).isEqualTo(UPDATED_DEPRECIATION_JOB_IDENTIFIER);
+        assertThat(testDepreciationEntry.getFiscalMonthIdentifier()).isEqualTo(UPDATED_FISCAL_MONTH_IDENTIFIER);
+        assertThat(testDepreciationEntry.getFiscalQuarterIdentifier()).isEqualTo(UPDATED_FISCAL_QUARTER_IDENTIFIER);
 
         // Validate the DepreciationEntry in Elasticsearch
         verify(mockDepreciationEntrySearchRepository).save(testDepreciationEntry);
@@ -945,7 +1206,11 @@ class DepreciationEntryResourceIT {
         DepreciationEntry partialUpdatedDepreciationEntry = new DepreciationEntry();
         partialUpdatedDepreciationEntry.setId(depreciationEntry.getId());
 
-        partialUpdatedDepreciationEntry.postedAt(UPDATED_POSTED_AT);
+        partialUpdatedDepreciationEntry
+            .postedAt(UPDATED_POSTED_AT)
+            .depreciationPeriodIdentifier(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER)
+            .depreciationJobIdentifier(UPDATED_DEPRECIATION_JOB_IDENTIFIER)
+            .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER);
 
         restDepreciationEntryMockMvc
             .perform(
@@ -962,6 +1227,10 @@ class DepreciationEntryResourceIT {
         assertThat(testDepreciationEntry.getPostedAt()).isEqualTo(UPDATED_POSTED_AT);
         assertThat(testDepreciationEntry.getDepreciationAmount()).isEqualByComparingTo(DEFAULT_DEPRECIATION_AMOUNT);
         assertThat(testDepreciationEntry.getAssetNumber()).isEqualTo(DEFAULT_ASSET_NUMBER);
+        assertThat(testDepreciationEntry.getDepreciationPeriodIdentifier()).isEqualTo(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER);
+        assertThat(testDepreciationEntry.getDepreciationJobIdentifier()).isEqualTo(UPDATED_DEPRECIATION_JOB_IDENTIFIER);
+        assertThat(testDepreciationEntry.getFiscalMonthIdentifier()).isEqualTo(UPDATED_FISCAL_MONTH_IDENTIFIER);
+        assertThat(testDepreciationEntry.getFiscalQuarterIdentifier()).isEqualTo(DEFAULT_FISCAL_QUARTER_IDENTIFIER);
     }
 
     @Test
@@ -979,7 +1248,11 @@ class DepreciationEntryResourceIT {
         partialUpdatedDepreciationEntry
             .postedAt(UPDATED_POSTED_AT)
             .depreciationAmount(UPDATED_DEPRECIATION_AMOUNT)
-            .assetNumber(UPDATED_ASSET_NUMBER);
+            .assetNumber(UPDATED_ASSET_NUMBER)
+            .depreciationPeriodIdentifier(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER)
+            .depreciationJobIdentifier(UPDATED_DEPRECIATION_JOB_IDENTIFIER)
+            .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER)
+            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER);
 
         restDepreciationEntryMockMvc
             .perform(
@@ -996,6 +1269,10 @@ class DepreciationEntryResourceIT {
         assertThat(testDepreciationEntry.getPostedAt()).isEqualTo(UPDATED_POSTED_AT);
         assertThat(testDepreciationEntry.getDepreciationAmount()).isEqualByComparingTo(UPDATED_DEPRECIATION_AMOUNT);
         assertThat(testDepreciationEntry.getAssetNumber()).isEqualTo(UPDATED_ASSET_NUMBER);
+        assertThat(testDepreciationEntry.getDepreciationPeriodIdentifier()).isEqualTo(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER);
+        assertThat(testDepreciationEntry.getDepreciationJobIdentifier()).isEqualTo(UPDATED_DEPRECIATION_JOB_IDENTIFIER);
+        assertThat(testDepreciationEntry.getFiscalMonthIdentifier()).isEqualTo(UPDATED_FISCAL_MONTH_IDENTIFIER);
+        assertThat(testDepreciationEntry.getFiscalQuarterIdentifier()).isEqualTo(UPDATED_FISCAL_QUARTER_IDENTIFIER);
     }
 
     @Test
@@ -1114,6 +1391,10 @@ class DepreciationEntryResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(depreciationEntry.getId().intValue())))
             .andExpect(jsonPath("$.[*].postedAt").value(hasItem(sameInstant(DEFAULT_POSTED_AT))))
             .andExpect(jsonPath("$.[*].depreciationAmount").value(hasItem(sameNumber(DEFAULT_DEPRECIATION_AMOUNT))))
-            .andExpect(jsonPath("$.[*].assetNumber").value(hasItem(DEFAULT_ASSET_NUMBER.intValue())));
+            .andExpect(jsonPath("$.[*].assetNumber").value(hasItem(DEFAULT_ASSET_NUMBER.intValue())))
+            .andExpect(jsonPath("$.[*].depreciationPeriodIdentifier").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].depreciationJobIdentifier").value(hasItem(DEFAULT_DEPRECIATION_JOB_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].fiscalMonthIdentifier").value(hasItem(DEFAULT_FISCAL_MONTH_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())));
     }
 }

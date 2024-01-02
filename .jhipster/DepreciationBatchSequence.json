@@ -16,6 +16,26 @@
       "fieldName": "depreciationBatchStatus",
       "fieldType": "DepreciationBatchStatusType",
       "fieldValues": "CREATED,RUNNING,COMPLETED,ERRORED,ENQUEUED"
+    },
+    {
+      "fieldName": "depreciationPeriodIdentifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "depreciationJobIdentifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "fiscalMonthIdentifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "fiscalQuarterIdentifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique"]
     }
   ],
   "relationships": [

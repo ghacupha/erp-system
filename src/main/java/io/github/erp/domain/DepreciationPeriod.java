@@ -45,11 +45,11 @@ public class DepreciationPeriod implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "start_date", nullable = false)
+    @Column(name = "start_date", nullable = false, unique = true)
     private LocalDate startDate;
 
     @NotNull
-    @Column(name = "end_date", nullable = false)
+    @Column(name = "end_date", nullable = false, unique = true)
     private LocalDate endDate;
 
     @Enumerated(EnumType.STRING)

@@ -11,6 +11,26 @@
     {
       "fieldName": "assetNumber",
       "fieldType": "Long"
+    },
+    {
+      "fieldName": "depreciationPeriodIdentifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "depreciationJobIdentifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "fiscalMonthIdentifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "fiscalQuarterIdentifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique"]
     }
   ],
   "relationships": [
