@@ -20,10 +20,7 @@ package io.github.erp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -32,6 +29,7 @@ import java.util.UUID;
  * Mapped superclass for entities that hold UUID identifier data and also applicationUser
  * field, createdBy and lastModifiedBy
  */
+@EntityListeners(ApplicationUserIdentifierEntityListener.class)
 @MappedSuperclass
 public abstract class AbstractIdentifiableEntity implements Serializable {
 

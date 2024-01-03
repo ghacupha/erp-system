@@ -1,0 +1,230 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-4">
+        <addColumn tableName="depreciation_batch_sequence">
+            <column name="created_by_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-5">
+        <addColumn tableName="depreciation_entry">
+            <column name="created_by_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-6">
+        <addColumn tableName="depreciation_job_notice">
+            <column name="created_by_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-7">
+        <addColumn tableName="fiscal_month">
+            <column name="created_by_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-8">
+        <addColumn tableName="fiscal_quarter">
+            <column name="created_by_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-9">
+        <addColumn tableName="depreciation_batch_sequence">
+            <column name="created_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-10">
+        <addColumn tableName="depreciation_entry">
+            <column name="created_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-11">
+        <addColumn tableName="depreciation_job">
+            <column name="created_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-12">
+        <addColumn tableName="depreciation_job_notice">
+            <column name="created_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-13">
+        <addColumn tableName="depreciation_period">
+            <column name="created_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-14">
+        <addColumn tableName="fiscal_month">
+            <column name="created_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-15">
+        <addColumn tableName="fiscal_quarter">
+            <column name="created_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-16">
+        <addColumn tableName="fiscal_year">
+            <column name="created_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-18">
+        <addColumn tableName="depreciation_batch_sequence">
+            <column name="identifier" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-19">
+        <addColumn tableName="depreciation_entry">
+            <column name="identifier" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-20">
+        <addColumn tableName="depreciation_job">
+            <column name="identifier" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-21">
+        <addColumn tableName="depreciation_job_notice">
+            <column name="identifier" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-22">
+        <addColumn tableName="depreciation_period">
+            <column name="identifier" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-23">
+        <addColumn tableName="fiscal_month">
+            <column name="identifier" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-24">
+        <addColumn tableName="fiscal_quarter">
+            <column name="identifier" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-25">
+        <addColumn tableName="fiscal_year">
+            <column name="identifier" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-26">
+        <addColumn tableName="depreciation_batch_sequence">
+            <column name="last_modified_at" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-27">
+        <addColumn tableName="depreciation_entry">
+            <column name="last_modified_at" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-28">
+        <addColumn tableName="depreciation_job">
+            <column name="last_modified_at" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-29">
+        <addColumn tableName="depreciation_job_notice">
+            <column name="last_modified_at" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-30">
+        <addColumn tableName="depreciation_period">
+            <column name="last_modified_at" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-31">
+        <addColumn tableName="fiscal_month">
+            <column name="last_modified_at" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-32">
+        <addColumn tableName="fiscal_quarter">
+            <column name="last_modified_at" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-33">
+        <addColumn tableName="fiscal_year">
+            <column name="last_modified_at" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-34">
+        <addColumn tableName="depreciation_batch_sequence">
+            <column name="last_modified_by_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-35">
+        <addColumn tableName="depreciation_entry">
+            <column name="last_modified_by_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-36">
+        <addColumn tableName="depreciation_job">
+            <column name="last_modified_by_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-37">
+        <addColumn tableName="depreciation_job_notice">
+            <column name="last_modified_by_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-38">
+        <addColumn tableName="depreciation_period">
+            <column name="last_modified_by_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-39">
+        <addColumn tableName="fiscal_month">
+            <column name="last_modified_by_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-40">
+        <addColumn tableName="fiscal_quarter">
+            <column name="last_modified_by_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-41">
+        <addColumn tableName="fiscal_year">
+            <column name="last_modified_by_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-48">
+        <addForeignKeyConstraint baseColumnNames="last_modified_by_id" baseTableName="fiscal_year" constraintName="FK1jd68pk68nmk06d92nln3kkrn" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application_user" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-49">
+        <addForeignKeyConstraint baseColumnNames="last_modified_by_id" baseTableName="depreciation_batch_sequence" constraintName="FK2kd89kc2nf9q12w2esp7arww8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application_user" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-50">
+        <addForeignKeyConstraint baseColumnNames="last_modified_by_id" baseTableName="depreciation_entry" constraintName="FK6qlttgd7svpo43g90llx96wt7" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application_user" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-51">
+        <addForeignKeyConstraint baseColumnNames="created_by_id" baseTableName="depreciation_job_notice" constraintName="FK8p84pesrcbc0204j13m19kge6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application_user" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-52">
+        <addForeignKeyConstraint baseColumnNames="last_modified_by_id" baseTableName="depreciation_job" constraintName="FK91urf1fvn2u0ne9ugnw1pifdp" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application_user" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-53">
+        <addForeignKeyConstraint baseColumnNames="last_modified_by_id" baseTableName="fiscal_month" constraintName="FKb0xhr51rms1xqm9c83e6a23el" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application_user" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-54">
+        <addForeignKeyConstraint baseColumnNames="created_by_id" baseTableName="fiscal_month" constraintName="FKd1ijcju2yc89vf2rxsnu7gxhs" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application_user" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-55">
+        <addForeignKeyConstraint baseColumnNames="created_by_id" baseTableName="depreciation_entry" constraintName="FKfatrsy71p61ten096518s2cy2" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application_user" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-56">
+        <addForeignKeyConstraint baseColumnNames="last_modified_by_id" baseTableName="depreciation_period" constraintName="FKg342rcstejesrk8uubw2id4do" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application_user" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-57">
+        <addForeignKeyConstraint baseColumnNames="last_modified_by_id" baseTableName="fiscal_quarter" constraintName="FKg59f1u0nafkjyxsaikw0ipvg3" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application_user" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-58">
+        <addForeignKeyConstraint baseColumnNames="last_modified_by_id" baseTableName="depreciation_job_notice" constraintName="FKgyudnlkijdeijr7sm3qwk8ng9" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application_user" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-59">
+        <addForeignKeyConstraint baseColumnNames="created_by_id" baseTableName="depreciation_batch_sequence" constraintName="FKnuvnf7evlxlhwp0lrcef72blf" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application_user" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-60">
+        <addForeignKeyConstraint baseColumnNames="created_by_id" baseTableName="fiscal_quarter" constraintName="FKpe2w6wfylex4va7bk0fhwsl1r" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application_user" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1704212235948-74">
+        <dropColumn columnName="created_at" tableName="depreciation_batch_sequence"/>
+    </changeSet>
+</databaseChangeLog>

@@ -54,6 +54,7 @@ package io.github.erp.internal.service.applicationUser;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.ApplicationUser;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Optional;
 
@@ -67,4 +68,6 @@ public interface InternalApplicationUserDetailService {
      * @return the current-user in the system
      */
     Optional<ApplicationUser> getCurrentApplicationUser();
+
+    Optional<ApplicationUser> getCorrespondingApplicationUser(UserDetails userDetails);
 }

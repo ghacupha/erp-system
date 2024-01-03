@@ -83,7 +83,8 @@ public class InternalApplicationUserDetailServiceImpl implements InternalApplica
         return getCorrespondingApplicationUser(getCurrentUserDetails());
     }
 
-    private Optional<ApplicationUser> getCorrespondingApplicationUser(UserDetails userDetails) {
+    @Override
+    public Optional<ApplicationUser> getCorrespondingApplicationUser(UserDetails userDetails) {
 
         var ref = new Object() {
             Optional<ApplicationUser> reportUser = Optional.empty();
