@@ -69,5 +69,9 @@ public interface InternalApplicationUserDetailService {
      */
     Optional<ApplicationUser> getCurrentApplicationUser();
 
+    /**
+     * Get the ApplicationUser that corresponds to the Spring Security UserDetails instance
+     * provided
+     */
     Optional<ApplicationUser> getCorrespondingApplicationUser(UserDetails userDetails);
 }
