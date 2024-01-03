@@ -16,7 +16,11 @@ import java.io.IOException;
 
 /**
  * This filter clears the application-user context after each request to ensure the same information remains
- * current
+ * current, and also update the CurrentUserContext the same which is used in an entity-listener.
+ * We cannot directly user the userDetailsService into the entity-listener because that one is
+ * managed in the entity-manager container factory. So we have to manually ensure that with each request
+ * we update the current-user in the thread-local. Though the form of the current user that we
+ * want is not the usual User but our custom one-to-one extension of the same tje ApplicationUser
  */
 @Component("currentUserClearFilter")
 public class CurrentUserClearFilter extends GenericFilterBean  implements Filter {
@@ -24,8 +28,6 @@ public class CurrentUserClearFilter extends GenericFilterBean  implements Filter
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
     public static final String AUTHORIZATION_TOKEN = "access_token";
-
-    private static final Logger log = LoggerFactory.getLogger(CurrentUserClearFilter.class);
 
     private final TokenProvider tokenProvider;
 

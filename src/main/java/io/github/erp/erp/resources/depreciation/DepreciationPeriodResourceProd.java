@@ -98,20 +98,10 @@ public class DepreciationPeriodResourceProd {
             throw new BadRequestAlertException("A new depreciationPeriod cannot already have an ID", ENTITY_NAME, "idexists");
         }
 
-        Optional<ApplicationUserDTO> applicationUserDTO = userDetailService.getCurrentApplicationUser()
-            .map(applicationUserMapper::toDto);
+//        Optional<ApplicationUserDTO> applicationUserDTO = userDetailService.getCurrentApplicationUser()
+//            .map(applicationUserMapper::toDto);
 
-        DepreciationPeriodDTO result = null;
-
-        if (applicationUserDTO.isPresent()) {
-
-            depreciationPeriodDTO.setCreatedBy(applicationUserDTO.get());
-
-            result = depreciationPeriodService.save(depreciationPeriodDTO);
-
-        } else {
-            throw new BadRequestAlertException("The current user does not exist on record", ENTITY_NAME, "appusermissing");
-        }
+        DepreciationPeriodDTO result = depreciationPeriodService.save(depreciationPeriodDTO);
 
         return ResponseEntity
             .created(new URI("/api/depreciation-periods/" + result.getId()))
