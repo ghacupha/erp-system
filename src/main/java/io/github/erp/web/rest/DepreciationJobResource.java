@@ -21,7 +21,9 @@ package io.github.erp.web.rest;
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.repository.DepreciationJobRepository;
+import io.github.erp.service.DepreciationJobQueryService;
 import io.github.erp.service.DepreciationJobService;
+import io.github.erp.service.criteria.DepreciationJobCriteria;
 import io.github.erp.service.dto.DepreciationJobDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -64,9 +66,16 @@ public class DepreciationJobResource {
 
     private final DepreciationJobRepository depreciationJobRepository;
 
-    public DepreciationJobResource(DepreciationJobService depreciationJobService, DepreciationJobRepository depreciationJobRepository) {
+    private final DepreciationJobQueryService depreciationJobQueryService;
+
+    public DepreciationJobResource(
+        DepreciationJobService depreciationJobService,
+        DepreciationJobRepository depreciationJobRepository,
+        DepreciationJobQueryService depreciationJobQueryService
+    ) {
         this.depreciationJobService = depreciationJobService;
         this.depreciationJobRepository = depreciationJobRepository;
+        this.depreciationJobQueryService = depreciationJobQueryService;
     }
 
     /**
@@ -164,14 +173,27 @@ public class DepreciationJobResource {
      * {@code GET  /depreciation-jobs} : get all the depreciationJobs.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of depreciationJobs in body.
      */
     @GetMapping("/depreciation-jobs")
-    public ResponseEntity<List<DepreciationJobDTO>> getAllDepreciationJobs(Pageable pageable) {
-        log.debug("REST request to get a page of DepreciationJobs");
-        Page<DepreciationJobDTO> page = depreciationJobService.findAll(pageable);
+    public ResponseEntity<List<DepreciationJobDTO>> getAllDepreciationJobs(DepreciationJobCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get DepreciationJobs by criteria: {}", criteria);
+        Page<DepreciationJobDTO> page = depreciationJobQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /depreciation-jobs/count} : count all the depreciationJobs.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/depreciation-jobs/count")
+    public ResponseEntity<Long> countDepreciationJobs(DepreciationJobCriteria criteria) {
+        log.debug("REST request to count DepreciationJobs by criteria: {}", criteria);
+        return ResponseEntity.ok().body(depreciationJobQueryService.countByCriteria(criteria));
     }
 
     /**

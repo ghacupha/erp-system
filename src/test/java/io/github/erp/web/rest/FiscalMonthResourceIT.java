@@ -26,10 +26,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.FiscalMonth;
+import io.github.erp.domain.FiscalQuarter;
 import io.github.erp.domain.FiscalYear;
+import io.github.erp.domain.Placeholder;
+import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.repository.FiscalMonthRepository;
 import io.github.erp.repository.search.FiscalMonthSearchRepository;
 import io.github.erp.service.FiscalMonthService;
+import io.github.erp.service.criteria.FiscalMonthCriteria;
 import io.github.erp.service.dto.FiscalMonthDTO;
 import io.github.erp.service.mapper.FiscalMonthMapper;
 import java.time.LocalDate;
@@ -65,12 +69,15 @@ class FiscalMonthResourceIT {
 
     private static final Integer DEFAULT_MONTH_NUMBER = 1;
     private static final Integer UPDATED_MONTH_NUMBER = 2;
+    private static final Integer SMALLER_MONTH_NUMBER = 1 - 1;
 
     private static final LocalDate DEFAULT_START_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_START_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_START_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final LocalDate DEFAULT_END_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_END_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_END_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final String DEFAULT_FISCAL_MONTH_CODE = "AAAAAAAAAA";
     private static final String UPDATED_FISCAL_MONTH_CODE = "BBBBBBBBBB";

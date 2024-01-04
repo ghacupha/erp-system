@@ -21,7 +21,9 @@ package io.github.erp.web.rest;
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.repository.SecurityClearanceRepository;
+import io.github.erp.service.SecurityClearanceQueryService;
 import io.github.erp.service.SecurityClearanceService;
+import io.github.erp.service.criteria.SecurityClearanceCriteria;
 import io.github.erp.service.dto.SecurityClearanceDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -64,12 +66,16 @@ public class SecurityClearanceResource {
 
     private final SecurityClearanceRepository securityClearanceRepository;
 
+    private final SecurityClearanceQueryService securityClearanceQueryService;
+
     public SecurityClearanceResource(
         SecurityClearanceService securityClearanceService,
-        SecurityClearanceRepository securityClearanceRepository
+        SecurityClearanceRepository securityClearanceRepository,
+        SecurityClearanceQueryService securityClearanceQueryService
     ) {
         this.securityClearanceService = securityClearanceService;
         this.securityClearanceRepository = securityClearanceRepository;
+        this.securityClearanceQueryService = securityClearanceQueryService;
     }
 
     /**
@@ -167,23 +173,27 @@ public class SecurityClearanceResource {
      * {@code GET  /security-clearances} : get all the securityClearances.
      *
      * @param pageable the pagination information.
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of securityClearances in body.
      */
     @GetMapping("/security-clearances")
-    public ResponseEntity<List<SecurityClearanceDTO>> getAllSecurityClearances(
-        Pageable pageable,
-        @RequestParam(required = false, defaultValue = "false") boolean eagerload
-    ) {
-        log.debug("REST request to get a page of SecurityClearances");
-        Page<SecurityClearanceDTO> page;
-        if (eagerload) {
-            page = securityClearanceService.findAllWithEagerRelationships(pageable);
-        } else {
-            page = securityClearanceService.findAll(pageable);
-        }
+    public ResponseEntity<List<SecurityClearanceDTO>> getAllSecurityClearances(SecurityClearanceCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get SecurityClearances by criteria: {}", criteria);
+        Page<SecurityClearanceDTO> page = securityClearanceQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /security-clearances/count} : count all the securityClearances.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/security-clearances/count")
+    public ResponseEntity<Long> countSecurityClearances(SecurityClearanceCriteria criteria) {
+        log.debug("REST request to count SecurityClearances by criteria: {}", criteria);
+        return ResponseEntity.ok().body(securityClearanceQueryService.countByCriteria(criteria));
     }
 
     /**

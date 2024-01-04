@@ -21,7 +21,9 @@ package io.github.erp.web.rest;
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.repository.PrepaymentCompilationRequestRepository;
+import io.github.erp.service.PrepaymentCompilationRequestQueryService;
 import io.github.erp.service.PrepaymentCompilationRequestService;
+import io.github.erp.service.criteria.PrepaymentCompilationRequestCriteria;
 import io.github.erp.service.dto.PrepaymentCompilationRequestDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -64,12 +66,16 @@ public class PrepaymentCompilationRequestResource {
 
     private final PrepaymentCompilationRequestRepository prepaymentCompilationRequestRepository;
 
+    private final PrepaymentCompilationRequestQueryService prepaymentCompilationRequestQueryService;
+
     public PrepaymentCompilationRequestResource(
         PrepaymentCompilationRequestService prepaymentCompilationRequestService,
-        PrepaymentCompilationRequestRepository prepaymentCompilationRequestRepository
+        PrepaymentCompilationRequestRepository prepaymentCompilationRequestRepository,
+        PrepaymentCompilationRequestQueryService prepaymentCompilationRequestQueryService
     ) {
         this.prepaymentCompilationRequestService = prepaymentCompilationRequestService;
         this.prepaymentCompilationRequestRepository = prepaymentCompilationRequestRepository;
+        this.prepaymentCompilationRequestQueryService = prepaymentCompilationRequestQueryService;
     }
 
     /**
@@ -172,23 +178,30 @@ public class PrepaymentCompilationRequestResource {
      * {@code GET  /prepayment-compilation-requests} : get all the prepaymentCompilationRequests.
      *
      * @param pageable the pagination information.
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of prepaymentCompilationRequests in body.
      */
     @GetMapping("/prepayment-compilation-requests")
     public ResponseEntity<List<PrepaymentCompilationRequestDTO>> getAllPrepaymentCompilationRequests(
-        Pageable pageable,
-        @RequestParam(required = false, defaultValue = "false") boolean eagerload
+        PrepaymentCompilationRequestCriteria criteria,
+        Pageable pageable
     ) {
-        log.debug("REST request to get a page of PrepaymentCompilationRequests");
-        Page<PrepaymentCompilationRequestDTO> page;
-        if (eagerload) {
-            page = prepaymentCompilationRequestService.findAllWithEagerRelationships(pageable);
-        } else {
-            page = prepaymentCompilationRequestService.findAll(pageable);
-        }
+        log.debug("REST request to get PrepaymentCompilationRequests by criteria: {}", criteria);
+        Page<PrepaymentCompilationRequestDTO> page = prepaymentCompilationRequestQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /prepayment-compilation-requests/count} : count all the prepaymentCompilationRequests.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/prepayment-compilation-requests/count")
+    public ResponseEntity<Long> countPrepaymentCompilationRequests(PrepaymentCompilationRequestCriteria criteria) {
+        log.debug("REST request to count PrepaymentCompilationRequests by criteria: {}", criteria);
+        return ResponseEntity.ok().body(prepaymentCompilationRequestQueryService.countByCriteria(criteria));
     }
 
     /**

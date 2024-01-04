@@ -21,7 +21,9 @@ package io.github.erp.web.rest;
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.repository.FiscalQuarterRepository;
+import io.github.erp.service.FiscalQuarterQueryService;
 import io.github.erp.service.FiscalQuarterService;
+import io.github.erp.service.criteria.FiscalQuarterCriteria;
 import io.github.erp.service.dto.FiscalQuarterDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -64,9 +66,16 @@ public class FiscalQuarterResource {
 
     private final FiscalQuarterRepository fiscalQuarterRepository;
 
-    public FiscalQuarterResource(FiscalQuarterService fiscalQuarterService, FiscalQuarterRepository fiscalQuarterRepository) {
+    private final FiscalQuarterQueryService fiscalQuarterQueryService;
+
+    public FiscalQuarterResource(
+        FiscalQuarterService fiscalQuarterService,
+        FiscalQuarterRepository fiscalQuarterRepository,
+        FiscalQuarterQueryService fiscalQuarterQueryService
+    ) {
         this.fiscalQuarterService = fiscalQuarterService;
         this.fiscalQuarterRepository = fiscalQuarterRepository;
+        this.fiscalQuarterQueryService = fiscalQuarterQueryService;
     }
 
     /**
@@ -164,23 +173,27 @@ public class FiscalQuarterResource {
      * {@code GET  /fiscal-quarters} : get all the fiscalQuarters.
      *
      * @param pageable the pagination information.
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of fiscalQuarters in body.
      */
     @GetMapping("/fiscal-quarters")
-    public ResponseEntity<List<FiscalQuarterDTO>> getAllFiscalQuarters(
-        Pageable pageable,
-        @RequestParam(required = false, defaultValue = "false") boolean eagerload
-    ) {
-        log.debug("REST request to get a page of FiscalQuarters");
-        Page<FiscalQuarterDTO> page;
-        if (eagerload) {
-            page = fiscalQuarterService.findAllWithEagerRelationships(pageable);
-        } else {
-            page = fiscalQuarterService.findAll(pageable);
-        }
+    public ResponseEntity<List<FiscalQuarterDTO>> getAllFiscalQuarters(FiscalQuarterCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get FiscalQuarters by criteria: {}", criteria);
+        Page<FiscalQuarterDTO> page = fiscalQuarterQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /fiscal-quarters/count} : count all the fiscalQuarters.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/fiscal-quarters/count")
+    public ResponseEntity<Long> countFiscalQuarters(FiscalQuarterCriteria criteria) {
+        log.debug("REST request to count FiscalQuarters by criteria: {}", criteria);
+        return ResponseEntity.ok().body(fiscalQuarterQueryService.countByCriteria(criteria));
     }
 
     /**
