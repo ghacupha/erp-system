@@ -20,7 +20,6 @@ package io.github.erp.service.dto;
 
 import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import javax.validation.constraints.*;
@@ -35,8 +34,6 @@ public class DepreciationBatchSequenceDTO implements Serializable {
     private Integer startIndex;
 
     private Integer endIndex;
-
-    private ZonedDateTime createdAt;
 
     private DepreciationBatchStatusType depreciationBatchStatus;
 
@@ -72,14 +69,6 @@ public class DepreciationBatchSequenceDTO implements Serializable {
 
     public void setEndIndex(Integer endIndex) {
         this.endIndex = endIndex;
-    }
-
-    public ZonedDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(ZonedDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 
     public DepreciationBatchStatusType getDepreciationBatchStatus() {
@@ -158,7 +147,6 @@ public class DepreciationBatchSequenceDTO implements Serializable {
             "id=" + getId() +
             ", startIndex=" + getStartIndex() +
             ", endIndex=" + getEndIndex() +
-            ", createdAt='" + getCreatedAt() + "'" +
             ", depreciationBatchStatus='" + getDepreciationBatchStatus() + "'" +
             ", depreciationPeriodIdentifier='" + getDepreciationPeriodIdentifier() + "'" +
             ", depreciationJobIdentifier='" + getDepreciationJobIdentifier() + "'" +

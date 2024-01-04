@@ -65,7 +65,7 @@ public class DepreciationPeriodServiceImpl implements DepreciationPeriodService 
         DepreciationPeriod depreciationPeriod = depreciationPeriodMapper.toEntity(depreciationPeriodDTO);
         depreciationPeriod = depreciationPeriodRepository.save(depreciationPeriod);
         DepreciationPeriodDTO result = depreciationPeriodMapper.toDto(depreciationPeriod);
-        // depreciationPeriodSearchRepository.save(depreciationPeriod);
+        depreciationPeriodSearchRepository.save(depreciationPeriod);
         return result;
     }
 

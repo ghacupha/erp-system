@@ -17,6 +17,7 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.FiscalQuarter;
 import io.github.erp.domain.FiscalYear;
@@ -27,6 +28,7 @@ import io.github.erp.repository.search.FiscalQuarterSearchRepository;
 import io.github.erp.service.FiscalQuarterService;
 import io.github.erp.service.dto.FiscalQuarterDTO;
 import io.github.erp.service.mapper.FiscalQuarterMapper;
+import io.github.erp.web.rest.FiscalQuarterResource;
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

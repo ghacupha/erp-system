@@ -27,4 +27,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface DepreciationJobRepository extends JpaRepository<DepreciationJob, Long>, JpaSpecificationExecutor<DepreciationJob> {}
+public interface DepreciationJobRepository extends JpaRepository<DepreciationJob, Long> {}

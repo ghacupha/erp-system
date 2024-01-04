@@ -33,7 +33,6 @@ import org.mapstruct.*;
         DepreciationPeriodMapper.class,
         PlaceholderMapper.class,
         UniversallyUniqueMappingMapper.class,
-        ApplicationUserMapper.class,
     }
 )
 public interface DepreciationJobNoticeMapper extends EntityMapper<DepreciationJobNoticeDTO, DepreciationJobNotice> {
@@ -42,7 +41,6 @@ public interface DepreciationJobNoticeMapper extends EntityMapper<DepreciationJo
     @Mapping(target = "depreciationPeriod", source = "depreciationPeriod", qualifiedByName = "id")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     @Mapping(target = "universallyUniqueMappings", source = "universallyUniqueMappings", qualifiedByName = "universalKeySet")
-    @Mapping(target = "superintended", source = "superintended", qualifiedByName = "applicationIdentity")
     DepreciationJobNoticeDTO toDto(DepreciationJobNotice s);
 
     @Mapping(target = "removePlaceholder", ignore = true)
