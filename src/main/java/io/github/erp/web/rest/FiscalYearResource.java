@@ -21,9 +21,7 @@ package io.github.erp.web.rest;
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.repository.FiscalYearRepository;
-import io.github.erp.service.FiscalYearQueryService;
 import io.github.erp.service.FiscalYearService;
-import io.github.erp.service.criteria.FiscalYearCriteria;
 import io.github.erp.service.dto.FiscalYearDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -66,16 +64,9 @@ public class FiscalYearResource {
 
     private final FiscalYearRepository fiscalYearRepository;
 
-    private final FiscalYearQueryService fiscalYearQueryService;
-
-    public FiscalYearResource(
-        FiscalYearService fiscalYearService,
-        FiscalYearRepository fiscalYearRepository,
-        FiscalYearQueryService fiscalYearQueryService
-    ) {
+    public FiscalYearResource(FiscalYearService fiscalYearService, FiscalYearRepository fiscalYearRepository) {
         this.fiscalYearService = fiscalYearService;
         this.fiscalYearRepository = fiscalYearRepository;
-        this.fiscalYearQueryService = fiscalYearQueryService;
     }
 
     /**
@@ -172,27 +163,23 @@ public class FiscalYearResource {
      * {@code GET  /fiscal-years} : get all the fiscalYears.
      *
      * @param pageable the pagination information.
-     * @param criteria the criteria which the requested entities should match.
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of fiscalYears in body.
      */
     @GetMapping("/fiscal-years")
-    public ResponseEntity<List<FiscalYearDTO>> getAllFiscalYears(FiscalYearCriteria criteria, Pageable pageable) {
-        log.debug("REST request to get FiscalYears by criteria: {}", criteria);
-        Page<FiscalYearDTO> page = fiscalYearQueryService.findByCriteria(criteria, pageable);
+    public ResponseEntity<List<FiscalYearDTO>> getAllFiscalYears(
+        Pageable pageable,
+        @RequestParam(required = false, defaultValue = "false") boolean eagerload
+    ) {
+        log.debug("REST request to get a page of FiscalYears");
+        Page<FiscalYearDTO> page;
+        if (eagerload) {
+            page = fiscalYearService.findAllWithEagerRelationships(pageable);
+        } else {
+            page = fiscalYearService.findAll(pageable);
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
-
-    /**
-     * {@code GET  /fiscal-years/count} : count all the fiscalYears.
-     *
-     * @param criteria the criteria which the requested entities should match.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
-     */
-    @GetMapping("/fiscal-years/count")
-    public ResponseEntity<Long> countFiscalYears(FiscalYearCriteria criteria) {
-        log.debug("REST request to count FiscalYears by criteria: {}", criteria);
-        return ResponseEntity.ok().body(fiscalYearQueryService.countByCriteria(criteria));
     }
 
     /**

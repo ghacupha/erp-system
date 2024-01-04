@@ -53,7 +53,7 @@
   ],
   "service": "serviceImpl",
   "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
+  "jpaMetamodelFiltering": false,
   "readOnly": false,
   "pagination": "pagination",
   "name": "FiscalYear",

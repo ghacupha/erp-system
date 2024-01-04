@@ -17,5 +17,21 @@
 @REM
 
 @echo off
-git checkout HEAD~1 src/test/java/io/github/erp/web/rest/ContractMetadataResourceIT.java src/test/java/io/github/erp/web/rest/SecurityClearanceResourceIT.java src/test/java/io/github/erp/web/rest/PrepaymentCompilationRequestResourceIT.java src/main/java/io/github/erp/service/dto/WorkInProgressOutstandingReportDTO.java src/test/java/io/github/erp/web/rest/FiscalYearResourceIT.java src/test/java/io/github/erp/web/rest/DepreciationJobResourceIT.java
+git checkout HEAD~1 src/test/java/io/github/erp/web/rest/ContractMetadataResourceIT.java
+git checkout HEAD~1 src/test/java/io/github/erp/web/rest/SecurityClearanceResourceIT.java
+git checkout HEAD~1 src/test/java/io/github/erp/web/rest/PrepaymentCompilationRequestResourceIT.java
+git checkout HEAD~1 src/main/java/io/github/erp/service/dto/WorkInProgressOutstandingReportDTO.java
+git checkout HEAD~1 src/test/java/io/github/erp/web/rest/FiscalYearResourceIT.java
+git checkout HEAD~1 src/test/java/io/github/erp/web/rest/FiscalMonthResourceIT.java
+git checkout HEAD~1 src/test/java/io/github/erp/web/rest/FiscalQuarterResourceIT.java
+git checkout HEAD~1 src/test/java/io/github/erp/web/rest/DepreciationJobResourceIT.java
+git checkout HEAD~1 src/test/java/io/github/erp/web/rest/SecurityClearanceResourceIT.java
+git checkout HEAD~1 src/main/java/io/github/erp/repository/FiscalMonthRepository.java
+git checkout HEAD~1 src/main/java/io/github/erp/repository/FiscalMonthRepository.java
+git checkout HEAD~1 src/main/java/io/github/erp/repository/FiscalYearRepository.java
+git checkout HEAD~1 src/main/java/io/github/erp/repository/PrepaymentCompilationRequestRepository.java
+git checkout HEAD~1 src/main/java/io/github/erp/repository/SecurityClearanceRepository.java
+git checkout HEAD~1 src/main/java/io/github/erp/repository/DepreciationJobNoticeRepository.java
+git checkout HEAD~1 src/main/java/io/github/erp/repository/DepreciationJobRepository.java
+git checkout HEAD~1 src/main/java/io/github/erp/repository/ContractMetadataRepository.java
 git checkout HEAD~1 src/main/resources/config/liquibase/changelog/

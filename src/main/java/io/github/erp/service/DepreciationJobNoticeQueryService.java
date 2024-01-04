@@ -193,15 +193,6 @@ public class DepreciationJobNoticeQueryService extends QueryService<Depreciation
                         )
                     );
             }
-            if (criteria.getSuperintendedId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getSuperintendedId(),
-                            root -> root.join(DepreciationJobNotice_.superintended, JoinType.LEFT).get(ApplicationUser_.id)
-                        )
-                    );
-            }
         }
         return specification;
     }
