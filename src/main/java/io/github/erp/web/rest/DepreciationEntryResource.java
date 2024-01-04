@@ -21,7 +21,9 @@ package io.github.erp.web.rest;
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.repository.DepreciationEntryRepository;
+import io.github.erp.service.DepreciationEntryQueryService;
 import io.github.erp.service.DepreciationEntryService;
+import io.github.erp.service.criteria.DepreciationEntryCriteria;
 import io.github.erp.service.dto.DepreciationEntryDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -64,12 +66,16 @@ public class DepreciationEntryResource {
 
     private final DepreciationEntryRepository depreciationEntryRepository;
 
+    private final DepreciationEntryQueryService depreciationEntryQueryService;
+
     public DepreciationEntryResource(
         DepreciationEntryService depreciationEntryService,
-        DepreciationEntryRepository depreciationEntryRepository
+        DepreciationEntryRepository depreciationEntryRepository,
+        DepreciationEntryQueryService depreciationEntryQueryService
     ) {
         this.depreciationEntryService = depreciationEntryService;
         this.depreciationEntryRepository = depreciationEntryRepository;
+        this.depreciationEntryQueryService = depreciationEntryQueryService;
     }
 
     /**
@@ -167,14 +173,27 @@ public class DepreciationEntryResource {
      * {@code GET  /depreciation-entries} : get all the depreciationEntries.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of depreciationEntries in body.
      */
     @GetMapping("/depreciation-entries")
-    public ResponseEntity<List<DepreciationEntryDTO>> getAllDepreciationEntries(Pageable pageable) {
-        log.debug("REST request to get a page of DepreciationEntries");
-        Page<DepreciationEntryDTO> page = depreciationEntryService.findAll(pageable);
+    public ResponseEntity<List<DepreciationEntryDTO>> getAllDepreciationEntries(DepreciationEntryCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get DepreciationEntries by criteria: {}", criteria);
+        Page<DepreciationEntryDTO> page = depreciationEntryQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /depreciation-entries/count} : count all the depreciationEntries.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/depreciation-entries/count")
+    public ResponseEntity<Long> countDepreciationEntries(DepreciationEntryCriteria criteria) {
+        log.debug("REST request to count DepreciationEntries by criteria: {}", criteria);
+        return ResponseEntity.ok().body(depreciationEntryQueryService.countByCriteria(criteria));
     }
 
     /**
