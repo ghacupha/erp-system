@@ -36,12 +36,6 @@
       "otherEntityRelationshipName": "nextPeriod"
     },
     {
-      "relationshipName": "createdBy",
-      "otherEntityName": "applicationUser",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "applicationIdentity"
-    },
-    {
       "relationshipName": "fiscalMonth",
       "otherEntityName": "fiscalMonth",
       "relationshipType": "many-to-one",

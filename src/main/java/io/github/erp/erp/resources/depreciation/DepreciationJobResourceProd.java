@@ -17,14 +17,16 @@ package io.github.erp.erp.resources.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.repository.InternalDepreciationJobRepository;
 import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.repository.DepreciationJobRepository;
+import io.github.erp.repository.search.DepreciationJobSearchRepository;
 import io.github.erp.service.DepreciationJobQueryService;
 import io.github.erp.service.DepreciationJobService;
 import io.github.erp.service.criteria.DepreciationJobCriteria;
-import io.github.erp.service.dto.ApplicationUserDTO;
 import io.github.erp.service.dto.DepreciationJobDTO;
 import io.github.erp.service.mapper.ApplicationUserMapper;
+import io.github.erp.service.mapper.DepreciationJobMapper;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,12 +69,21 @@ public class DepreciationJobResourceProd {
 
     private final ApplicationUserMapper applicationUserMapper;
 
-    public DepreciationJobResourceProd(DepreciationJobService depreciationJobService, DepreciationJobRepository depreciationJobRepository, DepreciationJobQueryService depreciationJobQueryService, InternalApplicationUserDetailService userDetailService, ApplicationUserMapper applicationUserMapper) {
+    private final DepreciationJobMapper depreciationJobMapper;
+
+    private final DepreciationJobSearchRepository depreciationJobSearchRepository;
+
+    private final InternalDepreciationJobRepository internalDepreciationJobRepository;
+
+    public DepreciationJobResourceProd(DepreciationJobService depreciationJobService, DepreciationJobRepository depreciationJobRepository, DepreciationJobQueryService depreciationJobQueryService, InternalApplicationUserDetailService userDetailService, ApplicationUserMapper applicationUserMapper, DepreciationJobMapper depreciationJobMapper, DepreciationJobSearchRepository depreciationJobSearchRepository, InternalDepreciationJobRepository internalDepreciationJobRepository) {
         this.depreciationJobService = depreciationJobService;
         this.depreciationJobRepository = depreciationJobRepository;
         this.depreciationJobQueryService = depreciationJobQueryService;
         this.userDetailService = userDetailService;
         this.applicationUserMapper = applicationUserMapper;
+        this.depreciationJobMapper = depreciationJobMapper;
+        this.depreciationJobSearchRepository = depreciationJobSearchRepository;
+        this.internalDepreciationJobRepository = internalDepreciationJobRepository;
     }
 
     /**
@@ -90,17 +101,22 @@ public class DepreciationJobResourceProd {
             throw new BadRequestAlertException("A new depreciationJob cannot already have an ID", ENTITY_NAME, "idexists");
         }
 
-        Optional<ApplicationUserDTO> applicationUserDTO = userDetailService.getCurrentApplicationUser()
-            .map(applicationUserMapper::toDto);
+//        Optional<ApplicationUserDTO> applicationUserDTO = userDetailService.getCurrentApplicationUser()
+//            .map(applicationUserMapper::toDto);
+//
+//        DepreciationJobDTO result = null;
+//
+//        if (applicationUserDTO.isPresent()) {
+//            depreciationJobDTO.setCreatedBy(applicationUserDTO.get());
+//            result = depreciationJobService.save(depreciationJobDTO);
+//        } else {
+//            throw new BadRequestAlertException("The current user does not exist on record", ENTITY_NAME, "appusermissing");
+//        }
 
-        DepreciationJobDTO result = null;
+        DepreciationJobDTO result =
+            depreciationJobMapper.toDto(internalDepreciationJobRepository.save(depreciationJobMapper.toEntity(depreciationJobDTO)));
 
-        if (applicationUserDTO.isPresent()) {
-            depreciationJobDTO.setCreatedBy(applicationUserDTO.get());
-            result = depreciationJobService.save(depreciationJobDTO);
-        } else {
-            throw new BadRequestAlertException("The current user does not exist on record", ENTITY_NAME, "appusermissing");
-        }
+        internalDepreciationJobRepository.findByIdEquals(result.getId()).ifPresent(depreciationJobSearchRepository::save);
 
         return ResponseEntity
             .created(new URI("/api/depreciation-jobs/" + result.getId()))

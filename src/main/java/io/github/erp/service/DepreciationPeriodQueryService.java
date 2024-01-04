@@ -143,15 +143,6 @@ public class DepreciationPeriodQueryService extends QueryService<DepreciationPer
                         )
                     );
             }
-            if (criteria.getCreatedById() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getCreatedById(),
-                            root -> root.join(DepreciationPeriod_.createdBy, JoinType.LEFT).get(ApplicationUser_.id)
-                        )
-                    );
-            }
             if (criteria.getFiscalMonthId() != null) {
                 specification =
                     specification.and(

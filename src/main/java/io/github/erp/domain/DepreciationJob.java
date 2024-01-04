@@ -62,7 +62,7 @@ public class DepreciationJob extends AbstractIdentifiableEntity implements Seria
     )
     private ApplicationUser createdBy;
 
-    @JsonIgnoreProperties(value = { "previousPeriod", "createdBy", "fiscalMonth" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "previousPeriod", "fiscalMonth" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
     private DepreciationPeriod depreciationPeriod;

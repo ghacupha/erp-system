@@ -46,8 +46,6 @@ public class DepreciationPeriodDTO implements Serializable {
 
     private DepreciationPeriodDTO previousPeriod;
 
-    private ApplicationUserDTO createdBy;
-
     private FiscalMonthDTO fiscalMonth;
 
     public Long getId() {
@@ -106,14 +104,6 @@ public class DepreciationPeriodDTO implements Serializable {
         this.previousPeriod = previousPeriod;
     }
 
-    public ApplicationUserDTO getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(ApplicationUserDTO createdBy) {
-        this.createdBy = createdBy;
-    }
-
     public FiscalMonthDTO getFiscalMonth() {
         return fiscalMonth;
     }
@@ -154,7 +144,6 @@ public class DepreciationPeriodDTO implements Serializable {
             ", periodCode='" + getPeriodCode() + "'" +
             ", processLocked='" + getProcessLocked() + "'" +
             ", previousPeriod=" + getPreviousPeriod() +
-            ", createdBy=" + getCreatedBy() +
             ", fiscalMonth=" + getFiscalMonth() +
             "}";
     }

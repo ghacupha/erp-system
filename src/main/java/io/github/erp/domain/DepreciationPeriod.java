@@ -63,17 +63,10 @@ public class DepreciationPeriod extends AbstractIdentifiableEntity implements Se
     @Column(name = "process_locked")
     private Boolean processLocked;
 
-    @JsonIgnoreProperties(value = { "previousPeriod", "createdBy", "fiscalMonth" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "previousPeriod", "fiscalMonth" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
     private DepreciationPeriod previousPeriod;
-
-    @ManyToOne
-    @JsonIgnoreProperties(
-        value = { "organization", "department", "securityClearance", "systemIdentity", "userProperties", "dealerIdentity", "placeholders" },
-        allowSetters = true
-    )
-    private ApplicationUser createdBy;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -170,19 +163,6 @@ public class DepreciationPeriod extends AbstractIdentifiableEntity implements Se
 
     public DepreciationPeriod previousPeriod(DepreciationPeriod depreciationPeriod) {
         this.setPreviousPeriod(depreciationPeriod);
-        return this;
-    }
-
-    public ApplicationUser getCreatedBy() {
-        return this.createdBy;
-    }
-
-    public void setCreatedBy(ApplicationUser applicationUser) {
-        this.createdBy = applicationUser;
-    }
-
-    public DepreciationPeriod createdBy(ApplicationUser applicationUser) {
-        this.setCreatedBy(applicationUser);
         return this;
     }
 

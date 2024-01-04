@@ -91,7 +91,7 @@ public class DepreciationJobNotice extends AbstractIdentifiableEntity implements
     private DepreciationBatchSequence depreciationBatchSequence;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "previousPeriod", "createdBy", "fiscalMonth" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "previousPeriod", "fiscalMonth" }, allowSetters = true)
     private DepreciationPeriod depreciationPeriod;
 
     @ManyToMany

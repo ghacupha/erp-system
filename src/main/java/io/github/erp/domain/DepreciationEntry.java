@@ -106,7 +106,7 @@ public class DepreciationEntry extends AbstractIdentifiableEntity implements Ser
     private AssetRegistration assetRegistration;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "previousPeriod", "createdBy", "fiscalMonth" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "previousPeriod", "fiscalMonth" }, allowSetters = true)
     private DepreciationPeriod depreciationPeriod;
 
     @ManyToOne
