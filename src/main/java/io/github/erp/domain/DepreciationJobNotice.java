@@ -37,7 +37,7 @@ import org.hibernate.annotations.Type;
 @Table(name = "depreciation_job_notice")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "depreciationjobnotice")
-public class DepreciationJobNotice extends AbstractIdentifiableEntity implements Serializable {
+public class DepreciationJobNotice implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

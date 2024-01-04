@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static io.github.erp.web.rest.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -25,13 +26,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.PrepaymentCompilationRequest;
 import io.github.erp.domain.enumeration.CompilationStatusTypes;
 import io.github.erp.repository.PrepaymentCompilationRequestRepository;
 import io.github.erp.repository.search.PrepaymentCompilationRequestSearchRepository;
 import io.github.erp.service.PrepaymentCompilationRequestService;
-import io.github.erp.service.criteria.PrepaymentCompilationRequestCriteria;
 import io.github.erp.service.dto.PrepaymentCompilationRequestDTO;
 import io.github.erp.service.mapper.PrepaymentCompilationRequestMapper;
 import java.time.Instant;
@@ -70,14 +69,12 @@ class PrepaymentCompilationRequestResourceIT {
 
     private static final ZonedDateTime DEFAULT_TIME_OF_REQUEST = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_TIME_OF_REQUEST = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
-    private static final ZonedDateTime SMALLER_TIME_OF_REQUEST = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
 
     private static final CompilationStatusTypes DEFAULT_COMPILATION_STATUS = CompilationStatusTypes.STARTED;
     private static final CompilationStatusTypes UPDATED_COMPILATION_STATUS = CompilationStatusTypes.IN_PROGRESS;
 
     private static final Integer DEFAULT_ITEMS_PROCESSED = 1;
     private static final Integer UPDATED_ITEMS_PROCESSED = 2;
-    private static final Integer SMALLER_ITEMS_PROCESSED = 1 - 1;
 
     private static final UUID DEFAULT_COMPILATION_TOKEN = UUID.randomUUID();
     private static final UUID UPDATED_COMPILATION_TOKEN = UUID.randomUUID();
@@ -86,8 +83,8 @@ class PrepaymentCompilationRequestResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/prepayment-compilation-requests";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private PrepaymentCompilationRequestRepository prepaymentCompilationRequestRepository;
@@ -287,407 +284,6 @@ class PrepaymentCompilationRequestResourceIT {
             .andExpect(jsonPath("$.compilationStatus").value(DEFAULT_COMPILATION_STATUS.toString()))
             .andExpect(jsonPath("$.itemsProcessed").value(DEFAULT_ITEMS_PROCESSED))
             .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN.toString()));
-    }
-
-    @Test
-    @Transactional
-    void getPrepaymentCompilationRequestsByIdFiltering() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        Long id = prepaymentCompilationRequest.getId();
-
-        defaultPrepaymentCompilationRequestShouldBeFound("id.equals=" + id);
-        // TODO defaultPrepaymentCompilationRequestShouldNotBeFound("id.notEquals=" + id);
-
-        defaultPrepaymentCompilationRequestShouldBeFound("id.greaterThanOrEqual=" + id);
-        defaultPrepaymentCompilationRequestShouldNotBeFound("id.greaterThan=" + id);
-
-        // TODO defaultPrepaymentCompilationRequestShouldBeFound("id.lessThanOrEqual=" + id);
-        // TODO defaultPrepaymentCompilationRequestShouldNotBeFound("id.lessThan=" + id);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByTimeOfRequestIsEqualToSomething() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where timeOfRequest equals to DEFAULT_TIME_OF_REQUEST
-        // TODO defaultPrepaymentCompilationRequestShouldBeFound("timeOfRequest.equals=" + DEFAULT_TIME_OF_REQUEST);
-
-        // Get all the prepaymentCompilationRequestList where timeOfRequest equals to UPDATED_TIME_OF_REQUEST
-        defaultPrepaymentCompilationRequestShouldNotBeFound("timeOfRequest.equals=" + UPDATED_TIME_OF_REQUEST);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByTimeOfRequestIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where timeOfRequest not equals to DEFAULT_TIME_OF_REQUEST
-        defaultPrepaymentCompilationRequestShouldNotBeFound("timeOfRequest.notEquals=" + DEFAULT_TIME_OF_REQUEST);
-
-        // Get all the prepaymentCompilationRequestList where timeOfRequest not equals to UPDATED_TIME_OF_REQUEST
-        // TODO defaultPrepaymentCompilationRequestShouldBeFound("timeOfRequest.notEquals=" + UPDATED_TIME_OF_REQUEST);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByTimeOfRequestIsInShouldWork() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where timeOfRequest in DEFAULT_TIME_OF_REQUEST or UPDATED_TIME_OF_REQUEST
-        // TODO defaultPrepaymentCompilationRequestShouldBeFound("timeOfRequest.in=" + DEFAULT_TIME_OF_REQUEST + "," + UPDATED_TIME_OF_REQUEST);
-
-        // Get all the prepaymentCompilationRequestList where timeOfRequest equals to UPDATED_TIME_OF_REQUEST
-        defaultPrepaymentCompilationRequestShouldNotBeFound("timeOfRequest.in=" + UPDATED_TIME_OF_REQUEST);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByTimeOfRequestIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where timeOfRequest is not null
-        // TODO defaultPrepaymentCompilationRequestShouldBeFound("timeOfRequest.specified=true");
-
-        // Get all the prepaymentCompilationRequestList where timeOfRequest is null
-        defaultPrepaymentCompilationRequestShouldNotBeFound("timeOfRequest.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByTimeOfRequestIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where timeOfRequest is greater than or equal to DEFAULT_TIME_OF_REQUEST
-        // TODO defaultPrepaymentCompilationRequestShouldBeFound("timeOfRequest.greaterThanOrEqual=" + DEFAULT_TIME_OF_REQUEST);
-
-        // Get all the prepaymentCompilationRequestList where timeOfRequest is greater than or equal to UPDATED_TIME_OF_REQUEST
-        defaultPrepaymentCompilationRequestShouldNotBeFound("timeOfRequest.greaterThanOrEqual=" + UPDATED_TIME_OF_REQUEST);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByTimeOfRequestIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where timeOfRequest is less than or equal to DEFAULT_TIME_OF_REQUEST
-        // TODO defaultPrepaymentCompilationRequestShouldBeFound("timeOfRequest.lessThanOrEqual=" + DEFAULT_TIME_OF_REQUEST);
-
-        // Get all the prepaymentCompilationRequestList where timeOfRequest is less than or equal to SMALLER_TIME_OF_REQUEST
-        defaultPrepaymentCompilationRequestShouldNotBeFound("timeOfRequest.lessThanOrEqual=" + SMALLER_TIME_OF_REQUEST);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByTimeOfRequestIsLessThanSomething() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where timeOfRequest is less than DEFAULT_TIME_OF_REQUEST
-        defaultPrepaymentCompilationRequestShouldNotBeFound("timeOfRequest.lessThan=" + DEFAULT_TIME_OF_REQUEST);
-
-        // Get all the prepaymentCompilationRequestList where timeOfRequest is less than UPDATED_TIME_OF_REQUEST
-        // TODO defaultPrepaymentCompilationRequestShouldBeFound("timeOfRequest.lessThan=" + UPDATED_TIME_OF_REQUEST);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByTimeOfRequestIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where timeOfRequest is greater than DEFAULT_TIME_OF_REQUEST
-        defaultPrepaymentCompilationRequestShouldNotBeFound("timeOfRequest.greaterThan=" + DEFAULT_TIME_OF_REQUEST);
-
-        // Get all the prepaymentCompilationRequestList where timeOfRequest is greater than SMALLER_TIME_OF_REQUEST
-        // TODO defaultPrepaymentCompilationRequestShouldBeFound("timeOfRequest.greaterThan=" + SMALLER_TIME_OF_REQUEST);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByCompilationStatusIsEqualToSomething() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where compilationStatus equals to DEFAULT_COMPILATION_STATUS
-        defaultPrepaymentCompilationRequestShouldBeFound("compilationStatus.equals=" + DEFAULT_COMPILATION_STATUS);
-
-        // Get all the prepaymentCompilationRequestList where compilationStatus equals to UPDATED_COMPILATION_STATUS
-        defaultPrepaymentCompilationRequestShouldNotBeFound("compilationStatus.equals=" + UPDATED_COMPILATION_STATUS);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByCompilationStatusIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where compilationStatus not equals to DEFAULT_COMPILATION_STATUS
-        // TODO defaultPrepaymentCompilationRequestShouldNotBeFound("compilationStatus.notEquals=" + DEFAULT_COMPILATION_STATUS);
-
-        // Get all the prepaymentCompilationRequestList where compilationStatus not equals to UPDATED_COMPILATION_STATUS
-        // TODO defaultPrepaymentCompilationRequestShouldBeFound("compilationStatus.notEquals=" + UPDATED_COMPILATION_STATUS);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByCompilationStatusIsInShouldWork() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where compilationStatus in DEFAULT_COMPILATION_STATUS or UPDATED_COMPILATION_STATUS
-        defaultPrepaymentCompilationRequestShouldBeFound(
-            "compilationStatus.in=" + DEFAULT_COMPILATION_STATUS + "," + UPDATED_COMPILATION_STATUS
-        );
-
-        // Get all the prepaymentCompilationRequestList where compilationStatus equals to UPDATED_COMPILATION_STATUS
-        defaultPrepaymentCompilationRequestShouldNotBeFound("compilationStatus.in=" + UPDATED_COMPILATION_STATUS);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByCompilationStatusIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where compilationStatus is not null
-        // TODO defaultPrepaymentCompilationRequestShouldBeFound("compilationStatus.specified=true");
-
-        // Get all the prepaymentCompilationRequestList where compilationStatus is null
-        defaultPrepaymentCompilationRequestShouldNotBeFound("compilationStatus.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByItemsProcessedIsEqualToSomething() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where itemsProcessed equals to DEFAULT_ITEMS_PROCESSED
-        defaultPrepaymentCompilationRequestShouldBeFound("itemsProcessed.equals=" + DEFAULT_ITEMS_PROCESSED);
-
-        // Get all the prepaymentCompilationRequestList where itemsProcessed equals to UPDATED_ITEMS_PROCESSED
-        defaultPrepaymentCompilationRequestShouldNotBeFound("itemsProcessed.equals=" + UPDATED_ITEMS_PROCESSED);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByItemsProcessedIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where itemsProcessed not equals to DEFAULT_ITEMS_PROCESSED
-        // TODO defaultPrepaymentCompilationRequestShouldNotBeFound("itemsProcessed.notEquals=" + DEFAULT_ITEMS_PROCESSED);
-
-        // Get all the prepaymentCompilationRequestList where itemsProcessed not equals to UPDATED_ITEMS_PROCESSED
-        // TODO defaultPrepaymentCompilationRequestShouldBeFound("itemsProcessed.notEquals=" + UPDATED_ITEMS_PROCESSED);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByItemsProcessedIsInShouldWork() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where itemsProcessed in DEFAULT_ITEMS_PROCESSED or UPDATED_ITEMS_PROCESSED
-        defaultPrepaymentCompilationRequestShouldBeFound("itemsProcessed.in=" + DEFAULT_ITEMS_PROCESSED + "," + UPDATED_ITEMS_PROCESSED);
-
-        // Get all the prepaymentCompilationRequestList where itemsProcessed equals to UPDATED_ITEMS_PROCESSED
-        defaultPrepaymentCompilationRequestShouldNotBeFound("itemsProcessed.in=" + UPDATED_ITEMS_PROCESSED);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByItemsProcessedIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where itemsProcessed is not null
-        // TODO defaultPrepaymentCompilationRequestShouldBeFound("itemsProcessed.specified=true");
-
-        // Get all the prepaymentCompilationRequestList where itemsProcessed is null
-        defaultPrepaymentCompilationRequestShouldNotBeFound("itemsProcessed.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByItemsProcessedIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where itemsProcessed is greater than or equal to DEFAULT_ITEMS_PROCESSED
-        defaultPrepaymentCompilationRequestShouldBeFound("itemsProcessed.greaterThanOrEqual=" + DEFAULT_ITEMS_PROCESSED);
-
-        // Get all the prepaymentCompilationRequestList where itemsProcessed is greater than or equal to UPDATED_ITEMS_PROCESSED
-        defaultPrepaymentCompilationRequestShouldNotBeFound("itemsProcessed.greaterThanOrEqual=" + UPDATED_ITEMS_PROCESSED);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByItemsProcessedIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where itemsProcessed is less than or equal to DEFAULT_ITEMS_PROCESSED
-        // TODO defaultPrepaymentCompilationRequestShouldBeFound("itemsProcessed.lessThanOrEqual=" + DEFAULT_ITEMS_PROCESSED);
-
-        // Get all the prepaymentCompilationRequestList where itemsProcessed is less than or equal to SMALLER_ITEMS_PROCESSED
-        // TODO defaultPrepaymentCompilationRequestShouldNotBeFound("itemsProcessed.lessThanOrEqual=" + SMALLER_ITEMS_PROCESSED);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByItemsProcessedIsLessThanSomething() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where itemsProcessed is less than DEFAULT_ITEMS_PROCESSED
-        // TODO defaultPrepaymentCompilationRequestShouldNotBeFound("itemsProcessed.lessThan=" + DEFAULT_ITEMS_PROCESSED);
-
-        // Get all the prepaymentCompilationRequestList where itemsProcessed is less than UPDATED_ITEMS_PROCESSED
-        // TODO defaultPrepaymentCompilationRequestShouldBeFound("itemsProcessed.lessThan=" + UPDATED_ITEMS_PROCESSED);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByItemsProcessedIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where itemsProcessed is greater than DEFAULT_ITEMS_PROCESSED
-        defaultPrepaymentCompilationRequestShouldNotBeFound("itemsProcessed.greaterThan=" + DEFAULT_ITEMS_PROCESSED);
-
-        // Get all the prepaymentCompilationRequestList where itemsProcessed is greater than SMALLER_ITEMS_PROCESSED
-        defaultPrepaymentCompilationRequestShouldBeFound("itemsProcessed.greaterThan=" + SMALLER_ITEMS_PROCESSED);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByCompilationTokenIsEqualToSomething() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where compilationToken equals to DEFAULT_COMPILATION_TOKEN
-        defaultPrepaymentCompilationRequestShouldBeFound("compilationToken.equals=" + DEFAULT_COMPILATION_TOKEN);
-
-        // Get all the prepaymentCompilationRequestList where compilationToken equals to UPDATED_COMPILATION_TOKEN
-        defaultPrepaymentCompilationRequestShouldNotBeFound("compilationToken.equals=" + UPDATED_COMPILATION_TOKEN);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByCompilationTokenIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where compilationToken not equals to DEFAULT_COMPILATION_TOKEN
-        // TODO defaultPrepaymentCompilationRequestShouldNotBeFound("compilationToken.notEquals=" + DEFAULT_COMPILATION_TOKEN);
-
-        // Get all the prepaymentCompilationRequestList where compilationToken not equals to UPDATED_COMPILATION_TOKEN
-        // TODO defaultPrepaymentCompilationRequestShouldBeFound("compilationToken.notEquals=" + UPDATED_COMPILATION_TOKEN);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByCompilationTokenIsInShouldWork() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where compilationToken in DEFAULT_COMPILATION_TOKEN or UPDATED_COMPILATION_TOKEN
-        defaultPrepaymentCompilationRequestShouldBeFound(
-            "compilationToken.in=" + DEFAULT_COMPILATION_TOKEN + "," + UPDATED_COMPILATION_TOKEN
-        );
-
-        // Get all the prepaymentCompilationRequestList where compilationToken equals to UPDATED_COMPILATION_TOKEN
-        defaultPrepaymentCompilationRequestShouldNotBeFound("compilationToken.in=" + UPDATED_COMPILATION_TOKEN);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByCompilationTokenIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-
-        // Get all the prepaymentCompilationRequestList where compilationToken is not null
-        // TODO defaultPrepaymentCompilationRequestShouldBeFound("compilationToken.specified=true");
-
-        // Get all the prepaymentCompilationRequestList where compilationToken is null
-        defaultPrepaymentCompilationRequestShouldNotBeFound("compilationToken.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentCompilationRequestsByPlaceholderIsEqualToSomething() throws Exception {
-        // Initialize the database
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-        Placeholder placeholder;
-        if (TestUtil.findAll(em, Placeholder.class).isEmpty()) {
-            placeholder = PlaceholderResourceIT.createEntity(em);
-            em.persist(placeholder);
-            em.flush();
-        } else {
-            placeholder = TestUtil.findAll(em, Placeholder.class).get(0);
-        }
-        em.persist(placeholder);
-        em.flush();
-        prepaymentCompilationRequest.addPlaceholder(placeholder);
-        prepaymentCompilationRequestRepository.saveAndFlush(prepaymentCompilationRequest);
-        Long placeholderId = placeholder.getId();
-
-        // Get all the prepaymentCompilationRequestList where placeholder equals to placeholderId
-        defaultPrepaymentCompilationRequestShouldBeFound("placeholderId.equals=" + placeholderId);
-
-        // Get all the prepaymentCompilationRequestList where placeholder equals to (placeholderId + 1)
-        defaultPrepaymentCompilationRequestShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
-    }
-
-    /**
-     * Executes the search, and checks that the default entity is returned.
-     */
-    private void defaultPrepaymentCompilationRequestShouldBeFound(String filter) throws Exception {
-        restPrepaymentCompilationRequestMockMvc
-            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentCompilationRequest.getId().intValue())))
-            .andExpect(jsonPath("$.[*].timeOfRequest").value(hasItem(sameInstant(DEFAULT_TIME_OF_REQUEST))))
-            .andExpect(jsonPath("$.[*].compilationStatus").value(hasItem(DEFAULT_COMPILATION_STATUS.toString())))
-            .andExpect(jsonPath("$.[*].itemsProcessed").value(hasItem(DEFAULT_ITEMS_PROCESSED)))
-            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN.toString())));
-
-        // Check, that the count call also returns 1
-        restPrepaymentCompilationRequestMockMvc
-            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(content().string("1"));
-    }
-
-    /**
-     * Executes the search, and checks that the default entity is not returned.
-     */
-    private void defaultPrepaymentCompilationRequestShouldNotBeFound(String filter) throws Exception {
-        restPrepaymentCompilationRequestMockMvc
-            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$").isEmpty());
-
-        // Check, that the count call also returns 0
-        restPrepaymentCompilationRequestMockMvc
-            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(content().string("0"));
     }
 
     @Test

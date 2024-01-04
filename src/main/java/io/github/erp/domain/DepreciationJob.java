@@ -34,7 +34,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "depreciation_job")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "depreciationjob")
-public class DepreciationJob extends AbstractIdentifiableEntity implements Serializable {
+public class DepreciationJob implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

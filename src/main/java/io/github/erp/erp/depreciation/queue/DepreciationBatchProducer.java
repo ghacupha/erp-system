@@ -58,7 +58,7 @@ public class DepreciationBatchProducer {
             .jobId(String.valueOf(depreciationJob.getId()))
             .assetIds(assets.stream().map(AssetRegistrationDTO::getId).map(String::valueOf).collect(Collectors.toList()))
             .initialCost(assets.stream().map(AssetRegistrationDTO::getAssetCost).reduce(BigDecimal::add).orElse(BigDecimal.ZERO))
-            .createdAt(LocalDateTime.from(batchSequence.getCreatedAt()))
+            .createdAt(LocalDateTime.now())
             .isLastBatch(isLastBatch)
             .startIndex(batchSequence.getStartIndex())
             .endIndex(batchSequence.getEndIndex())

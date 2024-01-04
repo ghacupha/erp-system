@@ -36,7 +36,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "fiscal_year")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "fiscalyear")
-public class FiscalYear extends AbstractIdentifiableEntity implements Serializable {
+public class FiscalYear implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

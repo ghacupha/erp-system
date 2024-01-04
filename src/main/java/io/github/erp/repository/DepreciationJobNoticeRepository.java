@@ -21,6 +21,7 @@ package io.github.erp.repository;
 import io.github.erp.domain.DepreciationJobNotice;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
@@ -31,7 +32,7 @@ import org.springframework.stereotype.Repository;
  * Spring Data SQL repository for the DepreciationJobNotice entity.
  */
 @Repository
-public interface DepreciationJobNoticeRepository extends JpaRepository<DepreciationJobNotice, Long> {
+public interface DepreciationJobNoticeRepository extends JpaRepository<DepreciationJobNotice, Long>, JpaSpecificationExecutor<DepreciationJobNotice> {
     @Query(
         value = "select distinct depreciationJobNotice from DepreciationJobNotice depreciationJobNotice left join fetch depreciationJobNotice.placeholders left join fetch depreciationJobNotice.universallyUniqueMappings",
         countQuery = "select count(distinct depreciationJobNotice) from DepreciationJobNotice depreciationJobNotice"

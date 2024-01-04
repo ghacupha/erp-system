@@ -189,7 +189,6 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
     private DepreciationBatchSequenceDTO createDepreciationBatchSequence(DepreciationJobDTO depreciationJob, int startIndex, int endIndex, boolean isLastBatch) {
         DepreciationBatchSequenceDTO batchSequence = new DepreciationBatchSequenceDTO();
         batchSequence.setDepreciationBatchStatus(DepreciationBatchStatusType.CREATED);
-        batchSequence.setCreatedAt(ZonedDateTime.now());
         batchSequence.setDepreciationJob(depreciationJob);
         batchSequence.setStartIndex(startIndex);
         batchSequence.setEndIndex(endIndex);
