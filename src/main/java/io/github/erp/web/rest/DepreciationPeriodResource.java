@@ -21,7 +21,9 @@ package io.github.erp.web.rest;
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.repository.DepreciationPeriodRepository;
+import io.github.erp.service.DepreciationPeriodQueryService;
 import io.github.erp.service.DepreciationPeriodService;
+import io.github.erp.service.criteria.DepreciationPeriodCriteria;
 import io.github.erp.service.dto.DepreciationPeriodDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -64,12 +66,16 @@ public class DepreciationPeriodResource {
 
     private final DepreciationPeriodRepository depreciationPeriodRepository;
 
+    private final DepreciationPeriodQueryService depreciationPeriodQueryService;
+
     public DepreciationPeriodResource(
         DepreciationPeriodService depreciationPeriodService,
-        DepreciationPeriodRepository depreciationPeriodRepository
+        DepreciationPeriodRepository depreciationPeriodRepository,
+        DepreciationPeriodQueryService depreciationPeriodQueryService
     ) {
         this.depreciationPeriodService = depreciationPeriodService;
         this.depreciationPeriodRepository = depreciationPeriodRepository;
+        this.depreciationPeriodQueryService = depreciationPeriodQueryService;
     }
 
     /**
@@ -167,14 +173,27 @@ public class DepreciationPeriodResource {
      * {@code GET  /depreciation-periods} : get all the depreciationPeriods.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of depreciationPeriods in body.
      */
     @GetMapping("/depreciation-periods")
-    public ResponseEntity<List<DepreciationPeriodDTO>> getAllDepreciationPeriods(Pageable pageable) {
-        log.debug("REST request to get a page of DepreciationPeriods");
-        Page<DepreciationPeriodDTO> page = depreciationPeriodService.findAll(pageable);
+    public ResponseEntity<List<DepreciationPeriodDTO>> getAllDepreciationPeriods(DepreciationPeriodCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get DepreciationPeriods by criteria: {}", criteria);
+        Page<DepreciationPeriodDTO> page = depreciationPeriodQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /depreciation-periods/count} : count all the depreciationPeriods.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/depreciation-periods/count")
+    public ResponseEntity<Long> countDepreciationPeriods(DepreciationPeriodCriteria criteria) {
+        log.debug("REST request to count DepreciationPeriods by criteria: {}", criteria);
+        return ResponseEntity.ok().body(depreciationPeriodQueryService.countByCriteria(criteria));
     }
 
     /**

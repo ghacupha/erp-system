@@ -25,15 +25,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.ApplicationUser;
 import io.github.erp.domain.FiscalYear;
-import io.github.erp.domain.Placeholder;
-import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.domain.enumeration.FiscalYearStatusType;
 import io.github.erp.repository.FiscalYearRepository;
 import io.github.erp.repository.search.FiscalYearSearchRepository;
 import io.github.erp.service.FiscalYearService;
-import io.github.erp.service.criteria.FiscalYearCriteria;
 import io.github.erp.service.dto.FiscalYearDTO;
 import io.github.erp.service.mapper.FiscalYearMapper;
 import java.time.LocalDate;
@@ -72,11 +68,9 @@ class FiscalYearResourceIT {
 
     private static final LocalDate DEFAULT_START_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_START_DATE = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_START_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final LocalDate DEFAULT_END_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_END_DATE = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_END_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final FiscalYearStatusType DEFAULT_FISCAL_YEAR_STATUS = FiscalYearStatusType.OPEN;
     private static final FiscalYearStatusType UPDATED_FISCAL_YEAR_STATUS = FiscalYearStatusType.CLOSED;

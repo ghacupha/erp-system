@@ -26,17 +26,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.DepreciationBatchSequence;
-import io.github.erp.domain.DepreciationJob;
 import io.github.erp.domain.DepreciationJobNotice;
-import io.github.erp.domain.DepreciationPeriod;
-import io.github.erp.domain.Placeholder;
-import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.domain.enumeration.DepreciationNoticeStatusType;
 import io.github.erp.repository.DepreciationJobNoticeRepository;
 import io.github.erp.repository.search.DepreciationJobNoticeSearchRepository;
 import io.github.erp.service.DepreciationJobNoticeService;
-import io.github.erp.service.criteria.DepreciationJobNoticeCriteria;
 import io.github.erp.service.dto.DepreciationJobNoticeDTO;
 import io.github.erp.service.mapper.DepreciationJobNoticeMapper;
 import java.time.Instant;
@@ -78,7 +72,6 @@ class DepreciationJobNoticeResourceIT {
 
     private static final ZonedDateTime DEFAULT_EVENT_TIME_STAMP = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_EVENT_TIME_STAMP = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
-    private static final ZonedDateTime SMALLER_EVENT_TIME_STAMP = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
 
     private static final DepreciationNoticeStatusType DEFAULT_DEPRECIATION_NOTICE_STATUS = DepreciationNoticeStatusType.INFO;
     private static final DepreciationNoticeStatusType UPDATED_DEPRECIATION_NOTICE_STATUS = DepreciationNoticeStatusType.WARNING;

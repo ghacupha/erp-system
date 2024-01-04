@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static io.github.erp.web.rest.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -68,14 +69,12 @@ class PrepaymentCompilationRequestResourceIT {
 
     private static final ZonedDateTime DEFAULT_TIME_OF_REQUEST = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_TIME_OF_REQUEST = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
-    private static final ZonedDateTime SMALLER_TIME_OF_REQUEST = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
 
     private static final CompilationStatusTypes DEFAULT_COMPILATION_STATUS = CompilationStatusTypes.STARTED;
     private static final CompilationStatusTypes UPDATED_COMPILATION_STATUS = CompilationStatusTypes.IN_PROGRESS;
 
     private static final Integer DEFAULT_ITEMS_PROCESSED = 1;
     private static final Integer UPDATED_ITEMS_PROCESSED = 2;
-    private static final Integer SMALLER_ITEMS_PROCESSED = 1 - 1;
 
     private static final UUID DEFAULT_COMPILATION_TOKEN = UUID.randomUUID();
     private static final UUID UPDATED_COMPILATION_TOKEN = UUID.randomUUID();
@@ -84,8 +83,8 @@ class PrepaymentCompilationRequestResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/prepayment-compilation-requests";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private PrepaymentCompilationRequestRepository prepaymentCompilationRequestRepository;

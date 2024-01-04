@@ -21,7 +21,9 @@ package io.github.erp.web.rest;
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.repository.DepreciationBatchSequenceRepository;
+import io.github.erp.service.DepreciationBatchSequenceQueryService;
 import io.github.erp.service.DepreciationBatchSequenceService;
+import io.github.erp.service.criteria.DepreciationBatchSequenceCriteria;
 import io.github.erp.service.dto.DepreciationBatchSequenceDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -64,12 +66,16 @@ public class DepreciationBatchSequenceResource {
 
     private final DepreciationBatchSequenceRepository depreciationBatchSequenceRepository;
 
+    private final DepreciationBatchSequenceQueryService depreciationBatchSequenceQueryService;
+
     public DepreciationBatchSequenceResource(
         DepreciationBatchSequenceService depreciationBatchSequenceService,
-        DepreciationBatchSequenceRepository depreciationBatchSequenceRepository
+        DepreciationBatchSequenceRepository depreciationBatchSequenceRepository,
+        DepreciationBatchSequenceQueryService depreciationBatchSequenceQueryService
     ) {
         this.depreciationBatchSequenceService = depreciationBatchSequenceService;
         this.depreciationBatchSequenceRepository = depreciationBatchSequenceRepository;
+        this.depreciationBatchSequenceQueryService = depreciationBatchSequenceQueryService;
     }
 
     /**
@@ -170,14 +176,30 @@ public class DepreciationBatchSequenceResource {
      * {@code GET  /depreciation-batch-sequences} : get all the depreciationBatchSequences.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of depreciationBatchSequences in body.
      */
     @GetMapping("/depreciation-batch-sequences")
-    public ResponseEntity<List<DepreciationBatchSequenceDTO>> getAllDepreciationBatchSequences(Pageable pageable) {
-        log.debug("REST request to get a page of DepreciationBatchSequences");
-        Page<DepreciationBatchSequenceDTO> page = depreciationBatchSequenceService.findAll(pageable);
+    public ResponseEntity<List<DepreciationBatchSequenceDTO>> getAllDepreciationBatchSequences(
+        DepreciationBatchSequenceCriteria criteria,
+        Pageable pageable
+    ) {
+        log.debug("REST request to get DepreciationBatchSequences by criteria: {}", criteria);
+        Page<DepreciationBatchSequenceDTO> page = depreciationBatchSequenceQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /depreciation-batch-sequences/count} : count all the depreciationBatchSequences.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/depreciation-batch-sequences/count")
+    public ResponseEntity<Long> countDepreciationBatchSequences(DepreciationBatchSequenceCriteria criteria) {
+        log.debug("REST request to count DepreciationBatchSequences by criteria: {}", criteria);
+        return ResponseEntity.ok().body(depreciationBatchSequenceQueryService.countByCriteria(criteria));
     }
 
     /**

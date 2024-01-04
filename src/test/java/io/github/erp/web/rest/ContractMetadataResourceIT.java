@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -24,20 +25,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.ApplicationUser;
-import io.github.erp.domain.BusinessDocument;
 import io.github.erp.domain.ContractMetadata;
-import io.github.erp.domain.ContractMetadata;
-import io.github.erp.domain.Dealer;
-import io.github.erp.domain.Placeholder;
-import io.github.erp.domain.SecurityClearance;
-import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.domain.enumeration.ContractStatus;
 import io.github.erp.domain.enumeration.ContractType;
 import io.github.erp.repository.ContractMetadataRepository;
 import io.github.erp.repository.search.ContractMetadataSearchRepository;
 import io.github.erp.service.ContractMetadataService;
-import io.github.erp.service.criteria.ContractMetadataCriteria;
 import io.github.erp.service.dto.ContractMetadataDTO;
 import io.github.erp.service.mapper.ContractMetadataMapper;
 import java.time.LocalDate;
@@ -84,11 +77,9 @@ class ContractMetadataResourceIT {
 
     private static final LocalDate DEFAULT_START_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_START_DATE = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_START_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final LocalDate DEFAULT_TERMINATION_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_TERMINATION_DATE = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_TERMINATION_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final String DEFAULT_COMMENTS_AND_ATTACHMENT = "AAAAAAAAAA";
     private static final String UPDATED_COMMENTS_AND_ATTACHMENT = "BBBBBBBBBB";

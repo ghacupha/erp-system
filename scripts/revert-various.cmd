@@ -20,19 +20,22 @@
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/ContractMetadataResourceIT.java
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/SecurityClearanceResourceIT.java
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/PrepaymentCompilationRequestResourceIT.java
-git checkout HEAD~1 src/main/java/io/github/erp/service/dto/WorkInProgressOutstandingReportDTO.java
+REM git checkout HEAD~1 src/main/java/io/github/erp/service/dto/WorkInProgressOutstandingReportDTO.java
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/FiscalYearResourceIT.java
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/FiscalMonthResourceIT.java
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/FiscalQuarterResourceIT.java
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/DepreciationJobResourceIT.java
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/DepreciationJobNoticeResourceIT.java
+git checkout HEAD~1 src/test/java/io/github/erp/web/rest/DepreciationPeriodResourceIT.java
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/SecurityClearanceResourceIT.java
-git checkout HEAD~1 src/main/java/io/github/erp/repository/FiscalMonthRepository.java
-git checkout HEAD~1 src/main/java/io/github/erp/repository/FiscalMonthRepository.java
-git checkout HEAD~1 src/main/java/io/github/erp/repository/FiscalYearRepository.java
-git checkout HEAD~1 src/main/java/io/github/erp/repository/PrepaymentCompilationRequestRepository.java
-git checkout HEAD~1 src/main/java/io/github/erp/repository/SecurityClearanceRepository.java
-git checkout HEAD~1 src/main/java/io/github/erp/repository/DepreciationJobNoticeRepository.java
-git checkout HEAD~1 src/main/java/io/github/erp/repository/DepreciationJobRepository.java
-git checkout HEAD~1 src/main/java/io/github/erp/repository/ContractMetadataRepository.java
+git checkout HEAD~1 src/test/java/io/github/erp/web/rest/DepreciationBatchSequenceResourceIT.java
+git checkout HEAD~1 src/test/java/io/github/erp/web/rest/DepreciationEntryResourceIT.java
+REM git checkout HEAD~1 src/main/java/io/github/erp/repository/FiscalMonthRepository.java
+REM git checkout HEAD~1 src/main/java/io/github/erp/repository/FiscalMonthRepository.java
+REM git checkout HEAD~1 src/main/java/io/github/erp/repository/FiscalYearRepository.java
+REM git checkout HEAD~1 src/main/java/io/github/erp/repository/PrepaymentCompilationRequestRepository.java
+REM git checkout HEAD~1 src/main/java/io/github/erp/repository/SecurityClearanceRepository.java
+REM git checkout HEAD~1 src/main/java/io/github/erp/repository/DepreciationJobNoticeRepository.java
+REM git checkout HEAD~1 src/main/java/io/github/erp/repository/DepreciationJobRepository.java
+REM git checkout HEAD~1 src/main/java/io/github/erp/repository/ContractMetadataRepository.java
 git checkout HEAD~1 src/main/resources/config/liquibase/changelog/
