@@ -17,14 +17,15 @@ package io.github.erp.erp.resources.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
+import io.github.erp.internal.repository.InternalDepreciationPeriodRepository;
 import io.github.erp.repository.DepreciationPeriodRepository;
+import io.github.erp.repository.search.DepreciationPeriodSearchRepository;
 import io.github.erp.service.DepreciationPeriodQueryService;
 import io.github.erp.service.DepreciationPeriodService;
 import io.github.erp.service.criteria.DepreciationPeriodCriteria;
-import io.github.erp.service.dto.ApplicationUserDTO;
 import io.github.erp.service.dto.DepreciationPeriodDTO;
-import io.github.erp.service.mapper.ApplicationUserMapper;
+// import io.github.erp.service.mapper.ApplicationUserMapper;
+import io.github.erp.service.mapper.DepreciationPeriodMapper;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,22 +66,35 @@ public class DepreciationPeriodResourceProd {
 
     private final DepreciationPeriodRepository depreciationPeriodRepository;
 
+    private final InternalDepreciationPeriodRepository internalDepreciationPeriodRepository;
+
     private final DepreciationPeriodQueryService depreciationPeriodQueryService;
 
-    private final InternalApplicationUserDetailService userDetailService;
+//    private final InternalApplicationUserDetailService userDetailService;
 
-    private final ApplicationUserMapper applicationUserMapper;
+//    private final ApplicationUserMapper applicationUserMapper;
+
+    private final DepreciationPeriodMapper depreciationPeriodMapper;
+
+    private final DepreciationPeriodSearchRepository depreciationPeriodSearchRepository;
 
     public DepreciationPeriodResourceProd(
         DepreciationPeriodService depreciationPeriodService,
         DepreciationPeriodRepository depreciationPeriodRepository,
+        InternalDepreciationPeriodRepository internalDepreciationPeriodRepository,
         DepreciationPeriodQueryService depreciationPeriodQueryService,
-        InternalApplicationUserDetailService userDetailService, ApplicationUserMapper applicationUserMapper) {
+//        InternalApplicationUserDetailService userDetailService,
+//        ApplicationUserMapper applicationUserMapper,
+        DepreciationPeriodMapper depreciationPeriodMapper,
+        DepreciationPeriodSearchRepository depreciationPeriodSearchRepository) {
         this.depreciationPeriodService = depreciationPeriodService;
         this.depreciationPeriodRepository = depreciationPeriodRepository;
+        this.internalDepreciationPeriodRepository = internalDepreciationPeriodRepository;
         this.depreciationPeriodQueryService = depreciationPeriodQueryService;
-        this.userDetailService = userDetailService;
-        this.applicationUserMapper = applicationUserMapper;
+//        this.userDetailService = userDetailService;
+//        this.applicationUserMapper = applicationUserMapper;
+        this.depreciationPeriodMapper = depreciationPeriodMapper;
+        this.depreciationPeriodSearchRepository = depreciationPeriodSearchRepository;
     }
 
     /**
@@ -101,7 +115,12 @@ public class DepreciationPeriodResourceProd {
 //        Optional<ApplicationUserDTO> applicationUserDTO = userDetailService.getCurrentApplicationUser()
 //            .map(applicationUserMapper::toDto);
 
-        DepreciationPeriodDTO result = depreciationPeriodService.save(depreciationPeriodDTO);
+        // DepreciationPeriodDTO result = depreciationPeriodService.save(depreciationPeriodDTO);
+
+        DepreciationPeriodDTO result =
+            depreciationPeriodMapper.toDto(internalDepreciationPeriodRepository.save(depreciationPeriodMapper.toEntity(depreciationPeriodDTO)));
+
+        internalDepreciationPeriodRepository.findByIdEquals(result.getId()).ifPresent(depreciationPeriodSearchRepository::save);
 
         return ResponseEntity
             .created(new URI("/api/depreciation-periods/" + result.getId()))

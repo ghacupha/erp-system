@@ -75,8 +75,6 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
 
     private LongFilter previousPeriodId;
 
-    private LongFilter createdById;
-
     private LongFilter fiscalMonthId;
 
     private Boolean distinct;
@@ -91,7 +89,6 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
         this.periodCode = other.periodCode == null ? null : other.periodCode.copy();
         this.processLocked = other.processLocked == null ? null : other.processLocked.copy();
         this.previousPeriodId = other.previousPeriodId == null ? null : other.previousPeriodId.copy();
-        this.createdById = other.createdById == null ? null : other.createdById.copy();
         this.fiscalMonthId = other.fiscalMonthId == null ? null : other.fiscalMonthId.copy();
         this.distinct = other.distinct;
     }
@@ -206,21 +203,6 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
         this.previousPeriodId = previousPeriodId;
     }
 
-    public LongFilter getCreatedById() {
-        return createdById;
-    }
-
-    public LongFilter createdById() {
-        if (createdById == null) {
-            createdById = new LongFilter();
-        }
-        return createdById;
-    }
-
-    public void setCreatedById(LongFilter createdById) {
-        this.createdById = createdById;
-    }
-
     public LongFilter getFiscalMonthId() {
         return fiscalMonthId;
     }
@@ -261,7 +243,6 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
             Objects.equals(periodCode, that.periodCode) &&
             Objects.equals(processLocked, that.processLocked) &&
             Objects.equals(previousPeriodId, that.previousPeriodId) &&
-            Objects.equals(createdById, that.createdById) &&
             Objects.equals(fiscalMonthId, that.fiscalMonthId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -277,7 +258,6 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
             periodCode,
             processLocked,
             previousPeriodId,
-            createdById,
             fiscalMonthId,
             distinct
         );
@@ -294,7 +274,6 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
             (periodCode != null ? "periodCode=" + periodCode + ", " : "") +
             (processLocked != null ? "processLocked=" + processLocked + ", " : "") +
             (previousPeriodId != null ? "previousPeriodId=" + previousPeriodId + ", " : "") +
-            (createdById != null ? "createdById=" + createdById + ", " : "") +
             (fiscalMonthId != null ? "fiscalMonthId=" + fiscalMonthId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

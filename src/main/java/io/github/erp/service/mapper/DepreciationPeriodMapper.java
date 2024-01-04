@@ -25,10 +25,9 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link DepreciationPeriod} and its DTO {@link DepreciationPeriodDTO}.
  */
-@Mapper(componentModel = "spring", uses = { ApplicationUserMapper.class, FiscalMonthMapper.class })
+@Mapper(componentModel = "spring", uses = { FiscalMonthMapper.class })
 public interface DepreciationPeriodMapper extends EntityMapper<DepreciationPeriodDTO, DepreciationPeriod> {
     @Mapping(target = "previousPeriod", source = "previousPeriod", qualifiedByName = "endDate")
-    @Mapping(target = "createdBy", source = "createdBy", qualifiedByName = "applicationIdentity")
     @Mapping(target = "fiscalMonth", source = "fiscalMonth", qualifiedByName = "fiscalMonthCode")
     DepreciationPeriodDTO toDto(DepreciationPeriod s);
 

@@ -37,7 +37,7 @@ public abstract class AbstractIdentifiableEntity implements Serializable {
 
     @Column(name = "identifier")
     @JsonIgnore
-    private UUID identifier;
+    private UUID identifier = UUID.randomUUID();
 
     @ManyToOne
     @JoinColumn(name = "created_by_id", updatable = false)

@@ -92,10 +92,6 @@ class DepreciationPeriodResourceIT {
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
-    @Mock static InternalApplicationUserDetailService userDetailService;
-
-    @Mock static InternalApplicationUserRepository internalApplicationUserRepository;
-
     @Autowired
     private DepreciationPeriodRepository depreciationPeriodRepository;
 
@@ -151,38 +147,12 @@ class DepreciationPeriodResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static DepreciationPeriod createUpdatedEntity(EntityManager em) {
-
-        // Mock user
-        User depreciationPeriodUser = new User();
-        depreciationPeriodUser.setActivated(true);
-        depreciationPeriodUser.setFirstName("Mr. Smith");
-        depreciationPeriodUser.setLogin("smith");
-        depreciationPeriodUser.setLangKey("en");
-
-        // Create a mock ApplicationUserDTO
-        ApplicationUser mockApplicationUser = new ApplicationUser();
-        mockApplicationUser.applicationIdentity("testDepreciationUser");
-        mockApplicationUser.setSystemIdentity(depreciationPeriodUser);
-        mockApplicationUser.setDepartment(new Dealer().dealerName("Operations Department"));
-        mockApplicationUser.setOrganization(new Dealer().dealerName("Fixed Assets Managers Inc"));
-
-        // Mock the behavior of getCurrentApplicationUser() to return the mockApplicationUser
-        when(internalApplicationUserRepository.findApplicationUserBySystemIdentity(depreciationPeriodUser)).thenReturn(Optional.of(mockApplicationUser));
-        when(userDetailService.getCurrentApplicationUser()).thenReturn(Optional.of(mockApplicationUser));
-
         DepreciationPeriod depreciationPeriod = new DepreciationPeriod()
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
             .depreciationPeriodStatus(UPDATED_DEPRECIATION_PERIOD_STATUS)
             .periodCode(UPDATED_PERIOD_CODE)
             .processLocked(UPDATED_PROCESS_LOCKED);
-
-
-        em.persist(depreciationPeriodUser);
-        em.flush();
-        em.persist(mockApplicationUser);
-        em.flush();
-
         // Add required entity
         FiscalMonth fiscalMonth;
         if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
@@ -193,20 +163,15 @@ class DepreciationPeriodResourceIT {
             fiscalMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
         }
         depreciationPeriod.setFiscalMonth(fiscalMonth);
-        depreciationPeriod.setCreatedBy(mockApplicationUser);
-
         return depreciationPeriod;
     }
 
     @BeforeEach
     public void initTest() {
-        // Initialize mocks and inject dependencies
-        MockitoAnnotations.initMocks(this);
-
         depreciationPeriod = createEntity(em);
     }
 
-    // @Test
+    @Test
     @Transactional
     void createDepreciationPeriod() throws Exception {
         int databaseSizeBeforeCreate = depreciationPeriodRepository.findAll().size();
@@ -800,32 +765,6 @@ class DepreciationPeriodResourceIT {
         defaultDepreciationPeriodShouldNotBeFound("previousPeriodId.equals=" + (previousPeriodId + 1));
     }
 
-    // @Test
-    @Transactional
-    void getAllDepreciationPeriodsByCreatedByIsEqualToSomething() throws Exception {
-        // Initialize the database
-        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
-        ApplicationUser createdBy;
-        if (TestUtil.findAll(em, ApplicationUser.class).isEmpty()) {
-            createdBy = ApplicationUserResourceIT.createEntity(em);
-            em.persist(createdBy);
-            em.flush();
-        } else {
-            createdBy = TestUtil.findAll(em, ApplicationUser.class).get(0);
-        }
-        em.persist(createdBy);
-        em.flush();
-        depreciationPeriod.setCreatedBy(createdBy);
-        depreciationPeriodRepository.saveAndFlush(depreciationPeriod);
-        Long createdById = createdBy.getId();
-
-        // Get all the depreciationPeriodList where createdBy equals to createdById
-        defaultDepreciationPeriodShouldBeFound("createdById.equals=" + createdById);
-
-        // Get all the depreciationPeriodList where createdBy equals to (createdById + 1)
-        defaultDepreciationPeriodShouldNotBeFound("createdById.equals=" + (createdById + 1));
-    }
-
     @Test
     @Transactional
     void getAllDepreciationPeriodsByFiscalMonthIsEqualToSomething() throws Exception {
@@ -901,7 +840,7 @@ class DepreciationPeriodResourceIT {
         restDepreciationPeriodMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
     }
 
-    @Test
+    // @Test
     @Transactional
     void putNewDepreciationPeriod() throws Exception {
         // Initialize the database

@@ -40,8 +40,7 @@ public interface InternalApplicationUserRepository
         "LEFT JOIN FETCH au.department " +
         "LEFT JOIN FETCH au.dealerIdentity di " +
         "LEFT JOIN FETCH di.paymentLabels " +
-        "LEFT JOIN FETCH au.organization or " +
-        "LEFT JOIN FETCH or.paymentLabels " +
+        "LEFT JOIN FETCH au.organization " +
         "LEFT JOIN FETCH au.placeholders " +
         "LEFT JOIN FETCH au.securityClearance " +
         "LEFT JOIN FETCH au.userProperties " +
