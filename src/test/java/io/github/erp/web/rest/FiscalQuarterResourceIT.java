@@ -27,9 +27,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.FiscalQuarter;
 import io.github.erp.domain.FiscalYear;
+import io.github.erp.domain.Placeholder;
+import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.repository.FiscalQuarterRepository;
 import io.github.erp.repository.search.FiscalQuarterSearchRepository;
 import io.github.erp.service.FiscalQuarterService;
+import io.github.erp.service.criteria.FiscalQuarterCriteria;
 import io.github.erp.service.dto.FiscalQuarterDTO;
 import io.github.erp.service.mapper.FiscalQuarterMapper;
 import java.time.LocalDate;
@@ -65,12 +68,15 @@ class FiscalQuarterResourceIT {
 
     private static final Integer DEFAULT_QUARTER_NUMBER = 1;
     private static final Integer UPDATED_QUARTER_NUMBER = 2;
+    private static final Integer SMALLER_QUARTER_NUMBER = 1 - 1;
 
     private static final LocalDate DEFAULT_START_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_START_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_START_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final LocalDate DEFAULT_END_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_END_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_END_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final String DEFAULT_FISCAL_QUARTER_CODE = "AAAAAAAAAA";
     private static final String UPDATED_FISCAL_QUARTER_CODE = "BBBBBBBBBB";

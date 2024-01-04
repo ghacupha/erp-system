@@ -21,7 +21,9 @@ package io.github.erp.web.rest;
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.repository.ContractMetadataRepository;
+import io.github.erp.service.ContractMetadataQueryService;
 import io.github.erp.service.ContractMetadataService;
+import io.github.erp.service.criteria.ContractMetadataCriteria;
 import io.github.erp.service.dto.ContractMetadataDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -64,12 +66,16 @@ public class ContractMetadataResource {
 
     private final ContractMetadataRepository contractMetadataRepository;
 
+    private final ContractMetadataQueryService contractMetadataQueryService;
+
     public ContractMetadataResource(
         ContractMetadataService contractMetadataService,
-        ContractMetadataRepository contractMetadataRepository
+        ContractMetadataRepository contractMetadataRepository,
+        ContractMetadataQueryService contractMetadataQueryService
     ) {
         this.contractMetadataService = contractMetadataService;
         this.contractMetadataRepository = contractMetadataRepository;
+        this.contractMetadataQueryService = contractMetadataQueryService;
     }
 
     /**
@@ -167,23 +173,27 @@ public class ContractMetadataResource {
      * {@code GET  /contract-metadata} : get all the contractMetadata.
      *
      * @param pageable the pagination information.
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of contractMetadata in body.
      */
     @GetMapping("/contract-metadata")
-    public ResponseEntity<List<ContractMetadataDTO>> getAllContractMetadata(
-        Pageable pageable,
-        @RequestParam(required = false, defaultValue = "false") boolean eagerload
-    ) {
-        log.debug("REST request to get a page of ContractMetadata");
-        Page<ContractMetadataDTO> page;
-        if (eagerload) {
-            page = contractMetadataService.findAllWithEagerRelationships(pageable);
-        } else {
-            page = contractMetadataService.findAll(pageable);
-        }
+    public ResponseEntity<List<ContractMetadataDTO>> getAllContractMetadata(ContractMetadataCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get ContractMetadata by criteria: {}", criteria);
+        Page<ContractMetadataDTO> page = contractMetadataQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /contract-metadata/count} : count all the contractMetadata.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/contract-metadata/count")
+    public ResponseEntity<Long> countContractMetadata(ContractMetadataCriteria criteria) {
+        log.debug("REST request to count ContractMetadata by criteria: {}", criteria);
+        return ResponseEntity.ok().body(contractMetadataQueryService.countByCriteria(criteria));
     }
 
     /**

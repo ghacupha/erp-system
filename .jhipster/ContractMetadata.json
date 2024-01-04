@@ -116,7 +116,7 @@
   ],
   "service": "serviceImpl",
   "dto": "mapstruct",
-  "jpaMetamodelFiltering": false,
+  "jpaMetamodelFiltering": true,
   "readOnly": false,
   "pagination": "pagination",
   "name": "ContractMetadata",

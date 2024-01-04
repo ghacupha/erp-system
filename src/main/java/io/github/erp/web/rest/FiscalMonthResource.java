@@ -21,7 +21,9 @@ package io.github.erp.web.rest;
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.repository.FiscalMonthRepository;
+import io.github.erp.service.FiscalMonthQueryService;
 import io.github.erp.service.FiscalMonthService;
+import io.github.erp.service.criteria.FiscalMonthCriteria;
 import io.github.erp.service.dto.FiscalMonthDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -64,9 +66,16 @@ public class FiscalMonthResource {
 
     private final FiscalMonthRepository fiscalMonthRepository;
 
-    public FiscalMonthResource(FiscalMonthService fiscalMonthService, FiscalMonthRepository fiscalMonthRepository) {
+    private final FiscalMonthQueryService fiscalMonthQueryService;
+
+    public FiscalMonthResource(
+        FiscalMonthService fiscalMonthService,
+        FiscalMonthRepository fiscalMonthRepository,
+        FiscalMonthQueryService fiscalMonthQueryService
+    ) {
         this.fiscalMonthService = fiscalMonthService;
         this.fiscalMonthRepository = fiscalMonthRepository;
+        this.fiscalMonthQueryService = fiscalMonthQueryService;
     }
 
     /**
@@ -163,23 +172,27 @@ public class FiscalMonthResource {
      * {@code GET  /fiscal-months} : get all the fiscalMonths.
      *
      * @param pageable the pagination information.
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of fiscalMonths in body.
      */
     @GetMapping("/fiscal-months")
-    public ResponseEntity<List<FiscalMonthDTO>> getAllFiscalMonths(
-        Pageable pageable,
-        @RequestParam(required = false, defaultValue = "false") boolean eagerload
-    ) {
-        log.debug("REST request to get a page of FiscalMonths");
-        Page<FiscalMonthDTO> page;
-        if (eagerload) {
-            page = fiscalMonthService.findAllWithEagerRelationships(pageable);
-        } else {
-            page = fiscalMonthService.findAll(pageable);
-        }
+    public ResponseEntity<List<FiscalMonthDTO>> getAllFiscalMonths(FiscalMonthCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get FiscalMonths by criteria: {}", criteria);
+        Page<FiscalMonthDTO> page = fiscalMonthQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /fiscal-months/count} : count all the fiscalMonths.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/fiscal-months/count")
+    public ResponseEntity<Long> countFiscalMonths(FiscalMonthCriteria criteria) {
+        log.debug("REST request to count FiscalMonths by criteria: {}", criteria);
+        return ResponseEntity.ok().body(fiscalMonthQueryService.countByCriteria(criteria));
     }
 
     /**
