@@ -30,7 +30,6 @@ import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 import tech.jhipster.service.filter.UUIDFilter;
-import tech.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
  * Criteria class for the {@link io.github.erp.domain.DepreciationBatchSequence} entity. This class is used
@@ -68,8 +67,6 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
 
     private IntegerFilter endIndex;
 
-    private ZonedDateTimeFilter createdAt;
-
     private DepreciationBatchStatusTypeFilter depreciationBatchStatus;
 
     private UUIDFilter depreciationPeriodIdentifier;
@@ -90,7 +87,6 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
         this.id = other.id == null ? null : other.id.copy();
         this.startIndex = other.startIndex == null ? null : other.startIndex.copy();
         this.endIndex = other.endIndex == null ? null : other.endIndex.copy();
-        this.createdAt = other.createdAt == null ? null : other.createdAt.copy();
         this.depreciationBatchStatus = other.depreciationBatchStatus == null ? null : other.depreciationBatchStatus.copy();
         this.depreciationPeriodIdentifier = other.depreciationPeriodIdentifier == null ? null : other.depreciationPeriodIdentifier.copy();
         this.depreciationJobIdentifier = other.depreciationJobIdentifier == null ? null : other.depreciationJobIdentifier.copy();
@@ -148,21 +144,6 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
 
     public void setEndIndex(IntegerFilter endIndex) {
         this.endIndex = endIndex;
-    }
-
-    public ZonedDateTimeFilter getCreatedAt() {
-        return createdAt;
-    }
-
-    public ZonedDateTimeFilter createdAt() {
-        if (createdAt == null) {
-            createdAt = new ZonedDateTimeFilter();
-        }
-        return createdAt;
-    }
-
-    public void setCreatedAt(ZonedDateTimeFilter createdAt) {
-        this.createdAt = createdAt;
     }
 
     public DepreciationBatchStatusTypeFilter getDepreciationBatchStatus() {
@@ -276,7 +257,6 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
             Objects.equals(id, that.id) &&
             Objects.equals(startIndex, that.startIndex) &&
             Objects.equals(endIndex, that.endIndex) &&
-            Objects.equals(createdAt, that.createdAt) &&
             Objects.equals(depreciationBatchStatus, that.depreciationBatchStatus) &&
             Objects.equals(depreciationPeriodIdentifier, that.depreciationPeriodIdentifier) &&
             Objects.equals(depreciationJobIdentifier, that.depreciationJobIdentifier) &&
@@ -293,7 +273,6 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
             id,
             startIndex,
             endIndex,
-            createdAt,
             depreciationBatchStatus,
             depreciationPeriodIdentifier,
             depreciationJobIdentifier,
@@ -311,7 +290,6 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
             (id != null ? "id=" + id + ", " : "") +
             (startIndex != null ? "startIndex=" + startIndex + ", " : "") +
             (endIndex != null ? "endIndex=" + endIndex + ", " : "") +
-            (createdAt != null ? "createdAt=" + createdAt + ", " : "") +
             (depreciationBatchStatus != null ? "depreciationBatchStatus=" + depreciationBatchStatus + ", " : "") +
             (depreciationPeriodIdentifier != null ? "depreciationPeriodIdentifier=" + depreciationPeriodIdentifier + ", " : "") +
             (depreciationJobIdentifier != null ? "depreciationJobIdentifier=" + depreciationJobIdentifier + ", " : "") +

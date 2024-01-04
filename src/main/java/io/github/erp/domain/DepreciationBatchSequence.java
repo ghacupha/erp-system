@@ -21,7 +21,6 @@ package io.github.erp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -50,9 +49,6 @@ public class DepreciationBatchSequence extends AbstractIdentifiableEntity implem
 
     @Column(name = "end_index")
     private Integer endIndex;
-
-    @Column(name = "created_at")
-    private ZonedDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "depreciation_batch_status")
@@ -113,19 +109,6 @@ public class DepreciationBatchSequence extends AbstractIdentifiableEntity implem
 
     public void setEndIndex(Integer endIndex) {
         this.endIndex = endIndex;
-    }
-
-    public ZonedDateTime getCreatedAt() {
-        return this.createdAt;
-    }
-
-    public DepreciationBatchSequence createdAt(ZonedDateTime createdAt) {
-        this.setCreatedAt(createdAt);
-        return this;
-    }
-
-    public void setCreatedAt(ZonedDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 
     public DepreciationBatchStatusType getDepreciationBatchStatus() {
@@ -232,7 +215,6 @@ public class DepreciationBatchSequence extends AbstractIdentifiableEntity implem
             "id=" + getId() +
             ", startIndex=" + getStartIndex() +
             ", endIndex=" + getEndIndex() +
-            ", createdAt='" + getCreatedAt() + "'" +
             ", depreciationBatchStatus='" + getDepreciationBatchStatus() + "'" +
             ", depreciationPeriodIdentifier='" + getDepreciationPeriodIdentifier() + "'" +
             ", depreciationJobIdentifier='" + getDepreciationJobIdentifier() + "'" +

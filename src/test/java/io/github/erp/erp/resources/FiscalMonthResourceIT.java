@@ -17,6 +17,7 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
 import io.github.erp.repository.FiscalMonthRepository;
@@ -24,6 +25,7 @@ import io.github.erp.repository.search.FiscalMonthSearchRepository;
 import io.github.erp.service.FiscalMonthService;
 import io.github.erp.service.dto.FiscalMonthDTO;
 import io.github.erp.service.mapper.FiscalMonthMapper;
+import io.github.erp.web.rest.FiscalMonthResource;
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

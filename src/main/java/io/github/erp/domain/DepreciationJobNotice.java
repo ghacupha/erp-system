@@ -114,13 +114,6 @@ public class DepreciationJobNotice extends AbstractIdentifiableEntity implements
     @JsonIgnoreProperties(value = { "parentMapping", "placeholders" }, allowSetters = true)
     private Set<UniversallyUniqueMapping> universallyUniqueMappings = new HashSet<>();
 
-    @ManyToOne
-    @JsonIgnoreProperties(
-        value = { "organization", "department", "securityClearance", "systemIdentity", "userProperties", "dealerIdentity", "placeholders" },
-        allowSetters = true
-    )
-    private ApplicationUser superintended;
-
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -335,19 +328,6 @@ public class DepreciationJobNotice extends AbstractIdentifiableEntity implements
 
     public DepreciationJobNotice removeUniversallyUniqueMapping(UniversallyUniqueMapping universallyUniqueMapping) {
         this.universallyUniqueMappings.remove(universallyUniqueMapping);
-        return this;
-    }
-
-    public ApplicationUser getSuperintended() {
-        return this.superintended;
-    }
-
-    public void setSuperintended(ApplicationUser applicationUser) {
-        this.superintended = applicationUser;
-    }
-
-    public DepreciationJobNotice superintended(ApplicationUser applicationUser) {
-        this.setSuperintended(applicationUser);
         return this;
     }
 

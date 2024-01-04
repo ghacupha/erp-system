@@ -122,9 +122,6 @@ public class DepreciationBatchSequenceQueryService extends QueryService<Deprecia
             if (criteria.getEndIndex() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getEndIndex(), DepreciationBatchSequence_.endIndex));
             }
-            if (criteria.getCreatedAt() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getCreatedAt(), DepreciationBatchSequence_.createdAt));
-            }
             if (criteria.getDepreciationBatchStatus() != null) {
                 specification =
                     specification.and(

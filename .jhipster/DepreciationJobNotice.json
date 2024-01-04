@@ -77,17 +77,11 @@
       "otherEntityField": "universalKey",
       "ownerSide": true,
       "otherEntityRelationshipName": "depreciationJobNotice"
-    },
-    {
-      "relationshipName": "superintended",
-      "otherEntityName": "applicationUser",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "applicationIdentity"
     }
   ],
   "service": "serviceImpl",
   "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
+  "jpaMetamodelFiltering": false,
   "readOnly": false,
   "pagination": "pagination",
   "name": "DepreciationJobNotice",

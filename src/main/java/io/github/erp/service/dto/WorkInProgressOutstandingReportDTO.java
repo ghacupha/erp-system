@@ -80,6 +80,22 @@ public class WorkInProgressOutstandingReportDTO implements Serializable {
         this.dealerName = dealerName;
     }
 
+    public String getInstalmentTransactionNumber() {
+        return instalmentTransactionNumber;
+    }
+
+    public void setInstalmentTransactionNumber(String instalmentTransactionNumber) {
+        this.instalmentTransactionNumber = instalmentTransactionNumber;
+    }
+
+    public LocalDate getInstalmentTransactionDate() {
+        return instalmentTransactionDate;
+    }
+
+    public void setInstalmentTransactionDate(LocalDate instalmentTransactionDate) {
+        this.instalmentTransactionDate = instalmentTransactionDate;
+    }
+
     public String getIso4217Code() {
         return iso4217Code;
     }
@@ -112,22 +128,6 @@ public class WorkInProgressOutstandingReportDTO implements Serializable {
         this.outstandingAmount = outstandingAmount;
     }
 
-    public String getInstalmentTransactionNumber() {
-        return instalmentTransactionNumber;
-    }
-
-    public void setInstalmentTransactionNumber(String instalmentTransactionNumber) {
-        this.instalmentTransactionNumber = instalmentTransactionNumber;
-    }
-
-    public LocalDate getInstalmentTransactionDate() {
-        return instalmentTransactionDate;
-    }
-
-    public void setInstalmentTransactionDate(LocalDate instalmentTransactionDate) {
-        this.instalmentTransactionDate = instalmentTransactionDate;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -157,12 +157,12 @@ public class WorkInProgressOutstandingReportDTO implements Serializable {
             ", sequenceNumber='" + getSequenceNumber() + "'" +
             ", particulars='" + getParticulars() + "'" +
             ", dealerName='" + getDealerName() + "'" +
+            ", instalmentTransactionNumber='" + getInstalmentTransactionNumber() + "'" +
+            ", instalmentTransactionDate='" + getInstalmentTransactionDate() + "'" +
             ", iso4217Code='" + getIso4217Code() + "'" +
             ", instalmentAmount=" + getInstalmentAmount() +
             ", totalTransferAmount=" + getTotalTransferAmount() +
             ", outstandingAmount=" + getOutstandingAmount() +
-            ", instalmentTransactionNumber='" + getInstalmentTransactionNumber() + "'" +
-            ", instalmentTransactionDate='" + getInstalmentTransactionDate() + "'" +
             "}";
     }
 }

@@ -17,6 +17,7 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.ApplicationUser;
 import io.github.erp.domain.FiscalYear;
@@ -713,7 +714,7 @@ class FiscalYearResourceIT {
         defaultFiscalYearShouldNotBeFound("universallyUniqueMappingId.equals=" + (universallyUniqueMappingId + 1));
     }
 
-    // @Test
+    @Test
     @Transactional
     void getAllFiscalYearsByCreatedByIsEqualToSomething() throws Exception {
         // Initialize the database
