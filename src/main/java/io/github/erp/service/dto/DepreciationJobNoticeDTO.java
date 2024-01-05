@@ -17,6 +17,7 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.enumeration.DepreciationNoticeStatusType;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
@@ -24,7 +25,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Lob;
-import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link io.github.erp.domain.DepreciationJobNotice} entity.
@@ -33,13 +33,10 @@ public class DepreciationJobNoticeDTO implements Serializable {
 
     private Long id;
 
-    @NotNull
     private String eventNarrative;
 
-    @NotNull
     private ZonedDateTime eventTimeStamp;
 
-    @NotNull
     private DepreciationNoticeStatusType depreciationNoticeStatus;
 
     private String sourceModule;

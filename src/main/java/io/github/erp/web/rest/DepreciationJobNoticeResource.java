@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.repository.DepreciationJobNoticeRepository;
@@ -31,8 +32,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -86,7 +85,7 @@ public class DepreciationJobNoticeResource {
      */
     @PostMapping("/depreciation-job-notices")
     public ResponseEntity<DepreciationJobNoticeDTO> createDepreciationJobNotice(
-        @Valid @RequestBody DepreciationJobNoticeDTO depreciationJobNoticeDTO
+        @RequestBody DepreciationJobNoticeDTO depreciationJobNoticeDTO
     ) throws URISyntaxException {
         log.debug("REST request to save DepreciationJobNotice : {}", depreciationJobNoticeDTO);
         if (depreciationJobNoticeDTO.getId() != null) {
@@ -112,7 +111,7 @@ public class DepreciationJobNoticeResource {
     @PutMapping("/depreciation-job-notices/{id}")
     public ResponseEntity<DepreciationJobNoticeDTO> updateDepreciationJobNotice(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody DepreciationJobNoticeDTO depreciationJobNoticeDTO
+        @RequestBody DepreciationJobNoticeDTO depreciationJobNoticeDTO
     ) throws URISyntaxException {
         log.debug("REST request to update DepreciationJobNotice : {}, {}", id, depreciationJobNoticeDTO);
         if (depreciationJobNoticeDTO.getId() == null) {
@@ -147,7 +146,7 @@ public class DepreciationJobNoticeResource {
     @PatchMapping(value = "/depreciation-job-notices/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<DepreciationJobNoticeDTO> partialUpdateDepreciationJobNotice(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody DepreciationJobNoticeDTO depreciationJobNoticeDTO
+        @RequestBody DepreciationJobNoticeDTO depreciationJobNoticeDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update DepreciationJobNotice partially : {}, {}", id, depreciationJobNoticeDTO);
         if (depreciationJobNoticeDTO.getId() == null) {

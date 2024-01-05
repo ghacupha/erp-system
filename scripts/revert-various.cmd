@@ -25,11 +25,13 @@ git checkout HEAD~1 src/test/java/io/github/erp/web/rest/FiscalYearResourceIT.ja
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/FiscalMonthResourceIT.java
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/FiscalQuarterResourceIT.java
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/DepreciationJobResourceIT.java
-git checkout HEAD~1 src/test/java/io/github/erp/web/rest/DepreciationJobNoticeResourceIT.java
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/DepreciationPeriodResourceIT.java
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/SecurityClearanceResourceIT.java
-git checkout HEAD~1 src/test/java/io/github/erp/web/rest/DepreciationBatchSequenceResourceIT.java
-git checkout HEAD~1 src/test/java/io/github/erp/web/rest/DepreciationEntryResourceIT.java
+git checkout HEAD~1 src/main/java/io/github/erp/domain/FiscalYear.java
+git checkout HEAD~1 src/main/java/io/github/erp/domain/FiscalQuarter.java
+git checkout HEAD~1 src/main/java/io/github/erp/domain/FiscalMonth.java
+git checkout HEAD~1 src/main/java/io/github/erp/domain/DepreciationPeriod.java
+git checkout HEAD~1 src/main/java/io/github/erp/domain/DepreciationJob.java
 REM git checkout HEAD~1 src/main/java/io/github/erp/repository/FiscalMonthRepository.java
 REM git checkout HEAD~1 src/main/java/io/github/erp/repository/FiscalMonthRepository.java
 REM git checkout HEAD~1 src/main/java/io/github/erp/repository/FiscalYearRepository.java
