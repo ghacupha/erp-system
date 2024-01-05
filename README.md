@@ -242,7 +242,7 @@ Similar to Iddo's dedication to meticulous documentation, this module captures a
 
 This innovative reporting framework embodies Iddo's commitment to meticulous recording, showcasing proactive foresight and detailed documentation. The module's silent operations and comprehensive data handling echo Iddo's legacy of detailed chronicles, establishing an advanced reporting system designed for seamless functionality and thorough data provision
 
-### Jehoiada: Lease Automation Vanguard series (ERP System Mark X) 2023.12.27
+### Jehoiada Series: Lease Automation Vanguard series (ERP System Mark X) 2023.12.27
 
 The 'Jehoiada: Lease Automation Vanguard' series embarks on a transformative journey to implement an IFRS 16 leases module, drawing inspiration from Jehoiada's influential leadership in ancient Judah's religious reforms.
 

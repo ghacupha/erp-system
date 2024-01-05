@@ -1,5 +1,5 @@
 @REM
-@REM Erp System - Mark IX No 5 (Iddo Series) Server ver 1.6.7
+@REM Erp System - Mark X No 1 (Jehoiada Series) Server ver 1.7.0
 @REM Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
 @REM
 @REM This program is free software: you can redistribute it and/or modify

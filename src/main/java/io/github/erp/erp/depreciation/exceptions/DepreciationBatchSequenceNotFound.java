@@ -1,7 +1,7 @@
-package io.github.erp.erp.depreciation;
+package io.github.erp.erp.depreciation.exceptions;
 
 /*-
- * Erp System - Mark IX No 5 (Iddo Series) Server ver 1.6.7
+ * Erp System - Mark X No 1 (Jehoiada Series) Server ver 1.7.0
  * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,10 +17,16 @@ package io.github.erp.erp.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
-import io.github.erp.service.dto.AssetRegistrationDTO;
+public class DepreciationBatchSequenceNotFound extends IllegalStateException {
 
-public class AssetCategoryNotConfiguredException extends IllegalStateException {
-    public AssetCategoryNotConfiguredException(AssetRegistrationDTO assetRegistration, DepreciationBatchMessage message) {
+    /**
+     * Constructs an IllegalStateException with the specified detail
+     * message.  A detail message is a String that describes this particular
+     * exception.
+     *
+     * @param s the String that contains a detailed message
+     */
+    public DepreciationBatchSequenceNotFound(String s) {
+        super("Depreciation batch id: " + s + " not found");
     }
 }

@@ -1,8 +1,8 @@
 {
   "name": "erp-system",
-  "version": "1.6.4",
+  "version": "1.7.0",
   "private": true,
-  "description": "Back-end for the ERP System: Mark IX No 2 (Iddo Series) Server v1.6.4",
+  "description": "Back-end for the ERP System: Mark X No 1 (Jehoiada Series) Server v1.7.0",
   "license": "GPLv3",
   "scripts": {
     "app:start": "./mvnw",
