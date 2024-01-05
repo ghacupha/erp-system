@@ -17,6 +17,7 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.github.erp.domain.enumeration.DepreciationNoticeStatusType;
 import java.io.Serializable;
@@ -24,7 +25,6 @@ import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
@@ -36,7 +36,7 @@ import org.hibernate.annotations.Type;
 @Table(name = "depreciation_job_notice")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "depreciationjobnotice")
-public class DepreciationJobNotice extends AbstractIdentifiableEntity implements Serializable {
+public class DepreciationJobNotice implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,17 +46,14 @@ public class DepreciationJobNotice extends AbstractIdentifiableEntity implements
     @Column(name = "id")
     private Long id;
 
-    @NotNull
-    @Column(name = "event_narrative", nullable = false)
+    @Column(name = "event_narrative")
     private String eventNarrative;
 
-    @NotNull
-    @Column(name = "event_time_stamp", nullable = false)
+    @Column(name = "event_time_stamp")
     private ZonedDateTime eventTimeStamp;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "depreciation_notice_status", nullable = false)
+    @Column(name = "depreciation_notice_status")
     private DepreciationNoticeStatusType depreciationNoticeStatus;
 
     @Column(name = "source_module")

@@ -93,7 +93,7 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
 
         // Process the assets in batches
         // TODO externalize this setting, you definitely would not do this for 10,000 items
-        int batchSize = 3000;
+        int batchSize = 1000;
         processAssetsInBatches(depreciationJob, assets, batchSize);
 
         // Mark the depreciation job as complete
