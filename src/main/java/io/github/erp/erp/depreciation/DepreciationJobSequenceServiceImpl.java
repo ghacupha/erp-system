@@ -1,7 +1,7 @@
 package io.github.erp.erp.depreciation;
 
 /*-
- * Erp System - Mark IX No 5 (Iddo Series) Server ver 1.6.7
+ * Erp System - Mark X No 1 (Jehoiada Series) Server ver 1.7.0
  * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -93,7 +93,7 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
 
         // Process the assets in batches
         // TODO externalize this setting, you definitely would not do this for 10,000 items
-        int batchSize = 300;
+        int batchSize = 3000;
         processAssetsInBatches(depreciationJob, assets, batchSize);
 
         // Mark the depreciation job as complete

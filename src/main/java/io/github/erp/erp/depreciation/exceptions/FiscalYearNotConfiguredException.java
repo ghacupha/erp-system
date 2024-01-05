@@ -1,7 +1,7 @@
-package io.github.erp.erp.depreciation;
+package io.github.erp.erp.depreciation.exceptions;
 
 /*-
- * Erp System - Mark IX No 5 (Iddo Series) Server ver 1.6.7
+ * Erp System - Mark X No 1 (Jehoiada Series) Server ver 1.7.0
  * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@ package io.github.erp.erp.depreciation;
  */
 import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
 
-public class DepreciationPeriodClosedException extends IllegalStateException {
-    public DepreciationPeriodClosedException(DepreciationBatchMessage message) {
+public class FiscalYearNotConfiguredException extends IllegalStateException {
+    public FiscalYearNotConfiguredException(DepreciationBatchMessage message) {
     }
 }
