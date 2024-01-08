@@ -21,6 +21,7 @@ package io.github.erp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import java.io.Serializable;
+import java.time.Duration;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -65,6 +66,24 @@ public class DepreciationBatchSequence implements Serializable {
 
     @Column(name = "fiscal_quarter_identifier", unique = true)
     private UUID fiscalQuarterIdentifier;
+
+    @Column(name = "batch_size")
+    private Integer batchSize;
+
+    @Column(name = "processed_items")
+    private Integer processedItems;
+
+    @Column(name = "sequence_number")
+    private Integer sequenceNumber;
+
+    @Column(name = "is_last_batch")
+    private Boolean isLastBatch;
+
+    @Column(name = "processing_time")
+    private Duration processingTime;
+
+    @Column(name = "total_items")
+    private Integer totalItems;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "createdBy", "depreciationPeriod" }, allowSetters = true)
@@ -176,6 +195,84 @@ public class DepreciationBatchSequence implements Serializable {
         this.fiscalQuarterIdentifier = fiscalQuarterIdentifier;
     }
 
+    public Integer getBatchSize() {
+        return this.batchSize;
+    }
+
+    public DepreciationBatchSequence batchSize(Integer batchSize) {
+        this.setBatchSize(batchSize);
+        return this;
+    }
+
+    public void setBatchSize(Integer batchSize) {
+        this.batchSize = batchSize;
+    }
+
+    public Integer getProcessedItems() {
+        return this.processedItems;
+    }
+
+    public DepreciationBatchSequence processedItems(Integer processedItems) {
+        this.setProcessedItems(processedItems);
+        return this;
+    }
+
+    public void setProcessedItems(Integer processedItems) {
+        this.processedItems = processedItems;
+    }
+
+    public Integer getSequenceNumber() {
+        return this.sequenceNumber;
+    }
+
+    public DepreciationBatchSequence sequenceNumber(Integer sequenceNumber) {
+        this.setSequenceNumber(sequenceNumber);
+        return this;
+    }
+
+    public void setSequenceNumber(Integer sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+
+    public Boolean getIsLastBatch() {
+        return this.isLastBatch;
+    }
+
+    public DepreciationBatchSequence isLastBatch(Boolean isLastBatch) {
+        this.setIsLastBatch(isLastBatch);
+        return this;
+    }
+
+    public void setIsLastBatch(Boolean isLastBatch) {
+        this.isLastBatch = isLastBatch;
+    }
+
+    public Duration getProcessingTime() {
+        return this.processingTime;
+    }
+
+    public DepreciationBatchSequence processingTime(Duration processingTime) {
+        this.setProcessingTime(processingTime);
+        return this;
+    }
+
+    public void setProcessingTime(Duration processingTime) {
+        this.processingTime = processingTime;
+    }
+
+    public Integer getTotalItems() {
+        return this.totalItems;
+    }
+
+    public DepreciationBatchSequence totalItems(Integer totalItems) {
+        this.setTotalItems(totalItems);
+        return this;
+    }
+
+    public void setTotalItems(Integer totalItems) {
+        this.totalItems = totalItems;
+    }
+
     public DepreciationJob getDepreciationJob() {
         return this.depreciationJob;
     }
@@ -220,6 +317,12 @@ public class DepreciationBatchSequence implements Serializable {
             ", depreciationJobIdentifier='" + getDepreciationJobIdentifier() + "'" +
             ", fiscalMonthIdentifier='" + getFiscalMonthIdentifier() + "'" +
             ", fiscalQuarterIdentifier='" + getFiscalQuarterIdentifier() + "'" +
+            ", batchSize=" + getBatchSize() +
+            ", processedItems=" + getProcessedItems() +
+            ", sequenceNumber=" + getSequenceNumber() +
+            ", isLastBatch='" + getIsLastBatch() + "'" +
+            ", processingTime='" + getProcessingTime() + "'" +
+            ", totalItems=" + getTotalItems() +
             "}";
     }
 }

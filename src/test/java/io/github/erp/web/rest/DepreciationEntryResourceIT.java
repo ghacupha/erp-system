@@ -29,7 +29,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.AssetCategory;
 import io.github.erp.domain.AssetRegistration;
+import io.github.erp.domain.DepreciationBatchSequence;
 import io.github.erp.domain.DepreciationEntry;
+import io.github.erp.domain.DepreciationJob;
 import io.github.erp.domain.DepreciationMethod;
 import io.github.erp.domain.DepreciationPeriod;
 import io.github.erp.domain.FiscalMonth;
@@ -99,6 +101,17 @@ class DepreciationEntryResourceIT {
     private static final UUID DEFAULT_FISCAL_QUARTER_IDENTIFIER = UUID.randomUUID();
     private static final UUID UPDATED_FISCAL_QUARTER_IDENTIFIER = UUID.randomUUID();
 
+    private static final Integer DEFAULT_BATCH_SEQUENCE_NUMBER = 1;
+    private static final Integer UPDATED_BATCH_SEQUENCE_NUMBER = 2;
+    private static final Integer SMALLER_BATCH_SEQUENCE_NUMBER = 1 - 1;
+
+    private static final String DEFAULT_PROCESSED_ITEMS = "AAAAAAAAAA";
+    private static final String UPDATED_PROCESSED_ITEMS = "BBBBBBBBBB";
+
+    private static final Integer DEFAULT_TOTAL_ITEMS_PROCESSED = 1;
+    private static final Integer UPDATED_TOTAL_ITEMS_PROCESSED = 2;
+    private static final Integer SMALLER_TOTAL_ITEMS_PROCESSED = 1 - 1;
+
     private static final String ENTITY_API_URL = "/api/depreciation-entries";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/depreciation-entries";
@@ -142,7 +155,10 @@ class DepreciationEntryResourceIT {
             .depreciationPeriodIdentifier(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER)
             .depreciationJobIdentifier(DEFAULT_DEPRECIATION_JOB_IDENTIFIER)
             .fiscalMonthIdentifier(DEFAULT_FISCAL_MONTH_IDENTIFIER)
-            .fiscalQuarterIdentifier(DEFAULT_FISCAL_QUARTER_IDENTIFIER);
+            .fiscalQuarterIdentifier(DEFAULT_FISCAL_QUARTER_IDENTIFIER)
+            .batchSequenceNumber(DEFAULT_BATCH_SEQUENCE_NUMBER)
+            .processedItems(DEFAULT_PROCESSED_ITEMS)
+            .totalItemsProcessed(DEFAULT_TOTAL_ITEMS_PROCESSED);
         return depreciationEntry;
     }
 
@@ -160,7 +176,10 @@ class DepreciationEntryResourceIT {
             .depreciationPeriodIdentifier(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER)
             .depreciationJobIdentifier(UPDATED_DEPRECIATION_JOB_IDENTIFIER)
             .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER)
-            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER);
+            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER)
+            .batchSequenceNumber(UPDATED_BATCH_SEQUENCE_NUMBER)
+            .processedItems(UPDATED_PROCESSED_ITEMS)
+            .totalItemsProcessed(UPDATED_TOTAL_ITEMS_PROCESSED);
         return depreciationEntry;
     }
 
@@ -194,6 +213,9 @@ class DepreciationEntryResourceIT {
         assertThat(testDepreciationEntry.getDepreciationJobIdentifier()).isEqualTo(DEFAULT_DEPRECIATION_JOB_IDENTIFIER);
         assertThat(testDepreciationEntry.getFiscalMonthIdentifier()).isEqualTo(DEFAULT_FISCAL_MONTH_IDENTIFIER);
         assertThat(testDepreciationEntry.getFiscalQuarterIdentifier()).isEqualTo(DEFAULT_FISCAL_QUARTER_IDENTIFIER);
+        assertThat(testDepreciationEntry.getBatchSequenceNumber()).isEqualTo(DEFAULT_BATCH_SEQUENCE_NUMBER);
+        assertThat(testDepreciationEntry.getProcessedItems()).isEqualTo(DEFAULT_PROCESSED_ITEMS);
+        assertThat(testDepreciationEntry.getTotalItemsProcessed()).isEqualTo(DEFAULT_TOTAL_ITEMS_PROCESSED);
 
         // Validate the DepreciationEntry in Elasticsearch
         verify(mockDepreciationEntrySearchRepository, times(1)).save(testDepreciationEntry);
@@ -243,7 +265,10 @@ class DepreciationEntryResourceIT {
             .andExpect(jsonPath("$.[*].depreciationPeriodIdentifier").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].depreciationJobIdentifier").value(hasItem(DEFAULT_DEPRECIATION_JOB_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].fiscalMonthIdentifier").value(hasItem(DEFAULT_FISCAL_MONTH_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())));
+            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].batchSequenceNumber").value(hasItem(DEFAULT_BATCH_SEQUENCE_NUMBER)))
+            .andExpect(jsonPath("$.[*].processedItems").value(hasItem(DEFAULT_PROCESSED_ITEMS)))
+            .andExpect(jsonPath("$.[*].totalItemsProcessed").value(hasItem(DEFAULT_TOTAL_ITEMS_PROCESSED)));
     }
 
     @Test
@@ -264,7 +289,10 @@ class DepreciationEntryResourceIT {
             .andExpect(jsonPath("$.depreciationPeriodIdentifier").value(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER.toString()))
             .andExpect(jsonPath("$.depreciationJobIdentifier").value(DEFAULT_DEPRECIATION_JOB_IDENTIFIER.toString()))
             .andExpect(jsonPath("$.fiscalMonthIdentifier").value(DEFAULT_FISCAL_MONTH_IDENTIFIER.toString()))
-            .andExpect(jsonPath("$.fiscalQuarterIdentifier").value(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString()));
+            .andExpect(jsonPath("$.fiscalQuarterIdentifier").value(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString()))
+            .andExpect(jsonPath("$.batchSequenceNumber").value(DEFAULT_BATCH_SEQUENCE_NUMBER))
+            .andExpect(jsonPath("$.processedItems").value(DEFAULT_PROCESSED_ITEMS))
+            .andExpect(jsonPath("$.totalItemsProcessed").value(DEFAULT_TOTAL_ITEMS_PROCESSED));
     }
 
     @Test
@@ -815,6 +843,296 @@ class DepreciationEntryResourceIT {
 
     @Test
     @Transactional
+    void getAllDepreciationEntriesByBatchSequenceNumberIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where batchSequenceNumber equals to DEFAULT_BATCH_SEQUENCE_NUMBER
+        defaultDepreciationEntryShouldBeFound("batchSequenceNumber.equals=" + DEFAULT_BATCH_SEQUENCE_NUMBER);
+
+        // Get all the depreciationEntryList where batchSequenceNumber equals to UPDATED_BATCH_SEQUENCE_NUMBER
+        defaultDepreciationEntryShouldNotBeFound("batchSequenceNumber.equals=" + UPDATED_BATCH_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByBatchSequenceNumberIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where batchSequenceNumber not equals to DEFAULT_BATCH_SEQUENCE_NUMBER
+        defaultDepreciationEntryShouldNotBeFound("batchSequenceNumber.notEquals=" + DEFAULT_BATCH_SEQUENCE_NUMBER);
+
+        // Get all the depreciationEntryList where batchSequenceNumber not equals to UPDATED_BATCH_SEQUENCE_NUMBER
+        defaultDepreciationEntryShouldBeFound("batchSequenceNumber.notEquals=" + UPDATED_BATCH_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByBatchSequenceNumberIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where batchSequenceNumber in DEFAULT_BATCH_SEQUENCE_NUMBER or UPDATED_BATCH_SEQUENCE_NUMBER
+        defaultDepreciationEntryShouldBeFound(
+            "batchSequenceNumber.in=" + DEFAULT_BATCH_SEQUENCE_NUMBER + "," + UPDATED_BATCH_SEQUENCE_NUMBER
+        );
+
+        // Get all the depreciationEntryList where batchSequenceNumber equals to UPDATED_BATCH_SEQUENCE_NUMBER
+        defaultDepreciationEntryShouldNotBeFound("batchSequenceNumber.in=" + UPDATED_BATCH_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByBatchSequenceNumberIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where batchSequenceNumber is not null
+        defaultDepreciationEntryShouldBeFound("batchSequenceNumber.specified=true");
+
+        // Get all the depreciationEntryList where batchSequenceNumber is null
+        defaultDepreciationEntryShouldNotBeFound("batchSequenceNumber.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByBatchSequenceNumberIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where batchSequenceNumber is greater than or equal to DEFAULT_BATCH_SEQUENCE_NUMBER
+        defaultDepreciationEntryShouldBeFound("batchSequenceNumber.greaterThanOrEqual=" + DEFAULT_BATCH_SEQUENCE_NUMBER);
+
+        // Get all the depreciationEntryList where batchSequenceNumber is greater than or equal to UPDATED_BATCH_SEQUENCE_NUMBER
+        defaultDepreciationEntryShouldNotBeFound("batchSequenceNumber.greaterThanOrEqual=" + UPDATED_BATCH_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByBatchSequenceNumberIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where batchSequenceNumber is less than or equal to DEFAULT_BATCH_SEQUENCE_NUMBER
+        defaultDepreciationEntryShouldBeFound("batchSequenceNumber.lessThanOrEqual=" + DEFAULT_BATCH_SEQUENCE_NUMBER);
+
+        // Get all the depreciationEntryList where batchSequenceNumber is less than or equal to SMALLER_BATCH_SEQUENCE_NUMBER
+        defaultDepreciationEntryShouldNotBeFound("batchSequenceNumber.lessThanOrEqual=" + SMALLER_BATCH_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByBatchSequenceNumberIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where batchSequenceNumber is less than DEFAULT_BATCH_SEQUENCE_NUMBER
+        defaultDepreciationEntryShouldNotBeFound("batchSequenceNumber.lessThan=" + DEFAULT_BATCH_SEQUENCE_NUMBER);
+
+        // Get all the depreciationEntryList where batchSequenceNumber is less than UPDATED_BATCH_SEQUENCE_NUMBER
+        defaultDepreciationEntryShouldBeFound("batchSequenceNumber.lessThan=" + UPDATED_BATCH_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByBatchSequenceNumberIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where batchSequenceNumber is greater than DEFAULT_BATCH_SEQUENCE_NUMBER
+        defaultDepreciationEntryShouldNotBeFound("batchSequenceNumber.greaterThan=" + DEFAULT_BATCH_SEQUENCE_NUMBER);
+
+        // Get all the depreciationEntryList where batchSequenceNumber is greater than SMALLER_BATCH_SEQUENCE_NUMBER
+        defaultDepreciationEntryShouldBeFound("batchSequenceNumber.greaterThan=" + SMALLER_BATCH_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByProcessedItemsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where processedItems equals to DEFAULT_PROCESSED_ITEMS
+        defaultDepreciationEntryShouldBeFound("processedItems.equals=" + DEFAULT_PROCESSED_ITEMS);
+
+        // Get all the depreciationEntryList where processedItems equals to UPDATED_PROCESSED_ITEMS
+        defaultDepreciationEntryShouldNotBeFound("processedItems.equals=" + UPDATED_PROCESSED_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByProcessedItemsIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where processedItems not equals to DEFAULT_PROCESSED_ITEMS
+        defaultDepreciationEntryShouldNotBeFound("processedItems.notEquals=" + DEFAULT_PROCESSED_ITEMS);
+
+        // Get all the depreciationEntryList where processedItems not equals to UPDATED_PROCESSED_ITEMS
+        defaultDepreciationEntryShouldBeFound("processedItems.notEquals=" + UPDATED_PROCESSED_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByProcessedItemsIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where processedItems in DEFAULT_PROCESSED_ITEMS or UPDATED_PROCESSED_ITEMS
+        defaultDepreciationEntryShouldBeFound("processedItems.in=" + DEFAULT_PROCESSED_ITEMS + "," + UPDATED_PROCESSED_ITEMS);
+
+        // Get all the depreciationEntryList where processedItems equals to UPDATED_PROCESSED_ITEMS
+        defaultDepreciationEntryShouldNotBeFound("processedItems.in=" + UPDATED_PROCESSED_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByProcessedItemsIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where processedItems is not null
+        defaultDepreciationEntryShouldBeFound("processedItems.specified=true");
+
+        // Get all the depreciationEntryList where processedItems is null
+        defaultDepreciationEntryShouldNotBeFound("processedItems.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByProcessedItemsContainsSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where processedItems contains DEFAULT_PROCESSED_ITEMS
+        defaultDepreciationEntryShouldBeFound("processedItems.contains=" + DEFAULT_PROCESSED_ITEMS);
+
+        // Get all the depreciationEntryList where processedItems contains UPDATED_PROCESSED_ITEMS
+        defaultDepreciationEntryShouldNotBeFound("processedItems.contains=" + UPDATED_PROCESSED_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByProcessedItemsNotContainsSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where processedItems does not contain DEFAULT_PROCESSED_ITEMS
+        defaultDepreciationEntryShouldNotBeFound("processedItems.doesNotContain=" + DEFAULT_PROCESSED_ITEMS);
+
+        // Get all the depreciationEntryList where processedItems does not contain UPDATED_PROCESSED_ITEMS
+        defaultDepreciationEntryShouldBeFound("processedItems.doesNotContain=" + UPDATED_PROCESSED_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByTotalItemsProcessedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where totalItemsProcessed equals to DEFAULT_TOTAL_ITEMS_PROCESSED
+        defaultDepreciationEntryShouldBeFound("totalItemsProcessed.equals=" + DEFAULT_TOTAL_ITEMS_PROCESSED);
+
+        // Get all the depreciationEntryList where totalItemsProcessed equals to UPDATED_TOTAL_ITEMS_PROCESSED
+        defaultDepreciationEntryShouldNotBeFound("totalItemsProcessed.equals=" + UPDATED_TOTAL_ITEMS_PROCESSED);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByTotalItemsProcessedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where totalItemsProcessed not equals to DEFAULT_TOTAL_ITEMS_PROCESSED
+        defaultDepreciationEntryShouldNotBeFound("totalItemsProcessed.notEquals=" + DEFAULT_TOTAL_ITEMS_PROCESSED);
+
+        // Get all the depreciationEntryList where totalItemsProcessed not equals to UPDATED_TOTAL_ITEMS_PROCESSED
+        defaultDepreciationEntryShouldBeFound("totalItemsProcessed.notEquals=" + UPDATED_TOTAL_ITEMS_PROCESSED);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByTotalItemsProcessedIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where totalItemsProcessed in DEFAULT_TOTAL_ITEMS_PROCESSED or UPDATED_TOTAL_ITEMS_PROCESSED
+        defaultDepreciationEntryShouldBeFound(
+            "totalItemsProcessed.in=" + DEFAULT_TOTAL_ITEMS_PROCESSED + "," + UPDATED_TOTAL_ITEMS_PROCESSED
+        );
+
+        // Get all the depreciationEntryList where totalItemsProcessed equals to UPDATED_TOTAL_ITEMS_PROCESSED
+        defaultDepreciationEntryShouldNotBeFound("totalItemsProcessed.in=" + UPDATED_TOTAL_ITEMS_PROCESSED);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByTotalItemsProcessedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where totalItemsProcessed is not null
+        defaultDepreciationEntryShouldBeFound("totalItemsProcessed.specified=true");
+
+        // Get all the depreciationEntryList where totalItemsProcessed is null
+        defaultDepreciationEntryShouldNotBeFound("totalItemsProcessed.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByTotalItemsProcessedIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where totalItemsProcessed is greater than or equal to DEFAULT_TOTAL_ITEMS_PROCESSED
+        defaultDepreciationEntryShouldBeFound("totalItemsProcessed.greaterThanOrEqual=" + DEFAULT_TOTAL_ITEMS_PROCESSED);
+
+        // Get all the depreciationEntryList where totalItemsProcessed is greater than or equal to UPDATED_TOTAL_ITEMS_PROCESSED
+        defaultDepreciationEntryShouldNotBeFound("totalItemsProcessed.greaterThanOrEqual=" + UPDATED_TOTAL_ITEMS_PROCESSED);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByTotalItemsProcessedIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where totalItemsProcessed is less than or equal to DEFAULT_TOTAL_ITEMS_PROCESSED
+        defaultDepreciationEntryShouldBeFound("totalItemsProcessed.lessThanOrEqual=" + DEFAULT_TOTAL_ITEMS_PROCESSED);
+
+        // Get all the depreciationEntryList where totalItemsProcessed is less than or equal to SMALLER_TOTAL_ITEMS_PROCESSED
+        defaultDepreciationEntryShouldNotBeFound("totalItemsProcessed.lessThanOrEqual=" + SMALLER_TOTAL_ITEMS_PROCESSED);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByTotalItemsProcessedIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where totalItemsProcessed is less than DEFAULT_TOTAL_ITEMS_PROCESSED
+        defaultDepreciationEntryShouldNotBeFound("totalItemsProcessed.lessThan=" + DEFAULT_TOTAL_ITEMS_PROCESSED);
+
+        // Get all the depreciationEntryList where totalItemsProcessed is less than UPDATED_TOTAL_ITEMS_PROCESSED
+        defaultDepreciationEntryShouldBeFound("totalItemsProcessed.lessThan=" + UPDATED_TOTAL_ITEMS_PROCESSED);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByTotalItemsProcessedIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where totalItemsProcessed is greater than DEFAULT_TOTAL_ITEMS_PROCESSED
+        defaultDepreciationEntryShouldNotBeFound("totalItemsProcessed.greaterThan=" + DEFAULT_TOTAL_ITEMS_PROCESSED);
+
+        // Get all the depreciationEntryList where totalItemsProcessed is greater than SMALLER_TOTAL_ITEMS_PROCESSED
+        defaultDepreciationEntryShouldBeFound("totalItemsProcessed.greaterThan=" + SMALLER_TOTAL_ITEMS_PROCESSED);
+    }
+
+    @Test
+    @Transactional
     void getAllDepreciationEntriesByServiceOutletIsEqualToSomething() throws Exception {
         // Initialize the database
         depreciationEntryRepository.saveAndFlush(depreciationEntry);
@@ -1021,6 +1339,58 @@ class DepreciationEntryResourceIT {
         defaultDepreciationEntryShouldNotBeFound("fiscalYearId.equals=" + (fiscalYearId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationJobIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+        DepreciationJob depreciationJob;
+        if (TestUtil.findAll(em, DepreciationJob.class).isEmpty()) {
+            depreciationJob = DepreciationJobResourceIT.createEntity(em);
+            em.persist(depreciationJob);
+            em.flush();
+        } else {
+            depreciationJob = TestUtil.findAll(em, DepreciationJob.class).get(0);
+        }
+        em.persist(depreciationJob);
+        em.flush();
+        depreciationEntry.setDepreciationJob(depreciationJob);
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+        Long depreciationJobId = depreciationJob.getId();
+
+        // Get all the depreciationEntryList where depreciationJob equals to depreciationJobId
+        defaultDepreciationEntryShouldBeFound("depreciationJobId.equals=" + depreciationJobId);
+
+        // Get all the depreciationEntryList where depreciationJob equals to (depreciationJobId + 1)
+        defaultDepreciationEntryShouldNotBeFound("depreciationJobId.equals=" + (depreciationJobId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationBatchSequenceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+        DepreciationBatchSequence depreciationBatchSequence;
+        if (TestUtil.findAll(em, DepreciationBatchSequence.class).isEmpty()) {
+            depreciationBatchSequence = DepreciationBatchSequenceResourceIT.createEntity(em);
+            em.persist(depreciationBatchSequence);
+            em.flush();
+        } else {
+            depreciationBatchSequence = TestUtil.findAll(em, DepreciationBatchSequence.class).get(0);
+        }
+        em.persist(depreciationBatchSequence);
+        em.flush();
+        depreciationEntry.setDepreciationBatchSequence(depreciationBatchSequence);
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+        Long depreciationBatchSequenceId = depreciationBatchSequence.getId();
+
+        // Get all the depreciationEntryList where depreciationBatchSequence equals to depreciationBatchSequenceId
+        defaultDepreciationEntryShouldBeFound("depreciationBatchSequenceId.equals=" + depreciationBatchSequenceId);
+
+        // Get all the depreciationEntryList where depreciationBatchSequence equals to (depreciationBatchSequenceId + 1)
+        defaultDepreciationEntryShouldNotBeFound("depreciationBatchSequenceId.equals=" + (depreciationBatchSequenceId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1036,7 +1406,10 @@ class DepreciationEntryResourceIT {
             .andExpect(jsonPath("$.[*].depreciationPeriodIdentifier").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].depreciationJobIdentifier").value(hasItem(DEFAULT_DEPRECIATION_JOB_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].fiscalMonthIdentifier").value(hasItem(DEFAULT_FISCAL_MONTH_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())));
+            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].batchSequenceNumber").value(hasItem(DEFAULT_BATCH_SEQUENCE_NUMBER)))
+            .andExpect(jsonPath("$.[*].processedItems").value(hasItem(DEFAULT_PROCESSED_ITEMS)))
+            .andExpect(jsonPath("$.[*].totalItemsProcessed").value(hasItem(DEFAULT_TOTAL_ITEMS_PROCESSED)));
 
         // Check, that the count call also returns 1
         restDepreciationEntryMockMvc
@@ -1091,7 +1464,10 @@ class DepreciationEntryResourceIT {
             .depreciationPeriodIdentifier(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER)
             .depreciationJobIdentifier(UPDATED_DEPRECIATION_JOB_IDENTIFIER)
             .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER)
-            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER);
+            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER)
+            .batchSequenceNumber(UPDATED_BATCH_SEQUENCE_NUMBER)
+            .processedItems(UPDATED_PROCESSED_ITEMS)
+            .totalItemsProcessed(UPDATED_TOTAL_ITEMS_PROCESSED);
         DepreciationEntryDTO depreciationEntryDTO = depreciationEntryMapper.toDto(updatedDepreciationEntry);
 
         restDepreciationEntryMockMvc
@@ -1113,6 +1489,9 @@ class DepreciationEntryResourceIT {
         assertThat(testDepreciationEntry.getDepreciationJobIdentifier()).isEqualTo(UPDATED_DEPRECIATION_JOB_IDENTIFIER);
         assertThat(testDepreciationEntry.getFiscalMonthIdentifier()).isEqualTo(UPDATED_FISCAL_MONTH_IDENTIFIER);
         assertThat(testDepreciationEntry.getFiscalQuarterIdentifier()).isEqualTo(UPDATED_FISCAL_QUARTER_IDENTIFIER);
+        assertThat(testDepreciationEntry.getBatchSequenceNumber()).isEqualTo(UPDATED_BATCH_SEQUENCE_NUMBER);
+        assertThat(testDepreciationEntry.getProcessedItems()).isEqualTo(UPDATED_PROCESSED_ITEMS);
+        assertThat(testDepreciationEntry.getTotalItemsProcessed()).isEqualTo(UPDATED_TOTAL_ITEMS_PROCESSED);
 
         // Validate the DepreciationEntry in Elasticsearch
         verify(mockDepreciationEntrySearchRepository).save(testDepreciationEntry);
@@ -1210,7 +1589,9 @@ class DepreciationEntryResourceIT {
             .postedAt(UPDATED_POSTED_AT)
             .depreciationPeriodIdentifier(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER)
             .depreciationJobIdentifier(UPDATED_DEPRECIATION_JOB_IDENTIFIER)
-            .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER);
+            .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER)
+            .batchSequenceNumber(UPDATED_BATCH_SEQUENCE_NUMBER)
+            .processedItems(UPDATED_PROCESSED_ITEMS);
 
         restDepreciationEntryMockMvc
             .perform(
@@ -1231,6 +1612,9 @@ class DepreciationEntryResourceIT {
         assertThat(testDepreciationEntry.getDepreciationJobIdentifier()).isEqualTo(UPDATED_DEPRECIATION_JOB_IDENTIFIER);
         assertThat(testDepreciationEntry.getFiscalMonthIdentifier()).isEqualTo(UPDATED_FISCAL_MONTH_IDENTIFIER);
         assertThat(testDepreciationEntry.getFiscalQuarterIdentifier()).isEqualTo(DEFAULT_FISCAL_QUARTER_IDENTIFIER);
+        assertThat(testDepreciationEntry.getBatchSequenceNumber()).isEqualTo(UPDATED_BATCH_SEQUENCE_NUMBER);
+        assertThat(testDepreciationEntry.getProcessedItems()).isEqualTo(UPDATED_PROCESSED_ITEMS);
+        assertThat(testDepreciationEntry.getTotalItemsProcessed()).isEqualTo(DEFAULT_TOTAL_ITEMS_PROCESSED);
     }
 
     @Test
@@ -1252,7 +1636,10 @@ class DepreciationEntryResourceIT {
             .depreciationPeriodIdentifier(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER)
             .depreciationJobIdentifier(UPDATED_DEPRECIATION_JOB_IDENTIFIER)
             .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER)
-            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER);
+            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER)
+            .batchSequenceNumber(UPDATED_BATCH_SEQUENCE_NUMBER)
+            .processedItems(UPDATED_PROCESSED_ITEMS)
+            .totalItemsProcessed(UPDATED_TOTAL_ITEMS_PROCESSED);
 
         restDepreciationEntryMockMvc
             .perform(
@@ -1273,6 +1660,9 @@ class DepreciationEntryResourceIT {
         assertThat(testDepreciationEntry.getDepreciationJobIdentifier()).isEqualTo(UPDATED_DEPRECIATION_JOB_IDENTIFIER);
         assertThat(testDepreciationEntry.getFiscalMonthIdentifier()).isEqualTo(UPDATED_FISCAL_MONTH_IDENTIFIER);
         assertThat(testDepreciationEntry.getFiscalQuarterIdentifier()).isEqualTo(UPDATED_FISCAL_QUARTER_IDENTIFIER);
+        assertThat(testDepreciationEntry.getBatchSequenceNumber()).isEqualTo(UPDATED_BATCH_SEQUENCE_NUMBER);
+        assertThat(testDepreciationEntry.getProcessedItems()).isEqualTo(UPDATED_PROCESSED_ITEMS);
+        assertThat(testDepreciationEntry.getTotalItemsProcessed()).isEqualTo(UPDATED_TOTAL_ITEMS_PROCESSED);
     }
 
     @Test
@@ -1395,6 +1785,9 @@ class DepreciationEntryResourceIT {
             .andExpect(jsonPath("$.[*].depreciationPeriodIdentifier").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].depreciationJobIdentifier").value(hasItem(DEFAULT_DEPRECIATION_JOB_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].fiscalMonthIdentifier").value(hasItem(DEFAULT_FISCAL_MONTH_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())));
+            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].batchSequenceNumber").value(hasItem(DEFAULT_BATCH_SEQUENCE_NUMBER)))
+            .andExpect(jsonPath("$.[*].processedItems").value(hasItem(DEFAULT_PROCESSED_ITEMS)))
+            .andExpect(jsonPath("$.[*].totalItemsProcessed").value(hasItem(DEFAULT_TOTAL_ITEMS_PROCESSED)));
     }
 }

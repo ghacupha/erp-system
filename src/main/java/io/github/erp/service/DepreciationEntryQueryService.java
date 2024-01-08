@@ -148,6 +148,18 @@ public class DepreciationEntryQueryService extends QueryService<DepreciationEntr
                         buildSpecification(criteria.getFiscalQuarterIdentifier(), DepreciationEntry_.fiscalQuarterIdentifier)
                     );
             }
+            if (criteria.getBatchSequenceNumber() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getBatchSequenceNumber(), DepreciationEntry_.batchSequenceNumber));
+            }
+            if (criteria.getProcessedItems() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getProcessedItems(), DepreciationEntry_.processedItems));
+            }
+            if (criteria.getTotalItemsProcessed() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getTotalItemsProcessed(), DepreciationEntry_.totalItemsProcessed));
+            }
             if (criteria.getServiceOutletId() != null) {
                 specification =
                     specification.and(
@@ -217,6 +229,25 @@ public class DepreciationEntryQueryService extends QueryService<DepreciationEntr
                         buildSpecification(
                             criteria.getFiscalYearId(),
                             root -> root.join(DepreciationEntry_.fiscalYear, JoinType.LEFT).get(FiscalYear_.id)
+                        )
+                    );
+            }
+            if (criteria.getDepreciationJobId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getDepreciationJobId(),
+                            root -> root.join(DepreciationEntry_.depreciationJob, JoinType.LEFT).get(DepreciationJob_.id)
+                        )
+                    );
+            }
+            if (criteria.getDepreciationBatchSequenceId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getDepreciationBatchSequenceId(),
+                            root ->
+                                root.join(DepreciationEntry_.depreciationBatchSequence, JoinType.LEFT).get(DepreciationBatchSequence_.id)
                         )
                     );
             }

@@ -46,6 +46,12 @@ public class DepreciationEntryDTO implements Serializable {
 
     private UUID fiscalQuarterIdentifier;
 
+    private Integer batchSequenceNumber;
+
+    private String processedItems;
+
+    private Integer totalItemsProcessed;
+
     private ServiceOutletDTO serviceOutlet;
 
     private AssetCategoryDTO assetCategory;
@@ -61,6 +67,10 @@ public class DepreciationEntryDTO implements Serializable {
     private FiscalQuarterDTO fiscalQuarter;
 
     private FiscalYearDTO fiscalYear;
+
+    private DepreciationJobDTO depreciationJob;
+
+    private DepreciationBatchSequenceDTO depreciationBatchSequence;
 
     public Long getId() {
         return id;
@@ -124,6 +134,30 @@ public class DepreciationEntryDTO implements Serializable {
 
     public void setFiscalQuarterIdentifier(UUID fiscalQuarterIdentifier) {
         this.fiscalQuarterIdentifier = fiscalQuarterIdentifier;
+    }
+
+    public Integer getBatchSequenceNumber() {
+        return batchSequenceNumber;
+    }
+
+    public void setBatchSequenceNumber(Integer batchSequenceNumber) {
+        this.batchSequenceNumber = batchSequenceNumber;
+    }
+
+    public String getProcessedItems() {
+        return processedItems;
+    }
+
+    public void setProcessedItems(String processedItems) {
+        this.processedItems = processedItems;
+    }
+
+    public Integer getTotalItemsProcessed() {
+        return totalItemsProcessed;
+    }
+
+    public void setTotalItemsProcessed(Integer totalItemsProcessed) {
+        this.totalItemsProcessed = totalItemsProcessed;
     }
 
     public ServiceOutletDTO getServiceOutlet() {
@@ -190,6 +224,22 @@ public class DepreciationEntryDTO implements Serializable {
         this.fiscalYear = fiscalYear;
     }
 
+    public DepreciationJobDTO getDepreciationJob() {
+        return depreciationJob;
+    }
+
+    public void setDepreciationJob(DepreciationJobDTO depreciationJob) {
+        this.depreciationJob = depreciationJob;
+    }
+
+    public DepreciationBatchSequenceDTO getDepreciationBatchSequence() {
+        return depreciationBatchSequence;
+    }
+
+    public void setDepreciationBatchSequence(DepreciationBatchSequenceDTO depreciationBatchSequence) {
+        this.depreciationBatchSequence = depreciationBatchSequence;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -223,6 +273,9 @@ public class DepreciationEntryDTO implements Serializable {
             ", depreciationJobIdentifier='" + getDepreciationJobIdentifier() + "'" +
             ", fiscalMonthIdentifier='" + getFiscalMonthIdentifier() + "'" +
             ", fiscalQuarterIdentifier='" + getFiscalQuarterIdentifier() + "'" +
+            ", batchSequenceNumber=" + getBatchSequenceNumber() +
+            ", processedItems='" + getProcessedItems() + "'" +
+            ", totalItemsProcessed=" + getTotalItemsProcessed() +
             ", serviceOutlet=" + getServiceOutlet() +
             ", assetCategory=" + getAssetCategory() +
             ", depreciationMethod=" + getDepreciationMethod() +
@@ -231,6 +284,8 @@ public class DepreciationEntryDTO implements Serializable {
             ", fiscalMonth=" + getFiscalMonth() +
             ", fiscalQuarter=" + getFiscalQuarter() +
             ", fiscalYear=" + getFiscalYear() +
+            ", depreciationJob=" + getDepreciationJob() +
+            ", depreciationBatchSequence=" + getDepreciationBatchSequence() +
             "}";
     }
 }
