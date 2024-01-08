@@ -73,7 +73,7 @@ import java.util.List;
  * Marks the depreciation run as completed and saves the DepreciationRun entity.
  */
 @Service
-public class DepreciationBatchSequenceService {
+public class BatchSequenceDepreciationService {
 
     private static final Logger log = LoggerFactory.getLogger(DepreciationJobSequenceServiceImpl.class);
 
@@ -92,7 +92,7 @@ public class DepreciationBatchSequenceService {
     private final io.github.erp.service.DepreciationBatchSequenceService batchSequenceService;
     private final DepreciationCompleteCallback depreciationCompleteCallback;
 
-    public DepreciationBatchSequenceService(
+    public BatchSequenceDepreciationService(
         DepreciationCalculatorService depreciationCalculatorService,
         DepreciationJobService depreciationJobService,
         DepreciationPeriodService depreciationPeriodService,
@@ -152,14 +152,14 @@ public class DepreciationBatchSequenceService {
 
                 if (depreciationPeriodIsClosed(batchSequence, depreciationJob, depreciationPeriod)) throw new DepreciationPeriodClosedException(message);
 
-                FiscalYearDTO fiscalYear = getFiscalYear(batchSequence, depreciationJob, depreciationPeriod);
-                if (fiscalYear == null) throw new FiscalYearNotConfiguredException(message);
+                // FiscalYearDTO fiscalYear = getFiscalYear(batchSequence, depreciationJob, depreciationPeriod);
+                // if (fiscalYear == null) throw new FiscalYearNotConfiguredException(message);
 
                 FiscalMonthDTO fiscalMonth = getFiscalMonth(batchSequence, depreciationJob, depreciationPeriod);
                 if (fiscalMonth == null) throw new FiscalMonthNotConfiguredException(message);
 
-                FiscalQuarterDTO fiscalQuarter = getFiscalQuarter(batchSequence, depreciationJob, depreciationPeriod);
-                if (fiscalQuarter == null) throw new FiscalQuarterNotConfiguredException(message);
+                // FiscalQuarterDTO fiscalQuarter = getFiscalQuarter(batchSequence, depreciationJob, depreciationPeriod);
+                // if (fiscalQuarter == null) throw new FiscalQuarterNotConfiguredException(message);
 
                 log.debug("Standby for depreciation sequence on {} assets for batch id{}", assetIds.size(), message.getBatchId());
                 // Perform the depreciation calculations for the batch of assets
@@ -188,13 +188,14 @@ public class DepreciationBatchSequenceService {
                                     // NetBookValueDTO netBookValue = new NetBookValueDTO(depreciationAmount, assetRegistration, assetCategory, serviceOutlet, depreciationPeriod, depreciationJob)
                                     // NetBookValueDTO = netBookValueService.save(netBookValue)
 
-                                    recordDepreciationEntry(depreciationPeriod, fiscalYear, fiscalMonth, fiscalQuarter, assetRegistration, assetCategory, serviceOutlet, depreciationMethod, depreciationAmount);
+                                    recordDepreciationEntry(depreciationPeriod, fiscalMonth, assetRegistration, assetCategory, serviceOutlet, depreciationMethod, depreciationAmount);
                                 });
                         });
                     // TODO Update the asset's net book value and any other relevant data
                     // TODO Create and update netbook-value-entry
                 }
 
+                // Marking batch as complete
                 depreciationCompleteCallback.onComplete(message);
             },
             () -> {
@@ -202,7 +203,7 @@ public class DepreciationBatchSequenceService {
             });
     }
 
-    private void recordDepreciationEntry(DepreciationPeriodDTO depreciationPeriod, FiscalYearDTO fiscalYear, FiscalMonthDTO fiscalMonth, FiscalQuarterDTO fiscalQuarter, io.github.erp.service.dto.AssetRegistrationDTO assetRegistration, AssetCategoryDTO assetCategory, ServiceOutletDTO serviceOutlet, io.github.erp.service.dto.DepreciationMethodDTO depreciationMethod, BigDecimal depreciationAmount) {
+    private void recordDepreciationEntry(DepreciationPeriodDTO depreciationPeriod, FiscalMonthDTO fiscalMonth, io.github.erp.service.dto.AssetRegistrationDTO assetRegistration, AssetCategoryDTO assetCategory, ServiceOutletDTO serviceOutlet, io.github.erp.service.dto.DepreciationMethodDTO depreciationMethod, BigDecimal depreciationAmount) {
         // Save the depreciation to the database
         DepreciationEntryDTO depreciationEntry = new DepreciationEntryDTO();
         depreciationEntry.setDepreciationAmount(depreciationAmount);
@@ -214,9 +215,9 @@ public class DepreciationBatchSequenceService {
         depreciationEntry.setAssetRegistration(assetRegistration);
         depreciationEntry.setPostedAt(ZonedDateTime.now());
         depreciationEntry.setServiceOutlet(serviceOutlet);
-        depreciationEntry.setFiscalYear(fiscalYear);
+        depreciationEntry.setFiscalYear(fiscalMonth.getFiscalYear());
         depreciationEntry.setFiscalMonth(fiscalMonth);
-        depreciationEntry.setFiscalQuarter(fiscalQuarter);
+        depreciationEntry.setFiscalQuarter(fiscalMonth.getFiscalQuarter());
 
         DepreciationEntryDTO depreciation = depreciationEntryService.save(depreciationEntry);
 
