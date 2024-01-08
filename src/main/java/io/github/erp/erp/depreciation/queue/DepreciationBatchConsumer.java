@@ -17,10 +17,12 @@ package io.github.erp.erp.depreciation.queue;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.erp.depreciation.DepreciationBatchSequenceService;
+import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
+import io.github.erp.erp.depreciation.BatchSequenceDepreciationService;
 import io.github.erp.erp.depreciation.DepreciationJobCompleteCallback;
 import io.github.erp.erp.depreciation.DepreciationJobErroredCallback;
 import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
+import io.github.erp.service.DepreciationBatchSequenceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -33,19 +35,26 @@ public class DepreciationBatchConsumer {
 
     private static final Logger log = LoggerFactory.getLogger(DepreciationBatchConsumer.class);
 
-    private final DepreciationBatchSequenceService depreciationBatchSequenceService;
+    private final BatchSequenceDepreciationService batchSequenceDepreciationService;
     private final DepreciationJobCompleteCallback depreciationJobCompleteCallback;
     private final DepreciationJobErroredCallback depreciationJobErroredCallback;
 
+    private final DepreciationBatchSequenceService depreciationBatchSequenceService;
+
     private final Object sequenceLock = new Object(); // For concurrency control
 
-    public DepreciationBatchConsumer(DepreciationBatchSequenceService depreciationBatchSequenceService, DepreciationJobCompleteCallback depreciationJobCompleteCallback, DepreciationJobErroredCallback depreciationJobErroredCallback) {
+    public DepreciationBatchConsumer(
+        BatchSequenceDepreciationService batchSequenceDepreciationService,
+        DepreciationJobCompleteCallback depreciationJobCompleteCallback,
+        DepreciationJobErroredCallback depreciationJobErroredCallback,
+        DepreciationBatchSequenceService depreciationBatchSequenceService) {
+        this.batchSequenceDepreciationService = batchSequenceDepreciationService;
+        this.depreciationJobErroredCallback = depreciationJobErroredCallback;
         this.depreciationBatchSequenceService = depreciationBatchSequenceService;
         this.depreciationJobCompleteCallback = depreciationJobCompleteCallback;
-        this.depreciationJobErroredCallback = depreciationJobErroredCallback;
     }
 
-    @KafkaListener(topics = "depreciation_batch_topic", groupId = "erp-system", concurrency ="8")
+    @KafkaListener(topics = "depreciation_batch_topic", groupId = "erp-system")
     public void processDepreciationJobMessages(List<DepreciationBatchMessage> messages) {
         // Process the batch of depreciation job messages
         for (DepreciationBatchMessage message : messages) {
@@ -57,12 +66,19 @@ public class DepreciationBatchConsumer {
                 synchronized (sequenceLock) {
                     // Process and update the batch sequence status
                     // TODO CALLBACK FOR SEQUENCE UPDATE
-                    depreciationBatchSequenceService.runDepreciation(message);
+                    batchSequenceDepreciationService.runDepreciation(message);
 
-                    // TODO implement this in a way that supports parallelism
-                    // if (message.isLastBatch()) {
-                    //    depreciationJobCompleteCallback.onComplete(message);
-                    // }
+//                    depreciationBatchSequenceService.findOne(Long.valueOf(message.getBatchId()))
+//                        .ifPresent(batch -> {
+//                            batch.setDepreciationBatchStatus(DepreciationBatchStatusType.COMPLETED);
+//                            depreciationBatchSequenceService.save(batch);
+//                        });
+                    // depreciationJobCompleteCallback.onComplete(message);
+
+                     // TODO implement this in a way that supports parallelism
+                     // if (message.isLastBatch()) {
+                     //    depreciationJobCompleteCallback.onComplete(message);
+                     // }
                 }
 
             } catch (Exception e) {

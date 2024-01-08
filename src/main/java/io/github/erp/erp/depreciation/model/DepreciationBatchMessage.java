@@ -45,4 +45,5 @@ public class DepreciationBatchMessage implements Serializable {
     private int startIndex;
     private int endIndex;
     private boolean isLastBatch;
+    private int processedCount;
 }
