@@ -61,6 +61,12 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
 
     private UUIDFilter fiscalQuarterIdentifier;
 
+    private IntegerFilter batchSequenceNumber;
+
+    private StringFilter processedItems;
+
+    private IntegerFilter totalItemsProcessed;
+
     private LongFilter serviceOutletId;
 
     private LongFilter assetCategoryId;
@@ -77,6 +83,10 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
 
     private LongFilter fiscalYearId;
 
+    private LongFilter depreciationJobId;
+
+    private LongFilter depreciationBatchSequenceId;
+
     private Boolean distinct;
 
     public DepreciationEntryCriteria() {}
@@ -90,6 +100,9 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
         this.depreciationJobIdentifier = other.depreciationJobIdentifier == null ? null : other.depreciationJobIdentifier.copy();
         this.fiscalMonthIdentifier = other.fiscalMonthIdentifier == null ? null : other.fiscalMonthIdentifier.copy();
         this.fiscalQuarterIdentifier = other.fiscalQuarterIdentifier == null ? null : other.fiscalQuarterIdentifier.copy();
+        this.batchSequenceNumber = other.batchSequenceNumber == null ? null : other.batchSequenceNumber.copy();
+        this.processedItems = other.processedItems == null ? null : other.processedItems.copy();
+        this.totalItemsProcessed = other.totalItemsProcessed == null ? null : other.totalItemsProcessed.copy();
         this.serviceOutletId = other.serviceOutletId == null ? null : other.serviceOutletId.copy();
         this.assetCategoryId = other.assetCategoryId == null ? null : other.assetCategoryId.copy();
         this.depreciationMethodId = other.depreciationMethodId == null ? null : other.depreciationMethodId.copy();
@@ -98,6 +111,8 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
         this.fiscalMonthId = other.fiscalMonthId == null ? null : other.fiscalMonthId.copy();
         this.fiscalQuarterId = other.fiscalQuarterId == null ? null : other.fiscalQuarterId.copy();
         this.fiscalYearId = other.fiscalYearId == null ? null : other.fiscalYearId.copy();
+        this.depreciationJobId = other.depreciationJobId == null ? null : other.depreciationJobId.copy();
+        this.depreciationBatchSequenceId = other.depreciationBatchSequenceId == null ? null : other.depreciationBatchSequenceId.copy();
         this.distinct = other.distinct;
     }
 
@@ -226,6 +241,51 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
         this.fiscalQuarterIdentifier = fiscalQuarterIdentifier;
     }
 
+    public IntegerFilter getBatchSequenceNumber() {
+        return batchSequenceNumber;
+    }
+
+    public IntegerFilter batchSequenceNumber() {
+        if (batchSequenceNumber == null) {
+            batchSequenceNumber = new IntegerFilter();
+        }
+        return batchSequenceNumber;
+    }
+
+    public void setBatchSequenceNumber(IntegerFilter batchSequenceNumber) {
+        this.batchSequenceNumber = batchSequenceNumber;
+    }
+
+    public StringFilter getProcessedItems() {
+        return processedItems;
+    }
+
+    public StringFilter processedItems() {
+        if (processedItems == null) {
+            processedItems = new StringFilter();
+        }
+        return processedItems;
+    }
+
+    public void setProcessedItems(StringFilter processedItems) {
+        this.processedItems = processedItems;
+    }
+
+    public IntegerFilter getTotalItemsProcessed() {
+        return totalItemsProcessed;
+    }
+
+    public IntegerFilter totalItemsProcessed() {
+        if (totalItemsProcessed == null) {
+            totalItemsProcessed = new IntegerFilter();
+        }
+        return totalItemsProcessed;
+    }
+
+    public void setTotalItemsProcessed(IntegerFilter totalItemsProcessed) {
+        this.totalItemsProcessed = totalItemsProcessed;
+    }
+
     public LongFilter getServiceOutletId() {
         return serviceOutletId;
     }
@@ -346,6 +406,36 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
         this.fiscalYearId = fiscalYearId;
     }
 
+    public LongFilter getDepreciationJobId() {
+        return depreciationJobId;
+    }
+
+    public LongFilter depreciationJobId() {
+        if (depreciationJobId == null) {
+            depreciationJobId = new LongFilter();
+        }
+        return depreciationJobId;
+    }
+
+    public void setDepreciationJobId(LongFilter depreciationJobId) {
+        this.depreciationJobId = depreciationJobId;
+    }
+
+    public LongFilter getDepreciationBatchSequenceId() {
+        return depreciationBatchSequenceId;
+    }
+
+    public LongFilter depreciationBatchSequenceId() {
+        if (depreciationBatchSequenceId == null) {
+            depreciationBatchSequenceId = new LongFilter();
+        }
+        return depreciationBatchSequenceId;
+    }
+
+    public void setDepreciationBatchSequenceId(LongFilter depreciationBatchSequenceId) {
+        this.depreciationBatchSequenceId = depreciationBatchSequenceId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -372,6 +462,9 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             Objects.equals(depreciationJobIdentifier, that.depreciationJobIdentifier) &&
             Objects.equals(fiscalMonthIdentifier, that.fiscalMonthIdentifier) &&
             Objects.equals(fiscalQuarterIdentifier, that.fiscalQuarterIdentifier) &&
+            Objects.equals(batchSequenceNumber, that.batchSequenceNumber) &&
+            Objects.equals(processedItems, that.processedItems) &&
+            Objects.equals(totalItemsProcessed, that.totalItemsProcessed) &&
             Objects.equals(serviceOutletId, that.serviceOutletId) &&
             Objects.equals(assetCategoryId, that.assetCategoryId) &&
             Objects.equals(depreciationMethodId, that.depreciationMethodId) &&
@@ -380,6 +473,8 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             Objects.equals(fiscalMonthId, that.fiscalMonthId) &&
             Objects.equals(fiscalQuarterId, that.fiscalQuarterId) &&
             Objects.equals(fiscalYearId, that.fiscalYearId) &&
+            Objects.equals(depreciationJobId, that.depreciationJobId) &&
+            Objects.equals(depreciationBatchSequenceId, that.depreciationBatchSequenceId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -395,6 +490,9 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             depreciationJobIdentifier,
             fiscalMonthIdentifier,
             fiscalQuarterIdentifier,
+            batchSequenceNumber,
+            processedItems,
+            totalItemsProcessed,
             serviceOutletId,
             assetCategoryId,
             depreciationMethodId,
@@ -403,6 +501,8 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             fiscalMonthId,
             fiscalQuarterId,
             fiscalYearId,
+            depreciationJobId,
+            depreciationBatchSequenceId,
             distinct
         );
     }
@@ -419,6 +519,9 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             (depreciationJobIdentifier != null ? "depreciationJobIdentifier=" + depreciationJobIdentifier + ", " : "") +
             (fiscalMonthIdentifier != null ? "fiscalMonthIdentifier=" + fiscalMonthIdentifier + ", " : "") +
             (fiscalQuarterIdentifier != null ? "fiscalQuarterIdentifier=" + fiscalQuarterIdentifier + ", " : "") +
+            (batchSequenceNumber != null ? "batchSequenceNumber=" + batchSequenceNumber + ", " : "") +
+            (processedItems != null ? "processedItems=" + processedItems + ", " : "") +
+            (totalItemsProcessed != null ? "totalItemsProcessed=" + totalItemsProcessed + ", " : "") +
             (serviceOutletId != null ? "serviceOutletId=" + serviceOutletId + ", " : "") +
             (assetCategoryId != null ? "assetCategoryId=" + assetCategoryId + ", " : "") +
             (depreciationMethodId != null ? "depreciationMethodId=" + depreciationMethodId + ", " : "") +
@@ -427,6 +530,8 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             (fiscalMonthId != null ? "fiscalMonthId=" + fiscalMonthId + ", " : "") +
             (fiscalQuarterId != null ? "fiscalQuarterId=" + fiscalQuarterId + ", " : "") +
             (fiscalYearId != null ? "fiscalYearId=" + fiscalYearId + ", " : "") +
+            (depreciationJobId != null ? "depreciationJobId=" + depreciationJobId + ", " : "") +
+            (depreciationBatchSequenceId != null ? "depreciationBatchSequenceId=" + depreciationBatchSequenceId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

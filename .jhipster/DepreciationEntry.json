@@ -31,6 +31,18 @@
       "fieldName": "fiscalQuarterIdentifier",
       "fieldType": "UUID",
       "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "batchSequenceNumber",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "processedItems",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "totalItemsProcessed",
+      "fieldType": "Integer"
     }
   ],
   "relationships": [
@@ -81,6 +93,18 @@
       "otherEntityName": "fiscalYear",
       "relationshipType": "many-to-one",
       "otherEntityField": "fiscalYearCode"
+    },
+    {
+      "relationshipName": "depreciationJob",
+      "otherEntityName": "depreciationJob",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "description"
+    },
+    {
+      "relationshipName": "depreciationBatchSequence",
+      "otherEntityName": "depreciationBatchSequence",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
     }
   ],
   "service": "serviceImpl",

@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark IX No 5 (Iddo Series) Server ver 1.6.7
+ * Erp System - Mark X No 1 (Jehoiada Series) Server ver 1.7.0
  * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@ package io.github.erp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.github.erp.domain.enumeration.DepreciationJobStatusType;
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -54,6 +55,24 @@ public class DepreciationJob extends AbstractIdentifiableEntity implements Seria
     @NotNull
     @Column(name = "description", nullable = false, unique = true)
     private String description;
+
+    @Column(name = "number_of_batches")
+    private Integer numberOfBatches;
+
+    @Column(name = "processed_batches")
+    private Integer processedBatches;
+
+    @Column(name = "last_batch_size")
+    private Integer lastBatchSize;
+
+    @Column(name = "processed_items")
+    private Integer processedItems;
+
+    @Column(name = "processing_time")
+    private Duration processingTime;
+
+    @Column(name = "total_items")
+    private Integer totalItems;
 
     @ManyToOne
     @JsonIgnoreProperties(
@@ -121,6 +140,84 @@ public class DepreciationJob extends AbstractIdentifiableEntity implements Seria
         this.description = description;
     }
 
+    public Integer getNumberOfBatches() {
+        return this.numberOfBatches;
+    }
+
+    public DepreciationJob numberOfBatches(Integer numberOfBatches) {
+        this.setNumberOfBatches(numberOfBatches);
+        return this;
+    }
+
+    public void setNumberOfBatches(Integer numberOfBatches) {
+        this.numberOfBatches = numberOfBatches;
+    }
+
+    public Integer getProcessedBatches() {
+        return this.processedBatches;
+    }
+
+    public DepreciationJob processedBatches(Integer processedBatches) {
+        this.setProcessedBatches(processedBatches);
+        return this;
+    }
+
+    public void setProcessedBatches(Integer processedBatches) {
+        this.processedBatches = processedBatches;
+    }
+
+    public Integer getLastBatchSize() {
+        return this.lastBatchSize;
+    }
+
+    public DepreciationJob lastBatchSize(Integer lastBatchSize) {
+        this.setLastBatchSize(lastBatchSize);
+        return this;
+    }
+
+    public void setLastBatchSize(Integer lastBatchSize) {
+        this.lastBatchSize = lastBatchSize;
+    }
+
+    public Integer getProcessedItems() {
+        return this.processedItems;
+    }
+
+    public DepreciationJob processedItems(Integer processedItems) {
+        this.setProcessedItems(processedItems);
+        return this;
+    }
+
+    public void setProcessedItems(Integer processedItems) {
+        this.processedItems = processedItems;
+    }
+
+    public Duration getProcessingTime() {
+        return this.processingTime;
+    }
+
+    public DepreciationJob processingTime(Duration processingTime) {
+        this.setProcessingTime(processingTime);
+        return this;
+    }
+
+    public void setProcessingTime(Duration processingTime) {
+        this.processingTime = processingTime;
+    }
+
+    public Integer getTotalItems() {
+        return this.totalItems;
+    }
+
+    public DepreciationJob totalItems(Integer totalItems) {
+        this.setTotalItems(totalItems);
+        return this;
+    }
+
+    public void setTotalItems(Integer totalItems) {
+        this.totalItems = totalItems;
+    }
+
     public ApplicationUser getCreatedBy() {
         return this.createdBy;
     }
@@ -174,6 +271,12 @@ public class DepreciationJob extends AbstractIdentifiableEntity implements Seria
             ", timeOfCommencement='" + getTimeOfCommencement() + "'" +
             ", depreciationJobStatus='" + getDepreciationJobStatus() + "'" +
             ", description='" + getDescription() + "'" +
+            ", numberOfBatches=" + getNumberOfBatches() +
+            ", processedBatches=" + getProcessedBatches() +
+            ", lastBatchSize=" + getLastBatchSize() +
+            ", processedItems=" + getProcessedItems() +
+            ", processingTime='" + getProcessingTime() + "'" +
+            ", totalItems=" + getTotalItems() +
             "}";
     }
 }

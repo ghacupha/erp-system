@@ -35,4 +35,10 @@ public interface DepreciationJobMapper extends EntityMapper<DepreciationJobDTO, 
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     DepreciationJobDTO toDtoId(DepreciationJob depreciationJob);
+
+    @Named("description")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "description", source = "description")
+    DepreciationJobDTO toDtoDescription(DepreciationJob depreciationJob);
 }

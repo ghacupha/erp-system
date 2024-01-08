@@ -66,6 +66,15 @@ public class DepreciationEntry implements Serializable {
     @Column(name = "fiscal_quarter_identifier", unique = true)
     private UUID fiscalQuarterIdentifier;
 
+    @Column(name = "batch_sequence_number")
+    private Integer batchSequenceNumber;
+
+    @Column(name = "processed_items")
+    private String processedItems;
+
+    @Column(name = "total_items_processed")
+    private Integer totalItemsProcessed;
+
     @ManyToOne
     @JsonIgnoreProperties(
         value = { "placeholders", "bankCode", "outletType", "outletStatus", "countyName", "subCountyName" },
@@ -120,6 +129,14 @@ public class DepreciationEntry implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties(value = { "placeholders", "universallyUniqueMappings", "createdBy", "lastUpdatedBy" }, allowSetters = true)
     private FiscalYear fiscalYear;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "createdBy", "depreciationPeriod" }, allowSetters = true)
+    private DepreciationJob depreciationJob;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "depreciationJob" }, allowSetters = true)
+    private DepreciationBatchSequence depreciationBatchSequence;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -227,6 +244,45 @@ public class DepreciationEntry implements Serializable {
         this.fiscalQuarterIdentifier = fiscalQuarterIdentifier;
     }
 
+    public Integer getBatchSequenceNumber() {
+        return this.batchSequenceNumber;
+    }
+
+    public DepreciationEntry batchSequenceNumber(Integer batchSequenceNumber) {
+        this.setBatchSequenceNumber(batchSequenceNumber);
+        return this;
+    }
+
+    public void setBatchSequenceNumber(Integer batchSequenceNumber) {
+        this.batchSequenceNumber = batchSequenceNumber;
+    }
+
+    public String getProcessedItems() {
+        return this.processedItems;
+    }
+
+    public DepreciationEntry processedItems(String processedItems) {
+        this.setProcessedItems(processedItems);
+        return this;
+    }
+
+    public void setProcessedItems(String processedItems) {
+        this.processedItems = processedItems;
+    }
+
+    public Integer getTotalItemsProcessed() {
+        return this.totalItemsProcessed;
+    }
+
+    public DepreciationEntry totalItemsProcessed(Integer totalItemsProcessed) {
+        this.setTotalItemsProcessed(totalItemsProcessed);
+        return this;
+    }
+
+    public void setTotalItemsProcessed(Integer totalItemsProcessed) {
+        this.totalItemsProcessed = totalItemsProcessed;
+    }
+
     public ServiceOutlet getServiceOutlet() {
         return this.serviceOutlet;
     }
@@ -331,6 +387,32 @@ public class DepreciationEntry implements Serializable {
         return this;
     }
 
+    public DepreciationJob getDepreciationJob() {
+        return this.depreciationJob;
+    }
+
+    public void setDepreciationJob(DepreciationJob depreciationJob) {
+        this.depreciationJob = depreciationJob;
+    }
+
+    public DepreciationEntry depreciationJob(DepreciationJob depreciationJob) {
+        this.setDepreciationJob(depreciationJob);
+        return this;
+    }
+
+    public DepreciationBatchSequence getDepreciationBatchSequence() {
+        return this.depreciationBatchSequence;
+    }
+
+    public void setDepreciationBatchSequence(DepreciationBatchSequence depreciationBatchSequence) {
+        this.depreciationBatchSequence = depreciationBatchSequence;
+    }
+
+    public DepreciationEntry depreciationBatchSequence(DepreciationBatchSequence depreciationBatchSequence) {
+        this.setDepreciationBatchSequence(depreciationBatchSequence);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -362,6 +444,9 @@ public class DepreciationEntry implements Serializable {
             ", depreciationJobIdentifier='" + getDepreciationJobIdentifier() + "'" +
             ", fiscalMonthIdentifier='" + getFiscalMonthIdentifier() + "'" +
             ", fiscalQuarterIdentifier='" + getFiscalQuarterIdentifier() + "'" +
+            ", batchSequenceNumber=" + getBatchSequenceNumber() +
+            ", processedItems='" + getProcessedItems() + "'" +
+            ", totalItemsProcessed=" + getTotalItemsProcessed() +
             "}";
     }
 }

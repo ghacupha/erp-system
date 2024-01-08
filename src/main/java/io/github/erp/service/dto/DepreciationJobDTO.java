@@ -20,6 +20,7 @@ package io.github.erp.service.dto;
 
 import io.github.erp.domain.enumeration.DepreciationJobStatusType;
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import javax.validation.constraints.*;
@@ -37,6 +38,18 @@ public class DepreciationJobDTO implements Serializable {
 
     @NotNull
     private String description;
+
+    private Integer numberOfBatches;
+
+    private Integer processedBatches;
+
+    private Integer lastBatchSize;
+
+    private Integer processedItems;
+
+    private Duration processingTime;
+
+    private Integer totalItems;
 
     private ApplicationUserDTO createdBy;
 
@@ -72,6 +85,54 @@ public class DepreciationJobDTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getNumberOfBatches() {
+        return numberOfBatches;
+    }
+
+    public void setNumberOfBatches(Integer numberOfBatches) {
+        this.numberOfBatches = numberOfBatches;
+    }
+
+    public Integer getProcessedBatches() {
+        return processedBatches;
+    }
+
+    public void setProcessedBatches(Integer processedBatches) {
+        this.processedBatches = processedBatches;
+    }
+
+    public Integer getLastBatchSize() {
+        return lastBatchSize;
+    }
+
+    public void setLastBatchSize(Integer lastBatchSize) {
+        this.lastBatchSize = lastBatchSize;
+    }
+
+    public Integer getProcessedItems() {
+        return processedItems;
+    }
+
+    public void setProcessedItems(Integer processedItems) {
+        this.processedItems = processedItems;
+    }
+
+    public Duration getProcessingTime() {
+        return processingTime;
+    }
+
+    public void setProcessingTime(Duration processingTime) {
+        this.processingTime = processingTime;
+    }
+
+    public Integer getTotalItems() {
+        return totalItems;
+    }
+
+    public void setTotalItems(Integer totalItems) {
+        this.totalItems = totalItems;
     }
 
     public ApplicationUserDTO getCreatedBy() {
@@ -119,6 +180,12 @@ public class DepreciationJobDTO implements Serializable {
             ", timeOfCommencement='" + getTimeOfCommencement() + "'" +
             ", depreciationJobStatus='" + getDepreciationJobStatus() + "'" +
             ", description='" + getDescription() + "'" +
+            ", numberOfBatches=" + getNumberOfBatches() +
+            ", processedBatches=" + getProcessedBatches() +
+            ", lastBatchSize=" + getLastBatchSize() +
+            ", processedItems=" + getProcessedItems() +
+            ", processingTime='" + getProcessingTime() + "'" +
+            ", totalItems=" + getTotalItems() +
             ", createdBy=" + getCreatedBy() +
             ", depreciationPeriod=" + getDepreciationPeriod() +
             "}";

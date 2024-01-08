@@ -40,6 +40,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -63,9 +64,11 @@ class DepreciationBatchSequenceResourceIT {
 
     private static final Integer DEFAULT_START_INDEX = 1;
     private static final Integer UPDATED_START_INDEX = 2;
+    private static final Integer SMALLER_START_INDEX = 1 - 1;
 
     private static final Integer DEFAULT_END_INDEX = 1;
     private static final Integer UPDATED_END_INDEX = 2;
+    private static final Integer SMALLER_END_INDEX = 1 - 1;
 
     private static final DepreciationBatchStatusType DEFAULT_DEPRECIATION_BATCH_STATUS = DepreciationBatchStatusType.CREATED;
     private static final DepreciationBatchStatusType UPDATED_DEPRECIATION_BATCH_STATUS = DepreciationBatchStatusType.RUNNING;
@@ -81,6 +84,29 @@ class DepreciationBatchSequenceResourceIT {
 
     private static final UUID DEFAULT_FISCAL_QUARTER_IDENTIFIER = UUID.randomUUID();
     private static final UUID UPDATED_FISCAL_QUARTER_IDENTIFIER = UUID.randomUUID();
+
+    private static final Integer DEFAULT_BATCH_SIZE = 1;
+    private static final Integer UPDATED_BATCH_SIZE = 2;
+    private static final Integer SMALLER_BATCH_SIZE = 1 - 1;
+
+    private static final Integer DEFAULT_PROCESSED_ITEMS = 1;
+    private static final Integer UPDATED_PROCESSED_ITEMS = 2;
+    private static final Integer SMALLER_PROCESSED_ITEMS = 1 - 1;
+
+    private static final Integer DEFAULT_SEQUENCE_NUMBER = 1;
+    private static final Integer UPDATED_SEQUENCE_NUMBER = 2;
+    private static final Integer SMALLER_SEQUENCE_NUMBER = 1 - 1;
+
+    private static final Boolean DEFAULT_IS_LAST_BATCH = false;
+    private static final Boolean UPDATED_IS_LAST_BATCH = true;
+
+    private static final Duration DEFAULT_PROCESSING_TIME = Duration.ofHours(6);
+    private static final Duration UPDATED_PROCESSING_TIME = Duration.ofHours(12);
+    private static final Duration SMALLER_PROCESSING_TIME = Duration.ofHours(5);
+
+    private static final Integer DEFAULT_TOTAL_ITEMS = 1;
+    private static final Integer UPDATED_TOTAL_ITEMS = 2;
+    private static final Integer SMALLER_TOTAL_ITEMS = 1 - 1;
 
     private static final String ENTITY_API_URL = "/api/fixed-asset/depreciation-batch-sequences";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -125,7 +151,13 @@ class DepreciationBatchSequenceResourceIT {
             .depreciationPeriodIdentifier(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER)
             .depreciationJobIdentifier(DEFAULT_DEPRECIATION_JOB_IDENTIFIER)
             .fiscalMonthIdentifier(DEFAULT_FISCAL_MONTH_IDENTIFIER)
-            .fiscalQuarterIdentifier(DEFAULT_FISCAL_QUARTER_IDENTIFIER);
+            .fiscalQuarterIdentifier(DEFAULT_FISCAL_QUARTER_IDENTIFIER)
+            .batchSize(DEFAULT_BATCH_SIZE)
+            .processedItems(DEFAULT_PROCESSED_ITEMS)
+            .sequenceNumber(DEFAULT_SEQUENCE_NUMBER)
+            .isLastBatch(DEFAULT_IS_LAST_BATCH)
+            .processingTime(DEFAULT_PROCESSING_TIME)
+            .totalItems(DEFAULT_TOTAL_ITEMS);
         return depreciationBatchSequence;
     }
 
@@ -143,7 +175,13 @@ class DepreciationBatchSequenceResourceIT {
             .depreciationPeriodIdentifier(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER)
             .depreciationJobIdentifier(UPDATED_DEPRECIATION_JOB_IDENTIFIER)
             .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER)
-            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER);
+            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER)
+            .batchSize(UPDATED_BATCH_SIZE)
+            .processedItems(UPDATED_PROCESSED_ITEMS)
+            .sequenceNumber(UPDATED_SEQUENCE_NUMBER)
+            .isLastBatch(UPDATED_IS_LAST_BATCH)
+            .processingTime(UPDATED_PROCESSING_TIME)
+            .totalItems(UPDATED_TOTAL_ITEMS);
         return depreciationBatchSequence;
     }
 
@@ -179,6 +217,12 @@ class DepreciationBatchSequenceResourceIT {
         assertThat(testDepreciationBatchSequence.getDepreciationJobIdentifier()).isEqualTo(DEFAULT_DEPRECIATION_JOB_IDENTIFIER);
         assertThat(testDepreciationBatchSequence.getFiscalMonthIdentifier()).isEqualTo(DEFAULT_FISCAL_MONTH_IDENTIFIER);
         assertThat(testDepreciationBatchSequence.getFiscalQuarterIdentifier()).isEqualTo(DEFAULT_FISCAL_QUARTER_IDENTIFIER);
+        assertThat(testDepreciationBatchSequence.getBatchSize()).isEqualTo(DEFAULT_BATCH_SIZE);
+        assertThat(testDepreciationBatchSequence.getProcessedItems()).isEqualTo(DEFAULT_PROCESSED_ITEMS);
+        assertThat(testDepreciationBatchSequence.getSequenceNumber()).isEqualTo(DEFAULT_SEQUENCE_NUMBER);
+        assertThat(testDepreciationBatchSequence.getIsLastBatch()).isEqualTo(DEFAULT_IS_LAST_BATCH);
+        assertThat(testDepreciationBatchSequence.getProcessingTime()).isEqualTo(DEFAULT_PROCESSING_TIME);
+        assertThat(testDepreciationBatchSequence.getTotalItems()).isEqualTo(DEFAULT_TOTAL_ITEMS);
 
         // Validate the DepreciationBatchSequence in Elasticsearch
         verify(mockDepreciationBatchSequenceSearchRepository, times(1)).save(testDepreciationBatchSequence);
@@ -228,7 +272,13 @@ class DepreciationBatchSequenceResourceIT {
             .andExpect(jsonPath("$.[*].depreciationPeriodIdentifier").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].depreciationJobIdentifier").value(hasItem(DEFAULT_DEPRECIATION_JOB_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].fiscalMonthIdentifier").value(hasItem(DEFAULT_FISCAL_MONTH_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())));
+            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].batchSize").value(hasItem(DEFAULT_BATCH_SIZE)))
+            .andExpect(jsonPath("$.[*].processedItems").value(hasItem(DEFAULT_PROCESSED_ITEMS)))
+            .andExpect(jsonPath("$.[*].sequenceNumber").value(hasItem(DEFAULT_SEQUENCE_NUMBER)))
+            .andExpect(jsonPath("$.[*].isLastBatch").value(hasItem(DEFAULT_IS_LAST_BATCH.booleanValue())))
+            .andExpect(jsonPath("$.[*].processingTime").value(hasItem(DEFAULT_PROCESSING_TIME.toString())))
+            .andExpect(jsonPath("$.[*].totalItems").value(hasItem(DEFAULT_TOTAL_ITEMS)));
     }
 
     @Test
@@ -280,7 +330,13 @@ class DepreciationBatchSequenceResourceIT {
             .depreciationPeriodIdentifier(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER)
             .depreciationJobIdentifier(UPDATED_DEPRECIATION_JOB_IDENTIFIER)
             .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER)
-            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER);
+            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER)
+            .batchSize(UPDATED_BATCH_SIZE)
+            .processedItems(UPDATED_PROCESSED_ITEMS)
+            .sequenceNumber(UPDATED_SEQUENCE_NUMBER)
+            .isLastBatch(UPDATED_IS_LAST_BATCH)
+            .processingTime(UPDATED_PROCESSING_TIME)
+            .totalItems(UPDATED_TOTAL_ITEMS);
         DepreciationBatchSequenceDTO depreciationBatchSequenceDTO = depreciationBatchSequenceMapper.toDto(updatedDepreciationBatchSequence);
 
         restDepreciationBatchSequenceMockMvc
@@ -304,6 +360,12 @@ class DepreciationBatchSequenceResourceIT {
         assertThat(testDepreciationBatchSequence.getDepreciationJobIdentifier()).isEqualTo(UPDATED_DEPRECIATION_JOB_IDENTIFIER);
         assertThat(testDepreciationBatchSequence.getFiscalMonthIdentifier()).isEqualTo(UPDATED_FISCAL_MONTH_IDENTIFIER);
         assertThat(testDepreciationBatchSequence.getFiscalQuarterIdentifier()).isEqualTo(UPDATED_FISCAL_QUARTER_IDENTIFIER);
+        assertThat(testDepreciationBatchSequence.getBatchSize()).isEqualTo(UPDATED_BATCH_SIZE);
+        assertThat(testDepreciationBatchSequence.getProcessedItems()).isEqualTo(UPDATED_PROCESSED_ITEMS);
+        assertThat(testDepreciationBatchSequence.getSequenceNumber()).isEqualTo(UPDATED_SEQUENCE_NUMBER);
+        assertThat(testDepreciationBatchSequence.getIsLastBatch()).isEqualTo(UPDATED_IS_LAST_BATCH);
+        assertThat(testDepreciationBatchSequence.getProcessingTime()).isEqualTo(UPDATED_PROCESSING_TIME);
+        assertThat(testDepreciationBatchSequence.getTotalItems()).isEqualTo(UPDATED_TOTAL_ITEMS);
 
         // Validate the DepreciationBatchSequence in Elasticsearch
         verify(mockDepreciationBatchSequenceSearchRepository).save(testDepreciationBatchSequence);
@@ -401,7 +463,11 @@ class DepreciationBatchSequenceResourceIT {
 
         partialUpdatedDepreciationBatchSequence
             .depreciationPeriodIdentifier(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER)
-            .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER);
+            .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER)
+            .batchSize(UPDATED_BATCH_SIZE)
+            .isLastBatch(UPDATED_IS_LAST_BATCH)
+            .processingTime(UPDATED_PROCESSING_TIME)
+            .totalItems(UPDATED_TOTAL_ITEMS);
 
         restDepreciationBatchSequenceMockMvc
             .perform(
@@ -424,6 +490,12 @@ class DepreciationBatchSequenceResourceIT {
         assertThat(testDepreciationBatchSequence.getDepreciationJobIdentifier()).isEqualTo(DEFAULT_DEPRECIATION_JOB_IDENTIFIER);
         assertThat(testDepreciationBatchSequence.getFiscalMonthIdentifier()).isEqualTo(UPDATED_FISCAL_MONTH_IDENTIFIER);
         assertThat(testDepreciationBatchSequence.getFiscalQuarterIdentifier()).isEqualTo(DEFAULT_FISCAL_QUARTER_IDENTIFIER);
+        assertThat(testDepreciationBatchSequence.getBatchSize()).isEqualTo(UPDATED_BATCH_SIZE);
+        assertThat(testDepreciationBatchSequence.getProcessedItems()).isEqualTo(DEFAULT_PROCESSED_ITEMS);
+        assertThat(testDepreciationBatchSequence.getSequenceNumber()).isEqualTo(DEFAULT_SEQUENCE_NUMBER);
+        assertThat(testDepreciationBatchSequence.getIsLastBatch()).isEqualTo(UPDATED_IS_LAST_BATCH);
+        assertThat(testDepreciationBatchSequence.getProcessingTime()).isEqualTo(UPDATED_PROCESSING_TIME);
+        assertThat(testDepreciationBatchSequence.getTotalItems()).isEqualTo(UPDATED_TOTAL_ITEMS);
     }
 
     @Test
@@ -445,7 +517,13 @@ class DepreciationBatchSequenceResourceIT {
             .depreciationPeriodIdentifier(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER)
             .depreciationJobIdentifier(UPDATED_DEPRECIATION_JOB_IDENTIFIER)
             .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER)
-            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER);
+            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER)
+            .batchSize(UPDATED_BATCH_SIZE)
+            .processedItems(UPDATED_PROCESSED_ITEMS)
+            .sequenceNumber(UPDATED_SEQUENCE_NUMBER)
+            .isLastBatch(UPDATED_IS_LAST_BATCH)
+            .processingTime(UPDATED_PROCESSING_TIME)
+            .totalItems(UPDATED_TOTAL_ITEMS);
 
         restDepreciationBatchSequenceMockMvc
             .perform(
@@ -468,6 +546,12 @@ class DepreciationBatchSequenceResourceIT {
         assertThat(testDepreciationBatchSequence.getDepreciationJobIdentifier()).isEqualTo(UPDATED_DEPRECIATION_JOB_IDENTIFIER);
         assertThat(testDepreciationBatchSequence.getFiscalMonthIdentifier()).isEqualTo(UPDATED_FISCAL_MONTH_IDENTIFIER);
         assertThat(testDepreciationBatchSequence.getFiscalQuarterIdentifier()).isEqualTo(UPDATED_FISCAL_QUARTER_IDENTIFIER);
+        assertThat(testDepreciationBatchSequence.getBatchSize()).isEqualTo(UPDATED_BATCH_SIZE);
+        assertThat(testDepreciationBatchSequence.getProcessedItems()).isEqualTo(UPDATED_PROCESSED_ITEMS);
+        assertThat(testDepreciationBatchSequence.getSequenceNumber()).isEqualTo(UPDATED_SEQUENCE_NUMBER);
+        assertThat(testDepreciationBatchSequence.getIsLastBatch()).isEqualTo(UPDATED_IS_LAST_BATCH);
+        assertThat(testDepreciationBatchSequence.getProcessingTime()).isEqualTo(UPDATED_PROCESSING_TIME);
+        assertThat(testDepreciationBatchSequence.getTotalItems()).isEqualTo(UPDATED_TOTAL_ITEMS);
     }
 
     @Test
@@ -590,6 +674,12 @@ class DepreciationBatchSequenceResourceIT {
             .andExpect(jsonPath("$.[*].depreciationPeriodIdentifier").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].depreciationJobIdentifier").value(hasItem(DEFAULT_DEPRECIATION_JOB_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].fiscalMonthIdentifier").value(hasItem(DEFAULT_FISCAL_MONTH_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())));
+            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].batchSize").value(hasItem(DEFAULT_BATCH_SIZE)))
+            .andExpect(jsonPath("$.[*].processedItems").value(hasItem(DEFAULT_PROCESSED_ITEMS)))
+            .andExpect(jsonPath("$.[*].sequenceNumber").value(hasItem(DEFAULT_SEQUENCE_NUMBER)))
+            .andExpect(jsonPath("$.[*].isLastBatch").value(hasItem(DEFAULT_IS_LAST_BATCH.booleanValue())))
+            .andExpect(jsonPath("$.[*].processingTime").value(hasItem(DEFAULT_PROCESSING_TIME.toString())))
+            .andExpect(jsonPath("$.[*].totalItems").value(hasItem(DEFAULT_TOTAL_ITEMS)));
     }
 }

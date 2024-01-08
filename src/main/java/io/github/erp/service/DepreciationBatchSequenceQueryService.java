@@ -155,6 +155,27 @@ public class DepreciationBatchSequenceQueryService extends QueryService<Deprecia
                         buildSpecification(criteria.getFiscalQuarterIdentifier(), DepreciationBatchSequence_.fiscalQuarterIdentifier)
                     );
             }
+            if (criteria.getBatchSize() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getBatchSize(), DepreciationBatchSequence_.batchSize));
+            }
+            if (criteria.getProcessedItems() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getProcessedItems(), DepreciationBatchSequence_.processedItems));
+            }
+            if (criteria.getSequenceNumber() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getSequenceNumber(), DepreciationBatchSequence_.sequenceNumber));
+            }
+            if (criteria.getIsLastBatch() != null) {
+                specification = specification.and(buildSpecification(criteria.getIsLastBatch(), DepreciationBatchSequence_.isLastBatch));
+            }
+            if (criteria.getProcessingTime() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getProcessingTime(), DepreciationBatchSequence_.processingTime));
+            }
+            if (criteria.getTotalItems() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getTotalItems(), DepreciationBatchSequence_.totalItems));
+            }
             if (criteria.getDepreciationJobId() != null) {
                 specification =
                     specification.and(

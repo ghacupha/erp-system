@@ -33,6 +33,7 @@ import io.github.erp.repository.search.DepreciationBatchSequenceSearchRepository
 import io.github.erp.service.criteria.DepreciationBatchSequenceCriteria;
 import io.github.erp.service.dto.DepreciationBatchSequenceDTO;
 import io.github.erp.service.mapper.DepreciationBatchSequenceMapper;
+import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -85,6 +86,29 @@ class DepreciationBatchSequenceResourceIT {
     private static final UUID DEFAULT_FISCAL_QUARTER_IDENTIFIER = UUID.randomUUID();
     private static final UUID UPDATED_FISCAL_QUARTER_IDENTIFIER = UUID.randomUUID();
 
+    private static final Integer DEFAULT_BATCH_SIZE = 1;
+    private static final Integer UPDATED_BATCH_SIZE = 2;
+    private static final Integer SMALLER_BATCH_SIZE = 1 - 1;
+
+    private static final Integer DEFAULT_PROCESSED_ITEMS = 1;
+    private static final Integer UPDATED_PROCESSED_ITEMS = 2;
+    private static final Integer SMALLER_PROCESSED_ITEMS = 1 - 1;
+
+    private static final Integer DEFAULT_SEQUENCE_NUMBER = 1;
+    private static final Integer UPDATED_SEQUENCE_NUMBER = 2;
+    private static final Integer SMALLER_SEQUENCE_NUMBER = 1 - 1;
+
+    private static final Boolean DEFAULT_IS_LAST_BATCH = false;
+    private static final Boolean UPDATED_IS_LAST_BATCH = true;
+
+    private static final Duration DEFAULT_PROCESSING_TIME = Duration.ofHours(6);
+    private static final Duration UPDATED_PROCESSING_TIME = Duration.ofHours(12);
+    private static final Duration SMALLER_PROCESSING_TIME = Duration.ofHours(5);
+
+    private static final Integer DEFAULT_TOTAL_ITEMS = 1;
+    private static final Integer UPDATED_TOTAL_ITEMS = 2;
+    private static final Integer SMALLER_TOTAL_ITEMS = 1 - 1;
+
     private static final String ENTITY_API_URL = "/api/depreciation-batch-sequences";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/depreciation-batch-sequences";
@@ -128,7 +152,13 @@ class DepreciationBatchSequenceResourceIT {
             .depreciationPeriodIdentifier(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER)
             .depreciationJobIdentifier(DEFAULT_DEPRECIATION_JOB_IDENTIFIER)
             .fiscalMonthIdentifier(DEFAULT_FISCAL_MONTH_IDENTIFIER)
-            .fiscalQuarterIdentifier(DEFAULT_FISCAL_QUARTER_IDENTIFIER);
+            .fiscalQuarterIdentifier(DEFAULT_FISCAL_QUARTER_IDENTIFIER)
+            .batchSize(DEFAULT_BATCH_SIZE)
+            .processedItems(DEFAULT_PROCESSED_ITEMS)
+            .sequenceNumber(DEFAULT_SEQUENCE_NUMBER)
+            .isLastBatch(DEFAULT_IS_LAST_BATCH)
+            .processingTime(DEFAULT_PROCESSING_TIME)
+            .totalItems(DEFAULT_TOTAL_ITEMS);
         return depreciationBatchSequence;
     }
 
@@ -146,7 +176,13 @@ class DepreciationBatchSequenceResourceIT {
             .depreciationPeriodIdentifier(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER)
             .depreciationJobIdentifier(UPDATED_DEPRECIATION_JOB_IDENTIFIER)
             .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER)
-            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER);
+            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER)
+            .batchSize(UPDATED_BATCH_SIZE)
+            .processedItems(UPDATED_PROCESSED_ITEMS)
+            .sequenceNumber(UPDATED_SEQUENCE_NUMBER)
+            .isLastBatch(UPDATED_IS_LAST_BATCH)
+            .processingTime(UPDATED_PROCESSING_TIME)
+            .totalItems(UPDATED_TOTAL_ITEMS);
         return depreciationBatchSequence;
     }
 
@@ -182,6 +218,12 @@ class DepreciationBatchSequenceResourceIT {
         assertThat(testDepreciationBatchSequence.getDepreciationJobIdentifier()).isEqualTo(DEFAULT_DEPRECIATION_JOB_IDENTIFIER);
         assertThat(testDepreciationBatchSequence.getFiscalMonthIdentifier()).isEqualTo(DEFAULT_FISCAL_MONTH_IDENTIFIER);
         assertThat(testDepreciationBatchSequence.getFiscalQuarterIdentifier()).isEqualTo(DEFAULT_FISCAL_QUARTER_IDENTIFIER);
+        assertThat(testDepreciationBatchSequence.getBatchSize()).isEqualTo(DEFAULT_BATCH_SIZE);
+        assertThat(testDepreciationBatchSequence.getProcessedItems()).isEqualTo(DEFAULT_PROCESSED_ITEMS);
+        assertThat(testDepreciationBatchSequence.getSequenceNumber()).isEqualTo(DEFAULT_SEQUENCE_NUMBER);
+        assertThat(testDepreciationBatchSequence.getIsLastBatch()).isEqualTo(DEFAULT_IS_LAST_BATCH);
+        assertThat(testDepreciationBatchSequence.getProcessingTime()).isEqualTo(DEFAULT_PROCESSING_TIME);
+        assertThat(testDepreciationBatchSequence.getTotalItems()).isEqualTo(DEFAULT_TOTAL_ITEMS);
 
         // Validate the DepreciationBatchSequence in Elasticsearch
         verify(mockDepreciationBatchSequenceSearchRepository, times(1)).save(testDepreciationBatchSequence);
@@ -231,7 +273,13 @@ class DepreciationBatchSequenceResourceIT {
             .andExpect(jsonPath("$.[*].depreciationPeriodIdentifier").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].depreciationJobIdentifier").value(hasItem(DEFAULT_DEPRECIATION_JOB_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].fiscalMonthIdentifier").value(hasItem(DEFAULT_FISCAL_MONTH_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())));
+            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].batchSize").value(hasItem(DEFAULT_BATCH_SIZE)))
+            .andExpect(jsonPath("$.[*].processedItems").value(hasItem(DEFAULT_PROCESSED_ITEMS)))
+            .andExpect(jsonPath("$.[*].sequenceNumber").value(hasItem(DEFAULT_SEQUENCE_NUMBER)))
+            .andExpect(jsonPath("$.[*].isLastBatch").value(hasItem(DEFAULT_IS_LAST_BATCH.booleanValue())))
+            .andExpect(jsonPath("$.[*].processingTime").value(hasItem(DEFAULT_PROCESSING_TIME.toString())))
+            .andExpect(jsonPath("$.[*].totalItems").value(hasItem(DEFAULT_TOTAL_ITEMS)));
     }
 
     @Test
@@ -252,7 +300,13 @@ class DepreciationBatchSequenceResourceIT {
             .andExpect(jsonPath("$.depreciationPeriodIdentifier").value(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER.toString()))
             .andExpect(jsonPath("$.depreciationJobIdentifier").value(DEFAULT_DEPRECIATION_JOB_IDENTIFIER.toString()))
             .andExpect(jsonPath("$.fiscalMonthIdentifier").value(DEFAULT_FISCAL_MONTH_IDENTIFIER.toString()))
-            .andExpect(jsonPath("$.fiscalQuarterIdentifier").value(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString()));
+            .andExpect(jsonPath("$.fiscalQuarterIdentifier").value(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString()))
+            .andExpect(jsonPath("$.batchSize").value(DEFAULT_BATCH_SIZE))
+            .andExpect(jsonPath("$.processedItems").value(DEFAULT_PROCESSED_ITEMS))
+            .andExpect(jsonPath("$.sequenceNumber").value(DEFAULT_SEQUENCE_NUMBER))
+            .andExpect(jsonPath("$.isLastBatch").value(DEFAULT_IS_LAST_BATCH.booleanValue()))
+            .andExpect(jsonPath("$.processingTime").value(DEFAULT_PROCESSING_TIME.toString()))
+            .andExpect(jsonPath("$.totalItems").value(DEFAULT_TOTAL_ITEMS));
     }
 
     @Test
@@ -755,6 +809,578 @@ class DepreciationBatchSequenceResourceIT {
 
     @Test
     @Transactional
+    void getAllDepreciationBatchSequencesByBatchSizeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where batchSize equals to DEFAULT_BATCH_SIZE
+        defaultDepreciationBatchSequenceShouldBeFound("batchSize.equals=" + DEFAULT_BATCH_SIZE);
+
+        // Get all the depreciationBatchSequenceList where batchSize equals to UPDATED_BATCH_SIZE
+        defaultDepreciationBatchSequenceShouldNotBeFound("batchSize.equals=" + UPDATED_BATCH_SIZE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByBatchSizeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where batchSize not equals to DEFAULT_BATCH_SIZE
+        defaultDepreciationBatchSequenceShouldNotBeFound("batchSize.notEquals=" + DEFAULT_BATCH_SIZE);
+
+        // Get all the depreciationBatchSequenceList where batchSize not equals to UPDATED_BATCH_SIZE
+        defaultDepreciationBatchSequenceShouldBeFound("batchSize.notEquals=" + UPDATED_BATCH_SIZE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByBatchSizeIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where batchSize in DEFAULT_BATCH_SIZE or UPDATED_BATCH_SIZE
+        defaultDepreciationBatchSequenceShouldBeFound("batchSize.in=" + DEFAULT_BATCH_SIZE + "," + UPDATED_BATCH_SIZE);
+
+        // Get all the depreciationBatchSequenceList where batchSize equals to UPDATED_BATCH_SIZE
+        defaultDepreciationBatchSequenceShouldNotBeFound("batchSize.in=" + UPDATED_BATCH_SIZE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByBatchSizeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where batchSize is not null
+        defaultDepreciationBatchSequenceShouldBeFound("batchSize.specified=true");
+
+        // Get all the depreciationBatchSequenceList where batchSize is null
+        defaultDepreciationBatchSequenceShouldNotBeFound("batchSize.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByBatchSizeIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where batchSize is greater than or equal to DEFAULT_BATCH_SIZE
+        defaultDepreciationBatchSequenceShouldBeFound("batchSize.greaterThanOrEqual=" + DEFAULT_BATCH_SIZE);
+
+        // Get all the depreciationBatchSequenceList where batchSize is greater than or equal to UPDATED_BATCH_SIZE
+        defaultDepreciationBatchSequenceShouldNotBeFound("batchSize.greaterThanOrEqual=" + UPDATED_BATCH_SIZE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByBatchSizeIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where batchSize is less than or equal to DEFAULT_BATCH_SIZE
+        defaultDepreciationBatchSequenceShouldBeFound("batchSize.lessThanOrEqual=" + DEFAULT_BATCH_SIZE);
+
+        // Get all the depreciationBatchSequenceList where batchSize is less than or equal to SMALLER_BATCH_SIZE
+        defaultDepreciationBatchSequenceShouldNotBeFound("batchSize.lessThanOrEqual=" + SMALLER_BATCH_SIZE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByBatchSizeIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where batchSize is less than DEFAULT_BATCH_SIZE
+        defaultDepreciationBatchSequenceShouldNotBeFound("batchSize.lessThan=" + DEFAULT_BATCH_SIZE);
+
+        // Get all the depreciationBatchSequenceList where batchSize is less than UPDATED_BATCH_SIZE
+        defaultDepreciationBatchSequenceShouldBeFound("batchSize.lessThan=" + UPDATED_BATCH_SIZE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByBatchSizeIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where batchSize is greater than DEFAULT_BATCH_SIZE
+        defaultDepreciationBatchSequenceShouldNotBeFound("batchSize.greaterThan=" + DEFAULT_BATCH_SIZE);
+
+        // Get all the depreciationBatchSequenceList where batchSize is greater than SMALLER_BATCH_SIZE
+        defaultDepreciationBatchSequenceShouldBeFound("batchSize.greaterThan=" + SMALLER_BATCH_SIZE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByProcessedItemsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where processedItems equals to DEFAULT_PROCESSED_ITEMS
+        defaultDepreciationBatchSequenceShouldBeFound("processedItems.equals=" + DEFAULT_PROCESSED_ITEMS);
+
+        // Get all the depreciationBatchSequenceList where processedItems equals to UPDATED_PROCESSED_ITEMS
+        defaultDepreciationBatchSequenceShouldNotBeFound("processedItems.equals=" + UPDATED_PROCESSED_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByProcessedItemsIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where processedItems not equals to DEFAULT_PROCESSED_ITEMS
+        defaultDepreciationBatchSequenceShouldNotBeFound("processedItems.notEquals=" + DEFAULT_PROCESSED_ITEMS);
+
+        // Get all the depreciationBatchSequenceList where processedItems not equals to UPDATED_PROCESSED_ITEMS
+        defaultDepreciationBatchSequenceShouldBeFound("processedItems.notEquals=" + UPDATED_PROCESSED_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByProcessedItemsIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where processedItems in DEFAULT_PROCESSED_ITEMS or UPDATED_PROCESSED_ITEMS
+        defaultDepreciationBatchSequenceShouldBeFound("processedItems.in=" + DEFAULT_PROCESSED_ITEMS + "," + UPDATED_PROCESSED_ITEMS);
+
+        // Get all the depreciationBatchSequenceList where processedItems equals to UPDATED_PROCESSED_ITEMS
+        defaultDepreciationBatchSequenceShouldNotBeFound("processedItems.in=" + UPDATED_PROCESSED_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByProcessedItemsIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where processedItems is not null
+        defaultDepreciationBatchSequenceShouldBeFound("processedItems.specified=true");
+
+        // Get all the depreciationBatchSequenceList where processedItems is null
+        defaultDepreciationBatchSequenceShouldNotBeFound("processedItems.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByProcessedItemsIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where processedItems is greater than or equal to DEFAULT_PROCESSED_ITEMS
+        defaultDepreciationBatchSequenceShouldBeFound("processedItems.greaterThanOrEqual=" + DEFAULT_PROCESSED_ITEMS);
+
+        // Get all the depreciationBatchSequenceList where processedItems is greater than or equal to UPDATED_PROCESSED_ITEMS
+        defaultDepreciationBatchSequenceShouldNotBeFound("processedItems.greaterThanOrEqual=" + UPDATED_PROCESSED_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByProcessedItemsIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where processedItems is less than or equal to DEFAULT_PROCESSED_ITEMS
+        defaultDepreciationBatchSequenceShouldBeFound("processedItems.lessThanOrEqual=" + DEFAULT_PROCESSED_ITEMS);
+
+        // Get all the depreciationBatchSequenceList where processedItems is less than or equal to SMALLER_PROCESSED_ITEMS
+        defaultDepreciationBatchSequenceShouldNotBeFound("processedItems.lessThanOrEqual=" + SMALLER_PROCESSED_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByProcessedItemsIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where processedItems is less than DEFAULT_PROCESSED_ITEMS
+        defaultDepreciationBatchSequenceShouldNotBeFound("processedItems.lessThan=" + DEFAULT_PROCESSED_ITEMS);
+
+        // Get all the depreciationBatchSequenceList where processedItems is less than UPDATED_PROCESSED_ITEMS
+        defaultDepreciationBatchSequenceShouldBeFound("processedItems.lessThan=" + UPDATED_PROCESSED_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByProcessedItemsIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where processedItems is greater than DEFAULT_PROCESSED_ITEMS
+        defaultDepreciationBatchSequenceShouldNotBeFound("processedItems.greaterThan=" + DEFAULT_PROCESSED_ITEMS);
+
+        // Get all the depreciationBatchSequenceList where processedItems is greater than SMALLER_PROCESSED_ITEMS
+        defaultDepreciationBatchSequenceShouldBeFound("processedItems.greaterThan=" + SMALLER_PROCESSED_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesBySequenceNumberIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where sequenceNumber equals to DEFAULT_SEQUENCE_NUMBER
+        defaultDepreciationBatchSequenceShouldBeFound("sequenceNumber.equals=" + DEFAULT_SEQUENCE_NUMBER);
+
+        // Get all the depreciationBatchSequenceList where sequenceNumber equals to UPDATED_SEQUENCE_NUMBER
+        defaultDepreciationBatchSequenceShouldNotBeFound("sequenceNumber.equals=" + UPDATED_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesBySequenceNumberIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where sequenceNumber not equals to DEFAULT_SEQUENCE_NUMBER
+        defaultDepreciationBatchSequenceShouldNotBeFound("sequenceNumber.notEquals=" + DEFAULT_SEQUENCE_NUMBER);
+
+        // Get all the depreciationBatchSequenceList where sequenceNumber not equals to UPDATED_SEQUENCE_NUMBER
+        defaultDepreciationBatchSequenceShouldBeFound("sequenceNumber.notEquals=" + UPDATED_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesBySequenceNumberIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where sequenceNumber in DEFAULT_SEQUENCE_NUMBER or UPDATED_SEQUENCE_NUMBER
+        defaultDepreciationBatchSequenceShouldBeFound("sequenceNumber.in=" + DEFAULT_SEQUENCE_NUMBER + "," + UPDATED_SEQUENCE_NUMBER);
+
+        // Get all the depreciationBatchSequenceList where sequenceNumber equals to UPDATED_SEQUENCE_NUMBER
+        defaultDepreciationBatchSequenceShouldNotBeFound("sequenceNumber.in=" + UPDATED_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesBySequenceNumberIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where sequenceNumber is not null
+        defaultDepreciationBatchSequenceShouldBeFound("sequenceNumber.specified=true");
+
+        // Get all the depreciationBatchSequenceList where sequenceNumber is null
+        defaultDepreciationBatchSequenceShouldNotBeFound("sequenceNumber.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesBySequenceNumberIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where sequenceNumber is greater than or equal to DEFAULT_SEQUENCE_NUMBER
+        defaultDepreciationBatchSequenceShouldBeFound("sequenceNumber.greaterThanOrEqual=" + DEFAULT_SEQUENCE_NUMBER);
+
+        // Get all the depreciationBatchSequenceList where sequenceNumber is greater than or equal to UPDATED_SEQUENCE_NUMBER
+        defaultDepreciationBatchSequenceShouldNotBeFound("sequenceNumber.greaterThanOrEqual=" + UPDATED_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesBySequenceNumberIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where sequenceNumber is less than or equal to DEFAULT_SEQUENCE_NUMBER
+        defaultDepreciationBatchSequenceShouldBeFound("sequenceNumber.lessThanOrEqual=" + DEFAULT_SEQUENCE_NUMBER);
+
+        // Get all the depreciationBatchSequenceList where sequenceNumber is less than or equal to SMALLER_SEQUENCE_NUMBER
+        defaultDepreciationBatchSequenceShouldNotBeFound("sequenceNumber.lessThanOrEqual=" + SMALLER_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesBySequenceNumberIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where sequenceNumber is less than DEFAULT_SEQUENCE_NUMBER
+        defaultDepreciationBatchSequenceShouldNotBeFound("sequenceNumber.lessThan=" + DEFAULT_SEQUENCE_NUMBER);
+
+        // Get all the depreciationBatchSequenceList where sequenceNumber is less than UPDATED_SEQUENCE_NUMBER
+        defaultDepreciationBatchSequenceShouldBeFound("sequenceNumber.lessThan=" + UPDATED_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesBySequenceNumberIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where sequenceNumber is greater than DEFAULT_SEQUENCE_NUMBER
+        defaultDepreciationBatchSequenceShouldNotBeFound("sequenceNumber.greaterThan=" + DEFAULT_SEQUENCE_NUMBER);
+
+        // Get all the depreciationBatchSequenceList where sequenceNumber is greater than SMALLER_SEQUENCE_NUMBER
+        defaultDepreciationBatchSequenceShouldBeFound("sequenceNumber.greaterThan=" + SMALLER_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByIsLastBatchIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where isLastBatch equals to DEFAULT_IS_LAST_BATCH
+        defaultDepreciationBatchSequenceShouldBeFound("isLastBatch.equals=" + DEFAULT_IS_LAST_BATCH);
+
+        // Get all the depreciationBatchSequenceList where isLastBatch equals to UPDATED_IS_LAST_BATCH
+        defaultDepreciationBatchSequenceShouldNotBeFound("isLastBatch.equals=" + UPDATED_IS_LAST_BATCH);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByIsLastBatchIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where isLastBatch not equals to DEFAULT_IS_LAST_BATCH
+        defaultDepreciationBatchSequenceShouldNotBeFound("isLastBatch.notEquals=" + DEFAULT_IS_LAST_BATCH);
+
+        // Get all the depreciationBatchSequenceList where isLastBatch not equals to UPDATED_IS_LAST_BATCH
+        defaultDepreciationBatchSequenceShouldBeFound("isLastBatch.notEquals=" + UPDATED_IS_LAST_BATCH);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByIsLastBatchIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where isLastBatch in DEFAULT_IS_LAST_BATCH or UPDATED_IS_LAST_BATCH
+        defaultDepreciationBatchSequenceShouldBeFound("isLastBatch.in=" + DEFAULT_IS_LAST_BATCH + "," + UPDATED_IS_LAST_BATCH);
+
+        // Get all the depreciationBatchSequenceList where isLastBatch equals to UPDATED_IS_LAST_BATCH
+        defaultDepreciationBatchSequenceShouldNotBeFound("isLastBatch.in=" + UPDATED_IS_LAST_BATCH);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByIsLastBatchIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where isLastBatch is not null
+        defaultDepreciationBatchSequenceShouldBeFound("isLastBatch.specified=true");
+
+        // Get all the depreciationBatchSequenceList where isLastBatch is null
+        defaultDepreciationBatchSequenceShouldNotBeFound("isLastBatch.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByProcessingTimeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where processingTime equals to DEFAULT_PROCESSING_TIME
+        defaultDepreciationBatchSequenceShouldBeFound("processingTime.equals=" + DEFAULT_PROCESSING_TIME);
+
+        // Get all the depreciationBatchSequenceList where processingTime equals to UPDATED_PROCESSING_TIME
+        defaultDepreciationBatchSequenceShouldNotBeFound("processingTime.equals=" + UPDATED_PROCESSING_TIME);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByProcessingTimeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where processingTime not equals to DEFAULT_PROCESSING_TIME
+        defaultDepreciationBatchSequenceShouldNotBeFound("processingTime.notEquals=" + DEFAULT_PROCESSING_TIME);
+
+        // Get all the depreciationBatchSequenceList where processingTime not equals to UPDATED_PROCESSING_TIME
+        defaultDepreciationBatchSequenceShouldBeFound("processingTime.notEquals=" + UPDATED_PROCESSING_TIME);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByProcessingTimeIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where processingTime in DEFAULT_PROCESSING_TIME or UPDATED_PROCESSING_TIME
+        defaultDepreciationBatchSequenceShouldBeFound("processingTime.in=" + DEFAULT_PROCESSING_TIME + "," + UPDATED_PROCESSING_TIME);
+
+        // Get all the depreciationBatchSequenceList where processingTime equals to UPDATED_PROCESSING_TIME
+        defaultDepreciationBatchSequenceShouldNotBeFound("processingTime.in=" + UPDATED_PROCESSING_TIME);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByProcessingTimeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where processingTime is not null
+        defaultDepreciationBatchSequenceShouldBeFound("processingTime.specified=true");
+
+        // Get all the depreciationBatchSequenceList where processingTime is null
+        defaultDepreciationBatchSequenceShouldNotBeFound("processingTime.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByProcessingTimeIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where processingTime is greater than or equal to DEFAULT_PROCESSING_TIME
+        defaultDepreciationBatchSequenceShouldBeFound("processingTime.greaterThanOrEqual=" + DEFAULT_PROCESSING_TIME);
+
+        // Get all the depreciationBatchSequenceList where processingTime is greater than or equal to UPDATED_PROCESSING_TIME
+        defaultDepreciationBatchSequenceShouldNotBeFound("processingTime.greaterThanOrEqual=" + UPDATED_PROCESSING_TIME);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByProcessingTimeIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where processingTime is less than or equal to DEFAULT_PROCESSING_TIME
+        defaultDepreciationBatchSequenceShouldBeFound("processingTime.lessThanOrEqual=" + DEFAULT_PROCESSING_TIME);
+
+        // Get all the depreciationBatchSequenceList where processingTime is less than or equal to SMALLER_PROCESSING_TIME
+        defaultDepreciationBatchSequenceShouldNotBeFound("processingTime.lessThanOrEqual=" + SMALLER_PROCESSING_TIME);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByProcessingTimeIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where processingTime is less than DEFAULT_PROCESSING_TIME
+        defaultDepreciationBatchSequenceShouldNotBeFound("processingTime.lessThan=" + DEFAULT_PROCESSING_TIME);
+
+        // Get all the depreciationBatchSequenceList where processingTime is less than UPDATED_PROCESSING_TIME
+        defaultDepreciationBatchSequenceShouldBeFound("processingTime.lessThan=" + UPDATED_PROCESSING_TIME);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByProcessingTimeIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where processingTime is greater than DEFAULT_PROCESSING_TIME
+        defaultDepreciationBatchSequenceShouldNotBeFound("processingTime.greaterThan=" + DEFAULT_PROCESSING_TIME);
+
+        // Get all the depreciationBatchSequenceList where processingTime is greater than SMALLER_PROCESSING_TIME
+        defaultDepreciationBatchSequenceShouldBeFound("processingTime.greaterThan=" + SMALLER_PROCESSING_TIME);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByTotalItemsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where totalItems equals to DEFAULT_TOTAL_ITEMS
+        defaultDepreciationBatchSequenceShouldBeFound("totalItems.equals=" + DEFAULT_TOTAL_ITEMS);
+
+        // Get all the depreciationBatchSequenceList where totalItems equals to UPDATED_TOTAL_ITEMS
+        defaultDepreciationBatchSequenceShouldNotBeFound("totalItems.equals=" + UPDATED_TOTAL_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByTotalItemsIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where totalItems not equals to DEFAULT_TOTAL_ITEMS
+        defaultDepreciationBatchSequenceShouldNotBeFound("totalItems.notEquals=" + DEFAULT_TOTAL_ITEMS);
+
+        // Get all the depreciationBatchSequenceList where totalItems not equals to UPDATED_TOTAL_ITEMS
+        defaultDepreciationBatchSequenceShouldBeFound("totalItems.notEquals=" + UPDATED_TOTAL_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByTotalItemsIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where totalItems in DEFAULT_TOTAL_ITEMS or UPDATED_TOTAL_ITEMS
+        defaultDepreciationBatchSequenceShouldBeFound("totalItems.in=" + DEFAULT_TOTAL_ITEMS + "," + UPDATED_TOTAL_ITEMS);
+
+        // Get all the depreciationBatchSequenceList where totalItems equals to UPDATED_TOTAL_ITEMS
+        defaultDepreciationBatchSequenceShouldNotBeFound("totalItems.in=" + UPDATED_TOTAL_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByTotalItemsIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where totalItems is not null
+        defaultDepreciationBatchSequenceShouldBeFound("totalItems.specified=true");
+
+        // Get all the depreciationBatchSequenceList where totalItems is null
+        defaultDepreciationBatchSequenceShouldNotBeFound("totalItems.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByTotalItemsIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where totalItems is greater than or equal to DEFAULT_TOTAL_ITEMS
+        defaultDepreciationBatchSequenceShouldBeFound("totalItems.greaterThanOrEqual=" + DEFAULT_TOTAL_ITEMS);
+
+        // Get all the depreciationBatchSequenceList where totalItems is greater than or equal to UPDATED_TOTAL_ITEMS
+        defaultDepreciationBatchSequenceShouldNotBeFound("totalItems.greaterThanOrEqual=" + UPDATED_TOTAL_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByTotalItemsIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where totalItems is less than or equal to DEFAULT_TOTAL_ITEMS
+        defaultDepreciationBatchSequenceShouldBeFound("totalItems.lessThanOrEqual=" + DEFAULT_TOTAL_ITEMS);
+
+        // Get all the depreciationBatchSequenceList where totalItems is less than or equal to SMALLER_TOTAL_ITEMS
+        defaultDepreciationBatchSequenceShouldNotBeFound("totalItems.lessThanOrEqual=" + SMALLER_TOTAL_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByTotalItemsIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where totalItems is less than DEFAULT_TOTAL_ITEMS
+        defaultDepreciationBatchSequenceShouldNotBeFound("totalItems.lessThan=" + DEFAULT_TOTAL_ITEMS);
+
+        // Get all the depreciationBatchSequenceList where totalItems is less than UPDATED_TOTAL_ITEMS
+        defaultDepreciationBatchSequenceShouldBeFound("totalItems.lessThan=" + UPDATED_TOTAL_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationBatchSequencesByTotalItemsIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
+
+        // Get all the depreciationBatchSequenceList where totalItems is greater than DEFAULT_TOTAL_ITEMS
+        defaultDepreciationBatchSequenceShouldNotBeFound("totalItems.greaterThan=" + DEFAULT_TOTAL_ITEMS);
+
+        // Get all the depreciationBatchSequenceList where totalItems is greater than SMALLER_TOTAL_ITEMS
+        defaultDepreciationBatchSequenceShouldBeFound("totalItems.greaterThan=" + SMALLER_TOTAL_ITEMS);
+    }
+
+    @Test
+    @Transactional
     void getAllDepreciationBatchSequencesByDepreciationJobIsEqualToSomething() throws Exception {
         // Initialize the database
         depreciationBatchSequenceRepository.saveAndFlush(depreciationBatchSequence);
@@ -794,7 +1420,13 @@ class DepreciationBatchSequenceResourceIT {
             .andExpect(jsonPath("$.[*].depreciationPeriodIdentifier").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].depreciationJobIdentifier").value(hasItem(DEFAULT_DEPRECIATION_JOB_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].fiscalMonthIdentifier").value(hasItem(DEFAULT_FISCAL_MONTH_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())));
+            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].batchSize").value(hasItem(DEFAULT_BATCH_SIZE)))
+            .andExpect(jsonPath("$.[*].processedItems").value(hasItem(DEFAULT_PROCESSED_ITEMS)))
+            .andExpect(jsonPath("$.[*].sequenceNumber").value(hasItem(DEFAULT_SEQUENCE_NUMBER)))
+            .andExpect(jsonPath("$.[*].isLastBatch").value(hasItem(DEFAULT_IS_LAST_BATCH.booleanValue())))
+            .andExpect(jsonPath("$.[*].processingTime").value(hasItem(DEFAULT_PROCESSING_TIME.toString())))
+            .andExpect(jsonPath("$.[*].totalItems").value(hasItem(DEFAULT_TOTAL_ITEMS)));
 
         // Check, that the count call also returns 1
         restDepreciationBatchSequenceMockMvc
@@ -851,7 +1483,13 @@ class DepreciationBatchSequenceResourceIT {
             .depreciationPeriodIdentifier(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER)
             .depreciationJobIdentifier(UPDATED_DEPRECIATION_JOB_IDENTIFIER)
             .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER)
-            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER);
+            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER)
+            .batchSize(UPDATED_BATCH_SIZE)
+            .processedItems(UPDATED_PROCESSED_ITEMS)
+            .sequenceNumber(UPDATED_SEQUENCE_NUMBER)
+            .isLastBatch(UPDATED_IS_LAST_BATCH)
+            .processingTime(UPDATED_PROCESSING_TIME)
+            .totalItems(UPDATED_TOTAL_ITEMS);
         DepreciationBatchSequenceDTO depreciationBatchSequenceDTO = depreciationBatchSequenceMapper.toDto(updatedDepreciationBatchSequence);
 
         restDepreciationBatchSequenceMockMvc
@@ -875,6 +1513,12 @@ class DepreciationBatchSequenceResourceIT {
         assertThat(testDepreciationBatchSequence.getDepreciationJobIdentifier()).isEqualTo(UPDATED_DEPRECIATION_JOB_IDENTIFIER);
         assertThat(testDepreciationBatchSequence.getFiscalMonthIdentifier()).isEqualTo(UPDATED_FISCAL_MONTH_IDENTIFIER);
         assertThat(testDepreciationBatchSequence.getFiscalQuarterIdentifier()).isEqualTo(UPDATED_FISCAL_QUARTER_IDENTIFIER);
+        assertThat(testDepreciationBatchSequence.getBatchSize()).isEqualTo(UPDATED_BATCH_SIZE);
+        assertThat(testDepreciationBatchSequence.getProcessedItems()).isEqualTo(UPDATED_PROCESSED_ITEMS);
+        assertThat(testDepreciationBatchSequence.getSequenceNumber()).isEqualTo(UPDATED_SEQUENCE_NUMBER);
+        assertThat(testDepreciationBatchSequence.getIsLastBatch()).isEqualTo(UPDATED_IS_LAST_BATCH);
+        assertThat(testDepreciationBatchSequence.getProcessingTime()).isEqualTo(UPDATED_PROCESSING_TIME);
+        assertThat(testDepreciationBatchSequence.getTotalItems()).isEqualTo(UPDATED_TOTAL_ITEMS);
 
         // Validate the DepreciationBatchSequence in Elasticsearch
         verify(mockDepreciationBatchSequenceSearchRepository).save(testDepreciationBatchSequence);
@@ -972,7 +1616,11 @@ class DepreciationBatchSequenceResourceIT {
 
         partialUpdatedDepreciationBatchSequence
             .depreciationPeriodIdentifier(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER)
-            .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER);
+            .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER)
+            .batchSize(UPDATED_BATCH_SIZE)
+            .isLastBatch(UPDATED_IS_LAST_BATCH)
+            .processingTime(UPDATED_PROCESSING_TIME)
+            .totalItems(UPDATED_TOTAL_ITEMS);
 
         restDepreciationBatchSequenceMockMvc
             .perform(
@@ -995,6 +1643,12 @@ class DepreciationBatchSequenceResourceIT {
         assertThat(testDepreciationBatchSequence.getDepreciationJobIdentifier()).isEqualTo(DEFAULT_DEPRECIATION_JOB_IDENTIFIER);
         assertThat(testDepreciationBatchSequence.getFiscalMonthIdentifier()).isEqualTo(UPDATED_FISCAL_MONTH_IDENTIFIER);
         assertThat(testDepreciationBatchSequence.getFiscalQuarterIdentifier()).isEqualTo(DEFAULT_FISCAL_QUARTER_IDENTIFIER);
+        assertThat(testDepreciationBatchSequence.getBatchSize()).isEqualTo(UPDATED_BATCH_SIZE);
+        assertThat(testDepreciationBatchSequence.getProcessedItems()).isEqualTo(DEFAULT_PROCESSED_ITEMS);
+        assertThat(testDepreciationBatchSequence.getSequenceNumber()).isEqualTo(DEFAULT_SEQUENCE_NUMBER);
+        assertThat(testDepreciationBatchSequence.getIsLastBatch()).isEqualTo(UPDATED_IS_LAST_BATCH);
+        assertThat(testDepreciationBatchSequence.getProcessingTime()).isEqualTo(UPDATED_PROCESSING_TIME);
+        assertThat(testDepreciationBatchSequence.getTotalItems()).isEqualTo(UPDATED_TOTAL_ITEMS);
     }
 
     @Test
@@ -1016,7 +1670,13 @@ class DepreciationBatchSequenceResourceIT {
             .depreciationPeriodIdentifier(UPDATED_DEPRECIATION_PERIOD_IDENTIFIER)
             .depreciationJobIdentifier(UPDATED_DEPRECIATION_JOB_IDENTIFIER)
             .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER)
-            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER);
+            .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER)
+            .batchSize(UPDATED_BATCH_SIZE)
+            .processedItems(UPDATED_PROCESSED_ITEMS)
+            .sequenceNumber(UPDATED_SEQUENCE_NUMBER)
+            .isLastBatch(UPDATED_IS_LAST_BATCH)
+            .processingTime(UPDATED_PROCESSING_TIME)
+            .totalItems(UPDATED_TOTAL_ITEMS);
 
         restDepreciationBatchSequenceMockMvc
             .perform(
@@ -1039,6 +1699,12 @@ class DepreciationBatchSequenceResourceIT {
         assertThat(testDepreciationBatchSequence.getDepreciationJobIdentifier()).isEqualTo(UPDATED_DEPRECIATION_JOB_IDENTIFIER);
         assertThat(testDepreciationBatchSequence.getFiscalMonthIdentifier()).isEqualTo(UPDATED_FISCAL_MONTH_IDENTIFIER);
         assertThat(testDepreciationBatchSequence.getFiscalQuarterIdentifier()).isEqualTo(UPDATED_FISCAL_QUARTER_IDENTIFIER);
+        assertThat(testDepreciationBatchSequence.getBatchSize()).isEqualTo(UPDATED_BATCH_SIZE);
+        assertThat(testDepreciationBatchSequence.getProcessedItems()).isEqualTo(UPDATED_PROCESSED_ITEMS);
+        assertThat(testDepreciationBatchSequence.getSequenceNumber()).isEqualTo(UPDATED_SEQUENCE_NUMBER);
+        assertThat(testDepreciationBatchSequence.getIsLastBatch()).isEqualTo(UPDATED_IS_LAST_BATCH);
+        assertThat(testDepreciationBatchSequence.getProcessingTime()).isEqualTo(UPDATED_PROCESSING_TIME);
+        assertThat(testDepreciationBatchSequence.getTotalItems()).isEqualTo(UPDATED_TOTAL_ITEMS);
     }
 
     @Test
@@ -1161,6 +1827,12 @@ class DepreciationBatchSequenceResourceIT {
             .andExpect(jsonPath("$.[*].depreciationPeriodIdentifier").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].depreciationJobIdentifier").value(hasItem(DEFAULT_DEPRECIATION_JOB_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].fiscalMonthIdentifier").value(hasItem(DEFAULT_FISCAL_MONTH_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())));
+            .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].batchSize").value(hasItem(DEFAULT_BATCH_SIZE)))
+            .andExpect(jsonPath("$.[*].processedItems").value(hasItem(DEFAULT_PROCESSED_ITEMS)))
+            .andExpect(jsonPath("$.[*].sequenceNumber").value(hasItem(DEFAULT_SEQUENCE_NUMBER)))
+            .andExpect(jsonPath("$.[*].isLastBatch").value(hasItem(DEFAULT_IS_LAST_BATCH.booleanValue())))
+            .andExpect(jsonPath("$.[*].processingTime").value(hasItem(DEFAULT_PROCESSING_TIME.toString())))
+            .andExpect(jsonPath("$.[*].totalItems").value(hasItem(DEFAULT_TOTAL_ITEMS)));
     }
 }

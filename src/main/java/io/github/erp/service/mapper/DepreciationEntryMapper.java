@@ -36,6 +36,8 @@ import org.mapstruct.*;
         FiscalMonthMapper.class,
         FiscalQuarterMapper.class,
         FiscalYearMapper.class,
+        DepreciationJobMapper.class,
+        DepreciationBatchSequenceMapper.class,
     }
 )
 public interface DepreciationEntryMapper extends EntityMapper<DepreciationEntryDTO, DepreciationEntry> {
@@ -47,5 +49,7 @@ public interface DepreciationEntryMapper extends EntityMapper<DepreciationEntryD
     @Mapping(target = "fiscalMonth", source = "fiscalMonth", qualifiedByName = "fiscalMonthCode")
     @Mapping(target = "fiscalQuarter", source = "fiscalQuarter", qualifiedByName = "fiscalQuarterCode")
     @Mapping(target = "fiscalYear", source = "fiscalYear", qualifiedByName = "fiscalYearCode")
+    @Mapping(target = "depreciationJob", source = "depreciationJob", qualifiedByName = "description")
+    @Mapping(target = "depreciationBatchSequence", source = "depreciationBatchSequence", qualifiedByName = "id")
     DepreciationEntryDTO toDto(DepreciationEntry s);
 }

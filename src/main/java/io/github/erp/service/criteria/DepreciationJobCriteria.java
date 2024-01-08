@@ -24,6 +24,7 @@ import java.util.Objects;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.BooleanFilter;
 import tech.jhipster.service.filter.DoubleFilter;
+import tech.jhipster.service.filter.DurationFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
@@ -69,6 +70,18 @@ public class DepreciationJobCriteria implements Serializable, Criteria {
 
     private StringFilter description;
 
+    private IntegerFilter numberOfBatches;
+
+    private IntegerFilter processedBatches;
+
+    private IntegerFilter lastBatchSize;
+
+    private IntegerFilter processedItems;
+
+    private DurationFilter processingTime;
+
+    private IntegerFilter totalItems;
+
     private LongFilter createdById;
 
     private LongFilter depreciationPeriodId;
@@ -82,6 +95,12 @@ public class DepreciationJobCriteria implements Serializable, Criteria {
         this.timeOfCommencement = other.timeOfCommencement == null ? null : other.timeOfCommencement.copy();
         this.depreciationJobStatus = other.depreciationJobStatus == null ? null : other.depreciationJobStatus.copy();
         this.description = other.description == null ? null : other.description.copy();
+        this.numberOfBatches = other.numberOfBatches == null ? null : other.numberOfBatches.copy();
+        this.processedBatches = other.processedBatches == null ? null : other.processedBatches.copy();
+        this.lastBatchSize = other.lastBatchSize == null ? null : other.lastBatchSize.copy();
+        this.processedItems = other.processedItems == null ? null : other.processedItems.copy();
+        this.processingTime = other.processingTime == null ? null : other.processingTime.copy();
+        this.totalItems = other.totalItems == null ? null : other.totalItems.copy();
         this.createdById = other.createdById == null ? null : other.createdById.copy();
         this.depreciationPeriodId = other.depreciationPeriodId == null ? null : other.depreciationPeriodId.copy();
         this.distinct = other.distinct;
@@ -152,6 +171,96 @@ public class DepreciationJobCriteria implements Serializable, Criteria {
         this.description = description;
     }
 
+    public IntegerFilter getNumberOfBatches() {
+        return numberOfBatches;
+    }
+
+    public IntegerFilter numberOfBatches() {
+        if (numberOfBatches == null) {
+            numberOfBatches = new IntegerFilter();
+        }
+        return numberOfBatches;
+    }
+
+    public void setNumberOfBatches(IntegerFilter numberOfBatches) {
+        this.numberOfBatches = numberOfBatches;
+    }
+
+    public IntegerFilter getProcessedBatches() {
+        return processedBatches;
+    }
+
+    public IntegerFilter processedBatches() {
+        if (processedBatches == null) {
+            processedBatches = new IntegerFilter();
+        }
+        return processedBatches;
+    }
+
+    public void setProcessedBatches(IntegerFilter processedBatches) {
+        this.processedBatches = processedBatches;
+    }
+
+    public IntegerFilter getLastBatchSize() {
+        return lastBatchSize;
+    }
+
+    public IntegerFilter lastBatchSize() {
+        if (lastBatchSize == null) {
+            lastBatchSize = new IntegerFilter();
+        }
+        return lastBatchSize;
+    }
+
+    public void setLastBatchSize(IntegerFilter lastBatchSize) {
+        this.lastBatchSize = lastBatchSize;
+    }
+
+    public IntegerFilter getProcessedItems() {
+        return processedItems;
+    }
+
+    public IntegerFilter processedItems() {
+        if (processedItems == null) {
+            processedItems = new IntegerFilter();
+        }
+        return processedItems;
+    }
+
+    public void setProcessedItems(IntegerFilter processedItems) {
+        this.processedItems = processedItems;
+    }
+
+    public DurationFilter getProcessingTime() {
+        return processingTime;
+    }
+
+    public DurationFilter processingTime() {
+        if (processingTime == null) {
+            processingTime = new DurationFilter();
+        }
+        return processingTime;
+    }
+
+    public void setProcessingTime(DurationFilter processingTime) {
+        this.processingTime = processingTime;
+    }
+
+    public IntegerFilter getTotalItems() {
+        return totalItems;
+    }
+
+    public IntegerFilter totalItems() {
+        if (totalItems == null) {
+            totalItems = new IntegerFilter();
+        }
+        return totalItems;
+    }
+
+    public void setTotalItems(IntegerFilter totalItems) {
+        this.totalItems = totalItems;
+    }
+
     public LongFilter getCreatedById() {
         return createdById;
     }
@@ -204,6 +313,12 @@ public class DepreciationJobCriteria implements Serializable, Criteria {
             Objects.equals(timeOfCommencement, that.timeOfCommencement) &&
             Objects.equals(depreciationJobStatus, that.depreciationJobStatus) &&
             Objects.equals(description, that.description) &&
+            Objects.equals(numberOfBatches, that.numberOfBatches) &&
+            Objects.equals(processedBatches, that.processedBatches) &&
+            Objects.equals(lastBatchSize, that.lastBatchSize) &&
+            Objects.equals(processedItems, that.processedItems) &&
+            Objects.equals(processingTime, that.processingTime) &&
+            Objects.equals(totalItems, that.totalItems) &&
             Objects.equals(createdById, that.createdById) &&
             Objects.equals(depreciationPeriodId, that.depreciationPeriodId) &&
             Objects.equals(distinct, that.distinct)
@@ -212,7 +327,21 @@ public class DepreciationJobCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, timeOfCommencement, depreciationJobStatus, description, createdById, depreciationPeriodId, distinct);
+        return Objects.hash(
+            id,
+            timeOfCommencement,
+            depreciationJobStatus,
+            description,
+            numberOfBatches,
+            processedBatches,
+            lastBatchSize,
+            processedItems,
+            processingTime,
+            totalItems,
+            createdById,
+            depreciationPeriodId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -223,6 +352,12 @@ public class DepreciationJobCriteria implements Serializable, Criteria {
             (timeOfCommencement != null ? "timeOfCommencement=" + timeOfCommencement + ", " : "") +
             (depreciationJobStatus != null ? "depreciationJobStatus=" + depreciationJobStatus + ", " : "") +
             (description != null ? "description=" + description + ", " : "") +
+            (numberOfBatches != null ? "numberOfBatches=" + numberOfBatches + ", " : "") +
+            (processedBatches != null ? "processedBatches=" + processedBatches + ", " : "") +
+            (lastBatchSize != null ? "lastBatchSize=" + lastBatchSize + ", " : "") +
+            (processedItems != null ? "processedItems=" + processedItems + ", " : "") +
+            (processingTime != null ? "processingTime=" + processingTime + ", " : "") +
+            (totalItems != null ? "totalItems=" + totalItems + ", " : "") +
             (createdById != null ? "createdById=" + createdById + ", " : "") +
             (depreciationPeriodId != null ? "depreciationPeriodId=" + depreciationPeriodId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

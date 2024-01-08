@@ -159,13 +159,17 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
      */
     private void processAssetsInBatches(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> assets, int batchSize) {
         int totalAssets = assets.size();
-        // int processedCount = 0;
+         int processedCount = 0;
+         int sequenceCounter = 0;
 
         log.info("System is processing {} assets in batches of {}", totalAssets, batchSize);
 
         // TODO check if the we can implement this lists on the repository itself using pages
         // TODO so that we can pull only the size of the assets needed not the whole kingdom
-        for (int processedCount = 0; processedCount < totalAssets; ) {
+        while (processedCount < totalAssets) {
+
+            ++sequenceCounter;
+
             int startIndex = processedCount;
             int endIndex = Math.min(processedCount + batchSize, totalAssets);
 
@@ -174,10 +178,10 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
 
             // Check if this is the last batch
             boolean isLastBatch = processedCount + batchSize >= totalAssets;
-            DepreciationBatchSequenceDTO batchSequence = createDepreciationBatchSequence(depreciationJob, startIndex, endIndex, isLastBatch);
+            DepreciationBatchSequenceDTO batchSequence = createDepreciationBatchSequence(depreciationJob, startIndex, endIndex, isLastBatch, processedCount, batchSize, sequenceCounter, totalAssets);
 
             // Process and enqueue the current batch
-            processAndEnqueueBatch(depreciationJob, currentBatch, batchSequence, isLastBatch, processedCount);
+            processAndEnqueueBatch(depreciationJob, currentBatch, batchSequence, isLastBatch, processedCount, sequenceCounter, totalAssets);
 
             processedCount += batchSize;
         }
@@ -186,15 +190,17 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
     /**
      * Creates a DepreciationBatchSequence entity to track the processed batch.
      */
-    private DepreciationBatchSequenceDTO createDepreciationBatchSequence(DepreciationJobDTO depreciationJob, int startIndex, int endIndex, boolean isLastBatch) {
+    private DepreciationBatchSequenceDTO createDepreciationBatchSequence(DepreciationJobDTO depreciationJob, int startIndex, int endIndex, boolean isLastBatch, int processedItems, int batchSize, int sequenceNumber, int totalItems) {
         DepreciationBatchSequenceDTO batchSequence = new DepreciationBatchSequenceDTO();
         batchSequence.setDepreciationBatchStatus(DepreciationBatchStatusType.CREATED);
         batchSequence.setDepreciationJob(depreciationJob);
         batchSequence.setStartIndex(startIndex);
         batchSequence.setEndIndex(endIndex);
-        // TODO track sequenceNumber
-        // TODO track last-batch
-        // batchSequence.setIsLastBatch(isLastBatch);
+        batchSequence.setSequenceNumber(sequenceNumber);
+        batchSequence.setBatchSize(batchSize);
+        batchSequence.setProcessedItems(processedItems);
+        batchSequence.setIsLastBatch(isLastBatch);
+        batchSequence.setTotalItems(totalItems);
 
         DepreciationBatchSequenceDTO createdBatchSequence = depreciationBatchSequenceService.save(batchSequence);
 
@@ -206,9 +212,9 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
     /**
      * Processes and enqueues the current batch for depreciation.
      */
-    private void processAndEnqueueBatch(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> currentBatch, DepreciationBatchSequenceDTO batchSequence, boolean isLastBatch, int processedCount) {
+    private void processAndEnqueueBatch(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> currentBatch, DepreciationBatchSequenceDTO batchSequence, boolean isLastBatch, int processedCount, int sequenceNumber, int totalItems) {
         // Enqueuing the DepreciationBatchMessage
-        depreciationBatchProducer.sendDepreciationJobMessage(depreciationJob, currentBatch, batchSequence, isLastBatch, processedCount);
+        depreciationBatchProducer.sendDepreciationJobMessage(depreciationJob, currentBatch, batchSequence, isLastBatch, processedCount, sequenceNumber, totalItems);
 
         // Update the batch sequence status to enqueued
         batchSequence.setDepreciationBatchStatus(DepreciationBatchStatusType.ENQUEUED);

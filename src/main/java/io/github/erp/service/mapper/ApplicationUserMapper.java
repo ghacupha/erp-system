@@ -46,6 +46,12 @@ public interface ApplicationUserMapper extends EntityMapper<ApplicationUserDTO, 
     @Mapping(target = "removePlaceholder", ignore = true)
     ApplicationUser toEntity(ApplicationUserDTO applicationUserDTO);
 
+    @Named("designation")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "designation", source = "designation")
+    ApplicationUserDTO toDtoDesignation(ApplicationUser applicationUser);
+
     @Named("applicationIdentity")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
@@ -57,10 +63,4 @@ public interface ApplicationUserMapper extends EntityMapper<ApplicationUserDTO, 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "applicationIdentity", source = "applicationIdentity")
     Set<ApplicationUserDTO> toDtoApplicationIdentitySet(Set<ApplicationUser> applicationUser);
-
-    @Named("designation")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "designation", source = "designation")
-    ApplicationUserDTO toDtoDesignation(ApplicationUser applicationUser);
 }

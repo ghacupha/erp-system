@@ -127,6 +127,25 @@ public class DepreciationJobQueryService extends QueryService<DepreciationJob> {
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), DepreciationJob_.description));
             }
+            if (criteria.getNumberOfBatches() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getNumberOfBatches(), DepreciationJob_.numberOfBatches));
+            }
+            if (criteria.getProcessedBatches() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getProcessedBatches(), DepreciationJob_.processedBatches));
+            }
+            if (criteria.getLastBatchSize() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getLastBatchSize(), DepreciationJob_.lastBatchSize));
+            }
+            if (criteria.getProcessedItems() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getProcessedItems(), DepreciationJob_.processedItems));
+            }
+            if (criteria.getProcessingTime() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getProcessingTime(), DepreciationJob_.processingTime));
+            }
+            if (criteria.getTotalItems() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getTotalItems(), DepreciationJob_.totalItems));
+            }
             if (criteria.getCreatedById() != null) {
                 specification =
                     specification.and(

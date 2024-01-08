@@ -24,6 +24,7 @@ import java.util.Objects;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.BooleanFilter;
 import tech.jhipster.service.filter.DoubleFilter;
+import tech.jhipster.service.filter.DurationFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
@@ -77,6 +78,18 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
 
     private UUIDFilter fiscalQuarterIdentifier;
 
+    private IntegerFilter batchSize;
+
+    private IntegerFilter processedItems;
+
+    private IntegerFilter sequenceNumber;
+
+    private BooleanFilter isLastBatch;
+
+    private DurationFilter processingTime;
+
+    private IntegerFilter totalItems;
+
     private LongFilter depreciationJobId;
 
     private Boolean distinct;
@@ -92,6 +105,12 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
         this.depreciationJobIdentifier = other.depreciationJobIdentifier == null ? null : other.depreciationJobIdentifier.copy();
         this.fiscalMonthIdentifier = other.fiscalMonthIdentifier == null ? null : other.fiscalMonthIdentifier.copy();
         this.fiscalQuarterIdentifier = other.fiscalQuarterIdentifier == null ? null : other.fiscalQuarterIdentifier.copy();
+        this.batchSize = other.batchSize == null ? null : other.batchSize.copy();
+        this.processedItems = other.processedItems == null ? null : other.processedItems.copy();
+        this.sequenceNumber = other.sequenceNumber == null ? null : other.sequenceNumber.copy();
+        this.isLastBatch = other.isLastBatch == null ? null : other.isLastBatch.copy();
+        this.processingTime = other.processingTime == null ? null : other.processingTime.copy();
+        this.totalItems = other.totalItems == null ? null : other.totalItems.copy();
         this.depreciationJobId = other.depreciationJobId == null ? null : other.depreciationJobId.copy();
         this.distinct = other.distinct;
     }
@@ -221,6 +240,96 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
         this.fiscalQuarterIdentifier = fiscalQuarterIdentifier;
     }
 
+    public IntegerFilter getBatchSize() {
+        return batchSize;
+    }
+
+    public IntegerFilter batchSize() {
+        if (batchSize == null) {
+            batchSize = new IntegerFilter();
+        }
+        return batchSize;
+    }
+
+    public void setBatchSize(IntegerFilter batchSize) {
+        this.batchSize = batchSize;
+    }
+
+    public IntegerFilter getProcessedItems() {
+        return processedItems;
+    }
+
+    public IntegerFilter processedItems() {
+        if (processedItems == null) {
+            processedItems = new IntegerFilter();
+        }
+        return processedItems;
+    }
+
+    public void setProcessedItems(IntegerFilter processedItems) {
+        this.processedItems = processedItems;
+    }
+
+    public IntegerFilter getSequenceNumber() {
+        return sequenceNumber;
+    }
+
+    public IntegerFilter sequenceNumber() {
+        if (sequenceNumber == null) {
+            sequenceNumber = new IntegerFilter();
+        }
+        return sequenceNumber;
+    }
+
+    public void setSequenceNumber(IntegerFilter sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+
+    public BooleanFilter getIsLastBatch() {
+        return isLastBatch;
+    }
+
+    public BooleanFilter isLastBatch() {
+        if (isLastBatch == null) {
+            isLastBatch = new BooleanFilter();
+        }
+        return isLastBatch;
+    }
+
+    public void setIsLastBatch(BooleanFilter isLastBatch) {
+        this.isLastBatch = isLastBatch;
+    }
+
+    public DurationFilter getProcessingTime() {
+        return processingTime;
+    }
+
+    public DurationFilter processingTime() {
+        if (processingTime == null) {
+            processingTime = new DurationFilter();
+        }
+        return processingTime;
+    }
+
+    public void setProcessingTime(DurationFilter processingTime) {
+        this.processingTime = processingTime;
+    }
+
+    public IntegerFilter getTotalItems() {
+        return totalItems;
+    }
+
+    public IntegerFilter totalItems() {
+        if (totalItems == null) {
+            totalItems = new IntegerFilter();
+        }
+        return totalItems;
+    }
+
+    public void setTotalItems(IntegerFilter totalItems) {
+        this.totalItems = totalItems;
+    }
+
     public LongFilter getDepreciationJobId() {
         return depreciationJobId;
     }
@@ -262,6 +371,12 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
             Objects.equals(depreciationJobIdentifier, that.depreciationJobIdentifier) &&
             Objects.equals(fiscalMonthIdentifier, that.fiscalMonthIdentifier) &&
             Objects.equals(fiscalQuarterIdentifier, that.fiscalQuarterIdentifier) &&
+            Objects.equals(batchSize, that.batchSize) &&
+            Objects.equals(processedItems, that.processedItems) &&
+            Objects.equals(sequenceNumber, that.sequenceNumber) &&
+            Objects.equals(isLastBatch, that.isLastBatch) &&
+            Objects.equals(processingTime, that.processingTime) &&
+            Objects.equals(totalItems, that.totalItems) &&
             Objects.equals(depreciationJobId, that.depreciationJobId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -278,6 +393,12 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
             depreciationJobIdentifier,
             fiscalMonthIdentifier,
             fiscalQuarterIdentifier,
+            batchSize,
+            processedItems,
+            sequenceNumber,
+            isLastBatch,
+            processingTime,
+            totalItems,
             depreciationJobId,
             distinct
         );
@@ -295,6 +416,12 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
             (depreciationJobIdentifier != null ? "depreciationJobIdentifier=" + depreciationJobIdentifier + ", " : "") +
             (fiscalMonthIdentifier != null ? "fiscalMonthIdentifier=" + fiscalMonthIdentifier + ", " : "") +
             (fiscalQuarterIdentifier != null ? "fiscalQuarterIdentifier=" + fiscalQuarterIdentifier + ", " : "") +
+            (batchSize != null ? "batchSize=" + batchSize + ", " : "") +
+            (processedItems != null ? "processedItems=" + processedItems + ", " : "") +
+            (sequenceNumber != null ? "sequenceNumber=" + sequenceNumber + ", " : "") +
+            (isLastBatch != null ? "isLastBatch=" + isLastBatch + ", " : "") +
+            (processingTime != null ? "processingTime=" + processingTime + ", " : "") +
+            (totalItems != null ? "totalItems=" + totalItems + ", " : "") +
             (depreciationJobId != null ? "depreciationJobId=" + depreciationJobId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
