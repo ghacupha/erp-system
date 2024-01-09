@@ -17,7 +17,6 @@ package io.github.erp.erp.depreciation.queue;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import io.github.erp.erp.depreciation.BatchSequenceDepreciationService;
 import io.github.erp.erp.depreciation.DepreciationJobCompleteCallback;
 import io.github.erp.erp.depreciation.DepreciationJobErroredCallback;
@@ -64,21 +63,7 @@ public class DepreciationBatchConsumer {
                 // TODO review if this method is introducing performance bottlenecks
                 // todo due to contention for the same lock
                 synchronized (sequenceLock) {
-                    // Process and update the batch sequence status
-                    // TODO CALLBACK FOR SEQUENCE UPDATE
                     batchSequenceDepreciationService.runDepreciation(message);
-
-//                    depreciationBatchSequenceService.findOne(Long.valueOf(message.getBatchId()))
-//                        .ifPresent(batch -> {
-//                            batch.setDepreciationBatchStatus(DepreciationBatchStatusType.COMPLETED);
-//                            depreciationBatchSequenceService.save(batch);
-//                        });
-                    // depreciationJobCompleteCallback.onComplete(message);
-
-                     // TODO implement this in a way that supports parallelism
-                     // if (message.isLastBatch()) {
-                     //    depreciationJobCompleteCallback.onComplete(message);
-                     // }
                 }
 
             } catch (Exception e) {

@@ -51,7 +51,7 @@ public class DepreciationBatchProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendDepreciationJobMessage(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> assets, DepreciationBatchSequenceDTO batchSequence, boolean isLastBatch, int processedCount, int sequenceNumber, int totalItems) {
+    public void sendDepreciationJobMessage(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> assets, DepreciationBatchSequenceDTO batchSequence, boolean isLastBatch, int processedCount, int sequenceNumber, int totalItems, String depreciationJobCountUpContextId, String depreciationJobCountDownContextId, String depreciationBatchCountUpContextId, String depreciationBatchCountDownContextId) {
         DepreciationBatchMessage depreciationJobMessage = DepreciationBatchMessage
             .builder()
             .batchId(String.valueOf(batchSequence.getId()))
@@ -66,6 +66,10 @@ public class DepreciationBatchProducer {
             .processedCount(processedCount)
             .sequenceNumber(sequenceNumber)
             .totalItems(totalItems)
+            .depreciationJobCountUpContextId(depreciationJobCountUpContextId)
+            .depreciationJobCountDownContextId(depreciationJobCountDownContextId)
+            .depreciationBatchCountUpContextId(depreciationBatchCountUpContextId)
+            .depreciationBatchCountDownContextId(depreciationBatchCountDownContextId)
             .build();
 
         kafkaTemplate.send(topicName, depreciationJobMessage);
