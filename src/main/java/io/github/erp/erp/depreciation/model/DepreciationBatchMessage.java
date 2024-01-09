@@ -48,4 +48,8 @@ public class DepreciationBatchMessage implements Serializable {
     private int processedCount;
     private int sequenceNumber;
     private int totalItems;
+    private String depreciationJobCountUpContextId;
+    private String depreciationJobCountDownContextId;
+    private String depreciationBatchCountUpContextId;
+    private String depreciationBatchCountDownContextId;
 }

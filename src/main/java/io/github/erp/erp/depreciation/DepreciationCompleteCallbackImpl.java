@@ -17,10 +17,14 @@ package io.github.erp.erp.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import com.ctc.wstx.shaded.msv_core.reader.trex.ZeroOrMoreState;
 import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
+import io.github.erp.erp.depreciation.context.DepreciationJobContext;
 import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
 import io.github.erp.service.DepreciationBatchSequenceService;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class DepreciationCompleteCallbackImpl implements DepreciationCompleteCallback {
@@ -33,13 +37,24 @@ public class DepreciationCompleteCallbackImpl implements DepreciationCompleteCal
 
     @Override
     public void onComplete(DepreciationBatchMessage message) {
-        // This method will be called after each depreciation batch is completed
-        depreciationBatchSequenceService.findOne(Long.valueOf(message.getBatchId())).ifPresent(depreciationBatch -> {
-            if (depreciationBatch.getDepreciationBatchStatus() != DepreciationBatchStatusType.COMPLETED) {
-                depreciationBatch.setDepreciationBatchStatus(DepreciationBatchStatusType.COMPLETED);
-                depreciationBatchSequenceService.save(depreciationBatch);
-            }
-        });
+        // Check if batch-size agrees with the counter first
+        UUID batchCountDownContextId = UUID.fromString(message.getDepreciationBatchCountDownContextId());
+        DepreciationJobContext contextManager = DepreciationJobContext.getInstance();
+
+        // This should now be zero
+        int pendingItems = contextManager.getNumberOfProcessedItems(batchCountDownContextId);
+
+        if (pendingItems == 0) {
+            // This method will be called after each depreciation batch is completed
+            depreciationBatchSequenceService.findOne(Long.valueOf(message.getBatchId())).ifPresent(depreciationBatch -> {
+                if (depreciationBatch.getDepreciationBatchStatus() != DepreciationBatchStatusType.COMPLETED) {
+                    depreciationBatch.setDepreciationBatchStatus(DepreciationBatchStatusType.COMPLETED);
+                    depreciationBatchSequenceService.save(depreciationBatch);
+                }
+            });
+        }
+
+        // Else check sequentially on a timer
 
     }
 }

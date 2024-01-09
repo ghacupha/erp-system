@@ -20,6 +20,7 @@ package io.github.erp.erp.depreciation;
 import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import io.github.erp.domain.enumeration.DepreciationJobStatusType;
 import io.github.erp.domain.enumeration.DepreciationPeriodStatusTypes;
+import io.github.erp.erp.depreciation.context.DepreciationJobContext;
 import io.github.erp.erp.depreciation.queue.DepreciationBatchProducer;
 import io.github.erp.service.AssetRegistrationService;
 import io.github.erp.service.DepreciationBatchSequenceService;
@@ -34,8 +35,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The DepreciationJobSequenceService class manages the depreciation process for a given DepreciationJob. It is responsible for
@@ -93,7 +94,7 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
 
         // Process the assets in batches
         // TODO externalize this setting, you definitely would not do this for 10,000 items
-        int batchSize = 1000;
+        int batchSize = 300;
         processAssetsInBatches(depreciationJob, assets, batchSize);
 
         // Mark the depreciation job as complete
@@ -162,6 +163,11 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
          int processedCount = 0;
          int sequenceCounter = 0;
 
+         DepreciationJobContext contextManager = DepreciationJobContext.getInstance();
+         String depreciationJobCountUpContextId = contextManager.createContext(0).toString();
+         String depreciationJobCountDownContextId = contextManager.createContext(totalAssets).toString();
+         String depreciationBatchCountUpContextId = contextManager.createContext(0).toString();
+
         log.info("System is processing {} assets in batches of {}", totalAssets, batchSize);
 
         // TODO check if the we can implement this lists on the repository itself using pages
@@ -176,12 +182,14 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
             // Get the current batch of assets
             List<AssetRegistrationDTO> currentBatch = assets.subList(startIndex, endIndex);
 
+            String depreciationBatchCountDownContextId = contextManager.createContext(currentBatch.size()).toString();
+
             // Check if this is the last batch
             boolean isLastBatch = processedCount + batchSize >= totalAssets;
-            DepreciationBatchSequenceDTO batchSequence = createDepreciationBatchSequence(depreciationJob, startIndex, endIndex, isLastBatch, processedCount, batchSize, sequenceCounter, totalAssets);
+            DepreciationBatchSequenceDTO batchSequence = createDepreciationBatchSequence(depreciationJob, startIndex, endIndex, isLastBatch, processedCount, currentBatch.size(), sequenceCounter, totalAssets);
 
             // Process and enqueue the current batch
-            processAndEnqueueBatch(depreciationJob, currentBatch, batchSequence, isLastBatch, processedCount, sequenceCounter, totalAssets);
+            processAndEnqueueBatch(depreciationJob, currentBatch, batchSequence, isLastBatch, processedCount, sequenceCounter, totalAssets, depreciationJobCountUpContextId, depreciationJobCountDownContextId, depreciationBatchCountUpContextId, depreciationBatchCountDownContextId);
 
             processedCount += batchSize;
         }
@@ -201,6 +209,8 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
         batchSequence.setProcessedItems(processedItems);
         batchSequence.setIsLastBatch(isLastBatch);
         batchSequence.setTotalItems(totalItems);
+        // TODO batchSequence.setProcessingIdentifier(/* Extracted from DepreciationContext*/);
+        // TODO SET identifier to compute processing time
 
         DepreciationBatchSequenceDTO createdBatchSequence = depreciationBatchSequenceService.save(batchSequence);
 
@@ -212,9 +222,9 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
     /**
      * Processes and enqueues the current batch for depreciation.
      */
-    private void processAndEnqueueBatch(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> currentBatch, DepreciationBatchSequenceDTO batchSequence, boolean isLastBatch, int processedCount, int sequenceNumber, int totalItems) {
+    private void processAndEnqueueBatch(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> currentBatch, DepreciationBatchSequenceDTO batchSequence, boolean isLastBatch, int processedCount, int sequenceNumber, int totalItems, String depreciationJobCountUpContextId, String depreciationJobCountDownContextId, String depreciationBatchCountUpContextId, String depreciationBatchCountDownContextId) {
         // Enqueuing the DepreciationBatchMessage
-        depreciationBatchProducer.sendDepreciationJobMessage(depreciationJob, currentBatch, batchSequence, isLastBatch, processedCount, sequenceNumber, totalItems);
+        depreciationBatchProducer.sendDepreciationJobMessage(depreciationJob, currentBatch, batchSequence, isLastBatch, processedCount, sequenceNumber, totalItems, depreciationJobCountUpContextId, depreciationJobCountDownContextId, depreciationBatchCountUpContextId, depreciationBatchCountDownContextId);
 
         // Update the batch sequence status to enqueued
         batchSequence.setDepreciationBatchStatus(DepreciationBatchStatusType.ENQUEUED);
