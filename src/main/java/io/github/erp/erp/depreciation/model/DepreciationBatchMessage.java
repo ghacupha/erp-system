@@ -17,6 +17,7 @@ package io.github.erp.erp.depreciation.model;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.erp.depreciation.context.DepreciationContextInstance;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,6 +27,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * includes list of asset ids that are to be depreciated in a single batch, and other
@@ -37,19 +39,22 @@ import java.util.List;
 @AllArgsConstructor
 public class DepreciationBatchMessage implements Serializable {
 
+    private UUID messageCorrelationId;
     private String jobId;
     private String batchId;
+    private int batchSize;
     private List<String> assetIds;
     private BigDecimal initialCost;
     private LocalDateTime createdAt;
     private int startIndex;
     private int endIndex;
     private boolean isLastBatch;
-    private int processedCount;
+    private int enqueuedCount;
     private int sequenceNumber;
     private int totalItems;
-    private String depreciationJobCountUpContextId;
-    private String depreciationJobCountDownContextId;
-    private String depreciationBatchCountUpContextId;
-    private String depreciationBatchCountDownContextId;
+    private DepreciationContextInstance depreciationContextInstance;
+
+    private boolean processed;
+    private int processedMessagesCount;
+    private int numberOfBatches;
 }
