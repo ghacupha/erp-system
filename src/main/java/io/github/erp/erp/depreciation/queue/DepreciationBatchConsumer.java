@@ -18,16 +18,16 @@ package io.github.erp.erp.depreciation.queue;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.erp.depreciation.BatchSequenceDepreciationService;
-import io.github.erp.erp.depreciation.DepreciationJobCompleteCallback;
-import io.github.erp.erp.depreciation.DepreciationJobErroredCallback;
+import io.github.erp.erp.depreciation.context.DepreciationJobContext;
+import io.github.erp.erp.depreciation.exceptions.UnexpectedDepreciationDataset;
 import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
-import io.github.erp.service.DepreciationBatchSequenceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.UUID;
 
 @Component
 public class DepreciationBatchConsumer {
@@ -35,40 +35,39 @@ public class DepreciationBatchConsumer {
     private static final Logger log = LoggerFactory.getLogger(DepreciationBatchConsumer.class);
 
     private final BatchSequenceDepreciationService batchSequenceDepreciationService;
-    private final DepreciationJobCompleteCallback depreciationJobCompleteCallback;
-    private final DepreciationJobErroredCallback depreciationJobErroredCallback;
 
-    private final DepreciationBatchSequenceService depreciationBatchSequenceService;
-
-    private final Object sequenceLock = new Object(); // For concurrency control
-
-    public DepreciationBatchConsumer(
-        BatchSequenceDepreciationService batchSequenceDepreciationService,
-        DepreciationJobCompleteCallback depreciationJobCompleteCallback,
-        DepreciationJobErroredCallback depreciationJobErroredCallback,
-        DepreciationBatchSequenceService depreciationBatchSequenceService) {
+    public DepreciationBatchConsumer( BatchSequenceDepreciationService batchSequenceDepreciationService ) {
         this.batchSequenceDepreciationService = batchSequenceDepreciationService;
-        this.depreciationJobErroredCallback = depreciationJobErroredCallback;
-        this.depreciationBatchSequenceService = depreciationBatchSequenceService;
-        this.depreciationJobCompleteCallback = depreciationJobCompleteCallback;
     }
 
-    @KafkaListener(topics = "depreciation_batch_topic", groupId = "erp-system")
-    public void processDepreciationJobMessages(List<DepreciationBatchMessage> messages) {
+    @KafkaListener(topics = "depreciation_batch_topic", groupId = "erp-system", concurrency = "8")
+    public void processDepreciationJobMessages(DepreciationBatchMessage message, Acknowledgment acknowledgment) {
         // Process the batch of depreciation job messages
-        for (DepreciationBatchMessage message : messages) {
-            try {
-                log.debug("Received message for batch-id id {}", message.getBatchId());
+        log.debug("Received message for batch-id id {}", message.getBatchId());
 
-                // TODO review if this method is introducing performance bottlenecks
-                // todo due to contention for the same lock
-                synchronized (sequenceLock) {
-                    batchSequenceDepreciationService.runDepreciation(message);
-                }
+        UUID messageCountContextId = message.getDepreciationContextInstance().getMessageCountContextId();
 
-            } catch (Exception e) {
-                depreciationJobErroredCallback.onError(message, e);
-            }
+        DepreciationJobContext contextManager = DepreciationJobContext.getInstance();
+
+        int messagesProcessed = contextManager.getNumberOfProcessedItems(messageCountContextId);
+
+        if (messagesProcessed == message.getNumberOfBatches() | messagesProcessed > message.getNumberOfBatches()) {
+
+            throw new UnexpectedDepreciationDataset("Number of messages processed = " + messagesProcessed + " Expected number of batches = " + message.getNumberOfBatches());
+        }
+
+        // acknowledge the message to commit offset
+        acknowledgment.acknowledge();
+
+        // Depreciation Running...
+        boolean messageProcessed = batchSequenceDepreciationService.runDepreciation(message).isProcessed();
+
+        if (messageProcessed) {
+
+            contextManager.updateNumberOfProcessedItems(messageCountContextId, 1);
+
+            contextManager.updateNumberOfProcessedItems(
+                message.getDepreciationContextInstance().getDepreciationBatchCountDownContextId(), message.getBatchSize());
         }
     }
 }

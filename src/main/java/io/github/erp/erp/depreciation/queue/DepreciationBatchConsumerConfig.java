@@ -59,21 +59,21 @@ public class DepreciationBatchConsumerConfig {
     public ConcurrentKafkaListenerContainerFactory<String, DepreciationBatchMessage> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, DepreciationBatchMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
-        // Set other properties on the factory if needed
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
         return factory;
     }
 
 
-    @Bean
-    public ContainerProperties containerProperties() {
-        ContainerProperties containerProperties = new ContainerProperties(topicName);
-        containerProperties.setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
-        // containerProperties.setListenerMode(ListenerMode.BATCH);
-        containerProperties.setAckOnError(false);
-        containerProperties.setPollTimeout(3000);
-        // containerProperties.setErrorHandler(new SeekToCurrentErrorHandler());
-        return containerProperties;
-    }
+//    @Bean
+//    public ContainerProperties containerProperties() {
+//        ContainerProperties containerProperties = new ContainerProperties(topicName);
+//        containerProperties.setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
+//        // containerProperties.setListenerMode(ListenerMode.BATCH);
+//        containerProperties.setAckOnError(false);
+//        containerProperties.setPollTimeout(3000);
+//        // containerProperties.setErrorHandler(new SeekToCurrentErrorHandler());
+//        return containerProperties;
+//    }
 
     // Define Kafka consumer configurations
     @SneakyThrows

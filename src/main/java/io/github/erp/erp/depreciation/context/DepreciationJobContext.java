@@ -20,11 +20,15 @@ package io.github.erp.erp.depreciation.context;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class DepreciationJobContext {
     private static final HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance();
     private static final DepreciationJobContext INSTANCE = new DepreciationJobContext();
+
+    private static final String CONTEXT_ID = "depreciationProcessContext";
 
     private DepreciationJobContext() {
         // Private constructor to prevent instantiation
@@ -36,21 +40,30 @@ public class DepreciationJobContext {
 
     public UUID createContext(int numberOfProcessedItems) {
         UUID uuid = UUID.randomUUID();
-        hazelcastInstance.getMap("processContext").put(uuid, numberOfProcessedItems);
+        hazelcastInstance.getMap(CONTEXT_ID).put(uuid, numberOfProcessedItems);
         return uuid;
     }
 
     public int getNumberOfProcessedItems(UUID uuid) {
-        return (int) hazelcastInstance.getMap("processContext").getOrDefault(uuid, 0);
+        return (int) hazelcastInstance.getMap(CONTEXT_ID).getOrDefault(uuid, 0);
+    }
+
+    public BigDecimal getAmount(UUID uuid) {
+        return (BigDecimal) hazelcastInstance.getMap(CONTEXT_ID).getOrDefault(uuid, BigDecimal.ZERO);
     }
 
     public void updateNumberOfProcessedItems(UUID uuid, int incrementBy) {
         int currentCount = getNumberOfProcessedItems(uuid);
-        hazelcastInstance.getMap("processContext").put(uuid, currentCount + incrementBy);
+        hazelcastInstance.getMap(CONTEXT_ID).put(uuid, currentCount + incrementBy);
+    }
+
+    public void updateAmount(UUID uuid, BigDecimal incrementBy) {
+        BigDecimal currentAmount = getAmount(uuid);
+        hazelcastInstance.getMap(CONTEXT_ID).put(uuid, currentAmount.add(incrementBy));
     }
 
     public void removeContext(UUID uuid) {
-        hazelcastInstance.getMap("processContext").remove(uuid);
+        hazelcastInstance.getMap(CONTEXT_ID).remove(uuid);
     }
 
 }

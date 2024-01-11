@@ -79,6 +79,16 @@
       "name": "kafka.depreciation-batch.topic.name",
       "type": "java.lang.String",
       "description": "Description for kafka.depreciation-batch.topic.name."
+    },
+    {
+      "name": "kafka.consumer.properties.enable.auto.commit",
+      "type": "java.lang.String",
+      "description": "Description for kafka.consumer.properties.enable.auto.commit."
+    },
+    {
+      "name": "kafka.admin.properties.replication.factor",
+      "type": "java.lang.String",
+      "description": "Description for kafka.admin.properties.replication.factor."
     }
   ]
 }

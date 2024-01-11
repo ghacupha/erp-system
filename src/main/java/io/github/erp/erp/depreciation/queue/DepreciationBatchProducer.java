@@ -17,6 +17,7 @@ package io.github.erp.erp.depreciation.queue;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.erp.depreciation.context.DepreciationContextInstance;
 import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
 import io.github.erp.service.dto.AssetRegistrationDTO;
 import io.github.erp.service.dto.DepreciationBatchSequenceDTO;
@@ -31,6 +32,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -51,10 +53,12 @@ public class DepreciationBatchProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendDepreciationJobMessage(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> assets, DepreciationBatchSequenceDTO batchSequence, boolean isLastBatch, int processedCount, int sequenceNumber, int totalItems, String depreciationJobCountUpContextId, String depreciationJobCountDownContextId, String depreciationBatchCountUpContextId, String depreciationBatchCountDownContextId) {
+    public void sendDepreciationJobMessage(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> assets, DepreciationBatchSequenceDTO batchSequence, boolean isLastBatch, int processedCount, int sequenceNumber, int totalItems, DepreciationContextInstance contextInstance, int numberOfBatches) {
         DepreciationBatchMessage depreciationJobMessage = DepreciationBatchMessage
             .builder()
+            .messageCorrelationId(UUID.randomUUID())
             .batchId(String.valueOf(batchSequence.getId()))
+            .batchSize(assets.size())
             .jobId(String.valueOf(depreciationJob.getId()))
             .assetIds(assets.stream().map(AssetRegistrationDTO::getId).map(String::valueOf).collect(Collectors.toList()))
             .initialCost(assets.stream().map(AssetRegistrationDTO::getAssetCost).reduce(BigDecimal::add).orElse(BigDecimal.ZERO))
@@ -63,13 +67,11 @@ public class DepreciationBatchProducer {
             .startIndex(batchSequence.getStartIndex())
             .endIndex(batchSequence.getEndIndex())
             .createdAt(LocalDateTime.now())
-            .processedCount(processedCount)
+            .enqueuedCount(processedCount)
             .sequenceNumber(sequenceNumber)
             .totalItems(totalItems)
-            .depreciationJobCountUpContextId(depreciationJobCountUpContextId)
-            .depreciationJobCountDownContextId(depreciationJobCountDownContextId)
-            .depreciationBatchCountUpContextId(depreciationBatchCountUpContextId)
-            .depreciationBatchCountDownContextId(depreciationBatchCountDownContextId)
+            .depreciationContextInstance(contextInstance)
+            .numberOfBatches(numberOfBatches)
             .build();
 
         kafkaTemplate.send(topicName, depreciationJobMessage);

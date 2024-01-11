@@ -231,6 +231,9 @@ jhipster:
 
 kafka:
   bootstrap-servers: localhost:9092
+  admin:
+    properties:
+      replication.factor: 8
   consumer:
     group.id: erp-system
     key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -241,6 +244,8 @@ kafka:
   producer:
     key.serializer: org.apache.kafka.common.serialization.StringSerializer
     value.serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    properties:
+      replication.factor: 8;
   depreciation-batch:
     topic:
       name: "depreciation_batch_topic"
