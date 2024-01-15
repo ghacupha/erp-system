@@ -245,7 +245,8 @@
       "PrepaymentAccountReport",
       "PrepaymentOutstandingOverviewReport",
       "AutonomousReport",
-      "AmortizationPostingReport"
+      "AmortizationPostingReport",
+      "DepreciationReport"
     ],
     "entitySuffix": "",
     "incrementalChangelog": false,
@@ -253,7 +254,7 @@
     "jhipsterVersion": "7.3.1",
     "jwtSecretKey": "ZWMyYzI1MmU3Mzg1ZTU4ZjFmOTIzYjEzOWZkZWU1MWZhNGY4ZTA3ZTEwYmYxMzczOGE3NDZiZjNkMDE3NjNiYTBmMTE0ODBiYTcyZDI0ZTcyNmU5OTA2NGY4NDUwZGEyMWQwYThmMTgxNWJiMjQ2OGQ0NmIxMTQwNTE0MGFkNzA=",
     "languages": ["en", "fr", "it", "de"],
-    "lastLiquibaseTimestamp": 1701931010000,
+    "lastLiquibaseTimestamp": 1705295934000,
     "messageBroker": "kafka",
     "nativeLanguage": "en",
     "otherModules": [],
