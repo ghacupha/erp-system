@@ -20,6 +20,5 @@ public class DepreciationContextInstance implements Serializable {
     private UUID depreciationBatchCountUpContextId;
     private UUID depreciationBatchCountDownContextId;
     private UUID messageCountContextId;
-    private List<UUID> cumulativeDepreciationContextIds; //for storing items by sol and by category
-    private List<UUID> netBookValueContextIds; //for storing items by sol and by category
+    private UUID depreciationAmountContextId;
 }
