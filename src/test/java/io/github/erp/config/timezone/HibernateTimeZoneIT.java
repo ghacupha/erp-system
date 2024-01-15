@@ -1,7 +1,7 @@
 package io.github.erp.config.timezone;
 
 /*-
- * Erp System - Mark X No 1 (Jehoiada Series) Server ver 1.7.0
+ * Erp System - Mark X No 2 (Jehoiada Series) Server ver 1.7.1
  * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify

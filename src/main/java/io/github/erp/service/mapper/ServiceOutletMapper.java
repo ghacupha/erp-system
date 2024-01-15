@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark X No 1 (Jehoiada Series) Server ver 1.7.0
+ * Erp System - Mark X No 2 (Jehoiada Series) Server ver 1.7.1
  * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.domain.ServiceOutlet;
 import io.github.erp.service.dto.ServiceOutletDTO;
 import java.util.Set;
@@ -42,15 +41,15 @@ public interface ServiceOutletMapper extends EntityMapper<ServiceOutletDTO, Serv
     @Mapping(target = "removePlaceholder", ignore = true)
     ServiceOutlet toEntity(ServiceOutletDTO serviceOutletDTO);
 
-    @Named("outletCodeSet")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "outletCode", source = "outletCode")
-    Set<ServiceOutletDTO> toDtoOutletCodeSet(Set<ServiceOutlet> serviceOutlet);
-
     @Named("outletCode")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "outletCode", source = "outletCode")
     ServiceOutletDTO toDtoOutletCode(ServiceOutlet serviceOutlet);
+
+    @Named("outletCodeSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "outletCode", source = "outletCode")
+    Set<ServiceOutletDTO> toDtoOutletCodeSet(Set<ServiceOutlet> serviceOutlet);
 }
