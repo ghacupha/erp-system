@@ -17,24 +17,20 @@ package io.github.erp.erp.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import com.ctc.wstx.shaded.msv_core.util.LightStack;
 import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import io.github.erp.domain.enumeration.DepreciationJobStatusType;
 import io.github.erp.domain.enumeration.DepreciationPeriodStatusTypes;
+import io.github.erp.erp.depreciation.context.DepreciationAmountContext;
 import io.github.erp.erp.depreciation.context.DepreciationContextInstance;
 import io.github.erp.erp.depreciation.context.DepreciationJobContext;
 import io.github.erp.erp.depreciation.queue.DepreciationBatchProducer;
-import io.github.erp.service.AssetRegistrationService;
-import io.github.erp.service.DepreciationBatchSequenceService;
-import io.github.erp.service.DepreciationJobService;
-import io.github.erp.service.DepreciationPeriodService;
-import io.github.erp.service.dto.AssetRegistrationDTO;
-import io.github.erp.service.dto.DepreciationBatchSequenceDTO;
-import io.github.erp.service.dto.DepreciationJobDTO;
-import io.github.erp.service.dto.DepreciationPeriodDTO;
-import org.apache.commons.math3.util.ArithmeticUtils;
+import io.github.erp.service.*;
+import io.github.erp.service.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -96,7 +92,7 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
 
         // Process the assets in batches
         // TODO externalize this setting, you definitely would not do this for 10,000 items
-        int batchSize = 300;
+        int batchSize = 600;
         processAssetsInBatches(depreciationJob, assets, batchSize);
 
         // Mark the depreciation job as complete
@@ -161,7 +157,7 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
      * Processes the assets in batches for depreciation.
      */
     private void processAssetsInBatches(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> assets, int batchSize) {
-        int totalAssets = assets.size();
+         int totalAssets = assets.size();
          int processedCount = 0;
          int sequenceCounter = 0;
          int numberOfBatches = totalAssets / batchSize + (totalAssets % batchSize == 0 ? 0 : 1);
@@ -173,11 +169,14 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
          UUID messageCountContextId = contextManager.createContext(0);
          UUID depreciationBatchCountDownContextId = contextManager.createContext(totalAssets);
 
-        log.info("System is processing {} assets in batches of {}", totalAssets, batchSize);
+         DepreciationAmountContext depreciationAmountContext = DepreciationAmountContext.getInstance();
+         UUID depreciationAmountContextId = depreciationAmountContext.createDepreciationAmountContext();
 
-        // TODO check if the we can implement this lists on the repository itself using pages
-        // TODO so that we can pull only the size of the assets needed not the whole kingdom
-        while (processedCount < totalAssets) {
+         log.info("System is processing {} assets in batches of {}", totalAssets, batchSize);
+
+         // TODO check if the we can implement this lists on the repository itself using pages
+         // TODO so that we can pull only the size of the assets needed not the whole kingdom
+         while (processedCount < totalAssets) {
 
             ++sequenceCounter;
 
@@ -196,6 +195,7 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
                 .depreciationBatchCountUpContextId(depreciationBatchCountUpContextId)
                 .depreciationJobCountDownContextId(depreciationJobCountDownContextId)
                 .depreciationBatchCountDownContextId(depreciationBatchCountDownContextId)
+                .depreciationAmountContextId(depreciationAmountContextId)
                 .messageCountContextId(messageCountContextId)
                 .build();
 
@@ -245,7 +245,8 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
     /**
      * Marks the depreciation job as complete.
      */
-    private void markDepreciationJobAsEnqueued(DepreciationJobDTO depreciationJob) {
+    @Async
+    void markDepreciationJobAsEnqueued(DepreciationJobDTO depreciationJob) {
         depreciationJob.setDepreciationJobStatus(DepreciationJobStatusType.ENQUEUED);
         depreciationJobService.save(depreciationJob);
     }

@@ -17,10 +17,12 @@ package io.github.erp.erp.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.enumeration.DepreciationJobStatusType;
 import io.github.erp.domain.enumeration.DepreciationNoticeStatusType;
 import io.github.erp.domain.enumeration.DepreciationPeriodStatusTypes;
 import io.github.erp.erp.depreciation.calculation.DepreciationCalculatorService;
+import io.github.erp.erp.depreciation.context.DepreciationAmountContext;
 import io.github.erp.erp.depreciation.context.DepreciationJobContext;
 import io.github.erp.erp.depreciation.exceptions.AssetCategoryNotConfiguredException;
 import io.github.erp.erp.depreciation.exceptions.DepreciationBatchSequenceNotFound;
@@ -141,6 +143,7 @@ public class BatchSequenceDepreciationService {
                 UUID depreciationJobCountDownContextId = message.getDepreciationContextInstance().getDepreciationJobCountDownContextId();
                 UUID depreciationBatchCountUpContextId = message.getDepreciationContextInstance().getDepreciationBatchCountUpContextId();
                 UUID depreciationBatchCountDownContextId = message.getDepreciationContextInstance().getDepreciationBatchCountDownContextId();
+                UUID depreciationAmountContextId = message.getDepreciationContextInstance().getDepreciationAmountContextId();
 
                 DepreciationJobDTO depreciationJob = getDepreciationJob(batchSequence, jobId);
                 if (depreciationJob == null) throw new DepreciationJobNotFoundException(message);
@@ -152,16 +155,21 @@ public class BatchSequenceDepreciationService {
                 if (depreciationPeriod == null) throw new DepreciationPeriodNotConfiguredException(message);
 
                 // OPT OUT
-                if (depreciationJobStatusIsComplete(batchSequence, depreciationJob, depreciationPeriod, message)) throw new DepreciationJobStatusCompleteException(message);
+                if (depreciationJobStatusIsComplete(batchSequence, depreciationJob, depreciationPeriod, message))
+                    throw new DepreciationJobStatusCompleteException(message);
 
                 log.debug("Commencing depreciation for depreciation-job id {}, for depreciation-period {}. Standby...", depreciationJob.getId(), depreciationPeriod.getId());
 
-                if (depreciationPeriodIsClosed(batchSequence, depreciationJob, depreciationPeriod)) throw new DepreciationPeriodClosedException(message);
+                if (depreciationPeriodIsClosed(batchSequence, depreciationJob, depreciationPeriod))
+                    throw new DepreciationPeriodClosedException(message);
 
                 FiscalMonthDTO fiscalMonth = getFiscalMonth(batchSequence, depreciationJob, depreciationPeriod);
                 if (fiscalMonth == null) throw new FiscalMonthNotConfiguredException(message);
 
                 log.debug("Standby for depreciation sequence on {} assets for batch id{}", assetIds.size(), message.getBatchId());
+
+                DepreciationAmountContext depreciationAmountContext
+                    = DepreciationAmountContext.getDepreciationAmountContext(depreciationAmountContextId);
 
                 // Perform the depreciation calculations for the batch of assets
                 for (String assetId : assetIds) {
@@ -172,30 +180,35 @@ public class BatchSequenceDepreciationService {
 
                             log.debug("Asset id {} ready for depreciation sequence, standby for next update", assetRegistration.getId());
 
-                            if (assetCategoryNotConfigured(batchSequence, depreciationJob, depreciationPeriod, assetRegistration)) throw new AssetCategoryNotConfiguredException(assetRegistration, message);
+                            if (assetCategoryNotConfigured(batchSequence, depreciationJob, depreciationPeriod, assetRegistration))
+                                throw new AssetCategoryNotConfiguredException(assetRegistration, message);
 
-                            AssetCategoryDTO assetCategory = assetCategoryService.findOne(assetRegistration.getAssetCategory().getId()).get();
+                            assetCategoryService.findOne(assetRegistration.getAssetCategory().getId()).ifPresent(assetCategory -> {
 
-                            if (serviceOutletNotConfigured(batchSequence, depreciationJob, depreciationPeriod, assetRegistration)) throw new ServiceOutletNotConfiguredException(assetRegistration, message);
+                                if (serviceOutletNotConfigured(batchSequence, depreciationJob, depreciationPeriod, assetRegistration))
+                                    throw new ServiceOutletNotConfiguredException(assetRegistration, message);
 
-                            ServiceOutletDTO serviceOutlet = serviceOutletService.findOne(assetRegistration.getMainServiceOutlet().getId()).get();
+                                serviceOutletService.findOne(assetRegistration.getMainServiceOutlet().getId()).ifPresent(serviceOutlet -> {
 
-                            depreciationMethodService.findOne(assetCategory.getDepreciationMethod().getId()).ifPresent(
-                                depreciationMethod -> {
-                                    // Calculate the depreciation amount using the DepreciationCalculator
-                                    BigDecimal depreciationAmount = depreciationCalculatorService.calculateDepreciation(assetRegistration, depreciationPeriod, assetCategory, depreciationMethod);
+                                    depreciationMethodService.findOne(assetCategory.getDepreciationMethod().getId()).ifPresent(
+                                        depreciationMethod -> {
+                                            // Calculate the depreciation amount using the DepreciationCalculator
+                                            BigDecimal depreciationAmount = depreciationCalculatorService.calculateDepreciation(assetRegistration, depreciationPeriod, assetCategory, depreciationMethod);
 
-                                    // TODO Update the asset's net book value and any other relevant data
-                                    // NetBookValueDTO netBookValue = new NetBookValueDTO(depreciationAmount, assetRegistration, assetCategory, serviceOutlet, depreciationPeriod, depreciationJob)
-                                    // NetBookValueDTO = netBookValueService.save(netBookValue)
+                                            recordDepreciationEntry(depreciationPeriod, fiscalMonth, assetRegistration, assetCategory, serviceOutlet, depreciationMethod, depreciationAmount);
 
-                                    recordDepreciationEntry(depreciationPeriod, fiscalMonth, assetRegistration, assetCategory, serviceOutlet, depreciationMethod, depreciationAmount);
+                                            depreciationAmountContext.setNumberOfProcessedItems(depreciationAmountContext.getNumberOfProcessedItems() + 1);
+
+                                            // update depreciation amount
+                                            depreciationAmountContext.updateAmountForServiceOutlet(assetCategory.getAssetCategoryName(), serviceOutlet.getOutletCode(), depreciationAmount.doubleValue());
+                                        });
+
+                                    contextManager.updateNumberOfProcessedItems(depreciationJobCountUpContextId, 1);
+                                    contextManager.updateNumberOfProcessedItems(depreciationBatchCountUpContextId, 1);
+                                    contextManager.updateNumberOfProcessedItems(depreciationJobCountDownContextId, -1);
+                                    contextManager.updateNumberOfProcessedItems(depreciationBatchCountDownContextId, -1);
                                 });
-
-                            contextManager.updateNumberOfProcessedItems(depreciationJobCountUpContextId, 1);
-                            contextManager.updateNumberOfProcessedItems(depreciationBatchCountUpContextId, 1);
-                            contextManager.updateNumberOfProcessedItems(depreciationJobCountDownContextId, -1);
-                            contextManager.updateNumberOfProcessedItems(depreciationBatchCountDownContextId, -1);
+                            });
                         });
                     // TODO Update the asset's net book value and any other relevant data
                     // TODO Create and update netbook-value-entry
@@ -204,7 +217,7 @@ public class BatchSequenceDepreciationService {
                 message.setProcessed(true);
 
                 // Marking batch as complete
-                depreciationCompleteCallback.onComplete(message);
+                // depreciationCompleteCallback.onComplete(message);
             },
             () -> {
                 throw new DepreciationBatchSequenceNotFound(message.getBatchId());
@@ -304,7 +317,7 @@ public class BatchSequenceDepreciationService {
         // This should now be zero
         int pendingItems = contextManager.getNumberOfProcessedItems(jobCountDownContextId);
 
-        if (pendingItems == 0| pendingItems < 0) {
+        if (pendingItems == 0 | pendingItems < 0) {
 
             log.warn("DepreciationJob id {} is status COMPLETE for period id {}. System opting out the depreciation sequence. Standby", depreciationJob.getId(), depreciationPeriod.getId());
 

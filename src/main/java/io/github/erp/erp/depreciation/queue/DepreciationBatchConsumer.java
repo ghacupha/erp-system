@@ -17,10 +17,15 @@ package io.github.erp.erp.depreciation.queue;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
+import io.github.erp.domain.enumeration.DepreciationJobStatusType;
 import io.github.erp.erp.depreciation.BatchSequenceDepreciationService;
+import io.github.erp.erp.depreciation.context.DepreciationAmountContext;
 import io.github.erp.erp.depreciation.context.DepreciationJobContext;
 import io.github.erp.erp.depreciation.exceptions.UnexpectedDepreciationDataset;
 import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
+import io.github.erp.service.DepreciationBatchSequenceService;
+import io.github.erp.service.DepreciationJobService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -28,6 +33,8 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Component
 public class DepreciationBatchConsumer {
@@ -35,39 +42,79 @@ public class DepreciationBatchConsumer {
     private static final Logger log = LoggerFactory.getLogger(DepreciationBatchConsumer.class);
 
     private final BatchSequenceDepreciationService batchSequenceDepreciationService;
+    private final DepreciationJobService depreciationJobService;
+    private final DepreciationBatchSequenceService depreciationBatchSequenceService;
 
-    public DepreciationBatchConsumer( BatchSequenceDepreciationService batchSequenceDepreciationService ) {
+    private final Lock depreciationLock = new ReentrantLock();
+
+    public DepreciationBatchConsumer(BatchSequenceDepreciationService batchSequenceDepreciationService, DepreciationJobService depreciationJobService, DepreciationBatchSequenceService depreciationBatchSequenceService) {
         this.batchSequenceDepreciationService = batchSequenceDepreciationService;
+        this.depreciationJobService = depreciationJobService;
+        this.depreciationBatchSequenceService = depreciationBatchSequenceService;
     }
 
-    @KafkaListener(topics = "depreciation_batch_topic", groupId = "erp-system", concurrency = "8")
+    @KafkaListener(topics = "depreciation_batch_topic", groupId = "erp-system", concurrency = "2")
     public void processDepreciationJobMessages(DepreciationBatchMessage message, Acknowledgment acknowledgment) {
-        // Process the batch of depreciation job messages
-        log.debug("Received message for batch-id id {}", message.getBatchId());
+        try {
 
-        UUID messageCountContextId = message.getDepreciationContextInstance().getMessageCountContextId();
+            depreciationLock.lock();
 
-        DepreciationJobContext contextManager = DepreciationJobContext.getInstance();
+            // Process the batch of depreciation job messages
+            log.debug("Received message for batch-id id {}", message.getBatchId());
 
-        int messagesProcessed = contextManager.getNumberOfProcessedItems(messageCountContextId);
+            UUID messageCountContextId = message.getDepreciationContextInstance().getMessageCountContextId();
 
-        if (messagesProcessed == message.getNumberOfBatches() | messagesProcessed > message.getNumberOfBatches()) {
+            DepreciationJobContext contextManager = DepreciationJobContext.getInstance();
 
-            throw new UnexpectedDepreciationDataset("Number of messages processed = " + messagesProcessed + " Expected number of batches = " + message.getNumberOfBatches());
-        }
+            int messagesProcessed = contextManager.getNumberOfProcessedItems(messageCountContextId);
 
-        // acknowledge the message to commit offset
-        acknowledgment.acknowledge();
+            if (messagesProcessed == message.getNumberOfBatches() | messagesProcessed > message.getNumberOfBatches()) {
 
-        // Depreciation Running...
-        boolean messageProcessed = batchSequenceDepreciationService.runDepreciation(message).isProcessed();
+                throw new UnexpectedDepreciationDataset("Number of messages processed = " + messagesProcessed + " Expected number of batches = " + message.getNumberOfBatches());
+            }
 
-        if (messageProcessed) {
+            // acknowledge the message to commit offset
+            acknowledgment.acknowledge();
 
-            contextManager.updateNumberOfProcessedItems(messageCountContextId, 1);
+            // Depreciation Running...
+            boolean messageProcessed = batchSequenceDepreciationService.runDepreciation(message).isProcessed();
 
-            contextManager.updateNumberOfProcessedItems(
-                message.getDepreciationContextInstance().getDepreciationBatchCountDownContextId(), message.getBatchSize());
+            if (messageProcessed) {
+
+                depreciationBatchSequenceService.findOne(Long.valueOf(message.getBatchId()))
+                    .ifPresent(batch -> {
+                        batch.setDepreciationBatchStatus(DepreciationBatchStatusType.COMPLETED);
+                        depreciationBatchSequenceService.save(batch);
+                    });
+            }
+
+            int pendingItemsInTheJob = contextManager.getNumberOfProcessedItems(message.getDepreciationContextInstance().getDepreciationJobCountDownContextId());
+
+            if (pendingItemsInTheJob == 0 | pendingItemsInTheJob < 0) {
+
+                depreciationJobService.findOne(Long.valueOf(message.getJobId()))
+                    .ifPresent(job -> {
+                        job.setDepreciationJobStatus(DepreciationJobStatusType.COMPLETE);
+                        depreciationJobService.save(job);
+                    });
+
+                DepreciationAmountContext amountContext
+                    = DepreciationAmountContext.getDepreciationAmountContext(
+                    message.getDepreciationContextInstance().getDepreciationAmountContextId());
+
+                int itemsProcessed = amountContext.getNumberOfProcessedItems();
+
+                log.info("Depreciation process complete for {} items", itemsProcessed);
+
+                amountContext.getAmountsByAssetCategoryAndServiceOutlet()
+                    .forEach((category, categoryMap) -> categoryMap
+                        .forEach((sol, amount) -> log.debug("Depreciation computed for category: {} under service-outlet :{} was {}", category, sol, amount)));
+
+            }
+
+        } finally {
+
+            depreciationLock.unlock();
         }
     }
 }
