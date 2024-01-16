@@ -108,6 +108,7 @@
         <jasperreports.version>6.19.1</jasperreports.version>
         <spring-kafka.version>2.6.0</spring-kafka.version>
         <opencsv.version>5.9</opencsv.version>
+        <dynamicreports.version>6.12.1</dynamicreports.version>
         <!-- jhipster-needle-maven-property -->
     </properties>
 
@@ -186,25 +187,6 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-config</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-netflix-eureka-client -->
-        <!--<dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-netflix-eureka-client</artifactId>
-        </dependency>-->
-        <!--<dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
-        </dependency>-->
-        <!--<dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-config-server</artifactId>
-        </dependency>-->
-        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-commons -->
-        <!--<dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-commons</artifactId>
-        </dependency>-->
-        <!-- https://mvnrepository.com/artifact/org.webjars/font-awesome -->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>font-awesome</artifactId>
@@ -214,18 +196,23 @@
         <dependency>
             <groupId>net.sourceforge.dynamicreports</groupId>
             <artifactId>dynamicreports-core</artifactId>
-            <version>6.12.1</version>
+            <version>${dynamicreports.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/net.sourceforge.dynamicreports/dynamicreports-adhoc -->
         <dependency>
             <groupId>net.sourceforge.dynamicreports</groupId>
             <artifactId>dynamicreports-adhoc</artifactId>
-            <version>6.12.1</version>
+            <version>${dynamicreports.version}</version>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.dynamicreports</groupId>
             <artifactId>dynamicreports-googlecharts</artifactId>
-            <version>6.12.1</version>
+            <version>${dynamicreports.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.dynamicreports</groupId>
+            <artifactId>dynamicreports-parent</artifactId>
+            <version>${dynamicreports.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
