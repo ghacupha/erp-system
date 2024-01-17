@@ -28,11 +28,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
@@ -84,6 +82,19 @@ public class ReportsFSStorageService implements FileStorageService {
             this.root.resolve(Objects.requireNonNull(file.getOriginalFilename())),
             StandardCopyOption.REPLACE_EXISTING
         );
+    }
+
+    /**
+     * Saves the file in the argument to the file system, replacing a similar
+     * file should one be found existing
+     *
+     */
+
+    @SneakyThrows
+    @Override
+    public void save(byte[] fileContent, String fileName) {
+
+        FileUtils.save(fileContent, this.root.resolve(fileName));
     }
 
     @Override

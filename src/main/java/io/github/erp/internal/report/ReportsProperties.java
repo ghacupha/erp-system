@@ -35,6 +35,16 @@ public class ReportsProperties {
 
     private String businessDocsDirectory;
 
+    private String reportPassword;
+
+    public String getReportPassword() {
+        return reportPassword;
+    }
+
+    public void setReportPassword(String reportPassword) {
+        this.reportPassword = reportPassword;
+    }
+
     public String getReportsDirectory() {
         return reportsDirectory;
     }
