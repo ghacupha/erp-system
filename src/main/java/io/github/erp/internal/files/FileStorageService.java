@@ -18,6 +18,8 @@ package io.github.erp.internal.files;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import org.springframework.core.io.Resource;
+
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
@@ -36,6 +38,8 @@ public interface FileStorageService {
      * Takes a multipart file from arguments and saves the file to the "working folder"
      */
     void save(MultipartFile file, String fileMd5CheckSum);
+
+    void save(byte[] fileContent, String fileName);
 
     void save(MultipartFile file);
 

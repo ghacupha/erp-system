@@ -70,9 +70,9 @@ class DepreciationReportResourceIT {
     private static final ZonedDateTime UPDATED_TIME_OF_REPORT_REQUEST = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
     private static final ZonedDateTime SMALLER_TIME_OF_REPORT_REQUEST = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
 
-    private static final String ENTITY_API_URL = "/api/fixed-asset/depreciation-reports";
+    private static final String ENTITY_API_URL = "/api/fixed-asset/report/depreciation-reports";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/fixed-asset/_search/depreciation-reports";
+    private static final String ENTITY_SEARCH_API_URL = "/api/fixed-asset/report/_search/depreciation-reports";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

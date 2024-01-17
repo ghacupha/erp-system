@@ -48,7 +48,7 @@ import java.util.Optional;
  * REST controller for managing {@link io.github.erp.domain.DepreciationReport}.
  */
 @RestController
-@RequestMapping("/api/fixed-asset")
+@RequestMapping("/api/fixed-asset/report")
 public class DepreciationReportResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(DepreciationReportResourceProd.class);
@@ -90,7 +90,7 @@ public class DepreciationReportResourceProd {
         }
         DepreciationReportDTO result = depreciationReportService.save(depreciationReportDTO);
         return ResponseEntity
-            .created(new URI("/api/depreciation-reports/" + result.getId()))
+            .created(new URI("/api/fixed-asset/report/depreciation-reports/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
