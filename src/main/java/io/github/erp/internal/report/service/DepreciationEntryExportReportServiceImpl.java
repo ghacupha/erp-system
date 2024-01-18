@@ -34,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -65,7 +66,9 @@ public class DepreciationEntryExportReportServiceImpl implements DepreciationEnt
 
         depreciationEntryList.ifPresent(reportList -> {
 
-            byte[] zippedStream =  exportDepreciationEntryList(reportList, depreciationReportDTO.getReportName()+".xlsx");
+            // byte[] zippedStream =  exportDepreciationEntryList(reportList, depreciationReportDTO.getReportName());
+
+            byte[] zippedStream =  exportDepreciationEntryListUnencrypted(reportList, UUID.randomUUID().toString() + ".xlsx", depreciationReportDTO.getReportName());
 
             // TODO export file to fileSystem
             fileStorageService.save(zippedStream, depreciationReportDTO.getReportName()+".zip");
@@ -82,6 +85,18 @@ public class DepreciationEntryExportReportServiceImpl implements DepreciationEnt
         }
 
         return ZipUtility.zipByteStream(reportStream, excelFileName, SYSTEM_PASSWORD.toCharArray());
+    }
+
+    private byte[] exportDepreciationEntryListUnencrypted(List<DepreciationEntryVM> entryList, String excelFileName, String reportTitle) {
+
+        byte[] reportStream = new byte[0];
+        try {
+            reportStream = ReportGenerator.generateUnencryptedExcelReport(entryList, DepreciationEntryVM.class, reportTitle);
+        } catch (DRException e) {
+            e.printStackTrace();
+        }
+
+        return ZipUtility.unencryptedZipByteStream(reportStream, excelFileName);
     }
 
     @NotNull

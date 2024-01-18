@@ -62,6 +62,36 @@ public class ZipUtility {
         }
     }
 
+    public static byte[] unencryptedZipByteStream(byte[] inputBytes, String fileNameInZip) {
+        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(inputBytes);
+             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+             ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream)) {
+
+            ZipParameters zipParameters = new ZipParameters();
+            zipParameters.setEncryptFiles(false);
+
+            // Use the specified filename for the Excel file inside the zip folder
+            zipParameters.setFileNameInZip(fileNameInZip);
+
+            zipOutputStream.putNextEntry(zipParameters);
+
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = inputStream.read(buffer)) > 0) {
+                zipOutputStream.write(buffer, 0, len);
+            }
+
+            zipOutputStream.closeEntry();
+
+            return outputStream.toByteArray();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle exceptions as needed
+            return new byte[0];
+        }
+    }
+
     public static byte[] unzipByteStream(byte[] zippedBytes, char[] password) {
         try (ByteArrayInputStream inputStream = new ByteArrayInputStream(zippedBytes);
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
