@@ -70,54 +70,71 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.erp.internal.service.autonomousReport;
+package io.github.erp.internal.report.autonomousReport._maps;
 
-import com.hazelcast.map.IMap;
-import io.github.erp.internal.repository.InternalPrepaymentReportRepository;
-import io.github.erp.internal.service.autonomousReport._maps.PrepaymentReportTupleMapper;
-import io.github.erp.internal.service.autonomousReport.reportListExport.ReportListExportService;
-import io.github.erp.service.dto.PrepaymentReportDTO;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import io.github.erp.domain.PrepaymentAccountReportTuple;
+import io.github.erp.internal.framework.Mapping;
+import io.github.erp.service.dto.PrepaymentAccountReportDTO;
+import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.math.BigDecimal;
 
-@Transactional
-@Service("prepaymentReportExportService")
-public class PrepaymentAccountExportService extends AbstractDatedReportExportService<PrepaymentReportDTO> implements DatedReportExportService<PrepaymentReportDTO> {
+@Component("prepaymentAccountReportTupleMapper")
+public class PrepaymentAccountReportTupleMapper implements Mapping<PrepaymentAccountReportTuple, PrepaymentAccountReportDTO> {
 
-    private final InternalPrepaymentReportRepository prepaymentReportRepository;
-    private final PrepaymentReportTupleMapper prepaymentReportTupleMapper;
+    @Override
+    public PrepaymentAccountReportTuple toValue1(PrepaymentAccountReportDTO vs) {
+        PrepaymentAccountReportTuple tuple = new PrepaymentAccountReportTuple() {
+            @Override
+            public Long getId() {
+                return vs.getId();
+            }
 
-    public PrepaymentAccountExportService(InternalPrepaymentReportRepository prepaymentReportRepository,
-                                          IMap<String, String> prepaymentsReportCache,
-                                          ReportListExportService<PrepaymentReportDTO> reportListExportService,
-                                          PrepaymentReportTupleMapper prepaymentReportTupleMapper) {
+            @Override
+            public String getPrepaymentAccount() {
+                return vs.getPrepaymentAccount();
+            }
 
-        super(prepaymentsReportCache, reportListExportService);
+            @Override
+            public BigDecimal getPrepaymentAmount() {
+                return vs.getPrepaymentAmount();
+            }
 
-        this.prepaymentReportRepository = prepaymentReportRepository;
-        this.prepaymentReportTupleMapper = prepaymentReportTupleMapper;
+            @Override
+            public BigDecimal getAmortisedAmount() {
+                return vs.getAmortisedAmount();
+            }
+
+            @Override
+            public BigDecimal getOutstandingAmount() {
+                return vs.getOutstandingAmount();
+            }
+
+            @Override
+            public Integer getNumberOfPrepaymentAccounts() {
+                return vs.getNumberOfPrepaymentAccounts();
+            }
+
+            @Override
+            public Integer getNumberOfAmortisedItems() {
+                return vs.getNumberOfAmortisedItems();
+            }
+        };
+
+        return tuple;
     }
 
     @Override
-    public void exportReportByDate(LocalDate reportDate, String reportName) throws IOException {
-        super.exportReportByDate(reportDate, reportName);
-    }
+    public PrepaymentAccountReportDTO toValue2(PrepaymentAccountReportTuple vs) {
+        PrepaymentAccountReportDTO report = new PrepaymentAccountReportDTO();
+        report.setId(vs.getId());
+        report.setPrepaymentAccount(vs.getPrepaymentAccount());
+        report.setNumberOfPrepaymentAccounts(vs.getNumberOfPrepaymentAccounts());
+        report.setNumberOfAmortisedItems(vs.getNumberOfAmortisedItems());
+        report.setPrepaymentAmount(vs.getPrepaymentAmount());
+        report.setAmortisedAmount(vs.getAmortisedAmount());
+        report.setOutstandingAmount(vs.getOutstandingAmount());
 
-    @Override
-    protected List<PrepaymentReportDTO> getReportList(LocalDate reportDate) {
-        return prepaymentReportRepository.findAllByReportDate(reportDate, PageRequest.of(0, Integer.MAX_VALUE))
-            .map(prepaymentReportTupleMapper::toValue2)
-            .getContent();
-    }
-
-    @Override
-    protected String getCacheKey(LocalDate reportDate, String reportName) {
-        return reportDate.format(DateTimeFormatter.ISO_DATE) + "-" + reportName;
+        return report;
     }
 }

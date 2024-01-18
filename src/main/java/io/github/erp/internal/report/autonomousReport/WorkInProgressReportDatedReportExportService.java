@@ -52,67 +52,50 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.erp.internal.service.autonomousReport._maps;
+package io.github.erp.internal.report.autonomousReport;
 
+import com.hazelcast.map.IMap;
 import io.github.erp.domain.WorkInProgressReportREPO;
-import io.github.erp.internal.framework.Mapping;
-import org.springframework.stereotype.Component;
+import io.github.erp.internal.repository.InternalWIPProjectDealerSummaryReportRepository;
+import io.github.erp.internal.report.autonomousReport.reportListExport.ReportListExportService;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
-@Component
-public class WorkInProgressReportREPOMapper implements Mapping<WorkInProgressReportREPO, WIPByDealerProjectDTO> {
+@Transactional
+@Service("workInProgressReportDatedReportExportService")
+public class WorkInProgressReportDatedReportExportService extends AbstractDatedReportExportService<WorkInProgressReportREPO>  implements DatedReportExportService<WorkInProgressReportREPO> {
 
-    @Override
-    public WorkInProgressReportREPO toValue1(WIPByDealerProjectDTO vs) {
-        return new WorkInProgressReportREPO() {
-            @Override
-            public Long getId() {
-                return vs.getId();
-            }
+    private final InternalWIPProjectDealerSummaryReportRepository internalWIPOutstandingReportRepository;
 
-            @Override
-            public String getProjectTitle() {
-                return vs.getProjectTitle();
-            }
 
-            @Override
-            public String getDealerName() {
-                return vs.getDealerName();
-            }
+    public WorkInProgressReportDatedReportExportService(
+        InternalWIPProjectDealerSummaryReportRepository internalWIPOutstandingReportRepository,
+        @Qualifier("workInProgressReportCache") IMap<String, String> workInProgressReportCache,
+        ReportListExportService<WorkInProgressReportREPO> reportListExportService) {
 
-            @Override
-            public Long getNumberOfItems() {
-                return vs.getNumberOfItems();
-            }
-
-            @Override
-            public BigDecimal getInstalmentAmount() {
-                return vs.getInstalmentAmount();
-            }
-
-            @Override
-            public BigDecimal getTransferAmount() {
-                return vs.getTransferAmount();
-            }
-
-            @Override
-            public BigDecimal getOutstandingAmount() {
-                return vs.getOutstandingAmount();
-            }
-        };
+        super(workInProgressReportCache, reportListExportService);
+        this.internalWIPOutstandingReportRepository = internalWIPOutstandingReportRepository;
     }
 
     @Override
-    public WIPByDealerProjectDTO toValue2(WorkInProgressReportREPO vs) {
-        return WIPByDealerProjectDTO.builder()
-            .id(vs.getId())
-            .projectTitle(vs.getProjectTitle())
-            .dealerName(vs.getDealerName())
-            .numberOfItems(vs.getNumberOfItems())
-            .instalmentAmount(vs.getInstalmentAmount())
-            .transferAmount(vs.getTransferAmount())
-            .outstandingAmount(vs.getOutstandingAmount())
-            .build();
+    public void exportReportByDate(LocalDate reportDate, String reportName) throws IOException {
+        super.exportReportByDate(reportDate, reportName);
+    }
+
+    @Override
+    protected List<WorkInProgressReportREPO> getReportList(LocalDate reportDate) {
+        return internalWIPOutstandingReportRepository.findAllByReportDate(reportDate, PageRequest.of(0, Integer.MAX_VALUE)).getContent();
+    }
+
+    @Override
+    protected String getCacheKey(LocalDate reportDate, String reportName) {
+        return reportDate.format(DateTimeFormatter.ISO_DATE) + "-" + reportName;
     }
 }

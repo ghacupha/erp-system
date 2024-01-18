@@ -17,11 +17,14 @@ package io.github.erp.erp.resources.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.repository.DepreciationReportRepository;
 import io.github.erp.service.DepreciationReportQueryService;
 import io.github.erp.service.DepreciationReportService;
 import io.github.erp.service.criteria.DepreciationReportCriteria;
+import io.github.erp.service.dto.ApplicationUserDTO;
 import io.github.erp.service.dto.DepreciationReportDTO;
+import io.github.erp.service.mapper.ApplicationUserMapper;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,14 +67,20 @@ public class DepreciationReportResourceProd {
 
     private final DepreciationReportQueryService depreciationReportQueryService;
 
+    private final InternalApplicationUserDetailService userDetailService;
+
+    private final ApplicationUserMapper applicationUserMapper;
+
     public DepreciationReportResourceProd(
         DepreciationReportService depreciationReportService,
         DepreciationReportRepository depreciationReportRepository,
-        DepreciationReportQueryService depreciationReportQueryService
-    ) {
+        DepreciationReportQueryService depreciationReportQueryService,
+        InternalApplicationUserDetailService userDetailService, ApplicationUserMapper applicationUserMapper) {
         this.depreciationReportService = depreciationReportService;
         this.depreciationReportRepository = depreciationReportRepository;
         this.depreciationReportQueryService = depreciationReportQueryService;
+        this.userDetailService = userDetailService;
+        this.applicationUserMapper = applicationUserMapper;
     }
 
     /**
@@ -88,7 +97,19 @@ public class DepreciationReportResourceProd {
         if (depreciationReportDTO.getId() != null) {
             throw new BadRequestAlertException("A new depreciationReport cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        DepreciationReportDTO result = depreciationReportService.save(depreciationReportDTO);
+
+        Optional<ApplicationUserDTO> applicationUserDTO = userDetailService.getCurrentApplicationUser()
+            .map(applicationUserMapper::toDto);
+
+        DepreciationReportDTO result = null;
+
+        if (applicationUserDTO.isPresent()) {
+            depreciationReportDTO.setRequestedBy(applicationUserDTO.get());
+            result = depreciationReportService.save(depreciationReportDTO);
+        } else {
+            throw new BadRequestAlertException("The current user does not exist on record", ENTITY_NAME, "appusermissing");
+        }
+
         return ResponseEntity
             .created(new URI("/api/fixed-asset/report/depreciation-reports/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))

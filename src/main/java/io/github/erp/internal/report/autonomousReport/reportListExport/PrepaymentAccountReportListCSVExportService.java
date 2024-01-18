@@ -52,71 +52,69 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.erp.internal.service.autonomousReport.reportListExport;
+
+/*-
+ * Erp System - Mark IX No 4 (Iddo Series) Server ver 1.6.6
+ * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+package io.github.erp.internal.report.autonomousReport.reportListExport;
 
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.report.ReportsProperties;
-import io.github.erp.internal.service.autonomousReport.CSVDynamicConverterService;
-import io.github.erp.internal.service.autonomousReport.reportListExport.ReportListExportService;
+import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.service.AutonomousReportService;
 import io.github.erp.service.dto.ApplicationUserDTO;
-import io.github.erp.service.dto.AutonomousReportDTO;
+import io.github.erp.service.dto.PrepaymentAccountReportDTO;
+import io.github.erp.service.mapper.ApplicationUserMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.UUID;
 
-public abstract class AbstractReportListCSVExportService<T> implements ReportListExportService<T> {
+@Service("prepaymentAccountReportListCSVExportService")
+@Transactional
+public class PrepaymentAccountReportListCSVExportService extends AbstractReportListCSVExportService<PrepaymentAccountReportDTO> implements ReportListExportService<PrepaymentAccountReportDTO> {
 
-    private final ReportsProperties reportsProperties;
-    private final FileStorageService fileStorageService;
-    private final AutonomousReportService autonomousReportService;
 
-    public AbstractReportListCSVExportService(ReportsProperties reportsProperties, FileStorageService fileStorageService, AutonomousReportService autonomousReportService) {
-        this.reportsProperties = reportsProperties;
-        this.fileStorageService = fileStorageService;
-        this.autonomousReportService = autonomousReportService;
+    private final InternalApplicationUserDetailService userDetailService;
+    private final ApplicationUserMapper applicationUserMapper;
+
+
+    public PrepaymentAccountReportListCSVExportService(
+        ReportsProperties reportsProperties,
+        @Qualifier("reportsFSStorageService") FileStorageService fileStorageService,
+        AutonomousReportService autonomousReportService,
+        InternalApplicationUserDetailService userDetailService,
+        ApplicationUserMapper applicationUserMapper) {
+
+        super(reportsProperties, fileStorageService, autonomousReportService);
+        this.userDetailService = userDetailService;
+        this.applicationUserMapper = applicationUserMapper;
     }
 
-    /**
-     * @param reportList List items to be exported
-     * @param reportDate report's date (this is the parameter for the report)
-     * @param fileName   filename to be used on the file system
-     * @param reportName name of the report as is to be saved on the DB
-     * @throws IOException can happen
-     */
-    @Override
-    public void executeReport(List<T> reportList, LocalDate reportDate, String fileName, String reportName) throws IOException {
+    public void executeReport(List<PrepaymentAccountReportDTO> reportList, LocalDate reportDate, String fileName, String reportName) throws IOException {
 
-        ByteArrayOutputStream csvByteArray = CSVDynamicConverterService.convertToCSV(reportList);
-
-        String reportPath = reportsProperties.getReportsDirectory().concat("/").concat(fileName).concat(".csv");
-
-        try (FileOutputStream fileOutputStream = new FileOutputStream(reportPath)) {
-            csvByteArray.writeTo(fileOutputStream);
-        }
-
-        String fileChecksum = fileStorageService.calculateSha512CheckSum(fileName + ".csv");
-
-        AutonomousReportDTO autoReport = new AutonomousReportDTO();
-        autoReport.setReportName(reportName);
-        autoReport.setReportParameters("Report Date: " + reportDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
-        autoReport.setCreatedAt(ZonedDateTime.now());
-        autoReport.setReportFilename(UUID.fromString(fileName));
-        autoReport.setReportFileContentType("text/csv");
-        autoReport.setCreatedBy(getCreatedBy());
-        autoReport.setFileChecksum(fileChecksum);
-
-        // todo CHECK report for tamper
-        autoReport.setReportTampered(false);
-        // Save report
-        autonomousReportService.save(autoReport);
+        super.executeReport(reportList, reportDate, fileName, reportName);
     }
 
-    protected abstract ApplicationUserDTO getCreatedBy();
+    protected ApplicationUserDTO getCreatedBy() {
+        return applicationUserMapper.toDto(userDetailService.getCurrentApplicationUser().get());
+    }
+
 }

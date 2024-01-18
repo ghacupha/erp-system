@@ -52,47 +52,47 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.erp.internal.service.autonomousReport.reportListExport;
+package io.github.erp.internal.report.autonomousReport._maps;
 
-import io.github.erp.internal.files.FileStorageService;
-import io.github.erp.internal.report.ReportsProperties;
-import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
-import io.github.erp.service.AutonomousReportService;
-import io.github.erp.service.dto.AmortizationPostingReportDTO;
-import io.github.erp.service.dto.ApplicationUserDTO;
-import io.github.erp.service.dto.PrepaymentAccountReportDTO;
-import io.github.erp.service.mapper.ApplicationUserMapper;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import io.github.erp.domain.WorkInProgressOutstandingReportREPO;
+import io.github.erp.internal.framework.Mapping;
+import io.github.erp.service.dto.WorkInProgressOutstandingReportDTO;
+import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.List;
+@Component
+public class WorkInProgressOutstandingReportREPOMapper implements Mapping<WorkInProgressOutstandingReportREPO, WorkInProgressOutstandingReportDTO> {
 
-@Service
-public class AmortizationPostingReportListExportService extends AbstractReportListCSVExportService<AmortizationPostingReportDTO> implements ReportListExportService<AmortizationPostingReportDTO> {
-
-    private final InternalApplicationUserDetailService userDetailService;
-    private final ApplicationUserMapper applicationUserMapper;
-
-    public AmortizationPostingReportListExportService(
-        ReportsProperties reportsProperties,
-        @Qualifier("reportsFSStorageService") FileStorageService fileStorageService,
-        AutonomousReportService autonomousReportService,
-        InternalApplicationUserDetailService userDetailService,
-        ApplicationUserMapper applicationUserMapper) {
-        super(reportsProperties, fileStorageService, autonomousReportService);
-        this.userDetailService = userDetailService;
-        this.applicationUserMapper = applicationUserMapper;
+    @Override
+    public WorkInProgressOutstandingReportREPO toValue1(WorkInProgressOutstandingReportDTO vs) {
+        return WorkInProgressOutstandingReportREPO.builder()
+            .id(vs.getId())
+            .sequenceNumber(vs.getSequenceNumber())
+            .particulars(vs.getParticulars())
+            .dealerName(vs.getDealerName())
+            .iso4217Code(vs.getIso4217Code())
+            .instalmentAmount(vs.getInstalmentAmount())
+            .totalTransferAmount(vs.getTotalTransferAmount())
+            .outstandingAmount(vs.getOutstandingAmount())
+            .instalmentTransactionNumber(vs.getInstalmentTransactionNumber())
+            .instalmentTransactionDate(vs.getInstalmentTransactionDate())
+            .build();
     }
 
-    public void executeReport(List<AmortizationPostingReportDTO> reportList, LocalDate reportDate, String fileName, String reportName) throws IOException {
+    @Override
+    public WorkInProgressOutstandingReportDTO toValue2(WorkInProgressOutstandingReportREPO vs) {
+        WorkInProgressOutstandingReportDTO dto = new WorkInProgressOutstandingReportDTO();
 
-        super.executeReport(reportList, reportDate, fileName, reportName);
+        dto.setId(vs.getId());
+        dto.setSequenceNumber(vs.getSequenceNumber());
+        dto.setParticulars(vs.getParticulars());
+        dto.setDealerName(vs.getDealerName());
+        dto.setIso4217Code(vs.getIso4217Code());
+        dto.setInstalmentAmount(vs.getInstalmentAmount());
+        dto.setTotalTransferAmount(vs.getTotalTransferAmount());
+        dto.setOutstandingAmount(vs.getOutstandingAmount());
+        dto.setInstalmentTransactionNumber(vs.getInstalmentTransactionNumber());
+        dto.setInstalmentTransactionDate(vs.getInstalmentTransactionDate());
+
+        return dto;
     }
-
-    protected ApplicationUserDTO getCreatedBy() {
-        return applicationUserMapper.toDto(userDetailService.getCurrentApplicationUser().get());
-    }
-
 }

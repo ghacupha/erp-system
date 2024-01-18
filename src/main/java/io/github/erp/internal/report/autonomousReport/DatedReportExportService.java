@@ -52,47 +52,59 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.erp.internal.service.autonomousReport._maps;
 
-import io.github.erp.domain.WorkInProgressOutstandingReportREPO;
-import io.github.erp.internal.framework.Mapping;
-import io.github.erp.service.dto.WorkInProgressOutstandingReportDTO;
-import org.springframework.stereotype.Component;
+/*-
+ * Erp System - Mark IX No 4 (Iddo Series) Server ver 1.6.6
+ * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+package io.github.erp.internal.report.autonomousReport;
 
-@Component
-public class WorkInProgressOutstandingReportREPOMapper implements Mapping<WorkInProgressOutstandingReportREPO, WorkInProgressOutstandingReportDTO> {
+/*-
+ * Erp System - Mark IX No 3 (Iddo Series) Server ver 1.6.5
+ * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
-    @Override
-    public WorkInProgressOutstandingReportREPO toValue1(WorkInProgressOutstandingReportDTO vs) {
-        return WorkInProgressOutstandingReportREPO.builder()
-            .id(vs.getId())
-            .sequenceNumber(vs.getSequenceNumber())
-            .particulars(vs.getParticulars())
-            .dealerName(vs.getDealerName())
-            .iso4217Code(vs.getIso4217Code())
-            .instalmentAmount(vs.getInstalmentAmount())
-            .totalTransferAmount(vs.getTotalTransferAmount())
-            .outstandingAmount(vs.getOutstandingAmount())
-            .instalmentTransactionNumber(vs.getInstalmentTransactionNumber())
-            .instalmentTransactionDate(vs.getInstalmentTransactionDate())
-            .build();
-    }
+import java.io.IOException;
+import java.time.LocalDate;
 
-    @Override
-    public WorkInProgressOutstandingReportDTO toValue2(WorkInProgressOutstandingReportREPO vs) {
-        WorkInProgressOutstandingReportDTO dto = new WorkInProgressOutstandingReportDTO();
+/**
+ * This interface is used to extract a report base on a parameter date,
+ * exporting it essential to CSV format
+ */
+public interface DatedReportExportService<T> {
 
-        dto.setId(vs.getId());
-        dto.setSequenceNumber(vs.getSequenceNumber());
-        dto.setParticulars(vs.getParticulars());
-        dto.setDealerName(vs.getDealerName());
-        dto.setIso4217Code(vs.getIso4217Code());
-        dto.setInstalmentAmount(vs.getInstalmentAmount());
-        dto.setTotalTransferAmount(vs.getTotalTransferAmount());
-        dto.setOutstandingAmount(vs.getOutstandingAmount());
-        dto.setInstalmentTransactionNumber(vs.getInstalmentTransactionNumber());
-        dto.setInstalmentTransactionDate(vs.getInstalmentTransactionDate());
-
-        return dto;
-    }
+    /**
+     * Exports report in the implementation format the parameter being the report-date
+     *
+     * @param reportDate Report-date of the report
+     * @param reportName Report name saved in the database
+     * @throws IOException It happens
+     */
+    void exportReportByDate(LocalDate reportDate, String reportName) throws IOException;
 }

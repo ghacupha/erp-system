@@ -50,7 +50,7 @@
         <docker.image.prefix>ghacupha</docker.image.prefix>
         <founder.website>https://github.com/ghacupha</founder.website>
         <owner.email>mailnjeru@gmail.com</owner.email>
-        <project.inceptionYear>2021 - 2023</project.inceptionYear>
+        <project.inceptionYear>2021 - 2024</project.inceptionYear>
         <project.owner>Edwin Njeru and the ERP System Contributors</project.owner>
         <!--<application.port>8979</application.port>-->
         <application.port>${env.ERP_SYSTEM_DEV_PORT}</application.port>
@@ -209,11 +209,11 @@
             <artifactId>dynamicreports-googlecharts</artifactId>
             <version>${dynamicreports.version}</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>net.sourceforge.dynamicreports</groupId>
             <artifactId>dynamicreports-parent</artifactId>
             <version>${dynamicreports.version}</version>
-        </dependency>
+        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
         <dependency>
