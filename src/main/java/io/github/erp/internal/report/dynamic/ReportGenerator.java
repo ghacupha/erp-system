@@ -35,6 +35,17 @@ public class ReportGenerator {
         return outputStream.toByteArray();
     }
 
+    public static <T> byte[] generateUnencryptedExcelReport(List<T> entityList, Class<T> entityType, String reportTitle) throws DRException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        new GenericReportTemplate<>(entityType)
+            .configureReport()
+            .setDataSource(entityList)
+            .toXlsx(outputStream, reportTitle);
+
+        return outputStream.toByteArray();
+    }
+
     public static <T> byte[] generatePdfReport(List<T> entityList, Class<T> entityType, String userPassword, String systemReportPassword) throws DRException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 

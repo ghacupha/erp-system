@@ -20,6 +20,7 @@ package io.github.erp.internal.report.dynamic;
 import net.sf.dynamicreports.jasper.builder.export.Exporters;
 import net.sf.dynamicreports.jasper.constant.PdfPermission;
 import net.sf.dynamicreports.report.builder.DynamicReports;
+import net.sf.dynamicreports.report.builder.column.ColumnBuilder;
 import net.sf.dynamicreports.report.builder.column.Columns;
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
 import net.sf.dynamicreports.report.datasource.DRDataSource;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static net.sf.dynamicreports.report.builder.DynamicReports.report;
 import static net.sf.dynamicreports.report.builder.DynamicReports.stl;
 
 /**
@@ -55,7 +57,7 @@ public class GenericReportTemplate<T> {
 
     public GenericReportTemplate<T> configureReport() {
         DynamicReports.report()
-            .columns(columns.toArray(new TextColumnBuilder[0]))
+            .columns(columns.toArray(new TextColumnBuilder[columns.size()]))
             .title(DynamicReports.cmp.text(type.getSimpleName() + " Report"))
             .setTemplate(Templates.reportTemplate)
             .setSubtotalStyle(stl.style().setPadding(2).setBottomBorder(stl.pen1Point()))
@@ -82,22 +84,22 @@ public class GenericReportTemplate<T> {
         return this;
     }
 
-    public void toXlsx(OutputStream outputStream, String systemReportPassword) throws DRException {
+    public void toXlsx(OutputStream outputStream, String reportTitle) throws DRException {
         DynamicReports.report()
-            .columns(columns.toArray(new TextColumnBuilder[0]))
-            .title(DynamicReports.cmp.text(type.getSimpleName() + " Report"))
+            .columns(columns.toArray(new TextColumnBuilder[columns.size()]))
+            .title(DynamicReports.cmp.text(reportTitle))
             .setTemplate(Templates.reportTemplate)
             .setSubtotalStyle(stl.style().setPadding(2).setBottomBorder(stl.pen1Point()))
             .pageFooter(Templates.footerComponent)
             .setPageMargin(DynamicReports.margin().setLeft(20).setRight(20))
             .setDataSource(dataSource)
-            .toXlsx(Exporters.xlsxExporter(outputStream).setPassword(systemReportPassword));
+            .toXlsx(Exporters.xlsxExporter(outputStream));
     }
 
 
     public void toPdf(OutputStream outputStream, String pdfPassword, String systemReportPassword) throws DRException {
         DynamicReports.report()
-            .columns(columns.toArray(new TextColumnBuilder[0]))
+            .columns((ColumnBuilder<?, ?>) columns)
             .title(DynamicReports.cmp.text(type.getSimpleName() + " Report"))
             .setTemplate(Templates.reportTemplate)
             .setSubtotalStyle(stl.style().setPadding(2).setBottomBorder(stl.pen1Point()))
