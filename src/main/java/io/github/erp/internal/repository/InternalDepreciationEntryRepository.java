@@ -1,7 +1,26 @@
 package io.github.erp.internal.repository;
 
+/*-
+ * Erp System - Mark X No 2 (Jehoiada Series) Server ver 1.7.1
+ * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import io.github.erp.domain.*;
 import io.github.erp.internal.report.service.DepreciationEntryVM;
+import io.github.erp.repository.DepreciationEntryReportItemRepository;
 import io.github.erp.repository.DepreciationEntryRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,34 +30,34 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface InternalDepreciationEntryRepository
-    extends DepreciationEntryRepository,
-    JpaRepository<DepreciationEntry, Long>,
-    JpaSpecificationExecutor<DepreciationEntry> {
+    extends DepreciationEntryReportItemRepository,
+    JpaRepository<DepreciationEntryReportItem, Long>,
+    JpaSpecificationExecutor<DepreciationEntryReportItem> {
 
-    Page<DepreciationEntry> getDepreciationEntryByDepreciationPeriodEqualsAndAssetCategoryEqualsAndServiceOutletEquals(
+    Page<DepreciationEntryInternal> getDepreciationEntryByDepreciationPeriodEqualsAndAssetCategoryEqualsAndServiceOutletEquals(
         DepreciationPeriod depreciationPeriod, AssetCategory assetCategory, ServiceOutlet serviceOutlet, Pageable pageable
     );
 
-    Page<DepreciationEntry> getDepreciationEntryByDepreciationPeriodEqualsAndServiceOutletEquals(
+    Page<DepreciationEntryInternal> getDepreciationEntryByDepreciationPeriodEqualsAndServiceOutletEquals(
         DepreciationPeriod depreciationPeriod, ServiceOutlet serviceOutlet, Pageable pageable
     );
 
-    Page<DepreciationEntry> getDepreciationEntryByDepreciationPeriodEqualsAndAssetCategoryEquals(
+    Page<DepreciationEntryInternal> getDepreciationEntryByDepreciationPeriodEqualsAndAssetCategoryEquals(
         DepreciationPeriod depreciationPeriod, AssetCategory assetCategory, Pageable pageable
     );
 
     @Query(value = "SELECT " +
-        "     de.id, " +
-        "     ar.asset_details, " +
-        "     posted_at, " +
-        "     de.asset_number, " +
-        "     so.outlet_code, " +
-        "     ac.asset_category_name, " +
-        "     dm.depreciation_method_name, " +
-        "     pd.period_code," +
-        "     fm.fiscal_month_code, " +
-        "     ar.asset_cost," +
-        "     de.depreciation_amount " +
+        "     de.id as id, " +
+        "     ar.asset_details as assetRegistrationDetails, " +
+        "     posted_at as postedAt, " +
+        "     de.asset_number as assetNumber, " +
+        "     so.outlet_code as serviceOutletCode, " +
+        "     ac.asset_category_name as assetCategory, " +
+        "     dm.depreciation_method_name as depreciationMethod, " +
+        "     pd.period_code as depreciationPeriodCode, " +
+        "     fm.fiscal_month_code as fiscalMonthCode, " +
+        "     ar.asset_cost as assetRegistrationCost, " +
+        "     de.depreciation_amount as depreciationAmount " +
         "FROM public.depreciation_entry de" +
         "  LEFT JOIN depreciation_period pd on depreciation_period_id = pd.id " +
         "  LEFT JOIN fiscal_month fm on de.fiscal_month_id = fm.id " +

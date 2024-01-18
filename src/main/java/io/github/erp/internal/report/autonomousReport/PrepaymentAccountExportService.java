@@ -70,51 +70,54 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.erp.internal.service.autonomousReport.reportListExport;
+package io.github.erp.internal.report.autonomousReport;
 
-import io.github.erp.internal.files.FileStorageService;
-import io.github.erp.internal.report.ReportsProperties;
-import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
-import io.github.erp.service.AutonomousReportService;
-import io.github.erp.service.dto.ApplicationUserDTO;
-import io.github.erp.service.dto.PrepaymentAccountReportDTO;
-import io.github.erp.service.mapper.ApplicationUserMapper;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.hazelcast.map.IMap;
+import io.github.erp.internal.repository.InternalPrepaymentReportRepository;
+import io.github.erp.internal.report.autonomousReport._maps.PrepaymentReportTupleMapper;
+import io.github.erp.internal.report.autonomousReport.reportListExport.ReportListExportService;
+import io.github.erp.service.dto.PrepaymentReportDTO;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-@Service("prepaymentAccountReportListCSVExportService")
 @Transactional
-public class PrepaymentAccountReportListCSVExportService extends AbstractReportListCSVExportService<PrepaymentAccountReportDTO> implements ReportListExportService<PrepaymentAccountReportDTO> {
+@Service("prepaymentReportExportService")
+public class PrepaymentAccountExportService extends AbstractDatedReportExportService<PrepaymentReportDTO> implements DatedReportExportService<PrepaymentReportDTO> {
 
+    private final InternalPrepaymentReportRepository prepaymentReportRepository;
+    private final PrepaymentReportTupleMapper prepaymentReportTupleMapper;
 
-    private final InternalApplicationUserDetailService userDetailService;
-    private final ApplicationUserMapper applicationUserMapper;
+    public PrepaymentAccountExportService(InternalPrepaymentReportRepository prepaymentReportRepository,
+                                          IMap<String, String> prepaymentsReportCache,
+                                          ReportListExportService<PrepaymentReportDTO> reportListExportService,
+                                          PrepaymentReportTupleMapper prepaymentReportTupleMapper) {
 
+        super(prepaymentsReportCache, reportListExportService);
 
-    public PrepaymentAccountReportListCSVExportService(
-        ReportsProperties reportsProperties,
-        @Qualifier("reportsFSStorageService") FileStorageService fileStorageService,
-        AutonomousReportService autonomousReportService,
-        InternalApplicationUserDetailService userDetailService,
-        ApplicationUserMapper applicationUserMapper) {
-
-        super(reportsProperties, fileStorageService, autonomousReportService);
-        this.userDetailService = userDetailService;
-        this.applicationUserMapper = applicationUserMapper;
+        this.prepaymentReportRepository = prepaymentReportRepository;
+        this.prepaymentReportTupleMapper = prepaymentReportTupleMapper;
     }
 
-    public void executeReport(List<PrepaymentAccountReportDTO> reportList, LocalDate reportDate, String fileName, String reportName) throws IOException {
-
-        super.executeReport(reportList, reportDate, fileName, reportName);
+    @Override
+    public void exportReportByDate(LocalDate reportDate, String reportName) throws IOException {
+        super.exportReportByDate(reportDate, reportName);
     }
 
-    protected ApplicationUserDTO getCreatedBy() {
-        return applicationUserMapper.toDto(userDetailService.getCurrentApplicationUser().get());
+    @Override
+    protected List<PrepaymentReportDTO> getReportList(LocalDate reportDate) {
+        return prepaymentReportRepository.findAllByReportDate(reportDate, PageRequest.of(0, Integer.MAX_VALUE))
+            .map(prepaymentReportTupleMapper::toValue2)
+            .getContent();
     }
 
+    @Override
+    protected String getCacheKey(LocalDate reportDate, String reportName) {
+        return reportDate.format(DateTimeFormatter.ISO_DATE) + "-" + reportName;
+    }
 }

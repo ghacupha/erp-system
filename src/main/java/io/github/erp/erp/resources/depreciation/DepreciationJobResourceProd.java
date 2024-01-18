@@ -65,22 +65,22 @@ public class DepreciationJobResourceProd {
     private final DepreciationJobRepository depreciationJobRepository;
     private final DepreciationJobQueryService depreciationJobQueryService;
 
-    private final InternalApplicationUserDetailService userDetailService;
-
-    private final ApplicationUserMapper applicationUserMapper;
-
     private final DepreciationJobMapper depreciationJobMapper;
 
     private final DepreciationJobSearchRepository depreciationJobSearchRepository;
 
     private final InternalDepreciationJobRepository internalDepreciationJobRepository;
 
-    public DepreciationJobResourceProd(DepreciationJobService depreciationJobService, DepreciationJobRepository depreciationJobRepository, DepreciationJobQueryService depreciationJobQueryService, InternalApplicationUserDetailService userDetailService, ApplicationUserMapper applicationUserMapper, DepreciationJobMapper depreciationJobMapper, DepreciationJobSearchRepository depreciationJobSearchRepository, InternalDepreciationJobRepository internalDepreciationJobRepository) {
+    public DepreciationJobResourceProd(
+        DepreciationJobService depreciationJobService,
+        DepreciationJobRepository depreciationJobRepository,
+        DepreciationJobQueryService depreciationJobQueryService,
+        DepreciationJobMapper depreciationJobMapper,
+        DepreciationJobSearchRepository depreciationJobSearchRepository,
+        InternalDepreciationJobRepository internalDepreciationJobRepository) {
         this.depreciationJobService = depreciationJobService;
         this.depreciationJobRepository = depreciationJobRepository;
         this.depreciationJobQueryService = depreciationJobQueryService;
-        this.userDetailService = userDetailService;
-        this.applicationUserMapper = applicationUserMapper;
         this.depreciationJobMapper = depreciationJobMapper;
         this.depreciationJobSearchRepository = depreciationJobSearchRepository;
         this.internalDepreciationJobRepository = internalDepreciationJobRepository;
@@ -100,18 +100,6 @@ public class DepreciationJobResourceProd {
         if (depreciationJobDTO.getId() != null) {
             throw new BadRequestAlertException("A new depreciationJob cannot already have an ID", ENTITY_NAME, "idexists");
         }
-
-//        Optional<ApplicationUserDTO> applicationUserDTO = userDetailService.getCurrentApplicationUser()
-//            .map(applicationUserMapper::toDto);
-//
-//        DepreciationJobDTO result = null;
-//
-//        if (applicationUserDTO.isPresent()) {
-//            depreciationJobDTO.setCreatedBy(applicationUserDTO.get());
-//            result = depreciationJobService.save(depreciationJobDTO);
-//        } else {
-//            throw new BadRequestAlertException("The current user does not exist on record", ENTITY_NAME, "appusermissing");
-//        }
 
         DepreciationJobDTO result =
             depreciationJobMapper.toDto(internalDepreciationJobRepository.save(depreciationJobMapper.toEntity(depreciationJobDTO)));

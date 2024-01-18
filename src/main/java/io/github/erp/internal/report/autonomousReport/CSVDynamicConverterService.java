@@ -70,7 +70,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.erp.internal.service.autonomousReport.reportListExport;
+package io.github.erp.internal.report.autonomousReport;
 
 /*-
  * Erp System - Mark IX No 3 (Iddo Series) Server ver 1.6.5
@@ -89,47 +89,82 @@ package io.github.erp.internal.service.autonomousReport.reportListExport;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.internal.files.FileStorageService;
-import io.github.erp.internal.report.ReportsProperties;
-import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
-import io.github.erp.internal.service.autonomousReport.reportListExport.AbstractReportListCSVExportService;
-import io.github.erp.internal.service.autonomousReport.reportListExport.ReportListExportService;
-import io.github.erp.service.AutonomousReportService;
-import io.github.erp.service.dto.ApplicationUserDTO;
-import io.github.erp.service.dto.PrepaymentReportDTO;
-import io.github.erp.service.mapper.ApplicationUserMapper;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import com.opencsv.CSVWriter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
-@Service("prepaymentReportListCSVExportService")
-public class PrepaymentReportListCSVExportService extends AbstractReportListCSVExportService<PrepaymentReportDTO> implements ReportListExportService<PrepaymentReportDTO> {
+/**
+ * Dynamically converts a list into a CSV file
+ */
+public class CSVDynamicConverterService {
 
-    private final InternalApplicationUserDetailService userDetailService;
-    private final ApplicationUserMapper applicationUserMapper;
+    public static <T> ByteArrayOutputStream convertToCSV(List<T> dataList) throws IOException {
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(byteStream);
 
-    public PrepaymentReportListCSVExportService(
-        ReportsProperties reportsProperties,
-        @Qualifier("reportsFSStorageService") FileStorageService fileStorageService,
-        AutonomousReportService autonomousReportService,
-        InternalApplicationUserDetailService userDetailService,
-        ApplicationUserMapper applicationUserMapper) {
+        CSVWriter csvWriter = new CSVWriter(outputStreamWriter);
 
-        super(reportsProperties, fileStorageService, autonomousReportService);
-        this.userDetailService = userDetailService;
-        this.applicationUserMapper = applicationUserMapper;
+        List<String[]> headers = getObjectAttributes(dataList);
+        for (String[] header : headers) {
+            csvWriter.writeNext(header);
+        }
+
+        List<String[]> rows = getObjectValues(dataList);
+        for (String[] row : rows) {
+            csvWriter.writeNext(row);
+        }
+
+        csvWriter.close();
+        return byteStream;
     }
 
-    public void executeReport(List<PrepaymentReportDTO> reportList, LocalDate reportDate, String fileName, String reportName) throws IOException {
 
-        super.executeReport(reportList, reportDate, fileName, reportName);
+    static <T> List<String[]> getObjectAttributes(List<T> dataList) {
+        List<String[]> headers = new ArrayList<>();
+        if (!dataList.isEmpty()) {
+            Class<?> clazz = dataList.get(0).getClass();
+            Field[] fields = clazz.getDeclaredFields();
+            List<String> attributeNames = new ArrayList<>();
+            for (Field field : fields) {
+                attributeNames.add(field.getName());
+            }
+            headers.add(attributeNames.toArray(new String[0]));
+        }
+        return headers;
     }
 
-    protected ApplicationUserDTO getCreatedBy() {
-        return applicationUserMapper.toDto(userDetailService.getCurrentApplicationUser().get());
+    public static <T> List<String[]> getObjectValues(List<T> dataList) {
+        List<String[]> rows = new ArrayList<>();
+        for (T obj : dataList) {
+            Class<?> clazz = obj.getClass();
+            Field[] fields = clazz.getDeclaredFields();
+            List<String> values = new ArrayList<>();
+            for (Field field : fields) {
+                try {
+                    Method[] methods = clazz.getMethods();
+                    for (Method method : methods) {
+                        if (method.getName().equalsIgnoreCase("get" + capitalize(field.getName()))) {
+                            Object value = method.invoke(obj);
+                            values.add(value != null ? value.toString() : "");
+                            break;
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            rows.add(values.toArray(new String[0]));
+        }
+        return rows;
     }
 
+    private static String capitalize(String s) {
+        return Character.toUpperCase(s.charAt(0)) + s.substring(1);
+    }
 }

@@ -52,13 +52,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.erp.internal.service.autonomousReport.reportListExport;
+package io.github.erp.internal.report.autonomousReport.reportListExport;
 
 import io.github.erp.domain.WorkInProgressReportREPO;
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.report.ReportsProperties;
 import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
-import io.github.erp.internal.service.autonomousReport._maps.WIPByDealerProjectDTO;
 import io.github.erp.service.AutonomousReportService;
 import io.github.erp.service.dto.ApplicationUserDTO;
 import io.github.erp.service.mapper.ApplicationUserMapper;

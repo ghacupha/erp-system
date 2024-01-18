@@ -20,7 +20,7 @@ package io.github.erp.erp.resources.prepayments;
 import io.github.erp.domain.AmortizationPostingReportInternal;
 import io.github.erp.internal.framework.Mapping;
 import io.github.erp.internal.repository.InternalAmortizationPostingRepository;
-import io.github.erp.internal.service.autonomousReport.DatedReportExportService;
+import io.github.erp.internal.report.autonomousReport.DatedReportExportService;
 import io.github.erp.repository.AmortizationPostingReportRepository;
 import io.github.erp.service.AmortizationPostingReportQueryService;
 import io.github.erp.service.AmortizationPostingReportService;

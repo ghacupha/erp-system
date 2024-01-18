@@ -1,0 +1,53 @@
+{
+  "fields": [
+    {
+      "fieldName": "assetRegistrationDetails",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "postedAt",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assetNumber",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "serviceOutletCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assetCategory",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "depreciationMethod",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "depreciationPeriodCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fiscalMonthCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assetRegistrationCost",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "depreciationAmount",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": true,
+  "pagination": "infinite-scroll",
+  "name": "DepreciationEntryReportItem",
+  "changelogDate": "20240117050558",
+  "incrementalChangelog": false
+}

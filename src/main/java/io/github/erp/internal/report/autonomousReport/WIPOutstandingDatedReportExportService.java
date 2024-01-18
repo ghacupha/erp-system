@@ -52,40 +52,44 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.erp.internal.service.autonomousReport;
+package io.github.erp.internal.report.autonomousReport;
 
 import com.hazelcast.map.IMap;
-import io.github.erp.domain.AmortizationPostingReportInternal;
+import io.github.erp.domain.WorkInProgressOutstandingReportREPO;
 import io.github.erp.internal.framework.Mapping;
-import io.github.erp.internal.repository.InternalAmortizationPostingRepository;
-import io.github.erp.internal.service.autonomousReport.reportListExport.ReportListExportService;
-import io.github.erp.service.dto.AmortizationPostingReportDTO;
+import io.github.erp.internal.repository.InternalWIPOutstandingReportRepository;
+import io.github.erp.internal.report.autonomousReport.reportListExport.ReportListExportService;
+import io.github.erp.service.dto.WorkInProgressOutstandingReportDTO;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+@Transactional
 @Service
-public class AmortizationPostingDatedReportExportService extends AbstractDatedReportExportService<AmortizationPostingReportDTO> implements DatedReportExportService<AmortizationPostingReportDTO> {
+public class WIPOutstandingDatedReportExportService extends AbstractDatedReportExportService<WorkInProgressOutstandingReportDTO> implements DatedReportExportService<WorkInProgressOutstandingReportDTO> {
+
+    private final InternalWIPOutstandingReportRepository internalWIPOutstandingReportRepository;
 
 
-    private final InternalAmortizationPostingRepository internalAmortizationPostingRepository;
-    private final Mapping<AmortizationPostingReportInternal, AmortizationPostingReportDTO> dtoMapping;
+    public final IMap<String, String> workInProgressReportCache;
+    private final Mapping<WorkInProgressOutstandingReportREPO, WorkInProgressOutstandingReportDTO> workInProgressOutstandingReportREPOMapper;
 
-    public AmortizationPostingDatedReportExportService(
-        InternalAmortizationPostingRepository internalAmortizationPostingRepository,
-        IMap<String, String> prepaymentsReportCache,
-        ReportListExportService<AmortizationPostingReportDTO> reportListExportService,
-        Mapping<AmortizationPostingReportInternal,
-            AmortizationPostingReportDTO> dtoMapping ) {
+    public WIPOutstandingDatedReportExportService(
+        InternalWIPOutstandingReportRepository internalWIPOutstandingReportRepository,
+        IMap<String, String> workInProgressReportCache,
+        Mapping<WorkInProgressOutstandingReportREPO, WorkInProgressOutstandingReportDTO> workInProgressOutstandingReportREPOMapper,
+        ReportListExportService<WorkInProgressOutstandingReportDTO> reportListExportService) {
 
-        super(prepaymentsReportCache, reportListExportService);
+        super(workInProgressReportCache, reportListExportService);
 
-        this.internalAmortizationPostingRepository = internalAmortizationPostingRepository;
-        this.dtoMapping = dtoMapping;
+        this.internalWIPOutstandingReportRepository = internalWIPOutstandingReportRepository;
+        this.workInProgressReportCache = workInProgressReportCache;
+        this.workInProgressOutstandingReportREPOMapper = workInProgressOutstandingReportREPOMapper;
     }
 
     @Override
@@ -94,15 +98,13 @@ public class AmortizationPostingDatedReportExportService extends AbstractDatedRe
     }
 
     @Override
-    protected List<AmortizationPostingReportDTO> getReportList(LocalDate reportDate) {
-        return internalAmortizationPostingRepository.findByReportDate(reportDate, PageRequest.of(0, Integer.MAX_VALUE))
-            .map(dtoMapping::toValue2)
-            .getContent();
+    protected List<WorkInProgressOutstandingReportDTO> getReportList(LocalDate reportDate) {
+        return internalWIPOutstandingReportRepository.findByReportDate(reportDate, PageRequest.of(0, Integer.MAX_VALUE))
+            .map(workInProgressOutstandingReportREPOMapper::toValue2).getContent();
     }
 
     @Override
     protected String getCacheKey(LocalDate reportDate, String reportName) {
         return reportDate.format(DateTimeFormatter.ISO_DATE) + "-" + reportName;
     }
-
 }
