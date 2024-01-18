@@ -2,7 +2,7 @@ package io.github.erp.internal.report.dynamic;
 
 /*-
  * Erp System - Mark X No 2 (Jehoiada Series) Server ver 1.7.1
- * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@ package io.github.erp.internal.report.dynamic;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import net.sf.dynamicreports.jasper.builder.export.Exporters;
 import net.sf.dynamicreports.jasper.constant.PdfPermission;
 import net.sf.dynamicreports.report.builder.DynamicReports;

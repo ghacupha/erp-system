@@ -23,7 +23,7 @@
             <column name="asset_number" type="bigint">
                 <constraints nullable="true" />
             </column>
-            <column name="service_outlet_code" type="varchar(255)">
+            <column name="service_outlet" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="asset_category" type="varchar(255)">
@@ -32,7 +32,7 @@
             <column name="depreciation_method" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="depreciation_period_code" type="varchar(255)">
+            <column name="depreciation_period" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="fiscal_month_code" type="varchar(255)">
@@ -68,10 +68,10 @@
             <column name="asset_registration_details" type="string"/>
             <column name="posted_at" type="string"/>
             <column name="asset_number" type="numeric"/>
-            <column name="service_outlet_code" type="string"/>
+            <column name="service_outlet" type="string"/>
             <column name="asset_category" type="string"/>
             <column name="depreciation_method" type="string"/>
-            <column name="depreciation_period_code" type="string"/>
+            <column name="depreciation_period" type="string"/>
             <column name="fiscal_month_code" type="string"/>
             <column name="asset_registration_cost" type="numeric"/>
             <column name="depreciation_amount" type="numeric"/>

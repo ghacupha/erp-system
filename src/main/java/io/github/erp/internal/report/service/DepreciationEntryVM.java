@@ -2,7 +2,7 @@ package io.github.erp.internal.report.service;
 
 /*-
  * Erp System - Mark X No 2 (Jehoiada Series) Server ver 1.7.1
- * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@ package io.github.erp.internal.report.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,13 +39,13 @@ public class DepreciationEntryVM implements Serializable {
 
     private String assetNumber;
 
-    private String serviceOutletCode;
+    private String serviceOutlet;
 
     private String assetCategory;
 
     private String depreciationMethod;
 
-    private String depreciationPeriodCode;
+    private String depreciationPeriod;
 
     private String fiscalMonthCode;
 
