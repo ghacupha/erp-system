@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Service
+@Deprecated
 @Transactional
 public class DepreciationEntryExportReportServiceImpl implements DepreciationEntryExportReportService {
 

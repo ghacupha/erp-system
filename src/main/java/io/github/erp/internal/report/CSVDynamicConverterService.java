@@ -88,7 +88,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.erp.internal.report.autonomousReport;
+package io.github.erp.internal.report;
 
 /*-
  * Erp System - Mark IX No 3 (Iddo Series) Server ver 1.6.5
