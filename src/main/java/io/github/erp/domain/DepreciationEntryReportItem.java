@@ -2,7 +2,7 @@ package io.github.erp.domain;
 
 /*-
  * Erp System - Mark X No 2 (Jehoiada Series) Server ver 1.7.1
- * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,8 +50,8 @@ public class DepreciationEntryReportItem implements Serializable {
     @Column(name = "asset_number")
     private Long assetNumber;
 
-    @Column(name = "service_outlet_code")
-    private String serviceOutletCode;
+    @Column(name = "service_outlet")
+    private String serviceOutlet;
 
     @Column(name = "asset_category")
     private String assetCategory;
@@ -59,8 +59,8 @@ public class DepreciationEntryReportItem implements Serializable {
     @Column(name = "depreciation_method")
     private String depreciationMethod;
 
-    @Column(name = "depreciation_period_code")
-    private String depreciationPeriodCode;
+    @Column(name = "depreciation_period")
+    private String depreciationPeriod;
 
     @Column(name = "fiscal_month_code")
     private String fiscalMonthCode;
@@ -125,17 +125,17 @@ public class DepreciationEntryReportItem implements Serializable {
         this.assetNumber = assetNumber;
     }
 
-    public String getServiceOutletCode() {
-        return this.serviceOutletCode;
+    public String getServiceOutlet() {
+        return this.serviceOutlet;
     }
 
-    public DepreciationEntryReportItem serviceOutletCode(String serviceOutletCode) {
-        this.setServiceOutletCode(serviceOutletCode);
+    public DepreciationEntryReportItem serviceOutlet(String serviceOutlet) {
+        this.setServiceOutlet(serviceOutlet);
         return this;
     }
 
-    public void setServiceOutletCode(String serviceOutletCode) {
-        this.serviceOutletCode = serviceOutletCode;
+    public void setServiceOutlet(String serviceOutlet) {
+        this.serviceOutlet = serviceOutlet;
     }
 
     public String getAssetCategory() {
@@ -164,17 +164,17 @@ public class DepreciationEntryReportItem implements Serializable {
         this.depreciationMethod = depreciationMethod;
     }
 
-    public String getDepreciationPeriodCode() {
-        return this.depreciationPeriodCode;
+    public String getDepreciationPeriod() {
+        return this.depreciationPeriod;
     }
 
-    public DepreciationEntryReportItem depreciationPeriodCode(String depreciationPeriodCode) {
-        this.setDepreciationPeriodCode(depreciationPeriodCode);
+    public DepreciationEntryReportItem depreciationPeriod(String depreciationPeriod) {
+        this.setDepreciationPeriod(depreciationPeriod);
         return this;
     }
 
-    public void setDepreciationPeriodCode(String depreciationPeriodCode) {
-        this.depreciationPeriodCode = depreciationPeriodCode;
+    public void setDepreciationPeriod(String depreciationPeriod) {
+        this.depreciationPeriod = depreciationPeriod;
     }
 
     public String getFiscalMonthCode() {
@@ -243,10 +243,10 @@ public class DepreciationEntryReportItem implements Serializable {
             ", assetRegistrationDetails='" + getAssetRegistrationDetails() + "'" +
             ", postedAt='" + getPostedAt() + "'" +
             ", assetNumber=" + getAssetNumber() +
-            ", serviceOutletCode='" + getServiceOutletCode() + "'" +
+            ", serviceOutlet='" + getServiceOutlet() + "'" +
             ", assetCategory='" + getAssetCategory() + "'" +
             ", depreciationMethod='" + getDepreciationMethod() + "'" +
-            ", depreciationPeriodCode='" + getDepreciationPeriodCode() + "'" +
+            ", depreciationPeriod='" + getDepreciationPeriod() + "'" +
             ", fiscalMonthCode='" + getFiscalMonthCode() + "'" +
             ", assetRegistrationCost=" + getAssetRegistrationCost() +
             ", depreciationAmount=" + getDepreciationAmount() +

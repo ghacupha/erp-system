@@ -2,7 +2,7 @@ package io.github.erp.internal.report.service;
 
 /*-
  * Erp System - Mark X No 2 (Jehoiada Series) Server ver 1.7.1
- * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@ package io.github.erp.internal.report.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.domain.DepreciationEntryInternal;
 import io.github.erp.internal.framework.Mapping;
 import org.springframework.stereotype.Component;
@@ -52,8 +51,8 @@ public class DepreciationEntryInternalMapper implements Mapping<DepreciationEntr
             }
 
             @Override
-            public String getServiceOutletCode() {
-                return vs.getServiceOutletCode();
+            public String getServiceOutlet() {
+                return vs.getServiceOutlet();
             }
 
             @Override
@@ -67,8 +66,8 @@ public class DepreciationEntryInternalMapper implements Mapping<DepreciationEntr
             }
 
             @Override
-            public String getDepreciationPeriodCode() {
-                return vs.getDepreciationPeriodCode();
+            public String getDepreciationPeriod() {
+                return vs.getDepreciationPeriod();
             }
 
             @Override
@@ -95,10 +94,10 @@ public class DepreciationEntryInternalMapper implements Mapping<DepreciationEntr
             .assetRegistrationDetails(vs.getAssetRegistrationDetails())
             .postedAt(vs.getPostedAt())
             .assetNumber(vs.getAssetNumber())
-            .serviceOutletCode(vs.getServiceOutletCode())
+            .serviceOutlet(vs.getServiceOutlet())
             .assetCategory(vs.getAssetCategory())
             .depreciationMethod(vs.getDepreciationMethod())
-            .depreciationPeriodCode(vs.getDepreciationPeriodCode())
+            .depreciationPeriod(vs.getDepreciationPeriod())
             .fiscalMonthCode(vs.getFiscalMonthCode())
             .assetRegistrationCost(vs.getAssetRegistrationCost())
             .depreciationAmount(vs.getDepreciationAmount())

@@ -2,7 +2,7 @@ package io.github.erp.internal.report.service;
 
 /*-
  * Erp System - Mark X No 2 (Jehoiada Series) Server ver 1.7.1
- * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@ package io.github.erp.internal.report.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.domain.DepreciationEntry;
 import io.github.erp.internal.framework.Mapping;
 import org.springframework.stereotype.Component;
@@ -42,10 +41,10 @@ public class DepreciationEntryVMMapper implements Mapping<DepreciationEntry, Dep
             .assetRegistrationDetails(vs.getAssetRegistration().getAssetDetails())
             .postedAt(vs.getPostedAt().format(DateTimeFormatter.ISO_ZONED_DATE_TIME))
             .assetNumber(String.valueOf(vs.getAssetNumber()))
-            .serviceOutletCode(vs.getServiceOutlet().getOutletCode())
+            .serviceOutlet(vs.getServiceOutlet().getOutletCode())
             .assetCategory(vs.getAssetCategory().getAssetCategoryName())
             .depreciationMethod(vs.getDepreciationMethod().getDepreciationMethodName())
-            .depreciationPeriodCode(vs.getDepreciationPeriod().getPeriodCode())
+            .depreciationPeriod(vs.getDepreciationPeriod().getPeriodCode())
             .fiscalMonthCode(vs.getFiscalMonth().getFiscalMonthCode())
             .assetRegistrationCost(vs.getAssetRegistration().getAssetCost())
             .depreciationAmount(vs.getDepreciationAmount())

@@ -2,7 +2,7 @@ package io.github.erp.internal.report.dynamic;
 
 /*-
  * Erp System - Mark X No 2 (Jehoiada Series) Server ver 1.7.1
- * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@ package io.github.erp.internal.report.dynamic;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import net.lingala.zip4j.io.inputstream.ZipInputStream;
 import net.lingala.zip4j.io.outputstream.ZipOutputStream;
 import net.lingala.zip4j.model.ZipParameters;
@@ -32,7 +31,7 @@ import java.io.IOException;
  */
 public class ZipUtility {
 
-    public static byte[] zipByteStream(byte[] inputBytes, char[] password) {
+    public static byte[] zipByteStream(byte[] inputBytes, String fileNameInZip, char[] password) {
         try (ByteArrayInputStream inputStream = new ByteArrayInputStream(inputBytes);
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
              ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream, password)) {
@@ -40,6 +39,9 @@ public class ZipUtility {
             ZipParameters zipParameters = new ZipParameters();
             zipParameters.setEncryptFiles(true);
             zipParameters.setEncryptionMethod(EncryptionMethod.AES);
+
+            // Use the specified filename for the Excel file inside the zip folder
+            zipParameters.setFileNameInZip(fileNameInZip);
 
             zipOutputStream.putNextEntry(zipParameters);
 

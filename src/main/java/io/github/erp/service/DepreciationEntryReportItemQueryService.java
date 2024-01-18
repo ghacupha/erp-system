@@ -2,7 +2,7 @@ package io.github.erp.service;
 
 /*-
  * Erp System - Mark X No 2 (Jehoiada Series) Server ver 1.7.1
- * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -132,11 +132,9 @@ public class DepreciationEntryReportItemQueryService extends QueryService<Deprec
                 specification =
                     specification.and(buildRangeSpecification(criteria.getAssetNumber(), DepreciationEntryReportItem_.assetNumber));
             }
-            if (criteria.getServiceOutletCode() != null) {
+            if (criteria.getServiceOutlet() != null) {
                 specification =
-                    specification.and(
-                        buildStringSpecification(criteria.getServiceOutletCode(), DepreciationEntryReportItem_.serviceOutletCode)
-                    );
+                    specification.and(buildStringSpecification(criteria.getServiceOutlet(), DepreciationEntryReportItem_.serviceOutlet));
             }
             if (criteria.getAssetCategory() != null) {
                 specification =
@@ -148,10 +146,10 @@ public class DepreciationEntryReportItemQueryService extends QueryService<Deprec
                         buildStringSpecification(criteria.getDepreciationMethod(), DepreciationEntryReportItem_.depreciationMethod)
                     );
             }
-            if (criteria.getDepreciationPeriodCode() != null) {
+            if (criteria.getDepreciationPeriod() != null) {
                 specification =
                     specification.and(
-                        buildStringSpecification(criteria.getDepreciationPeriodCode(), DepreciationEntryReportItem_.depreciationPeriodCode)
+                        buildStringSpecification(criteria.getDepreciationPeriod(), DepreciationEntryReportItem_.depreciationPeriod)
                     );
             }
             if (criteria.getFiscalMonthCode() != null) {

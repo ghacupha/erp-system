@@ -2,7 +2,7 @@ package io.github.erp.web.rest;
 
 /*-
  * Erp System - Mark X No 2 (Jehoiada Series) Server ver 1.7.1
- * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,8 +71,8 @@ class DepreciationEntryReportItemResourceIT {
     private static final Long UPDATED_ASSET_NUMBER = 2L;
     private static final Long SMALLER_ASSET_NUMBER = 1L - 1L;
 
-    private static final String DEFAULT_SERVICE_OUTLET_CODE = "AAAAAAAAAA";
-    private static final String UPDATED_SERVICE_OUTLET_CODE = "BBBBBBBBBB";
+    private static final String DEFAULT_SERVICE_OUTLET = "AAAAAAAAAA";
+    private static final String UPDATED_SERVICE_OUTLET = "BBBBBBBBBB";
 
     private static final String DEFAULT_ASSET_CATEGORY = "AAAAAAAAAA";
     private static final String UPDATED_ASSET_CATEGORY = "BBBBBBBBBB";
@@ -80,8 +80,8 @@ class DepreciationEntryReportItemResourceIT {
     private static final String DEFAULT_DEPRECIATION_METHOD = "AAAAAAAAAA";
     private static final String UPDATED_DEPRECIATION_METHOD = "BBBBBBBBBB";
 
-    private static final String DEFAULT_DEPRECIATION_PERIOD_CODE = "AAAAAAAAAA";
-    private static final String UPDATED_DEPRECIATION_PERIOD_CODE = "BBBBBBBBBB";
+    private static final String DEFAULT_DEPRECIATION_PERIOD = "AAAAAAAAAA";
+    private static final String UPDATED_DEPRECIATION_PERIOD = "BBBBBBBBBB";
 
     private static final String DEFAULT_FISCAL_MONTH_CODE = "AAAAAAAAAA";
     private static final String UPDATED_FISCAL_MONTH_CODE = "BBBBBBBBBB";
@@ -134,10 +134,10 @@ class DepreciationEntryReportItemResourceIT {
             .assetRegistrationDetails(DEFAULT_ASSET_REGISTRATION_DETAILS)
             .postedAt(DEFAULT_POSTED_AT)
             .assetNumber(DEFAULT_ASSET_NUMBER)
-            .serviceOutletCode(DEFAULT_SERVICE_OUTLET_CODE)
+            .serviceOutlet(DEFAULT_SERVICE_OUTLET)
             .assetCategory(DEFAULT_ASSET_CATEGORY)
             .depreciationMethod(DEFAULT_DEPRECIATION_METHOD)
-            .depreciationPeriodCode(DEFAULT_DEPRECIATION_PERIOD_CODE)
+            .depreciationPeriod(DEFAULT_DEPRECIATION_PERIOD)
             .fiscalMonthCode(DEFAULT_FISCAL_MONTH_CODE)
             .assetRegistrationCost(DEFAULT_ASSET_REGISTRATION_COST)
             .depreciationAmount(DEFAULT_DEPRECIATION_AMOUNT);
@@ -155,10 +155,10 @@ class DepreciationEntryReportItemResourceIT {
             .assetRegistrationDetails(UPDATED_ASSET_REGISTRATION_DETAILS)
             .postedAt(UPDATED_POSTED_AT)
             .assetNumber(UPDATED_ASSET_NUMBER)
-            .serviceOutletCode(UPDATED_SERVICE_OUTLET_CODE)
+            .serviceOutlet(UPDATED_SERVICE_OUTLET)
             .assetCategory(UPDATED_ASSET_CATEGORY)
             .depreciationMethod(UPDATED_DEPRECIATION_METHOD)
-            .depreciationPeriodCode(UPDATED_DEPRECIATION_PERIOD_CODE)
+            .depreciationPeriod(UPDATED_DEPRECIATION_PERIOD)
             .fiscalMonthCode(UPDATED_FISCAL_MONTH_CODE)
             .assetRegistrationCost(UPDATED_ASSET_REGISTRATION_COST)
             .depreciationAmount(UPDATED_DEPRECIATION_AMOUNT);
@@ -185,10 +185,10 @@ class DepreciationEntryReportItemResourceIT {
             .andExpect(jsonPath("$.[*].assetRegistrationDetails").value(hasItem(DEFAULT_ASSET_REGISTRATION_DETAILS)))
             .andExpect(jsonPath("$.[*].postedAt").value(hasItem(DEFAULT_POSTED_AT)))
             .andExpect(jsonPath("$.[*].assetNumber").value(hasItem(DEFAULT_ASSET_NUMBER.intValue())))
-            .andExpect(jsonPath("$.[*].serviceOutletCode").value(hasItem(DEFAULT_SERVICE_OUTLET_CODE)))
+            .andExpect(jsonPath("$.[*].serviceOutlet").value(hasItem(DEFAULT_SERVICE_OUTLET)))
             .andExpect(jsonPath("$.[*].assetCategory").value(hasItem(DEFAULT_ASSET_CATEGORY)))
             .andExpect(jsonPath("$.[*].depreciationMethod").value(hasItem(DEFAULT_DEPRECIATION_METHOD)))
-            .andExpect(jsonPath("$.[*].depreciationPeriodCode").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_CODE)))
+            .andExpect(jsonPath("$.[*].depreciationPeriod").value(hasItem(DEFAULT_DEPRECIATION_PERIOD)))
             .andExpect(jsonPath("$.[*].fiscalMonthCode").value(hasItem(DEFAULT_FISCAL_MONTH_CODE)))
             .andExpect(jsonPath("$.[*].assetRegistrationCost").value(hasItem(sameNumber(DEFAULT_ASSET_REGISTRATION_COST))))
             .andExpect(jsonPath("$.[*].depreciationAmount").value(hasItem(sameNumber(DEFAULT_DEPRECIATION_AMOUNT))));
@@ -209,10 +209,10 @@ class DepreciationEntryReportItemResourceIT {
             .andExpect(jsonPath("$.assetRegistrationDetails").value(DEFAULT_ASSET_REGISTRATION_DETAILS))
             .andExpect(jsonPath("$.postedAt").value(DEFAULT_POSTED_AT))
             .andExpect(jsonPath("$.assetNumber").value(DEFAULT_ASSET_NUMBER.intValue()))
-            .andExpect(jsonPath("$.serviceOutletCode").value(DEFAULT_SERVICE_OUTLET_CODE))
+            .andExpect(jsonPath("$.serviceOutlet").value(DEFAULT_SERVICE_OUTLET))
             .andExpect(jsonPath("$.assetCategory").value(DEFAULT_ASSET_CATEGORY))
             .andExpect(jsonPath("$.depreciationMethod").value(DEFAULT_DEPRECIATION_METHOD))
-            .andExpect(jsonPath("$.depreciationPeriodCode").value(DEFAULT_DEPRECIATION_PERIOD_CODE))
+            .andExpect(jsonPath("$.depreciationPeriod").value(DEFAULT_DEPRECIATION_PERIOD))
             .andExpect(jsonPath("$.fiscalMonthCode").value(DEFAULT_FISCAL_MONTH_CODE))
             .andExpect(jsonPath("$.assetRegistrationCost").value(sameNumber(DEFAULT_ASSET_REGISTRATION_COST)))
             .andExpect(jsonPath("$.depreciationAmount").value(sameNumber(DEFAULT_DEPRECIATION_AMOUNT)));
@@ -500,82 +500,80 @@ class DepreciationEntryReportItemResourceIT {
 
     @Test
     @Transactional
-    void getAllDepreciationEntryReportItemsByServiceOutletCodeIsEqualToSomething() throws Exception {
+    void getAllDepreciationEntryReportItemsByServiceOutletIsEqualToSomething() throws Exception {
         // Initialize the database
         depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
 
-        // Get all the depreciationEntryReportItemList where serviceOutletCode equals to DEFAULT_SERVICE_OUTLET_CODE
-        defaultDepreciationEntryReportItemShouldBeFound("serviceOutletCode.equals=" + DEFAULT_SERVICE_OUTLET_CODE);
+        // Get all the depreciationEntryReportItemList where serviceOutlet equals to DEFAULT_SERVICE_OUTLET
+        defaultDepreciationEntryReportItemShouldBeFound("serviceOutlet.equals=" + DEFAULT_SERVICE_OUTLET);
 
-        // Get all the depreciationEntryReportItemList where serviceOutletCode equals to UPDATED_SERVICE_OUTLET_CODE
-        defaultDepreciationEntryReportItemShouldNotBeFound("serviceOutletCode.equals=" + UPDATED_SERVICE_OUTLET_CODE);
+        // Get all the depreciationEntryReportItemList where serviceOutlet equals to UPDATED_SERVICE_OUTLET
+        defaultDepreciationEntryReportItemShouldNotBeFound("serviceOutlet.equals=" + UPDATED_SERVICE_OUTLET);
     }
 
     @Test
     @Transactional
-    void getAllDepreciationEntryReportItemsByServiceOutletCodeIsNotEqualToSomething() throws Exception {
+    void getAllDepreciationEntryReportItemsByServiceOutletIsNotEqualToSomething() throws Exception {
         // Initialize the database
         depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
 
-        // Get all the depreciationEntryReportItemList where serviceOutletCode not equals to DEFAULT_SERVICE_OUTLET_CODE
-        defaultDepreciationEntryReportItemShouldNotBeFound("serviceOutletCode.notEquals=" + DEFAULT_SERVICE_OUTLET_CODE);
+        // Get all the depreciationEntryReportItemList where serviceOutlet not equals to DEFAULT_SERVICE_OUTLET
+        defaultDepreciationEntryReportItemShouldNotBeFound("serviceOutlet.notEquals=" + DEFAULT_SERVICE_OUTLET);
 
-        // Get all the depreciationEntryReportItemList where serviceOutletCode not equals to UPDATED_SERVICE_OUTLET_CODE
-        defaultDepreciationEntryReportItemShouldBeFound("serviceOutletCode.notEquals=" + UPDATED_SERVICE_OUTLET_CODE);
+        // Get all the depreciationEntryReportItemList where serviceOutlet not equals to UPDATED_SERVICE_OUTLET
+        defaultDepreciationEntryReportItemShouldBeFound("serviceOutlet.notEquals=" + UPDATED_SERVICE_OUTLET);
     }
 
     @Test
     @Transactional
-    void getAllDepreciationEntryReportItemsByServiceOutletCodeIsInShouldWork() throws Exception {
+    void getAllDepreciationEntryReportItemsByServiceOutletIsInShouldWork() throws Exception {
         // Initialize the database
         depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
 
-        // Get all the depreciationEntryReportItemList where serviceOutletCode in DEFAULT_SERVICE_OUTLET_CODE or UPDATED_SERVICE_OUTLET_CODE
-        defaultDepreciationEntryReportItemShouldBeFound(
-            "serviceOutletCode.in=" + DEFAULT_SERVICE_OUTLET_CODE + "," + UPDATED_SERVICE_OUTLET_CODE
-        );
+        // Get all the depreciationEntryReportItemList where serviceOutlet in DEFAULT_SERVICE_OUTLET or UPDATED_SERVICE_OUTLET
+        defaultDepreciationEntryReportItemShouldBeFound("serviceOutlet.in=" + DEFAULT_SERVICE_OUTLET + "," + UPDATED_SERVICE_OUTLET);
 
-        // Get all the depreciationEntryReportItemList where serviceOutletCode equals to UPDATED_SERVICE_OUTLET_CODE
-        defaultDepreciationEntryReportItemShouldNotBeFound("serviceOutletCode.in=" + UPDATED_SERVICE_OUTLET_CODE);
+        // Get all the depreciationEntryReportItemList where serviceOutlet equals to UPDATED_SERVICE_OUTLET
+        defaultDepreciationEntryReportItemShouldNotBeFound("serviceOutlet.in=" + UPDATED_SERVICE_OUTLET);
     }
 
     @Test
     @Transactional
-    void getAllDepreciationEntryReportItemsByServiceOutletCodeIsNullOrNotNull() throws Exception {
+    void getAllDepreciationEntryReportItemsByServiceOutletIsNullOrNotNull() throws Exception {
         // Initialize the database
         depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
 
-        // Get all the depreciationEntryReportItemList where serviceOutletCode is not null
-        defaultDepreciationEntryReportItemShouldBeFound("serviceOutletCode.specified=true");
+        // Get all the depreciationEntryReportItemList where serviceOutlet is not null
+        defaultDepreciationEntryReportItemShouldBeFound("serviceOutlet.specified=true");
 
-        // Get all the depreciationEntryReportItemList where serviceOutletCode is null
-        defaultDepreciationEntryReportItemShouldNotBeFound("serviceOutletCode.specified=false");
+        // Get all the depreciationEntryReportItemList where serviceOutlet is null
+        defaultDepreciationEntryReportItemShouldNotBeFound("serviceOutlet.specified=false");
     }
 
     @Test
     @Transactional
-    void getAllDepreciationEntryReportItemsByServiceOutletCodeContainsSomething() throws Exception {
+    void getAllDepreciationEntryReportItemsByServiceOutletContainsSomething() throws Exception {
         // Initialize the database
         depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
 
-        // Get all the depreciationEntryReportItemList where serviceOutletCode contains DEFAULT_SERVICE_OUTLET_CODE
-        defaultDepreciationEntryReportItemShouldBeFound("serviceOutletCode.contains=" + DEFAULT_SERVICE_OUTLET_CODE);
+        // Get all the depreciationEntryReportItemList where serviceOutlet contains DEFAULT_SERVICE_OUTLET
+        defaultDepreciationEntryReportItemShouldBeFound("serviceOutlet.contains=" + DEFAULT_SERVICE_OUTLET);
 
-        // Get all the depreciationEntryReportItemList where serviceOutletCode contains UPDATED_SERVICE_OUTLET_CODE
-        defaultDepreciationEntryReportItemShouldNotBeFound("serviceOutletCode.contains=" + UPDATED_SERVICE_OUTLET_CODE);
+        // Get all the depreciationEntryReportItemList where serviceOutlet contains UPDATED_SERVICE_OUTLET
+        defaultDepreciationEntryReportItemShouldNotBeFound("serviceOutlet.contains=" + UPDATED_SERVICE_OUTLET);
     }
 
     @Test
     @Transactional
-    void getAllDepreciationEntryReportItemsByServiceOutletCodeNotContainsSomething() throws Exception {
+    void getAllDepreciationEntryReportItemsByServiceOutletNotContainsSomething() throws Exception {
         // Initialize the database
         depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
 
-        // Get all the depreciationEntryReportItemList where serviceOutletCode does not contain DEFAULT_SERVICE_OUTLET_CODE
-        defaultDepreciationEntryReportItemShouldNotBeFound("serviceOutletCode.doesNotContain=" + DEFAULT_SERVICE_OUTLET_CODE);
+        // Get all the depreciationEntryReportItemList where serviceOutlet does not contain DEFAULT_SERVICE_OUTLET
+        defaultDepreciationEntryReportItemShouldNotBeFound("serviceOutlet.doesNotContain=" + DEFAULT_SERVICE_OUTLET);
 
-        // Get all the depreciationEntryReportItemList where serviceOutletCode does not contain UPDATED_SERVICE_OUTLET_CODE
-        defaultDepreciationEntryReportItemShouldBeFound("serviceOutletCode.doesNotContain=" + UPDATED_SERVICE_OUTLET_CODE);
+        // Get all the depreciationEntryReportItemList where serviceOutlet does not contain UPDATED_SERVICE_OUTLET
+        defaultDepreciationEntryReportItemShouldBeFound("serviceOutlet.doesNotContain=" + UPDATED_SERVICE_OUTLET);
     }
 
     @Test
@@ -738,82 +736,82 @@ class DepreciationEntryReportItemResourceIT {
 
     @Test
     @Transactional
-    void getAllDepreciationEntryReportItemsByDepreciationPeriodCodeIsEqualToSomething() throws Exception {
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodIsEqualToSomething() throws Exception {
         // Initialize the database
         depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
 
-        // Get all the depreciationEntryReportItemList where depreciationPeriodCode equals to DEFAULT_DEPRECIATION_PERIOD_CODE
-        defaultDepreciationEntryReportItemShouldBeFound("depreciationPeriodCode.equals=" + DEFAULT_DEPRECIATION_PERIOD_CODE);
+        // Get all the depreciationEntryReportItemList where depreciationPeriod equals to DEFAULT_DEPRECIATION_PERIOD
+        defaultDepreciationEntryReportItemShouldBeFound("depreciationPeriod.equals=" + DEFAULT_DEPRECIATION_PERIOD);
 
-        // Get all the depreciationEntryReportItemList where depreciationPeriodCode equals to UPDATED_DEPRECIATION_PERIOD_CODE
-        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriodCode.equals=" + UPDATED_DEPRECIATION_PERIOD_CODE);
+        // Get all the depreciationEntryReportItemList where depreciationPeriod equals to UPDATED_DEPRECIATION_PERIOD
+        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriod.equals=" + UPDATED_DEPRECIATION_PERIOD);
     }
 
     @Test
     @Transactional
-    void getAllDepreciationEntryReportItemsByDepreciationPeriodCodeIsNotEqualToSomething() throws Exception {
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodIsNotEqualToSomething() throws Exception {
         // Initialize the database
         depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
 
-        // Get all the depreciationEntryReportItemList where depreciationPeriodCode not equals to DEFAULT_DEPRECIATION_PERIOD_CODE
-        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriodCode.notEquals=" + DEFAULT_DEPRECIATION_PERIOD_CODE);
+        // Get all the depreciationEntryReportItemList where depreciationPeriod not equals to DEFAULT_DEPRECIATION_PERIOD
+        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriod.notEquals=" + DEFAULT_DEPRECIATION_PERIOD);
 
-        // Get all the depreciationEntryReportItemList where depreciationPeriodCode not equals to UPDATED_DEPRECIATION_PERIOD_CODE
-        defaultDepreciationEntryReportItemShouldBeFound("depreciationPeriodCode.notEquals=" + UPDATED_DEPRECIATION_PERIOD_CODE);
+        // Get all the depreciationEntryReportItemList where depreciationPeriod not equals to UPDATED_DEPRECIATION_PERIOD
+        defaultDepreciationEntryReportItemShouldBeFound("depreciationPeriod.notEquals=" + UPDATED_DEPRECIATION_PERIOD);
     }
 
     @Test
     @Transactional
-    void getAllDepreciationEntryReportItemsByDepreciationPeriodCodeIsInShouldWork() throws Exception {
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodIsInShouldWork() throws Exception {
         // Initialize the database
         depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
 
-        // Get all the depreciationEntryReportItemList where depreciationPeriodCode in DEFAULT_DEPRECIATION_PERIOD_CODE or UPDATED_DEPRECIATION_PERIOD_CODE
+        // Get all the depreciationEntryReportItemList where depreciationPeriod in DEFAULT_DEPRECIATION_PERIOD or UPDATED_DEPRECIATION_PERIOD
         defaultDepreciationEntryReportItemShouldBeFound(
-            "depreciationPeriodCode.in=" + DEFAULT_DEPRECIATION_PERIOD_CODE + "," + UPDATED_DEPRECIATION_PERIOD_CODE
+            "depreciationPeriod.in=" + DEFAULT_DEPRECIATION_PERIOD + "," + UPDATED_DEPRECIATION_PERIOD
         );
 
-        // Get all the depreciationEntryReportItemList where depreciationPeriodCode equals to UPDATED_DEPRECIATION_PERIOD_CODE
-        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriodCode.in=" + UPDATED_DEPRECIATION_PERIOD_CODE);
+        // Get all the depreciationEntryReportItemList where depreciationPeriod equals to UPDATED_DEPRECIATION_PERIOD
+        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriod.in=" + UPDATED_DEPRECIATION_PERIOD);
     }
 
     @Test
     @Transactional
-    void getAllDepreciationEntryReportItemsByDepreciationPeriodCodeIsNullOrNotNull() throws Exception {
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodIsNullOrNotNull() throws Exception {
         // Initialize the database
         depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
 
-        // Get all the depreciationEntryReportItemList where depreciationPeriodCode is not null
-        defaultDepreciationEntryReportItemShouldBeFound("depreciationPeriodCode.specified=true");
+        // Get all the depreciationEntryReportItemList where depreciationPeriod is not null
+        defaultDepreciationEntryReportItemShouldBeFound("depreciationPeriod.specified=true");
 
-        // Get all the depreciationEntryReportItemList where depreciationPeriodCode is null
-        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriodCode.specified=false");
+        // Get all the depreciationEntryReportItemList where depreciationPeriod is null
+        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriod.specified=false");
     }
 
     @Test
     @Transactional
-    void getAllDepreciationEntryReportItemsByDepreciationPeriodCodeContainsSomething() throws Exception {
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodContainsSomething() throws Exception {
         // Initialize the database
         depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
 
-        // Get all the depreciationEntryReportItemList where depreciationPeriodCode contains DEFAULT_DEPRECIATION_PERIOD_CODE
-        defaultDepreciationEntryReportItemShouldBeFound("depreciationPeriodCode.contains=" + DEFAULT_DEPRECIATION_PERIOD_CODE);
+        // Get all the depreciationEntryReportItemList where depreciationPeriod contains DEFAULT_DEPRECIATION_PERIOD
+        defaultDepreciationEntryReportItemShouldBeFound("depreciationPeriod.contains=" + DEFAULT_DEPRECIATION_PERIOD);
 
-        // Get all the depreciationEntryReportItemList where depreciationPeriodCode contains UPDATED_DEPRECIATION_PERIOD_CODE
-        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriodCode.contains=" + UPDATED_DEPRECIATION_PERIOD_CODE);
+        // Get all the depreciationEntryReportItemList where depreciationPeriod contains UPDATED_DEPRECIATION_PERIOD
+        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriod.contains=" + UPDATED_DEPRECIATION_PERIOD);
     }
 
     @Test
     @Transactional
-    void getAllDepreciationEntryReportItemsByDepreciationPeriodCodeNotContainsSomething() throws Exception {
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodNotContainsSomething() throws Exception {
         // Initialize the database
         depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
 
-        // Get all the depreciationEntryReportItemList where depreciationPeriodCode does not contain DEFAULT_DEPRECIATION_PERIOD_CODE
-        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriodCode.doesNotContain=" + DEFAULT_DEPRECIATION_PERIOD_CODE);
+        // Get all the depreciationEntryReportItemList where depreciationPeriod does not contain DEFAULT_DEPRECIATION_PERIOD
+        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriod.doesNotContain=" + DEFAULT_DEPRECIATION_PERIOD);
 
-        // Get all the depreciationEntryReportItemList where depreciationPeriodCode does not contain UPDATED_DEPRECIATION_PERIOD_CODE
-        defaultDepreciationEntryReportItemShouldBeFound("depreciationPeriodCode.doesNotContain=" + UPDATED_DEPRECIATION_PERIOD_CODE);
+        // Get all the depreciationEntryReportItemList where depreciationPeriod does not contain UPDATED_DEPRECIATION_PERIOD
+        defaultDepreciationEntryReportItemShouldBeFound("depreciationPeriod.doesNotContain=" + UPDATED_DEPRECIATION_PERIOD);
     }
 
     @Test
@@ -1120,10 +1118,10 @@ class DepreciationEntryReportItemResourceIT {
             .andExpect(jsonPath("$.[*].assetRegistrationDetails").value(hasItem(DEFAULT_ASSET_REGISTRATION_DETAILS)))
             .andExpect(jsonPath("$.[*].postedAt").value(hasItem(DEFAULT_POSTED_AT)))
             .andExpect(jsonPath("$.[*].assetNumber").value(hasItem(DEFAULT_ASSET_NUMBER.intValue())))
-            .andExpect(jsonPath("$.[*].serviceOutletCode").value(hasItem(DEFAULT_SERVICE_OUTLET_CODE)))
+            .andExpect(jsonPath("$.[*].serviceOutlet").value(hasItem(DEFAULT_SERVICE_OUTLET)))
             .andExpect(jsonPath("$.[*].assetCategory").value(hasItem(DEFAULT_ASSET_CATEGORY)))
             .andExpect(jsonPath("$.[*].depreciationMethod").value(hasItem(DEFAULT_DEPRECIATION_METHOD)))
-            .andExpect(jsonPath("$.[*].depreciationPeriodCode").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_CODE)))
+            .andExpect(jsonPath("$.[*].depreciationPeriod").value(hasItem(DEFAULT_DEPRECIATION_PERIOD)))
             .andExpect(jsonPath("$.[*].fiscalMonthCode").value(hasItem(DEFAULT_FISCAL_MONTH_CODE)))
             .andExpect(jsonPath("$.[*].assetRegistrationCost").value(hasItem(sameNumber(DEFAULT_ASSET_REGISTRATION_COST))))
             .andExpect(jsonPath("$.[*].depreciationAmount").value(hasItem(sameNumber(DEFAULT_DEPRECIATION_AMOUNT))));
@@ -1180,10 +1178,10 @@ class DepreciationEntryReportItemResourceIT {
             .andExpect(jsonPath("$.[*].assetRegistrationDetails").value(hasItem(DEFAULT_ASSET_REGISTRATION_DETAILS)))
             .andExpect(jsonPath("$.[*].postedAt").value(hasItem(DEFAULT_POSTED_AT)))
             .andExpect(jsonPath("$.[*].assetNumber").value(hasItem(DEFAULT_ASSET_NUMBER.intValue())))
-            .andExpect(jsonPath("$.[*].serviceOutletCode").value(hasItem(DEFAULT_SERVICE_OUTLET_CODE)))
+            .andExpect(jsonPath("$.[*].serviceOutlet").value(hasItem(DEFAULT_SERVICE_OUTLET)))
             .andExpect(jsonPath("$.[*].assetCategory").value(hasItem(DEFAULT_ASSET_CATEGORY)))
             .andExpect(jsonPath("$.[*].depreciationMethod").value(hasItem(DEFAULT_DEPRECIATION_METHOD)))
-            .andExpect(jsonPath("$.[*].depreciationPeriodCode").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_CODE)))
+            .andExpect(jsonPath("$.[*].depreciationPeriod").value(hasItem(DEFAULT_DEPRECIATION_PERIOD)))
             .andExpect(jsonPath("$.[*].fiscalMonthCode").value(hasItem(DEFAULT_FISCAL_MONTH_CODE)))
             .andExpect(jsonPath("$.[*].assetRegistrationCost").value(hasItem(sameNumber(DEFAULT_ASSET_REGISTRATION_COST))))
             .andExpect(jsonPath("$.[*].depreciationAmount").value(hasItem(sameNumber(DEFAULT_DEPRECIATION_AMOUNT))));

@@ -2,7 +2,7 @@ package io.github.erp.internal.report.service;
 
 /*-
  * Erp System - Mark X No 2 (Jehoiada Series) Server ver 1.7.1
- * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@ package io.github.erp.internal.report.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.report.ReportsProperties;
 import io.github.erp.internal.report.dynamic.ReportGenerator;
@@ -40,7 +39,7 @@ import java.util.Optional;
 @Transactional
 public class DepreciationEntryExportReportServiceImpl implements DepreciationEntryExportReportService {
 
-    private final String SYSTEM_PASSWORD; // TODO Inject own password
+    private static final String SYSTEM_PASSWORD = "testPass1"; // TODO Inject own password
 
     private final DepreciationEntryInternalMapper depreciationEntryInternalMapper;
     private final DepreciationPeriodRepository depreciationPeriodRepository;
@@ -55,7 +54,7 @@ public class DepreciationEntryExportReportServiceImpl implements DepreciationEnt
         this.depreciationPeriodRepository = depreciationPeriodRepository;
         this.internalDepreciationEntryRepository = internalDepreciationEntryRepository;
         this.fileStorageService = fileStorageService;
-        SYSTEM_PASSWORD = reportsProperties.getReportPassword();
+        // SYSTEM_PASSWORD = reportsProperties.getReportPassword();
         this.depreciationEntryInternalMapper = depreciationEntryInternalMapper;
     }
 
@@ -66,14 +65,14 @@ public class DepreciationEntryExportReportServiceImpl implements DepreciationEnt
 
         depreciationEntryList.ifPresent(reportList -> {
 
-            byte[] zippedStream =  exportDepreciationEntryList(reportList);
+            byte[] zippedStream =  exportDepreciationEntryList(reportList, depreciationReportDTO.getReportName()+".xlsx");
 
             // TODO export file to fileSystem
             fileStorageService.save(zippedStream, depreciationReportDTO.getReportName()+".zip");
         });
     }
 
-    private byte[] exportDepreciationEntryList(List<DepreciationEntryVM> entryList) {
+    private byte[] exportDepreciationEntryList(List<DepreciationEntryVM> entryList, String excelFileName) {
 
         byte[] reportStream = new byte[0];
         try {
@@ -82,7 +81,7 @@ public class DepreciationEntryExportReportServiceImpl implements DepreciationEnt
             e.printStackTrace();
         }
 
-        return ZipUtility.zipByteStream(reportStream, SYSTEM_PASSWORD.toCharArray());
+        return ZipUtility.zipByteStream(reportStream, excelFileName, SYSTEM_PASSWORD.toCharArray());
     }
 
     @NotNull
