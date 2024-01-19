@@ -21,6 +21,8 @@ package io.github.erp.service.dto;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Objects;
+import java.util.UUID;
+import javax.persistence.Lob;
 import javax.validation.constraints.*;
 
 /**
@@ -36,6 +38,18 @@ public class DepreciationReportDTO implements Serializable {
     @NotNull
     private ZonedDateTime timeOfReportRequest;
 
+    private String fileChecksum;
+
+    private Boolean tampered;
+
+    private UUID filename;
+
+    private String reportParameters;
+
+    @Lob
+    private byte[] reportFile;
+
+    private String reportFileContentType;
     private ApplicationUserDTO requestedBy;
 
     private DepreciationPeriodDTO depreciationPeriod;
@@ -66,6 +80,54 @@ public class DepreciationReportDTO implements Serializable {
 
     public void setTimeOfReportRequest(ZonedDateTime timeOfReportRequest) {
         this.timeOfReportRequest = timeOfReportRequest;
+    }
+
+    public String getFileChecksum() {
+        return fileChecksum;
+    }
+
+    public void setFileChecksum(String fileChecksum) {
+        this.fileChecksum = fileChecksum;
+    }
+
+    public Boolean getTampered() {
+        return tampered;
+    }
+
+    public void setTampered(Boolean tampered) {
+        this.tampered = tampered;
+    }
+
+    public UUID getFilename() {
+        return filename;
+    }
+
+    public void setFilename(UUID filename) {
+        this.filename = filename;
+    }
+
+    public String getReportParameters() {
+        return reportParameters;
+    }
+
+    public void setReportParameters(String reportParameters) {
+        this.reportParameters = reportParameters;
+    }
+
+    public byte[] getReportFile() {
+        return reportFile;
+    }
+
+    public void setReportFile(byte[] reportFile) {
+        this.reportFile = reportFile;
+    }
+
+    public String getReportFileContentType() {
+        return reportFileContentType;
+    }
+
+    public void setReportFileContentType(String reportFileContentType) {
+        this.reportFileContentType = reportFileContentType;
     }
 
     public ApplicationUserDTO getRequestedBy() {
@@ -128,6 +190,11 @@ public class DepreciationReportDTO implements Serializable {
             "id=" + getId() +
             ", reportName='" + getReportName() + "'" +
             ", timeOfReportRequest='" + getTimeOfReportRequest() + "'" +
+            ", fileChecksum='" + getFileChecksum() + "'" +
+            ", tampered='" + getTampered() + "'" +
+            ", filename='" + getFilename() + "'" +
+            ", reportParameters='" + getReportParameters() + "'" +
+            ", reportFile='" + getReportFile() + "'" +
             ", requestedBy=" + getRequestedBy() +
             ", depreciationPeriod=" + getDepreciationPeriod() +
             ", serviceOutlet=" + getServiceOutlet() +

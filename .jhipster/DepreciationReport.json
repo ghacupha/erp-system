@@ -9,6 +9,27 @@
       "fieldName": "timeOfReportRequest",
       "fieldType": "ZonedDateTime",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fileChecksum",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "tampered",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "filename",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "reportParameters",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "reportFile",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
     }
   ],
   "relationships": [

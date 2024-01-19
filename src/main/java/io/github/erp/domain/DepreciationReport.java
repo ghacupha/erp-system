@@ -21,6 +21,7 @@ package io.github.erp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -50,6 +51,25 @@ public class DepreciationReport implements Serializable {
     @NotNull
     @Column(name = "time_of_report_request", nullable = false)
     private ZonedDateTime timeOfReportRequest;
+
+    @Column(name = "file_checksum")
+    private String fileChecksum;
+
+    @Column(name = "tampered")
+    private Boolean tampered;
+
+    @Column(name = "filename")
+    private UUID filename;
+
+    @Column(name = "report_parameters")
+    private String reportParameters;
+
+    @Lob
+    @Column(name = "report_file")
+    private byte[] reportFile;
+
+    @Column(name = "report_file_content_type")
+    private String reportFileContentType;
 
     @ManyToOne
     @JsonIgnoreProperties(
@@ -113,6 +133,84 @@ public class DepreciationReport implements Serializable {
 
     public void setTimeOfReportRequest(ZonedDateTime timeOfReportRequest) {
         this.timeOfReportRequest = timeOfReportRequest;
+    }
+
+    public String getFileChecksum() {
+        return this.fileChecksum;
+    }
+
+    public DepreciationReport fileChecksum(String fileChecksum) {
+        this.setFileChecksum(fileChecksum);
+        return this;
+    }
+
+    public void setFileChecksum(String fileChecksum) {
+        this.fileChecksum = fileChecksum;
+    }
+
+    public Boolean getTampered() {
+        return this.tampered;
+    }
+
+    public DepreciationReport tampered(Boolean tampered) {
+        this.setTampered(tampered);
+        return this;
+    }
+
+    public void setTampered(Boolean tampered) {
+        this.tampered = tampered;
+    }
+
+    public UUID getFilename() {
+        return this.filename;
+    }
+
+    public DepreciationReport filename(UUID filename) {
+        this.setFilename(filename);
+        return this;
+    }
+
+    public void setFilename(UUID filename) {
+        this.filename = filename;
+    }
+
+    public String getReportParameters() {
+        return this.reportParameters;
+    }
+
+    public DepreciationReport reportParameters(String reportParameters) {
+        this.setReportParameters(reportParameters);
+        return this;
+    }
+
+    public void setReportParameters(String reportParameters) {
+        this.reportParameters = reportParameters;
+    }
+
+    public byte[] getReportFile() {
+        return this.reportFile;
+    }
+
+    public DepreciationReport reportFile(byte[] reportFile) {
+        this.setReportFile(reportFile);
+        return this;
+    }
+
+    public void setReportFile(byte[] reportFile) {
+        this.reportFile = reportFile;
+    }
+
+    public String getReportFileContentType() {
+        return this.reportFileContentType;
+    }
+
+    public DepreciationReport reportFileContentType(String reportFileContentType) {
+        this.reportFileContentType = reportFileContentType;
+        return this;
+    }
+
+    public void setReportFileContentType(String reportFileContentType) {
+        this.reportFileContentType = reportFileContentType;
     }
 
     public ApplicationUser getRequestedBy() {
@@ -193,6 +291,12 @@ public class DepreciationReport implements Serializable {
             "id=" + getId() +
             ", reportName='" + getReportName() + "'" +
             ", timeOfReportRequest='" + getTimeOfReportRequest() + "'" +
+            ", fileChecksum='" + getFileChecksum() + "'" +
+            ", tampered='" + getTampered() + "'" +
+            ", filename='" + getFilename() + "'" +
+            ", reportParameters='" + getReportParameters() + "'" +
+            ", reportFile='" + getReportFile() + "'" +
+            ", reportFileContentType='" + getReportFileContentType() + "'" +
             "}";
     }
 }
