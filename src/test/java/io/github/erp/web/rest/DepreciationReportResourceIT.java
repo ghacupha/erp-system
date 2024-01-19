@@ -43,6 +43,7 @@ import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,6 +59,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 /**
  * Integration tests for the {@link DepreciationReportResource} REST controller.
@@ -74,6 +76,23 @@ class DepreciationReportResourceIT {
     private static final ZonedDateTime DEFAULT_TIME_OF_REPORT_REQUEST = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_TIME_OF_REPORT_REQUEST = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
     private static final ZonedDateTime SMALLER_TIME_OF_REPORT_REQUEST = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
+
+    private static final String DEFAULT_FILE_CHECKSUM = "AAAAAAAAAA";
+    private static final String UPDATED_FILE_CHECKSUM = "BBBBBBBBBB";
+
+    private static final Boolean DEFAULT_TAMPERED = false;
+    private static final Boolean UPDATED_TAMPERED = true;
+
+    private static final UUID DEFAULT_FILENAME = UUID.randomUUID();
+    private static final UUID UPDATED_FILENAME = UUID.randomUUID();
+
+    private static final String DEFAULT_REPORT_PARAMETERS = "AAAAAAAAAA";
+    private static final String UPDATED_REPORT_PARAMETERS = "BBBBBBBBBB";
+
+    private static final byte[] DEFAULT_REPORT_FILE = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_REPORT_FILE = TestUtil.createByteArray(1, "1");
+    private static final String DEFAULT_REPORT_FILE_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_REPORT_FILE_CONTENT_TYPE = "image/png";
 
     private static final String ENTITY_API_URL = "/api/depreciation-reports";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -113,7 +132,13 @@ class DepreciationReportResourceIT {
     public static DepreciationReport createEntity(EntityManager em) {
         DepreciationReport depreciationReport = new DepreciationReport()
             .reportName(DEFAULT_REPORT_NAME)
-            .timeOfReportRequest(DEFAULT_TIME_OF_REPORT_REQUEST);
+            .timeOfReportRequest(DEFAULT_TIME_OF_REPORT_REQUEST)
+            .fileChecksum(DEFAULT_FILE_CHECKSUM)
+            .tampered(DEFAULT_TAMPERED)
+            .filename(DEFAULT_FILENAME)
+            .reportParameters(DEFAULT_REPORT_PARAMETERS)
+            .reportFile(DEFAULT_REPORT_FILE)
+            .reportFileContentType(DEFAULT_REPORT_FILE_CONTENT_TYPE);
         // Add required entity
         DepreciationPeriod depreciationPeriod;
         if (TestUtil.findAll(em, DepreciationPeriod.class).isEmpty()) {
@@ -136,7 +161,13 @@ class DepreciationReportResourceIT {
     public static DepreciationReport createUpdatedEntity(EntityManager em) {
         DepreciationReport depreciationReport = new DepreciationReport()
             .reportName(UPDATED_REPORT_NAME)
-            .timeOfReportRequest(UPDATED_TIME_OF_REPORT_REQUEST);
+            .timeOfReportRequest(UPDATED_TIME_OF_REPORT_REQUEST)
+            .fileChecksum(UPDATED_FILE_CHECKSUM)
+            .tampered(UPDATED_TAMPERED)
+            .filename(UPDATED_FILENAME)
+            .reportParameters(UPDATED_REPORT_PARAMETERS)
+            .reportFile(UPDATED_REPORT_FILE)
+            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE);
         // Add required entity
         DepreciationPeriod depreciationPeriod;
         if (TestUtil.findAll(em, DepreciationPeriod.class).isEmpty()) {
@@ -175,6 +206,12 @@ class DepreciationReportResourceIT {
         DepreciationReport testDepreciationReport = depreciationReportList.get(depreciationReportList.size() - 1);
         assertThat(testDepreciationReport.getReportName()).isEqualTo(DEFAULT_REPORT_NAME);
         assertThat(testDepreciationReport.getTimeOfReportRequest()).isEqualTo(DEFAULT_TIME_OF_REPORT_REQUEST);
+        assertThat(testDepreciationReport.getFileChecksum()).isEqualTo(DEFAULT_FILE_CHECKSUM);
+        assertThat(testDepreciationReport.getTampered()).isEqualTo(DEFAULT_TAMPERED);
+        assertThat(testDepreciationReport.getFilename()).isEqualTo(DEFAULT_FILENAME);
+        assertThat(testDepreciationReport.getReportParameters()).isEqualTo(DEFAULT_REPORT_PARAMETERS);
+        assertThat(testDepreciationReport.getReportFile()).isEqualTo(DEFAULT_REPORT_FILE);
+        assertThat(testDepreciationReport.getReportFileContentType()).isEqualTo(DEFAULT_REPORT_FILE_CONTENT_TYPE);
 
         // Validate the DepreciationReport in Elasticsearch
         verify(mockDepreciationReportSearchRepository, times(1)).save(testDepreciationReport);
@@ -263,7 +300,13 @@ class DepreciationReportResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(depreciationReport.getId().intValue())))
             .andExpect(jsonPath("$.[*].reportName").value(hasItem(DEFAULT_REPORT_NAME)))
-            .andExpect(jsonPath("$.[*].timeOfReportRequest").value(hasItem(sameInstant(DEFAULT_TIME_OF_REPORT_REQUEST))));
+            .andExpect(jsonPath("$.[*].timeOfReportRequest").value(hasItem(sameInstant(DEFAULT_TIME_OF_REPORT_REQUEST))))
+            .andExpect(jsonPath("$.[*].fileChecksum").value(hasItem(DEFAULT_FILE_CHECKSUM)))
+            .andExpect(jsonPath("$.[*].tampered").value(hasItem(DEFAULT_TAMPERED.booleanValue())))
+            .andExpect(jsonPath("$.[*].filename").value(hasItem(DEFAULT_FILENAME.toString())))
+            .andExpect(jsonPath("$.[*].reportParameters").value(hasItem(DEFAULT_REPORT_PARAMETERS)))
+            .andExpect(jsonPath("$.[*].reportFileContentType").value(hasItem(DEFAULT_REPORT_FILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))));
     }
 
     @Test
@@ -279,7 +322,13 @@ class DepreciationReportResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(depreciationReport.getId().intValue()))
             .andExpect(jsonPath("$.reportName").value(DEFAULT_REPORT_NAME))
-            .andExpect(jsonPath("$.timeOfReportRequest").value(sameInstant(DEFAULT_TIME_OF_REPORT_REQUEST)));
+            .andExpect(jsonPath("$.timeOfReportRequest").value(sameInstant(DEFAULT_TIME_OF_REPORT_REQUEST)))
+            .andExpect(jsonPath("$.fileChecksum").value(DEFAULT_FILE_CHECKSUM))
+            .andExpect(jsonPath("$.tampered").value(DEFAULT_TAMPERED.booleanValue()))
+            .andExpect(jsonPath("$.filename").value(DEFAULT_FILENAME.toString()))
+            .andExpect(jsonPath("$.reportParameters").value(DEFAULT_REPORT_PARAMETERS))
+            .andExpect(jsonPath("$.reportFileContentType").value(DEFAULT_REPORT_FILE_CONTENT_TYPE))
+            .andExpect(jsonPath("$.reportFile").value(Base64Utils.encodeToString(DEFAULT_REPORT_FILE)));
     }
 
     @Test
@@ -486,6 +535,266 @@ class DepreciationReportResourceIT {
 
     @Test
     @Transactional
+    void getAllDepreciationReportsByFileChecksumIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationReportRepository.saveAndFlush(depreciationReport);
+
+        // Get all the depreciationReportList where fileChecksum equals to DEFAULT_FILE_CHECKSUM
+        defaultDepreciationReportShouldBeFound("fileChecksum.equals=" + DEFAULT_FILE_CHECKSUM);
+
+        // Get all the depreciationReportList where fileChecksum equals to UPDATED_FILE_CHECKSUM
+        defaultDepreciationReportShouldNotBeFound("fileChecksum.equals=" + UPDATED_FILE_CHECKSUM);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationReportsByFileChecksumIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationReportRepository.saveAndFlush(depreciationReport);
+
+        // Get all the depreciationReportList where fileChecksum not equals to DEFAULT_FILE_CHECKSUM
+        defaultDepreciationReportShouldNotBeFound("fileChecksum.notEquals=" + DEFAULT_FILE_CHECKSUM);
+
+        // Get all the depreciationReportList where fileChecksum not equals to UPDATED_FILE_CHECKSUM
+        defaultDepreciationReportShouldBeFound("fileChecksum.notEquals=" + UPDATED_FILE_CHECKSUM);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationReportsByFileChecksumIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationReportRepository.saveAndFlush(depreciationReport);
+
+        // Get all the depreciationReportList where fileChecksum in DEFAULT_FILE_CHECKSUM or UPDATED_FILE_CHECKSUM
+        defaultDepreciationReportShouldBeFound("fileChecksum.in=" + DEFAULT_FILE_CHECKSUM + "," + UPDATED_FILE_CHECKSUM);
+
+        // Get all the depreciationReportList where fileChecksum equals to UPDATED_FILE_CHECKSUM
+        defaultDepreciationReportShouldNotBeFound("fileChecksum.in=" + UPDATED_FILE_CHECKSUM);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationReportsByFileChecksumIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationReportRepository.saveAndFlush(depreciationReport);
+
+        // Get all the depreciationReportList where fileChecksum is not null
+        defaultDepreciationReportShouldBeFound("fileChecksum.specified=true");
+
+        // Get all the depreciationReportList where fileChecksum is null
+        defaultDepreciationReportShouldNotBeFound("fileChecksum.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationReportsByFileChecksumContainsSomething() throws Exception {
+        // Initialize the database
+        depreciationReportRepository.saveAndFlush(depreciationReport);
+
+        // Get all the depreciationReportList where fileChecksum contains DEFAULT_FILE_CHECKSUM
+        defaultDepreciationReportShouldBeFound("fileChecksum.contains=" + DEFAULT_FILE_CHECKSUM);
+
+        // Get all the depreciationReportList where fileChecksum contains UPDATED_FILE_CHECKSUM
+        defaultDepreciationReportShouldNotBeFound("fileChecksum.contains=" + UPDATED_FILE_CHECKSUM);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationReportsByFileChecksumNotContainsSomething() throws Exception {
+        // Initialize the database
+        depreciationReportRepository.saveAndFlush(depreciationReport);
+
+        // Get all the depreciationReportList where fileChecksum does not contain DEFAULT_FILE_CHECKSUM
+        defaultDepreciationReportShouldNotBeFound("fileChecksum.doesNotContain=" + DEFAULT_FILE_CHECKSUM);
+
+        // Get all the depreciationReportList where fileChecksum does not contain UPDATED_FILE_CHECKSUM
+        defaultDepreciationReportShouldBeFound("fileChecksum.doesNotContain=" + UPDATED_FILE_CHECKSUM);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationReportsByTamperedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationReportRepository.saveAndFlush(depreciationReport);
+
+        // Get all the depreciationReportList where tampered equals to DEFAULT_TAMPERED
+        defaultDepreciationReportShouldBeFound("tampered.equals=" + DEFAULT_TAMPERED);
+
+        // Get all the depreciationReportList where tampered equals to UPDATED_TAMPERED
+        defaultDepreciationReportShouldNotBeFound("tampered.equals=" + UPDATED_TAMPERED);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationReportsByTamperedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationReportRepository.saveAndFlush(depreciationReport);
+
+        // Get all the depreciationReportList where tampered not equals to DEFAULT_TAMPERED
+        defaultDepreciationReportShouldNotBeFound("tampered.notEquals=" + DEFAULT_TAMPERED);
+
+        // Get all the depreciationReportList where tampered not equals to UPDATED_TAMPERED
+        defaultDepreciationReportShouldBeFound("tampered.notEquals=" + UPDATED_TAMPERED);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationReportsByTamperedIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationReportRepository.saveAndFlush(depreciationReport);
+
+        // Get all the depreciationReportList where tampered in DEFAULT_TAMPERED or UPDATED_TAMPERED
+        defaultDepreciationReportShouldBeFound("tampered.in=" + DEFAULT_TAMPERED + "," + UPDATED_TAMPERED);
+
+        // Get all the depreciationReportList where tampered equals to UPDATED_TAMPERED
+        defaultDepreciationReportShouldNotBeFound("tampered.in=" + UPDATED_TAMPERED);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationReportsByTamperedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationReportRepository.saveAndFlush(depreciationReport);
+
+        // Get all the depreciationReportList where tampered is not null
+        defaultDepreciationReportShouldBeFound("tampered.specified=true");
+
+        // Get all the depreciationReportList where tampered is null
+        defaultDepreciationReportShouldNotBeFound("tampered.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationReportsByFilenameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationReportRepository.saveAndFlush(depreciationReport);
+
+        // Get all the depreciationReportList where filename equals to DEFAULT_FILENAME
+        defaultDepreciationReportShouldBeFound("filename.equals=" + DEFAULT_FILENAME);
+
+        // Get all the depreciationReportList where filename equals to UPDATED_FILENAME
+        defaultDepreciationReportShouldNotBeFound("filename.equals=" + UPDATED_FILENAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationReportsByFilenameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationReportRepository.saveAndFlush(depreciationReport);
+
+        // Get all the depreciationReportList where filename not equals to DEFAULT_FILENAME
+        defaultDepreciationReportShouldNotBeFound("filename.notEquals=" + DEFAULT_FILENAME);
+
+        // Get all the depreciationReportList where filename not equals to UPDATED_FILENAME
+        defaultDepreciationReportShouldBeFound("filename.notEquals=" + UPDATED_FILENAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationReportsByFilenameIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationReportRepository.saveAndFlush(depreciationReport);
+
+        // Get all the depreciationReportList where filename in DEFAULT_FILENAME or UPDATED_FILENAME
+        defaultDepreciationReportShouldBeFound("filename.in=" + DEFAULT_FILENAME + "," + UPDATED_FILENAME);
+
+        // Get all the depreciationReportList where filename equals to UPDATED_FILENAME
+        defaultDepreciationReportShouldNotBeFound("filename.in=" + UPDATED_FILENAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationReportsByFilenameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationReportRepository.saveAndFlush(depreciationReport);
+
+        // Get all the depreciationReportList where filename is not null
+        defaultDepreciationReportShouldBeFound("filename.specified=true");
+
+        // Get all the depreciationReportList where filename is null
+        defaultDepreciationReportShouldNotBeFound("filename.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationReportsByReportParametersIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationReportRepository.saveAndFlush(depreciationReport);
+
+        // Get all the depreciationReportList where reportParameters equals to DEFAULT_REPORT_PARAMETERS
+        defaultDepreciationReportShouldBeFound("reportParameters.equals=" + DEFAULT_REPORT_PARAMETERS);
+
+        // Get all the depreciationReportList where reportParameters equals to UPDATED_REPORT_PARAMETERS
+        defaultDepreciationReportShouldNotBeFound("reportParameters.equals=" + UPDATED_REPORT_PARAMETERS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationReportsByReportParametersIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationReportRepository.saveAndFlush(depreciationReport);
+
+        // Get all the depreciationReportList where reportParameters not equals to DEFAULT_REPORT_PARAMETERS
+        defaultDepreciationReportShouldNotBeFound("reportParameters.notEquals=" + DEFAULT_REPORT_PARAMETERS);
+
+        // Get all the depreciationReportList where reportParameters not equals to UPDATED_REPORT_PARAMETERS
+        defaultDepreciationReportShouldBeFound("reportParameters.notEquals=" + UPDATED_REPORT_PARAMETERS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationReportsByReportParametersIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationReportRepository.saveAndFlush(depreciationReport);
+
+        // Get all the depreciationReportList where reportParameters in DEFAULT_REPORT_PARAMETERS or UPDATED_REPORT_PARAMETERS
+        defaultDepreciationReportShouldBeFound("reportParameters.in=" + DEFAULT_REPORT_PARAMETERS + "," + UPDATED_REPORT_PARAMETERS);
+
+        // Get all the depreciationReportList where reportParameters equals to UPDATED_REPORT_PARAMETERS
+        defaultDepreciationReportShouldNotBeFound("reportParameters.in=" + UPDATED_REPORT_PARAMETERS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationReportsByReportParametersIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationReportRepository.saveAndFlush(depreciationReport);
+
+        // Get all the depreciationReportList where reportParameters is not null
+        defaultDepreciationReportShouldBeFound("reportParameters.specified=true");
+
+        // Get all the depreciationReportList where reportParameters is null
+        defaultDepreciationReportShouldNotBeFound("reportParameters.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationReportsByReportParametersContainsSomething() throws Exception {
+        // Initialize the database
+        depreciationReportRepository.saveAndFlush(depreciationReport);
+
+        // Get all the depreciationReportList where reportParameters contains DEFAULT_REPORT_PARAMETERS
+        defaultDepreciationReportShouldBeFound("reportParameters.contains=" + DEFAULT_REPORT_PARAMETERS);
+
+        // Get all the depreciationReportList where reportParameters contains UPDATED_REPORT_PARAMETERS
+        defaultDepreciationReportShouldNotBeFound("reportParameters.contains=" + UPDATED_REPORT_PARAMETERS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationReportsByReportParametersNotContainsSomething() throws Exception {
+        // Initialize the database
+        depreciationReportRepository.saveAndFlush(depreciationReport);
+
+        // Get all the depreciationReportList where reportParameters does not contain DEFAULT_REPORT_PARAMETERS
+        defaultDepreciationReportShouldNotBeFound("reportParameters.doesNotContain=" + DEFAULT_REPORT_PARAMETERS);
+
+        // Get all the depreciationReportList where reportParameters does not contain UPDATED_REPORT_PARAMETERS
+        defaultDepreciationReportShouldBeFound("reportParameters.doesNotContain=" + UPDATED_REPORT_PARAMETERS);
+    }
+
+    @Test
+    @Transactional
     void getAllDepreciationReportsByRequestedByIsEqualToSomething() throws Exception {
         // Initialize the database
         depreciationReportRepository.saveAndFlush(depreciationReport);
@@ -598,7 +907,13 @@ class DepreciationReportResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(depreciationReport.getId().intValue())))
             .andExpect(jsonPath("$.[*].reportName").value(hasItem(DEFAULT_REPORT_NAME)))
-            .andExpect(jsonPath("$.[*].timeOfReportRequest").value(hasItem(sameInstant(DEFAULT_TIME_OF_REPORT_REQUEST))));
+            .andExpect(jsonPath("$.[*].timeOfReportRequest").value(hasItem(sameInstant(DEFAULT_TIME_OF_REPORT_REQUEST))))
+            .andExpect(jsonPath("$.[*].fileChecksum").value(hasItem(DEFAULT_FILE_CHECKSUM)))
+            .andExpect(jsonPath("$.[*].tampered").value(hasItem(DEFAULT_TAMPERED.booleanValue())))
+            .andExpect(jsonPath("$.[*].filename").value(hasItem(DEFAULT_FILENAME.toString())))
+            .andExpect(jsonPath("$.[*].reportParameters").value(hasItem(DEFAULT_REPORT_PARAMETERS)))
+            .andExpect(jsonPath("$.[*].reportFileContentType").value(hasItem(DEFAULT_REPORT_FILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))));
 
         // Check, that the count call also returns 1
         restDepreciationReportMockMvc
@@ -646,7 +961,15 @@ class DepreciationReportResourceIT {
         DepreciationReport updatedDepreciationReport = depreciationReportRepository.findById(depreciationReport.getId()).get();
         // Disconnect from session so that the updates on updatedDepreciationReport are not directly saved in db
         em.detach(updatedDepreciationReport);
-        updatedDepreciationReport.reportName(UPDATED_REPORT_NAME).timeOfReportRequest(UPDATED_TIME_OF_REPORT_REQUEST);
+        updatedDepreciationReport
+            .reportName(UPDATED_REPORT_NAME)
+            .timeOfReportRequest(UPDATED_TIME_OF_REPORT_REQUEST)
+            .fileChecksum(UPDATED_FILE_CHECKSUM)
+            .tampered(UPDATED_TAMPERED)
+            .filename(UPDATED_FILENAME)
+            .reportParameters(UPDATED_REPORT_PARAMETERS)
+            .reportFile(UPDATED_REPORT_FILE)
+            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE);
         DepreciationReportDTO depreciationReportDTO = depreciationReportMapper.toDto(updatedDepreciationReport);
 
         restDepreciationReportMockMvc
@@ -663,6 +986,12 @@ class DepreciationReportResourceIT {
         DepreciationReport testDepreciationReport = depreciationReportList.get(depreciationReportList.size() - 1);
         assertThat(testDepreciationReport.getReportName()).isEqualTo(UPDATED_REPORT_NAME);
         assertThat(testDepreciationReport.getTimeOfReportRequest()).isEqualTo(UPDATED_TIME_OF_REPORT_REQUEST);
+        assertThat(testDepreciationReport.getFileChecksum()).isEqualTo(UPDATED_FILE_CHECKSUM);
+        assertThat(testDepreciationReport.getTampered()).isEqualTo(UPDATED_TAMPERED);
+        assertThat(testDepreciationReport.getFilename()).isEqualTo(UPDATED_FILENAME);
+        assertThat(testDepreciationReport.getReportParameters()).isEqualTo(UPDATED_REPORT_PARAMETERS);
+        assertThat(testDepreciationReport.getReportFile()).isEqualTo(UPDATED_REPORT_FILE);
+        assertThat(testDepreciationReport.getReportFileContentType()).isEqualTo(UPDATED_REPORT_FILE_CONTENT_TYPE);
 
         // Validate the DepreciationReport in Elasticsearch
         verify(mockDepreciationReportSearchRepository).save(testDepreciationReport);
@@ -758,7 +1087,11 @@ class DepreciationReportResourceIT {
         DepreciationReport partialUpdatedDepreciationReport = new DepreciationReport();
         partialUpdatedDepreciationReport.setId(depreciationReport.getId());
 
-        partialUpdatedDepreciationReport.reportName(UPDATED_REPORT_NAME).timeOfReportRequest(UPDATED_TIME_OF_REPORT_REQUEST);
+        partialUpdatedDepreciationReport
+            .reportName(UPDATED_REPORT_NAME)
+            .timeOfReportRequest(UPDATED_TIME_OF_REPORT_REQUEST)
+            .reportFile(UPDATED_REPORT_FILE)
+            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE);
 
         restDepreciationReportMockMvc
             .perform(
@@ -774,6 +1107,12 @@ class DepreciationReportResourceIT {
         DepreciationReport testDepreciationReport = depreciationReportList.get(depreciationReportList.size() - 1);
         assertThat(testDepreciationReport.getReportName()).isEqualTo(UPDATED_REPORT_NAME);
         assertThat(testDepreciationReport.getTimeOfReportRequest()).isEqualTo(UPDATED_TIME_OF_REPORT_REQUEST);
+        assertThat(testDepreciationReport.getFileChecksum()).isEqualTo(DEFAULT_FILE_CHECKSUM);
+        assertThat(testDepreciationReport.getTampered()).isEqualTo(DEFAULT_TAMPERED);
+        assertThat(testDepreciationReport.getFilename()).isEqualTo(DEFAULT_FILENAME);
+        assertThat(testDepreciationReport.getReportParameters()).isEqualTo(DEFAULT_REPORT_PARAMETERS);
+        assertThat(testDepreciationReport.getReportFile()).isEqualTo(UPDATED_REPORT_FILE);
+        assertThat(testDepreciationReport.getReportFileContentType()).isEqualTo(UPDATED_REPORT_FILE_CONTENT_TYPE);
     }
 
     @Test
@@ -788,7 +1127,15 @@ class DepreciationReportResourceIT {
         DepreciationReport partialUpdatedDepreciationReport = new DepreciationReport();
         partialUpdatedDepreciationReport.setId(depreciationReport.getId());
 
-        partialUpdatedDepreciationReport.reportName(UPDATED_REPORT_NAME).timeOfReportRequest(UPDATED_TIME_OF_REPORT_REQUEST);
+        partialUpdatedDepreciationReport
+            .reportName(UPDATED_REPORT_NAME)
+            .timeOfReportRequest(UPDATED_TIME_OF_REPORT_REQUEST)
+            .fileChecksum(UPDATED_FILE_CHECKSUM)
+            .tampered(UPDATED_TAMPERED)
+            .filename(UPDATED_FILENAME)
+            .reportParameters(UPDATED_REPORT_PARAMETERS)
+            .reportFile(UPDATED_REPORT_FILE)
+            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE);
 
         restDepreciationReportMockMvc
             .perform(
@@ -804,6 +1151,12 @@ class DepreciationReportResourceIT {
         DepreciationReport testDepreciationReport = depreciationReportList.get(depreciationReportList.size() - 1);
         assertThat(testDepreciationReport.getReportName()).isEqualTo(UPDATED_REPORT_NAME);
         assertThat(testDepreciationReport.getTimeOfReportRequest()).isEqualTo(UPDATED_TIME_OF_REPORT_REQUEST);
+        assertThat(testDepreciationReport.getFileChecksum()).isEqualTo(UPDATED_FILE_CHECKSUM);
+        assertThat(testDepreciationReport.getTampered()).isEqualTo(UPDATED_TAMPERED);
+        assertThat(testDepreciationReport.getFilename()).isEqualTo(UPDATED_FILENAME);
+        assertThat(testDepreciationReport.getReportParameters()).isEqualTo(UPDATED_REPORT_PARAMETERS);
+        assertThat(testDepreciationReport.getReportFile()).isEqualTo(UPDATED_REPORT_FILE);
+        assertThat(testDepreciationReport.getReportFileContentType()).isEqualTo(UPDATED_REPORT_FILE_CONTENT_TYPE);
     }
 
     @Test
@@ -921,6 +1274,12 @@ class DepreciationReportResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(depreciationReport.getId().intValue())))
             .andExpect(jsonPath("$.[*].reportName").value(hasItem(DEFAULT_REPORT_NAME)))
-            .andExpect(jsonPath("$.[*].timeOfReportRequest").value(hasItem(sameInstant(DEFAULT_TIME_OF_REPORT_REQUEST))));
+            .andExpect(jsonPath("$.[*].timeOfReportRequest").value(hasItem(sameInstant(DEFAULT_TIME_OF_REPORT_REQUEST))))
+            .andExpect(jsonPath("$.[*].fileChecksum").value(hasItem(DEFAULT_FILE_CHECKSUM)))
+            .andExpect(jsonPath("$.[*].tampered").value(hasItem(DEFAULT_TAMPERED.booleanValue())))
+            .andExpect(jsonPath("$.[*].filename").value(hasItem(DEFAULT_FILENAME.toString())))
+            .andExpect(jsonPath("$.[*].reportParameters").value(hasItem(DEFAULT_REPORT_PARAMETERS)))
+            .andExpect(jsonPath("$.[*].reportFileContentType").value(hasItem(DEFAULT_REPORT_FILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))));
     }
 }

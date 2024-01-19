@@ -123,6 +123,19 @@ public class DepreciationReportQueryService extends QueryService<DepreciationRep
                 specification =
                     specification.and(buildRangeSpecification(criteria.getTimeOfReportRequest(), DepreciationReport_.timeOfReportRequest));
             }
+            if (criteria.getFileChecksum() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getFileChecksum(), DepreciationReport_.fileChecksum));
+            }
+            if (criteria.getTampered() != null) {
+                specification = specification.and(buildSpecification(criteria.getTampered(), DepreciationReport_.tampered));
+            }
+            if (criteria.getFilename() != null) {
+                specification = specification.and(buildSpecification(criteria.getFilename(), DepreciationReport_.filename));
+            }
+            if (criteria.getReportParameters() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getReportParameters(), DepreciationReport_.reportParameters));
+            }
             if (criteria.getRequestedById() != null) {
                 specification =
                     specification.and(

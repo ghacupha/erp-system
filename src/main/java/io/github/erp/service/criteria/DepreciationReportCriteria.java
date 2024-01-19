@@ -28,6 +28,7 @@ import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
+import tech.jhipster.service.filter.UUIDFilter;
 import tech.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
@@ -49,6 +50,14 @@ public class DepreciationReportCriteria implements Serializable, Criteria {
 
     private ZonedDateTimeFilter timeOfReportRequest;
 
+    private StringFilter fileChecksum;
+
+    private BooleanFilter tampered;
+
+    private UUIDFilter filename;
+
+    private StringFilter reportParameters;
+
     private LongFilter requestedById;
 
     private LongFilter depreciationPeriodId;
@@ -65,6 +74,10 @@ public class DepreciationReportCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.reportName = other.reportName == null ? null : other.reportName.copy();
         this.timeOfReportRequest = other.timeOfReportRequest == null ? null : other.timeOfReportRequest.copy();
+        this.fileChecksum = other.fileChecksum == null ? null : other.fileChecksum.copy();
+        this.tampered = other.tampered == null ? null : other.tampered.copy();
+        this.filename = other.filename == null ? null : other.filename.copy();
+        this.reportParameters = other.reportParameters == null ? null : other.reportParameters.copy();
         this.requestedById = other.requestedById == null ? null : other.requestedById.copy();
         this.depreciationPeriodId = other.depreciationPeriodId == null ? null : other.depreciationPeriodId.copy();
         this.serviceOutletId = other.serviceOutletId == null ? null : other.serviceOutletId.copy();
@@ -120,6 +133,66 @@ public class DepreciationReportCriteria implements Serializable, Criteria {
 
     public void setTimeOfReportRequest(ZonedDateTimeFilter timeOfReportRequest) {
         this.timeOfReportRequest = timeOfReportRequest;
+    }
+
+    public StringFilter getFileChecksum() {
+        return fileChecksum;
+    }
+
+    public StringFilter fileChecksum() {
+        if (fileChecksum == null) {
+            fileChecksum = new StringFilter();
+        }
+        return fileChecksum;
+    }
+
+    public void setFileChecksum(StringFilter fileChecksum) {
+        this.fileChecksum = fileChecksum;
+    }
+
+    public BooleanFilter getTampered() {
+        return tampered;
+    }
+
+    public BooleanFilter tampered() {
+        if (tampered == null) {
+            tampered = new BooleanFilter();
+        }
+        return tampered;
+    }
+
+    public void setTampered(BooleanFilter tampered) {
+        this.tampered = tampered;
+    }
+
+    public UUIDFilter getFilename() {
+        return filename;
+    }
+
+    public UUIDFilter filename() {
+        if (filename == null) {
+            filename = new UUIDFilter();
+        }
+        return filename;
+    }
+
+    public void setFilename(UUIDFilter filename) {
+        this.filename = filename;
+    }
+
+    public StringFilter getReportParameters() {
+        return reportParameters;
+    }
+
+    public StringFilter reportParameters() {
+        if (reportParameters == null) {
+            reportParameters = new StringFilter();
+        }
+        return reportParameters;
+    }
+
+    public void setReportParameters(StringFilter reportParameters) {
+        this.reportParameters = reportParameters;
     }
 
     public LongFilter getRequestedById() {
@@ -203,6 +276,10 @@ public class DepreciationReportCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(reportName, that.reportName) &&
             Objects.equals(timeOfReportRequest, that.timeOfReportRequest) &&
+            Objects.equals(fileChecksum, that.fileChecksum) &&
+            Objects.equals(tampered, that.tampered) &&
+            Objects.equals(filename, that.filename) &&
+            Objects.equals(reportParameters, that.reportParameters) &&
             Objects.equals(requestedById, that.requestedById) &&
             Objects.equals(depreciationPeriodId, that.depreciationPeriodId) &&
             Objects.equals(serviceOutletId, that.serviceOutletId) &&
@@ -217,6 +294,10 @@ public class DepreciationReportCriteria implements Serializable, Criteria {
             id,
             reportName,
             timeOfReportRequest,
+            fileChecksum,
+            tampered,
+            filename,
+            reportParameters,
             requestedById,
             depreciationPeriodId,
             serviceOutletId,
@@ -232,6 +313,10 @@ public class DepreciationReportCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (reportName != null ? "reportName=" + reportName + ", " : "") +
             (timeOfReportRequest != null ? "timeOfReportRequest=" + timeOfReportRequest + ", " : "") +
+            (fileChecksum != null ? "fileChecksum=" + fileChecksum + ", " : "") +
+            (tampered != null ? "tampered=" + tampered + ", " : "") +
+            (filename != null ? "filename=" + filename + ", " : "") +
+            (reportParameters != null ? "reportParameters=" + reportParameters + ", " : "") +
             (requestedById != null ? "requestedById=" + requestedById + ", " : "") +
             (depreciationPeriodId != null ? "depreciationPeriodId=" + depreciationPeriodId + ", " : "") +
             (serviceOutletId != null ? "serviceOutletId=" + serviceOutletId + ", " : "") +
