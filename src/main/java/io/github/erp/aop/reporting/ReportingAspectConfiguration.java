@@ -122,4 +122,12 @@ public class ReportingAspectConfiguration {
     public DepreciationReportInterceptor depreciationReportInterceptor() {
         return new DepreciationReportInterceptor(depreciationEntryExportReportService);
     }
+
+    @Autowired
+    private ReportAttachmentService<DepreciationReportDTO> depreciationReportReportAttachmentService;
+
+    @Bean
+    public DepreciationReportAttachmentInterceptor depreciationReportAttachmentInterceptor() {
+        return new DepreciationReportAttachmentInterceptor(depreciationReportReportAttachmentService);
+    }
 }
