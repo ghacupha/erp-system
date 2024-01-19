@@ -25,6 +25,7 @@ import io.github.erp.internal.report.ReportsProperties;
 import io.github.erp.internal.repository.InternalDepreciationEntryRepository;
 import io.github.erp.internal.repository.InternalDepreciationReportRepository;
 import io.github.erp.repository.DepreciationPeriodRepository;
+import io.github.erp.service.DepreciationReportService;
 import io.github.erp.service.dto.DepreciationReportDTO;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -43,6 +44,7 @@ public class DepreciationEntryCSVExportReportService
     extends AbstractReportListCSVExportService<DepreciationEntryVM>
     implements DepreciationEntryExportReportService{
 
+    private final DepreciationReportService depreciationReportService;
     private final InternalDepreciationReportRepository internalDepreciationReportRepository;
     private final DepreciationEntryInternalMapper depreciationEntryInternalMapper;
     private final DepreciationPeriodRepository depreciationPeriodRepository;
@@ -51,11 +53,12 @@ public class DepreciationEntryCSVExportReportService
     public DepreciationEntryCSVExportReportService(
         ReportsProperties reportsProperties,
         @Qualifier("reportsFSStorageService") FileStorageService fileStorageService,
-        InternalDepreciationReportRepository internalDepreciationReportRepository,
+        DepreciationReportService depreciationReportService, InternalDepreciationReportRepository internalDepreciationReportRepository,
         DepreciationEntryInternalMapper depreciationEntryInternalMapper,
         DepreciationPeriodRepository depreciationPeriodRepository,
         InternalDepreciationEntryRepository internalDepreciationEntryRepository) {
         super(reportsProperties, fileStorageService);
+        this.depreciationReportService = depreciationReportService;
         this.internalDepreciationReportRepository = internalDepreciationReportRepository;
         this.depreciationEntryInternalMapper = depreciationEntryInternalMapper;
         this.depreciationPeriodRepository = depreciationPeriodRepository;
@@ -78,6 +81,7 @@ public class DepreciationEntryCSVExportReportService
                 depreciationReportDTO.setFilename(fileName);
                 depreciationReportDTO.setReportParameters(getReportParameters(depreciationReportDTO));
 
+                depreciationReportService.save(depreciationReportDTO);
             } catch (IOException e) {
                 e.printStackTrace();
             }
