@@ -18,13 +18,10 @@ package io.github.erp.internal.service;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.internal.repository.InternalDepreciationBatchSequenceRepository;
 import io.github.erp.internal.repository.InternalDepreciationEntryRepository;
 import io.github.erp.internal.repository.InternalDepreciationJobNoticeRepository;
-import io.github.erp.service.DepreciationBatchSequenceService;
 import io.github.erp.service.DepreciationEntryService;
 import io.github.erp.service.DepreciationJobNoticeService;
-import io.github.erp.service.DepreciationJobService;
 import io.github.erp.service.dto.DepreciationBatchSequenceDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -36,7 +33,6 @@ public class DepreciationBatchCascadeDeletionSequence implements CascadeDeletion
 
     private final DepreciationEntryService depreciationEntryService;
     private final DepreciationJobNoticeService depreciationJobNoticeService;
-    private final DepreciationBatchSequenceService depreciationBatchSequenceService;
 
     private final InternalDepreciationJobNoticeRepository internalDepreciationJobNoticeRepository;
     private final InternalDepreciationEntryRepository internalDepreciationEntryRepository;
@@ -44,12 +40,10 @@ public class DepreciationBatchCascadeDeletionSequence implements CascadeDeletion
     public DepreciationBatchCascadeDeletionSequence (
         DepreciationEntryService depreciationEntryService,
         DepreciationJobNoticeService depreciationJobNoticeService,
-        DepreciationBatchSequenceService depreciationBatchSequenceService,
         InternalDepreciationJobNoticeRepository internalDepreciationJobNoticeRepository,
         InternalDepreciationEntryRepository internalDepreciationEntryRepository) {
         this.depreciationEntryService = depreciationEntryService;
         this.depreciationJobNoticeService = depreciationJobNoticeService;
-        this.depreciationBatchSequenceService = depreciationBatchSequenceService;
         this.internalDepreciationJobNoticeRepository = internalDepreciationJobNoticeRepository;
         this.internalDepreciationEntryRepository = internalDepreciationEntryRepository;
     }

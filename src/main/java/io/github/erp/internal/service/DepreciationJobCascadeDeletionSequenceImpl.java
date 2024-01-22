@@ -24,7 +24,6 @@ import io.github.erp.internal.repository.InternalDepreciationJobNoticeRepository
 import io.github.erp.service.DepreciationBatchSequenceService;
 import io.github.erp.service.DepreciationEntryService;
 import io.github.erp.service.DepreciationJobNoticeService;
-import io.github.erp.service.DepreciationJobService;
 import io.github.erp.service.dto.DepreciationJobDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -34,7 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class DepreciationJobCascadeDeletionSequenceImpl implements CascadeDeletionSequence<DepreciationJobDTO> {
 
-    private final DepreciationJobService depreciationJobService;
     private final DepreciationEntryService depreciationEntryService;
     private final DepreciationJobNoticeService depreciationJobNoticeService;
     private final DepreciationBatchSequenceService depreciationBatchSequenceService;
@@ -44,13 +42,12 @@ public class DepreciationJobCascadeDeletionSequenceImpl implements CascadeDeleti
     private final InternalDepreciationEntryRepository internalDepreciationEntryRepository;
 
     public DepreciationJobCascadeDeletionSequenceImpl(
-        DepreciationJobService depreciationJobService, DepreciationEntryService depreciationEntryService,
+        DepreciationEntryService depreciationEntryService,
         DepreciationJobNoticeService depreciationJobNoticeService,
         DepreciationBatchSequenceService depreciationBatchSequenceService,
         InternalDepreciationBatchSequenceRepository internalDepreciationBatchSequenceRepository,
         InternalDepreciationJobNoticeRepository internalDepreciationJobNoticeRepository,
         InternalDepreciationEntryRepository internalDepreciationEntryRepository) {
-        this.depreciationJobService = depreciationJobService;
         this.depreciationEntryService = depreciationEntryService;
         this.depreciationJobNoticeService = depreciationJobNoticeService;
         this.depreciationBatchSequenceService = depreciationBatchSequenceService;
@@ -59,23 +56,21 @@ public class DepreciationJobCascadeDeletionSequenceImpl implements CascadeDeleti
         this.internalDepreciationEntryRepository = internalDepreciationEntryRepository;
     }
 
-    public DepreciationJobDTO deleteCascade(DepreciationJobDTO dto) {
-        depreciationJobService.findOne(dto.getId()).ifPresent(job -> {
+    public DepreciationJobDTO deleteCascade(DepreciationJobDTO job) {
 
-            internalDepreciationEntryRepository.findDepreciationEntryByDepreciationJobId(job.getId(), Pageable.ofSize(Integer.MAX_VALUE))
-                .forEach(depreciationEntry -> {
-                    depreciationEntryService.delete(depreciationEntry.getId());
-                });
-            internalDepreciationJobNoticeRepository.findDepreciationJobNoticeByDepreciationJobId(job.getId(), Pageable.ofSize(Integer.MAX_VALUE))
-                .forEach(depreciationJobNotice -> {
-                    depreciationJobNoticeService.delete(depreciationJobNotice.getId());
-                });
-            internalDepreciationBatchSequenceRepository.findByDepreciationJobId(job.getId(), Pageable.ofSize(Integer.MAX_VALUE))
-                .forEach(depreciationBatchSequence -> {
-                    depreciationBatchSequenceService.delete(job.getId());
-                });
-        });
+        internalDepreciationEntryRepository.findDepreciationEntryByDepreciationJobId(job.getId(), Pageable.ofSize(Integer.MAX_VALUE))
+            .forEach(depreciationEntry -> {
+                depreciationEntryService.delete(depreciationEntry.getId());
+            });
+        internalDepreciationJobNoticeRepository.findDepreciationJobNoticeByDepreciationJobId(job.getId(), Pageable.ofSize(Integer.MAX_VALUE))
+            .forEach(depreciationJobNotice -> {
+                depreciationJobNoticeService.delete(depreciationJobNotice.getId());
+            });
+        internalDepreciationBatchSequenceRepository.findByDepreciationJobId(job.getId(), Pageable.ofSize(Integer.MAX_VALUE))
+            .forEach(depreciationBatchSequence -> {
+                depreciationBatchSequenceService.delete(job.getId());
+            });
 
-        return dto;
+        return job;
     }
 }
