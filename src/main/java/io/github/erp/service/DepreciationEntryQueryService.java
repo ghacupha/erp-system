@@ -160,6 +160,34 @@ public class DepreciationEntryQueryService extends QueryService<DepreciationEntr
                 specification =
                     specification.and(buildRangeSpecification(criteria.getTotalItemsProcessed(), DepreciationEntry_.totalItemsProcessed));
             }
+            if (criteria.getElapsedMonths() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getElapsedMonths(), DepreciationEntry_.elapsedMonths));
+            }
+            if (criteria.getPriorMonths() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getPriorMonths(), DepreciationEntry_.priorMonths));
+            }
+            if (criteria.getUsefulLifeYears() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getUsefulLifeYears(), DepreciationEntry_.usefulLifeYears));
+            }
+            if (criteria.getPreviousNBV() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getPreviousNBV(), DepreciationEntry_.previousNBV));
+            }
+            if (criteria.getNetBookValue() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getNetBookValue(), DepreciationEntry_.netBookValue));
+            }
+            if (criteria.getDepreciationPeriodStartDate() != null) {
+                specification =
+                    specification.and(
+                        buildRangeSpecification(criteria.getDepreciationPeriodStartDate(), DepreciationEntry_.depreciationPeriodStartDate)
+                    );
+            }
+            if (criteria.getDepreciationPeriodEndDate() != null) {
+                specification =
+                    specification.and(
+                        buildRangeSpecification(criteria.getDepreciationPeriodEndDate(), DepreciationEntry_.depreciationPeriodEndDate)
+                    );
+            }
             if (criteria.getServiceOutletId() != null) {
                 specification =
                     specification.and(
