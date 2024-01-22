@@ -50,10 +50,10 @@ public interface InternalDepreciationEntryItemRepository
         "     ar.asset_details as assetRegistrationDetails, " +
         "     posted_at as postedAt, " +
         "     de.asset_number as assetNumber, " +
-        "     so.outlet_code as serviceOutletCode, " +
+        "     so.outlet_code as serviceOutlet, " +
         "     ac.asset_category_name as assetCategory, " +
         "     dm.depreciation_method_name as depreciationMethod, " +
-        "     pd.period_code as depreciationPeriodCode, " +
+        "     pd.period_code as depreciationPeriod, " +
         "     fm.fiscal_month_code as fiscalMonthCode, " +
         "     ar.asset_cost as assetRegistrationCost, " +
         "     de.depreciation_amount as depreciationAmount " +
