@@ -18,14 +18,12 @@ package io.github.erp.erp.resources.depreciation;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.internal.repository.InternalDepreciationJobRepository;
-import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
+import io.github.erp.internal.service.CascadeDeletionSequence;
 import io.github.erp.repository.DepreciationJobRepository;
 import io.github.erp.repository.search.DepreciationJobSearchRepository;
-import io.github.erp.service.DepreciationJobQueryService;
-import io.github.erp.service.DepreciationJobService;
+import io.github.erp.service.*;
 import io.github.erp.service.criteria.DepreciationJobCriteria;
 import io.github.erp.service.dto.DepreciationJobDTO;
-import io.github.erp.service.mapper.ApplicationUserMapper;
 import io.github.erp.service.mapper.DepreciationJobMapper;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
@@ -71,19 +69,23 @@ public class DepreciationJobResourceProd {
 
     private final InternalDepreciationJobRepository internalDepreciationJobRepository;
 
+    private final CascadeDeletionSequence<DepreciationJobDTO> depreciationJobCascadeDeletionSequence;
+
     public DepreciationJobResourceProd(
         DepreciationJobService depreciationJobService,
         DepreciationJobRepository depreciationJobRepository,
         DepreciationJobQueryService depreciationJobQueryService,
         DepreciationJobMapper depreciationJobMapper,
         DepreciationJobSearchRepository depreciationJobSearchRepository,
-        InternalDepreciationJobRepository internalDepreciationJobRepository) {
+        InternalDepreciationJobRepository internalDepreciationJobRepository,
+        CascadeDeletionSequence<DepreciationJobDTO> depreciationJobCascadeDeletionSequence) {
         this.depreciationJobService = depreciationJobService;
         this.depreciationJobRepository = depreciationJobRepository;
         this.depreciationJobQueryService = depreciationJobQueryService;
         this.depreciationJobMapper = depreciationJobMapper;
         this.depreciationJobSearchRepository = depreciationJobSearchRepository;
         this.internalDepreciationJobRepository = internalDepreciationJobRepository;
+        this.depreciationJobCascadeDeletionSequence = depreciationJobCascadeDeletionSequence;
     }
 
     /**
@@ -231,7 +233,12 @@ public class DepreciationJobResourceProd {
     @DeleteMapping("/depreciation-jobs/{id}")
     public ResponseEntity<Void> deleteDepreciationJob(@PathVariable Long id) {
         log.debug("REST request to delete DepreciationJob : {}", id);
-        depreciationJobService.delete(id);
+
+        depreciationJobService.findOne(id).ifPresent(job -> {
+
+            depreciationJobService.delete(depreciationJobCascadeDeletionSequence.deleteCascade(job).getId());
+        });
+
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

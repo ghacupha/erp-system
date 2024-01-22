@@ -17,6 +17,7 @@ package io.github.erp.erp.resources.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.service.CascadeDeletionSequence;
 import io.github.erp.repository.DepreciationBatchSequenceRepository;
 import io.github.erp.service.DepreciationBatchSequenceQueryService;
 import io.github.erp.service.DepreciationBatchSequenceService;
@@ -62,14 +63,17 @@ public class DepreciationBatchSequenceResourceProd {
 
     private final DepreciationBatchSequenceQueryService depreciationBatchSequenceQueryService;
 
+    private final CascadeDeletionSequence<DepreciationBatchSequenceDTO> batchSequenceDTOCascadeDeletionSequence;
+
     public DepreciationBatchSequenceResourceProd(
         DepreciationBatchSequenceService depreciationBatchSequenceService,
         DepreciationBatchSequenceRepository depreciationBatchSequenceRepository,
-        DepreciationBatchSequenceQueryService depreciationBatchSequenceQueryService
-    ) {
+        DepreciationBatchSequenceQueryService depreciationBatchSequenceQueryService,
+        CascadeDeletionSequence<DepreciationBatchSequenceDTO> batchSequenceDTOCascadeDeletionSequence) {
         this.depreciationBatchSequenceService = depreciationBatchSequenceService;
         this.depreciationBatchSequenceRepository = depreciationBatchSequenceRepository;
         this.depreciationBatchSequenceQueryService = depreciationBatchSequenceQueryService;
+        this.batchSequenceDTOCascadeDeletionSequence = batchSequenceDTOCascadeDeletionSequence;
     }
 
     /**
@@ -218,7 +222,12 @@ public class DepreciationBatchSequenceResourceProd {
     @DeleteMapping("/depreciation-batch-sequences/{id}")
     public ResponseEntity<Void> deleteDepreciationBatchSequence(@PathVariable Long id) {
         log.debug("REST request to delete DepreciationBatchSequence : {}", id);
-        depreciationBatchSequenceService.delete(id);
+
+        depreciationBatchSequenceService.findOne(id).ifPresent(batch -> {
+
+            depreciationBatchSequenceService.delete(batchSequenceDTOCascadeDeletionSequence.deleteCascade(batch).getId());
+        });
+
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

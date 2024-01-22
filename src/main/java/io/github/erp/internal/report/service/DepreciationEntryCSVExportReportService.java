@@ -22,7 +22,7 @@ import io.github.erp.domain.DepreciationReport;
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.report.AbstractReportListCSVExportService;
 import io.github.erp.internal.report.ReportsProperties;
-import io.github.erp.internal.repository.InternalDepreciationEntryRepository;
+import io.github.erp.internal.repository.InternalDepreciationEntryItemRepository;
 import io.github.erp.internal.repository.InternalDepreciationReportRepository;
 import io.github.erp.repository.DepreciationPeriodRepository;
 import io.github.erp.service.DepreciationReportService;
@@ -48,15 +48,15 @@ public class DepreciationEntryCSVExportReportService
     private final InternalDepreciationReportRepository internalDepreciationReportRepository;
     private final DepreciationEntryInternalMapper depreciationEntryInternalMapper;
     private final DepreciationPeriodRepository depreciationPeriodRepository;
-    private final InternalDepreciationEntryRepository internalDepreciationEntryRepository;
+    private final InternalDepreciationEntryItemRepository internalDepreciationEntryRepository;
 
     public DepreciationEntryCSVExportReportService(
-        ReportsProperties reportsProperties,
-        @Qualifier("reportsFSStorageService") FileStorageService fileStorageService,
-        DepreciationReportService depreciationReportService, InternalDepreciationReportRepository internalDepreciationReportRepository,
-        DepreciationEntryInternalMapper depreciationEntryInternalMapper,
-        DepreciationPeriodRepository depreciationPeriodRepository,
-        InternalDepreciationEntryRepository internalDepreciationEntryRepository) {
+            ReportsProperties reportsProperties,
+            @Qualifier("reportsFSStorageService") FileStorageService fileStorageService,
+            DepreciationReportService depreciationReportService, InternalDepreciationReportRepository internalDepreciationReportRepository,
+            DepreciationEntryInternalMapper depreciationEntryInternalMapper,
+            DepreciationPeriodRepository depreciationPeriodRepository,
+            InternalDepreciationEntryItemRepository internalDepreciationEntryRepository) {
         super(reportsProperties, fileStorageService);
         this.depreciationReportService = depreciationReportService;
         this.internalDepreciationReportRepository = internalDepreciationReportRepository;
