@@ -18,19 +18,20 @@ package io.github.erp.internal.repository;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.domain.DepreciationEntry;
-import io.github.erp.domain.DepreciationJob;
-import io.github.erp.repository.DepreciationEntryRepository;
+import io.github.erp.domain.DepreciationJobNotice;
+import io.github.erp.repository.DepreciationJobNoticeRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface InternalDepreciationEntryRepository
-    extends DepreciationEntryRepository,
-    JpaRepository<DepreciationEntry, Long>, JpaSpecificationExecutor<DepreciationEntry> {
+public interface InternalDepreciationJobNoticeRepository
+                        extends DepreciationJobNoticeRepository,
+                            JpaRepository<DepreciationJobNotice, Long>,
+                            JpaSpecificationExecutor<DepreciationJobNotice> {
 
-    Page<DepreciationEntry> findDepreciationEntryByDepreciationJobId(Long id, Pageable pageable);
+   Page<DepreciationJobNotice> findDepreciationJobNoticeByDepreciationJobId(Long id, Pageable pageable);
 
-    Page<DepreciationEntry> findDepreciationEntryByDepreciationBatchSequenceId(Long id, Pageable pageable);
+   Page<DepreciationJobNotice> findDepreciationJobNoticeByDepreciationBatchSequenceId(Long id, Pageable pageable);
+
 }

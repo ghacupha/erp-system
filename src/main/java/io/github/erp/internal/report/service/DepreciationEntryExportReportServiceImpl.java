@@ -21,7 +21,7 @@ import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.report.ReportsProperties;
 import io.github.erp.internal.report.dynamic.ReportGenerator;
 import io.github.erp.internal.report.dynamic.ZipUtility;
-import io.github.erp.internal.repository.InternalDepreciationEntryRepository;
+import io.github.erp.internal.repository.InternalDepreciationEntryItemRepository;
 import io.github.erp.repository.DepreciationPeriodRepository;
 import io.github.erp.service.dto.DepreciationReportDTO;
 import net.sf.dynamicreports.report.exception.DRException;
@@ -29,7 +29,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -44,14 +43,14 @@ public class DepreciationEntryExportReportServiceImpl implements DepreciationEnt
 
     private final DepreciationEntryInternalMapper depreciationEntryInternalMapper;
     private final DepreciationPeriodRepository depreciationPeriodRepository;
-    private final InternalDepreciationEntryRepository internalDepreciationEntryRepository;
+    private final InternalDepreciationEntryItemRepository internalDepreciationEntryRepository;
     private final FileStorageService fileStorageService;
 
     public DepreciationEntryExportReportServiceImpl(
-        DepreciationPeriodRepository depreciationPeriodRepository,
-        InternalDepreciationEntryRepository internalDepreciationEntryRepository,
-        @Qualifier("reportsFSStorageService") FileStorageService fileStorageService,
-        ReportsProperties reportsProperties, DepreciationEntryInternalMapper depreciationEntryInternalMapper) {
+            DepreciationPeriodRepository depreciationPeriodRepository,
+            InternalDepreciationEntryItemRepository internalDepreciationEntryRepository,
+            @Qualifier("reportsFSStorageService") FileStorageService fileStorageService,
+            ReportsProperties reportsProperties, DepreciationEntryInternalMapper depreciationEntryInternalMapper) {
         this.depreciationPeriodRepository = depreciationPeriodRepository;
         this.internalDepreciationEntryRepository = internalDepreciationEntryRepository;
         this.fileStorageService = fileStorageService;
