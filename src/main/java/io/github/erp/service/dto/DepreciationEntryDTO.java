@@ -20,6 +20,7 @@ package io.github.erp.service.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -51,6 +52,20 @@ public class DepreciationEntryDTO implements Serializable {
     private String processedItems;
 
     private Integer totalItemsProcessed;
+
+    private Long elapsedMonths;
+
+    private Long priorMonths;
+
+    private BigDecimal usefulLifeYears;
+
+    private BigDecimal previousNBV;
+
+    private BigDecimal netBookValue;
+
+    private LocalDate depreciationPeriodStartDate;
+
+    private LocalDate depreciationPeriodEndDate;
 
     private ServiceOutletDTO serviceOutlet;
 
@@ -158,6 +173,62 @@ public class DepreciationEntryDTO implements Serializable {
 
     public void setTotalItemsProcessed(Integer totalItemsProcessed) {
         this.totalItemsProcessed = totalItemsProcessed;
+    }
+
+    public Long getElapsedMonths() {
+        return elapsedMonths;
+    }
+
+    public void setElapsedMonths(Long elapsedMonths) {
+        this.elapsedMonths = elapsedMonths;
+    }
+
+    public Long getPriorMonths() {
+        return priorMonths;
+    }
+
+    public void setPriorMonths(Long priorMonths) {
+        this.priorMonths = priorMonths;
+    }
+
+    public BigDecimal getUsefulLifeYears() {
+        return usefulLifeYears;
+    }
+
+    public void setUsefulLifeYears(BigDecimal usefulLifeYears) {
+        this.usefulLifeYears = usefulLifeYears;
+    }
+
+    public BigDecimal getPreviousNBV() {
+        return previousNBV;
+    }
+
+    public void setPreviousNBV(BigDecimal previousNBV) {
+        this.previousNBV = previousNBV;
+    }
+
+    public BigDecimal getNetBookValue() {
+        return netBookValue;
+    }
+
+    public void setNetBookValue(BigDecimal netBookValue) {
+        this.netBookValue = netBookValue;
+    }
+
+    public LocalDate getDepreciationPeriodStartDate() {
+        return depreciationPeriodStartDate;
+    }
+
+    public void setDepreciationPeriodStartDate(LocalDate depreciationPeriodStartDate) {
+        this.depreciationPeriodStartDate = depreciationPeriodStartDate;
+    }
+
+    public LocalDate getDepreciationPeriodEndDate() {
+        return depreciationPeriodEndDate;
+    }
+
+    public void setDepreciationPeriodEndDate(LocalDate depreciationPeriodEndDate) {
+        this.depreciationPeriodEndDate = depreciationPeriodEndDate;
     }
 
     public ServiceOutletDTO getServiceOutlet() {
@@ -276,6 +347,13 @@ public class DepreciationEntryDTO implements Serializable {
             ", batchSequenceNumber=" + getBatchSequenceNumber() +
             ", processedItems='" + getProcessedItems() + "'" +
             ", totalItemsProcessed=" + getTotalItemsProcessed() +
+            ", elapsedMonths=" + getElapsedMonths() +
+            ", priorMonths=" + getPriorMonths() +
+            ", usefulLifeYears=" + getUsefulLifeYears() +
+            ", previousNBV=" + getPreviousNBV() +
+            ", netBookValue=" + getNetBookValue() +
+            ", depreciationPeriodStartDate='" + getDepreciationPeriodStartDate() + "'" +
+            ", depreciationPeriodEndDate='" + getDepreciationPeriodEndDate() + "'" +
             ", serviceOutlet=" + getServiceOutlet() +
             ", assetCategory=" + getAssetCategory() +
             ", depreciationMethod=" + getDepreciationMethod() +

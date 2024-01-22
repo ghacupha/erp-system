@@ -43,6 +43,34 @@
     {
       "fieldName": "totalItemsProcessed",
       "fieldType": "Integer"
+    },
+    {
+      "fieldName": "elapsedMonths",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "priorMonths",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "usefulLifeYears",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "previousNBV",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "netBookValue",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "depreciationPeriodStartDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "depreciationPeriodEndDate",
+      "fieldType": "LocalDate"
     }
   ],
   "relationships": [

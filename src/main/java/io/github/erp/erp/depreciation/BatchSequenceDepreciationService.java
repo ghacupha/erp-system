@@ -55,7 +55,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -96,7 +95,6 @@ public class BatchSequenceDepreciationService {
     private final FiscalMonthService fiscalMonthService;
     private final DepreciationJobNoticeService depreciationJobNoticeService;
     private final io.github.erp.service.DepreciationBatchSequenceService batchSequenceService;
-    private final DepreciationCompleteCallback depreciationCompleteCallback;
 
     public BatchSequenceDepreciationService(
         DepreciationCalculatorService depreciationCalculatorService,
@@ -109,7 +107,7 @@ public class BatchSequenceDepreciationService {
         DepreciationEntryService depreciationEntryService,
         FiscalMonthService fiscalMonthService,
         DepreciationJobNoticeService depreciationJobNoticeService,
-        io.github.erp.service.DepreciationBatchSequenceService batchSequenceService, DepreciationCompleteCallback depreciationCompleteCallback) {
+        io.github.erp.service.DepreciationBatchSequenceService batchSequenceService) {
         this.depreciationCalculatorService = depreciationCalculatorService;
         this.depreciationJobService = depreciationJobService;
         this.depreciationPeriodService = depreciationPeriodService;
@@ -121,7 +119,6 @@ public class BatchSequenceDepreciationService {
         this.fiscalMonthService = fiscalMonthService;
         this.depreciationJobNoticeService = depreciationJobNoticeService;
         this.batchSequenceService = batchSequenceService;
-        this.depreciationCompleteCallback = depreciationCompleteCallback;
     }
 
     /**
@@ -220,8 +217,6 @@ public class BatchSequenceDepreciationService {
                                 });
                             });
                         });
-                    // TODO Update the asset's net book value and any other relevant data
-                    // TODO Create and update netbook-value-entry
                 }
 
                 message.setProcessed(true);
@@ -253,7 +248,6 @@ public class BatchSequenceDepreciationService {
         depreciationEntry.setDepreciationMethod(depreciationMethod);
         depreciationEntry.setDepreciationPeriod(depreciationPeriod);
         depreciationEntry.setAssetCategory(assetCategory);
-        // TODO change this field to string
         depreciationEntry.setAssetNumber(Long.valueOf(assetRegistration.getAssetNumber()));
         depreciationEntry.setAssetRegistration(assetRegistration);
         depreciationEntry.setPostedAt(ZonedDateTime.now());
@@ -264,11 +258,13 @@ public class BatchSequenceDepreciationService {
         depreciationEntry.setDepreciationJob(depreciationJobDTO);
         depreciationEntry.setDepreciationBatchSequence(depreciationBatchSequenceDTO );
 
-        // TODO other values from the artefact
-        depreciationEntry.setElapsedMonths();
-        depreciationEntry.priorMonths();
-        depreciationEntry.usefulLifeYears();
-        depreciationEntry.nbvBeforeDepreciation();
+        depreciationEntry.setElapsedMonths(depreciationArtefact.getElapsedMonths());
+        depreciationEntry.setPriorMonths(depreciationArtefact.getPriorMonths());
+        depreciationEntry.setUsefulLifeYears(depreciationArtefact.getUsefulLifeYears());
+        depreciationEntry.setPreviousNBV(depreciationArtefact.getNbvBeforeDepreciation());
+        depreciationEntry.setNetBookValue(depreciationArtefact.getNbv());
+        depreciationEntry.setDepreciationPeriodStartDate(depreciationArtefact.getDepreciationPeriodStartDate());
+        depreciationEntry.setDepreciationPeriodEndDate(depreciationArtefact.getDepreciationPeriodEndDate());
 
         DepreciationEntryDTO depreciation = depreciationEntryService.save(depreciationEntry);
 

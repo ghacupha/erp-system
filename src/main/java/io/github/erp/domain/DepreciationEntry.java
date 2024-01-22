@@ -21,6 +21,7 @@ package io.github.erp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 import javax.persistence.*;
@@ -74,6 +75,27 @@ public class DepreciationEntry implements Serializable {
 
     @Column(name = "total_items_processed")
     private Integer totalItemsProcessed;
+
+    @Column(name = "elapsed_months")
+    private Long elapsedMonths;
+
+    @Column(name = "prior_months")
+    private Long priorMonths;
+
+    @Column(name = "useful_life_years", precision = 21, scale = 2)
+    private BigDecimal usefulLifeYears;
+
+    @Column(name = "previous_nbv", precision = 21, scale = 2)
+    private BigDecimal previousNBV;
+
+    @Column(name = "net_book_value", precision = 21, scale = 2)
+    private BigDecimal netBookValue;
+
+    @Column(name = "depreciation_period_start_date")
+    private LocalDate depreciationPeriodStartDate;
+
+    @Column(name = "depreciation_period_end_date")
+    private LocalDate depreciationPeriodEndDate;
 
     @ManyToOne
     @JsonIgnoreProperties(
@@ -283,6 +305,97 @@ public class DepreciationEntry implements Serializable {
         this.totalItemsProcessed = totalItemsProcessed;
     }
 
+    public Long getElapsedMonths() {
+        return this.elapsedMonths;
+    }
+
+    public DepreciationEntry elapsedMonths(Long elapsedMonths) {
+        this.setElapsedMonths(elapsedMonths);
+        return this;
+    }
+
+    public void setElapsedMonths(Long elapsedMonths) {
+        this.elapsedMonths = elapsedMonths;
+    }
+
+    public Long getPriorMonths() {
+        return this.priorMonths;
+    }
+
+    public DepreciationEntry priorMonths(Long priorMonths) {
+        this.setPriorMonths(priorMonths);
+        return this;
+    }
+
+    public void setPriorMonths(Long priorMonths) {
+        this.priorMonths = priorMonths;
+    }
+
+    public BigDecimal getUsefulLifeYears() {
+        return this.usefulLifeYears;
+    }
+
+    public DepreciationEntry usefulLifeYears(BigDecimal usefulLifeYears) {
+        this.setUsefulLifeYears(usefulLifeYears);
+        return this;
+    }
+
+    public void setUsefulLifeYears(BigDecimal usefulLifeYears) {
+        this.usefulLifeYears = usefulLifeYears;
+    }
+
+    public BigDecimal getPreviousNBV() {
+        return this.previousNBV;
+    }
+
+    public DepreciationEntry previousNBV(BigDecimal previousNBV) {
+        this.setPreviousNBV(previousNBV);
+        return this;
+    }
+
+    public void setPreviousNBV(BigDecimal previousNBV) {
+        this.previousNBV = previousNBV;
+    }
+
+    public BigDecimal getNetBookValue() {
+        return this.netBookValue;
+    }
+
+    public DepreciationEntry netBookValue(BigDecimal netBookValue) {
+        this.setNetBookValue(netBookValue);
+        return this;
+    }
+
+    public void setNetBookValue(BigDecimal netBookValue) {
+        this.netBookValue = netBookValue;
+    }
+
+    public LocalDate getDepreciationPeriodStartDate() {
+        return this.depreciationPeriodStartDate;
+    }
+
+    public DepreciationEntry depreciationPeriodStartDate(LocalDate depreciationPeriodStartDate) {
+        this.setDepreciationPeriodStartDate(depreciationPeriodStartDate);
+        return this;
+    }
+
+    public void setDepreciationPeriodStartDate(LocalDate depreciationPeriodStartDate) {
+        this.depreciationPeriodStartDate = depreciationPeriodStartDate;
+    }
+
+    public LocalDate getDepreciationPeriodEndDate() {
+        return this.depreciationPeriodEndDate;
+    }
+
+    public DepreciationEntry depreciationPeriodEndDate(LocalDate depreciationPeriodEndDate) {
+        this.setDepreciationPeriodEndDate(depreciationPeriodEndDate);
+        return this;
+    }
+
+    public void setDepreciationPeriodEndDate(LocalDate depreciationPeriodEndDate) {
+        this.depreciationPeriodEndDate = depreciationPeriodEndDate;
+    }
+
     public ServiceOutlet getServiceOutlet() {
         return this.serviceOutlet;
     }
@@ -447,6 +560,13 @@ public class DepreciationEntry implements Serializable {
             ", batchSequenceNumber=" + getBatchSequenceNumber() +
             ", processedItems='" + getProcessedItems() + "'" +
             ", totalItemsProcessed=" + getTotalItemsProcessed() +
+            ", elapsedMonths=" + getElapsedMonths() +
+            ", priorMonths=" + getPriorMonths() +
+            ", usefulLifeYears=" + getUsefulLifeYears() +
+            ", previousNBV=" + getPreviousNBV() +
+            ", netBookValue=" + getNetBookValue() +
+            ", depreciationPeriodStartDate='" + getDepreciationPeriodStartDate() + "'" +
+            ", depreciationPeriodEndDate='" + getDepreciationPeriodEndDate() + "'" +
             "}";
     }
 }

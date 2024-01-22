@@ -45,6 +45,7 @@ import io.github.erp.service.dto.DepreciationEntryDTO;
 import io.github.erp.service.mapper.DepreciationEntryMapper;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -112,6 +113,34 @@ class DepreciationEntryResourceIT {
     private static final Integer UPDATED_TOTAL_ITEMS_PROCESSED = 2;
     private static final Integer SMALLER_TOTAL_ITEMS_PROCESSED = 1 - 1;
 
+    private static final Long DEFAULT_ELAPSED_MONTHS = 1L;
+    private static final Long UPDATED_ELAPSED_MONTHS = 2L;
+    private static final Long SMALLER_ELAPSED_MONTHS = 1L - 1L;
+
+    private static final Long DEFAULT_PRIOR_MONTHS = 1L;
+    private static final Long UPDATED_PRIOR_MONTHS = 2L;
+    private static final Long SMALLER_PRIOR_MONTHS = 1L - 1L;
+
+    private static final BigDecimal DEFAULT_USEFUL_LIFE_YEARS = new BigDecimal(1);
+    private static final BigDecimal UPDATED_USEFUL_LIFE_YEARS = new BigDecimal(2);
+    private static final BigDecimal SMALLER_USEFUL_LIFE_YEARS = new BigDecimal(1 - 1);
+
+    private static final BigDecimal DEFAULT_PREVIOUS_NBV = new BigDecimal(1);
+    private static final BigDecimal UPDATED_PREVIOUS_NBV = new BigDecimal(2);
+    private static final BigDecimal SMALLER_PREVIOUS_NBV = new BigDecimal(1 - 1);
+
+    private static final BigDecimal DEFAULT_NET_BOOK_VALUE = new BigDecimal(1);
+    private static final BigDecimal UPDATED_NET_BOOK_VALUE = new BigDecimal(2);
+    private static final BigDecimal SMALLER_NET_BOOK_VALUE = new BigDecimal(1 - 1);
+
+    private static final LocalDate DEFAULT_DEPRECIATION_PERIOD_START_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DEPRECIATION_PERIOD_START_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_DEPRECIATION_PERIOD_START_DATE = LocalDate.ofEpochDay(-1L);
+
+    private static final LocalDate DEFAULT_DEPRECIATION_PERIOD_END_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DEPRECIATION_PERIOD_END_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_DEPRECIATION_PERIOD_END_DATE = LocalDate.ofEpochDay(-1L);
+
     private static final String ENTITY_API_URL = "/api/depreciation-entries";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/depreciation-entries";
@@ -158,7 +187,14 @@ class DepreciationEntryResourceIT {
             .fiscalQuarterIdentifier(DEFAULT_FISCAL_QUARTER_IDENTIFIER)
             .batchSequenceNumber(DEFAULT_BATCH_SEQUENCE_NUMBER)
             .processedItems(DEFAULT_PROCESSED_ITEMS)
-            .totalItemsProcessed(DEFAULT_TOTAL_ITEMS_PROCESSED);
+            .totalItemsProcessed(DEFAULT_TOTAL_ITEMS_PROCESSED)
+            .elapsedMonths(DEFAULT_ELAPSED_MONTHS)
+            .priorMonths(DEFAULT_PRIOR_MONTHS)
+            .usefulLifeYears(DEFAULT_USEFUL_LIFE_YEARS)
+            .previousNBV(DEFAULT_PREVIOUS_NBV)
+            .netBookValue(DEFAULT_NET_BOOK_VALUE)
+            .depreciationPeriodStartDate(DEFAULT_DEPRECIATION_PERIOD_START_DATE)
+            .depreciationPeriodEndDate(DEFAULT_DEPRECIATION_PERIOD_END_DATE);
         return depreciationEntry;
     }
 
@@ -179,7 +215,14 @@ class DepreciationEntryResourceIT {
             .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER)
             .batchSequenceNumber(UPDATED_BATCH_SEQUENCE_NUMBER)
             .processedItems(UPDATED_PROCESSED_ITEMS)
-            .totalItemsProcessed(UPDATED_TOTAL_ITEMS_PROCESSED);
+            .totalItemsProcessed(UPDATED_TOTAL_ITEMS_PROCESSED)
+            .elapsedMonths(UPDATED_ELAPSED_MONTHS)
+            .priorMonths(UPDATED_PRIOR_MONTHS)
+            .usefulLifeYears(UPDATED_USEFUL_LIFE_YEARS)
+            .previousNBV(UPDATED_PREVIOUS_NBV)
+            .netBookValue(UPDATED_NET_BOOK_VALUE)
+            .depreciationPeriodStartDate(UPDATED_DEPRECIATION_PERIOD_START_DATE)
+            .depreciationPeriodEndDate(UPDATED_DEPRECIATION_PERIOD_END_DATE);
         return depreciationEntry;
     }
 
@@ -216,6 +259,13 @@ class DepreciationEntryResourceIT {
         assertThat(testDepreciationEntry.getBatchSequenceNumber()).isEqualTo(DEFAULT_BATCH_SEQUENCE_NUMBER);
         assertThat(testDepreciationEntry.getProcessedItems()).isEqualTo(DEFAULT_PROCESSED_ITEMS);
         assertThat(testDepreciationEntry.getTotalItemsProcessed()).isEqualTo(DEFAULT_TOTAL_ITEMS_PROCESSED);
+        assertThat(testDepreciationEntry.getElapsedMonths()).isEqualTo(DEFAULT_ELAPSED_MONTHS);
+        assertThat(testDepreciationEntry.getPriorMonths()).isEqualTo(DEFAULT_PRIOR_MONTHS);
+        assertThat(testDepreciationEntry.getUsefulLifeYears()).isEqualByComparingTo(DEFAULT_USEFUL_LIFE_YEARS);
+        assertThat(testDepreciationEntry.getPreviousNBV()).isEqualByComparingTo(DEFAULT_PREVIOUS_NBV);
+        assertThat(testDepreciationEntry.getNetBookValue()).isEqualByComparingTo(DEFAULT_NET_BOOK_VALUE);
+        assertThat(testDepreciationEntry.getDepreciationPeriodStartDate()).isEqualTo(DEFAULT_DEPRECIATION_PERIOD_START_DATE);
+        assertThat(testDepreciationEntry.getDepreciationPeriodEndDate()).isEqualTo(DEFAULT_DEPRECIATION_PERIOD_END_DATE);
 
         // Validate the DepreciationEntry in Elasticsearch
         verify(mockDepreciationEntrySearchRepository, times(1)).save(testDepreciationEntry);
@@ -268,7 +318,14 @@ class DepreciationEntryResourceIT {
             .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].batchSequenceNumber").value(hasItem(DEFAULT_BATCH_SEQUENCE_NUMBER)))
             .andExpect(jsonPath("$.[*].processedItems").value(hasItem(DEFAULT_PROCESSED_ITEMS)))
-            .andExpect(jsonPath("$.[*].totalItemsProcessed").value(hasItem(DEFAULT_TOTAL_ITEMS_PROCESSED)));
+            .andExpect(jsonPath("$.[*].totalItemsProcessed").value(hasItem(DEFAULT_TOTAL_ITEMS_PROCESSED)))
+            .andExpect(jsonPath("$.[*].elapsedMonths").value(hasItem(DEFAULT_ELAPSED_MONTHS.intValue())))
+            .andExpect(jsonPath("$.[*].priorMonths").value(hasItem(DEFAULT_PRIOR_MONTHS.intValue())))
+            .andExpect(jsonPath("$.[*].usefulLifeYears").value(hasItem(sameNumber(DEFAULT_USEFUL_LIFE_YEARS))))
+            .andExpect(jsonPath("$.[*].previousNBV").value(hasItem(sameNumber(DEFAULT_PREVIOUS_NBV))))
+            .andExpect(jsonPath("$.[*].netBookValue").value(hasItem(sameNumber(DEFAULT_NET_BOOK_VALUE))))
+            .andExpect(jsonPath("$.[*].depreciationPeriodStartDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].depreciationPeriodEndDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_END_DATE.toString())));
     }
 
     @Test
@@ -292,7 +349,14 @@ class DepreciationEntryResourceIT {
             .andExpect(jsonPath("$.fiscalQuarterIdentifier").value(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString()))
             .andExpect(jsonPath("$.batchSequenceNumber").value(DEFAULT_BATCH_SEQUENCE_NUMBER))
             .andExpect(jsonPath("$.processedItems").value(DEFAULT_PROCESSED_ITEMS))
-            .andExpect(jsonPath("$.totalItemsProcessed").value(DEFAULT_TOTAL_ITEMS_PROCESSED));
+            .andExpect(jsonPath("$.totalItemsProcessed").value(DEFAULT_TOTAL_ITEMS_PROCESSED))
+            .andExpect(jsonPath("$.elapsedMonths").value(DEFAULT_ELAPSED_MONTHS.intValue()))
+            .andExpect(jsonPath("$.priorMonths").value(DEFAULT_PRIOR_MONTHS.intValue()))
+            .andExpect(jsonPath("$.usefulLifeYears").value(sameNumber(DEFAULT_USEFUL_LIFE_YEARS)))
+            .andExpect(jsonPath("$.previousNBV").value(sameNumber(DEFAULT_PREVIOUS_NBV)))
+            .andExpect(jsonPath("$.netBookValue").value(sameNumber(DEFAULT_NET_BOOK_VALUE)))
+            .andExpect(jsonPath("$.depreciationPeriodStartDate").value(DEFAULT_DEPRECIATION_PERIOD_START_DATE.toString()))
+            .andExpect(jsonPath("$.depreciationPeriodEndDate").value(DEFAULT_DEPRECIATION_PERIOD_END_DATE.toString()));
     }
 
     @Test
@@ -1133,6 +1197,740 @@ class DepreciationEntryResourceIT {
 
     @Test
     @Transactional
+    void getAllDepreciationEntriesByElapsedMonthsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where elapsedMonths equals to DEFAULT_ELAPSED_MONTHS
+        defaultDepreciationEntryShouldBeFound("elapsedMonths.equals=" + DEFAULT_ELAPSED_MONTHS);
+
+        // Get all the depreciationEntryList where elapsedMonths equals to UPDATED_ELAPSED_MONTHS
+        defaultDepreciationEntryShouldNotBeFound("elapsedMonths.equals=" + UPDATED_ELAPSED_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByElapsedMonthsIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where elapsedMonths not equals to DEFAULT_ELAPSED_MONTHS
+        defaultDepreciationEntryShouldNotBeFound("elapsedMonths.notEquals=" + DEFAULT_ELAPSED_MONTHS);
+
+        // Get all the depreciationEntryList where elapsedMonths not equals to UPDATED_ELAPSED_MONTHS
+        defaultDepreciationEntryShouldBeFound("elapsedMonths.notEquals=" + UPDATED_ELAPSED_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByElapsedMonthsIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where elapsedMonths in DEFAULT_ELAPSED_MONTHS or UPDATED_ELAPSED_MONTHS
+        defaultDepreciationEntryShouldBeFound("elapsedMonths.in=" + DEFAULT_ELAPSED_MONTHS + "," + UPDATED_ELAPSED_MONTHS);
+
+        // Get all the depreciationEntryList where elapsedMonths equals to UPDATED_ELAPSED_MONTHS
+        defaultDepreciationEntryShouldNotBeFound("elapsedMonths.in=" + UPDATED_ELAPSED_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByElapsedMonthsIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where elapsedMonths is not null
+        defaultDepreciationEntryShouldBeFound("elapsedMonths.specified=true");
+
+        // Get all the depreciationEntryList where elapsedMonths is null
+        defaultDepreciationEntryShouldNotBeFound("elapsedMonths.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByElapsedMonthsIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where elapsedMonths is greater than or equal to DEFAULT_ELAPSED_MONTHS
+        defaultDepreciationEntryShouldBeFound("elapsedMonths.greaterThanOrEqual=" + DEFAULT_ELAPSED_MONTHS);
+
+        // Get all the depreciationEntryList where elapsedMonths is greater than or equal to UPDATED_ELAPSED_MONTHS
+        defaultDepreciationEntryShouldNotBeFound("elapsedMonths.greaterThanOrEqual=" + UPDATED_ELAPSED_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByElapsedMonthsIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where elapsedMonths is less than or equal to DEFAULT_ELAPSED_MONTHS
+        defaultDepreciationEntryShouldBeFound("elapsedMonths.lessThanOrEqual=" + DEFAULT_ELAPSED_MONTHS);
+
+        // Get all the depreciationEntryList where elapsedMonths is less than or equal to SMALLER_ELAPSED_MONTHS
+        defaultDepreciationEntryShouldNotBeFound("elapsedMonths.lessThanOrEqual=" + SMALLER_ELAPSED_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByElapsedMonthsIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where elapsedMonths is less than DEFAULT_ELAPSED_MONTHS
+        defaultDepreciationEntryShouldNotBeFound("elapsedMonths.lessThan=" + DEFAULT_ELAPSED_MONTHS);
+
+        // Get all the depreciationEntryList where elapsedMonths is less than UPDATED_ELAPSED_MONTHS
+        defaultDepreciationEntryShouldBeFound("elapsedMonths.lessThan=" + UPDATED_ELAPSED_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByElapsedMonthsIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where elapsedMonths is greater than DEFAULT_ELAPSED_MONTHS
+        defaultDepreciationEntryShouldNotBeFound("elapsedMonths.greaterThan=" + DEFAULT_ELAPSED_MONTHS);
+
+        // Get all the depreciationEntryList where elapsedMonths is greater than SMALLER_ELAPSED_MONTHS
+        defaultDepreciationEntryShouldBeFound("elapsedMonths.greaterThan=" + SMALLER_ELAPSED_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByPriorMonthsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where priorMonths equals to DEFAULT_PRIOR_MONTHS
+        defaultDepreciationEntryShouldBeFound("priorMonths.equals=" + DEFAULT_PRIOR_MONTHS);
+
+        // Get all the depreciationEntryList where priorMonths equals to UPDATED_PRIOR_MONTHS
+        defaultDepreciationEntryShouldNotBeFound("priorMonths.equals=" + UPDATED_PRIOR_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByPriorMonthsIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where priorMonths not equals to DEFAULT_PRIOR_MONTHS
+        defaultDepreciationEntryShouldNotBeFound("priorMonths.notEquals=" + DEFAULT_PRIOR_MONTHS);
+
+        // Get all the depreciationEntryList where priorMonths not equals to UPDATED_PRIOR_MONTHS
+        defaultDepreciationEntryShouldBeFound("priorMonths.notEquals=" + UPDATED_PRIOR_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByPriorMonthsIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where priorMonths in DEFAULT_PRIOR_MONTHS or UPDATED_PRIOR_MONTHS
+        defaultDepreciationEntryShouldBeFound("priorMonths.in=" + DEFAULT_PRIOR_MONTHS + "," + UPDATED_PRIOR_MONTHS);
+
+        // Get all the depreciationEntryList where priorMonths equals to UPDATED_PRIOR_MONTHS
+        defaultDepreciationEntryShouldNotBeFound("priorMonths.in=" + UPDATED_PRIOR_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByPriorMonthsIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where priorMonths is not null
+        defaultDepreciationEntryShouldBeFound("priorMonths.specified=true");
+
+        // Get all the depreciationEntryList where priorMonths is null
+        defaultDepreciationEntryShouldNotBeFound("priorMonths.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByPriorMonthsIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where priorMonths is greater than or equal to DEFAULT_PRIOR_MONTHS
+        defaultDepreciationEntryShouldBeFound("priorMonths.greaterThanOrEqual=" + DEFAULT_PRIOR_MONTHS);
+
+        // Get all the depreciationEntryList where priorMonths is greater than or equal to UPDATED_PRIOR_MONTHS
+        defaultDepreciationEntryShouldNotBeFound("priorMonths.greaterThanOrEqual=" + UPDATED_PRIOR_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByPriorMonthsIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where priorMonths is less than or equal to DEFAULT_PRIOR_MONTHS
+        defaultDepreciationEntryShouldBeFound("priorMonths.lessThanOrEqual=" + DEFAULT_PRIOR_MONTHS);
+
+        // Get all the depreciationEntryList where priorMonths is less than or equal to SMALLER_PRIOR_MONTHS
+        defaultDepreciationEntryShouldNotBeFound("priorMonths.lessThanOrEqual=" + SMALLER_PRIOR_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByPriorMonthsIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where priorMonths is less than DEFAULT_PRIOR_MONTHS
+        defaultDepreciationEntryShouldNotBeFound("priorMonths.lessThan=" + DEFAULT_PRIOR_MONTHS);
+
+        // Get all the depreciationEntryList where priorMonths is less than UPDATED_PRIOR_MONTHS
+        defaultDepreciationEntryShouldBeFound("priorMonths.lessThan=" + UPDATED_PRIOR_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByPriorMonthsIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where priorMonths is greater than DEFAULT_PRIOR_MONTHS
+        defaultDepreciationEntryShouldNotBeFound("priorMonths.greaterThan=" + DEFAULT_PRIOR_MONTHS);
+
+        // Get all the depreciationEntryList where priorMonths is greater than SMALLER_PRIOR_MONTHS
+        defaultDepreciationEntryShouldBeFound("priorMonths.greaterThan=" + SMALLER_PRIOR_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByUsefulLifeYearsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where usefulLifeYears equals to DEFAULT_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryShouldBeFound("usefulLifeYears.equals=" + DEFAULT_USEFUL_LIFE_YEARS);
+
+        // Get all the depreciationEntryList where usefulLifeYears equals to UPDATED_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryShouldNotBeFound("usefulLifeYears.equals=" + UPDATED_USEFUL_LIFE_YEARS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByUsefulLifeYearsIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where usefulLifeYears not equals to DEFAULT_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryShouldNotBeFound("usefulLifeYears.notEquals=" + DEFAULT_USEFUL_LIFE_YEARS);
+
+        // Get all the depreciationEntryList where usefulLifeYears not equals to UPDATED_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryShouldBeFound("usefulLifeYears.notEquals=" + UPDATED_USEFUL_LIFE_YEARS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByUsefulLifeYearsIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where usefulLifeYears in DEFAULT_USEFUL_LIFE_YEARS or UPDATED_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryShouldBeFound("usefulLifeYears.in=" + DEFAULT_USEFUL_LIFE_YEARS + "," + UPDATED_USEFUL_LIFE_YEARS);
+
+        // Get all the depreciationEntryList where usefulLifeYears equals to UPDATED_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryShouldNotBeFound("usefulLifeYears.in=" + UPDATED_USEFUL_LIFE_YEARS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByUsefulLifeYearsIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where usefulLifeYears is not null
+        defaultDepreciationEntryShouldBeFound("usefulLifeYears.specified=true");
+
+        // Get all the depreciationEntryList where usefulLifeYears is null
+        defaultDepreciationEntryShouldNotBeFound("usefulLifeYears.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByUsefulLifeYearsIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where usefulLifeYears is greater than or equal to DEFAULT_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryShouldBeFound("usefulLifeYears.greaterThanOrEqual=" + DEFAULT_USEFUL_LIFE_YEARS);
+
+        // Get all the depreciationEntryList where usefulLifeYears is greater than or equal to UPDATED_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryShouldNotBeFound("usefulLifeYears.greaterThanOrEqual=" + UPDATED_USEFUL_LIFE_YEARS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByUsefulLifeYearsIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where usefulLifeYears is less than or equal to DEFAULT_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryShouldBeFound("usefulLifeYears.lessThanOrEqual=" + DEFAULT_USEFUL_LIFE_YEARS);
+
+        // Get all the depreciationEntryList where usefulLifeYears is less than or equal to SMALLER_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryShouldNotBeFound("usefulLifeYears.lessThanOrEqual=" + SMALLER_USEFUL_LIFE_YEARS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByUsefulLifeYearsIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where usefulLifeYears is less than DEFAULT_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryShouldNotBeFound("usefulLifeYears.lessThan=" + DEFAULT_USEFUL_LIFE_YEARS);
+
+        // Get all the depreciationEntryList where usefulLifeYears is less than UPDATED_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryShouldBeFound("usefulLifeYears.lessThan=" + UPDATED_USEFUL_LIFE_YEARS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByUsefulLifeYearsIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where usefulLifeYears is greater than DEFAULT_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryShouldNotBeFound("usefulLifeYears.greaterThan=" + DEFAULT_USEFUL_LIFE_YEARS);
+
+        // Get all the depreciationEntryList where usefulLifeYears is greater than SMALLER_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryShouldBeFound("usefulLifeYears.greaterThan=" + SMALLER_USEFUL_LIFE_YEARS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByPreviousNBVIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where previousNBV equals to DEFAULT_PREVIOUS_NBV
+        defaultDepreciationEntryShouldBeFound("previousNBV.equals=" + DEFAULT_PREVIOUS_NBV);
+
+        // Get all the depreciationEntryList where previousNBV equals to UPDATED_PREVIOUS_NBV
+        defaultDepreciationEntryShouldNotBeFound("previousNBV.equals=" + UPDATED_PREVIOUS_NBV);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByPreviousNBVIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where previousNBV not equals to DEFAULT_PREVIOUS_NBV
+        defaultDepreciationEntryShouldNotBeFound("previousNBV.notEquals=" + DEFAULT_PREVIOUS_NBV);
+
+        // Get all the depreciationEntryList where previousNBV not equals to UPDATED_PREVIOUS_NBV
+        defaultDepreciationEntryShouldBeFound("previousNBV.notEquals=" + UPDATED_PREVIOUS_NBV);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByPreviousNBVIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where previousNBV in DEFAULT_PREVIOUS_NBV or UPDATED_PREVIOUS_NBV
+        defaultDepreciationEntryShouldBeFound("previousNBV.in=" + DEFAULT_PREVIOUS_NBV + "," + UPDATED_PREVIOUS_NBV);
+
+        // Get all the depreciationEntryList where previousNBV equals to UPDATED_PREVIOUS_NBV
+        defaultDepreciationEntryShouldNotBeFound("previousNBV.in=" + UPDATED_PREVIOUS_NBV);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByPreviousNBVIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where previousNBV is not null
+        defaultDepreciationEntryShouldBeFound("previousNBV.specified=true");
+
+        // Get all the depreciationEntryList where previousNBV is null
+        defaultDepreciationEntryShouldNotBeFound("previousNBV.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByPreviousNBVIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where previousNBV is greater than or equal to DEFAULT_PREVIOUS_NBV
+        defaultDepreciationEntryShouldBeFound("previousNBV.greaterThanOrEqual=" + DEFAULT_PREVIOUS_NBV);
+
+        // Get all the depreciationEntryList where previousNBV is greater than or equal to UPDATED_PREVIOUS_NBV
+        defaultDepreciationEntryShouldNotBeFound("previousNBV.greaterThanOrEqual=" + UPDATED_PREVIOUS_NBV);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByPreviousNBVIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where previousNBV is less than or equal to DEFAULT_PREVIOUS_NBV
+        defaultDepreciationEntryShouldBeFound("previousNBV.lessThanOrEqual=" + DEFAULT_PREVIOUS_NBV);
+
+        // Get all the depreciationEntryList where previousNBV is less than or equal to SMALLER_PREVIOUS_NBV
+        defaultDepreciationEntryShouldNotBeFound("previousNBV.lessThanOrEqual=" + SMALLER_PREVIOUS_NBV);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByPreviousNBVIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where previousNBV is less than DEFAULT_PREVIOUS_NBV
+        defaultDepreciationEntryShouldNotBeFound("previousNBV.lessThan=" + DEFAULT_PREVIOUS_NBV);
+
+        // Get all the depreciationEntryList where previousNBV is less than UPDATED_PREVIOUS_NBV
+        defaultDepreciationEntryShouldBeFound("previousNBV.lessThan=" + UPDATED_PREVIOUS_NBV);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByPreviousNBVIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where previousNBV is greater than DEFAULT_PREVIOUS_NBV
+        defaultDepreciationEntryShouldNotBeFound("previousNBV.greaterThan=" + DEFAULT_PREVIOUS_NBV);
+
+        // Get all the depreciationEntryList where previousNBV is greater than SMALLER_PREVIOUS_NBV
+        defaultDepreciationEntryShouldBeFound("previousNBV.greaterThan=" + SMALLER_PREVIOUS_NBV);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByNetBookValueIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where netBookValue equals to DEFAULT_NET_BOOK_VALUE
+        defaultDepreciationEntryShouldBeFound("netBookValue.equals=" + DEFAULT_NET_BOOK_VALUE);
+
+        // Get all the depreciationEntryList where netBookValue equals to UPDATED_NET_BOOK_VALUE
+        defaultDepreciationEntryShouldNotBeFound("netBookValue.equals=" + UPDATED_NET_BOOK_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByNetBookValueIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where netBookValue not equals to DEFAULT_NET_BOOK_VALUE
+        defaultDepreciationEntryShouldNotBeFound("netBookValue.notEquals=" + DEFAULT_NET_BOOK_VALUE);
+
+        // Get all the depreciationEntryList where netBookValue not equals to UPDATED_NET_BOOK_VALUE
+        defaultDepreciationEntryShouldBeFound("netBookValue.notEquals=" + UPDATED_NET_BOOK_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByNetBookValueIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where netBookValue in DEFAULT_NET_BOOK_VALUE or UPDATED_NET_BOOK_VALUE
+        defaultDepreciationEntryShouldBeFound("netBookValue.in=" + DEFAULT_NET_BOOK_VALUE + "," + UPDATED_NET_BOOK_VALUE);
+
+        // Get all the depreciationEntryList where netBookValue equals to UPDATED_NET_BOOK_VALUE
+        defaultDepreciationEntryShouldNotBeFound("netBookValue.in=" + UPDATED_NET_BOOK_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByNetBookValueIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where netBookValue is not null
+        defaultDepreciationEntryShouldBeFound("netBookValue.specified=true");
+
+        // Get all the depreciationEntryList where netBookValue is null
+        defaultDepreciationEntryShouldNotBeFound("netBookValue.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByNetBookValueIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where netBookValue is greater than or equal to DEFAULT_NET_BOOK_VALUE
+        defaultDepreciationEntryShouldBeFound("netBookValue.greaterThanOrEqual=" + DEFAULT_NET_BOOK_VALUE);
+
+        // Get all the depreciationEntryList where netBookValue is greater than or equal to UPDATED_NET_BOOK_VALUE
+        defaultDepreciationEntryShouldNotBeFound("netBookValue.greaterThanOrEqual=" + UPDATED_NET_BOOK_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByNetBookValueIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where netBookValue is less than or equal to DEFAULT_NET_BOOK_VALUE
+        defaultDepreciationEntryShouldBeFound("netBookValue.lessThanOrEqual=" + DEFAULT_NET_BOOK_VALUE);
+
+        // Get all the depreciationEntryList where netBookValue is less than or equal to SMALLER_NET_BOOK_VALUE
+        defaultDepreciationEntryShouldNotBeFound("netBookValue.lessThanOrEqual=" + SMALLER_NET_BOOK_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByNetBookValueIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where netBookValue is less than DEFAULT_NET_BOOK_VALUE
+        defaultDepreciationEntryShouldNotBeFound("netBookValue.lessThan=" + DEFAULT_NET_BOOK_VALUE);
+
+        // Get all the depreciationEntryList where netBookValue is less than UPDATED_NET_BOOK_VALUE
+        defaultDepreciationEntryShouldBeFound("netBookValue.lessThan=" + UPDATED_NET_BOOK_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByNetBookValueIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where netBookValue is greater than DEFAULT_NET_BOOK_VALUE
+        defaultDepreciationEntryShouldNotBeFound("netBookValue.greaterThan=" + DEFAULT_NET_BOOK_VALUE);
+
+        // Get all the depreciationEntryList where netBookValue is greater than SMALLER_NET_BOOK_VALUE
+        defaultDepreciationEntryShouldBeFound("netBookValue.greaterThan=" + SMALLER_NET_BOOK_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationPeriodStartDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationPeriodStartDate equals to DEFAULT_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryShouldBeFound("depreciationPeriodStartDate.equals=" + DEFAULT_DEPRECIATION_PERIOD_START_DATE);
+
+        // Get all the depreciationEntryList where depreciationPeriodStartDate equals to UPDATED_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryShouldNotBeFound("depreciationPeriodStartDate.equals=" + UPDATED_DEPRECIATION_PERIOD_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationPeriodStartDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationPeriodStartDate not equals to DEFAULT_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryShouldNotBeFound("depreciationPeriodStartDate.notEquals=" + DEFAULT_DEPRECIATION_PERIOD_START_DATE);
+
+        // Get all the depreciationEntryList where depreciationPeriodStartDate not equals to UPDATED_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryShouldBeFound("depreciationPeriodStartDate.notEquals=" + UPDATED_DEPRECIATION_PERIOD_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationPeriodStartDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationPeriodStartDate in DEFAULT_DEPRECIATION_PERIOD_START_DATE or UPDATED_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryShouldBeFound(
+            "depreciationPeriodStartDate.in=" + DEFAULT_DEPRECIATION_PERIOD_START_DATE + "," + UPDATED_DEPRECIATION_PERIOD_START_DATE
+        );
+
+        // Get all the depreciationEntryList where depreciationPeriodStartDate equals to UPDATED_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryShouldNotBeFound("depreciationPeriodStartDate.in=" + UPDATED_DEPRECIATION_PERIOD_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationPeriodStartDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationPeriodStartDate is not null
+        defaultDepreciationEntryShouldBeFound("depreciationPeriodStartDate.specified=true");
+
+        // Get all the depreciationEntryList where depreciationPeriodStartDate is null
+        defaultDepreciationEntryShouldNotBeFound("depreciationPeriodStartDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationPeriodStartDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationPeriodStartDate is greater than or equal to DEFAULT_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryShouldBeFound("depreciationPeriodStartDate.greaterThanOrEqual=" + DEFAULT_DEPRECIATION_PERIOD_START_DATE);
+
+        // Get all the depreciationEntryList where depreciationPeriodStartDate is greater than or equal to UPDATED_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryShouldNotBeFound(
+            "depreciationPeriodStartDate.greaterThanOrEqual=" + UPDATED_DEPRECIATION_PERIOD_START_DATE
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationPeriodStartDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationPeriodStartDate is less than or equal to DEFAULT_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryShouldBeFound("depreciationPeriodStartDate.lessThanOrEqual=" + DEFAULT_DEPRECIATION_PERIOD_START_DATE);
+
+        // Get all the depreciationEntryList where depreciationPeriodStartDate is less than or equal to SMALLER_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryShouldNotBeFound("depreciationPeriodStartDate.lessThanOrEqual=" + SMALLER_DEPRECIATION_PERIOD_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationPeriodStartDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationPeriodStartDate is less than DEFAULT_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryShouldNotBeFound("depreciationPeriodStartDate.lessThan=" + DEFAULT_DEPRECIATION_PERIOD_START_DATE);
+
+        // Get all the depreciationEntryList where depreciationPeriodStartDate is less than UPDATED_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryShouldBeFound("depreciationPeriodStartDate.lessThan=" + UPDATED_DEPRECIATION_PERIOD_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationPeriodStartDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationPeriodStartDate is greater than DEFAULT_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryShouldNotBeFound("depreciationPeriodStartDate.greaterThan=" + DEFAULT_DEPRECIATION_PERIOD_START_DATE);
+
+        // Get all the depreciationEntryList where depreciationPeriodStartDate is greater than SMALLER_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryShouldBeFound("depreciationPeriodStartDate.greaterThan=" + SMALLER_DEPRECIATION_PERIOD_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationPeriodEndDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationPeriodEndDate equals to DEFAULT_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryShouldBeFound("depreciationPeriodEndDate.equals=" + DEFAULT_DEPRECIATION_PERIOD_END_DATE);
+
+        // Get all the depreciationEntryList where depreciationPeriodEndDate equals to UPDATED_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryShouldNotBeFound("depreciationPeriodEndDate.equals=" + UPDATED_DEPRECIATION_PERIOD_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationPeriodEndDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationPeriodEndDate not equals to DEFAULT_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryShouldNotBeFound("depreciationPeriodEndDate.notEquals=" + DEFAULT_DEPRECIATION_PERIOD_END_DATE);
+
+        // Get all the depreciationEntryList where depreciationPeriodEndDate not equals to UPDATED_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryShouldBeFound("depreciationPeriodEndDate.notEquals=" + UPDATED_DEPRECIATION_PERIOD_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationPeriodEndDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationPeriodEndDate in DEFAULT_DEPRECIATION_PERIOD_END_DATE or UPDATED_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryShouldBeFound(
+            "depreciationPeriodEndDate.in=" + DEFAULT_DEPRECIATION_PERIOD_END_DATE + "," + UPDATED_DEPRECIATION_PERIOD_END_DATE
+        );
+
+        // Get all the depreciationEntryList where depreciationPeriodEndDate equals to UPDATED_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryShouldNotBeFound("depreciationPeriodEndDate.in=" + UPDATED_DEPRECIATION_PERIOD_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationPeriodEndDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationPeriodEndDate is not null
+        defaultDepreciationEntryShouldBeFound("depreciationPeriodEndDate.specified=true");
+
+        // Get all the depreciationEntryList where depreciationPeriodEndDate is null
+        defaultDepreciationEntryShouldNotBeFound("depreciationPeriodEndDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationPeriodEndDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationPeriodEndDate is greater than or equal to DEFAULT_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryShouldBeFound("depreciationPeriodEndDate.greaterThanOrEqual=" + DEFAULT_DEPRECIATION_PERIOD_END_DATE);
+
+        // Get all the depreciationEntryList where depreciationPeriodEndDate is greater than or equal to UPDATED_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryShouldNotBeFound("depreciationPeriodEndDate.greaterThanOrEqual=" + UPDATED_DEPRECIATION_PERIOD_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationPeriodEndDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationPeriodEndDate is less than or equal to DEFAULT_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryShouldBeFound("depreciationPeriodEndDate.lessThanOrEqual=" + DEFAULT_DEPRECIATION_PERIOD_END_DATE);
+
+        // Get all the depreciationEntryList where depreciationPeriodEndDate is less than or equal to SMALLER_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryShouldNotBeFound("depreciationPeriodEndDate.lessThanOrEqual=" + SMALLER_DEPRECIATION_PERIOD_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationPeriodEndDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationPeriodEndDate is less than DEFAULT_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryShouldNotBeFound("depreciationPeriodEndDate.lessThan=" + DEFAULT_DEPRECIATION_PERIOD_END_DATE);
+
+        // Get all the depreciationEntryList where depreciationPeriodEndDate is less than UPDATED_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryShouldBeFound("depreciationPeriodEndDate.lessThan=" + UPDATED_DEPRECIATION_PERIOD_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByDepreciationPeriodEndDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where depreciationPeriodEndDate is greater than DEFAULT_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryShouldNotBeFound("depreciationPeriodEndDate.greaterThan=" + DEFAULT_DEPRECIATION_PERIOD_END_DATE);
+
+        // Get all the depreciationEntryList where depreciationPeriodEndDate is greater than SMALLER_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryShouldBeFound("depreciationPeriodEndDate.greaterThan=" + SMALLER_DEPRECIATION_PERIOD_END_DATE);
+    }
+
+    @Test
+    @Transactional
     void getAllDepreciationEntriesByServiceOutletIsEqualToSomething() throws Exception {
         // Initialize the database
         depreciationEntryRepository.saveAndFlush(depreciationEntry);
@@ -1409,7 +2207,14 @@ class DepreciationEntryResourceIT {
             .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].batchSequenceNumber").value(hasItem(DEFAULT_BATCH_SEQUENCE_NUMBER)))
             .andExpect(jsonPath("$.[*].processedItems").value(hasItem(DEFAULT_PROCESSED_ITEMS)))
-            .andExpect(jsonPath("$.[*].totalItemsProcessed").value(hasItem(DEFAULT_TOTAL_ITEMS_PROCESSED)));
+            .andExpect(jsonPath("$.[*].totalItemsProcessed").value(hasItem(DEFAULT_TOTAL_ITEMS_PROCESSED)))
+            .andExpect(jsonPath("$.[*].elapsedMonths").value(hasItem(DEFAULT_ELAPSED_MONTHS.intValue())))
+            .andExpect(jsonPath("$.[*].priorMonths").value(hasItem(DEFAULT_PRIOR_MONTHS.intValue())))
+            .andExpect(jsonPath("$.[*].usefulLifeYears").value(hasItem(sameNumber(DEFAULT_USEFUL_LIFE_YEARS))))
+            .andExpect(jsonPath("$.[*].previousNBV").value(hasItem(sameNumber(DEFAULT_PREVIOUS_NBV))))
+            .andExpect(jsonPath("$.[*].netBookValue").value(hasItem(sameNumber(DEFAULT_NET_BOOK_VALUE))))
+            .andExpect(jsonPath("$.[*].depreciationPeriodStartDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].depreciationPeriodEndDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_END_DATE.toString())));
 
         // Check, that the count call also returns 1
         restDepreciationEntryMockMvc
@@ -1467,7 +2272,14 @@ class DepreciationEntryResourceIT {
             .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER)
             .batchSequenceNumber(UPDATED_BATCH_SEQUENCE_NUMBER)
             .processedItems(UPDATED_PROCESSED_ITEMS)
-            .totalItemsProcessed(UPDATED_TOTAL_ITEMS_PROCESSED);
+            .totalItemsProcessed(UPDATED_TOTAL_ITEMS_PROCESSED)
+            .elapsedMonths(UPDATED_ELAPSED_MONTHS)
+            .priorMonths(UPDATED_PRIOR_MONTHS)
+            .usefulLifeYears(UPDATED_USEFUL_LIFE_YEARS)
+            .previousNBV(UPDATED_PREVIOUS_NBV)
+            .netBookValue(UPDATED_NET_BOOK_VALUE)
+            .depreciationPeriodStartDate(UPDATED_DEPRECIATION_PERIOD_START_DATE)
+            .depreciationPeriodEndDate(UPDATED_DEPRECIATION_PERIOD_END_DATE);
         DepreciationEntryDTO depreciationEntryDTO = depreciationEntryMapper.toDto(updatedDepreciationEntry);
 
         restDepreciationEntryMockMvc
@@ -1492,6 +2304,13 @@ class DepreciationEntryResourceIT {
         assertThat(testDepreciationEntry.getBatchSequenceNumber()).isEqualTo(UPDATED_BATCH_SEQUENCE_NUMBER);
         assertThat(testDepreciationEntry.getProcessedItems()).isEqualTo(UPDATED_PROCESSED_ITEMS);
         assertThat(testDepreciationEntry.getTotalItemsProcessed()).isEqualTo(UPDATED_TOTAL_ITEMS_PROCESSED);
+        assertThat(testDepreciationEntry.getElapsedMonths()).isEqualTo(UPDATED_ELAPSED_MONTHS);
+        assertThat(testDepreciationEntry.getPriorMonths()).isEqualTo(UPDATED_PRIOR_MONTHS);
+        assertThat(testDepreciationEntry.getUsefulLifeYears()).isEqualTo(UPDATED_USEFUL_LIFE_YEARS);
+        assertThat(testDepreciationEntry.getPreviousNBV()).isEqualTo(UPDATED_PREVIOUS_NBV);
+        assertThat(testDepreciationEntry.getNetBookValue()).isEqualTo(UPDATED_NET_BOOK_VALUE);
+        assertThat(testDepreciationEntry.getDepreciationPeriodStartDate()).isEqualTo(UPDATED_DEPRECIATION_PERIOD_START_DATE);
+        assertThat(testDepreciationEntry.getDepreciationPeriodEndDate()).isEqualTo(UPDATED_DEPRECIATION_PERIOD_END_DATE);
 
         // Validate the DepreciationEntry in Elasticsearch
         verify(mockDepreciationEntrySearchRepository).save(testDepreciationEntry);
@@ -1591,7 +2410,8 @@ class DepreciationEntryResourceIT {
             .depreciationJobIdentifier(UPDATED_DEPRECIATION_JOB_IDENTIFIER)
             .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER)
             .batchSequenceNumber(UPDATED_BATCH_SEQUENCE_NUMBER)
-            .processedItems(UPDATED_PROCESSED_ITEMS);
+            .processedItems(UPDATED_PROCESSED_ITEMS)
+            .usefulLifeYears(UPDATED_USEFUL_LIFE_YEARS);
 
         restDepreciationEntryMockMvc
             .perform(
@@ -1615,6 +2435,13 @@ class DepreciationEntryResourceIT {
         assertThat(testDepreciationEntry.getBatchSequenceNumber()).isEqualTo(UPDATED_BATCH_SEQUENCE_NUMBER);
         assertThat(testDepreciationEntry.getProcessedItems()).isEqualTo(UPDATED_PROCESSED_ITEMS);
         assertThat(testDepreciationEntry.getTotalItemsProcessed()).isEqualTo(DEFAULT_TOTAL_ITEMS_PROCESSED);
+        assertThat(testDepreciationEntry.getElapsedMonths()).isEqualTo(DEFAULT_ELAPSED_MONTHS);
+        assertThat(testDepreciationEntry.getPriorMonths()).isEqualTo(DEFAULT_PRIOR_MONTHS);
+        assertThat(testDepreciationEntry.getUsefulLifeYears()).isEqualByComparingTo(UPDATED_USEFUL_LIFE_YEARS);
+        assertThat(testDepreciationEntry.getPreviousNBV()).isEqualByComparingTo(DEFAULT_PREVIOUS_NBV);
+        assertThat(testDepreciationEntry.getNetBookValue()).isEqualByComparingTo(DEFAULT_NET_BOOK_VALUE);
+        assertThat(testDepreciationEntry.getDepreciationPeriodStartDate()).isEqualTo(DEFAULT_DEPRECIATION_PERIOD_START_DATE);
+        assertThat(testDepreciationEntry.getDepreciationPeriodEndDate()).isEqualTo(DEFAULT_DEPRECIATION_PERIOD_END_DATE);
     }
 
     @Test
@@ -1639,7 +2466,14 @@ class DepreciationEntryResourceIT {
             .fiscalQuarterIdentifier(UPDATED_FISCAL_QUARTER_IDENTIFIER)
             .batchSequenceNumber(UPDATED_BATCH_SEQUENCE_NUMBER)
             .processedItems(UPDATED_PROCESSED_ITEMS)
-            .totalItemsProcessed(UPDATED_TOTAL_ITEMS_PROCESSED);
+            .totalItemsProcessed(UPDATED_TOTAL_ITEMS_PROCESSED)
+            .elapsedMonths(UPDATED_ELAPSED_MONTHS)
+            .priorMonths(UPDATED_PRIOR_MONTHS)
+            .usefulLifeYears(UPDATED_USEFUL_LIFE_YEARS)
+            .previousNBV(UPDATED_PREVIOUS_NBV)
+            .netBookValue(UPDATED_NET_BOOK_VALUE)
+            .depreciationPeriodStartDate(UPDATED_DEPRECIATION_PERIOD_START_DATE)
+            .depreciationPeriodEndDate(UPDATED_DEPRECIATION_PERIOD_END_DATE);
 
         restDepreciationEntryMockMvc
             .perform(
@@ -1663,6 +2497,13 @@ class DepreciationEntryResourceIT {
         assertThat(testDepreciationEntry.getBatchSequenceNumber()).isEqualTo(UPDATED_BATCH_SEQUENCE_NUMBER);
         assertThat(testDepreciationEntry.getProcessedItems()).isEqualTo(UPDATED_PROCESSED_ITEMS);
         assertThat(testDepreciationEntry.getTotalItemsProcessed()).isEqualTo(UPDATED_TOTAL_ITEMS_PROCESSED);
+        assertThat(testDepreciationEntry.getElapsedMonths()).isEqualTo(UPDATED_ELAPSED_MONTHS);
+        assertThat(testDepreciationEntry.getPriorMonths()).isEqualTo(UPDATED_PRIOR_MONTHS);
+        assertThat(testDepreciationEntry.getUsefulLifeYears()).isEqualByComparingTo(UPDATED_USEFUL_LIFE_YEARS);
+        assertThat(testDepreciationEntry.getPreviousNBV()).isEqualByComparingTo(UPDATED_PREVIOUS_NBV);
+        assertThat(testDepreciationEntry.getNetBookValue()).isEqualByComparingTo(UPDATED_NET_BOOK_VALUE);
+        assertThat(testDepreciationEntry.getDepreciationPeriodStartDate()).isEqualTo(UPDATED_DEPRECIATION_PERIOD_START_DATE);
+        assertThat(testDepreciationEntry.getDepreciationPeriodEndDate()).isEqualTo(UPDATED_DEPRECIATION_PERIOD_END_DATE);
     }
 
     @Test
@@ -1788,6 +2629,13 @@ class DepreciationEntryResourceIT {
             .andExpect(jsonPath("$.[*].fiscalQuarterIdentifier").value(hasItem(DEFAULT_FISCAL_QUARTER_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].batchSequenceNumber").value(hasItem(DEFAULT_BATCH_SEQUENCE_NUMBER)))
             .andExpect(jsonPath("$.[*].processedItems").value(hasItem(DEFAULT_PROCESSED_ITEMS)))
-            .andExpect(jsonPath("$.[*].totalItemsProcessed").value(hasItem(DEFAULT_TOTAL_ITEMS_PROCESSED)));
+            .andExpect(jsonPath("$.[*].totalItemsProcessed").value(hasItem(DEFAULT_TOTAL_ITEMS_PROCESSED)))
+            .andExpect(jsonPath("$.[*].elapsedMonths").value(hasItem(DEFAULT_ELAPSED_MONTHS.intValue())))
+            .andExpect(jsonPath("$.[*].priorMonths").value(hasItem(DEFAULT_PRIOR_MONTHS.intValue())))
+            .andExpect(jsonPath("$.[*].usefulLifeYears").value(hasItem(sameNumber(DEFAULT_USEFUL_LIFE_YEARS))))
+            .andExpect(jsonPath("$.[*].previousNBV").value(hasItem(sameNumber(DEFAULT_PREVIOUS_NBV))))
+            .andExpect(jsonPath("$.[*].netBookValue").value(hasItem(sameNumber(DEFAULT_NET_BOOK_VALUE))))
+            .andExpect(jsonPath("$.[*].depreciationPeriodStartDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].depreciationPeriodEndDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_END_DATE.toString())));
     }
 }

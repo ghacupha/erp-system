@@ -27,6 +27,7 @@ import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
+import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 import tech.jhipster.service.filter.UUIDFilter;
@@ -67,6 +68,20 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
 
     private IntegerFilter totalItemsProcessed;
 
+    private LongFilter elapsedMonths;
+
+    private LongFilter priorMonths;
+
+    private BigDecimalFilter usefulLifeYears;
+
+    private BigDecimalFilter previousNBV;
+
+    private BigDecimalFilter netBookValue;
+
+    private LocalDateFilter depreciationPeriodStartDate;
+
+    private LocalDateFilter depreciationPeriodEndDate;
+
     private LongFilter serviceOutletId;
 
     private LongFilter assetCategoryId;
@@ -103,6 +118,13 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
         this.batchSequenceNumber = other.batchSequenceNumber == null ? null : other.batchSequenceNumber.copy();
         this.processedItems = other.processedItems == null ? null : other.processedItems.copy();
         this.totalItemsProcessed = other.totalItemsProcessed == null ? null : other.totalItemsProcessed.copy();
+        this.elapsedMonths = other.elapsedMonths == null ? null : other.elapsedMonths.copy();
+        this.priorMonths = other.priorMonths == null ? null : other.priorMonths.copy();
+        this.usefulLifeYears = other.usefulLifeYears == null ? null : other.usefulLifeYears.copy();
+        this.previousNBV = other.previousNBV == null ? null : other.previousNBV.copy();
+        this.netBookValue = other.netBookValue == null ? null : other.netBookValue.copy();
+        this.depreciationPeriodStartDate = other.depreciationPeriodStartDate == null ? null : other.depreciationPeriodStartDate.copy();
+        this.depreciationPeriodEndDate = other.depreciationPeriodEndDate == null ? null : other.depreciationPeriodEndDate.copy();
         this.serviceOutletId = other.serviceOutletId == null ? null : other.serviceOutletId.copy();
         this.assetCategoryId = other.assetCategoryId == null ? null : other.assetCategoryId.copy();
         this.depreciationMethodId = other.depreciationMethodId == null ? null : other.depreciationMethodId.copy();
@@ -286,6 +308,111 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
         this.totalItemsProcessed = totalItemsProcessed;
     }
 
+    public LongFilter getElapsedMonths() {
+        return elapsedMonths;
+    }
+
+    public LongFilter elapsedMonths() {
+        if (elapsedMonths == null) {
+            elapsedMonths = new LongFilter();
+        }
+        return elapsedMonths;
+    }
+
+    public void setElapsedMonths(LongFilter elapsedMonths) {
+        this.elapsedMonths = elapsedMonths;
+    }
+
+    public LongFilter getPriorMonths() {
+        return priorMonths;
+    }
+
+    public LongFilter priorMonths() {
+        if (priorMonths == null) {
+            priorMonths = new LongFilter();
+        }
+        return priorMonths;
+    }
+
+    public void setPriorMonths(LongFilter priorMonths) {
+        this.priorMonths = priorMonths;
+    }
+
+    public BigDecimalFilter getUsefulLifeYears() {
+        return usefulLifeYears;
+    }
+
+    public BigDecimalFilter usefulLifeYears() {
+        if (usefulLifeYears == null) {
+            usefulLifeYears = new BigDecimalFilter();
+        }
+        return usefulLifeYears;
+    }
+
+    public void setUsefulLifeYears(BigDecimalFilter usefulLifeYears) {
+        this.usefulLifeYears = usefulLifeYears;
+    }
+
+    public BigDecimalFilter getPreviousNBV() {
+        return previousNBV;
+    }
+
+    public BigDecimalFilter previousNBV() {
+        if (previousNBV == null) {
+            previousNBV = new BigDecimalFilter();
+        }
+        return previousNBV;
+    }
+
+    public void setPreviousNBV(BigDecimalFilter previousNBV) {
+        this.previousNBV = previousNBV;
+    }
+
+    public BigDecimalFilter getNetBookValue() {
+        return netBookValue;
+    }
+
+    public BigDecimalFilter netBookValue() {
+        if (netBookValue == null) {
+            netBookValue = new BigDecimalFilter();
+        }
+        return netBookValue;
+    }
+
+    public void setNetBookValue(BigDecimalFilter netBookValue) {
+        this.netBookValue = netBookValue;
+    }
+
+    public LocalDateFilter getDepreciationPeriodStartDate() {
+        return depreciationPeriodStartDate;
+    }
+
+    public LocalDateFilter depreciationPeriodStartDate() {
+        if (depreciationPeriodStartDate == null) {
+            depreciationPeriodStartDate = new LocalDateFilter();
+        }
+        return depreciationPeriodStartDate;
+    }
+
+    public void setDepreciationPeriodStartDate(LocalDateFilter depreciationPeriodStartDate) {
+        this.depreciationPeriodStartDate = depreciationPeriodStartDate;
+    }
+
+    public LocalDateFilter getDepreciationPeriodEndDate() {
+        return depreciationPeriodEndDate;
+    }
+
+    public LocalDateFilter depreciationPeriodEndDate() {
+        if (depreciationPeriodEndDate == null) {
+            depreciationPeriodEndDate = new LocalDateFilter();
+        }
+        return depreciationPeriodEndDate;
+    }
+
+    public void setDepreciationPeriodEndDate(LocalDateFilter depreciationPeriodEndDate) {
+        this.depreciationPeriodEndDate = depreciationPeriodEndDate;
+    }
+
     public LongFilter getServiceOutletId() {
         return serviceOutletId;
     }
@@ -465,6 +592,13 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             Objects.equals(batchSequenceNumber, that.batchSequenceNumber) &&
             Objects.equals(processedItems, that.processedItems) &&
             Objects.equals(totalItemsProcessed, that.totalItemsProcessed) &&
+            Objects.equals(elapsedMonths, that.elapsedMonths) &&
+            Objects.equals(priorMonths, that.priorMonths) &&
+            Objects.equals(usefulLifeYears, that.usefulLifeYears) &&
+            Objects.equals(previousNBV, that.previousNBV) &&
+            Objects.equals(netBookValue, that.netBookValue) &&
+            Objects.equals(depreciationPeriodStartDate, that.depreciationPeriodStartDate) &&
+            Objects.equals(depreciationPeriodEndDate, that.depreciationPeriodEndDate) &&
             Objects.equals(serviceOutletId, that.serviceOutletId) &&
             Objects.equals(assetCategoryId, that.assetCategoryId) &&
             Objects.equals(depreciationMethodId, that.depreciationMethodId) &&
@@ -493,6 +627,13 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             batchSequenceNumber,
             processedItems,
             totalItemsProcessed,
+            elapsedMonths,
+            priorMonths,
+            usefulLifeYears,
+            previousNBV,
+            netBookValue,
+            depreciationPeriodStartDate,
+            depreciationPeriodEndDate,
             serviceOutletId,
             assetCategoryId,
             depreciationMethodId,
@@ -522,6 +663,13 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             (batchSequenceNumber != null ? "batchSequenceNumber=" + batchSequenceNumber + ", " : "") +
             (processedItems != null ? "processedItems=" + processedItems + ", " : "") +
             (totalItemsProcessed != null ? "totalItemsProcessed=" + totalItemsProcessed + ", " : "") +
+            (elapsedMonths != null ? "elapsedMonths=" + elapsedMonths + ", " : "") +
+            (priorMonths != null ? "priorMonths=" + priorMonths + ", " : "") +
+            (usefulLifeYears != null ? "usefulLifeYears=" + usefulLifeYears + ", " : "") +
+            (previousNBV != null ? "previousNBV=" + previousNBV + ", " : "") +
+            (netBookValue != null ? "netBookValue=" + netBookValue + ", " : "") +
+            (depreciationPeriodStartDate != null ? "depreciationPeriodStartDate=" + depreciationPeriodStartDate + ", " : "") +
+            (depreciationPeriodEndDate != null ? "depreciationPeriodEndDate=" + depreciationPeriodEndDate + ", " : "") +
             (serviceOutletId != null ? "serviceOutletId=" + serviceOutletId + ", " : "") +
             (assetCategoryId != null ? "assetCategoryId=" + assetCategoryId + ", " : "") +
             (depreciationMethodId != null ? "depreciationMethodId=" + depreciationMethodId + ", " : "") +

@@ -392,9 +392,20 @@ public abstract class AbstractStartupRegisteredIndexService implements Controlle
 
     private static final Logger log = LoggerFactory.getLogger("IndexingServiceRegistrationSequence");
 
+    private boolean foregoIndex = true;
+
+    public AbstractStartupRegisteredIndexService(boolean foregoIndex) {
+        this.foregoIndex = foregoIndex;
+    }
+
     @Override
     public void onApplicationEvent(@NotNull ApplicationReadyEvent applicationReadyEvent) {
         log.info("Index Service registration initiated. Standby for next sequence");
+
+        if (foregoIndex) {
+
+            return;
+        }
 
         register();
 
