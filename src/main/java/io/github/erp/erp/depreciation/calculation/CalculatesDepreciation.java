@@ -17,6 +17,7 @@ package io.github.erp.erp.depreciation.calculation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.erp.depreciation.model.DepreciationArtefact;
 import io.github.erp.service.dto.AssetCategoryDTO;
 import io.github.erp.service.dto.AssetRegistrationDTO;
 import io.github.erp.service.dto.DepreciationMethodDTO;
@@ -56,5 +57,5 @@ public interface CalculatesDepreciation {
      * @return
      * @throws DepreciationRateNotProvidedException
      */
-    BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) throws DepreciationRateNotProvidedException;
+    DepreciationArtefact calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) throws DepreciationRateNotProvidedException;
 }

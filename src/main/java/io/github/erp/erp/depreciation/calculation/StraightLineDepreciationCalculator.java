@@ -18,6 +18,7 @@ package io.github.erp.erp.depreciation.calculation;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.enumeration.DepreciationTypes;
+import io.github.erp.erp.depreciation.model.DepreciationArtefact;
 import io.github.erp.service.dto.AssetCategoryDTO;
 import io.github.erp.service.dto.AssetRegistrationDTO;
 import io.github.erp.service.dto.DepreciationMethodDTO;
@@ -30,7 +31,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.*;
-import static io.github.erp.erp.depreciation.calculation.DepreciationUtility.*;
+import static io.github.erp.erp.depreciation.calculation.DepreciationUtility.calculateNetBookValueBeforeDepreciation;
+import static io.github.erp.erp.depreciation.calculation.DepreciationUtility.calculateStraightLineMonthlyDepreciation;
+import static io.github.erp.erp.depreciation.calculation.DepreciationUtility.calculateTotalStraightLineDepreciation;
+import static io.github.erp.erp.depreciation.calculation.DepreciationUtility.calculateUsefulLifeMonths;
+import static io.github.erp.erp.depreciation.calculation.DepreciationUtility.convertBasisPointsToDecimalDepreciationRate;
+import static io.github.erp.erp.depreciation.calculation.DepreciationUtility.getEffectiveDepreciationPeriod;
+import static io.github.erp.erp.depreciation.calculation.DepreciationUtility.getPriorPeriodInMonths;
 
 @Service("straightLineDepreciationCalculator")
 public class StraightLineDepreciationCalculator implements CalculatesDepreciation {
@@ -38,11 +45,21 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
     private static final Logger log = LoggerFactory.getLogger(StraightLineDepreciationCalculator.class);
 
     @Override
-    public BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) throws DepreciationRateNotProvidedException {
+    public DepreciationArtefact calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) throws DepreciationRateNotProvidedException {
 
         // OPT OUT
         if (depreciationMethod.getDepreciationType() != DepreciationTypes.STRAIGHT_LINE) {
-            return BigDecimal.ZERO;
+            // return BigDecimal.ZERO;
+            return DepreciationArtefact.builder()
+                .depreciationPeriodStartDate(period.getStartDate())
+                .depreciationPeriodEndDate(period.getEndDate())
+                .depreciationAmount(BigDecimal.ZERO)
+                .elapsedMonths((long) 0)
+                .priorMonths((long) 0)
+                .usefulLifeYears(calculateUsefulLifeMonths(assetCategory.getDepreciationRateYearly()))
+                .nbvBeforeDepreciation(BigDecimal.ZERO)
+                .nbv(ZERO)
+                .build();
         }
 
         LocalDate startDate = period.getStartDate();
@@ -56,11 +73,6 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
 
         // Convert from basis points to depreciation rate
         BigDecimal depreciationRateYearly = convertBasisPointsToDecimalDepreciationRate(assetCategory.getDepreciationRateYearly());
-
-        // OPT out for low or zero depreciation rates
-//        if(BigDecimal.ZERO.setScale(DECIMAL_SCALE,ROUNDING_MODE).compareTo(depreciationRateYearly) <= 0) {
-//            return BigDecimal.ZERO.setScale(MONEY_SCALE,ROUNDING_MODE);
-//        }
 
         BigDecimal usefulLifeYears = calculateUsefulLifeMonths(depreciationRateYearly); // Calculate useful life from depreciation rate
 
@@ -78,6 +90,15 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
         log.debug("Monthly depreciation: {}", monthlyDepreciation.toPlainString());
         log.debug("Depreciation amount: {}", depreciationAmount.toPlainString());
 
-        return depreciationAmount.min(netBookValueBeforeDepreciation).max(BigDecimal.ZERO).setScale(MONEY_SCALE, ROUNDING_MODE);
+        return DepreciationArtefact.builder()
+            .depreciationPeriodStartDate(startDate)
+            .depreciationPeriodEndDate(endDate)
+            .depreciationAmount(depreciationAmount.min(netBookValueBeforeDepreciation).max(BigDecimal.ZERO).setScale(MONEY_SCALE, ROUNDING_MODE))
+            .elapsedMonths(elapsedMonths)
+            .priorMonths(priorMonths)
+            .usefulLifeYears(usefulLifeYears)
+            .nbvBeforeDepreciation(netBookValueBeforeDepreciation)
+            .nbv(netBookValueBeforeDepreciation.subtract(depreciationAmount.min(netBookValueBeforeDepreciation).max(BigDecimal.ZERO).setScale(MONEY_SCALE, ROUNDING_MODE)))
+            .build();
     }
 }

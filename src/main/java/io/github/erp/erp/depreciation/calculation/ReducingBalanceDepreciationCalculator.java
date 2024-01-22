@@ -18,6 +18,7 @@ package io.github.erp.erp.depreciation.calculation;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.enumeration.DepreciationTypes;
+import io.github.erp.erp.depreciation.model.DepreciationArtefact;
 import io.github.erp.service.dto.AssetCategoryDTO;
 import io.github.erp.service.dto.AssetRegistrationDTO;
 import io.github.erp.service.dto.DepreciationMethodDTO;
@@ -29,11 +30,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.DECIMAL_SCALE;
-import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.MONEY_SCALE;
-import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.MONTHS_IN_YEAR;
-import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.ROUNDING_MODE;
-import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.TEN_THOUSAND;
+import static io.github.erp.erp.depreciation.calculation.DepreciationConstants.*;
+import static io.github.erp.erp.depreciation.calculation.DepreciationUtility.calculateUsefulLifeMonths;
 import static io.github.erp.erp.depreciation.calculation.DepreciationUtility.convertBasisPointsToDecimalMonthlyDepreciationRate;
 
 /**
@@ -42,47 +40,30 @@ import static io.github.erp.erp.depreciation.calculation.DepreciationUtility.con
 @Service("reducingBalanceDepreciationCalculator")
 public class ReducingBalanceDepreciationCalculator implements CalculatesDepreciation {
 
-    public BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) throws DepreciationRateNotProvidedException {
+    public DepreciationArtefact calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) throws DepreciationRateNotProvidedException {
 
         // opt out, no pain no pain
         if (depreciationMethod.getDepreciationType() != DepreciationTypes.DECLINING_BALANCE ) {
 
-            return BigDecimal.ZERO;
-        }
-
-        // Check database for accrued depreciation and net book value before periodStartDate
-        BigDecimal accruedDepreciationBeforeStart = fetchAccruedDepreciationFromDatabase(asset.getId(), period.getStartDate());
-        BigDecimal netBookValueBeforeStart = fetchNetBookValueFromDatabase(asset.getId(), period.getStartDate());
-
-        // If values exist, use them
-        if ((BigDecimal.ZERO.compareTo(accruedDepreciationBeforeStart) != 0) && (BigDecimal.ZERO.compareTo(netBookValueBeforeStart) != 0)) {
-            return accruedDepreciationBeforeStart;
+            // return BigDecimal.ZERO;
+            return DepreciationArtefact.builder()
+                .depreciationPeriodStartDate(period.getStartDate())
+                .depreciationPeriodEndDate(period.getEndDate())
+                .depreciationAmount(BigDecimal.ZERO)
+                .elapsedMonths((long) 0)
+                .priorMonths((long) 0)
+                .usefulLifeYears(calculateUsefulLifeMonths(assetCategory.getDepreciationRateYearly()))
+                .nbvBeforeDepreciation(BigDecimal.ZERO)
+                .nbv(ZERO)
+                .build();
         }
 
         // Calculate and return the depreciation for the specified period as before
-        BigDecimal calculatedDepreciation = calculatedDepreciation(asset, period, assetCategory);
-
-        // TODO calculate accrued depreciation with net period start details
-        // TODO net period start is end-date + 1 day
-        BigDecimal accruedDepreciation = accruedDepreciationBeforeStart.add(calculatedDepreciation);
-        // After calculating depreciation, enqueue messages for updating net book value and accrued depreciation
-        // TODO enqueueNetBookValueUpdate(asset.getId(), period.getStartDate(), netBookValueBeforeStart);
-        // TODO enqueueAccruedDepreciationUpdate(asset.getId(), period.getStartDate(), accruedDepreciation);
-
-        return calculatedDepreciation.setScale(MONEY_SCALE, ROUNDING_MODE);
-
-    }
-
-    private void enqueueAccruedDepreciationUpdate(Long id, LocalDate startDate, BigDecimal calculatedDepreciation) {
-        // TODO See about that message queue
-    }
-
-    private void enqueueNetBookValueUpdate(Long id, LocalDate startDate, BigDecimal netBookValueBeforeStart) {
-        // TODO See about that message queue
+        return calculatedDepreciation(asset, period, assetCategory);
     }
 
     @NotNull
-    private BigDecimal calculatedDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory) throws DepreciationRateNotProvidedException {
+    private DepreciationArtefact calculatedDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory) throws DepreciationRateNotProvidedException {
 
         BigDecimal netBookValue = asset.getAssetCost();
         BigDecimal depreciationRate = assetCategory.getDepreciationRateYearly();
@@ -95,12 +76,23 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
         LocalDate periodEndDate = period.getEndDate();
 
         if (capitalizationDate.isAfter(periodEndDate)) {
-            return BigDecimal.ZERO; // No depreciation before capitalization
+            return DepreciationArtefact.builder()
+                .depreciationPeriodStartDate(periodStartDate)
+                .depreciationPeriodEndDate(periodEndDate)
+                .depreciationAmount(BigDecimal.ZERO)
+                .elapsedMonths((long) 0)
+                .priorMonths((long) 0)
+                .usefulLifeYears(calculateUsefulLifeMonths(depreciationRate))
+                .nbvBeforeDepreciation(BigDecimal.ZERO)
+                .nbv(netBookValue)
+                .build();
         }
+
+        int elapsedMonthsBeforeStart = 0;
 
         BigDecimal depreciationBeforeStartDate = BigDecimal.ZERO.setScale(DECIMAL_SCALE, ROUNDING_MODE);
         if (capitalizationDate.isBefore(periodStartDate)) {
-            int elapsedMonthsBeforeStart = Math.toIntExact(ChronoUnit.MONTHS.between(capitalizationDate, periodStartDate)) + 1;
+            elapsedMonthsBeforeStart = Math.toIntExact(ChronoUnit.MONTHS.between(capitalizationDate, periodStartDate)) + 1;
             for (int month = 1; month <= elapsedMonthsBeforeStart; month++) {
                 BigDecimal monthlyDepreciation = netBookValue.multiply(depreciationRate).setScale(DECIMAL_SCALE, ROUNDING_MODE);
                 depreciationBeforeStartDate = depreciationBeforeStartDate.add(monthlyDepreciation);
@@ -124,21 +116,18 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
             }
         }
 
-        return depreciationAmount;
-    }
+        // return depreciationAmount;
 
-    private BigDecimal fetchAccruedDepreciationFromDatabase(Long assetId, LocalDate startDate) {
-        // Query database to fetch accrued depreciation before startDate for the given assetId
-        // Return null if not found, or the value if found
-
-        return BigDecimal.ZERO;
-    }
-
-    private BigDecimal fetchNetBookValueFromDatabase(Long assetId, LocalDate startDate) {
-        // Query database to fetch net book value before startDate for the given assetId
-        // Return null if not found, or the value if found
-
-        return BigDecimal.ZERO;
+        return DepreciationArtefact.builder()
+            .depreciationPeriodStartDate(periodStartDate)
+            .depreciationPeriodEndDate(periodEndDate)
+            .depreciationAmount(depreciationAmount.setScale(MONEY_SCALE, ROUNDING_MODE))
+            .elapsedMonths((long) elapsedMonths)
+            .priorMonths((long) elapsedMonthsBeforeStart)
+            .usefulLifeYears(calculateUsefulLifeMonths(depreciationRate))
+            .nbvBeforeDepreciation(netBookValue.add(depreciationAmount).setScale(MONEY_SCALE, ROUNDING_MODE))
+            .nbv(netBookValue)
+            .build();
     }
 }
 
