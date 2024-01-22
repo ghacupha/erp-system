@@ -30,6 +30,7 @@ import io.github.erp.erp.depreciation.exceptions.DepreciationPeriodClosedExcepti
 import io.github.erp.erp.depreciation.exceptions.DepreciationPeriodNotConfiguredException;
 import io.github.erp.erp.depreciation.exceptions.FiscalMonthNotConfiguredException;
 import io.github.erp.erp.depreciation.exceptions.ServiceOutletNotConfiguredException;
+import io.github.erp.erp.depreciation.model.DepreciationArtefact;
 import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
 import io.github.erp.service.AssetCategoryService;
 import io.github.erp.service.AssetRegistrationService;
@@ -192,14 +193,24 @@ public class BatchSequenceDepreciationService {
                                     depreciationMethodService.findOne(assetCategory.getDepreciationMethod().getId()).ifPresent(
                                         depreciationMethod -> {
                                             // Calculate the depreciation amount using the DepreciationCalculator
-                                            BigDecimal depreciationAmount = depreciationCalculatorService.calculateDepreciation(assetRegistration, depreciationPeriod, assetCategory, depreciationMethod);
+                                            DepreciationArtefact depreciationArtefact = depreciationCalculatorService.calculateDepreciation(assetRegistration, depreciationPeriod, assetCategory, depreciationMethod);
 
-                                            recordDepreciationEntry(depreciationPeriod, fiscalMonth, assetRegistration, assetCategory, serviceOutlet, depreciationMethod, depreciationAmount);
+                                            recordDepreciationEntry(
+                                                depreciationPeriod,
+                                                fiscalMonth,
+                                                assetRegistration,
+                                                assetCategory,
+                                                serviceOutlet,
+                                                depreciationMethod,
+                                                depreciationArtefact,
+                                                depreciationJob,
+                                                batchSequence
+                                                );
 
                                             depreciationAmountContext.setNumberOfProcessedItems(depreciationAmountContext.getNumberOfProcessedItems() + 1);
 
                                             // update depreciation amount
-                                            depreciationAmountContext.updateAmountForServiceOutlet(assetCategory.getAssetCategoryName(), serviceOutlet.getOutletCode(), depreciationAmount.doubleValue());
+                                            depreciationAmountContext.updateAmountForServiceOutlet(assetCategory.getAssetCategoryName(), serviceOutlet.getOutletCode(), depreciationArtefact.getDepreciationAmount().doubleValue());
                                         });
 
                                     contextManager.updateNumberOfProcessedItems(depreciationJobCountUpContextId, 1);
@@ -226,10 +237,19 @@ public class BatchSequenceDepreciationService {
     }
 
     // Send to Queue
-    private void recordDepreciationEntry(DepreciationPeriodDTO depreciationPeriod, FiscalMonthDTO fiscalMonth, io.github.erp.service.dto.AssetRegistrationDTO assetRegistration, AssetCategoryDTO assetCategory, ServiceOutletDTO serviceOutlet, io.github.erp.service.dto.DepreciationMethodDTO depreciationMethod, BigDecimal depreciationAmount) {
+    private void recordDepreciationEntry(
+        DepreciationPeriodDTO depreciationPeriod,
+        FiscalMonthDTO fiscalMonth,
+        io.github.erp.service.dto.AssetRegistrationDTO assetRegistration,
+        AssetCategoryDTO assetCategory,
+        ServiceOutletDTO serviceOutlet,
+        io.github.erp.service.dto.DepreciationMethodDTO depreciationMethod,
+        DepreciationArtefact depreciationArtefact,
+        DepreciationJobDTO depreciationJobDTO,
+        DepreciationBatchSequenceDTO depreciationBatchSequenceDTO) {
         // Save the depreciation to the database
         DepreciationEntryDTO depreciationEntry = new DepreciationEntryDTO();
-        depreciationEntry.setDepreciationAmount(depreciationAmount);
+        depreciationEntry.setDepreciationAmount(depreciationArtefact.getDepreciationAmount());
         depreciationEntry.setDepreciationMethod(depreciationMethod);
         depreciationEntry.setDepreciationPeriod(depreciationPeriod);
         depreciationEntry.setAssetCategory(assetCategory);
@@ -241,10 +261,18 @@ public class BatchSequenceDepreciationService {
         depreciationEntry.setFiscalYear(fiscalMonth.getFiscalYear());
         depreciationEntry.setFiscalMonth(fiscalMonth);
         depreciationEntry.setFiscalQuarter(fiscalMonth.getFiscalQuarter());
+        depreciationEntry.setDepreciationJob(depreciationJobDTO);
+        depreciationEntry.setDepreciationBatchSequence(depreciationBatchSequenceDTO );
+
+        // TODO other values from the artefact
+        depreciationEntry.setElapsedMonths();
+        depreciationEntry.priorMonths();
+        depreciationEntry.usefulLifeYears();
+        depreciationEntry.nbvBeforeDepreciation();
 
         DepreciationEntryDTO depreciation = depreciationEntryService.save(depreciationEntry);
 
-        log.debug("depreciation-entry id {} saved to the database, standby for next update", depreciation.getId());
+        log.trace("depreciation-entry id {} saved to the database, standby for next update", depreciation.getId());
     }
 
     private boolean serviceOutletNotConfigured(DepreciationBatchSequenceDTO batchSequence, DepreciationJobDTO depreciationJob, DepreciationPeriodDTO depreciationPeriod, io.github.erp.service.dto.AssetRegistrationDTO assetRegistration) {

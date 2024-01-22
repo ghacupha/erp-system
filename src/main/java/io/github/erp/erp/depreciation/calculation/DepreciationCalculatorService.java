@@ -18,6 +18,7 @@ package io.github.erp.erp.depreciation.calculation;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.enumeration.DepreciationTypes;
+import io.github.erp.erp.depreciation.model.DepreciationArtefact;
 import io.github.erp.service.dto.AssetCategoryDTO;
 import io.github.erp.service.dto.AssetRegistrationDTO;
 import io.github.erp.service.dto.DepreciationMethodDTO;
@@ -41,7 +42,7 @@ public class DepreciationCalculatorService implements CalculatesDepreciation {
     }
 
     @Override
-    public BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) {
+    public DepreciationArtefact calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) {
 
         if (depreciationMethod.getDepreciationType() == DepreciationTypes.STRAIGHT_LINE) {
             return straightLineDepreciationCalculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod);
@@ -49,6 +50,15 @@ public class DepreciationCalculatorService implements CalculatesDepreciation {
         if (depreciationMethod.getDepreciationType() == DepreciationTypes.DECLINING_BALANCE) {
             return reducingBalanceDepreciationCalculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod);
         }
-        return BigDecimal.ZERO;
+        return DepreciationArtefact.builder()
+            .depreciationAmount(BigDecimal.ZERO)
+            .elapsedMonths(0l)
+            .priorMonths(0l)
+            .usefulLifeYears(BigDecimal.ZERO)
+            .nbvBeforeDepreciation(BigDecimal.ZERO)
+            .nbv(BigDecimal.ZERO)
+            .depreciationPeriodStartDate(period.getStartDate())
+            .depreciationPeriodEndDate(period.getEndDate())
+            .build();
     }
 }
