@@ -50,16 +50,7 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
         // OPT OUT
         if (depreciationMethod.getDepreciationType() != DepreciationTypes.STRAIGHT_LINE) {
             // return BigDecimal.ZERO;
-            return DepreciationArtefact.builder()
-                .depreciationPeriodStartDate(period.getStartDate())
-                .depreciationPeriodEndDate(period.getEndDate())
-                .depreciationAmount(BigDecimal.ZERO)
-                .elapsedMonths((long) 0)
-                .priorMonths((long) 0)
-                .usefulLifeYears(calculateUsefulLifeMonths(assetCategory.getDepreciationRateYearly()))
-                .nbvBeforeDepreciation(BigDecimal.ZERO)
-                .nbv(ZERO)
-                .build();
+            return zeroAmountDepreciation(asset, period, assetCategory, getEffectiveDepreciationPeriod(period.getStartDate(), period.getEndDate(), asset.getCapitalizationDate()), getPriorPeriodInMonths(period.getEndDate(), asset.getCapitalizationDate(), getEffectiveDepreciationPeriod(period.getStartDate(), period.getEndDate(), asset.getCapitalizationDate())));
         }
 
         LocalDate startDate = period.getStartDate();
@@ -75,6 +66,13 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
         BigDecimal depreciationRateYearly = convertBasisPointsToDecimalDepreciationRate(assetCategory.getDepreciationRateYearly());
 
         BigDecimal usefulLifeYears = calculateUsefulLifeMonths(depreciationRateYearly); // Calculate useful life from depreciation rate
+
+
+        // TODO OPT OUT if prior months >= useful life
+        if (priorMonths >= usefulLifeYears.longValue()) {
+            return zeroAmountDepreciation(asset, period, assetCategory, elapsedMonths, priorMonths);
+        }
+
 
         BigDecimal netBookValueBeforeDepreciation = calculateNetBookValueBeforeDepreciation(capitalizationDate, assetCost, depreciationRateYearly, priorMonths,startDate, endDate);
 
@@ -99,6 +97,21 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
             .usefulLifeYears(usefulLifeYears)
             .nbvBeforeDepreciation(netBookValueBeforeDepreciation)
             .nbv(netBookValueBeforeDepreciation.subtract(depreciationAmount.min(netBookValueBeforeDepreciation).max(BigDecimal.ZERO).setScale(MONEY_SCALE, ROUNDING_MODE)))
+            .capitalizationDate(asset.getCapitalizationDate())
+            .build();
+    }
+
+    private DepreciationArtefact zeroAmountDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, long elapsedMonths, long priorMonths) {
+        return DepreciationArtefact.builder()
+            .depreciationPeriodStartDate(period.getStartDate())
+            .depreciationPeriodEndDate(period.getEndDate())
+            .depreciationAmount(BigDecimal.ZERO)
+            .elapsedMonths(elapsedMonths)
+            .priorMonths(priorMonths)
+            .usefulLifeYears(calculateUsefulLifeMonths(assetCategory.getDepreciationRateYearly()))
+            .nbvBeforeDepreciation(BigDecimal.ZERO)
+            .capitalizationDate(asset.getCapitalizationDate())
+            .nbv(ZERO)
             .build();
     }
 }
