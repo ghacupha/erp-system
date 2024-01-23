@@ -392,11 +392,12 @@ public abstract class AbstractStartupRegisteredIndexService implements Controlle
 
     private static final Logger log = LoggerFactory.getLogger("IndexingServiceRegistrationSequence");
 
+    // TODO crude way to do it. I will externalize this one soon
     private boolean foregoIndex = true;
 
-    public AbstractStartupRegisteredIndexService(boolean foregoIndex) {
-        this.foregoIndex = foregoIndex;
-    }
+//    public AbstractStartupRegisteredIndexService(boolean foregoIndex) {
+//        this.foregoIndex = foregoIndex;
+//    }
 
     @Override
     public void onApplicationEvent(@NotNull ApplicationReadyEvent applicationReadyEvent) {

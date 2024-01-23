@@ -404,6 +404,7 @@
     <include file="config/liquibase/changelog/20240115051854_added_entity_constraints_DepreciationReport.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240118124650_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240122113935_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240122124030_changelog.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

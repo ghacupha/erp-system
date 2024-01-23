@@ -20,6 +20,7 @@ package io.github.erp.service.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -48,6 +49,20 @@ public class DepreciationEntryReportItemDTO implements Serializable {
     private BigDecimal assetRegistrationCost;
 
     private BigDecimal depreciationAmount;
+
+    private Long elapsedMonths;
+
+    private Long priorMonths;
+
+    private BigDecimal usefulLifeYears;
+
+    private BigDecimal previousNBV;
+
+    private BigDecimal netBookValue;
+
+    private LocalDate depreciationPeriodStartDate;
+
+    private LocalDate depreciationPeriodEndDate;
 
     public Long getId() {
         return id;
@@ -137,6 +152,62 @@ public class DepreciationEntryReportItemDTO implements Serializable {
         this.depreciationAmount = depreciationAmount;
     }
 
+    public Long getElapsedMonths() {
+        return elapsedMonths;
+    }
+
+    public void setElapsedMonths(Long elapsedMonths) {
+        this.elapsedMonths = elapsedMonths;
+    }
+
+    public Long getPriorMonths() {
+        return priorMonths;
+    }
+
+    public void setPriorMonths(Long priorMonths) {
+        this.priorMonths = priorMonths;
+    }
+
+    public BigDecimal getUsefulLifeYears() {
+        return usefulLifeYears;
+    }
+
+    public void setUsefulLifeYears(BigDecimal usefulLifeYears) {
+        this.usefulLifeYears = usefulLifeYears;
+    }
+
+    public BigDecimal getPreviousNBV() {
+        return previousNBV;
+    }
+
+    public void setPreviousNBV(BigDecimal previousNBV) {
+        this.previousNBV = previousNBV;
+    }
+
+    public BigDecimal getNetBookValue() {
+        return netBookValue;
+    }
+
+    public void setNetBookValue(BigDecimal netBookValue) {
+        this.netBookValue = netBookValue;
+    }
+
+    public LocalDate getDepreciationPeriodStartDate() {
+        return depreciationPeriodStartDate;
+    }
+
+    public void setDepreciationPeriodStartDate(LocalDate depreciationPeriodStartDate) {
+        this.depreciationPeriodStartDate = depreciationPeriodStartDate;
+    }
+
+    public LocalDate getDepreciationPeriodEndDate() {
+        return depreciationPeriodEndDate;
+    }
+
+    public void setDepreciationPeriodEndDate(LocalDate depreciationPeriodEndDate) {
+        this.depreciationPeriodEndDate = depreciationPeriodEndDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -173,6 +244,13 @@ public class DepreciationEntryReportItemDTO implements Serializable {
             ", fiscalMonthCode='" + getFiscalMonthCode() + "'" +
             ", assetRegistrationCost=" + getAssetRegistrationCost() +
             ", depreciationAmount=" + getDepreciationAmount() +
+            ", elapsedMonths=" + getElapsedMonths() +
+            ", priorMonths=" + getPriorMonths() +
+            ", usefulLifeYears=" + getUsefulLifeYears() +
+            ", previousNBV=" + getPreviousNBV() +
+            ", netBookValue=" + getNetBookValue() +
+            ", depreciationPeriodStartDate='" + getDepreciationPeriodStartDate() + "'" +
+            ", depreciationPeriodEndDate='" + getDepreciationPeriodEndDate() + "'" +
             "}";
     }
 }

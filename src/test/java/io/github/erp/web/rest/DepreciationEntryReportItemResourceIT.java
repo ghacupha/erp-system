@@ -33,6 +33,8 @@ import io.github.erp.service.criteria.DepreciationEntryReportItemCriteria;
 import io.github.erp.service.dto.DepreciationEntryReportItemDTO;
 import io.github.erp.service.mapper.DepreciationEntryReportItemMapper;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -94,6 +96,34 @@ class DepreciationEntryReportItemResourceIT {
     private static final BigDecimal UPDATED_DEPRECIATION_AMOUNT = new BigDecimal(2);
     private static final BigDecimal SMALLER_DEPRECIATION_AMOUNT = new BigDecimal(1 - 1);
 
+    private static final Long DEFAULT_ELAPSED_MONTHS = 1L;
+    private static final Long UPDATED_ELAPSED_MONTHS = 2L;
+    private static final Long SMALLER_ELAPSED_MONTHS = 1L - 1L;
+
+    private static final Long DEFAULT_PRIOR_MONTHS = 1L;
+    private static final Long UPDATED_PRIOR_MONTHS = 2L;
+    private static final Long SMALLER_PRIOR_MONTHS = 1L - 1L;
+
+    private static final BigDecimal DEFAULT_USEFUL_LIFE_YEARS = new BigDecimal(1);
+    private static final BigDecimal UPDATED_USEFUL_LIFE_YEARS = new BigDecimal(2);
+    private static final BigDecimal SMALLER_USEFUL_LIFE_YEARS = new BigDecimal(1 - 1);
+
+    private static final BigDecimal DEFAULT_PREVIOUS_NBV = new BigDecimal(1);
+    private static final BigDecimal UPDATED_PREVIOUS_NBV = new BigDecimal(2);
+    private static final BigDecimal SMALLER_PREVIOUS_NBV = new BigDecimal(1 - 1);
+
+    private static final BigDecimal DEFAULT_NET_BOOK_VALUE = new BigDecimal(1);
+    private static final BigDecimal UPDATED_NET_BOOK_VALUE = new BigDecimal(2);
+    private static final BigDecimal SMALLER_NET_BOOK_VALUE = new BigDecimal(1 - 1);
+
+    private static final LocalDate DEFAULT_DEPRECIATION_PERIOD_START_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DEPRECIATION_PERIOD_START_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_DEPRECIATION_PERIOD_START_DATE = LocalDate.ofEpochDay(-1L);
+
+    private static final LocalDate DEFAULT_DEPRECIATION_PERIOD_END_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DEPRECIATION_PERIOD_END_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_DEPRECIATION_PERIOD_END_DATE = LocalDate.ofEpochDay(-1L);
+
     private static final String ENTITY_API_URL = "/api/depreciation-entry-report-items";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/depreciation-entry-report-items";
@@ -140,7 +170,14 @@ class DepreciationEntryReportItemResourceIT {
             .depreciationPeriod(DEFAULT_DEPRECIATION_PERIOD)
             .fiscalMonthCode(DEFAULT_FISCAL_MONTH_CODE)
             .assetRegistrationCost(DEFAULT_ASSET_REGISTRATION_COST)
-            .depreciationAmount(DEFAULT_DEPRECIATION_AMOUNT);
+            .depreciationAmount(DEFAULT_DEPRECIATION_AMOUNT)
+            .elapsedMonths(DEFAULT_ELAPSED_MONTHS)
+            .priorMonths(DEFAULT_PRIOR_MONTHS)
+            .usefulLifeYears(DEFAULT_USEFUL_LIFE_YEARS)
+            .previousNBV(DEFAULT_PREVIOUS_NBV)
+            .netBookValue(DEFAULT_NET_BOOK_VALUE)
+            .depreciationPeriodStartDate(DEFAULT_DEPRECIATION_PERIOD_START_DATE)
+            .depreciationPeriodEndDate(DEFAULT_DEPRECIATION_PERIOD_END_DATE);
         return depreciationEntryReportItem;
     }
 
@@ -161,7 +198,14 @@ class DepreciationEntryReportItemResourceIT {
             .depreciationPeriod(UPDATED_DEPRECIATION_PERIOD)
             .fiscalMonthCode(UPDATED_FISCAL_MONTH_CODE)
             .assetRegistrationCost(UPDATED_ASSET_REGISTRATION_COST)
-            .depreciationAmount(UPDATED_DEPRECIATION_AMOUNT);
+            .depreciationAmount(UPDATED_DEPRECIATION_AMOUNT)
+            .elapsedMonths(UPDATED_ELAPSED_MONTHS)
+            .priorMonths(UPDATED_PRIOR_MONTHS)
+            .usefulLifeYears(UPDATED_USEFUL_LIFE_YEARS)
+            .previousNBV(UPDATED_PREVIOUS_NBV)
+            .netBookValue(UPDATED_NET_BOOK_VALUE)
+            .depreciationPeriodStartDate(UPDATED_DEPRECIATION_PERIOD_START_DATE)
+            .depreciationPeriodEndDate(UPDATED_DEPRECIATION_PERIOD_END_DATE);
         return depreciationEntryReportItem;
     }
 
@@ -191,7 +235,14 @@ class DepreciationEntryReportItemResourceIT {
             .andExpect(jsonPath("$.[*].depreciationPeriod").value(hasItem(DEFAULT_DEPRECIATION_PERIOD)))
             .andExpect(jsonPath("$.[*].fiscalMonthCode").value(hasItem(DEFAULT_FISCAL_MONTH_CODE)))
             .andExpect(jsonPath("$.[*].assetRegistrationCost").value(hasItem(sameNumber(DEFAULT_ASSET_REGISTRATION_COST))))
-            .andExpect(jsonPath("$.[*].depreciationAmount").value(hasItem(sameNumber(DEFAULT_DEPRECIATION_AMOUNT))));
+            .andExpect(jsonPath("$.[*].depreciationAmount").value(hasItem(sameNumber(DEFAULT_DEPRECIATION_AMOUNT))))
+            .andExpect(jsonPath("$.[*].elapsedMonths").value(hasItem(DEFAULT_ELAPSED_MONTHS.intValue())))
+            .andExpect(jsonPath("$.[*].priorMonths").value(hasItem(DEFAULT_PRIOR_MONTHS.intValue())))
+            .andExpect(jsonPath("$.[*].usefulLifeYears").value(hasItem(sameNumber(DEFAULT_USEFUL_LIFE_YEARS))))
+            .andExpect(jsonPath("$.[*].previousNBV").value(hasItem(sameNumber(DEFAULT_PREVIOUS_NBV))))
+            .andExpect(jsonPath("$.[*].netBookValue").value(hasItem(sameNumber(DEFAULT_NET_BOOK_VALUE))))
+            .andExpect(jsonPath("$.[*].depreciationPeriodStartDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].depreciationPeriodEndDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_END_DATE.toString())));
     }
 
     @Test
@@ -215,7 +266,14 @@ class DepreciationEntryReportItemResourceIT {
             .andExpect(jsonPath("$.depreciationPeriod").value(DEFAULT_DEPRECIATION_PERIOD))
             .andExpect(jsonPath("$.fiscalMonthCode").value(DEFAULT_FISCAL_MONTH_CODE))
             .andExpect(jsonPath("$.assetRegistrationCost").value(sameNumber(DEFAULT_ASSET_REGISTRATION_COST)))
-            .andExpect(jsonPath("$.depreciationAmount").value(sameNumber(DEFAULT_DEPRECIATION_AMOUNT)));
+            .andExpect(jsonPath("$.depreciationAmount").value(sameNumber(DEFAULT_DEPRECIATION_AMOUNT)))
+            .andExpect(jsonPath("$.elapsedMonths").value(DEFAULT_ELAPSED_MONTHS.intValue()))
+            .andExpect(jsonPath("$.priorMonths").value(DEFAULT_PRIOR_MONTHS.intValue()))
+            .andExpect(jsonPath("$.usefulLifeYears").value(sameNumber(DEFAULT_USEFUL_LIFE_YEARS)))
+            .andExpect(jsonPath("$.previousNBV").value(sameNumber(DEFAULT_PREVIOUS_NBV)))
+            .andExpect(jsonPath("$.netBookValue").value(sameNumber(DEFAULT_NET_BOOK_VALUE)))
+            .andExpect(jsonPath("$.depreciationPeriodStartDate").value(DEFAULT_DEPRECIATION_PERIOD_START_DATE.toString()))
+            .andExpect(jsonPath("$.depreciationPeriodEndDate").value(DEFAULT_DEPRECIATION_PERIOD_END_DATE.toString()));
     }
 
     @Test
@@ -1106,6 +1164,764 @@ class DepreciationEntryReportItemResourceIT {
         defaultDepreciationEntryReportItemShouldBeFound("depreciationAmount.greaterThan=" + SMALLER_DEPRECIATION_AMOUNT);
     }
 
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByElapsedMonthsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where elapsedMonths equals to DEFAULT_ELAPSED_MONTHS
+        defaultDepreciationEntryReportItemShouldBeFound("elapsedMonths.equals=" + DEFAULT_ELAPSED_MONTHS);
+
+        // Get all the depreciationEntryReportItemList where elapsedMonths equals to UPDATED_ELAPSED_MONTHS
+        defaultDepreciationEntryReportItemShouldNotBeFound("elapsedMonths.equals=" + UPDATED_ELAPSED_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByElapsedMonthsIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where elapsedMonths not equals to DEFAULT_ELAPSED_MONTHS
+        defaultDepreciationEntryReportItemShouldNotBeFound("elapsedMonths.notEquals=" + DEFAULT_ELAPSED_MONTHS);
+
+        // Get all the depreciationEntryReportItemList where elapsedMonths not equals to UPDATED_ELAPSED_MONTHS
+        defaultDepreciationEntryReportItemShouldBeFound("elapsedMonths.notEquals=" + UPDATED_ELAPSED_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByElapsedMonthsIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where elapsedMonths in DEFAULT_ELAPSED_MONTHS or UPDATED_ELAPSED_MONTHS
+        defaultDepreciationEntryReportItemShouldBeFound("elapsedMonths.in=" + DEFAULT_ELAPSED_MONTHS + "," + UPDATED_ELAPSED_MONTHS);
+
+        // Get all the depreciationEntryReportItemList where elapsedMonths equals to UPDATED_ELAPSED_MONTHS
+        defaultDepreciationEntryReportItemShouldNotBeFound("elapsedMonths.in=" + UPDATED_ELAPSED_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByElapsedMonthsIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where elapsedMonths is not null
+        defaultDepreciationEntryReportItemShouldBeFound("elapsedMonths.specified=true");
+
+        // Get all the depreciationEntryReportItemList where elapsedMonths is null
+        defaultDepreciationEntryReportItemShouldNotBeFound("elapsedMonths.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByElapsedMonthsIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where elapsedMonths is greater than or equal to DEFAULT_ELAPSED_MONTHS
+        defaultDepreciationEntryReportItemShouldBeFound("elapsedMonths.greaterThanOrEqual=" + DEFAULT_ELAPSED_MONTHS);
+
+        // Get all the depreciationEntryReportItemList where elapsedMonths is greater than or equal to UPDATED_ELAPSED_MONTHS
+        defaultDepreciationEntryReportItemShouldNotBeFound("elapsedMonths.greaterThanOrEqual=" + UPDATED_ELAPSED_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByElapsedMonthsIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where elapsedMonths is less than or equal to DEFAULT_ELAPSED_MONTHS
+        defaultDepreciationEntryReportItemShouldBeFound("elapsedMonths.lessThanOrEqual=" + DEFAULT_ELAPSED_MONTHS);
+
+        // Get all the depreciationEntryReportItemList where elapsedMonths is less than or equal to SMALLER_ELAPSED_MONTHS
+        defaultDepreciationEntryReportItemShouldNotBeFound("elapsedMonths.lessThanOrEqual=" + SMALLER_ELAPSED_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByElapsedMonthsIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where elapsedMonths is less than DEFAULT_ELAPSED_MONTHS
+        defaultDepreciationEntryReportItemShouldNotBeFound("elapsedMonths.lessThan=" + DEFAULT_ELAPSED_MONTHS);
+
+        // Get all the depreciationEntryReportItemList where elapsedMonths is less than UPDATED_ELAPSED_MONTHS
+        defaultDepreciationEntryReportItemShouldBeFound("elapsedMonths.lessThan=" + UPDATED_ELAPSED_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByElapsedMonthsIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where elapsedMonths is greater than DEFAULT_ELAPSED_MONTHS
+        defaultDepreciationEntryReportItemShouldNotBeFound("elapsedMonths.greaterThan=" + DEFAULT_ELAPSED_MONTHS);
+
+        // Get all the depreciationEntryReportItemList where elapsedMonths is greater than SMALLER_ELAPSED_MONTHS
+        defaultDepreciationEntryReportItemShouldBeFound("elapsedMonths.greaterThan=" + SMALLER_ELAPSED_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByPriorMonthsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where priorMonths equals to DEFAULT_PRIOR_MONTHS
+        defaultDepreciationEntryReportItemShouldBeFound("priorMonths.equals=" + DEFAULT_PRIOR_MONTHS);
+
+        // Get all the depreciationEntryReportItemList where priorMonths equals to UPDATED_PRIOR_MONTHS
+        defaultDepreciationEntryReportItemShouldNotBeFound("priorMonths.equals=" + UPDATED_PRIOR_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByPriorMonthsIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where priorMonths not equals to DEFAULT_PRIOR_MONTHS
+        defaultDepreciationEntryReportItemShouldNotBeFound("priorMonths.notEquals=" + DEFAULT_PRIOR_MONTHS);
+
+        // Get all the depreciationEntryReportItemList where priorMonths not equals to UPDATED_PRIOR_MONTHS
+        defaultDepreciationEntryReportItemShouldBeFound("priorMonths.notEquals=" + UPDATED_PRIOR_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByPriorMonthsIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where priorMonths in DEFAULT_PRIOR_MONTHS or UPDATED_PRIOR_MONTHS
+        defaultDepreciationEntryReportItemShouldBeFound("priorMonths.in=" + DEFAULT_PRIOR_MONTHS + "," + UPDATED_PRIOR_MONTHS);
+
+        // Get all the depreciationEntryReportItemList where priorMonths equals to UPDATED_PRIOR_MONTHS
+        defaultDepreciationEntryReportItemShouldNotBeFound("priorMonths.in=" + UPDATED_PRIOR_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByPriorMonthsIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where priorMonths is not null
+        defaultDepreciationEntryReportItemShouldBeFound("priorMonths.specified=true");
+
+        // Get all the depreciationEntryReportItemList where priorMonths is null
+        defaultDepreciationEntryReportItemShouldNotBeFound("priorMonths.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByPriorMonthsIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where priorMonths is greater than or equal to DEFAULT_PRIOR_MONTHS
+        defaultDepreciationEntryReportItemShouldBeFound("priorMonths.greaterThanOrEqual=" + DEFAULT_PRIOR_MONTHS);
+
+        // Get all the depreciationEntryReportItemList where priorMonths is greater than or equal to UPDATED_PRIOR_MONTHS
+        defaultDepreciationEntryReportItemShouldNotBeFound("priorMonths.greaterThanOrEqual=" + UPDATED_PRIOR_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByPriorMonthsIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where priorMonths is less than or equal to DEFAULT_PRIOR_MONTHS
+        defaultDepreciationEntryReportItemShouldBeFound("priorMonths.lessThanOrEqual=" + DEFAULT_PRIOR_MONTHS);
+
+        // Get all the depreciationEntryReportItemList where priorMonths is less than or equal to SMALLER_PRIOR_MONTHS
+        defaultDepreciationEntryReportItemShouldNotBeFound("priorMonths.lessThanOrEqual=" + SMALLER_PRIOR_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByPriorMonthsIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where priorMonths is less than DEFAULT_PRIOR_MONTHS
+        defaultDepreciationEntryReportItemShouldNotBeFound("priorMonths.lessThan=" + DEFAULT_PRIOR_MONTHS);
+
+        // Get all the depreciationEntryReportItemList where priorMonths is less than UPDATED_PRIOR_MONTHS
+        defaultDepreciationEntryReportItemShouldBeFound("priorMonths.lessThan=" + UPDATED_PRIOR_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByPriorMonthsIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where priorMonths is greater than DEFAULT_PRIOR_MONTHS
+        defaultDepreciationEntryReportItemShouldNotBeFound("priorMonths.greaterThan=" + DEFAULT_PRIOR_MONTHS);
+
+        // Get all the depreciationEntryReportItemList where priorMonths is greater than SMALLER_PRIOR_MONTHS
+        defaultDepreciationEntryReportItemShouldBeFound("priorMonths.greaterThan=" + SMALLER_PRIOR_MONTHS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByUsefulLifeYearsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where usefulLifeYears equals to DEFAULT_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryReportItemShouldBeFound("usefulLifeYears.equals=" + DEFAULT_USEFUL_LIFE_YEARS);
+
+        // Get all the depreciationEntryReportItemList where usefulLifeYears equals to UPDATED_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryReportItemShouldNotBeFound("usefulLifeYears.equals=" + UPDATED_USEFUL_LIFE_YEARS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByUsefulLifeYearsIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where usefulLifeYears not equals to DEFAULT_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryReportItemShouldNotBeFound("usefulLifeYears.notEquals=" + DEFAULT_USEFUL_LIFE_YEARS);
+
+        // Get all the depreciationEntryReportItemList where usefulLifeYears not equals to UPDATED_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryReportItemShouldBeFound("usefulLifeYears.notEquals=" + UPDATED_USEFUL_LIFE_YEARS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByUsefulLifeYearsIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where usefulLifeYears in DEFAULT_USEFUL_LIFE_YEARS or UPDATED_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryReportItemShouldBeFound(
+            "usefulLifeYears.in=" + DEFAULT_USEFUL_LIFE_YEARS + "," + UPDATED_USEFUL_LIFE_YEARS
+        );
+
+        // Get all the depreciationEntryReportItemList where usefulLifeYears equals to UPDATED_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryReportItemShouldNotBeFound("usefulLifeYears.in=" + UPDATED_USEFUL_LIFE_YEARS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByUsefulLifeYearsIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where usefulLifeYears is not null
+        defaultDepreciationEntryReportItemShouldBeFound("usefulLifeYears.specified=true");
+
+        // Get all the depreciationEntryReportItemList where usefulLifeYears is null
+        defaultDepreciationEntryReportItemShouldNotBeFound("usefulLifeYears.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByUsefulLifeYearsIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where usefulLifeYears is greater than or equal to DEFAULT_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryReportItemShouldBeFound("usefulLifeYears.greaterThanOrEqual=" + DEFAULT_USEFUL_LIFE_YEARS);
+
+        // Get all the depreciationEntryReportItemList where usefulLifeYears is greater than or equal to UPDATED_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryReportItemShouldNotBeFound("usefulLifeYears.greaterThanOrEqual=" + UPDATED_USEFUL_LIFE_YEARS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByUsefulLifeYearsIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where usefulLifeYears is less than or equal to DEFAULT_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryReportItemShouldBeFound("usefulLifeYears.lessThanOrEqual=" + DEFAULT_USEFUL_LIFE_YEARS);
+
+        // Get all the depreciationEntryReportItemList where usefulLifeYears is less than or equal to SMALLER_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryReportItemShouldNotBeFound("usefulLifeYears.lessThanOrEqual=" + SMALLER_USEFUL_LIFE_YEARS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByUsefulLifeYearsIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where usefulLifeYears is less than DEFAULT_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryReportItemShouldNotBeFound("usefulLifeYears.lessThan=" + DEFAULT_USEFUL_LIFE_YEARS);
+
+        // Get all the depreciationEntryReportItemList where usefulLifeYears is less than UPDATED_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryReportItemShouldBeFound("usefulLifeYears.lessThan=" + UPDATED_USEFUL_LIFE_YEARS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByUsefulLifeYearsIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where usefulLifeYears is greater than DEFAULT_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryReportItemShouldNotBeFound("usefulLifeYears.greaterThan=" + DEFAULT_USEFUL_LIFE_YEARS);
+
+        // Get all the depreciationEntryReportItemList where usefulLifeYears is greater than SMALLER_USEFUL_LIFE_YEARS
+        defaultDepreciationEntryReportItemShouldBeFound("usefulLifeYears.greaterThan=" + SMALLER_USEFUL_LIFE_YEARS);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByPreviousNBVIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where previousNBV equals to DEFAULT_PREVIOUS_NBV
+        defaultDepreciationEntryReportItemShouldBeFound("previousNBV.equals=" + DEFAULT_PREVIOUS_NBV);
+
+        // Get all the depreciationEntryReportItemList where previousNBV equals to UPDATED_PREVIOUS_NBV
+        defaultDepreciationEntryReportItemShouldNotBeFound("previousNBV.equals=" + UPDATED_PREVIOUS_NBV);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByPreviousNBVIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where previousNBV not equals to DEFAULT_PREVIOUS_NBV
+        defaultDepreciationEntryReportItemShouldNotBeFound("previousNBV.notEquals=" + DEFAULT_PREVIOUS_NBV);
+
+        // Get all the depreciationEntryReportItemList where previousNBV not equals to UPDATED_PREVIOUS_NBV
+        defaultDepreciationEntryReportItemShouldBeFound("previousNBV.notEquals=" + UPDATED_PREVIOUS_NBV);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByPreviousNBVIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where previousNBV in DEFAULT_PREVIOUS_NBV or UPDATED_PREVIOUS_NBV
+        defaultDepreciationEntryReportItemShouldBeFound("previousNBV.in=" + DEFAULT_PREVIOUS_NBV + "," + UPDATED_PREVIOUS_NBV);
+
+        // Get all the depreciationEntryReportItemList where previousNBV equals to UPDATED_PREVIOUS_NBV
+        defaultDepreciationEntryReportItemShouldNotBeFound("previousNBV.in=" + UPDATED_PREVIOUS_NBV);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByPreviousNBVIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where previousNBV is not null
+        defaultDepreciationEntryReportItemShouldBeFound("previousNBV.specified=true");
+
+        // Get all the depreciationEntryReportItemList where previousNBV is null
+        defaultDepreciationEntryReportItemShouldNotBeFound("previousNBV.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByPreviousNBVIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where previousNBV is greater than or equal to DEFAULT_PREVIOUS_NBV
+        defaultDepreciationEntryReportItemShouldBeFound("previousNBV.greaterThanOrEqual=" + DEFAULT_PREVIOUS_NBV);
+
+        // Get all the depreciationEntryReportItemList where previousNBV is greater than or equal to UPDATED_PREVIOUS_NBV
+        defaultDepreciationEntryReportItemShouldNotBeFound("previousNBV.greaterThanOrEqual=" + UPDATED_PREVIOUS_NBV);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByPreviousNBVIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where previousNBV is less than or equal to DEFAULT_PREVIOUS_NBV
+        defaultDepreciationEntryReportItemShouldBeFound("previousNBV.lessThanOrEqual=" + DEFAULT_PREVIOUS_NBV);
+
+        // Get all the depreciationEntryReportItemList where previousNBV is less than or equal to SMALLER_PREVIOUS_NBV
+        defaultDepreciationEntryReportItemShouldNotBeFound("previousNBV.lessThanOrEqual=" + SMALLER_PREVIOUS_NBV);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByPreviousNBVIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where previousNBV is less than DEFAULT_PREVIOUS_NBV
+        defaultDepreciationEntryReportItemShouldNotBeFound("previousNBV.lessThan=" + DEFAULT_PREVIOUS_NBV);
+
+        // Get all the depreciationEntryReportItemList where previousNBV is less than UPDATED_PREVIOUS_NBV
+        defaultDepreciationEntryReportItemShouldBeFound("previousNBV.lessThan=" + UPDATED_PREVIOUS_NBV);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByPreviousNBVIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where previousNBV is greater than DEFAULT_PREVIOUS_NBV
+        defaultDepreciationEntryReportItemShouldNotBeFound("previousNBV.greaterThan=" + DEFAULT_PREVIOUS_NBV);
+
+        // Get all the depreciationEntryReportItemList where previousNBV is greater than SMALLER_PREVIOUS_NBV
+        defaultDepreciationEntryReportItemShouldBeFound("previousNBV.greaterThan=" + SMALLER_PREVIOUS_NBV);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByNetBookValueIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where netBookValue equals to DEFAULT_NET_BOOK_VALUE
+        defaultDepreciationEntryReportItemShouldBeFound("netBookValue.equals=" + DEFAULT_NET_BOOK_VALUE);
+
+        // Get all the depreciationEntryReportItemList where netBookValue equals to UPDATED_NET_BOOK_VALUE
+        defaultDepreciationEntryReportItemShouldNotBeFound("netBookValue.equals=" + UPDATED_NET_BOOK_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByNetBookValueIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where netBookValue not equals to DEFAULT_NET_BOOK_VALUE
+        defaultDepreciationEntryReportItemShouldNotBeFound("netBookValue.notEquals=" + DEFAULT_NET_BOOK_VALUE);
+
+        // Get all the depreciationEntryReportItemList where netBookValue not equals to UPDATED_NET_BOOK_VALUE
+        defaultDepreciationEntryReportItemShouldBeFound("netBookValue.notEquals=" + UPDATED_NET_BOOK_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByNetBookValueIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where netBookValue in DEFAULT_NET_BOOK_VALUE or UPDATED_NET_BOOK_VALUE
+        defaultDepreciationEntryReportItemShouldBeFound("netBookValue.in=" + DEFAULT_NET_BOOK_VALUE + "," + UPDATED_NET_BOOK_VALUE);
+
+        // Get all the depreciationEntryReportItemList where netBookValue equals to UPDATED_NET_BOOK_VALUE
+        defaultDepreciationEntryReportItemShouldNotBeFound("netBookValue.in=" + UPDATED_NET_BOOK_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByNetBookValueIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where netBookValue is not null
+        defaultDepreciationEntryReportItemShouldBeFound("netBookValue.specified=true");
+
+        // Get all the depreciationEntryReportItemList where netBookValue is null
+        defaultDepreciationEntryReportItemShouldNotBeFound("netBookValue.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByNetBookValueIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where netBookValue is greater than or equal to DEFAULT_NET_BOOK_VALUE
+        defaultDepreciationEntryReportItemShouldBeFound("netBookValue.greaterThanOrEqual=" + DEFAULT_NET_BOOK_VALUE);
+
+        // Get all the depreciationEntryReportItemList where netBookValue is greater than or equal to UPDATED_NET_BOOK_VALUE
+        defaultDepreciationEntryReportItemShouldNotBeFound("netBookValue.greaterThanOrEqual=" + UPDATED_NET_BOOK_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByNetBookValueIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where netBookValue is less than or equal to DEFAULT_NET_BOOK_VALUE
+        defaultDepreciationEntryReportItemShouldBeFound("netBookValue.lessThanOrEqual=" + DEFAULT_NET_BOOK_VALUE);
+
+        // Get all the depreciationEntryReportItemList where netBookValue is less than or equal to SMALLER_NET_BOOK_VALUE
+        defaultDepreciationEntryReportItemShouldNotBeFound("netBookValue.lessThanOrEqual=" + SMALLER_NET_BOOK_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByNetBookValueIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where netBookValue is less than DEFAULT_NET_BOOK_VALUE
+        defaultDepreciationEntryReportItemShouldNotBeFound("netBookValue.lessThan=" + DEFAULT_NET_BOOK_VALUE);
+
+        // Get all the depreciationEntryReportItemList where netBookValue is less than UPDATED_NET_BOOK_VALUE
+        defaultDepreciationEntryReportItemShouldBeFound("netBookValue.lessThan=" + UPDATED_NET_BOOK_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByNetBookValueIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where netBookValue is greater than DEFAULT_NET_BOOK_VALUE
+        defaultDepreciationEntryReportItemShouldNotBeFound("netBookValue.greaterThan=" + DEFAULT_NET_BOOK_VALUE);
+
+        // Get all the depreciationEntryReportItemList where netBookValue is greater than SMALLER_NET_BOOK_VALUE
+        defaultDepreciationEntryReportItemShouldBeFound("netBookValue.greaterThan=" + SMALLER_NET_BOOK_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodStartDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodStartDate equals to DEFAULT_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryReportItemShouldBeFound("depreciationPeriodStartDate.equals=" + DEFAULT_DEPRECIATION_PERIOD_START_DATE);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodStartDate equals to UPDATED_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriodStartDate.equals=" + UPDATED_DEPRECIATION_PERIOD_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodStartDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodStartDate not equals to DEFAULT_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryReportItemShouldNotBeFound(
+            "depreciationPeriodStartDate.notEquals=" + DEFAULT_DEPRECIATION_PERIOD_START_DATE
+        );
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodStartDate not equals to UPDATED_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryReportItemShouldBeFound("depreciationPeriodStartDate.notEquals=" + UPDATED_DEPRECIATION_PERIOD_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodStartDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodStartDate in DEFAULT_DEPRECIATION_PERIOD_START_DATE or UPDATED_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryReportItemShouldBeFound(
+            "depreciationPeriodStartDate.in=" + DEFAULT_DEPRECIATION_PERIOD_START_DATE + "," + UPDATED_DEPRECIATION_PERIOD_START_DATE
+        );
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodStartDate equals to UPDATED_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriodStartDate.in=" + UPDATED_DEPRECIATION_PERIOD_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodStartDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodStartDate is not null
+        defaultDepreciationEntryReportItemShouldBeFound("depreciationPeriodStartDate.specified=true");
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodStartDate is null
+        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriodStartDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodStartDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodStartDate is greater than or equal to DEFAULT_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryReportItemShouldBeFound(
+            "depreciationPeriodStartDate.greaterThanOrEqual=" + DEFAULT_DEPRECIATION_PERIOD_START_DATE
+        );
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodStartDate is greater than or equal to UPDATED_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryReportItemShouldNotBeFound(
+            "depreciationPeriodStartDate.greaterThanOrEqual=" + UPDATED_DEPRECIATION_PERIOD_START_DATE
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodStartDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodStartDate is less than or equal to DEFAULT_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryReportItemShouldBeFound(
+            "depreciationPeriodStartDate.lessThanOrEqual=" + DEFAULT_DEPRECIATION_PERIOD_START_DATE
+        );
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodStartDate is less than or equal to SMALLER_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryReportItemShouldNotBeFound(
+            "depreciationPeriodStartDate.lessThanOrEqual=" + SMALLER_DEPRECIATION_PERIOD_START_DATE
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodStartDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodStartDate is less than DEFAULT_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryReportItemShouldNotBeFound(
+            "depreciationPeriodStartDate.lessThan=" + DEFAULT_DEPRECIATION_PERIOD_START_DATE
+        );
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodStartDate is less than UPDATED_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryReportItemShouldBeFound("depreciationPeriodStartDate.lessThan=" + UPDATED_DEPRECIATION_PERIOD_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodStartDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodStartDate is greater than DEFAULT_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryReportItemShouldNotBeFound(
+            "depreciationPeriodStartDate.greaterThan=" + DEFAULT_DEPRECIATION_PERIOD_START_DATE
+        );
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodStartDate is greater than SMALLER_DEPRECIATION_PERIOD_START_DATE
+        defaultDepreciationEntryReportItemShouldBeFound(
+            "depreciationPeriodStartDate.greaterThan=" + SMALLER_DEPRECIATION_PERIOD_START_DATE
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodEndDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodEndDate equals to DEFAULT_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryReportItemShouldBeFound("depreciationPeriodEndDate.equals=" + DEFAULT_DEPRECIATION_PERIOD_END_DATE);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodEndDate equals to UPDATED_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriodEndDate.equals=" + UPDATED_DEPRECIATION_PERIOD_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodEndDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodEndDate not equals to DEFAULT_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriodEndDate.notEquals=" + DEFAULT_DEPRECIATION_PERIOD_END_DATE);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodEndDate not equals to UPDATED_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryReportItemShouldBeFound("depreciationPeriodEndDate.notEquals=" + UPDATED_DEPRECIATION_PERIOD_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodEndDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodEndDate in DEFAULT_DEPRECIATION_PERIOD_END_DATE or UPDATED_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryReportItemShouldBeFound(
+            "depreciationPeriodEndDate.in=" + DEFAULT_DEPRECIATION_PERIOD_END_DATE + "," + UPDATED_DEPRECIATION_PERIOD_END_DATE
+        );
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodEndDate equals to UPDATED_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriodEndDate.in=" + UPDATED_DEPRECIATION_PERIOD_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodEndDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodEndDate is not null
+        defaultDepreciationEntryReportItemShouldBeFound("depreciationPeriodEndDate.specified=true");
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodEndDate is null
+        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriodEndDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodEndDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodEndDate is greater than or equal to DEFAULT_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryReportItemShouldBeFound(
+            "depreciationPeriodEndDate.greaterThanOrEqual=" + DEFAULT_DEPRECIATION_PERIOD_END_DATE
+        );
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodEndDate is greater than or equal to UPDATED_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryReportItemShouldNotBeFound(
+            "depreciationPeriodEndDate.greaterThanOrEqual=" + UPDATED_DEPRECIATION_PERIOD_END_DATE
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodEndDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodEndDate is less than or equal to DEFAULT_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryReportItemShouldBeFound(
+            "depreciationPeriodEndDate.lessThanOrEqual=" + DEFAULT_DEPRECIATION_PERIOD_END_DATE
+        );
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodEndDate is less than or equal to SMALLER_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryReportItemShouldNotBeFound(
+            "depreciationPeriodEndDate.lessThanOrEqual=" + SMALLER_DEPRECIATION_PERIOD_END_DATE
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodEndDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodEndDate is less than DEFAULT_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriodEndDate.lessThan=" + DEFAULT_DEPRECIATION_PERIOD_END_DATE);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodEndDate is less than UPDATED_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryReportItemShouldBeFound("depreciationPeriodEndDate.lessThan=" + UPDATED_DEPRECIATION_PERIOD_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntryReportItemsByDepreciationPeriodEndDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryReportItemRepository.saveAndFlush(depreciationEntryReportItem);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodEndDate is greater than DEFAULT_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryReportItemShouldNotBeFound("depreciationPeriodEndDate.greaterThan=" + DEFAULT_DEPRECIATION_PERIOD_END_DATE);
+
+        // Get all the depreciationEntryReportItemList where depreciationPeriodEndDate is greater than SMALLER_DEPRECIATION_PERIOD_END_DATE
+        defaultDepreciationEntryReportItemShouldBeFound("depreciationPeriodEndDate.greaterThan=" + SMALLER_DEPRECIATION_PERIOD_END_DATE);
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1124,7 +1940,14 @@ class DepreciationEntryReportItemResourceIT {
             .andExpect(jsonPath("$.[*].depreciationPeriod").value(hasItem(DEFAULT_DEPRECIATION_PERIOD)))
             .andExpect(jsonPath("$.[*].fiscalMonthCode").value(hasItem(DEFAULT_FISCAL_MONTH_CODE)))
             .andExpect(jsonPath("$.[*].assetRegistrationCost").value(hasItem(sameNumber(DEFAULT_ASSET_REGISTRATION_COST))))
-            .andExpect(jsonPath("$.[*].depreciationAmount").value(hasItem(sameNumber(DEFAULT_DEPRECIATION_AMOUNT))));
+            .andExpect(jsonPath("$.[*].depreciationAmount").value(hasItem(sameNumber(DEFAULT_DEPRECIATION_AMOUNT))))
+            .andExpect(jsonPath("$.[*].elapsedMonths").value(hasItem(DEFAULT_ELAPSED_MONTHS.intValue())))
+            .andExpect(jsonPath("$.[*].priorMonths").value(hasItem(DEFAULT_PRIOR_MONTHS.intValue())))
+            .andExpect(jsonPath("$.[*].usefulLifeYears").value(hasItem(sameNumber(DEFAULT_USEFUL_LIFE_YEARS))))
+            .andExpect(jsonPath("$.[*].previousNBV").value(hasItem(sameNumber(DEFAULT_PREVIOUS_NBV))))
+            .andExpect(jsonPath("$.[*].netBookValue").value(hasItem(sameNumber(DEFAULT_NET_BOOK_VALUE))))
+            .andExpect(jsonPath("$.[*].depreciationPeriodStartDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].depreciationPeriodEndDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_END_DATE.toString())));
 
         // Check, that the count call also returns 1
         restDepreciationEntryReportItemMockMvc
@@ -1184,6 +2007,13 @@ class DepreciationEntryReportItemResourceIT {
             .andExpect(jsonPath("$.[*].depreciationPeriod").value(hasItem(DEFAULT_DEPRECIATION_PERIOD)))
             .andExpect(jsonPath("$.[*].fiscalMonthCode").value(hasItem(DEFAULT_FISCAL_MONTH_CODE)))
             .andExpect(jsonPath("$.[*].assetRegistrationCost").value(hasItem(sameNumber(DEFAULT_ASSET_REGISTRATION_COST))))
-            .andExpect(jsonPath("$.[*].depreciationAmount").value(hasItem(sameNumber(DEFAULT_DEPRECIATION_AMOUNT))));
+            .andExpect(jsonPath("$.[*].depreciationAmount").value(hasItem(sameNumber(DEFAULT_DEPRECIATION_AMOUNT))))
+            .andExpect(jsonPath("$.[*].elapsedMonths").value(hasItem(DEFAULT_ELAPSED_MONTHS.intValue())))
+            .andExpect(jsonPath("$.[*].priorMonths").value(hasItem(DEFAULT_PRIOR_MONTHS.intValue())))
+            .andExpect(jsonPath("$.[*].usefulLifeYears").value(hasItem(sameNumber(DEFAULT_USEFUL_LIFE_YEARS))))
+            .andExpect(jsonPath("$.[*].previousNBV").value(hasItem(sameNumber(DEFAULT_PREVIOUS_NBV))))
+            .andExpect(jsonPath("$.[*].netBookValue").value(hasItem(sameNumber(DEFAULT_NET_BOOK_VALUE))))
+            .andExpect(jsonPath("$.[*].depreciationPeriodStartDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].depreciationPeriodEndDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_END_DATE.toString())));
     }
 }

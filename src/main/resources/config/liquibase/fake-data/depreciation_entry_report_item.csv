@@ -1,11 +1,11 @@
-id;asset_registration_details;posted_at;asset_number;service_outlet;asset_category;depreciation_method;depreciation_period;fiscal_month_code;asset_registration_cost;depreciation_amount
-1;Omani Avon synergies;deposit;52345;Hat networks;Granite;SQL;IB open-source;Music Division Jersey;8341;179
-2;Rupee Station infomediaries;Roads;28588;Wyoming Steel clicks-and-mortar;Trail parsing Savings;copying Naira;purple invoice grid-enabled;Central vortals Tanzania;54471;38903
-3;open-source;transmitter orchid;41838;Keyboard Colorado Internal;Krone Virtual;portals generation;framework HDD Orchestrator;Global;68872;67192
-4;Licensed;IB neural navigating;40222;Fish;Optimization to;schemas;intuitive Auto SMS;Ball navigating;48717;48039
-5;Global turquoise;Shoes bandwidth;24485;Down-sized payment;lavender;e-services emulation;connect;deposit Avon;80224;88749
-6;Beauty Ball;compressing Handmade impactful;81940;Pataca;Personal;Chicken Fish;Sleek Generic models;synthesize;53464;1623
-7;Orchestrator transmitter deposit;Beauty Wooden cross-media;41368;extranet JBOD;Account Future;Bedfordshire Renminbi Strategist;Alaska;transmitting;95718;74952
-8;program;Communications;85443;ADP HTTP Keyboard;cutting-edge compress;Handcrafted;input Buckinghamshire deposit;Generic;58361;45735
-9;Bike;Shoes synergies;66323;B2C Global;Organic Viaduct Avon;orange program;Maine;Rubber Steel auxiliary;70455;5234
-10;compress;ability card high-level;22246;deliver Indiana Savings;Internal Wooden;matrix;copying;Shirt Configuration Checking;58324;28560
+id;asset_registration_details;posted_at;asset_number;service_outlet;asset_category;depreciation_method;depreciation_period;fiscal_month_code;asset_registration_cost;depreciation_amount;elapsed_months;prior_months;useful_life_years;previous_nbv;net_book_value;depreciation_period_start_date;depreciation_period_end_date
+1;Omani Avon synergies;deposit;52345;Hat networks;Granite;SQL;IB open-source;Music Division Jersey;8341;179;80582;66957;36958;91620;44577;2024-01-16;2024-01-16
+2;Egyptian Roads;Customer;81011;Tools;Frozen;software Pine fresh-thinking;cross-platform;override alarm;28544;28596;43581;92270;93892;90185;46184;2024-01-17;2024-01-16
+3;EXE Nevada;open-source;60467;connecting invoice panel;Colorado Internal;Krone Virtual;portals generation;framework HDD Orchestrator;20484;89891;51814;38168;68872;67192;3335;2024-01-17;2024-01-16
+4;GB;hacking programming empower;31589;bus;Borders methodical schemas;intuitive Auto SMS;Ball navigating;Oval Avon;47062;75911;52554;17597;45862;21050;71634;2024-01-17;2024-01-17
+5;deposit;payment;27568;Markets;moratorium background;Expressway deposit Avon;THX Buckinghamshire mobile;Front-line override Cambridgeshire;4842;70097;53832;16512;7914;59679;88447;2024-01-17;2024-01-16
+6;Tenge;Principal Borders Maine;69133;Cheese generate;Orchestrator transmitter deposit;Beauty Wooden cross-media;monetize Utah;seamless;51133;90442;25834;75976;75296;50239;17759;2024-01-17;2024-01-16
+7;matrix;Awesome transmitting Mobility;76669;discrete Account Vatu;HTTP;port;facilitate Legacy Avon;reboot parse Lek;12713;23945;1304;7788;60934;92192;58361;2024-01-16;2024-01-16
+8;Latvian;Drives Berkshire quantifying;35669;Universal;AGP;Viaduct Avon;orange program;Maine;87365;14551;63320;50548;14387;5728;83280;2024-01-16;2024-01-17
+9;protocol compress compressing;card high-level;22246;deliver Indiana Savings;Internal Wooden;matrix;copying;Shirt Configuration Checking;58324;28560;4721;68040;26336;84113;13092;2024-01-16;2024-01-16
+10;composite incubate Licensed;drive Tasty;96024;orchid withdrawal;withdrawal Rubber Developer;auxiliary quantify Savings;Cambridgeshire Tanzania;Bedfordshire Technician;9590;76110;64922;21837;20517;44242;43902;2024-01-16;2024-01-16
