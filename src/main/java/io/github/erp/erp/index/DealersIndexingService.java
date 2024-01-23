@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.DealerSearchRepository;
 import io.github.erp.service.DealerService;
 import io.github.erp.service.mapper.DealerMapper;
@@ -43,7 +44,8 @@ public class DealersIndexingService  extends AbstractStartupRegisteredIndexServi
     private final DealerMapper mapper;
     private final DealerSearchRepository searchRepository;
 
-    public DealersIndexingService(DealerService service, DealerMapper mapper, DealerSearchRepository searchRepository) {
+    public DealersIndexingService(IndexProperties indexProperties, DealerService service, DealerMapper mapper, DealerSearchRepository searchRepository) {
+        super(indexProperties);
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

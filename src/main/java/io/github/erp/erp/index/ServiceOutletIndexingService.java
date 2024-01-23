@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.ServiceOutletSearchRepository;
 import io.github.erp.service.ServiceOutletService;
 import io.github.erp.service.mapper.ServiceOutletMapper;
@@ -45,7 +46,8 @@ public class ServiceOutletIndexingService extends AbstractStartupRegisteredIndex
     private final ServiceOutletService service;
     private final ServiceOutletSearchRepository searchRepository;
 
-    public ServiceOutletIndexingService(ServiceOutletMapper mapper, ServiceOutletService service, ServiceOutletSearchRepository searchRepository) {
+    public ServiceOutletIndexingService(IndexProperties indexProperties, ServiceOutletMapper mapper, ServiceOutletService service, ServiceOutletSearchRepository searchRepository) {
+        super(indexProperties);
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.TransactionAccountSearchRepository;
 import io.github.erp.service.TransactionAccountService;
 import io.github.erp.service.mapper.TransactionAccountMapper;
@@ -44,7 +45,8 @@ public class TransactionAccountIndexingService  extends AbstractStartupRegistere
     private final TransactionAccountMapper mapper;
     private final TransactionAccountSearchRepository searchRepository;
 
-    public TransactionAccountIndexingService(TransactionAccountService service, TransactionAccountMapper mapper, TransactionAccountSearchRepository searchRepository) {
+    public TransactionAccountIndexingService(IndexProperties indexProperties, TransactionAccountService service, TransactionAccountMapper mapper, TransactionAccountSearchRepository searchRepository) {
+        super(indexProperties);
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

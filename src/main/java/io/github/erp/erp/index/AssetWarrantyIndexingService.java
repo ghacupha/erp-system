@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.AssetAccessorySearchRepository;
 import io.github.erp.repository.search.AssetWarrantySearchRepository;
 import io.github.erp.service.AssetAccessoryService;
@@ -47,7 +48,8 @@ public class AssetWarrantyIndexingService extends AbstractStartupRegisteredIndex
     private final AssetWarrantyService service;
     private final AssetWarrantySearchRepository searchRepository;
 
-    public AssetWarrantyIndexingService(AssetWarrantyMapper mapper, AssetWarrantyService service, AssetWarrantySearchRepository searchRepository) {
+    public AssetWarrantyIndexingService(IndexProperties indexProperties, AssetWarrantyMapper mapper, AssetWarrantyService service, AssetWarrantySearchRepository searchRepository) {
+        super(indexProperties);
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

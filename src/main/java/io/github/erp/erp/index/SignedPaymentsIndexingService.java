@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.SignedPaymentSearchRepository;
 import io.github.erp.service.SignedPaymentService;
 import io.github.erp.service.mapper.SignedPaymentMapper;
@@ -41,7 +42,8 @@ public class SignedPaymentsIndexingService extends AbstractStartupRegisteredInde
     private final SignedPaymentService service;
     private final SignedPaymentSearchRepository searchRepository;
 
-    public SignedPaymentsIndexingService(SignedPaymentMapper mapper, SignedPaymentService service, SignedPaymentSearchRepository searchRepository) {
+    public SignedPaymentsIndexingService(IndexProperties indexProperties, SignedPaymentMapper mapper, SignedPaymentService service, SignedPaymentSearchRepository searchRepository) {
+        super(indexProperties);
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

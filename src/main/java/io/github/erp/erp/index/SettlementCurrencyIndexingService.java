@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.SettlementCurrencySearchRepository;
 import io.github.erp.service.SettlementCurrencyService;
 import io.github.erp.service.mapper.SettlementCurrencyMapper;
@@ -45,7 +46,8 @@ public class SettlementCurrencyIndexingService extends AbstractStartupRegistered
     private final SettlementCurrencyMapper mapper;
     private final SettlementCurrencySearchRepository searchRepository;
 
-    public SettlementCurrencyIndexingService(SettlementCurrencyService service, SettlementCurrencyMapper mapper, SettlementCurrencySearchRepository searchRepository) {
+    public SettlementCurrencyIndexingService(IndexProperties indexProperties, SettlementCurrencyService service, SettlementCurrencyMapper mapper, SettlementCurrencySearchRepository searchRepository) {
+        super(indexProperties);
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.PaymentCategorySearchRepository;
 import io.github.erp.service.PaymentCategoryService;
 import io.github.erp.service.mapper.PaymentCategoryMapper;
@@ -43,7 +44,8 @@ public class PaymentCategoryIndexingService extends AbstractStartupRegisteredInd
     private final PaymentCategoryMapper mapper;
     private final PaymentCategorySearchRepository searchRepository;
 
-    public PaymentCategoryIndexingService(PaymentCategoryService service, PaymentCategoryMapper mapper, PaymentCategorySearchRepository searchRepository) {
+    public PaymentCategoryIndexingService(IndexProperties indexProperties, PaymentCategoryService service, PaymentCategoryMapper mapper, PaymentCategorySearchRepository searchRepository) {
+        super(indexProperties);
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

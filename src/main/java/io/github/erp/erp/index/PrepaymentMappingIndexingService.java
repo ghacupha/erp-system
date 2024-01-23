@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.PrepaymentMappingSearchRepository;
 import io.github.erp.service.PrepaymentMappingService;
 import io.github.erp.service.mapper.PrepaymentMappingMapper;
@@ -48,9 +49,11 @@ public class PrepaymentMappingIndexingService extends AbstractStartupRegisteredI
     private final PrepaymentMappingSearchRepository searchRepository;
 
     public PrepaymentMappingIndexingService(
+        IndexProperties indexProperties,
         PrepaymentMappingMapper mapper,
         PrepaymentMappingService service,
         PrepaymentMappingSearchRepository searchRepository) {
+        super(indexProperties);
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

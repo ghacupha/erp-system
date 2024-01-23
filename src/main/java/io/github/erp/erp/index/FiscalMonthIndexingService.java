@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.FiscalMonthSearchRepository;
 import io.github.erp.service.FiscalMonthService;
 import io.github.erp.service.mapper.FiscalMonthMapper;
@@ -45,7 +46,8 @@ public class FiscalMonthIndexingService extends AbstractStartupRegisteredIndexSe
     private final FiscalMonthMapper mapper;
     private final FiscalMonthSearchRepository searchRepository;
 
-    public FiscalMonthIndexingService(FiscalMonthService service, FiscalMonthMapper mapper, FiscalMonthSearchRepository searchRepository) {
+    public FiscalMonthIndexingService(IndexProperties indexProperties, FiscalMonthService service, FiscalMonthMapper mapper, FiscalMonthSearchRepository searchRepository) {
+        super(indexProperties);
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

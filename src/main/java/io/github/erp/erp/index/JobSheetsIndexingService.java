@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.JobSheetSearchRepository;
 import io.github.erp.service.JobSheetService;
 import io.github.erp.service.mapper.JobSheetMapper;
@@ -42,7 +43,8 @@ public class JobSheetsIndexingService extends AbstractStartupRegisteredIndexServ
     private final JobSheetService service;
     private final JobSheetSearchRepository searchRepository;
 
-    public JobSheetsIndexingService(JobSheetMapper mapper, JobSheetService service, JobSheetSearchRepository searchRepository) {
+    public JobSheetsIndexingService(IndexProperties indexProperties, JobSheetMapper mapper, JobSheetService service, JobSheetSearchRepository searchRepository) {
+        super(indexProperties);
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

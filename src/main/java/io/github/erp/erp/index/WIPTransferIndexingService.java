@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.WorkInProgressTransferSearchRepository;
 import io.github.erp.service.WorkInProgressTransferService;
 import io.github.erp.service.mapper.WorkInProgressTransferMapper;
@@ -44,7 +45,8 @@ public class WIPTransferIndexingService  extends AbstractStartupRegisteredIndexS
     private final WorkInProgressTransferMapper mapper;
     private final WorkInProgressTransferSearchRepository searchRepository;
 
-    public WIPTransferIndexingService(WorkInProgressTransferService service, WorkInProgressTransferMapper mapper, WorkInProgressTransferSearchRepository searchRepository) {
+    public WIPTransferIndexingService(IndexProperties indexProperties, WorkInProgressTransferService service, WorkInProgressTransferMapper mapper, WorkInProgressTransferSearchRepository searchRepository) {
+        super(indexProperties);
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

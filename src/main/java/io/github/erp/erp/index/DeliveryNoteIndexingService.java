@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.DeliveryNoteSearchRepository;
 import io.github.erp.service.DeliveryNoteService;
 import io.github.erp.service.mapper.DeliveryNoteMapper;
@@ -42,7 +43,8 @@ public class DeliveryNoteIndexingService extends AbstractStartupRegisteredIndexS
     private final DeliveryNoteService service;
     private final DeliveryNoteSearchRepository searchRepository;
 
-    public DeliveryNoteIndexingService(DeliveryNoteMapper mapper, DeliveryNoteService service, DeliveryNoteSearchRepository searchRepository) {
+    public DeliveryNoteIndexingService(IndexProperties indexProperties, DeliveryNoteMapper mapper, DeliveryNoteService service, DeliveryNoteSearchRepository searchRepository) {
+        super(indexProperties);
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;
