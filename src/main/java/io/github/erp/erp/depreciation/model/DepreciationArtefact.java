@@ -48,4 +48,6 @@ public class DepreciationArtefact {
     private LocalDate depreciationPeriodStartDate;
 
     private LocalDate depreciationPeriodEndDate;
+
+    private LocalDate capitalizationDate;
 }
