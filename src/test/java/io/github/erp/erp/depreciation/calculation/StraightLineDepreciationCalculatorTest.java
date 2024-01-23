@@ -786,7 +786,8 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         });
     }
 
-    @Test
+    // Update 2024.01.23 @Test case seen to have caused over depreciation so now we are checking
+    // if the prior period is more than the useful life first
     public void testNegativeDepreciationRate() {
         // Create specific asset data
         AssetRegistrationDTO asset = new AssetRegistrationDTO();

@@ -129,7 +129,8 @@ public class ReducingBalanceDepreciationCalculatorTest extends TestAssetDataGene
         Assertions.assertEquals(new BigDecimal("374.72").setScale(MONEY_SCALE, ROUNDING_MODE), calculatedDepreciation);
     }
 
-    @Test
+    // Update 2024.01.23 @Test case seen to have caused over depreciation so now we are checking
+    // if the prior period is more than the useful life first
     public void testReducingBalanceDepreciationAfterDepreciationPeriod() {
         // Generate random asset data
         AssetRegistrationDTO asset = generateRandomAssetRegistration();
