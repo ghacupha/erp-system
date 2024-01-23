@@ -27,6 +27,7 @@ import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
+import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 
@@ -65,6 +66,20 @@ public class DepreciationEntryReportItemCriteria implements Serializable, Criter
 
     private BigDecimalFilter depreciationAmount;
 
+    private LongFilter elapsedMonths;
+
+    private LongFilter priorMonths;
+
+    private BigDecimalFilter usefulLifeYears;
+
+    private BigDecimalFilter previousNBV;
+
+    private BigDecimalFilter netBookValue;
+
+    private LocalDateFilter depreciationPeriodStartDate;
+
+    private LocalDateFilter depreciationPeriodEndDate;
+
     private Boolean distinct;
 
     public DepreciationEntryReportItemCriteria() {}
@@ -81,6 +96,13 @@ public class DepreciationEntryReportItemCriteria implements Serializable, Criter
         this.fiscalMonthCode = other.fiscalMonthCode == null ? null : other.fiscalMonthCode.copy();
         this.assetRegistrationCost = other.assetRegistrationCost == null ? null : other.assetRegistrationCost.copy();
         this.depreciationAmount = other.depreciationAmount == null ? null : other.depreciationAmount.copy();
+        this.elapsedMonths = other.elapsedMonths == null ? null : other.elapsedMonths.copy();
+        this.priorMonths = other.priorMonths == null ? null : other.priorMonths.copy();
+        this.usefulLifeYears = other.usefulLifeYears == null ? null : other.usefulLifeYears.copy();
+        this.previousNBV = other.previousNBV == null ? null : other.previousNBV.copy();
+        this.netBookValue = other.netBookValue == null ? null : other.netBookValue.copy();
+        this.depreciationPeriodStartDate = other.depreciationPeriodStartDate == null ? null : other.depreciationPeriodStartDate.copy();
+        this.depreciationPeriodEndDate = other.depreciationPeriodEndDate == null ? null : other.depreciationPeriodEndDate.copy();
         this.distinct = other.distinct;
     }
 
@@ -254,6 +276,111 @@ public class DepreciationEntryReportItemCriteria implements Serializable, Criter
         this.depreciationAmount = depreciationAmount;
     }
 
+    public LongFilter getElapsedMonths() {
+        return elapsedMonths;
+    }
+
+    public LongFilter elapsedMonths() {
+        if (elapsedMonths == null) {
+            elapsedMonths = new LongFilter();
+        }
+        return elapsedMonths;
+    }
+
+    public void setElapsedMonths(LongFilter elapsedMonths) {
+        this.elapsedMonths = elapsedMonths;
+    }
+
+    public LongFilter getPriorMonths() {
+        return priorMonths;
+    }
+
+    public LongFilter priorMonths() {
+        if (priorMonths == null) {
+            priorMonths = new LongFilter();
+        }
+        return priorMonths;
+    }
+
+    public void setPriorMonths(LongFilter priorMonths) {
+        this.priorMonths = priorMonths;
+    }
+
+    public BigDecimalFilter getUsefulLifeYears() {
+        return usefulLifeYears;
+    }
+
+    public BigDecimalFilter usefulLifeYears() {
+        if (usefulLifeYears == null) {
+            usefulLifeYears = new BigDecimalFilter();
+        }
+        return usefulLifeYears;
+    }
+
+    public void setUsefulLifeYears(BigDecimalFilter usefulLifeYears) {
+        this.usefulLifeYears = usefulLifeYears;
+    }
+
+    public BigDecimalFilter getPreviousNBV() {
+        return previousNBV;
+    }
+
+    public BigDecimalFilter previousNBV() {
+        if (previousNBV == null) {
+            previousNBV = new BigDecimalFilter();
+        }
+        return previousNBV;
+    }
+
+    public void setPreviousNBV(BigDecimalFilter previousNBV) {
+        this.previousNBV = previousNBV;
+    }
+
+    public BigDecimalFilter getNetBookValue() {
+        return netBookValue;
+    }
+
+    public BigDecimalFilter netBookValue() {
+        if (netBookValue == null) {
+            netBookValue = new BigDecimalFilter();
+        }
+        return netBookValue;
+    }
+
+    public void setNetBookValue(BigDecimalFilter netBookValue) {
+        this.netBookValue = netBookValue;
+    }
+
+    public LocalDateFilter getDepreciationPeriodStartDate() {
+        return depreciationPeriodStartDate;
+    }
+
+    public LocalDateFilter depreciationPeriodStartDate() {
+        if (depreciationPeriodStartDate == null) {
+            depreciationPeriodStartDate = new LocalDateFilter();
+        }
+        return depreciationPeriodStartDate;
+    }
+
+    public void setDepreciationPeriodStartDate(LocalDateFilter depreciationPeriodStartDate) {
+        this.depreciationPeriodStartDate = depreciationPeriodStartDate;
+    }
+
+    public LocalDateFilter getDepreciationPeriodEndDate() {
+        return depreciationPeriodEndDate;
+    }
+
+    public LocalDateFilter depreciationPeriodEndDate() {
+        if (depreciationPeriodEndDate == null) {
+            depreciationPeriodEndDate = new LocalDateFilter();
+        }
+        return depreciationPeriodEndDate;
+    }
+
+    public void setDepreciationPeriodEndDate(LocalDateFilter depreciationPeriodEndDate) {
+        this.depreciationPeriodEndDate = depreciationPeriodEndDate;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -283,6 +410,13 @@ public class DepreciationEntryReportItemCriteria implements Serializable, Criter
             Objects.equals(fiscalMonthCode, that.fiscalMonthCode) &&
             Objects.equals(assetRegistrationCost, that.assetRegistrationCost) &&
             Objects.equals(depreciationAmount, that.depreciationAmount) &&
+            Objects.equals(elapsedMonths, that.elapsedMonths) &&
+            Objects.equals(priorMonths, that.priorMonths) &&
+            Objects.equals(usefulLifeYears, that.usefulLifeYears) &&
+            Objects.equals(previousNBV, that.previousNBV) &&
+            Objects.equals(netBookValue, that.netBookValue) &&
+            Objects.equals(depreciationPeriodStartDate, that.depreciationPeriodStartDate) &&
+            Objects.equals(depreciationPeriodEndDate, that.depreciationPeriodEndDate) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -301,6 +435,13 @@ public class DepreciationEntryReportItemCriteria implements Serializable, Criter
             fiscalMonthCode,
             assetRegistrationCost,
             depreciationAmount,
+            elapsedMonths,
+            priorMonths,
+            usefulLifeYears,
+            previousNBV,
+            netBookValue,
+            depreciationPeriodStartDate,
+            depreciationPeriodEndDate,
             distinct
         );
     }
@@ -320,6 +461,13 @@ public class DepreciationEntryReportItemCriteria implements Serializable, Criter
             (fiscalMonthCode != null ? "fiscalMonthCode=" + fiscalMonthCode + ", " : "") +
             (assetRegistrationCost != null ? "assetRegistrationCost=" + assetRegistrationCost + ", " : "") +
             (depreciationAmount != null ? "depreciationAmount=" + depreciationAmount + ", " : "") +
+            (elapsedMonths != null ? "elapsedMonths=" + elapsedMonths + ", " : "") +
+            (priorMonths != null ? "priorMonths=" + priorMonths + ", " : "") +
+            (usefulLifeYears != null ? "usefulLifeYears=" + usefulLifeYears + ", " : "") +
+            (previousNBV != null ? "previousNBV=" + previousNBV + ", " : "") +
+            (netBookValue != null ? "netBookValue=" + netBookValue + ", " : "") +
+            (depreciationPeriodStartDate != null ? "depreciationPeriodStartDate=" + depreciationPeriodStartDate + ", " : "") +
+            (depreciationPeriodEndDate != null ? "depreciationPeriodEndDate=" + depreciationPeriodEndDate + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

@@ -170,6 +170,44 @@ public class DepreciationEntryReportItemQueryService extends QueryService<Deprec
                         buildRangeSpecification(criteria.getDepreciationAmount(), DepreciationEntryReportItem_.depreciationAmount)
                     );
             }
+            if (criteria.getElapsedMonths() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getElapsedMonths(), DepreciationEntryReportItem_.elapsedMonths));
+            }
+            if (criteria.getPriorMonths() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getPriorMonths(), DepreciationEntryReportItem_.priorMonths));
+            }
+            if (criteria.getUsefulLifeYears() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getUsefulLifeYears(), DepreciationEntryReportItem_.usefulLifeYears));
+            }
+            if (criteria.getPreviousNBV() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getPreviousNBV(), DepreciationEntryReportItem_.previousNBV));
+            }
+            if (criteria.getNetBookValue() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getNetBookValue(), DepreciationEntryReportItem_.netBookValue));
+            }
+            if (criteria.getDepreciationPeriodStartDate() != null) {
+                specification =
+                    specification.and(
+                        buildRangeSpecification(
+                            criteria.getDepreciationPeriodStartDate(),
+                            DepreciationEntryReportItem_.depreciationPeriodStartDate
+                        )
+                    );
+            }
+            if (criteria.getDepreciationPeriodEndDate() != null) {
+                specification =
+                    specification.and(
+                        buildRangeSpecification(
+                            criteria.getDepreciationPeriodEndDate(),
+                            DepreciationEntryReportItem_.depreciationPeriodEndDate
+                        )
+                    );
+            }
         }
         return specification;
     }

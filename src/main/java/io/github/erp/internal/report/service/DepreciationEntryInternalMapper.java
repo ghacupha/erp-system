@@ -22,6 +22,7 @@ import io.github.erp.internal.framework.Mapping;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Component
 public class DepreciationEntryInternalMapper implements Mapping<DepreciationEntryInternal, DepreciationEntryVM> {
@@ -84,6 +85,41 @@ public class DepreciationEntryInternalMapper implements Mapping<DepreciationEntr
             public BigDecimal getDepreciationAmount() {
                 return vs.getDepreciationAmount();
             }
+
+            @Override
+            public Long getElapsedMonths() {
+                return vs.getElapsedMonths();
+            }
+
+            @Override
+            public Long getPriorMonths() {
+                return vs.getPriorMonths();
+            }
+
+            @Override
+            public BigDecimal getUsefulLifeYears() {
+                return vs.getUsefulLifeYears();
+            }
+
+            @Override
+            public BigDecimal getPreviousNBV() {
+                return vs.getPreviousNBV();
+            }
+
+            @Override
+            public BigDecimal getNetBookValue() {
+                return vs.getNetBookValue();
+            }
+
+            @Override
+            public LocalDate getDepreciationPeriodStartDate() {
+                return vs.getDepreciationPeriodStartDate();
+            }
+
+            @Override
+            public LocalDate getDepreciationPeriodEndDate() {
+                return vs.getDepreciationPeriodEndDate();
+            }
         };
     }
 
@@ -101,6 +137,13 @@ public class DepreciationEntryInternalMapper implements Mapping<DepreciationEntr
             .fiscalMonthCode(vs.getFiscalMonthCode())
             .assetRegistrationCost(vs.getAssetRegistrationCost())
             .depreciationAmount(vs.getDepreciationAmount())
+            .elapsedMonths(vs.getElapsedMonths())
+            .priorMonths(vs.getPriorMonths())
+            .usefulLifeYears(vs.getUsefulLifeYears())
+            .previousNBV(vs.getPreviousNBV())
+            .netBookValue(vs.getNetBookValue())
+            .depreciationPeriodStartDate(vs.getDepreciationPeriodStartDate())
+            .depreciationPeriodEndDate(vs.getDepreciationPeriodEndDate())
             .build();
     }
 }

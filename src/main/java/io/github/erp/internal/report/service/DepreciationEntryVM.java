@@ -24,6 +24,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -52,4 +53,18 @@ public class DepreciationEntryVM implements Serializable {
     private BigDecimal assetRegistrationCost;
 
     private BigDecimal depreciationAmount;
+
+    private Long elapsedMonths;
+
+    private Long priorMonths;
+
+    private BigDecimal usefulLifeYears;
+
+    private BigDecimal previousNBV;
+
+    private BigDecimal netBookValue;
+
+    private LocalDate depreciationPeriodStartDate;
+
+    private LocalDate depreciationPeriodEndDate;
 }

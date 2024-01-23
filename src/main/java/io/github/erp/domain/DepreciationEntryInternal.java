@@ -17,7 +17,9 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import javax.persistence.Column;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public interface DepreciationEntryInternal {
 
@@ -42,4 +44,18 @@ public interface DepreciationEntryInternal {
     BigDecimal getAssetRegistrationCost();
 
     BigDecimal getDepreciationAmount();
+
+    Long getElapsedMonths();
+
+    Long getPriorMonths();
+
+    BigDecimal getUsefulLifeYears();
+
+    BigDecimal getPreviousNBV();
+
+    BigDecimal getNetBookValue();
+
+    LocalDate getDepreciationPeriodStartDate();
+
+    LocalDate getDepreciationPeriodEndDate();
 }
