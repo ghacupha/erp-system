@@ -378,9 +378,11 @@
 package io.github.erp.erp.index.engine_v1;
 
 import io.github.erp.erp.index.api.ApplicationIndexingService;
+import io.github.erp.internal.IndexProperties;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 
@@ -392,12 +394,11 @@ public abstract class AbstractStartupRegisteredIndexService implements Controlle
 
     private static final Logger log = LoggerFactory.getLogger("IndexingServiceRegistrationSequence");
 
-    // TODO crude way to do it. I will externalize this one soon
-    private boolean foregoIndex = true;
+    private boolean foregoIndex;
 
-//    public AbstractStartupRegisteredIndexService(boolean foregoIndex) {
-//        this.foregoIndex = foregoIndex;
-//    }
+    public AbstractStartupRegisteredIndexService(IndexProperties indexProperties) {
+        this.foregoIndex = !indexProperties.isEnabled();
+    }
 
     @Override
     public void onApplicationEvent(@NotNull ApplicationReadyEvent applicationReadyEvent) {

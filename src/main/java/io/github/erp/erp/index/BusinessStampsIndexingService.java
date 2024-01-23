@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.BusinessStampSearchRepository;
 import io.github.erp.service.BusinessStampService;
 import io.github.erp.service.mapper.BusinessStampMapper;
@@ -43,7 +44,8 @@ public class BusinessStampsIndexingService extends AbstractStartupRegisteredInde
     private final BusinessStampService service;
     private final BusinessStampSearchRepository searchRepository;
 
-    public BusinessStampsIndexingService(BusinessStampMapper mapper, BusinessStampService service, BusinessStampSearchRepository searchRepository) {
+    public BusinessStampsIndexingService(IndexProperties indexProperties, BusinessStampMapper mapper, BusinessStampService service, BusinessStampSearchRepository searchRepository) {
+        super(indexProperties);
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

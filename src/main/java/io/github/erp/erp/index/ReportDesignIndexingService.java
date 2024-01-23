@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.ReportDesignSearchRepository;
 import io.github.erp.service.ReportDesignService;
 import io.github.erp.service.mapper.ReportDesignMapper;
@@ -44,7 +45,8 @@ public class ReportDesignIndexingService extends AbstractStartupRegisteredIndexS
     private final ReportDesignService service;
     private final ReportDesignSearchRepository searchRepository;
 
-    public ReportDesignIndexingService(ReportDesignMapper mapper, ReportDesignService service, ReportDesignSearchRepository searchRepository) {
+    public ReportDesignIndexingService(IndexProperties indexProperties, ReportDesignMapper mapper, ReportDesignService service, ReportDesignSearchRepository searchRepository) {
+        super(indexProperties);
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

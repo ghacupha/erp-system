@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.AlgorithmSearchRepository;
 import io.github.erp.service.AlgorithmService;
 import io.github.erp.service.mapper.AlgorithmMapper;
@@ -45,7 +46,8 @@ public class AlgorithmIndexingService extends AbstractStartupRegisteredIndexServ
     private final AlgorithmService service;
     private final AlgorithmSearchRepository searchRepository;
 
-    public AlgorithmIndexingService(AlgorithmMapper mapper, AlgorithmService service, AlgorithmSearchRepository searchRepository) {
+    public AlgorithmIndexingService(IndexProperties indexProperties, AlgorithmMapper mapper, AlgorithmService service, AlgorithmSearchRepository searchRepository) {
+        super(indexProperties);
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.AssetRegistrationSearchRepository;
 import io.github.erp.service.AssetRegistrationService;
 import io.github.erp.service.mapper.AssetRegistrationMapper;
@@ -44,7 +45,8 @@ public class AssetRegistryIndexingService  extends AbstractStartupRegisteredInde
     private final AssetRegistrationService service;
     private final AssetRegistrationSearchRepository searchRepository;
 
-    public AssetRegistryIndexingService(AssetRegistrationMapper mapper, AssetRegistrationService service, AssetRegistrationSearchRepository searchRepository) {
+    public AssetRegistryIndexingService(IndexProperties indexProperties, AssetRegistrationMapper mapper, AssetRegistrationService service, AssetRegistrationSearchRepository searchRepository) {
+        super(indexProperties);
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

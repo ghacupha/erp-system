@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.SystemModuleSearchRepository;
 import io.github.erp.service.SystemModuleService;
 import io.github.erp.service.mapper.SystemModuleMapper;
@@ -44,7 +45,8 @@ public class SystemModuleIndexingService extends AbstractStartupRegisteredIndexS
     private final SystemModuleService service;
     private final SystemModuleSearchRepository searchRepository;
 
-    public SystemModuleIndexingService(SystemModuleMapper mapper, SystemModuleService service, SystemModuleSearchRepository searchRepository) {
+    public SystemModuleIndexingService(IndexProperties indexProperties, SystemModuleMapper mapper, SystemModuleService service, SystemModuleSearchRepository searchRepository) {
+        super(indexProperties);
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

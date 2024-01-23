@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.LeaseContractSearchRepository;
 import io.github.erp.service.LeaseContractService;
 import io.github.erp.service.mapper.LeaseContractMapper;
@@ -44,7 +45,8 @@ public class LeaseContractIndexingService extends AbstractStartupRegisteredIndex
     private final LeaseContractMapper mapper;
     private final LeaseContractSearchRepository searchRepository;
 
-    public LeaseContractIndexingService(LeaseContractService service, LeaseContractMapper mapper, LeaseContractSearchRepository searchRepository) {
+    public LeaseContractIndexingService(IndexProperties indexProperties, LeaseContractService service, LeaseContractMapper mapper, LeaseContractSearchRepository searchRepository) {
+        super(indexProperties);
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

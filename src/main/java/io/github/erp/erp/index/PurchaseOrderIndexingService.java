@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.PurchaseOrderSearchRepository;
 import io.github.erp.service.PurchaseOrderService;
 import io.github.erp.service.mapper.PurchaseOrderMapper;
@@ -44,7 +45,8 @@ public class PurchaseOrderIndexingService extends AbstractStartupRegisteredIndex
     private final PurchaseOrderMapper mapper;
     private final PurchaseOrderSearchRepository searchRepository;
 
-    public PurchaseOrderIndexingService(PurchaseOrderService service, PurchaseOrderMapper mapper, PurchaseOrderSearchRepository searchRepository) {
+    public PurchaseOrderIndexingService(IndexProperties indexProperties, PurchaseOrderService service, PurchaseOrderMapper mapper, PurchaseOrderSearchRepository searchRepository) {
+        super(indexProperties);
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

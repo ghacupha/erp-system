@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.LeaseLiabilityScheduleItemSearchRepository;
 import io.github.erp.service.LeaseLiabilityScheduleItemService;
 import io.github.erp.service.mapper.LeaseLiabilityScheduleItemMapper;
@@ -44,7 +45,8 @@ public class LeaseLiabilityScheduleItemIndexingService extends AbstractStartupRe
     private final LeaseLiabilityScheduleItemMapper mapper;
     private final LeaseLiabilityScheduleItemSearchRepository searchRepository;
 
-    public LeaseLiabilityScheduleItemIndexingService(LeaseLiabilityScheduleItemService service, LeaseLiabilityScheduleItemMapper mapper, LeaseLiabilityScheduleItemSearchRepository searchRepository) {
+    public LeaseLiabilityScheduleItemIndexingService(IndexProperties indexProperties, LeaseLiabilityScheduleItemService service, LeaseLiabilityScheduleItemMapper mapper, LeaseLiabilityScheduleItemSearchRepository searchRepository) {
+        super(indexProperties);
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

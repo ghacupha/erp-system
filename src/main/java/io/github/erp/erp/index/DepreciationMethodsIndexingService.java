@@ -19,6 +19,7 @@ package io.github.erp.erp.index;
  */
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -47,9 +48,11 @@ public class DepreciationMethodsIndexingService extends AbstractStartupRegistere
     private final DepreciationMethodSearchRepository searchRepository;
 
     public DepreciationMethodsIndexingService (
+        IndexProperties indexProperties,
         DepreciationMethodMapper mapper,
         DepreciationMethodService service,
         DepreciationMethodSearchRepository searchRepository) {
+        super(indexProperties);
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

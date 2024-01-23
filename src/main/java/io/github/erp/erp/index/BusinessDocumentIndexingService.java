@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.BusinessDocumentSearchRepository;
 import io.github.erp.service.BusinessDocumentService;
 import io.github.erp.service.mapper.BusinessDocumentMapper;
@@ -43,7 +44,8 @@ public class BusinessDocumentIndexingService  extends AbstractStartupRegisteredI
     private final BusinessDocumentMapper mapper;
     private final BusinessDocumentSearchRepository searchRepository;
 
-    public BusinessDocumentIndexingService(BusinessDocumentService service, BusinessDocumentMapper mapper, BusinessDocumentSearchRepository searchRepository) {
+    public BusinessDocumentIndexingService(IndexProperties indexProperties, BusinessDocumentService service, BusinessDocumentMapper mapper, BusinessDocumentSearchRepository searchRepository) {
+        super(indexProperties);
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;
