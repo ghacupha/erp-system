@@ -63,7 +63,8 @@ public interface InternalDepreciationEntryItemRepository
         "     de.previous_nbv as previousNBV, " +
         "     de.net_book_value as netBookValue, " +
         "     de.depreciation_period_start_date as depreciationPeriodStartDate, " +
-        "     de.depreciation_period_end_date as depreciationPeriodEndDate " +
+        "     de.depreciation_period_end_date as depreciationPeriodEndDate, " +
+        "     de.capitalization_date as capitalizationDate " +
         "FROM public.depreciation_entry de" +
         "  LEFT JOIN depreciation_period pd on depreciation_period_id = pd.id " +
         "  LEFT JOIN fiscal_month fm on de.fiscal_month_id = fm.id " +

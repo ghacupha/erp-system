@@ -120,6 +120,11 @@ public class DepreciationEntryInternalMapper implements Mapping<DepreciationEntr
             public LocalDate getDepreciationPeriodEndDate() {
                 return vs.getDepreciationPeriodEndDate();
             }
+
+            @Override
+            public LocalDate getCapitalizationDate() {
+                return vs.getCapitalizationDate();
+            }
         };
     }
 
@@ -144,6 +149,7 @@ public class DepreciationEntryInternalMapper implements Mapping<DepreciationEntr
             .netBookValue(vs.getNetBookValue())
             .depreciationPeriodStartDate(vs.getDepreciationPeriodStartDate())
             .depreciationPeriodEndDate(vs.getDepreciationPeriodEndDate())
+            .capitalizationDate(vs.getCapitalizationDate())
             .build();
     }
 }

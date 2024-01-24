@@ -58,4 +58,6 @@ public interface DepreciationEntryInternal {
     LocalDate getDepreciationPeriodStartDate();
 
     LocalDate getDepreciationPeriodEndDate();
+
+    LocalDate getCapitalizationDate();
 }
