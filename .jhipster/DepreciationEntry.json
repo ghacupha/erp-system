@@ -71,6 +71,10 @@
     {
       "fieldName": "depreciationPeriodEndDate",
       "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "capitalizationDate",
+      "fieldType": "LocalDate"
     }
   ],
   "relationships": [

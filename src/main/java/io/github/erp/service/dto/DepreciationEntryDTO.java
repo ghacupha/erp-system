@@ -67,6 +67,8 @@ public class DepreciationEntryDTO implements Serializable {
 
     private LocalDate depreciationPeriodEndDate;
 
+    private LocalDate capitalizationDate;
+
     private ServiceOutletDTO serviceOutlet;
 
     private AssetCategoryDTO assetCategory;
@@ -231,6 +233,14 @@ public class DepreciationEntryDTO implements Serializable {
         this.depreciationPeriodEndDate = depreciationPeriodEndDate;
     }
 
+    public LocalDate getCapitalizationDate() {
+        return capitalizationDate;
+    }
+
+    public void setCapitalizationDate(LocalDate capitalizationDate) {
+        this.capitalizationDate = capitalizationDate;
+    }
+
     public ServiceOutletDTO getServiceOutlet() {
         return serviceOutlet;
     }
@@ -354,6 +364,7 @@ public class DepreciationEntryDTO implements Serializable {
             ", netBookValue=" + getNetBookValue() +
             ", depreciationPeriodStartDate='" + getDepreciationPeriodStartDate() + "'" +
             ", depreciationPeriodEndDate='" + getDepreciationPeriodEndDate() + "'" +
+            ", capitalizationDate='" + getCapitalizationDate() + "'" +
             ", serviceOutlet=" + getServiceOutlet() +
             ", assetCategory=" + getAssetCategory() +
             ", depreciationMethod=" + getDepreciationMethod() +

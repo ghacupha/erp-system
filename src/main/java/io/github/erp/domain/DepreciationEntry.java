@@ -97,6 +97,9 @@ public class DepreciationEntry implements Serializable {
     @Column(name = "depreciation_period_end_date")
     private LocalDate depreciationPeriodEndDate;
 
+    @Column(name = "capitalization_date")
+    private LocalDate capitalizationDate;
+
     @ManyToOne
     @JsonIgnoreProperties(
         value = { "placeholders", "bankCode", "outletType", "outletStatus", "countyName", "subCountyName" },
@@ -396,6 +399,19 @@ public class DepreciationEntry implements Serializable {
         this.depreciationPeriodEndDate = depreciationPeriodEndDate;
     }
 
+    public LocalDate getCapitalizationDate() {
+        return this.capitalizationDate;
+    }
+
+    public DepreciationEntry capitalizationDate(LocalDate capitalizationDate) {
+        this.setCapitalizationDate(capitalizationDate);
+        return this;
+    }
+
+    public void setCapitalizationDate(LocalDate capitalizationDate) {
+        this.capitalizationDate = capitalizationDate;
+    }
+
     public ServiceOutlet getServiceOutlet() {
         return this.serviceOutlet;
     }
@@ -567,6 +583,7 @@ public class DepreciationEntry implements Serializable {
             ", netBookValue=" + getNetBookValue() +
             ", depreciationPeriodStartDate='" + getDepreciationPeriodStartDate() + "'" +
             ", depreciationPeriodEndDate='" + getDepreciationPeriodEndDate() + "'" +
+            ", capitalizationDate='" + getCapitalizationDate() + "'" +
             "}";
     }
 }
