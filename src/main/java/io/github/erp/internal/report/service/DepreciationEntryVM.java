@@ -67,4 +67,6 @@ public class DepreciationEntryVM implements Serializable {
     private LocalDate depreciationPeriodStartDate;
 
     private LocalDate depreciationPeriodEndDate;
+
+    private LocalDate capitalizationDate;
 }

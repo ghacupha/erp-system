@@ -59,6 +59,7 @@ public class DepreciationCalculatorService implements CalculatesDepreciation {
             .nbv(BigDecimal.ZERO)
             .depreciationPeriodStartDate(period.getStartDate())
             .depreciationPeriodEndDate(period.getEndDate())
+            .capitalizationDate(asset.getCapitalizationDate())
             .build();
     }
 }

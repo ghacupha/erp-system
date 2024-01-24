@@ -46,16 +46,7 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
         if (depreciationMethod.getDepreciationType() != DepreciationTypes.DECLINING_BALANCE ) {
 
             // return BigDecimal.ZERO;
-            return DepreciationArtefact.builder()
-                .depreciationPeriodStartDate(period.getStartDate())
-                .depreciationPeriodEndDate(period.getEndDate())
-                .depreciationAmount(BigDecimal.ZERO)
-                .elapsedMonths((long) 0)
-                .priorMonths((long) 0)
-                .usefulLifeYears(calculateUsefulLifeMonths(assetCategory.getDepreciationRateYearly()))
-                .nbvBeforeDepreciation(BigDecimal.ZERO)
-                .nbv(ZERO)
-                .build();
+            return returnZeroAmountDepreciation(asset, ZERO, assetCategory.getDepreciationRateYearly(), period.getStartDate(), period.getEndDate());
         }
 
         // Calculate and return the depreciation for the specified period as before
@@ -76,16 +67,7 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
         LocalDate periodEndDate = period.getEndDate();
 
         if (capitalizationDate.isAfter(periodEndDate)) {
-            return DepreciationArtefact.builder()
-                .depreciationPeriodStartDate(periodStartDate)
-                .depreciationPeriodEndDate(periodEndDate)
-                .depreciationAmount(BigDecimal.ZERO)
-                .elapsedMonths((long) 0)
-                .priorMonths((long) 0)
-                .usefulLifeYears(calculateUsefulLifeMonths(depreciationRate))
-                .nbvBeforeDepreciation(BigDecimal.ZERO)
-                .nbv(netBookValue)
-                .build();
+            return returnZeroAmountDepreciation(asset, netBookValue, depreciationRate, periodStartDate, periodEndDate);
         }
 
         int elapsedMonthsBeforeStart = 0;
@@ -126,6 +108,21 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
             .priorMonths((long) elapsedMonthsBeforeStart)
             .usefulLifeYears(calculateUsefulLifeMonths(depreciationRate))
             .nbvBeforeDepreciation(netBookValue.add(depreciationAmount).setScale(MONEY_SCALE, ROUNDING_MODE))
+            .nbv(netBookValue)
+            .capitalizationDate(asset.getCapitalizationDate())
+            .build();
+    }
+
+    private DepreciationArtefact returnZeroAmountDepreciation(AssetRegistrationDTO asset, BigDecimal netBookValue, BigDecimal depreciationRate, LocalDate periodStartDate, LocalDate periodEndDate) {
+        return DepreciationArtefact.builder()
+            .depreciationPeriodStartDate(periodStartDate)
+            .depreciationPeriodEndDate(periodEndDate)
+            .depreciationAmount(BigDecimal.ZERO)
+            .elapsedMonths((long) 0)
+            .priorMonths((long) 0)
+            .usefulLifeYears(calculateUsefulLifeMonths(depreciationRate))
+            .nbvBeforeDepreciation(BigDecimal.ZERO)
+            .capitalizationDate(asset.getCapitalizationDate())
             .nbv(netBookValue)
             .build();
     }

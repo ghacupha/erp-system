@@ -266,6 +266,8 @@ public class BatchSequenceDepreciationService {
         depreciationEntry.setDepreciationPeriodStartDate(depreciationArtefact.getDepreciationPeriodStartDate());
         depreciationEntry.setDepreciationPeriodEndDate(depreciationArtefact.getDepreciationPeriodEndDate());
 
+        depreciationEntry.setCapitalizationDate(depreciationArtefact.getCapitalizationDate());
+
         DepreciationEntryDTO depreciation = depreciationEntryService.save(depreciationEntry);
 
         log.trace("depreciation-entry id {} saved to the database, standby for next update", depreciation.getId());
