@@ -82,6 +82,8 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
 
     private LocalDateFilter depreciationPeriodEndDate;
 
+    private LocalDateFilter capitalizationDate;
+
     private LongFilter serviceOutletId;
 
     private LongFilter assetCategoryId;
@@ -125,6 +127,7 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
         this.netBookValue = other.netBookValue == null ? null : other.netBookValue.copy();
         this.depreciationPeriodStartDate = other.depreciationPeriodStartDate == null ? null : other.depreciationPeriodStartDate.copy();
         this.depreciationPeriodEndDate = other.depreciationPeriodEndDate == null ? null : other.depreciationPeriodEndDate.copy();
+        this.capitalizationDate = other.capitalizationDate == null ? null : other.capitalizationDate.copy();
         this.serviceOutletId = other.serviceOutletId == null ? null : other.serviceOutletId.copy();
         this.assetCategoryId = other.assetCategoryId == null ? null : other.assetCategoryId.copy();
         this.depreciationMethodId = other.depreciationMethodId == null ? null : other.depreciationMethodId.copy();
@@ -413,6 +416,21 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
         this.depreciationPeriodEndDate = depreciationPeriodEndDate;
     }
 
+    public LocalDateFilter getCapitalizationDate() {
+        return capitalizationDate;
+    }
+
+    public LocalDateFilter capitalizationDate() {
+        if (capitalizationDate == null) {
+            capitalizationDate = new LocalDateFilter();
+        }
+        return capitalizationDate;
+    }
+
+    public void setCapitalizationDate(LocalDateFilter capitalizationDate) {
+        this.capitalizationDate = capitalizationDate;
+    }
+
     public LongFilter getServiceOutletId() {
         return serviceOutletId;
     }
@@ -599,6 +617,7 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             Objects.equals(netBookValue, that.netBookValue) &&
             Objects.equals(depreciationPeriodStartDate, that.depreciationPeriodStartDate) &&
             Objects.equals(depreciationPeriodEndDate, that.depreciationPeriodEndDate) &&
+            Objects.equals(capitalizationDate, that.capitalizationDate) &&
             Objects.equals(serviceOutletId, that.serviceOutletId) &&
             Objects.equals(assetCategoryId, that.assetCategoryId) &&
             Objects.equals(depreciationMethodId, that.depreciationMethodId) &&
@@ -634,6 +653,7 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             netBookValue,
             depreciationPeriodStartDate,
             depreciationPeriodEndDate,
+            capitalizationDate,
             serviceOutletId,
             assetCategoryId,
             depreciationMethodId,
@@ -670,6 +690,7 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             (netBookValue != null ? "netBookValue=" + netBookValue + ", " : "") +
             (depreciationPeriodStartDate != null ? "depreciationPeriodStartDate=" + depreciationPeriodStartDate + ", " : "") +
             (depreciationPeriodEndDate != null ? "depreciationPeriodEndDate=" + depreciationPeriodEndDate + ", " : "") +
+            (capitalizationDate != null ? "capitalizationDate=" + capitalizationDate + ", " : "") +
             (serviceOutletId != null ? "serviceOutletId=" + serviceOutletId + ", " : "") +
             (assetCategoryId != null ? "assetCategoryId=" + assetCategoryId + ", " : "") +
             (depreciationMethodId != null ? "depreciationMethodId=" + depreciationMethodId + ", " : "") +

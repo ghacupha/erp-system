@@ -141,6 +141,10 @@ class DepreciationEntryResourceIT {
     private static final LocalDate UPDATED_DEPRECIATION_PERIOD_END_DATE = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_DEPRECIATION_PERIOD_END_DATE = LocalDate.ofEpochDay(-1L);
 
+    private static final LocalDate DEFAULT_CAPITALIZATION_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_CAPITALIZATION_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_CAPITALIZATION_DATE = LocalDate.ofEpochDay(-1L);
+
     private static final String ENTITY_API_URL = "/api/depreciation-entries";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/depreciation-entries";
@@ -194,7 +198,8 @@ class DepreciationEntryResourceIT {
             .previousNBV(DEFAULT_PREVIOUS_NBV)
             .netBookValue(DEFAULT_NET_BOOK_VALUE)
             .depreciationPeriodStartDate(DEFAULT_DEPRECIATION_PERIOD_START_DATE)
-            .depreciationPeriodEndDate(DEFAULT_DEPRECIATION_PERIOD_END_DATE);
+            .depreciationPeriodEndDate(DEFAULT_DEPRECIATION_PERIOD_END_DATE)
+            .capitalizationDate(DEFAULT_CAPITALIZATION_DATE);
         return depreciationEntry;
     }
 
@@ -222,7 +227,8 @@ class DepreciationEntryResourceIT {
             .previousNBV(UPDATED_PREVIOUS_NBV)
             .netBookValue(UPDATED_NET_BOOK_VALUE)
             .depreciationPeriodStartDate(UPDATED_DEPRECIATION_PERIOD_START_DATE)
-            .depreciationPeriodEndDate(UPDATED_DEPRECIATION_PERIOD_END_DATE);
+            .depreciationPeriodEndDate(UPDATED_DEPRECIATION_PERIOD_END_DATE)
+            .capitalizationDate(UPDATED_CAPITALIZATION_DATE);
         return depreciationEntry;
     }
 
@@ -266,6 +272,7 @@ class DepreciationEntryResourceIT {
         assertThat(testDepreciationEntry.getNetBookValue()).isEqualByComparingTo(DEFAULT_NET_BOOK_VALUE);
         assertThat(testDepreciationEntry.getDepreciationPeriodStartDate()).isEqualTo(DEFAULT_DEPRECIATION_PERIOD_START_DATE);
         assertThat(testDepreciationEntry.getDepreciationPeriodEndDate()).isEqualTo(DEFAULT_DEPRECIATION_PERIOD_END_DATE);
+        assertThat(testDepreciationEntry.getCapitalizationDate()).isEqualTo(DEFAULT_CAPITALIZATION_DATE);
 
         // Validate the DepreciationEntry in Elasticsearch
         verify(mockDepreciationEntrySearchRepository, times(1)).save(testDepreciationEntry);
@@ -325,7 +332,8 @@ class DepreciationEntryResourceIT {
             .andExpect(jsonPath("$.[*].previousNBV").value(hasItem(sameNumber(DEFAULT_PREVIOUS_NBV))))
             .andExpect(jsonPath("$.[*].netBookValue").value(hasItem(sameNumber(DEFAULT_NET_BOOK_VALUE))))
             .andExpect(jsonPath("$.[*].depreciationPeriodStartDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].depreciationPeriodEndDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].depreciationPeriodEndDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].capitalizationDate").value(hasItem(DEFAULT_CAPITALIZATION_DATE.toString())));
     }
 
     @Test
@@ -356,7 +364,8 @@ class DepreciationEntryResourceIT {
             .andExpect(jsonPath("$.previousNBV").value(sameNumber(DEFAULT_PREVIOUS_NBV)))
             .andExpect(jsonPath("$.netBookValue").value(sameNumber(DEFAULT_NET_BOOK_VALUE)))
             .andExpect(jsonPath("$.depreciationPeriodStartDate").value(DEFAULT_DEPRECIATION_PERIOD_START_DATE.toString()))
-            .andExpect(jsonPath("$.depreciationPeriodEndDate").value(DEFAULT_DEPRECIATION_PERIOD_END_DATE.toString()));
+            .andExpect(jsonPath("$.depreciationPeriodEndDate").value(DEFAULT_DEPRECIATION_PERIOD_END_DATE.toString()))
+            .andExpect(jsonPath("$.capitalizationDate").value(DEFAULT_CAPITALIZATION_DATE.toString()));
     }
 
     @Test
@@ -1931,6 +1940,110 @@ class DepreciationEntryResourceIT {
 
     @Test
     @Transactional
+    void getAllDepreciationEntriesByCapitalizationDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where capitalizationDate equals to DEFAULT_CAPITALIZATION_DATE
+        defaultDepreciationEntryShouldBeFound("capitalizationDate.equals=" + DEFAULT_CAPITALIZATION_DATE);
+
+        // Get all the depreciationEntryList where capitalizationDate equals to UPDATED_CAPITALIZATION_DATE
+        defaultDepreciationEntryShouldNotBeFound("capitalizationDate.equals=" + UPDATED_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByCapitalizationDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where capitalizationDate not equals to DEFAULT_CAPITALIZATION_DATE
+        defaultDepreciationEntryShouldNotBeFound("capitalizationDate.notEquals=" + DEFAULT_CAPITALIZATION_DATE);
+
+        // Get all the depreciationEntryList where capitalizationDate not equals to UPDATED_CAPITALIZATION_DATE
+        defaultDepreciationEntryShouldBeFound("capitalizationDate.notEquals=" + UPDATED_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByCapitalizationDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where capitalizationDate in DEFAULT_CAPITALIZATION_DATE or UPDATED_CAPITALIZATION_DATE
+        defaultDepreciationEntryShouldBeFound("capitalizationDate.in=" + DEFAULT_CAPITALIZATION_DATE + "," + UPDATED_CAPITALIZATION_DATE);
+
+        // Get all the depreciationEntryList where capitalizationDate equals to UPDATED_CAPITALIZATION_DATE
+        defaultDepreciationEntryShouldNotBeFound("capitalizationDate.in=" + UPDATED_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByCapitalizationDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where capitalizationDate is not null
+        defaultDepreciationEntryShouldBeFound("capitalizationDate.specified=true");
+
+        // Get all the depreciationEntryList where capitalizationDate is null
+        defaultDepreciationEntryShouldNotBeFound("capitalizationDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByCapitalizationDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where capitalizationDate is greater than or equal to DEFAULT_CAPITALIZATION_DATE
+        defaultDepreciationEntryShouldBeFound("capitalizationDate.greaterThanOrEqual=" + DEFAULT_CAPITALIZATION_DATE);
+
+        // Get all the depreciationEntryList where capitalizationDate is greater than or equal to UPDATED_CAPITALIZATION_DATE
+        defaultDepreciationEntryShouldNotBeFound("capitalizationDate.greaterThanOrEqual=" + UPDATED_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByCapitalizationDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where capitalizationDate is less than or equal to DEFAULT_CAPITALIZATION_DATE
+        defaultDepreciationEntryShouldBeFound("capitalizationDate.lessThanOrEqual=" + DEFAULT_CAPITALIZATION_DATE);
+
+        // Get all the depreciationEntryList where capitalizationDate is less than or equal to SMALLER_CAPITALIZATION_DATE
+        defaultDepreciationEntryShouldNotBeFound("capitalizationDate.lessThanOrEqual=" + SMALLER_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByCapitalizationDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where capitalizationDate is less than DEFAULT_CAPITALIZATION_DATE
+        defaultDepreciationEntryShouldNotBeFound("capitalizationDate.lessThan=" + DEFAULT_CAPITALIZATION_DATE);
+
+        // Get all the depreciationEntryList where capitalizationDate is less than UPDATED_CAPITALIZATION_DATE
+        defaultDepreciationEntryShouldBeFound("capitalizationDate.lessThan=" + UPDATED_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllDepreciationEntriesByCapitalizationDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        depreciationEntryRepository.saveAndFlush(depreciationEntry);
+
+        // Get all the depreciationEntryList where capitalizationDate is greater than DEFAULT_CAPITALIZATION_DATE
+        defaultDepreciationEntryShouldNotBeFound("capitalizationDate.greaterThan=" + DEFAULT_CAPITALIZATION_DATE);
+
+        // Get all the depreciationEntryList where capitalizationDate is greater than SMALLER_CAPITALIZATION_DATE
+        defaultDepreciationEntryShouldBeFound("capitalizationDate.greaterThan=" + SMALLER_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
     void getAllDepreciationEntriesByServiceOutletIsEqualToSomething() throws Exception {
         // Initialize the database
         depreciationEntryRepository.saveAndFlush(depreciationEntry);
@@ -2214,7 +2327,8 @@ class DepreciationEntryResourceIT {
             .andExpect(jsonPath("$.[*].previousNBV").value(hasItem(sameNumber(DEFAULT_PREVIOUS_NBV))))
             .andExpect(jsonPath("$.[*].netBookValue").value(hasItem(sameNumber(DEFAULT_NET_BOOK_VALUE))))
             .andExpect(jsonPath("$.[*].depreciationPeriodStartDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].depreciationPeriodEndDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].depreciationPeriodEndDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].capitalizationDate").value(hasItem(DEFAULT_CAPITALIZATION_DATE.toString())));
 
         // Check, that the count call also returns 1
         restDepreciationEntryMockMvc
@@ -2279,7 +2393,8 @@ class DepreciationEntryResourceIT {
             .previousNBV(UPDATED_PREVIOUS_NBV)
             .netBookValue(UPDATED_NET_BOOK_VALUE)
             .depreciationPeriodStartDate(UPDATED_DEPRECIATION_PERIOD_START_DATE)
-            .depreciationPeriodEndDate(UPDATED_DEPRECIATION_PERIOD_END_DATE);
+            .depreciationPeriodEndDate(UPDATED_DEPRECIATION_PERIOD_END_DATE)
+            .capitalizationDate(UPDATED_CAPITALIZATION_DATE);
         DepreciationEntryDTO depreciationEntryDTO = depreciationEntryMapper.toDto(updatedDepreciationEntry);
 
         restDepreciationEntryMockMvc
@@ -2311,6 +2426,7 @@ class DepreciationEntryResourceIT {
         assertThat(testDepreciationEntry.getNetBookValue()).isEqualTo(UPDATED_NET_BOOK_VALUE);
         assertThat(testDepreciationEntry.getDepreciationPeriodStartDate()).isEqualTo(UPDATED_DEPRECIATION_PERIOD_START_DATE);
         assertThat(testDepreciationEntry.getDepreciationPeriodEndDate()).isEqualTo(UPDATED_DEPRECIATION_PERIOD_END_DATE);
+        assertThat(testDepreciationEntry.getCapitalizationDate()).isEqualTo(UPDATED_CAPITALIZATION_DATE);
 
         // Validate the DepreciationEntry in Elasticsearch
         verify(mockDepreciationEntrySearchRepository).save(testDepreciationEntry);
@@ -2411,7 +2527,8 @@ class DepreciationEntryResourceIT {
             .fiscalMonthIdentifier(UPDATED_FISCAL_MONTH_IDENTIFIER)
             .batchSequenceNumber(UPDATED_BATCH_SEQUENCE_NUMBER)
             .processedItems(UPDATED_PROCESSED_ITEMS)
-            .usefulLifeYears(UPDATED_USEFUL_LIFE_YEARS);
+            .usefulLifeYears(UPDATED_USEFUL_LIFE_YEARS)
+            .capitalizationDate(UPDATED_CAPITALIZATION_DATE);
 
         restDepreciationEntryMockMvc
             .perform(
@@ -2442,6 +2559,7 @@ class DepreciationEntryResourceIT {
         assertThat(testDepreciationEntry.getNetBookValue()).isEqualByComparingTo(DEFAULT_NET_BOOK_VALUE);
         assertThat(testDepreciationEntry.getDepreciationPeriodStartDate()).isEqualTo(DEFAULT_DEPRECIATION_PERIOD_START_DATE);
         assertThat(testDepreciationEntry.getDepreciationPeriodEndDate()).isEqualTo(DEFAULT_DEPRECIATION_PERIOD_END_DATE);
+        assertThat(testDepreciationEntry.getCapitalizationDate()).isEqualTo(UPDATED_CAPITALIZATION_DATE);
     }
 
     @Test
@@ -2473,7 +2591,8 @@ class DepreciationEntryResourceIT {
             .previousNBV(UPDATED_PREVIOUS_NBV)
             .netBookValue(UPDATED_NET_BOOK_VALUE)
             .depreciationPeriodStartDate(UPDATED_DEPRECIATION_PERIOD_START_DATE)
-            .depreciationPeriodEndDate(UPDATED_DEPRECIATION_PERIOD_END_DATE);
+            .depreciationPeriodEndDate(UPDATED_DEPRECIATION_PERIOD_END_DATE)
+            .capitalizationDate(UPDATED_CAPITALIZATION_DATE);
 
         restDepreciationEntryMockMvc
             .perform(
@@ -2504,6 +2623,7 @@ class DepreciationEntryResourceIT {
         assertThat(testDepreciationEntry.getNetBookValue()).isEqualByComparingTo(UPDATED_NET_BOOK_VALUE);
         assertThat(testDepreciationEntry.getDepreciationPeriodStartDate()).isEqualTo(UPDATED_DEPRECIATION_PERIOD_START_DATE);
         assertThat(testDepreciationEntry.getDepreciationPeriodEndDate()).isEqualTo(UPDATED_DEPRECIATION_PERIOD_END_DATE);
+        assertThat(testDepreciationEntry.getCapitalizationDate()).isEqualTo(UPDATED_CAPITALIZATION_DATE);
     }
 
     @Test
@@ -2636,6 +2756,7 @@ class DepreciationEntryResourceIT {
             .andExpect(jsonPath("$.[*].previousNBV").value(hasItem(sameNumber(DEFAULT_PREVIOUS_NBV))))
             .andExpect(jsonPath("$.[*].netBookValue").value(hasItem(sameNumber(DEFAULT_NET_BOOK_VALUE))))
             .andExpect(jsonPath("$.[*].depreciationPeriodStartDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].depreciationPeriodEndDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].depreciationPeriodEndDate").value(hasItem(DEFAULT_DEPRECIATION_PERIOD_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].capitalizationDate").value(hasItem(DEFAULT_CAPITALIZATION_DATE.toString())));
     }
 }

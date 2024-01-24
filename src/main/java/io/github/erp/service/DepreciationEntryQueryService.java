@@ -188,6 +188,10 @@ public class DepreciationEntryQueryService extends QueryService<DepreciationEntr
                         buildRangeSpecification(criteria.getDepreciationPeriodEndDate(), DepreciationEntry_.depreciationPeriodEndDate)
                     );
             }
+            if (criteria.getCapitalizationDate() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getCapitalizationDate(), DepreciationEntry_.capitalizationDate));
+            }
             if (criteria.getServiceOutletId() != null) {
                 specification =
                     specification.and(
