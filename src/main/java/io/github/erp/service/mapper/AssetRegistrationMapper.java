@@ -61,6 +61,7 @@ public interface AssetRegistrationMapper extends EntityMapper<AssetRegistrationD
     @Mapping(target = "universallyUniqueMappings", source = "universallyUniqueMappings", qualifiedByName = "universalKeySet")
     @Mapping(target = "assetAccessories", source = "assetAccessories", qualifiedByName = "assetDetailsSet")
     @Mapping(target = "mainServiceOutlet", source = "mainServiceOutlet", qualifiedByName = "outletCode")
+    @Mapping(target = "acquiringTransaction", source = "acquiringTransaction", qualifiedByName = "paymentNumber")
     AssetRegistrationDTO toDto(AssetRegistration s);
 
     @Mapping(target = "removePlaceholder", ignore = true)

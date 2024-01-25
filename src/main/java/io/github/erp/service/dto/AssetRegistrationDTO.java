@@ -95,6 +95,8 @@ public class AssetRegistrationDTO implements Serializable {
 
     private ServiceOutletDTO mainServiceOutlet;
 
+    private SettlementDTO acquiringTransaction;
+
     public Long getId() {
         return id;
     }
@@ -327,6 +329,14 @@ public class AssetRegistrationDTO implements Serializable {
         this.mainServiceOutlet = mainServiceOutlet;
     }
 
+    public SettlementDTO getAcquiringTransaction() {
+        return acquiringTransaction;
+    }
+
+    public void setAcquiringTransaction(SettlementDTO acquiringTransaction) {
+        this.acquiringTransaction = acquiringTransaction;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -380,6 +390,7 @@ public class AssetRegistrationDTO implements Serializable {
             ", universallyUniqueMappings=" + getUniversallyUniqueMappings() +
             ", assetAccessories=" + getAssetAccessories() +
             ", mainServiceOutlet=" + getMainServiceOutlet() +
+            ", acquiringTransaction=" + getAcquiringTransaction() +
             "}";
     }
 }

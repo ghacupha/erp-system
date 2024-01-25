@@ -289,6 +289,15 @@ public class AssetRegistrationQueryService extends QueryService<AssetRegistratio
                         )
                     );
             }
+            if (criteria.getAcquiringTransactionId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getAcquiringTransactionId(),
+                            root -> root.join(AssetRegistration_.acquiringTransaction, JoinType.LEFT).get(Settlement_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

@@ -191,6 +191,8 @@ public class AssetRegistrationResourceIT {
             dealer = TestUtil.findAll(em, Dealer.class).get(0);
         }
         assetRegistration.setDealer(dealer);
+        // Add required entity
+        assetRegistration.setAcquiringTransaction(settlement);
         return assetRegistration;
     }
 
@@ -244,6 +246,8 @@ public class AssetRegistrationResourceIT {
             dealer = TestUtil.findAll(em, Dealer.class).get(0);
         }
         assetRegistration.setDealer(dealer);
+        // Add required entity
+        assetRegistration.setAcquiringTransaction(settlement);
         return assetRegistration;
     }
 
@@ -1709,6 +1713,32 @@ public class AssetRegistrationResourceIT {
 
         // Get all the assetRegistrationList where mainServiceOutlet equals to (mainServiceOutletId + 1)
         defaultAssetRegistrationShouldNotBeFound("mainServiceOutletId.equals=" + (mainServiceOutletId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetRegistrationsByAcquiringTransactionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+        Settlement acquiringTransaction;
+        if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
+            acquiringTransaction = SettlementResourceIT.createEntity(em);
+            em.persist(acquiringTransaction);
+            em.flush();
+        } else {
+            acquiringTransaction = TestUtil.findAll(em, Settlement.class).get(0);
+        }
+        em.persist(acquiringTransaction);
+        em.flush();
+        assetRegistration.setAcquiringTransaction(acquiringTransaction);
+        assetRegistrationRepository.saveAndFlush(assetRegistration);
+        Long acquiringTransactionId = acquiringTransaction.getId();
+
+        // Get all the assetRegistrationList where acquiringTransaction equals to acquiringTransactionId
+        defaultAssetRegistrationShouldBeFound("acquiringTransactionId.equals=" + acquiringTransactionId);
+
+        // Get all the assetRegistrationList where acquiringTransaction equals to (acquiringTransactionId + 1)
+        defaultAssetRegistrationShouldNotBeFound("acquiringTransactionId.equals=" + (acquiringTransactionId + 1));
     }
 
     /**
