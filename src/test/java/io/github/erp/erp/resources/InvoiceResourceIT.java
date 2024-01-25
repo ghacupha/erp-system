@@ -29,6 +29,7 @@ import io.github.erp.domain.Invoice;
 import io.github.erp.domain.PaymentLabel;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.enumeration.CurrencyTypes;
+import io.github.erp.erp.resources.settlements.InvoiceResourceProd;
 import io.github.erp.repository.InvoiceRepository;
 import io.github.erp.repository.search.InvoiceSearchRepository;
 import io.github.erp.service.InvoiceService;

@@ -28,6 +28,7 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.domain.FixedAssetDepreciation;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.enumeration.DepreciationRegime;
+import io.github.erp.erp.resources.assets.FixedAssetDepreciationResourceProd;
 import io.github.erp.repository.FixedAssetDepreciationRepository;
 import io.github.erp.repository.search.FixedAssetDepreciationSearchRepository;
 import io.github.erp.service.FixedAssetDepreciationService;

@@ -22,7 +22,7 @@ import io.github.erp.internal.resource.decorator.IFixedAssetNetBookValueResource
 import io.github.erp.service.FixedAssetNetBookValueQueryService;
 import io.github.erp.service.criteria.FixedAssetNetBookValueCriteria;
 import io.github.erp.service.dto.FixedAssetNetBookValueDTO;
-import io.github.erp.erp.resources.FixedAssetNetBookValueResourceProd;
+import io.github.erp.erp.resources.assets.FixedAssetNetBookValueResourceProd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;

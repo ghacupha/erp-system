@@ -19,6 +19,7 @@ package io.github.erp.erp.resources;
  */
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
+import io.github.erp.erp.resources.settlements.DeliveryNoteResourceProd;
 import io.github.erp.repository.DeliveryNoteRepository;
 import io.github.erp.repository.search.DeliveryNoteSearchRepository;
 import io.github.erp.service.DeliveryNoteService;

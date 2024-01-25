@@ -19,6 +19,7 @@ package io.github.erp.erp.resources;
  */
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
+import io.github.erp.erp.resources.settlements.JobSheetResourceProd;
 import io.github.erp.repository.JobSheetRepository;
 import io.github.erp.repository.search.JobSheetSearchRepository;
 import io.github.erp.service.JobSheetService;

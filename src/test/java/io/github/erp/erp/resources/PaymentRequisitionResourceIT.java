@@ -28,6 +28,7 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.domain.PaymentLabel;
 import io.github.erp.domain.PaymentRequisition;
 import io.github.erp.domain.Placeholder;
+import io.github.erp.erp.resources.settlements.PaymentRequisitionResourceProd;
 import io.github.erp.repository.PaymentRequisitionRepository;
 import io.github.erp.repository.search.PaymentRequisitionSearchRepository;
 import io.github.erp.service.PaymentRequisitionService;

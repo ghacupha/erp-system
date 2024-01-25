@@ -28,6 +28,7 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.domain.FixedAssetNetBookValue;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.enumeration.DepreciationRegime;
+import io.github.erp.erp.resources.assets.FixedAssetNetBookValueResourceProd;
 import io.github.erp.repository.FixedAssetNetBookValueRepository;
 import io.github.erp.repository.search.FixedAssetNetBookValueSearchRepository;
 import io.github.erp.service.FixedAssetNetBookValueService;

@@ -30,6 +30,7 @@ import io.github.erp.domain.PaymentCategory;
 import io.github.erp.domain.PaymentLabel;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.enumeration.CurrencyTypes;
+import io.github.erp.erp.resources.settlements.PaymentResourceProd;
 import io.github.erp.repository.PaymentRepository;
 import io.github.erp.repository.search.PaymentSearchRepository;
 import io.github.erp.service.PaymentService;

@@ -19,7 +19,7 @@ package io.github.erp.internal.resource.decorator;
  */
 import io.github.erp.service.criteria.FixedAssetNetBookValueCriteria;
 import io.github.erp.service.dto.FixedAssetNetBookValueDTO;
-import io.github.erp.erp.resources.FixedAssetNetBookValueResourceProd;
+import io.github.erp.erp.resources.assets.FixedAssetNetBookValueResourceProd;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

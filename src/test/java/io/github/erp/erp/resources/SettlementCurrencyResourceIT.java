@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.SettlementCurrency;
+import io.github.erp.erp.resources.settlements.SettlementCurrencyResourceProd;
 import io.github.erp.repository.SettlementCurrencyRepository;
 import io.github.erp.repository.search.SettlementCurrencySearchRepository;
 import io.github.erp.service.SettlementCurrencyService;
