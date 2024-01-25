@@ -29,6 +29,7 @@ import io.github.erp.domain.PaymentCategory;
 import io.github.erp.domain.PaymentLabel;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.enumeration.CategoryTypes;
+import io.github.erp.erp.resources.settlements.PaymentCategoryResourceProd;
 import io.github.erp.repository.PaymentCategoryRepository;
 import io.github.erp.repository.search.PaymentCategorySearchRepository;
 import io.github.erp.service.PaymentCategoryService;

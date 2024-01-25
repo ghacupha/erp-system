@@ -27,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.FixedAssetAcquisition;
 import io.github.erp.domain.Placeholder;
+import io.github.erp.erp.resources.assets.FixedAssetAcquisitionResourceProd;
 import io.github.erp.repository.FixedAssetAcquisitionRepository;
 import io.github.erp.repository.search.FixedAssetAcquisitionSearchRepository;
 import io.github.erp.service.FixedAssetAcquisitionService;

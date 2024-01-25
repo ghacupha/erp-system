@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.PaymentLabel;
 import io.github.erp.domain.Placeholder;
+import io.github.erp.erp.resources.settlements.PaymentLabelResourceProd;
 import io.github.erp.repository.PaymentLabelRepository;
 import io.github.erp.repository.search.PaymentLabelSearchRepository;
 import io.github.erp.service.PaymentLabelService;

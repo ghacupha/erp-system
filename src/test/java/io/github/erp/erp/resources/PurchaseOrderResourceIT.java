@@ -19,6 +19,7 @@ package io.github.erp.erp.resources;
  */
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
+import io.github.erp.erp.resources.settlements.PurchaseOrderResourceProd;
 import io.github.erp.repository.PurchaseOrderRepository;
 import io.github.erp.repository.search.PurchaseOrderSearchRepository;
 import io.github.erp.service.PurchaseOrderService;

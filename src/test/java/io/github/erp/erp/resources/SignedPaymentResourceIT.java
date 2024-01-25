@@ -30,6 +30,7 @@ import io.github.erp.domain.PaymentLabel;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.SignedPayment;
 import io.github.erp.domain.enumeration.CurrencyTypes;
+import io.github.erp.erp.resources.settlements.SignedPaymentResourceProd;
 import io.github.erp.repository.SignedPaymentRepository;
 import io.github.erp.repository.search.SignedPaymentSearchRepository;
 import io.github.erp.service.SignedPaymentService;

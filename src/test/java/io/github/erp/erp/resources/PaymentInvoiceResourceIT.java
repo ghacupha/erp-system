@@ -19,6 +19,7 @@ package io.github.erp.erp.resources;
  */
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
+import io.github.erp.erp.resources.settlements.PaymentInvoiceResourceProd;
 import io.github.erp.repository.PaymentInvoiceRepository;
 import io.github.erp.repository.search.PaymentInvoiceSearchRepository;
 import io.github.erp.service.PaymentInvoiceService;
