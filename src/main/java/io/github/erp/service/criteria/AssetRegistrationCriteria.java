@@ -96,6 +96,8 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
 
     private LongFilter mainServiceOutletId;
 
+    private LongFilter acquiringTransactionId;
+
     private Boolean distinct;
 
     public AssetRegistrationCriteria() {}
@@ -127,6 +129,7 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
         this.universallyUniqueMappingId = other.universallyUniqueMappingId == null ? null : other.universallyUniqueMappingId.copy();
         this.assetAccessoryId = other.assetAccessoryId == null ? null : other.assetAccessoryId.copy();
         this.mainServiceOutletId = other.mainServiceOutletId == null ? null : other.mainServiceOutletId.copy();
+        this.acquiringTransactionId = other.acquiringTransactionId == null ? null : other.acquiringTransactionId.copy();
         this.distinct = other.distinct;
     }
 
@@ -525,6 +528,21 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
         this.mainServiceOutletId = mainServiceOutletId;
     }
 
+    public LongFilter getAcquiringTransactionId() {
+        return acquiringTransactionId;
+    }
+
+    public LongFilter acquiringTransactionId() {
+        if (acquiringTransactionId == null) {
+            acquiringTransactionId = new LongFilter();
+        }
+        return acquiringTransactionId;
+    }
+
+    public void setAcquiringTransactionId(LongFilter acquiringTransactionId) {
+        this.acquiringTransactionId = acquiringTransactionId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -569,6 +587,7 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             Objects.equals(universallyUniqueMappingId, that.universallyUniqueMappingId) &&
             Objects.equals(assetAccessoryId, that.assetAccessoryId) &&
             Objects.equals(mainServiceOutletId, that.mainServiceOutletId) &&
+            Objects.equals(acquiringTransactionId, that.acquiringTransactionId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -602,6 +621,7 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             universallyUniqueMappingId,
             assetAccessoryId,
             mainServiceOutletId,
+            acquiringTransactionId,
             distinct
         );
     }
@@ -636,6 +656,7 @@ public class AssetRegistrationCriteria implements Serializable, Criteria {
             (universallyUniqueMappingId != null ? "universallyUniqueMappingId=" + universallyUniqueMappingId + ", " : "") +
             (assetAccessoryId != null ? "assetAccessoryId=" + assetAccessoryId + ", " : "") +
             (mainServiceOutletId != null ? "mainServiceOutletId=" + mainServiceOutletId + ", " : "") +
+            (acquiringTransactionId != null ? "acquiringTransactionId=" + acquiringTransactionId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

@@ -307,6 +307,24 @@ public class AssetRegistration implements Serializable {
     )
     private ServiceOutlet mainServiceOutlet;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(
+        value = {
+            "placeholders",
+            "settlementCurrency",
+            "paymentLabels",
+            "paymentCategory",
+            "groupSettlement",
+            "biller",
+            "paymentInvoices",
+            "signatories",
+            "businessDocuments",
+        },
+        allowSetters = true
+    )
+    private Settlement acquiringTransaction;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -803,6 +821,19 @@ public class AssetRegistration implements Serializable {
 
     public AssetRegistration mainServiceOutlet(ServiceOutlet serviceOutlet) {
         this.setMainServiceOutlet(serviceOutlet);
+        return this;
+    }
+
+    public Settlement getAcquiringTransaction() {
+        return this.acquiringTransaction;
+    }
+
+    public void setAcquiringTransaction(Settlement settlement) {
+        this.acquiringTransaction = settlement;
+    }
+
+    public AssetRegistration acquiringTransaction(Settlement settlement) {
+        this.setAcquiringTransaction(settlement);
         return this;
     }
 

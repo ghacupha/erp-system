@@ -134,6 +134,7 @@ public class DepreciationEntry implements Serializable {
             "universallyUniqueMappings",
             "assetAccessories",
             "mainServiceOutlet",
+            "acquiringTransaction",
         },
         allowSetters = true
     )
