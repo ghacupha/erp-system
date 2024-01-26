@@ -48,6 +48,10 @@ public class AssetAdditionsReportCriteria implements Serializable, Criteria {
 
     private LocalDateFilter timeOfRequest;
 
+    private LocalDateFilter reportStartDate;
+
+    private LocalDateFilter reportEndDate;
+
     private UUIDFilter requestId;
 
     private StringFilter fileChecksum;
@@ -65,6 +69,8 @@ public class AssetAdditionsReportCriteria implements Serializable, Criteria {
     public AssetAdditionsReportCriteria(AssetAdditionsReportCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.timeOfRequest = other.timeOfRequest == null ? null : other.timeOfRequest.copy();
+        this.reportStartDate = other.reportStartDate == null ? null : other.reportStartDate.copy();
+        this.reportEndDate = other.reportEndDate == null ? null : other.reportEndDate.copy();
         this.requestId = other.requestId == null ? null : other.requestId.copy();
         this.fileChecksum = other.fileChecksum == null ? null : other.fileChecksum.copy();
         this.tampered = other.tampered == null ? null : other.tampered.copy();
@@ -106,6 +112,36 @@ public class AssetAdditionsReportCriteria implements Serializable, Criteria {
 
     public void setTimeOfRequest(LocalDateFilter timeOfRequest) {
         this.timeOfRequest = timeOfRequest;
+    }
+
+    public LocalDateFilter getReportStartDate() {
+        return reportStartDate;
+    }
+
+    public LocalDateFilter reportStartDate() {
+        if (reportStartDate == null) {
+            reportStartDate = new LocalDateFilter();
+        }
+        return reportStartDate;
+    }
+
+    public void setReportStartDate(LocalDateFilter reportStartDate) {
+        this.reportStartDate = reportStartDate;
+    }
+
+    public LocalDateFilter getReportEndDate() {
+        return reportEndDate;
+    }
+
+    public LocalDateFilter reportEndDate() {
+        if (reportEndDate == null) {
+            reportEndDate = new LocalDateFilter();
+        }
+        return reportEndDate;
+    }
+
+    public void setReportEndDate(LocalDateFilter reportEndDate) {
+        this.reportEndDate = reportEndDate;
     }
 
     public UUIDFilter getRequestId() {
@@ -203,6 +239,8 @@ public class AssetAdditionsReportCriteria implements Serializable, Criteria {
         return (
             Objects.equals(id, that.id) &&
             Objects.equals(timeOfRequest, that.timeOfRequest) &&
+            Objects.equals(reportStartDate, that.reportStartDate) &&
+            Objects.equals(reportEndDate, that.reportEndDate) &&
             Objects.equals(requestId, that.requestId) &&
             Objects.equals(fileChecksum, that.fileChecksum) &&
             Objects.equals(tampered, that.tampered) &&
@@ -214,7 +252,18 @@ public class AssetAdditionsReportCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, timeOfRequest, requestId, fileChecksum, tampered, filename, reportParameters, distinct);
+        return Objects.hash(
+            id,
+            timeOfRequest,
+            reportStartDate,
+            reportEndDate,
+            requestId,
+            fileChecksum,
+            tampered,
+            filename,
+            reportParameters,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -223,6 +272,8 @@ public class AssetAdditionsReportCriteria implements Serializable, Criteria {
         return "AssetAdditionsReportCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
             (timeOfRequest != null ? "timeOfRequest=" + timeOfRequest + ", " : "") +
+            (reportStartDate != null ? "reportStartDate=" + reportStartDate + ", " : "") +
+            (reportEndDate != null ? "reportEndDate=" + reportEndDate + ", " : "") +
             (requestId != null ? "requestId=" + requestId + ", " : "") +
             (fileChecksum != null ? "fileChecksum=" + fileChecksum + ", " : "") +
             (tampered != null ? "tampered=" + tampered + ", " : "") +

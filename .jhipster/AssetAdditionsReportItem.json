@@ -41,7 +41,7 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "assetCost",
+      "fieldName": "historicalCost",
       "fieldType": "BigDecimal"
     },
     {

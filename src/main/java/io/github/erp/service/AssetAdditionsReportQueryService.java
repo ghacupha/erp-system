@@ -120,6 +120,14 @@ public class AssetAdditionsReportQueryService extends QueryService<AssetAddition
                 specification =
                     specification.and(buildRangeSpecification(criteria.getTimeOfRequest(), AssetAdditionsReport_.timeOfRequest));
             }
+            if (criteria.getReportStartDate() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getReportStartDate(), AssetAdditionsReport_.reportStartDate));
+            }
+            if (criteria.getReportEndDate() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getReportEndDate(), AssetAdditionsReport_.reportEndDate));
+            }
             if (criteria.getRequestId() != null) {
                 specification = specification.and(buildSpecification(criteria.getRequestId(), AssetAdditionsReport_.requestId));
             }

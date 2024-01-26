@@ -66,13 +66,9 @@ public class AssetAdditionsReportItemCriteria implements Serializable, Criteria 
 
     private StringFilter supplier;
 
-    private StringFilter invoiceNumber;
+    private BigDecimalFilter historicalCost;
 
-    private StringFilter lpoNumber;
-
-    private BooleanFilter wipTransfer;
-
-    private BigDecimalFilter wipTransferAmount;
+    private LocalDateFilter registrationDate;
 
     private Boolean distinct;
 
@@ -90,10 +86,8 @@ public class AssetAdditionsReportItemCriteria implements Serializable, Criteria 
         this.assetDetails = other.assetDetails == null ? null : other.assetDetails.copy();
         this.assetCost = other.assetCost == null ? null : other.assetCost.copy();
         this.supplier = other.supplier == null ? null : other.supplier.copy();
-        this.invoiceNumber = other.invoiceNumber == null ? null : other.invoiceNumber.copy();
-        this.lpoNumber = other.lpoNumber == null ? null : other.lpoNumber.copy();
-        this.wipTransfer = other.wipTransfer == null ? null : other.wipTransfer.copy();
-        this.wipTransferAmount = other.wipTransferAmount == null ? null : other.wipTransferAmount.copy();
+        this.historicalCost = other.historicalCost == null ? null : other.historicalCost.copy();
+        this.registrationDate = other.registrationDate == null ? null : other.registrationDate.copy();
         this.distinct = other.distinct;
     }
 
@@ -267,64 +261,34 @@ public class AssetAdditionsReportItemCriteria implements Serializable, Criteria 
         this.supplier = supplier;
     }
 
-    public StringFilter getInvoiceNumber() {
-        return invoiceNumber;
+    public BigDecimalFilter getHistoricalCost() {
+        return historicalCost;
     }
 
-    public StringFilter invoiceNumber() {
-        if (invoiceNumber == null) {
-            invoiceNumber = new StringFilter();
+    public BigDecimalFilter historicalCost() {
+        if (historicalCost == null) {
+            historicalCost = new BigDecimalFilter();
         }
-        return invoiceNumber;
+        return historicalCost;
     }
 
-    public void setInvoiceNumber(StringFilter invoiceNumber) {
-        this.invoiceNumber = invoiceNumber;
+    public void setHistoricalCost(BigDecimalFilter historicalCost) {
+        this.historicalCost = historicalCost;
     }
 
-    public StringFilter getLpoNumber() {
-        return lpoNumber;
+    public LocalDateFilter getRegistrationDate() {
+        return registrationDate;
     }
 
-    public StringFilter lpoNumber() {
-        if (lpoNumber == null) {
-            lpoNumber = new StringFilter();
+    public LocalDateFilter registrationDate() {
+        if (registrationDate == null) {
+            registrationDate = new LocalDateFilter();
         }
-        return lpoNumber;
+        return registrationDate;
     }
 
-    public void setLpoNumber(StringFilter lpoNumber) {
-        this.lpoNumber = lpoNumber;
-    }
-
-    public BooleanFilter getWipTransfer() {
-        return wipTransfer;
-    }
-
-    public BooleanFilter wipTransfer() {
-        if (wipTransfer == null) {
-            wipTransfer = new BooleanFilter();
-        }
-        return wipTransfer;
-    }
-
-    public void setWipTransfer(BooleanFilter wipTransfer) {
-        this.wipTransfer = wipTransfer;
-    }
-
-    public BigDecimalFilter getWipTransferAmount() {
-        return wipTransferAmount;
-    }
-
-    public BigDecimalFilter wipTransferAmount() {
-        if (wipTransferAmount == null) {
-            wipTransferAmount = new BigDecimalFilter();
-        }
-        return wipTransferAmount;
-    }
-
-    public void setWipTransferAmount(BigDecimalFilter wipTransferAmount) {
-        this.wipTransferAmount = wipTransferAmount;
+    public void setRegistrationDate(LocalDateFilter registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
     public Boolean getDistinct() {
@@ -356,10 +320,8 @@ public class AssetAdditionsReportItemCriteria implements Serializable, Criteria 
             Objects.equals(assetDetails, that.assetDetails) &&
             Objects.equals(assetCost, that.assetCost) &&
             Objects.equals(supplier, that.supplier) &&
-            Objects.equals(invoiceNumber, that.invoiceNumber) &&
-            Objects.equals(lpoNumber, that.lpoNumber) &&
-            Objects.equals(wipTransfer, that.wipTransfer) &&
-            Objects.equals(wipTransferAmount, that.wipTransferAmount) &&
+            Objects.equals(historicalCost, that.historicalCost) &&
+            Objects.equals(registrationDate, that.registrationDate) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -378,10 +340,8 @@ public class AssetAdditionsReportItemCriteria implements Serializable, Criteria 
             assetDetails,
             assetCost,
             supplier,
-            invoiceNumber,
-            lpoNumber,
-            wipTransfer,
-            wipTransferAmount,
+            historicalCost,
+            registrationDate,
             distinct
         );
     }
@@ -401,10 +361,8 @@ public class AssetAdditionsReportItemCriteria implements Serializable, Criteria 
             (assetDetails != null ? "assetDetails=" + assetDetails + ", " : "") +
             (assetCost != null ? "assetCost=" + assetCost + ", " : "") +
             (supplier != null ? "supplier=" + supplier + ", " : "") +
-            (invoiceNumber != null ? "invoiceNumber=" + invoiceNumber + ", " : "") +
-            (lpoNumber != null ? "lpoNumber=" + lpoNumber + ", " : "") +
-            (wipTransfer != null ? "wipTransfer=" + wipTransfer + ", " : "") +
-            (wipTransferAmount != null ? "wipTransferAmount=" + wipTransferAmount + ", " : "") +
+            (historicalCost != null ? "historicalCost=" + historicalCost + ", " : "") +
+            (registrationDate != null ? "registrationDate=" + registrationDate + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

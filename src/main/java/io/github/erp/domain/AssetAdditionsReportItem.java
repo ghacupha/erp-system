@@ -72,17 +72,11 @@ public class AssetAdditionsReportItem implements Serializable {
     @Column(name = "supplier")
     private String supplier;
 
-    @Column(name = "invoice_number")
-    private String invoiceNumber;
+    @Column(name = "historical_cost", precision = 21, scale = 2)
+    private BigDecimal historicalCost;
 
-    @Column(name = "lpo_number")
-    private String lpoNumber;
-
-    @Column(name = "wip_transfer")
-    private Boolean wipTransfer;
-
-    @Column(name = "wip_transfer_amount", precision = 21, scale = 2)
-    private BigDecimal wipTransferAmount;
+    @Column(name = "registration_date")
+    private LocalDate registrationDate;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -229,56 +223,30 @@ public class AssetAdditionsReportItem implements Serializable {
         this.supplier = supplier;
     }
 
-    public String getInvoiceNumber() {
-        return this.invoiceNumber;
+    public BigDecimal getHistoricalCost() {
+        return this.historicalCost;
     }
 
-    public AssetAdditionsReportItem invoiceNumber(String invoiceNumber) {
-        this.setInvoiceNumber(invoiceNumber);
+    public AssetAdditionsReportItem historicalCost(BigDecimal historicalCost) {
+        this.setHistoricalCost(historicalCost);
         return this;
     }
 
-    public void setInvoiceNumber(String invoiceNumber) {
-        this.invoiceNumber = invoiceNumber;
+    public void setHistoricalCost(BigDecimal historicalCost) {
+        this.historicalCost = historicalCost;
     }
 
-    public String getLpoNumber() {
-        return this.lpoNumber;
+    public LocalDate getRegistrationDate() {
+        return this.registrationDate;
     }
 
-    public AssetAdditionsReportItem lpoNumber(String lpoNumber) {
-        this.setLpoNumber(lpoNumber);
+    public AssetAdditionsReportItem registrationDate(LocalDate registrationDate) {
+        this.setRegistrationDate(registrationDate);
         return this;
     }
 
-    public void setLpoNumber(String lpoNumber) {
-        this.lpoNumber = lpoNumber;
-    }
-
-    public Boolean getWipTransfer() {
-        return this.wipTransfer;
-    }
-
-    public AssetAdditionsReportItem wipTransfer(Boolean wipTransfer) {
-        this.setWipTransfer(wipTransfer);
-        return this;
-    }
-
-    public void setWipTransfer(Boolean wipTransfer) {
-        this.wipTransfer = wipTransfer;
-    }
-
-    public BigDecimal getWipTransferAmount() {
-        return this.wipTransferAmount;
-    }
-
-    public AssetAdditionsReportItem wipTransferAmount(BigDecimal wipTransferAmount) {
-        this.setWipTransferAmount(wipTransferAmount);
-        return this;
-    }
-
-    public void setWipTransferAmount(BigDecimal wipTransferAmount) {
-        this.wipTransferAmount = wipTransferAmount;
+    public void setRegistrationDate(LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -315,10 +283,8 @@ public class AssetAdditionsReportItem implements Serializable {
             ", assetDetails='" + getAssetDetails() + "'" +
             ", assetCost=" + getAssetCost() +
             ", supplier='" + getSupplier() + "'" +
-            ", invoiceNumber='" + getInvoiceNumber() + "'" +
-            ", lpoNumber='" + getLpoNumber() + "'" +
-            ", wipTransfer='" + getWipTransfer() + "'" +
-            ", wipTransferAmount=" + getWipTransferAmount() +
+            ", historicalCost=" + getHistoricalCost() +
+            ", registrationDate='" + getRegistrationDate() + "'" +
             "}";
     }
 }

@@ -46,6 +46,12 @@ public class AssetAdditionsReport implements Serializable {
     @Column(name = "time_of_request")
     private LocalDate timeOfRequest;
 
+    @Column(name = "report_start_date")
+    private LocalDate reportStartDate;
+
+    @Column(name = "report_end_date")
+    private LocalDate reportEndDate;
+
     @Column(name = "request_id", unique = true)
     private UUID requestId;
 
@@ -94,6 +100,32 @@ public class AssetAdditionsReport implements Serializable {
 
     public void setTimeOfRequest(LocalDate timeOfRequest) {
         this.timeOfRequest = timeOfRequest;
+    }
+
+    public LocalDate getReportStartDate() {
+        return this.reportStartDate;
+    }
+
+    public AssetAdditionsReport reportStartDate(LocalDate reportStartDate) {
+        this.setReportStartDate(reportStartDate);
+        return this;
+    }
+
+    public void setReportStartDate(LocalDate reportStartDate) {
+        this.reportStartDate = reportStartDate;
+    }
+
+    public LocalDate getReportEndDate() {
+        return this.reportEndDate;
+    }
+
+    public AssetAdditionsReport reportEndDate(LocalDate reportEndDate) {
+        this.setReportEndDate(reportEndDate);
+        return this;
+    }
+
+    public void setReportEndDate(LocalDate reportEndDate) {
+        this.reportEndDate = reportEndDate;
     }
 
     public UUID getRequestId() {
@@ -212,6 +244,8 @@ public class AssetAdditionsReport implements Serializable {
         return "AssetAdditionsReport{" +
             "id=" + getId() +
             ", timeOfRequest='" + getTimeOfRequest() + "'" +
+            ", reportStartDate='" + getReportStartDate() + "'" +
+            ", reportEndDate='" + getReportEndDate() + "'" +
             ", requestId='" + getRequestId() + "'" +
             ", fileChecksum='" + getFileChecksum() + "'" +
             ", tampered='" + getTampered() + "'" +

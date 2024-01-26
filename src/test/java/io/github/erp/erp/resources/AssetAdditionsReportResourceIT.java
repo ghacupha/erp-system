@@ -68,6 +68,14 @@ class AssetAdditionsReportResourceIT {
     private static final LocalDate UPDATED_TIME_OF_REQUEST = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_TIME_OF_REQUEST = LocalDate.ofEpochDay(-1L);
 
+    private static final LocalDate DEFAULT_REPORT_START_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_REPORT_START_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_REPORT_START_DATE = LocalDate.ofEpochDay(-1L);
+
+    private static final LocalDate DEFAULT_REPORT_END_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_REPORT_END_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_REPORT_END_DATE = LocalDate.ofEpochDay(-1L);
+
     private static final UUID DEFAULT_REQUEST_ID = UUID.randomUUID();
     private static final UUID UPDATED_REQUEST_ID = UUID.randomUUID();
 
@@ -126,6 +134,8 @@ class AssetAdditionsReportResourceIT {
     public static AssetAdditionsReport createEntity(EntityManager em) {
         AssetAdditionsReport assetAdditionsReport = new AssetAdditionsReport()
             .timeOfRequest(DEFAULT_TIME_OF_REQUEST)
+            .reportStartDate(DEFAULT_REPORT_START_DATE)
+            .reportEndDate(DEFAULT_REPORT_END_DATE)
             .requestId(DEFAULT_REQUEST_ID)
             .fileChecksum(DEFAULT_FILE_CHECKSUM)
             .tampered(DEFAULT_TAMPERED)
@@ -145,6 +155,8 @@ class AssetAdditionsReportResourceIT {
     public static AssetAdditionsReport createUpdatedEntity(EntityManager em) {
         AssetAdditionsReport assetAdditionsReport = new AssetAdditionsReport()
             .timeOfRequest(UPDATED_TIME_OF_REQUEST)
+            .reportStartDate(UPDATED_REPORT_START_DATE)
+            .reportEndDate(UPDATED_REPORT_END_DATE)
             .requestId(UPDATED_REQUEST_ID)
             .fileChecksum(UPDATED_FILE_CHECKSUM)
             .tampered(UPDATED_TAMPERED)
@@ -179,6 +191,8 @@ class AssetAdditionsReportResourceIT {
         assertThat(assetAdditionsReportList).hasSize(databaseSizeBeforeCreate + 1);
         AssetAdditionsReport testAssetAdditionsReport = assetAdditionsReportList.get(assetAdditionsReportList.size() - 1);
         assertThat(testAssetAdditionsReport.getTimeOfRequest()).isEqualTo(DEFAULT_TIME_OF_REQUEST);
+        assertThat(testAssetAdditionsReport.getReportStartDate()).isEqualTo(DEFAULT_REPORT_START_DATE);
+        assertThat(testAssetAdditionsReport.getReportEndDate()).isEqualTo(DEFAULT_REPORT_END_DATE);
         assertThat(testAssetAdditionsReport.getRequestId()).isEqualTo(DEFAULT_REQUEST_ID);
         assertThat(testAssetAdditionsReport.getFileChecksum()).isEqualTo(DEFAULT_FILE_CHECKSUM);
         assertThat(testAssetAdditionsReport.getTampered()).isEqualTo(DEFAULT_TAMPERED);
@@ -230,6 +244,8 @@ class AssetAdditionsReportResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(assetAdditionsReport.getId().intValue())))
             .andExpect(jsonPath("$.[*].timeOfRequest").value(hasItem(DEFAULT_TIME_OF_REQUEST.toString())))
+            .andExpect(jsonPath("$.[*].reportStartDate").value(hasItem(DEFAULT_REPORT_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].reportEndDate").value(hasItem(DEFAULT_REPORT_END_DATE.toString())))
             .andExpect(jsonPath("$.[*].requestId").value(hasItem(DEFAULT_REQUEST_ID.toString())))
             .andExpect(jsonPath("$.[*].fileChecksum").value(hasItem(DEFAULT_FILE_CHECKSUM)))
             .andExpect(jsonPath("$.[*].tampered").value(hasItem(DEFAULT_TAMPERED.booleanValue())))
@@ -252,6 +268,8 @@ class AssetAdditionsReportResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(assetAdditionsReport.getId().intValue()))
             .andExpect(jsonPath("$.timeOfRequest").value(DEFAULT_TIME_OF_REQUEST.toString()))
+            .andExpect(jsonPath("$.reportStartDate").value(DEFAULT_REPORT_START_DATE.toString()))
+            .andExpect(jsonPath("$.reportEndDate").value(DEFAULT_REPORT_END_DATE.toString()))
             .andExpect(jsonPath("$.requestId").value(DEFAULT_REQUEST_ID.toString()))
             .andExpect(jsonPath("$.fileChecksum").value(DEFAULT_FILE_CHECKSUM))
             .andExpect(jsonPath("$.tampered").value(DEFAULT_TAMPERED.booleanValue()))
@@ -381,6 +399,214 @@ class AssetAdditionsReportResourceIT {
 
         // Get all the assetAdditionsReportList where timeOfRequest is greater than SMALLER_TIME_OF_REQUEST
         defaultAssetAdditionsReportShouldBeFound("timeOfRequest.greaterThan=" + SMALLER_TIME_OF_REQUEST);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetAdditionsReportsByReportStartDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetAdditionsReportRepository.saveAndFlush(assetAdditionsReport);
+
+        // Get all the assetAdditionsReportList where reportStartDate equals to DEFAULT_REPORT_START_DATE
+        defaultAssetAdditionsReportShouldBeFound("reportStartDate.equals=" + DEFAULT_REPORT_START_DATE);
+
+        // Get all the assetAdditionsReportList where reportStartDate equals to UPDATED_REPORT_START_DATE
+        defaultAssetAdditionsReportShouldNotBeFound("reportStartDate.equals=" + UPDATED_REPORT_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetAdditionsReportsByReportStartDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        assetAdditionsReportRepository.saveAndFlush(assetAdditionsReport);
+
+        // Get all the assetAdditionsReportList where reportStartDate not equals to DEFAULT_REPORT_START_DATE
+        defaultAssetAdditionsReportShouldNotBeFound("reportStartDate.notEquals=" + DEFAULT_REPORT_START_DATE);
+
+        // Get all the assetAdditionsReportList where reportStartDate not equals to UPDATED_REPORT_START_DATE
+        defaultAssetAdditionsReportShouldBeFound("reportStartDate.notEquals=" + UPDATED_REPORT_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetAdditionsReportsByReportStartDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        assetAdditionsReportRepository.saveAndFlush(assetAdditionsReport);
+
+        // Get all the assetAdditionsReportList where reportStartDate in DEFAULT_REPORT_START_DATE or UPDATED_REPORT_START_DATE
+        defaultAssetAdditionsReportShouldBeFound("reportStartDate.in=" + DEFAULT_REPORT_START_DATE + "," + UPDATED_REPORT_START_DATE);
+
+        // Get all the assetAdditionsReportList where reportStartDate equals to UPDATED_REPORT_START_DATE
+        defaultAssetAdditionsReportShouldNotBeFound("reportStartDate.in=" + UPDATED_REPORT_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetAdditionsReportsByReportStartDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        assetAdditionsReportRepository.saveAndFlush(assetAdditionsReport);
+
+        // Get all the assetAdditionsReportList where reportStartDate is not null
+        defaultAssetAdditionsReportShouldBeFound("reportStartDate.specified=true");
+
+        // Get all the assetAdditionsReportList where reportStartDate is null
+        defaultAssetAdditionsReportShouldNotBeFound("reportStartDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetAdditionsReportsByReportStartDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        assetAdditionsReportRepository.saveAndFlush(assetAdditionsReport);
+
+        // Get all the assetAdditionsReportList where reportStartDate is greater than or equal to DEFAULT_REPORT_START_DATE
+        defaultAssetAdditionsReportShouldBeFound("reportStartDate.greaterThanOrEqual=" + DEFAULT_REPORT_START_DATE);
+
+        // Get all the assetAdditionsReportList where reportStartDate is greater than or equal to UPDATED_REPORT_START_DATE
+        defaultAssetAdditionsReportShouldNotBeFound("reportStartDate.greaterThanOrEqual=" + UPDATED_REPORT_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetAdditionsReportsByReportStartDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        assetAdditionsReportRepository.saveAndFlush(assetAdditionsReport);
+
+        // Get all the assetAdditionsReportList where reportStartDate is less than or equal to DEFAULT_REPORT_START_DATE
+        defaultAssetAdditionsReportShouldBeFound("reportStartDate.lessThanOrEqual=" + DEFAULT_REPORT_START_DATE);
+
+        // Get all the assetAdditionsReportList where reportStartDate is less than or equal to SMALLER_REPORT_START_DATE
+        defaultAssetAdditionsReportShouldNotBeFound("reportStartDate.lessThanOrEqual=" + SMALLER_REPORT_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetAdditionsReportsByReportStartDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        assetAdditionsReportRepository.saveAndFlush(assetAdditionsReport);
+
+        // Get all the assetAdditionsReportList where reportStartDate is less than DEFAULT_REPORT_START_DATE
+        defaultAssetAdditionsReportShouldNotBeFound("reportStartDate.lessThan=" + DEFAULT_REPORT_START_DATE);
+
+        // Get all the assetAdditionsReportList where reportStartDate is less than UPDATED_REPORT_START_DATE
+        defaultAssetAdditionsReportShouldBeFound("reportStartDate.lessThan=" + UPDATED_REPORT_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetAdditionsReportsByReportStartDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        assetAdditionsReportRepository.saveAndFlush(assetAdditionsReport);
+
+        // Get all the assetAdditionsReportList where reportStartDate is greater than DEFAULT_REPORT_START_DATE
+        defaultAssetAdditionsReportShouldNotBeFound("reportStartDate.greaterThan=" + DEFAULT_REPORT_START_DATE);
+
+        // Get all the assetAdditionsReportList where reportStartDate is greater than SMALLER_REPORT_START_DATE
+        defaultAssetAdditionsReportShouldBeFound("reportStartDate.greaterThan=" + SMALLER_REPORT_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetAdditionsReportsByReportEndDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetAdditionsReportRepository.saveAndFlush(assetAdditionsReport);
+
+        // Get all the assetAdditionsReportList where reportEndDate equals to DEFAULT_REPORT_END_DATE
+        defaultAssetAdditionsReportShouldBeFound("reportEndDate.equals=" + DEFAULT_REPORT_END_DATE);
+
+        // Get all the assetAdditionsReportList where reportEndDate equals to UPDATED_REPORT_END_DATE
+        defaultAssetAdditionsReportShouldNotBeFound("reportEndDate.equals=" + UPDATED_REPORT_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetAdditionsReportsByReportEndDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        assetAdditionsReportRepository.saveAndFlush(assetAdditionsReport);
+
+        // Get all the assetAdditionsReportList where reportEndDate not equals to DEFAULT_REPORT_END_DATE
+        defaultAssetAdditionsReportShouldNotBeFound("reportEndDate.notEquals=" + DEFAULT_REPORT_END_DATE);
+
+        // Get all the assetAdditionsReportList where reportEndDate not equals to UPDATED_REPORT_END_DATE
+        defaultAssetAdditionsReportShouldBeFound("reportEndDate.notEquals=" + UPDATED_REPORT_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetAdditionsReportsByReportEndDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        assetAdditionsReportRepository.saveAndFlush(assetAdditionsReport);
+
+        // Get all the assetAdditionsReportList where reportEndDate in DEFAULT_REPORT_END_DATE or UPDATED_REPORT_END_DATE
+        defaultAssetAdditionsReportShouldBeFound("reportEndDate.in=" + DEFAULT_REPORT_END_DATE + "," + UPDATED_REPORT_END_DATE);
+
+        // Get all the assetAdditionsReportList where reportEndDate equals to UPDATED_REPORT_END_DATE
+        defaultAssetAdditionsReportShouldNotBeFound("reportEndDate.in=" + UPDATED_REPORT_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetAdditionsReportsByReportEndDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        assetAdditionsReportRepository.saveAndFlush(assetAdditionsReport);
+
+        // Get all the assetAdditionsReportList where reportEndDate is not null
+        defaultAssetAdditionsReportShouldBeFound("reportEndDate.specified=true");
+
+        // Get all the assetAdditionsReportList where reportEndDate is null
+        defaultAssetAdditionsReportShouldNotBeFound("reportEndDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetAdditionsReportsByReportEndDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        assetAdditionsReportRepository.saveAndFlush(assetAdditionsReport);
+
+        // Get all the assetAdditionsReportList where reportEndDate is greater than or equal to DEFAULT_REPORT_END_DATE
+        defaultAssetAdditionsReportShouldBeFound("reportEndDate.greaterThanOrEqual=" + DEFAULT_REPORT_END_DATE);
+
+        // Get all the assetAdditionsReportList where reportEndDate is greater than or equal to UPDATED_REPORT_END_DATE
+        defaultAssetAdditionsReportShouldNotBeFound("reportEndDate.greaterThanOrEqual=" + UPDATED_REPORT_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetAdditionsReportsByReportEndDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        assetAdditionsReportRepository.saveAndFlush(assetAdditionsReport);
+
+        // Get all the assetAdditionsReportList where reportEndDate is less than or equal to DEFAULT_REPORT_END_DATE
+        defaultAssetAdditionsReportShouldBeFound("reportEndDate.lessThanOrEqual=" + DEFAULT_REPORT_END_DATE);
+
+        // Get all the assetAdditionsReportList where reportEndDate is less than or equal to SMALLER_REPORT_END_DATE
+        defaultAssetAdditionsReportShouldNotBeFound("reportEndDate.lessThanOrEqual=" + SMALLER_REPORT_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetAdditionsReportsByReportEndDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        assetAdditionsReportRepository.saveAndFlush(assetAdditionsReport);
+
+        // Get all the assetAdditionsReportList where reportEndDate is less than DEFAULT_REPORT_END_DATE
+        defaultAssetAdditionsReportShouldNotBeFound("reportEndDate.lessThan=" + DEFAULT_REPORT_END_DATE);
+
+        // Get all the assetAdditionsReportList where reportEndDate is less than UPDATED_REPORT_END_DATE
+        defaultAssetAdditionsReportShouldBeFound("reportEndDate.lessThan=" + UPDATED_REPORT_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetAdditionsReportsByReportEndDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        assetAdditionsReportRepository.saveAndFlush(assetAdditionsReport);
+
+        // Get all the assetAdditionsReportList where reportEndDate is greater than DEFAULT_REPORT_END_DATE
+        defaultAssetAdditionsReportShouldNotBeFound("reportEndDate.greaterThan=" + DEFAULT_REPORT_END_DATE);
+
+        // Get all the assetAdditionsReportList where reportEndDate is greater than SMALLER_REPORT_END_DATE
+        defaultAssetAdditionsReportShouldBeFound("reportEndDate.greaterThan=" + SMALLER_REPORT_END_DATE);
     }
 
     @Test
@@ -705,6 +931,8 @@ class AssetAdditionsReportResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(assetAdditionsReport.getId().intValue())))
             .andExpect(jsonPath("$.[*].timeOfRequest").value(hasItem(DEFAULT_TIME_OF_REQUEST.toString())))
+            .andExpect(jsonPath("$.[*].reportStartDate").value(hasItem(DEFAULT_REPORT_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].reportEndDate").value(hasItem(DEFAULT_REPORT_END_DATE.toString())))
             .andExpect(jsonPath("$.[*].requestId").value(hasItem(DEFAULT_REQUEST_ID.toString())))
             .andExpect(jsonPath("$.[*].fileChecksum").value(hasItem(DEFAULT_FILE_CHECKSUM)))
             .andExpect(jsonPath("$.[*].tampered").value(hasItem(DEFAULT_TAMPERED.booleanValue())))
@@ -761,6 +989,8 @@ class AssetAdditionsReportResourceIT {
         em.detach(updatedAssetAdditionsReport);
         updatedAssetAdditionsReport
             .timeOfRequest(UPDATED_TIME_OF_REQUEST)
+            .reportStartDate(UPDATED_REPORT_START_DATE)
+            .reportEndDate(UPDATED_REPORT_END_DATE)
             .requestId(UPDATED_REQUEST_ID)
             .fileChecksum(UPDATED_FILE_CHECKSUM)
             .tampered(UPDATED_TAMPERED)
@@ -783,6 +1013,8 @@ class AssetAdditionsReportResourceIT {
         assertThat(assetAdditionsReportList).hasSize(databaseSizeBeforeUpdate);
         AssetAdditionsReport testAssetAdditionsReport = assetAdditionsReportList.get(assetAdditionsReportList.size() - 1);
         assertThat(testAssetAdditionsReport.getTimeOfRequest()).isEqualTo(UPDATED_TIME_OF_REQUEST);
+        assertThat(testAssetAdditionsReport.getReportStartDate()).isEqualTo(UPDATED_REPORT_START_DATE);
+        assertThat(testAssetAdditionsReport.getReportEndDate()).isEqualTo(UPDATED_REPORT_END_DATE);
         assertThat(testAssetAdditionsReport.getRequestId()).isEqualTo(UPDATED_REQUEST_ID);
         assertThat(testAssetAdditionsReport.getFileChecksum()).isEqualTo(UPDATED_FILE_CHECKSUM);
         assertThat(testAssetAdditionsReport.getTampered()).isEqualTo(UPDATED_TAMPERED);
@@ -886,11 +1118,10 @@ class AssetAdditionsReportResourceIT {
         partialUpdatedAssetAdditionsReport.setId(assetAdditionsReport.getId());
 
         partialUpdatedAssetAdditionsReport
+            .reportEndDate(UPDATED_REPORT_END_DATE)
+            .requestId(UPDATED_REQUEST_ID)
             .fileChecksum(UPDATED_FILE_CHECKSUM)
-            .tampered(UPDATED_TAMPERED)
-            .filename(UPDATED_FILENAME)
-            .reportFile(UPDATED_REPORT_FILE)
-            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE);
+            .filename(UPDATED_FILENAME);
 
         restAssetAdditionsReportMockMvc
             .perform(
@@ -905,13 +1136,15 @@ class AssetAdditionsReportResourceIT {
         assertThat(assetAdditionsReportList).hasSize(databaseSizeBeforeUpdate);
         AssetAdditionsReport testAssetAdditionsReport = assetAdditionsReportList.get(assetAdditionsReportList.size() - 1);
         assertThat(testAssetAdditionsReport.getTimeOfRequest()).isEqualTo(DEFAULT_TIME_OF_REQUEST);
-        assertThat(testAssetAdditionsReport.getRequestId()).isEqualTo(DEFAULT_REQUEST_ID);
+        assertThat(testAssetAdditionsReport.getReportStartDate()).isEqualTo(DEFAULT_REPORT_START_DATE);
+        assertThat(testAssetAdditionsReport.getReportEndDate()).isEqualTo(UPDATED_REPORT_END_DATE);
+        assertThat(testAssetAdditionsReport.getRequestId()).isEqualTo(UPDATED_REQUEST_ID);
         assertThat(testAssetAdditionsReport.getFileChecksum()).isEqualTo(UPDATED_FILE_CHECKSUM);
-        assertThat(testAssetAdditionsReport.getTampered()).isEqualTo(UPDATED_TAMPERED);
+        assertThat(testAssetAdditionsReport.getTampered()).isEqualTo(DEFAULT_TAMPERED);
         assertThat(testAssetAdditionsReport.getFilename()).isEqualTo(UPDATED_FILENAME);
         assertThat(testAssetAdditionsReport.getReportParameters()).isEqualTo(DEFAULT_REPORT_PARAMETERS);
-        assertThat(testAssetAdditionsReport.getReportFile()).isEqualTo(UPDATED_REPORT_FILE);
-        assertThat(testAssetAdditionsReport.getReportFileContentType()).isEqualTo(UPDATED_REPORT_FILE_CONTENT_TYPE);
+        assertThat(testAssetAdditionsReport.getReportFile()).isEqualTo(DEFAULT_REPORT_FILE);
+        assertThat(testAssetAdditionsReport.getReportFileContentType()).isEqualTo(DEFAULT_REPORT_FILE_CONTENT_TYPE);
     }
 
     @Test
@@ -928,6 +1161,8 @@ class AssetAdditionsReportResourceIT {
 
         partialUpdatedAssetAdditionsReport
             .timeOfRequest(UPDATED_TIME_OF_REQUEST)
+            .reportStartDate(UPDATED_REPORT_START_DATE)
+            .reportEndDate(UPDATED_REPORT_END_DATE)
             .requestId(UPDATED_REQUEST_ID)
             .fileChecksum(UPDATED_FILE_CHECKSUM)
             .tampered(UPDATED_TAMPERED)
@@ -949,6 +1184,8 @@ class AssetAdditionsReportResourceIT {
         assertThat(assetAdditionsReportList).hasSize(databaseSizeBeforeUpdate);
         AssetAdditionsReport testAssetAdditionsReport = assetAdditionsReportList.get(assetAdditionsReportList.size() - 1);
         assertThat(testAssetAdditionsReport.getTimeOfRequest()).isEqualTo(UPDATED_TIME_OF_REQUEST);
+        assertThat(testAssetAdditionsReport.getReportStartDate()).isEqualTo(UPDATED_REPORT_START_DATE);
+        assertThat(testAssetAdditionsReport.getReportEndDate()).isEqualTo(UPDATED_REPORT_END_DATE);
         assertThat(testAssetAdditionsReport.getRequestId()).isEqualTo(UPDATED_REQUEST_ID);
         assertThat(testAssetAdditionsReport.getFileChecksum()).isEqualTo(UPDATED_FILE_CHECKSUM);
         assertThat(testAssetAdditionsReport.getTampered()).isEqualTo(UPDATED_TAMPERED);
@@ -1073,6 +1310,8 @@ class AssetAdditionsReportResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(assetAdditionsReport.getId().intValue())))
             .andExpect(jsonPath("$.[*].timeOfRequest").value(hasItem(DEFAULT_TIME_OF_REQUEST.toString())))
+            .andExpect(jsonPath("$.[*].reportStartDate").value(hasItem(DEFAULT_REPORT_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].reportEndDate").value(hasItem(DEFAULT_REPORT_END_DATE.toString())))
             .andExpect(jsonPath("$.[*].requestId").value(hasItem(DEFAULT_REQUEST_ID.toString())))
             .andExpect(jsonPath("$.[*].fileChecksum").value(hasItem(DEFAULT_FILE_CHECKSUM)))
             .andExpect(jsonPath("$.[*].tampered").value(hasItem(DEFAULT_TAMPERED.booleanValue())))

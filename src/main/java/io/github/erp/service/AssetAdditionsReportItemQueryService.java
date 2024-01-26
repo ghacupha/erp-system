@@ -157,21 +157,13 @@ public class AssetAdditionsReportItemQueryService extends QueryService<AssetAddi
             if (criteria.getSupplier() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getSupplier(), AssetAdditionsReportItem_.supplier));
             }
-            if (criteria.getInvoiceNumber() != null) {
+            if (criteria.getHistoricalCost() != null) {
                 specification =
-                    specification.and(buildStringSpecification(criteria.getInvoiceNumber(), AssetAdditionsReportItem_.invoiceNumber));
+                    specification.and(buildRangeSpecification(criteria.getHistoricalCost(), AssetAdditionsReportItem_.historicalCost));
             }
-            if (criteria.getLpoNumber() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getLpoNumber(), AssetAdditionsReportItem_.lpoNumber));
-            }
-            if (criteria.getWipTransfer() != null) {
-                specification = specification.and(buildSpecification(criteria.getWipTransfer(), AssetAdditionsReportItem_.wipTransfer));
-            }
-            if (criteria.getWipTransferAmount() != null) {
+            if (criteria.getRegistrationDate() != null) {
                 specification =
-                    specification.and(
-                        buildRangeSpecification(criteria.getWipTransferAmount(), AssetAdditionsReportItem_.wipTransferAmount)
-                    );
+                    specification.and(buildRangeSpecification(criteria.getRegistrationDate(), AssetAdditionsReportItem_.registrationDate));
             }
         }
         return specification;

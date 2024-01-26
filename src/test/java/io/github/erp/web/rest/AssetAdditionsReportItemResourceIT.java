@@ -96,18 +96,13 @@ class AssetAdditionsReportItemResourceIT {
     private static final String DEFAULT_SUPPLIER = "AAAAAAAAAA";
     private static final String UPDATED_SUPPLIER = "BBBBBBBBBB";
 
-    private static final String DEFAULT_INVOICE_NUMBER = "AAAAAAAAAA";
-    private static final String UPDATED_INVOICE_NUMBER = "BBBBBBBBBB";
+    private static final BigDecimal DEFAULT_HISTORICAL_COST = new BigDecimal(1);
+    private static final BigDecimal UPDATED_HISTORICAL_COST = new BigDecimal(2);
+    private static final BigDecimal SMALLER_HISTORICAL_COST = new BigDecimal(1 - 1);
 
-    private static final String DEFAULT_LPO_NUMBER = "AAAAAAAAAA";
-    private static final String UPDATED_LPO_NUMBER = "BBBBBBBBBB";
-
-    private static final Boolean DEFAULT_WIP_TRANSFER = false;
-    private static final Boolean UPDATED_WIP_TRANSFER = true;
-
-    private static final BigDecimal DEFAULT_WIP_TRANSFER_AMOUNT = new BigDecimal(1);
-    private static final BigDecimal UPDATED_WIP_TRANSFER_AMOUNT = new BigDecimal(2);
-    private static final BigDecimal SMALLER_WIP_TRANSFER_AMOUNT = new BigDecimal(1 - 1);
+    private static final LocalDate DEFAULT_REGISTRATION_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_REGISTRATION_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_REGISTRATION_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final String ENTITY_API_URL = "/api/asset-additions-report-items";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -156,10 +151,8 @@ class AssetAdditionsReportItemResourceIT {
             .assetDetails(DEFAULT_ASSET_DETAILS)
             .assetCost(DEFAULT_ASSET_COST)
             .supplier(DEFAULT_SUPPLIER)
-            .invoiceNumber(DEFAULT_INVOICE_NUMBER)
-            .lpoNumber(DEFAULT_LPO_NUMBER)
-            .wipTransfer(DEFAULT_WIP_TRANSFER)
-            .wipTransferAmount(DEFAULT_WIP_TRANSFER_AMOUNT);
+            .historicalCost(DEFAULT_HISTORICAL_COST)
+            .registrationDate(DEFAULT_REGISTRATION_DATE);
         return assetAdditionsReportItem;
     }
 
@@ -181,10 +174,8 @@ class AssetAdditionsReportItemResourceIT {
             .assetDetails(UPDATED_ASSET_DETAILS)
             .assetCost(UPDATED_ASSET_COST)
             .supplier(UPDATED_SUPPLIER)
-            .invoiceNumber(UPDATED_INVOICE_NUMBER)
-            .lpoNumber(UPDATED_LPO_NUMBER)
-            .wipTransfer(UPDATED_WIP_TRANSFER)
-            .wipTransferAmount(UPDATED_WIP_TRANSFER_AMOUNT);
+            .historicalCost(UPDATED_HISTORICAL_COST)
+            .registrationDate(UPDATED_REGISTRATION_DATE);
         return assetAdditionsReportItem;
     }
 
@@ -215,10 +206,8 @@ class AssetAdditionsReportItemResourceIT {
             .andExpect(jsonPath("$.[*].assetDetails").value(hasItem(DEFAULT_ASSET_DETAILS)))
             .andExpect(jsonPath("$.[*].assetCost").value(hasItem(sameNumber(DEFAULT_ASSET_COST))))
             .andExpect(jsonPath("$.[*].supplier").value(hasItem(DEFAULT_SUPPLIER)))
-            .andExpect(jsonPath("$.[*].invoiceNumber").value(hasItem(DEFAULT_INVOICE_NUMBER)))
-            .andExpect(jsonPath("$.[*].lpoNumber").value(hasItem(DEFAULT_LPO_NUMBER)))
-            .andExpect(jsonPath("$.[*].wipTransfer").value(hasItem(DEFAULT_WIP_TRANSFER.booleanValue())))
-            .andExpect(jsonPath("$.[*].wipTransferAmount").value(hasItem(sameNumber(DEFAULT_WIP_TRANSFER_AMOUNT))));
+            .andExpect(jsonPath("$.[*].historicalCost").value(hasItem(sameNumber(DEFAULT_HISTORICAL_COST))))
+            .andExpect(jsonPath("$.[*].registrationDate").value(hasItem(DEFAULT_REGISTRATION_DATE.toString())));
     }
 
     @Test
@@ -243,10 +232,8 @@ class AssetAdditionsReportItemResourceIT {
             .andExpect(jsonPath("$.assetDetails").value(DEFAULT_ASSET_DETAILS))
             .andExpect(jsonPath("$.assetCost").value(sameNumber(DEFAULT_ASSET_COST)))
             .andExpect(jsonPath("$.supplier").value(DEFAULT_SUPPLIER))
-            .andExpect(jsonPath("$.invoiceNumber").value(DEFAULT_INVOICE_NUMBER))
-            .andExpect(jsonPath("$.lpoNumber").value(DEFAULT_LPO_NUMBER))
-            .andExpect(jsonPath("$.wipTransfer").value(DEFAULT_WIP_TRANSFER.booleanValue()))
-            .andExpect(jsonPath("$.wipTransferAmount").value(sameNumber(DEFAULT_WIP_TRANSFER_AMOUNT)));
+            .andExpect(jsonPath("$.historicalCost").value(sameNumber(DEFAULT_HISTORICAL_COST)))
+            .andExpect(jsonPath("$.registrationDate").value(DEFAULT_REGISTRATION_DATE.toString()));
     }
 
     @Test
@@ -1131,316 +1118,210 @@ class AssetAdditionsReportItemResourceIT {
 
     @Test
     @Transactional
-    void getAllAssetAdditionsReportItemsByInvoiceNumberIsEqualToSomething() throws Exception {
+    void getAllAssetAdditionsReportItemsByHistoricalCostIsEqualToSomething() throws Exception {
         // Initialize the database
         assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
 
-        // Get all the assetAdditionsReportItemList where invoiceNumber equals to DEFAULT_INVOICE_NUMBER
-        defaultAssetAdditionsReportItemShouldBeFound("invoiceNumber.equals=" + DEFAULT_INVOICE_NUMBER);
+        // Get all the assetAdditionsReportItemList where historicalCost equals to DEFAULT_HISTORICAL_COST
+        defaultAssetAdditionsReportItemShouldBeFound("historicalCost.equals=" + DEFAULT_HISTORICAL_COST);
 
-        // Get all the assetAdditionsReportItemList where invoiceNumber equals to UPDATED_INVOICE_NUMBER
-        defaultAssetAdditionsReportItemShouldNotBeFound("invoiceNumber.equals=" + UPDATED_INVOICE_NUMBER);
+        // Get all the assetAdditionsReportItemList where historicalCost equals to UPDATED_HISTORICAL_COST
+        defaultAssetAdditionsReportItemShouldNotBeFound("historicalCost.equals=" + UPDATED_HISTORICAL_COST);
     }
 
     @Test
     @Transactional
-    void getAllAssetAdditionsReportItemsByInvoiceNumberIsNotEqualToSomething() throws Exception {
+    void getAllAssetAdditionsReportItemsByHistoricalCostIsNotEqualToSomething() throws Exception {
         // Initialize the database
         assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
 
-        // Get all the assetAdditionsReportItemList where invoiceNumber not equals to DEFAULT_INVOICE_NUMBER
-        defaultAssetAdditionsReportItemShouldNotBeFound("invoiceNumber.notEquals=" + DEFAULT_INVOICE_NUMBER);
+        // Get all the assetAdditionsReportItemList where historicalCost not equals to DEFAULT_HISTORICAL_COST
+        defaultAssetAdditionsReportItemShouldNotBeFound("historicalCost.notEquals=" + DEFAULT_HISTORICAL_COST);
 
-        // Get all the assetAdditionsReportItemList where invoiceNumber not equals to UPDATED_INVOICE_NUMBER
-        defaultAssetAdditionsReportItemShouldBeFound("invoiceNumber.notEquals=" + UPDATED_INVOICE_NUMBER);
+        // Get all the assetAdditionsReportItemList where historicalCost not equals to UPDATED_HISTORICAL_COST
+        defaultAssetAdditionsReportItemShouldBeFound("historicalCost.notEquals=" + UPDATED_HISTORICAL_COST);
     }
 
     @Test
     @Transactional
-    void getAllAssetAdditionsReportItemsByInvoiceNumberIsInShouldWork() throws Exception {
+    void getAllAssetAdditionsReportItemsByHistoricalCostIsInShouldWork() throws Exception {
         // Initialize the database
         assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
 
-        // Get all the assetAdditionsReportItemList where invoiceNumber in DEFAULT_INVOICE_NUMBER or UPDATED_INVOICE_NUMBER
-        defaultAssetAdditionsReportItemShouldBeFound("invoiceNumber.in=" + DEFAULT_INVOICE_NUMBER + "," + UPDATED_INVOICE_NUMBER);
+        // Get all the assetAdditionsReportItemList where historicalCost in DEFAULT_HISTORICAL_COST or UPDATED_HISTORICAL_COST
+        defaultAssetAdditionsReportItemShouldBeFound("historicalCost.in=" + DEFAULT_HISTORICAL_COST + "," + UPDATED_HISTORICAL_COST);
 
-        // Get all the assetAdditionsReportItemList where invoiceNumber equals to UPDATED_INVOICE_NUMBER
-        defaultAssetAdditionsReportItemShouldNotBeFound("invoiceNumber.in=" + UPDATED_INVOICE_NUMBER);
+        // Get all the assetAdditionsReportItemList where historicalCost equals to UPDATED_HISTORICAL_COST
+        defaultAssetAdditionsReportItemShouldNotBeFound("historicalCost.in=" + UPDATED_HISTORICAL_COST);
     }
 
     @Test
     @Transactional
-    void getAllAssetAdditionsReportItemsByInvoiceNumberIsNullOrNotNull() throws Exception {
+    void getAllAssetAdditionsReportItemsByHistoricalCostIsNullOrNotNull() throws Exception {
         // Initialize the database
         assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
 
-        // Get all the assetAdditionsReportItemList where invoiceNumber is not null
-        defaultAssetAdditionsReportItemShouldBeFound("invoiceNumber.specified=true");
+        // Get all the assetAdditionsReportItemList where historicalCost is not null
+        defaultAssetAdditionsReportItemShouldBeFound("historicalCost.specified=true");
 
-        // Get all the assetAdditionsReportItemList where invoiceNumber is null
-        defaultAssetAdditionsReportItemShouldNotBeFound("invoiceNumber.specified=false");
+        // Get all the assetAdditionsReportItemList where historicalCost is null
+        defaultAssetAdditionsReportItemShouldNotBeFound("historicalCost.specified=false");
     }
 
     @Test
     @Transactional
-    void getAllAssetAdditionsReportItemsByInvoiceNumberContainsSomething() throws Exception {
+    void getAllAssetAdditionsReportItemsByHistoricalCostIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
 
-        // Get all the assetAdditionsReportItemList where invoiceNumber contains DEFAULT_INVOICE_NUMBER
-        defaultAssetAdditionsReportItemShouldBeFound("invoiceNumber.contains=" + DEFAULT_INVOICE_NUMBER);
+        // Get all the assetAdditionsReportItemList where historicalCost is greater than or equal to DEFAULT_HISTORICAL_COST
+        defaultAssetAdditionsReportItemShouldBeFound("historicalCost.greaterThanOrEqual=" + DEFAULT_HISTORICAL_COST);
 
-        // Get all the assetAdditionsReportItemList where invoiceNumber contains UPDATED_INVOICE_NUMBER
-        defaultAssetAdditionsReportItemShouldNotBeFound("invoiceNumber.contains=" + UPDATED_INVOICE_NUMBER);
+        // Get all the assetAdditionsReportItemList where historicalCost is greater than or equal to UPDATED_HISTORICAL_COST
+        defaultAssetAdditionsReportItemShouldNotBeFound("historicalCost.greaterThanOrEqual=" + UPDATED_HISTORICAL_COST);
     }
 
     @Test
     @Transactional
-    void getAllAssetAdditionsReportItemsByInvoiceNumberNotContainsSomething() throws Exception {
+    void getAllAssetAdditionsReportItemsByHistoricalCostIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
         assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
 
-        // Get all the assetAdditionsReportItemList where invoiceNumber does not contain DEFAULT_INVOICE_NUMBER
-        defaultAssetAdditionsReportItemShouldNotBeFound("invoiceNumber.doesNotContain=" + DEFAULT_INVOICE_NUMBER);
+        // Get all the assetAdditionsReportItemList where historicalCost is less than or equal to DEFAULT_HISTORICAL_COST
+        defaultAssetAdditionsReportItemShouldBeFound("historicalCost.lessThanOrEqual=" + DEFAULT_HISTORICAL_COST);
 
-        // Get all the assetAdditionsReportItemList where invoiceNumber does not contain UPDATED_INVOICE_NUMBER
-        defaultAssetAdditionsReportItemShouldBeFound("invoiceNumber.doesNotContain=" + UPDATED_INVOICE_NUMBER);
+        // Get all the assetAdditionsReportItemList where historicalCost is less than or equal to SMALLER_HISTORICAL_COST
+        defaultAssetAdditionsReportItemShouldNotBeFound("historicalCost.lessThanOrEqual=" + SMALLER_HISTORICAL_COST);
     }
 
     @Test
     @Transactional
-    void getAllAssetAdditionsReportItemsByLpoNumberIsEqualToSomething() throws Exception {
+    void getAllAssetAdditionsReportItemsByHistoricalCostIsLessThanSomething() throws Exception {
         // Initialize the database
         assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
 
-        // Get all the assetAdditionsReportItemList where lpoNumber equals to DEFAULT_LPO_NUMBER
-        defaultAssetAdditionsReportItemShouldBeFound("lpoNumber.equals=" + DEFAULT_LPO_NUMBER);
+        // Get all the assetAdditionsReportItemList where historicalCost is less than DEFAULT_HISTORICAL_COST
+        defaultAssetAdditionsReportItemShouldNotBeFound("historicalCost.lessThan=" + DEFAULT_HISTORICAL_COST);
 
-        // Get all the assetAdditionsReportItemList where lpoNumber equals to UPDATED_LPO_NUMBER
-        defaultAssetAdditionsReportItemShouldNotBeFound("lpoNumber.equals=" + UPDATED_LPO_NUMBER);
+        // Get all the assetAdditionsReportItemList where historicalCost is less than UPDATED_HISTORICAL_COST
+        defaultAssetAdditionsReportItemShouldBeFound("historicalCost.lessThan=" + UPDATED_HISTORICAL_COST);
     }
 
     @Test
     @Transactional
-    void getAllAssetAdditionsReportItemsByLpoNumberIsNotEqualToSomething() throws Exception {
+    void getAllAssetAdditionsReportItemsByHistoricalCostIsGreaterThanSomething() throws Exception {
         // Initialize the database
         assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
 
-        // Get all the assetAdditionsReportItemList where lpoNumber not equals to DEFAULT_LPO_NUMBER
-        defaultAssetAdditionsReportItemShouldNotBeFound("lpoNumber.notEquals=" + DEFAULT_LPO_NUMBER);
+        // Get all the assetAdditionsReportItemList where historicalCost is greater than DEFAULT_HISTORICAL_COST
+        defaultAssetAdditionsReportItemShouldNotBeFound("historicalCost.greaterThan=" + DEFAULT_HISTORICAL_COST);
 
-        // Get all the assetAdditionsReportItemList where lpoNumber not equals to UPDATED_LPO_NUMBER
-        defaultAssetAdditionsReportItemShouldBeFound("lpoNumber.notEquals=" + UPDATED_LPO_NUMBER);
+        // Get all the assetAdditionsReportItemList where historicalCost is greater than SMALLER_HISTORICAL_COST
+        defaultAssetAdditionsReportItemShouldBeFound("historicalCost.greaterThan=" + SMALLER_HISTORICAL_COST);
     }
 
     @Test
     @Transactional
-    void getAllAssetAdditionsReportItemsByLpoNumberIsInShouldWork() throws Exception {
+    void getAllAssetAdditionsReportItemsByRegistrationDateIsEqualToSomething() throws Exception {
         // Initialize the database
         assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
 
-        // Get all the assetAdditionsReportItemList where lpoNumber in DEFAULT_LPO_NUMBER or UPDATED_LPO_NUMBER
-        defaultAssetAdditionsReportItemShouldBeFound("lpoNumber.in=" + DEFAULT_LPO_NUMBER + "," + UPDATED_LPO_NUMBER);
+        // Get all the assetAdditionsReportItemList where registrationDate equals to DEFAULT_REGISTRATION_DATE
+        defaultAssetAdditionsReportItemShouldBeFound("registrationDate.equals=" + DEFAULT_REGISTRATION_DATE);
 
-        // Get all the assetAdditionsReportItemList where lpoNumber equals to UPDATED_LPO_NUMBER
-        defaultAssetAdditionsReportItemShouldNotBeFound("lpoNumber.in=" + UPDATED_LPO_NUMBER);
+        // Get all the assetAdditionsReportItemList where registrationDate equals to UPDATED_REGISTRATION_DATE
+        defaultAssetAdditionsReportItemShouldNotBeFound("registrationDate.equals=" + UPDATED_REGISTRATION_DATE);
     }
 
     @Test
     @Transactional
-    void getAllAssetAdditionsReportItemsByLpoNumberIsNullOrNotNull() throws Exception {
+    void getAllAssetAdditionsReportItemsByRegistrationDateIsNotEqualToSomething() throws Exception {
         // Initialize the database
         assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
 
-        // Get all the assetAdditionsReportItemList where lpoNumber is not null
-        defaultAssetAdditionsReportItemShouldBeFound("lpoNumber.specified=true");
+        // Get all the assetAdditionsReportItemList where registrationDate not equals to DEFAULT_REGISTRATION_DATE
+        defaultAssetAdditionsReportItemShouldNotBeFound("registrationDate.notEquals=" + DEFAULT_REGISTRATION_DATE);
 
-        // Get all the assetAdditionsReportItemList where lpoNumber is null
-        defaultAssetAdditionsReportItemShouldNotBeFound("lpoNumber.specified=false");
+        // Get all the assetAdditionsReportItemList where registrationDate not equals to UPDATED_REGISTRATION_DATE
+        defaultAssetAdditionsReportItemShouldBeFound("registrationDate.notEquals=" + UPDATED_REGISTRATION_DATE);
     }
 
     @Test
     @Transactional
-    void getAllAssetAdditionsReportItemsByLpoNumberContainsSomething() throws Exception {
+    void getAllAssetAdditionsReportItemsByRegistrationDateIsInShouldWork() throws Exception {
         // Initialize the database
         assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
 
-        // Get all the assetAdditionsReportItemList where lpoNumber contains DEFAULT_LPO_NUMBER
-        defaultAssetAdditionsReportItemShouldBeFound("lpoNumber.contains=" + DEFAULT_LPO_NUMBER);
+        // Get all the assetAdditionsReportItemList where registrationDate in DEFAULT_REGISTRATION_DATE or UPDATED_REGISTRATION_DATE
+        defaultAssetAdditionsReportItemShouldBeFound("registrationDate.in=" + DEFAULT_REGISTRATION_DATE + "," + UPDATED_REGISTRATION_DATE);
 
-        // Get all the assetAdditionsReportItemList where lpoNumber contains UPDATED_LPO_NUMBER
-        defaultAssetAdditionsReportItemShouldNotBeFound("lpoNumber.contains=" + UPDATED_LPO_NUMBER);
+        // Get all the assetAdditionsReportItemList where registrationDate equals to UPDATED_REGISTRATION_DATE
+        defaultAssetAdditionsReportItemShouldNotBeFound("registrationDate.in=" + UPDATED_REGISTRATION_DATE);
     }
 
     @Test
     @Transactional
-    void getAllAssetAdditionsReportItemsByLpoNumberNotContainsSomething() throws Exception {
+    void getAllAssetAdditionsReportItemsByRegistrationDateIsNullOrNotNull() throws Exception {
         // Initialize the database
         assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
 
-        // Get all the assetAdditionsReportItemList where lpoNumber does not contain DEFAULT_LPO_NUMBER
-        defaultAssetAdditionsReportItemShouldNotBeFound("lpoNumber.doesNotContain=" + DEFAULT_LPO_NUMBER);
+        // Get all the assetAdditionsReportItemList where registrationDate is not null
+        defaultAssetAdditionsReportItemShouldBeFound("registrationDate.specified=true");
 
-        // Get all the assetAdditionsReportItemList where lpoNumber does not contain UPDATED_LPO_NUMBER
-        defaultAssetAdditionsReportItemShouldBeFound("lpoNumber.doesNotContain=" + UPDATED_LPO_NUMBER);
+        // Get all the assetAdditionsReportItemList where registrationDate is null
+        defaultAssetAdditionsReportItemShouldNotBeFound("registrationDate.specified=false");
     }
 
     @Test
     @Transactional
-    void getAllAssetAdditionsReportItemsByWipTransferIsEqualToSomething() throws Exception {
+    void getAllAssetAdditionsReportItemsByRegistrationDateIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
 
-        // Get all the assetAdditionsReportItemList where wipTransfer equals to DEFAULT_WIP_TRANSFER
-        defaultAssetAdditionsReportItemShouldBeFound("wipTransfer.equals=" + DEFAULT_WIP_TRANSFER);
+        // Get all the assetAdditionsReportItemList where registrationDate is greater than or equal to DEFAULT_REGISTRATION_DATE
+        defaultAssetAdditionsReportItemShouldBeFound("registrationDate.greaterThanOrEqual=" + DEFAULT_REGISTRATION_DATE);
 
-        // Get all the assetAdditionsReportItemList where wipTransfer equals to UPDATED_WIP_TRANSFER
-        defaultAssetAdditionsReportItemShouldNotBeFound("wipTransfer.equals=" + UPDATED_WIP_TRANSFER);
+        // Get all the assetAdditionsReportItemList where registrationDate is greater than or equal to UPDATED_REGISTRATION_DATE
+        defaultAssetAdditionsReportItemShouldNotBeFound("registrationDate.greaterThanOrEqual=" + UPDATED_REGISTRATION_DATE);
     }
 
     @Test
     @Transactional
-    void getAllAssetAdditionsReportItemsByWipTransferIsNotEqualToSomething() throws Exception {
+    void getAllAssetAdditionsReportItemsByRegistrationDateIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
         assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
 
-        // Get all the assetAdditionsReportItemList where wipTransfer not equals to DEFAULT_WIP_TRANSFER
-        defaultAssetAdditionsReportItemShouldNotBeFound("wipTransfer.notEquals=" + DEFAULT_WIP_TRANSFER);
+        // Get all the assetAdditionsReportItemList where registrationDate is less than or equal to DEFAULT_REGISTRATION_DATE
+        defaultAssetAdditionsReportItemShouldBeFound("registrationDate.lessThanOrEqual=" + DEFAULT_REGISTRATION_DATE);
 
-        // Get all the assetAdditionsReportItemList where wipTransfer not equals to UPDATED_WIP_TRANSFER
-        defaultAssetAdditionsReportItemShouldBeFound("wipTransfer.notEquals=" + UPDATED_WIP_TRANSFER);
+        // Get all the assetAdditionsReportItemList where registrationDate is less than or equal to SMALLER_REGISTRATION_DATE
+        defaultAssetAdditionsReportItemShouldNotBeFound("registrationDate.lessThanOrEqual=" + SMALLER_REGISTRATION_DATE);
     }
 
     @Test
     @Transactional
-    void getAllAssetAdditionsReportItemsByWipTransferIsInShouldWork() throws Exception {
+    void getAllAssetAdditionsReportItemsByRegistrationDateIsLessThanSomething() throws Exception {
         // Initialize the database
         assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
 
-        // Get all the assetAdditionsReportItemList where wipTransfer in DEFAULT_WIP_TRANSFER or UPDATED_WIP_TRANSFER
-        defaultAssetAdditionsReportItemShouldBeFound("wipTransfer.in=" + DEFAULT_WIP_TRANSFER + "," + UPDATED_WIP_TRANSFER);
+        // Get all the assetAdditionsReportItemList where registrationDate is less than DEFAULT_REGISTRATION_DATE
+        defaultAssetAdditionsReportItemShouldNotBeFound("registrationDate.lessThan=" + DEFAULT_REGISTRATION_DATE);
 
-        // Get all the assetAdditionsReportItemList where wipTransfer equals to UPDATED_WIP_TRANSFER
-        defaultAssetAdditionsReportItemShouldNotBeFound("wipTransfer.in=" + UPDATED_WIP_TRANSFER);
+        // Get all the assetAdditionsReportItemList where registrationDate is less than UPDATED_REGISTRATION_DATE
+        defaultAssetAdditionsReportItemShouldBeFound("registrationDate.lessThan=" + UPDATED_REGISTRATION_DATE);
     }
 
     @Test
     @Transactional
-    void getAllAssetAdditionsReportItemsByWipTransferIsNullOrNotNull() throws Exception {
+    void getAllAssetAdditionsReportItemsByRegistrationDateIsGreaterThanSomething() throws Exception {
         // Initialize the database
         assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
 
-        // Get all the assetAdditionsReportItemList where wipTransfer is not null
-        defaultAssetAdditionsReportItemShouldBeFound("wipTransfer.specified=true");
+        // Get all the assetAdditionsReportItemList where registrationDate is greater than DEFAULT_REGISTRATION_DATE
+        defaultAssetAdditionsReportItemShouldNotBeFound("registrationDate.greaterThan=" + DEFAULT_REGISTRATION_DATE);
 
-        // Get all the assetAdditionsReportItemList where wipTransfer is null
-        defaultAssetAdditionsReportItemShouldNotBeFound("wipTransfer.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllAssetAdditionsReportItemsByWipTransferAmountIsEqualToSomething() throws Exception {
-        // Initialize the database
-        assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
-
-        // Get all the assetAdditionsReportItemList where wipTransferAmount equals to DEFAULT_WIP_TRANSFER_AMOUNT
-        defaultAssetAdditionsReportItemShouldBeFound("wipTransferAmount.equals=" + DEFAULT_WIP_TRANSFER_AMOUNT);
-
-        // Get all the assetAdditionsReportItemList where wipTransferAmount equals to UPDATED_WIP_TRANSFER_AMOUNT
-        defaultAssetAdditionsReportItemShouldNotBeFound("wipTransferAmount.equals=" + UPDATED_WIP_TRANSFER_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    void getAllAssetAdditionsReportItemsByWipTransferAmountIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
-
-        // Get all the assetAdditionsReportItemList where wipTransferAmount not equals to DEFAULT_WIP_TRANSFER_AMOUNT
-        defaultAssetAdditionsReportItemShouldNotBeFound("wipTransferAmount.notEquals=" + DEFAULT_WIP_TRANSFER_AMOUNT);
-
-        // Get all the assetAdditionsReportItemList where wipTransferAmount not equals to UPDATED_WIP_TRANSFER_AMOUNT
-        defaultAssetAdditionsReportItemShouldBeFound("wipTransferAmount.notEquals=" + UPDATED_WIP_TRANSFER_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    void getAllAssetAdditionsReportItemsByWipTransferAmountIsInShouldWork() throws Exception {
-        // Initialize the database
-        assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
-
-        // Get all the assetAdditionsReportItemList where wipTransferAmount in DEFAULT_WIP_TRANSFER_AMOUNT or UPDATED_WIP_TRANSFER_AMOUNT
-        defaultAssetAdditionsReportItemShouldBeFound(
-            "wipTransferAmount.in=" + DEFAULT_WIP_TRANSFER_AMOUNT + "," + UPDATED_WIP_TRANSFER_AMOUNT
-        );
-
-        // Get all the assetAdditionsReportItemList where wipTransferAmount equals to UPDATED_WIP_TRANSFER_AMOUNT
-        defaultAssetAdditionsReportItemShouldNotBeFound("wipTransferAmount.in=" + UPDATED_WIP_TRANSFER_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    void getAllAssetAdditionsReportItemsByWipTransferAmountIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
-
-        // Get all the assetAdditionsReportItemList where wipTransferAmount is not null
-        defaultAssetAdditionsReportItemShouldBeFound("wipTransferAmount.specified=true");
-
-        // Get all the assetAdditionsReportItemList where wipTransferAmount is null
-        defaultAssetAdditionsReportItemShouldNotBeFound("wipTransferAmount.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllAssetAdditionsReportItemsByWipTransferAmountIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
-
-        // Get all the assetAdditionsReportItemList where wipTransferAmount is greater than or equal to DEFAULT_WIP_TRANSFER_AMOUNT
-        defaultAssetAdditionsReportItemShouldBeFound("wipTransferAmount.greaterThanOrEqual=" + DEFAULT_WIP_TRANSFER_AMOUNT);
-
-        // Get all the assetAdditionsReportItemList where wipTransferAmount is greater than or equal to UPDATED_WIP_TRANSFER_AMOUNT
-        defaultAssetAdditionsReportItemShouldNotBeFound("wipTransferAmount.greaterThanOrEqual=" + UPDATED_WIP_TRANSFER_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    void getAllAssetAdditionsReportItemsByWipTransferAmountIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
-
-        // Get all the assetAdditionsReportItemList where wipTransferAmount is less than or equal to DEFAULT_WIP_TRANSFER_AMOUNT
-        defaultAssetAdditionsReportItemShouldBeFound("wipTransferAmount.lessThanOrEqual=" + DEFAULT_WIP_TRANSFER_AMOUNT);
-
-        // Get all the assetAdditionsReportItemList where wipTransferAmount is less than or equal to SMALLER_WIP_TRANSFER_AMOUNT
-        defaultAssetAdditionsReportItemShouldNotBeFound("wipTransferAmount.lessThanOrEqual=" + SMALLER_WIP_TRANSFER_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    void getAllAssetAdditionsReportItemsByWipTransferAmountIsLessThanSomething() throws Exception {
-        // Initialize the database
-        assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
-
-        // Get all the assetAdditionsReportItemList where wipTransferAmount is less than DEFAULT_WIP_TRANSFER_AMOUNT
-        defaultAssetAdditionsReportItemShouldNotBeFound("wipTransferAmount.lessThan=" + DEFAULT_WIP_TRANSFER_AMOUNT);
-
-        // Get all the assetAdditionsReportItemList where wipTransferAmount is less than UPDATED_WIP_TRANSFER_AMOUNT
-        defaultAssetAdditionsReportItemShouldBeFound("wipTransferAmount.lessThan=" + UPDATED_WIP_TRANSFER_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    void getAllAssetAdditionsReportItemsByWipTransferAmountIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        assetAdditionsReportItemRepository.saveAndFlush(assetAdditionsReportItem);
-
-        // Get all the assetAdditionsReportItemList where wipTransferAmount is greater than DEFAULT_WIP_TRANSFER_AMOUNT
-        defaultAssetAdditionsReportItemShouldNotBeFound("wipTransferAmount.greaterThan=" + DEFAULT_WIP_TRANSFER_AMOUNT);
-
-        // Get all the assetAdditionsReportItemList where wipTransferAmount is greater than SMALLER_WIP_TRANSFER_AMOUNT
-        defaultAssetAdditionsReportItemShouldBeFound("wipTransferAmount.greaterThan=" + SMALLER_WIP_TRANSFER_AMOUNT);
+        // Get all the assetAdditionsReportItemList where registrationDate is greater than SMALLER_REGISTRATION_DATE
+        defaultAssetAdditionsReportItemShouldBeFound("registrationDate.greaterThan=" + SMALLER_REGISTRATION_DATE);
     }
 
     /**
@@ -1462,10 +1343,8 @@ class AssetAdditionsReportItemResourceIT {
             .andExpect(jsonPath("$.[*].assetDetails").value(hasItem(DEFAULT_ASSET_DETAILS)))
             .andExpect(jsonPath("$.[*].assetCost").value(hasItem(sameNumber(DEFAULT_ASSET_COST))))
             .andExpect(jsonPath("$.[*].supplier").value(hasItem(DEFAULT_SUPPLIER)))
-            .andExpect(jsonPath("$.[*].invoiceNumber").value(hasItem(DEFAULT_INVOICE_NUMBER)))
-            .andExpect(jsonPath("$.[*].lpoNumber").value(hasItem(DEFAULT_LPO_NUMBER)))
-            .andExpect(jsonPath("$.[*].wipTransfer").value(hasItem(DEFAULT_WIP_TRANSFER.booleanValue())))
-            .andExpect(jsonPath("$.[*].wipTransferAmount").value(hasItem(sameNumber(DEFAULT_WIP_TRANSFER_AMOUNT))));
+            .andExpect(jsonPath("$.[*].historicalCost").value(hasItem(sameNumber(DEFAULT_HISTORICAL_COST))))
+            .andExpect(jsonPath("$.[*].registrationDate").value(hasItem(DEFAULT_REGISTRATION_DATE.toString())));
 
         // Check, that the count call also returns 1
         restAssetAdditionsReportItemMockMvc
@@ -1526,9 +1405,7 @@ class AssetAdditionsReportItemResourceIT {
             .andExpect(jsonPath("$.[*].assetDetails").value(hasItem(DEFAULT_ASSET_DETAILS)))
             .andExpect(jsonPath("$.[*].assetCost").value(hasItem(sameNumber(DEFAULT_ASSET_COST))))
             .andExpect(jsonPath("$.[*].supplier").value(hasItem(DEFAULT_SUPPLIER)))
-            .andExpect(jsonPath("$.[*].invoiceNumber").value(hasItem(DEFAULT_INVOICE_NUMBER)))
-            .andExpect(jsonPath("$.[*].lpoNumber").value(hasItem(DEFAULT_LPO_NUMBER)))
-            .andExpect(jsonPath("$.[*].wipTransfer").value(hasItem(DEFAULT_WIP_TRANSFER.booleanValue())))
-            .andExpect(jsonPath("$.[*].wipTransferAmount").value(hasItem(sameNumber(DEFAULT_WIP_TRANSFER_AMOUNT))));
+            .andExpect(jsonPath("$.[*].historicalCost").value(hasItem(sameNumber(DEFAULT_HISTORICAL_COST))))
+            .andExpect(jsonPath("$.[*].registrationDate").value(hasItem(DEFAULT_REGISTRATION_DATE.toString())));
     }
 }
