@@ -25,6 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -40,7 +41,27 @@ public interface InternalAssetAdditionsReportItemRepository
     JpaRepository<AssetAdditionsReportItem, Long>,
     JpaSpecificationExecutor<AssetAdditionsReportItem> {
 
-    Page<AssetAdditionsReportItemInternal> getAssetAdditionsReportItemByReportDates(
+    @Query(nativeQuery = true, value = "SELECT " +
+        "   a.id, " +
+        "   asset_number, " +
+        "   asset_tag, " +
+        "   so.outlet_code, " +
+        "   settle.payment_number, " +
+        "   settle.payment_date, " +
+        "   ac.asset_category_name, " +
+        "   asset_details,     " +
+        "   asset_cost,    " +
+        "   supplier.dealer_name,    " +
+        "   capitalization_date, " +
+        "   historical_cost, " +
+        "   registration_date   " +
+        "FROM public.asset_registration a" +
+        "  LEFT JOIN asset_category ac ON ac.id = asset_category_id " +
+        "  LEFT JOIN dealer supplier ON supplier.id = dealer_id  " +
+        "  LEFT JOIN settlement settle ON settle.id = acquiring_transaction_id " +
+        "  LEFT JOIN service_outlet so ON so.id = main_service_outlet_id " +
+        " WHERE capitalization_date between :reportPeriodStartDate and :reportPeriodEndDate")
+    Page<AssetAdditionsReportItemInternal> findAllByCapitalizationDate(
         @Param("reportPeriodStartDate") LocalDate reportPeriodStartDate,
         @Param("reportPeriodEndDate") LocalDate reportPeriodEndDate,
         Pageable pageable);

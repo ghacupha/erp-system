@@ -5,6 +5,14 @@
       "fieldType": "LocalDate"
     },
     {
+      "fieldName": "reportStartDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "reportEndDate",
+      "fieldType": "LocalDate"
+    },
+    {
       "fieldName": "requestId",
       "fieldType": "UUID",
       "fieldValidateRules": ["unique"]

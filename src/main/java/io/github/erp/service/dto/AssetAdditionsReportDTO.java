@@ -34,6 +34,10 @@ public class AssetAdditionsReportDTO implements Serializable {
 
     private LocalDate timeOfRequest;
 
+    private LocalDate reportStartDate;
+
+    private LocalDate reportEndDate;
+
     private UUID requestId;
 
     private String fileChecksum;
@@ -63,6 +67,22 @@ public class AssetAdditionsReportDTO implements Serializable {
 
     public void setTimeOfRequest(LocalDate timeOfRequest) {
         this.timeOfRequest = timeOfRequest;
+    }
+
+    public LocalDate getReportStartDate() {
+        return reportStartDate;
+    }
+
+    public void setReportStartDate(LocalDate reportStartDate) {
+        this.reportStartDate = reportStartDate;
+    }
+
+    public LocalDate getReportEndDate() {
+        return reportEndDate;
+    }
+
+    public void setReportEndDate(LocalDate reportEndDate) {
+        this.reportEndDate = reportEndDate;
     }
 
     public UUID getRequestId() {
@@ -148,6 +168,8 @@ public class AssetAdditionsReportDTO implements Serializable {
         return "AssetAdditionsReportDTO{" +
             "id=" + getId() +
             ", timeOfRequest='" + getTimeOfRequest() + "'" +
+            ", reportStartDate='" + getReportStartDate() + "'" +
+            ", reportEndDate='" + getReportEndDate() + "'" +
             ", requestId='" + getRequestId() + "'" +
             ", fileChecksum='" + getFileChecksum() + "'" +
             ", tampered='" + getTampered() + "'" +

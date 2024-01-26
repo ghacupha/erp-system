@@ -50,13 +50,9 @@ public class AssetAdditionsReportItemDTO implements Serializable {
 
     private String supplier;
 
-    private String invoiceNumber;
+    private BigDecimal historicalCost;
 
-    private String lpoNumber;
-
-    private Boolean wipTransfer;
-
-    private BigDecimal wipTransferAmount;
+    private LocalDate registrationDate;
 
     public Long getId() {
         return id;
@@ -146,36 +142,20 @@ public class AssetAdditionsReportItemDTO implements Serializable {
         this.supplier = supplier;
     }
 
-    public String getInvoiceNumber() {
-        return invoiceNumber;
+    public BigDecimal getHistoricalCost() {
+        return historicalCost;
     }
 
-    public void setInvoiceNumber(String invoiceNumber) {
-        this.invoiceNumber = invoiceNumber;
+    public void setHistoricalCost(BigDecimal historicalCost) {
+        this.historicalCost = historicalCost;
     }
 
-    public String getLpoNumber() {
-        return lpoNumber;
+    public LocalDate getRegistrationDate() {
+        return registrationDate;
     }
 
-    public void setLpoNumber(String lpoNumber) {
-        this.lpoNumber = lpoNumber;
-    }
-
-    public Boolean getWipTransfer() {
-        return wipTransfer;
-    }
-
-    public void setWipTransfer(Boolean wipTransfer) {
-        this.wipTransfer = wipTransfer;
-    }
-
-    public BigDecimal getWipTransferAmount() {
-        return wipTransferAmount;
-    }
-
-    public void setWipTransferAmount(BigDecimal wipTransferAmount) {
-        this.wipTransferAmount = wipTransferAmount;
+    public void setRegistrationDate(LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
     @Override
@@ -214,10 +194,8 @@ public class AssetAdditionsReportItemDTO implements Serializable {
             ", assetDetails='" + getAssetDetails() + "'" +
             ", assetCost=" + getAssetCost() +
             ", supplier='" + getSupplier() + "'" +
-            ", invoiceNumber='" + getInvoiceNumber() + "'" +
-            ", lpoNumber='" + getLpoNumber() + "'" +
-            ", wipTransfer='" + getWipTransfer() + "'" +
-            ", wipTransferAmount=" + getWipTransferAmount() +
+            ", historicalCost=" + getHistoricalCost() +
+            ", registrationDate='" + getRegistrationDate() + "'" +
             "}";
     }
 }
