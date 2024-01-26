@@ -18,6 +18,7 @@ package io.github.erp.aop.reporting;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.internal.report.service.DepreciationEntryExportReportService;
+import io.github.erp.internal.report.service.ExportReportService;
 import io.github.erp.internal.repository.InternalProcessStatusRepository;
 import io.github.erp.internal.repository.InternalReportStatusRepository;
 import io.github.erp.internal.report.assemblies.ReportAssemblyService;
@@ -80,6 +81,14 @@ public class ReportingAspectConfiguration {
     @Autowired
     private DepreciationEntryExportReportService depreciationEntryExportReportService;
 
+
+    @Autowired
+    private ReportAttachmentService<DepreciationReportDTO> depreciationReportReportAttachmentService;
+
+
+    @Autowired
+    private ExportReportService<AssetAdditionsReportDTO> assetReportExportReportService;
+
     @Bean
     public ReportRequisitionInterceptor reportRequisitionInterceptor() {
 
@@ -123,11 +132,13 @@ public class ReportingAspectConfiguration {
         return new DepreciationReportInterceptor(depreciationEntryExportReportService);
     }
 
-    @Autowired
-    private ReportAttachmentService<DepreciationReportDTO> depreciationReportReportAttachmentService;
-
     @Bean
     public DepreciationReportAttachmentInterceptor depreciationReportAttachmentInterceptor() {
         return new DepreciationReportAttachmentInterceptor(depreciationReportReportAttachmentService);
+    }
+
+    @Bean
+    public AssetAdditionsReportInterceptor assetAdditionsReportInterceptor() {
+        return new AssetAdditionsReportInterceptor(assetReportExportReportService);
     }
 }

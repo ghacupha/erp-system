@@ -17,8 +17,9 @@ package io.github.erp.aop.reporting;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.internal.report.service.DepreciationEntryExportReportService;
-import io.github.erp.service.dto.DepreciationReportDTO;
+
+import io.github.erp.internal.report.service.ExportReportService;
+import io.github.erp.service.dto.AssetAdditionsReportDTO;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -29,30 +30,29 @@ import org.springframework.http.ResponseEntity;
 import java.util.Objects;
 
 @Aspect
-public class DepreciationReportInterceptor {
+public class AssetAdditionsReportInterceptor {
 
     private static final Logger log = LoggerFactory.getLogger(DepreciationReportInterceptor.class);
 
-    private final DepreciationEntryExportReportService depreciationEntryExportReportService;
+    private final ExportReportService<AssetAdditionsReportDTO> assetReportExportReportService;
 
-    public DepreciationReportInterceptor(DepreciationEntryExportReportService depreciationEntryExportReportService) {
-        this.depreciationEntryExportReportService = depreciationEntryExportReportService;
+    public AssetAdditionsReportInterceptor(ExportReportService<AssetAdditionsReportDTO> assetReportExportReportService) {
+        this.assetReportExportReportService = assetReportExportReportService;
     }
 
     @AfterReturning(
-        pointcut="execution(* io.github.erp.erp.resources.depreciation.DepreciationReportResourceProd.createDepreciationReport(..))",
+        pointcut="execution(* io.github.erp.erp.resources.assets.AssetAdditionsReportResourceProd.createAssetAdditionsReport(..))",
         returning="response")
-    public void getCreatedReportInfo(JoinPoint joinPoint, ResponseEntity<DepreciationReportDTO> response) {
+    public void getCreatedReportInfo(JoinPoint joinPoint, ResponseEntity<AssetAdditionsReportDTO> response) {
 
-        log.info("Depreciation report requisition response intercept completed successfully");
+        log.info("Report requisition response intercept completed successfully");
 
-        DepreciationReportDTO reportDTO = Objects.requireNonNull(response.getBody());
-        String reportId = reportDTO.getReportName();
+        AssetAdditionsReportDTO reportDTO = Objects.requireNonNull(response.getBody());
+        String reportId = reportDTO.getRequestId().toString();
         long entityId = reportDTO.getId();
 
-        log.info("Depreciation report requisition with id: {} has been registered, with entity id # {} commencing report creation sequence...", reportId, entityId);
+        log.info("Report requisition with id: {} has been registered, with entity id # {} commencing report creation sequence...", reportId, entityId);
 
-        depreciationEntryExportReportService.exportDepreciationEntryReport(reportDTO);
+        assetReportExportReportService.exportReport(reportDTO);
     }
-
 }

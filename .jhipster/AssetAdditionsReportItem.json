@@ -41,20 +41,12 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "invoiceNumber",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "lpoNumber",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "wipTransfer",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "wipTransferAmount",
+      "fieldName": "assetCost",
       "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "registrationDate",
+      "fieldType": "LocalDate"
     }
   ],
   "relationships": [],
