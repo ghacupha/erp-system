@@ -23,9 +23,11 @@ import io.github.erp.service.dto.AssetAdditionsReportDTO;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 
 import java.util.Objects;
 
@@ -41,7 +43,7 @@ public class AssetAdditionsReportInterceptor {
     }
 
     @AfterReturning(
-        pointcut="execution(* io.github.erp.erp.resources.assets.AssetAdditionsReportResourceProd.createAssetAdditionsReport(..))",
+        pointcut="assetAdditionsReportPointcut()",
         returning="response")
     public void getCreatedReportInfo(JoinPoint joinPoint, ResponseEntity<AssetAdditionsReportDTO> response) {
 
@@ -53,6 +55,18 @@ public class AssetAdditionsReportInterceptor {
 
         log.info("Report requisition with id: {} has been registered, with entity id # {} commencing report creation sequence...", reportId, entityId);
 
+        createReport(reportDTO);
+    }
+
+    @Async void createReport(AssetAdditionsReportDTO reportDTO) {
         assetReportExportReportService.exportReport(reportDTO);
+    }
+
+    /**
+     * Pointcut for report-requisition file attachment
+     */
+    @Pointcut("execution(* io.github.erp.erp.resources.assets.AssetAdditionsReportResourceProd.createAssetAdditionsReport(..))")
+    public void assetAdditionsReportPointcut() {
+        // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }
 }

@@ -35,6 +35,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -67,24 +68,24 @@ public class AssetAdditionsExportReportService
         @Override
         public void exportReport(AssetAdditionsReportDTO reportRequisition) {
 
-//            Optional<List<AssetsAdditionsReportItemVM>> reportListItems = getEntries(reportRequisition);
-//
-//            reportListItems.ifPresent(reportList -> {
-//
-//                try {
-//                    UUID fileName = UUID.randomUUID();
-//
-//                    String fileChecksum = super.executeReport(reportList, fileName.toString());
-//
-//                    reportRequisition.setFileChecksum(fileChecksum);
-//                    reportRequisition.setFilename(fileName);
-//                    reportRequisition.setReportParameters(getReportParameters(reportRequisition));
-//
-//                    assetAdditionsReportService.save(reportRequisition);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            });
+            Optional<List<AssetsAdditionsReportItemVM>> reportListItems = getEntries(reportRequisition);
+
+            reportListItems.ifPresent(reportList -> {
+
+                try {
+                    UUID fileName = UUID.randomUUID();
+
+                    String fileChecksum = super.executeReport(reportList, fileName.toString());
+
+                    reportRequisition.setFileChecksum(fileChecksum);
+                    reportRequisition.setFilename(fileName);
+                    reportRequisition.setReportParameters(getReportParameters(reportRequisition));
+
+                    assetAdditionsReportService.save(reportRequisition);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         }
 
         private String getReportParameters(AssetAdditionsReportDTO assetAdditionsReportDTO) {
@@ -95,30 +96,25 @@ public class AssetAdditionsExportReportService
 
 
             if(assetAdditionsReport.isPresent()) {
-// TODO
-//                parameters = "Period: ".concat(assetAdditionsReport.get().getReportStartDate().format(DATE_FORMAT).concat("; "));
-//
-//                if (depreciationReport.get().getAssetCategory() != null) {
-//
-//                    parameters = parameters.concat("Category: ".concat(depreciationReport.get().getAssetCategory().getAssetCategoryName()).concat("; "));
-//                }
-//
-//                if (depreciationReport.get().getServiceOutlet() != null) {
-//
-//                    parameters = parameters.concat("Outlet Code: ".concat(depreciationReport.get().getServiceOutlet().getOutletCode().concat("; ")));
-//                }
+
+                parameters = "Start Date: ".concat(assetAdditionsReport.get().getReportStartDate().format(DateTimeFormatter.ISO_DATE).concat("; "));
+
+                if (assetAdditionsReport.get().getReportEndDate() != null) {
+
+                    parameters = parameters.concat("End Date: ".concat(assetAdditionsReport.get().getReportEndDate().format(DateTimeFormatter.ISO_DATE)).concat("; "));
+                }
             }
 
             return parameters;
         }
 
-//        @NotNull
-//        private Optional<List<AssetsAdditionsReportItemVM>> getEntries(AssetAdditionsReportDTO assetAdditionsReportDTO) {
-//            return assetAdditionsReportRepository.findById(assetAdditionsReportDTO.getId())
-//                .map(report ->
-//                    internalAssetAdditionsReportItemRepository.getAssetAdditionsReportItemByReportDates(report.getReportStartDate(), report.getReportEndDate(), Pageable.ofSize(Integer.MAX_VALUE))
-//                        .getContent())
-//                .map(assetAdditionsEntryInternalMapper::toValue2);
-//        }
+        @NotNull
+        private Optional<List<AssetsAdditionsReportItemVM>> getEntries(AssetAdditionsReportDTO assetAdditionsReportDTO) {
+            return assetAdditionsReportRepository.findById(assetAdditionsReportDTO.getId())
+                .map(report ->
+                    internalAssetAdditionsReportItemRepository.findAllByCapitalizationDate(report.getReportStartDate(), report.getReportEndDate(), Pageable.ofSize(Integer.MAX_VALUE))
+                        .getContent())
+                .map(assetAdditionsEntryInternalMapper::toValue2);
+        }
 
 }

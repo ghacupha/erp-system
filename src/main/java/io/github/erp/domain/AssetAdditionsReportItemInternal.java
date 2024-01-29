@@ -44,4 +44,8 @@ public interface AssetAdditionsReportItemInternal {
     BigDecimal getAssetCost();
 
     String getSupplier();
+
+    BigDecimal getHistoricalCost();
+
+    LocalDate getRegistrationDate();
 }

@@ -19,6 +19,7 @@ package io.github.erp.erp.resources;
  */
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.ApplicationUser;
 import io.github.erp.domain.AssetAdditionsReport;
 import io.github.erp.repository.AssetAdditionsReportRepository;
 import io.github.erp.repository.search.AssetAdditionsReportSearchRepository;
@@ -919,6 +920,32 @@ class AssetAdditionsReportResourceIT {
 
         // Get all the assetAdditionsReportList where reportParameters does not contain UPDATED_REPORT_PARAMETERS
         defaultAssetAdditionsReportShouldBeFound("reportParameters.doesNotContain=" + UPDATED_REPORT_PARAMETERS);
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetAdditionsReportsByRequestedByIsEqualToSomething() throws Exception {
+        // Initialize the database
+        assetAdditionsReportRepository.saveAndFlush(assetAdditionsReport);
+        ApplicationUser requestedBy;
+        if (TestUtil.findAll(em, ApplicationUser.class).isEmpty()) {
+            requestedBy = ApplicationUserResourceIT.createEntity(em);
+            em.persist(requestedBy);
+            em.flush();
+        } else {
+            requestedBy = TestUtil.findAll(em, ApplicationUser.class).get(0);
+        }
+        em.persist(requestedBy);
+        em.flush();
+        assetAdditionsReport.setRequestedBy(requestedBy);
+        assetAdditionsReportRepository.saveAndFlush(assetAdditionsReport);
+        Long requestedById = requestedBy.getId();
+
+        // Get all the assetAdditionsReportList where requestedBy equals to requestedById
+        defaultAssetAdditionsReportShouldBeFound("requestedById.equals=" + requestedById);
+
+        // Get all the assetAdditionsReportList where requestedBy equals to (requestedById + 1)
+        defaultAssetAdditionsReportShouldNotBeFound("requestedById.equals=" + (requestedById + 1));
     }
 
     /**

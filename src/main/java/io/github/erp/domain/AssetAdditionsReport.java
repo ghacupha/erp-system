@@ -18,6 +18,7 @@ package io.github.erp.domain;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -73,6 +74,13 @@ public class AssetAdditionsReport implements Serializable {
 
     @Column(name = "report_file_content_type")
     private String reportFileContentType;
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = { "organization", "department", "securityClearance", "systemIdentity", "userProperties", "dealerIdentity", "placeholders" },
+        allowSetters = true
+    )
+    private ApplicationUser requestedBy;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -217,6 +225,19 @@ public class AssetAdditionsReport implements Serializable {
 
     public void setReportFileContentType(String reportFileContentType) {
         this.reportFileContentType = reportFileContentType;
+    }
+
+    public ApplicationUser getRequestedBy() {
+        return this.requestedBy;
+    }
+
+    public void setRequestedBy(ApplicationUser applicationUser) {
+        this.requestedBy = applicationUser;
+    }
+
+    public AssetAdditionsReport requestedBy(ApplicationUser applicationUser) {
+        this.setRequestedBy(applicationUser);
+        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

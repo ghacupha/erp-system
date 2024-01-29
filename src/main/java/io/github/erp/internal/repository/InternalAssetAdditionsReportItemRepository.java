@@ -42,17 +42,17 @@ public interface InternalAssetAdditionsReportItemRepository
     JpaSpecificationExecutor<AssetAdditionsReportItem> {
 
     @Query(nativeQuery = true, value = "SELECT " +
-        "   a.id, " +
-        "   asset_number, " +
-        "   asset_tag, " +
-        "   so.outlet_code, " +
-        "   settle.payment_number, " +
-        "   settle.payment_date, " +
-        "   ac.asset_category_name, " +
-        "   asset_details,     " +
-        "   asset_cost,    " +
-        "   supplier.dealer_name,    " +
-        "   capitalization_date, " +
+        "   a.id as id, " +
+        "   asset_number as assetNumber, " +
+        "   asset_tag as assetTag, " +
+        "   so.outlet_code as serviceOutletCode, " +
+        "   settle.payment_number as transactionId, " +
+        "   settle.payment_date as transactionDate, " +
+        "   capitalization_date as capitalizationDate, " +
+        "   ac.asset_category_name as assetCategory, " +
+        "   asset_details as assetDetails, " +
+        "   asset_cost as assetCost, " +
+        "   supplier.dealer_name as supplier, " +
         "   historical_cost, " +
         "   registration_date   " +
         "FROM public.asset_registration a" +
@@ -60,7 +60,7 @@ public interface InternalAssetAdditionsReportItemRepository
         "  LEFT JOIN dealer supplier ON supplier.id = dealer_id  " +
         "  LEFT JOIN settlement settle ON settle.id = acquiring_transaction_id " +
         "  LEFT JOIN service_outlet so ON so.id = main_service_outlet_id " +
-        " WHERE capitalization_date between :reportPeriodStartDate and :reportPeriodEndDate")
+        " WHERE capitalization_date between :reportPeriodStartDate and :reportPeriodEndDate ")
     Page<AssetAdditionsReportItemInternal> findAllByCapitalizationDate(
         @Param("reportPeriodStartDate") LocalDate reportPeriodStartDate,
         @Param("reportPeriodEndDate") LocalDate reportPeriodEndDate,

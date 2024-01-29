@@ -52,6 +52,7 @@ public class AssetAdditionsReportDTO implements Serializable {
     private byte[] reportFile;
 
     private String reportFileContentType;
+    private ApplicationUserDTO requestedBy;
 
     public Long getId() {
         return id;
@@ -141,6 +142,14 @@ public class AssetAdditionsReportDTO implements Serializable {
         this.reportFileContentType = reportFileContentType;
     }
 
+    public ApplicationUserDTO getRequestedBy() {
+        return requestedBy;
+    }
+
+    public void setRequestedBy(ApplicationUserDTO requestedBy) {
+        this.requestedBy = requestedBy;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -176,6 +185,7 @@ public class AssetAdditionsReportDTO implements Serializable {
             ", filename='" + getFilename() + "'" +
             ", reportParameters='" + getReportParameters() + "'" +
             ", reportFile='" + getReportFile() + "'" +
+            ", requestedBy=" + getRequestedBy() +
             "}";
     }
 }

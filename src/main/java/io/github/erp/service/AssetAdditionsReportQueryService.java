@@ -144,6 +144,15 @@ public class AssetAdditionsReportQueryService extends QueryService<AssetAddition
                 specification =
                     specification.and(buildStringSpecification(criteria.getReportParameters(), AssetAdditionsReport_.reportParameters));
             }
+            if (criteria.getRequestedById() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getRequestedById(),
+                            root -> root.join(AssetAdditionsReport_.requestedBy, JoinType.LEFT).get(ApplicationUser_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

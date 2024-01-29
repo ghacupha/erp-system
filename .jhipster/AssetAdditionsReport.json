@@ -40,7 +40,14 @@
       "fieldTypeBlobContent": "any"
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipName": "requestedBy",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "applicationIdentity"
+    }
+  ],
   "service": "serviceImpl",
   "dto": "mapstruct",
   "jpaMetamodelFiltering": true,
