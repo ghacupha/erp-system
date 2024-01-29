@@ -25,5 +25,8 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link AssetAdditionsReport} and its DTO {@link AssetAdditionsReportDTO}.
  */
-@Mapper(componentModel = "spring", uses = {})
-public interface AssetAdditionsReportMapper extends EntityMapper<AssetAdditionsReportDTO, AssetAdditionsReport> {}
+@Mapper(componentModel = "spring", uses = { ApplicationUserMapper.class })
+public interface AssetAdditionsReportMapper extends EntityMapper<AssetAdditionsReportDTO, AssetAdditionsReport> {
+    @Mapping(target = "requestedBy", source = "requestedBy", qualifiedByName = "applicationIdentity")
+    AssetAdditionsReportDTO toDto(AssetAdditionsReport s);
+}

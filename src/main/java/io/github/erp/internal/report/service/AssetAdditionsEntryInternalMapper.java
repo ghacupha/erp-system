@@ -85,6 +85,16 @@ public class AssetAdditionsEntryInternalMapper implements Mapping<AssetAdditions
             public String getSupplier() {
                 return vs.getSupplier();
             }
+
+            @Override
+            public BigDecimal getHistoricalCost() {
+                return vs.getHistoricalCost();
+            }
+
+            @Override
+            public LocalDate getRegistrationDate() {
+                return vs.getRegistrationDate();
+            }
         };
     }
 
@@ -102,6 +112,8 @@ public class AssetAdditionsEntryInternalMapper implements Mapping<AssetAdditions
             .assetDetails(vs.getAssetDetails())
             .assetCost(vs.getAssetCost())
             .supplier(vs.getSupplier())
+            .historicalCost(vs.getHistoricalCost())
+            .registrationDate(vs.getRegistrationDate())
             .build();
     }
 }

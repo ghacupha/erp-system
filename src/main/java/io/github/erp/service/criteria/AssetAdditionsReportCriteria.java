@@ -62,6 +62,8 @@ public class AssetAdditionsReportCriteria implements Serializable, Criteria {
 
     private StringFilter reportParameters;
 
+    private LongFilter requestedById;
+
     private Boolean distinct;
 
     public AssetAdditionsReportCriteria() {}
@@ -76,6 +78,7 @@ public class AssetAdditionsReportCriteria implements Serializable, Criteria {
         this.tampered = other.tampered == null ? null : other.tampered.copy();
         this.filename = other.filename == null ? null : other.filename.copy();
         this.reportParameters = other.reportParameters == null ? null : other.reportParameters.copy();
+        this.requestedById = other.requestedById == null ? null : other.requestedById.copy();
         this.distinct = other.distinct;
     }
 
@@ -219,6 +222,21 @@ public class AssetAdditionsReportCriteria implements Serializable, Criteria {
         this.reportParameters = reportParameters;
     }
 
+    public LongFilter getRequestedById() {
+        return requestedById;
+    }
+
+    public LongFilter requestedById() {
+        if (requestedById == null) {
+            requestedById = new LongFilter();
+        }
+        return requestedById;
+    }
+
+    public void setRequestedById(LongFilter requestedById) {
+        this.requestedById = requestedById;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -246,6 +264,7 @@ public class AssetAdditionsReportCriteria implements Serializable, Criteria {
             Objects.equals(tampered, that.tampered) &&
             Objects.equals(filename, that.filename) &&
             Objects.equals(reportParameters, that.reportParameters) &&
+            Objects.equals(requestedById, that.requestedById) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -262,6 +281,7 @@ public class AssetAdditionsReportCriteria implements Serializable, Criteria {
             tampered,
             filename,
             reportParameters,
+            requestedById,
             distinct
         );
     }
@@ -279,6 +299,7 @@ public class AssetAdditionsReportCriteria implements Serializable, Criteria {
             (tampered != null ? "tampered=" + tampered + ", " : "") +
             (filename != null ? "filename=" + filename + ", " : "") +
             (reportParameters != null ? "reportParameters=" + reportParameters + ", " : "") +
+            (requestedById != null ? "requestedById=" + requestedById + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
