@@ -68,6 +68,12 @@ public interface SettlementMapper extends EntityMapper<SettlementDTO, Settlement
     @Mapping(target = "paymentNumber", source = "paymentNumber")
     Set<SettlementDTO> toDtoPaymentNumberSet(Set<Settlement> settlement);
 
+    @Named("paymentDate")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "paymentDate", source = "paymentDate")
+    SettlementDTO toDtoPaymentDate(Settlement settlement);
+
     @Named("paymentNumber")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

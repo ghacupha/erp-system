@@ -162,16 +162,6 @@ public class AssetRegistrationResourceIT {
             .historicalCost(DEFAULT_HISTORICAL_COST)
             .registrationDate(DEFAULT_REGISTRATION_DATE);
         // Add required entity
-        Settlement settlement;
-        if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
-            settlement = SettlementResourceIT.createEntity(em);
-            em.persist(settlement);
-            em.flush();
-        } else {
-            settlement = TestUtil.findAll(em, Settlement.class).get(0);
-        }
-        assetRegistration.getSettlements().add(settlement);
-        // Add required entity
         AssetCategory assetCategory;
         if (TestUtil.findAll(em, AssetCategory.class).isEmpty()) {
             assetCategory = AssetCategoryResourceIT.createEntity(em);
@@ -192,6 +182,14 @@ public class AssetRegistrationResourceIT {
         }
         assetRegistration.setDealer(dealer);
         // Add required entity
+        Settlement settlement;
+        if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
+            settlement = SettlementResourceIT.createEntity(em);
+            em.persist(settlement);
+            em.flush();
+        } else {
+            settlement = TestUtil.findAll(em, Settlement.class).get(0);
+        }
         assetRegistration.setAcquiringTransaction(settlement);
         return assetRegistration;
     }
@@ -217,16 +215,6 @@ public class AssetRegistrationResourceIT {
             .historicalCost(UPDATED_HISTORICAL_COST)
             .registrationDate(UPDATED_REGISTRATION_DATE);
         // Add required entity
-        Settlement settlement;
-        if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
-            settlement = SettlementResourceIT.createUpdatedEntity(em);
-            em.persist(settlement);
-            em.flush();
-        } else {
-            settlement = TestUtil.findAll(em, Settlement.class).get(0);
-        }
-        assetRegistration.getSettlements().add(settlement);
-        // Add required entity
         AssetCategory assetCategory;
         if (TestUtil.findAll(em, AssetCategory.class).isEmpty()) {
             assetCategory = AssetCategoryResourceIT.createUpdatedEntity(em);
@@ -247,6 +235,14 @@ public class AssetRegistrationResourceIT {
         }
         assetRegistration.setDealer(dealer);
         // Add required entity
+        Settlement settlement;
+        if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
+            settlement = SettlementResourceIT.createUpdatedEntity(em);
+            em.persist(settlement);
+            em.flush();
+        } else {
+            settlement = TestUtil.findAll(em, Settlement.class).get(0);
+        }
         assetRegistration.setAcquiringTransaction(settlement);
         return assetRegistration;
     }
@@ -1353,54 +1349,54 @@ public class AssetRegistrationResourceIT {
 
     @Test
     @Transactional
-    void getAllAssetRegistrationsByServiceOutletIsEqualToSomething() throws Exception {
+    void getAllAssetRegistrationsByOtherRelatedServiceOutletsIsEqualToSomething() throws Exception {
         // Initialize the database
         assetRegistrationRepository.saveAndFlush(assetRegistration);
-        ServiceOutlet serviceOutlet;
+        ServiceOutlet otherRelatedServiceOutlets;
         if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
-            serviceOutlet = ServiceOutletResourceIT.createEntity(em);
-            em.persist(serviceOutlet);
+            otherRelatedServiceOutlets = ServiceOutletResourceIT.createEntity(em);
+            em.persist(otherRelatedServiceOutlets);
             em.flush();
         } else {
-            serviceOutlet = TestUtil.findAll(em, ServiceOutlet.class).get(0);
+            otherRelatedServiceOutlets = TestUtil.findAll(em, ServiceOutlet.class).get(0);
         }
-        em.persist(serviceOutlet);
+        em.persist(otherRelatedServiceOutlets);
         em.flush();
-        assetRegistration.addServiceOutlet(serviceOutlet);
+        assetRegistration.addOtherRelatedServiceOutlets(otherRelatedServiceOutlets);
         assetRegistrationRepository.saveAndFlush(assetRegistration);
-        Long serviceOutletId = serviceOutlet.getId();
+        Long otherRelatedServiceOutletsId = otherRelatedServiceOutlets.getId();
 
-        // Get all the assetRegistrationList where serviceOutlet equals to serviceOutletId
-        defaultAssetRegistrationShouldBeFound("serviceOutletId.equals=" + serviceOutletId);
+        // Get all the assetRegistrationList where otherRelatedServiceOutlets equals to otherRelatedServiceOutletsId
+        defaultAssetRegistrationShouldBeFound("otherRelatedServiceOutletsId.equals=" + otherRelatedServiceOutletsId);
 
-        // Get all the assetRegistrationList where serviceOutlet equals to (serviceOutletId + 1)
-        defaultAssetRegistrationShouldNotBeFound("serviceOutletId.equals=" + (serviceOutletId + 1));
+        // Get all the assetRegistrationList where otherRelatedServiceOutlets equals to (otherRelatedServiceOutletsId + 1)
+        defaultAssetRegistrationShouldNotBeFound("otherRelatedServiceOutletsId.equals=" + (otherRelatedServiceOutletsId + 1));
     }
 
     @Test
     @Transactional
-    void getAllAssetRegistrationsBySettlementIsEqualToSomething() throws Exception {
+    void getAllAssetRegistrationsByOtherRelatedSettlementsIsEqualToSomething() throws Exception {
         // Initialize the database
         assetRegistrationRepository.saveAndFlush(assetRegistration);
-        Settlement settlement;
+        Settlement otherRelatedSettlements;
         if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
-            settlement = SettlementResourceIT.createEntity(em);
-            em.persist(settlement);
+            otherRelatedSettlements = SettlementResourceIT.createEntity(em);
+            em.persist(otherRelatedSettlements);
             em.flush();
         } else {
-            settlement = TestUtil.findAll(em, Settlement.class).get(0);
+            otherRelatedSettlements = TestUtil.findAll(em, Settlement.class).get(0);
         }
-        em.persist(settlement);
+        em.persist(otherRelatedSettlements);
         em.flush();
-        assetRegistration.addSettlement(settlement);
+        assetRegistration.addOtherRelatedSettlements(otherRelatedSettlements);
         assetRegistrationRepository.saveAndFlush(assetRegistration);
-        Long settlementId = settlement.getId();
+        Long otherRelatedSettlementsId = otherRelatedSettlements.getId();
 
-        // Get all the assetRegistrationList where settlement equals to settlementId
-        defaultAssetRegistrationShouldBeFound("settlementId.equals=" + settlementId);
+        // Get all the assetRegistrationList where otherRelatedSettlements equals to otherRelatedSettlementsId
+        defaultAssetRegistrationShouldBeFound("otherRelatedSettlementsId.equals=" + otherRelatedSettlementsId);
 
-        // Get all the assetRegistrationList where settlement equals to (settlementId + 1)
-        defaultAssetRegistrationShouldNotBeFound("settlementId.equals=" + (settlementId + 1));
+        // Get all the assetRegistrationList where otherRelatedSettlements equals to (otherRelatedSettlementsId + 1)
+        defaultAssetRegistrationShouldNotBeFound("otherRelatedSettlementsId.equals=" + (otherRelatedSettlementsId + 1));
     }
 
     @Test
