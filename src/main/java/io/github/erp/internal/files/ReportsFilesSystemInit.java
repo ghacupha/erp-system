@@ -49,6 +49,7 @@ public class ReportsFilesSystemInit implements ApplicationListener<ApplicationRe
     private final ReportStatusService reportStatusService;
     private final AutonomousReportService autonomousReportService;
     private final DepreciationReportService depreciationReportService;
+    private final AssetAdditionsReportService assetAdditionsReportService;
 
     public ReportsFilesSystemInit(
         @Qualifier("reportsFSStorageService") FileStorageService storageService,
@@ -57,7 +58,7 @@ public class ReportsFilesSystemInit implements ApplicationListener<ApplicationRe
         XlsxReportRequisitionService xlsxReportRequisitionService,
         ExcelReportExportService excelReportExportService,
         ReportStatusService reportStatusService,
-        AutonomousReportService autonomousReportService, DepreciationReportService depreciationReportService) {
+        AutonomousReportService autonomousReportService, DepreciationReportService depreciationReportService, AssetAdditionsReportService assetAdditionsReportService) {
         this.storageService = storageService;
         this.pdfReportRequisitionService = pdfReportRequisitionService;
         this.reportRequisitionService = reportRequisitionService;
@@ -66,6 +67,7 @@ public class ReportsFilesSystemInit implements ApplicationListener<ApplicationRe
         this.reportStatusService = reportStatusService;
         this.autonomousReportService = autonomousReportService;
         this.depreciationReportService = depreciationReportService;
+        this.assetAdditionsReportService = assetAdditionsReportService;
     }
 
     @Override
@@ -94,6 +96,9 @@ public class ReportsFilesSystemInit implements ApplicationListener<ApplicationRe
 
         depreciationReportService.findAll(Pageable.unpaged())
             .forEach(report -> depreciationReportService.delete(report.getId()));
+
+        assetAdditionsReportService.findAll(Pageable.unpaged())
+            .forEach(report -> assetAdditionsReportService.delete(report.getId()));
 
         log.info("All report metadata has been deleted, removing old files from the reports directory. Standby...");
 
