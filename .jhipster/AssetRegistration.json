@@ -186,7 +186,7 @@
       "otherEntityName": "settlement",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
-      "otherEntityField": "paymentDate"
+      "otherEntityField": "paymentNumber"
     }
   ],
   "service": "serviceImpl"
