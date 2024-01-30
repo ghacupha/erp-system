@@ -1,0 +1,24 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1706629291519-5">
+        <addColumn tableName="depreciation_entry">
+            <column name="capitalization_date" type="date"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706629291519-6">
+        <addColumn tableName="work_in_progress_report">
+            <column name="dealer_name" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706629291519-7">
+        <addColumn tableName="work_in_progress_report">
+            <column name="project_title" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706629291519-9">
+        <dropForeignKeyConstraint baseTableName="work_in_progress_report" constraintName="fk_work_in_progress_report__work_project_register_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706629291519-21">
+        <dropColumn columnName="work_project_register_id" tableName="work_in_progress_report"/>
+    </changeSet>
+</databaseChangeLog>

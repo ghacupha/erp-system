@@ -68,7 +68,7 @@ public class DepreciationJobCascadeDeletionSequenceImpl implements CascadeDeleti
             });
         internalDepreciationBatchSequenceRepository.findByDepreciationJobId(job.getId(), Pageable.ofSize(Integer.MAX_VALUE))
             .forEach(depreciationBatchSequence -> {
-                depreciationBatchSequenceService.delete(job.getId());
+                depreciationBatchSequenceService.delete(depreciationBatchSequence.getId());
             });
 
         return job;
