@@ -47,8 +47,8 @@ import org.mapstruct.*;
 public interface AssetRegistrationMapper extends EntityMapper<AssetRegistrationDTO, AssetRegistration> {
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     @Mapping(target = "paymentInvoices", source = "paymentInvoices", qualifiedByName = "invoiceNumberSet")
-    @Mapping(target = "serviceOutlets", source = "serviceOutlets", qualifiedByName = "outletCodeSet")
-    @Mapping(target = "settlements", source = "settlements", qualifiedByName = "paymentNumberSet")
+    @Mapping(target = "otherRelatedServiceOutlets", source = "otherRelatedServiceOutlets", qualifiedByName = "outletCodeSet")
+    @Mapping(target = "otherRelatedSettlements", source = "otherRelatedSettlements", qualifiedByName = "paymentNumberSet")
     @Mapping(target = "assetCategory", source = "assetCategory", qualifiedByName = "assetCategoryName")
     @Mapping(target = "purchaseOrders", source = "purchaseOrders", qualifiedByName = "purchaseOrderNumberSet")
     @Mapping(target = "deliveryNotes", source = "deliveryNotes", qualifiedByName = "deliveryNoteNumberSet")
@@ -61,13 +61,13 @@ public interface AssetRegistrationMapper extends EntityMapper<AssetRegistrationD
     @Mapping(target = "universallyUniqueMappings", source = "universallyUniqueMappings", qualifiedByName = "universalKeySet")
     @Mapping(target = "assetAccessories", source = "assetAccessories", qualifiedByName = "assetDetailsSet")
     @Mapping(target = "mainServiceOutlet", source = "mainServiceOutlet", qualifiedByName = "outletCode")
-    @Mapping(target = "acquiringTransaction", source = "acquiringTransaction", qualifiedByName = "paymentNumber")
+    @Mapping(target = "acquiringTransaction", source = "acquiringTransaction", qualifiedByName = "paymentDate")
     AssetRegistrationDTO toDto(AssetRegistration s);
 
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removePaymentInvoices", ignore = true)
-    @Mapping(target = "removeServiceOutlet", ignore = true)
-    @Mapping(target = "removeSettlement", ignore = true)
+    @Mapping(target = "removeOtherRelatedServiceOutlets", ignore = true)
+    @Mapping(target = "removeOtherRelatedSettlements", ignore = true)
     @Mapping(target = "removePurchaseOrder", ignore = true)
     @Mapping(target = "removeDeliveryNote", ignore = true)
     @Mapping(target = "removeJobSheet", ignore = true)

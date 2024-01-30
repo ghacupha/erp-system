@@ -67,9 +67,9 @@ public class AssetRegistrationDTO implements Serializable {
 
     private Set<PaymentInvoiceDTO> paymentInvoices = new HashSet<>();
 
-    private Set<ServiceOutletDTO> serviceOutlets = new HashSet<>();
+    private Set<ServiceOutletDTO> otherRelatedServiceOutlets = new HashSet<>();
 
-    private Set<SettlementDTO> settlements = new HashSet<>();
+    private Set<SettlementDTO> otherRelatedSettlements = new HashSet<>();
 
     private AssetCategoryDTO assetCategory;
 
@@ -217,20 +217,20 @@ public class AssetRegistrationDTO implements Serializable {
         this.paymentInvoices = paymentInvoices;
     }
 
-    public Set<ServiceOutletDTO> getServiceOutlets() {
-        return serviceOutlets;
+    public Set<ServiceOutletDTO> getOtherRelatedServiceOutlets() {
+        return otherRelatedServiceOutlets;
     }
 
-    public void setServiceOutlets(Set<ServiceOutletDTO> serviceOutlets) {
-        this.serviceOutlets = serviceOutlets;
+    public void setOtherRelatedServiceOutlets(Set<ServiceOutletDTO> otherRelatedServiceOutlets) {
+        this.otherRelatedServiceOutlets = otherRelatedServiceOutlets;
     }
 
-    public Set<SettlementDTO> getSettlements() {
-        return settlements;
+    public Set<SettlementDTO> getOtherRelatedSettlements() {
+        return otherRelatedSettlements;
     }
 
-    public void setSettlements(Set<SettlementDTO> settlements) {
-        this.settlements = settlements;
+    public void setOtherRelatedSettlements(Set<SettlementDTO> otherRelatedSettlements) {
+        this.otherRelatedSettlements = otherRelatedSettlements;
     }
 
     public AssetCategoryDTO getAssetCategory() {
@@ -376,8 +376,8 @@ public class AssetRegistrationDTO implements Serializable {
             ", registrationDate='" + getRegistrationDate() + "'" +
             ", placeholders=" + getPlaceholders() +
             ", paymentInvoices=" + getPaymentInvoices() +
-            ", serviceOutlets=" + getServiceOutlets() +
-            ", settlements=" + getSettlements() +
+            ", otherRelatedServiceOutlets=" + getOtherRelatedServiceOutlets() +
+            ", otherRelatedSettlements=" + getOtherRelatedSettlements() +
             ", assetCategory=" + getAssetCategory() +
             ", purchaseOrders=" + getPurchaseOrders() +
             ", deliveryNotes=" + getDeliveryNotes() +

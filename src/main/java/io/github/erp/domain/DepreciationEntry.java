@@ -120,8 +120,8 @@ public class DepreciationEntry implements Serializable {
         value = {
             "placeholders",
             "paymentInvoices",
-            "serviceOutlets",
-            "settlements",
+            "otherRelatedServiceOutlets",
+            "otherRelatedSettlements",
             "assetCategory",
             "purchaseOrders",
             "deliveryNotes",

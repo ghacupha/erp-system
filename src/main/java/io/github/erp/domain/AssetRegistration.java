@@ -124,23 +124,22 @@ public class AssetRegistration implements Serializable {
 
     @ManyToMany
     @JoinTable(
-        name = "rel_asset_registration__service_outlet",
+        name = "rel_asset_registration__other_related_service_outlets",
         joinColumns = @JoinColumn(name = "asset_registration_id"),
-        inverseJoinColumns = @JoinColumn(name = "service_outlet_id")
+        inverseJoinColumns = @JoinColumn(name = "other_related_service_outlets_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
         value = { "placeholders", "bankCode", "outletType", "outletStatus", "countyName", "subCountyName" },
         allowSetters = true
     )
-    private Set<ServiceOutlet> serviceOutlets = new HashSet<>();
+    private Set<ServiceOutlet> otherRelatedServiceOutlets = new HashSet<>();
 
     @ManyToMany
-    @NotNull
     @JoinTable(
-        name = "rel_asset_registration__settlement",
+        name = "rel_asset_registration__other_related_settlements",
         joinColumns = @JoinColumn(name = "asset_registration_id"),
-        inverseJoinColumns = @JoinColumn(name = "settlement_id")
+        inverseJoinColumns = @JoinColumn(name = "other_related_settlements_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
@@ -157,7 +156,7 @@ public class AssetRegistration implements Serializable {
         },
         allowSetters = true
     )
-    private Set<Settlement> settlements = new HashSet<>();
+    private Set<Settlement> otherRelatedSettlements = new HashSet<>();
 
     @ManyToOne(optional = false)
     @NotNull
@@ -542,49 +541,49 @@ public class AssetRegistration implements Serializable {
         return this;
     }
 
-    public Set<ServiceOutlet> getServiceOutlets() {
-        return this.serviceOutlets;
+    public Set<ServiceOutlet> getOtherRelatedServiceOutlets() {
+        return this.otherRelatedServiceOutlets;
     }
 
-    public void setServiceOutlets(Set<ServiceOutlet> serviceOutlets) {
-        this.serviceOutlets = serviceOutlets;
+    public void setOtherRelatedServiceOutlets(Set<ServiceOutlet> serviceOutlets) {
+        this.otherRelatedServiceOutlets = serviceOutlets;
     }
 
-    public AssetRegistration serviceOutlets(Set<ServiceOutlet> serviceOutlets) {
-        this.setServiceOutlets(serviceOutlets);
+    public AssetRegistration otherRelatedServiceOutlets(Set<ServiceOutlet> serviceOutlets) {
+        this.setOtherRelatedServiceOutlets(serviceOutlets);
         return this;
     }
 
-    public AssetRegistration addServiceOutlet(ServiceOutlet serviceOutlet) {
-        this.serviceOutlets.add(serviceOutlet);
+    public AssetRegistration addOtherRelatedServiceOutlets(ServiceOutlet serviceOutlet) {
+        this.otherRelatedServiceOutlets.add(serviceOutlet);
         return this;
     }
 
-    public AssetRegistration removeServiceOutlet(ServiceOutlet serviceOutlet) {
-        this.serviceOutlets.remove(serviceOutlet);
+    public AssetRegistration removeOtherRelatedServiceOutlets(ServiceOutlet serviceOutlet) {
+        this.otherRelatedServiceOutlets.remove(serviceOutlet);
         return this;
     }
 
-    public Set<Settlement> getSettlements() {
-        return this.settlements;
+    public Set<Settlement> getOtherRelatedSettlements() {
+        return this.otherRelatedSettlements;
     }
 
-    public void setSettlements(Set<Settlement> settlements) {
-        this.settlements = settlements;
+    public void setOtherRelatedSettlements(Set<Settlement> settlements) {
+        this.otherRelatedSettlements = settlements;
     }
 
-    public AssetRegistration settlements(Set<Settlement> settlements) {
-        this.setSettlements(settlements);
+    public AssetRegistration otherRelatedSettlements(Set<Settlement> settlements) {
+        this.setOtherRelatedSettlements(settlements);
         return this;
     }
 
-    public AssetRegistration addSettlement(Settlement settlement) {
-        this.settlements.add(settlement);
+    public AssetRegistration addOtherRelatedSettlements(Settlement settlement) {
+        this.otherRelatedSettlements.add(settlement);
         return this;
     }
 
-    public AssetRegistration removeSettlement(Settlement settlement) {
-        this.settlements.remove(settlement);
+    public AssetRegistration removeOtherRelatedSettlements(Settlement settlement) {
+        this.otherRelatedSettlements.remove(settlement);
         return this;
     }
 

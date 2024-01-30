@@ -163,21 +163,21 @@ public class AssetRegistrationQueryService extends QueryService<AssetRegistratio
                         )
                     );
             }
-            if (criteria.getServiceOutletId() != null) {
+            if (criteria.getOtherRelatedServiceOutletsId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
-                            criteria.getServiceOutletId(),
-                            root -> root.join(AssetRegistration_.serviceOutlets, JoinType.LEFT).get(ServiceOutlet_.id)
+                            criteria.getOtherRelatedServiceOutletsId(),
+                            root -> root.join(AssetRegistration_.otherRelatedServiceOutlets, JoinType.LEFT).get(ServiceOutlet_.id)
                         )
                     );
             }
-            if (criteria.getSettlementId() != null) {
+            if (criteria.getOtherRelatedSettlementsId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
-                            criteria.getSettlementId(),
-                            root -> root.join(AssetRegistration_.settlements, JoinType.LEFT).get(Settlement_.id)
+                            criteria.getOtherRelatedSettlementsId(),
+                            root -> root.join(AssetRegistration_.otherRelatedSettlements, JoinType.LEFT).get(Settlement_.id)
                         )
                     );
             }
