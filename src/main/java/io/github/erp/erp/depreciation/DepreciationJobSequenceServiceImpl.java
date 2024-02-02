@@ -1,7 +1,7 @@
 package io.github.erp.erp.depreciation;
 
 /*-
- * Erp System - Mark X No 2 (Jehoiada Series) Server ver 1.7.1
+ * Erp System - Mark X No 2 (Jehoiada Series) Server ver 1.7.2-SNAPSHOT
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -50,6 +50,7 @@ import java.util.UUID;
 public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequenceService<DepreciationJobDTO> {
 
     private static final Logger log = LoggerFactory.getLogger(DepreciationJobSequenceServiceImpl.class);
+    private static final int PREFERRED_BATCH_SIZE = 850;
 
     private final AssetRegistrationService assetRegistrationService;
     private final DepreciationBatchProducer depreciationBatchProducer;
@@ -92,7 +93,7 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
 
         // Process the assets in batches
         // TODO externalize this setting, you definitely would not do this for 10,000 items
-        int batchSize = 600;
+        int batchSize = PREFERRED_BATCH_SIZE;
         processAssetsInBatches(depreciationJob, assets, batchSize);
 
         // Mark the depreciation job as complete
