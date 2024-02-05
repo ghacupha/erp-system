@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@ConfigurationProperties(prefix = "kafka")
+@ConfigurationProperties(prefix = "spring")
 public class KafkaProperties {
 
     private String bootStrapServers = "localhost:9092";

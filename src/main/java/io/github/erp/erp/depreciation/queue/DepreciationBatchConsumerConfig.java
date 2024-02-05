@@ -45,13 +45,13 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "spring.kafka.consumer")
 public class DepreciationBatchConsumerConfig {
 
-    @Value("${kafka.depreciation-batch.topic.name}")
+    @Value("${spring.kafka.depreciation-batch.topic.name}")
     private String topicName;
 
-    @Value("${kafka.bootstrap-servers}")
+    @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    @Value("${kafka.consumer.group.id}")
+    @Value("${spring.kafka.consumer.group.id}")
     private String groupId;
 
     // Set Kafka consumer properties
