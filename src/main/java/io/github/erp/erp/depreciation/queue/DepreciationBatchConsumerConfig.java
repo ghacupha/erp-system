@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
 import lombok.SneakyThrows;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,6 +39,7 @@ import org.springframework.kafka.listener.SeekToCurrentErrorHandler;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 // import static io.github.erp.erp.depreciation.queue.DepreciationBatchProducer.DEPRECIATION_BATCH_TOPIC;
 
@@ -69,6 +71,13 @@ public class DepreciationBatchConsumerConfig {
         Map<String, Object> properties = new HashMap<>();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+        properties.put(ConsumerConfig.REQUEST_TIMEOUT_MS_CONFIG, String.valueOf(TimeUnit.MINUTES.toMillis(2)));
+        properties.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, String.valueOf(TimeUnit.MINUTES.toMillis(2)));
+        properties.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, String.valueOf(TimeUnit.MINUTES.toMillis(7)));
+        properties.put(ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG, String.valueOf(TimeUnit.MINUTES.toMillis(2)));
+        properties.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, String.valueOf(TimeUnit.MINUTES.toMillis(5)));
+        properties.put(ConsumerConfig.RETRY_BACKOFF_MS_CONFIG, String.valueOf(TimeUnit.MINUTES.toMillis(2)));
+
         return properties;
     }
 
@@ -77,6 +86,7 @@ public class DepreciationBatchConsumerConfig {
     public DefaultKafkaConsumerFactory<String, DepreciationBatchMessage> consumerFactory() {
         DefaultKafkaConsumerFactory<String, DepreciationBatchMessage> consumerFactory =  new DefaultKafkaConsumerFactory<>(consumerConfigs());
 
+        // TODO Add listener
         consumerFactory.setKeyDeserializer(new StringDeserializer());
         consumerFactory.setValueDeserializer(new DepreciationBatchMessageDeserializer());
         return consumerFactory;
