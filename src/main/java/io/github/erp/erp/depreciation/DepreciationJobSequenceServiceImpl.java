@@ -50,7 +50,7 @@ import java.util.UUID;
 public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequenceService<DepreciationJobDTO> {
 
     private static final Logger log = LoggerFactory.getLogger(DepreciationJobSequenceServiceImpl.class);
-    private static final int PREFERRED_BATCH_SIZE = 450;
+    private static final int PREFERRED_BATCH_SIZE = 650;
 
     private final AssetRegistrationService assetRegistrationService;
     private final DepreciationBatchProducer depreciationBatchProducer;
@@ -88,13 +88,15 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
         depreciationJob.setDepreciationJobStatus(DepreciationJobStatusType.RUNNING);
         depreciationJobService.save(depreciationJob);
 
+        log.info("DepreciationJob status update complete, fetching assets for depreciation...");
         // Fetch assets from the database for depreciation processing
         List<AssetRegistrationDTO> assets = fetchAssets();
 
+        log.info("{} items extracted for depreciation, preferred batchh size is {}", assets.size(), PREFERRED_BATCH_SIZE);
+
         // Process the assets in batches
         // TODO externalize this setting, you definitely would not do this for 10,000 items
-        int batchSize = PREFERRED_BATCH_SIZE;
-        processAssetsInBatches(depreciationJob, assets, batchSize);
+        processAssetsInBatches(depreciationJob, assets, PREFERRED_BATCH_SIZE);
 
         // Mark the depreciation job as complete
         markDepreciationJobAsEnqueued(depreciationJob);
@@ -235,6 +237,8 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
      * Processes and enqueues the current batch for depreciation.
      */
     private void processAndEnqueueBatch(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> currentBatch, DepreciationBatchSequenceDTO batchSequence, boolean isLastBatch, int processedCount, int sequenceNumber, int totalItems, DepreciationContextInstance contextInstance, int numberOfBatches) {
+
+        log.info("Batch # {} of {} items received for processing under job id {}; {} items processed out of {}", sequenceNumber, currentBatch.size(),depreciationJob.getDescription(),processedCount, totalItems);
         // Enqueuing the DepreciationBatchMessage
         depreciationBatchProducer.sendDepreciationJobMessage(depreciationJob, currentBatch, batchSequence, isLastBatch, processedCount, sequenceNumber, totalItems, contextInstance, numberOfBatches);
 

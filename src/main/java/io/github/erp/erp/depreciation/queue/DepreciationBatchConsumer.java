@@ -53,14 +53,14 @@ public class DepreciationBatchConsumer {
         this.depreciationBatchSequenceService = depreciationBatchSequenceService;
     }
 
-    @KafkaListener(topics = "depreciation_batch_topic", groupId = "erp-system", concurrency = "4")
+    @KafkaListener(topics = "depreciation_batch_topic", groupId = "erp-system", concurrency = "8")
     public void processDepreciationJobMessages(DepreciationBatchMessage message, Acknowledgment acknowledgment) {
         try {
 
             depreciationLock.lock();
 
             // Process the batch of depreciation job messages
-            log.debug("Received message for batch-id id {}", message.getBatchId());
+            log.info("Received message for batch-id id {}", message.getBatchId());
 
             UUID messageCountContextId = message.getDepreciationContextInstance().getMessageCountContextId();
 
