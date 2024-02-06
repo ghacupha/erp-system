@@ -60,7 +60,7 @@ public class DepreciationBatchConsumer {
             depreciationLock.lock();
 
             // Process the batch of depreciation job messages
-            log.info("Received message for batch-id id {}", message.getBatchId());
+            log.info("Received message for batch-id id {} sequence # {}", message.getBatchId(), message.getSequenceNumber());
 
             UUID messageCountContextId = message.getDepreciationContextInstance().getMessageCountContextId();
 

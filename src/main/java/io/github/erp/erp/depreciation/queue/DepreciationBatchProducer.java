@@ -53,20 +53,20 @@ public class DepreciationBatchProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendDepreciationJobMessage(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> assets, DepreciationBatchSequenceDTO batchSequence, boolean isLastBatch, int processedCount, int sequenceNumber, int totalItems, DepreciationContextInstance contextInstance, int numberOfBatches) {
+    public void sendDepreciationJobMessage(DepreciationJobDTO depreciationJob, List<Long> currentBatch, DepreciationBatchSequenceDTO batchSequence, boolean isLastBatch, int processedCount, int sequenceNumber, int totalItems, DepreciationContextInstance contextInstance, int numberOfBatches, BigDecimal initialCost) {
 
         if (isLastBatch) {
-            log.info("Last batch encountered, sequence # {} with {} items; total items processed: {}, out of {}", sequenceNumber, assets.size(), processedCount, totalItems);
+            log.info("Last batch encountered, sequence # {} with {} items; total items processed: {}, out of {}", sequenceNumber, currentBatch.size(), processedCount, totalItems);
         }
 
         DepreciationBatchMessage depreciationJobMessage = DepreciationBatchMessage
             .builder()
             .messageCorrelationId(UUID.randomUUID())
             .batchId(String.valueOf(batchSequence.getId()))
-            .batchSize(assets.size())
+            .batchSize(currentBatch.size())
             .jobId(String.valueOf(depreciationJob.getId()))
-            .assetIds(assets.stream().map(AssetRegistrationDTO::getId).map(String::valueOf).collect(Collectors.toList()))
-            .initialCost(assets.stream().map(AssetRegistrationDTO::getAssetCost).reduce(BigDecimal::add).orElse(BigDecimal.ZERO))
+            .assetIds(currentBatch.stream().map(String::valueOf).collect(Collectors.toList()))
+            .initialCost(initialCost)
             .createdAt(LocalDateTime.now())
             .isLastBatch(isLastBatch)
             .startIndex(batchSequence.getStartIndex())

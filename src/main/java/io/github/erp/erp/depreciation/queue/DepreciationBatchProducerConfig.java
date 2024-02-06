@@ -33,6 +33,7 @@ import org.springframework.kafka.core.ProducerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 @ConfigurationProperties(prefix = "spring.kafka.producer")
@@ -54,6 +55,11 @@ public class DepreciationBatchProducerConfig {
     public Map<String, Object> producerConfigs() {
         Map<String, Object> properties = new HashMap<>();
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        properties.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, String.valueOf(TimeUnit.MINUTES.toMillis(3)));
+        properties.put(ProducerConfig.LINGER_MS_CONFIG, String.valueOf(TimeUnit.MINUTES.toMillis(2)));
+        properties.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, String.valueOf(TimeUnit.MINUTES.toMillis(3)));
+        properties.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG, String.valueOf(TimeUnit.MINUTES.toMillis(3)));
+
         return properties;
     }
 
