@@ -28,7 +28,8 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "spring")
 public class KafkaProperties {
 
-    private String bootStrapServers = "localhost:9092";
+    @Value("${spring.kafka.bootstrap-servers}")
+    private String bootStrapServers;
 
     private Map<String, String> consumer = new HashMap<>();
 
