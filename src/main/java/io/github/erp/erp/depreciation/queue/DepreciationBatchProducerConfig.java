@@ -38,10 +38,9 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "spring.kafka.producer")
 public class DepreciationBatchProducerConfig {
 
-    @Value("${kafka.bootstrap-servers}")
+    @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    // Set Kafka producer properties
     @Bean
     public ProducerFactory<String, DepreciationBatchMessage> producerFactory() throws ClassNotFoundException {
         DefaultKafkaProducerFactory<String, DepreciationBatchMessage> producerFactory = new DefaultKafkaProducerFactory<>(producerConfigs());
@@ -50,17 +49,14 @@ public class DepreciationBatchProducerConfig {
         return producerFactory;
     }
 
-    // Define Kafka producer configurations
     @SneakyThrows
     @Bean
     public Map<String, Object> producerConfigs() {
         Map<String, Object> properties = new HashMap<>();
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        // Add additional properties as needed
         return properties;
     }
 
-    // Create KafkaTemplate for producing messages
     @SneakyThrows
     @Bean("depreciationMessageKafkaTemplate")
     public KafkaTemplate<String, DepreciationBatchMessage> kafkaTemplate() {
