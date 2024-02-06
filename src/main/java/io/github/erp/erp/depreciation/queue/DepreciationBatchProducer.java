@@ -54,6 +54,11 @@ public class DepreciationBatchProducer {
     }
 
     public void sendDepreciationJobMessage(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> assets, DepreciationBatchSequenceDTO batchSequence, boolean isLastBatch, int processedCount, int sequenceNumber, int totalItems, DepreciationContextInstance contextInstance, int numberOfBatches) {
+
+        if (isLastBatch) {
+            log.info("Last batch encountered, sequence # {} with {} items; total items processed: {}, out of {}", sequenceNumber, assets.size(), processedCount, totalItems);
+        }
+
         DepreciationBatchMessage depreciationJobMessage = DepreciationBatchMessage
             .builder()
             .messageCorrelationId(UUID.randomUUID())
