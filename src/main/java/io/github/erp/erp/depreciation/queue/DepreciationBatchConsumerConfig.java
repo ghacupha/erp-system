@@ -54,7 +54,6 @@ public class DepreciationBatchConsumerConfig {
     @Value("${spring.kafka.consumer.group.id}")
     private String groupId;
 
-    // Set Kafka consumer properties
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, DepreciationBatchMessage> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, DepreciationBatchMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
@@ -64,27 +63,12 @@ public class DepreciationBatchConsumerConfig {
     }
 
 
-//    @Bean
-//    public ContainerProperties containerProperties() {
-//        ContainerProperties containerProperties = new ContainerProperties(topicName);
-//        containerProperties.setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
-//        // containerProperties.setListenerMode(ListenerMode.BATCH);
-//        containerProperties.setAckOnError(false);
-//        containerProperties.setPollTimeout(3000);
-//        // containerProperties.setErrorHandler(new SeekToCurrentErrorHandler());
-//        return containerProperties;
-//    }
-
-    // Define Kafka consumer configurations
     @SneakyThrows
     @Bean
     public Map<String, Object> consumerConfigs() {
         Map<String, Object> properties = new HashMap<>();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
-        // properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        // properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        // Add additional properties as needed
         return properties;
     }
 

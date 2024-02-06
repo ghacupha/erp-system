@@ -50,7 +50,7 @@ import java.util.UUID;
 public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequenceService<DepreciationJobDTO> {
 
     private static final Logger log = LoggerFactory.getLogger(DepreciationJobSequenceServiceImpl.class);
-    private static final int PREFERRED_BATCH_SIZE = 850;
+    private static final int PREFERRED_BATCH_SIZE = 450;
 
     private final AssetRegistrationService assetRegistrationService;
     private final DepreciationBatchProducer depreciationBatchProducer;

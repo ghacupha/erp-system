@@ -53,7 +53,7 @@ public class DepreciationBatchConsumer {
         this.depreciationBatchSequenceService = depreciationBatchSequenceService;
     }
 
-    @KafkaListener(topics = "depreciation_batch_topic", groupId = "erp-system", concurrency = "2")
+    @KafkaListener(topics = "depreciation_batch_topic", groupId = "erp-system", concurrency = "4")
     public void processDepreciationJobMessages(DepreciationBatchMessage message, Acknowledgment acknowledgment) {
         try {
 
