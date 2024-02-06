@@ -33,6 +33,7 @@ public interface InternalDepreciationJobRepository extends
     @EntityGraph(
         attributePaths = {
             "createdBy",
+            "depreciationPeriod",
             "lastModifiedBy",
             "createdBy.userProperties",
             "createdBy.placeholders",

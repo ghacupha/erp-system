@@ -28,6 +28,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -92,4 +93,13 @@ public interface InternalAssetRegistrationRepository
             "where assetRegistration.id =:id"
     )
     Optional<AssetRegistration> findOneWithEagerRelationships(@Param("id") Long id);
+
+    /**
+     * Applied in the depreciation module to exclude items capitalised after the end-date
+     * of the depreciation period in the depreciation-job
+     *
+     * @param capitalizationDate
+     * @return
+     */
+    List<AssetRegistration> findAllByCapitalizationDateBefore(LocalDate capitalizationDate);
 }
