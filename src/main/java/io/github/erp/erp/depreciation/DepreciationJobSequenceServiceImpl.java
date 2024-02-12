@@ -33,8 +33,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * The DepreciationJobSequenceService class manages the depreciation process for a given DepreciationJob. It is responsible for
@@ -202,8 +205,12 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
                 .messageCountContextId(messageCountContextId)
                 .build();
 
+            BigDecimal initialCost = currentBatch.stream().map(AssetRegistrationDTO::getAssetCost).reduce(BigDecimal::add).get();
+
+            List<Long> assetIds = currentBatch.stream().map(AssetRegistrationDTO::getId).collect(Collectors.toList());
+
             // Process and enqueue the current batch
-            processAndEnqueueBatch(depreciationJob, currentBatch, batchSequence, isLastBatch, processedCount, sequenceCounter, totalAssets, contextInstance, numberOfBatches);
+            processAndEnqueueBatch(depreciationJob, assetIds, batchSequence, isLastBatch, processedCount, sequenceCounter, totalAssets, contextInstance, numberOfBatches, initialCost);
 
             processedCount += batchSize;
         }
@@ -236,12 +243,11 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
     /**
      * Processes and enqueues the current batch for depreciation.
      */
-    private void processAndEnqueueBatch(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> currentBatch, DepreciationBatchSequenceDTO batchSequence, boolean isLastBatch, int processedCount, int sequenceNumber, int totalItems, DepreciationContextInstance contextInstance, int numberOfBatches) {
+    private void processAndEnqueueBatch(DepreciationJobDTO depreciationJob, List<Long> currentBatch, DepreciationBatchSequenceDTO batchSequence, boolean isLastBatch, int processedCount, int sequenceNumber, int totalItems, DepreciationContextInstance contextInstance, int numberOfBatches, BigDecimal initialCost) {
 
         log.info("Batch # {} of {} items received for processing under job id {}; {} items processed out of {}", sequenceNumber, currentBatch.size(),depreciationJob.getDescription(),processedCount, totalItems);
         // Enqueuing the DepreciationBatchMessage
-        depreciationBatchProducer.sendDepreciationJobMessage(depreciationJob, currentBatch, batchSequence, isLastBatch, processedCount, sequenceNumber, totalItems, contextInstance, numberOfBatches);
-
+        depreciationBatchProducer.sendDepreciationJobMessage(depreciationJob, currentBatch, batchSequence, isLastBatch, processedCount, sequenceNumber, totalItems, contextInstance, numberOfBatches, initialCost);
         // Update the batch sequence status to enqueued
         batchSequence.setDepreciationBatchStatus(DepreciationBatchStatusType.ENQUEUED);
         depreciationBatchSequenceService.save(batchSequence);
