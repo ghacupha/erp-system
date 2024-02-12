@@ -28,6 +28,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -102,4 +103,23 @@ public interface InternalAssetRegistrationRepository
      * @return
      */
     List<AssetRegistration> findAllByCapitalizationDateBefore(LocalDate capitalizationDate);
+
+    @Query(nativeQuery = true,
+        value = "select " +
+            "  a.id " +
+            "from asset_registration a " +
+            "  where " +
+            "  a.capitalization_date <= :endDate ",
+        countQuery = "select count( a.id ) from asset_registration a where a.capitalization_date <= :endDate "
+    )
+    List<Long> getAssetIdsByCapitalizationDateBefore(@Param("endDate") LocalDate capitalizationDate);
+
+    @Query(nativeQuery = true,
+        value = "select " +
+            "  coalesce (sum(a.asset_cost),0) " +
+            "from asset_registration a" +
+            "  where" +
+            "  a.capitalization_date <= :capitalizationDate "
+    )
+    BigDecimal getInitialAssetCostByCapitalizationDateBefore(@Param("capitalizationDate") LocalDate capitalizationDate);
 }

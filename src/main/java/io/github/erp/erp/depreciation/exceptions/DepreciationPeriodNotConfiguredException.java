@@ -22,4 +22,15 @@ import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
 public class DepreciationPeriodNotConfiguredException extends IllegalStateException {
     public DepreciationPeriodNotConfiguredException(DepreciationBatchMessage message) {
     }
+
+    /**
+     * Constructs an IllegalStateException with the specified detail
+     * message.  A detail message is a String that describes this particular
+     * exception.
+     *
+     * @param s the String that contains a detailed message
+     */
+    public DepreciationPeriodNotConfiguredException(String s) {
+        super(s);
+    }
 }
