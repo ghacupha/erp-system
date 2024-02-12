@@ -95,7 +95,7 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
         // Fetch assets from the database for depreciation processing
         List<AssetRegistrationDTO> assets = fetchAssets();
 
-        log.info("{} items extracted for depreciation, preferred batchh size is {}", assets.size(), PREFERRED_BATCH_SIZE);
+        log.info("{} items extracted for depreciation, preferred batch size is {}", assets.size(), PREFERRED_BATCH_SIZE);
 
         // Process the assets in batches
         // TODO externalize this setting, you definitely would not do this for 10,000 items
