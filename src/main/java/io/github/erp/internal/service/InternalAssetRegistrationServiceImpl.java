@@ -20,7 +20,6 @@ package io.github.erp.internal.service;
 
 import io.github.erp.domain.AssetRegistration;
 import io.github.erp.internal.repository.InternalAssetRegistrationRepository;
-import io.github.erp.repository.AssetRegistrationRepository;
 import io.github.erp.repository.search.AssetRegistrationSearchRepository;
 import io.github.erp.service.dto.AssetRegistrationDTO;
 import io.github.erp.service.impl.AssetRegistrationServiceImpl;
@@ -32,7 +31,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -47,10 +49,13 @@ public class InternalAssetRegistrationServiceImpl implements InternalAssetRegist
 
     private final AssetRegistrationSearchRepository assetRegistrationSearchRepository;
 
-    public InternalAssetRegistrationServiceImpl(InternalAssetRegistrationRepository assetRegistrationRepository, AssetRegistrationMapper assetRegistrationMapper, AssetRegistrationSearchRepository assetRegistrationSearchRepository) {
+    private final InternalAssetRegistrationRepository internalAssetRegistrationRepository;
+
+    public InternalAssetRegistrationServiceImpl(InternalAssetRegistrationRepository assetRegistrationRepository, AssetRegistrationMapper assetRegistrationMapper, AssetRegistrationSearchRepository assetRegistrationSearchRepository, InternalAssetRegistrationRepository internalAssetRegistrationRepository) {
         this.assetRegistrationRepository = assetRegistrationRepository;
         this.assetRegistrationMapper = assetRegistrationMapper;
         this.assetRegistrationSearchRepository = assetRegistrationSearchRepository;
+        this.internalAssetRegistrationRepository = internalAssetRegistrationRepository;
     }
 
     @Override
@@ -113,5 +118,13 @@ public class InternalAssetRegistrationServiceImpl implements InternalAssetRegist
     public Page<AssetRegistrationDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of AssetRegistrations for query {}", query);
         return assetRegistrationSearchRepository.search(query, pageable).map(assetRegistrationMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<AssetRegistrationDTO> findByCapitalizationDateBefore(LocalDate capitalizationDate) {
+
+        return internalAssetRegistrationRepository.findAllByCapitalizationDateBefore(capitalizationDate)
+            .stream().map(assetRegistrationMapper::toDto).collect(Collectors.toList());
     }
 }

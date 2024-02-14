@@ -17,7 +17,6 @@ package io.github.erp.erp.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import com.ctc.wstx.shaded.msv_core.util.LightStack;
 import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import io.github.erp.domain.enumeration.DepreciationJobStatusType;
 import io.github.erp.domain.enumeration.DepreciationPeriodStatusTypes;
@@ -25,16 +24,15 @@ import io.github.erp.erp.depreciation.context.DepreciationAmountContext;
 import io.github.erp.erp.depreciation.context.DepreciationContextInstance;
 import io.github.erp.erp.depreciation.context.DepreciationJobContext;
 import io.github.erp.erp.depreciation.queue.DepreciationBatchProducer;
+import io.github.erp.internal.service.InternalAssetRegistrationService;
 import io.github.erp.service.*;
 import io.github.erp.service.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -55,18 +53,27 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
     private static final Logger log = LoggerFactory.getLogger(DepreciationJobSequenceServiceImpl.class);
     private static final int PREFERRED_BATCH_SIZE = 650;
 
-    private final AssetRegistrationService assetRegistrationService;
+    // private final AssetRegistrationService assetRegistrationService;
     private final DepreciationBatchProducer depreciationBatchProducer;
     private final DepreciationJobService depreciationJobService;
     private final DepreciationBatchSequenceService depreciationBatchSequenceService;
     private final DepreciationPeriodService depreciationPeriodService;
 
-    public DepreciationJobSequenceServiceImpl(AssetRegistrationService assetRegistrationService, DepreciationBatchProducer depreciationBatchProducer, DepreciationJobService depreciationJobService, DepreciationBatchSequenceService depreciationBatchSequenceService, DepreciationPeriodService depreciationPeriodService) {
-        this.assetRegistrationService = assetRegistrationService;
+    private final InternalAssetRegistrationService internalAssetRegistrationService;
+
+    public DepreciationJobSequenceServiceImpl(
+        // AssetRegistrationService assetRegistrationService,
+        DepreciationBatchProducer depreciationBatchProducer,
+        DepreciationJobService depreciationJobService,
+        DepreciationBatchSequenceService depreciationBatchSequenceService,
+        DepreciationPeriodService depreciationPeriodService,
+        InternalAssetRegistrationService internalAssetRegistrationService) {
+        // this.assetRegistrationService = assetRegistrationService;
         this.depreciationBatchProducer = depreciationBatchProducer;
         this.depreciationJobService = depreciationJobService;
         this.depreciationBatchSequenceService = depreciationBatchSequenceService;
         this.depreciationPeriodService = depreciationPeriodService;
+        this.internalAssetRegistrationService = internalAssetRegistrationService;
     }
 
     /**
@@ -93,7 +100,7 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
 
         log.info("DepreciationJob status update complete, fetching assets for depreciation...");
         // Fetch assets from the database for depreciation processing
-        List<AssetRegistrationDTO> assets = fetchAssets();
+        List<AssetRegistrationDTO> assets = fetchAssets(depreciationJob);
 
         log.info("{} items extracted for depreciation, preferred batch size is {}", assets.size(), PREFERRED_BATCH_SIZE);
 
@@ -152,9 +159,9 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
      * Fetches the assets from the database for depreciation processing.
      * @return List of AssetRegistrationDTO containing the fetched assets.
      */
-    private List<AssetRegistrationDTO> fetchAssets() {
-        // TODO room for improvement in memory-management issues . Retrieve the assets from the database
-        List<AssetRegistrationDTO> assets = assetRegistrationService.findAll(Pageable.unpaged()).toList();
+    private List<AssetRegistrationDTO> fetchAssets(DepreciationJobDTO depreciationJob) {
+        // List<AssetRegistrationDTO> assets = assetRegistrationService.findAll(Pageable.unpaged()).toList();
+        List<AssetRegistrationDTO> assets = internalAssetRegistrationService.findByCapitalizationDateBefore(depreciationJob.getDepreciationPeriod().getEndDate());
         log.info("System has retrieved {} assets for depreciation.", assets.size());
         return assets;
     }
