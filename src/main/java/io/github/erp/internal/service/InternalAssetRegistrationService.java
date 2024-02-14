@@ -22,6 +22,8 @@ import io.github.erp.service.dto.AssetRegistrationDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface InternalAssetRegistrationService {
@@ -82,4 +84,11 @@ public interface InternalAssetRegistrationService {
      * @return the list of entities.
      */
     Page<AssetRegistrationDTO> search(String query, Pageable pageable);
+
+    /**
+     *
+     * @param capitalizationDate
+     * @return
+     */
+    List<AssetRegistrationDTO> findByCapitalizationDateBefore(LocalDate capitalizationDate);
 }
