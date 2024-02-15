@@ -51,7 +51,7 @@ import java.util.stream.Collectors;
 public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequenceService<DepreciationJobDTO> {
 
     private static final Logger log = LoggerFactory.getLogger(DepreciationJobSequenceServiceImpl.class);
-    private static final int PREFERRED_BATCH_SIZE = 650;
+    public static final int PREFERRED_BATCH_SIZE = 650;
 
     // private final AssetRegistrationService assetRegistrationService;
     private final DepreciationBatchProducer depreciationBatchProducer;
