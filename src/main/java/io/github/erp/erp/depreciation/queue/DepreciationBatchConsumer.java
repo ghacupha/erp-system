@@ -20,6 +20,7 @@ package io.github.erp.erp.depreciation.queue;
 import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import io.github.erp.domain.enumeration.DepreciationJobStatusType;
 import io.github.erp.erp.depreciation.BatchSequenceDepreciationService;
+import io.github.erp.erp.depreciation.DepreciationEntrySinkProcessor;
 import io.github.erp.erp.depreciation.context.DepreciationAmountContext;
 import io.github.erp.erp.depreciation.context.DepreciationJobContext;
 import io.github.erp.erp.depreciation.exceptions.UnexpectedDepreciationDataset;
@@ -45,12 +46,15 @@ public class DepreciationBatchConsumer {
     private final DepreciationJobService depreciationJobService;
     private final DepreciationBatchSequenceService depreciationBatchSequenceService;
 
+    private final DepreciationEntrySinkProcessor depreciationEntrySinkProcessor;
+
     private final Lock depreciationLock = new ReentrantLock();
 
-    public DepreciationBatchConsumer(BatchSequenceDepreciationService batchSequenceDepreciationService, DepreciationJobService depreciationJobService, DepreciationBatchSequenceService depreciationBatchSequenceService) {
+    public DepreciationBatchConsumer(BatchSequenceDepreciationService batchSequenceDepreciationService, DepreciationJobService depreciationJobService, DepreciationBatchSequenceService depreciationBatchSequenceService, DepreciationEntrySinkProcessor depreciationEntrySinkProcessor) {
         this.batchSequenceDepreciationService = batchSequenceDepreciationService;
         this.depreciationJobService = depreciationJobService;
         this.depreciationBatchSequenceService = depreciationBatchSequenceService;
+        this.depreciationEntrySinkProcessor = depreciationEntrySinkProcessor;
     }
 
     @KafkaListener(topics = "depreciation_batch_topic", groupId = "erp-system", concurrency = "8")
@@ -81,8 +85,11 @@ public class DepreciationBatchConsumer {
 
             if (messageProcessed) {
 
+                int numberOfProcessed = contextManager.getNumberOfProcessedItems(message.getDepreciationContextInstance().getDepreciationJobCountUpContextId());
+
                 depreciationBatchSequenceService.findOne(Long.valueOf(message.getBatchId()))
                     .ifPresent(batch -> {
+                        batch.setProcessedItems(numberOfProcessed);
                         batch.setDepreciationBatchStatus(DepreciationBatchStatusType.COMPLETED);
                         depreciationBatchSequenceService.save(batch);
                     });
@@ -92,17 +99,20 @@ public class DepreciationBatchConsumer {
 
             if (pendingItemsInTheJob == 0 | pendingItemsInTheJob < 0) {
 
-                depreciationJobService.findOne(Long.valueOf(message.getJobId()))
-                    .ifPresent(job -> {
-                        job.setDepreciationJobStatus(DepreciationJobStatusType.COMPLETE);
-                        depreciationJobService.save(job);
-                    });
-
                 DepreciationAmountContext amountContext
                     = DepreciationAmountContext.getDepreciationAmountContext(
                     message.getDepreciationContextInstance().getDepreciationAmountContextId());
 
                 int itemsProcessed = amountContext.getNumberOfProcessedItems();
+
+                depreciationEntrySinkProcessor.flushRemainingItems(message.getDepreciationContextInstance().getDepreciationJobCountDownContextId());
+
+                depreciationJobService.findOne(Long.valueOf(message.getJobId()))
+                    .ifPresent(job -> {
+                        job.setProcessedItems(itemsProcessed);
+                        job.setDepreciationJobStatus(DepreciationJobStatusType.COMPLETE);
+                        depreciationJobService.save(job);
+                    });
 
                 log.info("Depreciation process complete for {} items", itemsProcessed);
 

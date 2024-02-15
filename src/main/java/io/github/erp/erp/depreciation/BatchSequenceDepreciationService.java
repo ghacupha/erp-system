@@ -32,23 +32,9 @@ import io.github.erp.erp.depreciation.exceptions.FiscalMonthNotConfiguredExcepti
 import io.github.erp.erp.depreciation.exceptions.ServiceOutletNotConfiguredException;
 import io.github.erp.erp.depreciation.model.DepreciationArtefact;
 import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
-import io.github.erp.service.AssetCategoryService;
-import io.github.erp.service.AssetRegistrationService;
-import io.github.erp.service.DepreciationEntryService;
-import io.github.erp.service.DepreciationJobNoticeService;
-import io.github.erp.service.DepreciationJobService;
-import io.github.erp.service.DepreciationMethodService;
-import io.github.erp.service.DepreciationPeriodService;
-import io.github.erp.service.FiscalMonthService;
-import io.github.erp.service.ServiceOutletService;
-import io.github.erp.service.dto.AssetCategoryDTO;
-import io.github.erp.service.dto.DepreciationBatchSequenceDTO;
-import io.github.erp.service.dto.DepreciationEntryDTO;
-import io.github.erp.service.dto.DepreciationJobDTO;
-import io.github.erp.service.dto.DepreciationJobNoticeDTO;
-import io.github.erp.service.dto.DepreciationPeriodDTO;
-import io.github.erp.service.dto.FiscalMonthDTO;
-import io.github.erp.service.dto.ServiceOutletDTO;
+import io.github.erp.service.*;
+import io.github.erp.service.dto.*;
+import io.github.erp.service.mapper.DepreciationEntryMapper;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,10 +77,12 @@ public class BatchSequenceDepreciationService {
     private final ServiceOutletService serviceOutletService;
     private final AssetRegistrationService assetRegistrationService;
     private final DepreciationMethodService depreciationMethodService;
-    private final DepreciationEntryService depreciationEntryService;
     private final FiscalMonthService fiscalMonthService;
     private final DepreciationJobNoticeService depreciationJobNoticeService;
     private final io.github.erp.service.DepreciationBatchSequenceService batchSequenceService;
+
+    private final DepreciationEntryMapper depreciationEntryMapper;
+    private final DepreciationEntrySinkProcessor depreciationEntrySinkProcessor;
 
     public BatchSequenceDepreciationService(
         DepreciationCalculatorService depreciationCalculatorService,
@@ -104,10 +92,9 @@ public class BatchSequenceDepreciationService {
         ServiceOutletService serviceOutletService,
         AssetRegistrationService assetRegistrationService,
         DepreciationMethodService depreciationMethodService,
-        DepreciationEntryService depreciationEntryService,
         FiscalMonthService fiscalMonthService,
         DepreciationJobNoticeService depreciationJobNoticeService,
-        io.github.erp.service.DepreciationBatchSequenceService batchSequenceService) {
+        DepreciationBatchSequenceService batchSequenceService, DepreciationEntryMapper depreciationEntryMapper, DepreciationEntrySinkProcessor depreciationEntrySinkProcessor) {
         this.depreciationCalculatorService = depreciationCalculatorService;
         this.depreciationJobService = depreciationJobService;
         this.depreciationPeriodService = depreciationPeriodService;
@@ -115,10 +102,11 @@ public class BatchSequenceDepreciationService {
         this.serviceOutletService = serviceOutletService;
         this.assetRegistrationService = assetRegistrationService;
         this.depreciationMethodService = depreciationMethodService;
-        this.depreciationEntryService = depreciationEntryService;
         this.fiscalMonthService = fiscalMonthService;
         this.depreciationJobNoticeService = depreciationJobNoticeService;
         this.batchSequenceService = batchSequenceService;
+        this.depreciationEntryMapper = depreciationEntryMapper;
+        this.depreciationEntrySinkProcessor = depreciationEntrySinkProcessor;
     }
 
     /**
@@ -168,6 +156,9 @@ public class BatchSequenceDepreciationService {
                 DepreciationAmountContext depreciationAmountContext
                     = DepreciationAmountContext.getDepreciationAmountContext(depreciationAmountContextId);
 
+                // Increment number of pending items
+                depreciationAmountContext.addNumberOfPendingItems(assetIds.size());
+
                 // Perform the depreciation calculations for the batch of assets
                 for (String assetId : assetIds) {
 
@@ -201,7 +192,8 @@ public class BatchSequenceDepreciationService {
                                                 depreciationMethod,
                                                 depreciationArtefact,
                                                 depreciationJob,
-                                                batchSequence
+                                                batchSequence,
+                                                depreciationJobCountDownContextId
                                                 );
 
                                             depreciationAmountContext.setNumberOfProcessedItems(depreciationAmountContext.getNumberOfProcessedItems() + 1);
@@ -235,13 +227,15 @@ public class BatchSequenceDepreciationService {
     private void recordDepreciationEntry(
         DepreciationPeriodDTO depreciationPeriod,
         FiscalMonthDTO fiscalMonth,
-        io.github.erp.service.dto.AssetRegistrationDTO assetRegistration,
+        AssetRegistrationDTO assetRegistration,
         AssetCategoryDTO assetCategory,
         ServiceOutletDTO serviceOutlet,
-        io.github.erp.service.dto.DepreciationMethodDTO depreciationMethod,
+        DepreciationMethodDTO depreciationMethod,
         DepreciationArtefact depreciationArtefact,
         DepreciationJobDTO depreciationJobDTO,
-        DepreciationBatchSequenceDTO depreciationBatchSequenceDTO) {
+        DepreciationBatchSequenceDTO depreciationBatchSequenceDTO,
+        UUID depreciationJobCountDownContextId
+        ) {
         // Save the depreciation to the database
         DepreciationEntryDTO depreciationEntry = new DepreciationEntryDTO();
         depreciationEntry.setDepreciationAmount(depreciationArtefact.getDepreciationAmount());
@@ -268,11 +262,7 @@ public class BatchSequenceDepreciationService {
 
         depreciationEntry.setCapitalizationDate(depreciationArtefact.getCapitalizationDate());
 
-        DepreciationEntryDTO depreciation = depreciationEntryService.save(depreciationEntry);
-
-        // TODO depreciationEntrySinkProcessor.addEntry(depreciation);
-
-        log.trace("depreciation-entry id {} saved to the database, standby for next update", depreciation.getId());
+        depreciationEntrySinkProcessor.addDepreciationEntry(depreciationEntryMapper.toEntity(depreciationEntry), depreciationJobCountDownContextId);
     }
 
     private boolean serviceOutletNotConfigured(DepreciationBatchSequenceDTO batchSequence, DepreciationJobDTO depreciationJob, DepreciationPeriodDTO depreciationPeriod, io.github.erp.service.dto.AssetRegistrationDTO assetRegistration) {

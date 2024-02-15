@@ -33,6 +33,7 @@ public class DepreciationAmountContext implements Serializable {
     private static final String CONTEXT_ID = "depreciationAmountContext";
 
     private int numberOfProcessedItems;
+    private int numberOfPendingItems;
     private Map<String, Map<String, Double>> amountsByAssetCategoryAndServiceOutlet;
 
     public static DepreciationAmountContext getInstance() {
@@ -58,8 +59,24 @@ public class DepreciationAmountContext implements Serializable {
         return numberOfProcessedItems;
     }
 
+    public int getNumberOfPendingItems() {
+        return numberOfPendingItems;
+    }
+
+    public int reduceNumberOfPendingItems() {
+        return numberOfPendingItems - 1;
+    }
+
+    public int reduceNumberOfPendingItemsBy(int numberOfProcessedItems) {
+        return numberOfPendingItems - numberOfProcessedItems;
+    }
+
     public void setNumberOfProcessedItems(int numberOfProcessedItems) {
         this.numberOfProcessedItems = numberOfProcessedItems;
+    }
+
+    public void addNumberOfPendingItems(int numberOfPendingItems) {
+        this.numberOfPendingItems =+ numberOfPendingItems;
     }
 
     public Map<String, Map<String, Double>> getAmountsByAssetCategoryAndServiceOutlet() {
