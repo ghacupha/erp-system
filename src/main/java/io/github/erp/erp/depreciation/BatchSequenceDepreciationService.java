@@ -270,6 +270,8 @@ public class BatchSequenceDepreciationService {
 
         DepreciationEntryDTO depreciation = depreciationEntryService.save(depreciationEntry);
 
+        // TODO depreciationEntrySinkProcessor.addEntry(depreciation);
+
         log.trace("depreciation-entry id {} saved to the database, standby for next update", depreciation.getId());
     }
 
