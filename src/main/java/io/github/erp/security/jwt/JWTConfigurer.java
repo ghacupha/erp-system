@@ -1,7 +1,7 @@
 package io.github.erp.security.jwt;
 
 /*-
- * Erp System - Mark X No 2 (Jehoiada Series) Server ver 1.7.2-SNAPSHOT
+ * Erp System - Mark X No 3 (Jehoiada Series) Server ver 1.7.3
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
