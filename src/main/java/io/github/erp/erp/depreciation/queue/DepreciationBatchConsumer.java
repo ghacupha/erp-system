@@ -17,6 +17,7 @@ package io.github.erp.erp.depreciation.queue;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import io.github.erp.domain.enumeration.DepreciationJobStatusType;
 import io.github.erp.erp.depreciation.BatchSequenceDepreciationService;
@@ -33,6 +34,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -80,6 +82,8 @@ public class DepreciationBatchConsumer {
             // acknowledge the message to commit offset
             acknowledgment.acknowledge();
 
+            long startingTime = System.currentTimeMillis();
+
             // Depreciation Running...
             boolean messageProcessed = batchSequenceDepreciationService.runDepreciation(message).isProcessed();
 
@@ -89,43 +93,57 @@ public class DepreciationBatchConsumer {
 
                 depreciationBatchSequenceService.findOne(Long.valueOf(message.getBatchId()))
                     .ifPresent(batch -> {
-                        batch.setProcessedItems(numberOfProcessed);
+                        batch.setProcessingTime(Duration.ofMillis(System.currentTimeMillis()-startingTime));
+                        batch.setProcessedItems(message.getTotalItems());
                         batch.setDepreciationBatchStatus(DepreciationBatchStatusType.COMPLETED);
                         depreciationBatchSequenceService.save(batch);
                     });
-            }
 
-            int pendingItemsInTheJob = contextManager.getNumberOfProcessedItems(message.getDepreciationContextInstance().getDepreciationJobCountDownContextId());
+                if (message.isLastBatch()) {
+                    depreciationEntrySinkProcessor.flushRemainingItems(message.getDepreciationContextInstance().getDepreciationJobCountDownContextId());
 
-            if (pendingItemsInTheJob == 0 | pendingItemsInTheJob < 0) {
+                    updateDepreciationJobCompleted(message);
+                }
 
-                DepreciationAmountContext amountContext
-                    = DepreciationAmountContext.getDepreciationAmountContext(
-                    message.getDepreciationContextInstance().getDepreciationAmountContextId());
+                int pendingItemsInTheJob = contextManager.getNumberOfProcessedItems(message.getDepreciationContextInstance().getDepreciationJobCountDownContextId());
 
-                int itemsProcessed = amountContext.getNumberOfProcessedItems();
 
-                depreciationEntrySinkProcessor.flushRemainingItems(message.getDepreciationContextInstance().getDepreciationJobCountDownContextId());
+                if (pendingItemsInTheJob == 0 | pendingItemsInTheJob < 0) {
 
-                depreciationJobService.findOne(Long.valueOf(message.getJobId()))
-                    .ifPresent(job -> {
-                        job.setProcessedItems(itemsProcessed);
-                        job.setDepreciationJobStatus(DepreciationJobStatusType.COMPLETE);
-                        depreciationJobService.save(job);
-                    });
+                    DepreciationAmountContext amountContext
+                        = DepreciationAmountContext.getDepreciationAmountContext(
+                        message.getDepreciationContextInstance().getDepreciationAmountContextId());
 
-                log.info("Depreciation process complete for {} items", itemsProcessed);
+                    int itemsProcessed = amountContext.getNumberOfProcessedItems();
 
-                amountContext.getAmountsByAssetCategoryAndServiceOutlet()
-                    .forEach((category, categoryMap) -> categoryMap
-                        .forEach((sol, amount) -> log.debug("Depreciation computed for category: {} under service-outlet :{} was {}", category, sol, amount)));
+                    depreciationEntrySinkProcessor.flushRemainingItems(message.getDepreciationContextInstance().getDepreciationJobCountDownContextId());
 
-            }
+                    updateDepreciationJobCompleted(message);
+
+                    log.info("Depreciation process complete for {} items", itemsProcessed);
+
+                    amountContext.getAmountsByAssetCategoryAndServiceOutlet()
+                        .forEach((category, categoryMap) -> categoryMap
+                            .forEach((sol, amount) -> log.debug("Depreciation computed for category: {} under service-outlet :{} was {}", category, sol, amount)));
+
+                }
+
+            } // TODO Update depreciation job within this context
 
         } finally {
 
             depreciationLock.unlock();
         }
+    }
+
+    private void updateDepreciationJobCompleted(DepreciationBatchMessage message) {
+        depreciationJobService.findOne(Long.valueOf(message.getJobId()))
+            .ifPresent(job -> {
+                job.setProcessingTime(Duration.ofNanos(System.nanoTime() - job.getTimeOfCommencement().getNano()));
+                job.setProcessedItems(job.getProcessedItems() + message.getBatchSize());
+                job.setDepreciationJobStatus(DepreciationJobStatusType.COMPLETE);
+                depreciationJobService.save(job);
+            });
     }
 }
 

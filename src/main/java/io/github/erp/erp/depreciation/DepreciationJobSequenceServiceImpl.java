@@ -33,6 +33,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -106,10 +107,10 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
 
         // Process the assets in batches
         // TODO externalize this setting, you definitely would not do this for 10,000 items
-        processAssetsInBatches(depreciationJob, assets, PREFERRED_BATCH_SIZE);
+        int numberOfBatches = processAssetsInBatches(depreciationJob, assets, PREFERRED_BATCH_SIZE);
 
         // Mark the depreciation job as complete
-        markDepreciationJobAsEnqueued(depreciationJob);
+        markDepreciationJobAsEnqueued(depreciationJob, numberOfBatches);
     }
 
     /**
@@ -169,7 +170,7 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
     /**
      * Processes the assets in batches for depreciation.
      */
-    private void processAssetsInBatches(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> assets, int batchSize) {
+    private int processAssetsInBatches(DepreciationJobDTO depreciationJob, List<AssetRegistrationDTO> assets, int batchSize) {
          int totalAssets = assets.size();
          int processedCount = 0;
          int sequenceCounter = 0;
@@ -221,6 +222,7 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
 
             processedCount += batchSize;
         }
+        return numberOfBatches;
     }
 
     /**
@@ -264,7 +266,9 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
      * Marks the depreciation job as complete.
      */
     @Async
-    void markDepreciationJobAsEnqueued(DepreciationJobDTO depreciationJob) {
+    void markDepreciationJobAsEnqueued(DepreciationJobDTO depreciationJob, int numberOfBatches) {
+        depreciationJob.setNumberOfBatches(numberOfBatches);
+        depreciationJob.setTimeOfCommencement(ZonedDateTime.now());
         depreciationJob.setDepreciationJobStatus(DepreciationJobStatusType.ENQUEUED);
         depreciationJobService.save(depreciationJob);
     }

@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -140,8 +141,15 @@ public class BatchSequenceDepreciationService {
                 if (depreciationPeriod == null) throw new DepreciationPeriodNotConfiguredException(message);
 
                 // OPT OUT
-                if (depreciationJobStatusIsComplete(batchSequence, depreciationJob, depreciationPeriod, message))
-                    throw new DepreciationJobStatusCompleteException(message);
+                if (depreciationJobStatusIsComplete(batchSequence, depreciationJob, depreciationPeriod, message)) {
+                    // TODO Mark job complete
+                    depreciationJob.setProcessingTime(Duration.ofNanos(System.nanoTime() - depreciationJob.getTimeOfCommencement().getNano()));
+                    depreciationJob.setProcessedItems(depreciationJob.getProcessedItems() + message.getBatchSize());
+                    depreciationJob.setDepreciationJobStatus(DepreciationJobStatusType.COMPLETE);
+                    depreciationJobService.save(depreciationJob);
+
+                    return;
+                }
 
                 log.debug("Commencing depreciation for depreciation-job id {}, for depreciation-period {}. Standby...", depreciationJob.getId(), depreciationPeriod.getId());
 
@@ -204,7 +212,7 @@ public class BatchSequenceDepreciationService {
 
                                     contextManager.updateNumberOfProcessedItems(depreciationJobCountUpContextId, 1);
                                     contextManager.updateNumberOfProcessedItems(depreciationBatchCountUpContextId, 1);
-                                    contextManager.updateNumberOfProcessedItems(depreciationJobCountDownContextId, -1);
+                                   // contextManager.updateNumberOfProcessedItems(depreciationJobCountDownContextId, -1);
                                     contextManager.updateNumberOfProcessedItems(depreciationBatchCountDownContextId, -1);
                                 });
                             });
@@ -309,23 +317,23 @@ public class BatchSequenceDepreciationService {
     }
 
     private boolean depreciationJobStatusIsComplete(DepreciationBatchSequenceDTO batchSequence, DepreciationJobDTO depreciationJob, DepreciationPeriodDTO depreciationPeriod, DepreciationBatchMessage message) {
-
-        if (depreciationJob.getDepreciationJobStatus() == DepreciationJobStatusType.COMPLETE) {
-
-            log.warn("DepreciationJob id {} is status COMPLETE for period id {}. System opting out the depreciation sequence. Standby", depreciationJob.getId(), depreciationPeriod.getId());
-
-            DepreciationJobNoticeDTO notice = new DepreciationJobNoticeDTO();
-            notice.setErrorMessage("Depreciation Job id: " + depreciationJob.getId() + " is status COMPLETE");
-            notice.setDepreciationJob(depreciationJob);
-            notice.setDepreciationPeriod(depreciationPeriod);
-            notice.setDepreciationNoticeStatus(DepreciationNoticeStatusType.WARNING);
-            notice.setEventNarrative("Depreciation Job id: " + depreciationJob.getId() + " is status COMPLETE");
-            notice.setEventTimeStamp(ZonedDateTime.now());
-            notice.setDepreciationBatchSequence(batchSequence);
-            depreciationJobNoticeService.save(notice);
-
-            return true;
-        }
+//
+//        if (depreciationJob.getDepreciationJobStatus() == DepreciationJobStatusType.COMPLETE) {
+//
+//            log.warn("DepreciationJob id {} is status COMPLETE for period id {}. System opting out the depreciation sequence. Standby", depreciationJob.getId(), depreciationPeriod.getId());
+//
+//            DepreciationJobNoticeDTO notice = new DepreciationJobNoticeDTO();
+//            notice.setErrorMessage("Depreciation Job id: " + depreciationJob.getId() + " is status COMPLETE");
+//            notice.setDepreciationJob(depreciationJob);
+//            notice.setDepreciationPeriod(depreciationPeriod);
+//            notice.setDepreciationNoticeStatus(DepreciationNoticeStatusType.WARNING);
+//            notice.setEventNarrative("Depreciation Job id: " + depreciationJob.getId() + " is status COMPLETE");
+//            notice.setEventTimeStamp(ZonedDateTime.now());
+//            notice.setDepreciationBatchSequence(batchSequence);
+//            depreciationJobNoticeService.save(notice);
+//
+//            return true;
+//        }
 
         // Check if batch-size agrees with the counter first
         UUID jobCountDownContextId = message.getDepreciationContextInstance().getDepreciationJobCountDownContextId();

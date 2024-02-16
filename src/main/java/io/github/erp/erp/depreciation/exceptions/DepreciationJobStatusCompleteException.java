@@ -21,5 +21,6 @@ import io.github.erp.erp.depreciation.model.DepreciationBatchMessage;
 
 public class DepreciationJobStatusCompleteException extends IllegalStateException {
     public DepreciationJobStatusCompleteException(DepreciationBatchMessage message) {
+        super(String.valueOf(message.getJobId()));
     }
 }
