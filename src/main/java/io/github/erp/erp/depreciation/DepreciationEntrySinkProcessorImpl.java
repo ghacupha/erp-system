@@ -43,12 +43,18 @@ public class DepreciationEntrySinkProcessorImpl implements DepreciationEntrySink
     // Needed for the "additional plumbing"
     private final long maxFlushDelayMillis = 60000; // Max delay before forcing flush (1 minute)
 
+    private boolean isShutdown = false;
 
     public DepreciationEntrySinkProcessorImpl(InternalDepreciationEntryService depreciationEntryService) {
         this.depreciationEntryService = depreciationEntryService;
     }
 
     public void addDepreciationEntry(DepreciationEntry entry, UUID depreciationJobCountDownContextId) {
+
+        if (isShutdown) {
+            startup(); // Start the executor if it's shutdown
+        }
+
         buffer.add(entry);
 
         if (buffer.size() >= batchSizeThreshold) {
@@ -71,10 +77,25 @@ public class DepreciationEntrySinkProcessorImpl implements DepreciationEntrySink
     }
 
     public void shutdown() {
+        if (!isShutdown) {
+            log.warn("The buffer now shutting down; standby...");
+            executor.shutdown();
+            isShutdown = true;
+        }
+    }
 
-        log.warn("The buffer now shutting down; standby...");
-
-        executor.shutdown();
+    public void startup() {
+        if (isShutdown) {
+            log.info("Starting up the buffer processor...");
+            executor = Executors.newScheduledThreadPool(2); // Recreate the executor
+            isShutdown = false;
+            // Schedule flush tasks again if needed
+            if (buffer.size() >= batchSizeThreshold) {
+                scheduleFlush(null);
+            } else if (flushTask == null) {
+                scheduleFlushWithDelay(null);
+            }
+        }
     }
 
     @Override

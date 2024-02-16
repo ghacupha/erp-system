@@ -9,4 +9,8 @@ public interface DepreciationEntrySinkProcessor {
     void addDepreciationEntry(DepreciationEntry entry, UUID depreciationJobCountDownContextId);
 
     void flushRemainingItems(UUID depreciationJobCountDownContextId);
+
+    void shutdown();
+
+    void startup();
 }
