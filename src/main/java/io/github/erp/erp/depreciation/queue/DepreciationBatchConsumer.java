@@ -1,7 +1,7 @@
 package io.github.erp.erp.depreciation.queue;
 
 /*-
- * Erp System - Mark X No 2 (Jehoiada Series) Server ver 1.7.2-SNAPSHOT
+ * Erp System - Mark X No 3 (Jehoiada Series) Server ver 1.7.3
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.erp.depreciation.queue;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import io.github.erp.domain.enumeration.DepreciationJobStatusType;
 import io.github.erp.erp.depreciation.BatchSequenceDepreciationService;
