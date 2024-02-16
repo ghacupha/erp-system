@@ -8,11 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 import static io.github.erp.erp.depreciation.DepreciationJobSequenceServiceImpl.PREFERRED_BATCH_SIZE;
 
@@ -26,9 +26,23 @@ public class DepreciationEntrySinkProcessorImpl implements DepreciationEntrySink
 
     private List<DepreciationEntry> buffer = new ArrayList<>();
     private final int batchSizeThreshold = PREFERRED_BATCH_SIZE;
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+
+
+    private final long flushIntervalMillis = 5000;
+
+    // private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
 
     private DepreciationJobContext contextManager = DepreciationJobContext.getInstance();
+
+    private ScheduledFuture<?> flushTask;
+
+    // Argh! Additional plumbing was necessary after all
+    private ScheduledFuture<?> flushStuckTask;
+
+    // Needed for the "additional plumbing"
+    private final long maxFlushDelayMillis = 60000; // Max delay before forcing flush (1 minute)
+
 
     public DepreciationEntrySinkProcessorImpl(InternalDepreciationEntryService depreciationEntryService) {
         this.depreciationEntryService = depreciationEntryService;
@@ -39,21 +53,48 @@ public class DepreciationEntrySinkProcessorImpl implements DepreciationEntrySink
 
         if (buffer.size() >= batchSizeThreshold) {
 
-            flushBuffer(depreciationJobCountDownContextId);
+            scheduleFlush(depreciationJobCountDownContextId);
+
+        } else if (flushTask == null) {
+
+            scheduleFlushWithDelay(depreciationJobCountDownContextId);
         }
     }
 
+    private void scheduleFlush(UUID depreciationJobCountDownContextId) {
+
+        if (flushTask != null) {
+            flushTask.cancel(false);
+        }
+        flushTask = null;
+        flushBufferWithCount(depreciationJobCountDownContextId);
+    }
+
     public void shutdown() {
+
+        log.warn("The buffer now shutting down; standby...");
+
         executor.shutdown();
     }
 
     @Override
     public void flushRemainingItems(UUID depreciationJobCountDownContextId) {
 
-        this.flushBuffer(depreciationJobCountDownContextId);
+        log.info("We have reached the last batch and are attempting to flush the buffer; standby...");
+
+        this.flushBufferWithCount(depreciationJobCountDownContextId);
+
+        this.shutdown();
     }
 
-    private void flushBuffer(UUID depreciationJobCountDownContextId) {
+    private void scheduleFlushWithDelay(UUID depreciationJobCountDownContextId) {
+        if (flushTask != null) {
+            flushTask.cancel(false);
+        }
+        flushTask = executor.schedule(() -> flushBufferWithCount(depreciationJobCountDownContextId), flushIntervalMillis, TimeUnit.MILLISECONDS);
+    }
+
+    private void flushBufferWithCount(UUID depreciationJobCountDownContextId) {
 
         log.info("Depreciation buffer flushing {} items to the sink", buffer.size());
 
@@ -92,9 +133,23 @@ public class DepreciationEntrySinkProcessorImpl implements DepreciationEntrySink
 
             log.info("Saving {} entries to the database", entriesToPersist.size());
 
-            // depreciationEntryService.saveAll(entriesToPersist);
-
             executor.execute(() -> depreciationEntryService.saveAll(entriesToPersist));
+        }
+    }
+
+    @PostConstruct
+    private void scheduleFlushStuckTask() {
+        flushStuckTask = executor.scheduleAtFixedRate(this::checkFlushStuck, maxFlushDelayMillis, maxFlushDelayMillis, TimeUnit.MILLISECONDS);
+    }
+
+    // Additional plumbing
+    private void checkFlushStuck() {
+        // Check if the buffer hasn't been flushed for a long time
+        long lastFlushTime = System.currentTimeMillis() - flushIntervalMillis;
+        if (flushTask != null && flushTask.getDelay(TimeUnit.MILLISECONDS) > maxFlushDelayMillis && flushStuckTask != null && flushStuckTask.getDelay(TimeUnit.MILLISECONDS) > maxFlushDelayMillis) {
+            log.warn("Forcing flush of the buffer due to long delay in flushing");
+            // scheduleFlush(null);
+            flushBuffer();
         }
     }
 }
