@@ -1,4 +1,4 @@
-package io.github.erp.aop.depreciation;
+package io.github.erp.erp.assets.depreciation.context;
 
 /*-
  * Erp System - Mark X No 3 (Jehoiada Series) Server ver 1.7.3
@@ -17,21 +17,24 @@ package io.github.erp.aop.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.erp.assets.depreciation.DepreciationJobSequenceService;
-import io.github.erp.service.dto.DepreciationJobDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Configuration
-public class DepreciationJobsAspectConfiguration {
+import java.io.Serializable;
+import java.util.UUID;
 
-    @Autowired
-    private DepreciationJobSequenceService<DepreciationJobDTO> depreciationJobSequenceService;
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class DepreciationContextInstance implements Serializable {
 
-    @Bean
-    public DepreciationRunInterceptor depreciationRunInterceptor() {
-
-        return new DepreciationRunInterceptor(depreciationJobSequenceService);
-    }
+    private UUID depreciationJobCountUpContextId;
+    private UUID depreciationJobCountDownContextId;
+    private UUID depreciationBatchCountUpContextId;
+    private UUID depreciationBatchCountDownContextId;
+    private UUID messageCountContextId;
+    private UUID depreciationAmountContextId;
 }

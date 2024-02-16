@@ -1,4 +1,4 @@
-package io.github.erp.aop.depreciation;
+package io.github.erp.erp.assets.depreciation.exceptions;
 
 /*-
  * Erp System - Mark X No 3 (Jehoiada Series) Server ver 1.7.3
@@ -17,21 +17,10 @@ package io.github.erp.aop.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.erp.assets.depreciation.DepreciationJobSequenceService;
-import io.github.erp.service.dto.DepreciationJobDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import io.github.erp.erp.assets.depreciation.model.DepreciationBatchMessage;
+import io.github.erp.service.dto.AssetRegistrationDTO;
 
-@Configuration
-public class DepreciationJobsAspectConfiguration {
-
-    @Autowired
-    private DepreciationJobSequenceService<DepreciationJobDTO> depreciationJobSequenceService;
-
-    @Bean
-    public DepreciationRunInterceptor depreciationRunInterceptor() {
-
-        return new DepreciationRunInterceptor(depreciationJobSequenceService);
+public class AssetCategoryNotConfiguredException extends IllegalStateException {
+    public AssetCategoryNotConfiguredException(AssetRegistrationDTO assetRegistration, DepreciationBatchMessage message) {
     }
 }

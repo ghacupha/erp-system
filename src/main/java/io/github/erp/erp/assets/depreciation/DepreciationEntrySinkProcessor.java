@@ -1,4 +1,4 @@
-package io.github.erp.aop.depreciation;
+package io.github.erp.erp.assets.depreciation;
 
 /*-
  * Erp System - Mark X No 3 (Jehoiada Series) Server ver 1.7.3
@@ -17,21 +17,18 @@ package io.github.erp.aop.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.erp.assets.depreciation.DepreciationJobSequenceService;
-import io.github.erp.service.dto.DepreciationJobDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
-public class DepreciationJobsAspectConfiguration {
+import io.github.erp.domain.DepreciationEntry;
 
-    @Autowired
-    private DepreciationJobSequenceService<DepreciationJobDTO> depreciationJobSequenceService;
+import java.util.UUID;
 
-    @Bean
-    public DepreciationRunInterceptor depreciationRunInterceptor() {
+public interface DepreciationEntrySinkProcessor {
 
-        return new DepreciationRunInterceptor(depreciationJobSequenceService);
-    }
+    void addDepreciationEntry(DepreciationEntry entry, UUID depreciationJobCountDownContextId);
+
+    void flushRemainingItems(UUID depreciationJobCountDownContextId);
+
+    void shutdown();
+
+    void startup();
 }
