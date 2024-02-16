@@ -5,20 +5,4 @@
             <column name="capitalization_date" type="date"/>
         </addColumn>
     </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1706629291519-6">
-        <addColumn tableName="work_in_progress_report">
-            <column name="dealer_name" type="varchar(255)"/>
-        </addColumn>
-    </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1706629291519-7">
-        <addColumn tableName="work_in_progress_report">
-            <column name="project_title" type="varchar(255)"/>
-        </addColumn>
-    </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1706629291519-9">
-        <dropForeignKeyConstraint baseTableName="work_in_progress_report" constraintName="fk_work_in_progress_report__work_project_register_id"/>
-    </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1706629291519-21">
-        <dropColumn columnName="work_project_register_id" tableName="work_in_progress_report"/>
-    </changeSet>
 </databaseChangeLog>
