@@ -1,4 +1,4 @@
-package io.github.erp.aop.depreciation;
+package io.github.erp.erp.assets.depreciation.calculation;
 
 /*-
  * Erp System - Mark X No 3 (Jehoiada Series) Server ver 1.7.3
@@ -17,21 +17,13 @@ package io.github.erp.aop.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.erp.assets.depreciation.DepreciationJobSequenceService;
-import io.github.erp.service.dto.DepreciationJobDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import io.github.erp.service.dto.AssetCategoryDTO;
 
-@Configuration
-public class DepreciationJobsAspectConfiguration {
-
-    @Autowired
-    private DepreciationJobSequenceService<DepreciationJobDTO> depreciationJobSequenceService;
-
-    @Bean
-    public DepreciationRunInterceptor depreciationRunInterceptor() {
-
-        return new DepreciationRunInterceptor(depreciationJobSequenceService);
+/**
+ * Thrown when the asset category is not configured with the yearly depreciation rate
+ */
+public class DepreciationRateNotProvidedException extends IllegalStateException {
+    public DepreciationRateNotProvidedException(String errorMessage, AssetCategoryDTO assetCategory) {
+        super(errorMessage + " please ensure the yearly depreciation rate for category id : " + assetCategory.getAssetCategoryName() + " is provided in decimals");
     }
 }

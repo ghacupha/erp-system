@@ -17,7 +17,7 @@ package io.github.erp.aop.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.erp.depreciation.DepreciationJobSequenceService;
+import io.github.erp.erp.assets.depreciation.DepreciationJobSequenceService;
 import io.github.erp.service.dto.DepreciationJobDTO;
 import lombok.SneakyThrows;
 import org.aspectj.lang.JoinPoint;

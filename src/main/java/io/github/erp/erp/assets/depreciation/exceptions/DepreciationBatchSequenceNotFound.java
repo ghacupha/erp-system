@@ -1,4 +1,4 @@
-package io.github.erp.aop.depreciation;
+package io.github.erp.erp.assets.depreciation.exceptions;
 
 /*-
  * Erp System - Mark X No 3 (Jehoiada Series) Server ver 1.7.3
@@ -17,21 +17,16 @@ package io.github.erp.aop.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.erp.assets.depreciation.DepreciationJobSequenceService;
-import io.github.erp.service.dto.DepreciationJobDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+public class DepreciationBatchSequenceNotFound extends IllegalStateException {
 
-@Configuration
-public class DepreciationJobsAspectConfiguration {
-
-    @Autowired
-    private DepreciationJobSequenceService<DepreciationJobDTO> depreciationJobSequenceService;
-
-    @Bean
-    public DepreciationRunInterceptor depreciationRunInterceptor() {
-
-        return new DepreciationRunInterceptor(depreciationJobSequenceService);
+    /**
+     * Constructs an IllegalStateException with the specified detail
+     * message.  A detail message is a String that describes this particular
+     * exception.
+     *
+     * @param s the String that contains a detailed message
+     */
+    public DepreciationBatchSequenceNotFound(String s) {
+        super("Depreciation batch id: " + s + " not found");
     }
 }

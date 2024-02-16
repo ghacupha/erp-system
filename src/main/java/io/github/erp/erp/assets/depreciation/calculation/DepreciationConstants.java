@@ -1,4 +1,4 @@
-package io.github.erp.aop.depreciation;
+package io.github.erp.erp.assets.depreciation.calculation;
 
 /*-
  * Erp System - Mark X No 3 (Jehoiada Series) Server ver 1.7.3
@@ -17,21 +17,15 @@ package io.github.erp.aop.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.erp.assets.depreciation.DepreciationJobSequenceService;
-import io.github.erp.service.dto.DepreciationJobDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
-@Configuration
-public class DepreciationJobsAspectConfiguration {
+public class DepreciationConstants {
 
-    @Autowired
-    private DepreciationJobSequenceService<DepreciationJobDTO> depreciationJobSequenceService;
-
-    @Bean
-    public DepreciationRunInterceptor depreciationRunInterceptor() {
-
-        return new DepreciationRunInterceptor(depreciationJobSequenceService);
-    }
+    public static final int DECIMAL_SCALE = 6;
+    public static final int MONEY_SCALE = 2;
+    public static final RoundingMode ROUNDING_MODE = RoundingMode.HALF_EVEN;
+    public static final BigDecimal MONTHS_IN_YEAR = BigDecimal.valueOf(12);
+    public static final BigDecimal TEN_THOUSAND = BigDecimal.valueOf(10000);
+    public static final BigDecimal ZERO = new BigDecimal("0.00");
 }
