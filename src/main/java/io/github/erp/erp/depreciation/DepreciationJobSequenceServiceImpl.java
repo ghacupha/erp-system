@@ -118,7 +118,6 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
         log.info("{} items extracted for depreciation, preferred batch size is {}", assets.size(), PREFERRED_BATCH_SIZE);
 
         // Process the assets in batches
-        // TODO externalize this setting, you definitely would not do this for 10,000 items
         int numberOfBatches = processAssetsInBatches(depreciationJob, assets, PREFERRED_BATCH_SIZE);
 
         // Mark the depreciation job as complete

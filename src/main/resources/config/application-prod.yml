@@ -69,7 +69,7 @@ spring:
     bootstrap-servers: ${KAFKA_BOOTSTRAPSERVERS}
     admin:
       properties:
-        replication.factor: 3
+        replication.factor: 8
     consumer:
       group.id: erp-system
       key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -77,11 +77,12 @@ spring:
       auto.offset.reset: earliest
       properties:
         spring.json.trusted.packages: "*"
+        replication.factor: 8
     producer:
       key.serializer: org.apache.kafka.common.serialization.StringSerializer
       value.serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
-        replication.factor: 3;
+        replication.factor: 8;
     depreciation-batch:
       topic:
         name: "depreciation_batch_topic"
