@@ -62,19 +62,23 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
 
     private final InternalAssetRegistrationService internalAssetRegistrationService;
 
+    private final DepreciationEntrySinkProcessor depreciationEntrySinkProcessor;
+
     public DepreciationJobSequenceServiceImpl(
         // AssetRegistrationService assetRegistrationService,
         DepreciationBatchProducer depreciationBatchProducer,
         DepreciationJobService depreciationJobService,
         DepreciationBatchSequenceService depreciationBatchSequenceService,
         DepreciationPeriodService depreciationPeriodService,
-        InternalAssetRegistrationService internalAssetRegistrationService) {
+        InternalAssetRegistrationService internalAssetRegistrationService,
+        DepreciationEntrySinkProcessor depreciationEntrySinkProcessor) {
         // this.assetRegistrationService = assetRegistrationService;
         this.depreciationBatchProducer = depreciationBatchProducer;
         this.depreciationJobService = depreciationJobService;
         this.depreciationBatchSequenceService = depreciationBatchSequenceService;
         this.depreciationPeriodService = depreciationPeriodService;
         this.internalAssetRegistrationService = internalAssetRegistrationService;
+        this.depreciationEntrySinkProcessor = depreciationEntrySinkProcessor;
     }
 
     /**
@@ -86,9 +90,17 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
      */
     @Override
     public void triggerDepreciation(DepreciationJobDTO depreciationJob) {
+
+        log.info("Commencing depreciation-job id: {} depreciation-processor startup in progress", depreciationJob.getId());
+
+        depreciationEntrySinkProcessor.startup();
+
         // Check if any conditions require the system to opt out of the depreciation process
         boolean shouldOptOut = checkOptOutConditions(depreciationJob);
         if (shouldOptOut) {
+
+            log.warn("The opt-out conditions have returned positive. Depreciation Job is now terminating at the processor shutting down");
+            depreciationEntrySinkProcessor.shutdown();
             return;
         }
 
