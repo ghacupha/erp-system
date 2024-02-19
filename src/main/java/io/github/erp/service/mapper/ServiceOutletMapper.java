@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.ServiceOutlet;
 import io.github.erp.service.dto.ServiceOutletDTO;
 import java.util.Set;
@@ -41,15 +42,15 @@ public interface ServiceOutletMapper extends EntityMapper<ServiceOutletDTO, Serv
     @Mapping(target = "removePlaceholder", ignore = true)
     ServiceOutlet toEntity(ServiceOutletDTO serviceOutletDTO);
 
-    @Named("outletCodeSet")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "outletCode", source = "outletCode")
-    Set<ServiceOutletDTO> toDtoOutletCodeSet(Set<ServiceOutlet> serviceOutlet);
-
     @Named("outletCode")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "outletCode", source = "outletCode")
     ServiceOutletDTO toDtoOutletCode(ServiceOutlet serviceOutlet);
+
+    @Named("outletCodeSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "outletCode", source = "outletCode")
+    Set<ServiceOutletDTO> toDtoOutletCodeSet(Set<ServiceOutlet> serviceOutlet);
 }

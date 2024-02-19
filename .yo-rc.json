@@ -249,7 +249,8 @@
       "DepreciationReport",
       "DepreciationEntryReportItem",
       "AssetAdditionsReportItem",
-      "AssetAdditionsReport"
+      "AssetAdditionsReport",
+      "NetBookValueEntry"
     ],
     "entitySuffix": "",
     "incrementalChangelog": false,
@@ -257,7 +258,7 @@
     "jhipsterVersion": "7.3.1",
     "jwtSecretKey": "ZWMyYzI1MmU3Mzg1ZTU4ZjFmOTIzYjEzOWZkZWU1MWZhNGY4ZTA3ZTEwYmYxMzczOGE3NDZiZjNkMDE3NjNiYTBmMTE0ODBiYTcyZDI0ZTcyNmU5OTA2NGY4NDUwZGEyMWQwYThmMTgxNWJiMjQ2OGQ0NmIxMTQwNTE0MGFkNzA=",
     "languages": ["en", "fr", "it", "de"],
-    "lastLiquibaseTimestamp": 1706243670000,
+    "lastLiquibaseTimestamp": 1708320985000,
     "messageBroker": "kafka",
     "nativeLanguage": "en",
     "otherModules": [],
