@@ -252,7 +252,8 @@
       "AssetAdditionsReport",
       "NetBookValueEntry",
       "NbvCompilationJob",
-      "NbvCompilationBatch"
+      "NbvCompilationBatch",
+      "NbvCompilationReportItem"
     ],
     "entitySuffix": "",
     "incrementalChangelog": false,
