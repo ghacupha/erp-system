@@ -30,4 +30,10 @@ public interface NbvCompilationJobMapper extends EntityMapper<NbvCompilationJobD
     @Mapping(target = "activePeriod", source = "activePeriod", qualifiedByName = "endDate")
     @Mapping(target = "initiatedBy", source = "initiatedBy", qualifiedByName = "applicationIdentity")
     NbvCompilationJobDTO toDto(NbvCompilationJob s);
+
+    @Named("jobTitle")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "jobTitle", source = "jobTitle")
+    NbvCompilationJobDTO toDtoJobTitle(NbvCompilationJob nbvCompilationJob);
 }
