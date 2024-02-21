@@ -1,4 +1,4 @@
-package io.github.erp.erp.assets.nbv;
+package io.github.erp.domain;
 
 /*-
  * Erp System - Mark X No 3 (Jehoiada Series) Server ver 1.7.3
@@ -18,7 +18,44 @@ package io.github.erp.erp.assets.nbv;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-public interface NBVJobSequenceService<Job> {
+import java.math.BigDecimal;
+import java.util.UUID;
 
-    void  triggerJobStart(Job job);
+public interface NetBookValueEntryInternal {
+
+    Long getId();
+
+    String getAssetNumber();
+
+    String getAssetTag();
+
+    String getAssetDescription();
+
+    UUID getNbvIdentifier();
+
+    UUID getCompilationJobIdentifier();
+
+    UUID getCompilationBatchIdentifier();
+
+    Integer getElapsedMonths();
+
+    Integer getPriorMonths();
+
+    Integer getUsefulLifeYears();
+
+    BigDecimal getNetBookValueAmount();
+
+    BigDecimal getPreviousNetBookValueAmount();
+
+    BigDecimal getHistoricalCost();
+
+    String getServiceOutletCode();
+
+    String getDepreciationPeriodCode();
+
+    FiscalMonth getFiscalMonthCode();
+
+    String getDepreciationMethodName();
+
+    String getAssetCategoryName();
 }

@@ -56,4 +56,32 @@ public abstract class AbstractReportListCSVExportService<T> {
         return fileStorageService.calculateSha512CheckSum(fileName + ".csv");
     }
 
+    protected String getReportParameters() {
+
+        String parameters = "";
+
+        if(getPeriodCode() != null ) {
+
+            parameters = "Period: ".concat(getPeriodCode().concat("; "));
+
+            if (getAssetCategoryName() != null) {
+
+                parameters = parameters.concat("Category: ".concat(getAssetCategoryName()).concat("; "));
+            }
+
+            if (getOutletCode() != null) {
+
+                parameters = parameters.concat("Outlet Code: ".concat(getOutletCode().concat("; ")));
+            }
+        }
+
+        return parameters;
+    }
+
+    protected abstract String getOutletCode();
+
+    protected abstract String getAssetCategoryName();
+
+    protected abstract String getPeriodCode();
+
 }
