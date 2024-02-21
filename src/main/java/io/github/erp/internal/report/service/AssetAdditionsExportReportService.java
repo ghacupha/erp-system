@@ -116,4 +116,18 @@ public class AssetAdditionsExportReportService
                 .map(assetAdditionsEntryInternalMapper::toValue2);
         }
 
+    @Override
+    protected String getOutletCode() {
+        return null;
+    }
+
+    @Override
+    protected String getAssetCategoryName() {
+        return null;
+    }
+
+    @Override
+    protected String getPeriodCode() {
+        return null;
+    }
 }

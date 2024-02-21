@@ -49,6 +49,8 @@ public class DepreciationEntryCSVExportReportService
     private final DepreciationPeriodRepository depreciationPeriodRepository;
     private final InternalDepreciationEntryItemRepository internalDepreciationEntryRepository;
 
+    private DepreciationReportDTO depreciationReportDTO;
+
     public DepreciationEntryCSVExportReportService(
             ReportsProperties reportsProperties,
             @Qualifier("reportsFSStorageService") FileStorageService fileStorageService,
@@ -66,6 +68,8 @@ public class DepreciationEntryCSVExportReportService
 
     @Override
     public void exportDepreciationEntryReport(DepreciationReportDTO depreciationReportDTO) {
+
+        this.depreciationReportDTO = depreciationReportDTO;
 
         Optional<List<DepreciationEntryVM>> depreciationEntryList = getEntries(depreciationReportDTO);
 
@@ -119,5 +123,20 @@ public class DepreciationEntryCSVExportReportService
                 internalDepreciationEntryRepository.getDepreciationEntryByDepreciationPeriodEquals(period.getId(), Pageable.ofSize(Integer.MAX_VALUE))
                     .getContent())
             .map(depreciationEntryInternalMapper::toValue2);
+    }
+
+    @Override
+    protected String getOutletCode() {
+        return depreciationReportDTO.getServiceOutlet().getOutletCode();
+    }
+
+    @Override
+    protected String getAssetCategoryName() {
+        return depreciationReportDTO.getAssetCategory().getAssetCategoryName();
+    }
+
+    @Override
+    protected String getPeriodCode() {
+        return depreciationReportDTO.getDepreciationPeriod().getPeriodCode();
     }
 }

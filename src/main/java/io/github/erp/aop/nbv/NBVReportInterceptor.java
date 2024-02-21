@@ -18,7 +18,6 @@ package io.github.erp.aop.nbv;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.internal.report.service.NetBookValueEntryExportReportService;
-import io.github.erp.service.dto.DepreciationReportDTO;
 import io.github.erp.service.dto.NbvReportDTO;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
