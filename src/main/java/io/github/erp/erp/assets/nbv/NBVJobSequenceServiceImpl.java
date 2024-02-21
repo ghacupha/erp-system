@@ -78,7 +78,7 @@ public class NBVJobSequenceServiceImpl implements NBVJobSequenceService<NbvCompi
         // Process the assets in batches
         int numberOfBatches = processAssetsInBatches(nbvCompilationJobDTO, assetsIds, PREFERRED_BATCH_SIZE);
 
-        log.info("{} batches generated for asynch queue execution", numberOfBatches);
+        log.info("{} batches generated for async queue execution", numberOfBatches);
 
         nbvCompilationJobDTO.setCompilationStatus(ENQUEUED);
         nbvCompilationJobService.save(nbvCompilationJobDTO);

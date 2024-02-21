@@ -1,4 +1,4 @@
-package io.github.erp.internal.repository;
+package io.github.erp.erp.assets.nbv.calculation;
 
 /*-
  * Erp System - Mark X No 3 (Jehoiada Series) Server ver 1.7.3
