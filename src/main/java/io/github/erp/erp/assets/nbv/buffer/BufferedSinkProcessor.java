@@ -37,4 +37,6 @@ public interface BufferedSinkProcessor<T> {
     void shutdown();
 
     void startup();
+
+    void flushStuckTaskComplete();
 }
