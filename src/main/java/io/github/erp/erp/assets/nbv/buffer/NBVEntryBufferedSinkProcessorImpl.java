@@ -179,6 +179,10 @@ public class NBVEntryBufferedSinkProcessorImpl implements BufferedSinkProcessor<
         flushStuckTask = executor.scheduleAtFixedRate(this::checkFlushStuck, maxFlushDelayMillis, maxFlushDelayMillis, TimeUnit.MILLISECONDS);
     }
 
+    public void flushStuckTaskComplete() {
+        this.stuckFlushComplete = true;
+    }
+
     // Additional plumbing
     @Async
     @Scheduled(fixedRate = 5000)

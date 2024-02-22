@@ -100,7 +100,7 @@ public class NetBookValueEntryCSVExportReportService
 
         return depreciationPeriodRepository.findById(nbvReportDTO.getDepreciationPeriod().getId())
             .map(period ->
-                internalNetBookValueEntryRepository.getNBVEntryByDepreciationPeriodEqual(period.getId(), Pageable.ofSize(Integer.MAX_VALUE))
+                internalNetBookValueEntryRepository.getNBVEntryByDepreciationPeriod(period.getId(), Pageable.ofSize(Integer.MAX_VALUE))
                     .getContent())
             .map(netBookValueEntryVMMapping::toValue2);
     }

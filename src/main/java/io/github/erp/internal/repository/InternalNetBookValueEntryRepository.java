@@ -50,5 +50,8 @@ public interface InternalNetBookValueEntryRepository extends JpaRepository<NetBo
     )
     Optional<NetBookValueEntry> findOneWithEagerRelationships(@Param("id") Long id);
 
-    Page<NetBookValueEntryInternal> getNBVEntryByDepreciationPeriodEqual(@Param("depreciationPeriodId") Long depreciationPeriodId, Pageable pageable);
+    @Query(nativeQuery = true,
+        value = "/* TODO Just pick all entries that have a relation with this depreciation-period */"
+    )
+    Page<NetBookValueEntryInternal> getNBVEntryByDepreciationPeriod(@Param("depreciationPeriodId") Long depreciationPeriodId, Pageable pageable);
 }
