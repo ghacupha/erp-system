@@ -118,33 +118,34 @@ public class NBVJobSequenceServiceImpl implements NBVJobSequenceService<NbvCompi
         nbvCompilationJobService.save(nbvCompilationJobDTO);
     }
 
-    private int processAssetsInBatches(NbvCompilationJobDTO nbvCompilationJobDTO, List<Long> assetsIds, int preferredBatchSize) {
+    private int processAssetsInBatches(NbvCompilationJobDTO nbvCompilationJobDTO, List<Long> allAssetIds, int preferredBatchSize) {
 
         // TODO Implement and persist compilation batches
 
         final int[] count = {0};
         final int[] processedItems = {0};
 
-        Observable.fromIterable(assetsIds)
+        Observable.fromIterable(allAssetIds)
             .buffer(PREFERRED_BATCH_SIZE)
-            .subscribe(batchList -> {
+            .subscribe(batchAssetIds -> {
 
                 int batchSize = PREFERRED_BATCH_SIZE;
 
                 ++count[0];
-                processedItems[0] += batchList.size();
 
-                int numberOfBatches = assetsIds.size() / batchSize + (assetsIds.size() % batchSize == 0 ? 0 : 1);
+                int numberOfBatches = allAssetIds.size() / batchSize + (allAssetIds.size() % batchSize == 0 ? 0 : 1);
 
-                boolean isLastBatch = processedItems[0] + batchSize >= assetsIds.size();
+                boolean isLastBatch = processedItems[0] + batchSize >= allAssetIds.size();
+
+                processedItems[0] += batchAssetIds.size();
 
                 enqueueBatch(
-                    batchList,
+                    batchAssetIds,
                     nbvCompilationJobDTO.getId(),
-                    assetsIds.indexOf(batchList.get(0)),
-                    assetsIds.indexOf(batchList.get(batchList.size()-1)),
+                    allAssetIds.indexOf(batchAssetIds.get(0)),
+                    allAssetIds.indexOf(batchAssetIds.get(batchAssetIds.size()-1)),
                     nbvCompilationJobDTO,
-                    assetsIds.size(),
+                    allAssetIds.size(),
                     count[0],
                     processedItems[0],
                     numberOfBatches,
