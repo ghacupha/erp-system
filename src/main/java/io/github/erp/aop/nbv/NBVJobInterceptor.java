@@ -18,7 +18,6 @@ package io.github.erp.aop.nbv;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.aop.depreciation.DepreciationRunInterceptor;
 import io.github.erp.erp.assets.nbv.NBVJobSequenceService;
 import io.github.erp.service.dto.NbvCompilationJobDTO;
 import io.github.erp.service.dto.NbvReportDTO;
@@ -36,7 +35,7 @@ import java.util.Objects;
 @Aspect
 public class NBVJobInterceptor {
 
-    private static final Logger log = LoggerFactory.getLogger(DepreciationRunInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(NBVJobInterceptor.class);
 
     private final NBVJobSequenceService<NbvCompilationJobDTO> nbvJobSequenceService;
 
@@ -57,7 +56,7 @@ public class NBVJobInterceptor {
 
         launchJob(job);
 
-        log.info("Job successfully launched in {} milliseconds, standby for execution...", System.currentTimeMillis() - start);
+        log.info("NBV Job successfully launched in {} milliseconds, standby for execution...", System.currentTimeMillis() - start);
     }
 
     @SneakyThrows

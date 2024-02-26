@@ -17,7 +17,7 @@ package io.github.erp.erp.assets.depreciation.queue;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.erp.assets.depreciation.context.DepreciationContextInstance;
+import io.github.erp.erp.assets.depreciation.context.ContextInstance;
 import io.github.erp.erp.assets.depreciation.model.DepreciationBatchMessage;
 import io.github.erp.service.dto.DepreciationBatchSequenceDTO;
 import io.github.erp.service.dto.DepreciationJobDTO;
@@ -52,7 +52,7 @@ public class DepreciationBatchProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendDepreciationJobMessage(DepreciationJobDTO depreciationJob, List<Long> currentBatch, DepreciationBatchSequenceDTO batchSequence, boolean isLastBatch, int processedCount, int sequenceNumber, int totalItems, DepreciationContextInstance contextInstance, int numberOfBatches, BigDecimal initialCost) {
+    public void sendDepreciationJobMessage(DepreciationJobDTO depreciationJob, List<Long> currentBatch, DepreciationBatchSequenceDTO batchSequence, boolean isLastBatch, int processedCount, int sequenceNumber, int totalItems, ContextInstance contextInstance, int numberOfBatches, BigDecimal initialCost) {
 
         if (isLastBatch) {
             log.info("Last batch encountered, sequence # {} with {} items; total items processed: {}, out of {}", sequenceNumber, currentBatch.size(), processedCount, totalItems);
@@ -74,7 +74,7 @@ public class DepreciationBatchProducer {
             .enqueuedCount(processedCount)
             .sequenceNumber(sequenceNumber)
             .totalItems(totalItems)
-            .depreciationContextInstance(contextInstance)
+            .contextInstance(contextInstance)
             .numberOfBatches(numberOfBatches)
             .build();
 

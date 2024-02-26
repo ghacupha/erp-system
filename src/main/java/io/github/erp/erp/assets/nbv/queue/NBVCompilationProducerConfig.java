@@ -1,7 +1,5 @@
 package io.github.erp.erp.assets.nbv.queue;
 
-import io.github.erp.erp.assets.depreciation.model.DepreciationBatchMessage;
-import io.github.erp.erp.assets.depreciation.queue.DepreciationBatchMessageSerializer;
 import io.github.erp.erp.assets.nbv.model.NBVBatchMessage;
 import lombok.SneakyThrows;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -18,24 +16,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@ConfigurationProperties(prefix = "spring.kafka.nbv.producer")
+@ConfigurationProperties(prefix = "spring.kafka.topics.nbv.producer")
 public class NBVCompilationProducerConfig {
 
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    @Bean
-    public ProducerFactory<String, NBVBatchMessage> producerFactory() throws ClassNotFoundException {
-        DefaultKafkaProducerFactory<String, NBVBatchMessage> producerFactory = new DefaultKafkaProducerFactory<>(producerConfigs());
+    @Bean("nbvProducerFactory")
+    public ProducerFactory<String, NBVBatchMessage> nbvProducerFactory() throws ClassNotFoundException {
+        DefaultKafkaProducerFactory<String, NBVBatchMessage> producerFactory = new DefaultKafkaProducerFactory<>(nbvProducerConfigs());
         producerFactory.setKeySerializer(new StringSerializer());
         producerFactory.setValueSerializer(new NBVBatchMessageSerializer());
         return producerFactory;
     }
 
     @SneakyThrows
-    @Bean
-    public Map<String, Object> producerConfigs() {
+    @Bean("nbvProducerConfigs")
+    public Map<String, Object> nbvProducerConfigs() {
         Map<String, Object> properties = new HashMap<>();
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
 
@@ -44,7 +42,7 @@ public class NBVCompilationProducerConfig {
 
     @SneakyThrows
     @Bean("nbvMessageKafkaTemplate")
-    public KafkaTemplate<String, NBVBatchMessage> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
+    public KafkaTemplate<String, NBVBatchMessage> nbvMessageKafkaTemplate() {
+        return new KafkaTemplate<>(nbvProducerFactory());
     }
 }

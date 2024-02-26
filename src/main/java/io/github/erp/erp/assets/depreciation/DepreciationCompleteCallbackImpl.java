@@ -37,7 +37,7 @@ public class DepreciationCompleteCallbackImpl implements DepreciationCompleteCal
     @Override
     public void onComplete(DepreciationBatchMessage message) {
         // Check if batch-size agrees with the counter first
-        UUID batchCountDownContextId = message.getDepreciationContextInstance().getDepreciationBatchCountDownContextId();
+        UUID batchCountDownContextId = message.getContextInstance().getDepreciationBatchCountDownContextId();
         DepreciationJobContext contextManager = DepreciationJobContext.getInstance();
 
         // This should now be zero

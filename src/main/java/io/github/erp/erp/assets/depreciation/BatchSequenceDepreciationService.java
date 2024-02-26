@@ -124,11 +124,11 @@ public class BatchSequenceDepreciationService {
                 String jobId = message.getJobId();
                 List<String> assetIds = message.getAssetIds();
 
-                UUID depreciationJobCountUpContextId = message.getDepreciationContextInstance().getDepreciationJobCountUpContextId();
-                UUID depreciationJobCountDownContextId = message.getDepreciationContextInstance().getDepreciationJobCountDownContextId();
-                UUID depreciationBatchCountUpContextId = message.getDepreciationContextInstance().getDepreciationBatchCountUpContextId();
-                UUID depreciationBatchCountDownContextId = message.getDepreciationContextInstance().getDepreciationBatchCountDownContextId();
-                UUID depreciationAmountContextId = message.getDepreciationContextInstance().getDepreciationAmountContextId();
+                UUID depreciationJobCountUpContextId = message.getContextInstance().getDepreciationJobCountUpContextId();
+                UUID depreciationJobCountDownContextId = message.getContextInstance().getDepreciationJobCountDownContextId();
+                UUID depreciationBatchCountUpContextId = message.getContextInstance().getDepreciationBatchCountUpContextId();
+                UUID depreciationBatchCountDownContextId = message.getContextInstance().getDepreciationBatchCountDownContextId();
+                UUID depreciationAmountContextId = message.getContextInstance().getDepreciationAmountContextId();
 
                 DepreciationJobDTO depreciationJob = getDepreciationJob(batchSequence, jobId);
                 if (depreciationJob == null) throw new DepreciationJobNotFoundException(message);
@@ -335,7 +335,7 @@ public class BatchSequenceDepreciationService {
 //        }
 
         // Check if batch-size agrees with the counter first
-        UUID jobCountDownContextId = message.getDepreciationContextInstance().getDepreciationJobCountDownContextId();
+        UUID jobCountDownContextId = message.getContextInstance().getDepreciationJobCountDownContextId();
         DepreciationJobContext contextManager = DepreciationJobContext.getInstance();
 
         // This should now be zero

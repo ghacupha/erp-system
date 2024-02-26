@@ -21,7 +21,7 @@ import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import io.github.erp.domain.enumeration.DepreciationJobStatusType;
 import io.github.erp.domain.enumeration.DepreciationPeriodStatusTypes;
 import io.github.erp.erp.assets.depreciation.context.DepreciationAmountContext;
-import io.github.erp.erp.assets.depreciation.context.DepreciationContextInstance;
+import io.github.erp.erp.assets.depreciation.context.ContextInstance;
 import io.github.erp.erp.assets.depreciation.context.DepreciationJobContext;
 import io.github.erp.erp.assets.depreciation.queue.DepreciationBatchProducer;
 import io.github.erp.internal.service.InternalAssetRegistrationService;
@@ -215,7 +215,7 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
             boolean isLastBatch = processedCount + batchSize >= totalAssets;
             DepreciationBatchSequenceDTO batchSequence = createDepreciationBatchSequence(depreciationJob, startIndex, endIndex, isLastBatch, processedCount, currentBatch.size(), sequenceCounter, totalAssets);
 
-            DepreciationContextInstance contextInstance = DepreciationContextInstance.builder()
+            ContextInstance contextInstance = ContextInstance.builder()
                 .depreciationJobCountUpContextId(depreciationJobCountUpContextId)
                 .depreciationBatchCountUpContextId(depreciationBatchCountUpContextId)
                 .depreciationJobCountDownContextId(depreciationJobCountDownContextId)
@@ -263,7 +263,7 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
     /**
      * Processes and enqueues the current batch for depreciation.
      */
-    private void processAndEnqueueBatch(DepreciationJobDTO depreciationJob, List<Long> currentBatch, DepreciationBatchSequenceDTO batchSequence, boolean isLastBatch, int processedCount, int sequenceNumber, int totalItems, DepreciationContextInstance contextInstance, int numberOfBatches, BigDecimal initialCost) {
+    private void processAndEnqueueBatch(DepreciationJobDTO depreciationJob, List<Long> currentBatch, DepreciationBatchSequenceDTO batchSequence, boolean isLastBatch, int processedCount, int sequenceNumber, int totalItems, ContextInstance contextInstance, int numberOfBatches, BigDecimal initialCost) {
 
         log.info("Batch # {} of {} items received for processing under job id {}; {} items processed out of {}", sequenceNumber, currentBatch.size(),depreciationJob.getDescription(),processedCount, totalItems);
         // Enqueuing the DepreciationBatchMessage

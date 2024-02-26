@@ -29,7 +29,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DepreciationContextInstance implements Serializable {
+public class ContextInstance implements Serializable {
 
     private UUID depreciationJobCountUpContextId;
     private UUID depreciationJobCountDownContextId;

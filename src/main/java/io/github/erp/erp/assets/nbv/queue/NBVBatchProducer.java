@@ -17,11 +17,7 @@ package io.github.erp.erp.assets.nbv.queue;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.erp.assets.depreciation.context.DepreciationContextInstance;
-import io.github.erp.erp.assets.depreciation.model.DepreciationBatchMessage;
 import io.github.erp.erp.assets.nbv.model.NBVBatchMessage;
-import io.github.erp.service.dto.DepreciationBatchSequenceDTO;
-import io.github.erp.service.dto.DepreciationJobDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,11 +25,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * Creates and sends a depreciation-batch-message to the queue
@@ -41,7 +32,7 @@ import java.util.stream.Collectors;
 @Component
 public class NBVBatchProducer {
 
-    @Value("${spring.kafka.nbv.topic.name}")
+    @Value("${spring.kafka.topics.nbv.topic.name}")
     private String topicName;
 
     private static final Logger log = LoggerFactory.getLogger(NBVBatchProducer.class);

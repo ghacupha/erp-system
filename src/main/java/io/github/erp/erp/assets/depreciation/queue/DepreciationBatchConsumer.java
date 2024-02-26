@@ -67,7 +67,7 @@ public class DepreciationBatchConsumer {
             // Process the batch of depreciation job messages
             log.info("Received message for batch-id id {} sequence # {}", message.getBatchId(), message.getSequenceNumber());
 
-            UUID messageCountContextId = message.getDepreciationContextInstance().getMessageCountContextId();
+            UUID messageCountContextId = message.getContextInstance().getMessageCountContextId();
 
             DepreciationJobContext contextManager = DepreciationJobContext.getInstance();
 
@@ -88,7 +88,7 @@ public class DepreciationBatchConsumer {
 
             if (messageProcessed) {
 
-                int numberOfProcessed = contextManager.getNumberOfProcessedItems(message.getDepreciationContextInstance().getDepreciationJobCountUpContextId());
+                int numberOfProcessed = contextManager.getNumberOfProcessedItems(message.getContextInstance().getDepreciationJobCountUpContextId());
 
                 depreciationBatchSequenceService.findOne(Long.valueOf(message.getBatchId()))
                     .ifPresent(batch -> {
@@ -99,23 +99,23 @@ public class DepreciationBatchConsumer {
                     });
 
                 if (message.isLastBatch()) {
-                    depreciationEntrySinkProcessor.flushRemainingItems(message.getDepreciationContextInstance().getDepreciationJobCountDownContextId());
+                    depreciationEntrySinkProcessor.flushRemainingItems(message.getContextInstance().getDepreciationJobCountDownContextId());
 
                     updateDepreciationJobCompleted(message);
                 }
 
-                int pendingItemsInTheJob = contextManager.getNumberOfProcessedItems(message.getDepreciationContextInstance().getDepreciationJobCountDownContextId());
+                int pendingItemsInTheJob = contextManager.getNumberOfProcessedItems(message.getContextInstance().getDepreciationJobCountDownContextId());
 
 
                 if (pendingItemsInTheJob == 0 | pendingItemsInTheJob < 0) {
 
                     DepreciationAmountContext amountContext
                         = DepreciationAmountContext.getDepreciationAmountContext(
-                        message.getDepreciationContextInstance().getDepreciationAmountContextId());
+                        message.getContextInstance().getDepreciationAmountContextId());
 
                     int itemsProcessed = amountContext.getNumberOfProcessedItems();
 
-                    depreciationEntrySinkProcessor.flushRemainingItems(message.getDepreciationContextInstance().getDepreciationJobCountDownContextId());
+                    depreciationEntrySinkProcessor.flushRemainingItems(message.getContextInstance().getDepreciationJobCountDownContextId());
 
                     updateDepreciationJobCompleted(message);
 

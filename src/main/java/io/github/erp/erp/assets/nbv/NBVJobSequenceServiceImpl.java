@@ -31,6 +31,7 @@ import io.github.erp.service.dto.NbvCompilationJobDTO;
 import io.reactivex.Observable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -67,10 +68,10 @@ public class NBVJobSequenceServiceImpl implements NBVJobSequenceService<NbvCompi
         this.netBookValueEntryBufferedSinkProcessor = netBookValueEntryBufferedSinkProcessor;
     }
 
+    @Async
     @Override
     public void triggerJobStart(NbvCompilationJobDTO nbvCompilationJobDTO) {
         netBookValueEntryBufferedSinkProcessor.startup();
-        // TODO Implement batch processing sequence
         // TODO review opt out conditions
 
         if (nbvCompilationJobDTO.getCompilationStatus() == COMPLETE) {
@@ -90,7 +91,6 @@ public class NBVJobSequenceServiceImpl implements NBVJobSequenceService<NbvCompi
             log.warn("This compilation has tested positive for opt out conditions, and will now terminate. Terminating the job...");
 
             netBookValueEntryBufferedSinkProcessor.shutdown();
-            // TODO sinkProcessor.shutDown();
 
             return;
         }
@@ -120,13 +120,11 @@ public class NBVJobSequenceServiceImpl implements NBVJobSequenceService<NbvCompi
 
     private int processAssetsInBatches(NbvCompilationJobDTO nbvCompilationJobDTO, List<Long> allAssetIds, int preferredBatchSize) {
 
-        // TODO Implement and persist compilation batches
-
         final int[] count = {0};
         final int[] processedItems = {0};
 
         Observable.fromIterable(allAssetIds)
-            .buffer(PREFERRED_BATCH_SIZE)
+            .buffer(preferredBatchSize)
             .subscribe(batchAssetIds -> {
 
                 int batchSize = PREFERRED_BATCH_SIZE;
@@ -153,8 +151,6 @@ public class NBVJobSequenceServiceImpl implements NBVJobSequenceService<NbvCompi
                     );
             });
 
-        /* TODO nbvBatchProducer.sendJobMessage(); */
-
         return 0;
     }
 
@@ -176,6 +172,7 @@ public class NBVJobSequenceServiceImpl implements NBVJobSequenceService<NbvCompi
         nbvCompilationBatch.setTotalItems(totalItems);
         nbvCompilationBatch.setNbvCompilationJob(nbvCompilationJobDTO);
 
+        // TODO add initiator metadata from ApplicationUserContext
         NbvCompilationBatchDTO nbvBatch = nbvCompilationBatchService.save(nbvCompilationBatch);
 
 
@@ -196,6 +193,7 @@ public class NBVJobSequenceServiceImpl implements NBVJobSequenceService<NbvCompi
 
             .build();
 
+        log.info("Sending items into the queue....");
         nbvBatchProducer.sendJobMessage(nbvBatchMessage);
     }
 

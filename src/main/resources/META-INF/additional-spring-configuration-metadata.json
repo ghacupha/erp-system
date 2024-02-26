@@ -89,6 +89,26 @@
       "name": "kafka.admin.properties.replication.factor",
       "type": "java.lang.String",
       "description": "Description for kafka.admin.properties.replication.factor."
+    },
+    {
+      "name": "spring.kafka.topics.nbv.topic.name",
+      "type": "java.lang.String",
+      "description": "Description for spring.kafka.topics.nbv.topic.name."
+    },
+    {
+      "name": "spring.kafka.topics.nbv.consumer.group.id",
+      "type": "java.lang.String",
+      "description": "Description for spring.kafka.topics.nbv.consumer.group.id."
+    },
+    {
+      "name": "spring.kafka.topics.depreciation-batch.consumer.group.id",
+      "type": "java.lang.String",
+      "description": "Description for spring.kafka.topics.depreciation-batch.consumer.group.id."
+    },
+    {
+      "name": "spring.kafka.topics.nbv.consumer.auto.offset.reset",
+      "type": "java.lang.String",
+      "description": "Description for spring.kafka.topics.nbv.consumer.auto.offset.reset."
     }
   ]
 }

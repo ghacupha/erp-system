@@ -17,7 +17,7 @@ package io.github.erp.erp.assets.depreciation.model;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.erp.assets.depreciation.context.DepreciationContextInstance;
+import io.github.erp.erp.assets.depreciation.context.ContextInstance;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -52,8 +52,7 @@ public class DepreciationBatchMessage implements Serializable {
     private int enqueuedCount;
     private int sequenceNumber;
     private int totalItems;
-    private DepreciationContextInstance depreciationContextInstance;
-
+    private ContextInstance contextInstance;
     private boolean processed;
     private int processedMessagesCount;
     private int numberOfBatches;
