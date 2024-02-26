@@ -164,6 +164,10 @@ public class NetBookValueEntryQueryService extends QueryService<NetBookValueEntr
             if (criteria.getHistoricalCost() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getHistoricalCost(), NetBookValueEntry_.historicalCost));
             }
+            if (criteria.getCapitalizationDate() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getCapitalizationDate(), NetBookValueEntry_.capitalizationDate));
+            }
             if (criteria.getServiceOutletId() != null) {
                 specification =
                     specification.and(

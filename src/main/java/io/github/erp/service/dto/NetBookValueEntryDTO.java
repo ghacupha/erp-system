@@ -20,6 +20,7 @@ package io.github.erp.service.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -50,13 +51,15 @@ public class NetBookValueEntryDTO implements Serializable {
 
     private Integer priorMonths;
 
-    private Integer usefulLifeYears;
+    private Double usefulLifeYears;
 
     private BigDecimal netBookValueAmount;
 
     private BigDecimal previousNetBookValueAmount;
 
     private BigDecimal historicalCost;
+
+    private LocalDate capitalizationDate;
 
     private ServiceOutletDTO serviceOutlet;
 
@@ -144,11 +147,11 @@ public class NetBookValueEntryDTO implements Serializable {
         this.priorMonths = priorMonths;
     }
 
-    public Integer getUsefulLifeYears() {
+    public Double getUsefulLifeYears() {
         return usefulLifeYears;
     }
 
-    public void setUsefulLifeYears(Integer usefulLifeYears) {
+    public void setUsefulLifeYears(Double usefulLifeYears) {
         this.usefulLifeYears = usefulLifeYears;
     }
 
@@ -174,6 +177,14 @@ public class NetBookValueEntryDTO implements Serializable {
 
     public void setHistoricalCost(BigDecimal historicalCost) {
         this.historicalCost = historicalCost;
+    }
+
+    public LocalDate getCapitalizationDate() {
+        return capitalizationDate;
+    }
+
+    public void setCapitalizationDate(LocalDate capitalizationDate) {
+        this.capitalizationDate = capitalizationDate;
     }
 
     public ServiceOutletDTO getServiceOutlet() {
@@ -270,6 +281,7 @@ public class NetBookValueEntryDTO implements Serializable {
             ", netBookValueAmount=" + getNetBookValueAmount() +
             ", previousNetBookValueAmount=" + getPreviousNetBookValueAmount() +
             ", historicalCost=" + getHistoricalCost() +
+            ", capitalizationDate='" + getCapitalizationDate() + "'" +
             ", serviceOutlet=" + getServiceOutlet() +
             ", depreciationPeriod=" + getDepreciationPeriod() +
             ", fiscalMonth=" + getFiscalMonth() +
