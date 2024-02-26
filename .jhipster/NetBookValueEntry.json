@@ -35,7 +35,7 @@
     },
     {
       "fieldName": "usefulLifeYears",
-      "fieldType": "Integer"
+      "fieldType": "Double"
     },
     {
       "fieldName": "netBookValueAmount",
@@ -48,6 +48,10 @@
     {
       "fieldName": "historicalCost",
       "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "capitalizationDate",
+      "fieldType": "LocalDate"
     }
   ],
   "relationships": [

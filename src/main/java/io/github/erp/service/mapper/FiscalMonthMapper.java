@@ -40,6 +40,12 @@ public interface FiscalMonthMapper extends EntityMapper<FiscalMonthDTO, FiscalMo
     @Mapping(target = "removeUniversallyUniqueMapping", ignore = true)
     FiscalMonth toEntity(FiscalMonthDTO fiscalMonthDTO);
 
+    @Named("fiscalMonthCode")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "fiscalMonthCode", source = "fiscalMonthCode")
+    FiscalMonthDTO toDtoFiscalMonthCode(FiscalMonth fiscalMonth);
+
     @Named("startDate")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
@@ -51,10 +57,4 @@ public interface FiscalMonthMapper extends EntityMapper<FiscalMonthDTO, FiscalMo
     @Mapping(target = "id", source = "id")
     @Mapping(target = "endDate", source = "endDate")
     FiscalMonthDTO toDtoEndDate(FiscalMonth fiscalMonth);
-
-    @Named("fiscalMonthCode")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "fiscalMonthCode", source = "fiscalMonthCode")
-    FiscalMonthDTO toDtoFiscalMonthCode(FiscalMonth fiscalMonth);
 }

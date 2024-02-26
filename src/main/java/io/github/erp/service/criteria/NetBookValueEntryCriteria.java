@@ -27,6 +27,7 @@ import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
+import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 import tech.jhipster.service.filter.UUIDFilter;
@@ -62,13 +63,15 @@ public class NetBookValueEntryCriteria implements Serializable, Criteria {
 
     private IntegerFilter priorMonths;
 
-    private IntegerFilter usefulLifeYears;
+    private DoubleFilter usefulLifeYears;
 
     private BigDecimalFilter netBookValueAmount;
 
     private BigDecimalFilter previousNetBookValueAmount;
 
     private BigDecimalFilter historicalCost;
+
+    private LocalDateFilter capitalizationDate;
 
     private LongFilter serviceOutletId;
 
@@ -102,6 +105,7 @@ public class NetBookValueEntryCriteria implements Serializable, Criteria {
         this.netBookValueAmount = other.netBookValueAmount == null ? null : other.netBookValueAmount.copy();
         this.previousNetBookValueAmount = other.previousNetBookValueAmount == null ? null : other.previousNetBookValueAmount.copy();
         this.historicalCost = other.historicalCost == null ? null : other.historicalCost.copy();
+        this.capitalizationDate = other.capitalizationDate == null ? null : other.capitalizationDate.copy();
         this.serviceOutletId = other.serviceOutletId == null ? null : other.serviceOutletId.copy();
         this.depreciationPeriodId = other.depreciationPeriodId == null ? null : other.depreciationPeriodId.copy();
         this.fiscalMonthId = other.fiscalMonthId == null ? null : other.fiscalMonthId.copy();
@@ -252,18 +256,18 @@ public class NetBookValueEntryCriteria implements Serializable, Criteria {
         this.priorMonths = priorMonths;
     }
 
-    public IntegerFilter getUsefulLifeYears() {
+    public DoubleFilter getUsefulLifeYears() {
         return usefulLifeYears;
     }
 
-    public IntegerFilter usefulLifeYears() {
+    public DoubleFilter usefulLifeYears() {
         if (usefulLifeYears == null) {
-            usefulLifeYears = new IntegerFilter();
+            usefulLifeYears = new DoubleFilter();
         }
         return usefulLifeYears;
     }
 
-    public void setUsefulLifeYears(IntegerFilter usefulLifeYears) {
+    public void setUsefulLifeYears(DoubleFilter usefulLifeYears) {
         this.usefulLifeYears = usefulLifeYears;
     }
 
@@ -310,6 +314,21 @@ public class NetBookValueEntryCriteria implements Serializable, Criteria {
 
     public void setHistoricalCost(BigDecimalFilter historicalCost) {
         this.historicalCost = historicalCost;
+    }
+
+    public LocalDateFilter getCapitalizationDate() {
+        return capitalizationDate;
+    }
+
+    public LocalDateFilter capitalizationDate() {
+        if (capitalizationDate == null) {
+            capitalizationDate = new LocalDateFilter();
+        }
+        return capitalizationDate;
+    }
+
+    public void setCapitalizationDate(LocalDateFilter capitalizationDate) {
+        this.capitalizationDate = capitalizationDate;
     }
 
     public LongFilter getServiceOutletId() {
@@ -448,6 +467,7 @@ public class NetBookValueEntryCriteria implements Serializable, Criteria {
             Objects.equals(netBookValueAmount, that.netBookValueAmount) &&
             Objects.equals(previousNetBookValueAmount, that.previousNetBookValueAmount) &&
             Objects.equals(historicalCost, that.historicalCost) &&
+            Objects.equals(capitalizationDate, that.capitalizationDate) &&
             Objects.equals(serviceOutletId, that.serviceOutletId) &&
             Objects.equals(depreciationPeriodId, that.depreciationPeriodId) &&
             Objects.equals(fiscalMonthId, that.fiscalMonthId) &&
@@ -475,6 +495,7 @@ public class NetBookValueEntryCriteria implements Serializable, Criteria {
             netBookValueAmount,
             previousNetBookValueAmount,
             historicalCost,
+            capitalizationDate,
             serviceOutletId,
             depreciationPeriodId,
             fiscalMonthId,
@@ -503,6 +524,7 @@ public class NetBookValueEntryCriteria implements Serializable, Criteria {
             (netBookValueAmount != null ? "netBookValueAmount=" + netBookValueAmount + ", " : "") +
             (previousNetBookValueAmount != null ? "previousNetBookValueAmount=" + previousNetBookValueAmount + ", " : "") +
             (historicalCost != null ? "historicalCost=" + historicalCost + ", " : "") +
+            (capitalizationDate != null ? "capitalizationDate=" + capitalizationDate + ", " : "") +
             (serviceOutletId != null ? "serviceOutletId=" + serviceOutletId + ", " : "") +
             (depreciationPeriodId != null ? "depreciationPeriodId=" + depreciationPeriodId + ", " : "") +
             (fiscalMonthId != null ? "fiscalMonthId=" + fiscalMonthId + ", " : "") +

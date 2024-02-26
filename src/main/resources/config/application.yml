@@ -164,7 +164,6 @@ spring:
         consumer:
           group.id: erp-system-nbv
           auto.offset.reset: earliest
-          properties:
   messages:
     basename: i18n/messages
   main:

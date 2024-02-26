@@ -58,6 +58,18 @@ spring:
       hibernate.jdbc.time_zone: UTC
       hibernate.query.fail_on_pagination_over_collection_fetch: true
   kafka:
+    topics:
+      depreciation-batch:
+        topic:
+          name: "depreciation_batch_topic"
+        consumer:
+          group.id: erp-system-depreciation
+      nbv:
+        topic:
+          name: "nbv_batch_topic"
+        consumer:
+          group.id: erp-system-nbv
+          auto.offset.reset: earliest
     bootstrap-servers: localhost:9092
     admin:
       properties:

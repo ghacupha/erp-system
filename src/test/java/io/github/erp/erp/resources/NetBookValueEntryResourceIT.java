@@ -42,7 +42,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
-import java.util.*;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static io.github.erp.web.rest.TestUtil.sameNumber;
@@ -87,9 +93,9 @@ class NetBookValueEntryResourceIT {
     private static final Integer UPDATED_PRIOR_MONTHS = 2;
     private static final Integer SMALLER_PRIOR_MONTHS = 1 - 1;
 
-    private static final Integer DEFAULT_USEFUL_LIFE_YEARS = 1;
-    private static final Integer UPDATED_USEFUL_LIFE_YEARS = 2;
-    private static final Integer SMALLER_USEFUL_LIFE_YEARS = 1 - 1;
+    private static final Double DEFAULT_USEFUL_LIFE_YEARS = 1D;
+    private static final Double UPDATED_USEFUL_LIFE_YEARS = 2D;
+    private static final Double SMALLER_USEFUL_LIFE_YEARS = 1D - 1D;
 
     private static final BigDecimal DEFAULT_NET_BOOK_VALUE_AMOUNT = new BigDecimal(1);
     private static final BigDecimal UPDATED_NET_BOOK_VALUE_AMOUNT = new BigDecimal(2);
@@ -102,6 +108,10 @@ class NetBookValueEntryResourceIT {
     private static final BigDecimal DEFAULT_HISTORICAL_COST = new BigDecimal(1);
     private static final BigDecimal UPDATED_HISTORICAL_COST = new BigDecimal(2);
     private static final BigDecimal SMALLER_HISTORICAL_COST = new BigDecimal(1 - 1);
+
+    private static final LocalDate DEFAULT_CAPITALIZATION_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_CAPITALIZATION_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_CAPITALIZATION_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final String ENTITY_API_URL = "/api/fixed-asset/net-book-value-entries";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -157,7 +167,8 @@ class NetBookValueEntryResourceIT {
             .usefulLifeYears(DEFAULT_USEFUL_LIFE_YEARS)
             .netBookValueAmount(DEFAULT_NET_BOOK_VALUE_AMOUNT)
             .previousNetBookValueAmount(DEFAULT_PREVIOUS_NET_BOOK_VALUE_AMOUNT)
-            .historicalCost(DEFAULT_HISTORICAL_COST);
+            .historicalCost(DEFAULT_HISTORICAL_COST)
+            .capitalizationDate(DEFAULT_CAPITALIZATION_DATE);
         return netBookValueEntry;
     }
 
@@ -180,7 +191,8 @@ class NetBookValueEntryResourceIT {
             .usefulLifeYears(UPDATED_USEFUL_LIFE_YEARS)
             .netBookValueAmount(UPDATED_NET_BOOK_VALUE_AMOUNT)
             .previousNetBookValueAmount(UPDATED_PREVIOUS_NET_BOOK_VALUE_AMOUNT)
-            .historicalCost(UPDATED_HISTORICAL_COST);
+            .historicalCost(UPDATED_HISTORICAL_COST)
+            .capitalizationDate(UPDATED_CAPITALIZATION_DATE);
         return netBookValueEntry;
     }
 
@@ -219,6 +231,7 @@ class NetBookValueEntryResourceIT {
         assertThat(testNetBookValueEntry.getNetBookValueAmount()).isEqualByComparingTo(DEFAULT_NET_BOOK_VALUE_AMOUNT);
         assertThat(testNetBookValueEntry.getPreviousNetBookValueAmount()).isEqualByComparingTo(DEFAULT_PREVIOUS_NET_BOOK_VALUE_AMOUNT);
         assertThat(testNetBookValueEntry.getHistoricalCost()).isEqualByComparingTo(DEFAULT_HISTORICAL_COST);
+        assertThat(testNetBookValueEntry.getCapitalizationDate()).isEqualTo(DEFAULT_CAPITALIZATION_DATE);
 
         // Validate the NetBookValueEntry in Elasticsearch
         verify(mockNetBookValueEntrySearchRepository, times(1)).save(testNetBookValueEntry);
@@ -292,10 +305,11 @@ class NetBookValueEntryResourceIT {
             .andExpect(jsonPath("$.[*].compilationBatchIdentifier").value(hasItem(DEFAULT_COMPILATION_BATCH_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].elapsedMonths").value(hasItem(DEFAULT_ELAPSED_MONTHS)))
             .andExpect(jsonPath("$.[*].priorMonths").value(hasItem(DEFAULT_PRIOR_MONTHS)))
-            .andExpect(jsonPath("$.[*].usefulLifeYears").value(hasItem(DEFAULT_USEFUL_LIFE_YEARS)))
+            .andExpect(jsonPath("$.[*].usefulLifeYears").value(hasItem(DEFAULT_USEFUL_LIFE_YEARS.doubleValue())))
             .andExpect(jsonPath("$.[*].netBookValueAmount").value(hasItem(sameNumber(DEFAULT_NET_BOOK_VALUE_AMOUNT))))
             .andExpect(jsonPath("$.[*].previousNetBookValueAmount").value(hasItem(sameNumber(DEFAULT_PREVIOUS_NET_BOOK_VALUE_AMOUNT))))
-            .andExpect(jsonPath("$.[*].historicalCost").value(hasItem(sameNumber(DEFAULT_HISTORICAL_COST))));
+            .andExpect(jsonPath("$.[*].historicalCost").value(hasItem(sameNumber(DEFAULT_HISTORICAL_COST))))
+            .andExpect(jsonPath("$.[*].capitalizationDate").value(hasItem(DEFAULT_CAPITALIZATION_DATE.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -336,10 +350,11 @@ class NetBookValueEntryResourceIT {
             .andExpect(jsonPath("$.compilationBatchIdentifier").value(DEFAULT_COMPILATION_BATCH_IDENTIFIER.toString()))
             .andExpect(jsonPath("$.elapsedMonths").value(DEFAULT_ELAPSED_MONTHS))
             .andExpect(jsonPath("$.priorMonths").value(DEFAULT_PRIOR_MONTHS))
-            .andExpect(jsonPath("$.usefulLifeYears").value(DEFAULT_USEFUL_LIFE_YEARS))
+            .andExpect(jsonPath("$.usefulLifeYears").value(DEFAULT_USEFUL_LIFE_YEARS.doubleValue()))
             .andExpect(jsonPath("$.netBookValueAmount").value(sameNumber(DEFAULT_NET_BOOK_VALUE_AMOUNT)))
             .andExpect(jsonPath("$.previousNetBookValueAmount").value(sameNumber(DEFAULT_PREVIOUS_NET_BOOK_VALUE_AMOUNT)))
-            .andExpect(jsonPath("$.historicalCost").value(sameNumber(DEFAULT_HISTORICAL_COST)));
+            .andExpect(jsonPath("$.historicalCost").value(sameNumber(DEFAULT_HISTORICAL_COST)))
+            .andExpect(jsonPath("$.capitalizationDate").value(DEFAULT_CAPITALIZATION_DATE.toString()));
     }
 
     @Test
@@ -1384,6 +1399,110 @@ class NetBookValueEntryResourceIT {
 
     @Test
     @Transactional
+    void getAllNetBookValueEntriesByCapitalizationDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        netBookValueEntryRepository.saveAndFlush(netBookValueEntry);
+
+        // Get all the netBookValueEntryList where capitalizationDate equals to DEFAULT_CAPITALIZATION_DATE
+        defaultNetBookValueEntryShouldBeFound("capitalizationDate.equals=" + DEFAULT_CAPITALIZATION_DATE);
+
+        // Get all the netBookValueEntryList where capitalizationDate equals to UPDATED_CAPITALIZATION_DATE
+        defaultNetBookValueEntryShouldNotBeFound("capitalizationDate.equals=" + UPDATED_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllNetBookValueEntriesByCapitalizationDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        netBookValueEntryRepository.saveAndFlush(netBookValueEntry);
+
+        // Get all the netBookValueEntryList where capitalizationDate not equals to DEFAULT_CAPITALIZATION_DATE
+        defaultNetBookValueEntryShouldNotBeFound("capitalizationDate.notEquals=" + DEFAULT_CAPITALIZATION_DATE);
+
+        // Get all the netBookValueEntryList where capitalizationDate not equals to UPDATED_CAPITALIZATION_DATE
+        defaultNetBookValueEntryShouldBeFound("capitalizationDate.notEquals=" + UPDATED_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllNetBookValueEntriesByCapitalizationDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        netBookValueEntryRepository.saveAndFlush(netBookValueEntry);
+
+        // Get all the netBookValueEntryList where capitalizationDate in DEFAULT_CAPITALIZATION_DATE or UPDATED_CAPITALIZATION_DATE
+        defaultNetBookValueEntryShouldBeFound("capitalizationDate.in=" + DEFAULT_CAPITALIZATION_DATE + "," + UPDATED_CAPITALIZATION_DATE);
+
+        // Get all the netBookValueEntryList where capitalizationDate equals to UPDATED_CAPITALIZATION_DATE
+        defaultNetBookValueEntryShouldNotBeFound("capitalizationDate.in=" + UPDATED_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllNetBookValueEntriesByCapitalizationDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        netBookValueEntryRepository.saveAndFlush(netBookValueEntry);
+
+        // Get all the netBookValueEntryList where capitalizationDate is not null
+        defaultNetBookValueEntryShouldBeFound("capitalizationDate.specified=true");
+
+        // Get all the netBookValueEntryList where capitalizationDate is null
+        defaultNetBookValueEntryShouldNotBeFound("capitalizationDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllNetBookValueEntriesByCapitalizationDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        netBookValueEntryRepository.saveAndFlush(netBookValueEntry);
+
+        // Get all the netBookValueEntryList where capitalizationDate is greater than or equal to DEFAULT_CAPITALIZATION_DATE
+        defaultNetBookValueEntryShouldBeFound("capitalizationDate.greaterThanOrEqual=" + DEFAULT_CAPITALIZATION_DATE);
+
+        // Get all the netBookValueEntryList where capitalizationDate is greater than or equal to UPDATED_CAPITALIZATION_DATE
+        defaultNetBookValueEntryShouldNotBeFound("capitalizationDate.greaterThanOrEqual=" + UPDATED_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllNetBookValueEntriesByCapitalizationDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        netBookValueEntryRepository.saveAndFlush(netBookValueEntry);
+
+        // Get all the netBookValueEntryList where capitalizationDate is less than or equal to DEFAULT_CAPITALIZATION_DATE
+        defaultNetBookValueEntryShouldBeFound("capitalizationDate.lessThanOrEqual=" + DEFAULT_CAPITALIZATION_DATE);
+
+        // Get all the netBookValueEntryList where capitalizationDate is less than or equal to SMALLER_CAPITALIZATION_DATE
+        defaultNetBookValueEntryShouldNotBeFound("capitalizationDate.lessThanOrEqual=" + SMALLER_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllNetBookValueEntriesByCapitalizationDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        netBookValueEntryRepository.saveAndFlush(netBookValueEntry);
+
+        // Get all the netBookValueEntryList where capitalizationDate is less than DEFAULT_CAPITALIZATION_DATE
+        defaultNetBookValueEntryShouldNotBeFound("capitalizationDate.lessThan=" + DEFAULT_CAPITALIZATION_DATE);
+
+        // Get all the netBookValueEntryList where capitalizationDate is less than UPDATED_CAPITALIZATION_DATE
+        defaultNetBookValueEntryShouldBeFound("capitalizationDate.lessThan=" + UPDATED_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllNetBookValueEntriesByCapitalizationDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        netBookValueEntryRepository.saveAndFlush(netBookValueEntry);
+
+        // Get all the netBookValueEntryList where capitalizationDate is greater than DEFAULT_CAPITALIZATION_DATE
+        defaultNetBookValueEntryShouldNotBeFound("capitalizationDate.greaterThan=" + DEFAULT_CAPITALIZATION_DATE);
+
+        // Get all the netBookValueEntryList where capitalizationDate is greater than SMALLER_CAPITALIZATION_DATE
+        defaultNetBookValueEntryShouldBeFound("capitalizationDate.greaterThan=" + SMALLER_CAPITALIZATION_DATE);
+    }
+
+    @Test
+    @Transactional
     void getAllNetBookValueEntriesByServiceOutletIsEqualToSomething() throws Exception {
         // Initialize the database
         netBookValueEntryRepository.saveAndFlush(netBookValueEntry);
@@ -1581,10 +1700,11 @@ class NetBookValueEntryResourceIT {
             .andExpect(jsonPath("$.[*].compilationBatchIdentifier").value(hasItem(DEFAULT_COMPILATION_BATCH_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].elapsedMonths").value(hasItem(DEFAULT_ELAPSED_MONTHS)))
             .andExpect(jsonPath("$.[*].priorMonths").value(hasItem(DEFAULT_PRIOR_MONTHS)))
-            .andExpect(jsonPath("$.[*].usefulLifeYears").value(hasItem(DEFAULT_USEFUL_LIFE_YEARS)))
+            .andExpect(jsonPath("$.[*].usefulLifeYears").value(hasItem(DEFAULT_USEFUL_LIFE_YEARS.doubleValue())))
             .andExpect(jsonPath("$.[*].netBookValueAmount").value(hasItem(sameNumber(DEFAULT_NET_BOOK_VALUE_AMOUNT))))
             .andExpect(jsonPath("$.[*].previousNetBookValueAmount").value(hasItem(sameNumber(DEFAULT_PREVIOUS_NET_BOOK_VALUE_AMOUNT))))
-            .andExpect(jsonPath("$.[*].historicalCost").value(hasItem(sameNumber(DEFAULT_HISTORICAL_COST))));
+            .andExpect(jsonPath("$.[*].historicalCost").value(hasItem(sameNumber(DEFAULT_HISTORICAL_COST))))
+            .andExpect(jsonPath("$.[*].capitalizationDate").value(hasItem(DEFAULT_CAPITALIZATION_DATE.toString())));
 
         // Check, that the count call also returns 1
         restNetBookValueEntryMockMvc
@@ -1644,7 +1764,8 @@ class NetBookValueEntryResourceIT {
             .usefulLifeYears(UPDATED_USEFUL_LIFE_YEARS)
             .netBookValueAmount(UPDATED_NET_BOOK_VALUE_AMOUNT)
             .previousNetBookValueAmount(UPDATED_PREVIOUS_NET_BOOK_VALUE_AMOUNT)
-            .historicalCost(UPDATED_HISTORICAL_COST);
+            .historicalCost(UPDATED_HISTORICAL_COST)
+            .capitalizationDate(UPDATED_CAPITALIZATION_DATE);
         NetBookValueEntryDTO netBookValueEntryDTO = netBookValueEntryMapper.toDto(updatedNetBookValueEntry);
 
         restNetBookValueEntryMockMvc
@@ -1671,6 +1792,7 @@ class NetBookValueEntryResourceIT {
         assertThat(testNetBookValueEntry.getNetBookValueAmount()).isEqualTo(UPDATED_NET_BOOK_VALUE_AMOUNT);
         assertThat(testNetBookValueEntry.getPreviousNetBookValueAmount()).isEqualTo(UPDATED_PREVIOUS_NET_BOOK_VALUE_AMOUNT);
         assertThat(testNetBookValueEntry.getHistoricalCost()).isEqualTo(UPDATED_HISTORICAL_COST);
+        assertThat(testNetBookValueEntry.getCapitalizationDate()).isEqualTo(UPDATED_CAPITALIZATION_DATE);
 
         // Validate the NetBookValueEntry in Elasticsearch
         verify(mockNetBookValueEntrySearchRepository).save(testNetBookValueEntry);
@@ -1799,6 +1921,7 @@ class NetBookValueEntryResourceIT {
         assertThat(testNetBookValueEntry.getNetBookValueAmount()).isEqualByComparingTo(UPDATED_NET_BOOK_VALUE_AMOUNT);
         assertThat(testNetBookValueEntry.getPreviousNetBookValueAmount()).isEqualByComparingTo(UPDATED_PREVIOUS_NET_BOOK_VALUE_AMOUNT);
         assertThat(testNetBookValueEntry.getHistoricalCost()).isEqualByComparingTo(UPDATED_HISTORICAL_COST);
+        assertThat(testNetBookValueEntry.getCapitalizationDate()).isEqualTo(DEFAULT_CAPITALIZATION_DATE);
     }
 
     @Test
@@ -1825,7 +1948,8 @@ class NetBookValueEntryResourceIT {
             .usefulLifeYears(UPDATED_USEFUL_LIFE_YEARS)
             .netBookValueAmount(UPDATED_NET_BOOK_VALUE_AMOUNT)
             .previousNetBookValueAmount(UPDATED_PREVIOUS_NET_BOOK_VALUE_AMOUNT)
-            .historicalCost(UPDATED_HISTORICAL_COST);
+            .historicalCost(UPDATED_HISTORICAL_COST)
+            .capitalizationDate(UPDATED_CAPITALIZATION_DATE);
 
         restNetBookValueEntryMockMvc
             .perform(
@@ -1851,6 +1975,7 @@ class NetBookValueEntryResourceIT {
         assertThat(testNetBookValueEntry.getNetBookValueAmount()).isEqualByComparingTo(UPDATED_NET_BOOK_VALUE_AMOUNT);
         assertThat(testNetBookValueEntry.getPreviousNetBookValueAmount()).isEqualByComparingTo(UPDATED_PREVIOUS_NET_BOOK_VALUE_AMOUNT);
         assertThat(testNetBookValueEntry.getHistoricalCost()).isEqualByComparingTo(UPDATED_HISTORICAL_COST);
+        assertThat(testNetBookValueEntry.getCapitalizationDate()).isEqualTo(UPDATED_CAPITALIZATION_DATE);
     }
 
     @Test
@@ -1975,9 +2100,10 @@ class NetBookValueEntryResourceIT {
             .andExpect(jsonPath("$.[*].compilationBatchIdentifier").value(hasItem(DEFAULT_COMPILATION_BATCH_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].elapsedMonths").value(hasItem(DEFAULT_ELAPSED_MONTHS)))
             .andExpect(jsonPath("$.[*].priorMonths").value(hasItem(DEFAULT_PRIOR_MONTHS)))
-            .andExpect(jsonPath("$.[*].usefulLifeYears").value(hasItem(DEFAULT_USEFUL_LIFE_YEARS)))
+            .andExpect(jsonPath("$.[*].usefulLifeYears").value(hasItem(DEFAULT_USEFUL_LIFE_YEARS.doubleValue())))
             .andExpect(jsonPath("$.[*].netBookValueAmount").value(hasItem(sameNumber(DEFAULT_NET_BOOK_VALUE_AMOUNT))))
             .andExpect(jsonPath("$.[*].previousNetBookValueAmount").value(hasItem(sameNumber(DEFAULT_PREVIOUS_NET_BOOK_VALUE_AMOUNT))))
-            .andExpect(jsonPath("$.[*].historicalCost").value(hasItem(sameNumber(DEFAULT_HISTORICAL_COST))));
+            .andExpect(jsonPath("$.[*].historicalCost").value(hasItem(sameNumber(DEFAULT_HISTORICAL_COST))))
+            .andExpect(jsonPath("$.[*].capitalizationDate").value(hasItem(DEFAULT_CAPITALIZATION_DATE.toString())));
     }
 }

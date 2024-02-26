@@ -21,6 +21,7 @@ package io.github.erp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -72,7 +73,7 @@ public class NetBookValueEntry implements Serializable {
     private Integer priorMonths;
 
     @Column(name = "useful_life_years")
-    private Integer usefulLifeYears;
+    private Double usefulLifeYears;
 
     @Column(name = "net_book_value_amount", precision = 21, scale = 2)
     private BigDecimal netBookValueAmount;
@@ -82,6 +83,9 @@ public class NetBookValueEntry implements Serializable {
 
     @Column(name = "historical_cost", precision = 21, scale = 2)
     private BigDecimal historicalCost;
+
+    @Column(name = "capitalization_date")
+    private LocalDate capitalizationDate;
 
     @ManyToOne
     @JsonIgnoreProperties(
@@ -260,16 +264,16 @@ public class NetBookValueEntry implements Serializable {
         this.priorMonths = priorMonths;
     }
 
-    public Integer getUsefulLifeYears() {
+    public Double getUsefulLifeYears() {
         return this.usefulLifeYears;
     }
 
-    public NetBookValueEntry usefulLifeYears(Integer usefulLifeYears) {
+    public NetBookValueEntry usefulLifeYears(Double usefulLifeYears) {
         this.setUsefulLifeYears(usefulLifeYears);
         return this;
     }
 
-    public void setUsefulLifeYears(Integer usefulLifeYears) {
+    public void setUsefulLifeYears(Double usefulLifeYears) {
         this.usefulLifeYears = usefulLifeYears;
     }
 
@@ -310,6 +314,19 @@ public class NetBookValueEntry implements Serializable {
 
     public void setHistoricalCost(BigDecimal historicalCost) {
         this.historicalCost = historicalCost;
+    }
+
+    public LocalDate getCapitalizationDate() {
+        return this.capitalizationDate;
+    }
+
+    public NetBookValueEntry capitalizationDate(LocalDate capitalizationDate) {
+        this.setCapitalizationDate(capitalizationDate);
+        return this;
+    }
+
+    public void setCapitalizationDate(LocalDate capitalizationDate) {
+        this.capitalizationDate = capitalizationDate;
     }
 
     public ServiceOutlet getServiceOutlet() {
@@ -449,6 +466,7 @@ public class NetBookValueEntry implements Serializable {
             ", netBookValueAmount=" + getNetBookValueAmount() +
             ", previousNetBookValueAmount=" + getPreviousNetBookValueAmount() +
             ", historicalCost=" + getHistoricalCost() +
+            ", capitalizationDate='" + getCapitalizationDate() + "'" +
             "}";
     }
 }
