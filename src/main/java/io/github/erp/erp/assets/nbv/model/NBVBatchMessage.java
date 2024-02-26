@@ -1,6 +1,6 @@
 package io.github.erp.erp.assets.nbv.model;
 
-import io.github.erp.erp.assets.depreciation.context.DepreciationContextInstance;
+import io.github.erp.erp.assets.depreciation.context.ContextInstance;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +18,10 @@ import java.util.UUID;
 @AllArgsConstructor
 public class NBVBatchMessage implements Serializable {
 
+    private boolean processed;
+    private int processedMessagesCount;
+    private int numberOfBatches;
+    private BigDecimal initialCost;
     private UUID messageCorrelationId;
     private long jobId;
     private long batchId;
@@ -30,9 +34,7 @@ public class NBVBatchMessage implements Serializable {
     private int enqueuedCount;
     private int sequenceNumber;
     private int totalItems;
-    private DepreciationContextInstance depreciationContextInstance;
+    private ContextInstance contextInstance;
 
-    private boolean processed;
-    private int processedMessagesCount;
-    private int numberOfBatches;
+
 }

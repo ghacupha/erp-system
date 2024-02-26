@@ -1,7 +1,5 @@
 package io.github.erp.erp.assets.nbv.queue;
 
-import io.github.erp.erp.assets.depreciation.model.DepreciationBatchMessage;
-import io.github.erp.erp.assets.depreciation.queue.DepreciationBatchMessageDeserializer;
 import io.github.erp.erp.assets.nbv.model.NBVBatchMessage;
 import lombok.SneakyThrows;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -18,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@ConfigurationProperties(prefix = "spring.kafka.nbv.consumer")
+@ConfigurationProperties(prefix = "spring.kafka.topics.nbv.consumer")
 public class NBVCompilationConsumerConfig {
 
 
@@ -28,13 +26,13 @@ public class NBVCompilationConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    @Value("${spring.kafka.consumer.group.id}")
+    @Value("${spring.kafka.topics.nbv.consumer.group.id}")
     private String groupId;
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, NBVBatchMessage> kafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, NBVBatchMessage> nbvListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, NBVBatchMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
+        factory.setConsumerFactory(nbvConsumerFactory());
         factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
         return factory;
     }
@@ -42,7 +40,7 @@ public class NBVCompilationConsumerConfig {
 
     @SneakyThrows
     @Bean
-    public Map<String, Object> consumerConfigs() {
+    public Map<String, Object> nbvConsumerConfigs() {
         Map<String, Object> properties = new HashMap<>();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
@@ -52,8 +50,8 @@ public class NBVCompilationConsumerConfig {
 
     // Create Kafka consumer factory
     @Bean
-    public DefaultKafkaConsumerFactory<String, NBVBatchMessage> consumerFactory() {
-        DefaultKafkaConsumerFactory<String, NBVBatchMessage> consumerFactory =  new DefaultKafkaConsumerFactory<>(consumerConfigs());
+    public DefaultKafkaConsumerFactory<String, NBVBatchMessage> nbvConsumerFactory() {
+        DefaultKafkaConsumerFactory<String, NBVBatchMessage> consumerFactory =  new DefaultKafkaConsumerFactory<>(nbvConsumerConfigs());
 
         // TODO Add listener
         consumerFactory.setKeyDeserializer(new StringDeserializer());

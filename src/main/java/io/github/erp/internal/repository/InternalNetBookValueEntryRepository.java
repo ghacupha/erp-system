@@ -37,21 +37,51 @@ import java.util.Optional;
 @Repository
 public interface InternalNetBookValueEntryRepository extends JpaRepository<NetBookValueEntry, Long>, JpaSpecificationExecutor<NetBookValueEntry> {
     @Query(
-        value = "select distinct netBookValueEntry from NetBookValueEntry netBookValueEntry left join fetch netBookValueEntry.placeholders",
+        value = "select distinct netBookValueEntry from NetBookValueEntry netBookValueEntry LEFT JOIN fetch netBookValueEntry.placeholders",
         countQuery = "select count(distinct netBookValueEntry) from NetBookValueEntry netBookValueEntry"
     )
     Page<NetBookValueEntry> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("select distinct netBookValueEntry from NetBookValueEntry netBookValueEntry left join fetch netBookValueEntry.placeholders")
+    @Query("select distinct netBookValueEntry from NetBookValueEntry netBookValueEntry LEFT JOIN fetch netBookValueEntry.placeholders")
     List<NetBookValueEntry> findAllWithEagerRelationships();
 
     @Query(
-        "select netBookValueEntry from NetBookValueEntry netBookValueEntry left join fetch netBookValueEntry.placeholders where netBookValueEntry.id =:id"
+        "select netBookValueEntry from NetBookValueEntry netBookValueEntry LEFT JOIN fetch netBookValueEntry.placeholders where netBookValueEntry.id =:id"
     )
     Optional<NetBookValueEntry> findOneWithEagerRelationships(@Param("id") Long id);
 
     @Query(nativeQuery = true,
-        value = "/* TODO Just pick all entries that have a relation with this depreciation-period */"
+        value = "" +
+            "SELECT " +
+            "  nbv.id AS id, " +
+            "  nbv.asset_number, " +
+            "  nbv.asset_tag, " +
+            "  nbv.asset_description, " +
+            "  nbv.nbv_identifier, " +
+            "  nbv.compilation_job_identifier, " +
+            "  nbv.compilation_batch_identifier, " +
+            "  nbv.elapsed_months, " +
+            "  nbv.prior_months, " +
+            "  nbv.useful_life_years, " +
+            "  nbv.net_book_value_amount, " +
+            "  nbv.previous_net_book_value_amount, " +
+            "  nbv.historical_cost, " +
+            "  svt.outlet_code AS service_outlet_code, " +
+            "  pd.period_code AS depreciation_period_code, " +
+            "  mon.fiscal_month_code AS fiscal_month_code, " +
+            "  depreciation_method_name, " +
+            "  cat.asset_category_name " +
+            " FROM net_book_value_entry nbv " +
+            "  LEFT JOIN service_outlet svt on nbv.service_outlet_id = svt.id " +
+            "  LEFT JOIN depreciation_period pd on  nbv.depreciation_period_id = pd.id" +
+            "  LEFT JOIN fiscal_month mon on pd.fiscal_month_id = mon.id " +
+            "  LEFT JOIN asset_category cat on nbv.asset_category_id = cat.id " +
+            "  LEFT JOIN depreciation_method dep on cat.depreciation_method_id = dep.id " +
+            "WHERE pd.id = :depreciationPeriodId",
+        countQuery = "select count( * ) " +
+            " from net_book_value_entry nbv " +
+            "    LEFT JOIN depreciation_period pd on  nbv.depreciation_period_id = pd.id " +
+            "  WHERE pd.id = :depreciationPeriodId"
     )
     Page<NetBookValueEntryInternal> getNBVEntryByDepreciationPeriod(@Param("depreciationPeriodId") Long depreciationPeriodId, Pageable pageable);
 }
