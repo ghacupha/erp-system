@@ -25,12 +25,7 @@ import io.github.erp.erp.assets.nbv.buffer.BufferedSinkProcessor;
 import io.github.erp.erp.assets.nbv.model.NBVArtefact;
 import io.github.erp.erp.assets.nbv.model.NBVBatchMessage;
 import io.github.erp.service.dto.NetBookValueEntryDTO;
-import io.github.erp.service.mapper.AssetCategoryMapper;
-import io.github.erp.service.mapper.AssetRegistrationMapper;
-import io.github.erp.service.mapper.DepreciationMethodMapper;
-import io.github.erp.service.mapper.FiscalMonthMapper;
-import io.github.erp.service.mapper.NetBookValueEntryMapper;
-import io.github.erp.service.mapper.PlaceholderMapper;
+import io.github.erp.service.mapper.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,9 +44,11 @@ public class NetBookValueUpdateServiceImpl implements NetBookValueUpdateService 
     private final AssetRegistrationMapper assetRegistrationMapper;
     private final AssetCategoryMapper assetCategoryMapper;
     private final PlaceholderMapper placeholderMapper;
+    private final DepreciationPeriodMapper depreciationPeriodMapper;
 
     private final BufferedSinkProcessor<NetBookValueEntry> netBookValueEntryBufferedSinkProcessor;
     private final NetBookValueEntryMapper netBookValueEntryMapper;
+    private final ServiceOutletMapper serviceOutletMapper;
 
     public NetBookValueUpdateServiceImpl(
         FiscalMonthMapper fiscalMonthMapper,
@@ -59,15 +56,17 @@ public class NetBookValueUpdateServiceImpl implements NetBookValueUpdateService 
         AssetRegistrationMapper assetRegistrationMapper,
         AssetCategoryMapper assetCategoryMapper,
         PlaceholderMapper placeholderMapper,
-        BufferedSinkProcessor<NetBookValueEntry> netBookValueEntryBufferedSinkProcessor,
-        NetBookValueEntryMapper netBookValueEntryMapper) {
+        DepreciationPeriodMapper depreciationPeriodMapper, BufferedSinkProcessor<NetBookValueEntry> netBookValueEntryBufferedSinkProcessor,
+        NetBookValueEntryMapper netBookValueEntryMapper, ServiceOutletMapper serviceOutletMapper) {
         this.fiscalMonthMapper = fiscalMonthMapper;
         this.depreciationMethodMapper = depreciationMethodMapper;
         this.assetRegistrationMapper = assetRegistrationMapper;
         this.assetCategoryMapper = assetCategoryMapper;
         this.placeholderMapper = placeholderMapper;
+        this.depreciationPeriodMapper = depreciationPeriodMapper;
         this.netBookValueEntryBufferedSinkProcessor = netBookValueEntryBufferedSinkProcessor;
         this.netBookValueEntryMapper = netBookValueEntryMapper;
+        this.serviceOutletMapper = serviceOutletMapper;
     }
 
     public NetBookValueEntryDTO netBookValueUpdate(AssetRegistration assetRegistration, NBVBatchMessage nbvBatchMessage, NbvCompilationJob nbvCompilationJob, NBVArtefact nbvArtefact) {
@@ -87,6 +86,9 @@ public class NetBookValueUpdateServiceImpl implements NetBookValueUpdateService 
         dto.setPreviousNetBookValueAmount(nbvArtefact.getPreviousNetBookValueAmount());
         dto.setCapitalizationDate(nbvArtefact.getCapitalizationDate());
         dto.setFiscalMonth(fiscalMonthMapper.toDto(nbvCompilationJob.getActivePeriod().getFiscalMonth()));
+        dto.setHistoricalCost(assetRegistration.getHistoricalCost());
+        dto.setServiceOutlet(serviceOutletMapper.toDto(assetRegistration.getMainServiceOutlet()));
+        dto.setDepreciationPeriod(depreciationPeriodMapper.toDto(nbvCompilationJob.getActivePeriod()));
         dto.setDepreciationMethod(depreciationMethodMapper.toDto(assetRegistration.getAssetCategory().getDepreciationMethod()));
         dto.setAssetRegistration(assetRegistrationMapper.toDto(assetRegistration));
         dto.setAssetCategory(assetCategoryMapper.toDto(assetRegistration.getAssetCategory()));

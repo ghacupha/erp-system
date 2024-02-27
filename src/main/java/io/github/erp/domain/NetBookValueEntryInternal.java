@@ -19,6 +19,7 @@ package io.github.erp.domain;
  */
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 public interface NetBookValueEntryInternal {
@@ -49,13 +50,15 @@ public interface NetBookValueEntryInternal {
 
     BigDecimal getHistoricalCost();
 
-    String getServiceOutletCode();
+    LocalDate getCapitalizationDate();
 
-    String getDepreciationPeriodCode();
+    String getServiceOutlet();
 
-    FiscalMonth getFiscalMonthCode();
+    String getDepreciationPeriod();
 
-    String getDepreciationMethodName();
+    String getFiscalMonth();
 
-    String getAssetCategoryName();
+    String getDepreciationMethod();
+
+    String getAssetCategory();
 }

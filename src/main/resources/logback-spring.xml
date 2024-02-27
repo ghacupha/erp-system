@@ -50,9 +50,9 @@
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
     <logger name="org.bson" level="WARN"/>
     <logger name="org.elasticsearch" level="OFF"/>
-    <logger name="com.netflix" level="ERROR"/>
+    <logger name="com.netflix" level="INFO"/>
     <!-- <logger name="org.hibernate.validator" level="WARN"/> -->
-    <logger name="org.hibernate" level="WARN"/>
+    <logger name="org.hibernate" level="INFO"/>
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
     <logger name="org.postgresql" level="OFF"/>
     <logger name="org.springframework" level="INFO"/>

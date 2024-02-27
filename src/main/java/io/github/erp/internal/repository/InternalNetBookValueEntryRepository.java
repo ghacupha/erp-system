@@ -50,38 +50,129 @@ public interface InternalNetBookValueEntryRepository extends JpaRepository<NetBo
     )
     Optional<NetBookValueEntry> findOneWithEagerRelationships(@Param("id") Long id);
 
-    @Query(nativeQuery = true,
-        value = "" +
-            "SELECT " +
-            "  nbv.id AS id, " +
-            "  nbv.asset_number, " +
-            "  nbv.asset_tag, " +
-            "  nbv.asset_description, " +
-            "  nbv.nbv_identifier, " +
-            "  nbv.compilation_job_identifier, " +
-            "  nbv.compilation_batch_identifier, " +
-            "  nbv.elapsed_months, " +
-            "  nbv.prior_months, " +
-            "  nbv.useful_life_years, " +
-            "  nbv.net_book_value_amount, " +
-            "  nbv.previous_net_book_value_amount, " +
-            "  nbv.historical_cost, " +
-            "  svt.outlet_code AS service_outlet_code, " +
-            "  pd.period_code AS depreciation_period_code, " +
-            "  mon.fiscal_month_code AS fiscal_month_code, " +
-            "  depreciation_method_name, " +
-            "  cat.asset_category_name " +
-            " FROM net_book_value_entry nbv " +
-            "  LEFT JOIN service_outlet svt on nbv.service_outlet_id = svt.id " +
-            "  LEFT JOIN depreciation_period pd on  nbv.depreciation_period_id = pd.id" +
-            "  LEFT JOIN fiscal_month mon on pd.fiscal_month_id = mon.id " +
-            "  LEFT JOIN asset_category cat on nbv.asset_category_id = cat.id " +
-            "  LEFT JOIN depreciation_method dep on cat.depreciation_method_id = dep.id " +
-            "WHERE pd.id = :depreciationPeriodId",
-        countQuery = "select count( * ) " +
-            " from net_book_value_entry nbv " +
-            "    LEFT JOIN depreciation_period pd on  nbv.depreciation_period_id = pd.id " +
-            "  WHERE pd.id = :depreciationPeriodId"
-    )
+//    @Query(value = "" +
+//            "SELECT " +
+//            "  nbv.id AS id, " +
+//            "  nbv.asset_number AS assetNumber, " +
+//            "  nbv.asset_tag AS assetTag, " +
+//            "  nbv.asset_description AS assetDescription, " +
+//            "  nbv.nbv_identifier AS nbvIdentifier, " +
+//            "  nbv.compilation_job_identifier AS compilationJobIdentifier, " +
+//            "  nbv.compilation_batch_identifier AS compilationBatchIdentifier, " +
+//            "  nbv.elapsed_months AS elapsedMonths, " +
+//            "  nbv.prior_months AS priorMonths, " +
+//            "  nbv.useful_life_years AS usefulLifeYears, " +
+//            "  nbv.net_book_value_amount AS netBookValueAmount, " +
+//            "  nbv.previous_net_book_value_amount AS previousNetBookValueAmount, " +
+//            "  nbv.historical_cost AS historicalCost, " +
+//            "  ar.capitalization_date AS capitalizationDate," +
+//            "  svt.outlet_code AS serviceOutlet, " +
+//            "  pd.period_code AS depreciationPeriod, " +
+//            "  mon.fiscal_month_code AS fiscalMonth, " +
+//            "  depreciation_method_name AS depreciationMethod, " +
+//            "  cat.asset_category_name AS assetCategory " +
+//            "FROM net_book_value_entry nbv " +
+//            "  LEFT JOIN asset_registration ar on nbv.asset_registration_id = ar.id " +
+//            "  LEFT JOIN service_outlet svt on nbv.service_outlet_id = svt.id " +
+//            "  LEFT JOIN depreciation_period pd on  nbv.depreciation_period_id = pd.id" +
+//            "  LEFT JOIN fiscal_month mon on pd.fiscal_month_id = mon.id " +
+//            "  LEFT JOIN asset_category cat on nbv.asset_category_id = cat.id " +
+//            "  LEFT JOIN depreciation_method dep on cat.depreciation_method_id = dep.id " +
+//            "WHERE " +
+//            "pd.id = :depreciationPeriodId", nativeQuery = true)
+//    Page<NetBookValueEntryInternal> getNBVEntryByDepreciationPeriod(@Param("depreciationPeriodId") Long depreciationPeriodId, Pageable pageable);
+
+//    @Query(value = "" +
+//        " SELECT " +
+//        " nbv.id AS id," +
+//        "    nbv.asset_number AS assetNumber, " +
+//        "    nbv.asset_tag AS assetTag," +
+//        "    nbv.asset_description AS assetDescription, " +
+//        "    nbv.nbv_identifier::varchar AS nbvIdentifier," +
+//        "    nbv.compilation_job_identifier::varchar AS compilationJobIdentifier, " +
+//        "    nbv.compilation_batch_identifier::varchar AS compilationBatchIdentifier," +
+//        "    nbv.elapsed_months AS elapsedMonths, " +
+//        "    nbv.prior_months AS priorMonths, " +
+//        "    nbv.useful_life_years AS usefulLifeYears," +
+//        "    nbv.net_book_value_amount AS netBookValueAmount, " +
+//        "    nbv.previous_net_book_value_amount AS previousNetBookValueAmount," +
+//        "    nbv.historical_cost AS historicalCost," +
+//        "    ar.capitalization_date AS capitalizationDate," +
+//        "    svt.outlet_code AS serviceOutlet, " +
+//        "    pd.period_code AS depreciationPeriod, " +
+//        "    mon.fiscal_month_code AS fiscalMonth," +
+//        "    depreciation_method_name AS depreciationMethod, " +
+//        "    cat.asset_category_name AS assetCategory " +
+//        " FROM net_book_value_entry nbv " +
+//        "    LEFT JOIN asset_registration ar on nbv.asset_registration_id = ar.id " +
+//        "    LEFT JOIN service_outlet svt on nbv.service_outlet_id = svt.id " +
+//        "    LEFT JOIN depreciation_period pd on  nbv.depreciation_period_id = pd.id " +
+//        "    LEFT JOIN fiscal_month mon on pd.fiscal_month_id = mon.id " +
+//        "    LEFT JOIN asset_category cat on nbv.asset_category_id = cat.id " +
+//        "    LEFT JOIN depreciation_method dep on cat.depreciation_method_id = dep.id " +
+//        "  WHERE  pd.id = '95851'", nativeQuery = true)
+//    Page<NetBookValueEntryInternal> getNBVEntryByDepreciationPeriod(@Param("depreciationPeriodId") Long depreciationPeriodId, Pageable pageable);
+
+//    @Query(value = "" +
+//        "SELECT " +
+//        "    nbv.id AS id," +
+//        "    nbv.asset_number AS assetNumber, " +
+//        "    nbv.asset_tag AS assetTag," +
+//        "    nbv.asset_description AS assetDescription, " +
+//        "    nbv.nbv_identifier::varchar AS nbvIdentifier," +  // Casting UUID to varchar
+//        "    nbv.compilation_job_identifier::varchar AS compilationJobIdentifier, " +  // Casting UUID to varchar
+//        "    nbv.compilation_batch_identifier::varchar AS compilationBatchIdentifier," +  // Casting UUID to varchar
+//        "    nbv.elapsed_months AS elapsedMonths, " +
+//        "    nbv.prior_months AS priorMonths, " +
+//        "    nbv.useful_life_years AS usefulLifeYears," +
+//        "    nbv.net_book_value_amount AS netBookValueAmount, " +
+//        "    nbv.previous_net_book_value_amount AS previousNetBookValueAmount," +
+//        "    nbv.historical_cost AS historicalCost," +
+//        "    ar.capitalization_date AS capitalizationDate," +
+//        "    svt.outlet_code AS serviceOutlet, " +
+//        "    pd.period_code AS depreciationPeriod, " +
+//        "    mon.fiscal_month_code AS fiscalMonth," +
+//        "    depreciation_method_name AS depreciationMethod, " +
+//        "    cat.asset_category_name AS assetCategory " +
+//        "FROM net_book_value_entry nbv " +
+//        "    LEFT JOIN asset_registration ar ON nbv.asset_registration_id = ar.id " +
+//        "    LEFT JOIN service_outlet svt ON nbv.service_outlet_id = svt.id " +
+//        "    LEFT JOIN depreciation_period pd ON nbv.depreciation_period_id = pd.id " +
+//        "    LEFT JOIN fiscal_month mon ON pd.fiscal_month_id = mon.id " +
+//        "    LEFT JOIN asset_category cat ON nbv.asset_category_id = cat.id " +
+//        "    LEFT JOIN depreciation_method dep ON cat.depreciation_method_id = dep.id " +
+//        "WHERE pd.id = :depreciationPeriodId", nativeQuery = true)
+//    Page<NetBookValueEntryInternal> getNBVEntryByDepreciationPeriod(@Param("depreciationPeriodId") Long depreciationPeriodId, Pageable pageable);
+
+    @Query(value = "" +
+        "SELECT " +
+        "    nbv.id AS id," +
+        "    nbv.asset_number AS assetNumber, " +
+        "    nbv.asset_tag AS assetTag," +
+        "    nbv.asset_description AS assetDescription, " +
+        "    CAST(nbv.nbv_identifier AS varchar) AS nbvIdentifier," +
+        "    CAST(nbv.compilation_job_identifier AS varchar) AS compilationJobIdentifier, " +
+        "    CAST(nbv.compilation_batch_identifier AS varchar) AS compilationBatchIdentifier," +
+        "    nbv.elapsed_months AS elapsedMonths, " +
+        "    nbv.prior_months AS priorMonths, " +
+        "    nbv.useful_life_years AS usefulLifeYears," +
+        "    nbv.net_book_value_amount AS netBookValueAmount, " +
+        "    nbv.previous_net_book_value_amount AS previousNetBookValueAmount," +
+        "    nbv.historical_cost AS historicalCost," +
+        "    ar.capitalization_date AS capitalizationDate," +
+        "    svt.outlet_code AS serviceOutlet, " +
+        "    pd.period_code AS depreciationPeriod, " +
+        "    mon.fiscal_month_code AS fiscalMonth," +
+        "    depreciation_method_name AS depreciationMethod, " +
+        "    cat.asset_category_name AS assetCategory " +
+        "FROM net_book_value_entry nbv " +
+        "    LEFT JOIN asset_registration ar ON nbv.asset_registration_id = ar.id " +
+        "    LEFT JOIN service_outlet svt ON nbv.service_outlet_id = svt.id " +
+        "    LEFT JOIN depreciation_period pd ON nbv.depreciation_period_id = pd.id " +
+        "    LEFT JOIN fiscal_month mon ON pd.fiscal_month_id = mon.id " +
+        "    LEFT JOIN asset_category cat ON nbv.asset_category_id = cat.id " +
+        "    LEFT JOIN depreciation_method dep ON cat.depreciation_method_id = dep.id " +
+        "WHERE pd.id = :depreciationPeriodId", nativeQuery = true)
     Page<NetBookValueEntryInternal> getNBVEntryByDepreciationPeriod(@Param("depreciationPeriodId") Long depreciationPeriodId, Pageable pageable);
+
 }

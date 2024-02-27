@@ -24,6 +24,7 @@ import io.github.erp.internal.framework.Mapping;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Component
@@ -98,28 +99,33 @@ public class NetBookValueEntryVMMapper implements Mapping<NetBookValueEntryInter
             }
 
             @Override
-            public String getServiceOutletCode() {
-                return vs.getServiceOutletCode();
+            public LocalDate getCapitalizationDate() {
+                return vs.getCapitalizationDate();
             }
 
             @Override
-            public String getDepreciationPeriodCode() {
-                return vs.getDepreciationPeriodCode();
+            public String getServiceOutlet() {
+                return vs.getServiceOutlet();
             }
 
             @Override
-            public FiscalMonth getFiscalMonthCode() {
-                return vs.getFiscalMonthCode();
+            public String getDepreciationPeriod() {
+                return vs.getDepreciationPeriod();
             }
 
             @Override
-            public String getDepreciationMethodName() {
-                return vs.getDepreciationMethodName();
+            public String getFiscalMonth() {
+                return vs.getFiscalMonth();
             }
 
             @Override
-            public String getAssetCategoryName() {
-                return vs.getAssetCategoryName();
+            public String getDepreciationMethod() {
+                return vs.getDepreciationMethod();
+            }
+
+            @Override
+            public String getAssetCategory() {
+                return vs.getAssetCategory();
             }
         };
     }
@@ -139,11 +145,12 @@ public class NetBookValueEntryVMMapper implements Mapping<NetBookValueEntryInter
             .usefulLifeYears(vs.getUsefulLifeYears())
             .previousNetBookValueAmount(vs.getPreviousNetBookValueAmount())
             .historicalCost(vs.getHistoricalCost())
-            .serviceOutletCode(vs.getServiceOutletCode())
-            .depreciationPeriodCode(vs.getDepreciationPeriodCode())
-            .fiscalMonthCode(vs.getFiscalMonthCode())
-            .depreciationMethodName(vs.getDepreciationMethodName())
-            .assetCategoryName(vs.getAssetCategoryName())
+            .capitalizationDate(vs.getCapitalizationDate())
+            .serviceOutlet(vs.getServiceOutlet())
+            .depreciationPeriod(vs.getDepreciationPeriod())
+            .fiscalMonth(vs.getFiscalMonth())
+            .depreciationMethod(vs.getDepreciationMethod())
+            .assetCategory(vs.getAssetCategory())
             .build();
     }
 }
