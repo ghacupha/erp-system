@@ -24,10 +24,12 @@ import io.github.erp.internal.framework.Mapping;
 import io.github.erp.internal.report.AbstractReportListCSVExportService;
 import io.github.erp.internal.report.ReportsProperties;
 import io.github.erp.internal.repository.InternalNetBookValueEntryRepository;
+import io.github.erp.internal.service.applicationUser.CurrentUserContext;
 import io.github.erp.repository.DepreciationPeriodRepository;
 import io.github.erp.repository.NbvReportRepository;
 import io.github.erp.service.NbvReportService;
 import io.github.erp.service.dto.NbvReportDTO;
+import io.github.erp.service.mapper.ApplicationUserMapper;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
@@ -48,6 +50,7 @@ public class NetBookValueEntryCSVExportReportService
     extends AbstractReportListCSVExportService<NetBookValueEntryVM>
     implements NetBookValueEntryExportReportService<NbvReportDTO> {
 
+    private final ApplicationUserMapper applicationUserMapper;
     private final NbvReportService nbvReportService;
     private final DepreciationPeriodRepository depreciationPeriodRepository;
     private final InternalNetBookValueEntryRepository internalNetBookValueEntryRepository;
@@ -60,11 +63,12 @@ public class NetBookValueEntryCSVExportReportService
         @Qualifier("reportsFSStorageService") FileStorageService fileStorageService,
         NbvReportService nbvReportService,
         NbvReportRepository nbvReportRepository,
-        DepreciationPeriodRepository depreciationPeriodRepository,
+        ApplicationUserMapper applicationUserMapper, DepreciationPeriodRepository depreciationPeriodRepository,
         InternalNetBookValueEntryRepository internalNetBookValueEntryRepository,
         Mapping<NetBookValueEntryInternal, NetBookValueEntryVM> netBookValueEntryVMMapping) {
         super(reportsProperties, fileStorageService);
         this.nbvReportService = nbvReportService;
+        this.applicationUserMapper = applicationUserMapper;
         this.depreciationPeriodRepository = depreciationPeriodRepository;
         this.internalNetBookValueEntryRepository = internalNetBookValueEntryRepository;
         this.netBookValueEntryVMMapping = netBookValueEntryVMMapping;
@@ -87,6 +91,7 @@ public class NetBookValueEntryCSVExportReportService
                 nbvReportDTO.setFileChecksum(fileChecksum);
                 nbvReportDTO.setFilename(fileName);
                 nbvReportDTO.setReportParameters(super.getReportParameters());
+                nbvReportDTO.setRequestedBy(applicationUserMapper.toDto(CurrentUserContext.getCurrentUser()));
 
                 nbvReportService.save(nbvReportDTO);
             } catch (IOException e) {
@@ -100,23 +105,33 @@ public class NetBookValueEntryCSVExportReportService
 
         return depreciationPeriodRepository.findById(nbvReportDTO.getDepreciationPeriod().getId())
             .map(period ->
-                internalNetBookValueEntryRepository.getNBVEntryByDepreciationPeriod(period.getId(), Pageable.ofSize(Integer.MAX_VALUE))
+                internalNetBookValueEntryRepository
+                    .getNBVEntryByDepreciationPeriod(period.getId(), Pageable.ofSize(Integer.MAX_VALUE))
                     .getContent())
             .map(netBookValueEntryVMMapping::toValue2);
     }
 
     @Override
     protected String getOutletCode() {
-        return reportDTO.getServiceOutlet().getOutletCode();
+        if (reportDTO != null && reportDTO.getAssetCategory() != null && reportDTO.getAssetCategory().getAssetCategoryName() != null) {
+            return reportDTO.getServiceOutlet().getOutletCode();
+        } else {
+            return "All Outlets";
+        }
     }
 
     @Override
     protected String getAssetCategoryName() {
-        return reportDTO.getAssetCategory().getAssetCategoryName();
+        if (reportDTO != null && reportDTO.getAssetCategory() != null && reportDTO.getAssetCategory().getAssetCategoryName() != null) {
+            return reportDTO.getAssetCategory().getAssetCategoryName();
+        } else {
+            return "All Categories";
+        }
     }
+
 
     @Override
     protected String getPeriodCode() {
-        return reportDTO.getDepreciationPeriod().getPeriodCode();
+        return reportDTO.getDepreciationPeriod().getPeriodCode() == null ? "" : reportDTO.getDepreciationPeriod().getPeriodCode();
     }
 }

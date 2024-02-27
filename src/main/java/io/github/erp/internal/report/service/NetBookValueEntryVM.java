@@ -26,6 +26,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
@@ -60,13 +61,15 @@ public class NetBookValueEntryVM implements Serializable {
 
     BigDecimal historicalCost;
 
-    String serviceOutletCode;
+    LocalDate capitalizationDate;
 
-    String depreciationPeriodCode;
+    String serviceOutlet;
 
-    FiscalMonth fiscalMonthCode;
+    String depreciationPeriod;
 
-    String depreciationMethodName;
+    String fiscalMonth;
 
-    String assetCategoryName;
+    String depreciationMethod;
+
+    String assetCategory;
 }

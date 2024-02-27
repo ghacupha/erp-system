@@ -57,26 +57,23 @@ public abstract class AbstractReportListCSVExportService<T> {
     }
 
     protected String getReportParameters() {
+        StringBuilder parameters = new StringBuilder();
 
-        String parameters = "";
-
-        if(getPeriodCode() != null ) {
-
-            parameters = "Period: ".concat(getPeriodCode().concat("; "));
-
-            if (getAssetCategoryName() != null) {
-
-                parameters = parameters.concat("Category: ".concat(getAssetCategoryName()).concat("; "));
-            }
-
-            if (getOutletCode() != null) {
-
-                parameters = parameters.concat("Outlet Code: ".concat(getOutletCode().concat("; ")));
-            }
+        if (getPeriodCode() != null) {
+            parameters.append("Period: ").append(getPeriodCode()).append(";   ");
         }
 
-        return parameters;
+        if (getAssetCategoryName() != null && !getAssetCategoryName().isEmpty()) {
+            parameters.append("Category: ").append(getAssetCategoryName()).append(";   ");
+        }
+
+        if (getOutletCode() != null && !getOutletCode().isEmpty()) {
+            parameters.append("Outlet Code: ").append(getOutletCode()).append("; ");
+        }
+
+        return parameters.toString();
     }
+
 
     protected abstract String getOutletCode();
 
