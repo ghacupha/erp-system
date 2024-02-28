@@ -86,30 +86,17 @@ public interface NBVDecliningBalanceCalculationRepository extends JpaRepository<
             "WITH AssetDetails AS ( " +
             "    SELECT " +
             "        ar.asset_cost as asset_cost, " +
-            "        cat.depreciation_rate_yearly as depreciation_rate " +
-            "    FROM  " +
-            "        asset_registration ar " +
-            "    LEFT JOIN asset_category cat ON ar.asset_category_id = cat.id " +
-            "    WHERE " +
+            "        cat.depreciation_rate_yearly / (10000 * 12) as monthly_depreciation_rate_decimal " +
+            "    FROM " +
+            "        public.asset_registration ar " +
+            "    LEFT JOIN public.asset_category cat ON ar.asset_category_id = cat.id " +
+            "    WHERE\n" +
             "        ar.id = :asset_id " +
-            "), " +
-            "DepreciationPerPeriod AS ( " +
-            "    SELECT " +
-            "        generate_series(1, :period_n) AS period, " + // Adjust the range from 1 to 'N' for the specific period
-            "        asset_cost * (1 - POWER((1 - depreciation_rate/10000), generate_series(1, :period_n))) AS depreciation_per_period " +
-            "    FROM " +
-            "        AssetDetails " +
-            "), " +
-            "AccruedDepreciation AS ( " +
-            "    SELECT " +
-            "        sum(depreciation_per_period) AS accrued_depreciation_at_period_N " +
-            "    FROM " +
-            "        DepreciationPerPeriod " +
             ") " +
             "SELECT " +
-            "    asset_cost - accrued_depreciation_at_period_N AS net_book_value_at_period_N " +
+            "    asset_cost * POWER((1 - monthly_depreciation_rate_decimal), :period_n) AS net_book_value_at_period_N " +
             "FROM " +
-            "    AssetDetails, AccruedDepreciation;"
+            "    AssetDetails "
     )
     BigDecimal netBookValueAtPeriodN(
         @Param("period_n") long periodN /* e.g. n = 5 */,
