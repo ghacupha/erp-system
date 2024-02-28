@@ -52,9 +52,9 @@
     <logger name="org.elasticsearch" level="OFF"/>
     <logger name="com.netflix" level="INFO"/>
     <!-- <logger name="org.hibernate.validator" level="WARN"/> -->
-    <logger name="org.hibernate" level="INFO"/>
-    <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
-    <logger name="org.postgresql" level="INFO"/>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="org.hibernate.ejb.HibernatePersistence" level="WARN"/>
+    <logger name="org.postgresql" level="WARN"/>
     <logger name="org.springframework" level="INFO"/>
     <logger name="org.springframework.web" level="INFO"/>
     <logger name="org.springframework.security" level="INFO"/>

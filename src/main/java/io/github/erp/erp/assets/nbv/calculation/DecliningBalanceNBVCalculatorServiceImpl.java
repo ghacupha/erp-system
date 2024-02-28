@@ -52,8 +52,8 @@ public class DecliningBalanceNBVCalculatorServiceImpl implements DecliningBalanc
         BigDecimal previousNBV = nbvDecliningBalanceCalculationRepository.netBookValueAtPeriodN(priorPeriods, assetRegistration.getId());
 
         return NBVArtefact.builder()
-            .netBookValueAmount(nbv)
-            .previousNetBookValueAmount(previousNBV)
+            .netBookValueAmount(nbv.max(BigDecimal.ZERO))
+            .previousNetBookValueAmount(previousNBV.max(BigDecimal.ZERO))
             .elapsedMonths(elapsedMonths)
             .priorMonths(priorPeriods)
             .usefulLifeYears(calculateUsefulLifeMonths(convertBasisPointsToDecimalDepreciationRate(assetRegistration.getAssetCategory().getDepreciationRateYearly())))
