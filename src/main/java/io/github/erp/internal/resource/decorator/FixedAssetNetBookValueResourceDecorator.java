@@ -1,7 +1,7 @@
 package io.github.erp.internal.resource.decorator;
 
 /*-
- * Erp System - Mark X No 3 (Jehoiada Series) Server ver 1.7.3
+ * Erp System - Mark X No 4 (Jehoiada Series) Server ver 1.7.4
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify

@@ -1,7 +1,7 @@
 package io.github.erp.erp.assets.depreciation;
 
 /*-
- * Erp System - Mark X No 3 (Jehoiada Series) Server ver 1.7.3
+ * Erp System - Mark X No 4 (Jehoiada Series) Server ver 1.7.4
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.erp.assets.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 /**
  * The DepreciationJobSequenceService class manages the depreciation process for a given DepreciationJob. It is responsible for
  * triggering the depreciation sequence, processing assets in batches, and updating the depreciation job status accordingly.
