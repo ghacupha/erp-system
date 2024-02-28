@@ -85,7 +85,7 @@ public class NetBookValueEntryVMMapper implements Mapping<NetBookValueEntryInter
 
             @Override
             public BigDecimal getNetBookValueAmount() {
-                return vs.getNNetBookValueAmount();
+                return vs.getNetBookValueAmount();
             }
 
             @Override
@@ -143,6 +143,7 @@ public class NetBookValueEntryVMMapper implements Mapping<NetBookValueEntryInter
             .elapsedMonths(vs.getElapsedMonths())
             .priorMonths(vs.getPriorMonths())
             .usefulLifeYears(vs.getUsefulLifeYears())
+            .netBookValueAmount(vs.getNetBookValueAmount())
             .previousNetBookValueAmount(vs.getPreviousNetBookValueAmount())
             .historicalCost(vs.getHistoricalCost())
             .capitalizationDate(vs.getCapitalizationDate())

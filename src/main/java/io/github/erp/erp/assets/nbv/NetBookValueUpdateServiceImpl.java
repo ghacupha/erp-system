@@ -29,6 +29,8 @@ import io.github.erp.service.mapper.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.UUID;
 
@@ -82,8 +84,19 @@ public class NetBookValueUpdateServiceImpl implements NetBookValueUpdateService 
         dto.setElapsedMonths(Math.toIntExact(nbvArtefact.getElapsedMonths()));
         dto.setPriorMonths(Math.toIntExact(nbvArtefact.getPriorMonths()));
         dto.setUsefulLifeYears(nbvArtefact.getUsefulLifeYears().doubleValue());
-        dto.setNetBookValueAmount(nbvArtefact.getNetBookValueAmount());
-        dto.setPreviousNetBookValueAmount(nbvArtefact.getPreviousNetBookValueAmount());
+        dto.setNetBookValueAmount(nbvArtefact.getNetBookValueAmount().setScale(2, RoundingMode.HALF_EVEN));
+        // dto.setPreviousNetBookValueAmount(nbvArtefact.getPreviousNetBookValueAmount().setScale(2, RoundingMode.HALF_EVEN));
+
+        if (nbvArtefact.getPreviousNetBookValueAmount() != null) {
+            dto.setPreviousNetBookValueAmount(nbvArtefact.getPreviousNetBookValueAmount().setScale(2, RoundingMode.HALF_EVEN));
+        } else {
+            // Handling the case where previousNetBookValueAmount is null
+            // This is when an asset has been purchased in the same depreciation-period
+            // Alt check capitalization-date > depreciation-period.startDate
+            dto.setPreviousNetBookValueAmount(assetRegistration.getAssetCost()); // We default to asset-cost
+        }
+
+
         dto.setCapitalizationDate(nbvArtefact.getCapitalizationDate());
         dto.setFiscalMonth(fiscalMonthMapper.toDto(nbvCompilationJob.getActivePeriod().getFiscalMonth()));
         dto.setHistoricalCost(assetRegistration.getHistoricalCost());

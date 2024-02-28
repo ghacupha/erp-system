@@ -55,7 +55,7 @@ public class NetBookValueEntryVM implements Serializable {
 
     Integer usefulLifeYears;
 
-    BigDecimal nNetBookValueAmount;
+    BigDecimal netBookValueAmount;
 
     BigDecimal previousNetBookValueAmount;
 
