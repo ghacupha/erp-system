@@ -29,8 +29,8 @@ eureka:
 logging:
   level:
     ROOT: DEBUG
-    tech.jhipster: INFO
-    org.hibernate.SQL: INFO
+    tech.jhipster: WARN
+    org.hibernate.SQL: WARN
     io.github.erp: DEBUG
 
 management:
