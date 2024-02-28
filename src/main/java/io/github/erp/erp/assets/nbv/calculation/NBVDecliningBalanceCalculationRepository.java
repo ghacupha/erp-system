@@ -90,7 +90,7 @@ public interface NBVDecliningBalanceCalculationRepository extends JpaRepository<
             "    FROM " +
             "        public.asset_registration ar " +
             "    LEFT JOIN public.asset_category cat ON ar.asset_category_id = cat.id " +
-            "    WHERE\n" +
+            "    WHERE " +
             "        ar.id = :asset_id " +
             ") " +
             "SELECT " +
