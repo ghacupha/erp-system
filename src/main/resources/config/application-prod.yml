@@ -26,6 +26,7 @@ logging:
     ROOT: INFO
     tech.jhipster: INFO
     io.github.erp: INFO
+    org.apache.kafka: DEBUG
 
 management:
   metrics:
@@ -70,22 +71,54 @@ spring:
     admin:
       properties:
         replication.factor: ${KAFKA_REPLICATION_FACTOR}
-    consumer:
-      group.id: erp-system
-      key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value.deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      auto.offset.reset: earliest
-      properties:
-        spring.json.trusted.packages: "*"
-        replication.factor: ${KAFKA_REPLICATION_FACTOR}
-    producer:
-      key.serializer: org.apache.kafka.common.serialization.StringSerializer
-      value.serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      properties:
-        replication.factor: ${KAFKA_REPLICATION_FACTOR};
-    depreciation-batch:
-      topic:
-        name: "depreciation_batch_topic"
+    topics:
+      depreciation-batch:
+        topic:
+          name: "depreciation_batch_topic"
+        consumer:
+          group.id: erp-system-depreciation
+          auto.offset.reset: earliest
+          properties:
+            spring.json.trusted.packages: "*"
+            replication.factor: ${KAFKA_REPLICATION_FACTOR}
+        producer:
+          key.serializer: org.apache.kafka.common.serialization.StringSerializer
+          properties:
+            replication.factor: ${KAFKA_REPLICATION_FACTOR};
+      nbv:
+        topic:
+          name: "nbv_batch_topic"
+        consumer:
+          group.id: erp-system-nbv
+          auto.offset.reset: earliest
+          properties:
+            spring.json.trusted.packages: "*"
+            replication.factor: ${KAFKA_REPLICATION_FACTOR}
+        producer:
+          key.serializer: org.apache.kafka.common.serialization.StringSerializer
+          properties:
+            replication.factor: ${KAFKA_REPLICATION_FACTOR};
+#  kafka:
+#    bootstrap-servers: ${KAFKA_BOOTSTRAPSERVERS}
+#    admin:
+#      properties:
+#        replication.factor: ${KAFKA_REPLICATION_FACTOR}
+#    consumer:
+#      group.id: erp-system
+#      key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value.deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+#      auto.offset.reset: earliest
+#      properties:
+#        spring.json.trusted.packages: "*"
+#        replication.factor: ${KAFKA_REPLICATION_FACTOR}
+#    producer:
+#      key.serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value.serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#      properties:
+#        replication.factor: ${KAFKA_REPLICATION_FACTOR};
+#    depreciation-batch:
+#      topic:
+#        name: "depreciation_batch_topic"
   elasticsearch:
     rest:
       # uris: http://localhost:9200

@@ -53,7 +53,8 @@ public class NBVCompilationBatchExecutionListener {
     @KafkaListener(topics = "nbv_batch_topic", groupId = "erp-system-nbv", concurrency = "8")
     public void processJobMessages(DepreciationBatchMessage message, Acknowledgment acknowledgment) {
 
-        /* I know you are wondering but I too have no idea why the queue is constantly presenting a
+       /*
+        * I know you are wondering but I too have no idea why the queue is constantly presenting a
         * depreciation-batch-message instance when the producer is actually sending an NBVBatchMessage
         * am just effing clueless. Even running the debugger at TRACE log levels I still haven't figured this
         * issue out; may be I should stop using kafka...
@@ -68,8 +69,8 @@ public class NBVCompilationBatchExecutionListener {
         * the messages are configured? It's a message queue for pete's sake, how did they ever think that
         * they can simplify things by hiding that interface? Just present the whole goddamn API and those
         * developers who cannot manage will know from day 1 to not ever touch kafka even if their lives
-        * depended on it....
-        * */
+        * depended on it. Life can be Darwinian like that and it's just silly to pretend otherwise.
+        */
         log.info("Message received by queue status update for processing....");
         try {
 
