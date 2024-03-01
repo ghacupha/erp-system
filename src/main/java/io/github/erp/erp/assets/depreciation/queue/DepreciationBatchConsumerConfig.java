@@ -37,16 +37,20 @@ import java.util.Map;
 // import static io.github.erp.erp.depreciation.queue.DepreciationBatchProducer.DEPRECIATION_BATCH_TOPIC;
 
 @Configuration
-@ConfigurationProperties(prefix = "spring.kafka.consumer")
+@ConfigurationProperties(prefix = "spring.kafka.topics.depreciation-batch.consumer")
 public class DepreciationBatchConsumerConfig {
 
-    @Value("${spring.kafka.depreciation-batch.topic.name}")
-    private String topicName;
+//    @Value("${spring.kafka.depreciation-batch.topic.name}")
+//    private String topicName;
+
+//    @Value("${spring.kafka.topics.depreciation-batch.topic.name}")
+//    private String topicName;
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    @Value("${spring.kafka.consumer.group.id}")
+    // @Value("${spring.kafka.consumer.group.id}")
+    @Value("${spring.kafka.topics.depreciation-batch.consumer.group.id}")
     private String groupId;
 
     @Bean

@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@ConfigurationProperties(prefix = "spring.kafka.producer")
+@ConfigurationProperties(prefix = "spring.kafka.topics.depreciation-batch.producer")
 public class DepreciationBatchProducerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")

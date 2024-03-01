@@ -40,7 +40,10 @@ import java.util.stream.Collectors;
 @Component
 public class DepreciationBatchProducer {
 
-    @Value("${spring.kafka.depreciation-batch.topic.name}")
+//    @Value("${spring.kafka.depreciation-batch.topic.name}")
+//    private String topicName;
+
+    @Value("${spring.kafka.topics.depreciation-batch.topic.name}")
     private String topicName;
 
     private static final Logger log = LoggerFactory.getLogger(DepreciationBatchProducer.class);
