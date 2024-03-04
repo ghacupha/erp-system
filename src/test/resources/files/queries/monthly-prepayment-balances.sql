@@ -13,7 +13,7 @@ SELECT
     COALESCE(SUM(ps.prepayment_item_count), 0) AS NumberOfPrepaymentAccounts
 FROM
     end_month_series ems
-        LEFT JOIN (
+        LEFT JOIN LATERAL (
         SELECT
             pa.fiscal_month_id,
             SUM(COALESCE(p.prepayment_amount, 0)) as prepayment_amount,
@@ -32,7 +32,12 @@ FROM
                 )
         GROUP BY
             pa.fiscal_month_id
-    ) ps ON ps.fiscal_month_id = (SELECT fm.id FROM fiscal_month fm WHERE fm.end_date <= ems.end_date ORDER BY fm.end_date DESC LIMIT 1)
+        ) ps ON ps.fiscal_month_id = (
+        SELECT fm.id
+        FROM fiscal_month fm
+        WHERE fm.end_date <= ems.end_date
+        ORDER BY fm.end_date DESC LIMIT 1
+    )
 GROUP BY
     ems.end_date
 ORDER BY
