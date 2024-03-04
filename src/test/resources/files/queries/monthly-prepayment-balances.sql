@@ -1,9 +1,11 @@
 WITH RECURSIVE end_month_series AS (
-    SELECT DATE '2023-01-01'::timestamp AS end_date
+    SELECT DATE_TRUNC('month', '2023-01-01'::timestamp) AS start_date,
+           (DATE_TRUNC('month', '2023-01-01'::timestamp) + INTERVAL '1 month' - INTERVAL '1 day') AS end_date
     UNION ALL
-    SELECT end_date + INTERVAL '1 month'
-    FROM end_month_series
-    WHERE end_date < DATE '2023-12-31'
+    SELECT (DATE_TRUNC('month', ems.start_date) + INTERVAL '1 month') AS start_date,
+           ((DATE_TRUNC('month', ems.start_date) + INTERVAL '2 months' - INTERVAL '1 day')::date) AS end_date
+    FROM end_month_series ems
+    WHERE ems.start_date < '2023-12-01'::date
 )
 SELECT
     ems.end_date AS FiscalMonthEndDate,
