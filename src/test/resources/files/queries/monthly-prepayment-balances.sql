@@ -9,7 +9,7 @@ WITH RECURSIVE end_month_series AS (
     FROM
         end_month_series ems
     WHERE
-            ems.start_date < '2023-12-01'::date -- Adjust this condition as needed
+            ems.start_date < '2023-12-01'::date  -- // TODO set first day of the last month here
 )
 
 SELECT
