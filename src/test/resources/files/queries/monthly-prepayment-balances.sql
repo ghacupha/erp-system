@@ -1,54 +1,3 @@
--- WITH RECURSIVE end_month_series AS (
---     SELECT
---         DATE_TRUNC('month', '2023-01-01'::date) AS start_date,
---         (DATE_TRUNC('month', '2023-01-01'::date) + INTERVAL '1 month' - INTERVAL '1 day') AS end_date
---     UNION ALL
---     SELECT
---         (DATE_TRUNC('month', ems.start_date) + INTERVAL '1 month') AS start_date,
---         ((DATE_TRUNC('month', ems.start_date) + INTERVAL '2 months' - INTERVAL '1 day')::date) AS end_date
---     FROM
---         end_month_series ems
---     WHERE
---             ems.start_date < '2023-12-01'::date -- Adjust this condition as needed
--- )
--- SELECT
---     ems.end_date AS FiscalMonthEndDate,
---     ps.prepayment_amount AS TotalPrepaymentAmount,
---     ps.amortised_amount AS TotalAmortisedAmount,
---     ps.outstanding_amount AS TotalOutstandingAmount,
---     ps.prepayment_item_count AS NumberOfPrepaymentAccounts
--- FROM
---     end_month_series ems
---         LEFT JOIN LATERAL (
---         SELECT
---             pa.fiscal_month_id,
---             SUM(COALESCE(p.prepayment_amount, 0)) as prepayment_amount,
---             SUM(COALESCE(pa.prepayment_amount, 0)) as amortised_amount,
---             SUM(COALESCE(p.prepayment_amount, 0) - COALESCE(pa.prepayment_amount, 0)) as outstanding_amount,
---             COUNT(DISTINCT p.id) as prepayment_item_count
---         FROM
---             prepayment_account p
---                 LEFT JOIN prepayment_amortization pa ON p.id = pa.prepayment_account_id
---         WHERE
---             NOT EXISTS (
---                     SELECT 1
---                     FROM settlement s
---                     WHERE s.id = p.prepayment_transaction_id
---                       AND s.payment_date > ems.end_date
---                 ) AND pa.fiscal_month_id IN ( SELECT fm.id FROM fiscal_month fm WHERE fm.end_date <= ems.end_date )
---         GROUP BY
---             pa.fiscal_month_id
---         ) ps ON ps.fiscal_month_id = (
---         SELECT fm.id
---         FROM fiscal_month fm
---         WHERE fm.end_date <= ems.end_date
---         ORDER BY fm.end_date DESC LIMIT 1
---     )
--- GROUP BY
---     ems.end_date, ps.prepayment_amount, ps.amortised_amount, ps.outstanding_amount, ps.prepayment_item_count
--- ORDER BY
---     ems.end_date;
-
 WITH RECURSIVE end_month_series AS (
     SELECT
         DATE_TRUNC('month', '2023-01-01'::date) AS start_date,
@@ -62,39 +11,47 @@ WITH RECURSIVE end_month_series AS (
     WHERE
             ems.start_date < '2023-12-01'::date -- Adjust this condition as needed
 )
+
 SELECT
     ems.end_date AS FiscalMonthEndDate,
-    ps.prepayment_amount AS TotalPrepaymentAmount,
-    ps.amortised_amount AS TotalAmortisedAmount,
-    ps.outstanding_amount AS TotalOutstandingAmount,
-    ps.prepayment_item_count AS NumberOfPrepaymentAccounts
+    total_prepayment.TotalPrepaymentAmount,
+    COALESCE(SUM(ps.amortised_amount), 0) AS TotalAmortisedAmount,
+    (total_prepayment.TotalPrepaymentAmount - COALESCE(SUM(ps.amortised_amount), 0)) AS TotalOutstandingAmount,
+    COUNT(DISTINCT ps.id) AS NumberOfPrepaymentAccounts
 FROM
     end_month_series ems
-        LEFT JOIN LATERAL (
+        LEFT JOIN (
         SELECT
+            p.id,
+            COALESCE(p.prepayment_amount, 0) AS prepayment_amount,
+            COALESCE(pa.prepayment_amount, 0) AS amortised_amount,
+            COALESCE(p.prepayment_amount, 0) - COALESCE(pa.prepayment_amount, 0) AS outstanding_amount,
             pa.fiscal_month_id,
-            SUM(COALESCE(p.prepayment_amount, 0)) as prepayment_amount,
-            COALESCE(SUM(pa.prepayment_amount), 0) as amortised_amount,
-            SUM(COALESCE(p.prepayment_amount, 0)) - COALESCE(SUM(pa.prepayment_amount), 0) as outstanding_amount,
-            COUNT(DISTINCT p.id) as prepayment_item_count
+            s.payment_date
         FROM
             prepayment_account p
-                LEFT JOIN prepayment_amortization pa ON p.id = pa.prepayment_account_id
-        WHERE
-            NOT EXISTS (
-                    SELECT 1
-                    FROM settlement s
-                    WHERE s.id = p.prepayment_transaction_id
-                      AND s.payment_date > ems.end_date
-                )
-          AND pa.fiscal_month_id IN (SELECT fm.id FROM fiscal_month fm WHERE fm.end_date <= ems.end_date)
-        GROUP BY
-            pa.fiscal_month_id
-        ) ps ON ps.fiscal_month_id = (
+                LEFT JOIN
+            settlement s ON s.id = p.prepayment_transaction_id
+                LEFT JOIN
+            prepayment_amortization pa ON p.id = pa.prepayment_account_id
+    ) ps ON TRUE
+        CROSS JOIN LATERAL (
+        SELECT SUM(COALESCE(p.prepayment_amount, 0)) AS TotalPrepaymentAmount
+        FROM prepayment_account p
+                 LEFT JOIN settlement s ON s.id = p.prepayment_transaction_id
+        WHERE s.payment_date <= ems.end_date
+        ) AS total_prepayment
+WHERE
+        ps.fiscal_month_id IN (
         SELECT fm.id
         FROM fiscal_month fm
         WHERE fm.end_date <= ems.end_date
-        ORDER BY fm.end_date DESC LIMIT 1
     )
+  AND (
+        (ps.payment_date <= ems.end_date AND ps.payment_date IS NOT NULL)
+        OR (ps.payment_date IS NULL AND ps.fiscal_month_id IS NOT NULL)
+    )
+GROUP BY
+    ems.end_date, total_prepayment.TotalPrepaymentAmount
 ORDER BY
     ems.end_date;
