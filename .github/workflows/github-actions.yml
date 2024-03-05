@@ -64,7 +64,7 @@ jobs:
         run: ./mvnw -ntp package jib:dockerBuild -Pprod -DskipTests
 
       - name: Publish image
-        run: docker push ghacupha/erp-system:1.7.4
+        run: docker push ghacupha/erp-system:1.7.5
 
       - name: Build and Publish Elasticsearch image
         uses: docker/build-push-action@v2
@@ -72,4 +72,4 @@ jobs:
           context: .
           file: src/main/docker/ESDockerfile
           push: true
-          tags: ghacupha/erp-system-elastic-search:1.7.4
+          tags: ghacupha/erp-system-elastic-search:1.7.5
