@@ -37,6 +37,7 @@ import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 import java.time.LocalDate;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -91,19 +92,29 @@ public class MonthlyPrepaymentOutstandingReportItemResourceProd {
      * {@code GET  /monthly-prepayment-outstanding-report-items} : get all the monthlyPrepaymentOutstandingReportItems.
      *
      * @param pageable the pagination information.
-     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of monthlyPrepaymentOutstandingReportItems in body.
      */
     @GetMapping("/monthly-prepayment-outstanding-report-items/periodic")
     public ResponseEntity<List<MonthlyPrepaymentOutstandingReportItemDTO>> getAllMonthlyPrepaymentOutstandingReportItemsWFiscalYear(
-        MonthlyPrepaymentOutstandingReportItemCriteria criteria,
+        @RequestParam("fiscalStartDate") String fiscalStartDate,
+        @RequestParam("fiscalEndDate") String fiscalEndDate,
         Pageable pageable
     ) {
-        log.debug("REST request to get MonthlyPrepaymentOutstandingReportItems by criteria: {}", criteria);
 
         FiscalYearDTO fiscalYear = new FiscalYearDTO();
-        fiscalYear.setStartDate(LocalDate.of(2023, 1, 1));
-        fiscalYear.setEndDate(LocalDate.of(2023, 12, 1));
+        if (fiscalStartDate != null) {
+            fiscalYear.setStartDate(LocalDate.parse(fiscalStartDate).withDayOfMonth(1));
+        } else {
+            fiscalYear.setStartDate(LocalDate.of(2023, 1, 1));
+        }
+
+        if (fiscalStartDate != null) {
+            fiscalYear.setEndDate(LocalDate.parse(fiscalEndDate).withDayOfMonth(1));
+        } else {
+            fiscalYear.setEndDate(LocalDate.of(2023, 12, 1));
+        }
+
+        log.debug("REST request to get MonthlyPrepaymentOutstandingReportItems by fiscalStartDate: {} and fiscalEndDate: {}", fiscalStartDate, fiscalEndDate);
 
         Page<MonthlyPrepaymentOutstandingReportItemDTO> page = monthlyPrepaymentOutstandingReportItemService
             .findAllWithStartAndEndDate(pageable, fiscalYear);
