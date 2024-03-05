@@ -57,7 +57,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser(roles = {"FIXED_ASSETS_USER"})
+@WithMockUser(roles = {"PREPAYMENTS_MODULE_USER"})
 class MonthlyPrepaymentOutstandingReportItemResourceIT {
 
     private static final LocalDate DEFAULT_FISCAL_MONTH_END_DATE = LocalDate.ofEpochDay(0L);
@@ -80,9 +80,9 @@ class MonthlyPrepaymentOutstandingReportItemResourceIT {
     private static final Integer UPDATED_NUMBER_OF_PREPAYMENT_ACCOUNTS = 2;
     private static final Integer SMALLER_NUMBER_OF_PREPAYMENT_ACCOUNTS = 1 - 1;
 
-    private static final String ENTITY_API_URL = "/api/fixed-asset/monthly-prepayment-outstanding-report-items";
+    private static final String ENTITY_API_URL = "/api/prepayments/fixed-asset/monthly-prepayment-outstanding-report-items";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/fixed-asset/_search/monthly-prepayment-outstanding-report-items";
+    private static final String ENTITY_SEARCH_API_URL = "/api/prepayments/fixed-asset/_search/monthly-prepayment-outstanding-report-items";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

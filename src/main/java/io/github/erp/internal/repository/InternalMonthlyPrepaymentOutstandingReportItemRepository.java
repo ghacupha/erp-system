@@ -44,16 +44,16 @@ public interface InternalMonthlyPrepaymentOutstandingReportItemRepository
         value = "" +
             "WITH RECURSIVE end_month_series AS (" +
             "    SELECT" +
-            "        DATE_TRUNC('month', :fiscalStartDate::date) AS start_date," +
-            "        (DATE_TRUNC('month', :fiscalStartDate::date) + INTERVAL '1 month' - INTERVAL '1 day') AS end_date" +
+            "        DATE_TRUNC('month', :fiscalStartDate) AS start_date," +
+            "        (DATE_TRUNC('month', :fiscalStartDate) + INTERVAL '1 month' - INTERVAL '1 day') AS end_date" +
             "    UNION ALL" +
             "    SELECT" +
             "        (DATE_TRUNC('month', ems.start_date) + INTERVAL '1 month') AS start_date," +
-            "        ((DATE_TRUNC('month', ems.start_date) + INTERVAL '2 months' - INTERVAL '1 day')::date) AS end_date" +
+            "        ((DATE_TRUNC('month', ems.start_date) + INTERVAL '2 months' - INTERVAL '1 day')) AS end_date" + // TODO Review use of date casting
             "    FROM" +
             "        end_month_series ems" +
             "    WHERE" +
-            "            ems.start_date < :fiscalEndDate::date " + // TODO set first day of the last month here
+            "            ems.start_date < :fiscalEndDate " + // TODO set first day of the last month here
             ")" +
             " " +
             "SELECT" +

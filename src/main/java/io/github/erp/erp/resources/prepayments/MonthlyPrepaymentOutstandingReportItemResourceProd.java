@@ -1,4 +1,4 @@
-package io.github.erp.erp.resources.assets;
+package io.github.erp.erp.resources.prepayments;
 
 /*-
  * Erp System - Mark X No 4 (Jehoiada Series) Server ver 1.7.4
@@ -18,11 +18,14 @@ package io.github.erp.erp.resources.assets;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.internal.service.InternalMonthlyPrepaymentOutstandingReportItemService;
 import io.github.erp.repository.MonthlyPrepaymentOutstandingReportItemRepository;
 import io.github.erp.service.MonthlyPrepaymentOutstandingReportItemQueryService;
 import io.github.erp.service.MonthlyPrepaymentOutstandingReportItemService;
 import io.github.erp.service.criteria.MonthlyPrepaymentOutstandingReportItemCriteria;
+import io.github.erp.service.dto.FiscalYearDTO;
 import io.github.erp.service.dto.MonthlyPrepaymentOutstandingReportItemDTO;
+import net.bytebuddy.asm.Advice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -34,6 +37,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,24 +45,25 @@ import java.util.Optional;
  * REST controller for managing {@link io.github.erp.domain.MonthlyPrepaymentOutstandingReportItem}.
  */
 @RestController
-@RequestMapping("/api/fixed-asset")
+@RequestMapping("/api/prepayments")
 public class MonthlyPrepaymentOutstandingReportItemResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(MonthlyPrepaymentOutstandingReportItemResourceProd.class);
 
-    private final MonthlyPrepaymentOutstandingReportItemService monthlyPrepaymentOutstandingReportItemService;
+    // private final InternalMonthlyPrepaymentOutstandingReportItemService  in
+    private final InternalMonthlyPrepaymentOutstandingReportItemService monthlyPrepaymentOutstandingReportItemService;
 
-    private final MonthlyPrepaymentOutstandingReportItemRepository monthlyPrepaymentOutstandingReportItemRepository;
+    // private final MonthlyPrepaymentOutstandingReportItemRepository monthlyPrepaymentOutstandingReportItemRepository;
 
     private final MonthlyPrepaymentOutstandingReportItemQueryService monthlyPrepaymentOutstandingReportItemQueryService;
 
     public MonthlyPrepaymentOutstandingReportItemResourceProd(
-        MonthlyPrepaymentOutstandingReportItemService monthlyPrepaymentOutstandingReportItemService,
-        MonthlyPrepaymentOutstandingReportItemRepository monthlyPrepaymentOutstandingReportItemRepository,
+        InternalMonthlyPrepaymentOutstandingReportItemService monthlyPrepaymentOutstandingReportItemService,
+        // MonthlyPrepaymentOutstandingReportItemRepository monthlyPrepaymentOutstandingReportItemRepository,
         MonthlyPrepaymentOutstandingReportItemQueryService monthlyPrepaymentOutstandingReportItemQueryService
     ) {
         this.monthlyPrepaymentOutstandingReportItemService = monthlyPrepaymentOutstandingReportItemService;
-        this.monthlyPrepaymentOutstandingReportItemRepository = monthlyPrepaymentOutstandingReportItemRepository;
+        // this.monthlyPrepaymentOutstandingReportItemRepository = monthlyPrepaymentOutstandingReportItemRepository;
         this.monthlyPrepaymentOutstandingReportItemQueryService = monthlyPrepaymentOutstandingReportItemQueryService;
     }
 
@@ -79,6 +84,31 @@ public class MonthlyPrepaymentOutstandingReportItemResourceProd {
             criteria,
             pageable
         );
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /monthly-prepayment-outstanding-report-items} : get all the monthlyPrepaymentOutstandingReportItems.
+     *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of monthlyPrepaymentOutstandingReportItems in body.
+     */
+    @GetMapping("/monthly-prepayment-outstanding-report-items/periodic")
+    public ResponseEntity<List<MonthlyPrepaymentOutstandingReportItemDTO>> getAllMonthlyPrepaymentOutstandingReportItemsWFiscalYear(
+        MonthlyPrepaymentOutstandingReportItemCriteria criteria,
+        Pageable pageable
+    ) {
+        log.debug("REST request to get MonthlyPrepaymentOutstandingReportItems by criteria: {}", criteria);
+
+        FiscalYearDTO fiscalYear = new FiscalYearDTO();
+        fiscalYear.setStartDate(LocalDate.of(2023, 1, 1));
+        fiscalYear.setEndDate(LocalDate.of(2023, 12, 1));
+
+        Page<MonthlyPrepaymentOutstandingReportItemDTO> page = monthlyPrepaymentOutstandingReportItemService
+            .findAllWithStartAndEndDate(pageable, fiscalYear);
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
