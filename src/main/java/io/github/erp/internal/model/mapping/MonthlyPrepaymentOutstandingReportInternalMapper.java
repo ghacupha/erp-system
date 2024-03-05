@@ -18,6 +18,11 @@ public class MonthlyPrepaymentOutstandingReportInternalMapper
     public MonthlyPrepaymentOutstandingReportItemInternal toValue1(MonthlyPrepaymentOutstandingReportItemDTO vs) {
         return new MonthlyPrepaymentOutstandingReportItemInternal() {
             @Override
+            public Long getId() {
+                return vs.getId();
+            }
+
+            @Override
             public LocalDate getFiscalMonthEndDate() {
 
                 return vs.getFiscalMonthEndDate();
@@ -54,6 +59,7 @@ public class MonthlyPrepaymentOutstandingReportInternalMapper
 
         MonthlyPrepaymentOutstandingReportItemDTO dto = new MonthlyPrepaymentOutstandingReportItemDTO();
 
+        dto.setId(vs.getId());
         dto.setFiscalMonthEndDate(vs.getFiscalMonthEndDate());
         dto.setTotalPrepaymentAmount(vs.getTotalPrepaymentAmount());
         dto.setTotalAmortisedAmount(vs.getTotalAmortisedAmount());

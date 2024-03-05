@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 public interface MonthlyPrepaymentOutstandingReportItemInternal {
 
-    // Long getId();
+    Long getId();
 
     LocalDate getFiscalMonthEndDate();
 
