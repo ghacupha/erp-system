@@ -62,11 +62,11 @@ public interface InternalPrepaymentAccountReportRepository
         "    FROM fiscal_month fm   " +
         "    WHERE fm.end_date <= :reportDate   " +
         ")   " +
-        "WHERE s.payment_date <= :reportDate OR p.id NOT IN (   " +
+        "WHERE p.recognition_date <= :reportDate OR p.id NOT IN (   " +
         "    SELECT prep.id   " +
         "    FROM prepayment_account prep " +
         "             LEFT JOIN settlement s ON s.id = prep.prepayment_transaction_id " +
-        "    WHERE s.payment_date > :reportDate   " +
+        "    WHERE p.recognition_date > :reportDate   " +
         ")   " +
         " GROUP BY   " +
         "    p.id,   " +
@@ -93,11 +93,11 @@ public interface InternalPrepaymentAccountReportRepository
         "    FROM fiscal_month fm   " +
         "    WHERE fm.end_date <= :reportDate   " +
         ")   " +
-        "WHERE s.payment_date <= :reportDate OR p.id NOT IN (   " +
+        "WHERE p.recognition_date <= :reportDate OR p.id NOT IN (   " +
         "    SELECT prep.id   " +
         "    FROM prepayment_account prep " +
         "             LEFT JOIN settlement s ON s.id = prep.prepayment_transaction_id " +
-        "    WHERE s.payment_date > :reportDate   " +
+        "    WHERE prep.recognition_date > :reportDate   " +
         ")   " +
         " GROUP BY   " +
         "    p.id,   " +
@@ -138,11 +138,11 @@ public interface InternalPrepaymentAccountReportRepository
         "    FROM fiscal_month fm   " +
         "    WHERE fm.end_date <= :reportDate   " +
         ")   " +
-        "WHERE s.payment_date <= :reportDate OR p.id NOT IN (   " +
+        "WHERE p.recognition_date <= :reportDate OR p.id NOT IN (   " +
         "    SELECT prep.id   " +
         "    FROM prepayment_account prep   " +
         "             LEFT JOIN settlement s ON s.id = prep.prepayment_transaction_id   " +
-        "    WHERE s.payment_date > :reportDate   " +
+        "    WHERE prep.recognition_date > :reportDate   " +
         ")   " +
         "GROUP BY   " +
         "    p.id,   " +
