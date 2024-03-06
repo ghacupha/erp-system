@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.TransactionAccount;
 import io.github.erp.service.dto.TransactionAccountDTO;
 import org.mapstruct.*;
@@ -33,15 +34,15 @@ public interface TransactionAccountMapper extends EntityMapper<TransactionAccoun
     @Mapping(target = "removePlaceholder", ignore = true)
     TransactionAccount toEntity(TransactionAccountDTO transactionAccountDTO);
 
-    @Named("accountNumber")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "accountNumber", source = "accountNumber")
-    TransactionAccountDTO toDtoAccountNumber(TransactionAccount transactionAccount);
-
     @Named("accountName")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "accountName", source = "accountName")
     TransactionAccountDTO toDtoAccountName(TransactionAccount transactionAccount);
+
+    @Named("accountNumber")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "accountNumber", source = "accountNumber")
+    TransactionAccountDTO toDtoAccountNumber(TransactionAccount transactionAccount);
 }

@@ -17,6 +17,7 @@ package io.github.erp.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.*; // for static metamodels
 import io.github.erp.domain.PrepaymentAccount;
 import io.github.erp.repository.PrepaymentAccountRepository;
@@ -128,6 +129,10 @@ public class PrepaymentAccountQueryService extends QueryService<PrepaymentAccoun
             }
             if (criteria.getPrepaymentGuid() != null) {
                 specification = specification.and(buildSpecification(criteria.getPrepaymentGuid(), PrepaymentAccount_.prepaymentGuid));
+            }
+            if (criteria.getRecognitionDate() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getRecognitionDate(), PrepaymentAccount_.recognitionDate));
             }
             if (criteria.getSettlementCurrencyId() != null) {
                 specification =
