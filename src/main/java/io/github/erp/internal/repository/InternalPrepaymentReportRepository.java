@@ -62,11 +62,11 @@ public interface InternalPrepaymentReportRepository extends
         "    FROM fiscal_month fm " +
         "    WHERE fm.end_date <= :reportDate " +
         " )" +
-        " WHERE s.payment_date <= :reportDate OR p.id NOT IN ( " +
+        " WHERE p.recognition_date <= :reportDate OR p.id NOT IN ( " +
         "    SELECT prep.id" +
         "    FROM prepayment_account prep" +
         "    LEFT JOIN settlement s ON s.id = prep.prepayment_transaction_id" +
-        "    WHERE s.payment_date > :reportDate " +
+        "    WHERE prep.recognition_date > :reportDate " +
         " )" +
         " GROUP BY" +
         "    p.id," +
@@ -107,8 +107,8 @@ public interface InternalPrepaymentReportRepository extends
         "    GROUP BY pa.prepayment_account_id " +
         ") pa ON p.id = pa.prepayment_account_id " +
         "WHERE " +
-        "    (s.payment_date <= :reportDate OR s.payment_date IS NULL) " +
-        "    AND (pa.prepayment_account_id IS NOT NULL OR s.payment_date IS NULL) " +
+        "    (p.recognition_date <= :reportDate OR p.recognition_date IS NULL) " +
+        "    AND (pa.prepayment_account_id IS NOT NULL OR p.recognition_date IS NULL) " +
         "    AND p.id = :id", nativeQuery = true)
     Optional<PrepaymentReportTuple> findOneByReportDate(@Param("reportDate") LocalDate reportDate, @Param("id") long id);
 }
