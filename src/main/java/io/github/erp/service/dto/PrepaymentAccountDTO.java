@@ -17,8 +17,10 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -45,6 +47,8 @@ public class PrepaymentAccountDTO implements Serializable {
     private BigDecimal prepaymentAmount;
 
     private UUID prepaymentGuid;
+
+    private LocalDate recognitionDate;
 
     private SettlementCurrencyDTO settlementCurrency;
 
@@ -112,6 +116,14 @@ public class PrepaymentAccountDTO implements Serializable {
 
     public void setPrepaymentGuid(UUID prepaymentGuid) {
         this.prepaymentGuid = prepaymentGuid;
+    }
+
+    public LocalDate getRecognitionDate() {
+        return recognitionDate;
+    }
+
+    public void setRecognitionDate(LocalDate recognitionDate) {
+        this.recognitionDate = recognitionDate;
     }
 
     public SettlementCurrencyDTO getSettlementCurrency() {
@@ -225,6 +237,7 @@ public class PrepaymentAccountDTO implements Serializable {
             ", notes='" + getNotes() + "'" +
             ", prepaymentAmount=" + getPrepaymentAmount() +
             ", prepaymentGuid='" + getPrepaymentGuid() + "'" +
+            ", recognitionDate='" + getRecognitionDate() + "'" +
             ", settlementCurrency=" + getSettlementCurrency() +
             ", prepaymentTransaction=" + getPrepaymentTransaction() +
             ", serviceOutlet=" + getServiceOutlet() +

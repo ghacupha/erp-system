@@ -17,9 +17,11 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -64,6 +66,9 @@ public class PrepaymentAccount implements Serializable {
 
     @Column(name = "prepayment_guid")
     private UUID prepaymentGuid;
+
+    @Column(name = "recognition_date")
+    private LocalDate recognitionDate;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
@@ -234,6 +239,19 @@ public class PrepaymentAccount implements Serializable {
 
     public void setPrepaymentGuid(UUID prepaymentGuid) {
         this.prepaymentGuid = prepaymentGuid;
+    }
+
+    public LocalDate getRecognitionDate() {
+        return this.recognitionDate;
+    }
+
+    public PrepaymentAccount recognitionDate(LocalDate recognitionDate) {
+        this.setRecognitionDate(recognitionDate);
+        return this;
+    }
+
+    public void setRecognitionDate(LocalDate recognitionDate) {
+        this.recognitionDate = recognitionDate;
     }
 
     public SettlementCurrency getSettlementCurrency() {
@@ -435,6 +453,7 @@ public class PrepaymentAccount implements Serializable {
             ", notes='" + getNotes() + "'" +
             ", prepaymentAmount=" + getPrepaymentAmount() +
             ", prepaymentGuid='" + getPrepaymentGuid() + "'" +
+            ", recognitionDate='" + getRecognitionDate() + "'" +
             "}";
     }
 }

@@ -22,6 +22,10 @@
     {
       "fieldName": "prepaymentGuid",
       "fieldType": "UUID"
+    },
+    {
+      "fieldName": "recognitionDate",
+      "fieldType": "LocalDate"
     }
   ],
   "relationships": [
