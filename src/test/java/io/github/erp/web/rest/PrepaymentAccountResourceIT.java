@@ -659,6 +659,110 @@ class PrepaymentAccountResourceIT {
 
     @Test
     @Transactional
+    void getAllPrepaymentAccountsByRecognitionDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where recognitionDate equals to DEFAULT_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldBeFound("recognitionDate.equals=" + DEFAULT_RECOGNITION_DATE);
+
+        // Get all the prepaymentAccountList where recognitionDate equals to UPDATED_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldNotBeFound("recognitionDate.equals=" + UPDATED_RECOGNITION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByRecognitionDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where recognitionDate not equals to DEFAULT_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldNotBeFound("recognitionDate.notEquals=" + DEFAULT_RECOGNITION_DATE);
+
+        // Get all the prepaymentAccountList where recognitionDate not equals to UPDATED_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldBeFound("recognitionDate.notEquals=" + UPDATED_RECOGNITION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByRecognitionDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where recognitionDate in DEFAULT_RECOGNITION_DATE or UPDATED_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldBeFound("recognitionDate.in=" + DEFAULT_RECOGNITION_DATE + "," + UPDATED_RECOGNITION_DATE);
+
+        // Get all the prepaymentAccountList where recognitionDate equals to UPDATED_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldNotBeFound("recognitionDate.in=" + UPDATED_RECOGNITION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByRecognitionDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where recognitionDate is not null
+        defaultPrepaymentAccountShouldBeFound("recognitionDate.specified=true");
+
+        // Get all the prepaymentAccountList where recognitionDate is null
+        defaultPrepaymentAccountShouldNotBeFound("recognitionDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByRecognitionDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where recognitionDate is greater than or equal to DEFAULT_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldBeFound("recognitionDate.greaterThanOrEqual=" + DEFAULT_RECOGNITION_DATE);
+
+        // Get all the prepaymentAccountList where recognitionDate is greater than or equal to UPDATED_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldNotBeFound("recognitionDate.greaterThanOrEqual=" + UPDATED_RECOGNITION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByRecognitionDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where recognitionDate is less than or equal to DEFAULT_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldBeFound("recognitionDate.lessThanOrEqual=" + DEFAULT_RECOGNITION_DATE);
+
+        // Get all the prepaymentAccountList where recognitionDate is less than or equal to SMALLER_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldNotBeFound("recognitionDate.lessThanOrEqual=" + SMALLER_RECOGNITION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByRecognitionDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where recognitionDate is less than DEFAULT_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldNotBeFound("recognitionDate.lessThan=" + DEFAULT_RECOGNITION_DATE);
+
+        // Get all the prepaymentAccountList where recognitionDate is less than UPDATED_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldBeFound("recognitionDate.lessThan=" + UPDATED_RECOGNITION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByRecognitionDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where recognitionDate is greater than DEFAULT_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldNotBeFound("recognitionDate.greaterThan=" + DEFAULT_RECOGNITION_DATE);
+
+        // Get all the prepaymentAccountList where recognitionDate is greater than SMALLER_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldBeFound("recognitionDate.greaterThan=" + SMALLER_RECOGNITION_DATE);
+    }
+
+    @Test
+    @Transactional
     void getAllPrepaymentAccountsBySettlementCurrencyIsEqualToSomething() throws Exception {
         // Initialize the database
         prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
