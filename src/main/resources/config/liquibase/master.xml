@@ -252,6 +252,7 @@
     <include file="config/liquibase/changelog/20240219151405_added_entity_NbvReport.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240304133311_added_entity_MonthlyPrepaymentOutstandingReportItem.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240307045420_added_entity_IFRS16LeaseContract.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240307081647_added_entity_RouModelMetadata.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
@@ -428,6 +429,7 @@
     <include file="config/liquibase/changelog/20240226104612_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240306045214_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240307045420_added_entity_constraints_IFRS16LeaseContract.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240307081647_added_entity_constraints_RouModelMetadata.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
