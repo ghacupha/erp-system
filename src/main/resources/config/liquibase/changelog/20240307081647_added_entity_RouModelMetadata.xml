@@ -29,6 +29,9 @@
             <column name="lease_amount" type="decimal(21,2)">
                 <constraints nullable="false" />
             </column>
+            <column name="rou_model_reference" type="${uuidType}">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_rou_model_metadata__rou_model_reference" />
+            </column>
             <column name="ifrs16lease_contract_id" type="bigint">
                 <constraints nullable="false" />
             </column>
@@ -84,6 +87,7 @@
             <column name="description" type="string"/>
             <column name="lease_term_periods" type="numeric"/>
             <column name="lease_amount" type="numeric"/>
+            <column name="rou_model_reference" type="${uuidType}"/>
             <column name="ifrs16lease_contract_id" type="numeric"/>
             <column name="asset_account_id" type="numeric"/>
             <column name="depreciation_account_id" type="numeric"/>

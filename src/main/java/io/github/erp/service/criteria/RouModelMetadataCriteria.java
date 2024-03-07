@@ -29,6 +29,7 @@ import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
+import tech.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link io.github.erp.domain.RouModelMetadata} entity. This class is used
@@ -55,6 +56,8 @@ public class RouModelMetadataCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter leaseAmount;
 
+    private UUIDFilter rouModelReference;
+
     private LongFilter ifrs16LeaseContractId;
 
     private LongFilter assetAccountId;
@@ -78,6 +81,7 @@ public class RouModelMetadataCriteria implements Serializable, Criteria {
         this.description = other.description == null ? null : other.description.copy();
         this.leaseTermPeriods = other.leaseTermPeriods == null ? null : other.leaseTermPeriods.copy();
         this.leaseAmount = other.leaseAmount == null ? null : other.leaseAmount.copy();
+        this.rouModelReference = other.rouModelReference == null ? null : other.rouModelReference.copy();
         this.ifrs16LeaseContractId = other.ifrs16LeaseContractId == null ? null : other.ifrs16LeaseContractId.copy();
         this.assetAccountId = other.assetAccountId == null ? null : other.assetAccountId.copy();
         this.depreciationAccountId = other.depreciationAccountId == null ? null : other.depreciationAccountId.copy();
@@ -180,6 +184,21 @@ public class RouModelMetadataCriteria implements Serializable, Criteria {
 
     public void setLeaseAmount(BigDecimalFilter leaseAmount) {
         this.leaseAmount = leaseAmount;
+    }
+
+    public UUIDFilter getRouModelReference() {
+        return rouModelReference;
+    }
+
+    public UUIDFilter rouModelReference() {
+        if (rouModelReference == null) {
+            rouModelReference = new UUIDFilter();
+        }
+        return rouModelReference;
+    }
+
+    public void setRouModelReference(UUIDFilter rouModelReference) {
+        this.rouModelReference = rouModelReference;
     }
 
     public LongFilter getIfrs16LeaseContractId() {
@@ -296,6 +315,7 @@ public class RouModelMetadataCriteria implements Serializable, Criteria {
             Objects.equals(description, that.description) &&
             Objects.equals(leaseTermPeriods, that.leaseTermPeriods) &&
             Objects.equals(leaseAmount, that.leaseAmount) &&
+            Objects.equals(rouModelReference, that.rouModelReference) &&
             Objects.equals(ifrs16LeaseContractId, that.ifrs16LeaseContractId) &&
             Objects.equals(assetAccountId, that.assetAccountId) &&
             Objects.equals(depreciationAccountId, that.depreciationAccountId) &&
@@ -315,6 +335,7 @@ public class RouModelMetadataCriteria implements Serializable, Criteria {
             description,
             leaseTermPeriods,
             leaseAmount,
+            rouModelReference,
             ifrs16LeaseContractId,
             assetAccountId,
             depreciationAccountId,
@@ -335,6 +356,7 @@ public class RouModelMetadataCriteria implements Serializable, Criteria {
             (description != null ? "description=" + description + ", " : "") +
             (leaseTermPeriods != null ? "leaseTermPeriods=" + leaseTermPeriods + ", " : "") +
             (leaseAmount != null ? "leaseAmount=" + leaseAmount + ", " : "") +
+            (rouModelReference != null ? "rouModelReference=" + rouModelReference + ", " : "") +
             (ifrs16LeaseContractId != null ? "ifrs16LeaseContractId=" + ifrs16LeaseContractId + ", " : "") +
             (assetAccountId != null ? "assetAccountId=" + assetAccountId + ", " : "") +
             (depreciationAccountId != null ? "depreciationAccountId=" + depreciationAccountId + ", " : "") +

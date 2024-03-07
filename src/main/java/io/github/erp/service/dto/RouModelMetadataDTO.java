@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import javax.validation.constraints.*;
 
 /**
@@ -46,6 +47,9 @@ public class RouModelMetadataDTO implements Serializable {
     @NotNull
     @DecimalMin(value = "0")
     private BigDecimal leaseAmount;
+
+    @NotNull
+    private UUID rouModelReference;
 
     private IFRS16LeaseContractDTO ifrs16LeaseContract;
 
@@ -105,6 +109,14 @@ public class RouModelMetadataDTO implements Serializable {
 
     public void setLeaseAmount(BigDecimal leaseAmount) {
         this.leaseAmount = leaseAmount;
+    }
+
+    public UUID getRouModelReference() {
+        return rouModelReference;
+    }
+
+    public void setRouModelReference(UUID rouModelReference) {
+        this.rouModelReference = rouModelReference;
     }
 
     public IFRS16LeaseContractDTO getIfrs16LeaseContract() {
@@ -186,6 +198,7 @@ public class RouModelMetadataDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", leaseTermPeriods=" + getLeaseTermPeriods() +
             ", leaseAmount=" + getLeaseAmount() +
+            ", rouModelReference='" + getRouModelReference() + "'" +
             ", ifrs16LeaseContract=" + getIfrs16LeaseContract() +
             ", assetAccount=" + getAssetAccount() +
             ", depreciationAccount=" + getDepreciationAccount() +
