@@ -196,7 +196,7 @@ public class CurrentUserContextFilter extends GenericFilterBean  implements Filt
 
                 internalApplicationUserDetailService
                     .getCorrespondingApplicationUser((UserDetails) authentication.getPrincipal())
-                    .ifPresent(CurrentUserContext::setCurrentUser);
+                    .ifPresentOrElse(CurrentUserContext::setCurrentUser, CurrentUserContext::clearCurrentUser);
             }
 
             chain.doFilter(request, response);
