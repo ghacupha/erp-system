@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -84,6 +85,9 @@ class RouModelMetadataResourceIT {
     private static final BigDecimal DEFAULT_LEASE_AMOUNT = new BigDecimal(0);
     private static final BigDecimal UPDATED_LEASE_AMOUNT = new BigDecimal(1);
     private static final BigDecimal SMALLER_LEASE_AMOUNT = new BigDecimal(0 - 1);
+
+    private static final UUID DEFAULT_ROU_MODEL_REFERENCE = UUID.randomUUID();
+    private static final UUID UPDATED_ROU_MODEL_REFERENCE = UUID.randomUUID();
 
     private static final String ENTITY_API_URL = "/api/rou-model-metadata";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -132,7 +136,8 @@ class RouModelMetadataResourceIT {
             .modelVersion(DEFAULT_MODEL_VERSION)
             .description(DEFAULT_DESCRIPTION)
             .leaseTermPeriods(DEFAULT_LEASE_TERM_PERIODS)
-            .leaseAmount(DEFAULT_LEASE_AMOUNT);
+            .leaseAmount(DEFAULT_LEASE_AMOUNT)
+            .rouModelReference(DEFAULT_ROU_MODEL_REFERENCE);
         // Add required entity
         IFRS16LeaseContract iFRS16LeaseContract;
         if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
@@ -172,7 +177,8 @@ class RouModelMetadataResourceIT {
             .modelVersion(UPDATED_MODEL_VERSION)
             .description(UPDATED_DESCRIPTION)
             .leaseTermPeriods(UPDATED_LEASE_TERM_PERIODS)
-            .leaseAmount(UPDATED_LEASE_AMOUNT);
+            .leaseAmount(UPDATED_LEASE_AMOUNT)
+            .rouModelReference(UPDATED_ROU_MODEL_REFERENCE);
         // Add required entity
         IFRS16LeaseContract iFRS16LeaseContract;
         if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
@@ -226,6 +232,7 @@ class RouModelMetadataResourceIT {
         assertThat(testRouModelMetadata.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testRouModelMetadata.getLeaseTermPeriods()).isEqualTo(DEFAULT_LEASE_TERM_PERIODS);
         assertThat(testRouModelMetadata.getLeaseAmount()).isEqualByComparingTo(DEFAULT_LEASE_AMOUNT);
+        assertThat(testRouModelMetadata.getRouModelReference()).isEqualTo(DEFAULT_ROU_MODEL_REFERENCE);
 
         // Validate the RouModelMetadata in Elasticsearch
         verify(mockRouModelMetadataSearchRepository, times(1)).save(testRouModelMetadata);
@@ -337,6 +344,26 @@ class RouModelMetadataResourceIT {
 
     @Test
     @Transactional
+    void checkRouModelReferenceIsRequired() throws Exception {
+        int databaseSizeBeforeTest = rouModelMetadataRepository.findAll().size();
+        // set the field null
+        rouModelMetadata.setRouModelReference(null);
+
+        // Create the RouModelMetadata, which fails.
+        RouModelMetadataDTO rouModelMetadataDTO = rouModelMetadataMapper.toDto(rouModelMetadata);
+
+        restRouModelMetadataMockMvc
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(rouModelMetadataDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<RouModelMetadata> rouModelMetadataList = rouModelMetadataRepository.findAll();
+        assertThat(rouModelMetadataList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllRouModelMetadata() throws Exception {
         // Initialize the database
         rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
@@ -351,7 +378,8 @@ class RouModelMetadataResourceIT {
             .andExpect(jsonPath("$.[*].modelVersion").value(hasItem(sameNumber(DEFAULT_MODEL_VERSION))))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].leaseTermPeriods").value(hasItem(DEFAULT_LEASE_TERM_PERIODS)))
-            .andExpect(jsonPath("$.[*].leaseAmount").value(hasItem(sameNumber(DEFAULT_LEASE_AMOUNT))));
+            .andExpect(jsonPath("$.[*].leaseAmount").value(hasItem(sameNumber(DEFAULT_LEASE_AMOUNT))))
+            .andExpect(jsonPath("$.[*].rouModelReference").value(hasItem(DEFAULT_ROU_MODEL_REFERENCE.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -388,7 +416,8 @@ class RouModelMetadataResourceIT {
             .andExpect(jsonPath("$.modelVersion").value(sameNumber(DEFAULT_MODEL_VERSION)))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.leaseTermPeriods").value(DEFAULT_LEASE_TERM_PERIODS))
-            .andExpect(jsonPath("$.leaseAmount").value(sameNumber(DEFAULT_LEASE_AMOUNT)));
+            .andExpect(jsonPath("$.leaseAmount").value(sameNumber(DEFAULT_LEASE_AMOUNT)))
+            .andExpect(jsonPath("$.rouModelReference").value(DEFAULT_ROU_MODEL_REFERENCE.toString()));
     }
 
     @Test
@@ -879,6 +908,58 @@ class RouModelMetadataResourceIT {
 
     @Test
     @Transactional
+    void getAllRouModelMetadataByRouModelReferenceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where rouModelReference equals to DEFAULT_ROU_MODEL_REFERENCE
+        defaultRouModelMetadataShouldBeFound("rouModelReference.equals=" + DEFAULT_ROU_MODEL_REFERENCE);
+
+        // Get all the rouModelMetadataList where rouModelReference equals to UPDATED_ROU_MODEL_REFERENCE
+        defaultRouModelMetadataShouldNotBeFound("rouModelReference.equals=" + UPDATED_ROU_MODEL_REFERENCE);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByRouModelReferenceIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where rouModelReference not equals to DEFAULT_ROU_MODEL_REFERENCE
+        defaultRouModelMetadataShouldNotBeFound("rouModelReference.notEquals=" + DEFAULT_ROU_MODEL_REFERENCE);
+
+        // Get all the rouModelMetadataList where rouModelReference not equals to UPDATED_ROU_MODEL_REFERENCE
+        defaultRouModelMetadataShouldBeFound("rouModelReference.notEquals=" + UPDATED_ROU_MODEL_REFERENCE);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByRouModelReferenceIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where rouModelReference in DEFAULT_ROU_MODEL_REFERENCE or UPDATED_ROU_MODEL_REFERENCE
+        defaultRouModelMetadataShouldBeFound("rouModelReference.in=" + DEFAULT_ROU_MODEL_REFERENCE + "," + UPDATED_ROU_MODEL_REFERENCE);
+
+        // Get all the rouModelMetadataList where rouModelReference equals to UPDATED_ROU_MODEL_REFERENCE
+        defaultRouModelMetadataShouldNotBeFound("rouModelReference.in=" + UPDATED_ROU_MODEL_REFERENCE);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByRouModelReferenceIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where rouModelReference is not null
+        defaultRouModelMetadataShouldBeFound("rouModelReference.specified=true");
+
+        // Get all the rouModelMetadataList where rouModelReference is null
+        defaultRouModelMetadataShouldNotBeFound("rouModelReference.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllRouModelMetadataByIfrs16LeaseContractIsEqualToSomething() throws Exception {
         // Initialize the database
         rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
@@ -1046,7 +1127,8 @@ class RouModelMetadataResourceIT {
             .andExpect(jsonPath("$.[*].modelVersion").value(hasItem(sameNumber(DEFAULT_MODEL_VERSION))))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].leaseTermPeriods").value(hasItem(DEFAULT_LEASE_TERM_PERIODS)))
-            .andExpect(jsonPath("$.[*].leaseAmount").value(hasItem(sameNumber(DEFAULT_LEASE_AMOUNT))));
+            .andExpect(jsonPath("$.[*].leaseAmount").value(hasItem(sameNumber(DEFAULT_LEASE_AMOUNT))))
+            .andExpect(jsonPath("$.[*].rouModelReference").value(hasItem(DEFAULT_ROU_MODEL_REFERENCE.toString())));
 
         // Check, that the count call also returns 1
         restRouModelMetadataMockMvc
@@ -1099,7 +1181,8 @@ class RouModelMetadataResourceIT {
             .modelVersion(UPDATED_MODEL_VERSION)
             .description(UPDATED_DESCRIPTION)
             .leaseTermPeriods(UPDATED_LEASE_TERM_PERIODS)
-            .leaseAmount(UPDATED_LEASE_AMOUNT);
+            .leaseAmount(UPDATED_LEASE_AMOUNT)
+            .rouModelReference(UPDATED_ROU_MODEL_REFERENCE);
         RouModelMetadataDTO rouModelMetadataDTO = rouModelMetadataMapper.toDto(updatedRouModelMetadata);
 
         restRouModelMetadataMockMvc
@@ -1119,6 +1202,7 @@ class RouModelMetadataResourceIT {
         assertThat(testRouModelMetadata.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testRouModelMetadata.getLeaseTermPeriods()).isEqualTo(UPDATED_LEASE_TERM_PERIODS);
         assertThat(testRouModelMetadata.getLeaseAmount()).isEqualTo(UPDATED_LEASE_AMOUNT);
+        assertThat(testRouModelMetadata.getRouModelReference()).isEqualTo(UPDATED_ROU_MODEL_REFERENCE);
 
         // Validate the RouModelMetadata in Elasticsearch
         verify(mockRouModelMetadataSearchRepository).save(testRouModelMetadata);
@@ -1216,7 +1300,8 @@ class RouModelMetadataResourceIT {
             .modelTitle(UPDATED_MODEL_TITLE)
             .modelVersion(UPDATED_MODEL_VERSION)
             .description(UPDATED_DESCRIPTION)
-            .leaseTermPeriods(UPDATED_LEASE_TERM_PERIODS);
+            .leaseTermPeriods(UPDATED_LEASE_TERM_PERIODS)
+            .rouModelReference(UPDATED_ROU_MODEL_REFERENCE);
 
         restRouModelMetadataMockMvc
             .perform(
@@ -1235,6 +1320,7 @@ class RouModelMetadataResourceIT {
         assertThat(testRouModelMetadata.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testRouModelMetadata.getLeaseTermPeriods()).isEqualTo(UPDATED_LEASE_TERM_PERIODS);
         assertThat(testRouModelMetadata.getLeaseAmount()).isEqualByComparingTo(DEFAULT_LEASE_AMOUNT);
+        assertThat(testRouModelMetadata.getRouModelReference()).isEqualTo(UPDATED_ROU_MODEL_REFERENCE);
     }
 
     @Test
@@ -1254,7 +1340,8 @@ class RouModelMetadataResourceIT {
             .modelVersion(UPDATED_MODEL_VERSION)
             .description(UPDATED_DESCRIPTION)
             .leaseTermPeriods(UPDATED_LEASE_TERM_PERIODS)
-            .leaseAmount(UPDATED_LEASE_AMOUNT);
+            .leaseAmount(UPDATED_LEASE_AMOUNT)
+            .rouModelReference(UPDATED_ROU_MODEL_REFERENCE);
 
         restRouModelMetadataMockMvc
             .perform(
@@ -1273,6 +1360,7 @@ class RouModelMetadataResourceIT {
         assertThat(testRouModelMetadata.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testRouModelMetadata.getLeaseTermPeriods()).isEqualTo(UPDATED_LEASE_TERM_PERIODS);
         assertThat(testRouModelMetadata.getLeaseAmount()).isEqualByComparingTo(UPDATED_LEASE_AMOUNT);
+        assertThat(testRouModelMetadata.getRouModelReference()).isEqualTo(UPDATED_ROU_MODEL_REFERENCE);
     }
 
     @Test
@@ -1393,6 +1481,7 @@ class RouModelMetadataResourceIT {
             .andExpect(jsonPath("$.[*].modelVersion").value(hasItem(sameNumber(DEFAULT_MODEL_VERSION))))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].leaseTermPeriods").value(hasItem(DEFAULT_LEASE_TERM_PERIODS)))
-            .andExpect(jsonPath("$.[*].leaseAmount").value(hasItem(sameNumber(DEFAULT_LEASE_AMOUNT))));
+            .andExpect(jsonPath("$.[*].leaseAmount").value(hasItem(sameNumber(DEFAULT_LEASE_AMOUNT))))
+            .andExpect(jsonPath("$.[*].rouModelReference").value(hasItem(DEFAULT_ROU_MODEL_REFERENCE.toString())));
     }
 }

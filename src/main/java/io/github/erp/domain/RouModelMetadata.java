@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -64,6 +65,10 @@ public class RouModelMetadata implements Serializable {
     @DecimalMin(value = "0")
     @Column(name = "lease_amount", precision = 21, scale = 2, nullable = false)
     private BigDecimal leaseAmount;
+
+    @NotNull
+    @Column(name = "rou_model_reference", nullable = false, unique = true)
+    private UUID rouModelReference;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -193,6 +198,19 @@ public class RouModelMetadata implements Serializable {
         this.leaseAmount = leaseAmount;
     }
 
+    public UUID getRouModelReference() {
+        return this.rouModelReference;
+    }
+
+    public RouModelMetadata rouModelReference(UUID rouModelReference) {
+        this.setRouModelReference(rouModelReference);
+        return this;
+    }
+
+    public void setRouModelReference(UUID rouModelReference) {
+        this.rouModelReference = rouModelReference;
+    }
+
     public IFRS16LeaseContract getIfrs16LeaseContract() {
         return this.ifrs16LeaseContract;
     }
@@ -310,6 +328,7 @@ public class RouModelMetadata implements Serializable {
             ", description='" + getDescription() + "'" +
             ", leaseTermPeriods=" + getLeaseTermPeriods() +
             ", leaseAmount=" + getLeaseAmount() +
+            ", rouModelReference='" + getRouModelReference() + "'" +
             "}";
     }
 }

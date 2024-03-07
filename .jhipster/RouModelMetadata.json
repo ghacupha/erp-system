@@ -24,6 +24,11 @@
       "fieldType": "BigDecimal",
       "fieldValidateRules": ["required", "min"],
       "fieldValidateRulesMin": 0
+    },
+    {
+      "fieldName": "rouModelReference",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
     }
   ],
   "relationships": [
