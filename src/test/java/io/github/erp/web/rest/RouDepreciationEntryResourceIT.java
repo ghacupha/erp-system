@@ -26,7 +26,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.AssetCategory;
+import io.github.erp.domain.IFRS16LeaseContract;
 import io.github.erp.domain.RouDepreciationEntry;
+import io.github.erp.domain.RouModelMetadata;
+import io.github.erp.domain.TransactionAccount;
 import io.github.erp.repository.RouDepreciationEntryRepository;
 import io.github.erp.repository.search.RouDepreciationEntrySearchRepository;
 import io.github.erp.service.criteria.RouDepreciationEntryCriteria;
@@ -79,6 +83,10 @@ class RouDepreciationEntryResourceIT {
     private static final UUID DEFAULT_ROU_DEPRECIATION_IDENTIFIER = UUID.randomUUID();
     private static final UUID UPDATED_ROU_DEPRECIATION_IDENTIFIER = UUID.randomUUID();
 
+    private static final Integer DEFAULT_SEQUENCE_NUMBER = 1;
+    private static final Integer UPDATED_SEQUENCE_NUMBER = 2;
+    private static final Integer SMALLER_SEQUENCE_NUMBER = 1 - 1;
+
     private static final String ENTITY_API_URL = "/api/rou-depreciation-entries";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/rou-depreciation-entries";
@@ -120,7 +128,50 @@ class RouDepreciationEntryResourceIT {
             .depreciationAmount(DEFAULT_DEPRECIATION_AMOUNT)
             .outstandingAmount(DEFAULT_OUTSTANDING_AMOUNT)
             .rouAssetIdentifier(DEFAULT_ROU_ASSET_IDENTIFIER)
-            .rouDepreciationIdentifier(DEFAULT_ROU_DEPRECIATION_IDENTIFIER);
+            .rouDepreciationIdentifier(DEFAULT_ROU_DEPRECIATION_IDENTIFIER)
+            .sequenceNumber(DEFAULT_SEQUENCE_NUMBER);
+        // Add required entity
+        TransactionAccount transactionAccount;
+        if (TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
+            transactionAccount = TransactionAccountResourceIT.createEntity(em);
+            em.persist(transactionAccount);
+            em.flush();
+        } else {
+            transactionAccount = TestUtil.findAll(em, TransactionAccount.class).get(0);
+        }
+        rouDepreciationEntry.setDebitAccount(transactionAccount);
+        // Add required entity
+        rouDepreciationEntry.setCreditAccount(transactionAccount);
+        // Add required entity
+        AssetCategory assetCategory;
+        if (TestUtil.findAll(em, AssetCategory.class).isEmpty()) {
+            assetCategory = AssetCategoryResourceIT.createEntity(em);
+            em.persist(assetCategory);
+            em.flush();
+        } else {
+            assetCategory = TestUtil.findAll(em, AssetCategory.class).get(0);
+        }
+        rouDepreciationEntry.setAssetCategory(assetCategory);
+        // Add required entity
+        IFRS16LeaseContract iFRS16LeaseContract;
+        if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
+            iFRS16LeaseContract = IFRS16LeaseContractResourceIT.createEntity(em);
+            em.persist(iFRS16LeaseContract);
+            em.flush();
+        } else {
+            iFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
+        }
+        rouDepreciationEntry.setLeaseContract(iFRS16LeaseContract);
+        // Add required entity
+        RouModelMetadata rouModelMetadata;
+        if (TestUtil.findAll(em, RouModelMetadata.class).isEmpty()) {
+            rouModelMetadata = RouModelMetadataResourceIT.createEntity(em);
+            em.persist(rouModelMetadata);
+            em.flush();
+        } else {
+            rouModelMetadata = TestUtil.findAll(em, RouModelMetadata.class).get(0);
+        }
+        rouDepreciationEntry.setRouMetadata(rouModelMetadata);
         return rouDepreciationEntry;
     }
 
@@ -136,7 +187,50 @@ class RouDepreciationEntryResourceIT {
             .depreciationAmount(UPDATED_DEPRECIATION_AMOUNT)
             .outstandingAmount(UPDATED_OUTSTANDING_AMOUNT)
             .rouAssetIdentifier(UPDATED_ROU_ASSET_IDENTIFIER)
-            .rouDepreciationIdentifier(UPDATED_ROU_DEPRECIATION_IDENTIFIER);
+            .rouDepreciationIdentifier(UPDATED_ROU_DEPRECIATION_IDENTIFIER)
+            .sequenceNumber(UPDATED_SEQUENCE_NUMBER);
+        // Add required entity
+        TransactionAccount transactionAccount;
+        if (TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
+            transactionAccount = TransactionAccountResourceIT.createUpdatedEntity(em);
+            em.persist(transactionAccount);
+            em.flush();
+        } else {
+            transactionAccount = TestUtil.findAll(em, TransactionAccount.class).get(0);
+        }
+        rouDepreciationEntry.setDebitAccount(transactionAccount);
+        // Add required entity
+        rouDepreciationEntry.setCreditAccount(transactionAccount);
+        // Add required entity
+        AssetCategory assetCategory;
+        if (TestUtil.findAll(em, AssetCategory.class).isEmpty()) {
+            assetCategory = AssetCategoryResourceIT.createUpdatedEntity(em);
+            em.persist(assetCategory);
+            em.flush();
+        } else {
+            assetCategory = TestUtil.findAll(em, AssetCategory.class).get(0);
+        }
+        rouDepreciationEntry.setAssetCategory(assetCategory);
+        // Add required entity
+        IFRS16LeaseContract iFRS16LeaseContract;
+        if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
+            iFRS16LeaseContract = IFRS16LeaseContractResourceIT.createUpdatedEntity(em);
+            em.persist(iFRS16LeaseContract);
+            em.flush();
+        } else {
+            iFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
+        }
+        rouDepreciationEntry.setLeaseContract(iFRS16LeaseContract);
+        // Add required entity
+        RouModelMetadata rouModelMetadata;
+        if (TestUtil.findAll(em, RouModelMetadata.class).isEmpty()) {
+            rouModelMetadata = RouModelMetadataResourceIT.createUpdatedEntity(em);
+            em.persist(rouModelMetadata);
+            em.flush();
+        } else {
+            rouModelMetadata = TestUtil.findAll(em, RouModelMetadata.class).get(0);
+        }
+        rouDepreciationEntry.setRouMetadata(rouModelMetadata);
         return rouDepreciationEntry;
     }
 
@@ -168,6 +262,7 @@ class RouDepreciationEntryResourceIT {
         assertThat(testRouDepreciationEntry.getOutstandingAmount()).isEqualByComparingTo(DEFAULT_OUTSTANDING_AMOUNT);
         assertThat(testRouDepreciationEntry.getRouAssetIdentifier()).isEqualTo(DEFAULT_ROU_ASSET_IDENTIFIER);
         assertThat(testRouDepreciationEntry.getRouDepreciationIdentifier()).isEqualTo(DEFAULT_ROU_DEPRECIATION_IDENTIFIER);
+        assertThat(testRouDepreciationEntry.getSequenceNumber()).isEqualTo(DEFAULT_SEQUENCE_NUMBER);
 
         // Validate the RouDepreciationEntry in Elasticsearch
         verify(mockRouDepreciationEntrySearchRepository, times(1)).save(testRouDepreciationEntry);
@@ -281,7 +376,8 @@ class RouDepreciationEntryResourceIT {
             .andExpect(jsonPath("$.[*].depreciationAmount").value(hasItem(sameNumber(DEFAULT_DEPRECIATION_AMOUNT))))
             .andExpect(jsonPath("$.[*].outstandingAmount").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_AMOUNT))))
             .andExpect(jsonPath("$.[*].rouAssetIdentifier").value(hasItem(DEFAULT_ROU_ASSET_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].rouDepreciationIdentifier").value(hasItem(DEFAULT_ROU_DEPRECIATION_IDENTIFIER.toString())));
+            .andExpect(jsonPath("$.[*].rouDepreciationIdentifier").value(hasItem(DEFAULT_ROU_DEPRECIATION_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].sequenceNumber").value(hasItem(DEFAULT_SEQUENCE_NUMBER)));
     }
 
     @Test
@@ -300,7 +396,8 @@ class RouDepreciationEntryResourceIT {
             .andExpect(jsonPath("$.depreciationAmount").value(sameNumber(DEFAULT_DEPRECIATION_AMOUNT)))
             .andExpect(jsonPath("$.outstandingAmount").value(sameNumber(DEFAULT_OUTSTANDING_AMOUNT)))
             .andExpect(jsonPath("$.rouAssetIdentifier").value(DEFAULT_ROU_ASSET_IDENTIFIER.toString()))
-            .andExpect(jsonPath("$.rouDepreciationIdentifier").value(DEFAULT_ROU_DEPRECIATION_IDENTIFIER.toString()));
+            .andExpect(jsonPath("$.rouDepreciationIdentifier").value(DEFAULT_ROU_DEPRECIATION_IDENTIFIER.toString()))
+            .andExpect(jsonPath("$.sequenceNumber").value(DEFAULT_SEQUENCE_NUMBER));
     }
 
     @Test
@@ -717,6 +814,240 @@ class RouDepreciationEntryResourceIT {
         defaultRouDepreciationEntryShouldNotBeFound("rouDepreciationIdentifier.specified=false");
     }
 
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesBySequenceNumberIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where sequenceNumber equals to DEFAULT_SEQUENCE_NUMBER
+        defaultRouDepreciationEntryShouldBeFound("sequenceNumber.equals=" + DEFAULT_SEQUENCE_NUMBER);
+
+        // Get all the rouDepreciationEntryList where sequenceNumber equals to UPDATED_SEQUENCE_NUMBER
+        defaultRouDepreciationEntryShouldNotBeFound("sequenceNumber.equals=" + UPDATED_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesBySequenceNumberIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where sequenceNumber not equals to DEFAULT_SEQUENCE_NUMBER
+        defaultRouDepreciationEntryShouldNotBeFound("sequenceNumber.notEquals=" + DEFAULT_SEQUENCE_NUMBER);
+
+        // Get all the rouDepreciationEntryList where sequenceNumber not equals to UPDATED_SEQUENCE_NUMBER
+        defaultRouDepreciationEntryShouldBeFound("sequenceNumber.notEquals=" + UPDATED_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesBySequenceNumberIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where sequenceNumber in DEFAULT_SEQUENCE_NUMBER or UPDATED_SEQUENCE_NUMBER
+        defaultRouDepreciationEntryShouldBeFound("sequenceNumber.in=" + DEFAULT_SEQUENCE_NUMBER + "," + UPDATED_SEQUENCE_NUMBER);
+
+        // Get all the rouDepreciationEntryList where sequenceNumber equals to UPDATED_SEQUENCE_NUMBER
+        defaultRouDepreciationEntryShouldNotBeFound("sequenceNumber.in=" + UPDATED_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesBySequenceNumberIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where sequenceNumber is not null
+        defaultRouDepreciationEntryShouldBeFound("sequenceNumber.specified=true");
+
+        // Get all the rouDepreciationEntryList where sequenceNumber is null
+        defaultRouDepreciationEntryShouldNotBeFound("sequenceNumber.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesBySequenceNumberIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where sequenceNumber is greater than or equal to DEFAULT_SEQUENCE_NUMBER
+        defaultRouDepreciationEntryShouldBeFound("sequenceNumber.greaterThanOrEqual=" + DEFAULT_SEQUENCE_NUMBER);
+
+        // Get all the rouDepreciationEntryList where sequenceNumber is greater than or equal to UPDATED_SEQUENCE_NUMBER
+        defaultRouDepreciationEntryShouldNotBeFound("sequenceNumber.greaterThanOrEqual=" + UPDATED_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesBySequenceNumberIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where sequenceNumber is less than or equal to DEFAULT_SEQUENCE_NUMBER
+        defaultRouDepreciationEntryShouldBeFound("sequenceNumber.lessThanOrEqual=" + DEFAULT_SEQUENCE_NUMBER);
+
+        // Get all the rouDepreciationEntryList where sequenceNumber is less than or equal to SMALLER_SEQUENCE_NUMBER
+        defaultRouDepreciationEntryShouldNotBeFound("sequenceNumber.lessThanOrEqual=" + SMALLER_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesBySequenceNumberIsLessThanSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where sequenceNumber is less than DEFAULT_SEQUENCE_NUMBER
+        defaultRouDepreciationEntryShouldNotBeFound("sequenceNumber.lessThan=" + DEFAULT_SEQUENCE_NUMBER);
+
+        // Get all the rouDepreciationEntryList where sequenceNumber is less than UPDATED_SEQUENCE_NUMBER
+        defaultRouDepreciationEntryShouldBeFound("sequenceNumber.lessThan=" + UPDATED_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesBySequenceNumberIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where sequenceNumber is greater than DEFAULT_SEQUENCE_NUMBER
+        defaultRouDepreciationEntryShouldNotBeFound("sequenceNumber.greaterThan=" + DEFAULT_SEQUENCE_NUMBER);
+
+        // Get all the rouDepreciationEntryList where sequenceNumber is greater than SMALLER_SEQUENCE_NUMBER
+        defaultRouDepreciationEntryShouldBeFound("sequenceNumber.greaterThan=" + SMALLER_SEQUENCE_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByDebitAccountIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+        TransactionAccount debitAccount;
+        if (TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
+            debitAccount = TransactionAccountResourceIT.createEntity(em);
+            em.persist(debitAccount);
+            em.flush();
+        } else {
+            debitAccount = TestUtil.findAll(em, TransactionAccount.class).get(0);
+        }
+        em.persist(debitAccount);
+        em.flush();
+        rouDepreciationEntry.setDebitAccount(debitAccount);
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+        Long debitAccountId = debitAccount.getId();
+
+        // Get all the rouDepreciationEntryList where debitAccount equals to debitAccountId
+        defaultRouDepreciationEntryShouldBeFound("debitAccountId.equals=" + debitAccountId);
+
+        // Get all the rouDepreciationEntryList where debitAccount equals to (debitAccountId + 1)
+        defaultRouDepreciationEntryShouldNotBeFound("debitAccountId.equals=" + (debitAccountId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByCreditAccountIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+        TransactionAccount creditAccount;
+        if (TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
+            creditAccount = TransactionAccountResourceIT.createEntity(em);
+            em.persist(creditAccount);
+            em.flush();
+        } else {
+            creditAccount = TestUtil.findAll(em, TransactionAccount.class).get(0);
+        }
+        em.persist(creditAccount);
+        em.flush();
+        rouDepreciationEntry.setCreditAccount(creditAccount);
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+        Long creditAccountId = creditAccount.getId();
+
+        // Get all the rouDepreciationEntryList where creditAccount equals to creditAccountId
+        defaultRouDepreciationEntryShouldBeFound("creditAccountId.equals=" + creditAccountId);
+
+        // Get all the rouDepreciationEntryList where creditAccount equals to (creditAccountId + 1)
+        defaultRouDepreciationEntryShouldNotBeFound("creditAccountId.equals=" + (creditAccountId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByAssetCategoryIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+        AssetCategory assetCategory;
+        if (TestUtil.findAll(em, AssetCategory.class).isEmpty()) {
+            assetCategory = AssetCategoryResourceIT.createEntity(em);
+            em.persist(assetCategory);
+            em.flush();
+        } else {
+            assetCategory = TestUtil.findAll(em, AssetCategory.class).get(0);
+        }
+        em.persist(assetCategory);
+        em.flush();
+        rouDepreciationEntry.setAssetCategory(assetCategory);
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+        Long assetCategoryId = assetCategory.getId();
+
+        // Get all the rouDepreciationEntryList where assetCategory equals to assetCategoryId
+        defaultRouDepreciationEntryShouldBeFound("assetCategoryId.equals=" + assetCategoryId);
+
+        // Get all the rouDepreciationEntryList where assetCategory equals to (assetCategoryId + 1)
+        defaultRouDepreciationEntryShouldNotBeFound("assetCategoryId.equals=" + (assetCategoryId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByLeaseContractIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+        IFRS16LeaseContract leaseContract;
+        if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
+            leaseContract = IFRS16LeaseContractResourceIT.createEntity(em);
+            em.persist(leaseContract);
+            em.flush();
+        } else {
+            leaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
+        }
+        em.persist(leaseContract);
+        em.flush();
+        rouDepreciationEntry.setLeaseContract(leaseContract);
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+        Long leaseContractId = leaseContract.getId();
+
+        // Get all the rouDepreciationEntryList where leaseContract equals to leaseContractId
+        defaultRouDepreciationEntryShouldBeFound("leaseContractId.equals=" + leaseContractId);
+
+        // Get all the rouDepreciationEntryList where leaseContract equals to (leaseContractId + 1)
+        defaultRouDepreciationEntryShouldNotBeFound("leaseContractId.equals=" + (leaseContractId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByRouMetadataIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+        RouModelMetadata rouMetadata;
+        if (TestUtil.findAll(em, RouModelMetadata.class).isEmpty()) {
+            rouMetadata = RouModelMetadataResourceIT.createEntity(em);
+            em.persist(rouMetadata);
+            em.flush();
+        } else {
+            rouMetadata = TestUtil.findAll(em, RouModelMetadata.class).get(0);
+        }
+        em.persist(rouMetadata);
+        em.flush();
+        rouDepreciationEntry.setRouMetadata(rouMetadata);
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+        Long rouMetadataId = rouMetadata.getId();
+
+        // Get all the rouDepreciationEntryList where rouMetadata equals to rouMetadataId
+        defaultRouDepreciationEntryShouldBeFound("rouMetadataId.equals=" + rouMetadataId);
+
+        // Get all the rouDepreciationEntryList where rouMetadata equals to (rouMetadataId + 1)
+        defaultRouDepreciationEntryShouldNotBeFound("rouMetadataId.equals=" + (rouMetadataId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -730,7 +1061,8 @@ class RouDepreciationEntryResourceIT {
             .andExpect(jsonPath("$.[*].depreciationAmount").value(hasItem(sameNumber(DEFAULT_DEPRECIATION_AMOUNT))))
             .andExpect(jsonPath("$.[*].outstandingAmount").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_AMOUNT))))
             .andExpect(jsonPath("$.[*].rouAssetIdentifier").value(hasItem(DEFAULT_ROU_ASSET_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].rouDepreciationIdentifier").value(hasItem(DEFAULT_ROU_DEPRECIATION_IDENTIFIER.toString())));
+            .andExpect(jsonPath("$.[*].rouDepreciationIdentifier").value(hasItem(DEFAULT_ROU_DEPRECIATION_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].sequenceNumber").value(hasItem(DEFAULT_SEQUENCE_NUMBER)));
 
         // Check, that the count call also returns 1
         restRouDepreciationEntryMockMvc
@@ -783,7 +1115,8 @@ class RouDepreciationEntryResourceIT {
             .depreciationAmount(UPDATED_DEPRECIATION_AMOUNT)
             .outstandingAmount(UPDATED_OUTSTANDING_AMOUNT)
             .rouAssetIdentifier(UPDATED_ROU_ASSET_IDENTIFIER)
-            .rouDepreciationIdentifier(UPDATED_ROU_DEPRECIATION_IDENTIFIER);
+            .rouDepreciationIdentifier(UPDATED_ROU_DEPRECIATION_IDENTIFIER)
+            .sequenceNumber(UPDATED_SEQUENCE_NUMBER);
         RouDepreciationEntryDTO rouDepreciationEntryDTO = rouDepreciationEntryMapper.toDto(updatedRouDepreciationEntry);
 
         restRouDepreciationEntryMockMvc
@@ -803,6 +1136,7 @@ class RouDepreciationEntryResourceIT {
         assertThat(testRouDepreciationEntry.getOutstandingAmount()).isEqualTo(UPDATED_OUTSTANDING_AMOUNT);
         assertThat(testRouDepreciationEntry.getRouAssetIdentifier()).isEqualTo(UPDATED_ROU_ASSET_IDENTIFIER);
         assertThat(testRouDepreciationEntry.getRouDepreciationIdentifier()).isEqualTo(UPDATED_ROU_DEPRECIATION_IDENTIFIER);
+        assertThat(testRouDepreciationEntry.getSequenceNumber()).isEqualTo(UPDATED_SEQUENCE_NUMBER);
 
         // Validate the RouDepreciationEntry in Elasticsearch
         verify(mockRouDepreciationEntrySearchRepository).save(testRouDepreciationEntry);
@@ -898,7 +1232,7 @@ class RouDepreciationEntryResourceIT {
         RouDepreciationEntry partialUpdatedRouDepreciationEntry = new RouDepreciationEntry();
         partialUpdatedRouDepreciationEntry.setId(rouDepreciationEntry.getId());
 
-        partialUpdatedRouDepreciationEntry.rouAssetIdentifier(UPDATED_ROU_ASSET_IDENTIFIER);
+        partialUpdatedRouDepreciationEntry.rouAssetIdentifier(UPDATED_ROU_ASSET_IDENTIFIER).sequenceNumber(UPDATED_SEQUENCE_NUMBER);
 
         restRouDepreciationEntryMockMvc
             .perform(
@@ -917,6 +1251,7 @@ class RouDepreciationEntryResourceIT {
         assertThat(testRouDepreciationEntry.getOutstandingAmount()).isEqualByComparingTo(DEFAULT_OUTSTANDING_AMOUNT);
         assertThat(testRouDepreciationEntry.getRouAssetIdentifier()).isEqualTo(UPDATED_ROU_ASSET_IDENTIFIER);
         assertThat(testRouDepreciationEntry.getRouDepreciationIdentifier()).isEqualTo(DEFAULT_ROU_DEPRECIATION_IDENTIFIER);
+        assertThat(testRouDepreciationEntry.getSequenceNumber()).isEqualTo(UPDATED_SEQUENCE_NUMBER);
     }
 
     @Test
@@ -936,7 +1271,8 @@ class RouDepreciationEntryResourceIT {
             .depreciationAmount(UPDATED_DEPRECIATION_AMOUNT)
             .outstandingAmount(UPDATED_OUTSTANDING_AMOUNT)
             .rouAssetIdentifier(UPDATED_ROU_ASSET_IDENTIFIER)
-            .rouDepreciationIdentifier(UPDATED_ROU_DEPRECIATION_IDENTIFIER);
+            .rouDepreciationIdentifier(UPDATED_ROU_DEPRECIATION_IDENTIFIER)
+            .sequenceNumber(UPDATED_SEQUENCE_NUMBER);
 
         restRouDepreciationEntryMockMvc
             .perform(
@@ -955,6 +1291,7 @@ class RouDepreciationEntryResourceIT {
         assertThat(testRouDepreciationEntry.getOutstandingAmount()).isEqualByComparingTo(UPDATED_OUTSTANDING_AMOUNT);
         assertThat(testRouDepreciationEntry.getRouAssetIdentifier()).isEqualTo(UPDATED_ROU_ASSET_IDENTIFIER);
         assertThat(testRouDepreciationEntry.getRouDepreciationIdentifier()).isEqualTo(UPDATED_ROU_DEPRECIATION_IDENTIFIER);
+        assertThat(testRouDepreciationEntry.getSequenceNumber()).isEqualTo(UPDATED_SEQUENCE_NUMBER);
     }
 
     @Test
@@ -1075,6 +1412,7 @@ class RouDepreciationEntryResourceIT {
             .andExpect(jsonPath("$.[*].depreciationAmount").value(hasItem(sameNumber(DEFAULT_DEPRECIATION_AMOUNT))))
             .andExpect(jsonPath("$.[*].outstandingAmount").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_AMOUNT))))
             .andExpect(jsonPath("$.[*].rouAssetIdentifier").value(hasItem(DEFAULT_ROU_ASSET_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].rouDepreciationIdentifier").value(hasItem(DEFAULT_ROU_DEPRECIATION_IDENTIFIER.toString())));
+            .andExpect(jsonPath("$.[*].rouDepreciationIdentifier").value(hasItem(DEFAULT_ROU_DEPRECIATION_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].sequenceNumber").value(hasItem(DEFAULT_SEQUENCE_NUMBER)));
     }
 }

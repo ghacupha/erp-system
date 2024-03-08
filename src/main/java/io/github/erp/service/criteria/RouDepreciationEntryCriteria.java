@@ -56,6 +56,18 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
 
     private UUIDFilter rouDepreciationIdentifier;
 
+    private IntegerFilter sequenceNumber;
+
+    private LongFilter debitAccountId;
+
+    private LongFilter creditAccountId;
+
+    private LongFilter assetCategoryId;
+
+    private LongFilter leaseContractId;
+
+    private LongFilter rouMetadataId;
+
     private Boolean distinct;
 
     public RouDepreciationEntryCriteria() {}
@@ -67,6 +79,12 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
         this.outstandingAmount = other.outstandingAmount == null ? null : other.outstandingAmount.copy();
         this.rouAssetIdentifier = other.rouAssetIdentifier == null ? null : other.rouAssetIdentifier.copy();
         this.rouDepreciationIdentifier = other.rouDepreciationIdentifier == null ? null : other.rouDepreciationIdentifier.copy();
+        this.sequenceNumber = other.sequenceNumber == null ? null : other.sequenceNumber.copy();
+        this.debitAccountId = other.debitAccountId == null ? null : other.debitAccountId.copy();
+        this.creditAccountId = other.creditAccountId == null ? null : other.creditAccountId.copy();
+        this.assetCategoryId = other.assetCategoryId == null ? null : other.assetCategoryId.copy();
+        this.leaseContractId = other.leaseContractId == null ? null : other.leaseContractId.copy();
+        this.rouMetadataId = other.rouMetadataId == null ? null : other.rouMetadataId.copy();
         this.distinct = other.distinct;
     }
 
@@ -165,6 +183,96 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
         this.rouDepreciationIdentifier = rouDepreciationIdentifier;
     }
 
+    public IntegerFilter getSequenceNumber() {
+        return sequenceNumber;
+    }
+
+    public IntegerFilter sequenceNumber() {
+        if (sequenceNumber == null) {
+            sequenceNumber = new IntegerFilter();
+        }
+        return sequenceNumber;
+    }
+
+    public void setSequenceNumber(IntegerFilter sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+
+    public LongFilter getDebitAccountId() {
+        return debitAccountId;
+    }
+
+    public LongFilter debitAccountId() {
+        if (debitAccountId == null) {
+            debitAccountId = new LongFilter();
+        }
+        return debitAccountId;
+    }
+
+    public void setDebitAccountId(LongFilter debitAccountId) {
+        this.debitAccountId = debitAccountId;
+    }
+
+    public LongFilter getCreditAccountId() {
+        return creditAccountId;
+    }
+
+    public LongFilter creditAccountId() {
+        if (creditAccountId == null) {
+            creditAccountId = new LongFilter();
+        }
+        return creditAccountId;
+    }
+
+    public void setCreditAccountId(LongFilter creditAccountId) {
+        this.creditAccountId = creditAccountId;
+    }
+
+    public LongFilter getAssetCategoryId() {
+        return assetCategoryId;
+    }
+
+    public LongFilter assetCategoryId() {
+        if (assetCategoryId == null) {
+            assetCategoryId = new LongFilter();
+        }
+        return assetCategoryId;
+    }
+
+    public void setAssetCategoryId(LongFilter assetCategoryId) {
+        this.assetCategoryId = assetCategoryId;
+    }
+
+    public LongFilter getLeaseContractId() {
+        return leaseContractId;
+    }
+
+    public LongFilter leaseContractId() {
+        if (leaseContractId == null) {
+            leaseContractId = new LongFilter();
+        }
+        return leaseContractId;
+    }
+
+    public void setLeaseContractId(LongFilter leaseContractId) {
+        this.leaseContractId = leaseContractId;
+    }
+
+    public LongFilter getRouMetadataId() {
+        return rouMetadataId;
+    }
+
+    public LongFilter rouMetadataId() {
+        if (rouMetadataId == null) {
+            rouMetadataId = new LongFilter();
+        }
+        return rouMetadataId;
+    }
+
+    public void setRouMetadataId(LongFilter rouMetadataId) {
+        this.rouMetadataId = rouMetadataId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -189,6 +297,12 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
             Objects.equals(outstandingAmount, that.outstandingAmount) &&
             Objects.equals(rouAssetIdentifier, that.rouAssetIdentifier) &&
             Objects.equals(rouDepreciationIdentifier, that.rouDepreciationIdentifier) &&
+            Objects.equals(sequenceNumber, that.sequenceNumber) &&
+            Objects.equals(debitAccountId, that.debitAccountId) &&
+            Objects.equals(creditAccountId, that.creditAccountId) &&
+            Objects.equals(assetCategoryId, that.assetCategoryId) &&
+            Objects.equals(leaseContractId, that.leaseContractId) &&
+            Objects.equals(rouMetadataId, that.rouMetadataId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -202,6 +316,12 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
             outstandingAmount,
             rouAssetIdentifier,
             rouDepreciationIdentifier,
+            sequenceNumber,
+            debitAccountId,
+            creditAccountId,
+            assetCategoryId,
+            leaseContractId,
+            rouMetadataId,
             distinct
         );
     }
@@ -216,6 +336,12 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
             (outstandingAmount != null ? "outstandingAmount=" + outstandingAmount + ", " : "") +
             (rouAssetIdentifier != null ? "rouAssetIdentifier=" + rouAssetIdentifier + ", " : "") +
             (rouDepreciationIdentifier != null ? "rouDepreciationIdentifier=" + rouDepreciationIdentifier + ", " : "") +
+            (sequenceNumber != null ? "sequenceNumber=" + sequenceNumber + ", " : "") +
+            (debitAccountId != null ? "debitAccountId=" + debitAccountId + ", " : "") +
+            (creditAccountId != null ? "creditAccountId=" + creditAccountId + ", " : "") +
+            (assetCategoryId != null ? "assetCategoryId=" + assetCategoryId + ", " : "") +
+            (leaseContractId != null ? "leaseContractId=" + leaseContractId + ", " : "") +
+            (rouMetadataId != null ? "rouMetadataId=" + rouMetadataId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

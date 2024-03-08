@@ -25,5 +25,15 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link RouDepreciationEntry} and its DTO {@link RouDepreciationEntryDTO}.
  */
-@Mapper(componentModel = "spring", uses = {})
-public interface RouDepreciationEntryMapper extends EntityMapper<RouDepreciationEntryDTO, RouDepreciationEntry> {}
+@Mapper(
+    componentModel = "spring",
+    uses = { TransactionAccountMapper.class, AssetCategoryMapper.class, IFRS16LeaseContractMapper.class, RouModelMetadataMapper.class }
+)
+public interface RouDepreciationEntryMapper extends EntityMapper<RouDepreciationEntryDTO, RouDepreciationEntry> {
+    @Mapping(target = "debitAccount", source = "debitAccount", qualifiedByName = "accountName")
+    @Mapping(target = "creditAccount", source = "creditAccount", qualifiedByName = "accountName")
+    @Mapping(target = "assetCategory", source = "assetCategory", qualifiedByName = "assetCategoryName")
+    @Mapping(target = "leaseContract", source = "leaseContract", qualifiedByName = "bookingId")
+    @Mapping(target = "rouMetadata", source = "rouMetadata", qualifiedByName = "modelTitle")
+    RouDepreciationEntryDTO toDto(RouDepreciationEntry s);
+}
