@@ -48,10 +48,11 @@ public class IFRS16LeaseContract implements Serializable {
     @Column(name = "booking_id", nullable = false, unique = true)
     private String bookingId;
 
-    @Column(name = "lease_title", unique = true)
+    @NotNull
+    @Column(name = "lease_title", nullable = false)
     private String leaseTitle;
 
-    @Column(name = "short_title")
+    @Column(name = "short_title", unique = true)
     private String shortTitle;
 
     @Column(name = "description")

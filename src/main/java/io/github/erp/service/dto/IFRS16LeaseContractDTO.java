@@ -34,6 +34,7 @@ public class IFRS16LeaseContractDTO implements Serializable {
     @NotNull
     private String bookingId;
 
+    @NotNull
     private String leaseTitle;
 
     private String shortTitle;
