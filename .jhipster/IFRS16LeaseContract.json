@@ -8,11 +8,12 @@
     {
       "fieldName": "leaseTitle",
       "fieldType": "String",
-      "fieldValidateRules": ["unique"]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "shortTitle",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
     },
     {
       "fieldName": "description",
