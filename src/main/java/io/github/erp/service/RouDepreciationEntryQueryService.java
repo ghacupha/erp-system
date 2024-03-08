@@ -137,6 +137,55 @@ public class RouDepreciationEntryQueryService extends QueryService<RouDepreciati
                         buildSpecification(criteria.getRouDepreciationIdentifier(), RouDepreciationEntry_.rouDepreciationIdentifier)
                     );
             }
+            if (criteria.getSequenceNumber() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getSequenceNumber(), RouDepreciationEntry_.sequenceNumber));
+            }
+            if (criteria.getDebitAccountId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getDebitAccountId(),
+                            root -> root.join(RouDepreciationEntry_.debitAccount, JoinType.LEFT).get(TransactionAccount_.id)
+                        )
+                    );
+            }
+            if (criteria.getCreditAccountId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getCreditAccountId(),
+                            root -> root.join(RouDepreciationEntry_.creditAccount, JoinType.LEFT).get(TransactionAccount_.id)
+                        )
+                    );
+            }
+            if (criteria.getAssetCategoryId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getAssetCategoryId(),
+                            root -> root.join(RouDepreciationEntry_.assetCategory, JoinType.LEFT).get(AssetCategory_.id)
+                        )
+                    );
+            }
+            if (criteria.getLeaseContractId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLeaseContractId(),
+                            root -> root.join(RouDepreciationEntry_.leaseContract, JoinType.LEFT).get(IFRS16LeaseContract_.id)
+                        )
+                    );
+            }
+            if (criteria.getRouMetadataId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getRouMetadataId(),
+                            root -> root.join(RouDepreciationEntry_.rouMetadata, JoinType.LEFT).get(RouModelMetadata_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

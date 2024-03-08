@@ -18,6 +18,7 @@ package io.github.erp.domain;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -62,6 +63,47 @@ public class RouDepreciationEntry implements Serializable {
     @NotNull
     @Column(name = "rou_depreciation_identifier", nullable = false, unique = true)
     private UUID rouDepreciationIdentifier;
+
+    @Column(name = "sequence_number")
+    private Integer sequenceNumber;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
+    private TransactionAccount debitAccount;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
+    private TransactionAccount creditAccount;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "depreciationMethod", "placeholders" }, allowSetters = true)
+    private AssetCategory assetCategory;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(
+        value = { "superintendentServiceOutlet", "mainDealer", "firstReportingPeriod", "lastReportingPeriod" },
+        allowSetters = true
+    )
+    private IFRS16LeaseContract leaseContract;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(
+        value = {
+            "ifrs16LeaseContract",
+            "assetAccount",
+            "depreciationAccount",
+            "accruedDepreciationAccount",
+            "assetCategory",
+            "documentAttachments",
+        },
+        allowSetters = true
+    )
+    private RouModelMetadata rouMetadata;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -143,6 +185,84 @@ public class RouDepreciationEntry implements Serializable {
         this.rouDepreciationIdentifier = rouDepreciationIdentifier;
     }
 
+    public Integer getSequenceNumber() {
+        return this.sequenceNumber;
+    }
+
+    public RouDepreciationEntry sequenceNumber(Integer sequenceNumber) {
+        this.setSequenceNumber(sequenceNumber);
+        return this;
+    }
+
+    public void setSequenceNumber(Integer sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+
+    public TransactionAccount getDebitAccount() {
+        return this.debitAccount;
+    }
+
+    public void setDebitAccount(TransactionAccount transactionAccount) {
+        this.debitAccount = transactionAccount;
+    }
+
+    public RouDepreciationEntry debitAccount(TransactionAccount transactionAccount) {
+        this.setDebitAccount(transactionAccount);
+        return this;
+    }
+
+    public TransactionAccount getCreditAccount() {
+        return this.creditAccount;
+    }
+
+    public void setCreditAccount(TransactionAccount transactionAccount) {
+        this.creditAccount = transactionAccount;
+    }
+
+    public RouDepreciationEntry creditAccount(TransactionAccount transactionAccount) {
+        this.setCreditAccount(transactionAccount);
+        return this;
+    }
+
+    public AssetCategory getAssetCategory() {
+        return this.assetCategory;
+    }
+
+    public void setAssetCategory(AssetCategory assetCategory) {
+        this.assetCategory = assetCategory;
+    }
+
+    public RouDepreciationEntry assetCategory(AssetCategory assetCategory) {
+        this.setAssetCategory(assetCategory);
+        return this;
+    }
+
+    public IFRS16LeaseContract getLeaseContract() {
+        return this.leaseContract;
+    }
+
+    public void setLeaseContract(IFRS16LeaseContract iFRS16LeaseContract) {
+        this.leaseContract = iFRS16LeaseContract;
+    }
+
+    public RouDepreciationEntry leaseContract(IFRS16LeaseContract iFRS16LeaseContract) {
+        this.setLeaseContract(iFRS16LeaseContract);
+        return this;
+    }
+
+    public RouModelMetadata getRouMetadata() {
+        return this.rouMetadata;
+    }
+
+    public void setRouMetadata(RouModelMetadata rouModelMetadata) {
+        this.rouMetadata = rouModelMetadata;
+    }
+
+    public RouDepreciationEntry rouMetadata(RouModelMetadata rouModelMetadata) {
+        this.setRouMetadata(rouModelMetadata);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -172,6 +292,7 @@ public class RouDepreciationEntry implements Serializable {
             ", outstandingAmount=" + getOutstandingAmount() +
             ", rouAssetIdentifier='" + getRouAssetIdentifier() + "'" +
             ", rouDepreciationIdentifier='" + getRouDepreciationIdentifier() + "'" +
+            ", sequenceNumber=" + getSequenceNumber() +
             "}";
     }
 }

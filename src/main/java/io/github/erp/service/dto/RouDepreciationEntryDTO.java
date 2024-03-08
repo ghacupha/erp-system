@@ -46,6 +46,18 @@ public class RouDepreciationEntryDTO implements Serializable {
     @NotNull
     private UUID rouDepreciationIdentifier;
 
+    private Integer sequenceNumber;
+
+    private TransactionAccountDTO debitAccount;
+
+    private TransactionAccountDTO creditAccount;
+
+    private AssetCategoryDTO assetCategory;
+
+    private IFRS16LeaseContractDTO leaseContract;
+
+    private RouModelMetadataDTO rouMetadata;
+
     public Long getId() {
         return id;
     }
@@ -94,6 +106,54 @@ public class RouDepreciationEntryDTO implements Serializable {
         this.rouDepreciationIdentifier = rouDepreciationIdentifier;
     }
 
+    public Integer getSequenceNumber() {
+        return sequenceNumber;
+    }
+
+    public void setSequenceNumber(Integer sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+
+    public TransactionAccountDTO getDebitAccount() {
+        return debitAccount;
+    }
+
+    public void setDebitAccount(TransactionAccountDTO debitAccount) {
+        this.debitAccount = debitAccount;
+    }
+
+    public TransactionAccountDTO getCreditAccount() {
+        return creditAccount;
+    }
+
+    public void setCreditAccount(TransactionAccountDTO creditAccount) {
+        this.creditAccount = creditAccount;
+    }
+
+    public AssetCategoryDTO getAssetCategory() {
+        return assetCategory;
+    }
+
+    public void setAssetCategory(AssetCategoryDTO assetCategory) {
+        this.assetCategory = assetCategory;
+    }
+
+    public IFRS16LeaseContractDTO getLeaseContract() {
+        return leaseContract;
+    }
+
+    public void setLeaseContract(IFRS16LeaseContractDTO leaseContract) {
+        this.leaseContract = leaseContract;
+    }
+
+    public RouModelMetadataDTO getRouMetadata() {
+        return rouMetadata;
+    }
+
+    public void setRouMetadata(RouModelMetadataDTO rouMetadata) {
+        this.rouMetadata = rouMetadata;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -125,6 +185,12 @@ public class RouDepreciationEntryDTO implements Serializable {
             ", outstandingAmount=" + getOutstandingAmount() +
             ", rouAssetIdentifier='" + getRouAssetIdentifier() + "'" +
             ", rouDepreciationIdentifier='" + getRouDepreciationIdentifier() + "'" +
+            ", sequenceNumber=" + getSequenceNumber() +
+            ", debitAccount=" + getDebitAccount() +
+            ", creditAccount=" + getCreditAccount() +
+            ", assetCategory=" + getAssetCategory() +
+            ", leaseContract=" + getLeaseContract() +
+            ", rouMetadata=" + getRouMetadata() +
             "}";
     }
 }

@@ -40,4 +40,10 @@ public interface RouModelMetadataMapper extends EntityMapper<RouModelMetadataDTO
 
     @Mapping(target = "removeDocumentAttachments", ignore = true)
     RouModelMetadata toEntity(RouModelMetadataDTO rouModelMetadataDTO);
+
+    @Named("modelTitle")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "modelTitle", source = "modelTitle")
+    RouModelMetadataDTO toDtoModelTitle(RouModelMetadata rouModelMetadata);
 }

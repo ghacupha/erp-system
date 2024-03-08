@@ -29,6 +29,24 @@
             <column name="rou_depreciation_identifier" type="${uuidType}">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_rou_depreciation_entry__rou_depreciation_identifier" />
             </column>
+            <column name="sequence_number" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="debit_account_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="credit_account_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="asset_category_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="lease_contract_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="rou_metadata_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
@@ -55,6 +73,12 @@
             <column name="outstanding_amount" type="numeric"/>
             <column name="rou_asset_identifier" type="${uuidType}"/>
             <column name="rou_depreciation_identifier" type="${uuidType}"/>
+            <column name="sequence_number" type="numeric"/>
+            <column name="debit_account_id" type="numeric"/>
+            <column name="credit_account_id" type="numeric"/>
+            <column name="asset_category_id" type="numeric"/>
+            <column name="lease_contract_id" type="numeric"/>
+            <column name="rou_metadata_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>
