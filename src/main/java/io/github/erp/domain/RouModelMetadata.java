@@ -21,6 +21,7 @@ package io.github.erp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -70,10 +71,29 @@ public class RouModelMetadata implements Serializable {
     @Column(name = "rou_model_reference", nullable = false, unique = true)
     private UUID rouModelReference;
 
+    @Column(name = "commencement_date")
+    private LocalDate commencementDate;
+
+    @Column(name = "expiration_date")
+    private LocalDate expirationDate;
+
+    @Column(name = "has_been_fully_amortised")
+    private Boolean hasBeenFullyAmortised;
+
+    @Column(name = "has_been_decommissioned")
+    private Boolean hasBeenDecommissioned;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
-        value = { "superintendentServiceOutlet", "mainDealer", "firstReportingPeriod", "lastReportingPeriod" },
+        value = {
+            "superintendentServiceOutlet",
+            "mainDealer",
+            "firstReportingPeriod",
+            "lastReportingPeriod",
+            "leaseContractDocument",
+            "leaseContractCalculations",
+        },
         allowSetters = true
     )
     private IFRS16LeaseContract ifrs16LeaseContract;
@@ -211,6 +231,58 @@ public class RouModelMetadata implements Serializable {
         this.rouModelReference = rouModelReference;
     }
 
+    public LocalDate getCommencementDate() {
+        return this.commencementDate;
+    }
+
+    public RouModelMetadata commencementDate(LocalDate commencementDate) {
+        this.setCommencementDate(commencementDate);
+        return this;
+    }
+
+    public void setCommencementDate(LocalDate commencementDate) {
+        this.commencementDate = commencementDate;
+    }
+
+    public LocalDate getExpirationDate() {
+        return this.expirationDate;
+    }
+
+    public RouModelMetadata expirationDate(LocalDate expirationDate) {
+        this.setExpirationDate(expirationDate);
+        return this;
+    }
+
+    public void setExpirationDate(LocalDate expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+    public Boolean getHasBeenFullyAmortised() {
+        return this.hasBeenFullyAmortised;
+    }
+
+    public RouModelMetadata hasBeenFullyAmortised(Boolean hasBeenFullyAmortised) {
+        this.setHasBeenFullyAmortised(hasBeenFullyAmortised);
+        return this;
+    }
+
+    public void setHasBeenFullyAmortised(Boolean hasBeenFullyAmortised) {
+        this.hasBeenFullyAmortised = hasBeenFullyAmortised;
+    }
+
+    public Boolean getHasBeenDecommissioned() {
+        return this.hasBeenDecommissioned;
+    }
+
+    public RouModelMetadata hasBeenDecommissioned(Boolean hasBeenDecommissioned) {
+        this.setHasBeenDecommissioned(hasBeenDecommissioned);
+        return this;
+    }
+
+    public void setHasBeenDecommissioned(Boolean hasBeenDecommissioned) {
+        this.hasBeenDecommissioned = hasBeenDecommissioned;
+    }
+
     public IFRS16LeaseContract getIfrs16LeaseContract() {
         return this.ifrs16LeaseContract;
     }
@@ -329,6 +401,10 @@ public class RouModelMetadata implements Serializable {
             ", leaseTermPeriods=" + getLeaseTermPeriods() +
             ", leaseAmount=" + getLeaseAmount() +
             ", rouModelReference='" + getRouModelReference() + "'" +
+            ", commencementDate='" + getCommencementDate() + "'" +
+            ", expirationDate='" + getExpirationDate() + "'" +
+            ", hasBeenFullyAmortised='" + getHasBeenFullyAmortised() + "'" +
+            ", hasBeenDecommissioned='" + getHasBeenDecommissioned() + "'" +
             "}";
     }
 }

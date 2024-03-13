@@ -27,6 +27,7 @@ import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
+import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 import tech.jhipster.service.filter.UUIDFilter;
@@ -58,6 +59,14 @@ public class RouModelMetadataCriteria implements Serializable, Criteria {
 
     private UUIDFilter rouModelReference;
 
+    private LocalDateFilter commencementDate;
+
+    private LocalDateFilter expirationDate;
+
+    private BooleanFilter hasBeenFullyAmortised;
+
+    private BooleanFilter hasBeenDecommissioned;
+
     private LongFilter ifrs16LeaseContractId;
 
     private LongFilter assetAccountId;
@@ -82,6 +91,10 @@ public class RouModelMetadataCriteria implements Serializable, Criteria {
         this.leaseTermPeriods = other.leaseTermPeriods == null ? null : other.leaseTermPeriods.copy();
         this.leaseAmount = other.leaseAmount == null ? null : other.leaseAmount.copy();
         this.rouModelReference = other.rouModelReference == null ? null : other.rouModelReference.copy();
+        this.commencementDate = other.commencementDate == null ? null : other.commencementDate.copy();
+        this.expirationDate = other.expirationDate == null ? null : other.expirationDate.copy();
+        this.hasBeenFullyAmortised = other.hasBeenFullyAmortised == null ? null : other.hasBeenFullyAmortised.copy();
+        this.hasBeenDecommissioned = other.hasBeenDecommissioned == null ? null : other.hasBeenDecommissioned.copy();
         this.ifrs16LeaseContractId = other.ifrs16LeaseContractId == null ? null : other.ifrs16LeaseContractId.copy();
         this.assetAccountId = other.assetAccountId == null ? null : other.assetAccountId.copy();
         this.depreciationAccountId = other.depreciationAccountId == null ? null : other.depreciationAccountId.copy();
@@ -201,6 +214,66 @@ public class RouModelMetadataCriteria implements Serializable, Criteria {
         this.rouModelReference = rouModelReference;
     }
 
+    public LocalDateFilter getCommencementDate() {
+        return commencementDate;
+    }
+
+    public LocalDateFilter commencementDate() {
+        if (commencementDate == null) {
+            commencementDate = new LocalDateFilter();
+        }
+        return commencementDate;
+    }
+
+    public void setCommencementDate(LocalDateFilter commencementDate) {
+        this.commencementDate = commencementDate;
+    }
+
+    public LocalDateFilter getExpirationDate() {
+        return expirationDate;
+    }
+
+    public LocalDateFilter expirationDate() {
+        if (expirationDate == null) {
+            expirationDate = new LocalDateFilter();
+        }
+        return expirationDate;
+    }
+
+    public void setExpirationDate(LocalDateFilter expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+    public BooleanFilter getHasBeenFullyAmortised() {
+        return hasBeenFullyAmortised;
+    }
+
+    public BooleanFilter hasBeenFullyAmortised() {
+        if (hasBeenFullyAmortised == null) {
+            hasBeenFullyAmortised = new BooleanFilter();
+        }
+        return hasBeenFullyAmortised;
+    }
+
+    public void setHasBeenFullyAmortised(BooleanFilter hasBeenFullyAmortised) {
+        this.hasBeenFullyAmortised = hasBeenFullyAmortised;
+    }
+
+    public BooleanFilter getHasBeenDecommissioned() {
+        return hasBeenDecommissioned;
+    }
+
+    public BooleanFilter hasBeenDecommissioned() {
+        if (hasBeenDecommissioned == null) {
+            hasBeenDecommissioned = new BooleanFilter();
+        }
+        return hasBeenDecommissioned;
+    }
+
+    public void setHasBeenDecommissioned(BooleanFilter hasBeenDecommissioned) {
+        this.hasBeenDecommissioned = hasBeenDecommissioned;
+    }
+
     public LongFilter getIfrs16LeaseContractId() {
         return ifrs16LeaseContractId;
     }
@@ -316,6 +389,10 @@ public class RouModelMetadataCriteria implements Serializable, Criteria {
             Objects.equals(leaseTermPeriods, that.leaseTermPeriods) &&
             Objects.equals(leaseAmount, that.leaseAmount) &&
             Objects.equals(rouModelReference, that.rouModelReference) &&
+            Objects.equals(commencementDate, that.commencementDate) &&
+            Objects.equals(expirationDate, that.expirationDate) &&
+            Objects.equals(hasBeenFullyAmortised, that.hasBeenFullyAmortised) &&
+            Objects.equals(hasBeenDecommissioned, that.hasBeenDecommissioned) &&
             Objects.equals(ifrs16LeaseContractId, that.ifrs16LeaseContractId) &&
             Objects.equals(assetAccountId, that.assetAccountId) &&
             Objects.equals(depreciationAccountId, that.depreciationAccountId) &&
@@ -336,6 +413,10 @@ public class RouModelMetadataCriteria implements Serializable, Criteria {
             leaseTermPeriods,
             leaseAmount,
             rouModelReference,
+            commencementDate,
+            expirationDate,
+            hasBeenFullyAmortised,
+            hasBeenDecommissioned,
             ifrs16LeaseContractId,
             assetAccountId,
             depreciationAccountId,
@@ -357,6 +438,10 @@ public class RouModelMetadataCriteria implements Serializable, Criteria {
             (leaseTermPeriods != null ? "leaseTermPeriods=" + leaseTermPeriods + ", " : "") +
             (leaseAmount != null ? "leaseAmount=" + leaseAmount + ", " : "") +
             (rouModelReference != null ? "rouModelReference=" + rouModelReference + ", " : "") +
+            (commencementDate != null ? "commencementDate=" + commencementDate + ", " : "") +
+            (expirationDate != null ? "expirationDate=" + expirationDate + ", " : "") +
+            (hasBeenFullyAmortised != null ? "hasBeenFullyAmortised=" + hasBeenFullyAmortised + ", " : "") +
+            (hasBeenDecommissioned != null ? "hasBeenDecommissioned=" + hasBeenDecommissioned + ", " : "") +
             (ifrs16LeaseContractId != null ? "ifrs16LeaseContractId=" + ifrs16LeaseContractId + ", " : "") +
             (assetAccountId != null ? "assetAccountId=" + assetAccountId + ", " : "") +
             (depreciationAccountId != null ? "depreciationAccountId=" + depreciationAccountId + ", " : "") +

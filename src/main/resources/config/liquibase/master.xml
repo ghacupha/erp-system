@@ -254,6 +254,19 @@
     <include file="config/liquibase/changelog/20240307045420_added_entity_IFRS16LeaseContract.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240307081647_added_entity_RouModelMetadata.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240307105511_added_entity_RouDepreciationEntry.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313073952_added_entity_RouDepreciationEntryReportItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313075647_added_entity_RouDepreciationEntryReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313080709_added_entity_RouDepreciationRequest.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313083108_added_entity_RouAssetListReportItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313083631_added_entity_RouAssetNBVReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313084433_added_entity_RouAssetNBVReportItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313091444_added_entity_RouAccountBalanceReportItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313092355_added_entity_RouAccountBalanceReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313093232_added_entity_RouAssetListReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313094655_added_entity_RouDepreciationPostingReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313102017_added_entity_RouDepreciationPostingReportItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313103527_added_entity_RouMonthlyDepreciationReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313103024_added_entity_RouMonthlyDepreciationReportItem.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
@@ -434,6 +447,14 @@
     <include file="config/liquibase/changelog/20240307105511_added_entity_constraints_RouDepreciationEntry.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240308043402_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240308182607_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313075647_added_entity_constraints_RouDepreciationEntryReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313080709_added_entity_constraints_RouDepreciationRequest.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313083631_added_entity_constraints_RouAssetNBVReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313092355_added_entity_constraints_RouAccountBalanceReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313093232_added_entity_constraints_RouAssetListReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313094655_added_entity_constraints_RouDepreciationPostingReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313103527_added_entity_constraints_RouMonthlyDepreciationReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313134838_changelog.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

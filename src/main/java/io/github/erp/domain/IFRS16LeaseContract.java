@@ -92,6 +92,36 @@ public class IFRS16LeaseContract implements Serializable {
     @JsonIgnoreProperties(value = { "fiscalYear", "placeholders", "universallyUniqueMappings", "fiscalQuarter" }, allowSetters = true)
     private FiscalMonth lastReportingPeriod;
 
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = {
+            "createdBy",
+            "lastModifiedBy",
+            "originatingDepartment",
+            "applicationMappings",
+            "placeholders",
+            "fileChecksumAlgorithm",
+            "securityClearance",
+        },
+        allowSetters = true
+    )
+    private BusinessDocument leaseContractDocument;
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = {
+            "createdBy",
+            "lastModifiedBy",
+            "originatingDepartment",
+            "applicationMappings",
+            "placeholders",
+            "fileChecksumAlgorithm",
+            "securityClearance",
+        },
+        allowSetters = true
+    )
+    private BusinessDocument leaseContractCalculations;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -247,6 +277,32 @@ public class IFRS16LeaseContract implements Serializable {
 
     public IFRS16LeaseContract lastReportingPeriod(FiscalMonth fiscalMonth) {
         this.setLastReportingPeriod(fiscalMonth);
+        return this;
+    }
+
+    public BusinessDocument getLeaseContractDocument() {
+        return this.leaseContractDocument;
+    }
+
+    public void setLeaseContractDocument(BusinessDocument businessDocument) {
+        this.leaseContractDocument = businessDocument;
+    }
+
+    public IFRS16LeaseContract leaseContractDocument(BusinessDocument businessDocument) {
+        this.setLeaseContractDocument(businessDocument);
+        return this;
+    }
+
+    public BusinessDocument getLeaseContractCalculations() {
+        return this.leaseContractCalculations;
+    }
+
+    public void setLeaseContractCalculations(BusinessDocument businessDocument) {
+        this.leaseContractCalculations = businessDocument;
+    }
+
+    public IFRS16LeaseContract leaseContractCalculations(BusinessDocument businessDocument) {
+        this.setLeaseContractCalculations(businessDocument);
         return this;
     }
 

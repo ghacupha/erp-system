@@ -1,11 +1,11 @@
-id;model_title;model_version;description;lease_term_periods;lease_amount;rou_model_reference;ifrs16lease_contract_id;asset_account_id;depreciation_account_id;accrued_depreciation_account_id
-1;Rubber;12486;Centralized pink;65020;17803;9ddde4a9-328d-4015-82c2-52b6272c9edb;1;1;1;1
-2;Global Principal;61088;Plastic Electronics;24211;6856;e32eb338-3c4e-48c5-9114-32f214c70eb1;2;2;2;2
-3;quantify hacking;36522;Mouse;7116;17058;9b860368-0dd7-4166-b3b4-923009a38e2b;3;3;3;3
-4;orange Secured;53652;yellow;21156;24242;df934dbf-7471-449a-8784-deeef60aa67b;4;4;4;4
-5;transmit;2368;capacitor Agent;56816;12744;a0072fa6-6225-455d-b939-c281ae994364;5;5;5;5
-6;Borders;19331;Assistant;14825;34520;3963b385-1f6a-4db4-914c-4f4ee77f33cc;6;6;6;6
-7;viral orchid;39945;intangible bottom-line Books;54473;71956;438b1439-33e2-44b0-8e43-ecac51123999;7;7;7;7
-8;bandwidth;16915;Frozen Lead;94217;37826;ea8edb5c-2ff0-4842-9bd9-2ea0b5c45585;8;8;8;8
-9;multi-byte;86522;purple system;65754;56858;b3d4edba-869c-4f68-9c3b-e1b71ac2d228;9;9;9;9
-10;Bahamas repurpose;32449;Frozen;12474;80939;02eded30-45c9-4b24-82e7-61e7723806e1;10;10;10;10
+id;model_title;model_version;description;lease_term_periods;lease_amount;rou_model_reference;commencement_date;expiration_date;has_been_fully_amortised;has_been_decommissioned;ifrs16lease_contract_id;asset_account_id;depreciation_account_id;accrued_depreciation_account_id
+1;Rubber;12486;Centralized pink;65020;17803;9ddde4a9-328d-4015-82c2-52b6272c9edb;2024-03-06;2024-03-06;true;true;1;1;1;1
+2;Agent Arizona one-to-one;1444;Future;91386;23248;2eb3383c-4e8c-4511-9432-f214c70eb19c;2024-03-06;2024-03-07;true;false;2;2;2;2
+3;robust;18450;Rubber implement syndicate;83562;82883;7166f3b4-9230-409a-b8e2-b534e3c38131;2024-03-07;2024-03-07;false;true;3;3;3;3
+4;Savings calculating Forks;6380;Credit;47793;53886;4deeef60-aa67-4b2c-9f07-bfbfe692a007;2024-03-07;2024-03-06;true;false;4;4;4;4
+5;Mouse monetize;73168;Organic Granite;67495;89960;99436448-8132-4fd6-a539-63b3851f6adb;2024-03-07;2024-03-06;false;false;5;5;5;5
+6;well-modulated Accountability Cambridgeshire;24233;haptic proactive invoice;73337;29501;8c42b00c-8b43-48b1-8393-3e24b08e43ec;2024-03-06;2024-03-06;false;false;6;6;6;6
+7;Concrete;62101;non-volatile Bedfordshire;12583;94076;8e00f6ea-8edb-45c2-bf08-429bd92ea0b5;2024-03-06;2024-03-07;false;false;7;7;7;7
+8;clicks-and-mortar Georgia;33459;Towels;42977;83429;a9b3d4ed-ba86-49cf-a8dc-3be1b71ac2d2;2024-03-07;2024-03-06;false;true;8;8;8;8
+9;dynamic;84256;Car;95048;17236;91c02ede-d304-45c9-b248-2e761e772380;2024-03-06;2024-03-06;false;true;9;9;9;9
+10;program foreground;45289;Universal;90106;72313;479ec531-b9a6-4f39-8ed6-420459e15c85;2024-03-06;2024-03-07;true;true;10;10;10;10

@@ -38,6 +38,8 @@ import io.github.erp.service.criteria.RouModelMetadataCriteria;
 import io.github.erp.service.dto.RouModelMetadataDTO;
 import io.github.erp.service.mapper.RouModelMetadataMapper;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -89,6 +91,20 @@ class RouModelMetadataResourceIT {
     private static final UUID DEFAULT_ROU_MODEL_REFERENCE = UUID.randomUUID();
     private static final UUID UPDATED_ROU_MODEL_REFERENCE = UUID.randomUUID();
 
+    private static final LocalDate DEFAULT_COMMENCEMENT_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_COMMENCEMENT_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_COMMENCEMENT_DATE = LocalDate.ofEpochDay(-1L);
+
+    private static final LocalDate DEFAULT_EXPIRATION_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_EXPIRATION_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_EXPIRATION_DATE = LocalDate.ofEpochDay(-1L);
+
+    private static final Boolean DEFAULT_HAS_BEEN_FULLY_AMORTISED = false;
+    private static final Boolean UPDATED_HAS_BEEN_FULLY_AMORTISED = true;
+
+    private static final Boolean DEFAULT_HAS_BEEN_DECOMMISSIONED = false;
+    private static final Boolean UPDATED_HAS_BEEN_DECOMMISSIONED = true;
+
     private static final String ENTITY_API_URL = "/api/rou-model-metadata";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/rou-model-metadata";
@@ -137,7 +153,11 @@ class RouModelMetadataResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .leaseTermPeriods(DEFAULT_LEASE_TERM_PERIODS)
             .leaseAmount(DEFAULT_LEASE_AMOUNT)
-            .rouModelReference(DEFAULT_ROU_MODEL_REFERENCE);
+            .rouModelReference(DEFAULT_ROU_MODEL_REFERENCE)
+            .commencementDate(DEFAULT_COMMENCEMENT_DATE)
+            .expirationDate(DEFAULT_EXPIRATION_DATE)
+            .hasBeenFullyAmortised(DEFAULT_HAS_BEEN_FULLY_AMORTISED)
+            .hasBeenDecommissioned(DEFAULT_HAS_BEEN_DECOMMISSIONED);
         // Add required entity
         IFRS16LeaseContract iFRS16LeaseContract;
         if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
@@ -178,7 +198,11 @@ class RouModelMetadataResourceIT {
             .description(UPDATED_DESCRIPTION)
             .leaseTermPeriods(UPDATED_LEASE_TERM_PERIODS)
             .leaseAmount(UPDATED_LEASE_AMOUNT)
-            .rouModelReference(UPDATED_ROU_MODEL_REFERENCE);
+            .rouModelReference(UPDATED_ROU_MODEL_REFERENCE)
+            .commencementDate(UPDATED_COMMENCEMENT_DATE)
+            .expirationDate(UPDATED_EXPIRATION_DATE)
+            .hasBeenFullyAmortised(UPDATED_HAS_BEEN_FULLY_AMORTISED)
+            .hasBeenDecommissioned(UPDATED_HAS_BEEN_DECOMMISSIONED);
         // Add required entity
         IFRS16LeaseContract iFRS16LeaseContract;
         if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
@@ -233,6 +257,10 @@ class RouModelMetadataResourceIT {
         assertThat(testRouModelMetadata.getLeaseTermPeriods()).isEqualTo(DEFAULT_LEASE_TERM_PERIODS);
         assertThat(testRouModelMetadata.getLeaseAmount()).isEqualByComparingTo(DEFAULT_LEASE_AMOUNT);
         assertThat(testRouModelMetadata.getRouModelReference()).isEqualTo(DEFAULT_ROU_MODEL_REFERENCE);
+        assertThat(testRouModelMetadata.getCommencementDate()).isEqualTo(DEFAULT_COMMENCEMENT_DATE);
+        assertThat(testRouModelMetadata.getExpirationDate()).isEqualTo(DEFAULT_EXPIRATION_DATE);
+        assertThat(testRouModelMetadata.getHasBeenFullyAmortised()).isEqualTo(DEFAULT_HAS_BEEN_FULLY_AMORTISED);
+        assertThat(testRouModelMetadata.getHasBeenDecommissioned()).isEqualTo(DEFAULT_HAS_BEEN_DECOMMISSIONED);
 
         // Validate the RouModelMetadata in Elasticsearch
         verify(mockRouModelMetadataSearchRepository, times(1)).save(testRouModelMetadata);
@@ -379,7 +407,11 @@ class RouModelMetadataResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].leaseTermPeriods").value(hasItem(DEFAULT_LEASE_TERM_PERIODS)))
             .andExpect(jsonPath("$.[*].leaseAmount").value(hasItem(sameNumber(DEFAULT_LEASE_AMOUNT))))
-            .andExpect(jsonPath("$.[*].rouModelReference").value(hasItem(DEFAULT_ROU_MODEL_REFERENCE.toString())));
+            .andExpect(jsonPath("$.[*].rouModelReference").value(hasItem(DEFAULT_ROU_MODEL_REFERENCE.toString())))
+            .andExpect(jsonPath("$.[*].commencementDate").value(hasItem(DEFAULT_COMMENCEMENT_DATE.toString())))
+            .andExpect(jsonPath("$.[*].expirationDate").value(hasItem(DEFAULT_EXPIRATION_DATE.toString())))
+            .andExpect(jsonPath("$.[*].hasBeenFullyAmortised").value(hasItem(DEFAULT_HAS_BEEN_FULLY_AMORTISED.booleanValue())))
+            .andExpect(jsonPath("$.[*].hasBeenDecommissioned").value(hasItem(DEFAULT_HAS_BEEN_DECOMMISSIONED.booleanValue())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -417,7 +449,11 @@ class RouModelMetadataResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.leaseTermPeriods").value(DEFAULT_LEASE_TERM_PERIODS))
             .andExpect(jsonPath("$.leaseAmount").value(sameNumber(DEFAULT_LEASE_AMOUNT)))
-            .andExpect(jsonPath("$.rouModelReference").value(DEFAULT_ROU_MODEL_REFERENCE.toString()));
+            .andExpect(jsonPath("$.rouModelReference").value(DEFAULT_ROU_MODEL_REFERENCE.toString()))
+            .andExpect(jsonPath("$.commencementDate").value(DEFAULT_COMMENCEMENT_DATE.toString()))
+            .andExpect(jsonPath("$.expirationDate").value(DEFAULT_EXPIRATION_DATE.toString()))
+            .andExpect(jsonPath("$.hasBeenFullyAmortised").value(DEFAULT_HAS_BEEN_FULLY_AMORTISED.booleanValue()))
+            .andExpect(jsonPath("$.hasBeenDecommissioned").value(DEFAULT_HAS_BEEN_DECOMMISSIONED.booleanValue()));
     }
 
     @Test
@@ -960,6 +996,322 @@ class RouModelMetadataResourceIT {
 
     @Test
     @Transactional
+    void getAllRouModelMetadataByCommencementDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where commencementDate equals to DEFAULT_COMMENCEMENT_DATE
+        defaultRouModelMetadataShouldBeFound("commencementDate.equals=" + DEFAULT_COMMENCEMENT_DATE);
+
+        // Get all the rouModelMetadataList where commencementDate equals to UPDATED_COMMENCEMENT_DATE
+        defaultRouModelMetadataShouldNotBeFound("commencementDate.equals=" + UPDATED_COMMENCEMENT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByCommencementDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where commencementDate not equals to DEFAULT_COMMENCEMENT_DATE
+        defaultRouModelMetadataShouldNotBeFound("commencementDate.notEquals=" + DEFAULT_COMMENCEMENT_DATE);
+
+        // Get all the rouModelMetadataList where commencementDate not equals to UPDATED_COMMENCEMENT_DATE
+        defaultRouModelMetadataShouldBeFound("commencementDate.notEquals=" + UPDATED_COMMENCEMENT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByCommencementDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where commencementDate in DEFAULT_COMMENCEMENT_DATE or UPDATED_COMMENCEMENT_DATE
+        defaultRouModelMetadataShouldBeFound("commencementDate.in=" + DEFAULT_COMMENCEMENT_DATE + "," + UPDATED_COMMENCEMENT_DATE);
+
+        // Get all the rouModelMetadataList where commencementDate equals to UPDATED_COMMENCEMENT_DATE
+        defaultRouModelMetadataShouldNotBeFound("commencementDate.in=" + UPDATED_COMMENCEMENT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByCommencementDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where commencementDate is not null
+        defaultRouModelMetadataShouldBeFound("commencementDate.specified=true");
+
+        // Get all the rouModelMetadataList where commencementDate is null
+        defaultRouModelMetadataShouldNotBeFound("commencementDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByCommencementDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where commencementDate is greater than or equal to DEFAULT_COMMENCEMENT_DATE
+        defaultRouModelMetadataShouldBeFound("commencementDate.greaterThanOrEqual=" + DEFAULT_COMMENCEMENT_DATE);
+
+        // Get all the rouModelMetadataList where commencementDate is greater than or equal to UPDATED_COMMENCEMENT_DATE
+        defaultRouModelMetadataShouldNotBeFound("commencementDate.greaterThanOrEqual=" + UPDATED_COMMENCEMENT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByCommencementDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where commencementDate is less than or equal to DEFAULT_COMMENCEMENT_DATE
+        defaultRouModelMetadataShouldBeFound("commencementDate.lessThanOrEqual=" + DEFAULT_COMMENCEMENT_DATE);
+
+        // Get all the rouModelMetadataList where commencementDate is less than or equal to SMALLER_COMMENCEMENT_DATE
+        defaultRouModelMetadataShouldNotBeFound("commencementDate.lessThanOrEqual=" + SMALLER_COMMENCEMENT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByCommencementDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where commencementDate is less than DEFAULT_COMMENCEMENT_DATE
+        defaultRouModelMetadataShouldNotBeFound("commencementDate.lessThan=" + DEFAULT_COMMENCEMENT_DATE);
+
+        // Get all the rouModelMetadataList where commencementDate is less than UPDATED_COMMENCEMENT_DATE
+        defaultRouModelMetadataShouldBeFound("commencementDate.lessThan=" + UPDATED_COMMENCEMENT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByCommencementDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where commencementDate is greater than DEFAULT_COMMENCEMENT_DATE
+        defaultRouModelMetadataShouldNotBeFound("commencementDate.greaterThan=" + DEFAULT_COMMENCEMENT_DATE);
+
+        // Get all the rouModelMetadataList where commencementDate is greater than SMALLER_COMMENCEMENT_DATE
+        defaultRouModelMetadataShouldBeFound("commencementDate.greaterThan=" + SMALLER_COMMENCEMENT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByExpirationDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where expirationDate equals to DEFAULT_EXPIRATION_DATE
+        defaultRouModelMetadataShouldBeFound("expirationDate.equals=" + DEFAULT_EXPIRATION_DATE);
+
+        // Get all the rouModelMetadataList where expirationDate equals to UPDATED_EXPIRATION_DATE
+        defaultRouModelMetadataShouldNotBeFound("expirationDate.equals=" + UPDATED_EXPIRATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByExpirationDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where expirationDate not equals to DEFAULT_EXPIRATION_DATE
+        defaultRouModelMetadataShouldNotBeFound("expirationDate.notEquals=" + DEFAULT_EXPIRATION_DATE);
+
+        // Get all the rouModelMetadataList where expirationDate not equals to UPDATED_EXPIRATION_DATE
+        defaultRouModelMetadataShouldBeFound("expirationDate.notEquals=" + UPDATED_EXPIRATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByExpirationDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where expirationDate in DEFAULT_EXPIRATION_DATE or UPDATED_EXPIRATION_DATE
+        defaultRouModelMetadataShouldBeFound("expirationDate.in=" + DEFAULT_EXPIRATION_DATE + "," + UPDATED_EXPIRATION_DATE);
+
+        // Get all the rouModelMetadataList where expirationDate equals to UPDATED_EXPIRATION_DATE
+        defaultRouModelMetadataShouldNotBeFound("expirationDate.in=" + UPDATED_EXPIRATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByExpirationDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where expirationDate is not null
+        defaultRouModelMetadataShouldBeFound("expirationDate.specified=true");
+
+        // Get all the rouModelMetadataList where expirationDate is null
+        defaultRouModelMetadataShouldNotBeFound("expirationDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByExpirationDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where expirationDate is greater than or equal to DEFAULT_EXPIRATION_DATE
+        defaultRouModelMetadataShouldBeFound("expirationDate.greaterThanOrEqual=" + DEFAULT_EXPIRATION_DATE);
+
+        // Get all the rouModelMetadataList where expirationDate is greater than or equal to UPDATED_EXPIRATION_DATE
+        defaultRouModelMetadataShouldNotBeFound("expirationDate.greaterThanOrEqual=" + UPDATED_EXPIRATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByExpirationDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where expirationDate is less than or equal to DEFAULT_EXPIRATION_DATE
+        defaultRouModelMetadataShouldBeFound("expirationDate.lessThanOrEqual=" + DEFAULT_EXPIRATION_DATE);
+
+        // Get all the rouModelMetadataList where expirationDate is less than or equal to SMALLER_EXPIRATION_DATE
+        defaultRouModelMetadataShouldNotBeFound("expirationDate.lessThanOrEqual=" + SMALLER_EXPIRATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByExpirationDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where expirationDate is less than DEFAULT_EXPIRATION_DATE
+        defaultRouModelMetadataShouldNotBeFound("expirationDate.lessThan=" + DEFAULT_EXPIRATION_DATE);
+
+        // Get all the rouModelMetadataList where expirationDate is less than UPDATED_EXPIRATION_DATE
+        defaultRouModelMetadataShouldBeFound("expirationDate.lessThan=" + UPDATED_EXPIRATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByExpirationDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where expirationDate is greater than DEFAULT_EXPIRATION_DATE
+        defaultRouModelMetadataShouldNotBeFound("expirationDate.greaterThan=" + DEFAULT_EXPIRATION_DATE);
+
+        // Get all the rouModelMetadataList where expirationDate is greater than SMALLER_EXPIRATION_DATE
+        defaultRouModelMetadataShouldBeFound("expirationDate.greaterThan=" + SMALLER_EXPIRATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByHasBeenFullyAmortisedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where hasBeenFullyAmortised equals to DEFAULT_HAS_BEEN_FULLY_AMORTISED
+        defaultRouModelMetadataShouldBeFound("hasBeenFullyAmortised.equals=" + DEFAULT_HAS_BEEN_FULLY_AMORTISED);
+
+        // Get all the rouModelMetadataList where hasBeenFullyAmortised equals to UPDATED_HAS_BEEN_FULLY_AMORTISED
+        defaultRouModelMetadataShouldNotBeFound("hasBeenFullyAmortised.equals=" + UPDATED_HAS_BEEN_FULLY_AMORTISED);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByHasBeenFullyAmortisedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where hasBeenFullyAmortised not equals to DEFAULT_HAS_BEEN_FULLY_AMORTISED
+        defaultRouModelMetadataShouldNotBeFound("hasBeenFullyAmortised.notEquals=" + DEFAULT_HAS_BEEN_FULLY_AMORTISED);
+
+        // Get all the rouModelMetadataList where hasBeenFullyAmortised not equals to UPDATED_HAS_BEEN_FULLY_AMORTISED
+        defaultRouModelMetadataShouldBeFound("hasBeenFullyAmortised.notEquals=" + UPDATED_HAS_BEEN_FULLY_AMORTISED);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByHasBeenFullyAmortisedIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where hasBeenFullyAmortised in DEFAULT_HAS_BEEN_FULLY_AMORTISED or UPDATED_HAS_BEEN_FULLY_AMORTISED
+        defaultRouModelMetadataShouldBeFound(
+            "hasBeenFullyAmortised.in=" + DEFAULT_HAS_BEEN_FULLY_AMORTISED + "," + UPDATED_HAS_BEEN_FULLY_AMORTISED
+        );
+
+        // Get all the rouModelMetadataList where hasBeenFullyAmortised equals to UPDATED_HAS_BEEN_FULLY_AMORTISED
+        defaultRouModelMetadataShouldNotBeFound("hasBeenFullyAmortised.in=" + UPDATED_HAS_BEEN_FULLY_AMORTISED);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByHasBeenFullyAmortisedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where hasBeenFullyAmortised is not null
+        defaultRouModelMetadataShouldBeFound("hasBeenFullyAmortised.specified=true");
+
+        // Get all the rouModelMetadataList where hasBeenFullyAmortised is null
+        defaultRouModelMetadataShouldNotBeFound("hasBeenFullyAmortised.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByHasBeenDecommissionedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where hasBeenDecommissioned equals to DEFAULT_HAS_BEEN_DECOMMISSIONED
+        defaultRouModelMetadataShouldBeFound("hasBeenDecommissioned.equals=" + DEFAULT_HAS_BEEN_DECOMMISSIONED);
+
+        // Get all the rouModelMetadataList where hasBeenDecommissioned equals to UPDATED_HAS_BEEN_DECOMMISSIONED
+        defaultRouModelMetadataShouldNotBeFound("hasBeenDecommissioned.equals=" + UPDATED_HAS_BEEN_DECOMMISSIONED);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByHasBeenDecommissionedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where hasBeenDecommissioned not equals to DEFAULT_HAS_BEEN_DECOMMISSIONED
+        defaultRouModelMetadataShouldNotBeFound("hasBeenDecommissioned.notEquals=" + DEFAULT_HAS_BEEN_DECOMMISSIONED);
+
+        // Get all the rouModelMetadataList where hasBeenDecommissioned not equals to UPDATED_HAS_BEEN_DECOMMISSIONED
+        defaultRouModelMetadataShouldBeFound("hasBeenDecommissioned.notEquals=" + UPDATED_HAS_BEEN_DECOMMISSIONED);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByHasBeenDecommissionedIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where hasBeenDecommissioned in DEFAULT_HAS_BEEN_DECOMMISSIONED or UPDATED_HAS_BEEN_DECOMMISSIONED
+        defaultRouModelMetadataShouldBeFound(
+            "hasBeenDecommissioned.in=" + DEFAULT_HAS_BEEN_DECOMMISSIONED + "," + UPDATED_HAS_BEEN_DECOMMISSIONED
+        );
+
+        // Get all the rouModelMetadataList where hasBeenDecommissioned equals to UPDATED_HAS_BEEN_DECOMMISSIONED
+        defaultRouModelMetadataShouldNotBeFound("hasBeenDecommissioned.in=" + UPDATED_HAS_BEEN_DECOMMISSIONED);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByHasBeenDecommissionedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where hasBeenDecommissioned is not null
+        defaultRouModelMetadataShouldBeFound("hasBeenDecommissioned.specified=true");
+
+        // Get all the rouModelMetadataList where hasBeenDecommissioned is null
+        defaultRouModelMetadataShouldNotBeFound("hasBeenDecommissioned.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllRouModelMetadataByIfrs16LeaseContractIsEqualToSomething() throws Exception {
         // Initialize the database
         rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
@@ -1128,7 +1480,11 @@ class RouModelMetadataResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].leaseTermPeriods").value(hasItem(DEFAULT_LEASE_TERM_PERIODS)))
             .andExpect(jsonPath("$.[*].leaseAmount").value(hasItem(sameNumber(DEFAULT_LEASE_AMOUNT))))
-            .andExpect(jsonPath("$.[*].rouModelReference").value(hasItem(DEFAULT_ROU_MODEL_REFERENCE.toString())));
+            .andExpect(jsonPath("$.[*].rouModelReference").value(hasItem(DEFAULT_ROU_MODEL_REFERENCE.toString())))
+            .andExpect(jsonPath("$.[*].commencementDate").value(hasItem(DEFAULT_COMMENCEMENT_DATE.toString())))
+            .andExpect(jsonPath("$.[*].expirationDate").value(hasItem(DEFAULT_EXPIRATION_DATE.toString())))
+            .andExpect(jsonPath("$.[*].hasBeenFullyAmortised").value(hasItem(DEFAULT_HAS_BEEN_FULLY_AMORTISED.booleanValue())))
+            .andExpect(jsonPath("$.[*].hasBeenDecommissioned").value(hasItem(DEFAULT_HAS_BEEN_DECOMMISSIONED.booleanValue())));
 
         // Check, that the count call also returns 1
         restRouModelMetadataMockMvc
@@ -1182,7 +1538,11 @@ class RouModelMetadataResourceIT {
             .description(UPDATED_DESCRIPTION)
             .leaseTermPeriods(UPDATED_LEASE_TERM_PERIODS)
             .leaseAmount(UPDATED_LEASE_AMOUNT)
-            .rouModelReference(UPDATED_ROU_MODEL_REFERENCE);
+            .rouModelReference(UPDATED_ROU_MODEL_REFERENCE)
+            .commencementDate(UPDATED_COMMENCEMENT_DATE)
+            .expirationDate(UPDATED_EXPIRATION_DATE)
+            .hasBeenFullyAmortised(UPDATED_HAS_BEEN_FULLY_AMORTISED)
+            .hasBeenDecommissioned(UPDATED_HAS_BEEN_DECOMMISSIONED);
         RouModelMetadataDTO rouModelMetadataDTO = rouModelMetadataMapper.toDto(updatedRouModelMetadata);
 
         restRouModelMetadataMockMvc
@@ -1203,6 +1563,10 @@ class RouModelMetadataResourceIT {
         assertThat(testRouModelMetadata.getLeaseTermPeriods()).isEqualTo(UPDATED_LEASE_TERM_PERIODS);
         assertThat(testRouModelMetadata.getLeaseAmount()).isEqualTo(UPDATED_LEASE_AMOUNT);
         assertThat(testRouModelMetadata.getRouModelReference()).isEqualTo(UPDATED_ROU_MODEL_REFERENCE);
+        assertThat(testRouModelMetadata.getCommencementDate()).isEqualTo(UPDATED_COMMENCEMENT_DATE);
+        assertThat(testRouModelMetadata.getExpirationDate()).isEqualTo(UPDATED_EXPIRATION_DATE);
+        assertThat(testRouModelMetadata.getHasBeenFullyAmortised()).isEqualTo(UPDATED_HAS_BEEN_FULLY_AMORTISED);
+        assertThat(testRouModelMetadata.getHasBeenDecommissioned()).isEqualTo(UPDATED_HAS_BEEN_DECOMMISSIONED);
 
         // Validate the RouModelMetadata in Elasticsearch
         verify(mockRouModelMetadataSearchRepository).save(testRouModelMetadata);
@@ -1301,7 +1665,10 @@ class RouModelMetadataResourceIT {
             .modelVersion(UPDATED_MODEL_VERSION)
             .description(UPDATED_DESCRIPTION)
             .leaseTermPeriods(UPDATED_LEASE_TERM_PERIODS)
-            .rouModelReference(UPDATED_ROU_MODEL_REFERENCE);
+            .rouModelReference(UPDATED_ROU_MODEL_REFERENCE)
+            .commencementDate(UPDATED_COMMENCEMENT_DATE)
+            .expirationDate(UPDATED_EXPIRATION_DATE)
+            .hasBeenDecommissioned(UPDATED_HAS_BEEN_DECOMMISSIONED);
 
         restRouModelMetadataMockMvc
             .perform(
@@ -1321,6 +1688,10 @@ class RouModelMetadataResourceIT {
         assertThat(testRouModelMetadata.getLeaseTermPeriods()).isEqualTo(UPDATED_LEASE_TERM_PERIODS);
         assertThat(testRouModelMetadata.getLeaseAmount()).isEqualByComparingTo(DEFAULT_LEASE_AMOUNT);
         assertThat(testRouModelMetadata.getRouModelReference()).isEqualTo(UPDATED_ROU_MODEL_REFERENCE);
+        assertThat(testRouModelMetadata.getCommencementDate()).isEqualTo(UPDATED_COMMENCEMENT_DATE);
+        assertThat(testRouModelMetadata.getExpirationDate()).isEqualTo(UPDATED_EXPIRATION_DATE);
+        assertThat(testRouModelMetadata.getHasBeenFullyAmortised()).isEqualTo(DEFAULT_HAS_BEEN_FULLY_AMORTISED);
+        assertThat(testRouModelMetadata.getHasBeenDecommissioned()).isEqualTo(UPDATED_HAS_BEEN_DECOMMISSIONED);
     }
 
     @Test
@@ -1341,7 +1712,11 @@ class RouModelMetadataResourceIT {
             .description(UPDATED_DESCRIPTION)
             .leaseTermPeriods(UPDATED_LEASE_TERM_PERIODS)
             .leaseAmount(UPDATED_LEASE_AMOUNT)
-            .rouModelReference(UPDATED_ROU_MODEL_REFERENCE);
+            .rouModelReference(UPDATED_ROU_MODEL_REFERENCE)
+            .commencementDate(UPDATED_COMMENCEMENT_DATE)
+            .expirationDate(UPDATED_EXPIRATION_DATE)
+            .hasBeenFullyAmortised(UPDATED_HAS_BEEN_FULLY_AMORTISED)
+            .hasBeenDecommissioned(UPDATED_HAS_BEEN_DECOMMISSIONED);
 
         restRouModelMetadataMockMvc
             .perform(
@@ -1361,6 +1736,10 @@ class RouModelMetadataResourceIT {
         assertThat(testRouModelMetadata.getLeaseTermPeriods()).isEqualTo(UPDATED_LEASE_TERM_PERIODS);
         assertThat(testRouModelMetadata.getLeaseAmount()).isEqualByComparingTo(UPDATED_LEASE_AMOUNT);
         assertThat(testRouModelMetadata.getRouModelReference()).isEqualTo(UPDATED_ROU_MODEL_REFERENCE);
+        assertThat(testRouModelMetadata.getCommencementDate()).isEqualTo(UPDATED_COMMENCEMENT_DATE);
+        assertThat(testRouModelMetadata.getExpirationDate()).isEqualTo(UPDATED_EXPIRATION_DATE);
+        assertThat(testRouModelMetadata.getHasBeenFullyAmortised()).isEqualTo(UPDATED_HAS_BEEN_FULLY_AMORTISED);
+        assertThat(testRouModelMetadata.getHasBeenDecommissioned()).isEqualTo(UPDATED_HAS_BEEN_DECOMMISSIONED);
     }
 
     @Test
@@ -1482,6 +1861,10 @@ class RouModelMetadataResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].leaseTermPeriods").value(hasItem(DEFAULT_LEASE_TERM_PERIODS)))
             .andExpect(jsonPath("$.[*].leaseAmount").value(hasItem(sameNumber(DEFAULT_LEASE_AMOUNT))))
-            .andExpect(jsonPath("$.[*].rouModelReference").value(hasItem(DEFAULT_ROU_MODEL_REFERENCE.toString())));
+            .andExpect(jsonPath("$.[*].rouModelReference").value(hasItem(DEFAULT_ROU_MODEL_REFERENCE.toString())))
+            .andExpect(jsonPath("$.[*].commencementDate").value(hasItem(DEFAULT_COMMENCEMENT_DATE.toString())))
+            .andExpect(jsonPath("$.[*].expirationDate").value(hasItem(DEFAULT_EXPIRATION_DATE.toString())))
+            .andExpect(jsonPath("$.[*].hasBeenFullyAmortised").value(hasItem(DEFAULT_HAS_BEEN_FULLY_AMORTISED.booleanValue())))
+            .andExpect(jsonPath("$.[*].hasBeenDecommissioned").value(hasItem(DEFAULT_HAS_BEEN_DECOMMISSIONED.booleanValue())));
     }
 }

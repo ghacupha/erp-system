@@ -85,7 +85,14 @@ public class RouDepreciationEntry implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
-        value = { "superintendentServiceOutlet", "mainDealer", "firstReportingPeriod", "lastReportingPeriod" },
+        value = {
+            "superintendentServiceOutlet",
+            "mainDealer",
+            "firstReportingPeriod",
+            "lastReportingPeriod",
+            "leaseContractDocument",
+            "leaseContractCalculations",
+        },
         allowSetters = true
     )
     private IFRS16LeaseContract leaseContract;

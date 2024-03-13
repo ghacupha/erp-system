@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity RouAssetListReport.
+    -->
+    <changeSet id="20240313093232-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="requested_by_id"
+                                 baseTableName="rou_asset_list_report"
+                                 constraintName="fk_rou_asset_list_report__requested_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_user"/>
+    </changeSet>
+</databaseChangeLog>

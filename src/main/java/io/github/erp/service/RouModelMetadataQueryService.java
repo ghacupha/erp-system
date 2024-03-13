@@ -135,6 +135,21 @@ public class RouModelMetadataQueryService extends QueryService<RouModelMetadata>
             if (criteria.getRouModelReference() != null) {
                 specification = specification.and(buildSpecification(criteria.getRouModelReference(), RouModelMetadata_.rouModelReference));
             }
+            if (criteria.getCommencementDate() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getCommencementDate(), RouModelMetadata_.commencementDate));
+            }
+            if (criteria.getExpirationDate() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getExpirationDate(), RouModelMetadata_.expirationDate));
+            }
+            if (criteria.getHasBeenFullyAmortised() != null) {
+                specification =
+                    specification.and(buildSpecification(criteria.getHasBeenFullyAmortised(), RouModelMetadata_.hasBeenFullyAmortised));
+            }
+            if (criteria.getHasBeenDecommissioned() != null) {
+                specification =
+                    specification.and(buildSpecification(criteria.getHasBeenDecommissioned(), RouModelMetadata_.hasBeenDecommissioned));
+            }
             if (criteria.getIfrs16LeaseContractId() != null) {
                 specification =
                     specification.and(

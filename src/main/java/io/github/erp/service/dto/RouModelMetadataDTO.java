@@ -20,6 +20,7 @@ package io.github.erp.service.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -50,6 +51,14 @@ public class RouModelMetadataDTO implements Serializable {
 
     @NotNull
     private UUID rouModelReference;
+
+    private LocalDate commencementDate;
+
+    private LocalDate expirationDate;
+
+    private Boolean hasBeenFullyAmortised;
+
+    private Boolean hasBeenDecommissioned;
 
     private IFRS16LeaseContractDTO ifrs16LeaseContract;
 
@@ -117,6 +126,38 @@ public class RouModelMetadataDTO implements Serializable {
 
     public void setRouModelReference(UUID rouModelReference) {
         this.rouModelReference = rouModelReference;
+    }
+
+    public LocalDate getCommencementDate() {
+        return commencementDate;
+    }
+
+    public void setCommencementDate(LocalDate commencementDate) {
+        this.commencementDate = commencementDate;
+    }
+
+    public LocalDate getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(LocalDate expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+    public Boolean getHasBeenFullyAmortised() {
+        return hasBeenFullyAmortised;
+    }
+
+    public void setHasBeenFullyAmortised(Boolean hasBeenFullyAmortised) {
+        this.hasBeenFullyAmortised = hasBeenFullyAmortised;
+    }
+
+    public Boolean getHasBeenDecommissioned() {
+        return hasBeenDecommissioned;
+    }
+
+    public void setHasBeenDecommissioned(Boolean hasBeenDecommissioned) {
+        this.hasBeenDecommissioned = hasBeenDecommissioned;
     }
 
     public IFRS16LeaseContractDTO getIfrs16LeaseContract() {
@@ -199,6 +240,10 @@ public class RouModelMetadataDTO implements Serializable {
             ", leaseTermPeriods=" + getLeaseTermPeriods() +
             ", leaseAmount=" + getLeaseAmount() +
             ", rouModelReference='" + getRouModelReference() + "'" +
+            ", commencementDate='" + getCommencementDate() + "'" +
+            ", expirationDate='" + getExpirationDate() + "'" +
+            ", hasBeenFullyAmortised='" + getHasBeenFullyAmortised() + "'" +
+            ", hasBeenDecommissioned='" + getHasBeenDecommissioned() + "'" +
             ", ifrs16LeaseContract=" + getIfrs16LeaseContract() +
             ", assetAccount=" + getAssetAccount() +
             ", depreciationAccount=" + getDepreciationAccount() +
