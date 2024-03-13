@@ -62,6 +62,18 @@
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
       "otherEntityField": "fiscalMonthCode"
+    },
+    {
+      "relationshipName": "leaseContractDocument",
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "documentTitle"
+    },
+    {
+      "relationshipName": "leaseContractCalculations",
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "documentTitle"
     }
   ],
   "service": "serviceImpl",

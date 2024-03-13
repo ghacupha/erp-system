@@ -57,6 +57,10 @@ public class IFRS16LeaseContractDTO implements Serializable {
 
     private FiscalMonthDTO lastReportingPeriod;
 
+    private BusinessDocumentDTO leaseContractDocument;
+
+    private BusinessDocumentDTO leaseContractCalculations;
+
     public Long getId() {
         return id;
     }
@@ -153,6 +157,22 @@ public class IFRS16LeaseContractDTO implements Serializable {
         this.lastReportingPeriod = lastReportingPeriod;
     }
 
+    public BusinessDocumentDTO getLeaseContractDocument() {
+        return leaseContractDocument;
+    }
+
+    public void setLeaseContractDocument(BusinessDocumentDTO leaseContractDocument) {
+        this.leaseContractDocument = leaseContractDocument;
+    }
+
+    public BusinessDocumentDTO getLeaseContractCalculations() {
+        return leaseContractCalculations;
+    }
+
+    public void setLeaseContractCalculations(BusinessDocumentDTO leaseContractCalculations) {
+        this.leaseContractCalculations = leaseContractCalculations;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -190,6 +210,8 @@ public class IFRS16LeaseContractDTO implements Serializable {
             ", mainDealer=" + getMainDealer() +
             ", firstReportingPeriod=" + getFirstReportingPeriod() +
             ", lastReportingPeriod=" + getLastReportingPeriod() +
+            ", leaseContractDocument=" + getLeaseContractDocument() +
+            ", leaseContractCalculations=" + getLeaseContractCalculations() +
             "}";
     }
 }

@@ -29,6 +29,22 @@
       "fieldName": "rouModelReference",
       "fieldType": "UUID",
       "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "commencementDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "expirationDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "hasBeenFullyAmortised",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "hasBeenDecommissioned",
+      "fieldType": "Boolean"
     }
   ],
   "relationships": [

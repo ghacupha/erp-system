@@ -25,23 +25,28 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link IFRS16LeaseContract} and its DTO {@link IFRS16LeaseContractDTO}.
  */
-@Mapper(componentModel = "spring", uses = { ServiceOutletMapper.class, DealerMapper.class, FiscalMonthMapper.class })
+@Mapper(
+    componentModel = "spring",
+    uses = { ServiceOutletMapper.class, DealerMapper.class, FiscalMonthMapper.class, BusinessDocumentMapper.class }
+)
 public interface IFRS16LeaseContractMapper extends EntityMapper<IFRS16LeaseContractDTO, IFRS16LeaseContract> {
     @Mapping(target = "superintendentServiceOutlet", source = "superintendentServiceOutlet", qualifiedByName = "outletCode")
     @Mapping(target = "mainDealer", source = "mainDealer", qualifiedByName = "dealerName")
     @Mapping(target = "firstReportingPeriod", source = "firstReportingPeriod", qualifiedByName = "fiscalMonthCode")
     @Mapping(target = "lastReportingPeriod", source = "lastReportingPeriod", qualifiedByName = "fiscalMonthCode")
+    @Mapping(target = "leaseContractDocument", source = "leaseContractDocument", qualifiedByName = "documentTitle")
+    @Mapping(target = "leaseContractCalculations", source = "leaseContractCalculations", qualifiedByName = "documentTitle")
     IFRS16LeaseContractDTO toDto(IFRS16LeaseContract s);
-
-    @Named("bookingId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "bookingId", source = "bookingId")
-    IFRS16LeaseContractDTO toDtoBookingId(IFRS16LeaseContract iFRS16LeaseContract);
 
     @Named("shortTitle")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "shortTitle", source = "shortTitle")
     IFRS16LeaseContractDTO toDtoShortTitle(IFRS16LeaseContract iFRS16LeaseContract);
+
+    @Named("bookingId")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "bookingId", source = "bookingId")
+    IFRS16LeaseContractDTO toDtoBookingId(IFRS16LeaseContract iFRS16LeaseContract);
 }

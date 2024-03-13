@@ -68,6 +68,10 @@ public class IFRS16LeaseContractCriteria implements Serializable, Criteria {
 
     private LongFilter lastReportingPeriodId;
 
+    private LongFilter leaseContractDocumentId;
+
+    private LongFilter leaseContractCalculationsId;
+
     private Boolean distinct;
 
     public IFRS16LeaseContractCriteria() {}
@@ -86,6 +90,8 @@ public class IFRS16LeaseContractCriteria implements Serializable, Criteria {
         this.mainDealerId = other.mainDealerId == null ? null : other.mainDealerId.copy();
         this.firstReportingPeriodId = other.firstReportingPeriodId == null ? null : other.firstReportingPeriodId.copy();
         this.lastReportingPeriodId = other.lastReportingPeriodId == null ? null : other.lastReportingPeriodId.copy();
+        this.leaseContractDocumentId = other.leaseContractDocumentId == null ? null : other.leaseContractDocumentId.copy();
+        this.leaseContractCalculationsId = other.leaseContractCalculationsId == null ? null : other.leaseContractCalculationsId.copy();
         this.distinct = other.distinct;
     }
 
@@ -274,6 +280,36 @@ public class IFRS16LeaseContractCriteria implements Serializable, Criteria {
         this.lastReportingPeriodId = lastReportingPeriodId;
     }
 
+    public LongFilter getLeaseContractDocumentId() {
+        return leaseContractDocumentId;
+    }
+
+    public LongFilter leaseContractDocumentId() {
+        if (leaseContractDocumentId == null) {
+            leaseContractDocumentId = new LongFilter();
+        }
+        return leaseContractDocumentId;
+    }
+
+    public void setLeaseContractDocumentId(LongFilter leaseContractDocumentId) {
+        this.leaseContractDocumentId = leaseContractDocumentId;
+    }
+
+    public LongFilter getLeaseContractCalculationsId() {
+        return leaseContractCalculationsId;
+    }
+
+    public LongFilter leaseContractCalculationsId() {
+        if (leaseContractCalculationsId == null) {
+            leaseContractCalculationsId = new LongFilter();
+        }
+        return leaseContractCalculationsId;
+    }
+
+    public void setLeaseContractCalculationsId(LongFilter leaseContractCalculationsId) {
+        this.leaseContractCalculationsId = leaseContractCalculationsId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -304,6 +340,8 @@ public class IFRS16LeaseContractCriteria implements Serializable, Criteria {
             Objects.equals(mainDealerId, that.mainDealerId) &&
             Objects.equals(firstReportingPeriodId, that.firstReportingPeriodId) &&
             Objects.equals(lastReportingPeriodId, that.lastReportingPeriodId) &&
+            Objects.equals(leaseContractDocumentId, that.leaseContractDocumentId) &&
+            Objects.equals(leaseContractCalculationsId, that.leaseContractCalculationsId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -323,6 +361,8 @@ public class IFRS16LeaseContractCriteria implements Serializable, Criteria {
             mainDealerId,
             firstReportingPeriodId,
             lastReportingPeriodId,
+            leaseContractDocumentId,
+            leaseContractCalculationsId,
             distinct
         );
     }
@@ -343,6 +383,8 @@ public class IFRS16LeaseContractCriteria implements Serializable, Criteria {
             (mainDealerId != null ? "mainDealerId=" + mainDealerId + ", " : "") +
             (firstReportingPeriodId != null ? "firstReportingPeriodId=" + firstReportingPeriodId + ", " : "") +
             (lastReportingPeriodId != null ? "lastReportingPeriodId=" + lastReportingPeriodId + ", " : "") +
+            (leaseContractDocumentId != null ? "leaseContractDocumentId=" + leaseContractDocumentId + ", " : "") +
+            (leaseContractCalculationsId != null ? "leaseContractCalculationsId=" + leaseContractCalculationsId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

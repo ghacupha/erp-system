@@ -42,6 +42,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -81,6 +83,20 @@ class RouModelMetadataResourceIT {
 
     private static final UUID DEFAULT_ROU_MODEL_REFERENCE = UUID.randomUUID();
     private static final UUID UPDATED_ROU_MODEL_REFERENCE = UUID.randomUUID();
+
+    private static final LocalDate DEFAULT_COMMENCEMENT_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_COMMENCEMENT_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_COMMENCEMENT_DATE = LocalDate.ofEpochDay(-1L);
+
+    private static final LocalDate DEFAULT_EXPIRATION_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_EXPIRATION_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_EXPIRATION_DATE = LocalDate.ofEpochDay(-1L);
+
+    private static final Boolean DEFAULT_HAS_BEEN_FULLY_AMORTISED = false;
+    private static final Boolean UPDATED_HAS_BEEN_FULLY_AMORTISED = true;
+
+    private static final Boolean DEFAULT_HAS_BEEN_DECOMMISSIONED = false;
+    private static final Boolean UPDATED_HAS_BEEN_DECOMMISSIONED = true;
 
     private static final String ENTITY_API_URL = "/api/leases/rou-model-metadata";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -130,7 +146,11 @@ class RouModelMetadataResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .leaseTermPeriods(DEFAULT_LEASE_TERM_PERIODS)
             .leaseAmount(DEFAULT_LEASE_AMOUNT)
-            .rouModelReference(DEFAULT_ROU_MODEL_REFERENCE);
+            .rouModelReference(DEFAULT_ROU_MODEL_REFERENCE)
+            .commencementDate(DEFAULT_COMMENCEMENT_DATE)
+            .expirationDate(DEFAULT_EXPIRATION_DATE)
+            .hasBeenFullyAmortised(DEFAULT_HAS_BEEN_FULLY_AMORTISED)
+            .hasBeenDecommissioned(DEFAULT_HAS_BEEN_DECOMMISSIONED);
         // Add required entity
         IFRS16LeaseContract iFRS16LeaseContract;
         if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
@@ -171,7 +191,11 @@ class RouModelMetadataResourceIT {
             .description(UPDATED_DESCRIPTION)
             .leaseTermPeriods(UPDATED_LEASE_TERM_PERIODS)
             .leaseAmount(UPDATED_LEASE_AMOUNT)
-            .rouModelReference(UPDATED_ROU_MODEL_REFERENCE);
+            .rouModelReference(UPDATED_ROU_MODEL_REFERENCE)
+            .commencementDate(UPDATED_COMMENCEMENT_DATE)
+            .expirationDate(UPDATED_EXPIRATION_DATE)
+            .hasBeenFullyAmortised(UPDATED_HAS_BEEN_FULLY_AMORTISED)
+            .hasBeenDecommissioned(UPDATED_HAS_BEEN_DECOMMISSIONED);
         // Add required entity
         IFRS16LeaseContract iFRS16LeaseContract;
         if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
@@ -226,6 +250,10 @@ class RouModelMetadataResourceIT {
         assertThat(testRouModelMetadata.getLeaseTermPeriods()).isEqualTo(DEFAULT_LEASE_TERM_PERIODS);
         assertThat(testRouModelMetadata.getLeaseAmount()).isEqualByComparingTo(DEFAULT_LEASE_AMOUNT);
         assertThat(testRouModelMetadata.getRouModelReference()).isEqualTo(DEFAULT_ROU_MODEL_REFERENCE);
+        assertThat(testRouModelMetadata.getCommencementDate()).isEqualTo(DEFAULT_COMMENCEMENT_DATE);
+        assertThat(testRouModelMetadata.getExpirationDate()).isEqualTo(DEFAULT_EXPIRATION_DATE);
+        assertThat(testRouModelMetadata.getHasBeenFullyAmortised()).isEqualTo(DEFAULT_HAS_BEEN_FULLY_AMORTISED);
+        assertThat(testRouModelMetadata.getHasBeenDecommissioned()).isEqualTo(DEFAULT_HAS_BEEN_DECOMMISSIONED);
 
         // Validate the RouModelMetadata in Elasticsearch
         verify(mockRouModelMetadataSearchRepository, times(1)).save(testRouModelMetadata);
@@ -372,7 +400,11 @@ class RouModelMetadataResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].leaseTermPeriods").value(hasItem(DEFAULT_LEASE_TERM_PERIODS)))
             .andExpect(jsonPath("$.[*].leaseAmount").value(hasItem(sameNumber(DEFAULT_LEASE_AMOUNT))))
-            .andExpect(jsonPath("$.[*].rouModelReference").value(hasItem(DEFAULT_ROU_MODEL_REFERENCE.toString())));
+            .andExpect(jsonPath("$.[*].rouModelReference").value(hasItem(DEFAULT_ROU_MODEL_REFERENCE.toString())))
+            .andExpect(jsonPath("$.[*].commencementDate").value(hasItem(DEFAULT_COMMENCEMENT_DATE.toString())))
+            .andExpect(jsonPath("$.[*].expirationDate").value(hasItem(DEFAULT_EXPIRATION_DATE.toString())))
+            .andExpect(jsonPath("$.[*].hasBeenFullyAmortised").value(hasItem(DEFAULT_HAS_BEEN_FULLY_AMORTISED.booleanValue())))
+            .andExpect(jsonPath("$.[*].hasBeenDecommissioned").value(hasItem(DEFAULT_HAS_BEEN_DECOMMISSIONED.booleanValue())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -410,7 +442,11 @@ class RouModelMetadataResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.leaseTermPeriods").value(DEFAULT_LEASE_TERM_PERIODS))
             .andExpect(jsonPath("$.leaseAmount").value(sameNumber(DEFAULT_LEASE_AMOUNT)))
-            .andExpect(jsonPath("$.rouModelReference").value(DEFAULT_ROU_MODEL_REFERENCE.toString()));
+            .andExpect(jsonPath("$.rouModelReference").value(DEFAULT_ROU_MODEL_REFERENCE.toString()))
+            .andExpect(jsonPath("$.commencementDate").value(DEFAULT_COMMENCEMENT_DATE.toString()))
+            .andExpect(jsonPath("$.expirationDate").value(DEFAULT_EXPIRATION_DATE.toString()))
+            .andExpect(jsonPath("$.hasBeenFullyAmortised").value(DEFAULT_HAS_BEEN_FULLY_AMORTISED.booleanValue()))
+            .andExpect(jsonPath("$.hasBeenDecommissioned").value(DEFAULT_HAS_BEEN_DECOMMISSIONED.booleanValue()));
     }
 
     @Test
@@ -1121,7 +1157,11 @@ class RouModelMetadataResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].leaseTermPeriods").value(hasItem(DEFAULT_LEASE_TERM_PERIODS)))
             .andExpect(jsonPath("$.[*].leaseAmount").value(hasItem(sameNumber(DEFAULT_LEASE_AMOUNT))))
-            .andExpect(jsonPath("$.[*].rouModelReference").value(hasItem(DEFAULT_ROU_MODEL_REFERENCE.toString())));
+            .andExpect(jsonPath("$.[*].rouModelReference").value(hasItem(DEFAULT_ROU_MODEL_REFERENCE.toString())))
+            .andExpect(jsonPath("$.[*].commencementDate").value(hasItem(DEFAULT_COMMENCEMENT_DATE.toString())))
+            .andExpect(jsonPath("$.[*].expirationDate").value(hasItem(DEFAULT_EXPIRATION_DATE.toString())))
+            .andExpect(jsonPath("$.[*].hasBeenFullyAmortised").value(hasItem(DEFAULT_HAS_BEEN_FULLY_AMORTISED.booleanValue())))
+            .andExpect(jsonPath("$.[*].hasBeenDecommissioned").value(hasItem(DEFAULT_HAS_BEEN_DECOMMISSIONED.booleanValue())));
 
         // Check, that the count call also returns 1
         restRouModelMetadataMockMvc
@@ -1175,7 +1215,11 @@ class RouModelMetadataResourceIT {
             .description(UPDATED_DESCRIPTION)
             .leaseTermPeriods(UPDATED_LEASE_TERM_PERIODS)
             .leaseAmount(UPDATED_LEASE_AMOUNT)
-            .rouModelReference(UPDATED_ROU_MODEL_REFERENCE);
+            .rouModelReference(UPDATED_ROU_MODEL_REFERENCE)
+            .commencementDate(UPDATED_COMMENCEMENT_DATE)
+            .expirationDate(UPDATED_EXPIRATION_DATE)
+            .hasBeenFullyAmortised(UPDATED_HAS_BEEN_FULLY_AMORTISED)
+            .hasBeenDecommissioned(UPDATED_HAS_BEEN_DECOMMISSIONED);
         RouModelMetadataDTO rouModelMetadataDTO = rouModelMetadataMapper.toDto(updatedRouModelMetadata);
 
         restRouModelMetadataMockMvc
@@ -1196,6 +1240,10 @@ class RouModelMetadataResourceIT {
         assertThat(testRouModelMetadata.getLeaseTermPeriods()).isEqualTo(UPDATED_LEASE_TERM_PERIODS);
         assertThat(testRouModelMetadata.getLeaseAmount()).isEqualTo(UPDATED_LEASE_AMOUNT);
         assertThat(testRouModelMetadata.getRouModelReference()).isEqualTo(UPDATED_ROU_MODEL_REFERENCE);
+        assertThat(testRouModelMetadata.getCommencementDate()).isEqualTo(UPDATED_COMMENCEMENT_DATE);
+        assertThat(testRouModelMetadata.getExpirationDate()).isEqualTo(UPDATED_EXPIRATION_DATE);
+        assertThat(testRouModelMetadata.getHasBeenFullyAmortised()).isEqualTo(UPDATED_HAS_BEEN_FULLY_AMORTISED);
+        assertThat(testRouModelMetadata.getHasBeenDecommissioned()).isEqualTo(UPDATED_HAS_BEEN_DECOMMISSIONED);
 
         // Validate the RouModelMetadata in Elasticsearch
         verify(mockRouModelMetadataSearchRepository).save(testRouModelMetadata);
@@ -1294,7 +1342,10 @@ class RouModelMetadataResourceIT {
             .modelVersion(UPDATED_MODEL_VERSION)
             .description(UPDATED_DESCRIPTION)
             .leaseTermPeriods(UPDATED_LEASE_TERM_PERIODS)
-            .rouModelReference(UPDATED_ROU_MODEL_REFERENCE);
+            .rouModelReference(UPDATED_ROU_MODEL_REFERENCE)
+            .commencementDate(UPDATED_COMMENCEMENT_DATE)
+            .expirationDate(UPDATED_EXPIRATION_DATE)
+            .hasBeenDecommissioned(UPDATED_HAS_BEEN_DECOMMISSIONED);
 
         restRouModelMetadataMockMvc
             .perform(
@@ -1314,6 +1365,10 @@ class RouModelMetadataResourceIT {
         assertThat(testRouModelMetadata.getLeaseTermPeriods()).isEqualTo(UPDATED_LEASE_TERM_PERIODS);
         assertThat(testRouModelMetadata.getLeaseAmount()).isEqualByComparingTo(DEFAULT_LEASE_AMOUNT);
         assertThat(testRouModelMetadata.getRouModelReference()).isEqualTo(UPDATED_ROU_MODEL_REFERENCE);
+        assertThat(testRouModelMetadata.getCommencementDate()).isEqualTo(UPDATED_COMMENCEMENT_DATE);
+        assertThat(testRouModelMetadata.getExpirationDate()).isEqualTo(UPDATED_EXPIRATION_DATE);
+        assertThat(testRouModelMetadata.getHasBeenFullyAmortised()).isEqualTo(DEFAULT_HAS_BEEN_FULLY_AMORTISED);
+        assertThat(testRouModelMetadata.getHasBeenDecommissioned()).isEqualTo(UPDATED_HAS_BEEN_DECOMMISSIONED);
     }
 
     @Test
@@ -1334,7 +1389,11 @@ class RouModelMetadataResourceIT {
             .description(UPDATED_DESCRIPTION)
             .leaseTermPeriods(UPDATED_LEASE_TERM_PERIODS)
             .leaseAmount(UPDATED_LEASE_AMOUNT)
-            .rouModelReference(UPDATED_ROU_MODEL_REFERENCE);
+            .rouModelReference(UPDATED_ROU_MODEL_REFERENCE)
+            .commencementDate(UPDATED_COMMENCEMENT_DATE)
+            .expirationDate(UPDATED_EXPIRATION_DATE)
+            .hasBeenFullyAmortised(UPDATED_HAS_BEEN_FULLY_AMORTISED)
+            .hasBeenDecommissioned(UPDATED_HAS_BEEN_DECOMMISSIONED);
 
         restRouModelMetadataMockMvc
             .perform(
@@ -1354,6 +1413,10 @@ class RouModelMetadataResourceIT {
         assertThat(testRouModelMetadata.getLeaseTermPeriods()).isEqualTo(UPDATED_LEASE_TERM_PERIODS);
         assertThat(testRouModelMetadata.getLeaseAmount()).isEqualByComparingTo(UPDATED_LEASE_AMOUNT);
         assertThat(testRouModelMetadata.getRouModelReference()).isEqualTo(UPDATED_ROU_MODEL_REFERENCE);
+        assertThat(testRouModelMetadata.getCommencementDate()).isEqualTo(UPDATED_COMMENCEMENT_DATE);
+        assertThat(testRouModelMetadata.getExpirationDate()).isEqualTo(UPDATED_EXPIRATION_DATE);
+        assertThat(testRouModelMetadata.getHasBeenFullyAmortised()).isEqualTo(UPDATED_HAS_BEEN_FULLY_AMORTISED);
+        assertThat(testRouModelMetadata.getHasBeenDecommissioned()).isEqualTo(UPDATED_HAS_BEEN_DECOMMISSIONED);
     }
 
     @Test
@@ -1475,6 +1538,10 @@ class RouModelMetadataResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].leaseTermPeriods").value(hasItem(DEFAULT_LEASE_TERM_PERIODS)))
             .andExpect(jsonPath("$.[*].leaseAmount").value(hasItem(sameNumber(DEFAULT_LEASE_AMOUNT))))
-            .andExpect(jsonPath("$.[*].rouModelReference").value(hasItem(DEFAULT_ROU_MODEL_REFERENCE.toString())));
+            .andExpect(jsonPath("$.[*].rouModelReference").value(hasItem(DEFAULT_ROU_MODEL_REFERENCE.toString())))
+            .andExpect(jsonPath("$.[*].commencementDate").value(hasItem(DEFAULT_COMMENCEMENT_DATE.toString())))
+            .andExpect(jsonPath("$.[*].expirationDate").value(hasItem(DEFAULT_EXPIRATION_DATE.toString())))
+            .andExpect(jsonPath("$.[*].hasBeenFullyAmortised").value(hasItem(DEFAULT_HAS_BEEN_FULLY_AMORTISED.booleanValue())))
+            .andExpect(jsonPath("$.[*].hasBeenDecommissioned").value(hasItem(DEFAULT_HAS_BEEN_DECOMMISSIONED.booleanValue())));
     }
 }

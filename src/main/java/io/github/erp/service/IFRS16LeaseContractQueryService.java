@@ -174,6 +174,24 @@ public class IFRS16LeaseContractQueryService extends QueryService<IFRS16LeaseCon
                         )
                     );
             }
+            if (criteria.getLeaseContractDocumentId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLeaseContractDocumentId(),
+                            root -> root.join(IFRS16LeaseContract_.leaseContractDocument, JoinType.LEFT).get(BusinessDocument_.id)
+                        )
+                    );
+            }
+            if (criteria.getLeaseContractCalculationsId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLeaseContractCalculationsId(),
+                            root -> root.join(IFRS16LeaseContract_.leaseContractCalculations, JoinType.LEFT).get(BusinessDocument_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

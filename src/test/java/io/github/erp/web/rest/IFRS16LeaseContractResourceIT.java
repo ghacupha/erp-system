@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.BusinessDocument;
 import io.github.erp.domain.Dealer;
 import io.github.erp.domain.FiscalMonth;
 import io.github.erp.domain.IFRS16LeaseContract;
@@ -1100,6 +1101,58 @@ class IFRS16LeaseContractResourceIT {
 
         // Get all the iFRS16LeaseContractList where lastReportingPeriod equals to (lastReportingPeriodId + 1)
         defaultIFRS16LeaseContractShouldNotBeFound("lastReportingPeriodId.equals=" + (lastReportingPeriodId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllIFRS16LeaseContractsByLeaseContractDocumentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        iFRS16LeaseContractRepository.saveAndFlush(iFRS16LeaseContract);
+        BusinessDocument leaseContractDocument;
+        if (TestUtil.findAll(em, BusinessDocument.class).isEmpty()) {
+            leaseContractDocument = BusinessDocumentResourceIT.createEntity(em);
+            em.persist(leaseContractDocument);
+            em.flush();
+        } else {
+            leaseContractDocument = TestUtil.findAll(em, BusinessDocument.class).get(0);
+        }
+        em.persist(leaseContractDocument);
+        em.flush();
+        iFRS16LeaseContract.setLeaseContractDocument(leaseContractDocument);
+        iFRS16LeaseContractRepository.saveAndFlush(iFRS16LeaseContract);
+        Long leaseContractDocumentId = leaseContractDocument.getId();
+
+        // Get all the iFRS16LeaseContractList where leaseContractDocument equals to leaseContractDocumentId
+        defaultIFRS16LeaseContractShouldBeFound("leaseContractDocumentId.equals=" + leaseContractDocumentId);
+
+        // Get all the iFRS16LeaseContractList where leaseContractDocument equals to (leaseContractDocumentId + 1)
+        defaultIFRS16LeaseContractShouldNotBeFound("leaseContractDocumentId.equals=" + (leaseContractDocumentId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllIFRS16LeaseContractsByLeaseContractCalculationsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        iFRS16LeaseContractRepository.saveAndFlush(iFRS16LeaseContract);
+        BusinessDocument leaseContractCalculations;
+        if (TestUtil.findAll(em, BusinessDocument.class).isEmpty()) {
+            leaseContractCalculations = BusinessDocumentResourceIT.createEntity(em);
+            em.persist(leaseContractCalculations);
+            em.flush();
+        } else {
+            leaseContractCalculations = TestUtil.findAll(em, BusinessDocument.class).get(0);
+        }
+        em.persist(leaseContractCalculations);
+        em.flush();
+        iFRS16LeaseContract.setLeaseContractCalculations(leaseContractCalculations);
+        iFRS16LeaseContractRepository.saveAndFlush(iFRS16LeaseContract);
+        Long leaseContractCalculationsId = leaseContractCalculations.getId();
+
+        // Get all the iFRS16LeaseContractList where leaseContractCalculations equals to leaseContractCalculationsId
+        defaultIFRS16LeaseContractShouldBeFound("leaseContractCalculationsId.equals=" + leaseContractCalculationsId);
+
+        // Get all the iFRS16LeaseContractList where leaseContractCalculations equals to (leaseContractCalculationsId + 1)
+        defaultIFRS16LeaseContractShouldNotBeFound("leaseContractCalculationsId.equals=" + (leaseContractCalculationsId + 1));
     }
 
     /**

@@ -19,10 +19,7 @@ package io.github.erp.erp.resources;
  */
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.Dealer;
-import io.github.erp.domain.FiscalMonth;
-import io.github.erp.domain.IFRS16LeaseContract;
-import io.github.erp.domain.ServiceOutlet;
+import io.github.erp.domain.*;
 import io.github.erp.repository.IFRS16LeaseContractRepository;
 import io.github.erp.repository.search.IFRS16LeaseContractSearchRepository;
 import io.github.erp.service.dto.IFRS16LeaseContractDTO;
@@ -284,6 +281,28 @@ class IFRS16LeaseContractResourceIT {
         int databaseSizeBeforeTest = iFRS16LeaseContractRepository.findAll().size();
         // set the field null
         iFRS16LeaseContract.setBookingId(null);
+
+        // Create the IFRS16LeaseContract, which fails.
+        IFRS16LeaseContractDTO iFRS16LeaseContractDTO = iFRS16LeaseContractMapper.toDto(iFRS16LeaseContract);
+
+        restIFRS16LeaseContractMockMvc
+            .perform(
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(iFRS16LeaseContractDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<IFRS16LeaseContract> iFRS16LeaseContractList = iFRS16LeaseContractRepository.findAll();
+        assertThat(iFRS16LeaseContractList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkLeaseTitleIsRequired() throws Exception {
+        int databaseSizeBeforeTest = iFRS16LeaseContractRepository.findAll().size();
+        // set the field null
+        iFRS16LeaseContract.setLeaseTitle(null);
 
         // Create the IFRS16LeaseContract, which fails.
         IFRS16LeaseContractDTO iFRS16LeaseContractDTO = iFRS16LeaseContractMapper.toDto(iFRS16LeaseContract);
