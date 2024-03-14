@@ -26,6 +26,7 @@ git checkout HEAD~1 src/test/java/io/github/erp/web/rest/FiscalMonthResourceIT.j
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/FiscalQuarterResourceIT.java
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/DepreciationJobResourceIT.java
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/DepreciationPeriodResourceIT.java
+git checkout HEAD~1 src/test/java/io/github/erp/web/rest/NbvCompilationJobResourceIT.java
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/SecurityClearanceResourceIT.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/FiscalYear.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/FiscalQuarter.java

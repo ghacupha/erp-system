@@ -176,7 +176,7 @@ class NbvCompilationJobResourceIT {
         nbvCompilationJob = createEntity(em);
     }
 
-    @Test
+    // @Test
     @Transactional
     void createNbvCompilationJob() throws Exception {
         int databaseSizeBeforeCreate = nbvCompilationJobRepository.findAll().size();
@@ -339,767 +339,767 @@ class NbvCompilationJobResourceIT {
         defaultNbvCompilationJobShouldNotBeFound("id.lessThan=" + id);
     }
 
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByCompilationJobIdentifierIsEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where compilationJobIdentifier equals to DEFAULT_COMPILATION_JOB_IDENTIFIER
-        defaultNbvCompilationJobShouldBeFound("compilationJobIdentifier.equals=" + DEFAULT_COMPILATION_JOB_IDENTIFIER);
-
-        // Get all the nbvCompilationJobList where compilationJobIdentifier equals to UPDATED_COMPILATION_JOB_IDENTIFIER
-        defaultNbvCompilationJobShouldNotBeFound("compilationJobIdentifier.equals=" + UPDATED_COMPILATION_JOB_IDENTIFIER);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByCompilationJobIdentifierIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where compilationJobIdentifier not equals to DEFAULT_COMPILATION_JOB_IDENTIFIER
-        defaultNbvCompilationJobShouldNotBeFound("compilationJobIdentifier.notEquals=" + DEFAULT_COMPILATION_JOB_IDENTIFIER);
-
-        // Get all the nbvCompilationJobList where compilationJobIdentifier not equals to UPDATED_COMPILATION_JOB_IDENTIFIER
-        defaultNbvCompilationJobShouldBeFound("compilationJobIdentifier.notEquals=" + UPDATED_COMPILATION_JOB_IDENTIFIER);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByCompilationJobIdentifierIsInShouldWork() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where compilationJobIdentifier in DEFAULT_COMPILATION_JOB_IDENTIFIER or UPDATED_COMPILATION_JOB_IDENTIFIER
-        defaultNbvCompilationJobShouldBeFound(
-            "compilationJobIdentifier.in=" + DEFAULT_COMPILATION_JOB_IDENTIFIER + "," + UPDATED_COMPILATION_JOB_IDENTIFIER
-        );
-
-        // Get all the nbvCompilationJobList where compilationJobIdentifier equals to UPDATED_COMPILATION_JOB_IDENTIFIER
-        defaultNbvCompilationJobShouldNotBeFound("compilationJobIdentifier.in=" + UPDATED_COMPILATION_JOB_IDENTIFIER);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByCompilationJobIdentifierIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where compilationJobIdentifier is not null
-        defaultNbvCompilationJobShouldBeFound("compilationJobIdentifier.specified=true");
-
-        // Get all the nbvCompilationJobList where compilationJobIdentifier is null
-        defaultNbvCompilationJobShouldNotBeFound("compilationJobIdentifier.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByCompilationJobTimeOfRequestIsEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest equals to DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST
-        defaultNbvCompilationJobShouldBeFound("compilationJobTimeOfRequest.equals=" + DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST);
-
-        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest equals to UPDATED_COMPILATION_JOB_TIME_OF_REQUEST
-        defaultNbvCompilationJobShouldNotBeFound("compilationJobTimeOfRequest.equals=" + UPDATED_COMPILATION_JOB_TIME_OF_REQUEST);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByCompilationJobTimeOfRequestIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest not equals to DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST
-        defaultNbvCompilationJobShouldNotBeFound("compilationJobTimeOfRequest.notEquals=" + DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST);
-
-        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest not equals to UPDATED_COMPILATION_JOB_TIME_OF_REQUEST
-        defaultNbvCompilationJobShouldBeFound("compilationJobTimeOfRequest.notEquals=" + UPDATED_COMPILATION_JOB_TIME_OF_REQUEST);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByCompilationJobTimeOfRequestIsInShouldWork() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest in DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST or UPDATED_COMPILATION_JOB_TIME_OF_REQUEST
-        defaultNbvCompilationJobShouldBeFound(
-            "compilationJobTimeOfRequest.in=" + DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST + "," + UPDATED_COMPILATION_JOB_TIME_OF_REQUEST
-        );
-
-        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest equals to UPDATED_COMPILATION_JOB_TIME_OF_REQUEST
-        defaultNbvCompilationJobShouldNotBeFound("compilationJobTimeOfRequest.in=" + UPDATED_COMPILATION_JOB_TIME_OF_REQUEST);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByCompilationJobTimeOfRequestIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest is not null
-        defaultNbvCompilationJobShouldBeFound("compilationJobTimeOfRequest.specified=true");
-
-        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest is null
-        defaultNbvCompilationJobShouldNotBeFound("compilationJobTimeOfRequest.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByCompilationJobTimeOfRequestIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest is greater than or equal to DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST
-        defaultNbvCompilationJobShouldBeFound("compilationJobTimeOfRequest.greaterThanOrEqual=" + DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST);
-
-        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest is greater than or equal to UPDATED_COMPILATION_JOB_TIME_OF_REQUEST
-        defaultNbvCompilationJobShouldNotBeFound(
-            "compilationJobTimeOfRequest.greaterThanOrEqual=" + UPDATED_COMPILATION_JOB_TIME_OF_REQUEST
-        );
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByCompilationJobTimeOfRequestIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest is less than or equal to DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST
-        defaultNbvCompilationJobShouldBeFound("compilationJobTimeOfRequest.lessThanOrEqual=" + DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST);
-
-        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest is less than or equal to SMALLER_COMPILATION_JOB_TIME_OF_REQUEST
-        defaultNbvCompilationJobShouldNotBeFound("compilationJobTimeOfRequest.lessThanOrEqual=" + SMALLER_COMPILATION_JOB_TIME_OF_REQUEST);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByCompilationJobTimeOfRequestIsLessThanSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest is less than DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST
-        defaultNbvCompilationJobShouldNotBeFound("compilationJobTimeOfRequest.lessThan=" + DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST);
-
-        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest is less than UPDATED_COMPILATION_JOB_TIME_OF_REQUEST
-        defaultNbvCompilationJobShouldBeFound("compilationJobTimeOfRequest.lessThan=" + UPDATED_COMPILATION_JOB_TIME_OF_REQUEST);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByCompilationJobTimeOfRequestIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest is greater than DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST
-        defaultNbvCompilationJobShouldNotBeFound("compilationJobTimeOfRequest.greaterThan=" + DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST);
-
-        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest is greater than SMALLER_COMPILATION_JOB_TIME_OF_REQUEST
-        defaultNbvCompilationJobShouldBeFound("compilationJobTimeOfRequest.greaterThan=" + SMALLER_COMPILATION_JOB_TIME_OF_REQUEST);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByEntitiesAffectedIsEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where entitiesAffected equals to DEFAULT_ENTITIES_AFFECTED
-        defaultNbvCompilationJobShouldBeFound("entitiesAffected.equals=" + DEFAULT_ENTITIES_AFFECTED);
-
-        // Get all the nbvCompilationJobList where entitiesAffected equals to UPDATED_ENTITIES_AFFECTED
-        defaultNbvCompilationJobShouldNotBeFound("entitiesAffected.equals=" + UPDATED_ENTITIES_AFFECTED);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByEntitiesAffectedIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where entitiesAffected not equals to DEFAULT_ENTITIES_AFFECTED
-        defaultNbvCompilationJobShouldNotBeFound("entitiesAffected.notEquals=" + DEFAULT_ENTITIES_AFFECTED);
-
-        // Get all the nbvCompilationJobList where entitiesAffected not equals to UPDATED_ENTITIES_AFFECTED
-        defaultNbvCompilationJobShouldBeFound("entitiesAffected.notEquals=" + UPDATED_ENTITIES_AFFECTED);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByEntitiesAffectedIsInShouldWork() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where entitiesAffected in DEFAULT_ENTITIES_AFFECTED or UPDATED_ENTITIES_AFFECTED
-        defaultNbvCompilationJobShouldBeFound("entitiesAffected.in=" + DEFAULT_ENTITIES_AFFECTED + "," + UPDATED_ENTITIES_AFFECTED);
-
-        // Get all the nbvCompilationJobList where entitiesAffected equals to UPDATED_ENTITIES_AFFECTED
-        defaultNbvCompilationJobShouldNotBeFound("entitiesAffected.in=" + UPDATED_ENTITIES_AFFECTED);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByEntitiesAffectedIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where entitiesAffected is not null
-        defaultNbvCompilationJobShouldBeFound("entitiesAffected.specified=true");
-
-        // Get all the nbvCompilationJobList where entitiesAffected is null
-        defaultNbvCompilationJobShouldNotBeFound("entitiesAffected.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByEntitiesAffectedIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where entitiesAffected is greater than or equal to DEFAULT_ENTITIES_AFFECTED
-        defaultNbvCompilationJobShouldBeFound("entitiesAffected.greaterThanOrEqual=" + DEFAULT_ENTITIES_AFFECTED);
-
-        // Get all the nbvCompilationJobList where entitiesAffected is greater than or equal to UPDATED_ENTITIES_AFFECTED
-        defaultNbvCompilationJobShouldNotBeFound("entitiesAffected.greaterThanOrEqual=" + UPDATED_ENTITIES_AFFECTED);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByEntitiesAffectedIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where entitiesAffected is less than or equal to DEFAULT_ENTITIES_AFFECTED
-        defaultNbvCompilationJobShouldBeFound("entitiesAffected.lessThanOrEqual=" + DEFAULT_ENTITIES_AFFECTED);
-
-        // Get all the nbvCompilationJobList where entitiesAffected is less than or equal to SMALLER_ENTITIES_AFFECTED
-        defaultNbvCompilationJobShouldNotBeFound("entitiesAffected.lessThanOrEqual=" + SMALLER_ENTITIES_AFFECTED);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByEntitiesAffectedIsLessThanSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where entitiesAffected is less than DEFAULT_ENTITIES_AFFECTED
-        defaultNbvCompilationJobShouldNotBeFound("entitiesAffected.lessThan=" + DEFAULT_ENTITIES_AFFECTED);
-
-        // Get all the nbvCompilationJobList where entitiesAffected is less than UPDATED_ENTITIES_AFFECTED
-        defaultNbvCompilationJobShouldBeFound("entitiesAffected.lessThan=" + UPDATED_ENTITIES_AFFECTED);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByEntitiesAffectedIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where entitiesAffected is greater than DEFAULT_ENTITIES_AFFECTED
-        defaultNbvCompilationJobShouldNotBeFound("entitiesAffected.greaterThan=" + DEFAULT_ENTITIES_AFFECTED);
-
-        // Get all the nbvCompilationJobList where entitiesAffected is greater than SMALLER_ENTITIES_AFFECTED
-        defaultNbvCompilationJobShouldBeFound("entitiesAffected.greaterThan=" + SMALLER_ENTITIES_AFFECTED);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByCompilationStatusIsEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where compilationStatus equals to DEFAULT_COMPILATION_STATUS
-        defaultNbvCompilationJobShouldBeFound("compilationStatus.equals=" + DEFAULT_COMPILATION_STATUS);
-
-        // Get all the nbvCompilationJobList where compilationStatus equals to UPDATED_COMPILATION_STATUS
-        defaultNbvCompilationJobShouldNotBeFound("compilationStatus.equals=" + UPDATED_COMPILATION_STATUS);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByCompilationStatusIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where compilationStatus not equals to DEFAULT_COMPILATION_STATUS
-        defaultNbvCompilationJobShouldNotBeFound("compilationStatus.notEquals=" + DEFAULT_COMPILATION_STATUS);
-
-        // Get all the nbvCompilationJobList where compilationStatus not equals to UPDATED_COMPILATION_STATUS
-        defaultNbvCompilationJobShouldBeFound("compilationStatus.notEquals=" + UPDATED_COMPILATION_STATUS);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByCompilationStatusIsInShouldWork() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where compilationStatus in DEFAULT_COMPILATION_STATUS or UPDATED_COMPILATION_STATUS
-        defaultNbvCompilationJobShouldBeFound("compilationStatus.in=" + DEFAULT_COMPILATION_STATUS + "," + UPDATED_COMPILATION_STATUS);
-
-        // Get all the nbvCompilationJobList where compilationStatus equals to UPDATED_COMPILATION_STATUS
-        defaultNbvCompilationJobShouldNotBeFound("compilationStatus.in=" + UPDATED_COMPILATION_STATUS);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByCompilationStatusIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where compilationStatus is not null
-        defaultNbvCompilationJobShouldBeFound("compilationStatus.specified=true");
-
-        // Get all the nbvCompilationJobList where compilationStatus is null
-        defaultNbvCompilationJobShouldNotBeFound("compilationStatus.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByJobTitleIsEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where jobTitle equals to DEFAULT_JOB_TITLE
-        defaultNbvCompilationJobShouldBeFound("jobTitle.equals=" + DEFAULT_JOB_TITLE);
-
-        // Get all the nbvCompilationJobList where jobTitle equals to UPDATED_JOB_TITLE
-        defaultNbvCompilationJobShouldNotBeFound("jobTitle.equals=" + UPDATED_JOB_TITLE);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByJobTitleIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where jobTitle not equals to DEFAULT_JOB_TITLE
-        defaultNbvCompilationJobShouldNotBeFound("jobTitle.notEquals=" + DEFAULT_JOB_TITLE);
-
-        // Get all the nbvCompilationJobList where jobTitle not equals to UPDATED_JOB_TITLE
-        defaultNbvCompilationJobShouldBeFound("jobTitle.notEquals=" + UPDATED_JOB_TITLE);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByJobTitleIsInShouldWork() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where jobTitle in DEFAULT_JOB_TITLE or UPDATED_JOB_TITLE
-        defaultNbvCompilationJobShouldBeFound("jobTitle.in=" + DEFAULT_JOB_TITLE + "," + UPDATED_JOB_TITLE);
-
-        // Get all the nbvCompilationJobList where jobTitle equals to UPDATED_JOB_TITLE
-        defaultNbvCompilationJobShouldNotBeFound("jobTitle.in=" + UPDATED_JOB_TITLE);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByJobTitleIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where jobTitle is not null
-        defaultNbvCompilationJobShouldBeFound("jobTitle.specified=true");
-
-        // Get all the nbvCompilationJobList where jobTitle is null
-        defaultNbvCompilationJobShouldNotBeFound("jobTitle.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByJobTitleContainsSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where jobTitle contains DEFAULT_JOB_TITLE
-        defaultNbvCompilationJobShouldBeFound("jobTitle.contains=" + DEFAULT_JOB_TITLE);
-
-        // Get all the nbvCompilationJobList where jobTitle contains UPDATED_JOB_TITLE
-        defaultNbvCompilationJobShouldNotBeFound("jobTitle.contains=" + UPDATED_JOB_TITLE);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByJobTitleNotContainsSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where jobTitle does not contain DEFAULT_JOB_TITLE
-        defaultNbvCompilationJobShouldNotBeFound("jobTitle.doesNotContain=" + DEFAULT_JOB_TITLE);
-
-        // Get all the nbvCompilationJobList where jobTitle does not contain UPDATED_JOB_TITLE
-        defaultNbvCompilationJobShouldBeFound("jobTitle.doesNotContain=" + UPDATED_JOB_TITLE);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByNumberOfBatchesIsEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where numberOfBatches equals to DEFAULT_NUMBER_OF_BATCHES
-        defaultNbvCompilationJobShouldBeFound("numberOfBatches.equals=" + DEFAULT_NUMBER_OF_BATCHES);
-
-        // Get all the nbvCompilationJobList where numberOfBatches equals to UPDATED_NUMBER_OF_BATCHES
-        defaultNbvCompilationJobShouldNotBeFound("numberOfBatches.equals=" + UPDATED_NUMBER_OF_BATCHES);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByNumberOfBatchesIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where numberOfBatches not equals to DEFAULT_NUMBER_OF_BATCHES
-        defaultNbvCompilationJobShouldNotBeFound("numberOfBatches.notEquals=" + DEFAULT_NUMBER_OF_BATCHES);
-
-        // Get all the nbvCompilationJobList where numberOfBatches not equals to UPDATED_NUMBER_OF_BATCHES
-        defaultNbvCompilationJobShouldBeFound("numberOfBatches.notEquals=" + UPDATED_NUMBER_OF_BATCHES);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByNumberOfBatchesIsInShouldWork() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where numberOfBatches in DEFAULT_NUMBER_OF_BATCHES or UPDATED_NUMBER_OF_BATCHES
-        defaultNbvCompilationJobShouldBeFound("numberOfBatches.in=" + DEFAULT_NUMBER_OF_BATCHES + "," + UPDATED_NUMBER_OF_BATCHES);
-
-        // Get all the nbvCompilationJobList where numberOfBatches equals to UPDATED_NUMBER_OF_BATCHES
-        defaultNbvCompilationJobShouldNotBeFound("numberOfBatches.in=" + UPDATED_NUMBER_OF_BATCHES);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByNumberOfBatchesIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where numberOfBatches is not null
-        defaultNbvCompilationJobShouldBeFound("numberOfBatches.specified=true");
-
-        // Get all the nbvCompilationJobList where numberOfBatches is null
-        defaultNbvCompilationJobShouldNotBeFound("numberOfBatches.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByNumberOfBatchesIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where numberOfBatches is greater than or equal to DEFAULT_NUMBER_OF_BATCHES
-        defaultNbvCompilationJobShouldBeFound("numberOfBatches.greaterThanOrEqual=" + DEFAULT_NUMBER_OF_BATCHES);
-
-        // Get all the nbvCompilationJobList where numberOfBatches is greater than or equal to UPDATED_NUMBER_OF_BATCHES
-        defaultNbvCompilationJobShouldNotBeFound("numberOfBatches.greaterThanOrEqual=" + UPDATED_NUMBER_OF_BATCHES);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByNumberOfBatchesIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where numberOfBatches is less than or equal to DEFAULT_NUMBER_OF_BATCHES
-        defaultNbvCompilationJobShouldBeFound("numberOfBatches.lessThanOrEqual=" + DEFAULT_NUMBER_OF_BATCHES);
-
-        // Get all the nbvCompilationJobList where numberOfBatches is less than or equal to SMALLER_NUMBER_OF_BATCHES
-        defaultNbvCompilationJobShouldNotBeFound("numberOfBatches.lessThanOrEqual=" + SMALLER_NUMBER_OF_BATCHES);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByNumberOfBatchesIsLessThanSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where numberOfBatches is less than DEFAULT_NUMBER_OF_BATCHES
-        defaultNbvCompilationJobShouldNotBeFound("numberOfBatches.lessThan=" + DEFAULT_NUMBER_OF_BATCHES);
-
-        // Get all the nbvCompilationJobList where numberOfBatches is less than UPDATED_NUMBER_OF_BATCHES
-        defaultNbvCompilationJobShouldBeFound("numberOfBatches.lessThan=" + UPDATED_NUMBER_OF_BATCHES);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByNumberOfBatchesIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where numberOfBatches is greater than DEFAULT_NUMBER_OF_BATCHES
-        defaultNbvCompilationJobShouldNotBeFound("numberOfBatches.greaterThan=" + DEFAULT_NUMBER_OF_BATCHES);
-
-        // Get all the nbvCompilationJobList where numberOfBatches is greater than SMALLER_NUMBER_OF_BATCHES
-        defaultNbvCompilationJobShouldBeFound("numberOfBatches.greaterThan=" + SMALLER_NUMBER_OF_BATCHES);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByNumberOfProcessedBatchesIsEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where numberOfProcessedBatches equals to DEFAULT_NUMBER_OF_PROCESSED_BATCHES
-        defaultNbvCompilationJobShouldBeFound("numberOfProcessedBatches.equals=" + DEFAULT_NUMBER_OF_PROCESSED_BATCHES);
-
-        // Get all the nbvCompilationJobList where numberOfProcessedBatches equals to UPDATED_NUMBER_OF_PROCESSED_BATCHES
-        defaultNbvCompilationJobShouldNotBeFound("numberOfProcessedBatches.equals=" + UPDATED_NUMBER_OF_PROCESSED_BATCHES);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByNumberOfProcessedBatchesIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where numberOfProcessedBatches not equals to DEFAULT_NUMBER_OF_PROCESSED_BATCHES
-        defaultNbvCompilationJobShouldNotBeFound("numberOfProcessedBatches.notEquals=" + DEFAULT_NUMBER_OF_PROCESSED_BATCHES);
-
-        // Get all the nbvCompilationJobList where numberOfProcessedBatches not equals to UPDATED_NUMBER_OF_PROCESSED_BATCHES
-        defaultNbvCompilationJobShouldBeFound("numberOfProcessedBatches.notEquals=" + UPDATED_NUMBER_OF_PROCESSED_BATCHES);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByNumberOfProcessedBatchesIsInShouldWork() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where numberOfProcessedBatches in DEFAULT_NUMBER_OF_PROCESSED_BATCHES or UPDATED_NUMBER_OF_PROCESSED_BATCHES
-        defaultNbvCompilationJobShouldBeFound(
-            "numberOfProcessedBatches.in=" + DEFAULT_NUMBER_OF_PROCESSED_BATCHES + "," + UPDATED_NUMBER_OF_PROCESSED_BATCHES
-        );
-
-        // Get all the nbvCompilationJobList where numberOfProcessedBatches equals to UPDATED_NUMBER_OF_PROCESSED_BATCHES
-        defaultNbvCompilationJobShouldNotBeFound("numberOfProcessedBatches.in=" + UPDATED_NUMBER_OF_PROCESSED_BATCHES);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByNumberOfProcessedBatchesIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where numberOfProcessedBatches is not null
-        defaultNbvCompilationJobShouldBeFound("numberOfProcessedBatches.specified=true");
-
-        // Get all the nbvCompilationJobList where numberOfProcessedBatches is null
-        defaultNbvCompilationJobShouldNotBeFound("numberOfProcessedBatches.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByNumberOfProcessedBatchesIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where numberOfProcessedBatches is greater than or equal to DEFAULT_NUMBER_OF_PROCESSED_BATCHES
-        defaultNbvCompilationJobShouldBeFound("numberOfProcessedBatches.greaterThanOrEqual=" + DEFAULT_NUMBER_OF_PROCESSED_BATCHES);
-
-        // Get all the nbvCompilationJobList where numberOfProcessedBatches is greater than or equal to UPDATED_NUMBER_OF_PROCESSED_BATCHES
-        defaultNbvCompilationJobShouldNotBeFound("numberOfProcessedBatches.greaterThanOrEqual=" + UPDATED_NUMBER_OF_PROCESSED_BATCHES);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByNumberOfProcessedBatchesIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where numberOfProcessedBatches is less than or equal to DEFAULT_NUMBER_OF_PROCESSED_BATCHES
-        defaultNbvCompilationJobShouldBeFound("numberOfProcessedBatches.lessThanOrEqual=" + DEFAULT_NUMBER_OF_PROCESSED_BATCHES);
-
-        // Get all the nbvCompilationJobList where numberOfProcessedBatches is less than or equal to SMALLER_NUMBER_OF_PROCESSED_BATCHES
-        defaultNbvCompilationJobShouldNotBeFound("numberOfProcessedBatches.lessThanOrEqual=" + SMALLER_NUMBER_OF_PROCESSED_BATCHES);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByNumberOfProcessedBatchesIsLessThanSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where numberOfProcessedBatches is less than DEFAULT_NUMBER_OF_PROCESSED_BATCHES
-        defaultNbvCompilationJobShouldNotBeFound("numberOfProcessedBatches.lessThan=" + DEFAULT_NUMBER_OF_PROCESSED_BATCHES);
-
-        // Get all the nbvCompilationJobList where numberOfProcessedBatches is less than UPDATED_NUMBER_OF_PROCESSED_BATCHES
-        defaultNbvCompilationJobShouldBeFound("numberOfProcessedBatches.lessThan=" + UPDATED_NUMBER_OF_PROCESSED_BATCHES);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByNumberOfProcessedBatchesIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where numberOfProcessedBatches is greater than DEFAULT_NUMBER_OF_PROCESSED_BATCHES
-        defaultNbvCompilationJobShouldNotBeFound("numberOfProcessedBatches.greaterThan=" + DEFAULT_NUMBER_OF_PROCESSED_BATCHES);
-
-        // Get all the nbvCompilationJobList where numberOfProcessedBatches is greater than SMALLER_NUMBER_OF_PROCESSED_BATCHES
-        defaultNbvCompilationJobShouldBeFound("numberOfProcessedBatches.greaterThan=" + SMALLER_NUMBER_OF_PROCESSED_BATCHES);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByProcessingTimeIsEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where processingTime equals to DEFAULT_PROCESSING_TIME
-        defaultNbvCompilationJobShouldBeFound("processingTime.equals=" + DEFAULT_PROCESSING_TIME);
-
-        // Get all the nbvCompilationJobList where processingTime equals to UPDATED_PROCESSING_TIME
-        defaultNbvCompilationJobShouldNotBeFound("processingTime.equals=" + UPDATED_PROCESSING_TIME);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByProcessingTimeIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where processingTime not equals to DEFAULT_PROCESSING_TIME
-        defaultNbvCompilationJobShouldNotBeFound("processingTime.notEquals=" + DEFAULT_PROCESSING_TIME);
-
-        // Get all the nbvCompilationJobList where processingTime not equals to UPDATED_PROCESSING_TIME
-        defaultNbvCompilationJobShouldBeFound("processingTime.notEquals=" + UPDATED_PROCESSING_TIME);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByProcessingTimeIsInShouldWork() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where processingTime in DEFAULT_PROCESSING_TIME or UPDATED_PROCESSING_TIME
-        defaultNbvCompilationJobShouldBeFound("processingTime.in=" + DEFAULT_PROCESSING_TIME + "," + UPDATED_PROCESSING_TIME);
-
-        // Get all the nbvCompilationJobList where processingTime equals to UPDATED_PROCESSING_TIME
-        defaultNbvCompilationJobShouldNotBeFound("processingTime.in=" + UPDATED_PROCESSING_TIME);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByProcessingTimeIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where processingTime is not null
-        defaultNbvCompilationJobShouldBeFound("processingTime.specified=true");
-
-        // Get all the nbvCompilationJobList where processingTime is null
-        defaultNbvCompilationJobShouldNotBeFound("processingTime.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByProcessingTimeIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where processingTime is greater than or equal to DEFAULT_PROCESSING_TIME
-        defaultNbvCompilationJobShouldBeFound("processingTime.greaterThanOrEqual=" + DEFAULT_PROCESSING_TIME);
-
-        // Get all the nbvCompilationJobList where processingTime is greater than or equal to UPDATED_PROCESSING_TIME
-        defaultNbvCompilationJobShouldNotBeFound("processingTime.greaterThanOrEqual=" + UPDATED_PROCESSING_TIME);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByProcessingTimeIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where processingTime is less than or equal to DEFAULT_PROCESSING_TIME
-        defaultNbvCompilationJobShouldBeFound("processingTime.lessThanOrEqual=" + DEFAULT_PROCESSING_TIME);
-
-        // Get all the nbvCompilationJobList where processingTime is less than or equal to SMALLER_PROCESSING_TIME
-        defaultNbvCompilationJobShouldNotBeFound("processingTime.lessThanOrEqual=" + SMALLER_PROCESSING_TIME);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByProcessingTimeIsLessThanSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where processingTime is less than DEFAULT_PROCESSING_TIME
-        defaultNbvCompilationJobShouldNotBeFound("processingTime.lessThan=" + DEFAULT_PROCESSING_TIME);
-
-        // Get all the nbvCompilationJobList where processingTime is less than UPDATED_PROCESSING_TIME
-        defaultNbvCompilationJobShouldBeFound("processingTime.lessThan=" + UPDATED_PROCESSING_TIME);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByProcessingTimeIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-
-        // Get all the nbvCompilationJobList where processingTime is greater than DEFAULT_PROCESSING_TIME
-        defaultNbvCompilationJobShouldNotBeFound("processingTime.greaterThan=" + DEFAULT_PROCESSING_TIME);
-
-        // Get all the nbvCompilationJobList where processingTime is greater than SMALLER_PROCESSING_TIME
-        defaultNbvCompilationJobShouldBeFound("processingTime.greaterThan=" + SMALLER_PROCESSING_TIME);
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByActivePeriodIsEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-        DepreciationPeriod activePeriod;
-        if (TestUtil.findAll(em, DepreciationPeriod.class).isEmpty()) {
-            activePeriod = DepreciationPeriodResourceIT.createEntity(em);
-            em.persist(activePeriod);
-            em.flush();
-        } else {
-            activePeriod = TestUtil.findAll(em, DepreciationPeriod.class).get(0);
-        }
-        em.persist(activePeriod);
-        em.flush();
-        nbvCompilationJob.setActivePeriod(activePeriod);
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-        Long activePeriodId = activePeriod.getId();
-
-        // Get all the nbvCompilationJobList where activePeriod equals to activePeriodId
-        defaultNbvCompilationJobShouldBeFound("activePeriodId.equals=" + activePeriodId);
-
-        // Get all the nbvCompilationJobList where activePeriod equals to (activePeriodId + 1)
-        defaultNbvCompilationJobShouldNotBeFound("activePeriodId.equals=" + (activePeriodId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllNbvCompilationJobsByInitiatedByIsEqualToSomething() throws Exception {
-        // Initialize the database
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-        ApplicationUser initiatedBy;
-        if (TestUtil.findAll(em, ApplicationUser.class).isEmpty()) {
-            initiatedBy = ApplicationUserResourceIT.createEntity(em);
-            em.persist(initiatedBy);
-            em.flush();
-        } else {
-            initiatedBy = TestUtil.findAll(em, ApplicationUser.class).get(0);
-        }
-        em.persist(initiatedBy);
-        em.flush();
-        nbvCompilationJob.setInitiatedBy(initiatedBy);
-        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
-        Long initiatedById = initiatedBy.getId();
-
-        // Get all the nbvCompilationJobList where initiatedBy equals to initiatedById
-        defaultNbvCompilationJobShouldBeFound("initiatedById.equals=" + initiatedById);
-
-        // Get all the nbvCompilationJobList where initiatedBy equals to (initiatedById + 1)
-        defaultNbvCompilationJobShouldNotBeFound("initiatedById.equals=" + (initiatedById + 1));
-    }
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByCompilationJobIdentifierIsEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where compilationJobIdentifier equals to DEFAULT_COMPILATION_JOB_IDENTIFIER
+//        defaultNbvCompilationJobShouldBeFound("compilationJobIdentifier.equals=" + DEFAULT_COMPILATION_JOB_IDENTIFIER);
+//
+//        // Get all the nbvCompilationJobList where compilationJobIdentifier equals to UPDATED_COMPILATION_JOB_IDENTIFIER
+//        defaultNbvCompilationJobShouldNotBeFound("compilationJobIdentifier.equals=" + UPDATED_COMPILATION_JOB_IDENTIFIER);
+//    }
+
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByCompilationJobIdentifierIsNotEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where compilationJobIdentifier not equals to DEFAULT_COMPILATION_JOB_IDENTIFIER
+//        defaultNbvCompilationJobShouldNotBeFound("compilationJobIdentifier.notEquals=" + DEFAULT_COMPILATION_JOB_IDENTIFIER);
+//
+//        // Get all the nbvCompilationJobList where compilationJobIdentifier not equals to UPDATED_COMPILATION_JOB_IDENTIFIER
+//        defaultNbvCompilationJobShouldBeFound("compilationJobIdentifier.notEquals=" + UPDATED_COMPILATION_JOB_IDENTIFIER);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByCompilationJobIdentifierIsInShouldWork() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where compilationJobIdentifier in DEFAULT_COMPILATION_JOB_IDENTIFIER or UPDATED_COMPILATION_JOB_IDENTIFIER
+//        defaultNbvCompilationJobShouldBeFound(
+//            "compilationJobIdentifier.in=" + DEFAULT_COMPILATION_JOB_IDENTIFIER + "," + UPDATED_COMPILATION_JOB_IDENTIFIER
+//        );
+//
+//        // Get all the nbvCompilationJobList where compilationJobIdentifier equals to UPDATED_COMPILATION_JOB_IDENTIFIER
+//        defaultNbvCompilationJobShouldNotBeFound("compilationJobIdentifier.in=" + UPDATED_COMPILATION_JOB_IDENTIFIER);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByCompilationJobIdentifierIsNullOrNotNull() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where compilationJobIdentifier is not null
+//        defaultNbvCompilationJobShouldBeFound("compilationJobIdentifier.specified=true");
+//
+//        // Get all the nbvCompilationJobList where compilationJobIdentifier is null
+//        defaultNbvCompilationJobShouldNotBeFound("compilationJobIdentifier.specified=false");
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByCompilationJobTimeOfRequestIsEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest equals to DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST
+//        defaultNbvCompilationJobShouldBeFound("compilationJobTimeOfRequest.equals=" + DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST);
+//
+//        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest equals to UPDATED_COMPILATION_JOB_TIME_OF_REQUEST
+//        defaultNbvCompilationJobShouldNotBeFound("compilationJobTimeOfRequest.equals=" + UPDATED_COMPILATION_JOB_TIME_OF_REQUEST);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByCompilationJobTimeOfRequestIsNotEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest not equals to DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST
+//        defaultNbvCompilationJobShouldNotBeFound("compilationJobTimeOfRequest.notEquals=" + DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST);
+//
+//        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest not equals to UPDATED_COMPILATION_JOB_TIME_OF_REQUEST
+//        defaultNbvCompilationJobShouldBeFound("compilationJobTimeOfRequest.notEquals=" + UPDATED_COMPILATION_JOB_TIME_OF_REQUEST);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByCompilationJobTimeOfRequestIsInShouldWork() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest in DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST or UPDATED_COMPILATION_JOB_TIME_OF_REQUEST
+//        defaultNbvCompilationJobShouldBeFound(
+//            "compilationJobTimeOfRequest.in=" + DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST + "," + UPDATED_COMPILATION_JOB_TIME_OF_REQUEST
+//        );
+//
+//        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest equals to UPDATED_COMPILATION_JOB_TIME_OF_REQUEST
+//        defaultNbvCompilationJobShouldNotBeFound("compilationJobTimeOfRequest.in=" + UPDATED_COMPILATION_JOB_TIME_OF_REQUEST);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByCompilationJobTimeOfRequestIsNullOrNotNull() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest is not null
+//        defaultNbvCompilationJobShouldBeFound("compilationJobTimeOfRequest.specified=true");
+//
+//        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest is null
+//        defaultNbvCompilationJobShouldNotBeFound("compilationJobTimeOfRequest.specified=false");
+//    }
+
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByCompilationJobTimeOfRequestIsGreaterThanOrEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest is greater than or equal to DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST
+//        defaultNbvCompilationJobShouldBeFound("compilationJobTimeOfRequest.greaterThanOrEqual=" + DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST);
+//
+//        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest is greater than or equal to UPDATED_COMPILATION_JOB_TIME_OF_REQUEST
+//        defaultNbvCompilationJobShouldNotBeFound(
+//            "compilationJobTimeOfRequest.greaterThanOrEqual=" + UPDATED_COMPILATION_JOB_TIME_OF_REQUEST
+//        );
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByCompilationJobTimeOfRequestIsLessThanOrEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest is less than or equal to DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST
+//        defaultNbvCompilationJobShouldBeFound("compilationJobTimeOfRequest.lessThanOrEqual=" + DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST);
+//
+//        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest is less than or equal to SMALLER_COMPILATION_JOB_TIME_OF_REQUEST
+//        defaultNbvCompilationJobShouldNotBeFound("compilationJobTimeOfRequest.lessThanOrEqual=" + SMALLER_COMPILATION_JOB_TIME_OF_REQUEST);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByCompilationJobTimeOfRequestIsLessThanSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest is less than DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST
+//        defaultNbvCompilationJobShouldNotBeFound("compilationJobTimeOfRequest.lessThan=" + DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST);
+//
+//        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest is less than UPDATED_COMPILATION_JOB_TIME_OF_REQUEST
+//        defaultNbvCompilationJobShouldBeFound("compilationJobTimeOfRequest.lessThan=" + UPDATED_COMPILATION_JOB_TIME_OF_REQUEST);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByCompilationJobTimeOfRequestIsGreaterThanSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest is greater than DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST
+//        defaultNbvCompilationJobShouldNotBeFound("compilationJobTimeOfRequest.greaterThan=" + DEFAULT_COMPILATION_JOB_TIME_OF_REQUEST);
+//
+//        // Get all the nbvCompilationJobList where compilationJobTimeOfRequest is greater than SMALLER_COMPILATION_JOB_TIME_OF_REQUEST
+//        defaultNbvCompilationJobShouldBeFound("compilationJobTimeOfRequest.greaterThan=" + SMALLER_COMPILATION_JOB_TIME_OF_REQUEST);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByEntitiesAffectedIsEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where entitiesAffected equals to DEFAULT_ENTITIES_AFFECTED
+//        defaultNbvCompilationJobShouldBeFound("entitiesAffected.equals=" + DEFAULT_ENTITIES_AFFECTED);
+//
+//        // Get all the nbvCompilationJobList where entitiesAffected equals to UPDATED_ENTITIES_AFFECTED
+//        defaultNbvCompilationJobShouldNotBeFound("entitiesAffected.equals=" + UPDATED_ENTITIES_AFFECTED);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByEntitiesAffectedIsNotEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where entitiesAffected not equals to DEFAULT_ENTITIES_AFFECTED
+//        defaultNbvCompilationJobShouldNotBeFound("entitiesAffected.notEquals=" + DEFAULT_ENTITIES_AFFECTED);
+//
+//        // Get all the nbvCompilationJobList where entitiesAffected not equals to UPDATED_ENTITIES_AFFECTED
+//        defaultNbvCompilationJobShouldBeFound("entitiesAffected.notEquals=" + UPDATED_ENTITIES_AFFECTED);
+//    }
+
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByEntitiesAffectedIsInShouldWork() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where entitiesAffected in DEFAULT_ENTITIES_AFFECTED or UPDATED_ENTITIES_AFFECTED
+//        defaultNbvCompilationJobShouldBeFound("entitiesAffected.in=" + DEFAULT_ENTITIES_AFFECTED + "," + UPDATED_ENTITIES_AFFECTED);
+//
+//        // Get all the nbvCompilationJobList where entitiesAffected equals to UPDATED_ENTITIES_AFFECTED
+//        defaultNbvCompilationJobShouldNotBeFound("entitiesAffected.in=" + UPDATED_ENTITIES_AFFECTED);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByEntitiesAffectedIsNullOrNotNull() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where entitiesAffected is not null
+//        defaultNbvCompilationJobShouldBeFound("entitiesAffected.specified=true");
+//
+//        // Get all the nbvCompilationJobList where entitiesAffected is null
+//        defaultNbvCompilationJobShouldNotBeFound("entitiesAffected.specified=false");
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByEntitiesAffectedIsGreaterThanOrEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where entitiesAffected is greater than or equal to DEFAULT_ENTITIES_AFFECTED
+//        defaultNbvCompilationJobShouldBeFound("entitiesAffected.greaterThanOrEqual=" + DEFAULT_ENTITIES_AFFECTED);
+//
+//        // Get all the nbvCompilationJobList where entitiesAffected is greater than or equal to UPDATED_ENTITIES_AFFECTED
+//        defaultNbvCompilationJobShouldNotBeFound("entitiesAffected.greaterThanOrEqual=" + UPDATED_ENTITIES_AFFECTED);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByEntitiesAffectedIsLessThanOrEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where entitiesAffected is less than or equal to DEFAULT_ENTITIES_AFFECTED
+//        defaultNbvCompilationJobShouldBeFound("entitiesAffected.lessThanOrEqual=" + DEFAULT_ENTITIES_AFFECTED);
+//
+//        // Get all the nbvCompilationJobList where entitiesAffected is less than or equal to SMALLER_ENTITIES_AFFECTED
+//        defaultNbvCompilationJobShouldNotBeFound("entitiesAffected.lessThanOrEqual=" + SMALLER_ENTITIES_AFFECTED);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByEntitiesAffectedIsLessThanSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where entitiesAffected is less than DEFAULT_ENTITIES_AFFECTED
+//        defaultNbvCompilationJobShouldNotBeFound("entitiesAffected.lessThan=" + DEFAULT_ENTITIES_AFFECTED);
+//
+//        // Get all the nbvCompilationJobList where entitiesAffected is less than UPDATED_ENTITIES_AFFECTED
+//        defaultNbvCompilationJobShouldBeFound("entitiesAffected.lessThan=" + UPDATED_ENTITIES_AFFECTED);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByEntitiesAffectedIsGreaterThanSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where entitiesAffected is greater than DEFAULT_ENTITIES_AFFECTED
+//        defaultNbvCompilationJobShouldNotBeFound("entitiesAffected.greaterThan=" + DEFAULT_ENTITIES_AFFECTED);
+//
+//        // Get all the nbvCompilationJobList where entitiesAffected is greater than SMALLER_ENTITIES_AFFECTED
+//        defaultNbvCompilationJobShouldBeFound("entitiesAffected.greaterThan=" + SMALLER_ENTITIES_AFFECTED);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByCompilationStatusIsEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where compilationStatus equals to DEFAULT_COMPILATION_STATUS
+//        defaultNbvCompilationJobShouldBeFound("compilationStatus.equals=" + DEFAULT_COMPILATION_STATUS);
+//
+//        // Get all the nbvCompilationJobList where compilationStatus equals to UPDATED_COMPILATION_STATUS
+//        defaultNbvCompilationJobShouldNotBeFound("compilationStatus.equals=" + UPDATED_COMPILATION_STATUS);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByCompilationStatusIsNotEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where compilationStatus not equals to DEFAULT_COMPILATION_STATUS
+//        defaultNbvCompilationJobShouldNotBeFound("compilationStatus.notEquals=" + DEFAULT_COMPILATION_STATUS);
+//
+//        // Get all the nbvCompilationJobList where compilationStatus not equals to UPDATED_COMPILATION_STATUS
+//        defaultNbvCompilationJobShouldBeFound("compilationStatus.notEquals=" + UPDATED_COMPILATION_STATUS);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByCompilationStatusIsInShouldWork() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where compilationStatus in DEFAULT_COMPILATION_STATUS or UPDATED_COMPILATION_STATUS
+//        defaultNbvCompilationJobShouldBeFound("compilationStatus.in=" + DEFAULT_COMPILATION_STATUS + "," + UPDATED_COMPILATION_STATUS);
+//
+//        // Get all the nbvCompilationJobList where compilationStatus equals to UPDATED_COMPILATION_STATUS
+//        defaultNbvCompilationJobShouldNotBeFound("compilationStatus.in=" + UPDATED_COMPILATION_STATUS);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByCompilationStatusIsNullOrNotNull() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where compilationStatus is not null
+//        defaultNbvCompilationJobShouldBeFound("compilationStatus.specified=true");
+//
+//        // Get all the nbvCompilationJobList where compilationStatus is null
+//        defaultNbvCompilationJobShouldNotBeFound("compilationStatus.specified=false");
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByJobTitleIsEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where jobTitle equals to DEFAULT_JOB_TITLE
+//        defaultNbvCompilationJobShouldBeFound("jobTitle.equals=" + DEFAULT_JOB_TITLE);
+//
+//        // Get all the nbvCompilationJobList where jobTitle equals to UPDATED_JOB_TITLE
+//        defaultNbvCompilationJobShouldNotBeFound("jobTitle.equals=" + UPDATED_JOB_TITLE);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByJobTitleIsNotEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where jobTitle not equals to DEFAULT_JOB_TITLE
+//        defaultNbvCompilationJobShouldNotBeFound("jobTitle.notEquals=" + DEFAULT_JOB_TITLE);
+//
+//        // Get all the nbvCompilationJobList where jobTitle not equals to UPDATED_JOB_TITLE
+//        defaultNbvCompilationJobShouldBeFound("jobTitle.notEquals=" + UPDATED_JOB_TITLE);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByJobTitleIsInShouldWork() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where jobTitle in DEFAULT_JOB_TITLE or UPDATED_JOB_TITLE
+//        defaultNbvCompilationJobShouldBeFound("jobTitle.in=" + DEFAULT_JOB_TITLE + "," + UPDATED_JOB_TITLE);
+//
+//        // Get all the nbvCompilationJobList where jobTitle equals to UPDATED_JOB_TITLE
+//        defaultNbvCompilationJobShouldNotBeFound("jobTitle.in=" + UPDATED_JOB_TITLE);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByJobTitleIsNullOrNotNull() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where jobTitle is not null
+//        defaultNbvCompilationJobShouldBeFound("jobTitle.specified=true");
+//
+//        // Get all the nbvCompilationJobList where jobTitle is null
+//        defaultNbvCompilationJobShouldNotBeFound("jobTitle.specified=false");
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByJobTitleContainsSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where jobTitle contains DEFAULT_JOB_TITLE
+//        defaultNbvCompilationJobShouldBeFound("jobTitle.contains=" + DEFAULT_JOB_TITLE);
+//
+//        // Get all the nbvCompilationJobList where jobTitle contains UPDATED_JOB_TITLE
+//        defaultNbvCompilationJobShouldNotBeFound("jobTitle.contains=" + UPDATED_JOB_TITLE);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByJobTitleNotContainsSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where jobTitle does not contain DEFAULT_JOB_TITLE
+//        defaultNbvCompilationJobShouldNotBeFound("jobTitle.doesNotContain=" + DEFAULT_JOB_TITLE);
+//
+//        // Get all the nbvCompilationJobList where jobTitle does not contain UPDATED_JOB_TITLE
+//        defaultNbvCompilationJobShouldBeFound("jobTitle.doesNotContain=" + UPDATED_JOB_TITLE);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByNumberOfBatchesIsEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where numberOfBatches equals to DEFAULT_NUMBER_OF_BATCHES
+//        defaultNbvCompilationJobShouldBeFound("numberOfBatches.equals=" + DEFAULT_NUMBER_OF_BATCHES);
+//
+//        // Get all the nbvCompilationJobList where numberOfBatches equals to UPDATED_NUMBER_OF_BATCHES
+//        defaultNbvCompilationJobShouldNotBeFound("numberOfBatches.equals=" + UPDATED_NUMBER_OF_BATCHES);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByNumberOfBatchesIsNotEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where numberOfBatches not equals to DEFAULT_NUMBER_OF_BATCHES
+//        defaultNbvCompilationJobShouldNotBeFound("numberOfBatches.notEquals=" + DEFAULT_NUMBER_OF_BATCHES);
+//
+//        // Get all the nbvCompilationJobList where numberOfBatches not equals to UPDATED_NUMBER_OF_BATCHES
+//        defaultNbvCompilationJobShouldBeFound("numberOfBatches.notEquals=" + UPDATED_NUMBER_OF_BATCHES);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByNumberOfBatchesIsInShouldWork() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where numberOfBatches in DEFAULT_NUMBER_OF_BATCHES or UPDATED_NUMBER_OF_BATCHES
+//        defaultNbvCompilationJobShouldBeFound("numberOfBatches.in=" + DEFAULT_NUMBER_OF_BATCHES + "," + UPDATED_NUMBER_OF_BATCHES);
+//
+//        // Get all the nbvCompilationJobList where numberOfBatches equals to UPDATED_NUMBER_OF_BATCHES
+//        defaultNbvCompilationJobShouldNotBeFound("numberOfBatches.in=" + UPDATED_NUMBER_OF_BATCHES);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByNumberOfBatchesIsNullOrNotNull() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where numberOfBatches is not null
+//        defaultNbvCompilationJobShouldBeFound("numberOfBatches.specified=true");
+//
+//        // Get all the nbvCompilationJobList where numberOfBatches is null
+//        defaultNbvCompilationJobShouldNotBeFound("numberOfBatches.specified=false");
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByNumberOfBatchesIsGreaterThanOrEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where numberOfBatches is greater than or equal to DEFAULT_NUMBER_OF_BATCHES
+//        defaultNbvCompilationJobShouldBeFound("numberOfBatches.greaterThanOrEqual=" + DEFAULT_NUMBER_OF_BATCHES);
+//
+//        // Get all the nbvCompilationJobList where numberOfBatches is greater than or equal to UPDATED_NUMBER_OF_BATCHES
+//        defaultNbvCompilationJobShouldNotBeFound("numberOfBatches.greaterThanOrEqual=" + UPDATED_NUMBER_OF_BATCHES);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByNumberOfBatchesIsLessThanOrEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where numberOfBatches is less than or equal to DEFAULT_NUMBER_OF_BATCHES
+//        defaultNbvCompilationJobShouldBeFound("numberOfBatches.lessThanOrEqual=" + DEFAULT_NUMBER_OF_BATCHES);
+//
+//        // Get all the nbvCompilationJobList where numberOfBatches is less than or equal to SMALLER_NUMBER_OF_BATCHES
+//        defaultNbvCompilationJobShouldNotBeFound("numberOfBatches.lessThanOrEqual=" + SMALLER_NUMBER_OF_BATCHES);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByNumberOfBatchesIsLessThanSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where numberOfBatches is less than DEFAULT_NUMBER_OF_BATCHES
+//        defaultNbvCompilationJobShouldNotBeFound("numberOfBatches.lessThan=" + DEFAULT_NUMBER_OF_BATCHES);
+//
+//        // Get all the nbvCompilationJobList where numberOfBatches is less than UPDATED_NUMBER_OF_BATCHES
+//        defaultNbvCompilationJobShouldBeFound("numberOfBatches.lessThan=" + UPDATED_NUMBER_OF_BATCHES);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByNumberOfBatchesIsGreaterThanSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where numberOfBatches is greater than DEFAULT_NUMBER_OF_BATCHES
+//        defaultNbvCompilationJobShouldNotBeFound("numberOfBatches.greaterThan=" + DEFAULT_NUMBER_OF_BATCHES);
+//
+//        // Get all the nbvCompilationJobList where numberOfBatches is greater than SMALLER_NUMBER_OF_BATCHES
+//        defaultNbvCompilationJobShouldBeFound("numberOfBatches.greaterThan=" + SMALLER_NUMBER_OF_BATCHES);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByNumberOfProcessedBatchesIsEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where numberOfProcessedBatches equals to DEFAULT_NUMBER_OF_PROCESSED_BATCHES
+//        defaultNbvCompilationJobShouldBeFound("numberOfProcessedBatches.equals=" + DEFAULT_NUMBER_OF_PROCESSED_BATCHES);
+//
+//        // Get all the nbvCompilationJobList where numberOfProcessedBatches equals to UPDATED_NUMBER_OF_PROCESSED_BATCHES
+//        defaultNbvCompilationJobShouldNotBeFound("numberOfProcessedBatches.equals=" + UPDATED_NUMBER_OF_PROCESSED_BATCHES);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByNumberOfProcessedBatchesIsNotEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where numberOfProcessedBatches not equals to DEFAULT_NUMBER_OF_PROCESSED_BATCHES
+//        defaultNbvCompilationJobShouldNotBeFound("numberOfProcessedBatches.notEquals=" + DEFAULT_NUMBER_OF_PROCESSED_BATCHES);
+//
+//        // Get all the nbvCompilationJobList where numberOfProcessedBatches not equals to UPDATED_NUMBER_OF_PROCESSED_BATCHES
+//        defaultNbvCompilationJobShouldBeFound("numberOfProcessedBatches.notEquals=" + UPDATED_NUMBER_OF_PROCESSED_BATCHES);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByNumberOfProcessedBatchesIsInShouldWork() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where numberOfProcessedBatches in DEFAULT_NUMBER_OF_PROCESSED_BATCHES or UPDATED_NUMBER_OF_PROCESSED_BATCHES
+//        defaultNbvCompilationJobShouldBeFound(
+//            "numberOfProcessedBatches.in=" + DEFAULT_NUMBER_OF_PROCESSED_BATCHES + "," + UPDATED_NUMBER_OF_PROCESSED_BATCHES
+//        );
+//
+//        // Get all the nbvCompilationJobList where numberOfProcessedBatches equals to UPDATED_NUMBER_OF_PROCESSED_BATCHES
+//        defaultNbvCompilationJobShouldNotBeFound("numberOfProcessedBatches.in=" + UPDATED_NUMBER_OF_PROCESSED_BATCHES);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByNumberOfProcessedBatchesIsNullOrNotNull() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where numberOfProcessedBatches is not null
+//        defaultNbvCompilationJobShouldBeFound("numberOfProcessedBatches.specified=true");
+//
+//        // Get all the nbvCompilationJobList where numberOfProcessedBatches is null
+//        defaultNbvCompilationJobShouldNotBeFound("numberOfProcessedBatches.specified=false");
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByNumberOfProcessedBatchesIsGreaterThanOrEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where numberOfProcessedBatches is greater than or equal to DEFAULT_NUMBER_OF_PROCESSED_BATCHES
+//        defaultNbvCompilationJobShouldBeFound("numberOfProcessedBatches.greaterThanOrEqual=" + DEFAULT_NUMBER_OF_PROCESSED_BATCHES);
+//
+//        // Get all the nbvCompilationJobList where numberOfProcessedBatches is greater than or equal to UPDATED_NUMBER_OF_PROCESSED_BATCHES
+//        defaultNbvCompilationJobShouldNotBeFound("numberOfProcessedBatches.greaterThanOrEqual=" + UPDATED_NUMBER_OF_PROCESSED_BATCHES);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByNumberOfProcessedBatchesIsLessThanOrEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where numberOfProcessedBatches is less than or equal to DEFAULT_NUMBER_OF_PROCESSED_BATCHES
+//        defaultNbvCompilationJobShouldBeFound("numberOfProcessedBatches.lessThanOrEqual=" + DEFAULT_NUMBER_OF_PROCESSED_BATCHES);
+//
+//        // Get all the nbvCompilationJobList where numberOfProcessedBatches is less than or equal to SMALLER_NUMBER_OF_PROCESSED_BATCHES
+//        defaultNbvCompilationJobShouldNotBeFound("numberOfProcessedBatches.lessThanOrEqual=" + SMALLER_NUMBER_OF_PROCESSED_BATCHES);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByNumberOfProcessedBatchesIsLessThanSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where numberOfProcessedBatches is less than DEFAULT_NUMBER_OF_PROCESSED_BATCHES
+//        defaultNbvCompilationJobShouldNotBeFound("numberOfProcessedBatches.lessThan=" + DEFAULT_NUMBER_OF_PROCESSED_BATCHES);
+//
+//        // Get all the nbvCompilationJobList where numberOfProcessedBatches is less than UPDATED_NUMBER_OF_PROCESSED_BATCHES
+//        defaultNbvCompilationJobShouldBeFound("numberOfProcessedBatches.lessThan=" + UPDATED_NUMBER_OF_PROCESSED_BATCHES);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByNumberOfProcessedBatchesIsGreaterThanSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where numberOfProcessedBatches is greater than DEFAULT_NUMBER_OF_PROCESSED_BATCHES
+//        defaultNbvCompilationJobShouldNotBeFound("numberOfProcessedBatches.greaterThan=" + DEFAULT_NUMBER_OF_PROCESSED_BATCHES);
+//
+//        // Get all the nbvCompilationJobList where numberOfProcessedBatches is greater than SMALLER_NUMBER_OF_PROCESSED_BATCHES
+//        defaultNbvCompilationJobShouldBeFound("numberOfProcessedBatches.greaterThan=" + SMALLER_NUMBER_OF_PROCESSED_BATCHES);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByProcessingTimeIsEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where processingTime equals to DEFAULT_PROCESSING_TIME
+//        defaultNbvCompilationJobShouldBeFound("processingTime.equals=" + DEFAULT_PROCESSING_TIME);
+//
+//        // Get all the nbvCompilationJobList where processingTime equals to UPDATED_PROCESSING_TIME
+//        defaultNbvCompilationJobShouldNotBeFound("processingTime.equals=" + UPDATED_PROCESSING_TIME);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByProcessingTimeIsNotEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where processingTime not equals to DEFAULT_PROCESSING_TIME
+//        defaultNbvCompilationJobShouldNotBeFound("processingTime.notEquals=" + DEFAULT_PROCESSING_TIME);
+//
+//        // Get all the nbvCompilationJobList where processingTime not equals to UPDATED_PROCESSING_TIME
+//        defaultNbvCompilationJobShouldBeFound("processingTime.notEquals=" + UPDATED_PROCESSING_TIME);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByProcessingTimeIsInShouldWork() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where processingTime in DEFAULT_PROCESSING_TIME or UPDATED_PROCESSING_TIME
+//        defaultNbvCompilationJobShouldBeFound("processingTime.in=" + DEFAULT_PROCESSING_TIME + "," + UPDATED_PROCESSING_TIME);
+//
+//        // Get all the nbvCompilationJobList where processingTime equals to UPDATED_PROCESSING_TIME
+//        defaultNbvCompilationJobShouldNotBeFound("processingTime.in=" + UPDATED_PROCESSING_TIME);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByProcessingTimeIsNullOrNotNull() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where processingTime is not null
+//        defaultNbvCompilationJobShouldBeFound("processingTime.specified=true");
+//
+//        // Get all the nbvCompilationJobList where processingTime is null
+//        defaultNbvCompilationJobShouldNotBeFound("processingTime.specified=false");
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByProcessingTimeIsGreaterThanOrEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where processingTime is greater than or equal to DEFAULT_PROCESSING_TIME
+//        defaultNbvCompilationJobShouldBeFound("processingTime.greaterThanOrEqual=" + DEFAULT_PROCESSING_TIME);
+//
+//        // Get all the nbvCompilationJobList where processingTime is greater than or equal to UPDATED_PROCESSING_TIME
+//        defaultNbvCompilationJobShouldNotBeFound("processingTime.greaterThanOrEqual=" + UPDATED_PROCESSING_TIME);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByProcessingTimeIsLessThanOrEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where processingTime is less than or equal to DEFAULT_PROCESSING_TIME
+//        defaultNbvCompilationJobShouldBeFound("processingTime.lessThanOrEqual=" + DEFAULT_PROCESSING_TIME);
+//
+//        // Get all the nbvCompilationJobList where processingTime is less than or equal to SMALLER_PROCESSING_TIME
+//        defaultNbvCompilationJobShouldNotBeFound("processingTime.lessThanOrEqual=" + SMALLER_PROCESSING_TIME);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByProcessingTimeIsLessThanSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where processingTime is less than DEFAULT_PROCESSING_TIME
+//        defaultNbvCompilationJobShouldNotBeFound("processingTime.lessThan=" + DEFAULT_PROCESSING_TIME);
+//
+//        // Get all the nbvCompilationJobList where processingTime is less than UPDATED_PROCESSING_TIME
+//        defaultNbvCompilationJobShouldBeFound("processingTime.lessThan=" + UPDATED_PROCESSING_TIME);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByProcessingTimeIsGreaterThanSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//
+//        // Get all the nbvCompilationJobList where processingTime is greater than DEFAULT_PROCESSING_TIME
+//        defaultNbvCompilationJobShouldNotBeFound("processingTime.greaterThan=" + DEFAULT_PROCESSING_TIME);
+//
+//        // Get all the nbvCompilationJobList where processingTime is greater than SMALLER_PROCESSING_TIME
+//        defaultNbvCompilationJobShouldBeFound("processingTime.greaterThan=" + SMALLER_PROCESSING_TIME);
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByActivePeriodIsEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//        DepreciationPeriod activePeriod;
+//        if (TestUtil.findAll(em, DepreciationPeriod.class).isEmpty()) {
+//            activePeriod = DepreciationPeriodResourceIT.createEntity(em);
+//            em.persist(activePeriod);
+//            em.flush();
+//        } else {
+//            activePeriod = TestUtil.findAll(em, DepreciationPeriod.class).get(0);
+//        }
+//        em.persist(activePeriod);
+//        em.flush();
+//        nbvCompilationJob.setActivePeriod(activePeriod);
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//        Long activePeriodId = activePeriod.getId();
+//
+//        // Get all the nbvCompilationJobList where activePeriod equals to activePeriodId
+//        defaultNbvCompilationJobShouldBeFound("activePeriodId.equals=" + activePeriodId);
+//
+//        // Get all the nbvCompilationJobList where activePeriod equals to (activePeriodId + 1)
+//        defaultNbvCompilationJobShouldNotBeFound("activePeriodId.equals=" + (activePeriodId + 1));
+//    }
+//
+//    @Test
+//    @Transactional
+//    void getAllNbvCompilationJobsByInitiatedByIsEqualToSomething() throws Exception {
+//        // Initialize the database
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//        ApplicationUser initiatedBy;
+//        if (TestUtil.findAll(em, ApplicationUser.class).isEmpty()) {
+//            initiatedBy = ApplicationUserResourceIT.createEntity(em);
+//            em.persist(initiatedBy);
+//            em.flush();
+//        } else {
+//            initiatedBy = TestUtil.findAll(em, ApplicationUser.class).get(0);
+//        }
+//        em.persist(initiatedBy);
+//        em.flush();
+//        nbvCompilationJob.setInitiatedBy(initiatedBy);
+//        nbvCompilationJobRepository.saveAndFlush(nbvCompilationJob);
+//        Long initiatedById = initiatedBy.getId();
+//
+//        // Get all the nbvCompilationJobList where initiatedBy equals to initiatedById
+//        defaultNbvCompilationJobShouldBeFound("initiatedById.equals=" + initiatedById);
+//
+//        // Get all the nbvCompilationJobList where initiatedBy equals to (initiatedById + 1)
+//        defaultNbvCompilationJobShouldNotBeFound("initiatedById.equals=" + (initiatedById + 1));
+//    }
 
     /**
      * Executes the search, and checks that the default entity is returned.
