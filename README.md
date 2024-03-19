@@ -687,122 +687,6 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
 
 ```
 
-But there's a challenge: what do we do with all that juicy netBookValue information and that accruedDepreciation?
-So I thought I would other message queues (complicating the process even further), into which I would throw this information
-while maintaining the integrity of the method which is, to simply calculate the current period depreciation. 
-So again, I went the trusty chatGpt friend and asked what they thought. The poor thing started talking about the complexity that
-am now introducing into the code...
-
-Then I went like:
-
-You let me worry about the complexity of the message queue. But now it seems that we have an opportunity to optimize the depreciation 
-process further by  checking the database for these values if they align with the netBookValue before the startDate and the 
-accruedDepreciation before the startDate. How would we incorporate that into our present code, providing for the following: 
-we don't actually want to have a field tracking accrued depreciation amount or netBookValue amount in the assetRegistration as that would turn it into a 
-temporal object, and yet I need that object to remain independent of time except with respect to the capitalizationDate. In line with that I 
-intend to implement hibernate entities to represent accruedDepreciation  and netBookValue entities in a one-way one to many assetRegistration 
-to accruedDepreciation relationship and assetRegistration to netBookValueRelationship. This will have the benefit of keeping the 
-assetRegistration "ignorant" about the netBookValue and accruedDepreciation entities, which providing the latter entities a reference to the 
-assetRegistration to which they refer for reporting purposes. 
-
-Of course it's thoughts like these that often lead into rabbit holes but chatGpt easily gave gave me some rope to hang myself:
-
-It sounds like you want to optimize the depreciation calculation process by checking the database for pre-calculated values of net book value and accrued depreciation, 
-while keeping the `AssetRegistration` object independent of these values in order to maintain its temporal nature. Additionally, you're planning to use 
-Hibernate entities to represent `AccruedDepreciation` and `NetBookValue` while establishing relationships between these entities and `AssetRegistration`.
-
-Here's how you could incorporate these ideas into your design:
-
-1. **Hibernate Entities:**
-   Define `AccruedDepreciation` and `NetBookValue` Hibernate entities. Establish a one-to-many relationship between `AssetRegistration` and each of these entities.
-
-```java
-@Entity
-public class AssetRegistration {
-    // Other fields
-    
-    @OneToMany(mappedBy = "assetRegistration")
-    private List<AccruedDepreciation> accruedDepreciations;
-
-    @OneToMany(mappedBy = "assetRegistration")
-    private List<NetBookValue> netBookValues;
-
-    // Getters and setters
-}
-
-@Entity
-public class AccruedDepreciation {
-    @ManyToOne
-    @JoinColumn(name = "asset_registration_id")
-    private AssetRegistration assetRegistration;
-    
-    private BigDecimal value;
-    
-    // Other fields, getters and setters
-}
-
-@Entity
-public class NetBookValue {
-    @ManyToOne
-    @JoinColumn(name = "asset_registration_id")
-    private AssetRegistration assetRegistration;
-    
-    private BigDecimal value;
-    
-    // Other fields, getters and setters
-}
-```
-
-2. **Depreciation Calculation:**
-   Modify your `calculateDepreciation` method to first check the database for the values of `AccruedDepreciation` and `NetBookValue` before the `periodStartDate`. If the values exist, use them for the calculations. If not, perform the depreciation calculation as before and enqueue messages to update the database asynchronously.
-
-```java
-public BigDecimal calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) {
-    // Check database for accrued depreciation and net book value before periodStartDate
-    BigDecimal accruedDepreciationBeforeStart = fetchAccruedDepreciationFromDatabase(asset.getId(), period.getStartDate());
-    BigDecimal netBookValueBeforeStart = fetchNetBookValueFromDatabase(asset.getId(), period.getStartDate());
-
-    // If values exist, use them
-    if (accruedDepreciationBeforeStart != null && netBookValueBeforeStart != null) {
-        return accruedDepreciationBeforeStart;
-    }
-
-    // Calculate and return the depreciation for the specified period as before
-    BigDecimal calculatedDepreciation = calculateDepreciationForPeriod(asset, period, assetCategory, depreciationMethod);
-
-    // Enqueue messages to update accrued depreciation and net book value in the database
-    enqueueAccruedDepreciationUpdate(asset.getId(), period.getStartDate(), calculatedDepreciation);
-    enqueueNetBookValueUpdate(asset.getId(), period.getStartDate(), netBookValueForStart);
-
-    return calculatedDepreciation;
-}
-
-private BigDecimal calculateDepreciationForPeriod(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) {
-    // Your existing depreciation calculation logic here
-}
-
-private BigDecimal fetchAccruedDepreciationFromDatabase(Long assetId, LocalDate startDate) {
-    // Query database to fetch accrued depreciation before startDate for the given assetId
-    // Return null if not found, or the value if found
-}
-
-private BigDecimal fetchNetBookValueFromDatabase(Long assetId, LocalDate startDate) {
-    // Query database to fetch net book value before startDate for the given assetId
-    // Return null if not found, or the value if found
-}
-```
-
-This approach allows you to first check the database for pre-calculated values of accrued depreciation and net book value before the `periodStartDate`. 
-If these values exist, you can use them directly without recalculating. If not, you proceed with the depreciation calculation and asynchronously update 
-the database for future use.
-Remember to implement the database queries and enqueueing of update messages as needed in your application infrastructure.
-
-Thank you GPT. This is not what I wanted, because I needed for there to be actual ignorance about netBookValue and accruedDepreciation within the sphere
-of the assetRegistration. This is because it is becoming increasingly difficult to maintain that information in the search index and in fact some entities
-just plain refuse to save due to limits in the community elasticsearch engine am forced to use.
-From the look of things, the Ehud series will continue for a while longer, may be 2 to 3 weeks as we struggle with the depreciation module.
-
-
 #### Later date update (Ehud Series version 1.3.4)
 So somehow after unbelievable hours on the debugger, we finally managed to draft working algorithms
 for both straight-line depreciation and reducing-balance depreciation. We also added unit tests
@@ -888,5 +772,47 @@ In the Depreciation Module of our ERP system, we have carefully designed a set o
 By meticulously defining and integrating these entities, we achieve a comprehensive and streamlined solution for handling asset depreciation. This setup adheres to accounting standards, provides flexibility for different depreciation methods and time periods, supports efficient report generation, 
 and ensures accuracy in financial reporting. The architecture is designed to accommodate future enhancements, therefore the final copy might look and work differently from the one implied in this discussion.
 
+#### Update 2024-03-19 (Several levels deep into Jehoiada Series)
 
+One of the most enduring challenges with the implementation of the depreciation module was the project requirement for maximum flexibility and verifiability. So with the Jehoiada series we were essentially supposed to be working on an IFRS16 leases management module, but we reiterated again to the prodigal depreciation
+module to understand why it would not work. We did not even want to solve the problem, but just to for once and for all know why. And that's when it became clear that there were issues with the queue configuration that lead to duplication of our calculations
+producing something like an eternal calculation that kept repeating. 
+This would not be apparent if I'd not used the API developed back in Iddo series for exporting reports essentially as CSV. We could run depreciation and then write the report in the filesystem in a matter of mere seconds. So from there we could transparently see what the algorithms were doing to the assets as a report, and compare to manual excel calculations.
+One of the obvious challenges became evident was duplicated asset depreciation in the same depreciation-period in the same depreciation-job. So now the question was why were duplication messages being received by the processors? And that's when we figured
+that we needed to use Kafka's manual acknowledgement API. And that was that, and Kafka is your uncle, there was no more duplication, like at all.
+
+
+Having done that we realised accuracy to the tune of around 98% percent, making the 2% even more annoying. It was a matter of may be using the wrong period count here, the wrong depreciation rate there in the end the thing worked out, but it took somewhere between 50 minuted to 1 hour and 30 minutes
+to run around 10,000 items. What can you do in that time? May be go for coffee, go for a walk, go for lunch...
+It was actually on one of these walks that I figured that my design was stupid enough to warrant throwing the whole thing away and starting from scratch. Who can justify a process that takes 1 hour to depreciate 10,000 items. This is just bad engineering. So we acknowledged (begrudgingly) that there were bottle necks 
+in our perfectly accurate design. This acknowledgement more than anything is what led us to the next discovery.
+We simply made the calculations asynchronous, and then the process was through in like 5 minutes. Yes, you read that right, and then it took 1 hour 30 minutes to save the calculations in the database.
+
+Now hold my drink, it takes 1 hour, 30 minutes to save stuff in the database!!! Those expensive calculations, with all the data we are pulling from the same database, can take just 5 minutes!
+If only we could find a way to batch persistence processes like we were batching calculations, right? I mean we were batching assets and throwing them into a kafka queue and finishing the entire process in (IN JUST) 5 minutes, and then waste all that efficiency because we were saving items on a one by one basis.
+And that's where the idea of creating a persistence buffer came about. We calculate depreciation entries and push them into our buffer. From there what happens to the entries is not a function of the depreciation algorithm. There we configure buffer sizes and we apply data to the sink once the buffer is full.
+The buffer has a predefined size which is the maximum amount of entries it can hold after that size is attained, the buffer saves the items into the database in bulk. We literally leave the buffer to its own devices, and there is bunch of stuff am leaving out. This goes on until the depreciation process is complete.
+This alone changed the depreciation process time from the previous between 50 minutes and 1 hour and 30 minutes, all the way down to average of between 6 minutes and 10 minutes for 10,000 assets. 
+Who knew persistence operations were so expensive?
+
+
+Now the remaining challenge (and we ask accountants to leave the room for like 20 minutes) is how do we calculate depreciation for disposed assets? Of course the simple accountant-like answer is we don't. But this is from a design perspective and engineering because disposal is just a state, somewhere in the life of an asset. 
+At some point it was not disposed. So accountants would obviously mistakenly think of disposal as a state; but you know, and we know that disposal can be treated as an event. In fact in the real world, disposal is an event.
+So the idea is if we have an entity tracking disposal, we could have the relevant disposal dates and proceeds and dispoal values subtracted from our calculation at just the right moment. 
+This means that when we do back-in-time calculations we get real values of depreciation for an asset; the same which in the present or the future will get disposed. By synchronizing disposal data with our calculations, we achieve true representation—a glimpse into an asset's past and future.
+
+So instead of simply flagging our asset as disposed, what we ought to do is simply match disposal with the relevant fiscal month, (in fact depreciation-period representation is better), okay depreciation period, and then subtract the disposed amount from the calculation. If the asset is disposed, you should a zero value calculation.
+We would implement a similar entity to recognize decommissioned items, which rather than say they were disposed, it's that they are simply written off. In fact we will simply refer to them as written off items. For instance, let's say that you had capitalised some lease hold improvements for a period of like 10 years, but before the realization 
+of that period, you lost the lease by unexpected termination, or that something happened to the premises. You cannot possibly continue holding such lease hold improvement as an asset of any value in your books, but you cannot also support the idea that you disposed it. So, it's just that you wrote the thing off. 
+
+So why don't we just delete the asset from the register? For the same reason as before, we will no longer be able to report accurate point-in-time past depreciation or NBV for that matter. And here at ERP-Systems we believe that all depreciation calculations should be point in time calculations. Simply deleting an item
+from the register is just bad (read unethical) practice, and can be attributed to one of those create-a-fixed-assets-management-system-in-10-minutes tutorials, that can get you fired from your organization, or cost you your professional certification. So we do it the hard way: recognize disposals separately in a full-blown entity, and then recognize written-off assets
+in a separate full-blown entity. Then when running reports match the two with the registration items. Do the same when running depreciation so you don't end up depreciating items you had zerorised. This is a symptom of the point-in-time calculation meaning that we are getting rid of the need-to-know previous net book value, and using the cost to calculate either straight line
+depreciation, or declining balance depreciation.
+
+
+Another milestone in this series (Jehoiada series) was implementation of application-user context. This technique is a derivation of something we did to count processed items across multiple end-points of the depreciation queue.
+The idea is that the request object carries the context information, and that's what JHipster is actually doing in their JWT implementation. So harnessing that we are able to retrieve the current application-user which is something that we now use to monitor and actively record user activity. In sensitive entities
+like business-documents where we needed to track who is creating, and accessing and modifying documents, we desperately needed an automatic way to tracking who is doing what with our precious documents. So that how the application-user context was created.
+It retrieves the user information from the JWT signature of the request, and then retrieves the appropriate user and records the information. And therefore doing the same with other sensitive entities we have been able to improve the coverage of our monitors by that much.
 
