@@ -797,7 +797,7 @@ Who knew persistence operations were so expensive?
 
 
 Now the remaining challenge (and we ask accountants to leave the room for like 20 minutes) is how do we calculate depreciation for disposed assets? Of course the simple accountant-like answer is we don't. But this is from a design perspective and engineering because disposal is just a state, somewhere in the life of an asset. 
-At some point it was not disposed. So accountants would obviously mistakenly think of disposal as a state; but you know, and we know that disposal can be treated as an event. In fact in the real world, disposal is an event.
+At some point it was not disposed. So accountants would obviously mistakenly think of disposal as a state; but you know, and we know, and everybody knows that disposal is an event. In fact in the real world, disposal is an event.
 So the idea is if we have an entity tracking disposal, we could have the relevant disposal dates and proceeds and dispoal values subtracted from our calculation at just the right moment. 
 This means that when we do back-in-time calculations we get real values of depreciation for an asset; the same which in the present or the future will get disposed. By synchronizing disposal data with our calculations, we achieve true representation—a glimpse into an asset's past and future.
 
