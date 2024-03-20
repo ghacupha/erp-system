@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark X No 5 (Jehoiada Series) Server ver 1.7.5
+ * Erp System - Mark X No 6 (Jehoiada Series) Server ver 1.7.6
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -36,15 +36,15 @@ public interface PlaceholderMapper extends EntityMapper<PlaceholderDTO, Placehol
     @Mapping(target = "id", source = "id")
     Set<PlaceholderDTO> toDtoIdSet(Set<Placeholder> placeholder);
 
-    @Named("descriptionSet")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "description", source = "description")
-    Set<PlaceholderDTO> toDtoDescriptionSet(Set<Placeholder> placeholder);
-
     @Named("description")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "description", source = "description")
     PlaceholderDTO toDtoDescription(Placeholder placeholder);
+
+    @Named("descriptionSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "description", source = "description")
+    Set<PlaceholderDTO> toDtoDescriptionSet(Set<Placeholder> placeholder);
 }
