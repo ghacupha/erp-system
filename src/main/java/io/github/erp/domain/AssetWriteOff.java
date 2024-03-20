@@ -22,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -79,7 +81,7 @@ public class AssetWriteOff implements Serializable {
         value = { "organization", "department", "securityClearance", "systemIdentity", "userProperties", "dealerIdentity", "placeholders" },
         allowSetters = true
     )
-    private ApplicationUser accessedBy;
+    private ApplicationUser lastAccessedBy;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -112,9 +114,15 @@ public class AssetWriteOff implements Serializable {
     @JsonIgnoreProperties(value = { "previousPeriod", "fiscalMonth" }, allowSetters = true)
     private DepreciationPeriod effectivePeriod;
 
-    @ManyToOne
+    @ManyToMany
+    @JoinTable(
+        name = "rel_asset_write_off__placeholder",
+        joinColumns = @JoinColumn(name = "asset_write_off_id"),
+        inverseJoinColumns = @JoinColumn(name = "placeholder_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
-    private Placeholder placeholder;
+    private Set<Placeholder> placeholders = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -209,16 +217,16 @@ public class AssetWriteOff implements Serializable {
         return this;
     }
 
-    public ApplicationUser getAccessedBy() {
-        return this.accessedBy;
+    public ApplicationUser getLastAccessedBy() {
+        return this.lastAccessedBy;
     }
 
-    public void setAccessedBy(ApplicationUser applicationUser) {
-        this.accessedBy = applicationUser;
+    public void setLastAccessedBy(ApplicationUser applicationUser) {
+        this.lastAccessedBy = applicationUser;
     }
 
-    public AssetWriteOff accessedBy(ApplicationUser applicationUser) {
-        this.setAccessedBy(applicationUser);
+    public AssetWriteOff lastAccessedBy(ApplicationUser applicationUser) {
+        this.setLastAccessedBy(applicationUser);
         return this;
     }
 
@@ -248,16 +256,26 @@ public class AssetWriteOff implements Serializable {
         return this;
     }
 
-    public Placeholder getPlaceholder() {
-        return this.placeholder;
+    public Set<Placeholder> getPlaceholders() {
+        return this.placeholders;
     }
 
-    public void setPlaceholder(Placeholder placeholder) {
-        this.placeholder = placeholder;
+    public void setPlaceholders(Set<Placeholder> placeholders) {
+        this.placeholders = placeholders;
     }
 
-    public AssetWriteOff placeholder(Placeholder placeholder) {
-        this.setPlaceholder(placeholder);
+    public AssetWriteOff placeholders(Set<Placeholder> placeholders) {
+        this.setPlaceholders(placeholders);
+        return this;
+    }
+
+    public AssetWriteOff addPlaceholder(Placeholder placeholder) {
+        this.placeholders.add(placeholder);
+        return this;
+    }
+
+    public AssetWriteOff removePlaceholder(Placeholder placeholder) {
+        this.placeholders.remove(placeholder);
         return this;
     }
 

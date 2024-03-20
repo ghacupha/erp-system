@@ -1,4 +1,4 @@
-package io.github.erp.web.rest;
+package io.github.erp.erp.resources;
 
 /*-
  * Erp System - Mark X No 6 (Jehoiada Series) Server ver 1.7.6
@@ -18,35 +18,14 @@ package io.github.erp.web.rest;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import static io.github.erp.web.rest.TestUtil.sameNumber;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.ApplicationUser;
-import io.github.erp.domain.AssetRegistration;
-import io.github.erp.domain.AssetWriteOff;
-import io.github.erp.domain.DepreciationPeriod;
-import io.github.erp.domain.Placeholder;
+import io.github.erp.domain.*;
 import io.github.erp.repository.AssetWriteOffRepository;
 import io.github.erp.repository.search.AssetWriteOffSearchRepository;
 import io.github.erp.service.AssetWriteOffService;
-import io.github.erp.service.criteria.AssetWriteOffCriteria;
 import io.github.erp.service.dto.AssetWriteOffDTO;
 import io.github.erp.service.mapper.AssetWriteOffMapper;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -61,13 +40,27 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static io.github.erp.web.rest.TestUtil.sameNumber;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 /**
- * Integration tests for the {@link AssetWriteOffResource} REST controller.
+ * Integration tests for the AssetWriteOffResource REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"FIXED_ASSETS_USER"})
 class AssetWriteOffResourceIT {
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
@@ -84,9 +77,9 @@ class AssetWriteOffResourceIT {
     private static final UUID DEFAULT_WRITE_OFF_REFERENCE_ID = UUID.randomUUID();
     private static final UUID UPDATED_WRITE_OFF_REFERENCE_ID = UUID.randomUUID();
 
-    private static final String ENTITY_API_URL = "/api/asset-write-offs";
+    private static final String ENTITY_API_URL = "/api/fixed-asset/asset-write-offs";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/asset-write-offs";
+    private static final String ENTITY_SEARCH_API_URL = "/api/fixed-asset/_search/asset-write-offs";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

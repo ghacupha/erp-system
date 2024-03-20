@@ -19,12 +19,28 @@ package io.github.erp.repository;
  */
 
 import io.github.erp.domain.AssetWriteOff;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
  * Spring Data SQL repository for the AssetWriteOff entity.
  */
-@SuppressWarnings("unused")
 @Repository
-public interface AssetWriteOffRepository extends JpaRepository<AssetWriteOff, Long>, JpaSpecificationExecutor<AssetWriteOff> {}
+public interface AssetWriteOffRepository extends JpaRepository<AssetWriteOff, Long>, JpaSpecificationExecutor<AssetWriteOff> {
+    @Query(
+        value = "select distinct assetWriteOff from AssetWriteOff assetWriteOff left join fetch assetWriteOff.placeholders",
+        countQuery = "select count(distinct assetWriteOff) from AssetWriteOff assetWriteOff"
+    )
+    Page<AssetWriteOff> findAllWithEagerRelationships(Pageable pageable);
+
+    @Query("select distinct assetWriteOff from AssetWriteOff assetWriteOff left join fetch assetWriteOff.placeholders")
+    List<AssetWriteOff> findAllWithEagerRelationships();
+
+    @Query("select assetWriteOff from AssetWriteOff assetWriteOff left join fetch assetWriteOff.placeholders where assetWriteOff.id =:id")
+    Optional<AssetWriteOff> findOneWithEagerRelationships(@Param("id") Long id);
+}

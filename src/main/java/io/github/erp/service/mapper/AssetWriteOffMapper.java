@@ -32,9 +32,12 @@ import org.mapstruct.*;
 public interface AssetWriteOffMapper extends EntityMapper<AssetWriteOffDTO, AssetWriteOff> {
     @Mapping(target = "createdBy", source = "createdBy", qualifiedByName = "applicationIdentity")
     @Mapping(target = "modifiedBy", source = "modifiedBy", qualifiedByName = "applicationIdentity")
-    @Mapping(target = "accessedBy", source = "accessedBy", qualifiedByName = "applicationIdentity")
+    @Mapping(target = "lastAccessedBy", source = "lastAccessedBy", qualifiedByName = "applicationIdentity")
     @Mapping(target = "assetWrittenOff", source = "assetWrittenOff", qualifiedByName = "assetNumber")
     @Mapping(target = "effectivePeriod", source = "effectivePeriod", qualifiedByName = "startDate")
-    @Mapping(target = "placeholder", source = "placeholder", qualifiedByName = "description")
+    @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     AssetWriteOffDTO toDto(AssetWriteOff s);
+
+    @Mapping(target = "removePlaceholder", ignore = true)
+    AssetWriteOff toEntity(AssetWriteOffDTO assetWriteOffDTO);
 }
