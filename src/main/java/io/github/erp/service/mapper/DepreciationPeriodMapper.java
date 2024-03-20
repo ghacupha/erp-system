@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark X No 5 (Jehoiada Series) Server ver 1.7.5
+ * Erp System - Mark X No 6 (Jehoiada Series) Server ver 1.7.6
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -35,6 +35,12 @@ public interface DepreciationPeriodMapper extends EntityMapper<DepreciationPerio
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     DepreciationPeriodDTO toDtoId(DepreciationPeriod depreciationPeriod);
+
+    @Named("startDate")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "startDate", source = "startDate")
+    DepreciationPeriodDTO toDtoStartDate(DepreciationPeriod depreciationPeriod);
 
     @Named("endDate")
     @BeanMapping(ignoreByDefault = true)
