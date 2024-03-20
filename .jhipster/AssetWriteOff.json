@@ -34,7 +34,7 @@
       "otherEntityField": "applicationIdentity"
     },
     {
-      "relationshipName": "accessedBy",
+      "relationshipName": "lastAccessedBy",
       "otherEntityName": "applicationUser",
       "relationshipType": "many-to-one",
       "otherEntityField": "applicationIdentity"
@@ -56,8 +56,10 @@
     {
       "relationshipName": "placeholder",
       "otherEntityName": "placeholder",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "description"
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "assetWriteOff"
     }
   ],
   "service": "serviceImpl",

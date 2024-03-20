@@ -96,11 +96,15 @@ public class AssetWriteOffServiceImpl implements AssetWriteOffService {
         return assetWriteOffRepository.findAll(pageable).map(assetWriteOffMapper::toDto);
     }
 
+    public Page<AssetWriteOffDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return assetWriteOffRepository.findAllWithEagerRelationships(pageable).map(assetWriteOffMapper::toDto);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<AssetWriteOffDTO> findOne(Long id) {
         log.debug("Request to get AssetWriteOff : {}", id);
-        return assetWriteOffRepository.findById(id).map(assetWriteOffMapper::toDto);
+        return assetWriteOffRepository.findOneWithEagerRelationships(id).map(assetWriteOffMapper::toDto);
     }
 
     @Override

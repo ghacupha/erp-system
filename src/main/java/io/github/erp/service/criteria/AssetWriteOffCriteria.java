@@ -59,7 +59,7 @@ public class AssetWriteOffCriteria implements Serializable, Criteria {
 
     private LongFilter modifiedById;
 
-    private LongFilter accessedById;
+    private LongFilter lastAccessedById;
 
     private LongFilter assetWrittenOffId;
 
@@ -79,7 +79,7 @@ public class AssetWriteOffCriteria implements Serializable, Criteria {
         this.writeOffReferenceId = other.writeOffReferenceId == null ? null : other.writeOffReferenceId.copy();
         this.createdById = other.createdById == null ? null : other.createdById.copy();
         this.modifiedById = other.modifiedById == null ? null : other.modifiedById.copy();
-        this.accessedById = other.accessedById == null ? null : other.accessedById.copy();
+        this.lastAccessedById = other.lastAccessedById == null ? null : other.lastAccessedById.copy();
         this.assetWrittenOffId = other.assetWrittenOffId == null ? null : other.assetWrittenOffId.copy();
         this.effectivePeriodId = other.effectivePeriodId == null ? null : other.effectivePeriodId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
@@ -196,19 +196,19 @@ public class AssetWriteOffCriteria implements Serializable, Criteria {
         this.modifiedById = modifiedById;
     }
 
-    public LongFilter getAccessedById() {
-        return accessedById;
+    public LongFilter getLastAccessedById() {
+        return lastAccessedById;
     }
 
-    public LongFilter accessedById() {
-        if (accessedById == null) {
-            accessedById = new LongFilter();
+    public LongFilter lastAccessedById() {
+        if (lastAccessedById == null) {
+            lastAccessedById = new LongFilter();
         }
-        return accessedById;
+        return lastAccessedById;
     }
 
-    public void setAccessedById(LongFilter accessedById) {
-        this.accessedById = accessedById;
+    public void setLastAccessedById(LongFilter lastAccessedById) {
+        this.lastAccessedById = lastAccessedById;
     }
 
     public LongFilter getAssetWrittenOffId() {
@@ -281,7 +281,7 @@ public class AssetWriteOffCriteria implements Serializable, Criteria {
             Objects.equals(writeOffReferenceId, that.writeOffReferenceId) &&
             Objects.equals(createdById, that.createdById) &&
             Objects.equals(modifiedById, that.modifiedById) &&
-            Objects.equals(accessedById, that.accessedById) &&
+            Objects.equals(lastAccessedById, that.lastAccessedById) &&
             Objects.equals(assetWrittenOffId, that.assetWrittenOffId) &&
             Objects.equals(effectivePeriodId, that.effectivePeriodId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
@@ -299,7 +299,7 @@ public class AssetWriteOffCriteria implements Serializable, Criteria {
             writeOffReferenceId,
             createdById,
             modifiedById,
-            accessedById,
+            lastAccessedById,
             assetWrittenOffId,
             effectivePeriodId,
             placeholderId,
@@ -318,7 +318,7 @@ public class AssetWriteOffCriteria implements Serializable, Criteria {
             (writeOffReferenceId != null ? "writeOffReferenceId=" + writeOffReferenceId + ", " : "") +
             (createdById != null ? "createdById=" + createdById + ", " : "") +
             (modifiedById != null ? "modifiedById=" + modifiedById + ", " : "") +
-            (accessedById != null ? "accessedById=" + accessedById + ", " : "") +
+            (lastAccessedById != null ? "lastAccessedById=" + lastAccessedById + ", " : "") +
             (assetWrittenOffId != null ? "assetWrittenOffId=" + assetWrittenOffId + ", " : "") +
             (effectivePeriodId != null ? "effectivePeriodId=" + effectivePeriodId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +

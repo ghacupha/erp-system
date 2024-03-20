@@ -36,15 +36,15 @@ public interface PlaceholderMapper extends EntityMapper<PlaceholderDTO, Placehol
     @Mapping(target = "id", source = "id")
     Set<PlaceholderDTO> toDtoIdSet(Set<Placeholder> placeholder);
 
-    @Named("description")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "description", source = "description")
-    PlaceholderDTO toDtoDescription(Placeholder placeholder);
-
     @Named("descriptionSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "description", source = "description")
     Set<PlaceholderDTO> toDtoDescriptionSet(Set<Placeholder> placeholder);
+
+    @Named("description")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "description", source = "description")
+    PlaceholderDTO toDtoDescription(Placeholder placeholder);
 }

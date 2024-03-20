@@ -52,6 +52,14 @@ public interface AssetWriteOffService {
     Page<AssetWriteOffDTO> findAll(Pageable pageable);
 
     /**
+     * Get all the assetWriteOffs with eager load of many-to-many relationships.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<AssetWriteOffDTO> findAllWithEagerRelationships(Pageable pageable);
+
+    /**
      * Get the "id" assetWriteOff.
      *
      * @param id the id of the entity.

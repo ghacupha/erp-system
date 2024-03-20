@@ -21,7 +21,9 @@ package io.github.erp.service.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import javax.validation.constraints.*;
 
@@ -47,13 +49,13 @@ public class AssetWriteOffDTO implements Serializable {
 
     private ApplicationUserDTO modifiedBy;
 
-    private ApplicationUserDTO accessedBy;
+    private ApplicationUserDTO lastAccessedBy;
 
     private AssetRegistrationDTO assetWrittenOff;
 
     private DepreciationPeriodDTO effectivePeriod;
 
-    private PlaceholderDTO placeholder;
+    private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -111,12 +113,12 @@ public class AssetWriteOffDTO implements Serializable {
         this.modifiedBy = modifiedBy;
     }
 
-    public ApplicationUserDTO getAccessedBy() {
-        return accessedBy;
+    public ApplicationUserDTO getLastAccessedBy() {
+        return lastAccessedBy;
     }
 
-    public void setAccessedBy(ApplicationUserDTO accessedBy) {
-        this.accessedBy = accessedBy;
+    public void setLastAccessedBy(ApplicationUserDTO lastAccessedBy) {
+        this.lastAccessedBy = lastAccessedBy;
     }
 
     public AssetRegistrationDTO getAssetWrittenOff() {
@@ -135,12 +137,12 @@ public class AssetWriteOffDTO implements Serializable {
         this.effectivePeriod = effectivePeriod;
     }
 
-    public PlaceholderDTO getPlaceholder() {
-        return placeholder;
+    public Set<PlaceholderDTO> getPlaceholders() {
+        return placeholders;
     }
 
-    public void setPlaceholder(PlaceholderDTO placeholder) {
-        this.placeholder = placeholder;
+    public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
+        this.placeholders = placeholders;
     }
 
     @Override
@@ -175,10 +177,10 @@ public class AssetWriteOffDTO implements Serializable {
             ", writeOffReferenceId='" + getWriteOffReferenceId() + "'" +
             ", createdBy=" + getCreatedBy() +
             ", modifiedBy=" + getModifiedBy() +
-            ", accessedBy=" + getAccessedBy() +
+            ", lastAccessedBy=" + getLastAccessedBy() +
             ", assetWrittenOff=" + getAssetWrittenOff() +
             ", effectivePeriod=" + getEffectivePeriod() +
-            ", placeholder=" + getPlaceholder() +
+            ", placeholders=" + getPlaceholders() +
             "}";
     }
 }

@@ -147,12 +147,12 @@ public class AssetWriteOffQueryService extends QueryService<AssetWriteOff> {
                         )
                     );
             }
-            if (criteria.getAccessedById() != null) {
+            if (criteria.getLastAccessedById() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
-                            criteria.getAccessedById(),
-                            root -> root.join(AssetWriteOff_.accessedBy, JoinType.LEFT).get(ApplicationUser_.id)
+                            criteria.getLastAccessedById(),
+                            root -> root.join(AssetWriteOff_.lastAccessedBy, JoinType.LEFT).get(ApplicationUser_.id)
                         )
                     );
             }
@@ -179,7 +179,7 @@ public class AssetWriteOffQueryService extends QueryService<AssetWriteOff> {
                     specification.and(
                         buildSpecification(
                             criteria.getPlaceholderId(),
-                            root -> root.join(AssetWriteOff_.placeholder, JoinType.LEFT).get(Placeholder_.id)
+                            root -> root.join(AssetWriteOff_.placeholders, JoinType.LEFT).get(Placeholder_.id)
                         )
                     );
             }
