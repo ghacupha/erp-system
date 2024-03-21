@@ -19,10 +19,7 @@ package io.github.erp.erp.resources;
  */
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.ApplicationUser;
-import io.github.erp.domain.AssetDisposal;
-import io.github.erp.domain.DepreciationPeriod;
-import io.github.erp.domain.Placeholder;
+import io.github.erp.domain.*;
 import io.github.erp.repository.AssetDisposalRepository;
 import io.github.erp.repository.search.AssetDisposalSearchRepository;
 import io.github.erp.service.AssetDisposalService;
@@ -161,6 +158,16 @@ class AssetDisposalResourceIT {
             depreciationPeriod = TestUtil.findAll(em, DepreciationPeriod.class).get(0);
         }
         assetDisposal.setEffectivePeriod(depreciationPeriod);
+        // Add required entity
+        AssetRegistration assetRegistration;
+        if (TestUtil.findAll(em, AssetRegistration.class).isEmpty()) {
+            assetRegistration = AssetRegistrationResourceIT.createEntity(em);
+            em.persist(assetRegistration);
+            em.flush();
+        } else {
+            assetRegistration = TestUtil.findAll(em, AssetRegistration.class).get(0);
+        }
+        assetDisposal.setAssetDisposed(assetRegistration);
         return assetDisposal;
     }
 
@@ -191,6 +198,16 @@ class AssetDisposalResourceIT {
             depreciationPeriod = TestUtil.findAll(em, DepreciationPeriod.class).get(0);
         }
         assetDisposal.setEffectivePeriod(depreciationPeriod);
+        // Add required entity
+        AssetRegistration assetRegistration;
+        if (TestUtil.findAll(em, AssetRegistration.class).isEmpty()) {
+            assetRegistration = AssetRegistrationResourceIT.createUpdatedEntity(em);
+            em.persist(assetRegistration);
+            em.flush();
+        } else {
+            assetRegistration = TestUtil.findAll(em, AssetRegistration.class).get(0);
+        }
+        assetDisposal.setAssetDisposed(assetRegistration);
         return assetDisposal;
     }
 
@@ -1331,6 +1348,21 @@ class AssetDisposalResourceIT {
 
         // Get all the assetDisposalList where placeholder equals to (placeholderId + 1)
         defaultAssetDisposalShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetDisposalsByAssetDisposedIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        AssetRegistration assetDisposed = assetDisposal.getAssetDisposed();
+        assetDisposalRepository.saveAndFlush(assetDisposal);
+        Long assetDisposedId = assetDisposed.getId();
+
+        // Get all the assetDisposalList where assetDisposed equals to assetDisposedId
+        defaultAssetDisposalShouldBeFound("assetDisposedId.equals=" + assetDisposedId);
+
+        // Get all the assetDisposalList where assetDisposed equals to (assetDisposedId + 1)
+        defaultAssetDisposalShouldNotBeFound("assetDisposedId.equals=" + (assetDisposedId + 1));
     }
 
     /**

@@ -75,6 +75,8 @@ public class AssetDisposalCriteria implements Serializable, Criteria {
 
     private LongFilter placeholderId;
 
+    private LongFilter assetDisposedId;
+
     private Boolean distinct;
 
     public AssetDisposalCriteria() {}
@@ -95,6 +97,7 @@ public class AssetDisposalCriteria implements Serializable, Criteria {
         this.lastAccessedById = other.lastAccessedById == null ? null : other.lastAccessedById.copy();
         this.effectivePeriodId = other.effectivePeriodId == null ? null : other.effectivePeriodId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.assetDisposedId = other.assetDisposedId == null ? null : other.assetDisposedId.copy();
         this.distinct = other.distinct;
     }
 
@@ -328,6 +331,21 @@ public class AssetDisposalCriteria implements Serializable, Criteria {
         this.placeholderId = placeholderId;
     }
 
+    public LongFilter getAssetDisposedId() {
+        return assetDisposedId;
+    }
+
+    public LongFilter assetDisposedId() {
+        if (assetDisposedId == null) {
+            assetDisposedId = new LongFilter();
+        }
+        return assetDisposedId;
+    }
+
+    public void setAssetDisposedId(LongFilter assetDisposedId) {
+        this.assetDisposedId = assetDisposedId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -361,6 +379,7 @@ public class AssetDisposalCriteria implements Serializable, Criteria {
             Objects.equals(lastAccessedById, that.lastAccessedById) &&
             Objects.equals(effectivePeriodId, that.effectivePeriodId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(assetDisposedId, that.assetDisposedId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -383,6 +402,7 @@ public class AssetDisposalCriteria implements Serializable, Criteria {
             lastAccessedById,
             effectivePeriodId,
             placeholderId,
+            assetDisposedId,
             distinct
         );
     }
@@ -406,6 +426,7 @@ public class AssetDisposalCriteria implements Serializable, Criteria {
             (lastAccessedById != null ? "lastAccessedById=" + lastAccessedById + ", " : "") +
             (effectivePeriodId != null ? "effectivePeriodId=" + effectivePeriodId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (assetDisposedId != null ? "assetDisposedId=" + assetDisposedId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

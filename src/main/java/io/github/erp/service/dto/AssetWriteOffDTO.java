@@ -51,11 +51,11 @@ public class AssetWriteOffDTO implements Serializable {
 
     private ApplicationUserDTO lastAccessedBy;
 
-    private AssetRegistrationDTO assetWrittenOff;
-
     private DepreciationPeriodDTO effectivePeriod;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
+
+    private AssetRegistrationDTO assetWrittenOff;
 
     public Long getId() {
         return id;
@@ -121,14 +121,6 @@ public class AssetWriteOffDTO implements Serializable {
         this.lastAccessedBy = lastAccessedBy;
     }
 
-    public AssetRegistrationDTO getAssetWrittenOff() {
-        return assetWrittenOff;
-    }
-
-    public void setAssetWrittenOff(AssetRegistrationDTO assetWrittenOff) {
-        this.assetWrittenOff = assetWrittenOff;
-    }
-
     public DepreciationPeriodDTO getEffectivePeriod() {
         return effectivePeriod;
     }
@@ -143,6 +135,14 @@ public class AssetWriteOffDTO implements Serializable {
 
     public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
         this.placeholders = placeholders;
+    }
+
+    public AssetRegistrationDTO getAssetWrittenOff() {
+        return assetWrittenOff;
+    }
+
+    public void setAssetWrittenOff(AssetRegistrationDTO assetWrittenOff) {
+        this.assetWrittenOff = assetWrittenOff;
     }
 
     @Override
@@ -178,9 +178,9 @@ public class AssetWriteOffDTO implements Serializable {
             ", createdBy=" + getCreatedBy() +
             ", modifiedBy=" + getModifiedBy() +
             ", lastAccessedBy=" + getLastAccessedBy() +
-            ", assetWrittenOff=" + getAssetWrittenOff() +
             ", effectivePeriod=" + getEffectivePeriod() +
             ", placeholders=" + getPlaceholders() +
+            ", assetWrittenOff=" + getAssetWrittenOff() +
             "}";
     }
 }

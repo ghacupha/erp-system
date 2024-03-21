@@ -40,13 +40,6 @@
       "otherEntityField": "applicationIdentity"
     },
     {
-      "relationshipName": "assetWrittenOff",
-      "otherEntityName": "assetRegistration",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "assetNumber"
-    },
-    {
       "relationshipName": "effectivePeriod",
       "otherEntityName": "depreciationPeriod",
       "relationshipType": "many-to-one",
@@ -59,6 +52,16 @@
       "relationshipType": "many-to-many",
       "otherEntityField": "description",
       "ownerSide": true,
+      "otherEntityRelationshipName": "assetWriteOff"
+    },
+    {
+      "relationshipName": "assetWrittenOff",
+      "otherEntityName": "assetRegistration",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "assetNumber",
+      "ownerSide": true,
+      "id": false,
       "otherEntityRelationshipName": "assetWriteOff"
     }
   ],

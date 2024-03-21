@@ -187,6 +187,9 @@ public class BatchSequenceDepreciationService {
 
                                     depreciationMethodService.findOne(assetCategory.getDepreciationMethod().getId()).ifPresent(
                                         depreciationMethod -> {
+                                            // TODO Extract asset-disposal
+                                            // TODO Extract asset-writeOff
+
                                             // Calculate the depreciation amount using the DepreciationCalculator
                                             DepreciationArtefact depreciationArtefact = depreciationCalculatorService.calculateDepreciation(assetRegistration, depreciationPeriod, assetCategory, depreciationMethod);
 

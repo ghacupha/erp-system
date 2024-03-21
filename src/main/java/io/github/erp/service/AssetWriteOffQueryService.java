@@ -156,15 +156,6 @@ public class AssetWriteOffQueryService extends QueryService<AssetWriteOff> {
                         )
                     );
             }
-            if (criteria.getAssetWrittenOffId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getAssetWrittenOffId(),
-                            root -> root.join(AssetWriteOff_.assetWrittenOff, JoinType.LEFT).get(AssetRegistration_.id)
-                        )
-                    );
-            }
             if (criteria.getEffectivePeriodId() != null) {
                 specification =
                     specification.and(
@@ -180,6 +171,15 @@ public class AssetWriteOffQueryService extends QueryService<AssetWriteOff> {
                         buildSpecification(
                             criteria.getPlaceholderId(),
                             root -> root.join(AssetWriteOff_.placeholders, JoinType.LEFT).get(Placeholder_.id)
+                        )
+                    );
+            }
+            if (criteria.getAssetWrittenOffId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getAssetWrittenOffId(),
+                            root -> root.join(AssetWriteOff_.assetWrittenOff, JoinType.LEFT).get(AssetRegistration_.id)
                         )
                     );
             }

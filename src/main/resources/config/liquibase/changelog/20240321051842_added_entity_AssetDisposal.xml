@@ -53,6 +53,9 @@
             <column name="effective_period_id" type="bigint">
                 <constraints nullable="false" />
             </column>
+            <column name="asset_disposed_id" type="bigint">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_asset_disposal__asset_disposed_id" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
@@ -98,6 +101,7 @@
             <column name="disposal_date" type="date"/>
             <column name="dormant" type="boolean"/>
             <column name="effective_period_id" type="numeric"/>
+            <column name="asset_disposed_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

@@ -1,4 +1,4 @@
-id;description;write_off_amount;write_off_date;write_off_reference_id;asset_written_off_id;effective_period_id
+id;description;write_off_amount;write_off_date;write_off_reference_id;effective_period_id;asset_written_off_id
 1;bypass Home e-enable;27007;2024-03-20;73085d16-458b-4132-96b0-f455d9f55e46;1;1
 2;Egypt front-end;26063;2024-03-19;671c5bcc-b622-4873-b09e-28e64c1c1495;2;2
 3;Chips;13193;2024-03-19;d80bbc03-04ae-4ff6-bff9-527e3eecc0d9;3;3

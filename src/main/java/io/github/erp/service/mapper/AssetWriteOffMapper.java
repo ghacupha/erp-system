@@ -27,15 +27,15 @@ import org.mapstruct.*;
  */
 @Mapper(
     componentModel = "spring",
-    uses = { ApplicationUserMapper.class, AssetRegistrationMapper.class, DepreciationPeriodMapper.class, PlaceholderMapper.class }
+    uses = { ApplicationUserMapper.class, DepreciationPeriodMapper.class, PlaceholderMapper.class, AssetRegistrationMapper.class }
 )
 public interface AssetWriteOffMapper extends EntityMapper<AssetWriteOffDTO, AssetWriteOff> {
     @Mapping(target = "createdBy", source = "createdBy", qualifiedByName = "applicationIdentity")
     @Mapping(target = "modifiedBy", source = "modifiedBy", qualifiedByName = "applicationIdentity")
     @Mapping(target = "lastAccessedBy", source = "lastAccessedBy", qualifiedByName = "applicationIdentity")
-    @Mapping(target = "assetWrittenOff", source = "assetWrittenOff", qualifiedByName = "assetNumber")
     @Mapping(target = "effectivePeriod", source = "effectivePeriod", qualifiedByName = "startDate")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
+    @Mapping(target = "assetWrittenOff", source = "assetWrittenOff", qualifiedByName = "assetNumber")
     AssetWriteOffDTO toDto(AssetWriteOff s);
 
     @Mapping(target = "removePlaceholder", ignore = true)

@@ -25,13 +25,17 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link AssetDisposal} and its DTO {@link AssetDisposalDTO}.
  */
-@Mapper(componentModel = "spring", uses = { ApplicationUserMapper.class, DepreciationPeriodMapper.class, PlaceholderMapper.class })
+@Mapper(
+    componentModel = "spring",
+    uses = { ApplicationUserMapper.class, DepreciationPeriodMapper.class, PlaceholderMapper.class, AssetRegistrationMapper.class }
+)
 public interface AssetDisposalMapper extends EntityMapper<AssetDisposalDTO, AssetDisposal> {
     @Mapping(target = "createdBy", source = "createdBy", qualifiedByName = "applicationIdentity")
     @Mapping(target = "modifiedBy", source = "modifiedBy", qualifiedByName = "applicationIdentity")
     @Mapping(target = "lastAccessedBy", source = "lastAccessedBy", qualifiedByName = "applicationIdentity")
     @Mapping(target = "effectivePeriod", source = "effectivePeriod", qualifiedByName = "startDate")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
+    @Mapping(target = "assetDisposed", source = "assetDisposed", qualifiedByName = "assetNumber")
     AssetDisposalDTO toDto(AssetDisposal s);
 
     @Mapping(target = "removePlaceholder", ignore = true)

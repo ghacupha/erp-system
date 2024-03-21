@@ -61,11 +61,11 @@ public class AssetWriteOffCriteria implements Serializable, Criteria {
 
     private LongFilter lastAccessedById;
 
-    private LongFilter assetWrittenOffId;
-
     private LongFilter effectivePeriodId;
 
     private LongFilter placeholderId;
+
+    private LongFilter assetWrittenOffId;
 
     private Boolean distinct;
 
@@ -80,9 +80,9 @@ public class AssetWriteOffCriteria implements Serializable, Criteria {
         this.createdById = other.createdById == null ? null : other.createdById.copy();
         this.modifiedById = other.modifiedById == null ? null : other.modifiedById.copy();
         this.lastAccessedById = other.lastAccessedById == null ? null : other.lastAccessedById.copy();
-        this.assetWrittenOffId = other.assetWrittenOffId == null ? null : other.assetWrittenOffId.copy();
         this.effectivePeriodId = other.effectivePeriodId == null ? null : other.effectivePeriodId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.assetWrittenOffId = other.assetWrittenOffId == null ? null : other.assetWrittenOffId.copy();
         this.distinct = other.distinct;
     }
 
@@ -211,21 +211,6 @@ public class AssetWriteOffCriteria implements Serializable, Criteria {
         this.lastAccessedById = lastAccessedById;
     }
 
-    public LongFilter getAssetWrittenOffId() {
-        return assetWrittenOffId;
-    }
-
-    public LongFilter assetWrittenOffId() {
-        if (assetWrittenOffId == null) {
-            assetWrittenOffId = new LongFilter();
-        }
-        return assetWrittenOffId;
-    }
-
-    public void setAssetWrittenOffId(LongFilter assetWrittenOffId) {
-        this.assetWrittenOffId = assetWrittenOffId;
-    }
-
     public LongFilter getEffectivePeriodId() {
         return effectivePeriodId;
     }
@@ -256,6 +241,21 @@ public class AssetWriteOffCriteria implements Serializable, Criteria {
         this.placeholderId = placeholderId;
     }
 
+    public LongFilter getAssetWrittenOffId() {
+        return assetWrittenOffId;
+    }
+
+    public LongFilter assetWrittenOffId() {
+        if (assetWrittenOffId == null) {
+            assetWrittenOffId = new LongFilter();
+        }
+        return assetWrittenOffId;
+    }
+
+    public void setAssetWrittenOffId(LongFilter assetWrittenOffId) {
+        this.assetWrittenOffId = assetWrittenOffId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -282,9 +282,9 @@ public class AssetWriteOffCriteria implements Serializable, Criteria {
             Objects.equals(createdById, that.createdById) &&
             Objects.equals(modifiedById, that.modifiedById) &&
             Objects.equals(lastAccessedById, that.lastAccessedById) &&
-            Objects.equals(assetWrittenOffId, that.assetWrittenOffId) &&
             Objects.equals(effectivePeriodId, that.effectivePeriodId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(assetWrittenOffId, that.assetWrittenOffId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -300,9 +300,9 @@ public class AssetWriteOffCriteria implements Serializable, Criteria {
             createdById,
             modifiedById,
             lastAccessedById,
-            assetWrittenOffId,
             effectivePeriodId,
             placeholderId,
+            assetWrittenOffId,
             distinct
         );
     }
@@ -319,9 +319,9 @@ public class AssetWriteOffCriteria implements Serializable, Criteria {
             (createdById != null ? "createdById=" + createdById + ", " : "") +
             (modifiedById != null ? "modifiedById=" + modifiedById + ", " : "") +
             (lastAccessedById != null ? "lastAccessedById=" + lastAccessedById + ", " : "") +
-            (assetWrittenOffId != null ? "assetWrittenOffId=" + assetWrittenOffId + ", " : "") +
             (effectivePeriodId != null ? "effectivePeriodId=" + effectivePeriodId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (assetWrittenOffId != null ? "assetWrittenOffId=" + assetWrittenOffId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
