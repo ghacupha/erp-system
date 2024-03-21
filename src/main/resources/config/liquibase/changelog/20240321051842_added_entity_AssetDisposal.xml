@@ -7,23 +7,38 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <!--
-        Added the entity AssetWriteOff.
+        Added the entity AssetDisposal.
     -->
-    <changeSet id="20240320112940-1" author="jhipster">
-        <createTable tableName="asset_write_off">
+    <changeSet id="20240321051842-1" author="jhipster">
+        <createTable tableName="asset_disposal">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="asset_disposal_reference" type="${uuidType}">
+                <constraints nullable="true" />
             </column>
             <column name="description" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="write_off_amount" type="decimal(21,2)">
+            <column name="asset_cost" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="historical_cost" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="accrued_depreciation" type="decimal(21,2)">
                 <constraints nullable="false" />
             </column>
-            <column name="write_off_date" type="date">
+            <column name="net_book_value" type="decimal(21,2)">
                 <constraints nullable="false" />
             </column>
-            <column name="write_off_reference_id" type="${uuidType}">
+            <column name="decommissioning_date" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="disposal_date" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="dormant" type="boolean">
                 <constraints nullable="true" />
             </column>
             <column name="created_by_id" type="bigint">
@@ -32,20 +47,28 @@
             <column name="modified_by_id" type="bigint">
                 <constraints nullable="true" />
             </column>
-            <column name="accessed_by_id" type="bigint">
+            <column name="last_accessed_by_id" type="bigint">
                 <constraints nullable="true" />
-            </column>
-            <column name="asset_written_off_id" type="bigint">
-                <constraints nullable="false" />
             </column>
             <column name="effective_period_id" type="bigint">
                 <constraints nullable="false" />
             </column>
-            <column name="placeholder_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
+    </changeSet>
+
+    <changeSet id="20240321051842-1-relations" author="jhipster">
+
+        <createTable tableName="rel_asset_disposal__placeholder">
+            <column name="placeholder_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="asset_disposal_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="asset_disposal_id, placeholder_id" tableName="rel_asset_disposal__placeholder"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -58,18 +81,22 @@
           This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
           Spring Boot configuration key.
     -->
-    <changeSet id="20240320112940-1-data" author="jhipster" context="faker">
+    <changeSet id="20240321051842-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/asset_write_off.csv"
+                  file="config/liquibase/fake-data/asset_disposal.csv"
                   separator=";"
-                  tableName="asset_write_off"
+                  tableName="asset_disposal"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
+            <column name="asset_disposal_reference" type="${uuidType}"/>
             <column name="description" type="string"/>
-            <column name="write_off_amount" type="numeric"/>
-            <column name="write_off_date" type="date"/>
-            <column name="write_off_reference_id" type="${uuidType}"/>
-            <column name="asset_written_off_id" type="numeric"/>
+            <column name="asset_cost" type="numeric"/>
+            <column name="historical_cost" type="numeric"/>
+            <column name="accrued_depreciation" type="numeric"/>
+            <column name="net_book_value" type="numeric"/>
+            <column name="decommissioning_date" type="date"/>
+            <column name="disposal_date" type="date"/>
+            <column name="dormant" type="boolean"/>
             <column name="effective_period_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
