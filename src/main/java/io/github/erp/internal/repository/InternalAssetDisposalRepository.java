@@ -48,5 +48,5 @@ public interface InternalAssetDisposalRepository extends JpaRepository<AssetDisp
     @Query("select assetDisposal from AssetDisposal assetDisposal left join fetch assetDisposal.placeholders where assetDisposal.id =:id")
     Optional<AssetDisposal> findOneWithEagerRelationships(@Param("id") Long id);
 
-    Optional<AssetDisposal> findAssetDisposalByEffectivePeriodStartDateGreaterThan(LocalDate effectiveDate);
+    Optional<AssetDisposal> findAssetDisposalByAssetDisposedId(Long disposedAssetId);
 }

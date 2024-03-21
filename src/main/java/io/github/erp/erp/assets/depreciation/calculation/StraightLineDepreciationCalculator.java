@@ -45,7 +45,7 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
     private static final Logger log = LoggerFactory.getLogger(StraightLineDepreciationCalculator.class);
 
     @Override
-    public DepreciationArtefact calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) throws DepreciationRateNotProvidedException {
+    public DepreciationArtefact calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod, BigDecimal disposalAmount, BigDecimal writtenOffAmount) throws DepreciationRateNotProvidedException {
 
         // OPT OUT
         if (depreciationMethod.getDepreciationType() != DepreciationTypes.STRAIGHT_LINE) {
@@ -55,7 +55,7 @@ public class StraightLineDepreciationCalculator implements CalculatesDepreciatio
 
         LocalDate startDate = period.getStartDate();
         LocalDate endDate = period.getEndDate();
-        BigDecimal assetCost = asset.getAssetCost();
+        BigDecimal assetCost = asset.getAssetCost().subtract(disposalAmount).subtract(writtenOffAmount);
         LocalDate capitalizationDate = asset.getCapitalizationDate();
 
         long elapsedMonths = getEffectiveDepreciationPeriod(startDate, endDate, capitalizationDate);

@@ -459,6 +459,7 @@
     <include file="config/liquibase/changelog/20240313134838_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240320112940_added_entity_constraints_AssetWriteOff.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240321051842_added_entity_constraints_AssetDisposal.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240321100229_changelog" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

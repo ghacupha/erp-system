@@ -40,7 +40,7 @@ import static io.github.erp.erp.assets.depreciation.calculation.DepreciationUtil
 @Service("reducingBalanceDepreciationCalculator")
 public class ReducingBalanceDepreciationCalculator implements CalculatesDepreciation {
 
-    public DepreciationArtefact calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) throws DepreciationRateNotProvidedException {
+    public DepreciationArtefact calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod, BigDecimal disposalAmount, BigDecimal writtenOffAmount) throws DepreciationRateNotProvidedException {
 
         // opt out, no pain no pain
         if (depreciationMethod.getDepreciationType() != DepreciationTypes.DECLINING_BALANCE ) {
@@ -50,13 +50,13 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
         }
 
         // Calculate and return the depreciation for the specified period as before
-        return calculatedDepreciation(asset, period, assetCategory);
+        return calculatedDepreciation(asset, period, assetCategory, disposalAmount);
     }
 
     @NotNull
-    private DepreciationArtefact calculatedDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory) throws DepreciationRateNotProvidedException {
+    private DepreciationArtefact calculatedDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, BigDecimal disposalAmount) throws DepreciationRateNotProvidedException {
 
-        BigDecimal netBookValue = asset.getAssetCost();
+        BigDecimal netBookValue = asset.getAssetCost().subtract(disposalAmount);
         BigDecimal depreciationRate = assetCategory.getDepreciationRateYearly();
         if (depreciationRate == null) {
             throw new DepreciationRateNotProvidedException("Depreciation rate is not provided", assetCategory);
