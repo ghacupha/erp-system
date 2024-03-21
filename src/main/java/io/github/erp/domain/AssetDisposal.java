@@ -115,6 +115,33 @@ public class AssetDisposal implements Serializable {
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
 
+    @JsonIgnoreProperties(
+        value = {
+            "placeholders",
+            "paymentInvoices",
+            "otherRelatedServiceOutlets",
+            "otherRelatedSettlements",
+            "assetCategory",
+            "purchaseOrders",
+            "deliveryNotes",
+            "jobSheets",
+            "dealer",
+            "designatedUsers",
+            "settlementCurrency",
+            "businessDocuments",
+            "assetWarranties",
+            "universallyUniqueMappings",
+            "assetAccessories",
+            "mainServiceOutlet",
+            "acquiringTransaction",
+        },
+        allowSetters = true
+    )
+    @OneToOne(optional = false)
+    @NotNull
+    @JoinColumn(unique = true)
+    private AssetRegistration assetDisposed;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -319,6 +346,19 @@ public class AssetDisposal implements Serializable {
 
     public AssetDisposal removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
+        return this;
+    }
+
+    public AssetRegistration getAssetDisposed() {
+        return this.assetDisposed;
+    }
+
+    public void setAssetDisposed(AssetRegistration assetRegistration) {
+        this.assetDisposed = assetRegistration;
+    }
+
+    public AssetDisposal assetDisposed(AssetRegistration assetRegistration) {
+        this.setAssetDisposed(assetRegistration);
         return this;
     }
 

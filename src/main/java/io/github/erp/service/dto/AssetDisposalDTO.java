@@ -67,6 +67,8 @@ public class AssetDisposalDTO implements Serializable {
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
+    private AssetRegistrationDTO assetDisposed;
+
     public Long getId() {
         return id;
     }
@@ -187,6 +189,14 @@ public class AssetDisposalDTO implements Serializable {
         this.placeholders = placeholders;
     }
 
+    public AssetRegistrationDTO getAssetDisposed() {
+        return assetDisposed;
+    }
+
+    public void setAssetDisposed(AssetRegistrationDTO assetDisposed) {
+        this.assetDisposed = assetDisposed;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -227,6 +237,7 @@ public class AssetDisposalDTO implements Serializable {
             ", lastAccessedBy=" + getLastAccessedBy() +
             ", effectivePeriod=" + getEffectivePeriod() +
             ", placeholders=" + getPlaceholders() +
+            ", assetDisposed=" + getAssetDisposed() +
             "}";
     }
 }

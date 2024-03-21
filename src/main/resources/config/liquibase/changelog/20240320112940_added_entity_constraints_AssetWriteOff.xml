@@ -20,9 +20,9 @@
                                  referencedColumnNames="id"
                                  referencedTableName="application_user"/>
 
-        <addForeignKeyConstraint baseColumnNames="accessed_by_id"
+        <addForeignKeyConstraint baseColumnNames="last_accessed_by_id"
                                  baseTableName="asset_write_off"
-                                 constraintName="fk_asset_write_off__accessed_by_id"
+                                 constraintName="fk_asset_write_off__last_accessed_by_id"
                                  referencedColumnNames="id"
                                  referencedTableName="application_user"/>
 
@@ -38,9 +38,15 @@
                                  referencedColumnNames="id"
                                  referencedTableName="depreciation_period"/>
 
+        <addForeignKeyConstraint baseColumnNames="asset_write_off_id"
+                                 baseTableName="rel_asset_write_off__placeholder"
+                                 constraintName="fk_rel_asset_write_off__placeholder__asset_write_off_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_write_off"/>
+
         <addForeignKeyConstraint baseColumnNames="placeholder_id"
-                                 baseTableName="asset_write_off"
-                                 constraintName="fk_asset_write_off__placeholder_id"
+                                 baseTableName="rel_asset_write_off__placeholder"
+                                 constraintName="fk_rel_asset_write_off__placeholder__placeholder_id"
                                  referencedColumnNames="id"
                                  referencedTableName="placeholder"/>
     </changeSet>

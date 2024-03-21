@@ -85,6 +85,19 @@ public class AssetWriteOff implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties(value = { "previousPeriod", "fiscalMonth" }, allowSetters = true)
+    private DepreciationPeriod effectivePeriod;
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_asset_write_off__placeholder",
+        joinColumns = @JoinColumn(name = "asset_write_off_id"),
+        inverseJoinColumns = @JoinColumn(name = "placeholder_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
+    private Set<Placeholder> placeholders = new HashSet<>();
+
     @JsonIgnoreProperties(
         value = {
             "placeholders",
@@ -107,22 +120,10 @@ public class AssetWriteOff implements Serializable {
         },
         allowSetters = true
     )
-    private AssetRegistration assetWrittenOff;
-
-    @ManyToOne(optional = false)
+    @OneToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "previousPeriod", "fiscalMonth" }, allowSetters = true)
-    private DepreciationPeriod effectivePeriod;
-
-    @ManyToMany
-    @JoinTable(
-        name = "rel_asset_write_off__placeholder",
-        joinColumns = @JoinColumn(name = "asset_write_off_id"),
-        inverseJoinColumns = @JoinColumn(name = "placeholder_id")
-    )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
-    private Set<Placeholder> placeholders = new HashSet<>();
+    @JoinColumn(unique = true)
+    private AssetRegistration assetWrittenOff;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -230,19 +231,6 @@ public class AssetWriteOff implements Serializable {
         return this;
     }
 
-    public AssetRegistration getAssetWrittenOff() {
-        return this.assetWrittenOff;
-    }
-
-    public void setAssetWrittenOff(AssetRegistration assetRegistration) {
-        this.assetWrittenOff = assetRegistration;
-    }
-
-    public AssetWriteOff assetWrittenOff(AssetRegistration assetRegistration) {
-        this.setAssetWrittenOff(assetRegistration);
-        return this;
-    }
-
     public DepreciationPeriod getEffectivePeriod() {
         return this.effectivePeriod;
     }
@@ -276,6 +264,19 @@ public class AssetWriteOff implements Serializable {
 
     public AssetWriteOff removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
+        return this;
+    }
+
+    public AssetRegistration getAssetWrittenOff() {
+        return this.assetWrittenOff;
+    }
+
+    public void setAssetWrittenOff(AssetRegistration assetRegistration) {
+        this.assetWrittenOff = assetRegistration;
+    }
+
+    public AssetWriteOff assetWrittenOff(AssetRegistration assetRegistration) {
+        this.setAssetWrittenOff(assetRegistration);
         return this;
     }
 

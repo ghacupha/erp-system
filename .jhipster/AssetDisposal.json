@@ -75,6 +75,16 @@
       "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "assetDisposal"
+    },
+    {
+      "relationshipName": "assetDisposed",
+      "otherEntityName": "assetRegistration",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "assetNumber",
+      "ownerSide": true,
+      "id": false,
+      "otherEntityRelationshipName": "assetDisposal"
     }
   ],
   "service": "serviceImpl",

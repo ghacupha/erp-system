@@ -191,6 +191,15 @@ public class AssetDisposalQueryService extends QueryService<AssetDisposal> {
                         )
                     );
             }
+            if (criteria.getAssetDisposedId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getAssetDisposedId(),
+                            root -> root.join(AssetDisposal_.assetDisposed, JoinType.LEFT).get(AssetRegistration_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

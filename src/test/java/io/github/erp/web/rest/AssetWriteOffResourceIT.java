@@ -132,16 +132,6 @@ class AssetWriteOffResourceIT {
             .writeOffDate(DEFAULT_WRITE_OFF_DATE)
             .writeOffReferenceId(DEFAULT_WRITE_OFF_REFERENCE_ID);
         // Add required entity
-        AssetRegistration assetRegistration;
-        if (TestUtil.findAll(em, AssetRegistration.class).isEmpty()) {
-            assetRegistration = AssetRegistrationResourceIT.createEntity(em);
-            em.persist(assetRegistration);
-            em.flush();
-        } else {
-            assetRegistration = TestUtil.findAll(em, AssetRegistration.class).get(0);
-        }
-        assetWriteOff.setAssetWrittenOff(assetRegistration);
-        // Add required entity
         DepreciationPeriod depreciationPeriod;
         if (TestUtil.findAll(em, DepreciationPeriod.class).isEmpty()) {
             depreciationPeriod = DepreciationPeriodResourceIT.createEntity(em);
@@ -151,6 +141,16 @@ class AssetWriteOffResourceIT {
             depreciationPeriod = TestUtil.findAll(em, DepreciationPeriod.class).get(0);
         }
         assetWriteOff.setEffectivePeriod(depreciationPeriod);
+        // Add required entity
+        AssetRegistration assetRegistration;
+        if (TestUtil.findAll(em, AssetRegistration.class).isEmpty()) {
+            assetRegistration = AssetRegistrationResourceIT.createEntity(em);
+            em.persist(assetRegistration);
+            em.flush();
+        } else {
+            assetRegistration = TestUtil.findAll(em, AssetRegistration.class).get(0);
+        }
+        assetWriteOff.setAssetWrittenOff(assetRegistration);
         return assetWriteOff;
     }
 
@@ -167,16 +167,6 @@ class AssetWriteOffResourceIT {
             .writeOffDate(UPDATED_WRITE_OFF_DATE)
             .writeOffReferenceId(UPDATED_WRITE_OFF_REFERENCE_ID);
         // Add required entity
-        AssetRegistration assetRegistration;
-        if (TestUtil.findAll(em, AssetRegistration.class).isEmpty()) {
-            assetRegistration = AssetRegistrationResourceIT.createUpdatedEntity(em);
-            em.persist(assetRegistration);
-            em.flush();
-        } else {
-            assetRegistration = TestUtil.findAll(em, AssetRegistration.class).get(0);
-        }
-        assetWriteOff.setAssetWrittenOff(assetRegistration);
-        // Add required entity
         DepreciationPeriod depreciationPeriod;
         if (TestUtil.findAll(em, DepreciationPeriod.class).isEmpty()) {
             depreciationPeriod = DepreciationPeriodResourceIT.createUpdatedEntity(em);
@@ -186,6 +176,16 @@ class AssetWriteOffResourceIT {
             depreciationPeriod = TestUtil.findAll(em, DepreciationPeriod.class).get(0);
         }
         assetWriteOff.setEffectivePeriod(depreciationPeriod);
+        // Add required entity
+        AssetRegistration assetRegistration;
+        if (TestUtil.findAll(em, AssetRegistration.class).isEmpty()) {
+            assetRegistration = AssetRegistrationResourceIT.createUpdatedEntity(em);
+            em.persist(assetRegistration);
+            em.flush();
+        } else {
+            assetRegistration = TestUtil.findAll(em, AssetRegistration.class).get(0);
+        }
+        assetWriteOff.setAssetWrittenOff(assetRegistration);
         return assetWriteOff;
     }
 
@@ -775,32 +775,6 @@ class AssetWriteOffResourceIT {
 
     @Test
     @Transactional
-    void getAllAssetWriteOffsByAssetWrittenOffIsEqualToSomething() throws Exception {
-        // Initialize the database
-        assetWriteOffRepository.saveAndFlush(assetWriteOff);
-        AssetRegistration assetWrittenOff;
-        if (TestUtil.findAll(em, AssetRegistration.class).isEmpty()) {
-            assetWrittenOff = AssetRegistrationResourceIT.createEntity(em);
-            em.persist(assetWrittenOff);
-            em.flush();
-        } else {
-            assetWrittenOff = TestUtil.findAll(em, AssetRegistration.class).get(0);
-        }
-        em.persist(assetWrittenOff);
-        em.flush();
-        assetWriteOff.setAssetWrittenOff(assetWrittenOff);
-        assetWriteOffRepository.saveAndFlush(assetWriteOff);
-        Long assetWrittenOffId = assetWrittenOff.getId();
-
-        // Get all the assetWriteOffList where assetWrittenOff equals to assetWrittenOffId
-        defaultAssetWriteOffShouldBeFound("assetWrittenOffId.equals=" + assetWrittenOffId);
-
-        // Get all the assetWriteOffList where assetWrittenOff equals to (assetWrittenOffId + 1)
-        defaultAssetWriteOffShouldNotBeFound("assetWrittenOffId.equals=" + (assetWrittenOffId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllAssetWriteOffsByEffectivePeriodIsEqualToSomething() throws Exception {
         // Initialize the database
         assetWriteOffRepository.saveAndFlush(assetWriteOff);
@@ -849,6 +823,21 @@ class AssetWriteOffResourceIT {
 
         // Get all the assetWriteOffList where placeholder equals to (placeholderId + 1)
         defaultAssetWriteOffShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllAssetWriteOffsByAssetWrittenOffIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        AssetRegistration assetWrittenOff = assetWriteOff.getAssetWrittenOff();
+        assetWriteOffRepository.saveAndFlush(assetWriteOff);
+        Long assetWrittenOffId = assetWrittenOff.getId();
+
+        // Get all the assetWriteOffList where assetWrittenOff equals to assetWrittenOffId
+        defaultAssetWriteOffShouldBeFound("assetWrittenOffId.equals=" + assetWrittenOffId);
+
+        // Get all the assetWriteOffList where assetWrittenOff equals to (assetWrittenOffId + 1)
+        defaultAssetWriteOffShouldNotBeFound("assetWrittenOffId.equals=" + (assetWrittenOffId + 1));
     }
 
     /**

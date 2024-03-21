@@ -32,7 +32,7 @@
             <column name="modified_by_id" type="bigint">
                 <constraints nullable="true" />
             </column>
-            <column name="accessed_by_id" type="bigint">
+            <column name="last_accessed_by_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <column name="asset_written_off_id" type="bigint">
@@ -41,11 +41,22 @@
             <column name="effective_period_id" type="bigint">
                 <constraints nullable="false" />
             </column>
-            <column name="placeholder_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
+    </changeSet>
+
+    <changeSet id="20240320112940-1-relations" author="jhipster">
+
+        <createTable tableName="rel_asset_write_off__placeholder">
+            <column name="placeholder_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="asset_write_off_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="asset_write_off_id, placeholder_id" tableName="rel_asset_write_off__placeholder"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->

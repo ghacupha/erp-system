@@ -43,5 +43,11 @@
                                  constraintName="fk_rel_asset_disposal__placeholder__placeholder_id"
                                  referencedColumnNames="id"
                                  referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_disposed_id"
+                                 baseTableName="asset_disposal"
+                                 constraintName="fk_asset_disposal__asset_disposed_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_registration"/>
     </changeSet>
 </databaseChangeLog>
