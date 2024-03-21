@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 import static io.github.erp.erp.assets.depreciation.calculation.DepreciationConstants.*;
 import static io.github.erp.erp.assets.depreciation.calculation.DepreciationUtility.calculateUsefulLifeMonths;
+import static java.math.BigDecimal.ZERO;
 
 public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerator {
 
@@ -63,7 +64,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         StraightLineDepreciationCalculator calculator = new StraightLineDepreciationCalculator();
 
         // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod).getDepreciationAmount();
+        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO).getDepreciationAmount();
 
         // Calculate expected depreciation manually
         BigDecimal assetCost = asset.getAssetCost();
@@ -90,13 +91,13 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         BigDecimal expectedDepreciation = null;
         // zero depreciation expected; Capitalization is after period end
         if (asset.getCapitalizationDate().isAfter(periodEndDate)) {
-            expectedDepreciation = BigDecimal.ZERO.setScale(MONEY_SCALE, ROUNDING_MODE);
+            expectedDepreciation = ZERO.setScale(MONEY_SCALE, ROUNDING_MODE);
         } else {
             expectedDepreciation =
                 assetCost.divide(usefulLifeMonths, DECIMAL_SCALE, ROUNDING_MODE)
                     .multiply(BigDecimal.valueOf(monthsInPeriod))
                     .setScale(MONEY_SCALE, ROUNDING_MODE)
-                    .max(BigDecimal.ZERO)
+                    .max(ZERO)
                     .setScale(MONEY_SCALE, ROUNDING_MODE);
         }
 
@@ -136,7 +137,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         StraightLineDepreciationCalculator calculator = new StraightLineDepreciationCalculator();
 
         // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod).getDepreciationAmount();
+        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO).getDepreciationAmount();
 
         // Calculate expected depreciation manually
         BigDecimal assetCost = asset.getAssetCost();
@@ -163,13 +164,13 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         BigDecimal expectedDepreciation = null;
         // zero depreciation expected; Capitalization is after period end
         if (asset.getCapitalizationDate().isAfter(periodEndDate)) {
-            expectedDepreciation = BigDecimal.ZERO.setScale(MONEY_SCALE, ROUNDING_MODE);
+            expectedDepreciation = ZERO.setScale(MONEY_SCALE, ROUNDING_MODE);
         } else {
             expectedDepreciation =
                 assetCost.divide(usefulLifeMonths, DECIMAL_SCALE, ROUNDING_MODE)
                     .multiply(BigDecimal.valueOf(monthsInPeriod))
                     .setScale(MONEY_SCALE, ROUNDING_MODE)
-                    .max(BigDecimal.ZERO)
+                    .max(ZERO)
                     .setScale(MONEY_SCALE, ROUNDING_MODE);
         }
 
@@ -207,7 +208,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         StraightLineDepreciationCalculator calculator = new StraightLineDepreciationCalculator();
 
         // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod).getDepreciationAmount();
+        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod,ZERO, ZERO).getDepreciationAmount();
 
         // Calculate expected depreciation manually
         BigDecimal assetCost = asset.getAssetCost();
@@ -234,13 +235,13 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         BigDecimal expectedDepreciation = null;
         // zero depreciation expected; Capitalization is after period end
         if (asset.getCapitalizationDate().isAfter(periodEndDate)) {
-            expectedDepreciation = BigDecimal.ZERO.setScale(MONEY_SCALE, ROUNDING_MODE);
+            expectedDepreciation = ZERO.setScale(MONEY_SCALE, ROUNDING_MODE);
         } else {
             expectedDepreciation =
                 assetCost.divide(usefulLifeMonths, DECIMAL_SCALE, ROUNDING_MODE)
                     .multiply(BigDecimal.valueOf(monthsInPeriod))
                     .setScale(MONEY_SCALE, ROUNDING_MODE)
-                    .max(BigDecimal.ZERO)
+                    .max(ZERO)
                     .setScale(MONEY_SCALE, ROUNDING_MODE);
         }
 
@@ -279,7 +280,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
 
         // TODO revisit the calculator to see how effective months arise as negative values
         // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod).getDepreciationAmount();
+        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO).getDepreciationAmount();
 
         // Calculate expected depreciation manually
         BigDecimal assetCost = asset.getAssetCost();
@@ -290,13 +291,13 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         BigDecimal expectedDepreciation = null;
         // zero depreciation expected; Capitalization is after period end
         if (asset.getCapitalizationDate().isAfter(periodEndDate)) {
-            expectedDepreciation = BigDecimal.ZERO.setScale(MONEY_SCALE, ROUNDING_MODE);
+            expectedDepreciation = ZERO.setScale(MONEY_SCALE, ROUNDING_MODE);
         } else {
             expectedDepreciation =
                 assetCost.divide(usefulLifeMonths, DECIMAL_SCALE, ROUNDING_MODE)
                     .multiply(BigDecimal.valueOf(monthsInPeriod))
                     .setScale(MONEY_SCALE, ROUNDING_MODE)
-                    .max(BigDecimal.ZERO)
+                    .max(ZERO)
                     .setScale(MONEY_SCALE, ROUNDING_MODE);
         }
 
@@ -343,7 +344,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         StraightLineDepreciationCalculator calculator = new StraightLineDepreciationCalculator();
 
         // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod).getDepreciationAmount();
+        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod,ZERO, ZERO).getDepreciationAmount();
 
         // Calculate expected depreciation manually
         BigDecimal assetCost = asset.getAssetCost();
@@ -362,13 +363,13 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         BigDecimal expectedDepreciation = null;
         // zero depreciation expected; Capitalization is after period end
         if (asset.getCapitalizationDate().isAfter(periodEndDate)) {
-            expectedDepreciation = BigDecimal.ZERO.setScale(MONEY_SCALE, ROUNDING_MODE);
+            expectedDepreciation = ZERO.setScale(MONEY_SCALE, ROUNDING_MODE);
         } else {
             expectedDepreciation =
                 assetCost.divide(usefulLifeMonths, DECIMAL_SCALE, ROUNDING_MODE)
                     .multiply(BigDecimal.valueOf(monthsInPeriod))
                     .setScale(MONEY_SCALE, ROUNDING_MODE)
-                    .max(BigDecimal.ZERO)
+                    .max(ZERO)
                     .setScale(MONEY_SCALE, ROUNDING_MODE);
         }
 
@@ -419,7 +420,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         StraightLineDepreciationCalculator calculator = new StraightLineDepreciationCalculator();
 
         // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod).getDepreciationAmount();
+        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO).getDepreciationAmount();
 
         // Calculate expected depreciation manually
         BigDecimal assetCost = asset.getAssetCost();
@@ -438,13 +439,13 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         BigDecimal expectedDepreciation = null;
         // zero depreciation expected; Capitalization is after period end
         if (asset.getCapitalizationDate().isAfter(periodEndDate)) {
-            expectedDepreciation = BigDecimal.ZERO.setScale(MONEY_SCALE, ROUNDING_MODE);
+            expectedDepreciation = ZERO.setScale(MONEY_SCALE, ROUNDING_MODE);
         } else {
             expectedDepreciation =
                 assetCost.divide(usefulLifeMonths, DECIMAL_SCALE, ROUNDING_MODE)
                     .multiply(BigDecimal.valueOf(monthsInPeriod))
                     .setScale(MONEY_SCALE, ROUNDING_MODE)
-                    .max(BigDecimal.ZERO)
+                    .max(ZERO)
                     .setScale(MONEY_SCALE, ROUNDING_MODE);
         }
 
@@ -492,7 +493,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         StraightLineDepreciationCalculator calculator = new StraightLineDepreciationCalculator();
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod);
+            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO);
         });
     }
 
@@ -523,7 +524,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
 
         // Calculate depreciation using the calculator
         Assertions.assertThrows(NullPointerException.class, () -> {
-            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod);
+            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO);
         });
     }
 
@@ -553,7 +554,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         StraightLineDepreciationCalculator calculator = new StraightLineDepreciationCalculator();
 
         // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod).getDepreciationAmount();
+        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO).getDepreciationAmount();
 
         // Calculate expected depreciation manually for a 1-month period
         BigDecimal assetCost = asset.getAssetCost();
@@ -563,7 +564,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
             assetCost.divide(usefulLifeMonths, DECIMAL_SCALE, ROUNDING_MODE)
                 .multiply(BigDecimal.valueOf(monthsInPeriod))
                 .setScale(MONEY_SCALE, ROUNDING_MODE)
-                .max(BigDecimal.ZERO)
+                .max(ZERO)
                 .setScale(MONEY_SCALE, ROUNDING_MODE);
 
         System.out.println("Asset Cost: " + asset.getAssetCost());
@@ -810,7 +811,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
 
         // Create AssetCategoryDTO
         AssetCategoryDTO assetCategory = new AssetCategoryDTO();
-        assetCategory.setDepreciationRateYearly(BigDecimal.ZERO); // Zero depreciation rate
+        assetCategory.setDepreciationRateYearly(ZERO); // Zero depreciation rate
 
         // Create DepreciationPeriodDTO
         LocalDate periodStartDate = LocalDate.of(2022, 1, 1);
@@ -824,7 +825,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
 
         // Calculate depreciation using the calculator
         Assertions.assertThrows(DepreciationRateNotProvidedException.class, () -> {
-            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod);
+            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO);
         });
     }
 
@@ -855,7 +856,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
 
         // Calculate depreciation using the calculator
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod);
+            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO);
         });
     }
 
@@ -887,7 +888,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
 
         // Calculate depreciation using the calculator
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod);
+            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO);
         });
     }
 
@@ -933,7 +934,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         StraightLineDepreciationCalculator calculator = new StraightLineDepreciationCalculator();
 
         // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod).getDepreciationAmount();
+        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO).getDepreciationAmount();
 
         // Calculate expected depreciation manually
 
@@ -960,13 +961,13 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         BigDecimal expectedDepreciation = null;
         // zero depreciation expected; Capitalization is after period end
         if (asset.getCapitalizationDate().isAfter(periodEndDate)) {
-            expectedDepreciation = BigDecimal.ZERO.setScale(MONEY_SCALE, ROUNDING_MODE);
+            expectedDepreciation = ZERO.setScale(MONEY_SCALE, ROUNDING_MODE);
         } else {
             expectedDepreciation =
                 assetCost.divide(usefulLifeMonths, DECIMAL_SCALE, ROUNDING_MODE)
                     .multiply(BigDecimal.valueOf(monthsInPeriod))
                     .setScale(MONEY_SCALE, ROUNDING_MODE)
-                    .max(BigDecimal.ZERO)
+                    .max(ZERO)
                     .setScale(MONEY_SCALE, ROUNDING_MODE);
         }
 

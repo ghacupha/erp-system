@@ -23,6 +23,8 @@ import io.github.erp.service.dto.AssetRegistrationDTO;
 import io.github.erp.service.dto.DepreciationMethodDTO;
 import io.github.erp.service.dto.DepreciationPeriodDTO;
 
+import java.math.BigDecimal;
+
 /*-
  * Erp System - Mark IV No 1 (Ehud Series) Server ver 1.3.1
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
@@ -52,8 +54,9 @@ public interface CalculatesDepreciation {
      * @param period
      * @param assetCategory
      * @param depreciationMethod
+     * @param disposalAmount amount of asset-cost disposed
      * @return
      * @throws DepreciationRateNotProvidedException
      */
-    DepreciationArtefact calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod) throws DepreciationRateNotProvidedException;
+    DepreciationArtefact calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod, BigDecimal disposalAmount, BigDecimal writtenOffAmount) throws DepreciationRateNotProvidedException;
 }
