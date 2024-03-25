@@ -1,0 +1,186 @@
+package io.github.erp.erp.buffer;
+
+import io.github.erp.domain.AssetDisposal;
+import io.github.erp.erp.assets.nbv.buffer.BufferedSinkProcessor;
+import io.github.erp.internal.repository.InternalAssetDisposalRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
+import static io.github.erp.erp.assets.depreciation.DepreciationJobSequenceServiceImpl.PREFERRED_BATCH_SIZE;
+
+@Transactional
+@Service
+public class AssetDisposalBufferedSinkProcessorImpl implements BufferedSinkProcessor<AssetDisposal> {
+
+    private final static Logger log = LoggerFactory.getLogger(AssetDisposalBufferedSinkProcessorImpl.class);
+
+    private final InternalAssetDisposalRepository internalAssetDisposalRepository;
+
+    private final List<AssetDisposal> buffer = new ArrayList<>();
+
+    private final int batchSizeThreshold = PREFERRED_BATCH_SIZE;
+
+
+    private final long flushIntervalMillis = 5000;
+
+    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+
+    private ScheduledFuture<?> flushTask;
+
+    // Argh! Additional plumbing was necessary after all
+    private ScheduledFuture<?> flushStuckTask;
+
+    // Needed for the "additional plumbing"
+    private final long maxFlushDelayMillis = 60000 * 15; // Max delay before forcing flush (15 minutes)
+
+    boolean stuckFlushComplete = false;
+
+    private boolean isShutdown = false;
+
+    public AssetDisposalBufferedSinkProcessorImpl(InternalAssetDisposalRepository internalAssetDisposalRepository) {
+        this.internalAssetDisposalRepository = internalAssetDisposalRepository;
+    }
+
+    public void addEntry(AssetDisposal entry) {
+
+        if (isShutdown) {
+            startup(); // Start the executor if it's shutdown
+        }
+
+        buffer.add(entry);
+
+        if (buffer.size() >= batchSizeThreshold) {
+
+            scheduleFlush();
+
+        } else if (flushTask == null) {
+
+            scheduleFlushWithDelay();
+        }
+    }
+
+    private void scheduleFlush() {
+
+        if (flushTask != null) {
+            flushTask.cancel(false);
+        }
+        flushTask = null;
+        flushBufferWithCount();
+    }
+
+    public void shutdown() {
+        if (!isShutdown) {
+            log.warn("The buffer now shutting down; standby...");
+            executor.shutdown();
+            isShutdown = true;
+        }
+    }
+
+    public void startup() {
+        if (isShutdown) {
+            log.info("Starting up the buffer processor...");
+            executor = Executors.newScheduledThreadPool(2); // Recreate the executor
+            isShutdown = false;
+            // Schedule flush tasks again if needed
+            if (buffer.size() >= batchSizeThreshold) {
+                scheduleFlush();
+            } else if (flushTask == null) {
+                scheduleFlushWithDelay();
+            }
+        }
+    }
+
+    public void flushRemainingItems() {
+
+        log.info("We have reached the last batch and are attempting to flush the buffer; standby...");
+
+        this.flushBufferWithCount();
+
+        this.shutdown();
+    }
+
+    private void scheduleFlushWithDelay() {
+        if (flushTask != null) {
+            flushTask.cancel(false);
+        }
+        flushTask = executor.schedule(this::flushBufferWithCount, flushIntervalMillis, TimeUnit.MILLISECONDS);
+    }
+
+    private void flushBufferWithCount() {
+
+        log.info("Depreciation buffer flushing {} items to the sink", buffer.size());
+
+        if (!buffer.isEmpty()) {
+
+            int numberOfPersistedEntries = this.flushBuffer();
+
+            log.info("{} entries successfully saved to the data-sink.", numberOfPersistedEntries);
+        }
+    }
+
+    private int flushBuffer() {
+
+        int flushedItems = buffer.size();
+
+        log.info("NBV buffer flushing {} items to the sink", flushedItems);
+
+        this.saveEntries();
+
+        return flushedItems;
+    }
+
+    private void saveEntries() {
+
+        if (!buffer.isEmpty()) {
+
+            List<AssetDisposal> entriesToPersist = new ArrayList<>(buffer);
+
+            log.info("Clearing buffer...");
+
+            buffer.clear();
+
+            log.info("Saving {} entries to the database", entriesToPersist.size());
+
+            executor.execute(() -> internalAssetDisposalRepository.saveAll(entriesToPersist));
+        }
+    }
+
+    @PostConstruct
+    private void scheduleFlushStuckTask() {
+        flushStuckTask = executor.scheduleAtFixedRate(this::checkFlushStuck, maxFlushDelayMillis, maxFlushDelayMillis, TimeUnit.MILLISECONDS);
+    }
+
+    public void flushStuckTaskComplete() {
+        this.stuckFlushComplete = true;
+    }
+
+    // Additional plumbing
+    @Async
+    @Scheduled(fixedRate = 5000)
+    void checkFlushStuck() {
+        if (!stuckFlushComplete) {
+            // Check if the buffer hasn't been flushed for a long time
+            long lastFlushTime = System.currentTimeMillis() - flushIntervalMillis;
+
+            if (flushTask != null && flushTask.getDelay(TimeUnit.MILLISECONDS) > maxFlushDelayMillis && flushStuckTask != null && flushStuckTask.getDelay(TimeUnit.MILLISECONDS) > maxFlushDelayMillis) {
+                log.error("Forcing flush of the buffer due to long delay in flushing; last flush time: {}", lastFlushTime);
+                scheduleFlush();
+            }
+
+            stuckFlushComplete = true;
+        }
+    }
+
+}
