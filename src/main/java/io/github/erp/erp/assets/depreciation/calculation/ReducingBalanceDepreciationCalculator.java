@@ -50,13 +50,15 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
         }
 
         // Calculate and return the depreciation for the specified period as before
-        return calculatedDepreciation(asset, period, assetCategory, disposalAmount);
+        return calculatedDepreciation(asset, period, assetCategory, disposalAmount, writtenOffAmount);
     }
 
     @NotNull
-    private DepreciationArtefact calculatedDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, BigDecimal disposalAmount) throws DepreciationRateNotProvidedException {
+    private DepreciationArtefact calculatedDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, BigDecimal disposalAmount, BigDecimal writtenOffAmount) throws DepreciationRateNotProvidedException {
 
-        BigDecimal netBookValue = asset.getAssetCost().subtract(disposalAmount);
+        BigDecimal netBookValue = asset.getAssetCost().subtract(disposalAmount).subtract(writtenOffAmount);
+
+
         BigDecimal depreciationRate = assetCategory.getDepreciationRateYearly();
         if (depreciationRate == null) {
             throw new DepreciationRateNotProvidedException("Depreciation rate is not provided", assetCategory);

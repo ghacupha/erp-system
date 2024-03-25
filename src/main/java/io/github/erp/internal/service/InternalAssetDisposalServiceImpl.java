@@ -20,11 +20,10 @@ package io.github.erp.internal.service;
 
 import io.github.erp.domain.ApplicationUser;
 import io.github.erp.domain.AssetDisposal;
+import io.github.erp.erp.assets.nbv.buffer.BufferedSinkProcessor;
 import io.github.erp.internal.repository.InternalAssetDisposalRepository;
 import io.github.erp.internal.service.applicationUser.CurrentUserContext;
-import io.github.erp.repository.AssetDisposalRepository;
 import io.github.erp.repository.search.AssetDisposalSearchRepository;
-import io.github.erp.service.AssetDisposalService;
 import io.github.erp.service.dto.AssetDisposalDTO;
 import io.github.erp.service.mapper.AssetDisposalMapper;
 import org.slf4j.Logger;
@@ -51,14 +50,17 @@ public class InternalAssetDisposalServiceImpl implements InternalAssetDisposalSe
 
     private final AssetDisposalSearchRepository assetDisposalSearchRepository;
 
+    private final BufferedSinkProcessor<AssetDisposal> bufferedSinkProcessor;
+
     public InternalAssetDisposalServiceImpl(
         InternalAssetDisposalRepository assetDisposalRepository,
         AssetDisposalMapper assetDisposalMapper,
-        AssetDisposalSearchRepository assetDisposalSearchRepository
-    ) {
+        AssetDisposalSearchRepository assetDisposalSearchRepository,
+        BufferedSinkProcessor<AssetDisposal> bufferedSinkProcessor) {
         this.assetDisposalRepository = assetDisposalRepository;
         this.assetDisposalMapper = assetDisposalMapper;
         this.assetDisposalSearchRepository = assetDisposalSearchRepository;
+        this.bufferedSinkProcessor = bufferedSinkProcessor;
     }
 
     @Override
@@ -132,7 +134,10 @@ public class InternalAssetDisposalServiceImpl implements InternalAssetDisposalSe
         return assetDisposalRepository.findAssetDisposalByAssetDisposedId(disposedAssetId)
             .map((assetDisposal) -> {
                 assetDisposal.setLastAccessedBy(accessor);
-                return assetDisposalMapper.toDto(assetDisposalRepository.save(assetDisposal));
+
+                bufferedSinkProcessor.addEntry(assetDisposal);
+
+                return assetDisposalMapper.toDto(assetDisposal);
             });
     }
 

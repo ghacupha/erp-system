@@ -32,6 +32,7 @@ import io.github.erp.erp.assets.depreciation.exceptions.ServiceOutletNotConfigur
 import io.github.erp.erp.assets.depreciation.model.DepreciationArtefact;
 import io.github.erp.erp.assets.depreciation.model.DepreciationBatchMessage;
 import io.github.erp.internal.service.InternalAssetDisposalService;
+import io.github.erp.internal.service.InternalAssetWriteOffService;
 import io.github.erp.service.*;
 import io.github.erp.service.dto.*;
 import io.github.erp.service.mapper.DepreciationEntryMapper;
@@ -88,6 +89,7 @@ public class BatchSequenceDepreciationService {
     private final DepreciationEntrySinkProcessor depreciationEntrySinkProcessor;
 
     private final InternalAssetDisposalService internalAssetDisposalService;
+    private final InternalAssetWriteOffService internalAssetWriteOffService;
 
     public BatchSequenceDepreciationService(
         DepreciationCalculatorService depreciationCalculatorService,
@@ -99,7 +101,7 @@ public class BatchSequenceDepreciationService {
         DepreciationMethodService depreciationMethodService,
         FiscalMonthService fiscalMonthService,
         DepreciationJobNoticeService depreciationJobNoticeService,
-        DepreciationBatchSequenceService batchSequenceService, DepreciationEntryMapper depreciationEntryMapper, DepreciationEntrySinkProcessor depreciationEntrySinkProcessor, InternalAssetDisposalService internalAssetDisposalService) {
+        DepreciationBatchSequenceService batchSequenceService, DepreciationEntryMapper depreciationEntryMapper, DepreciationEntrySinkProcessor depreciationEntrySinkProcessor, InternalAssetDisposalService internalAssetDisposalService, InternalAssetWriteOffService internalAssetWriteOffService) {
         this.depreciationCalculatorService = depreciationCalculatorService;
         this.depreciationJobService = depreciationJobService;
         this.depreciationPeriodService = depreciationPeriodService;
@@ -113,6 +115,7 @@ public class BatchSequenceDepreciationService {
         this.depreciationEntryMapper = depreciationEntryMapper;
         this.depreciationEntrySinkProcessor = depreciationEntrySinkProcessor;
         this.internalAssetDisposalService = internalAssetDisposalService;
+        this.internalAssetWriteOffService = internalAssetWriteOffService;
     }
 
     /**
@@ -194,12 +197,12 @@ public class BatchSequenceDepreciationService {
                                     depreciationMethodService.findOne(assetCategory.getDepreciationMethod().getId()).ifPresent(
                                         depreciationMethod -> {
 
-                                            final BigDecimal[] writtenOffAmount = updateWrittenOffAssetAmount(depreciationPeriod, assetId);
+                                            final BigDecimal writtenOffAmount = updateWrittenOffAssetAmount(depreciationPeriod, assetId);
 
-                                            final BigDecimal[] disposalAmount = updateDisposedAssetAmount(depreciationPeriod, assetId);
+                                            final BigDecimal disposalAmount = updateDisposedAssetAmount(depreciationPeriod, assetId);
 
                                                 // Calculate the depreciation amount using the DepreciationCalculator
-                                                DepreciationArtefact depreciationArtefact = depreciationCalculatorService.calculateDepreciation(assetRegistration, depreciationPeriod, assetCategory, depreciationMethod, disposalAmount[0], writtenOffAmount[0]);
+                                                DepreciationArtefact depreciationArtefact = depreciationCalculatorService.calculateDepreciation(assetRegistration, depreciationPeriod, assetCategory, depreciationMethod, disposalAmount, writtenOffAmount);
 
                                                 recordDepreciationEntry(
                                                     depreciationPeriod,
@@ -242,7 +245,7 @@ public class BatchSequenceDepreciationService {
     }
 
     @NotNull
-    private BigDecimal[] updateDisposedAssetAmount(DepreciationPeriodDTO depreciationPeriod, String assetId) {
+    private BigDecimal updateDisposedAssetAmount(DepreciationPeriodDTO depreciationPeriod, String assetId) {
         final BigDecimal[] disposalAmount = {BigDecimal.ZERO};
         internalAssetDisposalService.findOneByDisposedAsset(Long.valueOf(assetId))
             .ifPresent(disposalEvent -> {
@@ -256,27 +259,20 @@ public class BatchSequenceDepreciationService {
                 }
 
             });
-        return disposalAmount;
+        return disposalAmount[0];
     }
 
     @NotNull
-    private BigDecimal[] updateWrittenOffAssetAmount (DepreciationPeriodDTO depreciationPeriod, String assetId) {
-        final BigDecimal[] disposalAmount = {BigDecimal.ZERO};
+    private BigDecimal updateWrittenOffAssetAmount (DepreciationPeriodDTO depreciationPeriod, String assetId) {
+        final BigDecimal[] writeOffAmount = {BigDecimal.ZERO};
 
-        // TODO internal service for written Off assets
-//        internalAssetDisposalService.findOneByDisposedAsset(Long.valueOf(assetId))
-//            .ifPresent(disposalEvent -> {
-//
-//                if (disposalEvent.getEffectivePeriod().getStartDate().isAfter(depreciationPeriod.getStartDate())) {
-//                    disposalAmount[0] = disposalEvent.getAssetCost();
-//                }
-//
-//                if (disposalEvent.getEffectivePeriod().getStartDate().isEqual(depreciationPeriod.getStartDate())) {
-//                    disposalAmount[0] = disposalEvent.getAssetCost();
-//                }
-//
-//            });
-        return disposalAmount;
+        internalAssetWriteOffService.findAssetWriteOffByIdAndPeriod(depreciationPeriod, Long.valueOf(assetId))
+            .ifPresent(writeOffEvent -> {
+
+                writeOffAmount[0] = writeOffEvent.getWriteOffAmount();
+
+            });
+        return writeOffAmount[0];
     }
 
     // Send to Queue
