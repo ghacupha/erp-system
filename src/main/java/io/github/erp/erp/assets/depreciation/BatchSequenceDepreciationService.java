@@ -269,7 +269,7 @@ public class BatchSequenceDepreciationService {
         internalAssetWriteOffService.findAssetWriteOffByIdAndPeriod(depreciationPeriod, Long.valueOf(assetId))
             .ifPresent(writeOffEvent -> {
 
-                writeOffAmount[0] = writeOffEvent.getWriteOffAmount();
+                writeOffAmount[0] = writeOffAmount[0].add(writeOffEvent.getWriteOffAmount());
 
             });
         return writeOffAmount[0];
