@@ -26,7 +26,6 @@ import io.github.erp.service.AlgorithmService;
 import io.github.erp.service.mapper.AlgorithmMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -46,8 +45,13 @@ public class AlgorithmIndexingService extends AbstractStartupRegisteredIndexServ
     private final AlgorithmService service;
     private final AlgorithmSearchRepository searchRepository;
 
-    public AlgorithmIndexingService(IndexProperties indexProperties, AlgorithmMapper mapper, AlgorithmService service, AlgorithmSearchRepository searchRepository) {
-        super(indexProperties);
+    public AlgorithmIndexingService(
+        IndexProperties indexProperties,
+        AlgorithmMapper mapper,
+        AlgorithmService service,
+        AlgorithmSearchRepository searchRepository
+    ) {
+        super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

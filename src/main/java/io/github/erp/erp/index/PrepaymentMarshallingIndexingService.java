@@ -49,7 +49,7 @@ public class PrepaymentMarshallingIndexingService extends AbstractStartupRegiste
     private final PrepaymentMarshallingSearchRepository searchRepository;
 
     public PrepaymentMarshallingIndexingService(IndexProperties indexProperties, PrepaymentMarshallingMapper mapper, PrepaymentMarshallingService service, PrepaymentMarshallingSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

@@ -47,7 +47,7 @@ public class FiscalQuarterIndexingService extends AbstractStartupRegisteredIndex
     private final FiscalQuarterSearchRepository searchRepository;
 
     public FiscalQuarterIndexingService(IndexProperties indexProperties, FiscalQuarterService service, FiscalQuarterMapper mapper, FiscalQuarterSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

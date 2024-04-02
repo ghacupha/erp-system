@@ -44,7 +44,7 @@ public class JobSheetsIndexingService extends AbstractStartupRegisteredIndexServ
     private final JobSheetSearchRepository searchRepository;
 
     public JobSheetsIndexingService(IndexProperties indexProperties, JobSheetMapper mapper, JobSheetService service, JobSheetSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

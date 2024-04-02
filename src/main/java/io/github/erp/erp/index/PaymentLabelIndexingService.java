@@ -45,7 +45,7 @@ public class PaymentLabelIndexingService extends AbstractStartupRegisteredIndexS
     private final PaymentLabelSearchRepository searchRepository;
 
     public PaymentLabelIndexingService(IndexProperties indexProperties, PaymentLabelService service, PaymentLabelMapper mapper, PaymentLabelSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

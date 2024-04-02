@@ -47,7 +47,7 @@ public class ServiceOutletIndexingService extends AbstractStartupRegisteredIndex
     private final ServiceOutletSearchRepository searchRepository;
 
     public ServiceOutletIndexingService(IndexProperties indexProperties, ServiceOutletMapper mapper, ServiceOutletService service, ServiceOutletSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

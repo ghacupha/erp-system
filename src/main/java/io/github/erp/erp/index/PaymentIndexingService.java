@@ -43,7 +43,7 @@ public class PaymentIndexingService  extends AbstractStartupRegisteredIndexServi
     private final PaymentSearchRepository searchRepository;
 
     public PaymentIndexingService(IndexProperties indexProperties, PaymentService service, PaymentMapper mapper, PaymentSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

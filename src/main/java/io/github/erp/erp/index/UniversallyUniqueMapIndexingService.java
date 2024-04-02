@@ -50,7 +50,7 @@ public class UniversallyUniqueMapIndexingService extends AbstractStartupRegister
         UniversallyUniqueMappingService service,
         UniversallyUniqueMappingMapper mapper,
         UniversallyUniqueMappingSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

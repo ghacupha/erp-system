@@ -46,7 +46,7 @@ public class AssetCategoryIndexingService extends AbstractStartupRegisteredIndex
     private final AssetCategorySearchRepository searchRepository;
 
     public AssetCategoryIndexingService(IndexProperties indexProperties, AssetCategoryMapper mapper, AssetCategoryService service, AssetCategorySearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

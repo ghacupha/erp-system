@@ -46,7 +46,7 @@ public class LeaseLiabilityScheduleItemIndexingService extends AbstractStartupRe
     private final LeaseLiabilityScheduleItemSearchRepository searchRepository;
 
     public LeaseLiabilityScheduleItemIndexingService(IndexProperties indexProperties, LeaseLiabilityScheduleItemService service, LeaseLiabilityScheduleItemMapper mapper, LeaseLiabilityScheduleItemSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

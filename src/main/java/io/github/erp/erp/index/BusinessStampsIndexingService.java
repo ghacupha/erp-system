@@ -45,7 +45,7 @@ public class BusinessStampsIndexingService extends AbstractStartupRegisteredInde
     private final BusinessStampSearchRepository searchRepository;
 
     public BusinessStampsIndexingService(IndexProperties indexProperties, BusinessStampMapper mapper, BusinessStampService service, BusinessStampSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

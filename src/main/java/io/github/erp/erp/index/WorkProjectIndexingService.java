@@ -46,7 +46,7 @@ public class WorkProjectIndexingService  extends AbstractStartupRegisteredIndexS
     private final WorkProjectRegisterSearchRepository searchRepository;
 
     public WorkProjectIndexingService(IndexProperties indexProperties, WorkProjectRegisterService service, WorkProjectRegisterMapper mapper, WorkProjectRegisterSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

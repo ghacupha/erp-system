@@ -50,7 +50,7 @@ public class PrepaymentAmortizationIndexingService extends AbstractStartupRegist
     private final PrepaymentAmortizationSearchRepository searchRepository;
 
     public PrepaymentAmortizationIndexingService(IndexProperties indexProperties, PrepaymentAmortizationMapper mapper, PrepaymentAmortizationService service, PrepaymentAmortizationSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

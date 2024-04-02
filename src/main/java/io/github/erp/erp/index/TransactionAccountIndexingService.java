@@ -46,7 +46,7 @@ public class TransactionAccountIndexingService  extends AbstractStartupRegistere
     private final TransactionAccountSearchRepository searchRepository;
 
     public TransactionAccountIndexingService(IndexProperties indexProperties, TransactionAccountService service, TransactionAccountMapper mapper, TransactionAccountSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

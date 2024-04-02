@@ -43,7 +43,7 @@ public class SignedPaymentsIndexingService extends AbstractStartupRegisteredInde
     private final SignedPaymentSearchRepository searchRepository;
 
     public SignedPaymentsIndexingService(IndexProperties indexProperties, SignedPaymentMapper mapper, SignedPaymentService service, SignedPaymentSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

@@ -46,7 +46,7 @@ public class WIPRegistrationIndexingService  extends AbstractStartupRegisteredIn
     private final WorkInProgressRegistrationSearchRepository searchRepository;
 
     public WIPRegistrationIndexingService(IndexProperties indexProperties, WorkInProgressRegistrationService service, WorkInProgressRegistrationMapper mapper, WorkInProgressRegistrationSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

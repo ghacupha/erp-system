@@ -46,7 +46,7 @@ public class ApplicationUserIndexingService extends AbstractStartupRegisteredInd
     private final ApplicationUserSearchRepository searchRepository;
 
     public ApplicationUserIndexingService(IndexProperties indexProperties, ApplicationUserMapper mapper, ApplicationUserService service, ApplicationUserSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

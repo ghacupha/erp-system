@@ -44,7 +44,7 @@ public class DeliveryNoteIndexingService extends AbstractStartupRegisteredIndexS
     private final DeliveryNoteSearchRepository searchRepository;
 
     public DeliveryNoteIndexingService(IndexProperties indexProperties, DeliveryNoteMapper mapper, DeliveryNoteService service, DeliveryNoteSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

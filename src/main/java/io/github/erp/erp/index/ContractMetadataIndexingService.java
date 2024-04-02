@@ -46,7 +46,7 @@ public class ContractMetadataIndexingService extends AbstractStartupRegisteredIn
     private final ContractMetadataSearchRepository searchRepository;
 
     public ContractMetadataIndexingService(IndexProperties indexProperties, ContractMetadataService service, ContractMetadataMapper mapper, ContractMetadataSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;
