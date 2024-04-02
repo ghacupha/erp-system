@@ -46,7 +46,7 @@ public class FiscalYearIndexingService extends AbstractStartupRegisteredIndexSer
     private final FiscalYearSearchRepository searchRepository;
 
     public FiscalYearIndexingService(IndexProperties indexProperties, FiscalYearService service, FiscalYearMapper mapper, FiscalYearSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

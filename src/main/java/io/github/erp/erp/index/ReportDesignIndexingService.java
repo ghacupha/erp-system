@@ -46,7 +46,7 @@ public class ReportDesignIndexingService extends AbstractStartupRegisteredIndexS
     private final ReportDesignSearchRepository searchRepository;
 
     public ReportDesignIndexingService(IndexProperties indexProperties, ReportDesignMapper mapper, ReportDesignService service, ReportDesignSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

@@ -45,7 +45,7 @@ public class DealersIndexingService  extends AbstractStartupRegisteredIndexServi
     private final DealerSearchRepository searchRepository;
 
     public DealersIndexingService(IndexProperties indexProperties, DealerService service, DealerMapper mapper, DealerSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

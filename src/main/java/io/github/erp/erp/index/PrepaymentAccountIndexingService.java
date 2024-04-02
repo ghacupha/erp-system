@@ -45,7 +45,7 @@ public class PrepaymentAccountIndexingService extends AbstractStartupRegisteredI
     private final PrepaymentAccountSearchRepository searchRepository;
 
     public PrepaymentAccountIndexingService(IndexProperties indexProperties, PrepaymentAccountMapper mapper, PrepaymentAccountService service, PrepaymentAccountSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

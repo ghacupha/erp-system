@@ -47,7 +47,7 @@ public class SecurityClearanceIndexingService  extends AbstractStartupRegistered
     private final SecurityClearanceSearchRepository searchRepository;
 
     public SecurityClearanceIndexingService(IndexProperties indexProperties, SecurityClearanceService service, SecurityClearanceMapper mapper, SecurityClearanceSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

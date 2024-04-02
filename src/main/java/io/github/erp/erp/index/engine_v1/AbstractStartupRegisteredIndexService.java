@@ -484,27 +484,37 @@ public abstract class AbstractStartupRegisteredIndexService implements Controlle
 
     private static final Logger log = LoggerFactory.getLogger("IndexingServiceRegistrationSequence");
 
-    private boolean foregoIndex;
+    private final boolean foregoIndex;
 
-    public AbstractStartupRegisteredIndexService(IndexProperties indexProperties) {
+    private final boolean foregoIndexRebuild;
+
+    public AbstractStartupRegisteredIndexService(
+        IndexProperties indexProperties,
+        IndexProperties.Rebuild rebuildIndex
+    ) {
         this.foregoIndex = !indexProperties.isEnabled();
+        this.foregoIndexRebuild = !rebuildIndex.isEnabled();
     }
 
     @Override
     public void onApplicationEvent(@NotNull ApplicationReadyEvent applicationReadyEvent) {
         log.info("Index Service registration initiated. Standby for next sequence");
 
-        if (foregoIndex) {
+        register(); // Register always but don't index
 
-            return;
+        if (!foregoIndex) {
+
+            if (!foregoIndexRebuild) {
+                tearDown();
+            }
+
+            index();
         }
-
-        register();
-
-        index();
     }
 
     public abstract void register();
 
     public abstract void index();
+
+    public abstract void tearDown();
 }

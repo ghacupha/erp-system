@@ -47,7 +47,7 @@ public class SettlementCurrencyIndexingService extends AbstractStartupRegistered
     private final SettlementCurrencySearchRepository searchRepository;
 
     public SettlementCurrencyIndexingService(IndexProperties indexProperties, SettlementCurrencyService service, SettlementCurrencyMapper mapper, SettlementCurrencySearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

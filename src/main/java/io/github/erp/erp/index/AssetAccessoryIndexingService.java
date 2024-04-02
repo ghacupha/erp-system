@@ -46,7 +46,7 @@ public class AssetAccessoryIndexingService extends AbstractStartupRegisteredInde
     private final AssetAccessorySearchRepository searchRepository;
 
     public AssetAccessoryIndexingService(IndexProperties indexProperties, AssetAccessoryMapper mapper, AssetAccessoryService service, AssetAccessorySearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

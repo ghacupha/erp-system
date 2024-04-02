@@ -46,7 +46,7 @@ public class WIPTransferIndexingService  extends AbstractStartupRegisteredIndexS
     private final WorkInProgressTransferSearchRepository searchRepository;
 
     public WIPTransferIndexingService(IndexProperties indexProperties, WorkInProgressTransferService service, WorkInProgressTransferMapper mapper, WorkInProgressTransferSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

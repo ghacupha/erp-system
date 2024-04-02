@@ -53,7 +53,7 @@ public class PrepaymentMappingIndexingService extends AbstractStartupRegisteredI
         PrepaymentMappingMapper mapper,
         PrepaymentMappingService service,
         PrepaymentMappingSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

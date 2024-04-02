@@ -46,7 +46,7 @@ public class PurchaseOrderIndexingService extends AbstractStartupRegisteredIndex
     private final PurchaseOrderSearchRepository searchRepository;
 
     public PurchaseOrderIndexingService(IndexProperties indexProperties, PurchaseOrderService service, PurchaseOrderMapper mapper, PurchaseOrderSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

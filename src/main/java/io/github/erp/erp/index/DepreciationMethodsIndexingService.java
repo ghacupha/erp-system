@@ -52,7 +52,7 @@ public class DepreciationMethodsIndexingService extends AbstractStartupRegistere
         DepreciationMethodMapper mapper,
         DepreciationMethodService service,
         DepreciationMethodSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

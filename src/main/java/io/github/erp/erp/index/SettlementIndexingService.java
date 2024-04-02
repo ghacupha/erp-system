@@ -46,7 +46,7 @@ public class SettlementIndexingService extends AbstractStartupRegisteredIndexSer
     private final SettlementSearchRepository searchRepository;
 
     public SettlementIndexingService(IndexProperties indexProperties, SettlementService service, SettlementMapper mapper, SettlementSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

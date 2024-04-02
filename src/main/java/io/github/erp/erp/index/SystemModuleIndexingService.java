@@ -46,7 +46,7 @@ public class SystemModuleIndexingService extends AbstractStartupRegisteredIndexS
     private final SystemModuleSearchRepository searchRepository;
 
     public SystemModuleIndexingService(IndexProperties indexProperties, SystemModuleMapper mapper, SystemModuleService service, SystemModuleSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

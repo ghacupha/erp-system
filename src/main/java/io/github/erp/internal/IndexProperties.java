@@ -24,7 +24,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @ConfigurationProperties(prefix = "erp-index")
-@PropertySource(value = "classpath:config/erpConfigs.yml", factory = AppPropertyFactory.class)
+@PropertySource(value = "classpath:config/indexConfigs.yml", factory = AppPropertyFactory.class)
 public class IndexProperties {
 
     private boolean enabled;
@@ -35,5 +35,28 @@ public class IndexProperties {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    private Rebuild rebuild;
+
+    public Rebuild getRebuild() {
+        return rebuild;
+    }
+
+    public void setRebuild(Rebuild rebuild) {
+        this.rebuild = rebuild;
+    }
+
+    public static class Rebuild {
+
+        private boolean enabled;
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
     }
 }

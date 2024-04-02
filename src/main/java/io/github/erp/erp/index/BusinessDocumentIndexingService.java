@@ -45,7 +45,7 @@ public class BusinessDocumentIndexingService  extends AbstractStartupRegisteredI
     private final BusinessDocumentSearchRepository searchRepository;
 
     public BusinessDocumentIndexingService(IndexProperties indexProperties, BusinessDocumentService service, BusinessDocumentMapper mapper, BusinessDocumentSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

@@ -46,7 +46,7 @@ public class LeaseContractIndexingService extends AbstractStartupRegisteredIndex
     private final LeaseContractSearchRepository searchRepository;
 
     public LeaseContractIndexingService(IndexProperties indexProperties, LeaseContractService service, LeaseContractMapper mapper, LeaseContractSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

@@ -46,7 +46,7 @@ public class LeaseModelMetadataIndexingService extends AbstractStartupRegistered
     private final LeaseModelMetadataSearchRepository searchRepository;
 
     public LeaseModelMetadataIndexingService(IndexProperties indexProperties, LeaseModelMetadataService service, LeaseModelMetadataMapper mapper, LeaseModelMetadataSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

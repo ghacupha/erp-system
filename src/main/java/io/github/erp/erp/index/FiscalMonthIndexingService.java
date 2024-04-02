@@ -46,8 +46,8 @@ public class FiscalMonthIndexingService extends AbstractStartupRegisteredIndexSe
     private final FiscalMonthMapper mapper;
     private final FiscalMonthSearchRepository searchRepository;
 
-    public FiscalMonthIndexingService(IndexProperties indexProperties, FiscalMonthService service, FiscalMonthMapper mapper, FiscalMonthSearchRepository searchRepository) {
-        super(indexProperties);
+    public FiscalMonthIndexingService(IndexProperties indexProperties,FiscalMonthService service, FiscalMonthMapper mapper, FiscalMonthSearchRepository searchRepository) {
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

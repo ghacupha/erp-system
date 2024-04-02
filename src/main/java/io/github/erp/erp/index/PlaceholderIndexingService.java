@@ -46,7 +46,7 @@ public class PlaceholderIndexingService extends AbstractStartupRegisteredIndexSe
     private final PlaceholderSearchRepository searchRepository;
 
     public PlaceholderIndexingService(IndexProperties indexProperties, PlaceholderService service, PlaceholderMapper mapper, PlaceholderSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

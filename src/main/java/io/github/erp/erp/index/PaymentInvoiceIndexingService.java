@@ -45,7 +45,7 @@ public class PaymentInvoiceIndexingService  extends AbstractStartupRegisteredInd
     private final PaymentInvoiceSearchRepository searchRepository;
 
     public PaymentInvoiceIndexingService(IndexProperties indexProperties, PaymentInvoiceService service, PaymentInvoiceMapper mapper, PaymentInvoiceSearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;

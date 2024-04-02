@@ -49,7 +49,7 @@ public class AssetWarrantyIndexingService extends AbstractStartupRegisteredIndex
     private final AssetWarrantySearchRepository searchRepository;
 
     public AssetWarrantyIndexingService(IndexProperties indexProperties, AssetWarrantyMapper mapper, AssetWarrantyService service, AssetWarrantySearchRepository searchRepository) {
-        super(indexProperties);
+        super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;
