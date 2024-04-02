@@ -1,0 +1,4 @@
+erp-index:
+    enabled: false
+    rebuild:
+      enabled: false
