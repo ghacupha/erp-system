@@ -10,7 +10,6 @@
     <version>1.7.6</version>
     <packaging>jar</packaging>
     <name>Erp System</name>
-    <!--<description>Mark III No 6 (Caleb Series) Server ver 0.3.0-SNAPSHOT</description>-->
     <description>${ERP_SYSTEM_DEPLOYMENT_TITLE}</description>
 
     <repositories>
@@ -52,7 +51,6 @@
         <owner.email>mailnjeru@gmail.com</owner.email>
         <project.inceptionYear>2021 - 2024</project.inceptionYear>
         <project.owner>Edwin Njeru and the ERP System Contributors</project.owner>
-        <!--<application.port>8979</application.port>-->
         <application.port>${env.ERP_SYSTEM_DEV_PORT}</application.port>
 
         <maven.javadoc.skip>true</maven.javadoc.skip>
@@ -133,13 +131,6 @@
     </dependencyManagement>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/io.reactivex.rxjava3/rxjava -->
-       <!-- <dependency>
-            <groupId>io.reactivex.rxjava3</groupId>
-            <artifactId>rxjava</artifactId>
-            <version>3.1.8</version>
-        </dependency>-->
-
         <!-- https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxjava -->
         <dependency>
             <groupId>io.reactivex.rxjava2</groupId>
@@ -226,11 +217,6 @@
             <artifactId>dynamicreports-googlecharts</artifactId>
             <version>${dynamicreports.version}</version>
         </dependency>
-        <!--<dependency>
-            <groupId>net.sourceforge.dynamicreports</groupId>
-            <artifactId>dynamicreports-parent</artifactId>
-            <version>${dynamicreports.version}</version>
-        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
         <dependency>
@@ -270,32 +256,6 @@
             <version>${jasperreports.version}</version>
         </dependency>
 
-
-        <!--<dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-webmvc-core</artifactId>
-            <version>1.6.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-data-rest</artifactId>
-            <version>1.6.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-security</artifactId>
-            <version>1.6.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-native</artifactId>
-            <version>1.6.7</version>
-        </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>

@@ -28,6 +28,8 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "spring")
 public class KafkaProperties {
 
+    private static final String BOOTSTRAP_SERVERS = "bootstrap.servers";
+
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootStrapServers;
 
@@ -45,8 +47,8 @@ public class KafkaProperties {
 
     public Map<String, Object> getConsumerProps() {
         Map<String, Object> properties = new HashMap<>(this.consumer);
-        if (!properties.containsKey("bootstrap.servers")) {
-            properties.put("bootstrap.servers", this.bootStrapServers);
+        if (!properties.containsKey(BOOTSTRAP_SERVERS)) {
+            properties.put(BOOTSTRAP_SERVERS, this.bootStrapServers);
         }
         return properties;
     }
@@ -57,8 +59,8 @@ public class KafkaProperties {
 
     public Map<String, Object> getProducerProps() {
         Map<String, Object> properties = new HashMap<>(this.producer);
-        if (!properties.containsKey("bootstrap.servers")) {
-            properties.put("bootstrap.servers", this.bootStrapServers);
+        if (!properties.containsKey(BOOTSTRAP_SERVERS)) {
+            properties.put(BOOTSTRAP_SERVERS, this.bootStrapServers);
         }
         return properties;
     }

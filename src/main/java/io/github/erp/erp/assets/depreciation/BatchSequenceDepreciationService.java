@@ -225,7 +225,6 @@ public class BatchSequenceDepreciationService {
 
                                     contextManager.updateNumberOfProcessedItems(depreciationJobCountUpContextId, 1);
                                     contextManager.updateNumberOfProcessedItems(depreciationBatchCountUpContextId, 1);
-                                   // contextManager.updateNumberOfProcessedItems(depreciationJobCountDownContextId, -1);
                                     contextManager.updateNumberOfProcessedItems(depreciationBatchCountDownContextId, -1);
                                 });
                             });
@@ -233,9 +232,6 @@ public class BatchSequenceDepreciationService {
                 }
 
                 message.setProcessed(true);
-
-                // Marking batch as complete
-                // depreciationCompleteCallback.onComplete(message);
             },
             () -> {
                 throw new DepreciationBatchSequenceNotFound(message.getBatchId());
