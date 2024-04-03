@@ -124,8 +124,6 @@ public class BatchSequenceDepreciationService {
      */
     public DepreciationBatchMessage runDepreciation(DepreciationBatchMessage message) {
 
-        DepreciationJobContext contextManager = DepreciationJobContext.getInstance();
-
         batchSequenceService.findOne(Long.valueOf(message.getBatchId())).ifPresentOrElse(batchSequence -> {
 
                 log.debug("Running depreciation for batch-id {}, standby...", message.getBatchId());
@@ -133,10 +131,6 @@ public class BatchSequenceDepreciationService {
                 String jobId = message.getJobId();
                 List<String> assetIds = message.getAssetIds();
 
-                UUID depreciationJobCountUpContextId = message.getContextInstance().getDepreciationJobCountUpContextId();
-                UUID depreciationJobCountDownContextId = message.getContextInstance().getDepreciationJobCountDownContextId();
-                UUID depreciationBatchCountUpContextId = message.getContextInstance().getDepreciationBatchCountUpContextId();
-                UUID depreciationBatchCountDownContextId = message.getContextInstance().getDepreciationBatchCountDownContextId();
                 UUID depreciationAmountContextId = message.getContextInstance().getDepreciationAmountContextId();
 
                 DepreciationJobDTO depreciationJob = getDepreciationJob(batchSequence, jobId);
@@ -149,15 +143,7 @@ public class BatchSequenceDepreciationService {
                 if (depreciationPeriod == null) throw new DepreciationPeriodNotConfiguredException(message);
 
                 // OPT OUT
-                if (depreciationJobStatusIsComplete(batchSequence, depreciationJob, depreciationPeriod, message)) {
-                    // TODO Mark job complete
-                    depreciationJob.setProcessingTime(Duration.ofNanos(System.nanoTime() - depreciationJob.getTimeOfCommencement().getNano()));
-                    depreciationJob.setProcessedItems(depreciationJob.getProcessedItems() + message.getBatchSize());
-                    depreciationJob.setDepreciationJobStatus(DepreciationJobStatusType.COMPLETE);
-                    depreciationJobService.save(depreciationJob);
-
-                    return;
-                }
+                if (depreciationJobCompletionStatusCheck(message, batchSequence, depreciationJob, depreciationPeriod)) return;
 
                 log.debug("Commencing depreciation for depreciation-job id {}, for depreciation-period {}. Standby...", depreciationJob.getId(), depreciationPeriod.getId());
 
@@ -178,57 +164,7 @@ public class BatchSequenceDepreciationService {
                 // Perform the depreciation calculations for the batch of assets
                 for (String assetId : assetIds) {
 
-                    // Retrieve the asset from the database using the assetId
-                    assetRegistrationService.findOne(Long.valueOf(assetId)).ifPresent(
-                        assetRegistration -> {
-
-                            log.debug("Asset id {} ready for depreciation sequence, standby for next update", assetRegistration.getId());
-
-                            if (assetCategoryNotConfigured(batchSequence, depreciationJob, depreciationPeriod, assetRegistration))
-                                throw new AssetCategoryNotConfiguredException(assetRegistration, message);
-
-                            assetCategoryService.findOne(assetRegistration.getAssetCategory().getId()).ifPresent(assetCategory -> {
-
-                                if (serviceOutletNotConfigured(batchSequence, depreciationJob, depreciationPeriod, assetRegistration))
-                                    throw new ServiceOutletNotConfiguredException(assetRegistration, message);
-
-                                serviceOutletService.findOne(assetRegistration.getMainServiceOutlet().getId()).ifPresent(serviceOutlet -> {
-
-                                    depreciationMethodService.findOne(assetCategory.getDepreciationMethod().getId()).ifPresent(
-                                        depreciationMethod -> {
-
-                                            final BigDecimal writtenOffAmount = updateWrittenOffAssetAmount(depreciationPeriod, assetId);
-
-                                            final BigDecimal disposalAmount = updateDisposedAssetAmount(depreciationPeriod, assetId);
-
-                                                // Calculate the depreciation amount using the DepreciationCalculator
-                                                DepreciationArtefact depreciationArtefact = depreciationCalculatorService.calculateDepreciation(assetRegistration, depreciationPeriod, assetCategory, depreciationMethod, disposalAmount, writtenOffAmount);
-
-                                                recordDepreciationEntry(
-                                                    depreciationPeriod,
-                                                    fiscalMonth,
-                                                    assetRegistration,
-                                                    assetCategory,
-                                                    serviceOutlet,
-                                                    depreciationMethod,
-                                                    depreciationArtefact,
-                                                    depreciationJob,
-                                                    batchSequence,
-                                                    depreciationJobCountDownContextId
-                                                );
-
-                                            depreciationAmountContext.setNumberOfProcessedItems(depreciationAmountContext.getNumberOfProcessedItems() + 1);
-
-                                            // update depreciation amount
-                                            depreciationAmountContext.updateAmountForServiceOutlet(assetCategory.getAssetCategoryName(), serviceOutlet.getOutletCode(), depreciationArtefact.getDepreciationAmount().doubleValue());
-                                        });
-
-                                    contextManager.updateNumberOfProcessedItems(depreciationJobCountUpContextId, 1);
-                                    contextManager.updateNumberOfProcessedItems(depreciationBatchCountUpContextId, 1);
-                                    contextManager.updateNumberOfProcessedItems(depreciationBatchCountDownContextId, -1);
-                                });
-                            });
-                        });
+                    depreciateAssetId(message, batchSequence, depreciationJob, depreciationPeriod, fiscalMonth, depreciationAmountContext, assetId);
                 }
 
                 message.setProcessed(true);
@@ -238,6 +174,82 @@ public class BatchSequenceDepreciationService {
             });
 
         return message;
+    }
+
+    private void depreciateAssetId(DepreciationBatchMessage message, DepreciationBatchSequenceDTO batchSequence, DepreciationJobDTO depreciationJob, DepreciationPeriodDTO depreciationPeriod, FiscalMonthDTO fiscalMonth, DepreciationAmountContext depreciationAmountContext, String assetId) {
+
+        DepreciationJobContext contextManager = DepreciationJobContext.getInstance();
+
+        UUID depreciationJobCountUpContextId = message.getContextInstance().getDepreciationJobCountUpContextId();
+        UUID depreciationJobCountDownContextId = message.getContextInstance().getDepreciationJobCountDownContextId();
+        UUID depreciationBatchCountUpContextId = message.getContextInstance().getDepreciationBatchCountUpContextId();
+        UUID depreciationBatchCountDownContextId = message.getContextInstance().getDepreciationBatchCountDownContextId();
+
+
+        // Retrieve the asset from the database using the assetId
+        assetRegistrationService.findOne(Long.valueOf(assetId)).ifPresent(
+            assetRegistration -> {
+
+                log.debug("Asset id {} ready for depreciation sequence, standby for next update", assetRegistration.getId());
+
+                if (assetCategoryNotConfigured(batchSequence, depreciationJob, depreciationPeriod, assetRegistration))
+                    throw new AssetCategoryNotConfiguredException(assetRegistration, message);
+
+                assetCategoryService.findOne(assetRegistration.getAssetCategory().getId()).ifPresent(assetCategory -> {
+
+                    if (serviceOutletNotConfigured(batchSequence, depreciationJob, depreciationPeriod, assetRegistration))
+                        throw new ServiceOutletNotConfiguredException(assetRegistration, message);
+
+                    serviceOutletService.findOne(assetRegistration.getMainServiceOutlet().getId()).ifPresent(serviceOutlet -> {
+
+                        depreciationMethodService.findOne(assetCategory.getDepreciationMethod().getId()).ifPresent(
+                            depreciationMethod -> {
+
+                                final BigDecimal writtenOffAmount = updateWrittenOffAssetAmount(depreciationPeriod, assetId);
+
+                                final BigDecimal disposalAmount = updateDisposedAssetAmount(depreciationPeriod, assetId);
+
+                                    // Calculate the depreciation amount using the DepreciationCalculator
+                                    DepreciationArtefact depreciationArtefact = depreciationCalculatorService.calculateDepreciation(assetRegistration, depreciationPeriod, assetCategory, depreciationMethod, disposalAmount, writtenOffAmount);
+
+                                    recordDepreciationEntry(
+                                        depreciationPeriod,
+                                        fiscalMonth,
+                                        assetRegistration,
+                                        assetCategory,
+                                        serviceOutlet,
+                                        depreciationMethod,
+                                        depreciationArtefact,
+                                        depreciationJob,
+                                        batchSequence,
+                                        depreciationJobCountDownContextId
+                                    );
+
+                                depreciationAmountContext.setNumberOfProcessedItems(depreciationAmountContext.getNumberOfProcessedItems() + 1);
+
+                                // update depreciation amount
+                                depreciationAmountContext.updateAmountForServiceOutlet(assetCategory.getAssetCategoryName(), serviceOutlet.getOutletCode(), depreciationArtefact.getDepreciationAmount().doubleValue());
+                            });
+
+                        contextManager.updateNumberOfProcessedItems(depreciationJobCountUpContextId, 1);
+                        contextManager.updateNumberOfProcessedItems(depreciationBatchCountUpContextId, 1);
+                        contextManager.updateNumberOfProcessedItems(depreciationBatchCountDownContextId, -1);
+                    });
+                });
+            });
+    }
+
+    private boolean depreciationJobCompletionStatusCheck(DepreciationBatchMessage message, DepreciationBatchSequenceDTO batchSequence, DepreciationJobDTO depreciationJob, DepreciationPeriodDTO depreciationPeriod) {
+        if (depreciationJobStatusIsComplete(batchSequence, depreciationJob, depreciationPeriod, message)) {
+            // TODO Mark job complete
+            depreciationJob.setProcessingTime(Duration.ofNanos(System.nanoTime() - depreciationJob.getTimeOfCommencement().getNano()));
+            depreciationJob.setProcessedItems(depreciationJob.getProcessedItems() + message.getBatchSize());
+            depreciationJob.setDepreciationJobStatus(DepreciationJobStatusType.COMPLETE);
+            depreciationJobService.save(depreciationJob);
+
+            return true;
+        }
+        return false;
     }
 
     @NotNull
