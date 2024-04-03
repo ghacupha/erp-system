@@ -68,12 +68,6 @@ public class DepreciationBatchConsumerConfig {
         Map<String, Object> properties = new HashMap<>();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
-//        properties.put(ConsumerConfig.REQUEST_TIMEOUT_MS_CONFIG, String.valueOf(TimeUnit.MINUTES.toMillis(2)));
-//        properties.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, String.valueOf(TimeUnit.MINUTES.toMillis(2)));
-//        properties.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, String.valueOf(TimeUnit.MINUTES.toMillis(7)));
-//        properties.put(ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG, String.valueOf(TimeUnit.MINUTES.toMillis(2)));
-//        properties.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, String.valueOf(TimeUnit.MINUTES.toMillis(5)));
-//        properties.put(ConsumerConfig.RETRY_BACKOFF_MS_CONFIG, String.valueOf(TimeUnit.MINUTES.toMillis(2)));
 
         return properties;
     }
