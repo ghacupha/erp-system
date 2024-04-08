@@ -32,6 +32,7 @@ logging:
     tech.jhipster: WARN
     org.hibernate.SQL: WARN
     io.github.erp: DEBUG
+    org.springframework: INFO
 
 management:
   health:

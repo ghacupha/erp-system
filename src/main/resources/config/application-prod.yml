@@ -27,6 +27,7 @@ logging:
     tech.jhipster: INFO
     io.github.erp: INFO
     org.apache.kafka: DEBUG
+    org.springframework: WARN
 
 management:
   metrics:
