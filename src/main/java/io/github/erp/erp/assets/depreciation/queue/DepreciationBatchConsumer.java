@@ -60,6 +60,10 @@ public class DepreciationBatchConsumer {
 
     @KafkaListener(topics = "depreciation_batch_topic", groupId = "erp-system-depreciation", concurrency = "8")
     public void processDepreciationJobMessages(DepreciationBatchMessage message, Acknowledgment acknowledgment) {
+
+        // acknowledge the message to commit offset
+        acknowledgment.acknowledge();
+
         try {
 
             depreciationLock.lock();
@@ -77,9 +81,6 @@ public class DepreciationBatchConsumer {
 
                 throw new UnexpectedDepreciationDataset("Number of messages processed = " + messagesProcessed + " Expected number of batches = " + message.getNumberOfBatches());
             }
-
-            // acknowledge the message to commit offset
-            acknowledgment.acknowledge();
 
             long startingTime = System.currentTimeMillis();
 
