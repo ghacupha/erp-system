@@ -369,23 +369,6 @@ public class BatchSequenceDepreciationService {
     }
 
     private boolean depreciationJobStatusIsComplete(DepreciationBatchSequenceDTO batchSequence, DepreciationJobDTO depreciationJob, DepreciationPeriodDTO depreciationPeriod, DepreciationBatchMessage message) {
-//
-//        if (depreciationJob.getDepreciationJobStatus() == DepreciationJobStatusType.COMPLETE) {
-//
-//            log.warn("DepreciationJob id {} is status COMPLETE for period id {}. System opting out the depreciation sequence. Standby", depreciationJob.getId(), depreciationPeriod.getId());
-//
-//            DepreciationJobNoticeDTO notice = new DepreciationJobNoticeDTO();
-//            notice.setErrorMessage("Depreciation Job id: " + depreciationJob.getId() + " is status COMPLETE");
-//            notice.setDepreciationJob(depreciationJob);
-//            notice.setDepreciationPeriod(depreciationPeriod);
-//            notice.setDepreciationNoticeStatus(DepreciationNoticeStatusType.WARNING);
-//            notice.setEventNarrative("Depreciation Job id: " + depreciationJob.getId() + " is status COMPLETE");
-//            notice.setEventTimeStamp(ZonedDateTime.now());
-//            notice.setDepreciationBatchSequence(batchSequence);
-//            depreciationJobNoticeService.save(notice);
-//
-//            return true;
-//        }
 
         // Check if batch-size agrees with the counter first
         UUID jobCountDownContextId = message.getContextInstance().getDepreciationJobCountDownContextId();
