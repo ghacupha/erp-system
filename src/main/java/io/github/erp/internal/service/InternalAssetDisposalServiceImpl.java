@@ -33,6 +33,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -128,17 +130,11 @@ public class InternalAssetDisposalServiceImpl implements InternalAssetDisposalSe
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<AssetDisposalDTO> findOneByDisposedAsset(Long disposedAssetId) {
+    public Optional<List<AssetDisposalDTO>> findDisposedItems (Long disposedAssetId, LocalDate depreciationPeriodStartDate) {
         log.debug("Request to get AssetDisposal for asset id: {}", disposedAssetId);
-        ApplicationUser accessor = CurrentUserContext.getCurrentUser();
-        return assetDisposalRepository.findAssetDisposalByAssetDisposedId(disposedAssetId)
-            .map((assetDisposal) -> {
-                assetDisposal.setLastAccessedBy(accessor);
 
-                bufferedSinkProcessor.addEntry(assetDisposal);
-
-                return assetDisposalMapper.toDto(assetDisposal);
-            });
+        return assetDisposalRepository.findAssetDisposal(disposedAssetId, depreciationPeriodStartDate)
+            .map(assetDisposalMapper::toDto);
     }
 
     @Override

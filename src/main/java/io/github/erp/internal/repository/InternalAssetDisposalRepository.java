@@ -19,6 +19,7 @@ package io.github.erp.internal.repository;
  */
 
 import io.github.erp.domain.AssetDisposal;
+import io.github.erp.domain.AssetDisposalInternal;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -48,5 +49,48 @@ public interface InternalAssetDisposalRepository extends JpaRepository<AssetDisp
     @Query("select assetDisposal from AssetDisposal assetDisposal left join fetch assetDisposal.placeholders where assetDisposal.id =:id")
     Optional<AssetDisposal> findOneWithEagerRelationships(@Param("id") Long id);
 
-    Optional<AssetDisposal> findAssetDisposalByAssetDisposedId(Long disposedAssetId);
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT " +
+            "   ad.id," +
+            "   asset_disposal_reference," +
+            "   description, asset_cost," +
+            "   historical_cost," +
+            "   accrued_depreciation," +
+            "   net_book_value," +
+            "   decommissioning_date," +
+            "   disposal_date," +
+            "   dormant," +
+            "   ad.created_by_id," +
+            "   ad.modified_by_id," +
+            "   ad.last_accessed_by_id," +
+            "   effective_period_id," +
+            "   asset_disposed_id " +
+            "FROM public.asset_disposal ad " +
+            "LEFT JOIN depreciation_period dp ON ad.effective_period_id = dp.id " +
+            "WHERE asset_disposed_id = :disposedAssetId " +
+            "AND dp.start_date <= CAST ( :depreciationPeriodStartDate AS DATE)",
+        countQuery = "" +
+            "SELECT " +
+            "   ad.id," +
+            "   asset_disposal_reference," +
+            "   description, asset_cost," +
+            "   historical_cost," +
+            "   accrued_depreciation," +
+            "   net_book_value," +
+            "   decommissioning_date," +
+            "   disposal_date," +
+            "   dormant," +
+            "   ad.created_by_id," +
+            "   ad.modified_by_id," +
+            "   ad.last_accessed_by_id," +
+            "   effective_period_id," +
+            "   asset_disposed_id " +
+            "FROM public.asset_disposal ad " +
+            "LEFT JOIN depreciation_period dp ON ad.effective_period_id = dp.id " +
+            "WHERE asset_disposed_id = :disposedAssetId " +
+            "AND dp.start_date <= CAST ( :depreciationPeriodStartDate AS DATE)"
+    )
+    Optional<List<AssetDisposal>> findAssetDisposal(@Param("disposedAssetId")Long disposedAssetId, @Param("depreciationPeriodStartDate")LocalDate depreciationPeriodStartDate);
 }

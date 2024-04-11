@@ -17,6 +17,7 @@ package io.github.erp.erp.assets.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.domain.AssetWriteOffInternal;
 import io.github.erp.domain.enumeration.DepreciationJobStatusType;
 import io.github.erp.domain.enumeration.DepreciationNoticeStatusType;
 import io.github.erp.domain.enumeration.DepreciationPeriodStatusTypes;
@@ -47,6 +48,7 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -255,18 +257,10 @@ public class BatchSequenceDepreciationService {
     @NotNull
     private BigDecimal updateDisposedAssetAmount(DepreciationPeriodDTO depreciationPeriod, String assetId) {
         final BigDecimal[] disposalAmount = {BigDecimal.ZERO};
-        internalAssetDisposalService.findOneByDisposedAsset(Long.valueOf(assetId))
-            .ifPresent(disposalEvent -> {
 
-                if (disposalEvent.getEffectivePeriod().getStartDate().isAfter(depreciationPeriod.getStartDate())) {
-                    disposalAmount[0] = disposalEvent.getAssetCost();
-                }
+        internalAssetDisposalService.findDisposedItems(Long.valueOf(assetId), depreciationPeriod.getStartDate())
+            .ifPresent(disposalEvents -> disposalEvents.forEach(disposalEvent ->  disposalAmount[0] = disposalAmount[0].add(disposalEvent.getAssetCost())));
 
-                if (disposalEvent.getEffectivePeriod().getStartDate().isEqual(depreciationPeriod.getStartDate())) {
-                    disposalAmount[0] = disposalEvent.getAssetCost();
-                }
-
-            });
         return disposalAmount[0];
     }
 
@@ -275,11 +269,8 @@ public class BatchSequenceDepreciationService {
         final BigDecimal[] writeOffAmount = {BigDecimal.ZERO};
 
         internalAssetWriteOffService.findAssetWriteOffByIdAndPeriod(depreciationPeriod, Long.valueOf(assetId))
-            .ifPresent(writeOffEvent -> {
+            .ifPresent(writeOffEvents -> writeOffEvents.forEach(writeOffEvent ->  writeOffAmount[0] = writeOffAmount[0].add(writeOffEvent.getWriteOffAmount())));
 
-                writeOffAmount[0] = writeOffAmount[0].add(writeOffEvent.getWriteOffAmount());
-
-            });
         return writeOffAmount[0];
     }
 

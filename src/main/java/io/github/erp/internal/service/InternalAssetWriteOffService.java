@@ -24,6 +24,7 @@ import io.github.erp.service.dto.DepreciationPeriodDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -80,7 +81,7 @@ public interface InternalAssetWriteOffService {
      * @param assetWrittenOffId the id of the entity written off.
      * @return the entity.
      */
-    Optional<AssetWriteOffInternal> findAssetWriteOffByIdAndPeriod(DepreciationPeriodDTO depreciationPeriod, Long assetWrittenOffId);
+    Optional<List<AssetWriteOffInternal>> findAssetWriteOffByIdAndPeriod(DepreciationPeriodDTO depreciationPeriod, Long assetWrittenOffId);
 
     /**
      * Delete the "id" assetWriteOff.

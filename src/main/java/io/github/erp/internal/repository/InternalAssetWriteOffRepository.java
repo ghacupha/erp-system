@@ -66,5 +66,5 @@ public interface InternalAssetWriteOffRepository extends JpaRepository<AssetWrit
         " WHERE " +
         "  aw.asset_written_off_id= :assetWrittenOffId " +
         "  AND dp.start_date <= CAST ( :depreciationPeriodStartDate AS DATE)")
-    Optional<AssetWriteOffInternal> findAssetWriteOff(@Param("assetWrittenOffId") Long assetWrittenOffId, @Param("depreciationPeriodStartDate")LocalDate depreciationPeriodStartDate);
+    Optional<List<AssetWriteOffInternal>> findAssetWriteOff(@Param("assetWrittenOffId") Long assetWrittenOffId, @Param("depreciationPeriodStartDate")LocalDate depreciationPeriodStartDate);
 }
