@@ -104,7 +104,7 @@ public class DepreciationBatchConsumer {
                 if (message.isLastBatch()) {
                     depreciationEntrySinkProcessor.flushRemainingItems(message.getContextInstance().getDepreciationJobCountDownContextId());
 
-                    updateDepreciationJobCompleted(message, numberOfProcessed);
+                    // TODO check possible duplication updateDepreciationJobCompleted(message, numberOfProcessed);
                 }
 
                 int pendingItemsInTheJob = contextManager.getNumberOfProcessedItems(message.getContextInstance().getDepreciationJobCountDownContextId());
