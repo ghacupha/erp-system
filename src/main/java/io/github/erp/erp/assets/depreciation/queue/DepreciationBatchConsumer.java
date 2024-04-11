@@ -80,7 +80,7 @@ public class DepreciationBatchConsumer {
             if (messagesProcessed == message.getNumberOfBatches() | messagesProcessed > message.getNumberOfBatches()) {
 
                 depreciationLock.unlock();
-                
+
                 throw new UnexpectedDepreciationDataset("Number of messages processed = " + messagesProcessed + " Expected number of batches = " + message.getNumberOfBatches());
             }
 
@@ -104,7 +104,7 @@ public class DepreciationBatchConsumer {
                 if (message.isLastBatch()) {
                     depreciationEntrySinkProcessor.flushRemainingItems(message.getContextInstance().getDepreciationJobCountDownContextId());
 
-                    updateDepreciationJobCompleted(message);
+                    updateDepreciationJobCompleted(message, numberOfProcessed);
                 }
 
                 int pendingItemsInTheJob = contextManager.getNumberOfProcessedItems(message.getContextInstance().getDepreciationJobCountDownContextId());
@@ -120,7 +120,7 @@ public class DepreciationBatchConsumer {
 
                     depreciationEntrySinkProcessor.flushRemainingItems(message.getContextInstance().getDepreciationJobCountDownContextId());
 
-                    updateDepreciationJobCompleted(message);
+                    updateDepreciationJobCompleted(message, itemsProcessed);
 
                     log.info("Depreciation process complete for {} items", itemsProcessed);
 
@@ -138,11 +138,11 @@ public class DepreciationBatchConsumer {
         }
     }
 
-    private void updateDepreciationJobCompleted(DepreciationBatchMessage message) {
+    private void updateDepreciationJobCompleted(DepreciationBatchMessage message, int itemsProcessed) {
         depreciationJobService.findOne(Long.valueOf(message.getJobId()))
             .ifPresent(job -> {
                 job.setProcessingTime(Duration.ofNanos(System.nanoTime() - job.getTimeOfCommencement().getNano()));
-                job.setProcessedItems(job.getProcessedItems() + message.getBatchSize());
+                job.setProcessedItems(job.getProcessedItems() == null ? itemsProcessed : job.getProcessedItems() + message.getBatchSize());
                 job.setDepreciationJobStatus(DepreciationJobStatusType.COMPLETE);
                 depreciationJobService.save(job);
             });
