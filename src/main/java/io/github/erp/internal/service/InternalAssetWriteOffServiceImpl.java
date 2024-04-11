@@ -27,6 +27,8 @@ import io.github.erp.repository.search.AssetWriteOffSearchRepository;
 import io.github.erp.service.dto.AssetWriteOffDTO;
 import io.github.erp.service.dto.DepreciationPeriodDTO;
 import io.github.erp.service.mapper.AssetWriteOffMapper;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -128,7 +130,7 @@ public class InternalAssetWriteOffServiceImpl implements InternalAssetWriteOffSe
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<AssetWriteOffInternal> findAssetWriteOffByIdAndPeriod(DepreciationPeriodDTO depreciationPeriod, Long assetWrittenOffId) {
+    public Optional<List<AssetWriteOffInternal>> findAssetWriteOffByIdAndPeriod(DepreciationPeriodDTO depreciationPeriod, Long assetWrittenOffId) {
         log.debug("Request to get AssetWriteOffEvent for asset id : {}", assetWrittenOffId);
         return assetWriteOffRepository.findAssetWriteOff(assetWrittenOffId, depreciationPeriod.getStartDate());
     }

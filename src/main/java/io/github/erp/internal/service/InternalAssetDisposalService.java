@@ -22,6 +22,8 @@ import io.github.erp.service.dto.AssetDisposalDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -72,9 +74,9 @@ public interface InternalAssetDisposalService {
      * Get the "id" assetDisposal.
      *
      * @param disposedAssetId the id of the asset probably disposed.
-     * @return the entity.
+     * @return the entities
      */
-    Optional<AssetDisposalDTO> findOneByDisposedAsset(Long disposedAssetId);
+    Optional<List<AssetDisposalDTO>> findDisposedItems(Long disposedAssetId, LocalDate depreciationPeriodStartDate);
 
     /**
      * Delete the "id" assetDisposal.
