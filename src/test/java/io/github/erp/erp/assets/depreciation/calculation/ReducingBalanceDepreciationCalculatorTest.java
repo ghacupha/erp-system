@@ -58,7 +58,7 @@ public class ReducingBalanceDepreciationCalculatorTest extends TestAssetDataGene
         ReducingBalanceDepreciationCalculator calculator = new ReducingBalanceDepreciationCalculator();
 
         // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO).getDepreciationAmount();
+        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO).getDepreciationAmount();
 
         // Perform assertion on the calculated depreciation
         Assertions.assertEquals(new BigDecimal("1413.75").setScale(MONEY_SCALE, ROUNDING_MODE), calculatedDepreciation);
@@ -90,7 +90,7 @@ public class ReducingBalanceDepreciationCalculatorTest extends TestAssetDataGene
         ReducingBalanceDepreciationCalculator calculator = new ReducingBalanceDepreciationCalculator();
 
         // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO).getDepreciationAmount();
+        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO).getDepreciationAmount();
 
         // Perform assertion on the calculated depreciation
         Assertions.assertEquals(new BigDecimal("16052.68").setScale(MONEY_SCALE, ROUNDING_MODE), calculatedDepreciation);
@@ -122,7 +122,7 @@ public class ReducingBalanceDepreciationCalculatorTest extends TestAssetDataGene
         ReducingBalanceDepreciationCalculator calculator = new ReducingBalanceDepreciationCalculator();
 
         // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO).getDepreciationAmount();
+        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO).getDepreciationAmount();
 
         // Perform assertion on the calculated depreciation
         Assertions.assertEquals(new BigDecimal("374.72").setScale(MONEY_SCALE, ROUNDING_MODE), calculatedDepreciation);
@@ -155,7 +155,7 @@ public class ReducingBalanceDepreciationCalculatorTest extends TestAssetDataGene
         ReducingBalanceDepreciationCalculator calculator = new ReducingBalanceDepreciationCalculator();
 
         // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO).getDepreciationAmount();
+        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO).getDepreciationAmount();
 
         // Perform assertion on the calculated depreciation
         Assertions.assertEquals(new BigDecimal("0.00").setScale(MONEY_SCALE, ROUNDING_MODE), calculatedDepreciation);

@@ -64,7 +64,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         StraightLineDepreciationCalculator calculator = new StraightLineDepreciationCalculator();
 
         // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO).getDepreciationAmount();
+        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO).getDepreciationAmount();
 
         // Calculate expected depreciation manually
         BigDecimal assetCost = asset.getAssetCost();
@@ -137,7 +137,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         StraightLineDepreciationCalculator calculator = new StraightLineDepreciationCalculator();
 
         // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO).getDepreciationAmount();
+        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO).getDepreciationAmount();
 
         // Calculate expected depreciation manually
         BigDecimal assetCost = asset.getAssetCost();
@@ -208,7 +208,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         StraightLineDepreciationCalculator calculator = new StraightLineDepreciationCalculator();
 
         // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod,ZERO, ZERO).getDepreciationAmount();
+        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod,ZERO).getDepreciationAmount();
 
         // Calculate expected depreciation manually
         BigDecimal assetCost = asset.getAssetCost();
@@ -280,7 +280,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
 
         // TODO revisit the calculator to see how effective months arise as negative values
         // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO).getDepreciationAmount();
+        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO).getDepreciationAmount();
 
         // Calculate expected depreciation manually
         BigDecimal assetCost = asset.getAssetCost();
@@ -344,7 +344,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         StraightLineDepreciationCalculator calculator = new StraightLineDepreciationCalculator();
 
         // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod,ZERO, ZERO).getDepreciationAmount();
+        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod,ZERO).getDepreciationAmount();
 
         // Calculate expected depreciation manually
         BigDecimal assetCost = asset.getAssetCost();
@@ -420,7 +420,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         StraightLineDepreciationCalculator calculator = new StraightLineDepreciationCalculator();
 
         // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO).getDepreciationAmount();
+        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO).getDepreciationAmount();
 
         // Calculate expected depreciation manually
         BigDecimal assetCost = asset.getAssetCost();
@@ -493,7 +493,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         StraightLineDepreciationCalculator calculator = new StraightLineDepreciationCalculator();
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO);
+            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO);
         });
     }
 
@@ -524,7 +524,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
 
         // Calculate depreciation using the calculator
         Assertions.assertThrows(NullPointerException.class, () -> {
-            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO);
+            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO);
         });
     }
 
@@ -554,7 +554,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         StraightLineDepreciationCalculator calculator = new StraightLineDepreciationCalculator();
 
         // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO).getDepreciationAmount();
+        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO).getDepreciationAmount();
 
         // Calculate expected depreciation manually for a 1-month period
         BigDecimal assetCost = asset.getAssetCost();
@@ -825,7 +825,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
 
         // Calculate depreciation using the calculator
         Assertions.assertThrows(DepreciationRateNotProvidedException.class, () -> {
-            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO);
+            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO);
         });
     }
 
@@ -856,7 +856,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
 
         // Calculate depreciation using the calculator
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO);
+            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO);
         });
     }
 
@@ -888,7 +888,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
 
         // Calculate depreciation using the calculator
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO);
+            calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO);
         });
     }
 
@@ -934,7 +934,7 @@ public class StraightLineDepreciationCalculatorTest extends TestAssetDataGenerat
         StraightLineDepreciationCalculator calculator = new StraightLineDepreciationCalculator();
 
         // Calculate depreciation using the calculator
-        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO, ZERO).getDepreciationAmount();
+        BigDecimal calculatedDepreciation = calculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, ZERO).getDepreciationAmount();
 
         // Calculate expected depreciation manually
 
