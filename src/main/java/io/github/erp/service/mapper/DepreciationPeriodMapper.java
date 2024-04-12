@@ -36,11 +36,11 @@ public interface DepreciationPeriodMapper extends EntityMapper<DepreciationPerio
     @Mapping(target = "id", source = "id")
     DepreciationPeriodDTO toDtoId(DepreciationPeriod depreciationPeriod);
 
-    @Named("startDate")
+    @Named("periodCode")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "startDate", source = "startDate")
-    DepreciationPeriodDTO toDtoStartDate(DepreciationPeriod depreciationPeriod);
+    @Mapping(target = "periodCode", source = "periodCode")
+    DepreciationPeriodDTO toDtoPeriodCode(DepreciationPeriod depreciationPeriod);
 
     @Named("endDate")
     @BeanMapping(ignoreByDefault = true)
@@ -48,9 +48,9 @@ public interface DepreciationPeriodMapper extends EntityMapper<DepreciationPerio
     @Mapping(target = "endDate", source = "endDate")
     DepreciationPeriodDTO toDtoEndDate(DepreciationPeriod depreciationPeriod);
 
-    @Named("periodCode")
+    @Named("startDate")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "periodCode", source = "periodCode")
-    DepreciationPeriodDTO toDtoPeriodCode(DepreciationPeriod depreciationPeriod);
+    @Mapping(target = "startDate", source = "startDate")
+    DepreciationPeriodDTO toDtoStartDate(DepreciationPeriod depreciationPeriod);
 }

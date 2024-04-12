@@ -1,4 +1,4 @@
-package io.github.erp.internal.model.mapping;
+package io.github.erp.domain;
 
 /*-
  * Erp System - Mark X No 6 (Jehoiada Series) Server ver 1.7.6
@@ -18,19 +18,24 @@ package io.github.erp.internal.model.mapping;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.domain.AssetWriteOffInternal;
-import io.github.erp.internal.framework.Mapping;
-import io.github.erp.service.dto.AssetWriteOffDTO;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class AssetWriteOffInternalMapper implements Mapping<AssetWriteOffDTO, AssetWriteOffInternal> {
+import io.github.erp.web.rest.TestUtil;
+import org.junit.jupiter.api.Test;
 
-    @Override
-    public AssetWriteOffDTO toValue1(AssetWriteOffInternal vs) {
-        return null;
-    }
+class AssetRevaluationTest {
 
-    @Override
-    public AssetWriteOffInternal toValue2(AssetWriteOffDTO vs) {
-        return null;
+    @Test
+    void equalsVerifier() throws Exception {
+        TestUtil.equalsVerifier(AssetRevaluation.class);
+        AssetRevaluation assetRevaluation1 = new AssetRevaluation();
+        assetRevaluation1.setId(1L);
+        AssetRevaluation assetRevaluation2 = new AssetRevaluation();
+        assetRevaluation2.setId(assetRevaluation1.getId());
+        assertThat(assetRevaluation1).isEqualTo(assetRevaluation2);
+        assetRevaluation2.setId(2L);
+        assertThat(assetRevaluation1).isNotEqualTo(assetRevaluation2);
+        assetRevaluation1.setId(null);
+        assertThat(assetRevaluation1).isNotEqualTo(assetRevaluation2);
     }
 }
