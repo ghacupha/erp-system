@@ -1,4 +1,4 @@
-package io.github.erp.erp.assets.depreciation.adjustments;
+package io.github.erp.service.mapper;
 
 /*-
  * Erp System - Mark X No 6 (Jehoiada Series) Server ver 1.7.6
@@ -18,8 +18,17 @@ package io.github.erp.erp.assets.depreciation.adjustments;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import org.springframework.stereotype.Service;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@Service("assetRevaluationAdjustmentService")
-public class AssetRevaluationAdjustmentService {
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+class AssetRevaluationMapperTest {
+
+    private AssetRevaluationMapper assetRevaluationMapper;
+
+    @BeforeEach
+    public void setUp() {
+        assetRevaluationMapper = new AssetRevaluationMapperImpl();
+    }
 }

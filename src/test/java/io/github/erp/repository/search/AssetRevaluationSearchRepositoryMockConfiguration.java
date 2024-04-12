@@ -1,4 +1,4 @@
-package io.github.erp.erp.assets.depreciation.adjustments;
+package io.github.erp.repository.search;
 
 /*-
  * Erp System - Mark X No 6 (Jehoiada Series) Server ver 1.7.6
@@ -18,8 +18,16 @@ package io.github.erp.erp.assets.depreciation.adjustments;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import org.springframework.stereotype.Service;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Configuration;
 
-@Service("assetRevaluationAdjustmentService")
-public class AssetRevaluationAdjustmentService {
+/**
+ * Configure a Mock version of {@link AssetRevaluationSearchRepository} to test the
+ * application without starting Elasticsearch.
+ */
+@Configuration
+public class AssetRevaluationSearchRepositoryMockConfiguration {
+
+    @MockBean
+    private AssetRevaluationSearchRepository mockAssetRevaluationSearchRepository;
 }
