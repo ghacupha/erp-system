@@ -18,10 +18,13 @@ package io.github.erp.internal.service;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.service.dto.AssetDisposalDTO;
 import io.github.erp.service.dto.AssetRevaluationDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -84,4 +87,12 @@ public interface InternalAssetRevaluationService {
      * @return the list of entities.
      */
     Page<AssetRevaluationDTO> search(String query, Pageable pageable);
+
+    /**
+     * Get the "id" assetDisposal.
+     *
+     * @param revaluedAssetId the id of the asset probably disposed.
+     * @return the entities
+     */
+    Optional<List<AssetRevaluationDTO>> findRevaluedItems(Long revaluedAssetId, LocalDate depreciationPeriodStartDate);
 }

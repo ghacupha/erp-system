@@ -19,9 +19,10 @@ package io.github.erp.internal.service;
  */
 
 import io.github.erp.domain.AssetRevaluation;
+import io.github.erp.internal.repository.InternalAssetRevaluationRepository;
 import io.github.erp.repository.AssetRevaluationRepository;
 import io.github.erp.repository.search.AssetRevaluationSearchRepository;
-import io.github.erp.service.AssetRevaluationService;
+import io.github.erp.service.dto.AssetDisposalDTO;
 import io.github.erp.service.dto.AssetRevaluationDTO;
 import io.github.erp.service.mapper.AssetRevaluationMapper;
 import org.slf4j.Logger;
@@ -31,25 +32,29 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link AssetRevaluation}.
  */
 @Service
 @Transactional
-public class InternalAssetRevaluationServiceImpl implements AssetRevaluationService {
+public class InternalAssetRevaluationServiceImpl implements InternalAssetRevaluationService {
 
     private final Logger log = LoggerFactory.getLogger(InternalAssetRevaluationServiceImpl.class);
 
-    private final AssetRevaluationRepository assetRevaluationRepository;
+    private final InternalAssetRevaluationRepository assetRevaluationRepository;
 
     private final AssetRevaluationMapper assetRevaluationMapper;
 
     private final AssetRevaluationSearchRepository assetRevaluationSearchRepository;
 
     public InternalAssetRevaluationServiceImpl(
-        AssetRevaluationRepository assetRevaluationRepository,
+        InternalAssetRevaluationRepository assetRevaluationRepository,
         AssetRevaluationMapper assetRevaluationMapper,
         AssetRevaluationSearchRepository assetRevaluationSearchRepository
     ) {
@@ -118,5 +123,20 @@ public class InternalAssetRevaluationServiceImpl implements AssetRevaluationServ
     public Page<AssetRevaluationDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of AssetRevaluations for query {}", query);
         return assetRevaluationSearchRepository.search(query, pageable).map(assetRevaluationMapper::toDto);
+    }
+
+    /**
+     * Get the list of revalued items given the id of the asset
+     *
+     * @param revaluedAssetId             the id of the asset probably disposed.
+     * @param depreciationPeriodStartDate start date of the depreciation-period of the depreciation job
+     * @return the entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<List<AssetRevaluationDTO>> findRevaluedItems(Long revaluedAssetId, LocalDate depreciationPeriodStartDate) {
+
+        return assetRevaluationRepository.findAssetRevaluation(revaluedAssetId, depreciationPeriodStartDate)
+            .map(assetRevaluationMapper::toDto);
     }
 }
