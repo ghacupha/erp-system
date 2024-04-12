@@ -19,6 +19,7 @@ package io.github.erp.erp.assets.depreciation.adjustments;
  */
 
 import io.github.erp.domain.AssetWriteOffInternal;
+import io.github.erp.internal.service.InternalAssetGeneralAdjustmentService;
 import io.github.erp.service.dto.DepreciationPeriodDTO;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,12 @@ import java.math.BigDecimal;
 @Service("generalAssetAmountAdjustmentService")
 public class GeneralAssetAmountAdjustmentService implements AdjustedCostService {
 
+    private final InternalAssetGeneralAdjustmentService internalAssetGeneralAdjustmentService;
+
+    public GeneralAssetAmountAdjustmentService(InternalAssetGeneralAdjustmentService internalAssetGeneralAdjustmentService) {
+        this.internalAssetGeneralAdjustmentService = internalAssetGeneralAdjustmentService;
+    }
+
     /**
      * @param depreciationPeriod Specified for the current Job
      * @param assetId            of the asset whose depreciation we are calculating
@@ -37,6 +44,12 @@ public class GeneralAssetAmountAdjustmentService implements AdjustedCostService 
      */
     @Override
     public BigDecimal getAssetAmountAdjustment(DepreciationPeriodDTO depreciationPeriod, String assetId) {
-        return null;
+
+        final BigDecimal[] revaluationAmount = {BigDecimal.ZERO};
+
+        internalAssetGeneralAdjustmentService.findAdjustmentItems(Long.valueOf(assetId), depreciationPeriod.getStartDate())
+            .ifPresent(revaluationEvents -> revaluationEvents.forEach(revaluationEvent ->  revaluationAmount[0] = revaluationAmount[0].add(revaluationEvent.getDevaluationAmount())));
+
+        return revaluationAmount[0];
     }
 }

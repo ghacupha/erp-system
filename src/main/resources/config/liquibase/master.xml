@@ -270,6 +270,7 @@
     <include file="config/liquibase/changelog/20240320112940_added_entity_AssetWriteOff.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240321051842_added_entity_AssetDisposal.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240412053158_added_entity_AssetRevaluation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240412085640_added_entity_AssetGeneralAdjustment.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
@@ -462,6 +463,7 @@
     <include file="config/liquibase/changelog/20240321051842_added_entity_constraints_AssetDisposal.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240321100229_changelog" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240412053158_added_entity_constraints_AssetRevaluation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240412085640_added_entity_constraints_AssetGeneralAdjustment.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
