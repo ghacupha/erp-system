@@ -31,11 +31,16 @@ public class AggregateAssetCostAdjustmentService implements AdjustedCostService 
 
     private final AdjustedCostService assetDisposalAdjustmentService;
     private final AdjustedCostService assetWriteOffAdjustmentService;
+    private final AdjustedCostService assetRevaluationAdjustmentService;
 
 
-    public AggregateAssetCostAdjustmentService(AdjustedCostService assetDisposalAdjustmentService, AdjustedCostService assetWriteOffAdjustmentService) {
+    public AggregateAssetCostAdjustmentService(
+        AdjustedCostService assetDisposalAdjustmentService,
+        AdjustedCostService assetWriteOffAdjustmentService,
+        AdjustedCostService assetRevaluationAdjustmentService) {
         this.assetDisposalAdjustmentService = assetDisposalAdjustmentService;
         this.assetWriteOffAdjustmentService = assetWriteOffAdjustmentService;
+        this.assetRevaluationAdjustmentService = assetRevaluationAdjustmentService;
     }
 
     /**
@@ -49,7 +54,7 @@ public class AggregateAssetCostAdjustmentService implements AdjustedCostService 
 
         adjustment = adjustment.add(assetDisposalAdjustmentService.getAssetAmountAdjustment(depreciationPeriod, assetId));
         adjustment = adjustment.add(assetWriteOffAdjustmentService.getAssetAmountAdjustment(depreciationPeriod, assetId));
-        // TODO adjustment = adjustment.add(assetRevaluationAdjustmentService.getAssetAmountAdjustment(depreciationPeriod, assetId));
+        adjustment = adjustment.add(assetRevaluationAdjustmentService.getAssetAmountAdjustment(depreciationPeriod, assetId));
         // TODO adjustment = adjustment.add(assetGeneralAdjustmentService.getAssetAmountAdjustment(depreciationPeriod, assetId));
 
         return adjustment;

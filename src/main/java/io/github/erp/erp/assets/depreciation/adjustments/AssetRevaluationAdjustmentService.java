@@ -18,8 +18,34 @@ package io.github.erp.erp.assets.depreciation.adjustments;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.internal.service.InternalAssetRevaluationService;
+import io.github.erp.service.dto.DepreciationPeriodDTO;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service("assetRevaluationAdjustmentService")
-public class AssetRevaluationAdjustmentService {
+public class AssetRevaluationAdjustmentService implements AdjustedCostService {
+
+    private final InternalAssetRevaluationService internalAssetRevaluationService;
+
+    public AssetRevaluationAdjustmentService(InternalAssetRevaluationService internalAssetRevaluationService) {
+        this.internalAssetRevaluationService = internalAssetRevaluationService;
+    }
+
+    /**
+     * @param depreciationPeriod Specified for the current Job
+     * @param assetId            of the asset whose depreciation we are calculating
+     * @return The amount of adjustment to the asset cost
+     */
+    @Override
+    public BigDecimal getAssetAmountAdjustment(DepreciationPeriodDTO depreciationPeriod, String assetId) {
+
+        final BigDecimal[] revaluationAmount = {BigDecimal.ZERO};
+
+        internalAssetRevaluationService.findRevaluedItems(Long.valueOf(assetId), depreciationPeriod.getStartDate())
+            .ifPresent(revaluationEvents -> revaluationEvents.forEach(revaluationEvent ->  revaluationAmount[0] = revaluationAmount[0].add(revaluationEvent.getDevaluationAmount())));
+
+        return revaluationAmount[0];
+    }
 }

@@ -70,6 +70,24 @@ public interface InternalAssetRevaluationRepository extends JpaRepository<AssetR
             " FROM public.asset_revaluation ar" +
             " LEFT JOIN depreciation_period dp ON ar.effective_period_id = dp.id " +
             " WHERE revalued_asset_id = :revaluedAssetId " +
+            " AND dp.start_date <= CAST ( :depreciationPeriodStartDate AS DATE)",
+        countQuery = "" +
+            "SELECT " +
+            "    id, " +
+            "   description, " +
+            "   devaluation_amount, " +
+            "   revaluation_date, " +
+            "   revaluation_reference_id, " +
+            "   time_of_creation, " +
+            "   revaluer_id, " +
+            "   created_by_id, " +
+            "   last_modified_by_id, " +
+            "   last_accessed_by_id, " +
+            "   effective_period_id, " +
+            "   revalued_asset_id " +
+            " FROM public.asset_revaluation ar" +
+            " LEFT JOIN depreciation_period dp ON ar.effective_period_id = dp.id " +
+            " WHERE revalued_asset_id = :revaluedAssetId " +
             " AND dp.start_date <= CAST ( :depreciationPeriodStartDate AS DATE)"
     )
     Optional<List<AssetRevaluation>> findAssetRevaluation(@Param("revaluedAssetId")Long disposedAssetId, @Param("depreciationPeriodStartDate") LocalDate depreciationPeriodStartDate);
