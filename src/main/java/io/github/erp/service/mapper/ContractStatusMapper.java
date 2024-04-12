@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark X No 6 (Jehoiada Series) Server ver 1.7.6
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.7
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.domain.ContractStatus;
 import io.github.erp.service.dto.ContractStatusDTO;
 import org.mapstruct.*;

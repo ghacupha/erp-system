@@ -1,7 +1,7 @@
 package io.github.erp.internal.framework;
 
 /*-
- * Erp System - Mark X No 6 (Jehoiada Series) Server ver 1.7.6
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.7
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
