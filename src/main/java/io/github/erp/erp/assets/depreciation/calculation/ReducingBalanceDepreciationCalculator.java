@@ -40,7 +40,7 @@ import static io.github.erp.erp.assets.depreciation.calculation.DepreciationUtil
 @Service("reducingBalanceDepreciationCalculator")
 public class ReducingBalanceDepreciationCalculator implements CalculatesDepreciation {
 
-    public DepreciationArtefact calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod, BigDecimal disposalAmount, BigDecimal writtenOffAmount) throws DepreciationRateNotProvidedException {
+    public DepreciationArtefact calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod, BigDecimal costAdjustment) throws DepreciationRateNotProvidedException {
 
         // opt out, no pain no pain
         if (depreciationMethod.getDepreciationType() != DepreciationTypes.DECLINING_BALANCE ) {
@@ -50,13 +50,13 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
         }
 
         // Calculate and return the depreciation for the specified period as before
-        return calculatedDepreciation(asset, period, assetCategory, disposalAmount, writtenOffAmount);
+        return calculatedDepreciation(asset, period, assetCategory, costAdjustment);
     }
 
     @NotNull
-    private DepreciationArtefact calculatedDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, BigDecimal disposalAmount, BigDecimal writtenOffAmount) throws DepreciationRateNotProvidedException {
+    private DepreciationArtefact calculatedDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, BigDecimal costAdjustment) throws DepreciationRateNotProvidedException {
 
-        BigDecimal netBookValue = asset.getAssetCost().subtract(disposalAmount).subtract(writtenOffAmount);
+        BigDecimal netBookValue = asset.getAssetCost().subtract(costAdjustment);
 
 
         BigDecimal depreciationRate = assetCategory.getDepreciationRateYearly();

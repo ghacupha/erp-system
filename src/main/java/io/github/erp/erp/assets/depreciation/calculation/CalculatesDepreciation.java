@@ -58,5 +58,5 @@ public interface CalculatesDepreciation {
      * @return
      * @throws DepreciationRateNotProvidedException
      */
-    DepreciationArtefact calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod, BigDecimal disposalAmount, BigDecimal writtenOffAmount) throws DepreciationRateNotProvidedException;
+    DepreciationArtefact calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod, BigDecimal costAdjustment) throws DepreciationRateNotProvidedException;
 }

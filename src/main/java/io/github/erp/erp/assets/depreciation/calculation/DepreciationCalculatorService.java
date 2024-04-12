@@ -42,13 +42,13 @@ public class DepreciationCalculatorService implements CalculatesDepreciation {
     }
 
     @Override
-    public DepreciationArtefact calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod, BigDecimal disposalAmount, BigDecimal writtenOffAmount) {
+    public DepreciationArtefact calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod, BigDecimal costAdjustment) {
 
         if (depreciationMethod.getDepreciationType() == DepreciationTypes.STRAIGHT_LINE) {
-            return straightLineDepreciationCalculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, disposalAmount, writtenOffAmount);
+            return straightLineDepreciationCalculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, costAdjustment);
         }
         if (depreciationMethod.getDepreciationType() == DepreciationTypes.DECLINING_BALANCE) {
-            return reducingBalanceDepreciationCalculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, disposalAmount, writtenOffAmount);
+            return reducingBalanceDepreciationCalculator.calculateDepreciation(asset, period, assetCategory, depreciationMethod, costAdjustment);
         }
         return DepreciationArtefact.builder()
             .depreciationAmount(BigDecimal.ZERO)

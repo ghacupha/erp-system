@@ -17,10 +17,10 @@ package io.github.erp.erp.assets.depreciation;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.AssetWriteOffInternal;
 import io.github.erp.domain.enumeration.DepreciationJobStatusType;
 import io.github.erp.domain.enumeration.DepreciationNoticeStatusType;
 import io.github.erp.domain.enumeration.DepreciationPeriodStatusTypes;
+import io.github.erp.erp.assets.depreciation.adjustments.AdjustedCostService;
 import io.github.erp.erp.assets.depreciation.calculation.DepreciationCalculatorService;
 import io.github.erp.erp.assets.depreciation.context.DepreciationAmountContext;
 import io.github.erp.erp.assets.depreciation.context.DepreciationJobContext;
@@ -41,6 +41,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,7 +49,6 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -93,6 +93,8 @@ public class BatchSequenceDepreciationService {
     private final InternalAssetDisposalService internalAssetDisposalService;
     private final InternalAssetWriteOffService internalAssetWriteOffService;
 
+    private final AdjustedCostService adjustedCostService;
+
     public BatchSequenceDepreciationService(
         DepreciationCalculatorService depreciationCalculatorService,
         DepreciationJobService depreciationJobService,
@@ -103,7 +105,12 @@ public class BatchSequenceDepreciationService {
         DepreciationMethodService depreciationMethodService,
         FiscalMonthService fiscalMonthService,
         DepreciationJobNoticeService depreciationJobNoticeService,
-        DepreciationBatchSequenceService batchSequenceService, DepreciationEntryMapper depreciationEntryMapper, DepreciationEntrySinkProcessor depreciationEntrySinkProcessor, InternalAssetDisposalService internalAssetDisposalService, InternalAssetWriteOffService internalAssetWriteOffService) {
+        DepreciationBatchSequenceService batchSequenceService,
+        DepreciationEntryMapper depreciationEntryMapper,
+        DepreciationEntrySinkProcessor depreciationEntrySinkProcessor,
+        InternalAssetDisposalService internalAssetDisposalService,
+        InternalAssetWriteOffService internalAssetWriteOffService,
+        @Qualifier("aggregateAssetCostAdjustmentService") AdjustedCostService adjustedCostService) {
         this.depreciationCalculatorService = depreciationCalculatorService;
         this.depreciationJobService = depreciationJobService;
         this.depreciationPeriodService = depreciationPeriodService;
@@ -118,6 +125,7 @@ public class BatchSequenceDepreciationService {
         this.depreciationEntrySinkProcessor = depreciationEntrySinkProcessor;
         this.internalAssetDisposalService = internalAssetDisposalService;
         this.internalAssetWriteOffService = internalAssetWriteOffService;
+        this.adjustedCostService = adjustedCostService;
     }
 
     /**
@@ -207,12 +215,10 @@ public class BatchSequenceDepreciationService {
                         depreciationMethodService.findOne(assetCategory.getDepreciationMethod().getId()).ifPresent(
                             depreciationMethod -> {
 
-                                final BigDecimal writtenOffAmount = updateWrittenOffAssetAmount(depreciationPeriod, assetId);
-
-                                final BigDecimal disposalAmount = updateDisposedAssetAmount(depreciationPeriod, assetId);
+                                final BigDecimal costAdjustment = adjustedCostService.getAssetAmountAdjustment(depreciationPeriod, assetId);
 
                                     // Calculate the depreciation amount using the DepreciationCalculator
-                                    DepreciationArtefact depreciationArtefact = depreciationCalculatorService.calculateDepreciation(assetRegistration, depreciationPeriod, assetCategory, depreciationMethod, disposalAmount, writtenOffAmount);
+                                    DepreciationArtefact depreciationArtefact = depreciationCalculatorService.calculateDepreciation(assetRegistration, depreciationPeriod, assetCategory, depreciationMethod, costAdjustment);
 
                                     recordDepreciationEntry(
                                         depreciationPeriod,
@@ -262,16 +268,6 @@ public class BatchSequenceDepreciationService {
             .ifPresent(disposalEvents -> disposalEvents.forEach(disposalEvent ->  disposalAmount[0] = disposalAmount[0].add(disposalEvent.getAssetCost())));
 
         return disposalAmount[0];
-    }
-
-    @NotNull
-    private BigDecimal updateWrittenOffAssetAmount (DepreciationPeriodDTO depreciationPeriod, String assetId) {
-        final BigDecimal[] writeOffAmount = {BigDecimal.ZERO};
-
-        internalAssetWriteOffService.findAssetWriteOffByIdAndPeriod(depreciationPeriod, Long.valueOf(assetId))
-            .ifPresent(writeOffEvents -> writeOffEvents.forEach(writeOffEvent ->  writeOffAmount[0] = writeOffAmount[0].add(writeOffEvent.getWriteOffAmount())));
-
-        return writeOffAmount[0];
     }
 
     // Send to Queue
