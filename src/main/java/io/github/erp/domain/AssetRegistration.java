@@ -28,6 +28,8 @@ import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A AssetRegistration.
@@ -35,7 +37,8 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "asset_registration")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "assetregistration")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "assetregistration-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
+// @org.springframework.data.elasticsearch.annotations.Document(indexName = "assetregistration")
 public class AssetRegistration implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,49 +47,62 @@ public class AssetRegistration implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
     @NotNull
     @Column(name = "asset_number", nullable = false, unique = true)
+    @Field(type = FieldType.Keyword)
     private String assetNumber;
 
     @NotNull
     @Column(name = "asset_tag", nullable = false)
+    @Field(type = FieldType.Keyword)
     private String assetTag;
 
     @Column(name = "asset_details")
+    @Field(type = FieldType.Text)
     private String assetDetails;
 
     @NotNull
     @Column(name = "asset_cost", precision = 21, scale = 2, nullable = false)
+    @Field(type = FieldType.Double)
     private BigDecimal assetCost;
 
     @Lob
     @Column(name = "comments")
+    @Field(type = FieldType.Byte, index = false)
     private byte[] comments;
 
     @Column(name = "comments_content_type")
+    @Field(type = FieldType.Text, index = false)
     private String commentsContentType;
 
     @Column(name = "model_number")
+    @Field(type = FieldType.Keyword)
     private String modelNumber;
 
     @Column(name = "serial_number")
+    @Field(type = FieldType.Keyword)
     private String serialNumber;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "remarks")
+    @Field(type = FieldType.Text)
     private String remarks;
 
     @NotNull
-    @Column(name = "capitalization_date", nullable = false)
+    @Column(name = "capitalization_date")
+    @Field(type = FieldType.Date)
     private LocalDate capitalizationDate;
 
     @Column(name = "historical_cost", precision = 21, scale = 2)
+    @Field(type = FieldType.Double)
     private BigDecimal historicalCost;
 
     @Column(name = "registration_date")
+    @Field(type = FieldType.Date)
     private LocalDate registrationDate;
 
     @ManyToMany
