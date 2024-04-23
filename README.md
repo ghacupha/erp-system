@@ -1,6 +1,7 @@
 # ERP System
 
 [![Documentation Status](https://readthedocs.org/projects/erp-system/badge/?version=latest)](https://erp-system.readthedocs.io/en/latest/?badge=latest)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
 This application was generated using JHipster 7.3.1, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v7.3.1](https://www.jhipster.tech/documentation-archive/v7.3.1).
 
