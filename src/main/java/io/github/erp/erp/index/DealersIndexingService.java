@@ -18,8 +18,10 @@ package io.github.erp.erp.index;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import com.google.common.collect.ImmutableList;
+import io.github.erp.domain.Dealer;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.erp.index.engine_v2.AbstractStartUpBatchedIndexService;
 import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.DealerSearchRepository;
 import io.github.erp.service.DealerService;
@@ -31,12 +33,13 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @Transactional
-public class DealersIndexingService  extends AbstractStartupRegisteredIndexService {
+public class DealersIndexingService  extends AbstractStartUpBatchedIndexService<Dealer> {
     private static final String TAG = "DealersIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
 
@@ -69,7 +72,9 @@ public class DealersIndexingService  extends AbstractStartupRegisteredIndexServi
         try {
             reindexLock.lockInterruptibly();
 
-            indexerSequence();
+            int batches = indexerSequence();
+
+            log.info("{} batches processed", batches);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -78,16 +83,13 @@ public class DealersIndexingService  extends AbstractStartupRegisteredIndexServi
         }
     }
 
-    private void indexerSequence() {
+    private int indexerSequence() {
         log.info("Initiating {} build sequence", TAG);
         long startup = System.currentTimeMillis();
-        this.searchRepository.saveAll(
-            service.findAll(Pageable.unpaged())
-                .stream()
-                .map(mapper::toEntity)
-                .filter(entity -> !searchRepository.existsById(entity.getId()))
-                .collect(ImmutableList.toImmutableList()));
+
         log.trace("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
+
+        return processInBatchesOf(100);
     }
 
     @Override
@@ -98,5 +100,20 @@ public class DealersIndexingService  extends AbstractStartupRegisteredIndexServi
         } else {
             log.trace("{} ReIndexer: Concurrent reindexing attempt", TAG);
         }
+    }
+
+    @Override
+    protected List<Dealer> getItemsForIndexing() {
+        return service.findAll(Pageable.unpaged())
+            .stream()
+            .map(mapper::toEntity)
+            .filter(entity -> !searchRepository.existsById(entity.getId()))
+            .collect(ImmutableList.toImmutableList());
+    }
+
+    @Override
+    protected void processBatchIndex(List<Dealer> batch) {
+
+        this.searchRepository.saveAll(batch);
     }
 }

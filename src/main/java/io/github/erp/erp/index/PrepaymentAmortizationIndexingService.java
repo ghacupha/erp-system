@@ -18,8 +18,10 @@ package io.github.erp.erp.index;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import com.google.common.collect.ImmutableList;
+import io.github.erp.domain.PrepaymentAmortization;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.erp.index.engine_v2.AbstractStartUpBatchedIndexService;
 import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.PrepaymentAmortizationSearchRepository;
 import io.github.erp.repository.search.PrepaymentMarshallingSearchRepository;
@@ -34,12 +36,13 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @Transactional
-public class PrepaymentAmortizationIndexingService extends AbstractStartupRegisteredIndexService {
+public class PrepaymentAmortizationIndexingService extends AbstractStartUpBatchedIndexService<PrepaymentAmortization> {
 
 
     private static final String TAG = "PrepaymentAmortizationIndex";
@@ -74,7 +77,9 @@ public class PrepaymentAmortizationIndexingService extends AbstractStartupRegist
         try {
             reindexLock.lockInterruptibly();
 
-            indexerSequence();
+            int batches = indexerSequence();
+
+            log.info("{} batches processed", batches);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -83,16 +88,12 @@ public class PrepaymentAmortizationIndexingService extends AbstractStartupRegist
         }
     }
 
-    private void indexerSequence() {
+    private int indexerSequence() {
         log.info("Initiating {} build sequence", TAG);
         long startup = System.currentTimeMillis();
-        this.searchRepository.saveAll(
-            service.findAll(Pageable.unpaged())
-                .stream()
-                .map(mapper::toEntity)
-                .filter(entity -> !searchRepository.existsById(entity.getId()))
-                .collect(ImmutableList.toImmutableList()));
         log.trace("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
+
+        return processInBatchesOf(300);
     }
 
     @Override
@@ -103,5 +104,20 @@ public class PrepaymentAmortizationIndexingService extends AbstractStartupRegist
         } else {
             log.trace("{} ReIndexer: Concurrent reindexing attempt", TAG);
         }
+    }
+
+    @Override
+    protected List<PrepaymentAmortization> getItemsForIndexing() {
+        return service.findAll(Pageable.unpaged())
+                .stream()
+                .map(mapper::toEntity)
+                .filter(entity -> !searchRepository.existsById(entity.getId()))
+                .collect(ImmutableList.toImmutableList());
+    }
+
+    @Override
+    protected void processBatchIndex(List<PrepaymentAmortization> batch) {
+
+        this.searchRepository.saveAll(batch);
     }
 }
