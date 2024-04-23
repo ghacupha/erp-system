@@ -2,7 +2,7 @@
   "name": "erp-system",
   "version": "1.7.7",
   "private": true,
-  "description": "Back-end for the ERP System: Mark X No 7 (Jehoiada Series) Server v1.7.7",
+  "description": "Back-end for the ERP System: Mark X No 7 (Jehoiada Series) Server v1.7.8",
   "license": "GPLv3",
   "scripts": {
     "app:start": "./mvnw",
