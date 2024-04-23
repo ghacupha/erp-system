@@ -18,8 +18,10 @@ package io.github.erp.erp.index;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import com.google.common.collect.ImmutableList;
+import io.github.erp.domain.WorkInProgressRegistration;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.erp.index.engine_v2.AbstractStartUpBatchedIndexService;
 import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.WorkInProgressRegistrationSearchRepository;
 import io.github.erp.service.WorkInProgressRegistrationService;
@@ -31,12 +33,13 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @Transactional
-public class WIPRegistrationIndexingService  extends AbstractStartupRegisteredIndexService {
+public class WIPRegistrationIndexingService  extends AbstractStartUpBatchedIndexService<WorkInProgressRegistration> {
 
     private static final String TAG = "WIPRegistrationIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
@@ -70,7 +73,9 @@ public class WIPRegistrationIndexingService  extends AbstractStartupRegisteredIn
         try {
             reindexLock.lockInterruptibly();
 
-            indexerSequence();
+            int batches = indexerSequence();
+
+            log.info("{} batches processed", batches);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -79,16 +84,13 @@ public class WIPRegistrationIndexingService  extends AbstractStartupRegisteredIn
         }
     }
 
-    private void indexerSequence() {
+    private int indexerSequence() {
         log.info("Initiating {} build sequence", TAG);
         long startup = System.currentTimeMillis();
-        this.searchRepository.saveAll(
-            service.findAll(Pageable.unpaged())
-                .stream()
-                .map(mapper::toEntity)
-                .filter(entity -> !searchRepository.existsById(entity.getId()))
-                .collect(ImmutableList.toImmutableList()));
+
         log.trace("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
+
+        return processInBatchesOf(300);
     }
 
     @Override
@@ -99,5 +101,20 @@ public class WIPRegistrationIndexingService  extends AbstractStartupRegisteredIn
         } else {
             log.trace("{} ReIndexer: Concurrent reindexing attempt", TAG);
         }
+    }
+
+    @Override
+    protected List<WorkInProgressRegistration> getItemsForIndexing() {
+        return service.findAll(Pageable.unpaged())
+                .stream()
+                .map(mapper::toEntity)
+                .filter(entity -> !searchRepository.existsById(entity.getId()))
+                .collect(ImmutableList.toImmutableList());
+    }
+
+    @Override
+    protected void processBatchIndex(List<WorkInProgressRegistration> batch) {
+
+        this.searchRepository.saveAll(batch);
     }
 }

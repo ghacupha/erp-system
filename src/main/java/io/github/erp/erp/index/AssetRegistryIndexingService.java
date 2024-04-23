@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableList;
 import io.github.erp.domain.AssetRegistration;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.erp.index.engine_v2.AbstractStartUpBatchedIndexService;
 import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.AssetRegistrationSearchRepository;
 import io.github.erp.service.AssetRegistrationService;
@@ -43,7 +44,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @Transactional
-public class AssetRegistryIndexingService extends AbstractStartupRegisteredIndexService {
+public class AssetRegistryIndexingService extends AbstractStartUpBatchedIndexService<AssetRegistration> {
 
     private static final String TAG = "Asset Registry Index";
     private static final Logger log = LoggerFactory.getLogger(TAG);
@@ -77,69 +78,15 @@ public class AssetRegistryIndexingService extends AbstractStartupRegisteredIndex
         try {
             reindexLock.lockInterruptibly();
 
-            indexerSequence();
+            int batches = indexerSequence();
+
+            log.info("{} batches processed", batches);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
             reindexLock.unlock();
         }
-    }
-
-    private void indexerSequence() {
-        log.info("Initiating {} build sequence", TAG);
-        long startup = System.currentTimeMillis();
-
-        List<AssetRegistration> indexList =
-            service.findAll(Pageable.unpaged())
-                .stream()
-                .map(mapper::toEntity)
-                .filter(entity -> !searchRepository.existsById(entity.getId()))
-                .collect(ImmutableList.toImmutableList());
-
-        this.processAssetsInBatches(indexList, 100);
-
-        log.trace("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
-    }
-
-
-    private int processAssetsInBatches(List<AssetRegistration> allIdxAssets, int preferredBatchSize) {
-
-        AtomicInteger count = new AtomicInteger(0);
-        AtomicInteger processedItems = new AtomicInteger(0);
-
-        int numberOfBatches = allIdxAssets.size() / preferredBatchSize + (allIdxAssets.size() % preferredBatchSize == 0 ? 0 : 1);
-
-        Disposable disposableBatchProcess = Observable.fromIterable(allIdxAssets)
-            .buffer(preferredBatchSize)
-            .subscribe(batchAssetIds -> {
-
-                count.incrementAndGet();
-                processedItems.addAndGet(batchAssetIds.size());
-
-                boolean isLastBatch = processedItems.get() >= allIdxAssets.size();
-
-                try {
-                    this.searchRepository.saveAll(batchAssetIds);
-                } catch (Exception e) {
-                    log.error("Exception encountered during persistence of batch # {}", count.get(), e);
-                    throw new RuntimeException("Error while saving batch # " + count.get() + " into idx", e);
-                }
-
-                log.debug("{} out of {} batches processed", count.get(), numberOfBatches);
-
-                if (isLastBatch) {
-                    log.debug("Final batch of {} items has been processed", processedItems.get());
-                }
-
-            });
-
-        if (count.get() >= numberOfBatches) {
-            log.debug("Disposing the batch sequence...");
-            disposableBatchProcess.dispose();
-        }
-
-        return 0;
     }
 
     @Override
@@ -150,5 +97,30 @@ public class AssetRegistryIndexingService extends AbstractStartupRegisteredIndex
         } else {
             log.trace("{} ReIndexer: Concurrent reindexing attempt", TAG);
         }
+    }
+
+    private int indexerSequence() {
+        log.info("Initiating {} build sequence", TAG);
+        long startup = System.currentTimeMillis();
+
+        log.trace("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
+
+        return this.processInBatchesOf(100);
+
+    }
+
+    @Override
+    protected List<AssetRegistration> getItemsForIndexing() {
+        return service.findAll(Pageable.unpaged())
+            .stream()
+            .map(mapper::toEntity)
+            .filter(entity -> !searchRepository.existsById(entity.getId()))
+            .collect(ImmutableList.toImmutableList());
+    }
+
+    @Override
+    protected void processBatchIndex(List<AssetRegistration> batch) {
+
+        this.searchRepository.saveAll(batch);
     }
 }
