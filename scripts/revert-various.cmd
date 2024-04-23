@@ -33,6 +33,7 @@ git checkout HEAD~1 src/main/java/io/github/erp/domain/FiscalQuarter.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/FiscalMonth.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/DepreciationPeriod.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/DepreciationJob.java
+git checkout HEAD~1 src/main/java/io/github/erp/domain/AssetRegistration.java
 REM git checkout HEAD~1 src/main/java/io/github/erp/repository/AssetRegistrationRepository.java
 REM git checkout HEAD~1 src/main/java/io/github/erp/repository/FiscalMonthRepository.java
 REM git checkout HEAD~1 src/main/java/io/github/erp/repository/FiscalMonthRepository.java
