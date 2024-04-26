@@ -120,7 +120,7 @@ public class InternalAssetGeneralAdjustmentServiceImpl implements InternalAssetG
         internalApplicationUserDetailService.getCurrentApplicationUser().ifPresent(appUser -> {
             dto.ifPresent(adjustment -> {
                 adjustment.setLastAccessedBy(applicationUserMapper.toDto(appUser));
-                partialUpdate(adjustment);
+                save(adjustment);
             });
         });
         return dto;

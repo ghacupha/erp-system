@@ -100,7 +100,7 @@ public class AssetGeneralAdjustmentResourceProd {
         }
         AssetGeneralAdjustmentDTO result = assetGeneralAdjustmentService.save(assetGeneralAdjustmentDTO);
         return ResponseEntity
-            .created(new URI("/api/asset-general-adjustments/" + result.getId()))
+            .created(new URI("/api/fixed-asset/asset-general-adjustments/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
