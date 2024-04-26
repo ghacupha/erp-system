@@ -121,4 +121,11 @@ public interface InternalAssetRegistrationRepository
             "  a.capitalization_date <= :capitalizationDate "
     )
     BigDecimal getInitialAssetCostByCapitalizationDateBefore(@Param("capitalizationDate") LocalDate capitalizationDate);
+
+    @Query(
+        nativeQuery = true,
+        value = "SELECT CAST(asset_number AS BIGINT) FROM public.asset_registration",
+        countQuery = "SELECT asset_number FROM public.asset_registration"
+    )
+    List<Long> findAllIds();
 }

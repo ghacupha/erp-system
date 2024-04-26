@@ -32,33 +32,33 @@ public class NextIntegerFillerTest {
 
     @Test
     public void testFillNext() {
-        List<Integer> numbers = new ArrayList<>();
-        numbers.add(3);
-        numbers.add(6);
-        numbers.add(1);
-        numbers.add(4);
+        List<Long> numbers = new ArrayList<>();
+        numbers.add(3L);
+        numbers.add(6L);
+        numbers.add(1L);
+        numbers.add(4L);
 
-        int nextNumber = NextIntegerFiller.fillNext(numbers);
+        long nextNumber = NextIntegerFiller.fillNext(numbers);
         assertEquals(2, nextNumber, "Next number to fill should be 2");
     }
 
     @Test
     public void testFillNextWithEmptyList() {
-        List<Integer> numbers = new ArrayList<>();
+        List<Long> numbers = new ArrayList<>();
 
-        int nextNumber = NextIntegerFiller.fillNext(numbers);
+        long nextNumber = NextIntegerFiller.fillNext(numbers);
         assertEquals(0, nextNumber, "Next number to fill should be 0 for an empty list");
     }
 
     @Test
     public void testFillNextWithConsecutiveNumbers() {
-        List<Integer> numbers = new ArrayList<>();
-        numbers.add(1);
-        numbers.add(2);
-        numbers.add(3);
-        numbers.add(4);
+        List<Long> numbers = new ArrayList<>();
+        numbers.add(1L);
+        numbers.add(2L);
+        numbers.add(3L);
+        numbers.add(4L);
 
-        int nextNumber = NextIntegerFiller.fillNext(numbers);
+        long nextNumber = NextIntegerFiller.fillNext(numbers);
         assertEquals(5, nextNumber, "Next number to fill should be 5 for consecutive numbers");
     }
 }

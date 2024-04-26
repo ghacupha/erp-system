@@ -7,7 +7,7 @@
 
     <groupId>io.github.erp</groupId>
     <artifactId>erp-system</artifactId>
-    <version>1.7.8</version>
+    <version>1.7.9</version>
     <packaging>jar</packaging>
     <name>Erp System</name>
     <description>${ERP_SYSTEM_DEPLOYMENT_TITLE}</description>
@@ -617,7 +617,7 @@
                         <exclude>src/main/resources/**</exclude>
                         <!--// TODO review license for production-->
                     </excludes>
-                    <header>com/mycila/maven/plugin/license/templates/GPL-3.txt</header>
+                    <header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
                     <properties>
                         <owner>${project.owner}</owner>
                         <email>${owner.email}</email>
