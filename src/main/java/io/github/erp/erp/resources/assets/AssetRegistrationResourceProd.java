@@ -238,4 +238,16 @@ public class AssetRegistrationResourceProd {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
+
+    /**
+     * {@code GET  /prepayment-accounts/next/catalogue-number} : get the next catalogue number.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the next number code in body.
+     */
+    @GetMapping("/asset-registrations/next/asset-number")
+    public ResponseEntity<Long> getNextAssetNumber() {
+        log.debug("REST request to fetch the next asset number");
+
+        return ResponseEntity.ok().body(assetRegistrationService.calculateNextAssetNumber());
+    }
 }

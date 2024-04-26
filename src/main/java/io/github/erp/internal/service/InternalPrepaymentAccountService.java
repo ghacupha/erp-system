@@ -17,84 +17,76 @@ package io.github.erp.internal.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.service.dto.AssetRegistrationDTO;
+import io.github.erp.service.dto.PrepaymentAccountDTO;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-public interface InternalAssetRegistrationService {
-
+/**
+ * Service Interface for managing {@link io.github.erp.domain.PrepaymentAccount}.
+ */
+public interface InternalPrepaymentAccountService {
     /**
-     * Save a assetRegistration.
+     * Save a prepaymentAccount.
      *
-     * @param assetRegistrationDTO the entity to save.
+     * @param prepaymentAccountDTO the entity to save.
      * @return the persisted entity.
      */
-    AssetRegistrationDTO save(AssetRegistrationDTO assetRegistrationDTO);
+    PrepaymentAccountDTO save(PrepaymentAccountDTO prepaymentAccountDTO);
 
     /**
-     * Partially updates a assetRegistration.
+     * Partially updates a prepaymentAccount.
      *
-     * @param assetRegistrationDTO the entity to update partially.
+     * @param prepaymentAccountDTO the entity to update partially.
      * @return the persisted entity.
      */
-    Optional<AssetRegistrationDTO> partialUpdate(AssetRegistrationDTO assetRegistrationDTO);
+    Optional<PrepaymentAccountDTO> partialUpdate(PrepaymentAccountDTO prepaymentAccountDTO);
 
     /**
-     * Get all the assetRegistrations.
+     * Get all the prepaymentAccounts.
      *
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<AssetRegistrationDTO> findAll(Pageable pageable);
+    Page<PrepaymentAccountDTO> findAll(Pageable pageable);
 
     /**
-     * Get all the assetRegistrations with eager load of many-to-many relationships.
+     * Calculate the next catalogue number.
+     *
+     * @return the next catalogue number
+     */
+    Long calculateNextCatalogueNumber();
+
+    /**
+     * Get all the prepaymentAccounts with eager load of many-to-many relationships.
      *
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<AssetRegistrationDTO> findAllWithEagerRelationships(Pageable pageable);
+    Page<PrepaymentAccountDTO> findAllWithEagerRelationships(Pageable pageable);
 
     /**
-     * Get the "id" assetRegistration.
+     * Get the "id" prepaymentAccount.
      *
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<AssetRegistrationDTO> findOne(Long id);
+    Optional<PrepaymentAccountDTO> findOne(Long id);
 
     /**
-     * Delete the "id" assetRegistration.
+     * Delete the "id" prepaymentAccount.
      *
      * @param id the id of the entity.
      */
     void delete(Long id);
 
     /**
-     * Search for the assetRegistration corresponding to the query.
+     * Search for the prepaymentAccount corresponding to the query.
      *
      * @param query the query of the search.
      *
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<AssetRegistrationDTO> search(String query, Pageable pageable);
-
-    /**
-     *
-     * @param capitalizationDate
-     * @return
-     */
-    List<AssetRegistrationDTO> findByCapitalizationDateBefore(LocalDate capitalizationDate);
-
-    /**
-     * Calculate the next asset-number.
-     *
-     * @return the next catalogue number
-     */
-    Long calculateNextAssetNumber();
+    Page<PrepaymentAccountDTO> search(String query, Pageable pageable);
 }

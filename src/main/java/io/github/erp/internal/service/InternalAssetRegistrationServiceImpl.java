@@ -19,6 +19,7 @@ package io.github.erp.internal.service;
  */
 import io.github.erp.domain.AssetRegistration;
 import io.github.erp.internal.repository.InternalAssetRegistrationRepository;
+import io.github.erp.internal.utilities.NextIntegerFiller;
 import io.github.erp.repository.search.AssetRegistrationSearchRepository;
 import io.github.erp.service.dto.AssetRegistrationDTO;
 import io.github.erp.service.impl.AssetRegistrationServiceImpl;
@@ -125,5 +126,12 @@ public class InternalAssetRegistrationServiceImpl implements InternalAssetRegist
 
         return internalAssetRegistrationRepository.findAllByCapitalizationDateBefore(capitalizationDate)
             .stream().map(assetRegistrationMapper::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long calculateNextAssetNumber() {
+        log.debug("Request to get next asset number");
+        return NextIntegerFiller.fillNext(assetRegistrationRepository.findAllIds());
     }
 }

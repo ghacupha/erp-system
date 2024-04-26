@@ -18,6 +18,7 @@ package io.github.erp.erp.resources.prepayments;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import com.hazelcast.map.IMap;
+import io.github.erp.internal.service.InternalPrepaymentAccountService;
 import io.github.erp.repository.PrepaymentAccountRepository;
 import io.github.erp.service.PrepaymentAccountQueryService;
 import io.github.erp.service.PrepaymentAccountService;
@@ -49,7 +50,6 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController("prepaymentAccountResourceProd")
 @RequestMapping("/api/prepayments")
-@Deprecated
 public class PrepaymentAccountResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(PrepaymentAccountResourceProd.class);
@@ -59,7 +59,7 @@ public class PrepaymentAccountResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final PrepaymentAccountService prepaymentAccountService;
+    private final InternalPrepaymentAccountService prepaymentAccountService;
 
     private final PrepaymentAccountRepository prepaymentAccountRepository;
 
@@ -68,7 +68,7 @@ public class PrepaymentAccountResourceProd {
     public final IMap<String, String> prepaymentsReportCache;
 
     public PrepaymentAccountResourceProd(
-        PrepaymentAccountService prepaymentAccountService,
+        InternalPrepaymentAccountService prepaymentAccountService,
         PrepaymentAccountRepository prepaymentAccountRepository,
         PrepaymentAccountQueryService prepaymentAccountQueryService,
         IMap<String, String> prepaymentsReportCache) {
@@ -205,6 +205,18 @@ public class PrepaymentAccountResourceProd {
     public ResponseEntity<Long> countPrepaymentAccounts(PrepaymentAccountCriteria criteria) {
         log.debug("REST request to count PrepaymentAccounts by criteria: {}", criteria);
         return ResponseEntity.ok().body(prepaymentAccountQueryService.countByCriteria(criteria));
+    }
+
+    /**
+     * {@code GET  /prepayment-accounts/next/catalogue-number} : get the next catalogue number.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the next number code in body.
+     */
+    @GetMapping("/prepayment-accounts/next/catalogue-number")
+    public ResponseEntity<Long> getNextCatalogueNumber() {
+        log.debug("REST request to fetch the next catalogue number");
+
+        return ResponseEntity.ok().body(prepaymentAccountService.calculateNextCatalogueNumber());
     }
 
     /**
