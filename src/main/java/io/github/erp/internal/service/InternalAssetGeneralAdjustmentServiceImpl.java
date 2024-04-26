@@ -19,9 +19,10 @@ package io.github.erp.internal.service;
  */
 import io.github.erp.domain.AssetGeneralAdjustment;
 import io.github.erp.internal.repository.InternalAssetGeneralAdjustmentRepository;
-import io.github.erp.repository.AssetGeneralAdjustmentRepository;
+import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.repository.search.AssetGeneralAdjustmentSearchRepository;
 import io.github.erp.service.dto.AssetGeneralAdjustmentDTO;
+import io.github.erp.service.mapper.ApplicationUserMapper;
 import io.github.erp.service.mapper.AssetGeneralAdjustmentMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,19 +50,32 @@ public class InternalAssetGeneralAdjustmentServiceImpl implements InternalAssetG
 
     private final AssetGeneralAdjustmentSearchRepository assetGeneralAdjustmentSearchRepository;
 
+    private final InternalApplicationUserDetailService internalApplicationUserDetailService;
+
+    private final ApplicationUserMapper applicationUserMapper;
+
     public InternalAssetGeneralAdjustmentServiceImpl(
         InternalAssetGeneralAdjustmentRepository assetGeneralAdjustmentRepository,
         AssetGeneralAdjustmentMapper assetGeneralAdjustmentMapper,
-        AssetGeneralAdjustmentSearchRepository assetGeneralAdjustmentSearchRepository
-    ) {
+        AssetGeneralAdjustmentSearchRepository assetGeneralAdjustmentSearchRepository,
+        InternalApplicationUserDetailService internalApplicationUserDetailService, ApplicationUserMapper applicationUserMapper) {
         this.assetGeneralAdjustmentRepository = assetGeneralAdjustmentRepository;
         this.assetGeneralAdjustmentMapper = assetGeneralAdjustmentMapper;
         this.assetGeneralAdjustmentSearchRepository = assetGeneralAdjustmentSearchRepository;
+        this.internalApplicationUserDetailService = internalApplicationUserDetailService;
+        this.applicationUserMapper = applicationUserMapper;
     }
 
     @Override
     public AssetGeneralAdjustmentDTO save(AssetGeneralAdjustmentDTO assetGeneralAdjustmentDTO) {
         log.debug("Request to save AssetGeneralAdjustment : {}", assetGeneralAdjustmentDTO);
+        internalApplicationUserDetailService.getCurrentApplicationUser().ifPresent(appUser -> {
+            assetGeneralAdjustmentDTO.setCreatedBy(applicationUserMapper.toDto(appUser));
+            if (assetGeneralAdjustmentDTO.getId() != null ) {
+                assetGeneralAdjustmentDTO.setLastModifiedBy(applicationUserMapper.toDto(appUser));
+            }
+        });
+
         AssetGeneralAdjustment assetGeneralAdjustment = assetGeneralAdjustmentMapper.toEntity(assetGeneralAdjustmentDTO);
         assetGeneralAdjustment = assetGeneralAdjustmentRepository.save(assetGeneralAdjustment);
         AssetGeneralAdjustmentDTO result = assetGeneralAdjustmentMapper.toDto(assetGeneralAdjustment);
@@ -99,9 +113,20 @@ public class InternalAssetGeneralAdjustmentServiceImpl implements InternalAssetG
     @Override
     @Transactional(readOnly = true)
     public Optional<AssetGeneralAdjustmentDTO> findOne(Long id) {
+
         log.debug("Request to get AssetGeneralAdjustment : {}", id);
-        return assetGeneralAdjustmentRepository.findById(id).map(assetGeneralAdjustmentMapper::toDto);
+
+        Optional<AssetGeneralAdjustmentDTO> dto = assetGeneralAdjustmentRepository.findById(id).map(assetGeneralAdjustmentMapper::toDto);
+        internalApplicationUserDetailService.getCurrentApplicationUser().ifPresent(appUser -> {
+            dto.ifPresent(adjustment -> {
+                adjustment.setLastAccessedBy(applicationUserMapper.toDto(appUser));
+                partialUpdate(adjustment);
+            });
+        });
+        return dto;
     }
+
+
 
     @Override
     public void delete(Long id) {
