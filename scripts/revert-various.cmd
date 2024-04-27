@@ -34,13 +34,4 @@ git checkout HEAD~1 src/main/java/io/github/erp/domain/FiscalMonth.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/DepreciationPeriod.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/DepreciationJob.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/AssetRegistration.java
-REM git checkout HEAD~1 src/main/java/io/github/erp/repository/AssetRegistrationRepository.java
-REM git checkout HEAD~1 src/main/java/io/github/erp/repository/FiscalMonthRepository.java
-REM git checkout HEAD~1 src/main/java/io/github/erp/repository/FiscalMonthRepository.java
-REM git checkout HEAD~1 src/main/java/io/github/erp/repository/FiscalYearRepository.java
-REM git checkout HEAD~1 src/main/java/io/github/erp/repository/PrepaymentCompilationRequestRepository.java
-REM git checkout HEAD~1 src/main/java/io/github/erp/repository/SecurityClearanceRepository.java
-REM git checkout HEAD~1 src/main/java/io/github/erp/repository/DepreciationJobNoticeRepository.java
-REM git checkout HEAD~1 src/main/java/io/github/erp/repository/DepreciationJobRepository.java
-REM git checkout HEAD~1 src/main/java/io/github/erp/repository/ContractMetadataRepository.java
 git checkout HEAD~1 src/main/resources/config/liquibase/changelog/

@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.DepreciationPeriod;
 import io.github.erp.service.dto.DepreciationPeriodDTO;
 import org.mapstruct.*;
@@ -35,17 +36,17 @@ public interface DepreciationPeriodMapper extends EntityMapper<DepreciationPerio
     @Mapping(target = "id", source = "id")
     DepreciationPeriodDTO toDtoId(DepreciationPeriod depreciationPeriod);
 
-    @Named("periodCode")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "periodCode", source = "periodCode")
-    DepreciationPeriodDTO toDtoPeriodCode(DepreciationPeriod depreciationPeriod);
-
     @Named("endDate")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "endDate", source = "endDate")
     DepreciationPeriodDTO toDtoEndDate(DepreciationPeriod depreciationPeriod);
+
+    @Named("periodCode")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "periodCode", source = "periodCode")
+    DepreciationPeriodDTO toDtoPeriodCode(DepreciationPeriod depreciationPeriod);
 
     @Named("startDate")
     @BeanMapping(ignoreByDefault = true)
