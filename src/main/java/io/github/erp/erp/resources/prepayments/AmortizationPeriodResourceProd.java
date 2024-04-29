@@ -18,7 +18,7 @@ package io.github.erp.erp.resources.prepayments;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.internal.service.InternalAmortizationPeriodService;
+import io.github.erp.internal.service.prepayments.InternalAmortizationPeriodService;
 import io.github.erp.repository.AmortizationPeriodRepository;
 import io.github.erp.service.AmortizationPeriodQueryService;
 import io.github.erp.service.criteria.AmortizationPeriodCriteria;

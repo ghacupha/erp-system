@@ -24,7 +24,9 @@ import io.github.erp.repository.PrepaymentAccountRepository;
 import io.github.erp.repository.PrepaymentAmortizationRepository;
 import io.github.erp.repository.PrepaymentMarshallingRepository;
 import io.github.erp.repository.search.PrepaymentAmortizationSearchRepository;
+import io.github.erp.service.dto.AmortizationPeriodDTO;
 import io.github.erp.service.dto.PrepaymentCompilationRequestDTO;
+import io.github.erp.service.mapper.AmortizationPeriodMapper;
 import io.github.erp.service.mapper.PrepaymentCompilationRequestMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +39,8 @@ import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 /**
@@ -59,6 +63,8 @@ public class PrepaymentCompilationServiceImpl implements PrepaymentCompilationSe
     private final PrepaymentCompilationCompleteSequence prepaymentCompilationCompleteSequence;
     private final PrepaymentAmortizationRepository prepaymentAmortizationRepository;
     private final PrepaymentAmortizationSearchRepository prepaymentAmortizationSearchRepository;
+    private final InternalAmortizationPeriodService internalAmortizationPeriodService;
+    private final AmortizationPeriodMapper amortizationPeriodMapper;
 
     public PrepaymentCompilationServiceImpl(
         PrepaymentMarshallingRepository prepaymentMarshallingRepository,
@@ -67,7 +73,9 @@ public class PrepaymentCompilationServiceImpl implements PrepaymentCompilationSe
         PrepaymentCompilationRequestMapper prepaymentCompilationRequestMapper,
         PrepaymentCompilationCompleteSequence prepaymentCompilationCompleteSequence,
         PrepaymentAmortizationRepository prepaymentAmortizationRepository,
-        PrepaymentAmortizationSearchRepository prepaymentAmortizationSearchRepository) {
+        PrepaymentAmortizationSearchRepository prepaymentAmortizationSearchRepository,
+        InternalAmortizationPeriodService internalAmortizationPeriodService,
+        AmortizationPeriodMapper amortizationPeriodMapper) {
         this.prepaymentMarshallingRepository = prepaymentMarshallingRepository;
         this.prepaymentAccountRepository = prepaymentAccountRepository;
         this.prepaymentCompilationRequestMapper = prepaymentCompilationRequestMapper;
@@ -75,6 +83,8 @@ public class PrepaymentCompilationServiceImpl implements PrepaymentCompilationSe
         this.prepaymentAmortizationSearchRepository = prepaymentAmortizationSearchRepository;
         this.fiscalMonthRepository = fiscalMonthRepository;
         this.prepaymentCompilationCompleteSequence = prepaymentCompilationCompleteSequence;
+        this.internalAmortizationPeriodService = internalAmortizationPeriodService;
+        this.amortizationPeriodMapper = amortizationPeriodMapper;
     }
 
     @Override
@@ -113,22 +123,37 @@ public class PrepaymentCompilationServiceImpl implements PrepaymentCompilationSe
 
             FiscalMonth fiscalMonth = incrementFiscalMonth(marshalItem, period);
 
-            PrepaymentAmortization dto = new PrepaymentAmortization();
-            dto.setPrepaymentAmount(prepaymentAnon.account.getPrepaymentAmount().divide(BigDecimal.valueOf(marshalItem.getAmortizationPeriods()), RoundingMode.HALF_EVEN));
-            dto.setFiscalMonth(fiscalMonth);
-            // TODO dto.setAmortizationPeriod(incrementAmortizationPeriod(marshalItem, period));
-            dto.setPrepaymentCompilationRequest(prepaymentCompilationRequest);
-            dto.setPrepaymentAccount(prepaymentAnon.account);
-            dto.setDebitAccount(prepaymentAnon.account.getTransferAccount());
-            dto.setCreditAccount(prepaymentAnon.account.getDebitAccount());
-            dto.setDescription(prepaymentAnon.account.getParticulars());
-            dto.setSettlementCurrency(prepaymentAnon.account.getSettlementCurrency());
-            dto.setInactive(false);
+            PrepaymentAmortization prepaymentAmortization = new PrepaymentAmortization();
+            prepaymentAmortization.setPrepaymentAmount(prepaymentAnon.account.getPrepaymentAmount().divide(BigDecimal.valueOf(marshalItem.getAmortizationPeriods()), RoundingMode.HALF_EVEN));
+            prepaymentAmortization.setFiscalMonth(fiscalMonth);
+            prepaymentAmortization.setAmortizationPeriod(incrementAmortizationPeriod(marshalItem, period));
+            prepaymentAmortization.setPrepaymentCompilationRequest(prepaymentCompilationRequest);
+            prepaymentAmortization.setPrepaymentAccount(prepaymentAnon.account);
+            prepaymentAmortization.setDebitAccount(prepaymentAnon.account.getTransferAccount());
+            prepaymentAmortization.setCreditAccount(prepaymentAnon.account.getDebitAccount());
+            prepaymentAmortization.setDescription(prepaymentAnon.account.getParticulars());
+            prepaymentAmortization.setSettlementCurrency(prepaymentAnon.account.getSettlementCurrency());
+            prepaymentAmortization.amortizationIdentifier(UUID.randomUUID());
+            prepaymentAmortization.setInactive(false);
 
-            amortizationDTOList.add(dto);
+            amortizationDTOList.add(prepaymentAmortization);
         }
 
         return amortizationDTOList.stream();
+    }
+
+    private AmortizationPeriod incrementAmortizationPeriod(PrepaymentMarshalling marshalling, int period) {
+
+        long firstAmortizationPeriodId = marshalling.getFirstAmortizationPeriod().getId();
+
+        Optional<AmortizationPeriodDTO> nextPeriod =
+            internalAmortizationPeriodService.getNextAmortizationPeriod(firstAmortizationPeriodId, period);
+
+        if (nextPeriod.isPresent()) {
+            return amortizationPeriodMapper.toEntity(nextPeriod.get());
+        } else {
+            throw new AmortizationPeriodNotFoundException("No amortization-period found in the nth sequence after instance id : " + firstAmortizationPeriodId);
+        }
     }
 
     /**
