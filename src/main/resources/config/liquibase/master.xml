@@ -467,6 +467,7 @@
     <include file="config/liquibase/changelog/20240412085640_added_entity_constraints_AssetGeneralAdjustment.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240427185244_added_entity_constraints_AmortizationPeriod.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240429060847_added_first_amortization_period_id.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240429073351_added_amortization_period.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

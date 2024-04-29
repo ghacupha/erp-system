@@ -44,10 +44,7 @@ import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static io.github.erp.web.rest.TestUtil.sameNumber;
@@ -79,6 +76,9 @@ public class PrepaymentAmortizationResourceIT {
 
     private static final Boolean DEFAULT_INACTIVE = false;
     private static final Boolean UPDATED_INACTIVE = true;
+
+    private static final UUID DEFAULT_AMORTIZATION_IDENTIFIER = UUID.randomUUID();
+    private static final UUID UPDATED_AMORTIZATION_IDENTIFIER = UUID.randomUUID();
 
     private static final String ENTITY_API_URL = "/api/prepayments/prepayment-amortizations";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -126,7 +126,8 @@ public class PrepaymentAmortizationResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .prepaymentPeriod(DEFAULT_PREPAYMENT_PERIOD)
             .prepaymentAmount(DEFAULT_PREPAYMENT_AMOUNT)
-            .inactive(DEFAULT_INACTIVE);
+            .inactive(DEFAULT_INACTIVE)
+            .amortizationIdentifier(DEFAULT_AMORTIZATION_IDENTIFIER);
         // Add required entity
         FiscalMonth fiscalMonth;
         if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
@@ -147,6 +148,16 @@ public class PrepaymentAmortizationResourceIT {
             prepaymentCompilationRequest = TestUtil.findAll(em, PrepaymentCompilationRequest.class).get(0);
         }
         prepaymentAmortization.setPrepaymentCompilationRequest(prepaymentCompilationRequest);
+        // Add required entity
+        AmortizationPeriod amortizationPeriod;
+        if (TestUtil.findAll(em, AmortizationPeriod.class).isEmpty()) {
+            amortizationPeriod = AmortizationPeriodResourceIT.createEntity(em);
+            em.persist(amortizationPeriod);
+            em.flush();
+        } else {
+            amortizationPeriod = TestUtil.findAll(em, AmortizationPeriod.class).get(0);
+        }
+        prepaymentAmortization.setAmortizationPeriod(amortizationPeriod);
         return prepaymentAmortization;
     }
 
@@ -161,7 +172,8 @@ public class PrepaymentAmortizationResourceIT {
             .description(UPDATED_DESCRIPTION)
             .prepaymentPeriod(UPDATED_PREPAYMENT_PERIOD)
             .prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT)
-            .inactive(UPDATED_INACTIVE);
+            .inactive(UPDATED_INACTIVE)
+            .amortizationIdentifier(UPDATED_AMORTIZATION_IDENTIFIER);
         // Add required entity
         FiscalMonth fiscalMonth;
         if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
@@ -182,6 +194,16 @@ public class PrepaymentAmortizationResourceIT {
             prepaymentCompilationRequest = TestUtil.findAll(em, PrepaymentCompilationRequest.class).get(0);
         }
         prepaymentAmortization.setPrepaymentCompilationRequest(prepaymentCompilationRequest);
+        // Add required entity
+        AmortizationPeriod amortizationPeriod;
+        if (TestUtil.findAll(em, AmortizationPeriod.class).isEmpty()) {
+            amortizationPeriod = AmortizationPeriodResourceIT.createUpdatedEntity(em);
+            em.persist(amortizationPeriod);
+            em.flush();
+        } else {
+            amortizationPeriod = TestUtil.findAll(em, AmortizationPeriod.class).get(0);
+        }
+        prepaymentAmortization.setAmortizationPeriod(amortizationPeriod);
         return prepaymentAmortization;
     }
 
@@ -212,6 +234,7 @@ public class PrepaymentAmortizationResourceIT {
         assertThat(testPrepaymentAmortization.getPrepaymentPeriod()).isEqualTo(DEFAULT_PREPAYMENT_PERIOD);
         assertThat(testPrepaymentAmortization.getPrepaymentAmount()).isEqualByComparingTo(DEFAULT_PREPAYMENT_AMOUNT);
         assertThat(testPrepaymentAmortization.getInactive()).isEqualTo(DEFAULT_INACTIVE);
+        assertThat(testPrepaymentAmortization.getAmortizationIdentifier()).isEqualTo(DEFAULT_AMORTIZATION_IDENTIFIER);
 
         // Validate the PrepaymentAmortization in Elasticsearch
         verify(mockPrepaymentAmortizationSearchRepository, times(1)).save(testPrepaymentAmortization);
@@ -258,7 +281,8 @@ public class PrepaymentAmortizationResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].prepaymentPeriod").value(hasItem(DEFAULT_PREPAYMENT_PERIOD.toString())))
             .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))))
-            .andExpect(jsonPath("$.[*].inactive").value(hasItem(DEFAULT_INACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].inactive").value(hasItem(DEFAULT_INACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].amortizationIdentifier").value(hasItem(DEFAULT_AMORTIZATION_IDENTIFIER.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -294,7 +318,8 @@ public class PrepaymentAmortizationResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.prepaymentPeriod").value(DEFAULT_PREPAYMENT_PERIOD.toString()))
             .andExpect(jsonPath("$.prepaymentAmount").value(sameNumber(DEFAULT_PREPAYMENT_AMOUNT)))
-            .andExpect(jsonPath("$.inactive").value(DEFAULT_INACTIVE.booleanValue()));
+            .andExpect(jsonPath("$.inactive").value(DEFAULT_INACTIVE.booleanValue()))
+            .andExpect(jsonPath("$.amortizationIdentifier").value(DEFAULT_AMORTIZATION_IDENTIFIER.toString()));
     }
 
     @Test
@@ -655,6 +680,60 @@ public class PrepaymentAmortizationResourceIT {
 
     @Test
     @Transactional
+    void getAllPrepaymentAmortizationsByAmortizationIdentifierIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAmortizationRepository.saveAndFlush(prepaymentAmortization);
+
+        // Get all the prepaymentAmortizationList where amortizationIdentifier equals to DEFAULT_AMORTIZATION_IDENTIFIER
+        defaultPrepaymentAmortizationShouldBeFound("amortizationIdentifier.equals=" + DEFAULT_AMORTIZATION_IDENTIFIER);
+
+        // Get all the prepaymentAmortizationList where amortizationIdentifier equals to UPDATED_AMORTIZATION_IDENTIFIER
+        defaultPrepaymentAmortizationShouldNotBeFound("amortizationIdentifier.equals=" + UPDATED_AMORTIZATION_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAmortizationsByAmortizationIdentifierIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAmortizationRepository.saveAndFlush(prepaymentAmortization);
+
+        // Get all the prepaymentAmortizationList where amortizationIdentifier not equals to DEFAULT_AMORTIZATION_IDENTIFIER
+        defaultPrepaymentAmortizationShouldNotBeFound("amortizationIdentifier.notEquals=" + DEFAULT_AMORTIZATION_IDENTIFIER);
+
+        // Get all the prepaymentAmortizationList where amortizationIdentifier not equals to UPDATED_AMORTIZATION_IDENTIFIER
+        defaultPrepaymentAmortizationShouldBeFound("amortizationIdentifier.notEquals=" + UPDATED_AMORTIZATION_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAmortizationsByAmortizationIdentifierIsInShouldWork() throws Exception {
+        // Initialize the database
+        prepaymentAmortizationRepository.saveAndFlush(prepaymentAmortization);
+
+        // Get all the prepaymentAmortizationList where amortizationIdentifier in DEFAULT_AMORTIZATION_IDENTIFIER or UPDATED_AMORTIZATION_IDENTIFIER
+        defaultPrepaymentAmortizationShouldBeFound(
+            "amortizationIdentifier.in=" + DEFAULT_AMORTIZATION_IDENTIFIER + "," + UPDATED_AMORTIZATION_IDENTIFIER
+        );
+
+        // Get all the prepaymentAmortizationList where amortizationIdentifier equals to UPDATED_AMORTIZATION_IDENTIFIER
+        defaultPrepaymentAmortizationShouldNotBeFound("amortizationIdentifier.in=" + UPDATED_AMORTIZATION_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAmortizationsByAmortizationIdentifierIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        prepaymentAmortizationRepository.saveAndFlush(prepaymentAmortization);
+
+        // Get all the prepaymentAmortizationList where amortizationIdentifier is not null
+        defaultPrepaymentAmortizationShouldBeFound("amortizationIdentifier.specified=true");
+
+        // Get all the prepaymentAmortizationList where amortizationIdentifier is null
+        defaultPrepaymentAmortizationShouldNotBeFound("amortizationIdentifier.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllPrepaymentAmortizationsByPrepaymentAccountIsEqualToSomething() throws Exception {
         // Initialize the database
         prepaymentAmortizationRepository.saveAndFlush(prepaymentAmortization);
@@ -835,6 +914,32 @@ public class PrepaymentAmortizationResourceIT {
         defaultPrepaymentAmortizationShouldNotBeFound("prepaymentCompilationRequestId.equals=" + (prepaymentCompilationRequestId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllPrepaymentAmortizationsByAmortizationPeriodIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAmortizationRepository.saveAndFlush(prepaymentAmortization);
+        AmortizationPeriod amortizationPeriod;
+        if (TestUtil.findAll(em, AmortizationPeriod.class).isEmpty()) {
+            amortizationPeriod = AmortizationPeriodResourceIT.createEntity(em);
+            em.persist(amortizationPeriod);
+            em.flush();
+        } else {
+            amortizationPeriod = TestUtil.findAll(em, AmortizationPeriod.class).get(0);
+        }
+        em.persist(amortizationPeriod);
+        em.flush();
+        prepaymentAmortization.setAmortizationPeriod(amortizationPeriod);
+        prepaymentAmortizationRepository.saveAndFlush(prepaymentAmortization);
+        Long amortizationPeriodId = amortizationPeriod.getId();
+
+        // Get all the prepaymentAmortizationList where amortizationPeriod equals to amortizationPeriodId
+        defaultPrepaymentAmortizationShouldBeFound("amortizationPeriodId.equals=" + amortizationPeriodId);
+
+        // Get all the prepaymentAmortizationList where amortizationPeriod equals to (amortizationPeriodId + 1)
+        defaultPrepaymentAmortizationShouldNotBeFound("amortizationPeriodId.equals=" + (amortizationPeriodId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -847,7 +952,8 @@ public class PrepaymentAmortizationResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].prepaymentPeriod").value(hasItem(DEFAULT_PREPAYMENT_PERIOD.toString())))
             .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))))
-            .andExpect(jsonPath("$.[*].inactive").value(hasItem(DEFAULT_INACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].inactive").value(hasItem(DEFAULT_INACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].amortizationIdentifier").value(hasItem(DEFAULT_AMORTIZATION_IDENTIFIER.toString())));
 
         // Check, that the count call also returns 1
         restPrepaymentAmortizationMockMvc
@@ -901,7 +1007,8 @@ public class PrepaymentAmortizationResourceIT {
             .description(UPDATED_DESCRIPTION)
             .prepaymentPeriod(UPDATED_PREPAYMENT_PERIOD)
             .prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT)
-            .inactive(UPDATED_INACTIVE);
+            .inactive(UPDATED_INACTIVE)
+            .amortizationIdentifier(UPDATED_AMORTIZATION_IDENTIFIER);
         PrepaymentAmortizationDTO prepaymentAmortizationDTO = prepaymentAmortizationMapper.toDto(updatedPrepaymentAmortization);
 
         restPrepaymentAmortizationMockMvc
@@ -920,6 +1027,7 @@ public class PrepaymentAmortizationResourceIT {
         assertThat(testPrepaymentAmortization.getPrepaymentPeriod()).isEqualTo(UPDATED_PREPAYMENT_PERIOD);
         assertThat(testPrepaymentAmortization.getPrepaymentAmount()).isEqualTo(UPDATED_PREPAYMENT_AMOUNT);
         assertThat(testPrepaymentAmortization.getInactive()).isEqualTo(UPDATED_INACTIVE);
+        assertThat(testPrepaymentAmortization.getAmortizationIdentifier()).isEqualTo(UPDATED_AMORTIZATION_IDENTIFIER);
 
         // Validate the PrepaymentAmortization in Elasticsearch
         verify(mockPrepaymentAmortizationSearchRepository).save(testPrepaymentAmortization);
@@ -1015,6 +1123,8 @@ public class PrepaymentAmortizationResourceIT {
         PrepaymentAmortization partialUpdatedPrepaymentAmortization = new PrepaymentAmortization();
         partialUpdatedPrepaymentAmortization.setId(prepaymentAmortization.getId());
 
+        partialUpdatedPrepaymentAmortization.amortizationIdentifier(UPDATED_AMORTIZATION_IDENTIFIER);
+
         restPrepaymentAmortizationMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedPrepaymentAmortization.getId())
@@ -1031,6 +1141,7 @@ public class PrepaymentAmortizationResourceIT {
         assertThat(testPrepaymentAmortization.getPrepaymentPeriod()).isEqualTo(DEFAULT_PREPAYMENT_PERIOD);
         assertThat(testPrepaymentAmortization.getPrepaymentAmount()).isEqualByComparingTo(DEFAULT_PREPAYMENT_AMOUNT);
         assertThat(testPrepaymentAmortization.getInactive()).isEqualTo(DEFAULT_INACTIVE);
+        assertThat(testPrepaymentAmortization.getAmortizationIdentifier()).isEqualTo(UPDATED_AMORTIZATION_IDENTIFIER);
     }
 
     @Test
@@ -1049,7 +1160,8 @@ public class PrepaymentAmortizationResourceIT {
             .description(UPDATED_DESCRIPTION)
             .prepaymentPeriod(UPDATED_PREPAYMENT_PERIOD)
             .prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT)
-            .inactive(UPDATED_INACTIVE);
+            .inactive(UPDATED_INACTIVE)
+            .amortizationIdentifier(UPDATED_AMORTIZATION_IDENTIFIER);
 
         restPrepaymentAmortizationMockMvc
             .perform(
@@ -1067,6 +1179,7 @@ public class PrepaymentAmortizationResourceIT {
         assertThat(testPrepaymentAmortization.getPrepaymentPeriod()).isEqualTo(UPDATED_PREPAYMENT_PERIOD);
         assertThat(testPrepaymentAmortization.getPrepaymentAmount()).isEqualByComparingTo(UPDATED_PREPAYMENT_AMOUNT);
         assertThat(testPrepaymentAmortization.getInactive()).isEqualTo(UPDATED_INACTIVE);
+        assertThat(testPrepaymentAmortization.getAmortizationIdentifier()).isEqualTo(UPDATED_AMORTIZATION_IDENTIFIER);
     }
 
     @Test
@@ -1186,6 +1299,7 @@ public class PrepaymentAmortizationResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].prepaymentPeriod").value(hasItem(DEFAULT_PREPAYMENT_PERIOD.toString())))
             .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))))
-            .andExpect(jsonPath("$.[*].inactive").value(hasItem(DEFAULT_INACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].inactive").value(hasItem(DEFAULT_INACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].amortizationIdentifier").value(hasItem(DEFAULT_AMORTIZATION_IDENTIFIER.toString())));
     }
 }
