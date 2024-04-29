@@ -44,7 +44,7 @@ public interface InternalAmortizationPostingRepository
         "LEFT JOIN prepayment_account pa on prepayment_account_id = pa.id " +
         "LEFT JOIN transaction_account da on p.debit_account_id = da.id  " +
         "LEFT JOIN transaction_account ca on p.credit_account_id = ca.id " +
-        "LEFT JOIN fiscal_month fm on p.fiscal_month_id = fm.id " +
+        "LEFT JOIN amortization_period fm on p.amortization_period_id = fm.id " +
         "WHERE :reportDate BETWEEN fm.start_date AND fm.end_date", nativeQuery = true)
     Page<AmortizationPostingReportInternal> findByReportDate(@Param("reportDate") LocalDate reportDate, Pageable pageable);
 }
