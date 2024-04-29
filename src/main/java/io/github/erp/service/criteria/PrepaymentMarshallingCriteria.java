@@ -61,6 +61,8 @@ public class PrepaymentMarshallingCriteria implements Serializable, Criteria {
 
     private LongFilter lastFiscalMonthId;
 
+    private LongFilter firstAmortizationPeriodId;
+
     private Boolean distinct;
 
     public PrepaymentMarshallingCriteria() {}
@@ -75,6 +77,7 @@ public class PrepaymentMarshallingCriteria implements Serializable, Criteria {
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.firstFiscalMonthId = other.firstFiscalMonthId == null ? null : other.firstFiscalMonthId.copy();
         this.lastFiscalMonthId = other.lastFiscalMonthId == null ? null : other.lastFiscalMonthId.copy();
+        this.firstAmortizationPeriodId = other.firstAmortizationPeriodId == null ? null : other.firstAmortizationPeriodId.copy();
         this.distinct = other.distinct;
     }
 
@@ -218,6 +221,21 @@ public class PrepaymentMarshallingCriteria implements Serializable, Criteria {
         this.lastFiscalMonthId = lastFiscalMonthId;
     }
 
+    public LongFilter getFirstAmortizationPeriodId() {
+        return firstAmortizationPeriodId;
+    }
+
+    public LongFilter firstAmortizationPeriodId() {
+        if (firstAmortizationPeriodId == null) {
+            firstAmortizationPeriodId = new LongFilter();
+        }
+        return firstAmortizationPeriodId;
+    }
+
+    public void setFirstAmortizationPeriodId(LongFilter firstAmortizationPeriodId) {
+        this.firstAmortizationPeriodId = firstAmortizationPeriodId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -245,6 +263,7 @@ public class PrepaymentMarshallingCriteria implements Serializable, Criteria {
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(firstFiscalMonthId, that.firstFiscalMonthId) &&
             Objects.equals(lastFiscalMonthId, that.lastFiscalMonthId) &&
+            Objects.equals(firstAmortizationPeriodId, that.firstAmortizationPeriodId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -261,6 +280,7 @@ public class PrepaymentMarshallingCriteria implements Serializable, Criteria {
             placeholderId,
             firstFiscalMonthId,
             lastFiscalMonthId,
+            firstAmortizationPeriodId,
             distinct
         );
     }
@@ -278,6 +298,7 @@ public class PrepaymentMarshallingCriteria implements Serializable, Criteria {
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (firstFiscalMonthId != null ? "firstFiscalMonthId=" + firstFiscalMonthId + ", " : "") +
             (lastFiscalMonthId != null ? "lastFiscalMonthId=" + lastFiscalMonthId + ", " : "") +
+            (firstAmortizationPeriodId != null ? "firstAmortizationPeriodId=" + firstAmortizationPeriodId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

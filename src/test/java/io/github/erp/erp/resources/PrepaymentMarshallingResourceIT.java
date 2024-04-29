@@ -18,11 +18,7 @@ package io.github.erp.erp.resources;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.FiscalMonth;
-import io.github.erp.domain.Placeholder;
-import io.github.erp.domain.PrepaymentAccount;
-import io.github.erp.domain.PrepaymentMarshalling;
-import io.github.erp.erp.resources.prepayments.PrepaymentMarshallingResourceProd;
+import io.github.erp.domain.*;
 import io.github.erp.repository.PrepaymentMarshallingRepository;
 import io.github.erp.repository.search.PrepaymentMarshallingSearchRepository;
 import io.github.erp.service.PrepaymentMarshallingService;
@@ -54,7 +50,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link PrepaymentMarshallingResourceProd} REST controller.
+ * Integration tests for the PrepaymentMarshallingResourceProd REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -79,8 +75,8 @@ class PrepaymentMarshallingResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/prepayments/_search/prepayment-marshallings";
 
-    private static final Random random = new Random();
-    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private PrepaymentMarshallingRepository prepaymentMarshallingRepository;
@@ -144,6 +140,16 @@ class PrepaymentMarshallingResourceIT {
         prepaymentMarshalling.setFirstFiscalMonth(fiscalMonth);
         // Add required entity
         prepaymentMarshalling.setLastFiscalMonth(fiscalMonth);
+        // Add required entity
+        AmortizationPeriod amortizationPeriod;
+        if (TestUtil.findAll(em, AmortizationPeriod.class).isEmpty()) {
+            amortizationPeriod = AmortizationPeriodResourceIT.createEntity(em);
+            em.persist(amortizationPeriod);
+            em.flush();
+        } else {
+            amortizationPeriod = TestUtil.findAll(em, AmortizationPeriod.class).get(0);
+        }
+        prepaymentMarshalling.setFirstAmortizationPeriod(amortizationPeriod);
         return prepaymentMarshalling;
     }
 
@@ -181,6 +187,16 @@ class PrepaymentMarshallingResourceIT {
         prepaymentMarshalling.setFirstFiscalMonth(fiscalMonth);
         // Add required entity
         prepaymentMarshalling.setLastFiscalMonth(fiscalMonth);
+        // Add required entity
+        AmortizationPeriod amortizationPeriod;
+        if (TestUtil.findAll(em, AmortizationPeriod.class).isEmpty()) {
+            amortizationPeriod = AmortizationPeriodResourceIT.createUpdatedEntity(em);
+            em.persist(amortizationPeriod);
+            em.flush();
+        } else {
+            amortizationPeriod = TestUtil.findAll(em, AmortizationPeriod.class).get(0);
+        }
+        prepaymentMarshalling.setFirstAmortizationPeriod(amortizationPeriod);
         return prepaymentMarshalling;
     }
 
@@ -678,6 +694,32 @@ class PrepaymentMarshallingResourceIT {
 
         // Get all the prepaymentMarshallingList where lastFiscalMonth equals to (lastFiscalMonthId + 1)
         defaultPrepaymentMarshallingShouldNotBeFound("lastFiscalMonthId.equals=" + (lastFiscalMonthId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentMarshallingsByFirstAmortizationPeriodIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
+        AmortizationPeriod firstAmortizationPeriod;
+        if (TestUtil.findAll(em, AmortizationPeriod.class).isEmpty()) {
+            firstAmortizationPeriod = AmortizationPeriodResourceIT.createEntity(em);
+            em.persist(firstAmortizationPeriod);
+            em.flush();
+        } else {
+            firstAmortizationPeriod = TestUtil.findAll(em, AmortizationPeriod.class).get(0);
+        }
+        em.persist(firstAmortizationPeriod);
+        em.flush();
+        prepaymentMarshalling.setFirstAmortizationPeriod(firstAmortizationPeriod);
+        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
+        Long firstAmortizationPeriodId = firstAmortizationPeriod.getId();
+
+        // Get all the prepaymentMarshallingList where firstAmortizationPeriod equals to firstAmortizationPeriodId
+        defaultPrepaymentMarshallingShouldBeFound("firstAmortizationPeriodId.equals=" + firstAmortizationPeriodId);
+
+        // Get all the prepaymentMarshallingList where firstAmortizationPeriod equals to (firstAmortizationPeriodId + 1)
+        defaultPrepaymentMarshallingShouldNotBeFound("firstAmortizationPeriodId.equals=" + (firstAmortizationPeriodId + 1));
     }
 
     /**

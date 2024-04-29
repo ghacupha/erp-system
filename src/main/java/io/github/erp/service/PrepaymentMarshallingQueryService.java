@@ -168,6 +168,15 @@ public class PrepaymentMarshallingQueryService extends QueryService<PrepaymentMa
                         )
                     );
             }
+            if (criteria.getFirstAmortizationPeriodId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getFirstAmortizationPeriodId(),
+                            root -> root.join(PrepaymentMarshalling_.firstAmortizationPeriod, JoinType.LEFT).get(AmortizationPeriod_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

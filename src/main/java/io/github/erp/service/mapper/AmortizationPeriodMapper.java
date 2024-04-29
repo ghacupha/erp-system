@@ -29,4 +29,10 @@ import org.mapstruct.*;
 public interface AmortizationPeriodMapper extends EntityMapper<AmortizationPeriodDTO, AmortizationPeriod> {
     @Mapping(target = "fiscalMonth", source = "fiscalMonth", qualifiedByName = "fiscalMonthCode")
     AmortizationPeriodDTO toDto(AmortizationPeriod s);
+
+    @Named("periodCode")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "periodCode", source = "periodCode")
+    AmortizationPeriodDTO toDtoPeriodCode(AmortizationPeriod amortizationPeriod);
 }

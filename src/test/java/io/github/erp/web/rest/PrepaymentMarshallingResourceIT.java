@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.AmortizationPeriod;
 import io.github.erp.domain.FiscalMonth;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.PrepaymentAccount;
@@ -147,6 +148,16 @@ class PrepaymentMarshallingResourceIT {
         prepaymentMarshalling.setFirstFiscalMonth(fiscalMonth);
         // Add required entity
         prepaymentMarshalling.setLastFiscalMonth(fiscalMonth);
+        // Add required entity
+        AmortizationPeriod amortizationPeriod;
+        if (TestUtil.findAll(em, AmortizationPeriod.class).isEmpty()) {
+            amortizationPeriod = AmortizationPeriodResourceIT.createEntity(em);
+            em.persist(amortizationPeriod);
+            em.flush();
+        } else {
+            amortizationPeriod = TestUtil.findAll(em, AmortizationPeriod.class).get(0);
+        }
+        prepaymentMarshalling.setFirstAmortizationPeriod(amortizationPeriod);
         return prepaymentMarshalling;
     }
 
@@ -184,6 +195,16 @@ class PrepaymentMarshallingResourceIT {
         prepaymentMarshalling.setFirstFiscalMonth(fiscalMonth);
         // Add required entity
         prepaymentMarshalling.setLastFiscalMonth(fiscalMonth);
+        // Add required entity
+        AmortizationPeriod amortizationPeriod;
+        if (TestUtil.findAll(em, AmortizationPeriod.class).isEmpty()) {
+            amortizationPeriod = AmortizationPeriodResourceIT.createUpdatedEntity(em);
+            em.persist(amortizationPeriod);
+            em.flush();
+        } else {
+            amortizationPeriod = TestUtil.findAll(em, AmortizationPeriod.class).get(0);
+        }
+        prepaymentMarshalling.setFirstAmortizationPeriod(amortizationPeriod);
         return prepaymentMarshalling;
     }
 
@@ -681,6 +702,32 @@ class PrepaymentMarshallingResourceIT {
 
         // Get all the prepaymentMarshallingList where lastFiscalMonth equals to (lastFiscalMonthId + 1)
         defaultPrepaymentMarshallingShouldNotBeFound("lastFiscalMonthId.equals=" + (lastFiscalMonthId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentMarshallingsByFirstAmortizationPeriodIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
+        AmortizationPeriod firstAmortizationPeriod;
+        if (TestUtil.findAll(em, AmortizationPeriod.class).isEmpty()) {
+            firstAmortizationPeriod = AmortizationPeriodResourceIT.createEntity(em);
+            em.persist(firstAmortizationPeriod);
+            em.flush();
+        } else {
+            firstAmortizationPeriod = TestUtil.findAll(em, AmortizationPeriod.class).get(0);
+        }
+        em.persist(firstAmortizationPeriod);
+        em.flush();
+        prepaymentMarshalling.setFirstAmortizationPeriod(firstAmortizationPeriod);
+        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
+        Long firstAmortizationPeriodId = firstAmortizationPeriod.getId();
+
+        // Get all the prepaymentMarshallingList where firstAmortizationPeriod equals to firstAmortizationPeriodId
+        defaultPrepaymentMarshallingShouldBeFound("firstAmortizationPeriodId.equals=" + firstAmortizationPeriodId);
+
+        // Get all the prepaymentMarshallingList where firstAmortizationPeriod equals to (firstAmortizationPeriodId + 1)
+        defaultPrepaymentMarshallingShouldNotBeFound("firstAmortizationPeriodId.equals=" + (firstAmortizationPeriodId + 1));
     }
 
     /**

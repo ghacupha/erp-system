@@ -48,6 +48,8 @@ public class PrepaymentMarshallingDTO implements Serializable {
 
     private FiscalMonthDTO lastFiscalMonth;
 
+    private AmortizationPeriodDTO firstAmortizationPeriod;
+
     public Long getId() {
         return id;
     }
@@ -120,6 +122,14 @@ public class PrepaymentMarshallingDTO implements Serializable {
         this.lastFiscalMonth = lastFiscalMonth;
     }
 
+    public AmortizationPeriodDTO getFirstAmortizationPeriod() {
+        return firstAmortizationPeriod;
+    }
+
+    public void setFirstAmortizationPeriod(AmortizationPeriodDTO firstAmortizationPeriod) {
+        this.firstAmortizationPeriod = firstAmortizationPeriod;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -154,6 +164,7 @@ public class PrepaymentMarshallingDTO implements Serializable {
             ", placeholders=" + getPlaceholders() +
             ", firstFiscalMonth=" + getFirstFiscalMonth() +
             ", lastFiscalMonth=" + getLastFiscalMonth() +
+            ", firstAmortizationPeriod=" + getFirstAmortizationPeriod() +
             "}";
     }
 }

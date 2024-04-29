@@ -96,6 +96,11 @@ public class PrepaymentMarshalling implements Serializable {
     @JsonIgnoreProperties(value = { "fiscalYear", "placeholders", "universallyUniqueMappings", "fiscalQuarter" }, allowSetters = true)
     private FiscalMonth lastFiscalMonth;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "fiscalMonth" }, allowSetters = true)
+    private AmortizationPeriod firstAmortizationPeriod;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -222,6 +227,19 @@ public class PrepaymentMarshalling implements Serializable {
 
     public PrepaymentMarshalling lastFiscalMonth(FiscalMonth fiscalMonth) {
         this.setLastFiscalMonth(fiscalMonth);
+        return this;
+    }
+
+    public AmortizationPeriod getFirstAmortizationPeriod() {
+        return this.firstAmortizationPeriod;
+    }
+
+    public void setFirstAmortizationPeriod(AmortizationPeriod amortizationPeriod) {
+        this.firstAmortizationPeriod = amortizationPeriod;
+    }
+
+    public PrepaymentMarshalling firstAmortizationPeriod(AmortizationPeriod amortizationPeriod) {
+        this.setFirstAmortizationPeriod(amortizationPeriod);
         return this;
     }
 
