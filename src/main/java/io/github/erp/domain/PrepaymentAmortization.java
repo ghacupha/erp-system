@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -57,6 +58,9 @@ public class PrepaymentAmortization implements Serializable {
 
     @Column(name = "inactive")
     private Boolean inactive;
+
+    @Column(name = "amortization_identifier")
+    private UUID amortizationIdentifier;
 
     @ManyToOne
     @JsonIgnoreProperties(
@@ -107,6 +111,11 @@ public class PrepaymentAmortization implements Serializable {
     @NotNull
     @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
     private PrepaymentCompilationRequest prepaymentCompilationRequest;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "fiscalMonth" }, allowSetters = true)
+    private AmortizationPeriod amortizationPeriod;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -173,6 +182,19 @@ public class PrepaymentAmortization implements Serializable {
 
     public void setInactive(Boolean inactive) {
         this.inactive = inactive;
+    }
+
+    public UUID getAmortizationIdentifier() {
+        return this.amortizationIdentifier;
+    }
+
+    public PrepaymentAmortization amortizationIdentifier(UUID amortizationIdentifier) {
+        this.setAmortizationIdentifier(amortizationIdentifier);
+        return this;
+    }
+
+    public void setAmortizationIdentifier(UUID amortizationIdentifier) {
+        this.amortizationIdentifier = amortizationIdentifier;
     }
 
     public PrepaymentAccount getPrepaymentAccount() {
@@ -276,6 +298,19 @@ public class PrepaymentAmortization implements Serializable {
         return this;
     }
 
+    public AmortizationPeriod getAmortizationPeriod() {
+        return this.amortizationPeriod;
+    }
+
+    public void setAmortizationPeriod(AmortizationPeriod amortizationPeriod) {
+        this.amortizationPeriod = amortizationPeriod;
+    }
+
+    public PrepaymentAmortization amortizationPeriod(AmortizationPeriod amortizationPeriod) {
+        this.setAmortizationPeriod(amortizationPeriod);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -304,6 +339,7 @@ public class PrepaymentAmortization implements Serializable {
             ", prepaymentPeriod='" + getPrepaymentPeriod() + "'" +
             ", prepaymentAmount=" + getPrepaymentAmount() +
             ", inactive='" + getInactive() + "'" +
+            ", amortizationIdentifier='" + getAmortizationIdentifier() + "'" +
             "}";
     }
 }

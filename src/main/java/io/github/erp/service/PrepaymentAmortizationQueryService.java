@@ -130,6 +130,12 @@ public class PrepaymentAmortizationQueryService extends QueryService<PrepaymentA
             if (criteria.getInactive() != null) {
                 specification = specification.and(buildSpecification(criteria.getInactive(), PrepaymentAmortization_.inactive));
             }
+            if (criteria.getAmortizationIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getAmortizationIdentifier(), PrepaymentAmortization_.amortizationIdentifier)
+                    );
+            }
             if (criteria.getPrepaymentAccountId() != null) {
                 specification =
                     specification.and(
@@ -193,6 +199,15 @@ public class PrepaymentAmortizationQueryService extends QueryService<PrepaymentA
                                 root
                                     .join(PrepaymentAmortization_.prepaymentCompilationRequest, JoinType.LEFT)
                                     .get(PrepaymentCompilationRequest_.id)
+                        )
+                    );
+            }
+            if (criteria.getAmortizationPeriodId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getAmortizationPeriodId(),
+                            root -> root.join(PrepaymentAmortization_.amortizationPeriod, JoinType.LEFT).get(AmortizationPeriod_.id)
                         )
                     );
             }

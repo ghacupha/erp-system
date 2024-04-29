@@ -1,11 +1,11 @@
-id;description;prepayment_period;prepayment_amount;inactive;fiscal_month_id;prepayment_compilation_request_id
-1;multi-state Automotive Bedfordshire;2022-05-03;49312;false;1;1
-2;generate microchip;2022-05-03;14138;true;2;2
-3;cross-platform bluetooth;2022-05-03;6841;false;3;3
-4;Pound responsive;2022-05-02;74937;true;4;4
-5;Designer Borders;2022-05-02;11644;true;5;5
-6;zero;2022-05-02;6652;false;6;6
-7;Toys customized COM;2022-05-03;33762;true;7;7
-8;eco-centric;2022-05-03;65646;false;8;8
-9;Data;2022-05-03;77830;false;9;9
-10;payment;2022-05-02;1608;false;10;10
+id;description;prepayment_period;prepayment_amount;inactive;amortization_identifier;fiscal_month_id;prepayment_compilation_request_id;amortization_period_id
+1;multi-state Automotive Bedfordshire;2022-05-03;49312;false;7c8cb394-286c-456c-a891-39a7f4c4bb98;1;1;1
+2;Antilles invoice Rubber;2022-05-03;98373;false;a14c08c5-ebd8-4855-8445-66a33fc35c42;2;2;2
+3;Lari Garden;2022-05-03;54207;false;e0e1a28e-c1e8-4c31-b376-7d1a988e00d2;3;3;3
+4;Director Turkish;2022-05-02;2558;true;a95179a6-9530-47f2-b74f-e97d7f3e7770;4;4;4
+5;capacitor back-end;2022-05-03;19323;true;890e765b-8d65-4f1c-9760-792c7cff88e8;5;5;5
+6;Plain Cotton Dakota;2022-05-03;94810;true;bd15d6d3-e3fd-47bf-be0a-ed5151866a45;6;6;6
+7;recontextualize Computers;2022-05-02;8995;true;de10338d-e23d-4f92-b661-4f61be474be3;7;7;7
+8;morph Metal cross-platform;2022-05-03;57929;true;9b134767-d735-49e3-8953-451a2539204c;8;8;8
+9;application engineer;2022-05-02;44520;false;93b59b6d-a201-4558-9f3e-78e6fc5aed05;9;9;9
+10;Virginia interface;2022-05-03;69003;false;da5bb650-b3c6-4566-b0bf-c903eefbc67d;10;10;10

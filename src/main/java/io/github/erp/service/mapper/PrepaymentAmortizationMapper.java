@@ -34,6 +34,7 @@ import org.mapstruct.*;
         PlaceholderMapper.class,
         FiscalMonthMapper.class,
         PrepaymentCompilationRequestMapper.class,
+        AmortizationPeriodMapper.class,
     }
 )
 public interface PrepaymentAmortizationMapper extends EntityMapper<PrepaymentAmortizationDTO, PrepaymentAmortization> {
@@ -44,6 +45,7 @@ public interface PrepaymentAmortizationMapper extends EntityMapper<PrepaymentAmo
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     @Mapping(target = "fiscalMonth", source = "fiscalMonth", qualifiedByName = "endDate")
     @Mapping(target = "prepaymentCompilationRequest", source = "prepaymentCompilationRequest", qualifiedByName = "id")
+    @Mapping(target = "amortizationPeriod", source = "amortizationPeriod", qualifiedByName = "periodCode")
     PrepaymentAmortizationDTO toDto(PrepaymentAmortization s);
 
     @Mapping(target = "removePlaceholder", ignore = true)

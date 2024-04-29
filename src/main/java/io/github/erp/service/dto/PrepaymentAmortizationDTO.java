@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import javax.validation.constraints.*;
 
 /**
@@ -41,6 +42,8 @@ public class PrepaymentAmortizationDTO implements Serializable {
 
     private Boolean inactive;
 
+    private UUID amortizationIdentifier;
+
     private PrepaymentAccountDTO prepaymentAccount;
 
     private SettlementCurrencyDTO settlementCurrency;
@@ -54,6 +57,8 @@ public class PrepaymentAmortizationDTO implements Serializable {
     private FiscalMonthDTO fiscalMonth;
 
     private PrepaymentCompilationRequestDTO prepaymentCompilationRequest;
+
+    private AmortizationPeriodDTO amortizationPeriod;
 
     public Long getId() {
         return id;
@@ -93,6 +98,14 @@ public class PrepaymentAmortizationDTO implements Serializable {
 
     public void setInactive(Boolean inactive) {
         this.inactive = inactive;
+    }
+
+    public UUID getAmortizationIdentifier() {
+        return amortizationIdentifier;
+    }
+
+    public void setAmortizationIdentifier(UUID amortizationIdentifier) {
+        this.amortizationIdentifier = amortizationIdentifier;
     }
 
     public PrepaymentAccountDTO getPrepaymentAccount() {
@@ -151,6 +164,14 @@ public class PrepaymentAmortizationDTO implements Serializable {
         this.prepaymentCompilationRequest = prepaymentCompilationRequest;
     }
 
+    public AmortizationPeriodDTO getAmortizationPeriod() {
+        return amortizationPeriod;
+    }
+
+    public void setAmortizationPeriod(AmortizationPeriodDTO amortizationPeriod) {
+        this.amortizationPeriod = amortizationPeriod;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -181,6 +202,7 @@ public class PrepaymentAmortizationDTO implements Serializable {
             ", prepaymentPeriod='" + getPrepaymentPeriod() + "'" +
             ", prepaymentAmount=" + getPrepaymentAmount() +
             ", inactive='" + getInactive() + "'" +
+            ", amortizationIdentifier='" + getAmortizationIdentifier() + "'" +
             ", prepaymentAccount=" + getPrepaymentAccount() +
             ", settlementCurrency=" + getSettlementCurrency() +
             ", debitAccount=" + getDebitAccount() +
@@ -188,6 +210,7 @@ public class PrepaymentAmortizationDTO implements Serializable {
             ", placeholders=" + getPlaceholders() +
             ", fiscalMonth=" + getFiscalMonth() +
             ", prepaymentCompilationRequest=" + getPrepaymentCompilationRequest() +
+            ", amortizationPeriod=" + getAmortizationPeriod() +
             "}";
     }
 }
