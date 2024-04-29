@@ -111,9 +111,12 @@ public class PrepaymentCompilationServiceImpl implements PrepaymentCompilationSe
 
         for (int period = 0; period <= marshalItem.getAmortizationPeriods() - 1; period++) {
 
+            FiscalMonth fiscalMonth = incrementFiscalMonth(marshalItem, period);
+
             PrepaymentAmortization dto = new PrepaymentAmortization();
             dto.setPrepaymentAmount(prepaymentAnon.account.getPrepaymentAmount().divide(BigDecimal.valueOf(marshalItem.getAmortizationPeriods()), RoundingMode.HALF_EVEN));
-            dto.setFiscalMonth(incrementFiscalMonth(marshalItem, period));
+            dto.setFiscalMonth(fiscalMonth);
+            // TODO dto.setAmortizationPeriod(incrementAmortizationPeriod(marshalItem, period));
             dto.setPrepaymentCompilationRequest(prepaymentCompilationRequest);
             dto.setPrepaymentAccount(prepaymentAnon.account);
             dto.setDebitAccount(prepaymentAnon.account.getTransferAccount());
