@@ -64,7 +64,7 @@ public interface InternalPrepaymentOutstandingOverviewReportRepository extends
             "  LEFT JOIN prepayment_amortization pa ON p.id = pa.prepayment_account_id AND pa.amortization_period_id IN ( " +
             "    SELECT fm.id " +
             "    FROM amortization_period fm   " +
-            "    WHERE fm.end_date <= :reportDate   " +
+            "    WHERE fm.end_date < :reportDate   " +
             ")   " +
             "WHERE p.recognition_date <= :reportDate OR p.id NOT IN (   " +
             "    SELECT prep.id   " +
