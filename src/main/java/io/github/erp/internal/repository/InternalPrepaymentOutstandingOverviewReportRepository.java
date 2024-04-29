@@ -61,9 +61,9 @@ public interface InternalPrepaymentOutstandingOverviewReportRepository extends
             "  LEFT JOIN dealer d ON d.id = p.dealer_id " +
             "  LEFT JOIN settlement_currency c ON c.id = p.settlement_currency_id " +
             "  LEFT JOIN settlement s ON s.id = p.prepayment_transaction_id " +
-            "  LEFT JOIN prepayment_amortization pa ON p.id = pa.prepayment_account_id AND pa.fiscal_month_id IN ( " +
+            "  LEFT JOIN prepayment_amortization pa ON p.id = pa.prepayment_account_id AND pa.amortization_period_id IN ( " +
             "    SELECT fm.id " +
-            "    FROM fiscal_month fm   " +
+            "    FROM amortization_period fm   " +
             "    WHERE fm.end_date <= :reportDate   " +
             ")   " +
             "WHERE p.recognition_date <= :reportDate OR p.id NOT IN (   " +
