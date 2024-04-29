@@ -1,4 +1,4 @@
-package io.github.erp.internal.service;
+package io.github.erp.internal.service.prepayments;
 
 /*-
  * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
@@ -59,6 +59,15 @@ public interface InternalAmortizationPeriodService {
      * @return the entity.
      */
     Optional<AmortizationPeriodDTO> findOne(Long id);
+
+    /**
+     * Get the nth amortizationPeriod instance in the sequence after the current
+     * instance.
+     *
+     * @param currentPeriodId the id of the current entity.
+     * @return the entity.
+     */
+    Optional<AmortizationPeriodDTO> getNextAmortizationPeriod(Long currentPeriodId, long nthValue);
 
     /**
      * Delete the "id" amortizationPeriod.

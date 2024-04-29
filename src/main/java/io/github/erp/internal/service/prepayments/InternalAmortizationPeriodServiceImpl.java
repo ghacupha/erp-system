@@ -1,4 +1,4 @@
-package io.github.erp.internal.service;
+package io.github.erp.internal.service.prepayments;
 
 /*-
  * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
@@ -19,9 +19,9 @@ package io.github.erp.internal.service;
  */
 
 import io.github.erp.domain.AmortizationPeriod;
+import io.github.erp.internal.repository.InternalAmortizationPeriodRepository;
 import io.github.erp.repository.AmortizationPeriodRepository;
 import io.github.erp.repository.search.AmortizationPeriodSearchRepository;
-import io.github.erp.service.AmortizationPeriodService;
 import io.github.erp.service.dto.AmortizationPeriodDTO;
 import io.github.erp.service.mapper.AmortizationPeriodMapper;
 import org.slf4j.Logger;
@@ -42,14 +42,14 @@ public class InternalAmortizationPeriodServiceImpl implements InternalAmortizati
 
     private final Logger log = LoggerFactory.getLogger(InternalAmortizationPeriodServiceImpl.class);
 
-    private final AmortizationPeriodRepository amortizationPeriodRepository;
+    private final InternalAmortizationPeriodRepository amortizationPeriodRepository;
 
     private final AmortizationPeriodMapper amortizationPeriodMapper;
 
     private final AmortizationPeriodSearchRepository amortizationPeriodSearchRepository;
 
     public InternalAmortizationPeriodServiceImpl(
-        AmortizationPeriodRepository amortizationPeriodRepository,
+        InternalAmortizationPeriodRepository amortizationPeriodRepository,
         AmortizationPeriodMapper amortizationPeriodMapper,
         AmortizationPeriodSearchRepository amortizationPeriodSearchRepository
     ) {
@@ -114,5 +114,20 @@ public class InternalAmortizationPeriodServiceImpl implements InternalAmortizati
     public Page<AmortizationPeriodDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of AmortizationPeriods for query {}", query);
         return amortizationPeriodSearchRepository.search(query, pageable).map(amortizationPeriodMapper::toDto);
+    }
+
+    /**
+     * Get the nth amortizationPeriod instance in the sequence after the current
+     * instance.
+     *
+     * @param currentPeriodId the id of the current entity.
+     * @return the entity.
+     */
+    @Override
+    public Optional<AmortizationPeriodDTO> getNextAmortizationPeriod(Long currentPeriodId, long nthValue) {
+        log.debug("Request to fetch the next instance of amortization period after the current instance id: {}", currentPeriodId);
+
+        return amortizationPeriodRepository.getNextAmortizationPeriod(currentPeriodId, nthValue)
+            .map(amortizationPeriodMapper::toDto);
     }
 }

@@ -25,3 +25,9 @@ FROM (
      ) AS subquery
          JOIN amortization_period AS ap ON subquery.fm_id = ap.fiscal_month_id
 WHERE pm.id = subquery.pm_id;
+
+UPDATE prepayment_amortization AS pa
+SET amortization_period_id = ap.id
+FROM fiscal_month AS fm
+         JOIN amortization_period AS ap ON ap.fiscal_month_id = fm.id
+WHERE pa.fiscal_month_id = fm.id;
