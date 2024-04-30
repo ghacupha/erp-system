@@ -1,4 +1,4 @@
-package io.github.erp.internal.service;
+package io.github.erp.internal.service.files;
 
 /*-
  * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
@@ -17,7 +17,7 @@ package io.github.erp.internal.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.internal.framework.service.DataFileContainer;
+import io.github.erp.internal.framework.service.FileUploadDeletionService;
 import io.github.erp.internal.framework.model.FileUploadHasDataFile;
 import io.github.erp.internal.model.mapping.FileUploadHasDataFileMapping;
 import io.github.erp.service.FileUploadService;
@@ -25,13 +25,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service("fileUploadDataFileContainer")
-public class FileUploadDataFileContainer implements DataFileContainer<FileUploadHasDataFile> {
+/**
+ * This is created to work with the file-deletion-listener for that is called to finally remove the file whose data
+ * has been removed from the library
+ */
+@Service("fileUploadDeletionService")
+public class FileUploadDeletionServiceImpl implements FileUploadDeletionService<FileUploadHasDataFile> {
 
     private final FileUploadHasDataFileMapping dataFileMapping;
     private final FileUploadService fileUploadService;
 
-    public FileUploadDataFileContainer(FileUploadHasDataFileMapping dataFileMapping, FileUploadService fileUploadService) {
+    public FileUploadDeletionServiceImpl(FileUploadHasDataFileMapping dataFileMapping, FileUploadService fileUploadService) {
         this.dataFileMapping = dataFileMapping;
         this.fileUploadService = fileUploadService;
     }
@@ -46,5 +50,11 @@ public class FileUploadDataFileContainer implements DataFileContainer<FileUpload
         });
 
         return Optional.of(file[0]);
+    }
+
+    @Override
+    public void delete(Long id) {
+
+        fileUploadService.delete(id);
     }
 }
