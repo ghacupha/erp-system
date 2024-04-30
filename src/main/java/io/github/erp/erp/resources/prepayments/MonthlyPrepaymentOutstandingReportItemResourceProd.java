@@ -17,14 +17,11 @@ package io.github.erp.erp.resources.prepayments;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.internal.service.InternalMonthlyPrepaymentOutstandingReportItemService;
-import io.github.erp.repository.MonthlyPrepaymentOutstandingReportItemRepository;
+import io.github.erp.internal.service.prepayments.InternalMonthlyPrepaymentOutstandingReportItemService;
 import io.github.erp.service.MonthlyPrepaymentOutstandingReportItemQueryService;
-import io.github.erp.service.MonthlyPrepaymentOutstandingReportItemService;
 import io.github.erp.service.criteria.MonthlyPrepaymentOutstandingReportItemCriteria;
 import io.github.erp.service.dto.FiscalYearDTO;
 import io.github.erp.service.dto.MonthlyPrepaymentOutstandingReportItemDTO;
-import net.bytebuddy.asm.Advice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -37,7 +34,6 @@ import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 import java.time.LocalDate;
-import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,10 +46,7 @@ public class MonthlyPrepaymentOutstandingReportItemResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(MonthlyPrepaymentOutstandingReportItemResourceProd.class);
 
-    // private final InternalMonthlyPrepaymentOutstandingReportItemService  in
     private final InternalMonthlyPrepaymentOutstandingReportItemService monthlyPrepaymentOutstandingReportItemService;
-
-    // private final MonthlyPrepaymentOutstandingReportItemRepository monthlyPrepaymentOutstandingReportItemRepository;
 
     private final MonthlyPrepaymentOutstandingReportItemQueryService monthlyPrepaymentOutstandingReportItemQueryService;
 

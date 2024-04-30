@@ -19,7 +19,7 @@ package io.github.erp.erp.assets.depreciation;
  */
 import io.github.erp.domain.DepreciationEntry;
 import io.github.erp.erp.assets.depreciation.context.DepreciationJobContext;
-import io.github.erp.internal.service.InternalDepreciationEntryService;
+import io.github.erp.internal.service.assets.InternalDepreciationEntryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

@@ -20,7 +20,7 @@ package io.github.erp.erp.assets.nbv;
 import io.github.erp.erp.assets.nbv.model.NBVArtefact;
 import io.github.erp.erp.assets.nbv.model.NBVBatchMessage;
 import io.github.erp.internal.repository.InternalNbvCompilationJobRepository;
-import io.github.erp.internal.service.InternalDepreciationPeriodService;
+import io.github.erp.internal.service.assets.InternalDepreciationPeriodService;
 import io.github.erp.repository.AssetRegistrationRepository;
 import io.github.erp.service.dto.NetBookValueEntryDTO;
 import org.springframework.beans.factory.annotation.Qualifier;

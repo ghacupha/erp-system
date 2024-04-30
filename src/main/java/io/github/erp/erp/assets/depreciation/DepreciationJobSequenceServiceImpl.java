@@ -24,7 +24,7 @@ import io.github.erp.erp.assets.depreciation.context.DepreciationAmountContext;
 import io.github.erp.erp.assets.depreciation.context.ContextInstance;
 import io.github.erp.erp.assets.depreciation.context.DepreciationJobContext;
 import io.github.erp.erp.assets.depreciation.queue.DepreciationBatchProducer;
-import io.github.erp.internal.service.InternalAssetRegistrationService;
+import io.github.erp.internal.service.assets.InternalAssetRegistrationService;
 import io.github.erp.service.*;
 import io.github.erp.service.dto.*;
 import org.slf4j.Logger;
