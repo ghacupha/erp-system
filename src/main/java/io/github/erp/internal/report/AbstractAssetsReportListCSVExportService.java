@@ -28,12 +28,12 @@ import java.util.List;
  * This service creates a CSV file given a list of items and a file name
  * @param <T>
  */
-public abstract class AbstractReportListCSVExportService<T> {
+public abstract class AbstractAssetsReportListCSVExportService<T> {
 
     private final ReportsProperties reportsProperties;
     private final FileStorageService fileStorageService;
 
-    public AbstractReportListCSVExportService(ReportsProperties reportsProperties, FileStorageService fileStorageService) {
+    public AbstractAssetsReportListCSVExportService(ReportsProperties reportsProperties, FileStorageService fileStorageService) {
         this.reportsProperties = reportsProperties;
         this.fileStorageService = fileStorageService;
     }

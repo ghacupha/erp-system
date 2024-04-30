@@ -19,7 +19,7 @@ package io.github.erp.internal.report.service;
  */
 import io.github.erp.domain.DepreciationReport;
 import io.github.erp.internal.files.FileStorageService;
-import io.github.erp.internal.report.AbstractReportListCSVExportService;
+import io.github.erp.internal.report.AbstractAssetsReportListCSVExportService;
 import io.github.erp.internal.report.ReportsProperties;
 import io.github.erp.internal.repository.InternalDepreciationEntryItemRepository;
 import io.github.erp.internal.repository.InternalDepreciationReportRepository;
@@ -40,7 +40,7 @@ import java.util.UUID;
 @Service
 @Transactional
 public class DepreciationEntryCSVExportReportService
-    extends AbstractReportListCSVExportService<DepreciationEntryVM>
+    extends AbstractAssetsReportListCSVExportService<DepreciationEntryVM>
     implements DepreciationEntryExportReportService{
 
     private final DepreciationReportService depreciationReportService;

@@ -22,6 +22,8 @@ import io.github.erp.service.dto.PrepaymentReportDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -78,4 +80,12 @@ public interface InternalPrepaymentReportService {
      * @return the list of entities.
      */
     Page<PrepaymentReportDTO> search(String query, Pageable pageable);
+
+    /**
+     * Returns report items calculated as at the reportDate parameter
+     *
+     * @param reportDate
+     * @return
+     */
+    Optional<List<PrepaymentReportDTO>> getReportListByReportDate(LocalDate reportDate);
 }
