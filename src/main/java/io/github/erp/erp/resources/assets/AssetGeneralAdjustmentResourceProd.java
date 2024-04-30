@@ -17,7 +17,7 @@ package io.github.erp.erp.resources.assets;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.internal.service.InternalAssetGeneralAdjustmentService;
+import io.github.erp.internal.service.assets.InternalAssetGeneralAdjustmentService;
 import io.github.erp.repository.AssetGeneralAdjustmentRepository;
 import io.github.erp.service.AssetGeneralAdjustmentQueryService;
 import io.github.erp.service.criteria.AssetGeneralAdjustmentCriteria;

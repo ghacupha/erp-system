@@ -18,10 +18,9 @@ package io.github.erp.erp.resources.prepayments;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import com.hazelcast.map.IMap;
-import io.github.erp.internal.service.InternalPrepaymentAccountService;
+import io.github.erp.internal.service.prepayments.InternalPrepaymentAccountService;
 import io.github.erp.repository.PrepaymentAccountRepository;
 import io.github.erp.service.PrepaymentAccountQueryService;
-import io.github.erp.service.PrepaymentAccountService;
 import io.github.erp.service.criteria.PrepaymentAccountCriteria;
 import io.github.erp.service.dto.PrepaymentAccountDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;

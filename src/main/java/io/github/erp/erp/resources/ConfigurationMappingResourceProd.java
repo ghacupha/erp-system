@@ -19,7 +19,7 @@ package io.github.erp.erp.resources;
  */
 import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.service.dto.PrepaymentMappingDTO;
-import io.github.erp.internal.service.InternalPrepaymentMappingService;
+import io.github.erp.internal.service.prepayments.InternalPrepaymentMappingService;
 import io.github.erp.internal.service.InternalUniversallyUniqueMappingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

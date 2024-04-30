@@ -1,0 +1,65 @@
+{
+  "fields": [
+    {
+      "fieldName": "reportName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "timeOfRequisition",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fileChecksum",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "tampered",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "filename",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "reportParameters",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "reportFile",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "requestedBy",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "applicationIdentity"
+    },
+    {
+      "relationshipName": "lastAccessedBy",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "applicationIdentity"
+    },
+    {
+      "relationshipName": "fiscalYear",
+      "otherEntityName": "fiscalYear",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "fiscalYearCode"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "entityTableName": "monthly_prepayment_report_req",
+  "name": "MonthlyPrepaymentReportRequisition",
+  "changelogDate": "20240430120705",
+  "incrementalChangelog": false
+}

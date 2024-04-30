@@ -17,10 +17,9 @@ package io.github.erp.erp.resources.assets;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.internal.service.InternalAssetRegistrationService;
+import io.github.erp.internal.service.assets.InternalAssetRegistrationService;
 import io.github.erp.repository.AssetRegistrationRepository;
 import io.github.erp.service.AssetRegistrationQueryService;
-import io.github.erp.service.AssetRegistrationService;
 import io.github.erp.service.criteria.AssetRegistrationCriteria;
 import io.github.erp.service.dto.AssetRegistrationDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;

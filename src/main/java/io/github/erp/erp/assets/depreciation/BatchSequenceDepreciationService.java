@@ -32,8 +32,8 @@ import io.github.erp.erp.assets.depreciation.exceptions.FiscalMonthNotConfigured
 import io.github.erp.erp.assets.depreciation.exceptions.ServiceOutletNotConfiguredException;
 import io.github.erp.erp.assets.depreciation.model.DepreciationArtefact;
 import io.github.erp.erp.assets.depreciation.model.DepreciationBatchMessage;
-import io.github.erp.internal.service.InternalAssetDisposalService;
-import io.github.erp.internal.service.InternalAssetWriteOffService;
+import io.github.erp.internal.service.assets.InternalAssetDisposalService;
+import io.github.erp.internal.service.assets.InternalAssetWriteOffService;
 import io.github.erp.service.*;
 import io.github.erp.service.dto.*;
 import io.github.erp.service.mapper.DepreciationEntryMapper;

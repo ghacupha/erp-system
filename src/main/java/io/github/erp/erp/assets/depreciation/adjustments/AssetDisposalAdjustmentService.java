@@ -17,8 +17,7 @@ package io.github.erp.erp.assets.depreciation.adjustments;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.internal.service.InternalAssetDisposalService;
-import io.github.erp.service.dto.AssetDisposalDTO;
+import io.github.erp.internal.service.assets.InternalAssetDisposalService;
 import io.github.erp.service.dto.DepreciationPeriodDTO;
 import org.springframework.stereotype.Service;
 
