@@ -21,7 +21,7 @@ import io.github.erp.domain.AssetAdditionsReport;
 import io.github.erp.domain.AssetAdditionsReportItemInternal;
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.framework.Mapping;
-import io.github.erp.internal.report.AbstractReportListCSVExportService;
+import io.github.erp.internal.report.AbstractAssetsReportListCSVExportService;
 import io.github.erp.internal.report.ReportsProperties;
 import io.github.erp.internal.repository.InternalAssetAdditionsReportItemRepository;
 import io.github.erp.repository.AssetAdditionsReportRepository;
@@ -42,7 +42,7 @@ import java.util.UUID;
 @Transactional
 @Service
 public class AssetAdditionsExportReportService
-    extends AbstractReportListCSVExportService<AssetsAdditionsReportItemVM>
+    extends AbstractAssetsReportListCSVExportService<AssetsAdditionsReportItemVM>
     implements ExportReportService<AssetAdditionsReportDTO> {
 
         private final InternalAssetAdditionsReportItemRepository internalAssetAdditionsReportItemRepository;

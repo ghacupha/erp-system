@@ -92,6 +92,9 @@ public class ReportingAspectConfiguration {
     @Autowired
     private ReportAttachmentService<AssetAdditionsReportDTO> assetAdditionsReportDTOReportAttachmentService;
 
+    @Autowired
+    private ExportReportService<PrepaymentReportRequisitionDTO> prepaymentReportExportReportService;
+
     @Bean
     public ReportRequisitionInterceptor reportRequisitionInterceptor() {
 
@@ -148,5 +151,9 @@ public class ReportingAspectConfiguration {
     @Bean
     public AssetAdditionsReportAttachmentInterceptor assetAdditionsReportAttachmentInterceptor() {
         return new AssetAdditionsReportAttachmentInterceptor(assetAdditionsReportDTOReportAttachmentService);
+    }
+
+    public PrepaymentReportRequisitionInterceptor prepaymentReportRequisitionInterceptor() {
+        return new PrepaymentReportRequisitionInterceptor(prepaymentReportExportReportService);
     }
 }

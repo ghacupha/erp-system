@@ -20,7 +20,7 @@ package io.github.erp.internal.report.service;
 import io.github.erp.domain.NetBookValueEntryInternal;
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.framework.Mapping;
-import io.github.erp.internal.report.AbstractReportListCSVExportService;
+import io.github.erp.internal.report.AbstractAssetsReportListCSVExportService;
 import io.github.erp.internal.report.ReportsProperties;
 import io.github.erp.internal.repository.InternalNetBookValueEntryRepository;
 import io.github.erp.internal.service.applicationUser.CurrentUserContext;
@@ -46,7 +46,7 @@ import java.util.UUID;
 @Service
 @Transactional
 public class NetBookValueEntryCSVExportReportService
-    extends AbstractReportListCSVExportService<NetBookValueEntryVM>
+    extends AbstractAssetsReportListCSVExportService<NetBookValueEntryVM>
     implements NetBookValueEntryExportReportService<NbvReportDTO> {
 
     private final ApplicationUserMapper applicationUserMapper;

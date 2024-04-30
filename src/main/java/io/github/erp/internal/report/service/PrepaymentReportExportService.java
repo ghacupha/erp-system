@@ -1,19 +1,16 @@
 package io.github.erp.internal.report.service;
 
-import io.github.erp.domain.AssetAdditionsReport;
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.report.AbstractCSVListExportService;
 import io.github.erp.internal.report.ReportsProperties;
-import io.github.erp.service.dto.AssetAdditionsReportDTO;
+import io.github.erp.internal.service.prepayments.InternalPrepaymentReportService;
+import io.github.erp.service.dto.PrepaymentReportDTO;
 import io.github.erp.service.dto.PrepaymentReportRequisitionDTO;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,19 +18,23 @@ import java.util.UUID;
 @Transactional
 @Service
 public class PrepaymentReportExportService
-    extends AbstractCSVListExportService<PrepaymentReportRequisitionDTO>
+    extends AbstractCSVListExportService<PrepaymentReportDTO>
     implements ExportReportService<PrepaymentReportRequisitionDTO> {
+
+    private final InternalPrepaymentReportService internalPrepaymentReportService;
 
     public PrepaymentReportExportService(
         ReportsProperties reportsProperties,
+        InternalPrepaymentReportService internalPrepaymentReportService,
         @Qualifier("reportsFSStorageService") FileStorageService fileStorageService) {
         super(reportsProperties, fileStorageService);
+        this.internalPrepaymentReportService = internalPrepaymentReportService;
     }
 
     @Override
     public void exportReport(PrepaymentReportRequisitionDTO reportRequisition) {
 
-        Optional<List<AssetsAdditionsReportItemVM>> reportListItems = getEntries(reportRequisition);
+        Optional<List<PrepaymentReportDTO>> reportListItems = getEntries(reportRequisition);
 
         reportListItems.ifPresent(reportList -> {
 
@@ -46,39 +47,21 @@ public class PrepaymentReportExportService
                 reportRequisition.setFilename(fileName);
                 reportRequisition.setReportParameters(getReportParameters(reportRequisition));
 
-                assetAdditionsReportService.save(reportRequisition);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
     }
 
-    private String getReportParameters(AssetAdditionsReportDTO assetAdditionsReportDTO) {
+    private String getReportParameters(PrepaymentReportRequisitionDTO reportRequisition) {
 
-        String parameters = "";
-
-        Optional<AssetAdditionsReport> assetAdditionsReport = assetAdditionsReportRepository.findById(assetAdditionsReportDTO.getId());
-
-
-        if(assetAdditionsReport.isPresent()) {
-
-            parameters = "Start Date: ".concat(assetAdditionsReport.get().getReportStartDate().format(DateTimeFormatter.ISO_DATE).concat("; "));
-
-            if (assetAdditionsReport.get().getReportEndDate() != null) {
-
-                parameters = parameters.concat("End Date: ".concat(assetAdditionsReport.get().getReportEndDate().format(DateTimeFormatter.ISO_DATE)).concat("; "));
-            }
-        }
-
-        return parameters;
+        // TODO get report-date parameter
+        return reportRequisition.getReportParameters();
     }
 
-    @NotNull
-    private Optional<List<AssetsAdditionsReportItemVM>> getEntries(PrepaymentReportRequisitionDTO reportRequisition) {
-        return assetAdditionsReportRepository.findById(assetAdditionsReportDTO.getId())
-            .map(report ->
-                internalAssetAdditionsReportItemRepository.findAllByCapitalizationDate(report.getReportStartDate(), report.getReportEndDate(), Pageable.ofSize(Integer.MAX_VALUE))
-                    .getContent())
-            .map(assetAdditionsEntryInternalMapper::toValue2);
+    private Optional<List<PrepaymentReportDTO>> getEntries(PrepaymentReportRequisitionDTO reportRequisition) {
+
+        // TODO get report-date parameter from the requisition
+        return internalPrepaymentReportService.getReportListByReportDate(reportRequisition.getTimeOfRequisition().toLocalDate());
     }
 }
