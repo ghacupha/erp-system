@@ -1,4 +1,4 @@
-package io.github.erp.internal.service;
+package io.github.erp.internal.service.assets;
 
 /*-
  * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9

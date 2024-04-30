@@ -1,4 +1,4 @@
-package io.github.erp.internal.service;
+package io.github.erp.internal.service.assets;
 
 /*-
  * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
@@ -19,13 +19,13 @@ package io.github.erp.internal.service;
  */
 import com.google.common.util.concurrent.Futures;
 import tech.jhipster.service.filter.LongFilter;
-import io.github.erp.domain.FixedAssetNetBookValue;
+import io.github.erp.domain.FixedAssetDepreciation;
 import io.github.erp.internal.framework.batch.DeletionService;
-import io.github.erp.repository.FixedAssetNetBookValueRepository;
-import io.github.erp.repository.search.FixedAssetNetBookValueSearchRepository;
-import io.github.erp.service.FixedAssetNetBookValueQueryService;
-import io.github.erp.service.criteria.FixedAssetNetBookValueCriteria;
-import io.github.erp.service.dto.FixedAssetNetBookValueDTO;
+import io.github.erp.repository.FixedAssetDepreciationRepository;
+import io.github.erp.repository.search.FixedAssetDepreciationSearchRepository;
+import io.github.erp.service.FixedAssetDepreciationQueryService;
+import io.github.erp.service.criteria.FixedAssetDepreciationCriteria;
+import io.github.erp.service.dto.FixedAssetDepreciationDTO;
 import io.github.erp.service.mapper.EntityMapper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -39,14 +39,13 @@ import java.util.stream.Collectors;
 
 @Transactional
 @Service
-public class FixedAssetNetBookValueDeletionService  implements DeletionService<FixedAssetNetBookValue> {
+public class FixedAssetDepreciationDeletionService implements DeletionService<FixedAssetDepreciation> {
+    private final FixedAssetDepreciationRepository fixedAssetDepreciationRepository;
+    private final FixedAssetDepreciationSearchRepository fixedAssetDepreciationSearchRepository;
+    private final FixedAssetDepreciationQueryService fixedAssetDepreciationQueryService;
+    private final EntityMapper<FixedAssetDepreciationDTO, FixedAssetDepreciation> fixedAssetDepreciationMapper;
 
-    private final FixedAssetNetBookValueRepository fixedAssetDepreciationRepository;
-    private final FixedAssetNetBookValueSearchRepository fixedAssetDepreciationSearchRepository;
-    private final FixedAssetNetBookValueQueryService fixedAssetDepreciationQueryService;
-    private final EntityMapper<FixedAssetNetBookValueDTO, FixedAssetNetBookValue> fixedAssetDepreciationMapper;
-
-    public FixedAssetNetBookValueDeletionService(FixedAssetNetBookValueRepository fixedAssetDepreciationRepository, FixedAssetNetBookValueSearchRepository fixedAssetDepreciationSearchRepository, FixedAssetNetBookValueQueryService fixedAssetDepreciationQueryService, EntityMapper<FixedAssetNetBookValueDTO, FixedAssetNetBookValue> fixedAssetDepreciationMapper) {
+    public FixedAssetDepreciationDeletionService(FixedAssetDepreciationRepository fixedAssetDepreciationRepository, FixedAssetDepreciationSearchRepository fixedAssetDepreciationSearchRepository, FixedAssetDepreciationQueryService fixedAssetDepreciationQueryService, EntityMapper<FixedAssetDepreciationDTO, FixedAssetDepreciation> fixedAssetDepreciationMapper) {
         this.fixedAssetDepreciationRepository = fixedAssetDepreciationRepository;
         this.fixedAssetDepreciationSearchRepository = fixedAssetDepreciationSearchRepository;
         this.fixedAssetDepreciationQueryService = fixedAssetDepreciationQueryService;
@@ -61,18 +60,18 @@ public class FixedAssetNetBookValueDeletionService  implements DeletionService<F
      */
     @Override
     @Async
-    public Future<List<FixedAssetNetBookValue>> delete(final List<Long> list) {
-        List<FixedAssetNetBookValue> deletedAccounts = new CopyOnWriteArrayList<>();
+    public Future<List<FixedAssetDepreciation>> delete(final List<Long> list) {
+        List<FixedAssetDepreciation> deletedAccounts = new CopyOnWriteArrayList<>();
 
-        Optional<List<FixedAssetNetBookValue>> deletable = Optional.of(new CopyOnWriteArrayList<>());
+        Optional<List<FixedAssetDepreciation>> deletable = Optional.of(new CopyOnWriteArrayList<>());
 
-        List<FixedAssetNetBookValueCriteria> criteriaList = new CopyOnWriteArrayList<>();
+        List<FixedAssetDepreciationCriteria> criteriaList = new CopyOnWriteArrayList<>();
 
         list.forEach(
             id -> {
                 LongFilter idFilter = new LongFilter();
                 idFilter.setEquals(id);
-                FixedAssetNetBookValueCriteria criteria = new FixedAssetNetBookValueCriteria();
+                FixedAssetDepreciationCriteria criteria = new FixedAssetDepreciationCriteria();
                 criteria.setId(idFilter);
                 criteriaList.add(criteria);
             }
@@ -98,7 +97,7 @@ public class FixedAssetNetBookValueDeletionService  implements DeletionService<F
         return Futures.immediateFuture(deletedAccounts);
     }
 
-    public void mapCriteriaList(Optional<List<FixedAssetNetBookValue>> deletable, List<FixedAssetNetBookValueCriteria> criteriaList, FixedAssetNetBookValueQueryService fixedAssetDepreciationQueryService) {
+    public void mapCriteriaList(Optional<List<FixedAssetDepreciation>> deletable, List<FixedAssetDepreciationCriteria> criteriaList, FixedAssetDepreciationQueryService fixedAssetDepreciationQueryService) {
         criteriaList.forEach(
             criteria ->
                 deletable.ifPresent(
