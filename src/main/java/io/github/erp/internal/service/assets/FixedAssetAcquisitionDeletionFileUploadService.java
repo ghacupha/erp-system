@@ -1,4 +1,4 @@
-package io.github.erp.internal.service;
+package io.github.erp.internal.service.assets;
 
 /*-
  * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
@@ -17,34 +17,34 @@ package io.github.erp.internal.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.internal.model.mapping.AssetDepreciationBatchEntityDTOMapping;
-import io.github.erp.internal.model.FixedAssetDepreciationBEO;
+import io.github.erp.internal.model.mapping.AssetAcquisitionBatchEntityDTOMapping;
+import io.github.erp.internal.model.FixedAssetAcquisitionBEO;
 import tech.jhipster.service.filter.StringFilter;
 import io.github.erp.internal.framework.service.DeletionUploadService;
-import io.github.erp.service.FixedAssetDepreciationQueryService;
-import io.github.erp.service.criteria.FixedAssetDepreciationCriteria;
+import io.github.erp.service.FixedAssetAcquisitionQueryService;
+import io.github.erp.service.criteria.FixedAssetAcquisitionCriteria;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service("fixedAssetDepreciationDeletionFileUploadService")
-public class FixedAssetDepreciationDeletionFileUploadService implements DeletionUploadService<FixedAssetDepreciationBEO> {
+@Service("fixedAssetAcquisitionDeletionFileUploadService")
+public class FixedAssetAcquisitionDeletionFileUploadService implements DeletionUploadService<FixedAssetAcquisitionBEO> {
 
-    private final AssetDepreciationBatchEntityDTOMapping batchEntityDTOMapping;
-    private final FixedAssetDepreciationQueryService fixedAssetDepreciationQueryService;
+    private final AssetAcquisitionBatchEntityDTOMapping batchEntityDTOMapping;
+    private final FixedAssetAcquisitionQueryService fixedAssetAcquisitionQueryService;
 
-    public FixedAssetDepreciationDeletionFileUploadService(AssetDepreciationBatchEntityDTOMapping batchEntityDTOMapping, FixedAssetDepreciationQueryService fixedAssetDepreciationQueryService) {
+    public FixedAssetAcquisitionDeletionFileUploadService(AssetAcquisitionBatchEntityDTOMapping batchEntityDTOMapping, FixedAssetAcquisitionQueryService fixedAssetAcquisitionQueryService) {
         this.batchEntityDTOMapping = batchEntityDTOMapping;
-        this.fixedAssetDepreciationQueryService = fixedAssetDepreciationQueryService;
+        this.fixedAssetAcquisitionQueryService = fixedAssetAcquisitionQueryService;
     }
 
     @Override
-    public Optional<List<FixedAssetDepreciationBEO>> findAllByUploadToken(String stringToken) {
-        FixedAssetDepreciationCriteria criteria = new FixedAssetDepreciationCriteria();
+    public Optional<List<FixedAssetAcquisitionBEO>> findAllByUploadToken(String stringToken) {
+        FixedAssetAcquisitionCriteria criteria = new FixedAssetAcquisitionCriteria();
         StringFilter uploadToken = new StringFilter();
         uploadToken.setEquals(stringToken);
         criteria.setFileUploadToken(uploadToken);
-        return Optional.of(batchEntityDTOMapping.toValue1(fixedAssetDepreciationQueryService.findByCriteria(criteria)));
+        return Optional.of(batchEntityDTOMapping.toValue1(fixedAssetAcquisitionQueryService.findByCriteria(criteria)));
     }
 }

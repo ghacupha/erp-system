@@ -1,4 +1,4 @@
-package io.github.erp.internal.service;
+package io.github.erp.internal.service.assets;
 
 /*-
  * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
@@ -18,36 +18,36 @@ package io.github.erp.internal.service;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.internal.framework.BatchService;
-import io.github.erp.repository.FixedAssetDepreciationRepository;
-import io.github.erp.repository.search.FixedAssetDepreciationSearchRepository;
-import io.github.erp.service.dto.FixedAssetDepreciationDTO;
-import io.github.erp.service.mapper.FixedAssetDepreciationMapper;
+import io.github.erp.repository.FixedAssetAcquisitionRepository;
+import io.github.erp.repository.search.FixedAssetAcquisitionSearchRepository;
+import io.github.erp.service.dto.FixedAssetAcquisitionDTO;
+import io.github.erp.service.mapper.FixedAssetAcquisitionMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Transactional
-@Service("fixedAssetDepreciationBatchService")
-public class FixedAssetDepreciationBatchService implements BatchService<FixedAssetDepreciationDTO> {
+@Service("fixedAssetAcquisitionBatchService")
+public class FixedAssetAcquisitionBatchService implements BatchService<FixedAssetAcquisitionDTO> {
 
-    private final FixedAssetDepreciationMapper mapper;
-    private final FixedAssetDepreciationRepository repository;
-    private final FixedAssetDepreciationSearchRepository searchRepository;
+    private final FixedAssetAcquisitionMapper mapper;
+    private final FixedAssetAcquisitionRepository repository;
+    private final FixedAssetAcquisitionSearchRepository searchRepository;
 
-    public FixedAssetDepreciationBatchService(FixedAssetDepreciationMapper mapper, FixedAssetDepreciationRepository repository, FixedAssetDepreciationSearchRepository searchRepository) {
+    public FixedAssetAcquisitionBatchService(FixedAssetAcquisitionMapper mapper, FixedAssetAcquisitionRepository repository, FixedAssetAcquisitionSearchRepository searchRepository) {
         this.mapper = mapper;
         this.repository = repository;
         this.searchRepository = searchRepository;
     }
 
     @Override
-    public List<FixedAssetDepreciationDTO> save(List<FixedAssetDepreciationDTO> entities) {
+    public List<FixedAssetAcquisitionDTO> save(List<FixedAssetAcquisitionDTO> entities) {
         return mapper.toDto(repository.saveAll(mapper.toEntity(entities)));
     }
 
     @Override
-    public void index(List<FixedAssetDepreciationDTO> entities) {
+    public void index(List<FixedAssetAcquisitionDTO> entities) {
 
         searchRepository.saveAll(mapper.toEntity(entities));
     }
