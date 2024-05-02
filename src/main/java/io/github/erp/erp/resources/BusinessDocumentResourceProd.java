@@ -153,7 +153,7 @@ public class BusinessDocumentResourceProd {
         if (userDetailService.getCurrentApplicationUser().isPresent()) {
 
             businessDocumentDTO.setLastModified(ZonedDateTime.now());
-            businessDocumentDTO.setLastModifiedBy(applicationUserMapper.toDto(userDetailService.getCurrentApplicationUser().get()));
+            businessDocumentDTO.setLastModifiedBy(userDetailService.getCurrentApplicationUser().get());
 
              result = businessDocumentService.save(businessDocumentDTO);
 
@@ -203,7 +203,7 @@ public class BusinessDocumentResourceProd {
         if (userDetailService.getCurrentApplicationUser().isPresent()) {
 
             businessDocumentDTO.setLastModified(ZonedDateTime.now());
-            businessDocumentDTO.setLastModifiedBy(applicationUserMapper.toDto(userDetailService.getCurrentApplicationUser().get()));
+            businessDocumentDTO.setLastModifiedBy(userDetailService.getCurrentApplicationUser().get());
 
             result = businessDocumentService.partialUpdate(businessDocumentDTO);
 

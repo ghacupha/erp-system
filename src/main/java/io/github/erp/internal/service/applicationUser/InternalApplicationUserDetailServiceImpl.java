@@ -270,6 +270,8 @@ package io.github.erp.internal.service.applicationUser;
 import io.github.erp.domain.ApplicationUser;
 import io.github.erp.internal.repository.InternalApplicationUserRepository;
 import io.github.erp.repository.UserRepository;
+import io.github.erp.service.dto.ApplicationUserDTO;
+import io.github.erp.service.mapper.ApplicationUserMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -284,21 +286,23 @@ import java.util.Optional;
 public class InternalApplicationUserDetailServiceImpl implements InternalApplicationUserDetailService {
 
     private final UserRepository userRepository;
+    private final ApplicationUserMapper applicationUserMapper;
     private final InternalApplicationUserRepository internalApplicationUserRepository;
 
-    public InternalApplicationUserDetailServiceImpl(UserRepository userRepository, InternalApplicationUserRepository internalApplicationUserRepository) {
+    public InternalApplicationUserDetailServiceImpl(UserRepository userRepository, ApplicationUserMapper applicationUserMapper, InternalApplicationUserRepository internalApplicationUserRepository) {
         this.userRepository = userRepository;
+        this.applicationUserMapper = applicationUserMapper;
         this.internalApplicationUserRepository = internalApplicationUserRepository;
     }
 
     @Override
-    public Optional<ApplicationUser> getCurrentApplicationUser() {
+    public Optional<ApplicationUserDTO> getCurrentApplicationUser() {
 
         return getCorrespondingApplicationUser(getCurrentUserDetails());
     }
 
     @Override
-    public Optional<ApplicationUser> getCorrespondingApplicationUser(UserDetails userDetails) {
+    public Optional<ApplicationUserDTO> getCorrespondingApplicationUser(UserDetails userDetails) {
 
         var ref = new Object() {
             Optional<ApplicationUser> reportUser = Optional.empty();
@@ -319,7 +323,7 @@ public class InternalApplicationUserDetailServiceImpl implements InternalApplica
             () -> {throw new UsernameNotFoundException("We could not retrieve user by username: " + userDetails.getUsername());}
         );
 
-        return ref.reportUser;
+        return ref.reportUser.map(applicationUserMapper::toDto);
     }
 
     private UserDetails getCurrentUserDetails() {

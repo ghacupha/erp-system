@@ -89,18 +89,15 @@ import java.util.List;
 public class WIPSummaryDealerProjectReportListCSVExportService extends AbstractReportListCSVExportService<WorkInProgressReportREPO> implements ReportListExportService<WorkInProgressReportREPO> {
 
     private final InternalApplicationUserDetailService userDetailService;
-    private final ApplicationUserMapper applicationUserMapper;
 
     public WIPSummaryDealerProjectReportListCSVExportService(
         ReportsProperties reportsProperties,
         @Qualifier("reportsFSStorageService") FileStorageService fileStorageService,
         AutonomousReportService autonomousReportService,
-        InternalApplicationUserDetailService userDetailService,
-        ApplicationUserMapper applicationUserMapper) {
+        InternalApplicationUserDetailService userDetailService) {
 
         super(reportsProperties, fileStorageService, autonomousReportService);
         this.userDetailService = userDetailService;
-        this.applicationUserMapper = applicationUserMapper;
     }
 
     /**
@@ -117,6 +114,6 @@ public class WIPSummaryDealerProjectReportListCSVExportService extends AbstractR
     }
 
     protected ApplicationUserDTO getCreatedBy() {
-        return applicationUserMapper.toDto(userDetailService.getCurrentApplicationUser().get());
+        return userDetailService.getCurrentApplicationUser().get();
     }
 }

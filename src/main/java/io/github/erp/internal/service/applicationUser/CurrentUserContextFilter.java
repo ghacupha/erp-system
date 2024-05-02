@@ -233,10 +233,8 @@
 package io.github.erp.internal.service.applicationUser;
 
 import io.github.erp.security.jwt.TokenProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.github.erp.service.mapper.ApplicationUserMapper;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -265,9 +263,12 @@ public class CurrentUserContextFilter extends GenericFilterBean  implements Filt
 
     private final InternalApplicationUserDetailService internalApplicationUserDetailService;
 
-    public CurrentUserContextFilter(TokenProvider tokenProvider, InternalApplicationUserDetailService internalApplicationUserDetailService) {
+    private final ApplicationUserMapper applicationUserMapper;
+
+    public CurrentUserContextFilter(TokenProvider tokenProvider, InternalApplicationUserDetailService internalApplicationUserDetailService, ApplicationUserMapper applicationUserMapper) {
         this.tokenProvider = tokenProvider;
         this.internalApplicationUserDetailService = internalApplicationUserDetailService;
+        this.applicationUserMapper = applicationUserMapper;
     }
 
     @Override
@@ -284,6 +285,7 @@ public class CurrentUserContextFilter extends GenericFilterBean  implements Filt
 
                 internalApplicationUserDetailService
                     .getCorrespondingApplicationUser((UserDetails) authentication.getPrincipal())
+                    .map(applicationUserMapper::toEntity)
                     .ifPresentOrElse(CurrentUserContext::setCurrentUser, CurrentUserContext::clearCurrentUser);
             }
 

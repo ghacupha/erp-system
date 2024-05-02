@@ -63,8 +63,7 @@ public class PrepaymentReportRequisition implements Serializable {
     @Column(name = "tampered")
     private Boolean tampered;
 
-    @NotNull
-    @Column(name = "filename", nullable = false, unique = true)
+    @Column(name = "filename", unique = true)
     private UUID filename;
 
     @Column(name = "report_parameters")

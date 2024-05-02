@@ -250,17 +250,14 @@ import java.util.List;
 public class AmortizationPostingReportListExportService extends AbstractReportListCSVExportService<AmortizationPostingReportDTO> implements ReportListExportService<AmortizationPostingReportDTO> {
 
     private final InternalApplicationUserDetailService userDetailService;
-    private final ApplicationUserMapper applicationUserMapper;
 
     public AmortizationPostingReportListExportService(
         ReportsProperties reportsProperties,
         @Qualifier("reportsFSStorageService") FileStorageService fileStorageService,
         AutonomousReportService autonomousReportService,
-        InternalApplicationUserDetailService userDetailService,
-        ApplicationUserMapper applicationUserMapper) {
+        InternalApplicationUserDetailService userDetailService) {
         super(reportsProperties, fileStorageService, autonomousReportService);
         this.userDetailService = userDetailService;
-        this.applicationUserMapper = applicationUserMapper;
     }
 
     public void executeReport(List<AmortizationPostingReportDTO> reportList, LocalDate reportDate, String fileName, String reportName) throws IOException {
@@ -269,7 +266,7 @@ public class AmortizationPostingReportListExportService extends AbstractReportLi
     }
 
     protected ApplicationUserDTO getCreatedBy() {
-        return applicationUserMapper.toDto(userDetailService.getCurrentApplicationUser().get());
+        return userDetailService.getCurrentApplicationUser().get();
     }
 
 }
