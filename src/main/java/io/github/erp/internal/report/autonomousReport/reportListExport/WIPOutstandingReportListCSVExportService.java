@@ -91,19 +91,16 @@ import java.util.List;
 public class WIPOutstandingReportListCSVExportService extends AbstractReportListCSVExportService<WorkInProgressOutstandingReportDTO> implements ReportListExportService<WorkInProgressOutstandingReportDTO> {
 
     private final InternalApplicationUserDetailService userDetailService;
-    private final ApplicationUserMapper applicationUserMapper;
 
 
     public WIPOutstandingReportListCSVExportService (
         ReportsProperties reportsProperties,
         @Qualifier("reportsFSStorageService") FileStorageService fileStorageService,
         AutonomousReportService autonomousReportService,
-        InternalApplicationUserDetailService userDetailService,
-        ApplicationUserMapper applicationUserMapper) {
+        InternalApplicationUserDetailService userDetailService) {
 
         super(reportsProperties, fileStorageService, autonomousReportService);
         this.userDetailService = userDetailService;
-        this.applicationUserMapper = applicationUserMapper;
     }
 
     /**
@@ -120,6 +117,6 @@ public class WIPOutstandingReportListCSVExportService extends AbstractReportList
     }
 
     protected ApplicationUserDTO getCreatedBy() {
-        return applicationUserMapper.toDto(userDetailService.getCurrentApplicationUser().get());
+        return userDetailService.getCurrentApplicationUser().get();
     }
 }

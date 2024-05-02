@@ -19,9 +19,9 @@ package io.github.erp.internal.service.prepayments;
  */
 
 import io.github.erp.domain.PrepaymentReportRequisition;
+import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.repository.PrepaymentReportRequisitionRepository;
 import io.github.erp.repository.search.PrepaymentReportRequisitionSearchRepository;
-import io.github.erp.service.PrepaymentReportRequisitionService;
 import io.github.erp.service.dto.PrepaymentReportRequisitionDTO;
 import io.github.erp.service.mapper.PrepaymentReportRequisitionMapper;
 import org.slf4j.Logger;
@@ -48,19 +48,28 @@ public class InternalPrepaymentReportRequisitionServiceImpl implements InternalP
 
     private final PrepaymentReportRequisitionSearchRepository prepaymentReportRequisitionSearchRepository;
 
+    private final InternalApplicationUserDetailService internalApplicationUserDetailService;
+
     public InternalPrepaymentReportRequisitionServiceImpl(
         PrepaymentReportRequisitionRepository prepaymentReportRequisitionRepository,
         PrepaymentReportRequisitionMapper prepaymentReportRequisitionMapper,
-        PrepaymentReportRequisitionSearchRepository prepaymentReportRequisitionSearchRepository
-    ) {
+        PrepaymentReportRequisitionSearchRepository prepaymentReportRequisitionSearchRepository,
+        InternalApplicationUserDetailService internalApplicationUserDetailService) {
         this.prepaymentReportRequisitionRepository = prepaymentReportRequisitionRepository;
         this.prepaymentReportRequisitionMapper = prepaymentReportRequisitionMapper;
         this.prepaymentReportRequisitionSearchRepository = prepaymentReportRequisitionSearchRepository;
+        this.internalApplicationUserDetailService = internalApplicationUserDetailService;
     }
 
     @Override
     public PrepaymentReportRequisitionDTO save(PrepaymentReportRequisitionDTO prepaymentReportRequisitionDTO) {
         log.debug("Request to save PrepaymentReportRequisition : {}", prepaymentReportRequisitionDTO);
+
+        // Update user details
+        if (prepaymentReportRequisitionDTO.getId() == null) {
+            internalApplicationUserDetailService.getCurrentApplicationUser().ifPresent(prepaymentReportRequisitionDTO::setRequestedBy);
+        }
+
         PrepaymentReportRequisition prepaymentReportRequisition = prepaymentReportRequisitionMapper.toEntity(
             prepaymentReportRequisitionDTO
         );
@@ -101,7 +110,19 @@ public class InternalPrepaymentReportRequisitionServiceImpl implements InternalP
     @Transactional(readOnly = true)
     public Optional<PrepaymentReportRequisitionDTO> findOne(Long id) {
         log.debug("Request to get PrepaymentReportRequisition : {}", id);
-        return prepaymentReportRequisitionRepository.findById(id).map(prepaymentReportRequisitionMapper::toDto);
+
+        final Optional<PrepaymentReportRequisitionDTO>[] reportRequisitionDTO = new Optional[]{Optional.empty()};
+
+        internalApplicationUserDetailService.getCurrentApplicationUser().ifPresent(appUser -> {
+
+            prepaymentReportRequisitionRepository.findById(id).map(prepaymentReportRequisitionMapper::toDto)
+            .ifPresent(report -> {
+                report.setLastAccessedBy(appUser);
+                reportRequisitionDTO[0] = Optional.of(save(report));
+            });
+        });
+
+        return reportRequisitionDTO[0];
     }
 
     @Override

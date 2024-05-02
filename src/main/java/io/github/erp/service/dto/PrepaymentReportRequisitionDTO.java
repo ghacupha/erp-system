@@ -46,7 +46,6 @@ public class PrepaymentReportRequisitionDTO implements Serializable {
 
     private Boolean tampered;
 
-    @NotNull
     private UUID filename;
 
     private String reportParameters;

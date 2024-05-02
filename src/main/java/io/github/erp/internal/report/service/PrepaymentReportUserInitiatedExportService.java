@@ -21,6 +21,7 @@ package io.github.erp.internal.report.service;
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.report.CSVListExportService;
 import io.github.erp.internal.report.ReportsProperties;
+import io.github.erp.internal.service.prepayments.InternalPrepaymentReportRequisitionService;
 import io.github.erp.internal.service.prepayments.InternalPrepaymentReportService;
 import io.github.erp.service.dto.PrepaymentReportDTO;
 import io.github.erp.service.dto.PrepaymentReportRequisitionDTO;
@@ -39,19 +40,21 @@ import java.util.UUID;
  * reports directory as a csv file
  */
 @Transactional
-@Service
+@Service("prepaymentReportUserInitiatedExportService")
 public class PrepaymentReportUserInitiatedExportService
     extends CSVListExportService<PrepaymentReportDTO>
     implements ExportReportService<PrepaymentReportRequisitionDTO> {
 
     private final InternalPrepaymentReportService internalPrepaymentReportService;
+    private final InternalPrepaymentReportRequisitionService internalPrepaymentReportRequisitionService;
 
     public PrepaymentReportUserInitiatedExportService(
         ReportsProperties reportsProperties,
         InternalPrepaymentReportService internalPrepaymentReportService,
-        @Qualifier("reportsFSStorageService") FileStorageService fileStorageService) {
+        @Qualifier("reportsFSStorageService") FileStorageService fileStorageService, InternalPrepaymentReportRequisitionService internalPrepaymentReportRequisitionService) {
         super(reportsProperties, fileStorageService);
         this.internalPrepaymentReportService = internalPrepaymentReportService;
+        this.internalPrepaymentReportRequisitionService = internalPrepaymentReportRequisitionService;
     }
 
     @Override
@@ -69,6 +72,8 @@ public class PrepaymentReportUserInitiatedExportService
                 reportRequisition.setFileChecksum(fileChecksum);
                 reportRequisition.setFilename(fileName);
                 reportRequisition.setReportParameters(getReportParameters(reportRequisition));
+
+                internalPrepaymentReportRequisitionService.save(reportRequisition);
 
             } catch (IOException e) {
                 e.printStackTrace();

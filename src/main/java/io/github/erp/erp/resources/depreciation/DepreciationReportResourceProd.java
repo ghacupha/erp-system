@@ -98,8 +98,7 @@ public class DepreciationReportResourceProd {
             throw new BadRequestAlertException("A new depreciationReport cannot already have an ID", ENTITY_NAME, "idexists");
         }
 
-        Optional<ApplicationUserDTO> applicationUserDTO = userDetailService.getCurrentApplicationUser()
-            .map(applicationUserMapper::toDto);
+        Optional<ApplicationUserDTO> applicationUserDTO = userDetailService.getCurrentApplicationUser();
 
         DepreciationReportDTO result = null;
 

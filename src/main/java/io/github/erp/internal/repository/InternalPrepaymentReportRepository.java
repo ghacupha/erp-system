@@ -29,6 +29,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -79,6 +80,44 @@ public interface InternalPrepaymentReportRepository extends
         "    p.prepayment_amount", nativeQuery = true)
     Page<PrepaymentReportTuple> findAllByReportDate(@Param("reportDate") LocalDate reportDate, Pageable page);
 
+
+    @Query(value = " SELECT " +
+        "    p.id, " +
+        "    p.catalogue_number as CatalogueNumber, " +
+        "    p.particulars, " +
+        "    d.dealer_name as DealerName, " +
+        "    s.payment_number as PaymentNumber, " +
+        "    s.payment_date as PaymentDate, " +
+        "    c.iso_4217_currency_code as CurrencyCode, " +
+        "    COALESCE(p.prepayment_amount, 0) as PrepaymentAmount, " +
+        "    COALESCE(SUM(pa.prepayment_amount), 0) as AmortisedAmount, " +
+        "    COALESCE(p.prepayment_amount, 0) - COALESCE(SUM(pa.prepayment_amount), 0) as OutstandingAmount " +
+        " FROM prepayment_account p " +
+        " LEFT JOIN dealer d ON d.id = p.dealer_id " +
+        " LEFT JOIN settlement_currency c ON c.id = p.settlement_currency_id " +
+        " LEFT JOIN settlement s ON s.id = p.prepayment_transaction_id " +
+        " LEFT JOIN " +
+        "  prepayment_amortization pa ON p.id = pa.prepayment_account_id AND pa.amortization_period_id IN ( " +
+        "    SELECT fm.id " +
+        "    FROM amortization_period fm " +
+        "    WHERE fm.end_date < :reportDate " +
+        " )" +
+        " WHERE p.recognition_date <= :reportDate OR p.id NOT IN ( " +
+        "    SELECT prep.id" +
+        "    FROM prepayment_account prep" +
+        "    LEFT JOIN settlement s ON s.id = prep.prepayment_transaction_id" +
+        "    WHERE prep.recognition_date > :reportDate " +
+        " )" +
+        " GROUP BY" +
+        "    p.id," +
+        "    p.catalogue_number," +
+        "    p.particulars," +
+        "    d.dealer_name," +
+        "    s.payment_number," +
+        "    s.payment_date," +
+        "    c.iso_4217_currency_code," +
+        "    p.prepayment_amount", nativeQuery = true)
+    Optional<List<PrepaymentReportTuple>> findAllByReportDate(@Param("reportDate") LocalDate reportDate);
 
     @Query(value = "SELECT" +
         "    p.id," +

@@ -123,23 +123,6 @@ public class PrepaymentReportResourceProd {
         }
     }
 
-//    private static PrepaymentReportDTO mapPrepaymentReport(PrepaymentReportTuple prepaymentReportTuple) {
-//
-//        PrepaymentReportDTO report = new PrepaymentReportDTO();
-//        report.setId(prepaymentReportTuple.getId());
-//        report.setCatalogueNumber(prepaymentReportTuple.getCatalogueNumber());
-//        report.setParticulars(prepaymentReportTuple.getParticulars());
-//        report.setDealerName(prepaymentReportTuple.getDealerName());
-//        report.setPaymentNumber(prepaymentReportTuple.getPaymentNumber());
-//        report.setPaymentDate(prepaymentReportTuple.getPaymentDate());
-//        report.setCurrencyCode(prepaymentReportTuple.getCurrencyCode());
-//        report.setPrepaymentAmount(prepaymentReportTuple.getPrepaymentAmount());
-//        report.setAmortisedAmount(prepaymentReportTuple.getAmortisedAmount());
-//        report.setOutstandingAmount(prepaymentReportTuple.getOutstandingAmount());
-//
-//        return report;
-//    }
-
     /**
      * {@code GET  /prepayment-reports/count} : count all the prepaymentReports.
      *

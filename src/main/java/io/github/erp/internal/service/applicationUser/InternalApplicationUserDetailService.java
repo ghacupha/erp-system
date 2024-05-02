@@ -268,6 +268,7 @@ package io.github.erp.internal.service.applicationUser;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.ApplicationUser;
+import io.github.erp.service.dto.ApplicationUserDTO;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Optional;
@@ -281,11 +282,11 @@ public interface InternalApplicationUserDetailService {
      *
      * @return the current-user in the system
      */
-    Optional<ApplicationUser> getCurrentApplicationUser();
+    Optional<ApplicationUserDTO> getCurrentApplicationUser();
 
     /**
      * Get the ApplicationUser that corresponds to the Spring Security UserDetails instance
      * provided
      */
-    Optional<ApplicationUser> getCorrespondingApplicationUser(UserDetails userDetails);
+    Optional<ApplicationUserDTO> getCorrespondingApplicationUser(UserDetails userDetails);
 }

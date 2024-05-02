@@ -19,8 +19,8 @@ package io.github.erp.internal.service.prepayments;
  */
 
 import io.github.erp.domain.PrepaymentReport;
+import io.github.erp.internal.report.autonomousReport._maps.PrepaymentReportTupleMapper;
 import io.github.erp.internal.repository.InternalPrepaymentReportRepository;
-import io.github.erp.repository.PrepaymentReportRepository;
 import io.github.erp.repository.search.PrepaymentReportSearchRepository;
 import io.github.erp.service.dto.PrepaymentReportDTO;
 import io.github.erp.service.mapper.PrepaymentReportMapper;
@@ -50,14 +50,17 @@ public class InternalPrepaymentReportServiceImpl implements InternalPrepaymentRe
 
     private final PrepaymentReportSearchRepository prepaymentReportSearchRepository;
 
+    private final PrepaymentReportTupleMapper prepaymentReportTupleMapper;
+
     public InternalPrepaymentReportServiceImpl(
         InternalPrepaymentReportRepository prepaymentReportRepository,
         PrepaymentReportMapper prepaymentReportMapper,
-        PrepaymentReportSearchRepository prepaymentReportSearchRepository
-    ) {
+        PrepaymentReportSearchRepository prepaymentReportSearchRepository,
+        PrepaymentReportTupleMapper prepaymentReportTupleMapper) {
         this.prepaymentReportRepository = prepaymentReportRepository;
         this.prepaymentReportMapper = prepaymentReportMapper;
         this.prepaymentReportSearchRepository = prepaymentReportSearchRepository;
+        this.prepaymentReportTupleMapper = prepaymentReportTupleMapper;
     }
 
     @Override
@@ -119,13 +122,16 @@ public class InternalPrepaymentReportServiceImpl implements InternalPrepaymentRe
     }
 
     /**
-     * Returns report items calculated as at the reportDate parameter
+     * Returns report items calculated as at the reportDate parameter. The same do not have
+     * parameters for page as the expectation is to derive the entire list
      *
-     * @param reportDate
-     * @return
+     * @param reportDate This is the date of the report as at which the prepayment report is including
+     *                   prepayment-account items and amortizing the same
+     * @return Optional list of prepayment-report items with calculated outstanding values
      */
     @Override
     public Optional<List<PrepaymentReportDTO>> getReportListByReportDate(LocalDate reportDate) {
-        return Optional.empty();
+        return prepaymentReportRepository.findAllByReportDate(reportDate)
+            .map(prepaymentReportTupleMapper::toValue2);
     }
 }

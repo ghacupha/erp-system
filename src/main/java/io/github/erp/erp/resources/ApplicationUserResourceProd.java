@@ -68,19 +68,15 @@ public class ApplicationUserResourceProd {
 
     private final InternalApplicationUserDetailService userDetailService;
 
-    private final ApplicationUserMapper applicationUserMapper;
-
     public ApplicationUserResourceProd(
         ApplicationUserService applicationUserService,
         ApplicationUserRepository applicationUserRepository,
         ApplicationUserQueryService applicationUserQueryService,
-        InternalApplicationUserDetailService userDetailService,
-        ApplicationUserMapper applicationUserMapper) {
+        InternalApplicationUserDetailService userDetailService) {
         this.applicationUserService = applicationUserService;
         this.applicationUserRepository = applicationUserRepository;
         this.applicationUserQueryService = applicationUserQueryService;
         this.userDetailService = userDetailService;
-        this.applicationUserMapper = applicationUserMapper;
     }
 
     /**
@@ -222,8 +218,7 @@ public class ApplicationUserResourceProd {
     @GetMapping("/application-users/current")
     public ResponseEntity<ApplicationUserDTO> getCurrentUser() {
         log.debug("REST request to get current ApplicationUser");
-        Optional<ApplicationUserDTO> applicationUserDTO = userDetailService.getCurrentApplicationUser()
-            .map(applicationUserMapper::toDto);
+        Optional<ApplicationUserDTO> applicationUserDTO = userDetailService.getCurrentApplicationUser();
         return ResponseUtil.wrapOrNotFound(applicationUserDTO);
     }
 

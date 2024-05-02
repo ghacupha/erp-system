@@ -27,6 +27,7 @@ import io.github.erp.service.*;
 import io.github.erp.service.dto.*;
 import io.github.erp.service.mapper.ReportStatusMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -93,7 +94,11 @@ public class ReportingAspectConfiguration {
     private ReportAttachmentService<AssetAdditionsReportDTO> assetAdditionsReportDTOReportAttachmentService;
 
     @Autowired
+    @Qualifier("prepaymentReportUserInitiatedExportService")
     private ExportReportService<PrepaymentReportRequisitionDTO> prepaymentReportExportReportService;
+
+    @Autowired
+    private ReportAttachmentService<PrepaymentReportRequisitionDTO> prepaymentReportRequisitionAttachmentService;
 
     @Bean
     public ReportRequisitionInterceptor reportRequisitionInterceptor() {
@@ -153,7 +158,13 @@ public class ReportingAspectConfiguration {
         return new AssetAdditionsReportAttachmentInterceptor(assetAdditionsReportDTOReportAttachmentService);
     }
 
+    @Bean
     public PrepaymentReportRequisitionInterceptor prepaymentReportRequisitionInterceptor() {
         return new PrepaymentReportRequisitionInterceptor(prepaymentReportExportReportService);
+    }
+
+    @Bean
+    public PrepaymentReportRequisitionAttachmentInterceptor prepaymentReportRequisitionAttachmentInterceptor() {
+        return new PrepaymentReportRequisitionAttachmentInterceptor(prepaymentReportRequisitionAttachmentService);
     }
 }

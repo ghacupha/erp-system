@@ -41,10 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -59,16 +56,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the PrepaymentReportRequisitionResource REST controller.
+ * Integration tests for the PrepaymentReportRequisitionResourceProd REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser(roles = {"PREPAYMENTS_MODULE_USER"})
+@WithMockUser
 class PrepaymentReportRequisitionResourceIT {
 
     private static final String DEFAULT_REPORT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_REPORT_NAME = "BBBBBBBBBB";
+
+    private static final LocalDate DEFAULT_REPORT_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_REPORT_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_REPORT_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final ZonedDateTime DEFAULT_TIME_OF_REQUISITION = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_TIME_OF_REQUISITION = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
@@ -91,9 +92,9 @@ class PrepaymentReportRequisitionResourceIT {
     private static final String DEFAULT_REPORT_FILE_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_REPORT_FILE_CONTENT_TYPE = "image/png";
 
-    private static final String ENTITY_API_URL = "/api/prepayments/prepayment-report-requisitions";
+    private static final String ENTITY_API_URL = "/api/prepayment-report-requisitions";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/prepayments/_search/prepayment-report-requisitions";
+    private static final String ENTITY_SEARCH_API_URL = "/api/_search/prepayment-report-requisitions";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
@@ -129,6 +130,7 @@ class PrepaymentReportRequisitionResourceIT {
     public static PrepaymentReportRequisition createEntity(EntityManager em) {
         PrepaymentReportRequisition prepaymentReportRequisition = new PrepaymentReportRequisition()
             .reportName(DEFAULT_REPORT_NAME)
+            .reportDate(DEFAULT_REPORT_DATE)
             .timeOfRequisition(DEFAULT_TIME_OF_REQUISITION)
             .fileChecksum(DEFAULT_FILE_CHECKSUM)
             .tampered(DEFAULT_TAMPERED)
@@ -148,6 +150,7 @@ class PrepaymentReportRequisitionResourceIT {
     public static PrepaymentReportRequisition createUpdatedEntity(EntityManager em) {
         PrepaymentReportRequisition prepaymentReportRequisition = new PrepaymentReportRequisition()
             .reportName(UPDATED_REPORT_NAME)
+            .reportDate(UPDATED_REPORT_DATE)
             .timeOfRequisition(UPDATED_TIME_OF_REQUISITION)
             .fileChecksum(UPDATED_FILE_CHECKSUM)
             .tampered(UPDATED_TAMPERED)
@@ -186,6 +189,7 @@ class PrepaymentReportRequisitionResourceIT {
             prepaymentReportRequisitionList.size() - 1
         );
         assertThat(testPrepaymentReportRequisition.getReportName()).isEqualTo(DEFAULT_REPORT_NAME);
+        assertThat(testPrepaymentReportRequisition.getReportDate()).isEqualTo(DEFAULT_REPORT_DATE);
         assertThat(testPrepaymentReportRequisition.getTimeOfRequisition()).isEqualTo(DEFAULT_TIME_OF_REQUISITION);
         assertThat(testPrepaymentReportRequisition.getFileChecksum()).isEqualTo(DEFAULT_FILE_CHECKSUM);
         assertThat(testPrepaymentReportRequisition.getTampered()).isEqualTo(DEFAULT_TAMPERED);
@@ -252,10 +256,10 @@ class PrepaymentReportRequisitionResourceIT {
 
     @Test
     @Transactional
-    void checkTimeOfRequisitionIsRequired() throws Exception {
+    void checkReportDateIsRequired() throws Exception {
         int databaseSizeBeforeTest = prepaymentReportRequisitionRepository.findAll().size();
         // set the field null
-        prepaymentReportRequisition.setTimeOfRequisition(null);
+        prepaymentReportRequisition.setReportDate(null);
 
         // Create the PrepaymentReportRequisition, which fails.
         PrepaymentReportRequisitionDTO prepaymentReportRequisitionDTO = prepaymentReportRequisitionMapper.toDto(
@@ -276,10 +280,10 @@ class PrepaymentReportRequisitionResourceIT {
 
     @Test
     @Transactional
-    void checkFilenameIsRequired() throws Exception {
+    void checkTimeOfRequisitionIsRequired() throws Exception {
         int databaseSizeBeforeTest = prepaymentReportRequisitionRepository.findAll().size();
         // set the field null
-        prepaymentReportRequisition.setFilename(null);
+        prepaymentReportRequisition.setTimeOfRequisition(null);
 
         // Create the PrepaymentReportRequisition, which fails.
         PrepaymentReportRequisitionDTO prepaymentReportRequisitionDTO = prepaymentReportRequisitionMapper.toDto(
@@ -311,6 +315,7 @@ class PrepaymentReportRequisitionResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentReportRequisition.getId().intValue())))
             .andExpect(jsonPath("$.[*].reportName").value(hasItem(DEFAULT_REPORT_NAME)))
+            .andExpect(jsonPath("$.[*].reportDate").value(hasItem(DEFAULT_REPORT_DATE.toString())))
             .andExpect(jsonPath("$.[*].timeOfRequisition").value(hasItem(sameInstant(DEFAULT_TIME_OF_REQUISITION))))
             .andExpect(jsonPath("$.[*].fileChecksum").value(hasItem(DEFAULT_FILE_CHECKSUM)))
             .andExpect(jsonPath("$.[*].tampered").value(hasItem(DEFAULT_TAMPERED.booleanValue())))
@@ -333,6 +338,7 @@ class PrepaymentReportRequisitionResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(prepaymentReportRequisition.getId().intValue()))
             .andExpect(jsonPath("$.reportName").value(DEFAULT_REPORT_NAME))
+            .andExpect(jsonPath("$.reportDate").value(DEFAULT_REPORT_DATE.toString()))
             .andExpect(jsonPath("$.timeOfRequisition").value(sameInstant(DEFAULT_TIME_OF_REQUISITION)))
             .andExpect(jsonPath("$.fileChecksum").value(DEFAULT_FILE_CHECKSUM))
             .andExpect(jsonPath("$.tampered").value(DEFAULT_TAMPERED.booleanValue()))
@@ -436,6 +442,110 @@ class PrepaymentReportRequisitionResourceIT {
 
         // Get all the prepaymentReportRequisitionList where reportName does not contain UPDATED_REPORT_NAME
         defaultPrepaymentReportRequisitionShouldBeFound("reportName.doesNotContain=" + UPDATED_REPORT_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentReportRequisitionsByReportDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentReportRequisitionRepository.saveAndFlush(prepaymentReportRequisition);
+
+        // Get all the prepaymentReportRequisitionList where reportDate equals to DEFAULT_REPORT_DATE
+        defaultPrepaymentReportRequisitionShouldBeFound("reportDate.equals=" + DEFAULT_REPORT_DATE);
+
+        // Get all the prepaymentReportRequisitionList where reportDate equals to UPDATED_REPORT_DATE
+        defaultPrepaymentReportRequisitionShouldNotBeFound("reportDate.equals=" + UPDATED_REPORT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentReportRequisitionsByReportDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentReportRequisitionRepository.saveAndFlush(prepaymentReportRequisition);
+
+        // Get all the prepaymentReportRequisitionList where reportDate not equals to DEFAULT_REPORT_DATE
+        defaultPrepaymentReportRequisitionShouldNotBeFound("reportDate.notEquals=" + DEFAULT_REPORT_DATE);
+
+        // Get all the prepaymentReportRequisitionList where reportDate not equals to UPDATED_REPORT_DATE
+        defaultPrepaymentReportRequisitionShouldBeFound("reportDate.notEquals=" + UPDATED_REPORT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentReportRequisitionsByReportDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        prepaymentReportRequisitionRepository.saveAndFlush(prepaymentReportRequisition);
+
+        // Get all the prepaymentReportRequisitionList where reportDate in DEFAULT_REPORT_DATE or UPDATED_REPORT_DATE
+        defaultPrepaymentReportRequisitionShouldBeFound("reportDate.in=" + DEFAULT_REPORT_DATE + "," + UPDATED_REPORT_DATE);
+
+        // Get all the prepaymentReportRequisitionList where reportDate equals to UPDATED_REPORT_DATE
+        defaultPrepaymentReportRequisitionShouldNotBeFound("reportDate.in=" + UPDATED_REPORT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentReportRequisitionsByReportDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        prepaymentReportRequisitionRepository.saveAndFlush(prepaymentReportRequisition);
+
+        // Get all the prepaymentReportRequisitionList where reportDate is not null
+        defaultPrepaymentReportRequisitionShouldBeFound("reportDate.specified=true");
+
+        // Get all the prepaymentReportRequisitionList where reportDate is null
+        defaultPrepaymentReportRequisitionShouldNotBeFound("reportDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentReportRequisitionsByReportDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentReportRequisitionRepository.saveAndFlush(prepaymentReportRequisition);
+
+        // Get all the prepaymentReportRequisitionList where reportDate is greater than or equal to DEFAULT_REPORT_DATE
+        defaultPrepaymentReportRequisitionShouldBeFound("reportDate.greaterThanOrEqual=" + DEFAULT_REPORT_DATE);
+
+        // Get all the prepaymentReportRequisitionList where reportDate is greater than or equal to UPDATED_REPORT_DATE
+        defaultPrepaymentReportRequisitionShouldNotBeFound("reportDate.greaterThanOrEqual=" + UPDATED_REPORT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentReportRequisitionsByReportDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentReportRequisitionRepository.saveAndFlush(prepaymentReportRequisition);
+
+        // Get all the prepaymentReportRequisitionList where reportDate is less than or equal to DEFAULT_REPORT_DATE
+        defaultPrepaymentReportRequisitionShouldBeFound("reportDate.lessThanOrEqual=" + DEFAULT_REPORT_DATE);
+
+        // Get all the prepaymentReportRequisitionList where reportDate is less than or equal to SMALLER_REPORT_DATE
+        defaultPrepaymentReportRequisitionShouldNotBeFound("reportDate.lessThanOrEqual=" + SMALLER_REPORT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentReportRequisitionsByReportDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        prepaymentReportRequisitionRepository.saveAndFlush(prepaymentReportRequisition);
+
+        // Get all the prepaymentReportRequisitionList where reportDate is less than DEFAULT_REPORT_DATE
+        defaultPrepaymentReportRequisitionShouldNotBeFound("reportDate.lessThan=" + DEFAULT_REPORT_DATE);
+
+        // Get all the prepaymentReportRequisitionList where reportDate is less than UPDATED_REPORT_DATE
+        defaultPrepaymentReportRequisitionShouldBeFound("reportDate.lessThan=" + UPDATED_REPORT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentReportRequisitionsByReportDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        prepaymentReportRequisitionRepository.saveAndFlush(prepaymentReportRequisition);
+
+        // Get all the prepaymentReportRequisitionList where reportDate is greater than DEFAULT_REPORT_DATE
+        defaultPrepaymentReportRequisitionShouldNotBeFound("reportDate.greaterThan=" + DEFAULT_REPORT_DATE);
+
+        // Get all the prepaymentReportRequisitionList where reportDate is greater than SMALLER_REPORT_DATE
+        defaultPrepaymentReportRequisitionShouldBeFound("reportDate.greaterThan=" + SMALLER_REPORT_DATE);
     }
 
     @Test
@@ -868,6 +978,7 @@ class PrepaymentReportRequisitionResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentReportRequisition.getId().intValue())))
             .andExpect(jsonPath("$.[*].reportName").value(hasItem(DEFAULT_REPORT_NAME)))
+            .andExpect(jsonPath("$.[*].reportDate").value(hasItem(DEFAULT_REPORT_DATE.toString())))
             .andExpect(jsonPath("$.[*].timeOfRequisition").value(hasItem(sameInstant(DEFAULT_TIME_OF_REQUISITION))))
             .andExpect(jsonPath("$.[*].fileChecksum").value(hasItem(DEFAULT_FILE_CHECKSUM)))
             .andExpect(jsonPath("$.[*].tampered").value(hasItem(DEFAULT_TAMPERED.booleanValue())))
@@ -926,6 +1037,7 @@ class PrepaymentReportRequisitionResourceIT {
         em.detach(updatedPrepaymentReportRequisition);
         updatedPrepaymentReportRequisition
             .reportName(UPDATED_REPORT_NAME)
+            .reportDate(UPDATED_REPORT_DATE)
             .timeOfRequisition(UPDATED_TIME_OF_REQUISITION)
             .fileChecksum(UPDATED_FILE_CHECKSUM)
             .tampered(UPDATED_TAMPERED)
@@ -952,6 +1064,7 @@ class PrepaymentReportRequisitionResourceIT {
             prepaymentReportRequisitionList.size() - 1
         );
         assertThat(testPrepaymentReportRequisition.getReportName()).isEqualTo(UPDATED_REPORT_NAME);
+        assertThat(testPrepaymentReportRequisition.getReportDate()).isEqualTo(UPDATED_REPORT_DATE);
         assertThat(testPrepaymentReportRequisition.getTimeOfRequisition()).isEqualTo(UPDATED_TIME_OF_REQUISITION);
         assertThat(testPrepaymentReportRequisition.getFileChecksum()).isEqualTo(UPDATED_FILE_CHECKSUM);
         assertThat(testPrepaymentReportRequisition.getTampered()).isEqualTo(UPDATED_TAMPERED);
@@ -1062,11 +1175,10 @@ class PrepaymentReportRequisitionResourceIT {
 
         partialUpdatedPrepaymentReportRequisition
             .reportName(UPDATED_REPORT_NAME)
+            .reportDate(UPDATED_REPORT_DATE)
             .timeOfRequisition(UPDATED_TIME_OF_REQUISITION)
             .fileChecksum(UPDATED_FILE_CHECKSUM)
-            .tampered(UPDATED_TAMPERED)
-            .reportFile(UPDATED_REPORT_FILE)
-            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE);
+            .reportParameters(UPDATED_REPORT_PARAMETERS);
 
         restPrepaymentReportRequisitionMockMvc
             .perform(
@@ -1083,13 +1195,14 @@ class PrepaymentReportRequisitionResourceIT {
             prepaymentReportRequisitionList.size() - 1
         );
         assertThat(testPrepaymentReportRequisition.getReportName()).isEqualTo(UPDATED_REPORT_NAME);
+        assertThat(testPrepaymentReportRequisition.getReportDate()).isEqualTo(UPDATED_REPORT_DATE);
         assertThat(testPrepaymentReportRequisition.getTimeOfRequisition()).isEqualTo(UPDATED_TIME_OF_REQUISITION);
         assertThat(testPrepaymentReportRequisition.getFileChecksum()).isEqualTo(UPDATED_FILE_CHECKSUM);
-        assertThat(testPrepaymentReportRequisition.getTampered()).isEqualTo(UPDATED_TAMPERED);
+        assertThat(testPrepaymentReportRequisition.getTampered()).isEqualTo(DEFAULT_TAMPERED);
         assertThat(testPrepaymentReportRequisition.getFilename()).isEqualTo(DEFAULT_FILENAME);
-        assertThat(testPrepaymentReportRequisition.getReportParameters()).isEqualTo(DEFAULT_REPORT_PARAMETERS);
-        assertThat(testPrepaymentReportRequisition.getReportFile()).isEqualTo(UPDATED_REPORT_FILE);
-        assertThat(testPrepaymentReportRequisition.getReportFileContentType()).isEqualTo(UPDATED_REPORT_FILE_CONTENT_TYPE);
+        assertThat(testPrepaymentReportRequisition.getReportParameters()).isEqualTo(UPDATED_REPORT_PARAMETERS);
+        assertThat(testPrepaymentReportRequisition.getReportFile()).isEqualTo(DEFAULT_REPORT_FILE);
+        assertThat(testPrepaymentReportRequisition.getReportFileContentType()).isEqualTo(DEFAULT_REPORT_FILE_CONTENT_TYPE);
     }
 
     @Test
@@ -1106,6 +1219,7 @@ class PrepaymentReportRequisitionResourceIT {
 
         partialUpdatedPrepaymentReportRequisition
             .reportName(UPDATED_REPORT_NAME)
+            .reportDate(UPDATED_REPORT_DATE)
             .timeOfRequisition(UPDATED_TIME_OF_REQUISITION)
             .fileChecksum(UPDATED_FILE_CHECKSUM)
             .tampered(UPDATED_TAMPERED)
@@ -1129,6 +1243,7 @@ class PrepaymentReportRequisitionResourceIT {
             prepaymentReportRequisitionList.size() - 1
         );
         assertThat(testPrepaymentReportRequisition.getReportName()).isEqualTo(UPDATED_REPORT_NAME);
+        assertThat(testPrepaymentReportRequisition.getReportDate()).isEqualTo(UPDATED_REPORT_DATE);
         assertThat(testPrepaymentReportRequisition.getTimeOfRequisition()).isEqualTo(UPDATED_TIME_OF_REQUISITION);
         assertThat(testPrepaymentReportRequisition.getFileChecksum()).isEqualTo(UPDATED_FILE_CHECKSUM);
         assertThat(testPrepaymentReportRequisition.getTampered()).isEqualTo(UPDATED_TAMPERED);
@@ -1259,6 +1374,7 @@ class PrepaymentReportRequisitionResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentReportRequisition.getId().intValue())))
             .andExpect(jsonPath("$.[*].reportName").value(hasItem(DEFAULT_REPORT_NAME)))
+            .andExpect(jsonPath("$.[*].reportDate").value(hasItem(DEFAULT_REPORT_DATE.toString())))
             .andExpect(jsonPath("$.[*].timeOfRequisition").value(hasItem(sameInstant(DEFAULT_TIME_OF_REQUISITION))))
             .andExpect(jsonPath("$.[*].fileChecksum").value(hasItem(DEFAULT_FILE_CHECKSUM)))
             .andExpect(jsonPath("$.[*].tampered").value(hasItem(DEFAULT_TAMPERED.booleanValue())))

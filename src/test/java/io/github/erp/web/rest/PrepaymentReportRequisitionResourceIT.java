@@ -308,30 +308,6 @@ class PrepaymentReportRequisitionResourceIT {
 
     @Test
     @Transactional
-    void checkFilenameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = prepaymentReportRequisitionRepository.findAll().size();
-        // set the field null
-        prepaymentReportRequisition.setFilename(null);
-
-        // Create the PrepaymentReportRequisition, which fails.
-        PrepaymentReportRequisitionDTO prepaymentReportRequisitionDTO = prepaymentReportRequisitionMapper.toDto(
-            prepaymentReportRequisition
-        );
-
-        restPrepaymentReportRequisitionMockMvc
-            .perform(
-                post(ENTITY_API_URL)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(prepaymentReportRequisitionDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<PrepaymentReportRequisition> prepaymentReportRequisitionList = prepaymentReportRequisitionRepository.findAll();
-        assertThat(prepaymentReportRequisitionList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllPrepaymentReportRequisitions() throws Exception {
         // Initialize the database
         prepaymentReportRequisitionRepository.saveAndFlush(prepaymentReportRequisition);

@@ -70,9 +70,9 @@ public class InternalAssetGeneralAdjustmentServiceImpl implements InternalAssetG
     public AssetGeneralAdjustmentDTO save(AssetGeneralAdjustmentDTO assetGeneralAdjustmentDTO) {
         log.debug("Request to save AssetGeneralAdjustment : {}", assetGeneralAdjustmentDTO);
         internalApplicationUserDetailService.getCurrentApplicationUser().ifPresent(appUser -> {
-            assetGeneralAdjustmentDTO.setCreatedBy(applicationUserMapper.toDto(appUser));
+            assetGeneralAdjustmentDTO.setCreatedBy(appUser);
             if (assetGeneralAdjustmentDTO.getId() != null ) {
-                assetGeneralAdjustmentDTO.setLastModifiedBy(applicationUserMapper.toDto(appUser));
+                assetGeneralAdjustmentDTO.setLastModifiedBy(appUser);
             }
         });
 
@@ -119,7 +119,7 @@ public class InternalAssetGeneralAdjustmentServiceImpl implements InternalAssetG
         Optional<AssetGeneralAdjustmentDTO> dto = assetGeneralAdjustmentRepository.findById(id).map(assetGeneralAdjustmentMapper::toDto);
         internalApplicationUserDetailService.getCurrentApplicationUser().ifPresent(appUser -> {
             dto.ifPresent(adjustment -> {
-                adjustment.setLastAccessedBy(applicationUserMapper.toDto(appUser));
+                adjustment.setLastAccessedBy(appUser);
                 save(adjustment);
             });
         });

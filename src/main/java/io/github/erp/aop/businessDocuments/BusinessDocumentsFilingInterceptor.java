@@ -471,6 +471,7 @@ import io.github.erp.internal.model.BusinessDocumentFSO;
 import io.github.erp.internal.model.mapping.BusinessDocumentFSOMapping;
 import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.service.BusinessDocumentService;
+import io.github.erp.service.dto.ApplicationUserDTO;
 import io.github.erp.service.dto.BusinessDocumentDTO;
 import io.github.erp.service.mapper.ApplicationUserMapper;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
@@ -535,18 +536,14 @@ public class BusinessDocumentsFilingInterceptor {
 
         BusinessDocumentFSO bDoc = (BusinessDocumentFSO) joinPoint.getArgs()[0];
 
-        Optional<ApplicationUser> optionalUser = userDetailService.getCurrentApplicationUser();
+        Optional<ApplicationUserDTO> optionalUser = userDetailService.getCurrentApplicationUser();
 
         if (optionalUser.isPresent()) {
-            bDoc.setLastModifiedBy(applicationUserMapper.toDto(optionalUser.get()));
+            bDoc.setLastModifiedBy(optionalUser.get());
             bDoc.setLastModified(ZonedDateTime.now());
-            bDoc.setCreatedBy(applicationUserMapper.toDto(optionalUser.get()));
-            bDoc.setOriginatingDepartment(
-                applicationUserMapper.toDto(optionalUser.get()).getDepartment()
-            );
-            bDoc.setSecurityClearance(
-                applicationUserMapper.toDto(optionalUser.get()).getSecurityClearance()
-            );
+            bDoc.setCreatedBy(optionalUser.get());
+            bDoc.setOriginatingDepartment(optionalUser.get().getDepartment());
+            bDoc.setSecurityClearance(optionalUser.get().getSecurityClearance());
         }
 
         BusinessDocumentDTO result = businessDocumentService.save(businessDocumentFSOMapping.toValue2(bDoc));
