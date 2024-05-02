@@ -17,6 +17,15 @@ package io.github.erp.internal.report.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+/**
+ * This service takes a report requisition out of which configurations for
+ * a report, and the parameters are applied to create a report which is exported
+ * in the desired format to the prescribed or expected destination
+ *
+ * @param <DTO> This is the type of the requisition object containing the report
+ *             instructions, parameters and configurations
+ */
 public interface ExportReportService<DTO> {
 
     void exportReport(DTO reportRequisition);

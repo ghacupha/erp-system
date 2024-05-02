@@ -1,7 +1,25 @@
 package io.github.erp.internal.report.service;
 
+/*-
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import io.github.erp.internal.files.FileStorageService;
-import io.github.erp.internal.report.AbstractCSVListExportService;
+import io.github.erp.internal.report.CSVListExportService;
 import io.github.erp.internal.report.ReportsProperties;
 import io.github.erp.internal.service.prepayments.InternalPrepaymentReportService;
 import io.github.erp.service.dto.PrepaymentReportDTO;
@@ -11,19 +29,24 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * This service exports a list prepayment-report items into the file system in the
+ * reports directory as a csv file
+ */
 @Transactional
 @Service
-public class PrepaymentReportExportService
-    extends AbstractCSVListExportService<PrepaymentReportDTO>
+public class PrepaymentReportUserInitiatedExportService
+    extends CSVListExportService<PrepaymentReportDTO>
     implements ExportReportService<PrepaymentReportRequisitionDTO> {
 
     private final InternalPrepaymentReportService internalPrepaymentReportService;
 
-    public PrepaymentReportExportService(
+    public PrepaymentReportUserInitiatedExportService(
         ReportsProperties reportsProperties,
         InternalPrepaymentReportService internalPrepaymentReportService,
         @Qualifier("reportsFSStorageService") FileStorageService fileStorageService) {
@@ -55,13 +78,11 @@ public class PrepaymentReportExportService
 
     private String getReportParameters(PrepaymentReportRequisitionDTO reportRequisition) {
 
-        // TODO get report-date parameter
-        return reportRequisition.getReportParameters();
+        return "Report Date: ".concat(reportRequisition.getReportDate().format(DateTimeFormatter.ISO_DATE));
     }
 
     private Optional<List<PrepaymentReportDTO>> getEntries(PrepaymentReportRequisitionDTO reportRequisition) {
 
-        // TODO get report-date parameter from the requisition
-        return internalPrepaymentReportService.getReportListByReportDate(reportRequisition.getTimeOfRequisition().toLocalDate());
+        return internalPrepaymentReportService.getReportListByReportDate(reportRequisition.getReportDate());
     }
 }

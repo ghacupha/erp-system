@@ -26,6 +26,7 @@ import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
+import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 import tech.jhipster.service.filter.UUIDFilter;
@@ -48,6 +49,8 @@ public class PrepaymentReportRequisitionCriteria implements Serializable, Criter
 
     private StringFilter reportName;
 
+    private LocalDateFilter reportDate;
+
     private ZonedDateTimeFilter timeOfRequisition;
 
     private StringFilter fileChecksum;
@@ -69,6 +72,7 @@ public class PrepaymentReportRequisitionCriteria implements Serializable, Criter
     public PrepaymentReportRequisitionCriteria(PrepaymentReportRequisitionCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.reportName = other.reportName == null ? null : other.reportName.copy();
+        this.reportDate = other.reportDate == null ? null : other.reportDate.copy();
         this.timeOfRequisition = other.timeOfRequisition == null ? null : other.timeOfRequisition.copy();
         this.fileChecksum = other.fileChecksum == null ? null : other.fileChecksum.copy();
         this.tampered = other.tampered == null ? null : other.tampered.copy();
@@ -112,6 +116,21 @@ public class PrepaymentReportRequisitionCriteria implements Serializable, Criter
 
     public void setReportName(StringFilter reportName) {
         this.reportName = reportName;
+    }
+
+    public LocalDateFilter getReportDate() {
+        return reportDate;
+    }
+
+    public LocalDateFilter reportDate() {
+        if (reportDate == null) {
+            reportDate = new LocalDateFilter();
+        }
+        return reportDate;
+    }
+
+    public void setReportDate(LocalDateFilter reportDate) {
+        this.reportDate = reportDate;
     }
 
     public ZonedDateTimeFilter getTimeOfRequisition() {
@@ -239,6 +258,7 @@ public class PrepaymentReportRequisitionCriteria implements Serializable, Criter
         return (
             Objects.equals(id, that.id) &&
             Objects.equals(reportName, that.reportName) &&
+            Objects.equals(reportDate, that.reportDate) &&
             Objects.equals(timeOfRequisition, that.timeOfRequisition) &&
             Objects.equals(fileChecksum, that.fileChecksum) &&
             Objects.equals(tampered, that.tampered) &&
@@ -255,6 +275,7 @@ public class PrepaymentReportRequisitionCriteria implements Serializable, Criter
         return Objects.hash(
             id,
             reportName,
+            reportDate,
             timeOfRequisition,
             fileChecksum,
             tampered,
@@ -272,6 +293,7 @@ public class PrepaymentReportRequisitionCriteria implements Serializable, Criter
         return "PrepaymentReportRequisitionCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
             (reportName != null ? "reportName=" + reportName + ", " : "") +
+            (reportDate != null ? "reportDate=" + reportDate + ", " : "") +
             (timeOfRequisition != null ? "timeOfRequisition=" + timeOfRequisition + ", " : "") +
             (fileChecksum != null ? "fileChecksum=" + fileChecksum + ", " : "") +
             (tampered != null ? "tampered=" + tampered + ", " : "") +

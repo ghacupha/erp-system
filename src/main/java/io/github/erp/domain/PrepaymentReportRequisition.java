@@ -20,6 +20,7 @@ package io.github.erp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 import javax.persistence.*;
@@ -47,6 +48,10 @@ public class PrepaymentReportRequisition implements Serializable {
     @NotNull
     @Column(name = "report_name", nullable = false, unique = true)
     private String reportName;
+
+    @NotNull
+    @Column(name = "report_date", nullable = false)
+    private LocalDate reportDate;
 
     @NotNull
     @Column(name = "time_of_requisition", nullable = false)
@@ -112,6 +117,19 @@ public class PrepaymentReportRequisition implements Serializable {
 
     public void setReportName(String reportName) {
         this.reportName = reportName;
+    }
+
+    public LocalDate getReportDate() {
+        return this.reportDate;
+    }
+
+    public PrepaymentReportRequisition reportDate(LocalDate reportDate) {
+        this.setReportDate(reportDate);
+        return this;
+    }
+
+    public void setReportDate(LocalDate reportDate) {
+        this.reportDate = reportDate;
     }
 
     public ZonedDateTime getTimeOfRequisition() {
@@ -256,6 +274,7 @@ public class PrepaymentReportRequisition implements Serializable {
         return "PrepaymentReportRequisition{" +
             "id=" + getId() +
             ", reportName='" + getReportName() + "'" +
+            ", reportDate='" + getReportDate() + "'" +
             ", timeOfRequisition='" + getTimeOfRequisition() + "'" +
             ", fileChecksum='" + getFileChecksum() + "'" +
             ", tampered='" + getTampered() + "'" +
