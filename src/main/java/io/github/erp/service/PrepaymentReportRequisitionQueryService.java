@@ -120,6 +120,10 @@ public class PrepaymentReportRequisitionQueryService extends QueryService<Prepay
                 specification =
                     specification.and(buildStringSpecification(criteria.getReportName(), PrepaymentReportRequisition_.reportName));
             }
+            if (criteria.getReportDate() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getReportDate(), PrepaymentReportRequisition_.reportDate));
+            }
             if (criteria.getTimeOfRequisition() != null) {
                 specification =
                     specification.and(

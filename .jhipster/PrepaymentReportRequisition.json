@@ -6,6 +6,11 @@
       "fieldValidateRules": ["required", "unique"]
     },
     {
+      "fieldName": "reportDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
       "fieldName": "timeOfRequisition",
       "fieldType": "ZonedDateTime",
       "fieldValidateRules": ["required"]

@@ -19,6 +19,7 @@ package io.github.erp.service.dto;
  */
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -34,6 +35,9 @@ public class PrepaymentReportRequisitionDTO implements Serializable {
 
     @NotNull
     private String reportName;
+
+    @NotNull
+    private LocalDate reportDate;
 
     @NotNull
     private ZonedDateTime timeOfRequisition;
@@ -69,6 +73,14 @@ public class PrepaymentReportRequisitionDTO implements Serializable {
 
     public void setReportName(String reportName) {
         this.reportName = reportName;
+    }
+
+    public LocalDate getReportDate() {
+        return reportDate;
+    }
+
+    public void setReportDate(LocalDate reportDate) {
+        this.reportDate = reportDate;
     }
 
     public ZonedDateTime getTimeOfRequisition() {
@@ -170,6 +182,7 @@ public class PrepaymentReportRequisitionDTO implements Serializable {
         return "PrepaymentReportRequisitionDTO{" +
             "id=" + getId() +
             ", reportName='" + getReportName() + "'" +
+            ", reportDate='" + getReportDate() + "'" +
             ", timeOfRequisition='" + getTimeOfRequisition() + "'" +
             ", fileChecksum='" + getFileChecksum() + "'" +
             ", tampered='" + getTampered() + "'" +
