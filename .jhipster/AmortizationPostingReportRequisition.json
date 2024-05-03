@@ -1,8 +1,8 @@
 {
   "fields": [
     {
-      "fieldName": "reportName",
-      "fieldType": "String",
+      "fieldName": "requestId",
+      "fieldType": "UUID",
       "fieldValidateRules": ["required", "unique"]
     },
     {

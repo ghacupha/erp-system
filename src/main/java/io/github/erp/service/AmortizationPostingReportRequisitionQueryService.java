@@ -123,9 +123,9 @@ public class AmortizationPostingReportRequisitionQueryService extends QueryServi
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), AmortizationPostingReportRequisition_.id));
             }
-            if (criteria.getReportName() != null) {
+            if (criteria.getRequestId() != null) {
                 specification =
-                    specification.and(buildStringSpecification(criteria.getReportName(), AmortizationPostingReportRequisition_.reportName));
+                    specification.and(buildSpecification(criteria.getRequestId(), AmortizationPostingReportRequisition_.requestId));
             }
             if (criteria.getTimeOfRequisition() != null) {
                 specification =
