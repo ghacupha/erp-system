@@ -45,8 +45,8 @@ public class AmortizationPostingReportRequisition implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "report_name", nullable = false, unique = true)
-    private String reportName;
+    @Column(name = "request_id", nullable = false, unique = true)
+    private UUID requestId;
 
     @NotNull
     @Column(name = "time_of_requisition", nullable = false)
@@ -105,17 +105,17 @@ public class AmortizationPostingReportRequisition implements Serializable {
         this.id = id;
     }
 
-    public String getReportName() {
-        return this.reportName;
+    public UUID getRequestId() {
+        return this.requestId;
     }
 
-    public AmortizationPostingReportRequisition reportName(String reportName) {
-        this.setReportName(reportName);
+    public AmortizationPostingReportRequisition requestId(UUID requestId) {
+        this.setRequestId(requestId);
         return this;
     }
 
-    public void setReportName(String reportName) {
-        this.reportName = reportName;
+    public void setRequestId(UUID requestId) {
+        this.requestId = requestId;
     }
 
     public ZonedDateTime getTimeOfRequisition() {
@@ -272,7 +272,7 @@ public class AmortizationPostingReportRequisition implements Serializable {
     public String toString() {
         return "AmortizationPostingReportRequisition{" +
             "id=" + getId() +
-            ", reportName='" + getReportName() + "'" +
+            ", requestId='" + getRequestId() + "'" +
             ", timeOfRequisition='" + getTimeOfRequisition() + "'" +
             ", fileChecksum='" + getFileChecksum() + "'" +
             ", tampered='" + getTampered() + "'" +

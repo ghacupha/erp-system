@@ -33,7 +33,7 @@ public class AmortizationPostingReportRequisitionDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private String reportName;
+    private UUID requestId;
 
     @NotNull
     private ZonedDateTime timeOfRequisition;
@@ -64,12 +64,12 @@ public class AmortizationPostingReportRequisitionDTO implements Serializable {
         this.id = id;
     }
 
-    public String getReportName() {
-        return reportName;
+    public UUID getRequestId() {
+        return requestId;
     }
 
-    public void setReportName(String reportName) {
-        this.reportName = reportName;
+    public void setRequestId(UUID requestId) {
+        this.requestId = requestId;
     }
 
     public ZonedDateTime getTimeOfRequisition() {
@@ -178,7 +178,7 @@ public class AmortizationPostingReportRequisitionDTO implements Serializable {
     public String toString() {
         return "AmortizationPostingReportRequisitionDTO{" +
             "id=" + getId() +
-            ", reportName='" + getReportName() + "'" +
+            ", requestId='" + getRequestId() + "'" +
             ", timeOfRequisition='" + getTimeOfRequisition() + "'" +
             ", fileChecksum='" + getFileChecksum() + "'" +
             ", tampered='" + getTampered() + "'" +
