@@ -24,14 +24,15 @@ public class AmortizationPostingReportRequisitionInterceptor {
 
     private static final Logger log = LoggerFactory.getLogger(AmortizationPostingReportRequisitionInterceptor.class);
 
-    private final ExportReportService<AmortizationPostingReportRequisitionDTO> amortizationPostingReportRequisitionDTOExportReportService;
+    private final ExportReportService<AmortizationPostingReportRequisitionDTO> amortizationPostingReportRequisitionExportReportService;
 
-    public AmortizationPostingReportRequisitionInterceptor(ExportReportService<AmortizationPostingReportRequisitionDTO> amortizationPostingReportRequisitionDTOExportReportService){
-        this.amortizationPostingReportRequisitionDTOExportReportService = amortizationPostingReportRequisitionDTOExportReportService;
+    public AmortizationPostingReportRequisitionInterceptor(
+        ExportReportService<AmortizationPostingReportRequisitionDTO> amortizationPostingReportRequisitionExportReportService){
+        this.amortizationPostingReportRequisitionExportReportService = amortizationPostingReportRequisitionExportReportService;
     }
 
     @AfterReturning(
-        pointcut="prepaymentReportRequisitionPointcut()",
+        pointcut="reportRequisitionPointcut()",
         returning="response")
     public void getCreatedReportInfo(JoinPoint joinPoint, ResponseEntity<AmortizationPostingReportRequisitionDTO> response) {
 
@@ -49,11 +50,11 @@ public class AmortizationPostingReportRequisitionInterceptor {
     @Async
     void createReport(AmortizationPostingReportRequisitionDTO reportDTO) {
 
-        amortizationPostingReportRequisitionDTOExportReportService.exportReport(reportDTO);
+        amortizationPostingReportRequisitionExportReportService.exportReport(reportDTO);
     }
 
     @Pointcut("execution(* io.github.erp.erp.resources.prepayments.AmortizationPostingReportRequisitionResourceProd.createAmortizationPostingReportRequisition(..))")
-    public void prepaymentReportRequisitionPointcut() {
+    public void reportRequisitionPointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }
 }

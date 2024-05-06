@@ -101,7 +101,11 @@ public class ReportingAspectConfiguration {
     private ReportAttachmentService<PrepaymentReportRequisitionDTO> prepaymentReportRequisitionAttachmentService;
 
     @Autowired
-    private ExportReportService<AmortizationPostingReportRequisitionDTO> amortizationPostingReportRequisitionDTOExportReportService;
+    @Qualifier("amortizationPostingRequisitionUserInitiatedReportExport")
+    private ExportReportService<AmortizationPostingReportRequisitionDTO> amortizationPostingReportRequisitionExportReportService;
+
+    @Autowired
+    private ReportAttachmentService<AmortizationPostingReportRequisitionDTO> amortizationPostingReportRequisitionAttachmentService;
 
     @Bean
     public ReportRequisitionInterceptor reportRequisitionInterceptor() {
@@ -173,6 +177,11 @@ public class ReportingAspectConfiguration {
 
     @Bean
     public AmortizationPostingReportRequisitionInterceptor amortizationPostingReportRequisitionInterceptor() {
-        return new AmortizationPostingReportRequisitionInterceptor(amortizationPostingReportRequisitionDTOExportReportService);
+        return new AmortizationPostingReportRequisitionInterceptor(amortizationPostingReportRequisitionExportReportService);
+    }
+
+    @Bean
+    public AmortizationPostingReportRequisitionAttachmentInterceptor amortizationPostingReportRequisitionAttachmentInterceptor() {
+        return new AmortizationPostingReportRequisitionAttachmentInterceptor(amortizationPostingReportRequisitionAttachmentService);
     }
 }

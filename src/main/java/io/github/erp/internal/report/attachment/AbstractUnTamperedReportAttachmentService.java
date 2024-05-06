@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * SHA512 checksum from database to see if the file saved in the database is different
  * from the one created by the system albeit having the same filename
  */
-public class AbstractUnTamperedReportAttachmentService<DTO> {
+public abstract class AbstractUnTamperedReportAttachmentService<DTO> {
 
     private static final Logger log = LoggerFactory.getLogger("UnTamperedReportAttachmentService");
 
@@ -45,7 +45,7 @@ public class AbstractUnTamperedReportAttachmentService<DTO> {
 
         long startup = System.currentTimeMillis();
 
-        log.debug("Fetching report name : {}", one.getReportName());
+        log.debug("Fetching report name : {}, with report-file-name: {}", one.getReportName(), one.getReportId().toString());
 
         String reportFileName = one.getReportId().toString().concat(fileExtension);
 
