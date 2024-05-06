@@ -62,6 +62,6 @@ public interface InternalAmortizationPostingReportRepository
         "LEFT JOIN transaction_account da on p.debit_account_id = da.id  " +
         "LEFT JOIN transaction_account ca on p.credit_account_id = ca.id " +
         "LEFT JOIN amortization_period fm on p.amortization_period_id = fm.id " +
-        "WHERE :reportDate BETWEEN fm.start_date AND fm.end_date", nativeQuery = true)
+        "WHERE :reportDate BETWEEN CAST(fm.start_date AS date) AND CAST(fm.end_date AS date)", nativeQuery = true)
     Optional<List<AmortizationPostingReportInternal>> findByAllReportDate(@Param("reportDate") LocalDate reportDate);
 }

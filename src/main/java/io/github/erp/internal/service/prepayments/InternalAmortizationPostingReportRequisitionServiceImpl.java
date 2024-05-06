@@ -19,9 +19,9 @@ package io.github.erp.internal.service.prepayments;
  */
 
 import io.github.erp.domain.AmortizationPostingReportRequisition;
+import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.repository.AmortizationPostingReportRequisitionRepository;
 import io.github.erp.repository.search.AmortizationPostingReportRequisitionSearchRepository;
-import io.github.erp.service.AmortizationPostingReportRequisitionService;
 import io.github.erp.service.dto.AmortizationPostingReportRequisitionDTO;
 import io.github.erp.service.mapper.AmortizationPostingReportRequisitionMapper;
 import org.slf4j.Logger;
@@ -48,19 +48,31 @@ public class InternalAmortizationPostingReportRequisitionServiceImpl implements 
 
     private final AmortizationPostingReportRequisitionSearchRepository amortizationPostingReportRequisitionSearchRepository;
 
+    private final InternalApplicationUserDetailService internalApplicationUserDetailService;
+
     public InternalAmortizationPostingReportRequisitionServiceImpl(
         AmortizationPostingReportRequisitionRepository amortizationPostingReportRequisitionRepository,
         AmortizationPostingReportRequisitionMapper amortizationPostingReportRequisitionMapper,
-        AmortizationPostingReportRequisitionSearchRepository amortizationPostingReportRequisitionSearchRepository
-    ) {
+        AmortizationPostingReportRequisitionSearchRepository amortizationPostingReportRequisitionSearchRepository,
+        InternalApplicationUserDetailService internalApplicationUserDetailService) {
         this.amortizationPostingReportRequisitionRepository = amortizationPostingReportRequisitionRepository;
         this.amortizationPostingReportRequisitionMapper = amortizationPostingReportRequisitionMapper;
         this.amortizationPostingReportRequisitionSearchRepository = amortizationPostingReportRequisitionSearchRepository;
+        this.internalApplicationUserDetailService = internalApplicationUserDetailService;
     }
 
     @Override
     public AmortizationPostingReportRequisitionDTO save(AmortizationPostingReportRequisitionDTO amortizationPostingReportRequisitionDTO) {
         log.debug("Request to save AmortizationPostingReportRequisition : {}", amortizationPostingReportRequisitionDTO);
+
+        internalApplicationUserDetailService.getCurrentApplicationUser().ifPresent(appUser -> {
+            if (amortizationPostingReportRequisitionDTO.getId() == null) {
+                amortizationPostingReportRequisitionDTO.setRequestedBy(appUser);
+            } else {
+                amortizationPostingReportRequisitionDTO.setLastAccessedBy(appUser);
+            }
+        });
+
         AmortizationPostingReportRequisition amortizationPostingReportRequisition = amortizationPostingReportRequisitionMapper.toEntity(
             amortizationPostingReportRequisitionDTO
         );

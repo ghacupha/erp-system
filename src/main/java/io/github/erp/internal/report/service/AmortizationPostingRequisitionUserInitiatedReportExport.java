@@ -3,13 +3,10 @@ package io.github.erp.internal.report.service;
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.report.CSVListExportService;
 import io.github.erp.internal.report.ReportsProperties;
-import io.github.erp.internal.service.prepayments.InternalAmortizationPostingReportRequisitionService;
-import io.github.erp.internal.service.prepayments.InternalAmortizationPostingReportService;
-import io.github.erp.internal.service.prepayments.InternalPrepaymentReportRequisitionService;
-import io.github.erp.internal.service.prepayments.InternalPrepaymentReportService;
+import io.github.erp.internal.service.prepayments.*;
 import io.github.erp.service.dto.AmortizationPostingReportDTO;
 import io.github.erp.service.dto.AmortizationPostingReportRequisitionDTO;
-import io.github.erp.service.dto.PrepaymentReportDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,25 +15,29 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Execution of the amortization-posting-report on the file system as a csv file
  */
+@Slf4j
 @Transactional
 @Service("amortizationPostingRequisitionUserInitiatedReportExport")
 public class AmortizationPostingRequisitionUserInitiatedReportExport
     extends CSVListExportService<AmortizationPostingReportDTO>
     implements ExportReportService<AmortizationPostingReportRequisitionDTO>{
 
+    private final InternalAmortizationPeriodService internalAmortizationPeriodService;
     private final InternalAmortizationPostingReportService internalAmortizationPostingReportService;
     private final InternalAmortizationPostingReportRequisitionService internalAmortizationPostingReportRequisitionService;
 
-    public AmortizationPostingRequisitionUserInitiatedReportExport (
+    public AmortizationPostingRequisitionUserInitiatedReportExport(
         ReportsProperties reportsProperties,
         @Qualifier("reportsFSStorageService") FileStorageService fileStorageService,
-        InternalAmortizationPostingReportService internalAmortizationPostingReportService,
+        InternalAmortizationPeriodService internalAmortizationPeriodService, InternalAmortizationPostingReportService internalAmortizationPostingReportService,
         InternalAmortizationPostingReportRequisitionService internalAmortizationPostingReportRequisitionService) {
         super(reportsProperties, fileStorageService);
+        this.internalAmortizationPeriodService = internalAmortizationPeriodService;
 
         this.internalAmortizationPostingReportService = internalAmortizationPostingReportService;
         this.internalAmortizationPostingReportRequisitionService = internalAmortizationPostingReportRequisitionService;
@@ -73,6 +74,14 @@ public class AmortizationPostingRequisitionUserInitiatedReportExport
 
     private Optional<List<AmortizationPostingReportDTO>> getEntries(AmortizationPostingReportRequisitionDTO reportRequisition) {
 
-        return internalAmortizationPostingReportService.findAllByReportDate(reportRequisition.getAmortizationPeriod().getEndDate());
+        AtomicReference<Optional<List<AmortizationPostingReportDTO>>> amortizationPostingItems = new AtomicReference<>(Optional.empty());
+
+        internalAmortizationPeriodService.findOne(reportRequisition.getAmortizationPeriod().getId()).ifPresent(
+            amortizationPeriod -> {
+                amortizationPostingItems.set(internalAmortizationPostingReportService.findAllByReportDate(amortizationPeriod.getEndDate()));
+
+                log.debug("Posting report created with {} entries", amortizationPostingItems.get().get().size());
+            });
+        return amortizationPostingItems.get();
     }
 }
