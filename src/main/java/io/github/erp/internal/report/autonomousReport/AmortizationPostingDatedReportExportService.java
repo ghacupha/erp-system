@@ -235,7 +235,7 @@ package io.github.erp.internal.report.autonomousReport;
 import com.hazelcast.map.IMap;
 import io.github.erp.domain.AmortizationPostingReportInternal;
 import io.github.erp.internal.framework.Mapping;
-import io.github.erp.internal.repository.InternalAmortizationPostingRepository;
+import io.github.erp.internal.repository.InternalAmortizationPostingReportRepository;
 import io.github.erp.internal.report.autonomousReport.reportListExport.ReportListExportService;
 import io.github.erp.service.dto.AmortizationPostingReportDTO;
 import org.springframework.data.domain.PageRequest;
@@ -250,14 +250,14 @@ import java.util.List;
 public class AmortizationPostingDatedReportExportService extends AbstractDatedReportExportService<AmortizationPostingReportDTO> implements DatedReportExportService<AmortizationPostingReportDTO> {
 
 
-    private final InternalAmortizationPostingRepository internalAmortizationPostingRepository;
+    private final InternalAmortizationPostingReportRepository internalAmortizationPostingRepository;
     private final Mapping<AmortizationPostingReportInternal, AmortizationPostingReportDTO> dtoMapping;
 
     public AmortizationPostingDatedReportExportService(
-        InternalAmortizationPostingRepository internalAmortizationPostingRepository,
-        IMap<String, String> prepaymentsReportCache,
-        ReportListExportService<AmortizationPostingReportDTO> reportListExportService,
-        Mapping<AmortizationPostingReportInternal,
+            InternalAmortizationPostingReportRepository internalAmortizationPostingRepository,
+            IMap<String, String> prepaymentsReportCache,
+            ReportListExportService<AmortizationPostingReportDTO> reportListExportService,
+            Mapping<AmortizationPostingReportInternal,
             AmortizationPostingReportDTO> dtoMapping ) {
 
         super(prepaymentsReportCache, reportListExportService);

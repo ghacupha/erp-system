@@ -19,7 +19,7 @@ package io.github.erp.erp.resources.prepayments;
  */
 import io.github.erp.domain.AmortizationPostingReportInternal;
 import io.github.erp.internal.framework.Mapping;
-import io.github.erp.internal.repository.InternalAmortizationPostingRepository;
+import io.github.erp.internal.repository.InternalAmortizationPostingReportRepository;
 import io.github.erp.internal.report.autonomousReport.DatedReportExportService;
 import io.github.erp.repository.AmortizationPostingReportRepository;
 import io.github.erp.service.AmortizationPostingReportQueryService;
@@ -60,19 +60,19 @@ public class AmortizationPostingReportResourceProd {
 
     private final AmortizationPostingReportQueryService amortizationPostingReportQueryService;
 
-    private final InternalAmortizationPostingRepository internalAmortizationPostingRepository;
+    private final InternalAmortizationPostingReportRepository internalAmortizationPostingRepository;
 
     private final Mapping<AmortizationPostingReportInternal, AmortizationPostingReportDTO> amortizationPostingReportDTOMapping;
 
     private final DatedReportExportService<AmortizationPostingReportDTO> amortizationPostingReportExportService;
 
     public AmortizationPostingReportResourceProd(
-        AmortizationPostingReportService amortizationPostingReportService,
-        AmortizationPostingReportRepository amortizationPostingReportRepository,
-        AmortizationPostingReportQueryService amortizationPostingReportQueryService,
-        InternalAmortizationPostingRepository internalAmortizationPostingRepository,
-        Mapping<AmortizationPostingReportInternal, AmortizationPostingReportDTO> amortizationPostingReportDTOMapping,
-        DatedReportExportService<AmortizationPostingReportDTO> amortizationPostingReportExportService) {
+            AmortizationPostingReportService amortizationPostingReportService,
+            AmortizationPostingReportRepository amortizationPostingReportRepository,
+            AmortizationPostingReportQueryService amortizationPostingReportQueryService,
+            InternalAmortizationPostingReportRepository internalAmortizationPostingRepository,
+            Mapping<AmortizationPostingReportInternal, AmortizationPostingReportDTO> amortizationPostingReportDTOMapping,
+            DatedReportExportService<AmortizationPostingReportDTO> amortizationPostingReportExportService) {
         this.amortizationPostingReportService = amortizationPostingReportService;
         this.amortizationPostingReportRepository = amortizationPostingReportRepository;
         this.amortizationPostingReportQueryService = amortizationPostingReportQueryService;

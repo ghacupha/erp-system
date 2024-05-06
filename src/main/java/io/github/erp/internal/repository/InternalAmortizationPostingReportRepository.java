@@ -28,8 +28,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
-public interface InternalAmortizationPostingRepository
+public interface InternalAmortizationPostingReportRepository
     extends AmortizationPostingReportRepository,
     JpaRepository<AmortizationPostingReport, Long> {
 
@@ -47,4 +49,19 @@ public interface InternalAmortizationPostingRepository
         "LEFT JOIN amortization_period fm on p.amortization_period_id = fm.id " +
         "WHERE :reportDate BETWEEN fm.start_date AND fm.end_date", nativeQuery = true)
     Page<AmortizationPostingReportInternal> findByReportDate(@Param("reportDate") LocalDate reportDate, Pageable pageable);
+
+    @Query(value = "SELECT " +
+        " p.id  as id, " +
+        " pa.catalogue_number as catalogueNumber," +
+        " da.account_number as debitAccount," +
+        " ca.account_number as creditAccount," +
+        " description as description, " +
+        " p.prepayment_amount as amortizationAmount  " +
+        "FROM public.prepayment_amortization p  " +
+        "LEFT JOIN prepayment_account pa on prepayment_account_id = pa.id " +
+        "LEFT JOIN transaction_account da on p.debit_account_id = da.id  " +
+        "LEFT JOIN transaction_account ca on p.credit_account_id = ca.id " +
+        "LEFT JOIN amortization_period fm on p.amortization_period_id = fm.id " +
+        "WHERE :reportDate BETWEEN fm.start_date AND fm.end_date", nativeQuery = true)
+    Optional<List<AmortizationPostingReportInternal>> findByAllReportDate(@Param("reportDate") LocalDate reportDate);
 }
