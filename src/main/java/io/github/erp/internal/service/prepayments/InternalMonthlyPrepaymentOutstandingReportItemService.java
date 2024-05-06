@@ -22,6 +22,7 @@ import io.github.erp.service.dto.MonthlyPrepaymentOutstandingReportItemDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -87,4 +88,12 @@ public interface InternalMonthlyPrepaymentOutstandingReportItemService {
      * @return
      */
     Page<MonthlyPrepaymentOutstandingReportItemDTO> findAllWithStartAndEndDate(Pageable pageable, FiscalYearDTO fiscalYearDTO);
+
+    /**
+     * Create monthly report items using a given fiscal-year as parameter
+     *
+     * @param fiscalYear Fiscal year applied as parameter
+     * @return List of monthly prepayment-outstanding-report items
+     */
+    Optional<List<MonthlyPrepaymentOutstandingReportItemDTO>> findReportItemsByFiscalYear(FiscalYearDTO fiscalYear);
 }

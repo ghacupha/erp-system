@@ -17,12 +17,9 @@ package io.github.erp.erp.resources.prepayments;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.PrepaymentAccountReportTuple;
-import io.github.erp.internal.framework.Mapping;
-import io.github.erp.internal.repository.InternalPrepaymentAccountReportRepository;
 import io.github.erp.internal.report.autonomousReport.DatedReportExportService;
+import io.github.erp.internal.service.prepayments.InternalPrepaymentAccountReportService;
 import io.github.erp.service.PrepaymentAccountReportQueryService;
-import io.github.erp.service.PrepaymentAccountReportService;
 import io.github.erp.service.criteria.PrepaymentAccountReportCriteria;
 import io.github.erp.service.dto.PrepaymentAccountReportDTO;
 import org.slf4j.Logger;
@@ -53,28 +50,21 @@ public class PrepaymentAccountReportResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(PrepaymentAccountReportResourceProd.class);
 
-    private final PrepaymentAccountReportService prepaymentAccountReportService;
+    private final InternalPrepaymentAccountReportService prepaymentAccountReportService;
 
     private final PrepaymentAccountReportQueryService prepaymentAccountReportQueryService;
 
-    private final InternalPrepaymentAccountReportRepository internalPrepaymentAccountReportRepository;
-
     private final DatedReportExportService<PrepaymentAccountReportDTO> prepaymentReportExportService;
 
-    private final Mapping<PrepaymentAccountReportTuple, PrepaymentAccountReportDTO> prepaymentAccountReportDTOMapping;
 
     public PrepaymentAccountReportResourceProd(
         DatedReportExportService<PrepaymentAccountReportDTO> prepaymentReportExportService,
-        PrepaymentAccountReportService prepaymentAccountReportService,
-        PrepaymentAccountReportQueryService prepaymentAccountReportQueryService,
-        InternalPrepaymentAccountReportRepository internalPrepaymentAccountReportRepository, Mapping<PrepaymentAccountReportTuple,
-        PrepaymentAccountReportDTO> prepaymentAccountReportDTOMapping) {
+        InternalPrepaymentAccountReportService prepaymentAccountReportService,
+        PrepaymentAccountReportQueryService prepaymentAccountReportQueryService) {
         this.prepaymentAccountReportService = prepaymentAccountReportService;
         this.prepaymentAccountReportQueryService = prepaymentAccountReportQueryService;
-        this.internalPrepaymentAccountReportRepository = internalPrepaymentAccountReportRepository;
 
         this.prepaymentReportExportService = prepaymentReportExportService;
-        this.prepaymentAccountReportDTOMapping = prepaymentAccountReportDTOMapping;
     }
 
     /**
@@ -110,8 +100,7 @@ public class PrepaymentAccountReportResourceProd {
         log.debug("REST request to get PrepaymentAccountReports by criteria, report-date: {}", reportDate);
 
         Page<PrepaymentAccountReportDTO> page =
-            internalPrepaymentAccountReportRepository.findAllByReportDate(LocalDate.parse(reportDate), pageable)
-            .map(prepaymentAccountReportDTOMapping::toValue2);
+            prepaymentAccountReportService.findAllByReportDate(LocalDate.parse(reportDate), pageable);
 
         exportCSVReport(LocalDate.parse(reportDate));
 
@@ -164,11 +153,7 @@ public class PrepaymentAccountReportResourceProd {
     @GetMapping("/prepayment-account-reports/reported/{id}")
     public ResponseEntity<PrepaymentAccountReportDTO> getPrepaymentAccountReportByDate(@RequestParam("reportDate") String reportDate, @PathVariable Long id) {
         log.debug("REST request to get PrepaymentAccountReport : {}", id);
-        Optional<PrepaymentAccountReportDTO> prepaymentAccountReportDTO =
-            internalPrepaymentAccountReportRepository.findOneByReportDate(LocalDate.parse(reportDate), id)
-            .map(prepaymentAccountReportDTOMapping::toValue2);
-
-        return ResponseUtil.wrapOrNotFound(prepaymentAccountReportDTO);
+        return ResponseUtil.wrapOrNotFound(prepaymentAccountReportService.findOneByReportDate(LocalDate.parse(reportDate), id));
     }
 
     /**

@@ -107,6 +107,12 @@ public class ReportingAspectConfiguration {
     @Autowired
     private ReportAttachmentService<AmortizationPostingReportRequisitionDTO> amortizationPostingReportRequisitionAttachmentService;
 
+    @Autowired
+    private ExportReportService<PrepaymentByAccountReportRequisitionDTO> prepaymentByAccountReportRequisitionDTOExportReportService;
+
+    @Autowired
+    private ExportReportService<MonthlyPrepaymentReportRequisitionDTO> prepaymentByAccountReportRequisitionExportReportService;
+
     @Bean
     public ReportRequisitionInterceptor reportRequisitionInterceptor() {
 
@@ -183,5 +189,18 @@ public class ReportingAspectConfiguration {
     @Bean
     public AmortizationPostingReportRequisitionAttachmentInterceptor amortizationPostingReportRequisitionAttachmentInterceptor() {
         return new AmortizationPostingReportRequisitionAttachmentInterceptor(amortizationPostingReportRequisitionAttachmentService);
+    }
+
+    @Bean
+    public PrepaymentByAccountReportRequisitionInterceptor prepaymentByAccountReportRequisitionInterceptor() {
+
+        return new PrepaymentByAccountReportRequisitionInterceptor(prepaymentByAccountReportRequisitionDTOExportReportService);
+    }
+
+
+    @Bean
+    public MonthlyPrepaymentReportRequisitionIntercept monthlyPrepaymentReportRequisitionIntercept() {
+
+        return new MonthlyPrepaymentReportRequisitionIntercept(prepaymentByAccountReportRequisitionExportReportService);
     }
 }

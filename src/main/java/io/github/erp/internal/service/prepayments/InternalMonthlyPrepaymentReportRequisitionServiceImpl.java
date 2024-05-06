@@ -19,9 +19,9 @@ package io.github.erp.internal.service.prepayments;
  */
 
 import io.github.erp.domain.MonthlyPrepaymentReportRequisition;
+import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.repository.MonthlyPrepaymentReportRequisitionRepository;
 import io.github.erp.repository.search.MonthlyPrepaymentReportRequisitionSearchRepository;
-import io.github.erp.service.MonthlyPrepaymentReportRequisitionService;
 import io.github.erp.service.dto.MonthlyPrepaymentReportRequisitionDTO;
 import io.github.erp.service.mapper.MonthlyPrepaymentReportRequisitionMapper;
 import org.slf4j.Logger;
@@ -48,19 +48,29 @@ public class InternalMonthlyPrepaymentReportRequisitionServiceImpl implements In
 
     private final MonthlyPrepaymentReportRequisitionSearchRepository monthlyPrepaymentReportRequisitionSearchRepository;
 
+    private final InternalApplicationUserDetailService internalApplicationUserDetailService;
     public InternalMonthlyPrepaymentReportRequisitionServiceImpl(
         MonthlyPrepaymentReportRequisitionRepository monthlyPrepaymentReportRequisitionRepository,
         MonthlyPrepaymentReportRequisitionMapper monthlyPrepaymentReportRequisitionMapper,
-        MonthlyPrepaymentReportRequisitionSearchRepository monthlyPrepaymentReportRequisitionSearchRepository
-    ) {
+        MonthlyPrepaymentReportRequisitionSearchRepository monthlyPrepaymentReportRequisitionSearchRepository,
+        InternalApplicationUserDetailService internalApplicationUserDetailService) {
         this.monthlyPrepaymentReportRequisitionRepository = monthlyPrepaymentReportRequisitionRepository;
         this.monthlyPrepaymentReportRequisitionMapper = monthlyPrepaymentReportRequisitionMapper;
         this.monthlyPrepaymentReportRequisitionSearchRepository = monthlyPrepaymentReportRequisitionSearchRepository;
+        this.internalApplicationUserDetailService = internalApplicationUserDetailService;
     }
 
     @Override
     public MonthlyPrepaymentReportRequisitionDTO save(MonthlyPrepaymentReportRequisitionDTO monthlyPrepaymentReportRequisitionDTO) {
         log.debug("Request to save MonthlyPrepaymentReportRequisition : {}", monthlyPrepaymentReportRequisitionDTO);
+
+        internalApplicationUserDetailService.getCurrentApplicationUser().ifPresent(appUser -> {
+            if (monthlyPrepaymentReportRequisitionDTO.getId() == null) {
+                monthlyPrepaymentReportRequisitionDTO.setRequestedBy(appUser);
+            } else {
+                monthlyPrepaymentReportRequisitionDTO.setLastAccessedBy(appUser);
+            }
+        });
         MonthlyPrepaymentReportRequisition monthlyPrepaymentReportRequisition = monthlyPrepaymentReportRequisitionMapper.toEntity(
             monthlyPrepaymentReportRequisitionDTO
         );
