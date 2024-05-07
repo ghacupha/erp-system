@@ -1,8 +1,8 @@
 package io.github.erp.internal.files;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,18 +47,27 @@ public class ReportsFilesSystemInit implements ApplicationListener<ApplicationRe
     private final XlsxReportRequisitionService xlsxReportRequisitionService;
     private final ExcelReportExportService excelReportExportService;
     private final ReportStatusService reportStatusService;
+    private final AutonomousReportService autonomousReportService;
+    private final DepreciationReportService depreciationReportService;
+    private final AssetAdditionsReportService assetAdditionsReportService;
 
     public ReportsFilesSystemInit(
         @Qualifier("reportsFSStorageService") FileStorageService storageService,
         PdfReportRequisitionService pdfReportRequisitionService,
         ReportRequisitionService reportRequisitionService,
-        XlsxReportRequisitionService xlsxReportRequisitionService, ExcelReportExportService excelReportExportService, ReportStatusService reportStatusService) {
+        XlsxReportRequisitionService xlsxReportRequisitionService,
+        ExcelReportExportService excelReportExportService,
+        ReportStatusService reportStatusService,
+        AutonomousReportService autonomousReportService, DepreciationReportService depreciationReportService, AssetAdditionsReportService assetAdditionsReportService) {
         this.storageService = storageService;
         this.pdfReportRequisitionService = pdfReportRequisitionService;
         this.reportRequisitionService = reportRequisitionService;
         this.xlsxReportRequisitionService = xlsxReportRequisitionService;
         this.excelReportExportService = excelReportExportService;
         this.reportStatusService = reportStatusService;
+        this.autonomousReportService = autonomousReportService;
+        this.depreciationReportService = depreciationReportService;
+        this.assetAdditionsReportService = assetAdditionsReportService;
     }
 
     @Override
@@ -81,6 +90,15 @@ public class ReportsFilesSystemInit implements ApplicationListener<ApplicationRe
 
         reportStatusService.findAll(Pageable.unpaged())
             .forEach(report -> reportStatusService.delete(report.getId()));
+
+        autonomousReportService.findAll(Pageable.unpaged())
+            .forEach(report -> autonomousReportService.delete(report.getId()));
+
+        depreciationReportService.findAll(Pageable.unpaged())
+            .forEach(report -> depreciationReportService.delete(report.getId()));
+
+        assetAdditionsReportService.findAll(Pageable.unpaged())
+            .forEach(report -> assetAdditionsReportService.delete(report.getId()));
 
         log.info("All report metadata has been deleted, removing old files from the reports directory. Standby...");
 

@@ -1,8 +1,8 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,10 @@ public class WorkProjectRegister implements Serializable {
     private String catalogueNumber;
 
     @NotNull
-    @Column(name = "description", nullable = false)
+    @Column(name = "project_title", nullable = false, unique = true)
+    private String projectTitle;
+
+    @Column(name = "description")
     private String description;
 
     @Lob
@@ -142,6 +145,19 @@ public class WorkProjectRegister implements Serializable {
 
     public void setCatalogueNumber(String catalogueNumber) {
         this.catalogueNumber = catalogueNumber;
+    }
+
+    public String getProjectTitle() {
+        return this.projectTitle;
+    }
+
+    public WorkProjectRegister projectTitle(String projectTitle) {
+        this.setProjectTitle(projectTitle);
+        return this;
+    }
+
+    public void setProjectTitle(String projectTitle) {
+        this.projectTitle = projectTitle;
     }
 
     public String getDescription() {
@@ -329,6 +345,7 @@ public class WorkProjectRegister implements Serializable {
         return "WorkProjectRegister{" +
             "id=" + getId() +
             ", catalogueNumber='" + getCatalogueNumber() + "'" +
+            ", projectTitle='" + getProjectTitle() + "'" +
             ", description='" + getDescription() + "'" +
             ", details='" + getDetails() + "'" +
             ", detailsContentType='" + getDetailsContentType() + "'" +

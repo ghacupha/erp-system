@@ -1,8 +1,8 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,14 +36,21 @@ public interface FiscalMonthMapper extends EntityMapper<FiscalMonthDTO, FiscalMo
     @Mapping(target = "fiscalQuarter", source = "fiscalQuarter", qualifiedByName = "fiscalQuarterCode")
     FiscalMonthDTO toDto(FiscalMonth s);
 
-    @Named("id")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    FiscalMonthDTO toDtoId(FiscalMonth fiscalMonth);
-
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removeUniversallyUniqueMapping", ignore = true)
     FiscalMonth toEntity(FiscalMonthDTO fiscalMonthDTO);
+
+    @Named("startDate")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "startDate", source = "startDate")
+    FiscalMonthDTO toDtoStartDate(FiscalMonth fiscalMonth);
+
+    @Named("endDate")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "endDate", source = "endDate")
+    FiscalMonthDTO toDtoEndDate(FiscalMonth fiscalMonth);
 
     @Named("fiscalMonthCode")
     @BeanMapping(ignoreByDefault = true)

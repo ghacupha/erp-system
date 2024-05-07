@@ -1,8 +1,8 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,14 +25,28 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link WorkInProgressTransfer} and its DTO {@link WorkInProgressTransferDTO}.
  */
-@Mapper(componentModel = "spring", uses = { WorkInProgressRegistrationMapper.class, PlaceholderMapper.class, BusinessDocumentMapper.class })
+@Mapper(
+    componentModel = "spring",
+    uses = {
+        PlaceholderMapper.class,
+        BusinessDocumentMapper.class,
+        AssetCategoryMapper.class,
+        WorkInProgressRegistrationMapper.class,
+        ServiceOutletMapper.class,
+        SettlementMapper.class,
+        WorkProjectRegisterMapper.class,
+    }
+)
 public interface WorkInProgressTransferMapper extends EntityMapper<WorkInProgressTransferDTO, WorkInProgressTransfer> {
-    @Mapping(target = "workInProgressRegistrations", source = "workInProgressRegistrations", qualifiedByName = "idSet")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     @Mapping(target = "businessDocuments", source = "businessDocuments", qualifiedByName = "documentTitleSet")
+    @Mapping(target = "assetCategory", source = "assetCategory", qualifiedByName = "assetCategoryName")
+    @Mapping(target = "workInProgressRegistration", source = "workInProgressRegistration", qualifiedByName = "sequenceNumber")
+    @Mapping(target = "serviceOutlet", source = "serviceOutlet", qualifiedByName = "outletCode")
+    @Mapping(target = "settlement", source = "settlement", qualifiedByName = "paymentNumber")
+    @Mapping(target = "workProjectRegister", source = "workProjectRegister", qualifiedByName = "projectTitle")
     WorkInProgressTransferDTO toDto(WorkInProgressTransfer s);
 
-    @Mapping(target = "removeWorkInProgressRegistration", ignore = true)
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removeBusinessDocument", ignore = true)
     WorkInProgressTransfer toEntity(WorkInProgressTransferDTO workInProgressTransferDTO);

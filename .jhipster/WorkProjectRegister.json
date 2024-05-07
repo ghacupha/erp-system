@@ -6,9 +6,13 @@
       "fieldValidateRules": ["required", "unique"]
     },
     {
-      "fieldName": "description",
+      "fieldName": "projectTitle",
       "fieldType": "String",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
     },
     {
       "fieldName": "details",

@@ -11,7 +11,32 @@
     },
     {
       "fieldName": "description",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "numberOfBatches",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "processedBatches",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "lastBatchSize",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "processedItems",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "processingTime",
+      "fieldType": "Duration"
+    },
+    {
+      "fieldName": "totalItems",
+      "fieldType": "Integer"
     }
   ],
   "relationships": [

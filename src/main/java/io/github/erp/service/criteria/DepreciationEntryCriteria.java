@@ -1,8 +1,8 @@
 package io.github.erp.service.criteria;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,8 +27,10 @@ import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
+import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
+import tech.jhipster.service.filter.UUIDFilter;
 import tech.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
@@ -52,6 +54,36 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
 
     private LongFilter assetNumber;
 
+    private UUIDFilter depreciationPeriodIdentifier;
+
+    private UUIDFilter depreciationJobIdentifier;
+
+    private UUIDFilter fiscalMonthIdentifier;
+
+    private UUIDFilter fiscalQuarterIdentifier;
+
+    private IntegerFilter batchSequenceNumber;
+
+    private StringFilter processedItems;
+
+    private IntegerFilter totalItemsProcessed;
+
+    private LongFilter elapsedMonths;
+
+    private LongFilter priorMonths;
+
+    private BigDecimalFilter usefulLifeYears;
+
+    private BigDecimalFilter previousNBV;
+
+    private BigDecimalFilter netBookValue;
+
+    private LocalDateFilter depreciationPeriodStartDate;
+
+    private LocalDateFilter depreciationPeriodEndDate;
+
+    private LocalDateFilter capitalizationDate;
+
     private LongFilter serviceOutletId;
 
     private LongFilter assetCategoryId;
@@ -68,6 +100,10 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
 
     private LongFilter fiscalYearId;
 
+    private LongFilter depreciationJobId;
+
+    private LongFilter depreciationBatchSequenceId;
+
     private Boolean distinct;
 
     public DepreciationEntryCriteria() {}
@@ -77,6 +113,21 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
         this.postedAt = other.postedAt == null ? null : other.postedAt.copy();
         this.depreciationAmount = other.depreciationAmount == null ? null : other.depreciationAmount.copy();
         this.assetNumber = other.assetNumber == null ? null : other.assetNumber.copy();
+        this.depreciationPeriodIdentifier = other.depreciationPeriodIdentifier == null ? null : other.depreciationPeriodIdentifier.copy();
+        this.depreciationJobIdentifier = other.depreciationJobIdentifier == null ? null : other.depreciationJobIdentifier.copy();
+        this.fiscalMonthIdentifier = other.fiscalMonthIdentifier == null ? null : other.fiscalMonthIdentifier.copy();
+        this.fiscalQuarterIdentifier = other.fiscalQuarterIdentifier == null ? null : other.fiscalQuarterIdentifier.copy();
+        this.batchSequenceNumber = other.batchSequenceNumber == null ? null : other.batchSequenceNumber.copy();
+        this.processedItems = other.processedItems == null ? null : other.processedItems.copy();
+        this.totalItemsProcessed = other.totalItemsProcessed == null ? null : other.totalItemsProcessed.copy();
+        this.elapsedMonths = other.elapsedMonths == null ? null : other.elapsedMonths.copy();
+        this.priorMonths = other.priorMonths == null ? null : other.priorMonths.copy();
+        this.usefulLifeYears = other.usefulLifeYears == null ? null : other.usefulLifeYears.copy();
+        this.previousNBV = other.previousNBV == null ? null : other.previousNBV.copy();
+        this.netBookValue = other.netBookValue == null ? null : other.netBookValue.copy();
+        this.depreciationPeriodStartDate = other.depreciationPeriodStartDate == null ? null : other.depreciationPeriodStartDate.copy();
+        this.depreciationPeriodEndDate = other.depreciationPeriodEndDate == null ? null : other.depreciationPeriodEndDate.copy();
+        this.capitalizationDate = other.capitalizationDate == null ? null : other.capitalizationDate.copy();
         this.serviceOutletId = other.serviceOutletId == null ? null : other.serviceOutletId.copy();
         this.assetCategoryId = other.assetCategoryId == null ? null : other.assetCategoryId.copy();
         this.depreciationMethodId = other.depreciationMethodId == null ? null : other.depreciationMethodId.copy();
@@ -85,6 +136,8 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
         this.fiscalMonthId = other.fiscalMonthId == null ? null : other.fiscalMonthId.copy();
         this.fiscalQuarterId = other.fiscalQuarterId == null ? null : other.fiscalQuarterId.copy();
         this.fiscalYearId = other.fiscalYearId == null ? null : other.fiscalYearId.copy();
+        this.depreciationJobId = other.depreciationJobId == null ? null : other.depreciationJobId.copy();
+        this.depreciationBatchSequenceId = other.depreciationBatchSequenceId == null ? null : other.depreciationBatchSequenceId.copy();
         this.distinct = other.distinct;
     }
 
@@ -151,6 +204,231 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
 
     public void setAssetNumber(LongFilter assetNumber) {
         this.assetNumber = assetNumber;
+    }
+
+    public UUIDFilter getDepreciationPeriodIdentifier() {
+        return depreciationPeriodIdentifier;
+    }
+
+    public UUIDFilter depreciationPeriodIdentifier() {
+        if (depreciationPeriodIdentifier == null) {
+            depreciationPeriodIdentifier = new UUIDFilter();
+        }
+        return depreciationPeriodIdentifier;
+    }
+
+    public void setDepreciationPeriodIdentifier(UUIDFilter depreciationPeriodIdentifier) {
+        this.depreciationPeriodIdentifier = depreciationPeriodIdentifier;
+    }
+
+    public UUIDFilter getDepreciationJobIdentifier() {
+        return depreciationJobIdentifier;
+    }
+
+    public UUIDFilter depreciationJobIdentifier() {
+        if (depreciationJobIdentifier == null) {
+            depreciationJobIdentifier = new UUIDFilter();
+        }
+        return depreciationJobIdentifier;
+    }
+
+    public void setDepreciationJobIdentifier(UUIDFilter depreciationJobIdentifier) {
+        this.depreciationJobIdentifier = depreciationJobIdentifier;
+    }
+
+    public UUIDFilter getFiscalMonthIdentifier() {
+        return fiscalMonthIdentifier;
+    }
+
+    public UUIDFilter fiscalMonthIdentifier() {
+        if (fiscalMonthIdentifier == null) {
+            fiscalMonthIdentifier = new UUIDFilter();
+        }
+        return fiscalMonthIdentifier;
+    }
+
+    public void setFiscalMonthIdentifier(UUIDFilter fiscalMonthIdentifier) {
+        this.fiscalMonthIdentifier = fiscalMonthIdentifier;
+    }
+
+    public UUIDFilter getFiscalQuarterIdentifier() {
+        return fiscalQuarterIdentifier;
+    }
+
+    public UUIDFilter fiscalQuarterIdentifier() {
+        if (fiscalQuarterIdentifier == null) {
+            fiscalQuarterIdentifier = new UUIDFilter();
+        }
+        return fiscalQuarterIdentifier;
+    }
+
+    public void setFiscalQuarterIdentifier(UUIDFilter fiscalQuarterIdentifier) {
+        this.fiscalQuarterIdentifier = fiscalQuarterIdentifier;
+    }
+
+    public IntegerFilter getBatchSequenceNumber() {
+        return batchSequenceNumber;
+    }
+
+    public IntegerFilter batchSequenceNumber() {
+        if (batchSequenceNumber == null) {
+            batchSequenceNumber = new IntegerFilter();
+        }
+        return batchSequenceNumber;
+    }
+
+    public void setBatchSequenceNumber(IntegerFilter batchSequenceNumber) {
+        this.batchSequenceNumber = batchSequenceNumber;
+    }
+
+    public StringFilter getProcessedItems() {
+        return processedItems;
+    }
+
+    public StringFilter processedItems() {
+        if (processedItems == null) {
+            processedItems = new StringFilter();
+        }
+        return processedItems;
+    }
+
+    public void setProcessedItems(StringFilter processedItems) {
+        this.processedItems = processedItems;
+    }
+
+    public IntegerFilter getTotalItemsProcessed() {
+        return totalItemsProcessed;
+    }
+
+    public IntegerFilter totalItemsProcessed() {
+        if (totalItemsProcessed == null) {
+            totalItemsProcessed = new IntegerFilter();
+        }
+        return totalItemsProcessed;
+    }
+
+    public void setTotalItemsProcessed(IntegerFilter totalItemsProcessed) {
+        this.totalItemsProcessed = totalItemsProcessed;
+    }
+
+    public LongFilter getElapsedMonths() {
+        return elapsedMonths;
+    }
+
+    public LongFilter elapsedMonths() {
+        if (elapsedMonths == null) {
+            elapsedMonths = new LongFilter();
+        }
+        return elapsedMonths;
+    }
+
+    public void setElapsedMonths(LongFilter elapsedMonths) {
+        this.elapsedMonths = elapsedMonths;
+    }
+
+    public LongFilter getPriorMonths() {
+        return priorMonths;
+    }
+
+    public LongFilter priorMonths() {
+        if (priorMonths == null) {
+            priorMonths = new LongFilter();
+        }
+        return priorMonths;
+    }
+
+    public void setPriorMonths(LongFilter priorMonths) {
+        this.priorMonths = priorMonths;
+    }
+
+    public BigDecimalFilter getUsefulLifeYears() {
+        return usefulLifeYears;
+    }
+
+    public BigDecimalFilter usefulLifeYears() {
+        if (usefulLifeYears == null) {
+            usefulLifeYears = new BigDecimalFilter();
+        }
+        return usefulLifeYears;
+    }
+
+    public void setUsefulLifeYears(BigDecimalFilter usefulLifeYears) {
+        this.usefulLifeYears = usefulLifeYears;
+    }
+
+    public BigDecimalFilter getPreviousNBV() {
+        return previousNBV;
+    }
+
+    public BigDecimalFilter previousNBV() {
+        if (previousNBV == null) {
+            previousNBV = new BigDecimalFilter();
+        }
+        return previousNBV;
+    }
+
+    public void setPreviousNBV(BigDecimalFilter previousNBV) {
+        this.previousNBV = previousNBV;
+    }
+
+    public BigDecimalFilter getNetBookValue() {
+        return netBookValue;
+    }
+
+    public BigDecimalFilter netBookValue() {
+        if (netBookValue == null) {
+            netBookValue = new BigDecimalFilter();
+        }
+        return netBookValue;
+    }
+
+    public void setNetBookValue(BigDecimalFilter netBookValue) {
+        this.netBookValue = netBookValue;
+    }
+
+    public LocalDateFilter getDepreciationPeriodStartDate() {
+        return depreciationPeriodStartDate;
+    }
+
+    public LocalDateFilter depreciationPeriodStartDate() {
+        if (depreciationPeriodStartDate == null) {
+            depreciationPeriodStartDate = new LocalDateFilter();
+        }
+        return depreciationPeriodStartDate;
+    }
+
+    public void setDepreciationPeriodStartDate(LocalDateFilter depreciationPeriodStartDate) {
+        this.depreciationPeriodStartDate = depreciationPeriodStartDate;
+    }
+
+    public LocalDateFilter getDepreciationPeriodEndDate() {
+        return depreciationPeriodEndDate;
+    }
+
+    public LocalDateFilter depreciationPeriodEndDate() {
+        if (depreciationPeriodEndDate == null) {
+            depreciationPeriodEndDate = new LocalDateFilter();
+        }
+        return depreciationPeriodEndDate;
+    }
+
+    public void setDepreciationPeriodEndDate(LocalDateFilter depreciationPeriodEndDate) {
+        this.depreciationPeriodEndDate = depreciationPeriodEndDate;
+    }
+
+    public LocalDateFilter getCapitalizationDate() {
+        return capitalizationDate;
+    }
+
+    public LocalDateFilter capitalizationDate() {
+        if (capitalizationDate == null) {
+            capitalizationDate = new LocalDateFilter();
+        }
+        return capitalizationDate;
+    }
+
+    public void setCapitalizationDate(LocalDateFilter capitalizationDate) {
+        this.capitalizationDate = capitalizationDate;
     }
 
     public LongFilter getServiceOutletId() {
@@ -273,6 +551,36 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
         this.fiscalYearId = fiscalYearId;
     }
 
+    public LongFilter getDepreciationJobId() {
+        return depreciationJobId;
+    }
+
+    public LongFilter depreciationJobId() {
+        if (depreciationJobId == null) {
+            depreciationJobId = new LongFilter();
+        }
+        return depreciationJobId;
+    }
+
+    public void setDepreciationJobId(LongFilter depreciationJobId) {
+        this.depreciationJobId = depreciationJobId;
+    }
+
+    public LongFilter getDepreciationBatchSequenceId() {
+        return depreciationBatchSequenceId;
+    }
+
+    public LongFilter depreciationBatchSequenceId() {
+        if (depreciationBatchSequenceId == null) {
+            depreciationBatchSequenceId = new LongFilter();
+        }
+        return depreciationBatchSequenceId;
+    }
+
+    public void setDepreciationBatchSequenceId(LongFilter depreciationBatchSequenceId) {
+        this.depreciationBatchSequenceId = depreciationBatchSequenceId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -295,6 +603,21 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             Objects.equals(postedAt, that.postedAt) &&
             Objects.equals(depreciationAmount, that.depreciationAmount) &&
             Objects.equals(assetNumber, that.assetNumber) &&
+            Objects.equals(depreciationPeriodIdentifier, that.depreciationPeriodIdentifier) &&
+            Objects.equals(depreciationJobIdentifier, that.depreciationJobIdentifier) &&
+            Objects.equals(fiscalMonthIdentifier, that.fiscalMonthIdentifier) &&
+            Objects.equals(fiscalQuarterIdentifier, that.fiscalQuarterIdentifier) &&
+            Objects.equals(batchSequenceNumber, that.batchSequenceNumber) &&
+            Objects.equals(processedItems, that.processedItems) &&
+            Objects.equals(totalItemsProcessed, that.totalItemsProcessed) &&
+            Objects.equals(elapsedMonths, that.elapsedMonths) &&
+            Objects.equals(priorMonths, that.priorMonths) &&
+            Objects.equals(usefulLifeYears, that.usefulLifeYears) &&
+            Objects.equals(previousNBV, that.previousNBV) &&
+            Objects.equals(netBookValue, that.netBookValue) &&
+            Objects.equals(depreciationPeriodStartDate, that.depreciationPeriodStartDate) &&
+            Objects.equals(depreciationPeriodEndDate, that.depreciationPeriodEndDate) &&
+            Objects.equals(capitalizationDate, that.capitalizationDate) &&
             Objects.equals(serviceOutletId, that.serviceOutletId) &&
             Objects.equals(assetCategoryId, that.assetCategoryId) &&
             Objects.equals(depreciationMethodId, that.depreciationMethodId) &&
@@ -303,6 +626,8 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             Objects.equals(fiscalMonthId, that.fiscalMonthId) &&
             Objects.equals(fiscalQuarterId, that.fiscalQuarterId) &&
             Objects.equals(fiscalYearId, that.fiscalYearId) &&
+            Objects.equals(depreciationJobId, that.depreciationJobId) &&
+            Objects.equals(depreciationBatchSequenceId, that.depreciationBatchSequenceId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -314,6 +639,21 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             postedAt,
             depreciationAmount,
             assetNumber,
+            depreciationPeriodIdentifier,
+            depreciationJobIdentifier,
+            fiscalMonthIdentifier,
+            fiscalQuarterIdentifier,
+            batchSequenceNumber,
+            processedItems,
+            totalItemsProcessed,
+            elapsedMonths,
+            priorMonths,
+            usefulLifeYears,
+            previousNBV,
+            netBookValue,
+            depreciationPeriodStartDate,
+            depreciationPeriodEndDate,
+            capitalizationDate,
             serviceOutletId,
             assetCategoryId,
             depreciationMethodId,
@@ -322,6 +662,8 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             fiscalMonthId,
             fiscalQuarterId,
             fiscalYearId,
+            depreciationJobId,
+            depreciationBatchSequenceId,
             distinct
         );
     }
@@ -334,6 +676,21 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             (postedAt != null ? "postedAt=" + postedAt + ", " : "") +
             (depreciationAmount != null ? "depreciationAmount=" + depreciationAmount + ", " : "") +
             (assetNumber != null ? "assetNumber=" + assetNumber + ", " : "") +
+            (depreciationPeriodIdentifier != null ? "depreciationPeriodIdentifier=" + depreciationPeriodIdentifier + ", " : "") +
+            (depreciationJobIdentifier != null ? "depreciationJobIdentifier=" + depreciationJobIdentifier + ", " : "") +
+            (fiscalMonthIdentifier != null ? "fiscalMonthIdentifier=" + fiscalMonthIdentifier + ", " : "") +
+            (fiscalQuarterIdentifier != null ? "fiscalQuarterIdentifier=" + fiscalQuarterIdentifier + ", " : "") +
+            (batchSequenceNumber != null ? "batchSequenceNumber=" + batchSequenceNumber + ", " : "") +
+            (processedItems != null ? "processedItems=" + processedItems + ", " : "") +
+            (totalItemsProcessed != null ? "totalItemsProcessed=" + totalItemsProcessed + ", " : "") +
+            (elapsedMonths != null ? "elapsedMonths=" + elapsedMonths + ", " : "") +
+            (priorMonths != null ? "priorMonths=" + priorMonths + ", " : "") +
+            (usefulLifeYears != null ? "usefulLifeYears=" + usefulLifeYears + ", " : "") +
+            (previousNBV != null ? "previousNBV=" + previousNBV + ", " : "") +
+            (netBookValue != null ? "netBookValue=" + netBookValue + ", " : "") +
+            (depreciationPeriodStartDate != null ? "depreciationPeriodStartDate=" + depreciationPeriodStartDate + ", " : "") +
+            (depreciationPeriodEndDate != null ? "depreciationPeriodEndDate=" + depreciationPeriodEndDate + ", " : "") +
+            (capitalizationDate != null ? "capitalizationDate=" + capitalizationDate + ", " : "") +
             (serviceOutletId != null ? "serviceOutletId=" + serviceOutletId + ", " : "") +
             (assetCategoryId != null ? "assetCategoryId=" + assetCategoryId + ", " : "") +
             (depreciationMethodId != null ? "depreciationMethodId=" + depreciationMethodId + ", " : "") +
@@ -342,6 +699,8 @@ public class DepreciationEntryCriteria implements Serializable, Criteria {
             (fiscalMonthId != null ? "fiscalMonthId=" + fiscalMonthId + ", " : "") +
             (fiscalQuarterId != null ? "fiscalQuarterId=" + fiscalQuarterId + ", " : "") +
             (fiscalYearId != null ? "fiscalYearId=" + fiscalYearId + ", " : "") +
+            (depreciationJobId != null ? "depreciationJobId=" + depreciationJobId + ", " : "") +
+            (depreciationBatchSequenceId != null ? "depreciationBatchSequenceId=" + depreciationBatchSequenceId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

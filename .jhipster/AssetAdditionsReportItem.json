@@ -1,0 +1,61 @@
+{
+  "fields": [
+    {
+      "fieldName": "assetNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assetTag",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "serviceOutletCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "transactionId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "transactionDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "capitalizationDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "assetCategory",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assetDetails",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assetCost",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "supplier",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "historicalCost",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "registrationDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": true,
+  "pagination": "infinite-scroll",
+  "name": "AssetAdditionsReportItem",
+  "changelogDate": "20240125050141",
+  "incrementalChangelog": false
+}

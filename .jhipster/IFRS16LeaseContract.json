@@ -1,0 +1,87 @@
+{
+  "fields": [
+    {
+      "fieldName": "bookingId",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "leaseTitle",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "shortTitle",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "inceptionDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "commencementDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "serialNumber",
+      "fieldType": "UUID"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "superintendentServiceOutlet",
+      "otherEntityName": "serviceOutlet",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "outletCode"
+    },
+    {
+      "relationshipName": "mainDealer",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "dealerName"
+    },
+    {
+      "relationshipName": "firstReportingPeriod",
+      "otherEntityName": "fiscalMonth",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "fiscalMonthCode"
+    },
+    {
+      "relationshipName": "lastReportingPeriod",
+      "otherEntityName": "fiscalMonth",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "fiscalMonthCode"
+    },
+    {
+      "relationshipName": "leaseContractDocument",
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "documentTitle"
+    },
+    {
+      "relationshipName": "leaseContractCalculations",
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "documentTitle"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "IFRS16LeaseContract",
+  "changelogDate": "20240307045420",
+  "incrementalChangelog": false
+}

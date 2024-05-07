@@ -1,8 +1,8 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,9 +67,9 @@ public class AssetRegistrationDTO implements Serializable {
 
     private Set<PaymentInvoiceDTO> paymentInvoices = new HashSet<>();
 
-    private Set<ServiceOutletDTO> serviceOutlets = new HashSet<>();
+    private Set<ServiceOutletDTO> otherRelatedServiceOutlets = new HashSet<>();
 
-    private Set<SettlementDTO> settlements = new HashSet<>();
+    private Set<SettlementDTO> otherRelatedSettlements = new HashSet<>();
 
     private AssetCategoryDTO assetCategory;
 
@@ -94,6 +94,8 @@ public class AssetRegistrationDTO implements Serializable {
     private Set<AssetAccessoryDTO> assetAccessories = new HashSet<>();
 
     private ServiceOutletDTO mainServiceOutlet;
+
+    private SettlementDTO acquiringTransaction;
 
     public Long getId() {
         return id;
@@ -215,20 +217,20 @@ public class AssetRegistrationDTO implements Serializable {
         this.paymentInvoices = paymentInvoices;
     }
 
-    public Set<ServiceOutletDTO> getServiceOutlets() {
-        return serviceOutlets;
+    public Set<ServiceOutletDTO> getOtherRelatedServiceOutlets() {
+        return otherRelatedServiceOutlets;
     }
 
-    public void setServiceOutlets(Set<ServiceOutletDTO> serviceOutlets) {
-        this.serviceOutlets = serviceOutlets;
+    public void setOtherRelatedServiceOutlets(Set<ServiceOutletDTO> otherRelatedServiceOutlets) {
+        this.otherRelatedServiceOutlets = otherRelatedServiceOutlets;
     }
 
-    public Set<SettlementDTO> getSettlements() {
-        return settlements;
+    public Set<SettlementDTO> getOtherRelatedSettlements() {
+        return otherRelatedSettlements;
     }
 
-    public void setSettlements(Set<SettlementDTO> settlements) {
-        this.settlements = settlements;
+    public void setOtherRelatedSettlements(Set<SettlementDTO> otherRelatedSettlements) {
+        this.otherRelatedSettlements = otherRelatedSettlements;
     }
 
     public AssetCategoryDTO getAssetCategory() {
@@ -327,6 +329,14 @@ public class AssetRegistrationDTO implements Serializable {
         this.mainServiceOutlet = mainServiceOutlet;
     }
 
+    public SettlementDTO getAcquiringTransaction() {
+        return acquiringTransaction;
+    }
+
+    public void setAcquiringTransaction(SettlementDTO acquiringTransaction) {
+        this.acquiringTransaction = acquiringTransaction;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -366,8 +376,8 @@ public class AssetRegistrationDTO implements Serializable {
             ", registrationDate='" + getRegistrationDate() + "'" +
             ", placeholders=" + getPlaceholders() +
             ", paymentInvoices=" + getPaymentInvoices() +
-            ", serviceOutlets=" + getServiceOutlets() +
-            ", settlements=" + getSettlements() +
+            ", otherRelatedServiceOutlets=" + getOtherRelatedServiceOutlets() +
+            ", otherRelatedSettlements=" + getOtherRelatedSettlements() +
             ", assetCategory=" + getAssetCategory() +
             ", purchaseOrders=" + getPurchaseOrders() +
             ", deliveryNotes=" + getDeliveryNotes() +
@@ -380,6 +390,7 @@ public class AssetRegistrationDTO implements Serializable {
             ", universallyUniqueMappings=" + getUniversallyUniqueMappings() +
             ", assetAccessories=" + getAssetAccessories() +
             ", mainServiceOutlet=" + getMainServiceOutlet() +
+            ", acquiringTransaction=" + getAcquiringTransaction() +
             "}";
     }
 }

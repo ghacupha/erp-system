@@ -1,8 +1,8 @@
 package io.github.erp.web.rest;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.ApplicationUser;
 import io.github.erp.domain.DepreciationBatchSequence;
 import io.github.erp.domain.DepreciationJob;
 import io.github.erp.domain.DepreciationJobNotice;
@@ -238,72 +237,6 @@ class DepreciationJobNoticeResourceIT {
 
         // Validate the DepreciationJobNotice in Elasticsearch
         verify(mockDepreciationJobNoticeSearchRepository, times(0)).save(depreciationJobNotice);
-    }
-
-    @Test
-    @Transactional
-    void checkEventNarrativeIsRequired() throws Exception {
-        int databaseSizeBeforeTest = depreciationJobNoticeRepository.findAll().size();
-        // set the field null
-        depreciationJobNotice.setEventNarrative(null);
-
-        // Create the DepreciationJobNotice, which fails.
-        DepreciationJobNoticeDTO depreciationJobNoticeDTO = depreciationJobNoticeMapper.toDto(depreciationJobNotice);
-
-        restDepreciationJobNoticeMockMvc
-            .perform(
-                post(ENTITY_API_URL)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(depreciationJobNoticeDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<DepreciationJobNotice> depreciationJobNoticeList = depreciationJobNoticeRepository.findAll();
-        assertThat(depreciationJobNoticeList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    void checkEventTimeStampIsRequired() throws Exception {
-        int databaseSizeBeforeTest = depreciationJobNoticeRepository.findAll().size();
-        // set the field null
-        depreciationJobNotice.setEventTimeStamp(null);
-
-        // Create the DepreciationJobNotice, which fails.
-        DepreciationJobNoticeDTO depreciationJobNoticeDTO = depreciationJobNoticeMapper.toDto(depreciationJobNotice);
-
-        restDepreciationJobNoticeMockMvc
-            .perform(
-                post(ENTITY_API_URL)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(depreciationJobNoticeDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<DepreciationJobNotice> depreciationJobNoticeList = depreciationJobNoticeRepository.findAll();
-        assertThat(depreciationJobNoticeList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    void checkDepreciationNoticeStatusIsRequired() throws Exception {
-        int databaseSizeBeforeTest = depreciationJobNoticeRepository.findAll().size();
-        // set the field null
-        depreciationJobNotice.setDepreciationNoticeStatus(null);
-
-        // Create the DepreciationJobNotice, which fails.
-        DepreciationJobNoticeDTO depreciationJobNoticeDTO = depreciationJobNoticeMapper.toDto(depreciationJobNotice);
-
-        restDepreciationJobNoticeMockMvc
-            .perform(
-                post(ENTITY_API_URL)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(depreciationJobNoticeDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<DepreciationJobNotice> depreciationJobNoticeList = depreciationJobNoticeRepository.findAll();
-        assertThat(depreciationJobNoticeList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -1064,32 +997,6 @@ class DepreciationJobNoticeResourceIT {
 
         // Get all the depreciationJobNoticeList where universallyUniqueMapping equals to (universallyUniqueMappingId + 1)
         defaultDepreciationJobNoticeShouldNotBeFound("universallyUniqueMappingId.equals=" + (universallyUniqueMappingId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllDepreciationJobNoticesBySuperintendedIsEqualToSomething() throws Exception {
-        // Initialize the database
-        depreciationJobNoticeRepository.saveAndFlush(depreciationJobNotice);
-        ApplicationUser superintended;
-        if (TestUtil.findAll(em, ApplicationUser.class).isEmpty()) {
-            superintended = ApplicationUserResourceIT.createEntity(em);
-            em.persist(superintended);
-            em.flush();
-        } else {
-            superintended = TestUtil.findAll(em, ApplicationUser.class).get(0);
-        }
-        em.persist(superintended);
-        em.flush();
-        depreciationJobNotice.setSuperintended(superintended);
-        depreciationJobNoticeRepository.saveAndFlush(depreciationJobNotice);
-        Long superintendedId = superintended.getId();
-
-        // Get all the depreciationJobNoticeList where superintended equals to superintendedId
-        defaultDepreciationJobNoticeShouldBeFound("superintendedId.equals=" + superintendedId);
-
-        // Get all the depreciationJobNoticeList where superintended equals to (superintendedId + 1)
-        defaultDepreciationJobNoticeShouldNotBeFound("superintendedId.equals=" + (superintendedId + 1));
     }
 
     /**

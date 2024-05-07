@@ -1,8 +1,8 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,13 +46,7 @@ public class DepreciationPeriodDTO implements Serializable {
 
     private DepreciationPeriodDTO previousPeriod;
 
-    private ApplicationUserDTO createdBy;
-
-    private FiscalYearDTO fiscalYear;
-
     private FiscalMonthDTO fiscalMonth;
-
-    private FiscalQuarterDTO fiscalQuarter;
 
     public Long getId() {
         return id;
@@ -110,36 +104,12 @@ public class DepreciationPeriodDTO implements Serializable {
         this.previousPeriod = previousPeriod;
     }
 
-    public ApplicationUserDTO getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(ApplicationUserDTO createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public FiscalYearDTO getFiscalYear() {
-        return fiscalYear;
-    }
-
-    public void setFiscalYear(FiscalYearDTO fiscalYear) {
-        this.fiscalYear = fiscalYear;
-    }
-
     public FiscalMonthDTO getFiscalMonth() {
         return fiscalMonth;
     }
 
     public void setFiscalMonth(FiscalMonthDTO fiscalMonth) {
         this.fiscalMonth = fiscalMonth;
-    }
-
-    public FiscalQuarterDTO getFiscalQuarter() {
-        return fiscalQuarter;
-    }
-
-    public void setFiscalQuarter(FiscalQuarterDTO fiscalQuarter) {
-        this.fiscalQuarter = fiscalQuarter;
     }
 
     @Override
@@ -174,10 +144,7 @@ public class DepreciationPeriodDTO implements Serializable {
             ", periodCode='" + getPeriodCode() + "'" +
             ", processLocked='" + getProcessLocked() + "'" +
             ", previousPeriod=" + getPreviousPeriod() +
-            ", createdBy=" + getCreatedBy() +
-            ", fiscalYear=" + getFiscalYear() +
             ", fiscalMonth=" + getFiscalMonth() +
-            ", fiscalQuarter=" + getFiscalQuarter() +
             "}";
     }
 }

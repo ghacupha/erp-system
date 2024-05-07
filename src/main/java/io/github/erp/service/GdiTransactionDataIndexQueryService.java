@@ -1,8 +1,8 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -132,10 +132,10 @@ public class GdiTransactionDataIndexQueryService extends QueryService<GdiTransac
                 specification =
                     specification.and(buildSpecification(criteria.getDatasetBehavior(), GdiTransactionDataIndex_.datasetBehavior));
             }
-            if (criteria.getMinimumDatarowsPerRequest() != null) {
+            if (criteria.getMinimumDataRowsPerRequest() != null) {
                 specification =
                     specification.and(
-                        buildRangeSpecification(criteria.getMinimumDatarowsPerRequest(), GdiTransactionDataIndex_.minimumDatarowsPerRequest)
+                        buildRangeSpecification(criteria.getMinimumDataRowsPerRequest(), GdiTransactionDataIndex_.minimumDataRowsPerRequest)
                     );
             }
             if (criteria.getMaximumDataRowsPerRequest() != null) {
@@ -144,12 +144,42 @@ public class GdiTransactionDataIndexQueryService extends QueryService<GdiTransac
                         buildRangeSpecification(criteria.getMaximumDataRowsPerRequest(), GdiTransactionDataIndex_.maximumDataRowsPerRequest)
                     );
             }
+            if (criteria.getDataPath() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDataPath(), GdiTransactionDataIndex_.dataPath));
+            }
             if (criteria.getMasterDataItemId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
                             criteria.getMasterDataItemId(),
                             root -> root.join(GdiTransactionDataIndex_.masterDataItems, JoinType.LEFT).get(GdiMasterDataIndex_.id)
+                        )
+                    );
+            }
+            if (criteria.getBusinessTeamId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getBusinessTeamId(),
+                            root -> root.join(GdiTransactionDataIndex_.businessTeam, JoinType.LEFT).get(BusinessTeam_.id)
+                        )
+                    );
+            }
+            if (criteria.getDataSetTemplateId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getDataSetTemplateId(),
+                            root -> root.join(GdiTransactionDataIndex_.dataSetTemplate, JoinType.LEFT).get(BusinessDocument_.id)
+                        )
+                    );
+            }
+            if (criteria.getPlaceholderId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPlaceholderId(),
+                            root -> root.join(GdiTransactionDataIndex_.placeholders, JoinType.LEFT).get(Placeholder_.id)
                         )
                     );
             }

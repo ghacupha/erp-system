@@ -1,8 +1,8 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@ package io.github.erp.erp.resources;
  */
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
+import io.github.erp.erp.resources.wip.WorkInProgressRegistrationResourceProd;
 import io.github.erp.repository.WorkInProgressRegistrationRepository;
 import io.github.erp.repository.search.WorkInProgressRegistrationSearchRepository;
 import io.github.erp.service.WorkInProgressRegistrationService;
@@ -79,6 +80,13 @@ public class WorkInProgressRegistrationResourceIT {
     private static final String DEFAULT_COMMENTS_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_COMMENTS_CONTENT_TYPE = "image/png";
 
+    private static final Double DEFAULT_LEVEL_OF_COMPLETION = 1D;
+    private static final Double UPDATED_LEVEL_OF_COMPLETION = 2D;
+    private static final Double SMALLER_LEVEL_OF_COMPLETION = 1D - 1D;
+
+    private static final Boolean DEFAULT_COMPLETED = false;
+    private static final Boolean UPDATED_COMPLETED = true;
+
     private static final String ENTITY_API_URL = "/api/fixed-asset/work-in-progress-registrations";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/fixed-asset/_search/work-in-progress-registrations";
@@ -126,7 +134,9 @@ public class WorkInProgressRegistrationResourceIT {
             .particulars(DEFAULT_PARTICULARS)
             .instalmentAmount(DEFAULT_INSTALMENT_AMOUNT)
             .comments(DEFAULT_COMMENTS)
-            .commentsContentType(DEFAULT_COMMENTS_CONTENT_TYPE);
+            .commentsContentType(DEFAULT_COMMENTS_CONTENT_TYPE)
+            .levelOfCompletion(DEFAULT_LEVEL_OF_COMPLETION)
+            .completed(DEFAULT_COMPLETED);
         return workInProgressRegistration;
     }
 
@@ -142,7 +152,9 @@ public class WorkInProgressRegistrationResourceIT {
             .particulars(UPDATED_PARTICULARS)
             .instalmentAmount(UPDATED_INSTALMENT_AMOUNT)
             .comments(UPDATED_COMMENTS)
-            .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE);
+            .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE)
+            .levelOfCompletion(UPDATED_LEVEL_OF_COMPLETION)
+            .completed(UPDATED_COMPLETED);
         return workInProgressRegistration;
     }
 
@@ -176,6 +188,8 @@ public class WorkInProgressRegistrationResourceIT {
         assertThat(testWorkInProgressRegistration.getInstalmentAmount()).isEqualByComparingTo(DEFAULT_INSTALMENT_AMOUNT);
         assertThat(testWorkInProgressRegistration.getComments()).isEqualTo(DEFAULT_COMMENTS);
         assertThat(testWorkInProgressRegistration.getCommentsContentType()).isEqualTo(DEFAULT_COMMENTS_CONTENT_TYPE);
+        assertThat(testWorkInProgressRegistration.getLevelOfCompletion()).isEqualTo(DEFAULT_LEVEL_OF_COMPLETION);
+        assertThat(testWorkInProgressRegistration.getCompleted()).isEqualTo(DEFAULT_COMPLETED);
 
         // Validate the WorkInProgressRegistration in Elasticsearch
         verify(mockWorkInProgressRegistrationSearchRepository, times(1)).save(testWorkInProgressRegistration);
@@ -245,7 +259,9 @@ public class WorkInProgressRegistrationResourceIT {
             .andExpect(jsonPath("$.[*].particulars").value(hasItem(DEFAULT_PARTICULARS)))
             .andExpect(jsonPath("$.[*].instalmentAmount").value(hasItem(sameNumber(DEFAULT_INSTALMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].commentsContentType").value(hasItem(DEFAULT_COMMENTS_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].comments").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMMENTS))));
+            .andExpect(jsonPath("$.[*].comments").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMMENTS))))
+            .andExpect(jsonPath("$.[*].levelOfCompletion").value(hasItem(DEFAULT_LEVEL_OF_COMPLETION.doubleValue())))
+            .andExpect(jsonPath("$.[*].completed").value(hasItem(DEFAULT_COMPLETED.booleanValue())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -282,7 +298,9 @@ public class WorkInProgressRegistrationResourceIT {
             .andExpect(jsonPath("$.particulars").value(DEFAULT_PARTICULARS))
             .andExpect(jsonPath("$.instalmentAmount").value(sameNumber(DEFAULT_INSTALMENT_AMOUNT)))
             .andExpect(jsonPath("$.commentsContentType").value(DEFAULT_COMMENTS_CONTENT_TYPE))
-            .andExpect(jsonPath("$.comments").value(Base64Utils.encodeToString(DEFAULT_COMMENTS)));
+            .andExpect(jsonPath("$.comments").value(Base64Utils.encodeToString(DEFAULT_COMMENTS)))
+            .andExpect(jsonPath("$.levelOfCompletion").value(DEFAULT_LEVEL_OF_COMPLETION.doubleValue()))
+            .andExpect(jsonPath("$.completed").value(DEFAULT_COMPLETED.booleanValue()));
     }
 
     @Test
@@ -567,6 +585,164 @@ public class WorkInProgressRegistrationResourceIT {
 
     @Test
     @Transactional
+    void getAllWorkInProgressRegistrationsByLevelOfCompletionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+
+        // Get all the workInProgressRegistrationList where levelOfCompletion equals to DEFAULT_LEVEL_OF_COMPLETION
+        defaultWorkInProgressRegistrationShouldBeFound("levelOfCompletion.equals=" + DEFAULT_LEVEL_OF_COMPLETION);
+
+        // Get all the workInProgressRegistrationList where levelOfCompletion equals to UPDATED_LEVEL_OF_COMPLETION
+        defaultWorkInProgressRegistrationShouldNotBeFound("levelOfCompletion.equals=" + UPDATED_LEVEL_OF_COMPLETION);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByLevelOfCompletionIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+
+        // Get all the workInProgressRegistrationList where levelOfCompletion not equals to DEFAULT_LEVEL_OF_COMPLETION
+        defaultWorkInProgressRegistrationShouldNotBeFound("levelOfCompletion.notEquals=" + DEFAULT_LEVEL_OF_COMPLETION);
+
+        // Get all the workInProgressRegistrationList where levelOfCompletion not equals to UPDATED_LEVEL_OF_COMPLETION
+        defaultWorkInProgressRegistrationShouldBeFound("levelOfCompletion.notEquals=" + UPDATED_LEVEL_OF_COMPLETION);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByLevelOfCompletionIsInShouldWork() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+
+        // Get all the workInProgressRegistrationList where levelOfCompletion in DEFAULT_LEVEL_OF_COMPLETION or UPDATED_LEVEL_OF_COMPLETION
+        defaultWorkInProgressRegistrationShouldBeFound(
+            "levelOfCompletion.in=" + DEFAULT_LEVEL_OF_COMPLETION + "," + UPDATED_LEVEL_OF_COMPLETION
+        );
+
+        // Get all the workInProgressRegistrationList where levelOfCompletion equals to UPDATED_LEVEL_OF_COMPLETION
+        defaultWorkInProgressRegistrationShouldNotBeFound("levelOfCompletion.in=" + UPDATED_LEVEL_OF_COMPLETION);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByLevelOfCompletionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+
+        // Get all the workInProgressRegistrationList where levelOfCompletion is not null
+        defaultWorkInProgressRegistrationShouldBeFound("levelOfCompletion.specified=true");
+
+        // Get all the workInProgressRegistrationList where levelOfCompletion is null
+        defaultWorkInProgressRegistrationShouldNotBeFound("levelOfCompletion.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByLevelOfCompletionIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+
+        // Get all the workInProgressRegistrationList where levelOfCompletion is greater than or equal to DEFAULT_LEVEL_OF_COMPLETION
+        defaultWorkInProgressRegistrationShouldBeFound("levelOfCompletion.greaterThanOrEqual=" + DEFAULT_LEVEL_OF_COMPLETION);
+
+        // Get all the workInProgressRegistrationList where levelOfCompletion is greater than or equal to UPDATED_LEVEL_OF_COMPLETION
+        defaultWorkInProgressRegistrationShouldNotBeFound("levelOfCompletion.greaterThanOrEqual=" + UPDATED_LEVEL_OF_COMPLETION);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByLevelOfCompletionIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+
+        // Get all the workInProgressRegistrationList where levelOfCompletion is less than or equal to DEFAULT_LEVEL_OF_COMPLETION
+        defaultWorkInProgressRegistrationShouldBeFound("levelOfCompletion.lessThanOrEqual=" + DEFAULT_LEVEL_OF_COMPLETION);
+
+        // Get all the workInProgressRegistrationList where levelOfCompletion is less than or equal to SMALLER_LEVEL_OF_COMPLETION
+        defaultWorkInProgressRegistrationShouldNotBeFound("levelOfCompletion.lessThanOrEqual=" + SMALLER_LEVEL_OF_COMPLETION);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByLevelOfCompletionIsLessThanSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+
+        // Get all the workInProgressRegistrationList where levelOfCompletion is less than DEFAULT_LEVEL_OF_COMPLETION
+        defaultWorkInProgressRegistrationShouldNotBeFound("levelOfCompletion.lessThan=" + DEFAULT_LEVEL_OF_COMPLETION);
+
+        // Get all the workInProgressRegistrationList where levelOfCompletion is less than UPDATED_LEVEL_OF_COMPLETION
+        defaultWorkInProgressRegistrationShouldBeFound("levelOfCompletion.lessThan=" + UPDATED_LEVEL_OF_COMPLETION);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByLevelOfCompletionIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+
+        // Get all the workInProgressRegistrationList where levelOfCompletion is greater than DEFAULT_LEVEL_OF_COMPLETION
+        defaultWorkInProgressRegistrationShouldNotBeFound("levelOfCompletion.greaterThan=" + DEFAULT_LEVEL_OF_COMPLETION);
+
+        // Get all the workInProgressRegistrationList where levelOfCompletion is greater than SMALLER_LEVEL_OF_COMPLETION
+        defaultWorkInProgressRegistrationShouldBeFound("levelOfCompletion.greaterThan=" + SMALLER_LEVEL_OF_COMPLETION);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByCompletedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+
+        // Get all the workInProgressRegistrationList where completed equals to DEFAULT_COMPLETED
+        defaultWorkInProgressRegistrationShouldBeFound("completed.equals=" + DEFAULT_COMPLETED);
+
+        // Get all the workInProgressRegistrationList where completed equals to UPDATED_COMPLETED
+        defaultWorkInProgressRegistrationShouldNotBeFound("completed.equals=" + UPDATED_COMPLETED);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByCompletedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+
+        // Get all the workInProgressRegistrationList where completed not equals to DEFAULT_COMPLETED
+        defaultWorkInProgressRegistrationShouldNotBeFound("completed.notEquals=" + DEFAULT_COMPLETED);
+
+        // Get all the workInProgressRegistrationList where completed not equals to UPDATED_COMPLETED
+        defaultWorkInProgressRegistrationShouldBeFound("completed.notEquals=" + UPDATED_COMPLETED);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByCompletedIsInShouldWork() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+
+        // Get all the workInProgressRegistrationList where completed in DEFAULT_COMPLETED or UPDATED_COMPLETED
+        defaultWorkInProgressRegistrationShouldBeFound("completed.in=" + DEFAULT_COMPLETED + "," + UPDATED_COMPLETED);
+
+        // Get all the workInProgressRegistrationList where completed equals to UPDATED_COMPLETED
+        defaultWorkInProgressRegistrationShouldNotBeFound("completed.in=" + UPDATED_COMPLETED);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByCompletedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+
+        // Get all the workInProgressRegistrationList where completed is not null
+        defaultWorkInProgressRegistrationShouldBeFound("completed.specified=true");
+
+        // Get all the workInProgressRegistrationList where completed is null
+        defaultWorkInProgressRegistrationShouldNotBeFound("completed.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllWorkInProgressRegistrationsByPlaceholderIsEqualToSomething() throws Exception {
         // Initialize the database
         workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
@@ -589,188 +765,6 @@ public class WorkInProgressRegistrationResourceIT {
 
         // Get all the workInProgressRegistrationList where placeholder equals to (placeholderId + 1)
         defaultWorkInProgressRegistrationShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllWorkInProgressRegistrationsByPaymentInvoicesIsEqualToSomething() throws Exception {
-        // Initialize the database
-        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
-        PaymentInvoice paymentInvoices;
-        if (TestUtil.findAll(em, PaymentInvoice.class).isEmpty()) {
-            paymentInvoices = PaymentInvoiceResourceIT.createEntity(em);
-            em.persist(paymentInvoices);
-            em.flush();
-        } else {
-            paymentInvoices = TestUtil.findAll(em, PaymentInvoice.class).get(0);
-        }
-        em.persist(paymentInvoices);
-        em.flush();
-        workInProgressRegistration.addPaymentInvoices(paymentInvoices);
-        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
-        Long paymentInvoicesId = paymentInvoices.getId();
-
-        // Get all the workInProgressRegistrationList where paymentInvoices equals to paymentInvoicesId
-        defaultWorkInProgressRegistrationShouldBeFound("paymentInvoicesId.equals=" + paymentInvoicesId);
-
-        // Get all the workInProgressRegistrationList where paymentInvoices equals to (paymentInvoicesId + 1)
-        defaultWorkInProgressRegistrationShouldNotBeFound("paymentInvoicesId.equals=" + (paymentInvoicesId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllWorkInProgressRegistrationsByServiceOutletIsEqualToSomething() throws Exception {
-        // Initialize the database
-        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
-        ServiceOutlet serviceOutlet;
-        if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
-            serviceOutlet = ServiceOutletResourceIT.createEntity(em);
-            em.persist(serviceOutlet);
-            em.flush();
-        } else {
-            serviceOutlet = TestUtil.findAll(em, ServiceOutlet.class).get(0);
-        }
-        em.persist(serviceOutlet);
-        em.flush();
-        workInProgressRegistration.addServiceOutlet(serviceOutlet);
-        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
-        Long serviceOutletId = serviceOutlet.getId();
-
-        // Get all the workInProgressRegistrationList where serviceOutlet equals to serviceOutletId
-        defaultWorkInProgressRegistrationShouldBeFound("serviceOutletId.equals=" + serviceOutletId);
-
-        // Get all the workInProgressRegistrationList where serviceOutlet equals to (serviceOutletId + 1)
-        defaultWorkInProgressRegistrationShouldNotBeFound("serviceOutletId.equals=" + (serviceOutletId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllWorkInProgressRegistrationsBySettlementIsEqualToSomething() throws Exception {
-        // Initialize the database
-        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
-        Settlement settlement;
-        if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
-            settlement = SettlementResourceIT.createEntity(em);
-            em.persist(settlement);
-            em.flush();
-        } else {
-            settlement = TestUtil.findAll(em, Settlement.class).get(0);
-        }
-        em.persist(settlement);
-        em.flush();
-        workInProgressRegistration.addSettlement(settlement);
-        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
-        Long settlementId = settlement.getId();
-
-        // Get all the workInProgressRegistrationList where settlement equals to settlementId
-        defaultWorkInProgressRegistrationShouldBeFound("settlementId.equals=" + settlementId);
-
-        // Get all the workInProgressRegistrationList where settlement equals to (settlementId + 1)
-        defaultWorkInProgressRegistrationShouldNotBeFound("settlementId.equals=" + (settlementId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllWorkInProgressRegistrationsByPurchaseOrderIsEqualToSomething() throws Exception {
-        // Initialize the database
-        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
-        PurchaseOrder purchaseOrder;
-        if (TestUtil.findAll(em, PurchaseOrder.class).isEmpty()) {
-            purchaseOrder = PurchaseOrderResourceIT.createEntity(em);
-            em.persist(purchaseOrder);
-            em.flush();
-        } else {
-            purchaseOrder = TestUtil.findAll(em, PurchaseOrder.class).get(0);
-        }
-        em.persist(purchaseOrder);
-        em.flush();
-        workInProgressRegistration.addPurchaseOrder(purchaseOrder);
-        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
-        Long purchaseOrderId = purchaseOrder.getId();
-
-        // Get all the workInProgressRegistrationList where purchaseOrder equals to purchaseOrderId
-        defaultWorkInProgressRegistrationShouldBeFound("purchaseOrderId.equals=" + purchaseOrderId);
-
-        // Get all the workInProgressRegistrationList where purchaseOrder equals to (purchaseOrderId + 1)
-        defaultWorkInProgressRegistrationShouldNotBeFound("purchaseOrderId.equals=" + (purchaseOrderId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllWorkInProgressRegistrationsByDeliveryNoteIsEqualToSomething() throws Exception {
-        // Initialize the database
-        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
-        DeliveryNote deliveryNote;
-        if (TestUtil.findAll(em, DeliveryNote.class).isEmpty()) {
-            deliveryNote = DeliveryNoteResourceIT.createEntity(em);
-            em.persist(deliveryNote);
-            em.flush();
-        } else {
-            deliveryNote = TestUtil.findAll(em, DeliveryNote.class).get(0);
-        }
-        em.persist(deliveryNote);
-        em.flush();
-        workInProgressRegistration.addDeliveryNote(deliveryNote);
-        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
-        Long deliveryNoteId = deliveryNote.getId();
-
-        // Get all the workInProgressRegistrationList where deliveryNote equals to deliveryNoteId
-        defaultWorkInProgressRegistrationShouldBeFound("deliveryNoteId.equals=" + deliveryNoteId);
-
-        // Get all the workInProgressRegistrationList where deliveryNote equals to (deliveryNoteId + 1)
-        defaultWorkInProgressRegistrationShouldNotBeFound("deliveryNoteId.equals=" + (deliveryNoteId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllWorkInProgressRegistrationsByJobSheetIsEqualToSomething() throws Exception {
-        // Initialize the database
-        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
-        JobSheet jobSheet;
-        if (TestUtil.findAll(em, JobSheet.class).isEmpty()) {
-            jobSheet = JobSheetResourceIT.createEntity(em);
-            em.persist(jobSheet);
-            em.flush();
-        } else {
-            jobSheet = TestUtil.findAll(em, JobSheet.class).get(0);
-        }
-        em.persist(jobSheet);
-        em.flush();
-        workInProgressRegistration.addJobSheet(jobSheet);
-        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
-        Long jobSheetId = jobSheet.getId();
-
-        // Get all the workInProgressRegistrationList where jobSheet equals to jobSheetId
-        defaultWorkInProgressRegistrationShouldBeFound("jobSheetId.equals=" + jobSheetId);
-
-        // Get all the workInProgressRegistrationList where jobSheet equals to (jobSheetId + 1)
-        defaultWorkInProgressRegistrationShouldNotBeFound("jobSheetId.equals=" + (jobSheetId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllWorkInProgressRegistrationsByDealerIsEqualToSomething() throws Exception {
-        // Initialize the database
-        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
-        Dealer dealer;
-        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
-            dealer = DealerResourceIT.createEntity(em);
-            em.persist(dealer);
-            em.flush();
-        } else {
-            dealer = TestUtil.findAll(em, Dealer.class).get(0);
-        }
-        em.persist(dealer);
-        em.flush();
-        workInProgressRegistration.setDealer(dealer);
-        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
-        Long dealerId = dealer.getId();
-
-        // Get all the workInProgressRegistrationList where dealer equals to dealerId
-        defaultWorkInProgressRegistrationShouldBeFound("dealerId.equals=" + dealerId);
-
-        // Get all the workInProgressRegistrationList where dealer equals to (dealerId + 1)
-        defaultWorkInProgressRegistrationShouldNotBeFound("dealerId.equals=" + (dealerId + 1));
     }
 
     @Test
@@ -929,6 +923,188 @@ public class WorkInProgressRegistrationResourceIT {
         defaultWorkInProgressRegistrationShouldNotBeFound("assetWarrantyId.equals=" + (assetWarrantyId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByInvoiceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        PaymentInvoice invoice;
+        if (TestUtil.findAll(em, PaymentInvoice.class).isEmpty()) {
+            invoice = PaymentInvoiceResourceIT.createEntity(em);
+            em.persist(invoice);
+            em.flush();
+        } else {
+            invoice = TestUtil.findAll(em, PaymentInvoice.class).get(0);
+        }
+        em.persist(invoice);
+        em.flush();
+        workInProgressRegistration.setInvoice(invoice);
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        Long invoiceId = invoice.getId();
+
+        // Get all the workInProgressRegistrationList where invoice equals to invoiceId
+        defaultWorkInProgressRegistrationShouldBeFound("invoiceId.equals=" + invoiceId);
+
+        // Get all the workInProgressRegistrationList where invoice equals to (invoiceId + 1)
+        defaultWorkInProgressRegistrationShouldNotBeFound("invoiceId.equals=" + (invoiceId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByOutletCodeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        ServiceOutlet outletCode;
+        if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
+            outletCode = ServiceOutletResourceIT.createEntity(em);
+            em.persist(outletCode);
+            em.flush();
+        } else {
+            outletCode = TestUtil.findAll(em, ServiceOutlet.class).get(0);
+        }
+        em.persist(outletCode);
+        em.flush();
+        workInProgressRegistration.setOutletCode(outletCode);
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        Long outletCodeId = outletCode.getId();
+
+        // Get all the workInProgressRegistrationList where outletCode equals to outletCodeId
+        defaultWorkInProgressRegistrationShouldBeFound("outletCodeId.equals=" + outletCodeId);
+
+        // Get all the workInProgressRegistrationList where outletCode equals to (outletCodeId + 1)
+        defaultWorkInProgressRegistrationShouldNotBeFound("outletCodeId.equals=" + (outletCodeId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsBySettlementTransactionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        Settlement settlementTransaction;
+        if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
+            settlementTransaction = SettlementResourceIT.createEntity(em);
+            em.persist(settlementTransaction);
+            em.flush();
+        } else {
+            settlementTransaction = TestUtil.findAll(em, Settlement.class).get(0);
+        }
+        em.persist(settlementTransaction);
+        em.flush();
+        workInProgressRegistration.setSettlementTransaction(settlementTransaction);
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        Long settlementTransactionId = settlementTransaction.getId();
+
+        // Get all the workInProgressRegistrationList where settlementTransaction equals to settlementTransactionId
+        defaultWorkInProgressRegistrationShouldBeFound("settlementTransactionId.equals=" + settlementTransactionId);
+
+        // Get all the workInProgressRegistrationList where settlementTransaction equals to (settlementTransactionId + 1)
+        defaultWorkInProgressRegistrationShouldNotBeFound("settlementTransactionId.equals=" + (settlementTransactionId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByPurchaseOrderIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        PurchaseOrder purchaseOrder;
+        if (TestUtil.findAll(em, PurchaseOrder.class).isEmpty()) {
+            purchaseOrder = PurchaseOrderResourceIT.createEntity(em);
+            em.persist(purchaseOrder);
+            em.flush();
+        } else {
+            purchaseOrder = TestUtil.findAll(em, PurchaseOrder.class).get(0);
+        }
+        em.persist(purchaseOrder);
+        em.flush();
+        workInProgressRegistration.setPurchaseOrder(purchaseOrder);
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        Long purchaseOrderId = purchaseOrder.getId();
+
+        // Get all the workInProgressRegistrationList where purchaseOrder equals to purchaseOrderId
+        defaultWorkInProgressRegistrationShouldBeFound("purchaseOrderId.equals=" + purchaseOrderId);
+
+        // Get all the workInProgressRegistrationList where purchaseOrder equals to (purchaseOrderId + 1)
+        defaultWorkInProgressRegistrationShouldNotBeFound("purchaseOrderId.equals=" + (purchaseOrderId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByDeliveryNoteIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        DeliveryNote deliveryNote;
+        if (TestUtil.findAll(em, DeliveryNote.class).isEmpty()) {
+            deliveryNote = DeliveryNoteResourceIT.createEntity(em);
+            em.persist(deliveryNote);
+            em.flush();
+        } else {
+            deliveryNote = TestUtil.findAll(em, DeliveryNote.class).get(0);
+        }
+        em.persist(deliveryNote);
+        em.flush();
+        workInProgressRegistration.setDeliveryNote(deliveryNote);
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        Long deliveryNoteId = deliveryNote.getId();
+
+        // Get all the workInProgressRegistrationList where deliveryNote equals to deliveryNoteId
+        defaultWorkInProgressRegistrationShouldBeFound("deliveryNoteId.equals=" + deliveryNoteId);
+
+        // Get all the workInProgressRegistrationList where deliveryNote equals to (deliveryNoteId + 1)
+        defaultWorkInProgressRegistrationShouldNotBeFound("deliveryNoteId.equals=" + (deliveryNoteId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByJobSheetIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        JobSheet jobSheet;
+        if (TestUtil.findAll(em, JobSheet.class).isEmpty()) {
+            jobSheet = JobSheetResourceIT.createEntity(em);
+            em.persist(jobSheet);
+            em.flush();
+        } else {
+            jobSheet = TestUtil.findAll(em, JobSheet.class).get(0);
+        }
+        em.persist(jobSheet);
+        em.flush();
+        workInProgressRegistration.setJobSheet(jobSheet);
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        Long jobSheetId = jobSheet.getId();
+
+        // Get all the workInProgressRegistrationList where jobSheet equals to jobSheetId
+        defaultWorkInProgressRegistrationShouldBeFound("jobSheetId.equals=" + jobSheetId);
+
+        // Get all the workInProgressRegistrationList where jobSheet equals to (jobSheetId + 1)
+        defaultWorkInProgressRegistrationShouldNotBeFound("jobSheetId.equals=" + (jobSheetId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByDealerIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        Dealer dealer;
+        if (TestUtil.findAll(em, Dealer.class).isEmpty()) {
+            dealer = DealerResourceIT.createEntity(em);
+            em.persist(dealer);
+            em.flush();
+        } else {
+            dealer = TestUtil.findAll(em, Dealer.class).get(0);
+        }
+        em.persist(dealer);
+        em.flush();
+        workInProgressRegistration.setDealer(dealer);
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+        Long dealerId = dealer.getId();
+
+        // Get all the workInProgressRegistrationList where dealer equals to dealerId
+        defaultWorkInProgressRegistrationShouldBeFound("dealerId.equals=" + dealerId);
+
+        // Get all the workInProgressRegistrationList where dealer equals to (dealerId + 1)
+        defaultWorkInProgressRegistrationShouldNotBeFound("dealerId.equals=" + (dealerId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -942,7 +1118,9 @@ public class WorkInProgressRegistrationResourceIT {
             .andExpect(jsonPath("$.[*].particulars").value(hasItem(DEFAULT_PARTICULARS)))
             .andExpect(jsonPath("$.[*].instalmentAmount").value(hasItem(sameNumber(DEFAULT_INSTALMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].commentsContentType").value(hasItem(DEFAULT_COMMENTS_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].comments").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMMENTS))));
+            .andExpect(jsonPath("$.[*].comments").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMMENTS))))
+            .andExpect(jsonPath("$.[*].levelOfCompletion").value(hasItem(DEFAULT_LEVEL_OF_COMPLETION.doubleValue())))
+            .andExpect(jsonPath("$.[*].completed").value(hasItem(DEFAULT_COMPLETED.booleanValue())));
 
         // Check, that the count call also returns 1
         restWorkInProgressRegistrationMockMvc
@@ -997,7 +1175,9 @@ public class WorkInProgressRegistrationResourceIT {
             .particulars(UPDATED_PARTICULARS)
             .instalmentAmount(UPDATED_INSTALMENT_AMOUNT)
             .comments(UPDATED_COMMENTS)
-            .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE);
+            .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE)
+            .levelOfCompletion(UPDATED_LEVEL_OF_COMPLETION)
+            .completed(UPDATED_COMPLETED);
         WorkInProgressRegistrationDTO workInProgressRegistrationDTO = workInProgressRegistrationMapper.toDto(
             updatedWorkInProgressRegistration
         );
@@ -1021,6 +1201,8 @@ public class WorkInProgressRegistrationResourceIT {
         assertThat(testWorkInProgressRegistration.getInstalmentAmount()).isEqualTo(UPDATED_INSTALMENT_AMOUNT);
         assertThat(testWorkInProgressRegistration.getComments()).isEqualTo(UPDATED_COMMENTS);
         assertThat(testWorkInProgressRegistration.getCommentsContentType()).isEqualTo(UPDATED_COMMENTS_CONTENT_TYPE);
+        assertThat(testWorkInProgressRegistration.getLevelOfCompletion()).isEqualTo(UPDATED_LEVEL_OF_COMPLETION);
+        assertThat(testWorkInProgressRegistration.getCompleted()).isEqualTo(UPDATED_COMPLETED);
 
         // Validate the WorkInProgressRegistration in Elasticsearch
         verify(mockWorkInProgressRegistrationSearchRepository).save(testWorkInProgressRegistration);
@@ -1116,7 +1298,10 @@ public class WorkInProgressRegistrationResourceIT {
         WorkInProgressRegistration partialUpdatedWorkInProgressRegistration = new WorkInProgressRegistration();
         partialUpdatedWorkInProgressRegistration.setId(workInProgressRegistration.getId());
 
-        partialUpdatedWorkInProgressRegistration.sequenceNumber(UPDATED_SEQUENCE_NUMBER).particulars(UPDATED_PARTICULARS);
+        partialUpdatedWorkInProgressRegistration
+            .sequenceNumber(UPDATED_SEQUENCE_NUMBER)
+            .particulars(UPDATED_PARTICULARS)
+            .levelOfCompletion(UPDATED_LEVEL_OF_COMPLETION);
 
         restWorkInProgressRegistrationMockMvc
             .perform(
@@ -1137,6 +1322,8 @@ public class WorkInProgressRegistrationResourceIT {
         assertThat(testWorkInProgressRegistration.getInstalmentAmount()).isEqualByComparingTo(DEFAULT_INSTALMENT_AMOUNT);
         assertThat(testWorkInProgressRegistration.getComments()).isEqualTo(DEFAULT_COMMENTS);
         assertThat(testWorkInProgressRegistration.getCommentsContentType()).isEqualTo(DEFAULT_COMMENTS_CONTENT_TYPE);
+        assertThat(testWorkInProgressRegistration.getLevelOfCompletion()).isEqualTo(UPDATED_LEVEL_OF_COMPLETION);
+        assertThat(testWorkInProgressRegistration.getCompleted()).isEqualTo(DEFAULT_COMPLETED);
     }
 
     @Test
@@ -1156,7 +1343,9 @@ public class WorkInProgressRegistrationResourceIT {
             .particulars(UPDATED_PARTICULARS)
             .instalmentAmount(UPDATED_INSTALMENT_AMOUNT)
             .comments(UPDATED_COMMENTS)
-            .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE);
+            .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE)
+            .levelOfCompletion(UPDATED_LEVEL_OF_COMPLETION)
+            .completed(UPDATED_COMPLETED);
 
         restWorkInProgressRegistrationMockMvc
             .perform(
@@ -1177,6 +1366,8 @@ public class WorkInProgressRegistrationResourceIT {
         assertThat(testWorkInProgressRegistration.getInstalmentAmount()).isEqualByComparingTo(UPDATED_INSTALMENT_AMOUNT);
         assertThat(testWorkInProgressRegistration.getComments()).isEqualTo(UPDATED_COMMENTS);
         assertThat(testWorkInProgressRegistration.getCommentsContentType()).isEqualTo(UPDATED_COMMENTS_CONTENT_TYPE);
+        assertThat(testWorkInProgressRegistration.getLevelOfCompletion()).isEqualTo(UPDATED_LEVEL_OF_COMPLETION);
+        assertThat(testWorkInProgressRegistration.getCompleted()).isEqualTo(UPDATED_COMPLETED);
     }
 
     @Test
@@ -1297,6 +1488,8 @@ public class WorkInProgressRegistrationResourceIT {
             .andExpect(jsonPath("$.[*].particulars").value(hasItem(DEFAULT_PARTICULARS)))
             .andExpect(jsonPath("$.[*].instalmentAmount").value(hasItem(sameNumber(DEFAULT_INSTALMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].commentsContentType").value(hasItem(DEFAULT_COMMENTS_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].comments").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMMENTS))));
+            .andExpect(jsonPath("$.[*].comments").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMMENTS))))
+            .andExpect(jsonPath("$.[*].levelOfCompletion").value(hasItem(DEFAULT_LEVEL_OF_COMPLETION.doubleValue())))
+            .andExpect(jsonPath("$.[*].completed").value(hasItem(DEFAULT_COMPLETED.booleanValue())));
     }
 }

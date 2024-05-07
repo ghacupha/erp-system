@@ -1,8 +1,8 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.ProcessStatus;
 import io.github.erp.domain.ReportStatus;
+import io.github.erp.erp.resources.reports.ReportStatusResourceProd;
 import io.github.erp.repository.ReportStatusRepository;
 import io.github.erp.repository.search.ReportStatusSearchRepository;
 import io.github.erp.service.ReportStatusService;

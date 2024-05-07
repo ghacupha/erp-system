@@ -1,8 +1,8 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -56,6 +58,9 @@ public class PrepaymentAmortization implements Serializable {
 
     @Column(name = "inactive")
     private Boolean inactive;
+
+    @Column(name = "amortization_identifier")
+    private UUID amortizationIdentifier;
 
     @ManyToOne
     @JsonIgnoreProperties(
@@ -96,6 +101,21 @@ public class PrepaymentAmortization implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "fiscalYear", "placeholders", "universallyUniqueMappings", "fiscalQuarter" }, allowSetters = true)
+    private FiscalMonth fiscalMonth;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    private PrepaymentCompilationRequest prepaymentCompilationRequest;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "fiscalMonth" }, allowSetters = true)
+    private AmortizationPeriod amortizationPeriod;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -162,6 +182,19 @@ public class PrepaymentAmortization implements Serializable {
 
     public void setInactive(Boolean inactive) {
         this.inactive = inactive;
+    }
+
+    public UUID getAmortizationIdentifier() {
+        return this.amortizationIdentifier;
+    }
+
+    public PrepaymentAmortization amortizationIdentifier(UUID amortizationIdentifier) {
+        this.setAmortizationIdentifier(amortizationIdentifier);
+        return this;
+    }
+
+    public void setAmortizationIdentifier(UUID amortizationIdentifier) {
+        this.amortizationIdentifier = amortizationIdentifier;
     }
 
     public PrepaymentAccount getPrepaymentAccount() {
@@ -239,6 +272,45 @@ public class PrepaymentAmortization implements Serializable {
         return this;
     }
 
+    public FiscalMonth getFiscalMonth() {
+        return this.fiscalMonth;
+    }
+
+    public void setFiscalMonth(FiscalMonth fiscalMonth) {
+        this.fiscalMonth = fiscalMonth;
+    }
+
+    public PrepaymentAmortization fiscalMonth(FiscalMonth fiscalMonth) {
+        this.setFiscalMonth(fiscalMonth);
+        return this;
+    }
+
+    public PrepaymentCompilationRequest getPrepaymentCompilationRequest() {
+        return this.prepaymentCompilationRequest;
+    }
+
+    public void setPrepaymentCompilationRequest(PrepaymentCompilationRequest prepaymentCompilationRequest) {
+        this.prepaymentCompilationRequest = prepaymentCompilationRequest;
+    }
+
+    public PrepaymentAmortization prepaymentCompilationRequest(PrepaymentCompilationRequest prepaymentCompilationRequest) {
+        this.setPrepaymentCompilationRequest(prepaymentCompilationRequest);
+        return this;
+    }
+
+    public AmortizationPeriod getAmortizationPeriod() {
+        return this.amortizationPeriod;
+    }
+
+    public void setAmortizationPeriod(AmortizationPeriod amortizationPeriod) {
+        this.amortizationPeriod = amortizationPeriod;
+    }
+
+    public PrepaymentAmortization amortizationPeriod(AmortizationPeriod amortizationPeriod) {
+        this.setAmortizationPeriod(amortizationPeriod);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -267,6 +339,7 @@ public class PrepaymentAmortization implements Serializable {
             ", prepaymentPeriod='" + getPrepaymentPeriod() + "'" +
             ", prepaymentAmount=" + getPrepaymentAmount() +
             ", inactive='" + getInactive() + "'" +
+            ", amortizationIdentifier='" + getAmortizationIdentifier() + "'" +
             "}";
     }
 }

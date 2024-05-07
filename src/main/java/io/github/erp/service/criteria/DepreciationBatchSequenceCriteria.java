@@ -1,8 +1,8 @@
 package io.github.erp.service.criteria;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,12 +24,13 @@ import java.util.Objects;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.BooleanFilter;
 import tech.jhipster.service.filter.DoubleFilter;
+import tech.jhipster.service.filter.DurationFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
-import tech.jhipster.service.filter.ZonedDateTimeFilter;
+import tech.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link io.github.erp.domain.DepreciationBatchSequence} entity. This class is used
@@ -67,9 +68,27 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
 
     private IntegerFilter endIndex;
 
-    private ZonedDateTimeFilter createdAt;
-
     private DepreciationBatchStatusTypeFilter depreciationBatchStatus;
+
+    private UUIDFilter depreciationPeriodIdentifier;
+
+    private UUIDFilter depreciationJobIdentifier;
+
+    private UUIDFilter fiscalMonthIdentifier;
+
+    private UUIDFilter fiscalQuarterIdentifier;
+
+    private IntegerFilter batchSize;
+
+    private IntegerFilter processedItems;
+
+    private IntegerFilter sequenceNumber;
+
+    private BooleanFilter isLastBatch;
+
+    private DurationFilter processingTime;
+
+    private IntegerFilter totalItems;
 
     private LongFilter depreciationJobId;
 
@@ -81,8 +100,17 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
         this.id = other.id == null ? null : other.id.copy();
         this.startIndex = other.startIndex == null ? null : other.startIndex.copy();
         this.endIndex = other.endIndex == null ? null : other.endIndex.copy();
-        this.createdAt = other.createdAt == null ? null : other.createdAt.copy();
         this.depreciationBatchStatus = other.depreciationBatchStatus == null ? null : other.depreciationBatchStatus.copy();
+        this.depreciationPeriodIdentifier = other.depreciationPeriodIdentifier == null ? null : other.depreciationPeriodIdentifier.copy();
+        this.depreciationJobIdentifier = other.depreciationJobIdentifier == null ? null : other.depreciationJobIdentifier.copy();
+        this.fiscalMonthIdentifier = other.fiscalMonthIdentifier == null ? null : other.fiscalMonthIdentifier.copy();
+        this.fiscalQuarterIdentifier = other.fiscalQuarterIdentifier == null ? null : other.fiscalQuarterIdentifier.copy();
+        this.batchSize = other.batchSize == null ? null : other.batchSize.copy();
+        this.processedItems = other.processedItems == null ? null : other.processedItems.copy();
+        this.sequenceNumber = other.sequenceNumber == null ? null : other.sequenceNumber.copy();
+        this.isLastBatch = other.isLastBatch == null ? null : other.isLastBatch.copy();
+        this.processingTime = other.processingTime == null ? null : other.processingTime.copy();
+        this.totalItems = other.totalItems == null ? null : other.totalItems.copy();
         this.depreciationJobId = other.depreciationJobId == null ? null : other.depreciationJobId.copy();
         this.distinct = other.distinct;
     }
@@ -137,21 +165,6 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
         this.endIndex = endIndex;
     }
 
-    public ZonedDateTimeFilter getCreatedAt() {
-        return createdAt;
-    }
-
-    public ZonedDateTimeFilter createdAt() {
-        if (createdAt == null) {
-            createdAt = new ZonedDateTimeFilter();
-        }
-        return createdAt;
-    }
-
-    public void setCreatedAt(ZonedDateTimeFilter createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public DepreciationBatchStatusTypeFilter getDepreciationBatchStatus() {
         return depreciationBatchStatus;
     }
@@ -165,6 +178,156 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
 
     public void setDepreciationBatchStatus(DepreciationBatchStatusTypeFilter depreciationBatchStatus) {
         this.depreciationBatchStatus = depreciationBatchStatus;
+    }
+
+    public UUIDFilter getDepreciationPeriodIdentifier() {
+        return depreciationPeriodIdentifier;
+    }
+
+    public UUIDFilter depreciationPeriodIdentifier() {
+        if (depreciationPeriodIdentifier == null) {
+            depreciationPeriodIdentifier = new UUIDFilter();
+        }
+        return depreciationPeriodIdentifier;
+    }
+
+    public void setDepreciationPeriodIdentifier(UUIDFilter depreciationPeriodIdentifier) {
+        this.depreciationPeriodIdentifier = depreciationPeriodIdentifier;
+    }
+
+    public UUIDFilter getDepreciationJobIdentifier() {
+        return depreciationJobIdentifier;
+    }
+
+    public UUIDFilter depreciationJobIdentifier() {
+        if (depreciationJobIdentifier == null) {
+            depreciationJobIdentifier = new UUIDFilter();
+        }
+        return depreciationJobIdentifier;
+    }
+
+    public void setDepreciationJobIdentifier(UUIDFilter depreciationJobIdentifier) {
+        this.depreciationJobIdentifier = depreciationJobIdentifier;
+    }
+
+    public UUIDFilter getFiscalMonthIdentifier() {
+        return fiscalMonthIdentifier;
+    }
+
+    public UUIDFilter fiscalMonthIdentifier() {
+        if (fiscalMonthIdentifier == null) {
+            fiscalMonthIdentifier = new UUIDFilter();
+        }
+        return fiscalMonthIdentifier;
+    }
+
+    public void setFiscalMonthIdentifier(UUIDFilter fiscalMonthIdentifier) {
+        this.fiscalMonthIdentifier = fiscalMonthIdentifier;
+    }
+
+    public UUIDFilter getFiscalQuarterIdentifier() {
+        return fiscalQuarterIdentifier;
+    }
+
+    public UUIDFilter fiscalQuarterIdentifier() {
+        if (fiscalQuarterIdentifier == null) {
+            fiscalQuarterIdentifier = new UUIDFilter();
+        }
+        return fiscalQuarterIdentifier;
+    }
+
+    public void setFiscalQuarterIdentifier(UUIDFilter fiscalQuarterIdentifier) {
+        this.fiscalQuarterIdentifier = fiscalQuarterIdentifier;
+    }
+
+    public IntegerFilter getBatchSize() {
+        return batchSize;
+    }
+
+    public IntegerFilter batchSize() {
+        if (batchSize == null) {
+            batchSize = new IntegerFilter();
+        }
+        return batchSize;
+    }
+
+    public void setBatchSize(IntegerFilter batchSize) {
+        this.batchSize = batchSize;
+    }
+
+    public IntegerFilter getProcessedItems() {
+        return processedItems;
+    }
+
+    public IntegerFilter processedItems() {
+        if (processedItems == null) {
+            processedItems = new IntegerFilter();
+        }
+        return processedItems;
+    }
+
+    public void setProcessedItems(IntegerFilter processedItems) {
+        this.processedItems = processedItems;
+    }
+
+    public IntegerFilter getSequenceNumber() {
+        return sequenceNumber;
+    }
+
+    public IntegerFilter sequenceNumber() {
+        if (sequenceNumber == null) {
+            sequenceNumber = new IntegerFilter();
+        }
+        return sequenceNumber;
+    }
+
+    public void setSequenceNumber(IntegerFilter sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+
+    public BooleanFilter getIsLastBatch() {
+        return isLastBatch;
+    }
+
+    public BooleanFilter isLastBatch() {
+        if (isLastBatch == null) {
+            isLastBatch = new BooleanFilter();
+        }
+        return isLastBatch;
+    }
+
+    public void setIsLastBatch(BooleanFilter isLastBatch) {
+        this.isLastBatch = isLastBatch;
+    }
+
+    public DurationFilter getProcessingTime() {
+        return processingTime;
+    }
+
+    public DurationFilter processingTime() {
+        if (processingTime == null) {
+            processingTime = new DurationFilter();
+        }
+        return processingTime;
+    }
+
+    public void setProcessingTime(DurationFilter processingTime) {
+        this.processingTime = processingTime;
+    }
+
+    public IntegerFilter getTotalItems() {
+        return totalItems;
+    }
+
+    public IntegerFilter totalItems() {
+        if (totalItems == null) {
+            totalItems = new IntegerFilter();
+        }
+        return totalItems;
+    }
+
+    public void setTotalItems(IntegerFilter totalItems) {
+        this.totalItems = totalItems;
     }
 
     public LongFilter getDepreciationJobId() {
@@ -203,8 +366,17 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
             Objects.equals(id, that.id) &&
             Objects.equals(startIndex, that.startIndex) &&
             Objects.equals(endIndex, that.endIndex) &&
-            Objects.equals(createdAt, that.createdAt) &&
             Objects.equals(depreciationBatchStatus, that.depreciationBatchStatus) &&
+            Objects.equals(depreciationPeriodIdentifier, that.depreciationPeriodIdentifier) &&
+            Objects.equals(depreciationJobIdentifier, that.depreciationJobIdentifier) &&
+            Objects.equals(fiscalMonthIdentifier, that.fiscalMonthIdentifier) &&
+            Objects.equals(fiscalQuarterIdentifier, that.fiscalQuarterIdentifier) &&
+            Objects.equals(batchSize, that.batchSize) &&
+            Objects.equals(processedItems, that.processedItems) &&
+            Objects.equals(sequenceNumber, that.sequenceNumber) &&
+            Objects.equals(isLastBatch, that.isLastBatch) &&
+            Objects.equals(processingTime, that.processingTime) &&
+            Objects.equals(totalItems, that.totalItems) &&
             Objects.equals(depreciationJobId, that.depreciationJobId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -212,7 +384,24 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, startIndex, endIndex, createdAt, depreciationBatchStatus, depreciationJobId, distinct);
+        return Objects.hash(
+            id,
+            startIndex,
+            endIndex,
+            depreciationBatchStatus,
+            depreciationPeriodIdentifier,
+            depreciationJobIdentifier,
+            fiscalMonthIdentifier,
+            fiscalQuarterIdentifier,
+            batchSize,
+            processedItems,
+            sequenceNumber,
+            isLastBatch,
+            processingTime,
+            totalItems,
+            depreciationJobId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -222,8 +411,17 @@ public class DepreciationBatchSequenceCriteria implements Serializable, Criteria
             (id != null ? "id=" + id + ", " : "") +
             (startIndex != null ? "startIndex=" + startIndex + ", " : "") +
             (endIndex != null ? "endIndex=" + endIndex + ", " : "") +
-            (createdAt != null ? "createdAt=" + createdAt + ", " : "") +
             (depreciationBatchStatus != null ? "depreciationBatchStatus=" + depreciationBatchStatus + ", " : "") +
+            (depreciationPeriodIdentifier != null ? "depreciationPeriodIdentifier=" + depreciationPeriodIdentifier + ", " : "") +
+            (depreciationJobIdentifier != null ? "depreciationJobIdentifier=" + depreciationJobIdentifier + ", " : "") +
+            (fiscalMonthIdentifier != null ? "fiscalMonthIdentifier=" + fiscalMonthIdentifier + ", " : "") +
+            (fiscalQuarterIdentifier != null ? "fiscalQuarterIdentifier=" + fiscalQuarterIdentifier + ", " : "") +
+            (batchSize != null ? "batchSize=" + batchSize + ", " : "") +
+            (processedItems != null ? "processedItems=" + processedItems + ", " : "") +
+            (sequenceNumber != null ? "sequenceNumber=" + sequenceNumber + ", " : "") +
+            (isLastBatch != null ? "isLastBatch=" + isLastBatch + ", " : "") +
+            (processingTime != null ? "processingTime=" + processingTime + ", " : "") +
+            (totalItems != null ? "totalItems=" + totalItems + ", " : "") +
             (depreciationJobId != null ? "depreciationJobId=" + depreciationJobId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

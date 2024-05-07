@@ -1,8 +1,8 @@
 package io.github.erp.service.criteria;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -88,11 +88,19 @@ public class GdiTransactionDataIndexCriteria implements Serializable, Criteria {
 
     private DatasetBehaviorTypesFilter datasetBehavior;
 
-    private IntegerFilter minimumDatarowsPerRequest;
+    private IntegerFilter minimumDataRowsPerRequest;
 
     private IntegerFilter maximumDataRowsPerRequest;
 
+    private StringFilter dataPath;
+
     private LongFilter masterDataItemId;
+
+    private LongFilter businessTeamId;
+
+    private LongFilter dataSetTemplateId;
+
+    private LongFilter placeholderId;
 
     private Boolean distinct;
 
@@ -104,9 +112,13 @@ public class GdiTransactionDataIndexCriteria implements Serializable, Criteria {
         this.databaseName = other.databaseName == null ? null : other.databaseName.copy();
         this.updateFrequency = other.updateFrequency == null ? null : other.updateFrequency.copy();
         this.datasetBehavior = other.datasetBehavior == null ? null : other.datasetBehavior.copy();
-        this.minimumDatarowsPerRequest = other.minimumDatarowsPerRequest == null ? null : other.minimumDatarowsPerRequest.copy();
+        this.minimumDataRowsPerRequest = other.minimumDataRowsPerRequest == null ? null : other.minimumDataRowsPerRequest.copy();
         this.maximumDataRowsPerRequest = other.maximumDataRowsPerRequest == null ? null : other.maximumDataRowsPerRequest.copy();
+        this.dataPath = other.dataPath == null ? null : other.dataPath.copy();
         this.masterDataItemId = other.masterDataItemId == null ? null : other.masterDataItemId.copy();
+        this.businessTeamId = other.businessTeamId == null ? null : other.businessTeamId.copy();
+        this.dataSetTemplateId = other.dataSetTemplateId == null ? null : other.dataSetTemplateId.copy();
+        this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
     }
 
@@ -190,19 +202,19 @@ public class GdiTransactionDataIndexCriteria implements Serializable, Criteria {
         this.datasetBehavior = datasetBehavior;
     }
 
-    public IntegerFilter getMinimumDatarowsPerRequest() {
-        return minimumDatarowsPerRequest;
+    public IntegerFilter getMinimumDataRowsPerRequest() {
+        return minimumDataRowsPerRequest;
     }
 
-    public IntegerFilter minimumDatarowsPerRequest() {
-        if (minimumDatarowsPerRequest == null) {
-            minimumDatarowsPerRequest = new IntegerFilter();
+    public IntegerFilter minimumDataRowsPerRequest() {
+        if (minimumDataRowsPerRequest == null) {
+            minimumDataRowsPerRequest = new IntegerFilter();
         }
-        return minimumDatarowsPerRequest;
+        return minimumDataRowsPerRequest;
     }
 
-    public void setMinimumDatarowsPerRequest(IntegerFilter minimumDatarowsPerRequest) {
-        this.minimumDatarowsPerRequest = minimumDatarowsPerRequest;
+    public void setMinimumDataRowsPerRequest(IntegerFilter minimumDataRowsPerRequest) {
+        this.minimumDataRowsPerRequest = minimumDataRowsPerRequest;
     }
 
     public IntegerFilter getMaximumDataRowsPerRequest() {
@@ -220,6 +232,21 @@ public class GdiTransactionDataIndexCriteria implements Serializable, Criteria {
         this.maximumDataRowsPerRequest = maximumDataRowsPerRequest;
     }
 
+    public StringFilter getDataPath() {
+        return dataPath;
+    }
+
+    public StringFilter dataPath() {
+        if (dataPath == null) {
+            dataPath = new StringFilter();
+        }
+        return dataPath;
+    }
+
+    public void setDataPath(StringFilter dataPath) {
+        this.dataPath = dataPath;
+    }
+
     public LongFilter getMasterDataItemId() {
         return masterDataItemId;
     }
@@ -233,6 +260,51 @@ public class GdiTransactionDataIndexCriteria implements Serializable, Criteria {
 
     public void setMasterDataItemId(LongFilter masterDataItemId) {
         this.masterDataItemId = masterDataItemId;
+    }
+
+    public LongFilter getBusinessTeamId() {
+        return businessTeamId;
+    }
+
+    public LongFilter businessTeamId() {
+        if (businessTeamId == null) {
+            businessTeamId = new LongFilter();
+        }
+        return businessTeamId;
+    }
+
+    public void setBusinessTeamId(LongFilter businessTeamId) {
+        this.businessTeamId = businessTeamId;
+    }
+
+    public LongFilter getDataSetTemplateId() {
+        return dataSetTemplateId;
+    }
+
+    public LongFilter dataSetTemplateId() {
+        if (dataSetTemplateId == null) {
+            dataSetTemplateId = new LongFilter();
+        }
+        return dataSetTemplateId;
+    }
+
+    public void setDataSetTemplateId(LongFilter dataSetTemplateId) {
+        this.dataSetTemplateId = dataSetTemplateId;
+    }
+
+    public LongFilter getPlaceholderId() {
+        return placeholderId;
+    }
+
+    public LongFilter placeholderId() {
+        if (placeholderId == null) {
+            placeholderId = new LongFilter();
+        }
+        return placeholderId;
+    }
+
+    public void setPlaceholderId(LongFilter placeholderId) {
+        this.placeholderId = placeholderId;
     }
 
     public Boolean getDistinct() {
@@ -258,9 +330,13 @@ public class GdiTransactionDataIndexCriteria implements Serializable, Criteria {
             Objects.equals(databaseName, that.databaseName) &&
             Objects.equals(updateFrequency, that.updateFrequency) &&
             Objects.equals(datasetBehavior, that.datasetBehavior) &&
-            Objects.equals(minimumDatarowsPerRequest, that.minimumDatarowsPerRequest) &&
+            Objects.equals(minimumDataRowsPerRequest, that.minimumDataRowsPerRequest) &&
             Objects.equals(maximumDataRowsPerRequest, that.maximumDataRowsPerRequest) &&
+            Objects.equals(dataPath, that.dataPath) &&
             Objects.equals(masterDataItemId, that.masterDataItemId) &&
+            Objects.equals(businessTeamId, that.businessTeamId) &&
+            Objects.equals(dataSetTemplateId, that.dataSetTemplateId) &&
+            Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -273,9 +349,13 @@ public class GdiTransactionDataIndexCriteria implements Serializable, Criteria {
             databaseName,
             updateFrequency,
             datasetBehavior,
-            minimumDatarowsPerRequest,
+            minimumDataRowsPerRequest,
             maximumDataRowsPerRequest,
+            dataPath,
             masterDataItemId,
+            businessTeamId,
+            dataSetTemplateId,
+            placeholderId,
             distinct
         );
     }
@@ -289,9 +369,13 @@ public class GdiTransactionDataIndexCriteria implements Serializable, Criteria {
             (databaseName != null ? "databaseName=" + databaseName + ", " : "") +
             (updateFrequency != null ? "updateFrequency=" + updateFrequency + ", " : "") +
             (datasetBehavior != null ? "datasetBehavior=" + datasetBehavior + ", " : "") +
-            (minimumDatarowsPerRequest != null ? "minimumDatarowsPerRequest=" + minimumDatarowsPerRequest + ", " : "") +
+            (minimumDataRowsPerRequest != null ? "minimumDataRowsPerRequest=" + minimumDataRowsPerRequest + ", " : "") +
             (maximumDataRowsPerRequest != null ? "maximumDataRowsPerRequest=" + maximumDataRowsPerRequest + ", " : "") +
+            (dataPath != null ? "dataPath=" + dataPath + ", " : "") +
             (masterDataItemId != null ? "masterDataItemId=" + masterDataItemId + ", " : "") +
+            (businessTeamId != null ? "businessTeamId=" + businessTeamId + ", " : "") +
+            (dataSetTemplateId != null ? "dataSetTemplateId=" + dataSetTemplateId + ", " : "") +
+            (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

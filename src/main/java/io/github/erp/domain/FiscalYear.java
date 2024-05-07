@@ -1,8 +1,8 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.github.erp.domain.enumeration.FiscalYearStatusType;
 import java.io.Serializable;
@@ -36,7 +35,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "fiscal_year")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "fiscalyear")
-public class FiscalYear implements Serializable {
+public class FiscalYear extends AbstractIdentifiableEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -51,11 +50,11 @@ public class FiscalYear implements Serializable {
     private String fiscalYearCode;
 
     @NotNull
-    @Column(name = "start_date", nullable = false)
+    @Column(name = "start_date", nullable = false, unique = true)
     private LocalDate startDate;
 
     @NotNull
-    @Column(name = "end_date", nullable = false)
+    @Column(name = "end_date", nullable = false, unique = true)
     private LocalDate endDate;
 
     @Enumerated(EnumType.STRING)

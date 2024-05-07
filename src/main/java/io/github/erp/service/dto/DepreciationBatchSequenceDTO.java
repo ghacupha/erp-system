@@ -1,8 +1,8 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,8 +20,10 @@ package io.github.erp.service.dto;
 
 import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.Duration;
 import java.util.Objects;
+import java.util.UUID;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link io.github.erp.domain.DepreciationBatchSequence} entity.
@@ -34,9 +36,27 @@ public class DepreciationBatchSequenceDTO implements Serializable {
 
     private Integer endIndex;
 
-    private ZonedDateTime createdAt;
-
     private DepreciationBatchStatusType depreciationBatchStatus;
+
+    private UUID depreciationPeriodIdentifier;
+
+    private UUID depreciationJobIdentifier;
+
+    private UUID fiscalMonthIdentifier;
+
+    private UUID fiscalQuarterIdentifier;
+
+    private Integer batchSize;
+
+    private Integer processedItems;
+
+    private Integer sequenceNumber;
+
+    private Boolean isLastBatch;
+
+    private Duration processingTime;
+
+    private Integer totalItems;
 
     private DepreciationJobDTO depreciationJob;
 
@@ -64,20 +84,92 @@ public class DepreciationBatchSequenceDTO implements Serializable {
         this.endIndex = endIndex;
     }
 
-    public ZonedDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(ZonedDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public DepreciationBatchStatusType getDepreciationBatchStatus() {
         return depreciationBatchStatus;
     }
 
     public void setDepreciationBatchStatus(DepreciationBatchStatusType depreciationBatchStatus) {
         this.depreciationBatchStatus = depreciationBatchStatus;
+    }
+
+    public UUID getDepreciationPeriodIdentifier() {
+        return depreciationPeriodIdentifier;
+    }
+
+    public void setDepreciationPeriodIdentifier(UUID depreciationPeriodIdentifier) {
+        this.depreciationPeriodIdentifier = depreciationPeriodIdentifier;
+    }
+
+    public UUID getDepreciationJobIdentifier() {
+        return depreciationJobIdentifier;
+    }
+
+    public void setDepreciationJobIdentifier(UUID depreciationJobIdentifier) {
+        this.depreciationJobIdentifier = depreciationJobIdentifier;
+    }
+
+    public UUID getFiscalMonthIdentifier() {
+        return fiscalMonthIdentifier;
+    }
+
+    public void setFiscalMonthIdentifier(UUID fiscalMonthIdentifier) {
+        this.fiscalMonthIdentifier = fiscalMonthIdentifier;
+    }
+
+    public UUID getFiscalQuarterIdentifier() {
+        return fiscalQuarterIdentifier;
+    }
+
+    public void setFiscalQuarterIdentifier(UUID fiscalQuarterIdentifier) {
+        this.fiscalQuarterIdentifier = fiscalQuarterIdentifier;
+    }
+
+    public Integer getBatchSize() {
+        return batchSize;
+    }
+
+    public void setBatchSize(Integer batchSize) {
+        this.batchSize = batchSize;
+    }
+
+    public Integer getProcessedItems() {
+        return processedItems;
+    }
+
+    public void setProcessedItems(Integer processedItems) {
+        this.processedItems = processedItems;
+    }
+
+    public Integer getSequenceNumber() {
+        return sequenceNumber;
+    }
+
+    public void setSequenceNumber(Integer sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+
+    public Boolean getIsLastBatch() {
+        return isLastBatch;
+    }
+
+    public void setIsLastBatch(Boolean isLastBatch) {
+        this.isLastBatch = isLastBatch;
+    }
+
+    public Duration getProcessingTime() {
+        return processingTime;
+    }
+
+    public void setProcessingTime(Duration processingTime) {
+        this.processingTime = processingTime;
+    }
+
+    public Integer getTotalItems() {
+        return totalItems;
+    }
+
+    public void setTotalItems(Integer totalItems) {
+        this.totalItems = totalItems;
     }
 
     public DepreciationJobDTO getDepreciationJob() {
@@ -116,8 +208,17 @@ public class DepreciationBatchSequenceDTO implements Serializable {
             "id=" + getId() +
             ", startIndex=" + getStartIndex() +
             ", endIndex=" + getEndIndex() +
-            ", createdAt='" + getCreatedAt() + "'" +
             ", depreciationBatchStatus='" + getDepreciationBatchStatus() + "'" +
+            ", depreciationPeriodIdentifier='" + getDepreciationPeriodIdentifier() + "'" +
+            ", depreciationJobIdentifier='" + getDepreciationJobIdentifier() + "'" +
+            ", fiscalMonthIdentifier='" + getFiscalMonthIdentifier() + "'" +
+            ", fiscalQuarterIdentifier='" + getFiscalQuarterIdentifier() + "'" +
+            ", batchSize=" + getBatchSize() +
+            ", processedItems=" + getProcessedItems() +
+            ", sequenceNumber=" + getSequenceNumber() +
+            ", isLastBatch='" + getIsLastBatch() + "'" +
+            ", processingTime='" + getProcessingTime() + "'" +
+            ", totalItems=" + getTotalItems() +
             ", depreciationJob=" + getDepreciationJob() +
             "}";
     }

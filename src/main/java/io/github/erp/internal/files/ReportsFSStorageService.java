@@ -1,8 +1,8 @@
 package io.github.erp.internal.files;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,11 +28,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
@@ -86,6 +84,19 @@ public class ReportsFSStorageService implements FileStorageService {
         );
     }
 
+    /**
+     * Saves the file in the argument to the file system, replacing a similar
+     * file should one be found existing
+     *
+     */
+
+    @SneakyThrows
+    @Override
+    public void save(byte[] fileContent, String fileName) {
+
+        FileUtils.save(fileContent, this.root.resolve(fileName));
+    }
+
     @Override
     public Resource load(String filename) {
         try {
@@ -104,6 +115,11 @@ public class ReportsFSStorageService implements FileStorageService {
     @Override
     public String calculateMD5CheckSum(String filename) {
         return FileUtils.calculateMD5CheckSum(root, filename);
+    }
+
+    @Override
+    public String calculateSha512CheckSum(String filename) {
+        return FileUtils.calculateSha512CheckSum(root, filename);
     }
 
     @Override
@@ -130,5 +146,13 @@ public class ReportsFSStorageService implements FileStorageService {
     @Override
     public String calculateCheckSum(String fileName, String algorithmName) {
         return this.calculateMD5CheckSum(fileName);
+    }
+
+    @Override
+    public boolean fileRemainsUnTampered(String fileName, String originalChecksum) {
+
+        String currentChecksum = FileUtils.calculateSha512CheckSum(root, fileName);
+
+        return currentChecksum.equalsIgnoreCase(originalChecksum);
     }
 }

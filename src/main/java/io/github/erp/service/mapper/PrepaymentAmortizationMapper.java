@@ -1,8 +1,8 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,15 @@ import org.mapstruct.*;
  */
 @Mapper(
     componentModel = "spring",
-    uses = { PrepaymentAccountMapper.class, SettlementCurrencyMapper.class, TransactionAccountMapper.class, PlaceholderMapper.class }
+    uses = {
+        PrepaymentAccountMapper.class,
+        SettlementCurrencyMapper.class,
+        TransactionAccountMapper.class,
+        PlaceholderMapper.class,
+        FiscalMonthMapper.class,
+        PrepaymentCompilationRequestMapper.class,
+        AmortizationPeriodMapper.class,
+    }
 )
 public interface PrepaymentAmortizationMapper extends EntityMapper<PrepaymentAmortizationDTO, PrepaymentAmortization> {
     @Mapping(target = "prepaymentAccount", source = "prepaymentAccount", qualifiedByName = "catalogueNumber")
@@ -35,6 +43,9 @@ public interface PrepaymentAmortizationMapper extends EntityMapper<PrepaymentAmo
     @Mapping(target = "debitAccount", source = "debitAccount", qualifiedByName = "accountNumber")
     @Mapping(target = "creditAccount", source = "creditAccount", qualifiedByName = "accountNumber")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
+    @Mapping(target = "fiscalMonth", source = "fiscalMonth", qualifiedByName = "endDate")
+    @Mapping(target = "prepaymentCompilationRequest", source = "prepaymentCompilationRequest", qualifiedByName = "id")
+    @Mapping(target = "amortizationPeriod", source = "amortizationPeriod", qualifiedByName = "periodCode")
     PrepaymentAmortizationDTO toDto(PrepaymentAmortization s);
 
     @Mapping(target = "removePlaceholder", ignore = true)

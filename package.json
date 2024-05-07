@@ -1,9 +1,9 @@
 {
   "name": "erp-system",
-  "version": "1.5.2",
+  "version": "1.7.9",
   "private": true,
-  "description": "Back-end for the ERP System: Mark VI No 1 (Phoebe Series) Server v1.5.2",
-  "license": "GPLv3",
+  "description": "Back-end for the ERP System: Mark X No 7 (Jehoiada Series) Server v1.7.8",
+  "license": "APACHEv2",
   "scripts": {
     "app:start": "./mvnw",
     "backend:build-cache": "./mvnw dependency:go-offline",

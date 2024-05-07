@@ -1,8 +1,8 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,9 +20,9 @@ package io.github.erp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -45,15 +45,17 @@ public class PrepaymentMarshalling implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @NotNull
-    @Column(name = "inactive", nullable = false)
+    @Column(name = "inactive")
     private Boolean inactive;
-
-    @Column(name = "amortization_commencement_date")
-    private LocalDate amortizationCommencementDate;
 
     @Column(name = "amortization_periods")
     private Integer amortizationPeriods;
+
+    @Column(name = "processed")
+    private Boolean processed;
+
+    @Column(name = "compilation_token")
+    private UUID compilationToken;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -84,6 +86,21 @@ public class PrepaymentMarshalling implements Serializable {
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
 
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "fiscalYear", "placeholders", "universallyUniqueMappings", "fiscalQuarter" }, allowSetters = true)
+    private FiscalMonth firstFiscalMonth;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "fiscalYear", "placeholders", "universallyUniqueMappings", "fiscalQuarter" }, allowSetters = true)
+    private FiscalMonth lastFiscalMonth;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "fiscalMonth" }, allowSetters = true)
+    private AmortizationPeriod firstAmortizationPeriod;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -112,19 +129,6 @@ public class PrepaymentMarshalling implements Serializable {
         this.inactive = inactive;
     }
 
-    public LocalDate getAmortizationCommencementDate() {
-        return this.amortizationCommencementDate;
-    }
-
-    public PrepaymentMarshalling amortizationCommencementDate(LocalDate amortizationCommencementDate) {
-        this.setAmortizationCommencementDate(amortizationCommencementDate);
-        return this;
-    }
-
-    public void setAmortizationCommencementDate(LocalDate amortizationCommencementDate) {
-        this.amortizationCommencementDate = amortizationCommencementDate;
-    }
-
     public Integer getAmortizationPeriods() {
         return this.amortizationPeriods;
     }
@@ -136,6 +140,32 @@ public class PrepaymentMarshalling implements Serializable {
 
     public void setAmortizationPeriods(Integer amortizationPeriods) {
         this.amortizationPeriods = amortizationPeriods;
+    }
+
+    public Boolean getProcessed() {
+        return this.processed;
+    }
+
+    public PrepaymentMarshalling processed(Boolean processed) {
+        this.setProcessed(processed);
+        return this;
+    }
+
+    public void setProcessed(Boolean processed) {
+        this.processed = processed;
+    }
+
+    public UUID getCompilationToken() {
+        return this.compilationToken;
+    }
+
+    public PrepaymentMarshalling compilationToken(UUID compilationToken) {
+        this.setCompilationToken(compilationToken);
+        return this;
+    }
+
+    public void setCompilationToken(UUID compilationToken) {
+        this.compilationToken = compilationToken;
     }
 
     public PrepaymentAccount getPrepaymentAccount() {
@@ -174,6 +204,45 @@ public class PrepaymentMarshalling implements Serializable {
         return this;
     }
 
+    public FiscalMonth getFirstFiscalMonth() {
+        return this.firstFiscalMonth;
+    }
+
+    public void setFirstFiscalMonth(FiscalMonth fiscalMonth) {
+        this.firstFiscalMonth = fiscalMonth;
+    }
+
+    public PrepaymentMarshalling firstFiscalMonth(FiscalMonth fiscalMonth) {
+        this.setFirstFiscalMonth(fiscalMonth);
+        return this;
+    }
+
+    public FiscalMonth getLastFiscalMonth() {
+        return this.lastFiscalMonth;
+    }
+
+    public void setLastFiscalMonth(FiscalMonth fiscalMonth) {
+        this.lastFiscalMonth = fiscalMonth;
+    }
+
+    public PrepaymentMarshalling lastFiscalMonth(FiscalMonth fiscalMonth) {
+        this.setLastFiscalMonth(fiscalMonth);
+        return this;
+    }
+
+    public AmortizationPeriod getFirstAmortizationPeriod() {
+        return this.firstAmortizationPeriod;
+    }
+
+    public void setFirstAmortizationPeriod(AmortizationPeriod amortizationPeriod) {
+        this.firstAmortizationPeriod = amortizationPeriod;
+    }
+
+    public PrepaymentMarshalling firstAmortizationPeriod(AmortizationPeriod amortizationPeriod) {
+        this.setFirstAmortizationPeriod(amortizationPeriod);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -199,8 +268,9 @@ public class PrepaymentMarshalling implements Serializable {
         return "PrepaymentMarshalling{" +
             "id=" + getId() +
             ", inactive='" + getInactive() + "'" +
-            ", amortizationCommencementDate='" + getAmortizationCommencementDate() + "'" +
             ", amortizationPeriods=" + getAmortizationPeriods() +
+            ", processed='" + getProcessed() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             "}";
     }
 }

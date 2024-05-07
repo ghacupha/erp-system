@@ -1,8 +1,8 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,11 +31,6 @@ public interface FiscalQuarterMapper extends EntityMapper<FiscalQuarterDTO, Fisc
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     @Mapping(target = "universallyUniqueMappings", source = "universallyUniqueMappings", qualifiedByName = "universalKeySet")
     FiscalQuarterDTO toDto(FiscalQuarter s);
-
-    @Named("id")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    FiscalQuarterDTO toDtoId(FiscalQuarter fiscalQuarter);
 
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removeUniversallyUniqueMapping", ignore = true)

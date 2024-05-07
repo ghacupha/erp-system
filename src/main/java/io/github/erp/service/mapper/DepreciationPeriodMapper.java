@@ -1,8 +1,8 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,16 +25,10 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link DepreciationPeriod} and its DTO {@link DepreciationPeriodDTO}.
  */
-@Mapper(
-    componentModel = "spring",
-    uses = { ApplicationUserMapper.class, FiscalYearMapper.class, FiscalMonthMapper.class, FiscalQuarterMapper.class }
-)
+@Mapper(componentModel = "spring", uses = { FiscalMonthMapper.class })
 public interface DepreciationPeriodMapper extends EntityMapper<DepreciationPeriodDTO, DepreciationPeriod> {
     @Mapping(target = "previousPeriod", source = "previousPeriod", qualifiedByName = "endDate")
-    @Mapping(target = "createdBy", source = "createdBy", qualifiedByName = "applicationIdentity")
-    @Mapping(target = "fiscalYear", source = "fiscalYear", qualifiedByName = "fiscalYearCode")
-    @Mapping(target = "fiscalMonth", source = "fiscalMonth", qualifiedByName = "id")
-    @Mapping(target = "fiscalQuarter", source = "fiscalQuarter", qualifiedByName = "id")
+    @Mapping(target = "fiscalMonth", source = "fiscalMonth", qualifiedByName = "fiscalMonthCode")
     DepreciationPeriodDTO toDto(DepreciationPeriod s);
 
     @Named("id")
@@ -47,4 +41,16 @@ public interface DepreciationPeriodMapper extends EntityMapper<DepreciationPerio
     @Mapping(target = "id", source = "id")
     @Mapping(target = "endDate", source = "endDate")
     DepreciationPeriodDTO toDtoEndDate(DepreciationPeriod depreciationPeriod);
+
+    @Named("periodCode")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "periodCode", source = "periodCode")
+    DepreciationPeriodDTO toDtoPeriodCode(DepreciationPeriod depreciationPeriod);
+
+    @Named("startDate")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "startDate", source = "startDate")
+    DepreciationPeriodDTO toDtoStartDate(DepreciationPeriod depreciationPeriod);
 }

@@ -1,8 +1,8 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,10 +19,10 @@ package io.github.erp.service.dto;
  */
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import javax.validation.constraints.*;
 
 /**
@@ -32,16 +32,23 @@ public class PrepaymentMarshallingDTO implements Serializable {
 
     private Long id;
 
-    @NotNull
     private Boolean inactive;
 
-    private LocalDate amortizationCommencementDate;
-
     private Integer amortizationPeriods;
+
+    private Boolean processed;
+
+    private UUID compilationToken;
 
     private PrepaymentAccountDTO prepaymentAccount;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
+
+    private FiscalMonthDTO firstFiscalMonth;
+
+    private FiscalMonthDTO lastFiscalMonth;
+
+    private AmortizationPeriodDTO firstAmortizationPeriod;
 
     public Long getId() {
         return id;
@@ -59,20 +66,28 @@ public class PrepaymentMarshallingDTO implements Serializable {
         this.inactive = inactive;
     }
 
-    public LocalDate getAmortizationCommencementDate() {
-        return amortizationCommencementDate;
-    }
-
-    public void setAmortizationCommencementDate(LocalDate amortizationCommencementDate) {
-        this.amortizationCommencementDate = amortizationCommencementDate;
-    }
-
     public Integer getAmortizationPeriods() {
         return amortizationPeriods;
     }
 
     public void setAmortizationPeriods(Integer amortizationPeriods) {
         this.amortizationPeriods = amortizationPeriods;
+    }
+
+    public Boolean getProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(Boolean processed) {
+        this.processed = processed;
+    }
+
+    public UUID getCompilationToken() {
+        return compilationToken;
+    }
+
+    public void setCompilationToken(UUID compilationToken) {
+        this.compilationToken = compilationToken;
     }
 
     public PrepaymentAccountDTO getPrepaymentAccount() {
@@ -89,6 +104,30 @@ public class PrepaymentMarshallingDTO implements Serializable {
 
     public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
         this.placeholders = placeholders;
+    }
+
+    public FiscalMonthDTO getFirstFiscalMonth() {
+        return firstFiscalMonth;
+    }
+
+    public void setFirstFiscalMonth(FiscalMonthDTO firstFiscalMonth) {
+        this.firstFiscalMonth = firstFiscalMonth;
+    }
+
+    public FiscalMonthDTO getLastFiscalMonth() {
+        return lastFiscalMonth;
+    }
+
+    public void setLastFiscalMonth(FiscalMonthDTO lastFiscalMonth) {
+        this.lastFiscalMonth = lastFiscalMonth;
+    }
+
+    public AmortizationPeriodDTO getFirstAmortizationPeriod() {
+        return firstAmortizationPeriod;
+    }
+
+    public void setFirstAmortizationPeriod(AmortizationPeriodDTO firstAmortizationPeriod) {
+        this.firstAmortizationPeriod = firstAmortizationPeriod;
     }
 
     @Override
@@ -118,10 +157,14 @@ public class PrepaymentMarshallingDTO implements Serializable {
         return "PrepaymentMarshallingDTO{" +
             "id=" + getId() +
             ", inactive='" + getInactive() + "'" +
-            ", amortizationCommencementDate='" + getAmortizationCommencementDate() + "'" +
             ", amortizationPeriods=" + getAmortizationPeriods() +
+            ", processed='" + getProcessed() + "'" +
+            ", compilationToken='" + getCompilationToken() + "'" +
             ", prepaymentAccount=" + getPrepaymentAccount() +
             ", placeholders=" + getPlaceholders() +
+            ", firstFiscalMonth=" + getFirstFiscalMonth() +
+            ", lastFiscalMonth=" + getLastFiscalMonth() +
+            ", firstAmortizationPeriod=" + getFirstAmortizationPeriod() +
             "}";
     }
 }

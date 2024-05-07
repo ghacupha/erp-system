@@ -1,8 +1,8 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,8 @@ import org.mapstruct.*;
         FiscalMonthMapper.class,
         FiscalQuarterMapper.class,
         FiscalYearMapper.class,
+        DepreciationJobMapper.class,
+        DepreciationBatchSequenceMapper.class,
     }
 )
 public interface DepreciationEntryMapper extends EntityMapper<DepreciationEntryDTO, DepreciationEntry> {
@@ -47,5 +49,7 @@ public interface DepreciationEntryMapper extends EntityMapper<DepreciationEntryD
     @Mapping(target = "fiscalMonth", source = "fiscalMonth", qualifiedByName = "fiscalMonthCode")
     @Mapping(target = "fiscalQuarter", source = "fiscalQuarter", qualifiedByName = "fiscalQuarterCode")
     @Mapping(target = "fiscalYear", source = "fiscalYear", qualifiedByName = "fiscalYearCode")
+    @Mapping(target = "depreciationJob", source = "depreciationJob", qualifiedByName = "description")
+    @Mapping(target = "depreciationBatchSequence", source = "depreciationBatchSequence", qualifiedByName = "id")
     DepreciationEntryDTO toDto(DepreciationEntry s);
 }

@@ -1,8 +1,8 @@
 package io.github.erp.erp.index;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.PrepaymentMappingSearchRepository;
 import io.github.erp.service.PrepaymentMappingService;
 import io.github.erp.service.mapper.PrepaymentMappingMapper;
@@ -40,7 +41,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @Transactional
 public class PrepaymentMappingIndexingService extends AbstractStartupRegisteredIndexService {
 
-    private static final String TAG = "PrepaymentAccountIndex";
+    private static final String TAG = "PrepaymentMappingIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
 
     private final PrepaymentMappingMapper mapper;
@@ -48,9 +49,11 @@ public class PrepaymentMappingIndexingService extends AbstractStartupRegisteredI
     private final PrepaymentMappingSearchRepository searchRepository;
 
     public PrepaymentMappingIndexingService(
+        IndexProperties indexProperties,
         PrepaymentMappingMapper mapper,
         PrepaymentMappingService service,
         PrepaymentMappingSearchRepository searchRepository) {
+        super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

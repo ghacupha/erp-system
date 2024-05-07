@@ -1,8 +1,8 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -29,6 +28,8 @@ import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A AssetRegistration.
@@ -36,7 +37,8 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "asset_registration")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "assetregistration")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "assetregistration-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
+// @org.springframework.data.elasticsearch.annotations.Document(indexName = "assetregistration")
 public class AssetRegistration implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,49 +47,62 @@ public class AssetRegistration implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
     @NotNull
     @Column(name = "asset_number", nullable = false, unique = true)
+    @Field(type = FieldType.Keyword)
     private String assetNumber;
 
     @NotNull
     @Column(name = "asset_tag", nullable = false)
+    @Field(type = FieldType.Keyword)
     private String assetTag;
 
     @Column(name = "asset_details")
+    @Field(type = FieldType.Text)
     private String assetDetails;
 
     @NotNull
     @Column(name = "asset_cost", precision = 21, scale = 2, nullable = false)
+    @Field(type = FieldType.Double)
     private BigDecimal assetCost;
 
     @Lob
     @Column(name = "comments")
+    @Field(type = FieldType.Byte, index = false)
     private byte[] comments;
 
     @Column(name = "comments_content_type")
+    @Field(type = FieldType.Text, index = false)
     private String commentsContentType;
 
     @Column(name = "model_number")
+    @Field(type = FieldType.Keyword)
     private String modelNumber;
 
     @Column(name = "serial_number")
+    @Field(type = FieldType.Keyword)
     private String serialNumber;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "remarks")
+    @Field(type = FieldType.Text)
     private String remarks;
 
     @NotNull
-    @Column(name = "capitalization_date", nullable = false)
+    @Column(name = "capitalization_date")
+    @Field(type = FieldType.Date)
     private LocalDate capitalizationDate;
 
     @Column(name = "historical_cost", precision = 21, scale = 2)
+    @Field(type = FieldType.Double)
     private BigDecimal historicalCost;
 
     @Column(name = "registration_date")
+    @Field(type = FieldType.Date)
     private LocalDate registrationDate;
 
     @ManyToMany
@@ -124,23 +139,22 @@ public class AssetRegistration implements Serializable {
 
     @ManyToMany
     @JoinTable(
-        name = "rel_asset_registration__service_outlet",
+        name = "rel_asset_registration__other_related_service_outlets",
         joinColumns = @JoinColumn(name = "asset_registration_id"),
-        inverseJoinColumns = @JoinColumn(name = "service_outlet_id")
+        inverseJoinColumns = @JoinColumn(name = "other_related_service_outlets_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
         value = { "placeholders", "bankCode", "outletType", "outletStatus", "countyName", "subCountyName" },
         allowSetters = true
     )
-    private Set<ServiceOutlet> serviceOutlets = new HashSet<>();
+    private Set<ServiceOutlet> otherRelatedServiceOutlets = new HashSet<>();
 
     @ManyToMany
-    @NotNull
     @JoinTable(
-        name = "rel_asset_registration__settlement",
+        name = "rel_asset_registration__other_related_settlements",
         joinColumns = @JoinColumn(name = "asset_registration_id"),
-        inverseJoinColumns = @JoinColumn(name = "settlement_id")
+        inverseJoinColumns = @JoinColumn(name = "other_related_settlements_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
@@ -157,7 +171,7 @@ public class AssetRegistration implements Serializable {
         },
         allowSetters = true
     )
-    private Set<Settlement> settlements = new HashSet<>();
+    private Set<Settlement> otherRelatedSettlements = new HashSet<>();
 
     @ManyToOne(optional = false)
     @NotNull
@@ -306,6 +320,24 @@ public class AssetRegistration implements Serializable {
         allowSetters = true
     )
     private ServiceOutlet mainServiceOutlet;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(
+        value = {
+            "placeholders",
+            "settlementCurrency",
+            "paymentLabels",
+            "paymentCategory",
+            "groupSettlement",
+            "biller",
+            "paymentInvoices",
+            "signatories",
+            "businessDocuments",
+        },
+        allowSetters = true
+    )
+    private Settlement acquiringTransaction;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -524,49 +556,49 @@ public class AssetRegistration implements Serializable {
         return this;
     }
 
-    public Set<ServiceOutlet> getServiceOutlets() {
-        return this.serviceOutlets;
+    public Set<ServiceOutlet> getOtherRelatedServiceOutlets() {
+        return this.otherRelatedServiceOutlets;
     }
 
-    public void setServiceOutlets(Set<ServiceOutlet> serviceOutlets) {
-        this.serviceOutlets = serviceOutlets;
+    public void setOtherRelatedServiceOutlets(Set<ServiceOutlet> serviceOutlets) {
+        this.otherRelatedServiceOutlets = serviceOutlets;
     }
 
-    public AssetRegistration serviceOutlets(Set<ServiceOutlet> serviceOutlets) {
-        this.setServiceOutlets(serviceOutlets);
+    public AssetRegistration otherRelatedServiceOutlets(Set<ServiceOutlet> serviceOutlets) {
+        this.setOtherRelatedServiceOutlets(serviceOutlets);
         return this;
     }
 
-    public AssetRegistration addServiceOutlet(ServiceOutlet serviceOutlet) {
-        this.serviceOutlets.add(serviceOutlet);
+    public AssetRegistration addOtherRelatedServiceOutlets(ServiceOutlet serviceOutlet) {
+        this.otherRelatedServiceOutlets.add(serviceOutlet);
         return this;
     }
 
-    public AssetRegistration removeServiceOutlet(ServiceOutlet serviceOutlet) {
-        this.serviceOutlets.remove(serviceOutlet);
+    public AssetRegistration removeOtherRelatedServiceOutlets(ServiceOutlet serviceOutlet) {
+        this.otherRelatedServiceOutlets.remove(serviceOutlet);
         return this;
     }
 
-    public Set<Settlement> getSettlements() {
-        return this.settlements;
+    public Set<Settlement> getOtherRelatedSettlements() {
+        return this.otherRelatedSettlements;
     }
 
-    public void setSettlements(Set<Settlement> settlements) {
-        this.settlements = settlements;
+    public void setOtherRelatedSettlements(Set<Settlement> settlements) {
+        this.otherRelatedSettlements = settlements;
     }
 
-    public AssetRegistration settlements(Set<Settlement> settlements) {
-        this.setSettlements(settlements);
+    public AssetRegistration otherRelatedSettlements(Set<Settlement> settlements) {
+        this.setOtherRelatedSettlements(settlements);
         return this;
     }
 
-    public AssetRegistration addSettlement(Settlement settlement) {
-        this.settlements.add(settlement);
+    public AssetRegistration addOtherRelatedSettlements(Settlement settlement) {
+        this.otherRelatedSettlements.add(settlement);
         return this;
     }
 
-    public AssetRegistration removeSettlement(Settlement settlement) {
-        this.settlements.remove(settlement);
+    public AssetRegistration removeOtherRelatedSettlements(Settlement settlement) {
+        this.otherRelatedSettlements.remove(settlement);
         return this;
     }
 
@@ -803,6 +835,19 @@ public class AssetRegistration implements Serializable {
 
     public AssetRegistration mainServiceOutlet(ServiceOutlet serviceOutlet) {
         this.setMainServiceOutlet(serviceOutlet);
+        return this;
+    }
+
+    public Settlement getAcquiringTransaction() {
+        return this.acquiringTransaction;
+    }
+
+    public void setAcquiringTransaction(Settlement settlement) {
+        this.acquiringTransaction = settlement;
+    }
+
+    public AssetRegistration acquiringTransaction(Settlement settlement) {
+        this.setAcquiringTransaction(settlement);
         return this;
     }
 

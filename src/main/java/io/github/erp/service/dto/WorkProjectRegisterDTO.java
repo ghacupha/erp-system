@@ -1,8 +1,8 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,8 @@ public class WorkProjectRegisterDTO implements Serializable {
     private String catalogueNumber;
 
     @NotNull
+    private String projectTitle;
+
     private String description;
 
     @Lob
@@ -71,6 +73,14 @@ public class WorkProjectRegisterDTO implements Serializable {
 
     public void setCatalogueNumber(String catalogueNumber) {
         this.catalogueNumber = catalogueNumber;
+    }
+
+    public String getProjectTitle() {
+        return projectTitle;
+    }
+
+    public void setProjectTitle(String projectTitle) {
+        this.projectTitle = projectTitle;
     }
 
     public String getDescription() {
@@ -180,6 +190,7 @@ public class WorkProjectRegisterDTO implements Serializable {
         return "WorkProjectRegisterDTO{" +
             "id=" + getId() +
             ", catalogueNumber='" + getCatalogueNumber() + "'" +
+            ", projectTitle='" + getProjectTitle() + "'" +
             ", description='" + getDescription() + "'" +
             ", details='" + getDetails() + "'" +
             ", totalProjectCost=" + getTotalProjectCost() +

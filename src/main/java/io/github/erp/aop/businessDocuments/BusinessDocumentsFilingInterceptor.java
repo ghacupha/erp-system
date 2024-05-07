@@ -1,7 +1,42 @@
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*-
+ * Erp System - Mark IX No 3 (Iddo Series) Server ver 1.6.5
+ * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*-
+ * Erp System - Mark IX No 2 (Iddo Series) Server ver 1.6.4
+ * Copyright © 2021 - 2023 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -430,11 +465,15 @@
  */
 package io.github.erp.aop.businessDocuments;
 
+import io.github.erp.domain.ApplicationUser;
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.model.BusinessDocumentFSO;
 import io.github.erp.internal.model.mapping.BusinessDocumentFSOMapping;
+import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.service.BusinessDocumentService;
+import io.github.erp.service.dto.ApplicationUserDTO;
 import io.github.erp.service.dto.BusinessDocumentDTO;
+import io.github.erp.service.mapper.ApplicationUserMapper;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -448,7 +487,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * This advise intercepts the BusinessDocuments#createBusinessDocument method processes and stores
@@ -467,13 +508,21 @@ public class BusinessDocumentsFilingInterceptor {
 
     private final FileStorageService fileStorageService;
 
+    private final InternalApplicationUserDetailService userDetailService;
+
+    private final ApplicationUserMapper applicationUserMapper;
+
     public BusinessDocumentsFilingInterceptor(
+        ApplicationUserMapper applicationUserMapper,
+        InternalApplicationUserDetailService userDetailService,
         BusinessDocumentService businessDocumentService,
         BusinessDocumentFSOMapping businessDocumentFSOMapping,
         @Qualifier("businessDocumentFSStorageService") FileStorageService fileStorageService) {
         this.businessDocumentService = businessDocumentService;
         this.businessDocumentFSOMapping = businessDocumentFSOMapping;
         this.fileStorageService = fileStorageService;
+        this.applicationUserMapper = applicationUserMapper;
+        this.userDetailService = userDetailService;
     }
 
     @Around(value = "filingResponsePointcut()")
@@ -484,8 +533,21 @@ public class BusinessDocumentsFilingInterceptor {
         if (log.isDebugEnabled()) {
             log.debug("Enter: {}() with argument[s] = {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
         }
+
         BusinessDocumentFSO bDoc = (BusinessDocumentFSO) joinPoint.getArgs()[0];
+
+        Optional<ApplicationUserDTO> optionalUser = userDetailService.getCurrentApplicationUser();
+
+        if (optionalUser.isPresent()) {
+            bDoc.setLastModifiedBy(optionalUser.get());
+            bDoc.setLastModified(ZonedDateTime.now());
+            bDoc.setCreatedBy(optionalUser.get());
+            bDoc.setOriginatingDepartment(optionalUser.get().getDepartment());
+            bDoc.setSecurityClearance(optionalUser.get().getSecurityClearance());
+        }
+
         BusinessDocumentDTO result = businessDocumentService.save(businessDocumentFSOMapping.toValue2(bDoc));
+
         try {
 
             log.debug("REST request intercepted to save BusinessDocument serial: {}", bDoc.getDocumentSerial());

@@ -7,17 +7,25 @@
     {
       "fieldName": "targetAssetNumber",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "transferAmount",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "transferDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "transferType",
+      "fieldType": "WorkInProgressTransferType",
+      "fieldValues": "DEBIT_TRANSFER,REVERSAL,CREDIT_NOTE,CAPITALIZATION",
+      "fieldValidateRules": ["required"]
     }
   ],
   "relationships": [
-    {
-      "relationshipName": "workInProgressRegistration",
-      "otherEntityName": "workInProgressRegistration",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "id",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "workInProgressTransfer"
-    },
     {
       "relationshipName": "placeholder",
       "otherEntityName": "placeholder",
@@ -33,6 +41,36 @@
       "otherEntityField": "documentTitle",
       "ownerSide": true,
       "otherEntityRelationshipName": "workInProgressTransfer"
+    },
+    {
+      "relationshipName": "assetCategory",
+      "otherEntityName": "assetCategory",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "assetCategoryName"
+    },
+    {
+      "relationshipName": "workInProgressRegistration",
+      "otherEntityName": "workInProgressRegistration",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "sequenceNumber"
+    },
+    {
+      "relationshipName": "serviceOutlet",
+      "otherEntityName": "serviceOutlet",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "outletCode"
+    },
+    {
+      "relationshipName": "settlement",
+      "otherEntityName": "settlement",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "paymentNumber"
+    },
+    {
+      "relationshipName": "workProjectRegister",
+      "otherEntityName": "workProjectRegister",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "projectTitle"
     }
   ],
   "service": "serviceImpl",

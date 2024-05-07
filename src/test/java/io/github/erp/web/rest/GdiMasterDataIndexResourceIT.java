@@ -1,8 +1,8 @@
 package io.github.erp.web.rest;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,6 +69,9 @@ class GdiMasterDataIndexResourceIT {
     private static final String DEFAULT_BUSINESS_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_BUSINESS_DESCRIPTION = "BBBBBBBBBB";
 
+    private static final String DEFAULT_DATA_PATH = "AAAAAAAAAA";
+    private static final String UPDATED_DATA_PATH = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/gdi-master-data-indices";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/gdi-master-data-indices";
@@ -108,7 +111,8 @@ class GdiMasterDataIndexResourceIT {
         GdiMasterDataIndex gdiMasterDataIndex = new GdiMasterDataIndex()
             .entityName(DEFAULT_ENTITY_NAME)
             .databaseName(DEFAULT_DATABASE_NAME)
-            .businessDescription(DEFAULT_BUSINESS_DESCRIPTION);
+            .businessDescription(DEFAULT_BUSINESS_DESCRIPTION)
+            .dataPath(DEFAULT_DATA_PATH);
         return gdiMasterDataIndex;
     }
 
@@ -122,7 +126,8 @@ class GdiMasterDataIndexResourceIT {
         GdiMasterDataIndex gdiMasterDataIndex = new GdiMasterDataIndex()
             .entityName(UPDATED_ENTITY_NAME)
             .databaseName(UPDATED_DATABASE_NAME)
-            .businessDescription(UPDATED_BUSINESS_DESCRIPTION);
+            .businessDescription(UPDATED_BUSINESS_DESCRIPTION)
+            .dataPath(UPDATED_DATA_PATH);
         return gdiMasterDataIndex;
     }
 
@@ -152,6 +157,7 @@ class GdiMasterDataIndexResourceIT {
         assertThat(testGdiMasterDataIndex.getEntityName()).isEqualTo(DEFAULT_ENTITY_NAME);
         assertThat(testGdiMasterDataIndex.getDatabaseName()).isEqualTo(DEFAULT_DATABASE_NAME);
         assertThat(testGdiMasterDataIndex.getBusinessDescription()).isEqualTo(DEFAULT_BUSINESS_DESCRIPTION);
+        assertThat(testGdiMasterDataIndex.getDataPath()).isEqualTo(DEFAULT_DATA_PATH);
 
         // Validate the GdiMasterDataIndex in Elasticsearch
         verify(mockGdiMasterDataIndexSearchRepository, times(1)).save(testGdiMasterDataIndex);
@@ -241,7 +247,8 @@ class GdiMasterDataIndexResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(gdiMasterDataIndex.getId().intValue())))
             .andExpect(jsonPath("$.[*].entityName").value(hasItem(DEFAULT_ENTITY_NAME)))
             .andExpect(jsonPath("$.[*].databaseName").value(hasItem(DEFAULT_DATABASE_NAME)))
-            .andExpect(jsonPath("$.[*].businessDescription").value(hasItem(DEFAULT_BUSINESS_DESCRIPTION.toString())));
+            .andExpect(jsonPath("$.[*].businessDescription").value(hasItem(DEFAULT_BUSINESS_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].dataPath").value(hasItem(DEFAULT_DATA_PATH)));
     }
 
     @Test
@@ -258,7 +265,8 @@ class GdiMasterDataIndexResourceIT {
             .andExpect(jsonPath("$.id").value(gdiMasterDataIndex.getId().intValue()))
             .andExpect(jsonPath("$.entityName").value(DEFAULT_ENTITY_NAME))
             .andExpect(jsonPath("$.databaseName").value(DEFAULT_DATABASE_NAME))
-            .andExpect(jsonPath("$.businessDescription").value(DEFAULT_BUSINESS_DESCRIPTION.toString()));
+            .andExpect(jsonPath("$.businessDescription").value(DEFAULT_BUSINESS_DESCRIPTION.toString()))
+            .andExpect(jsonPath("$.dataPath").value(DEFAULT_DATA_PATH));
     }
 
     @Test
@@ -435,6 +443,84 @@ class GdiMasterDataIndexResourceIT {
         defaultGdiMasterDataIndexShouldBeFound("databaseName.doesNotContain=" + UPDATED_DATABASE_NAME);
     }
 
+    @Test
+    @Transactional
+    void getAllGdiMasterDataIndicesByDataPathIsEqualToSomething() throws Exception {
+        // Initialize the database
+        gdiMasterDataIndexRepository.saveAndFlush(gdiMasterDataIndex);
+
+        // Get all the gdiMasterDataIndexList where dataPath equals to DEFAULT_DATA_PATH
+        defaultGdiMasterDataIndexShouldBeFound("dataPath.equals=" + DEFAULT_DATA_PATH);
+
+        // Get all the gdiMasterDataIndexList where dataPath equals to UPDATED_DATA_PATH
+        defaultGdiMasterDataIndexShouldNotBeFound("dataPath.equals=" + UPDATED_DATA_PATH);
+    }
+
+    @Test
+    @Transactional
+    void getAllGdiMasterDataIndicesByDataPathIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        gdiMasterDataIndexRepository.saveAndFlush(gdiMasterDataIndex);
+
+        // Get all the gdiMasterDataIndexList where dataPath not equals to DEFAULT_DATA_PATH
+        defaultGdiMasterDataIndexShouldNotBeFound("dataPath.notEquals=" + DEFAULT_DATA_PATH);
+
+        // Get all the gdiMasterDataIndexList where dataPath not equals to UPDATED_DATA_PATH
+        defaultGdiMasterDataIndexShouldBeFound("dataPath.notEquals=" + UPDATED_DATA_PATH);
+    }
+
+    @Test
+    @Transactional
+    void getAllGdiMasterDataIndicesByDataPathIsInShouldWork() throws Exception {
+        // Initialize the database
+        gdiMasterDataIndexRepository.saveAndFlush(gdiMasterDataIndex);
+
+        // Get all the gdiMasterDataIndexList where dataPath in DEFAULT_DATA_PATH or UPDATED_DATA_PATH
+        defaultGdiMasterDataIndexShouldBeFound("dataPath.in=" + DEFAULT_DATA_PATH + "," + UPDATED_DATA_PATH);
+
+        // Get all the gdiMasterDataIndexList where dataPath equals to UPDATED_DATA_PATH
+        defaultGdiMasterDataIndexShouldNotBeFound("dataPath.in=" + UPDATED_DATA_PATH);
+    }
+
+    @Test
+    @Transactional
+    void getAllGdiMasterDataIndicesByDataPathIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        gdiMasterDataIndexRepository.saveAndFlush(gdiMasterDataIndex);
+
+        // Get all the gdiMasterDataIndexList where dataPath is not null
+        defaultGdiMasterDataIndexShouldBeFound("dataPath.specified=true");
+
+        // Get all the gdiMasterDataIndexList where dataPath is null
+        defaultGdiMasterDataIndexShouldNotBeFound("dataPath.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllGdiMasterDataIndicesByDataPathContainsSomething() throws Exception {
+        // Initialize the database
+        gdiMasterDataIndexRepository.saveAndFlush(gdiMasterDataIndex);
+
+        // Get all the gdiMasterDataIndexList where dataPath contains DEFAULT_DATA_PATH
+        defaultGdiMasterDataIndexShouldBeFound("dataPath.contains=" + DEFAULT_DATA_PATH);
+
+        // Get all the gdiMasterDataIndexList where dataPath contains UPDATED_DATA_PATH
+        defaultGdiMasterDataIndexShouldNotBeFound("dataPath.contains=" + UPDATED_DATA_PATH);
+    }
+
+    @Test
+    @Transactional
+    void getAllGdiMasterDataIndicesByDataPathNotContainsSomething() throws Exception {
+        // Initialize the database
+        gdiMasterDataIndexRepository.saveAndFlush(gdiMasterDataIndex);
+
+        // Get all the gdiMasterDataIndexList where dataPath does not contain DEFAULT_DATA_PATH
+        defaultGdiMasterDataIndexShouldNotBeFound("dataPath.doesNotContain=" + DEFAULT_DATA_PATH);
+
+        // Get all the gdiMasterDataIndexList where dataPath does not contain UPDATED_DATA_PATH
+        defaultGdiMasterDataIndexShouldBeFound("dataPath.doesNotContain=" + UPDATED_DATA_PATH);
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -446,7 +532,8 @@ class GdiMasterDataIndexResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(gdiMasterDataIndex.getId().intValue())))
             .andExpect(jsonPath("$.[*].entityName").value(hasItem(DEFAULT_ENTITY_NAME)))
             .andExpect(jsonPath("$.[*].databaseName").value(hasItem(DEFAULT_DATABASE_NAME)))
-            .andExpect(jsonPath("$.[*].businessDescription").value(hasItem(DEFAULT_BUSINESS_DESCRIPTION.toString())));
+            .andExpect(jsonPath("$.[*].businessDescription").value(hasItem(DEFAULT_BUSINESS_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].dataPath").value(hasItem(DEFAULT_DATA_PATH)));
 
         // Check, that the count call also returns 1
         restGdiMasterDataIndexMockMvc
@@ -497,7 +584,8 @@ class GdiMasterDataIndexResourceIT {
         updatedGdiMasterDataIndex
             .entityName(UPDATED_ENTITY_NAME)
             .databaseName(UPDATED_DATABASE_NAME)
-            .businessDescription(UPDATED_BUSINESS_DESCRIPTION);
+            .businessDescription(UPDATED_BUSINESS_DESCRIPTION)
+            .dataPath(UPDATED_DATA_PATH);
         GdiMasterDataIndexDTO gdiMasterDataIndexDTO = gdiMasterDataIndexMapper.toDto(updatedGdiMasterDataIndex);
 
         restGdiMasterDataIndexMockMvc
@@ -515,6 +603,7 @@ class GdiMasterDataIndexResourceIT {
         assertThat(testGdiMasterDataIndex.getEntityName()).isEqualTo(UPDATED_ENTITY_NAME);
         assertThat(testGdiMasterDataIndex.getDatabaseName()).isEqualTo(UPDATED_DATABASE_NAME);
         assertThat(testGdiMasterDataIndex.getBusinessDescription()).isEqualTo(UPDATED_BUSINESS_DESCRIPTION);
+        assertThat(testGdiMasterDataIndex.getDataPath()).isEqualTo(UPDATED_DATA_PATH);
 
         // Validate the GdiMasterDataIndex in Elasticsearch
         verify(mockGdiMasterDataIndexSearchRepository).save(testGdiMasterDataIndex);
@@ -627,6 +716,7 @@ class GdiMasterDataIndexResourceIT {
         assertThat(testGdiMasterDataIndex.getEntityName()).isEqualTo(UPDATED_ENTITY_NAME);
         assertThat(testGdiMasterDataIndex.getDatabaseName()).isEqualTo(DEFAULT_DATABASE_NAME);
         assertThat(testGdiMasterDataIndex.getBusinessDescription()).isEqualTo(UPDATED_BUSINESS_DESCRIPTION);
+        assertThat(testGdiMasterDataIndex.getDataPath()).isEqualTo(DEFAULT_DATA_PATH);
     }
 
     @Test
@@ -644,7 +734,8 @@ class GdiMasterDataIndexResourceIT {
         partialUpdatedGdiMasterDataIndex
             .entityName(UPDATED_ENTITY_NAME)
             .databaseName(UPDATED_DATABASE_NAME)
-            .businessDescription(UPDATED_BUSINESS_DESCRIPTION);
+            .businessDescription(UPDATED_BUSINESS_DESCRIPTION)
+            .dataPath(UPDATED_DATA_PATH);
 
         restGdiMasterDataIndexMockMvc
             .perform(
@@ -661,6 +752,7 @@ class GdiMasterDataIndexResourceIT {
         assertThat(testGdiMasterDataIndex.getEntityName()).isEqualTo(UPDATED_ENTITY_NAME);
         assertThat(testGdiMasterDataIndex.getDatabaseName()).isEqualTo(UPDATED_DATABASE_NAME);
         assertThat(testGdiMasterDataIndex.getBusinessDescription()).isEqualTo(UPDATED_BUSINESS_DESCRIPTION);
+        assertThat(testGdiMasterDataIndex.getDataPath()).isEqualTo(UPDATED_DATA_PATH);
     }
 
     @Test
@@ -779,6 +871,7 @@ class GdiMasterDataIndexResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(gdiMasterDataIndex.getId().intValue())))
             .andExpect(jsonPath("$.[*].entityName").value(hasItem(DEFAULT_ENTITY_NAME)))
             .andExpect(jsonPath("$.[*].databaseName").value(hasItem(DEFAULT_DATABASE_NAME)))
-            .andExpect(jsonPath("$.[*].businessDescription").value(hasItem(DEFAULT_BUSINESS_DESCRIPTION.toString())));
+            .andExpect(jsonPath("$.[*].businessDescription").value(hasItem(DEFAULT_BUSINESS_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].dataPath").value(hasItem(DEFAULT_DATA_PATH)));
     }
 }

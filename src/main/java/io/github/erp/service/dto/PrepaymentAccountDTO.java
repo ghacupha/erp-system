@@ -1,8 +1,8 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ package io.github.erp.service.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -46,6 +47,8 @@ public class PrepaymentAccountDTO implements Serializable {
     private BigDecimal prepaymentAmount;
 
     private UUID prepaymentGuid;
+
+    private LocalDate recognitionDate;
 
     private SettlementCurrencyDTO settlementCurrency;
 
@@ -113,6 +116,14 @@ public class PrepaymentAccountDTO implements Serializable {
 
     public void setPrepaymentGuid(UUID prepaymentGuid) {
         this.prepaymentGuid = prepaymentGuid;
+    }
+
+    public LocalDate getRecognitionDate() {
+        return recognitionDate;
+    }
+
+    public void setRecognitionDate(LocalDate recognitionDate) {
+        this.recognitionDate = recognitionDate;
     }
 
     public SettlementCurrencyDTO getSettlementCurrency() {
@@ -226,6 +237,7 @@ public class PrepaymentAccountDTO implements Serializable {
             ", notes='" + getNotes() + "'" +
             ", prepaymentAmount=" + getPrepaymentAmount() +
             ", prepaymentGuid='" + getPrepaymentGuid() + "'" +
+            ", recognitionDate='" + getRecognitionDate() + "'" +
             ", settlementCurrency=" + getSettlementCurrency() +
             ", prepaymentTransaction=" + getPrepaymentTransaction() +
             ", serviceOutlet=" + getServiceOutlet() +

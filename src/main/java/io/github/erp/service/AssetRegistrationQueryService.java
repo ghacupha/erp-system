@@ -1,8 +1,8 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -163,21 +163,21 @@ public class AssetRegistrationQueryService extends QueryService<AssetRegistratio
                         )
                     );
             }
-            if (criteria.getServiceOutletId() != null) {
+            if (criteria.getOtherRelatedServiceOutletsId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
-                            criteria.getServiceOutletId(),
-                            root -> root.join(AssetRegistration_.serviceOutlets, JoinType.LEFT).get(ServiceOutlet_.id)
+                            criteria.getOtherRelatedServiceOutletsId(),
+                            root -> root.join(AssetRegistration_.otherRelatedServiceOutlets, JoinType.LEFT).get(ServiceOutlet_.id)
                         )
                     );
             }
-            if (criteria.getSettlementId() != null) {
+            if (criteria.getOtherRelatedSettlementsId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
-                            criteria.getSettlementId(),
-                            root -> root.join(AssetRegistration_.settlements, JoinType.LEFT).get(Settlement_.id)
+                            criteria.getOtherRelatedSettlementsId(),
+                            root -> root.join(AssetRegistration_.otherRelatedSettlements, JoinType.LEFT).get(Settlement_.id)
                         )
                     );
             }
@@ -286,6 +286,15 @@ public class AssetRegistrationQueryService extends QueryService<AssetRegistratio
                         buildSpecification(
                             criteria.getMainServiceOutletId(),
                             root -> root.join(AssetRegistration_.mainServiceOutlet, JoinType.LEFT).get(ServiceOutlet_.id)
+                        )
+                    );
+            }
+            if (criteria.getAcquiringTransactionId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getAcquiringTransactionId(),
+                            root -> root.join(AssetRegistration_.acquiringTransaction, JoinType.LEFT).get(Settlement_.id)
                         )
                     );
             }

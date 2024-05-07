@@ -1,8 +1,8 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@ package io.github.erp.domain;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.github.erp.domain.enumeration.DatasetBehaviorTypes;
 import io.github.erp.domain.enumeration.UpdateFrequencyTypes;
 import java.io.Serializable;
@@ -64,8 +65,8 @@ public class GdiTransactionDataIndex implements Serializable {
     @Column(name = "dataset_behavior", nullable = false)
     private DatasetBehaviorTypes datasetBehavior;
 
-    @Column(name = "minimum_datarows_per_request")
-    private Integer minimumDatarowsPerRequest;
+    @Column(name = "minimum_data_rows_per_request")
+    private Integer minimumDataRowsPerRequest;
 
     @Column(name = "maximum_data_rows_per_request")
     private Integer maximumDataRowsPerRequest;
@@ -75,12 +76,8 @@ public class GdiTransactionDataIndex implements Serializable {
     @Column(name = "dataset_description")
     private String datasetDescription;
 
-    @Lob
-    @Column(name = "data_template")
-    private byte[] dataTemplate;
-
-    @Column(name = "data_template_content_type")
-    private String dataTemplateContentType;
+    @Column(name = "data_path")
+    private String dataPath;
 
     @ManyToMany
     @JoinTable(
@@ -90,6 +87,36 @@ public class GdiTransactionDataIndex implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<GdiMasterDataIndex> masterDataItems = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "teamMembers" }, allowSetters = true)
+    private BusinessTeam businessTeam;
+
+    @JsonIgnoreProperties(
+        value = {
+            "createdBy",
+            "lastModifiedBy",
+            "originatingDepartment",
+            "applicationMappings",
+            "placeholders",
+            "fileChecksumAlgorithm",
+            "securityClearance",
+        },
+        allowSetters = true
+    )
+    @OneToOne
+    @JoinColumn(unique = true)
+    private BusinessDocument dataSetTemplate;
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_gdi_transaction_data_index__placeholder",
+        joinColumns = @JoinColumn(name = "gdi_transaction_data_index_id"),
+        inverseJoinColumns = @JoinColumn(name = "placeholder_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
+    private Set<Placeholder> placeholders = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -158,17 +185,17 @@ public class GdiTransactionDataIndex implements Serializable {
         this.datasetBehavior = datasetBehavior;
     }
 
-    public Integer getMinimumDatarowsPerRequest() {
-        return this.minimumDatarowsPerRequest;
+    public Integer getMinimumDataRowsPerRequest() {
+        return this.minimumDataRowsPerRequest;
     }
 
-    public GdiTransactionDataIndex minimumDatarowsPerRequest(Integer minimumDatarowsPerRequest) {
-        this.setMinimumDatarowsPerRequest(minimumDatarowsPerRequest);
+    public GdiTransactionDataIndex minimumDataRowsPerRequest(Integer minimumDataRowsPerRequest) {
+        this.setMinimumDataRowsPerRequest(minimumDataRowsPerRequest);
         return this;
     }
 
-    public void setMinimumDatarowsPerRequest(Integer minimumDatarowsPerRequest) {
-        this.minimumDatarowsPerRequest = minimumDatarowsPerRequest;
+    public void setMinimumDataRowsPerRequest(Integer minimumDataRowsPerRequest) {
+        this.minimumDataRowsPerRequest = minimumDataRowsPerRequest;
     }
 
     public Integer getMaximumDataRowsPerRequest() {
@@ -197,30 +224,17 @@ public class GdiTransactionDataIndex implements Serializable {
         this.datasetDescription = datasetDescription;
     }
 
-    public byte[] getDataTemplate() {
-        return this.dataTemplate;
+    public String getDataPath() {
+        return this.dataPath;
     }
 
-    public GdiTransactionDataIndex dataTemplate(byte[] dataTemplate) {
-        this.setDataTemplate(dataTemplate);
+    public GdiTransactionDataIndex dataPath(String dataPath) {
+        this.setDataPath(dataPath);
         return this;
     }
 
-    public void setDataTemplate(byte[] dataTemplate) {
-        this.dataTemplate = dataTemplate;
-    }
-
-    public String getDataTemplateContentType() {
-        return this.dataTemplateContentType;
-    }
-
-    public GdiTransactionDataIndex dataTemplateContentType(String dataTemplateContentType) {
-        this.dataTemplateContentType = dataTemplateContentType;
-        return this;
-    }
-
-    public void setDataTemplateContentType(String dataTemplateContentType) {
-        this.dataTemplateContentType = dataTemplateContentType;
+    public void setDataPath(String dataPath) {
+        this.dataPath = dataPath;
     }
 
     public Set<GdiMasterDataIndex> getMasterDataItems() {
@@ -243,6 +257,55 @@ public class GdiTransactionDataIndex implements Serializable {
 
     public GdiTransactionDataIndex removeMasterDataItem(GdiMasterDataIndex gdiMasterDataIndex) {
         this.masterDataItems.remove(gdiMasterDataIndex);
+        return this;
+    }
+
+    public BusinessTeam getBusinessTeam() {
+        return this.businessTeam;
+    }
+
+    public void setBusinessTeam(BusinessTeam businessTeam) {
+        this.businessTeam = businessTeam;
+    }
+
+    public GdiTransactionDataIndex businessTeam(BusinessTeam businessTeam) {
+        this.setBusinessTeam(businessTeam);
+        return this;
+    }
+
+    public BusinessDocument getDataSetTemplate() {
+        return this.dataSetTemplate;
+    }
+
+    public void setDataSetTemplate(BusinessDocument businessDocument) {
+        this.dataSetTemplate = businessDocument;
+    }
+
+    public GdiTransactionDataIndex dataSetTemplate(BusinessDocument businessDocument) {
+        this.setDataSetTemplate(businessDocument);
+        return this;
+    }
+
+    public Set<Placeholder> getPlaceholders() {
+        return this.placeholders;
+    }
+
+    public void setPlaceholders(Set<Placeholder> placeholders) {
+        this.placeholders = placeholders;
+    }
+
+    public GdiTransactionDataIndex placeholders(Set<Placeholder> placeholders) {
+        this.setPlaceholders(placeholders);
+        return this;
+    }
+
+    public GdiTransactionDataIndex addPlaceholder(Placeholder placeholder) {
+        this.placeholders.add(placeholder);
+        return this;
+    }
+
+    public GdiTransactionDataIndex removePlaceholder(Placeholder placeholder) {
+        this.placeholders.remove(placeholder);
         return this;
     }
 
@@ -274,11 +337,10 @@ public class GdiTransactionDataIndex implements Serializable {
             ", databaseName='" + getDatabaseName() + "'" +
             ", updateFrequency='" + getUpdateFrequency() + "'" +
             ", datasetBehavior='" + getDatasetBehavior() + "'" +
-            ", minimumDatarowsPerRequest=" + getMinimumDatarowsPerRequest() +
+            ", minimumDataRowsPerRequest=" + getMinimumDataRowsPerRequest() +
             ", maximumDataRowsPerRequest=" + getMaximumDataRowsPerRequest() +
             ", datasetDescription='" + getDatasetDescription() + "'" +
-            ", dataTemplate='" + getDataTemplate() + "'" +
-            ", dataTemplateContentType='" + getDataTemplateContentType() + "'" +
+            ", dataPath='" + getDataPath() + "'" +
             "}";
     }
 }

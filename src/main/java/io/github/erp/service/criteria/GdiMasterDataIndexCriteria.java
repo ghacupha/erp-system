@@ -1,8 +1,8 @@
 package io.github.erp.service.criteria;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,6 +48,8 @@ public class GdiMasterDataIndexCriteria implements Serializable, Criteria {
 
     private StringFilter databaseName;
 
+    private StringFilter dataPath;
+
     private Boolean distinct;
 
     public GdiMasterDataIndexCriteria() {}
@@ -56,6 +58,7 @@ public class GdiMasterDataIndexCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.entityName = other.entityName == null ? null : other.entityName.copy();
         this.databaseName = other.databaseName == null ? null : other.databaseName.copy();
+        this.dataPath = other.dataPath == null ? null : other.dataPath.copy();
         this.distinct = other.distinct;
     }
 
@@ -109,6 +112,21 @@ public class GdiMasterDataIndexCriteria implements Serializable, Criteria {
         this.databaseName = databaseName;
     }
 
+    public StringFilter getDataPath() {
+        return dataPath;
+    }
+
+    public StringFilter dataPath() {
+        if (dataPath == null) {
+            dataPath = new StringFilter();
+        }
+        return dataPath;
+    }
+
+    public void setDataPath(StringFilter dataPath) {
+        this.dataPath = dataPath;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -130,13 +148,14 @@ public class GdiMasterDataIndexCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(entityName, that.entityName) &&
             Objects.equals(databaseName, that.databaseName) &&
+            Objects.equals(dataPath, that.dataPath) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, entityName, databaseName, distinct);
+        return Objects.hash(id, entityName, databaseName, dataPath, distinct);
     }
 
     // prettier-ignore
@@ -146,6 +165,7 @@ public class GdiMasterDataIndexCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (entityName != null ? "entityName=" + entityName + ", " : "") +
             (databaseName != null ? "databaseName=" + databaseName + ", " : "") +
+            (dataPath != null ? "dataPath=" + dataPath + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

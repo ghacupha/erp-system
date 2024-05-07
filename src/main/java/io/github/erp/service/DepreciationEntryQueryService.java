@@ -1,8 +1,8 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -126,6 +126,72 @@ public class DepreciationEntryQueryService extends QueryService<DepreciationEntr
             if (criteria.getAssetNumber() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getAssetNumber(), DepreciationEntry_.assetNumber));
             }
+            if (criteria.getDepreciationPeriodIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getDepreciationPeriodIdentifier(), DepreciationEntry_.depreciationPeriodIdentifier)
+                    );
+            }
+            if (criteria.getDepreciationJobIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getDepreciationJobIdentifier(), DepreciationEntry_.depreciationJobIdentifier)
+                    );
+            }
+            if (criteria.getFiscalMonthIdentifier() != null) {
+                specification =
+                    specification.and(buildSpecification(criteria.getFiscalMonthIdentifier(), DepreciationEntry_.fiscalMonthIdentifier));
+            }
+            if (criteria.getFiscalQuarterIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getFiscalQuarterIdentifier(), DepreciationEntry_.fiscalQuarterIdentifier)
+                    );
+            }
+            if (criteria.getBatchSequenceNumber() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getBatchSequenceNumber(), DepreciationEntry_.batchSequenceNumber));
+            }
+            if (criteria.getProcessedItems() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getProcessedItems(), DepreciationEntry_.processedItems));
+            }
+            if (criteria.getTotalItemsProcessed() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getTotalItemsProcessed(), DepreciationEntry_.totalItemsProcessed));
+            }
+            if (criteria.getElapsedMonths() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getElapsedMonths(), DepreciationEntry_.elapsedMonths));
+            }
+            if (criteria.getPriorMonths() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getPriorMonths(), DepreciationEntry_.priorMonths));
+            }
+            if (criteria.getUsefulLifeYears() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getUsefulLifeYears(), DepreciationEntry_.usefulLifeYears));
+            }
+            if (criteria.getPreviousNBV() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getPreviousNBV(), DepreciationEntry_.previousNBV));
+            }
+            if (criteria.getNetBookValue() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getNetBookValue(), DepreciationEntry_.netBookValue));
+            }
+            if (criteria.getDepreciationPeriodStartDate() != null) {
+                specification =
+                    specification.and(
+                        buildRangeSpecification(criteria.getDepreciationPeriodStartDate(), DepreciationEntry_.depreciationPeriodStartDate)
+                    );
+            }
+            if (criteria.getDepreciationPeriodEndDate() != null) {
+                specification =
+                    specification.and(
+                        buildRangeSpecification(criteria.getDepreciationPeriodEndDate(), DepreciationEntry_.depreciationPeriodEndDate)
+                    );
+            }
+            if (criteria.getCapitalizationDate() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getCapitalizationDate(), DepreciationEntry_.capitalizationDate));
+            }
             if (criteria.getServiceOutletId() != null) {
                 specification =
                     specification.and(
@@ -195,6 +261,25 @@ public class DepreciationEntryQueryService extends QueryService<DepreciationEntr
                         buildSpecification(
                             criteria.getFiscalYearId(),
                             root -> root.join(DepreciationEntry_.fiscalYear, JoinType.LEFT).get(FiscalYear_.id)
+                        )
+                    );
+            }
+            if (criteria.getDepreciationJobId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getDepreciationJobId(),
+                            root -> root.join(DepreciationEntry_.depreciationJob, JoinType.LEFT).get(DepreciationJob_.id)
+                        )
+                    );
+            }
+            if (criteria.getDepreciationBatchSequenceId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getDepreciationBatchSequenceId(),
+                            root ->
+                                root.join(DepreciationEntry_.depreciationBatchSequence, JoinType.LEFT).get(DepreciationBatchSequence_.id)
                         )
                     );
             }

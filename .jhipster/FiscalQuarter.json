@@ -8,12 +8,12 @@
     {
       "fieldName": "startDate",
       "fieldType": "LocalDate",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required", "unique"]
     },
     {
       "fieldName": "endDate",
       "fieldType": "LocalDate",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required", "unique"]
     },
     {
       "fieldName": "fiscalQuarterCode",

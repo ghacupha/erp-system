@@ -1,8 +1,8 @@
 package io.github.erp.aop.reporting;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,17 +17,21 @@ package io.github.erp.aop.reporting;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.aop.reporting.monthlyPrepaymentReport.MonthlyPrepaymentReportRequisitionIntercept;
+import io.github.erp.aop.reporting.monthlyPrepaymentReport.MonthlyPrepaymentReportRequisitionAttachmentInterceptor;
+import io.github.erp.aop.reporting.prepaymentByAccount.PrepaymentByAccountReportAttachmentInterceptor;
+import io.github.erp.aop.reporting.prepaymentByAccount.PrepaymentByAccountReportRequisitionInterceptor;
+import io.github.erp.internal.report.service.DepreciationEntryExportReportService;
+import io.github.erp.internal.report.service.ExportReportService;
 import io.github.erp.internal.repository.InternalProcessStatusRepository;
 import io.github.erp.internal.repository.InternalReportStatusRepository;
 import io.github.erp.internal.report.assemblies.ReportAssemblyService;
 import io.github.erp.internal.report.attachment.ReportAttachmentService;
 import io.github.erp.service.*;
-import io.github.erp.service.dto.ExcelReportExportDTO;
-import io.github.erp.service.dto.PdfReportRequisitionDTO;
-import io.github.erp.service.dto.ReportRequisitionDTO;
-import io.github.erp.service.dto.XlsxReportRequisitionDTO;
+import io.github.erp.service.dto.*;
 import io.github.erp.service.mapper.ReportStatusMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -76,6 +80,49 @@ public class ReportingAspectConfiguration {
     @Autowired
     private ReportAttachmentService<ExcelReportExportDTO> excelReportExportReportAttachmentService;
 
+    @Autowired
+    private ReportAttachmentService<AutonomousReportDTO> autonomousReportAttachmentService;
+
+    @Autowired
+    private DepreciationEntryExportReportService depreciationEntryExportReportService;
+
+
+    @Autowired
+    private ReportAttachmentService<DepreciationReportDTO> depreciationReportReportAttachmentService;
+
+
+    @Autowired
+    private ExportReportService<AssetAdditionsReportDTO> assetReportExportReportService;
+
+    @Autowired
+    private ReportAttachmentService<AssetAdditionsReportDTO> assetAdditionsReportDTOReportAttachmentService;
+
+    @Autowired
+    @Qualifier("prepaymentReportUserInitiatedExportService")
+    private ExportReportService<PrepaymentReportRequisitionDTO> prepaymentReportExportReportService;
+
+    @Autowired
+    private ReportAttachmentService<PrepaymentReportRequisitionDTO> prepaymentReportRequisitionAttachmentService;
+
+    @Autowired
+    @Qualifier("amortizationPostingRequisitionUserInitiatedReportExport")
+    private ExportReportService<AmortizationPostingReportRequisitionDTO> amortizationPostingReportRequisitionExportReportService;
+
+    @Autowired
+    private ReportAttachmentService<AmortizationPostingReportRequisitionDTO> amortizationPostingReportRequisitionAttachmentService;
+
+    @Autowired
+    private ExportReportService<PrepaymentByAccountReportRequisitionDTO> prepaymentByAccountReportRequisitionDTOExportReportService;
+
+    @Autowired
+    private ExportReportService<MonthlyPrepaymentReportRequisitionDTO> prepaymentByAccountReportRequisitionExportReportService;
+
+    @Autowired
+    private ReportAttachmentService<PrepaymentByAccountReportRequisitionDTO> prepaymentByAccountReportRequisitionReportAttachmentService;
+
+    @Autowired
+    private ReportAttachmentService<MonthlyPrepaymentReportRequisitionDTO> monthlyPrepaymentReportRequisitionReportAttachmentService;
+
     @Bean
     public ReportRequisitionInterceptor reportRequisitionInterceptor() {
 
@@ -107,5 +154,75 @@ public class ReportingAspectConfiguration {
     @Bean
     public ExcelReportExportAttachmentInterceptor excelReportExportAttachmentInterceptor() {
         return new ExcelReportExportAttachmentInterceptor(excelReportExportReportAttachmentService);
+    }
+
+    @Bean
+    public AutonomousReportAttachmentInterceptor autonomousReportAttachmentInterceptor() {
+        return new AutonomousReportAttachmentInterceptor(autonomousReportAttachmentService);
+    }
+
+    @Bean
+    public DepreciationReportInterceptor depreciationReportInterceptor() {
+        return new DepreciationReportInterceptor(depreciationEntryExportReportService);
+    }
+
+    @Bean
+    public DepreciationReportAttachmentInterceptor depreciationReportAttachmentInterceptor() {
+        return new DepreciationReportAttachmentInterceptor(depreciationReportReportAttachmentService);
+    }
+
+    @Bean
+    public AssetAdditionsReportInterceptor assetAdditionsReportInterceptor() {
+        return new AssetAdditionsReportInterceptor(assetReportExportReportService);
+    }
+
+    @Bean
+    public AssetAdditionsReportAttachmentInterceptor assetAdditionsReportAttachmentInterceptor() {
+        return new AssetAdditionsReportAttachmentInterceptor(assetAdditionsReportDTOReportAttachmentService);
+    }
+
+    @Bean
+    public PrepaymentReportRequisitionInterceptor prepaymentReportRequisitionInterceptor() {
+        return new PrepaymentReportRequisitionInterceptor(prepaymentReportExportReportService);
+    }
+
+    @Bean
+    public PrepaymentReportRequisitionAttachmentInterceptor prepaymentReportRequisitionAttachmentInterceptor() {
+        return new PrepaymentReportRequisitionAttachmentInterceptor(prepaymentReportRequisitionAttachmentService);
+    }
+
+    @Bean
+    public AmortizationPostingReportRequisitionInterceptor amortizationPostingReportRequisitionInterceptor() {
+        return new AmortizationPostingReportRequisitionInterceptor(amortizationPostingReportRequisitionExportReportService);
+    }
+
+    @Bean
+    public AmortizationPostingReportRequisitionAttachmentInterceptor amortizationPostingReportRequisitionAttachmentInterceptor() {
+        return new AmortizationPostingReportRequisitionAttachmentInterceptor(amortizationPostingReportRequisitionAttachmentService);
+    }
+
+    @Bean
+    public PrepaymentByAccountReportRequisitionInterceptor prepaymentByAccountReportRequisitionInterceptor() {
+
+        return new PrepaymentByAccountReportRequisitionInterceptor(prepaymentByAccountReportRequisitionDTOExportReportService);
+    }
+
+
+    @Bean
+    public MonthlyPrepaymentReportRequisitionIntercept monthlyPrepaymentReportRequisitionIntercept() {
+
+        return new MonthlyPrepaymentReportRequisitionIntercept(prepaymentByAccountReportRequisitionExportReportService);
+    }
+
+    @Bean
+    public PrepaymentByAccountReportAttachmentInterceptor prepaymentByAccountReportAttachmentInterceptor() {
+
+        return new PrepaymentByAccountReportAttachmentInterceptor(prepaymentByAccountReportRequisitionReportAttachmentService);
+    }
+
+    @Bean
+    public MonthlyPrepaymentReportRequisitionAttachmentInterceptor prepaymentByMonthReportAttachmentInterceptor() {
+
+        return new MonthlyPrepaymentReportRequisitionAttachmentInterceptor(monthlyPrepaymentReportRequisitionReportAttachmentService);
     }
 }

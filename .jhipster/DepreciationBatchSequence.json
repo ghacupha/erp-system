@@ -9,13 +9,53 @@
       "fieldType": "Integer"
     },
     {
-      "fieldName": "createdAt",
-      "fieldType": "ZonedDateTime"
-    },
-    {
       "fieldName": "depreciationBatchStatus",
       "fieldType": "DepreciationBatchStatusType",
       "fieldValues": "CREATED,RUNNING,COMPLETED,ERRORED,ENQUEUED"
+    },
+    {
+      "fieldName": "depreciationPeriodIdentifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "depreciationJobIdentifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "fiscalMonthIdentifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "fiscalQuarterIdentifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "batchSize",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "processedItems",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "sequenceNumber",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "isLastBatch",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "processingTime",
+      "fieldType": "Duration"
+    },
+    {
+      "fieldName": "totalItems",
+      "fieldType": "Integer"
     }
   ],
   "relationships": [

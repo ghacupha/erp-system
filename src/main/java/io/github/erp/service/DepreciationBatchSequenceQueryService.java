@@ -1,8 +1,8 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -122,14 +122,59 @@ public class DepreciationBatchSequenceQueryService extends QueryService<Deprecia
             if (criteria.getEndIndex() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getEndIndex(), DepreciationBatchSequence_.endIndex));
             }
-            if (criteria.getCreatedAt() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getCreatedAt(), DepreciationBatchSequence_.createdAt));
-            }
             if (criteria.getDepreciationBatchStatus() != null) {
                 specification =
                     specification.and(
                         buildSpecification(criteria.getDepreciationBatchStatus(), DepreciationBatchSequence_.depreciationBatchStatus)
                     );
+            }
+            if (criteria.getDepreciationPeriodIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getDepreciationPeriodIdentifier(),
+                            DepreciationBatchSequence_.depreciationPeriodIdentifier
+                        )
+                    );
+            }
+            if (criteria.getDepreciationJobIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getDepreciationJobIdentifier(), DepreciationBatchSequence_.depreciationJobIdentifier)
+                    );
+            }
+            if (criteria.getFiscalMonthIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getFiscalMonthIdentifier(), DepreciationBatchSequence_.fiscalMonthIdentifier)
+                    );
+            }
+            if (criteria.getFiscalQuarterIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getFiscalQuarterIdentifier(), DepreciationBatchSequence_.fiscalQuarterIdentifier)
+                    );
+            }
+            if (criteria.getBatchSize() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getBatchSize(), DepreciationBatchSequence_.batchSize));
+            }
+            if (criteria.getProcessedItems() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getProcessedItems(), DepreciationBatchSequence_.processedItems));
+            }
+            if (criteria.getSequenceNumber() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getSequenceNumber(), DepreciationBatchSequence_.sequenceNumber));
+            }
+            if (criteria.getIsLastBatch() != null) {
+                specification = specification.and(buildSpecification(criteria.getIsLastBatch(), DepreciationBatchSequence_.isLastBatch));
+            }
+            if (criteria.getProcessingTime() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getProcessingTime(), DepreciationBatchSequence_.processingTime));
+            }
+            if (criteria.getTotalItems() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getTotalItems(), DepreciationBatchSequence_.totalItems));
             }
             if (criteria.getDepreciationJobId() != null) {
                 specification =

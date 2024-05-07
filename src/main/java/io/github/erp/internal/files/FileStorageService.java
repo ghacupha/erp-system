@@ -1,8 +1,8 @@
 package io.github.erp.internal.files;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@ package io.github.erp.internal.files;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import org.springframework.core.io.Resource;
+
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
@@ -36,6 +38,8 @@ public interface FileStorageService {
      * Takes a multipart file from arguments and saves the file to the "working folder"
      */
     void save(MultipartFile file, String fileMd5CheckSum);
+
+    void save(byte[] fileContent, String fileName);
 
     void save(MultipartFile file);
 
@@ -68,6 +72,14 @@ public interface FileStorageService {
     String calculateMD5CheckSum(String filename);
 
     /**
+     * Calculates the SHA512 sum of the filename provided from the working folder
+     *
+     * @param filename
+     * @return
+     */
+    String calculateSha512CheckSum(String filename);
+
+    /**
      * Calculates checksum given a fileName
      *
      * @param fileName fileName whose checksum we'll compute
@@ -75,4 +87,14 @@ public interface FileStorageService {
      * @return file checksum
      */
     String calculateCheckSum(String fileName, String algorithmName);
+
+    /**
+     * This methods return true if the file in the file system is not tampered. It checks
+     * the the current SHA512 file checkSum against the calculated one from the file system.
+     *
+     * @param fileName Filename from the file system
+     * @param originalChecksum Original checksum calculated when saving the file
+     * @return TRUE if the file is uncompromised.
+     */
+    boolean fileRemainsUnTampered(String fileName, String originalChecksum);
 }

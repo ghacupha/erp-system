@@ -1,8 +1,8 @@
 package io.github.erp.internal.files.documents;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,10 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -79,6 +76,13 @@ public class BusinessDocumentFSStorageService implements FileStorageService {
         );
     }
 
+    @SneakyThrows
+    @Override
+    public void save(byte[] fileContent, String fileName) {
+
+        FileUtils.save(fileContent, this.root.resolve(fileName));
+    }
+
     @Override
     public Resource load(String filename) {
         try {
@@ -97,6 +101,11 @@ public class BusinessDocumentFSStorageService implements FileStorageService {
     @Override
     public String calculateMD5CheckSum(String filename) {
         return FileUtils.calculateMD5CheckSum(root, filename);
+    }
+
+    @Override
+    public String calculateSha512CheckSum(String filename) {
+        return FileUtils.calculateSha512CheckSum(root, filename);
     }
 
     @Override
@@ -134,5 +143,10 @@ public class BusinessDocumentFSStorageService implements FileStorageService {
                 return FileUtils.calculateSha512CheckSum(root, fileName);
             }
         }
+    }
+
+    @Override
+    public boolean fileRemainsUnTampered(String fileName, String originalChecksum) {
+        return FileUtils.calculateSha512CheckSum(root, fileName).equalsIgnoreCase(originalChecksum);
     }
 }

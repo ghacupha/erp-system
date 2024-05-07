@@ -1,8 +1,8 @@
 package io.github.erp.erp.index;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@ package io.github.erp.erp.index;
  */
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -47,9 +48,11 @@ public class DepreciationMethodsIndexingService extends AbstractStartupRegistere
     private final DepreciationMethodSearchRepository searchRepository;
 
     public DepreciationMethodsIndexingService (
+        IndexProperties indexProperties,
         DepreciationMethodMapper mapper,
         DepreciationMethodService service,
         DepreciationMethodSearchRepository searchRepository) {
+        super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

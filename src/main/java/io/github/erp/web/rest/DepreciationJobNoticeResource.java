@@ -1,8 +1,8 @@
 package io.github.erp.web.rest;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,8 +32,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -87,7 +85,7 @@ public class DepreciationJobNoticeResource {
      */
     @PostMapping("/depreciation-job-notices")
     public ResponseEntity<DepreciationJobNoticeDTO> createDepreciationJobNotice(
-        @Valid @RequestBody DepreciationJobNoticeDTO depreciationJobNoticeDTO
+        @RequestBody DepreciationJobNoticeDTO depreciationJobNoticeDTO
     ) throws URISyntaxException {
         log.debug("REST request to save DepreciationJobNotice : {}", depreciationJobNoticeDTO);
         if (depreciationJobNoticeDTO.getId() != null) {
@@ -113,7 +111,7 @@ public class DepreciationJobNoticeResource {
     @PutMapping("/depreciation-job-notices/{id}")
     public ResponseEntity<DepreciationJobNoticeDTO> updateDepreciationJobNotice(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody DepreciationJobNoticeDTO depreciationJobNoticeDTO
+        @RequestBody DepreciationJobNoticeDTO depreciationJobNoticeDTO
     ) throws URISyntaxException {
         log.debug("REST request to update DepreciationJobNotice : {}, {}", id, depreciationJobNoticeDTO);
         if (depreciationJobNoticeDTO.getId() == null) {
@@ -148,7 +146,7 @@ public class DepreciationJobNoticeResource {
     @PatchMapping(value = "/depreciation-job-notices/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<DepreciationJobNoticeDTO> partialUpdateDepreciationJobNotice(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody DepreciationJobNoticeDTO depreciationJobNoticeDTO
+        @RequestBody DepreciationJobNoticeDTO depreciationJobNoticeDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update DepreciationJobNotice partially : {}, {}", id, depreciationJobNoticeDTO);
         if (depreciationJobNoticeDTO.getId() == null) {

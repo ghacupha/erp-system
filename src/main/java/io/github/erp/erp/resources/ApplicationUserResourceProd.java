@@ -1,8 +1,8 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,11 +17,13 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.repository.ApplicationUserRepository;
 import io.github.erp.service.ApplicationUserQueryService;
 import io.github.erp.service.ApplicationUserService;
 import io.github.erp.service.criteria.ApplicationUserCriteria;
 import io.github.erp.service.dto.ApplicationUserDTO;
+import io.github.erp.service.mapper.ApplicationUserMapper;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,14 +66,17 @@ public class ApplicationUserResourceProd {
 
     private final ApplicationUserQueryService applicationUserQueryService;
 
+    private final InternalApplicationUserDetailService userDetailService;
+
     public ApplicationUserResourceProd(
         ApplicationUserService applicationUserService,
         ApplicationUserRepository applicationUserRepository,
-        ApplicationUserQueryService applicationUserQueryService
-    ) {
+        ApplicationUserQueryService applicationUserQueryService,
+        InternalApplicationUserDetailService userDetailService) {
         this.applicationUserService = applicationUserService;
         this.applicationUserRepository = applicationUserRepository;
         this.applicationUserQueryService = applicationUserQueryService;
+        this.userDetailService = userDetailService;
     }
 
     /**
@@ -202,6 +207,18 @@ public class ApplicationUserResourceProd {
     public ResponseEntity<ApplicationUserDTO> getApplicationUser(@PathVariable Long id) {
         log.debug("REST request to get ApplicationUser : {}", id);
         Optional<ApplicationUserDTO> applicationUserDTO = applicationUserService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(applicationUserDTO);
+    }
+
+    /**
+     * {@code GET  /application-users/current} : get the current applicationUser.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the applicationUserDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/application-users/current")
+    public ResponseEntity<ApplicationUserDTO> getCurrentUser() {
+        log.debug("REST request to get current ApplicationUser");
+        Optional<ApplicationUserDTO> applicationUserDTO = userDetailService.getCurrentApplicationUser();
         return ResponseUtil.wrapOrNotFound(applicationUserDTO);
     }
 

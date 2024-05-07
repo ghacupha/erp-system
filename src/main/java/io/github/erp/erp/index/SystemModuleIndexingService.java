@@ -1,8 +1,8 @@
 package io.github.erp.erp.index;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ package io.github.erp.erp.index;
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.SystemModuleSearchRepository;
 import io.github.erp.service.SystemModuleService;
 import io.github.erp.service.mapper.SystemModuleMapper;
@@ -44,7 +45,8 @@ public class SystemModuleIndexingService extends AbstractStartupRegisteredIndexS
     private final SystemModuleService service;
     private final SystemModuleSearchRepository searchRepository;
 
-    public SystemModuleIndexingService(SystemModuleMapper mapper, SystemModuleService service, SystemModuleSearchRepository searchRepository) {
+    public SystemModuleIndexingService(IndexProperties indexProperties, SystemModuleMapper mapper, SystemModuleService service, SystemModuleSearchRepository searchRepository) {
+        super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;

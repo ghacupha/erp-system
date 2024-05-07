@@ -230,6 +230,53 @@
     <include file="config/liquibase/changelog/20231004123713_added_entity_CollateralInformation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231004124958_added_entity_CreditCardFacility.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231004131702_added_entity_CardState.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231017081151_added_entity_BusinessTeam.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231030075738_added_entity_WorkInProgressOutstandingReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231107053508_added_entity_WorkInProgressReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231114132844_added_entity_WorkInProgressOverview.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231121114011_added_entity_PrepaymentCompilationRequest.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231128072021_added_entity_PrepaymentReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231128140040_added_entity_PrepaymentAccountReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231130132010_added_entity_PrepaymentOutstandingOverviewReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231207063650_added_entity_AutonomousReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231220155255_added_entity_AmortizationPostingReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240115051854_added_entity_DepreciationReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240117050558_added_entity_DepreciationEntryReportItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240125050141_added_entity_AssetAdditionsReportItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240126043430_added_entity_AssetAdditionsReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240219053625_added_entity_NetBookValueEntry.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240219083823_added_entity_NbvCompilationJob.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240219093155_added_entity_NbvCompilationBatch.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240219102755_added_entity_NbvCompilationReportItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240219115614_added_entity_NbvReportItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240219151405_added_entity_NbvReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240304133311_added_entity_MonthlyPrepaymentOutstandingReportItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240307045420_added_entity_IFRS16LeaseContract.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240307081647_added_entity_RouModelMetadata.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240307105511_added_entity_RouDepreciationEntry.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313073952_added_entity_RouDepreciationEntryReportItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313075647_added_entity_RouDepreciationEntryReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313080709_added_entity_RouDepreciationRequest.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313083108_added_entity_RouAssetListReportItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313083631_added_entity_RouAssetNBVReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313084433_added_entity_RouAssetNBVReportItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313091444_added_entity_RouAccountBalanceReportItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313092355_added_entity_RouAccountBalanceReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313093232_added_entity_RouAssetListReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313094655_added_entity_RouDepreciationPostingReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313102017_added_entity_RouDepreciationPostingReportItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313103527_added_entity_RouMonthlyDepreciationReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313103024_added_entity_RouMonthlyDepreciationReportItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240320112940_added_entity_AssetWriteOff.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240321051842_added_entity_AssetDisposal.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240412053158_added_entity_AssetRevaluation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240412085640_added_entity_AssetGeneralAdjustment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240427185244_added_entity_AmortizationPeriod.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240430114123_added_entity_PrepaymentReportRequisition.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240430115208_added_entity_PrepaymentAccountReportRequisition.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240430115817_added_entity_AmortizationPostingReportRequisition.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240430120705_added_entity_MonthlyPrepaymentReportRequisition.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240506110010_added_entity_PrepaymentByAccountReportRequisition.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
@@ -294,6 +341,7 @@
     <include file="config/liquibase/changelog/20220701140751_added_entity_constraints_ReportDesign.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220726145438_added_entity_constraints_PrepaymentMapping.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220801130650_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231016113736_added_datapath_to_index_tables.xml" relativeToChangelogFile="false"/>
     <!--<include file="config/liquibase/changelog/20220726153626_changelog.xml" relativeToChangelogFile="false"/>-->
     <include file="config/liquibase/changelog/20220802070433_added_entity_constraints_AmortizationRecurrence.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220802080530_added_entity_constraints_AmortizationSequence.xml" relativeToChangelogFile="false"/>
@@ -366,6 +414,74 @@
     <include file="config/liquibase/changelog/20231004121919_added_entity_constraints_CardUsageInformation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231004123713_added_entity_constraints_CollateralInformation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231004124958_added_entity_constraints_CreditCardFacility.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231017081151_added_entity_constraints_BusinessTeam.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231017092242_various_changes_gdi_index.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231017123351_various_changes_work_project_register.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231018125319_various_changes_work_in_progress_transfer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231027094030_wip_registration_m21_changes.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231115083520_wip_overview_changes.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231121111852_changelog_prepayment_marshalling.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231122060441_new_prepayment_amortization_columns.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231121114011_added_entity_constraints_PrepaymentCompilationRequest.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231123055611_prepayment_compilation_request_changes.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231123064452_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231123083910_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231207063650_added_entity_constraints_AutonomousReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231215172551_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231220114227_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231228083604_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240102064922_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240102153740_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240102161554_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240104143924_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240105100832_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240108101315_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240115051854_added_entity_constraints_DepreciationReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240118124650_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240122113935_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240122124030_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240125081051_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240126112621_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240129061725_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240126043430_added_entity_constraints_AssetAdditionsReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240129154923_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240130153949_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240219053625_added_entity_constraints_NetBookValueEntry.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240219083823_added_entity_constraints_NbvCompilationJob.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240219093155_added_entity_constraints_NbvCompilationBatch.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240219151405_added_entity_constraints_NbvReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240226104612_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240306045214_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240307045420_added_entity_constraints_IFRS16LeaseContract.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240307081647_added_entity_constraints_RouModelMetadata.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240307105511_added_entity_constraints_RouDepreciationEntry.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240308043402_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240308182607_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313075647_added_entity_constraints_RouDepreciationEntryReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313080709_added_entity_constraints_RouDepreciationRequest.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313083631_added_entity_constraints_RouAssetNBVReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313092355_added_entity_constraints_RouAccountBalanceReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313093232_added_entity_constraints_RouAssetListReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313094655_added_entity_constraints_RouDepreciationPostingReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313103527_added_entity_constraints_RouMonthlyDepreciationReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240313134838_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240320112940_added_entity_constraints_AssetWriteOff.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240321051842_added_entity_constraints_AssetDisposal.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240321100229_changelog" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240412053158_added_entity_constraints_AssetRevaluation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240412085640_added_entity_constraints_AssetGeneralAdjustment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240427185244_added_entity_constraints_AmortizationPeriod.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240429060847_added_first_amortization_period_id.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240429073351_added_amortization_period.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240430114123_added_entity_constraints_PrepaymentReportRequisition.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240430115208_added_entity_constraints_PrepaymentAccountReportRequisition.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240430115817_added_entity_constraints_AmortizationPostingReportRequisition.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240430120705_added_entity_constraints_MonthlyPrepaymentReportRequisition.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240502083203_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240502084951_added_report_date.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240503111301_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240506110010_added_entity_constraints_PrepaymentByAccountReportRequisition.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240507100313_changelog.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

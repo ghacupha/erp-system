@@ -1,8 +1,8 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -119,20 +119,18 @@ public class PrepaymentMarshallingQueryService extends QueryService<PrepaymentMa
             if (criteria.getInactive() != null) {
                 specification = specification.and(buildSpecification(criteria.getInactive(), PrepaymentMarshalling_.inactive));
             }
-            if (criteria.getAmortizationCommencementDate() != null) {
-                specification =
-                    specification.and(
-                        buildRangeSpecification(
-                            criteria.getAmortizationCommencementDate(),
-                            PrepaymentMarshalling_.amortizationCommencementDate
-                        )
-                    );
-            }
             if (criteria.getAmortizationPeriods() != null) {
                 specification =
                     specification.and(
                         buildRangeSpecification(criteria.getAmortizationPeriods(), PrepaymentMarshalling_.amortizationPeriods)
                     );
+            }
+            if (criteria.getProcessed() != null) {
+                specification = specification.and(buildSpecification(criteria.getProcessed(), PrepaymentMarshalling_.processed));
+            }
+            if (criteria.getCompilationToken() != null) {
+                specification =
+                    specification.and(buildSpecification(criteria.getCompilationToken(), PrepaymentMarshalling_.compilationToken));
             }
             if (criteria.getPrepaymentAccountId() != null) {
                 specification =
@@ -149,6 +147,33 @@ public class PrepaymentMarshallingQueryService extends QueryService<PrepaymentMa
                         buildSpecification(
                             criteria.getPlaceholderId(),
                             root -> root.join(PrepaymentMarshalling_.placeholders, JoinType.LEFT).get(Placeholder_.id)
+                        )
+                    );
+            }
+            if (criteria.getFirstFiscalMonthId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getFirstFiscalMonthId(),
+                            root -> root.join(PrepaymentMarshalling_.firstFiscalMonth, JoinType.LEFT).get(FiscalMonth_.id)
+                        )
+                    );
+            }
+            if (criteria.getLastFiscalMonthId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLastFiscalMonthId(),
+                            root -> root.join(PrepaymentMarshalling_.lastFiscalMonth, JoinType.LEFT).get(FiscalMonth_.id)
+                        )
+                    );
+            }
+            if (criteria.getFirstAmortizationPeriodId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getFirstAmortizationPeriodId(),
+                            root -> root.join(PrepaymentMarshalling_.firstAmortizationPeriod, JoinType.LEFT).get(AmortizationPeriod_.id)
                         )
                     );
             }

@@ -1,8 +1,8 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,6 +54,9 @@ public class GdiMasterDataIndex implements Serializable {
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "business_description")
     private String businessDescription;
+
+    @Column(name = "data_path")
+    private String dataPath;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -109,6 +112,19 @@ public class GdiMasterDataIndex implements Serializable {
         this.businessDescription = businessDescription;
     }
 
+    public String getDataPath() {
+        return this.dataPath;
+    }
+
+    public GdiMasterDataIndex dataPath(String dataPath) {
+        this.setDataPath(dataPath);
+        return this;
+    }
+
+    public void setDataPath(String dataPath) {
+        this.dataPath = dataPath;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -136,6 +152,7 @@ public class GdiMasterDataIndex implements Serializable {
             ", entityName='" + getEntityName() + "'" +
             ", databaseName='" + getDatabaseName() + "'" +
             ", businessDescription='" + getBusinessDescription() + "'" +
+            ", dataPath='" + getDataPath() + "'" +
             "}";
     }
 }

@@ -1,8 +1,8 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -130,6 +130,12 @@ public class PrepaymentAmortizationQueryService extends QueryService<PrepaymentA
             if (criteria.getInactive() != null) {
                 specification = specification.and(buildSpecification(criteria.getInactive(), PrepaymentAmortization_.inactive));
             }
+            if (criteria.getAmortizationIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getAmortizationIdentifier(), PrepaymentAmortization_.amortizationIdentifier)
+                    );
+            }
             if (criteria.getPrepaymentAccountId() != null) {
                 specification =
                     specification.and(
@@ -172,6 +178,36 @@ public class PrepaymentAmortizationQueryService extends QueryService<PrepaymentA
                         buildSpecification(
                             criteria.getPlaceholderId(),
                             root -> root.join(PrepaymentAmortization_.placeholders, JoinType.LEFT).get(Placeholder_.id)
+                        )
+                    );
+            }
+            if (criteria.getFiscalMonthId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getFiscalMonthId(),
+                            root -> root.join(PrepaymentAmortization_.fiscalMonth, JoinType.LEFT).get(FiscalMonth_.id)
+                        )
+                    );
+            }
+            if (criteria.getPrepaymentCompilationRequestId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPrepaymentCompilationRequestId(),
+                            root ->
+                                root
+                                    .join(PrepaymentAmortization_.prepaymentCompilationRequest, JoinType.LEFT)
+                                    .get(PrepaymentCompilationRequest_.id)
+                        )
+                    );
+            }
+            if (criteria.getAmortizationPeriodId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getAmortizationPeriodId(),
+                            root -> root.join(PrepaymentAmortization_.amortizationPeriod, JoinType.LEFT).get(AmortizationPeriod_.id)
                         )
                     );
             }
