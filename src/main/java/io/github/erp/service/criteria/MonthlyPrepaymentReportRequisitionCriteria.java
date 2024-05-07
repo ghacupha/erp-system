@@ -46,7 +46,7 @@ public class MonthlyPrepaymentReportRequisitionCriteria implements Serializable,
 
     private LongFilter id;
 
-    private StringFilter reportName;
+    private StringFilter requestId;
 
     private ZonedDateTimeFilter timeOfRequisition;
 
@@ -70,7 +70,7 @@ public class MonthlyPrepaymentReportRequisitionCriteria implements Serializable,
 
     public MonthlyPrepaymentReportRequisitionCriteria(MonthlyPrepaymentReportRequisitionCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.reportName = other.reportName == null ? null : other.reportName.copy();
+        this.requestId = other.requestId == null ? null : other.requestId.copy();
         this.timeOfRequisition = other.timeOfRequisition == null ? null : other.timeOfRequisition.copy();
         this.fileChecksum = other.fileChecksum == null ? null : other.fileChecksum.copy();
         this.tampered = other.tampered == null ? null : other.tampered.copy();
@@ -102,19 +102,19 @@ public class MonthlyPrepaymentReportRequisitionCriteria implements Serializable,
         this.id = id;
     }
 
-    public StringFilter getReportName() {
-        return reportName;
+    public StringFilter getRequestId() {
+        return requestId;
     }
 
-    public StringFilter reportName() {
-        if (reportName == null) {
-            reportName = new StringFilter();
+    public StringFilter requestId() {
+        if (requestId == null) {
+            requestId = new StringFilter();
         }
-        return reportName;
+        return requestId;
     }
 
-    public void setReportName(StringFilter reportName) {
-        this.reportName = reportName;
+    public void setRequestId(StringFilter requestId) {
+        this.requestId = requestId;
     }
 
     public ZonedDateTimeFilter getTimeOfRequisition() {
@@ -256,7 +256,7 @@ public class MonthlyPrepaymentReportRequisitionCriteria implements Serializable,
         final MonthlyPrepaymentReportRequisitionCriteria that = (MonthlyPrepaymentReportRequisitionCriteria) o;
         return (
             Objects.equals(id, that.id) &&
-            Objects.equals(reportName, that.reportName) &&
+            Objects.equals(requestId, that.requestId) &&
             Objects.equals(timeOfRequisition, that.timeOfRequisition) &&
             Objects.equals(fileChecksum, that.fileChecksum) &&
             Objects.equals(tampered, that.tampered) &&
@@ -273,7 +273,7 @@ public class MonthlyPrepaymentReportRequisitionCriteria implements Serializable,
     public int hashCode() {
         return Objects.hash(
             id,
-            reportName,
+            requestId,
             timeOfRequisition,
             fileChecksum,
             tampered,
@@ -291,7 +291,7 @@ public class MonthlyPrepaymentReportRequisitionCriteria implements Serializable,
     public String toString() {
         return "MonthlyPrepaymentReportRequisitionCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
-            (reportName != null ? "reportName=" + reportName + ", " : "") +
+            (requestId != null ? "requestId=" + requestId + ", " : "") +
             (timeOfRequisition != null ? "timeOfRequisition=" + timeOfRequisition + ", " : "") +
             (fileChecksum != null ? "fileChecksum=" + fileChecksum + ", " : "") +
             (tampered != null ? "tampered=" + tampered + ", " : "") +

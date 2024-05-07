@@ -68,8 +68,8 @@ import org.springframework.util.Base64Utils;
 @WithMockUser
 class MonthlyPrepaymentReportRequisitionResourceIT {
 
-    private static final String DEFAULT_REPORT_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_REPORT_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_REQUEST_ID = "AAAAAAAAAA";
+    private static final String UPDATED_REQUEST_ID = "BBBBBBBBBB";
 
     private static final ZonedDateTime DEFAULT_TIME_OF_REQUISITION = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_TIME_OF_REQUISITION = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
@@ -129,7 +129,7 @@ class MonthlyPrepaymentReportRequisitionResourceIT {
      */
     public static MonthlyPrepaymentReportRequisition createEntity(EntityManager em) {
         MonthlyPrepaymentReportRequisition monthlyPrepaymentReportRequisition = new MonthlyPrepaymentReportRequisition()
-            .reportName(DEFAULT_REPORT_NAME)
+            .requestId(DEFAULT_REQUEST_ID)
             .timeOfRequisition(DEFAULT_TIME_OF_REQUISITION)
             .fileChecksum(DEFAULT_FILE_CHECKSUM)
             .tampered(DEFAULT_TAMPERED)
@@ -158,7 +158,7 @@ class MonthlyPrepaymentReportRequisitionResourceIT {
      */
     public static MonthlyPrepaymentReportRequisition createUpdatedEntity(EntityManager em) {
         MonthlyPrepaymentReportRequisition monthlyPrepaymentReportRequisition = new MonthlyPrepaymentReportRequisition()
-            .reportName(UPDATED_REPORT_NAME)
+            .requestId(UPDATED_REQUEST_ID)
             .timeOfRequisition(UPDATED_TIME_OF_REQUISITION)
             .fileChecksum(UPDATED_FILE_CHECKSUM)
             .tampered(UPDATED_TAMPERED)
@@ -206,7 +206,7 @@ class MonthlyPrepaymentReportRequisitionResourceIT {
         MonthlyPrepaymentReportRequisition testMonthlyPrepaymentReportRequisition = monthlyPrepaymentReportRequisitionList.get(
             monthlyPrepaymentReportRequisitionList.size() - 1
         );
-        assertThat(testMonthlyPrepaymentReportRequisition.getReportName()).isEqualTo(DEFAULT_REPORT_NAME);
+        assertThat(testMonthlyPrepaymentReportRequisition.getRequestId()).isEqualTo(DEFAULT_REQUEST_ID);
         assertThat(testMonthlyPrepaymentReportRequisition.getTimeOfRequisition()).isEqualTo(DEFAULT_TIME_OF_REQUISITION);
         assertThat(testMonthlyPrepaymentReportRequisition.getFileChecksum()).isEqualTo(DEFAULT_FILE_CHECKSUM);
         assertThat(testMonthlyPrepaymentReportRequisition.getTampered()).isEqualTo(DEFAULT_TAMPERED);
@@ -249,10 +249,10 @@ class MonthlyPrepaymentReportRequisitionResourceIT {
 
     @Test
     @Transactional
-    void checkReportNameIsRequired() throws Exception {
+    void checkRequestIdIsRequired() throws Exception {
         int databaseSizeBeforeTest = monthlyPrepaymentReportRequisitionRepository.findAll().size();
         // set the field null
-        monthlyPrepaymentReportRequisition.setReportName(null);
+        monthlyPrepaymentReportRequisition.setRequestId(null);
 
         // Create the MonthlyPrepaymentReportRequisition, which fails.
         MonthlyPrepaymentReportRequisitionDTO monthlyPrepaymentReportRequisitionDTO = monthlyPrepaymentReportRequisitionMapper.toDto(
@@ -307,7 +307,7 @@ class MonthlyPrepaymentReportRequisitionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(monthlyPrepaymentReportRequisition.getId().intValue())))
-            .andExpect(jsonPath("$.[*].reportName").value(hasItem(DEFAULT_REPORT_NAME)))
+            .andExpect(jsonPath("$.[*].requestId").value(hasItem(DEFAULT_REQUEST_ID)))
             .andExpect(jsonPath("$.[*].timeOfRequisition").value(hasItem(sameInstant(DEFAULT_TIME_OF_REQUISITION))))
             .andExpect(jsonPath("$.[*].fileChecksum").value(hasItem(DEFAULT_FILE_CHECKSUM)))
             .andExpect(jsonPath("$.[*].tampered").value(hasItem(DEFAULT_TAMPERED.booleanValue())))
@@ -329,7 +329,7 @@ class MonthlyPrepaymentReportRequisitionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(monthlyPrepaymentReportRequisition.getId().intValue()))
-            .andExpect(jsonPath("$.reportName").value(DEFAULT_REPORT_NAME))
+            .andExpect(jsonPath("$.requestId").value(DEFAULT_REQUEST_ID))
             .andExpect(jsonPath("$.timeOfRequisition").value(sameInstant(DEFAULT_TIME_OF_REQUISITION)))
             .andExpect(jsonPath("$.fileChecksum").value(DEFAULT_FILE_CHECKSUM))
             .andExpect(jsonPath("$.tampered").value(DEFAULT_TAMPERED.booleanValue()))
@@ -359,80 +359,80 @@ class MonthlyPrepaymentReportRequisitionResourceIT {
 
     @Test
     @Transactional
-    void getAllMonthlyPrepaymentReportRequisitionsByReportNameIsEqualToSomething() throws Exception {
+    void getAllMonthlyPrepaymentReportRequisitionsByRequestIdIsEqualToSomething() throws Exception {
         // Initialize the database
         monthlyPrepaymentReportRequisitionRepository.saveAndFlush(monthlyPrepaymentReportRequisition);
 
-        // Get all the monthlyPrepaymentReportRequisitionList where reportName equals to DEFAULT_REPORT_NAME
-        defaultMonthlyPrepaymentReportRequisitionShouldBeFound("reportName.equals=" + DEFAULT_REPORT_NAME);
+        // Get all the monthlyPrepaymentReportRequisitionList where requestId equals to DEFAULT_REQUEST_ID
+        defaultMonthlyPrepaymentReportRequisitionShouldBeFound("requestId.equals=" + DEFAULT_REQUEST_ID);
 
-        // Get all the monthlyPrepaymentReportRequisitionList where reportName equals to UPDATED_REPORT_NAME
-        defaultMonthlyPrepaymentReportRequisitionShouldNotBeFound("reportName.equals=" + UPDATED_REPORT_NAME);
+        // Get all the monthlyPrepaymentReportRequisitionList where requestId equals to UPDATED_REQUEST_ID
+        defaultMonthlyPrepaymentReportRequisitionShouldNotBeFound("requestId.equals=" + UPDATED_REQUEST_ID);
     }
 
     @Test
     @Transactional
-    void getAllMonthlyPrepaymentReportRequisitionsByReportNameIsNotEqualToSomething() throws Exception {
+    void getAllMonthlyPrepaymentReportRequisitionsByRequestIdIsNotEqualToSomething() throws Exception {
         // Initialize the database
         monthlyPrepaymentReportRequisitionRepository.saveAndFlush(monthlyPrepaymentReportRequisition);
 
-        // Get all the monthlyPrepaymentReportRequisitionList where reportName not equals to DEFAULT_REPORT_NAME
-        defaultMonthlyPrepaymentReportRequisitionShouldNotBeFound("reportName.notEquals=" + DEFAULT_REPORT_NAME);
+        // Get all the monthlyPrepaymentReportRequisitionList where requestId not equals to DEFAULT_REQUEST_ID
+        defaultMonthlyPrepaymentReportRequisitionShouldNotBeFound("requestId.notEquals=" + DEFAULT_REQUEST_ID);
 
-        // Get all the monthlyPrepaymentReportRequisitionList where reportName not equals to UPDATED_REPORT_NAME
-        defaultMonthlyPrepaymentReportRequisitionShouldBeFound("reportName.notEquals=" + UPDATED_REPORT_NAME);
+        // Get all the monthlyPrepaymentReportRequisitionList where requestId not equals to UPDATED_REQUEST_ID
+        defaultMonthlyPrepaymentReportRequisitionShouldBeFound("requestId.notEquals=" + UPDATED_REQUEST_ID);
     }
 
     @Test
     @Transactional
-    void getAllMonthlyPrepaymentReportRequisitionsByReportNameIsInShouldWork() throws Exception {
+    void getAllMonthlyPrepaymentReportRequisitionsByRequestIdIsInShouldWork() throws Exception {
         // Initialize the database
         monthlyPrepaymentReportRequisitionRepository.saveAndFlush(monthlyPrepaymentReportRequisition);
 
-        // Get all the monthlyPrepaymentReportRequisitionList where reportName in DEFAULT_REPORT_NAME or UPDATED_REPORT_NAME
-        defaultMonthlyPrepaymentReportRequisitionShouldBeFound("reportName.in=" + DEFAULT_REPORT_NAME + "," + UPDATED_REPORT_NAME);
+        // Get all the monthlyPrepaymentReportRequisitionList where requestId in DEFAULT_REQUEST_ID or UPDATED_REQUEST_ID
+        defaultMonthlyPrepaymentReportRequisitionShouldBeFound("requestId.in=" + DEFAULT_REQUEST_ID + "," + UPDATED_REQUEST_ID);
 
-        // Get all the monthlyPrepaymentReportRequisitionList where reportName equals to UPDATED_REPORT_NAME
-        defaultMonthlyPrepaymentReportRequisitionShouldNotBeFound("reportName.in=" + UPDATED_REPORT_NAME);
+        // Get all the monthlyPrepaymentReportRequisitionList where requestId equals to UPDATED_REQUEST_ID
+        defaultMonthlyPrepaymentReportRequisitionShouldNotBeFound("requestId.in=" + UPDATED_REQUEST_ID);
     }
 
     @Test
     @Transactional
-    void getAllMonthlyPrepaymentReportRequisitionsByReportNameIsNullOrNotNull() throws Exception {
+    void getAllMonthlyPrepaymentReportRequisitionsByRequestIdIsNullOrNotNull() throws Exception {
         // Initialize the database
         monthlyPrepaymentReportRequisitionRepository.saveAndFlush(monthlyPrepaymentReportRequisition);
 
-        // Get all the monthlyPrepaymentReportRequisitionList where reportName is not null
-        defaultMonthlyPrepaymentReportRequisitionShouldBeFound("reportName.specified=true");
+        // Get all the monthlyPrepaymentReportRequisitionList where requestId is not null
+        defaultMonthlyPrepaymentReportRequisitionShouldBeFound("requestId.specified=true");
 
-        // Get all the monthlyPrepaymentReportRequisitionList where reportName is null
-        defaultMonthlyPrepaymentReportRequisitionShouldNotBeFound("reportName.specified=false");
+        // Get all the monthlyPrepaymentReportRequisitionList where requestId is null
+        defaultMonthlyPrepaymentReportRequisitionShouldNotBeFound("requestId.specified=false");
     }
 
     @Test
     @Transactional
-    void getAllMonthlyPrepaymentReportRequisitionsByReportNameContainsSomething() throws Exception {
+    void getAllMonthlyPrepaymentReportRequisitionsByRequestIdContainsSomething() throws Exception {
         // Initialize the database
         monthlyPrepaymentReportRequisitionRepository.saveAndFlush(monthlyPrepaymentReportRequisition);
 
-        // Get all the monthlyPrepaymentReportRequisitionList where reportName contains DEFAULT_REPORT_NAME
-        defaultMonthlyPrepaymentReportRequisitionShouldBeFound("reportName.contains=" + DEFAULT_REPORT_NAME);
+        // Get all the monthlyPrepaymentReportRequisitionList where requestId contains DEFAULT_REQUEST_ID
+        defaultMonthlyPrepaymentReportRequisitionShouldBeFound("requestId.contains=" + DEFAULT_REQUEST_ID);
 
-        // Get all the monthlyPrepaymentReportRequisitionList where reportName contains UPDATED_REPORT_NAME
-        defaultMonthlyPrepaymentReportRequisitionShouldNotBeFound("reportName.contains=" + UPDATED_REPORT_NAME);
+        // Get all the monthlyPrepaymentReportRequisitionList where requestId contains UPDATED_REQUEST_ID
+        defaultMonthlyPrepaymentReportRequisitionShouldNotBeFound("requestId.contains=" + UPDATED_REQUEST_ID);
     }
 
     @Test
     @Transactional
-    void getAllMonthlyPrepaymentReportRequisitionsByReportNameNotContainsSomething() throws Exception {
+    void getAllMonthlyPrepaymentReportRequisitionsByRequestIdNotContainsSomething() throws Exception {
         // Initialize the database
         monthlyPrepaymentReportRequisitionRepository.saveAndFlush(monthlyPrepaymentReportRequisition);
 
-        // Get all the monthlyPrepaymentReportRequisitionList where reportName does not contain DEFAULT_REPORT_NAME
-        defaultMonthlyPrepaymentReportRequisitionShouldNotBeFound("reportName.doesNotContain=" + DEFAULT_REPORT_NAME);
+        // Get all the monthlyPrepaymentReportRequisitionList where requestId does not contain DEFAULT_REQUEST_ID
+        defaultMonthlyPrepaymentReportRequisitionShouldNotBeFound("requestId.doesNotContain=" + DEFAULT_REQUEST_ID);
 
-        // Get all the monthlyPrepaymentReportRequisitionList where reportName does not contain UPDATED_REPORT_NAME
-        defaultMonthlyPrepaymentReportRequisitionShouldBeFound("reportName.doesNotContain=" + UPDATED_REPORT_NAME);
+        // Get all the monthlyPrepaymentReportRequisitionList where requestId does not contain UPDATED_REQUEST_ID
+        defaultMonthlyPrepaymentReportRequisitionShouldBeFound("requestId.doesNotContain=" + UPDATED_REQUEST_ID);
     }
 
     @Test
@@ -890,7 +890,7 @@ class MonthlyPrepaymentReportRequisitionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(monthlyPrepaymentReportRequisition.getId().intValue())))
-            .andExpect(jsonPath("$.[*].reportName").value(hasItem(DEFAULT_REPORT_NAME)))
+            .andExpect(jsonPath("$.[*].requestId").value(hasItem(DEFAULT_REQUEST_ID)))
             .andExpect(jsonPath("$.[*].timeOfRequisition").value(hasItem(sameInstant(DEFAULT_TIME_OF_REQUISITION))))
             .andExpect(jsonPath("$.[*].fileChecksum").value(hasItem(DEFAULT_FILE_CHECKSUM)))
             .andExpect(jsonPath("$.[*].tampered").value(hasItem(DEFAULT_TAMPERED.booleanValue())))
@@ -948,7 +948,7 @@ class MonthlyPrepaymentReportRequisitionResourceIT {
         // Disconnect from session so that the updates on updatedMonthlyPrepaymentReportRequisition are not directly saved in db
         em.detach(updatedMonthlyPrepaymentReportRequisition);
         updatedMonthlyPrepaymentReportRequisition
-            .reportName(UPDATED_REPORT_NAME)
+            .requestId(UPDATED_REQUEST_ID)
             .timeOfRequisition(UPDATED_TIME_OF_REQUISITION)
             .fileChecksum(UPDATED_FILE_CHECKSUM)
             .tampered(UPDATED_TAMPERED)
@@ -974,7 +974,7 @@ class MonthlyPrepaymentReportRequisitionResourceIT {
         MonthlyPrepaymentReportRequisition testMonthlyPrepaymentReportRequisition = monthlyPrepaymentReportRequisitionList.get(
             monthlyPrepaymentReportRequisitionList.size() - 1
         );
-        assertThat(testMonthlyPrepaymentReportRequisition.getReportName()).isEqualTo(UPDATED_REPORT_NAME);
+        assertThat(testMonthlyPrepaymentReportRequisition.getRequestId()).isEqualTo(UPDATED_REQUEST_ID);
         assertThat(testMonthlyPrepaymentReportRequisition.getTimeOfRequisition()).isEqualTo(UPDATED_TIME_OF_REQUISITION);
         assertThat(testMonthlyPrepaymentReportRequisition.getFileChecksum()).isEqualTo(UPDATED_FILE_CHECKSUM);
         assertThat(testMonthlyPrepaymentReportRequisition.getTampered()).isEqualTo(UPDATED_TAMPERED);
@@ -1084,7 +1084,7 @@ class MonthlyPrepaymentReportRequisitionResourceIT {
         partialUpdatedMonthlyPrepaymentReportRequisition.setId(monthlyPrepaymentReportRequisition.getId());
 
         partialUpdatedMonthlyPrepaymentReportRequisition
-            .reportName(UPDATED_REPORT_NAME)
+            .requestId(UPDATED_REQUEST_ID)
             .timeOfRequisition(UPDATED_TIME_OF_REQUISITION)
             .filename(UPDATED_FILENAME);
 
@@ -1102,7 +1102,7 @@ class MonthlyPrepaymentReportRequisitionResourceIT {
         MonthlyPrepaymentReportRequisition testMonthlyPrepaymentReportRequisition = monthlyPrepaymentReportRequisitionList.get(
             monthlyPrepaymentReportRequisitionList.size() - 1
         );
-        assertThat(testMonthlyPrepaymentReportRequisition.getReportName()).isEqualTo(UPDATED_REPORT_NAME);
+        assertThat(testMonthlyPrepaymentReportRequisition.getRequestId()).isEqualTo(UPDATED_REQUEST_ID);
         assertThat(testMonthlyPrepaymentReportRequisition.getTimeOfRequisition()).isEqualTo(UPDATED_TIME_OF_REQUISITION);
         assertThat(testMonthlyPrepaymentReportRequisition.getFileChecksum()).isEqualTo(DEFAULT_FILE_CHECKSUM);
         assertThat(testMonthlyPrepaymentReportRequisition.getTampered()).isEqualTo(DEFAULT_TAMPERED);
@@ -1125,7 +1125,7 @@ class MonthlyPrepaymentReportRequisitionResourceIT {
         partialUpdatedMonthlyPrepaymentReportRequisition.setId(monthlyPrepaymentReportRequisition.getId());
 
         partialUpdatedMonthlyPrepaymentReportRequisition
-            .reportName(UPDATED_REPORT_NAME)
+            .requestId(UPDATED_REQUEST_ID)
             .timeOfRequisition(UPDATED_TIME_OF_REQUISITION)
             .fileChecksum(UPDATED_FILE_CHECKSUM)
             .tampered(UPDATED_TAMPERED)
@@ -1148,7 +1148,7 @@ class MonthlyPrepaymentReportRequisitionResourceIT {
         MonthlyPrepaymentReportRequisition testMonthlyPrepaymentReportRequisition = monthlyPrepaymentReportRequisitionList.get(
             monthlyPrepaymentReportRequisitionList.size() - 1
         );
-        assertThat(testMonthlyPrepaymentReportRequisition.getReportName()).isEqualTo(UPDATED_REPORT_NAME);
+        assertThat(testMonthlyPrepaymentReportRequisition.getRequestId()).isEqualTo(UPDATED_REQUEST_ID);
         assertThat(testMonthlyPrepaymentReportRequisition.getTimeOfRequisition()).isEqualTo(UPDATED_TIME_OF_REQUISITION);
         assertThat(testMonthlyPrepaymentReportRequisition.getFileChecksum()).isEqualTo(UPDATED_FILE_CHECKSUM);
         assertThat(testMonthlyPrepaymentReportRequisition.getTampered()).isEqualTo(UPDATED_TAMPERED);
@@ -1283,7 +1283,7 @@ class MonthlyPrepaymentReportRequisitionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(monthlyPrepaymentReportRequisition.getId().intValue())))
-            .andExpect(jsonPath("$.[*].reportName").value(hasItem(DEFAULT_REPORT_NAME)))
+            .andExpect(jsonPath("$.[*].requestId").value(hasItem(DEFAULT_REQUEST_ID)))
             .andExpect(jsonPath("$.[*].timeOfRequisition").value(hasItem(sameInstant(DEFAULT_TIME_OF_REQUISITION))))
             .andExpect(jsonPath("$.[*].fileChecksum").value(hasItem(DEFAULT_FILE_CHECKSUM)))
             .andExpect(jsonPath("$.[*].tampered").value(hasItem(DEFAULT_TAMPERED.booleanValue())))

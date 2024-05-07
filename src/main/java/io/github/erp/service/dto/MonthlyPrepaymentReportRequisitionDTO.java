@@ -33,7 +33,7 @@ public class MonthlyPrepaymentReportRequisitionDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private String reportName;
+    private String requestId;
 
     @NotNull
     private ZonedDateTime timeOfRequisition;
@@ -64,12 +64,12 @@ public class MonthlyPrepaymentReportRequisitionDTO implements Serializable {
         this.id = id;
     }
 
-    public String getReportName() {
-        return reportName;
+    public String getRequestId() {
+        return requestId;
     }
 
-    public void setReportName(String reportName) {
-        this.reportName = reportName;
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
     }
 
     public ZonedDateTime getTimeOfRequisition() {
@@ -178,7 +178,7 @@ public class MonthlyPrepaymentReportRequisitionDTO implements Serializable {
     public String toString() {
         return "MonthlyPrepaymentReportRequisitionDTO{" +
             "id=" + getId() +
-            ", reportName='" + getReportName() + "'" +
+            ", requestId='" + getRequestId() + "'" +
             ", timeOfRequisition='" + getTimeOfRequisition() + "'" +
             ", fileChecksum='" + getFileChecksum() + "'" +
             ", tampered='" + getTampered() + "'" +

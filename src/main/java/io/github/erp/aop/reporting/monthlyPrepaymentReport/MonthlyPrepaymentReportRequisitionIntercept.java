@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 
+import java.util.Locale;
 import java.util.Objects;
 
 @Aspect
@@ -53,7 +54,7 @@ public class MonthlyPrepaymentReportRequisitionIntercept {
         log.info("Report requisition response intercept completed successfully");
 
         MonthlyPrepaymentReportRequisitionDTO reportDTO = Objects.requireNonNull(response.getBody());
-        String reportId = reportDTO.getReportName();
+        String reportId = reportDTO.getRequestId().toLowerCase(Locale.ROOT);
         long entityId = reportDTO.getId();
 
         log.info("Report requisition with id: {} has been registered, with entity id # {} commencing report creation sequence...", reportId, entityId);

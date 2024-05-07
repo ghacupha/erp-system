@@ -1,4 +1,4 @@
-id;report_name;time_of_requisition;file_checksum;tampered;filename;report_parameters;report_file;report_file_content_type;fiscal_year_id
+id;request_id;time_of_requisition;file_checksum;tampered;filename;report_parameters;report_file;report_file_content_type;fiscal_year_id
 1;lavender generate;2024-04-30T01:48:13;revolutionize Books impactful;false;12a30b92-ae67-40d8-8741-e5286c53d1b1;Unbranded tan online;../fake-data/blob/hipster.png;image/png;1
 2;Plastic;2024-04-30T02:12:38;Checking;false;3b48feb0-46dd-45d7-9c2b-cd991d86198d;Outdoors;../fake-data/blob/hipster.png;image/png;2
 3;Fresh bypass bypassing;2024-04-29T14:52:17;Cape Ergonomic;false;95c621c7-25c3-4a91-b75a-d72f7782c7ce;green virtual;../fake-data/blob/hipster.png;image/png;3
