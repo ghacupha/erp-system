@@ -17,6 +17,8 @@ package io.github.erp.aop.reporting;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.aop.reporting.prepaymentByAccount.PrepaymentByAccountReportAttachmentInterceptor;
+import io.github.erp.aop.reporting.prepaymentByAccount.PrepaymentByAccountReportRequisitionInterceptor;
 import io.github.erp.internal.report.service.DepreciationEntryExportReportService;
 import io.github.erp.internal.report.service.ExportReportService;
 import io.github.erp.internal.repository.InternalProcessStatusRepository;
@@ -113,6 +115,9 @@ public class ReportingAspectConfiguration {
     @Autowired
     private ExportReportService<MonthlyPrepaymentReportRequisitionDTO> prepaymentByAccountReportRequisitionExportReportService;
 
+    @Autowired
+    private ReportAttachmentService<PrepaymentByAccountReportRequisitionDTO> prepaymentByAccountReportRequisitionReportAttachmentService;
+
     @Bean
     public ReportRequisitionInterceptor reportRequisitionInterceptor() {
 
@@ -202,5 +207,11 @@ public class ReportingAspectConfiguration {
     public MonthlyPrepaymentReportRequisitionIntercept monthlyPrepaymentReportRequisitionIntercept() {
 
         return new MonthlyPrepaymentReportRequisitionIntercept(prepaymentByAccountReportRequisitionExportReportService);
+    }
+
+    @Bean
+    public PrepaymentByAccountReportAttachmentInterceptor prepaymentByAccountReportAttachmentInterceptor() {
+
+        return new PrepaymentByAccountReportAttachmentInterceptor(prepaymentByAccountReportRequisitionReportAttachmentService);
     }
 }
