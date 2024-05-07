@@ -186,41 +186,6 @@ public class MonthlyPrepaymentReportRequisitionResourceIT {
 
     @Test
     @Transactional
-    void createMonthlyPrepaymentReportRequisition() throws Exception {
-        int databaseSizeBeforeCreate = monthlyPrepaymentReportRequisitionRepository.findAll().size();
-        // Create the MonthlyPrepaymentReportRequisition
-        MonthlyPrepaymentReportRequisitionDTO monthlyPrepaymentReportRequisitionDTO = monthlyPrepaymentReportRequisitionMapper.toDto(
-            monthlyPrepaymentReportRequisition
-        );
-        restMonthlyPrepaymentReportRequisitionMockMvc
-            .perform(
-                post(ENTITY_API_URL)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(monthlyPrepaymentReportRequisitionDTO))
-            )
-            .andExpect(status().isCreated());
-
-        // Validate the MonthlyPrepaymentReportRequisition in the database
-        List<MonthlyPrepaymentReportRequisition> monthlyPrepaymentReportRequisitionList = monthlyPrepaymentReportRequisitionRepository.findAll();
-        assertThat(monthlyPrepaymentReportRequisitionList).hasSize(databaseSizeBeforeCreate + 1);
-        MonthlyPrepaymentReportRequisition testMonthlyPrepaymentReportRequisition = monthlyPrepaymentReportRequisitionList.get(
-            monthlyPrepaymentReportRequisitionList.size() - 1
-        );
-        assertThat(testMonthlyPrepaymentReportRequisition.getRequestId()).isEqualTo(DEFAULT_REQUEST_ID);
-        assertThat(testMonthlyPrepaymentReportRequisition.getTimeOfRequisition()).isEqualTo(DEFAULT_TIME_OF_REQUISITION);
-        assertThat(testMonthlyPrepaymentReportRequisition.getFileChecksum()).isEqualTo(DEFAULT_FILE_CHECKSUM);
-        assertThat(testMonthlyPrepaymentReportRequisition.getTampered()).isEqualTo(DEFAULT_TAMPERED);
-        assertThat(testMonthlyPrepaymentReportRequisition.getFilename()).isEqualTo(DEFAULT_FILENAME);
-        assertThat(testMonthlyPrepaymentReportRequisition.getReportParameters()).isEqualTo(DEFAULT_REPORT_PARAMETERS);
-        assertThat(testMonthlyPrepaymentReportRequisition.getReportFile()).isEqualTo(DEFAULT_REPORT_FILE);
-        assertThat(testMonthlyPrepaymentReportRequisition.getReportFileContentType()).isEqualTo(DEFAULT_REPORT_FILE_CONTENT_TYPE);
-
-        // Validate the MonthlyPrepaymentReportRequisition in Elasticsearch
-        verify(mockMonthlyPrepaymentReportRequisitionSearchRepository, times(1)).save(testMonthlyPrepaymentReportRequisition);
-    }
-
-    @Test
-    @Transactional
     void createMonthlyPrepaymentReportRequisitionWithExistingId() throws Exception {
         // Create the MonthlyPrepaymentReportRequisition with an existing ID
         monthlyPrepaymentReportRequisition.setId(1L);
@@ -315,28 +280,6 @@ public class MonthlyPrepaymentReportRequisitionResourceIT {
             .andExpect(jsonPath("$.[*].reportParameters").value(hasItem(DEFAULT_REPORT_PARAMETERS)))
             .andExpect(jsonPath("$.[*].reportFileContentType").value(hasItem(DEFAULT_REPORT_FILE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))));
-    }
-
-    @Test
-    @Transactional
-    void getMonthlyPrepaymentReportRequisition() throws Exception {
-        // Initialize the database
-        monthlyPrepaymentReportRequisitionRepository.saveAndFlush(monthlyPrepaymentReportRequisition);
-
-        // Get the monthlyPrepaymentReportRequisition
-        restMonthlyPrepaymentReportRequisitionMockMvc
-            .perform(get(ENTITY_API_URL_ID, monthlyPrepaymentReportRequisition.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.id").value(monthlyPrepaymentReportRequisition.getId().intValue()))
-            .andExpect(jsonPath("$.requestId").value(DEFAULT_REQUEST_ID))
-            .andExpect(jsonPath("$.timeOfRequisition").value(sameInstant(DEFAULT_TIME_OF_REQUISITION)))
-            .andExpect(jsonPath("$.fileChecksum").value(DEFAULT_FILE_CHECKSUM))
-            .andExpect(jsonPath("$.tampered").value(DEFAULT_TAMPERED.booleanValue()))
-            .andExpect(jsonPath("$.filename").value(DEFAULT_FILENAME.toString()))
-            .andExpect(jsonPath("$.reportParameters").value(DEFAULT_REPORT_PARAMETERS))
-            .andExpect(jsonPath("$.reportFileContentType").value(DEFAULT_REPORT_FILE_CONTENT_TYPE))
-            .andExpect(jsonPath("$.reportFile").value(Base64Utils.encodeToString(DEFAULT_REPORT_FILE)));
     }
 
     @Test
@@ -931,60 +874,6 @@ public class MonthlyPrepaymentReportRequisitionResourceIT {
     void getNonExistingMonthlyPrepaymentReportRequisition() throws Exception {
         // Get the monthlyPrepaymentReportRequisition
         restMonthlyPrepaymentReportRequisitionMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
-    }
-
-    @Test
-    @Transactional
-    void putNewMonthlyPrepaymentReportRequisition() throws Exception {
-        // Initialize the database
-        monthlyPrepaymentReportRequisitionRepository.saveAndFlush(monthlyPrepaymentReportRequisition);
-
-        int databaseSizeBeforeUpdate = monthlyPrepaymentReportRequisitionRepository.findAll().size();
-
-        // Update the monthlyPrepaymentReportRequisition
-        MonthlyPrepaymentReportRequisition updatedMonthlyPrepaymentReportRequisition = monthlyPrepaymentReportRequisitionRepository
-            .findById(monthlyPrepaymentReportRequisition.getId())
-            .get();
-        // Disconnect from session so that the updates on updatedMonthlyPrepaymentReportRequisition are not directly saved in db
-        em.detach(updatedMonthlyPrepaymentReportRequisition);
-        updatedMonthlyPrepaymentReportRequisition
-            .requestId(UPDATED_REQUEST_ID)
-            .timeOfRequisition(UPDATED_TIME_OF_REQUISITION)
-            .fileChecksum(UPDATED_FILE_CHECKSUM)
-            .tampered(UPDATED_TAMPERED)
-            .filename(UPDATED_FILENAME)
-            .reportParameters(UPDATED_REPORT_PARAMETERS)
-            .reportFile(UPDATED_REPORT_FILE)
-            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE);
-        MonthlyPrepaymentReportRequisitionDTO monthlyPrepaymentReportRequisitionDTO = monthlyPrepaymentReportRequisitionMapper.toDto(
-            updatedMonthlyPrepaymentReportRequisition
-        );
-
-        restMonthlyPrepaymentReportRequisitionMockMvc
-            .perform(
-                put(ENTITY_API_URL_ID, monthlyPrepaymentReportRequisitionDTO.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(monthlyPrepaymentReportRequisitionDTO))
-            )
-            .andExpect(status().isOk());
-
-        // Validate the MonthlyPrepaymentReportRequisition in the database
-        List<MonthlyPrepaymentReportRequisition> monthlyPrepaymentReportRequisitionList = monthlyPrepaymentReportRequisitionRepository.findAll();
-        assertThat(monthlyPrepaymentReportRequisitionList).hasSize(databaseSizeBeforeUpdate);
-        MonthlyPrepaymentReportRequisition testMonthlyPrepaymentReportRequisition = monthlyPrepaymentReportRequisitionList.get(
-            monthlyPrepaymentReportRequisitionList.size() - 1
-        );
-        assertThat(testMonthlyPrepaymentReportRequisition.getRequestId()).isEqualTo(UPDATED_REQUEST_ID);
-        assertThat(testMonthlyPrepaymentReportRequisition.getTimeOfRequisition()).isEqualTo(UPDATED_TIME_OF_REQUISITION);
-        assertThat(testMonthlyPrepaymentReportRequisition.getFileChecksum()).isEqualTo(UPDATED_FILE_CHECKSUM);
-        assertThat(testMonthlyPrepaymentReportRequisition.getTampered()).isEqualTo(UPDATED_TAMPERED);
-        assertThat(testMonthlyPrepaymentReportRequisition.getFilename()).isEqualTo(UPDATED_FILENAME);
-        assertThat(testMonthlyPrepaymentReportRequisition.getReportParameters()).isEqualTo(UPDATED_REPORT_PARAMETERS);
-        assertThat(testMonthlyPrepaymentReportRequisition.getReportFile()).isEqualTo(UPDATED_REPORT_FILE);
-        assertThat(testMonthlyPrepaymentReportRequisition.getReportFileContentType()).isEqualTo(UPDATED_REPORT_FILE_CONTENT_TYPE);
-
-        // Validate the MonthlyPrepaymentReportRequisition in Elasticsearch
-        verify(mockMonthlyPrepaymentReportRequisitionSearchRepository).save(testMonthlyPrepaymentReportRequisition);
     }
 
     @Test

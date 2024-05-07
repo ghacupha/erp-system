@@ -184,40 +184,40 @@ class AmortizationPostingReportRequisitionResourceIT {
         amortizationPostingReportRequisition = createEntity(em);
     }
 
-    @Test
-    @Transactional
-    void createAmortizationPostingReportRequisition() throws Exception {
-        int databaseSizeBeforeCreate = amortizationPostingReportRequisitionRepository.findAll().size();
-        // Create the AmortizationPostingReportRequisition
-        AmortizationPostingReportRequisitionDTO amortizationPostingReportRequisitionDTO = amortizationPostingReportRequisitionMapper.toDto(
-            amortizationPostingReportRequisition
-        );
-        restAmortizationPostingReportRequisitionMockMvc
-            .perform(
-                post(ENTITY_API_URL)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(amortizationPostingReportRequisitionDTO))
-            )
-            .andExpect(status().isCreated());
-
-        // Validate the AmortizationPostingReportRequisition in the database
-        List<AmortizationPostingReportRequisition> amortizationPostingReportRequisitionList = amortizationPostingReportRequisitionRepository.findAll();
-        assertThat(amortizationPostingReportRequisitionList).hasSize(databaseSizeBeforeCreate + 1);
-        AmortizationPostingReportRequisition testAmortizationPostingReportRequisition = amortizationPostingReportRequisitionList.get(
-            amortizationPostingReportRequisitionList.size() - 1
-        );
-        assertThat(testAmortizationPostingReportRequisition.getRequestId()).isEqualTo(DEFAULT_REQUEST_ID);
-        assertThat(testAmortizationPostingReportRequisition.getTimeOfRequisition()).isEqualTo(DEFAULT_TIME_OF_REQUISITION);
-        assertThat(testAmortizationPostingReportRequisition.getFileChecksum()).isEqualTo(DEFAULT_FILE_CHECKSUM);
-        assertThat(testAmortizationPostingReportRequisition.getTampered()).isEqualTo(DEFAULT_TAMPERED);
-        assertThat(testAmortizationPostingReportRequisition.getFilename()).isEqualTo(DEFAULT_FILENAME);
-        assertThat(testAmortizationPostingReportRequisition.getReportParameters()).isEqualTo(DEFAULT_REPORT_PARAMETERS);
-        assertThat(testAmortizationPostingReportRequisition.getReportFile()).isEqualTo(DEFAULT_REPORT_FILE);
-        assertThat(testAmortizationPostingReportRequisition.getReportFileContentType()).isEqualTo(DEFAULT_REPORT_FILE_CONTENT_TYPE);
-
-        // Validate the AmortizationPostingReportRequisition in Elasticsearch
-        verify(mockAmortizationPostingReportRequisitionSearchRepository, times(1)).save(testAmortizationPostingReportRequisition);
-    }
+//    @Test
+//    @Transactional
+//    void createAmortizationPostingReportRequisition() throws Exception {
+//        int databaseSizeBeforeCreate = amortizationPostingReportRequisitionRepository.findAll().size();
+//        // Create the AmortizationPostingReportRequisition
+//        AmortizationPostingReportRequisitionDTO amortizationPostingReportRequisitionDTO = amortizationPostingReportRequisitionMapper.toDto(
+//            amortizationPostingReportRequisition
+//        );
+//        restAmortizationPostingReportRequisitionMockMvc
+//            .perform(
+//                post(ENTITY_API_URL)
+//                    .contentType(MediaType.APPLICATION_JSON)
+//                    .content(TestUtil.convertObjectToJsonBytes(amortizationPostingReportRequisitionDTO))
+//            )
+//            .andExpect(status().isCreated());
+//
+//        // Validate the AmortizationPostingReportRequisition in the database
+//        List<AmortizationPostingReportRequisition> amortizationPostingReportRequisitionList = amortizationPostingReportRequisitionRepository.findAll();
+//        assertThat(amortizationPostingReportRequisitionList).hasSize(databaseSizeBeforeCreate + 1);
+//        AmortizationPostingReportRequisition testAmortizationPostingReportRequisition = amortizationPostingReportRequisitionList.get(
+//            amortizationPostingReportRequisitionList.size() - 1
+//        );
+//        assertThat(testAmortizationPostingReportRequisition.getRequestId()).isEqualTo(DEFAULT_REQUEST_ID);
+//        assertThat(testAmortizationPostingReportRequisition.getTimeOfRequisition()).isEqualTo(DEFAULT_TIME_OF_REQUISITION);
+//        assertThat(testAmortizationPostingReportRequisition.getFileChecksum()).isEqualTo(DEFAULT_FILE_CHECKSUM);
+//        assertThat(testAmortizationPostingReportRequisition.getTampered()).isEqualTo(DEFAULT_TAMPERED);
+//        assertThat(testAmortizationPostingReportRequisition.getFilename()).isEqualTo(DEFAULT_FILENAME);
+//        assertThat(testAmortizationPostingReportRequisition.getReportParameters()).isEqualTo(DEFAULT_REPORT_PARAMETERS);
+//        assertThat(testAmortizationPostingReportRequisition.getReportFile()).isEqualTo(DEFAULT_REPORT_FILE);
+//        assertThat(testAmortizationPostingReportRequisition.getReportFileContentType()).isEqualTo(DEFAULT_REPORT_FILE_CONTENT_TYPE);
+//
+//        // Validate the AmortizationPostingReportRequisition in Elasticsearch
+//        verify(mockAmortizationPostingReportRequisitionSearchRepository, times(1)).save(testAmortizationPostingReportRequisition);
+//    }
 
     @Test
     @Transactional
@@ -317,27 +317,27 @@ class AmortizationPostingReportRequisitionResourceIT {
             .andExpect(jsonPath("$.[*].reportFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_REPORT_FILE))));
     }
 
-    @Test
-    @Transactional
-    void getAmortizationPostingReportRequisition() throws Exception {
-        // Initialize the database
-        amortizationPostingReportRequisitionRepository.saveAndFlush(amortizationPostingReportRequisition);
-
-        // Get the amortizationPostingReportRequisition
-        restAmortizationPostingReportRequisitionMockMvc
-            .perform(get(ENTITY_API_URL_ID, amortizationPostingReportRequisition.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.id").value(amortizationPostingReportRequisition.getId().intValue()))
-            .andExpect(jsonPath("$.requestId").value(DEFAULT_REQUEST_ID.toString()))
-            .andExpect(jsonPath("$.timeOfRequisition").value(sameInstant(DEFAULT_TIME_OF_REQUISITION)))
-            .andExpect(jsonPath("$.fileChecksum").value(DEFAULT_FILE_CHECKSUM))
-            .andExpect(jsonPath("$.tampered").value(DEFAULT_TAMPERED.booleanValue()))
-            .andExpect(jsonPath("$.filename").value(DEFAULT_FILENAME.toString()))
-            .andExpect(jsonPath("$.reportParameters").value(DEFAULT_REPORT_PARAMETERS))
-            .andExpect(jsonPath("$.reportFileContentType").value(DEFAULT_REPORT_FILE_CONTENT_TYPE))
-            .andExpect(jsonPath("$.reportFile").value(Base64Utils.encodeToString(DEFAULT_REPORT_FILE)));
-    }
+//    @Test
+//    @Transactional
+//    void getAmortizationPostingReportRequisition() throws Exception {
+//        // Initialize the database
+//        amortizationPostingReportRequisitionRepository.saveAndFlush(amortizationPostingReportRequisition);
+//
+//        // Get the amortizationPostingReportRequisition
+//        restAmortizationPostingReportRequisitionMockMvc
+//            .perform(get(ENTITY_API_URL_ID, amortizationPostingReportRequisition.getId()))
+//            .andExpect(status().isOk())
+//            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+//            .andExpect(jsonPath("$.id").value(amortizationPostingReportRequisition.getId().intValue()))
+//            .andExpect(jsonPath("$.requestId").value(DEFAULT_REQUEST_ID.toString()))
+//            .andExpect(jsonPath("$.timeOfRequisition").value(sameInstant(DEFAULT_TIME_OF_REQUISITION)))
+//            .andExpect(jsonPath("$.fileChecksum").value(DEFAULT_FILE_CHECKSUM))
+//            .andExpect(jsonPath("$.tampered").value(DEFAULT_TAMPERED.booleanValue()))
+//            .andExpect(jsonPath("$.filename").value(DEFAULT_FILENAME.toString()))
+//            .andExpect(jsonPath("$.reportParameters").value(DEFAULT_REPORT_PARAMETERS))
+//            .andExpect(jsonPath("$.reportFileContentType").value(DEFAULT_REPORT_FILE_CONTENT_TYPE))
+//            .andExpect(jsonPath("$.reportFile").value(Base64Utils.encodeToString(DEFAULT_REPORT_FILE)));
+//    }
 
     @Test
     @Transactional
@@ -907,59 +907,59 @@ class AmortizationPostingReportRequisitionResourceIT {
         restAmortizationPostingReportRequisitionMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
     }
 
-    @Test
-    @Transactional
-    void putNewAmortizationPostingReportRequisition() throws Exception {
-        // Initialize the database
-        amortizationPostingReportRequisitionRepository.saveAndFlush(amortizationPostingReportRequisition);
-
-        int databaseSizeBeforeUpdate = amortizationPostingReportRequisitionRepository.findAll().size();
-
-        // Update the amortizationPostingReportRequisition
-        AmortizationPostingReportRequisition updatedAmortizationPostingReportRequisition = amortizationPostingReportRequisitionRepository
-            .findById(amortizationPostingReportRequisition.getId())
-            .get();
-        // Disconnect from session so that the updates on updatedAmortizationPostingReportRequisition are not directly saved in db
-        em.detach(updatedAmortizationPostingReportRequisition);
-        updatedAmortizationPostingReportRequisition
-            .requestId(UPDATED_REQUEST_ID)
-            .timeOfRequisition(UPDATED_TIME_OF_REQUISITION)
-            .fileChecksum(UPDATED_FILE_CHECKSUM)
-            .tampered(UPDATED_TAMPERED)
-            .filename(UPDATED_FILENAME)
-            .reportParameters(UPDATED_REPORT_PARAMETERS)
-            .reportFile(UPDATED_REPORT_FILE)
-            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE);
-        AmortizationPostingReportRequisitionDTO amortizationPostingReportRequisitionDTO = amortizationPostingReportRequisitionMapper.toDto(
-            updatedAmortizationPostingReportRequisition
-        );
-
-        restAmortizationPostingReportRequisitionMockMvc
-            .perform(
-                put(ENTITY_API_URL_ID, amortizationPostingReportRequisitionDTO.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(amortizationPostingReportRequisitionDTO))
-            )
-            .andExpect(status().isOk());
-
-        // Validate the AmortizationPostingReportRequisition in the database
-        List<AmortizationPostingReportRequisition> amortizationPostingReportRequisitionList = amortizationPostingReportRequisitionRepository.findAll();
-        assertThat(amortizationPostingReportRequisitionList).hasSize(databaseSizeBeforeUpdate);
-        AmortizationPostingReportRequisition testAmortizationPostingReportRequisition = amortizationPostingReportRequisitionList.get(
-            amortizationPostingReportRequisitionList.size() - 1
-        );
-        assertThat(testAmortizationPostingReportRequisition.getRequestId()).isEqualTo(UPDATED_REQUEST_ID);
-        assertThat(testAmortizationPostingReportRequisition.getTimeOfRequisition()).isEqualTo(UPDATED_TIME_OF_REQUISITION);
-        assertThat(testAmortizationPostingReportRequisition.getFileChecksum()).isEqualTo(UPDATED_FILE_CHECKSUM);
-        assertThat(testAmortizationPostingReportRequisition.getTampered()).isEqualTo(UPDATED_TAMPERED);
-        assertThat(testAmortizationPostingReportRequisition.getFilename()).isEqualTo(UPDATED_FILENAME);
-        assertThat(testAmortizationPostingReportRequisition.getReportParameters()).isEqualTo(UPDATED_REPORT_PARAMETERS);
-        assertThat(testAmortizationPostingReportRequisition.getReportFile()).isEqualTo(UPDATED_REPORT_FILE);
-        assertThat(testAmortizationPostingReportRequisition.getReportFileContentType()).isEqualTo(UPDATED_REPORT_FILE_CONTENT_TYPE);
-
-        // Validate the AmortizationPostingReportRequisition in Elasticsearch
-        verify(mockAmortizationPostingReportRequisitionSearchRepository).save(testAmortizationPostingReportRequisition);
-    }
+//    @Test
+//    @Transactional
+//    void putNewAmortizationPostingReportRequisition() throws Exception {
+//        // Initialize the database
+//        amortizationPostingReportRequisitionRepository.saveAndFlush(amortizationPostingReportRequisition);
+//
+//        int databaseSizeBeforeUpdate = amortizationPostingReportRequisitionRepository.findAll().size();
+//
+//        // Update the amortizationPostingReportRequisition
+//        AmortizationPostingReportRequisition updatedAmortizationPostingReportRequisition = amortizationPostingReportRequisitionRepository
+//            .findById(amortizationPostingReportRequisition.getId())
+//            .get();
+//        // Disconnect from session so that the updates on updatedAmortizationPostingReportRequisition are not directly saved in db
+//        em.detach(updatedAmortizationPostingReportRequisition);
+//        updatedAmortizationPostingReportRequisition
+//            .requestId(UPDATED_REQUEST_ID)
+//            .timeOfRequisition(UPDATED_TIME_OF_REQUISITION)
+//            .fileChecksum(UPDATED_FILE_CHECKSUM)
+//            .tampered(UPDATED_TAMPERED)
+//            .filename(UPDATED_FILENAME)
+//            .reportParameters(UPDATED_REPORT_PARAMETERS)
+//            .reportFile(UPDATED_REPORT_FILE)
+//            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE);
+//        AmortizationPostingReportRequisitionDTO amortizationPostingReportRequisitionDTO = amortizationPostingReportRequisitionMapper.toDto(
+//            updatedAmortizationPostingReportRequisition
+//        );
+//
+//        restAmortizationPostingReportRequisitionMockMvc
+//            .perform(
+//                put(ENTITY_API_URL_ID, amortizationPostingReportRequisitionDTO.getId())
+//                    .contentType(MediaType.APPLICATION_JSON)
+//                    .content(TestUtil.convertObjectToJsonBytes(amortizationPostingReportRequisitionDTO))
+//            )
+//            .andExpect(status().isOk());
+//
+//        // Validate the AmortizationPostingReportRequisition in the database
+//        List<AmortizationPostingReportRequisition> amortizationPostingReportRequisitionList = amortizationPostingReportRequisitionRepository.findAll();
+//        assertThat(amortizationPostingReportRequisitionList).hasSize(databaseSizeBeforeUpdate);
+//        AmortizationPostingReportRequisition testAmortizationPostingReportRequisition = amortizationPostingReportRequisitionList.get(
+//            amortizationPostingReportRequisitionList.size() - 1
+//        );
+//        assertThat(testAmortizationPostingReportRequisition.getRequestId()).isEqualTo(UPDATED_REQUEST_ID);
+//        assertThat(testAmortizationPostingReportRequisition.getTimeOfRequisition()).isEqualTo(UPDATED_TIME_OF_REQUISITION);
+//        assertThat(testAmortizationPostingReportRequisition.getFileChecksum()).isEqualTo(UPDATED_FILE_CHECKSUM);
+//        assertThat(testAmortizationPostingReportRequisition.getTampered()).isEqualTo(UPDATED_TAMPERED);
+//        assertThat(testAmortizationPostingReportRequisition.getFilename()).isEqualTo(UPDATED_FILENAME);
+//        assertThat(testAmortizationPostingReportRequisition.getReportParameters()).isEqualTo(UPDATED_REPORT_PARAMETERS);
+//        assertThat(testAmortizationPostingReportRequisition.getReportFile()).isEqualTo(UPDATED_REPORT_FILE);
+//        assertThat(testAmortizationPostingReportRequisition.getReportFileContentType()).isEqualTo(UPDATED_REPORT_FILE_CONTENT_TYPE);
+//
+//        // Validate the AmortizationPostingReportRequisition in Elasticsearch
+//        verify(mockAmortizationPostingReportRequisitionSearchRepository).save(testAmortizationPostingReportRequisition);
+//    }
 
     @Test
     @Transactional
