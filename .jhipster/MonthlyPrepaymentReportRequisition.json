@@ -1,7 +1,7 @@
 {
   "fields": [
     {
-      "fieldName": "reportName",
+      "fieldName": "requestId",
       "fieldType": "String",
       "fieldValidateRules": ["required", "unique"]
     },

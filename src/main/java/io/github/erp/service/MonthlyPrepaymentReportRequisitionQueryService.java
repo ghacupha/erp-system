@@ -118,9 +118,9 @@ public class MonthlyPrepaymentReportRequisitionQueryService extends QueryService
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), MonthlyPrepaymentReportRequisition_.id));
             }
-            if (criteria.getReportName() != null) {
+            if (criteria.getRequestId() != null) {
                 specification =
-                    specification.and(buildStringSpecification(criteria.getReportName(), MonthlyPrepaymentReportRequisition_.reportName));
+                    specification.and(buildStringSpecification(criteria.getRequestId(), MonthlyPrepaymentReportRequisition_.requestId));
             }
             if (criteria.getTimeOfRequisition() != null) {
                 specification =

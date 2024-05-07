@@ -1,5 +1,23 @@
 package io.github.erp.internal.report.attachment.models;
 
+/*-
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import io.github.erp.internal.framework.Mapping;
 import io.github.erp.service.dto.MonthlyPrepaymentReportRequisitionDTO;
 import org.springframework.stereotype.Component;
@@ -12,7 +30,7 @@ public class AttachedMonthlyPrepaymentReportRequisitionMapper implements Mapping
 
         MonthlyPrepaymentReportRequisitionDTO dto = new MonthlyPrepaymentReportRequisitionDTO();
         dto.setId(vs.getId());
-        dto.setReportName(vs.getReportName());
+        dto.setRequestId(vs.getRequestId());
         dto.setTimeOfRequisition(vs.getTimeOfRequisition());
         dto.setFileChecksum(vs.getFileChecksum());
         dto.setTampered(vs.getTampered());
@@ -30,9 +48,9 @@ public class AttachedMonthlyPrepaymentReportRequisitionMapper implements Mapping
     @Override
     public AttachedMonthlyPrepaymentReportRequisitionDTO toValue2(MonthlyPrepaymentReportRequisitionDTO vs) {
 
-        AttachedMonthlyPrepaymentReportRequisitionDTO dto = AttachedMonthlyPrepaymentReportRequisitionDTO.builder()
+        return AttachedMonthlyPrepaymentReportRequisitionDTO.builder()
             .id(vs.getId())
-            .reportName(vs.getReportName())
+            .requestId(vs.getRequestId())
             .timeOfRequisition(vs.getTimeOfRequisition())
             .fileChecksum(vs.getFileChecksum())
             .tampered(vs.getTampered())
@@ -44,7 +62,5 @@ public class AttachedMonthlyPrepaymentReportRequisitionMapper implements Mapping
             .lastAccessedBy(vs.getLastAccessedBy())
             .fiscalYear(vs.getFiscalYear())
             .build();
-
-        return dto;
     }
 }

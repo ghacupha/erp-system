@@ -481,6 +481,7 @@
     <include file="config/liquibase/changelog/20240502084951_added_report_date.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240503111301_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240506110010_added_entity_constraints_PrepaymentByAccountReportRequisition.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240507100313_changelog.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
