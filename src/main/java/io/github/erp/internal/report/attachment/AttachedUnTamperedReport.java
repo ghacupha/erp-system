@@ -19,11 +19,17 @@ package io.github.erp.internal.report.attachment;
  */
 import io.github.erp.internal.model.HasChecksum;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public interface AttachedUnTamperedReport<DTO> extends HasChecksum {
+public interface AttachedUnTamperedReport<DTO> extends HasChecksum, Serializable {
 
-
+    /**
+     * User to update on the DTO the file-attachment from the file system
+     *
+     * @param reportResource the byte array of the file being attached
+     * @return DTO containing the file attachment for further mapping
+     */
     AttachedUnTamperedReport<DTO> setReportAttachment(byte[] reportResource);
 
     /**
