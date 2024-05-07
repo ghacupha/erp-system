@@ -1,8 +1,8 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,8 +47,8 @@ import org.mapstruct.*;
 public interface AssetRegistrationMapper extends EntityMapper<AssetRegistrationDTO, AssetRegistration> {
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     @Mapping(target = "paymentInvoices", source = "paymentInvoices", qualifiedByName = "invoiceNumberSet")
-    @Mapping(target = "serviceOutlets", source = "serviceOutlets", qualifiedByName = "outletCodeSet")
-    @Mapping(target = "settlements", source = "settlements", qualifiedByName = "paymentNumberSet")
+    @Mapping(target = "otherRelatedServiceOutlets", source = "otherRelatedServiceOutlets", qualifiedByName = "outletCodeSet")
+    @Mapping(target = "otherRelatedSettlements", source = "otherRelatedSettlements", qualifiedByName = "paymentNumberSet")
     @Mapping(target = "assetCategory", source = "assetCategory", qualifiedByName = "assetCategoryName")
     @Mapping(target = "purchaseOrders", source = "purchaseOrders", qualifiedByName = "purchaseOrderNumberSet")
     @Mapping(target = "deliveryNotes", source = "deliveryNotes", qualifiedByName = "deliveryNoteNumberSet")
@@ -61,12 +61,18 @@ public interface AssetRegistrationMapper extends EntityMapper<AssetRegistrationD
     @Mapping(target = "universallyUniqueMappings", source = "universallyUniqueMappings", qualifiedByName = "universalKeySet")
     @Mapping(target = "assetAccessories", source = "assetAccessories", qualifiedByName = "assetDetailsSet")
     @Mapping(target = "mainServiceOutlet", source = "mainServiceOutlet", qualifiedByName = "outletCode")
+    @Mapping(target = "acquiringTransaction", source = "acquiringTransaction", qualifiedByName = "paymentNumber")
     AssetRegistrationDTO toDto(AssetRegistration s);
+
+    @Named("id")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    AssetRegistrationDTO toDtoId(AssetRegistration assetRegistration);
 
     @Mapping(target = "removePlaceholder", ignore = true)
     @Mapping(target = "removePaymentInvoices", ignore = true)
-    @Mapping(target = "removeServiceOutlet", ignore = true)
-    @Mapping(target = "removeSettlement", ignore = true)
+    @Mapping(target = "removeOtherRelatedServiceOutlets", ignore = true)
+    @Mapping(target = "removeOtherRelatedSettlements", ignore = true)
     @Mapping(target = "removePurchaseOrder", ignore = true)
     @Mapping(target = "removeDeliveryNote", ignore = true)
     @Mapping(target = "removeJobSheet", ignore = true)

@@ -2,19 +2,16 @@
   "fields": [
     {
       "fieldName": "eventNarrative",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
+      "fieldType": "String"
     },
     {
       "fieldName": "eventTimeStamp",
-      "fieldType": "ZonedDateTime",
-      "fieldValidateRules": ["required"]
+      "fieldType": "ZonedDateTime"
     },
     {
       "fieldName": "depreciationNoticeStatus",
       "fieldType": "DepreciationNoticeStatusType",
-      "fieldValues": "INFO,WARNING,ERROR",
-      "fieldValidateRules": ["required"]
+      "fieldValues": "INFO,WARNING,ERROR"
     },
     {
       "fieldName": "sourceModule",
@@ -77,12 +74,6 @@
       "otherEntityField": "universalKey",
       "ownerSide": true,
       "otherEntityRelationshipName": "depreciationJobNotice"
-    },
-    {
-      "relationshipName": "superintended",
-      "otherEntityName": "applicationUser",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "applicationIdentity"
     }
   ],
   "service": "serviceImpl",

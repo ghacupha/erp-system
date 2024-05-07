@@ -1,8 +1,8 @@
 package io.github.erp.service.criteria;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,13 +75,7 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
 
     private LongFilter previousPeriodId;
 
-    private LongFilter createdById;
-
-    private LongFilter fiscalYearId;
-
     private LongFilter fiscalMonthId;
-
-    private LongFilter fiscalQuarterId;
 
     private Boolean distinct;
 
@@ -95,10 +89,7 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
         this.periodCode = other.periodCode == null ? null : other.periodCode.copy();
         this.processLocked = other.processLocked == null ? null : other.processLocked.copy();
         this.previousPeriodId = other.previousPeriodId == null ? null : other.previousPeriodId.copy();
-        this.createdById = other.createdById == null ? null : other.createdById.copy();
-        this.fiscalYearId = other.fiscalYearId == null ? null : other.fiscalYearId.copy();
         this.fiscalMonthId = other.fiscalMonthId == null ? null : other.fiscalMonthId.copy();
-        this.fiscalQuarterId = other.fiscalQuarterId == null ? null : other.fiscalQuarterId.copy();
         this.distinct = other.distinct;
     }
 
@@ -212,36 +203,6 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
         this.previousPeriodId = previousPeriodId;
     }
 
-    public LongFilter getCreatedById() {
-        return createdById;
-    }
-
-    public LongFilter createdById() {
-        if (createdById == null) {
-            createdById = new LongFilter();
-        }
-        return createdById;
-    }
-
-    public void setCreatedById(LongFilter createdById) {
-        this.createdById = createdById;
-    }
-
-    public LongFilter getFiscalYearId() {
-        return fiscalYearId;
-    }
-
-    public LongFilter fiscalYearId() {
-        if (fiscalYearId == null) {
-            fiscalYearId = new LongFilter();
-        }
-        return fiscalYearId;
-    }
-
-    public void setFiscalYearId(LongFilter fiscalYearId) {
-        this.fiscalYearId = fiscalYearId;
-    }
-
     public LongFilter getFiscalMonthId() {
         return fiscalMonthId;
     }
@@ -255,21 +216,6 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
 
     public void setFiscalMonthId(LongFilter fiscalMonthId) {
         this.fiscalMonthId = fiscalMonthId;
-    }
-
-    public LongFilter getFiscalQuarterId() {
-        return fiscalQuarterId;
-    }
-
-    public LongFilter fiscalQuarterId() {
-        if (fiscalQuarterId == null) {
-            fiscalQuarterId = new LongFilter();
-        }
-        return fiscalQuarterId;
-    }
-
-    public void setFiscalQuarterId(LongFilter fiscalQuarterId) {
-        this.fiscalQuarterId = fiscalQuarterId;
     }
 
     public Boolean getDistinct() {
@@ -297,10 +243,7 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
             Objects.equals(periodCode, that.periodCode) &&
             Objects.equals(processLocked, that.processLocked) &&
             Objects.equals(previousPeriodId, that.previousPeriodId) &&
-            Objects.equals(createdById, that.createdById) &&
-            Objects.equals(fiscalYearId, that.fiscalYearId) &&
             Objects.equals(fiscalMonthId, that.fiscalMonthId) &&
-            Objects.equals(fiscalQuarterId, that.fiscalQuarterId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -315,10 +258,7 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
             periodCode,
             processLocked,
             previousPeriodId,
-            createdById,
-            fiscalYearId,
             fiscalMonthId,
-            fiscalQuarterId,
             distinct
         );
     }
@@ -334,10 +274,7 @@ public class DepreciationPeriodCriteria implements Serializable, Criteria {
             (periodCode != null ? "periodCode=" + periodCode + ", " : "") +
             (processLocked != null ? "processLocked=" + processLocked + ", " : "") +
             (previousPeriodId != null ? "previousPeriodId=" + previousPeriodId + ", " : "") +
-            (createdById != null ? "createdById=" + createdById + ", " : "") +
-            (fiscalYearId != null ? "fiscalYearId=" + fiscalYearId + ", " : "") +
             (fiscalMonthId != null ? "fiscalMonthId=" + fiscalMonthId + ", " : "") +
-            (fiscalQuarterId != null ? "fiscalQuarterId=" + fiscalQuarterId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

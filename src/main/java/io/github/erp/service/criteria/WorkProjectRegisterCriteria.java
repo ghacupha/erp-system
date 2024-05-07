@@ -1,8 +1,8 @@
 package io.github.erp.service.criteria;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,6 +47,8 @@ public class WorkProjectRegisterCriteria implements Serializable, Criteria {
 
     private StringFilter catalogueNumber;
 
+    private StringFilter projectTitle;
+
     private StringFilter description;
 
     private BigDecimalFilter totalProjectCost;
@@ -66,6 +68,7 @@ public class WorkProjectRegisterCriteria implements Serializable, Criteria {
     public WorkProjectRegisterCriteria(WorkProjectRegisterCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.catalogueNumber = other.catalogueNumber == null ? null : other.catalogueNumber.copy();
+        this.projectTitle = other.projectTitle == null ? null : other.projectTitle.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.totalProjectCost = other.totalProjectCost == null ? null : other.totalProjectCost.copy();
         this.dealersId = other.dealersId == null ? null : other.dealersId.copy();
@@ -108,6 +111,21 @@ public class WorkProjectRegisterCriteria implements Serializable, Criteria {
 
     public void setCatalogueNumber(StringFilter catalogueNumber) {
         this.catalogueNumber = catalogueNumber;
+    }
+
+    public StringFilter getProjectTitle() {
+        return projectTitle;
+    }
+
+    public StringFilter projectTitle() {
+        if (projectTitle == null) {
+            projectTitle = new StringFilter();
+        }
+        return projectTitle;
+    }
+
+    public void setProjectTitle(StringFilter projectTitle) {
+        this.projectTitle = projectTitle;
     }
 
     public StringFilter getDescription() {
@@ -220,6 +238,7 @@ public class WorkProjectRegisterCriteria implements Serializable, Criteria {
         return (
             Objects.equals(id, that.id) &&
             Objects.equals(catalogueNumber, that.catalogueNumber) &&
+            Objects.equals(projectTitle, that.projectTitle) &&
             Objects.equals(description, that.description) &&
             Objects.equals(totalProjectCost, that.totalProjectCost) &&
             Objects.equals(dealersId, that.dealersId) &&
@@ -235,6 +254,7 @@ public class WorkProjectRegisterCriteria implements Serializable, Criteria {
         return Objects.hash(
             id,
             catalogueNumber,
+            projectTitle,
             description,
             totalProjectCost,
             dealersId,
@@ -251,6 +271,7 @@ public class WorkProjectRegisterCriteria implements Serializable, Criteria {
         return "WorkProjectRegisterCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
             (catalogueNumber != null ? "catalogueNumber=" + catalogueNumber + ", " : "") +
+            (projectTitle != null ? "projectTitle=" + projectTitle + ", " : "") +
             (description != null ? "description=" + description + ", " : "") +
             (totalProjectCost != null ? "totalProjectCost=" + totalProjectCost + ", " : "") +
             (dealersId != null ? "dealersId=" + dealersId + ", " : "") +

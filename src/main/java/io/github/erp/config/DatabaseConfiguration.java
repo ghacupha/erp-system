@@ -1,8 +1,8 @@
 package io.github.erp.config;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import tech.jhipster.config.JHipsterConstants;
 
 @Configuration
-@EnableJpaRepositories({ "io.github.erp.repository", "io.github.erp.internal.repository" })
+@EnableJpaRepositories({
+    "io.github.erp.repository",
+    "io.github.erp.internal.repository",
+    "io.github.erp.erp.assets.nbv.calculation" })
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement
 @EnableElasticsearchRepositories("io.github.erp.repository.search")

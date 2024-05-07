@@ -80,7 +80,7 @@
       "otherEntityName": "serviceOutlet",
       "otherEntityRelationshipName": "assetRegistration",
       "ownerSide": true,
-      "relationshipName": "serviceOutlet",
+      "relationshipName": "otherRelatedServiceOutlets",
       "relationshipType": "many-to-many"
     },
     {
@@ -88,9 +88,8 @@
       "otherEntityName": "settlement",
       "otherEntityRelationshipName": "assetRegistration",
       "ownerSide": true,
-      "relationshipName": "settlement",
-      "relationshipType": "many-to-many",
-      "relationshipValidateRules": ["required"]
+      "relationshipName": "otherRelatedSettlements",
+      "relationshipType": "many-to-many"
     },
     {
       "otherEntityField": "assetCategoryName",
@@ -181,6 +180,13 @@
       "otherEntityName": "serviceOutlet",
       "relationshipType": "many-to-one",
       "otherEntityField": "outletCode"
+    },
+    {
+      "relationshipName": "acquiringTransaction",
+      "otherEntityName": "settlement",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "paymentNumber"
     }
   ],
   "service": "serviceImpl"

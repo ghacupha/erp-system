@@ -1,8 +1,8 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,11 +19,13 @@ package io.github.erp.erp.resources;
  */
 import io.github.erp.internal.model.BusinessDocumentFSO;
 import io.github.erp.internal.model.mapping.BusinessDocumentFSOMapping;
+import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.repository.BusinessDocumentRepository;
 import io.github.erp.service.BusinessDocumentQueryService;
 import io.github.erp.service.BusinessDocumentService;
 import io.github.erp.service.criteria.BusinessDocumentCriteria;
 import io.github.erp.service.dto.BusinessDocumentDTO;
+import io.github.erp.service.mapper.ApplicationUserMapper;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +53,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -77,15 +80,23 @@ public class BusinessDocumentResourceProd {
 
     private final BusinessDocumentFSOMapping businessDocumentFSOMapping;
 
+    private final InternalApplicationUserDetailService userDetailService;
+
+    private final ApplicationUserMapper applicationUserMapper;
+
     public BusinessDocumentResourceProd(
         BusinessDocumentService businessDocumentService,
         BusinessDocumentRepository businessDocumentRepository,
         BusinessDocumentQueryService businessDocumentQueryService,
-        BusinessDocumentFSOMapping businessDocumentFSOMapping) {
+        BusinessDocumentFSOMapping businessDocumentFSOMapping,
+        InternalApplicationUserDetailService userDetailService,
+        ApplicationUserMapper applicationUserMapper) {
         this.businessDocumentService = businessDocumentService;
         this.businessDocumentRepository = businessDocumentRepository;
         this.businessDocumentQueryService = businessDocumentQueryService;
         this.businessDocumentFSOMapping = businessDocumentFSOMapping;
+        this.userDetailService = userDetailService;
+        this.applicationUserMapper = applicationUserMapper;
     }
 
     /**
@@ -105,32 +116,10 @@ public class BusinessDocumentResourceProd {
         BusinessDocumentDTO result = businessDocumentService.save(businessDocumentFSOMapping.toValue2(businessDocumentDTO));
 
         return ResponseEntity
-            .created(new URI("/api/business-documents/" + result.getId()))
+            .created(new URI("/api/docs/business-documents/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(businessDocumentFSOMapping.toValue1(result));
     }
-
-
-//    /**
-//     * {@code POST  /business-documents} : Create a new businessDocument.
-//     *
-//     * @param businessDocumentDTO the businessDocumentDTO to create.
-//     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new businessDocumentDTO, or with status {@code 400 (Bad Request)} if the businessDocument has already an ID.
-//     * @throws URISyntaxException if the Location URI syntax is incorrect.
-//     */
-//    @PostMapping("/business-documents")
-//    public ResponseEntity<BusinessDocumentDTO> createBusinessDocument(@Valid @RequestBody BusinessDocumentDTO businessDocumentDTO)
-//        throws URISyntaxException {
-//        log.debug("REST request to save BusinessDocument : {}", businessDocumentDTO);
-//        if (businessDocumentDTO.getId() != null) {
-//            throw new BadRequestAlertException("A new businessDocument cannot already have an ID", ENTITY_NAME, "idexists");
-//        }
-//        BusinessDocumentDTO result = businessDocumentService.save(businessDocumentDTO);
-//        return ResponseEntity
-//            .created(new URI("/api/business-documents/" + result.getId()))
-//            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
-//            .body(result);
-//    }
 
     /**
      * {@code PUT  /business-documents/:id} : Updates an existing businessDocument.
@@ -159,7 +148,20 @@ public class BusinessDocumentResourceProd {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        BusinessDocumentDTO result = businessDocumentService.save(businessDocumentDTO);
+        BusinessDocumentDTO result = null;
+
+        if (userDetailService.getCurrentApplicationUser().isPresent()) {
+
+            businessDocumentDTO.setLastModified(ZonedDateTime.now());
+            businessDocumentDTO.setLastModifiedBy(userDetailService.getCurrentApplicationUser().get());
+
+             result = businessDocumentService.save(businessDocumentDTO);
+
+        } else {
+
+            throw new BadRequestAlertException("ApplicationUser not found", ENTITY_NAME, "idnotfound");
+        }
+
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, businessDocumentDTO.getId().toString()))
@@ -194,7 +196,22 @@ public class BusinessDocumentResourceProd {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<BusinessDocumentDTO> result = businessDocumentService.partialUpdate(businessDocumentDTO);
+        // Optional<BusinessDocumentDTO> result = businessDocumentService.partialUpdate(businessDocumentDTO);
+
+        Optional<BusinessDocumentDTO> result = null;
+
+        if (userDetailService.getCurrentApplicationUser().isPresent()) {
+
+            businessDocumentDTO.setLastModified(ZonedDateTime.now());
+            businessDocumentDTO.setLastModifiedBy(userDetailService.getCurrentApplicationUser().get());
+
+            result = businessDocumentService.partialUpdate(businessDocumentDTO);
+
+        } else {
+
+            throw new BadRequestAlertException("ApplicationUser not found", ENTITY_NAME, "idnotfound");
+        }
+
 
         return ResponseUtil.wrapOrNotFound(
             result,

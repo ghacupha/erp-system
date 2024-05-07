@@ -1,0 +1,56 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1706543603960-5">
+        <createTable tableName="rel_asset_registration__other_related_service_outlets">
+            <column name="asset_registration_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="other_related_service_outlets_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706543603960-6">
+        <createTable tableName="rel_asset_registration__other_related_settlements">
+            <column name="asset_registration_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="other_related_settlements_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706543603960-10">
+        <addForeignKeyConstraint baseColumnNames="other_related_service_outlets_id" baseTableName="rel_asset_registration__other_related_service_outlets" constraintName="FKd5xcuto2x5o6csdiwyphmu0rf" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="service_outlet" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706543603960-11">
+        <addForeignKeyConstraint baseColumnNames="acquiring_transaction_id" baseTableName="asset_registration" constraintName="FKkj7ixpwg7x5ukti8r9jbf1aub" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706543603960-12">
+        <addForeignKeyConstraint baseColumnNames="other_related_settlements_id" baseTableName="rel_asset_registration__other_related_settlements" constraintName="FKoc7dfhbik88omwvpot9fwh6kj" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706543603960-13">
+        <addForeignKeyConstraint baseColumnNames="asset_registration_id" baseTableName="rel_asset_registration__other_related_settlements" constraintName="FKpwranarh5m8wusym43l70789h" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="asset_registration" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706543603960-14">
+        <addForeignKeyConstraint baseColumnNames="asset_registration_id" baseTableName="rel_asset_registration__other_related_service_outlets" constraintName="FKqldnertxoooxy8xau79kqk55p" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="asset_registration" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706543603960-15">
+        <dropForeignKeyConstraint baseTableName="rel_asset_registration__service_outlet" constraintName="fk_rel_asset_registration__serv__asset_registration_00_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706543603960-16">
+        <dropForeignKeyConstraint baseTableName="rel_asset_registration__service_outlet" constraintName="fk_rel_asset_registration__service_outlet__service_outlet_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706543603960-17">
+        <dropForeignKeyConstraint baseTableName="rel_asset_registration__settlement" constraintName="fk_rel_asset_registration__settlement__asset_registration_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706543603960-18">
+        <dropForeignKeyConstraint baseTableName="rel_asset_registration__settlement" constraintName="fk_rel_asset_registration__settlement__settlement_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706543603960-30">
+        <dropTable tableName="rel_asset_registration__service_outlet"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706543603960-31">
+        <dropTable tableName="rel_asset_registration__settlement"/>
+    </changeSet>
+</databaseChangeLog>

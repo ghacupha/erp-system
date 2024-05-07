@@ -1,8 +1,8 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ package io.github.erp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -65,6 +66,9 @@ public class PrepaymentAccount implements Serializable {
 
     @Column(name = "prepayment_guid")
     private UUID prepaymentGuid;
+
+    @Column(name = "recognition_date")
+    private LocalDate recognitionDate;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
@@ -235,6 +239,19 @@ public class PrepaymentAccount implements Serializable {
 
     public void setPrepaymentGuid(UUID prepaymentGuid) {
         this.prepaymentGuid = prepaymentGuid;
+    }
+
+    public LocalDate getRecognitionDate() {
+        return this.recognitionDate;
+    }
+
+    public PrepaymentAccount recognitionDate(LocalDate recognitionDate) {
+        this.setRecognitionDate(recognitionDate);
+        return this;
+    }
+
+    public void setRecognitionDate(LocalDate recognitionDate) {
+        this.recognitionDate = recognitionDate;
     }
 
     public SettlementCurrency getSettlementCurrency() {
@@ -436,6 +453,7 @@ public class PrepaymentAccount implements Serializable {
             ", notes='" + getNotes() + "'" +
             ", prepaymentAmount=" + getPrepaymentAmount() +
             ", prepaymentGuid='" + getPrepaymentGuid() + "'" +
+            ", recognitionDate='" + getRecognitionDate() + "'" +
             "}";
     }
 }

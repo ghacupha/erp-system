@@ -1,8 +1,8 @@
 package io.github.erp.aop.reporting;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ public class PDFReportRequisitionInterceptor {
     }
 
     @AfterReturning(
-        pointcut="execution(* io.github.erp.erp.resources.PdfReportRequisitionResourceProd.createPdfReportRequisition(..))",
+        pointcut="execution(* io.github.erp.erp.resources.reports.PdfReportRequisitionResourceProd.createPdfReportRequisition(..))",
         returning="response")
     public void getCreatedReportInfo(JoinPoint joinPoint, ResponseEntity<PdfReportRequisitionDTO> response) {
 

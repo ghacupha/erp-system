@@ -1,8 +1,8 @@
 package io.github.erp.service.criteria;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,9 +26,9 @@ import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
-import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
+import tech.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link io.github.erp.domain.PrepaymentMarshalling} entity. This class is used
@@ -47,13 +47,21 @@ public class PrepaymentMarshallingCriteria implements Serializable, Criteria {
 
     private BooleanFilter inactive;
 
-    private LocalDateFilter amortizationCommencementDate;
-
     private IntegerFilter amortizationPeriods;
+
+    private BooleanFilter processed;
+
+    private UUIDFilter compilationToken;
 
     private LongFilter prepaymentAccountId;
 
     private LongFilter placeholderId;
+
+    private LongFilter firstFiscalMonthId;
+
+    private LongFilter lastFiscalMonthId;
+
+    private LongFilter firstAmortizationPeriodId;
 
     private Boolean distinct;
 
@@ -62,10 +70,14 @@ public class PrepaymentMarshallingCriteria implements Serializable, Criteria {
     public PrepaymentMarshallingCriteria(PrepaymentMarshallingCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.inactive = other.inactive == null ? null : other.inactive.copy();
-        this.amortizationCommencementDate = other.amortizationCommencementDate == null ? null : other.amortizationCommencementDate.copy();
         this.amortizationPeriods = other.amortizationPeriods == null ? null : other.amortizationPeriods.copy();
+        this.processed = other.processed == null ? null : other.processed.copy();
+        this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
         this.prepaymentAccountId = other.prepaymentAccountId == null ? null : other.prepaymentAccountId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.firstFiscalMonthId = other.firstFiscalMonthId == null ? null : other.firstFiscalMonthId.copy();
+        this.lastFiscalMonthId = other.lastFiscalMonthId == null ? null : other.lastFiscalMonthId.copy();
+        this.firstAmortizationPeriodId = other.firstAmortizationPeriodId == null ? null : other.firstAmortizationPeriodId.copy();
         this.distinct = other.distinct;
     }
 
@@ -104,21 +116,6 @@ public class PrepaymentMarshallingCriteria implements Serializable, Criteria {
         this.inactive = inactive;
     }
 
-    public LocalDateFilter getAmortizationCommencementDate() {
-        return amortizationCommencementDate;
-    }
-
-    public LocalDateFilter amortizationCommencementDate() {
-        if (amortizationCommencementDate == null) {
-            amortizationCommencementDate = new LocalDateFilter();
-        }
-        return amortizationCommencementDate;
-    }
-
-    public void setAmortizationCommencementDate(LocalDateFilter amortizationCommencementDate) {
-        this.amortizationCommencementDate = amortizationCommencementDate;
-    }
-
     public IntegerFilter getAmortizationPeriods() {
         return amortizationPeriods;
     }
@@ -132,6 +129,36 @@ public class PrepaymentMarshallingCriteria implements Serializable, Criteria {
 
     public void setAmortizationPeriods(IntegerFilter amortizationPeriods) {
         this.amortizationPeriods = amortizationPeriods;
+    }
+
+    public BooleanFilter getProcessed() {
+        return processed;
+    }
+
+    public BooleanFilter processed() {
+        if (processed == null) {
+            processed = new BooleanFilter();
+        }
+        return processed;
+    }
+
+    public void setProcessed(BooleanFilter processed) {
+        this.processed = processed;
+    }
+
+    public UUIDFilter getCompilationToken() {
+        return compilationToken;
+    }
+
+    public UUIDFilter compilationToken() {
+        if (compilationToken == null) {
+            compilationToken = new UUIDFilter();
+        }
+        return compilationToken;
+    }
+
+    public void setCompilationToken(UUIDFilter compilationToken) {
+        this.compilationToken = compilationToken;
     }
 
     public LongFilter getPrepaymentAccountId() {
@@ -164,6 +191,51 @@ public class PrepaymentMarshallingCriteria implements Serializable, Criteria {
         this.placeholderId = placeholderId;
     }
 
+    public LongFilter getFirstFiscalMonthId() {
+        return firstFiscalMonthId;
+    }
+
+    public LongFilter firstFiscalMonthId() {
+        if (firstFiscalMonthId == null) {
+            firstFiscalMonthId = new LongFilter();
+        }
+        return firstFiscalMonthId;
+    }
+
+    public void setFirstFiscalMonthId(LongFilter firstFiscalMonthId) {
+        this.firstFiscalMonthId = firstFiscalMonthId;
+    }
+
+    public LongFilter getLastFiscalMonthId() {
+        return lastFiscalMonthId;
+    }
+
+    public LongFilter lastFiscalMonthId() {
+        if (lastFiscalMonthId == null) {
+            lastFiscalMonthId = new LongFilter();
+        }
+        return lastFiscalMonthId;
+    }
+
+    public void setLastFiscalMonthId(LongFilter lastFiscalMonthId) {
+        this.lastFiscalMonthId = lastFiscalMonthId;
+    }
+
+    public LongFilter getFirstAmortizationPeriodId() {
+        return firstAmortizationPeriodId;
+    }
+
+    public LongFilter firstAmortizationPeriodId() {
+        if (firstAmortizationPeriodId == null) {
+            firstAmortizationPeriodId = new LongFilter();
+        }
+        return firstAmortizationPeriodId;
+    }
+
+    public void setFirstAmortizationPeriodId(LongFilter firstAmortizationPeriodId) {
+        this.firstAmortizationPeriodId = firstAmortizationPeriodId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -184,17 +256,33 @@ public class PrepaymentMarshallingCriteria implements Serializable, Criteria {
         return (
             Objects.equals(id, that.id) &&
             Objects.equals(inactive, that.inactive) &&
-            Objects.equals(amortizationCommencementDate, that.amortizationCommencementDate) &&
             Objects.equals(amortizationPeriods, that.amortizationPeriods) &&
+            Objects.equals(processed, that.processed) &&
+            Objects.equals(compilationToken, that.compilationToken) &&
             Objects.equals(prepaymentAccountId, that.prepaymentAccountId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(firstFiscalMonthId, that.firstFiscalMonthId) &&
+            Objects.equals(lastFiscalMonthId, that.lastFiscalMonthId) &&
+            Objects.equals(firstAmortizationPeriodId, that.firstAmortizationPeriodId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, inactive, amortizationCommencementDate, amortizationPeriods, prepaymentAccountId, placeholderId, distinct);
+        return Objects.hash(
+            id,
+            inactive,
+            amortizationPeriods,
+            processed,
+            compilationToken,
+            prepaymentAccountId,
+            placeholderId,
+            firstFiscalMonthId,
+            lastFiscalMonthId,
+            firstAmortizationPeriodId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -203,10 +291,14 @@ public class PrepaymentMarshallingCriteria implements Serializable, Criteria {
         return "PrepaymentMarshallingCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
             (inactive != null ? "inactive=" + inactive + ", " : "") +
-            (amortizationCommencementDate != null ? "amortizationCommencementDate=" + amortizationCommencementDate + ", " : "") +
             (amortizationPeriods != null ? "amortizationPeriods=" + amortizationPeriods + ", " : "") +
+            (processed != null ? "processed=" + processed + ", " : "") +
+            (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
             (prepaymentAccountId != null ? "prepaymentAccountId=" + prepaymentAccountId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (firstFiscalMonthId != null ? "firstFiscalMonthId=" + firstFiscalMonthId + ", " : "") +
+            (lastFiscalMonthId != null ? "lastFiscalMonthId=" + lastFiscalMonthId + ", " : "") +
+            (firstAmortizationPeriodId != null ? "firstAmortizationPeriodId=" + firstAmortizationPeriodId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

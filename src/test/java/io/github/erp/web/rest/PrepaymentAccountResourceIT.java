@@ -1,8 +1,8 @@
 package io.github.erp.web.rest;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,6 +43,8 @@ import io.github.erp.service.criteria.PrepaymentAccountCriteria;
 import io.github.erp.service.dto.PrepaymentAccountDTO;
 import io.github.erp.service.mapper.PrepaymentAccountMapper;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -89,6 +91,10 @@ class PrepaymentAccountResourceIT {
 
     private static final UUID DEFAULT_PREPAYMENT_GUID = UUID.randomUUID();
     private static final UUID UPDATED_PREPAYMENT_GUID = UUID.randomUUID();
+
+    private static final LocalDate DEFAULT_RECOGNITION_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_RECOGNITION_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_RECOGNITION_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final String ENTITY_API_URL = "/api/prepayment-accounts";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -137,7 +143,8 @@ class PrepaymentAccountResourceIT {
             .particulars(DEFAULT_PARTICULARS)
             .notes(DEFAULT_NOTES)
             .prepaymentAmount(DEFAULT_PREPAYMENT_AMOUNT)
-            .prepaymentGuid(DEFAULT_PREPAYMENT_GUID);
+            .prepaymentGuid(DEFAULT_PREPAYMENT_GUID)
+            .recognitionDate(DEFAULT_RECOGNITION_DATE);
         return prepaymentAccount;
     }
 
@@ -153,7 +160,8 @@ class PrepaymentAccountResourceIT {
             .particulars(UPDATED_PARTICULARS)
             .notes(UPDATED_NOTES)
             .prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT)
-            .prepaymentGuid(UPDATED_PREPAYMENT_GUID);
+            .prepaymentGuid(UPDATED_PREPAYMENT_GUID)
+            .recognitionDate(UPDATED_RECOGNITION_DATE);
         return prepaymentAccount;
     }
 
@@ -185,6 +193,7 @@ class PrepaymentAccountResourceIT {
         assertThat(testPrepaymentAccount.getNotes()).isEqualTo(DEFAULT_NOTES);
         assertThat(testPrepaymentAccount.getPrepaymentAmount()).isEqualByComparingTo(DEFAULT_PREPAYMENT_AMOUNT);
         assertThat(testPrepaymentAccount.getPrepaymentGuid()).isEqualTo(DEFAULT_PREPAYMENT_GUID);
+        assertThat(testPrepaymentAccount.getRecognitionDate()).isEqualTo(DEFAULT_RECOGNITION_DATE);
 
         // Validate the PrepaymentAccount in Elasticsearch
         verify(mockPrepaymentAccountSearchRepository, times(1)).save(testPrepaymentAccount);
@@ -276,7 +285,8 @@ class PrepaymentAccountResourceIT {
             .andExpect(jsonPath("$.[*].particulars").value(hasItem(DEFAULT_PARTICULARS)))
             .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES.toString())))
             .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))))
-            .andExpect(jsonPath("$.[*].prepaymentGuid").value(hasItem(DEFAULT_PREPAYMENT_GUID.toString())));
+            .andExpect(jsonPath("$.[*].prepaymentGuid").value(hasItem(DEFAULT_PREPAYMENT_GUID.toString())))
+            .andExpect(jsonPath("$.[*].recognitionDate").value(hasItem(DEFAULT_RECOGNITION_DATE.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -313,7 +323,8 @@ class PrepaymentAccountResourceIT {
             .andExpect(jsonPath("$.particulars").value(DEFAULT_PARTICULARS))
             .andExpect(jsonPath("$.notes").value(DEFAULT_NOTES.toString()))
             .andExpect(jsonPath("$.prepaymentAmount").value(sameNumber(DEFAULT_PREPAYMENT_AMOUNT)))
-            .andExpect(jsonPath("$.prepaymentGuid").value(DEFAULT_PREPAYMENT_GUID.toString()));
+            .andExpect(jsonPath("$.prepaymentGuid").value(DEFAULT_PREPAYMENT_GUID.toString()))
+            .andExpect(jsonPath("$.recognitionDate").value(DEFAULT_RECOGNITION_DATE.toString()));
     }
 
     @Test
@@ -648,6 +659,110 @@ class PrepaymentAccountResourceIT {
 
     @Test
     @Transactional
+    void getAllPrepaymentAccountsByRecognitionDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where recognitionDate equals to DEFAULT_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldBeFound("recognitionDate.equals=" + DEFAULT_RECOGNITION_DATE);
+
+        // Get all the prepaymentAccountList where recognitionDate equals to UPDATED_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldNotBeFound("recognitionDate.equals=" + UPDATED_RECOGNITION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByRecognitionDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where recognitionDate not equals to DEFAULT_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldNotBeFound("recognitionDate.notEquals=" + DEFAULT_RECOGNITION_DATE);
+
+        // Get all the prepaymentAccountList where recognitionDate not equals to UPDATED_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldBeFound("recognitionDate.notEquals=" + UPDATED_RECOGNITION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByRecognitionDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where recognitionDate in DEFAULT_RECOGNITION_DATE or UPDATED_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldBeFound("recognitionDate.in=" + DEFAULT_RECOGNITION_DATE + "," + UPDATED_RECOGNITION_DATE);
+
+        // Get all the prepaymentAccountList where recognitionDate equals to UPDATED_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldNotBeFound("recognitionDate.in=" + UPDATED_RECOGNITION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByRecognitionDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where recognitionDate is not null
+        defaultPrepaymentAccountShouldBeFound("recognitionDate.specified=true");
+
+        // Get all the prepaymentAccountList where recognitionDate is null
+        defaultPrepaymentAccountShouldNotBeFound("recognitionDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByRecognitionDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where recognitionDate is greater than or equal to DEFAULT_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldBeFound("recognitionDate.greaterThanOrEqual=" + DEFAULT_RECOGNITION_DATE);
+
+        // Get all the prepaymentAccountList where recognitionDate is greater than or equal to UPDATED_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldNotBeFound("recognitionDate.greaterThanOrEqual=" + UPDATED_RECOGNITION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByRecognitionDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where recognitionDate is less than or equal to DEFAULT_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldBeFound("recognitionDate.lessThanOrEqual=" + DEFAULT_RECOGNITION_DATE);
+
+        // Get all the prepaymentAccountList where recognitionDate is less than or equal to SMALLER_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldNotBeFound("recognitionDate.lessThanOrEqual=" + SMALLER_RECOGNITION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByRecognitionDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where recognitionDate is less than DEFAULT_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldNotBeFound("recognitionDate.lessThan=" + DEFAULT_RECOGNITION_DATE);
+
+        // Get all the prepaymentAccountList where recognitionDate is less than UPDATED_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldBeFound("recognitionDate.lessThan=" + UPDATED_RECOGNITION_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountsByRecognitionDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
+
+        // Get all the prepaymentAccountList where recognitionDate is greater than DEFAULT_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldNotBeFound("recognitionDate.greaterThan=" + DEFAULT_RECOGNITION_DATE);
+
+        // Get all the prepaymentAccountList where recognitionDate is greater than SMALLER_RECOGNITION_DATE
+        defaultPrepaymentAccountShouldBeFound("recognitionDate.greaterThan=" + SMALLER_RECOGNITION_DATE);
+    }
+
+    @Test
+    @Transactional
     void getAllPrepaymentAccountsBySettlementCurrencyIsEqualToSomething() throws Exception {
         // Initialize the database
         prepaymentAccountRepository.saveAndFlush(prepaymentAccount);
@@ -919,7 +1034,8 @@ class PrepaymentAccountResourceIT {
             .andExpect(jsonPath("$.[*].particulars").value(hasItem(DEFAULT_PARTICULARS)))
             .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES.toString())))
             .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))))
-            .andExpect(jsonPath("$.[*].prepaymentGuid").value(hasItem(DEFAULT_PREPAYMENT_GUID.toString())));
+            .andExpect(jsonPath("$.[*].prepaymentGuid").value(hasItem(DEFAULT_PREPAYMENT_GUID.toString())))
+            .andExpect(jsonPath("$.[*].recognitionDate").value(hasItem(DEFAULT_RECOGNITION_DATE.toString())));
 
         // Check, that the count call also returns 1
         restPrepaymentAccountMockMvc
@@ -972,7 +1088,8 @@ class PrepaymentAccountResourceIT {
             .particulars(UPDATED_PARTICULARS)
             .notes(UPDATED_NOTES)
             .prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT)
-            .prepaymentGuid(UPDATED_PREPAYMENT_GUID);
+            .prepaymentGuid(UPDATED_PREPAYMENT_GUID)
+            .recognitionDate(UPDATED_RECOGNITION_DATE);
         PrepaymentAccountDTO prepaymentAccountDTO = prepaymentAccountMapper.toDto(updatedPrepaymentAccount);
 
         restPrepaymentAccountMockMvc
@@ -992,6 +1109,7 @@ class PrepaymentAccountResourceIT {
         assertThat(testPrepaymentAccount.getNotes()).isEqualTo(UPDATED_NOTES);
         assertThat(testPrepaymentAccount.getPrepaymentAmount()).isEqualTo(UPDATED_PREPAYMENT_AMOUNT);
         assertThat(testPrepaymentAccount.getPrepaymentGuid()).isEqualTo(UPDATED_PREPAYMENT_GUID);
+        assertThat(testPrepaymentAccount.getRecognitionDate()).isEqualTo(UPDATED_RECOGNITION_DATE);
 
         // Validate the PrepaymentAccount in Elasticsearch
         verify(mockPrepaymentAccountSearchRepository).save(testPrepaymentAccount);
@@ -1088,7 +1206,8 @@ class PrepaymentAccountResourceIT {
         partialUpdatedPrepaymentAccount
             .notes(UPDATED_NOTES)
             .prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT)
-            .prepaymentGuid(UPDATED_PREPAYMENT_GUID);
+            .prepaymentGuid(UPDATED_PREPAYMENT_GUID)
+            .recognitionDate(UPDATED_RECOGNITION_DATE);
 
         restPrepaymentAccountMockMvc
             .perform(
@@ -1107,6 +1226,7 @@ class PrepaymentAccountResourceIT {
         assertThat(testPrepaymentAccount.getNotes()).isEqualTo(UPDATED_NOTES);
         assertThat(testPrepaymentAccount.getPrepaymentAmount()).isEqualByComparingTo(UPDATED_PREPAYMENT_AMOUNT);
         assertThat(testPrepaymentAccount.getPrepaymentGuid()).isEqualTo(UPDATED_PREPAYMENT_GUID);
+        assertThat(testPrepaymentAccount.getRecognitionDate()).isEqualTo(UPDATED_RECOGNITION_DATE);
     }
 
     @Test
@@ -1126,7 +1246,8 @@ class PrepaymentAccountResourceIT {
             .particulars(UPDATED_PARTICULARS)
             .notes(UPDATED_NOTES)
             .prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT)
-            .prepaymentGuid(UPDATED_PREPAYMENT_GUID);
+            .prepaymentGuid(UPDATED_PREPAYMENT_GUID)
+            .recognitionDate(UPDATED_RECOGNITION_DATE);
 
         restPrepaymentAccountMockMvc
             .perform(
@@ -1145,6 +1266,7 @@ class PrepaymentAccountResourceIT {
         assertThat(testPrepaymentAccount.getNotes()).isEqualTo(UPDATED_NOTES);
         assertThat(testPrepaymentAccount.getPrepaymentAmount()).isEqualByComparingTo(UPDATED_PREPAYMENT_AMOUNT);
         assertThat(testPrepaymentAccount.getPrepaymentGuid()).isEqualTo(UPDATED_PREPAYMENT_GUID);
+        assertThat(testPrepaymentAccount.getRecognitionDate()).isEqualTo(UPDATED_RECOGNITION_DATE);
     }
 
     @Test
@@ -1265,6 +1387,7 @@ class PrepaymentAccountResourceIT {
             .andExpect(jsonPath("$.[*].particulars").value(hasItem(DEFAULT_PARTICULARS)))
             .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES.toString())))
             .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))))
-            .andExpect(jsonPath("$.[*].prepaymentGuid").value(hasItem(DEFAULT_PREPAYMENT_GUID.toString())));
+            .andExpect(jsonPath("$.[*].prepaymentGuid").value(hasItem(DEFAULT_PREPAYMENT_GUID.toString())))
+            .andExpect(jsonPath("$.[*].recognitionDate").value(hasItem(DEFAULT_RECOGNITION_DATE.toString())));
     }
 }

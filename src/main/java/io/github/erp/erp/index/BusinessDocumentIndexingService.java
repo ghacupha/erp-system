@@ -1,8 +1,8 @@
 package io.github.erp.erp.index;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +18,11 @@ package io.github.erp.erp.index;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import com.google.common.collect.ImmutableList;
+import io.github.erp.domain.BusinessDocument;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.erp.index.engine_v2.AbstractStartUpBatchedIndexService;
+import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.BusinessDocumentSearchRepository;
 import io.github.erp.service.BusinessDocumentService;
 import io.github.erp.service.mapper.BusinessDocumentMapper;
@@ -30,12 +33,13 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @Transactional
-public class BusinessDocumentIndexingService  extends AbstractStartupRegisteredIndexService {
+public class BusinessDocumentIndexingService  extends AbstractStartUpBatchedIndexService<BusinessDocument> {
     private static final String TAG = "BusinessDocumentIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
 
@@ -43,7 +47,8 @@ public class BusinessDocumentIndexingService  extends AbstractStartupRegisteredI
     private final BusinessDocumentMapper mapper;
     private final BusinessDocumentSearchRepository searchRepository;
 
-    public BusinessDocumentIndexingService(BusinessDocumentService service, BusinessDocumentMapper mapper, BusinessDocumentSearchRepository searchRepository) {
+    public BusinessDocumentIndexingService(IndexProperties indexProperties, BusinessDocumentService service, BusinessDocumentMapper mapper, BusinessDocumentSearchRepository searchRepository) {
+        super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;
@@ -67,7 +72,9 @@ public class BusinessDocumentIndexingService  extends AbstractStartupRegisteredI
         try {
             reindexLock.lockInterruptibly();
 
-            indexerSequence();
+            int batches = indexerSequence();
+
+            log.info("{} batches processed", batches);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -76,16 +83,13 @@ public class BusinessDocumentIndexingService  extends AbstractStartupRegisteredI
         }
     }
 
-    private void indexerSequence() {
+    private int indexerSequence() {
         log.info("Initiating {} build sequence", TAG);
         long startup = System.currentTimeMillis();
-        this.searchRepository.saveAll(
-            service.findAll(Pageable.unpaged())
-                .stream()
-                .map(mapper::toEntity)
-                .filter(entity -> !searchRepository.existsById(entity.getId()))
-                .collect(ImmutableList.toImmutableList()));
+
         log.trace("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
+
+        return processInBatchesOf(150);
     }
 
     @Override
@@ -96,5 +100,19 @@ public class BusinessDocumentIndexingService  extends AbstractStartupRegisteredI
         } else {
             log.trace("{} ReIndexer: Concurrent reindexing attempt", TAG);
         }
+    }
+
+    @Override
+    protected List<BusinessDocument> getItemsForIndexing() {
+        return service.findAll(Pageable.unpaged())
+                .stream()
+                .map(mapper::toEntity)
+                .filter(entity -> !searchRepository.existsById(entity.getId()))
+                .collect(ImmutableList.toImmutableList());
+    }
+
+    @Override
+    protected void processBatchIndex(List<BusinessDocument> batch) {
+        this.searchRepository.saveAll(batch);
     }
 }

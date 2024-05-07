@@ -23,7 +23,7 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "minimumDatarowsPerRequest",
+      "fieldName": "minimumDataRowsPerRequest",
       "fieldType": "Integer"
     },
     {
@@ -36,9 +36,8 @@
       "fieldTypeBlobContent": "text"
     },
     {
-      "fieldName": "dataTemplate",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "any"
+      "fieldName": "dataPath",
+      "fieldType": "String"
     }
   ],
   "relationships": [
@@ -47,6 +46,29 @@
       "otherEntityName": "gdiMasterDataIndex",
       "relationshipType": "many-to-many",
       "otherEntityField": "entityName",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "gdiTransactionDataIndex"
+    },
+    {
+      "relationshipName": "businessTeam",
+      "otherEntityName": "businessTeam",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "businessTeam"
+    },
+    {
+      "relationshipName": "dataSetTemplate",
+      "otherEntityName": "businessDocument",
+      "relationshipType": "one-to-one",
+      "otherEntityField": "documentTitle",
+      "ownerSide": true,
+      "id": false,
+      "otherEntityRelationshipName": "gdiTransactionDataIndex"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "gdiTransactionDataIndex"
     }

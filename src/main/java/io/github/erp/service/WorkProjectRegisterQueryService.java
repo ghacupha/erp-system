@@ -1,8 +1,8 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -119,6 +119,9 @@ public class WorkProjectRegisterQueryService extends QueryService<WorkProjectReg
             if (criteria.getCatalogueNumber() != null) {
                 specification =
                     specification.and(buildStringSpecification(criteria.getCatalogueNumber(), WorkProjectRegister_.catalogueNumber));
+            }
+            if (criteria.getProjectTitle() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getProjectTitle(), WorkProjectRegister_.projectTitle));
             }
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), WorkProjectRegister_.description));

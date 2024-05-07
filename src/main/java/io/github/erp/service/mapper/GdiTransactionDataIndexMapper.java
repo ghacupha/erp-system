@@ -1,8 +1,8 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,11 +25,18 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link GdiTransactionDataIndex} and its DTO {@link GdiTransactionDataIndexDTO}.
  */
-@Mapper(componentModel = "spring", uses = { GdiMasterDataIndexMapper.class })
+@Mapper(
+    componentModel = "spring",
+    uses = { GdiMasterDataIndexMapper.class, BusinessTeamMapper.class, BusinessDocumentMapper.class, PlaceholderMapper.class }
+)
 public interface GdiTransactionDataIndexMapper extends EntityMapper<GdiTransactionDataIndexDTO, GdiTransactionDataIndex> {
     @Mapping(target = "masterDataItems", source = "masterDataItems", qualifiedByName = "entityNameSet")
+    @Mapping(target = "businessTeam", source = "businessTeam", qualifiedByName = "businessTeam")
+    @Mapping(target = "dataSetTemplate", source = "dataSetTemplate", qualifiedByName = "documentTitle")
+    @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     GdiTransactionDataIndexDTO toDto(GdiTransactionDataIndex s);
 
     @Mapping(target = "removeMasterDataItem", ignore = true)
+    @Mapping(target = "removePlaceholder", ignore = true)
     GdiTransactionDataIndex toEntity(GdiTransactionDataIndexDTO gdiTransactionDataIndexDTO);
 }

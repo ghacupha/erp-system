@@ -1,8 +1,8 @@
 package io.github.erp.erp.resources.gdi;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,12 +19,10 @@ package io.github.erp.erp.resources.gdi;
  */
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.CustomerType;
-import io.github.erp.erp.resources.CustomerTypeResourceProd;
 import io.github.erp.repository.CustomerTypeRepository;
 import io.github.erp.repository.search.CustomerTypeSearchRepository;
 import io.github.erp.service.dto.CustomerTypeDTO;
 import io.github.erp.service.mapper.CustomerTypeMapper;
-import io.github.erp.web.rest.CustomerTypeResource;
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,8 @@
 package io.github.erp.internal.resource;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ import io.github.erp.internal.resource.decorator.IFixedAssetNetBookValueResource
 import io.github.erp.service.FixedAssetNetBookValueQueryService;
 import io.github.erp.service.criteria.FixedAssetNetBookValueCriteria;
 import io.github.erp.service.dto.FixedAssetNetBookValueDTO;
-import io.github.erp.erp.resources.FixedAssetNetBookValueResourceProd;
+import io.github.erp.erp.resources.assets.FixedAssetNetBookValueResourceProd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;

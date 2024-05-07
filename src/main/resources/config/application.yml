@@ -129,7 +129,7 @@ spring:
       hibernate.connection.provider_disables_autocommit: true
       hibernate.cache.use_second_level_cache: true
       hibernate.cache.use_query_cache: false
-      hibernate.generate_statistics: true
+      hibernate.generate_statistics: false
       # modify batch size as necessary
       hibernate.jdbc.batch_size: 25
       hibernate.order_inserts: true
@@ -147,6 +147,23 @@ spring:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
     # show-sql: true
+  kafka:
+    bootstrap-servers: localhost:9092
+    admin:
+      properties:
+        replication.factor: 8
+    topics:
+      depreciation-batch:
+        topic:
+          name: "depreciation_batch_topic"
+        consumer:
+          group.id: erp-system-depreciation
+      nbv:
+        topic:
+          name: "nbv_batch_topic"
+        consumer:
+          group.id: erp-system-nbv
+          auto.offset.reset: earliest
   messages:
     basename: i18n/messages
   main:
@@ -228,22 +245,6 @@ jhipster:
 # More documentation is available at:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
-
-kafka:
-  bootstrap-servers: localhost:9092
-  consumer:
-    group.id: erp-system
-    key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    value.deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-    auto.offset.reset: earliest
-    properties:
-      spring.json.trusted.packages: "*"
-  producer:
-    key.serializer: org.apache.kafka.common.serialization.StringSerializer
-    value.serializer: org.springframework.kafka.support.serializer.JsonSerializer
-  depreciation-batch:
-    topic:
-      name: "depreciation_batch_topic"
 
 app:
   title: 'erpSystem'

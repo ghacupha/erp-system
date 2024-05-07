@@ -1,8 +1,8 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,30 +17,13 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.Placeholder;
-import io.github.erp.domain.PrepaymentAccount;
-import io.github.erp.domain.PrepaymentMarshalling;
+import io.github.erp.domain.*;
 import io.github.erp.repository.PrepaymentMarshallingRepository;
 import io.github.erp.repository.search.PrepaymentMarshallingSearchRepository;
 import io.github.erp.service.PrepaymentMarshallingService;
 import io.github.erp.service.dto.PrepaymentMarshallingDTO;
 import io.github.erp.service.mapper.PrepaymentMarshallingMapper;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
-
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,8 +39,18 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 /**
- * Integration tests for the {@link PrepaymentMarshallingResourceProd} REST controller.
+ * Integration tests for the PrepaymentMarshallingResourceProd REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -68,13 +61,15 @@ class PrepaymentMarshallingResourceIT {
     private static final Boolean DEFAULT_INACTIVE = false;
     private static final Boolean UPDATED_INACTIVE = true;
 
-    private static final LocalDate DEFAULT_AMORTIZATION_COMMENCEMENT_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_AMORTIZATION_COMMENCEMENT_DATE = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_AMORTIZATION_COMMENCEMENT_DATE = LocalDate.ofEpochDay(-1L);
-
     private static final Integer DEFAULT_AMORTIZATION_PERIODS = 1;
     private static final Integer UPDATED_AMORTIZATION_PERIODS = 2;
     private static final Integer SMALLER_AMORTIZATION_PERIODS = 1 - 1;
+
+    private static final Boolean DEFAULT_PROCESSED = false;
+    private static final Boolean UPDATED_PROCESSED = true;
+
+    private static final UUID DEFAULT_COMPILATION_TOKEN = UUID.randomUUID();
+    private static final UUID UPDATED_COMPILATION_TOKEN = UUID.randomUUID();
 
     private static final String ENTITY_API_URL = "/api/prepayments/prepayment-marshallings";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -120,8 +115,9 @@ class PrepaymentMarshallingResourceIT {
     public static PrepaymentMarshalling createEntity(EntityManager em) {
         PrepaymentMarshalling prepaymentMarshalling = new PrepaymentMarshalling()
             .inactive(DEFAULT_INACTIVE)
-            .amortizationCommencementDate(DEFAULT_AMORTIZATION_COMMENCEMENT_DATE)
-            .amortizationPeriods(DEFAULT_AMORTIZATION_PERIODS);
+            .amortizationPeriods(DEFAULT_AMORTIZATION_PERIODS)
+            .processed(DEFAULT_PROCESSED)
+            .compilationToken(DEFAULT_COMPILATION_TOKEN);
         // Add required entity
         PrepaymentAccount prepaymentAccount;
         if (TestUtil.findAll(em, PrepaymentAccount.class).isEmpty()) {
@@ -132,6 +128,28 @@ class PrepaymentMarshallingResourceIT {
             prepaymentAccount = TestUtil.findAll(em, PrepaymentAccount.class).get(0);
         }
         prepaymentMarshalling.setPrepaymentAccount(prepaymentAccount);
+        // Add required entity
+        FiscalMonth fiscalMonth;
+        if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
+            fiscalMonth = FiscalMonthResourceIT.createEntity(em);
+            em.persist(fiscalMonth);
+            em.flush();
+        } else {
+            fiscalMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
+        }
+        prepaymentMarshalling.setFirstFiscalMonth(fiscalMonth);
+        // Add required entity
+        prepaymentMarshalling.setLastFiscalMonth(fiscalMonth);
+        // Add required entity
+        AmortizationPeriod amortizationPeriod;
+        if (TestUtil.findAll(em, AmortizationPeriod.class).isEmpty()) {
+            amortizationPeriod = AmortizationPeriodResourceIT.createEntity(em);
+            em.persist(amortizationPeriod);
+            em.flush();
+        } else {
+            amortizationPeriod = TestUtil.findAll(em, AmortizationPeriod.class).get(0);
+        }
+        prepaymentMarshalling.setFirstAmortizationPeriod(amortizationPeriod);
         return prepaymentMarshalling;
     }
 
@@ -144,8 +162,9 @@ class PrepaymentMarshallingResourceIT {
     public static PrepaymentMarshalling createUpdatedEntity(EntityManager em) {
         PrepaymentMarshalling prepaymentMarshalling = new PrepaymentMarshalling()
             .inactive(UPDATED_INACTIVE)
-            .amortizationCommencementDate(UPDATED_AMORTIZATION_COMMENCEMENT_DATE)
-            .amortizationPeriods(UPDATED_AMORTIZATION_PERIODS);
+            .amortizationPeriods(UPDATED_AMORTIZATION_PERIODS)
+            .processed(UPDATED_PROCESSED)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         // Add required entity
         PrepaymentAccount prepaymentAccount;
         if (TestUtil.findAll(em, PrepaymentAccount.class).isEmpty()) {
@@ -156,6 +175,28 @@ class PrepaymentMarshallingResourceIT {
             prepaymentAccount = TestUtil.findAll(em, PrepaymentAccount.class).get(0);
         }
         prepaymentMarshalling.setPrepaymentAccount(prepaymentAccount);
+        // Add required entity
+        FiscalMonth fiscalMonth;
+        if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
+            fiscalMonth = FiscalMonthResourceIT.createUpdatedEntity(em);
+            em.persist(fiscalMonth);
+            em.flush();
+        } else {
+            fiscalMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
+        }
+        prepaymentMarshalling.setFirstFiscalMonth(fiscalMonth);
+        // Add required entity
+        prepaymentMarshalling.setLastFiscalMonth(fiscalMonth);
+        // Add required entity
+        AmortizationPeriod amortizationPeriod;
+        if (TestUtil.findAll(em, AmortizationPeriod.class).isEmpty()) {
+            amortizationPeriod = AmortizationPeriodResourceIT.createUpdatedEntity(em);
+            em.persist(amortizationPeriod);
+            em.flush();
+        } else {
+            amortizationPeriod = TestUtil.findAll(em, AmortizationPeriod.class).get(0);
+        }
+        prepaymentMarshalling.setFirstAmortizationPeriod(amortizationPeriod);
         return prepaymentMarshalling;
     }
 
@@ -183,8 +224,9 @@ class PrepaymentMarshallingResourceIT {
         assertThat(prepaymentMarshallingList).hasSize(databaseSizeBeforeCreate + 1);
         PrepaymentMarshalling testPrepaymentMarshalling = prepaymentMarshallingList.get(prepaymentMarshallingList.size() - 1);
         assertThat(testPrepaymentMarshalling.getInactive()).isEqualTo(DEFAULT_INACTIVE);
-        assertThat(testPrepaymentMarshalling.getAmortizationCommencementDate()).isEqualTo(DEFAULT_AMORTIZATION_COMMENCEMENT_DATE);
         assertThat(testPrepaymentMarshalling.getAmortizationPeriods()).isEqualTo(DEFAULT_AMORTIZATION_PERIODS);
+        assertThat(testPrepaymentMarshalling.getProcessed()).isEqualTo(DEFAULT_PROCESSED);
+        assertThat(testPrepaymentMarshalling.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
 
         // Validate the PrepaymentMarshalling in Elasticsearch
         verify(mockPrepaymentMarshallingSearchRepository, times(1)).save(testPrepaymentMarshalling);
@@ -218,28 +260,6 @@ class PrepaymentMarshallingResourceIT {
 
     @Test
     @Transactional
-    void checkInactiveIsRequired() throws Exception {
-        int databaseSizeBeforeTest = prepaymentMarshallingRepository.findAll().size();
-        // set the field null
-        prepaymentMarshalling.setInactive(null);
-
-        // Create the PrepaymentMarshalling, which fails.
-        PrepaymentMarshallingDTO prepaymentMarshallingDTO = prepaymentMarshallingMapper.toDto(prepaymentMarshalling);
-
-        restPrepaymentMarshallingMockMvc
-            .perform(
-                post(ENTITY_API_URL)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(prepaymentMarshallingDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<PrepaymentMarshalling> prepaymentMarshallingList = prepaymentMarshallingRepository.findAll();
-        assertThat(prepaymentMarshallingList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllPrepaymentMarshallings() throws Exception {
         // Initialize the database
         prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
@@ -251,8 +271,9 @@ class PrepaymentMarshallingResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentMarshalling.getId().intValue())))
             .andExpect(jsonPath("$.[*].inactive").value(hasItem(DEFAULT_INACTIVE.booleanValue())))
-            .andExpect(jsonPath("$.[*].amortizationCommencementDate").value(hasItem(DEFAULT_AMORTIZATION_COMMENCEMENT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].amortizationPeriods").value(hasItem(DEFAULT_AMORTIZATION_PERIODS)));
+            .andExpect(jsonPath("$.[*].amortizationPeriods").value(hasItem(DEFAULT_AMORTIZATION_PERIODS)))
+            .andExpect(jsonPath("$.[*].processed").value(hasItem(DEFAULT_PROCESSED.booleanValue())))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -286,8 +307,9 @@ class PrepaymentMarshallingResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(prepaymentMarshalling.getId().intValue()))
             .andExpect(jsonPath("$.inactive").value(DEFAULT_INACTIVE.booleanValue()))
-            .andExpect(jsonPath("$.amortizationCommencementDate").value(DEFAULT_AMORTIZATION_COMMENCEMENT_DATE.toString()))
-            .andExpect(jsonPath("$.amortizationPeriods").value(DEFAULT_AMORTIZATION_PERIODS));
+            .andExpect(jsonPath("$.amortizationPeriods").value(DEFAULT_AMORTIZATION_PERIODS))
+            .andExpect(jsonPath("$.processed").value(DEFAULT_PROCESSED.booleanValue()))
+            .andExpect(jsonPath("$.compilationToken").value(DEFAULT_COMPILATION_TOKEN.toString()));
     }
 
     @Test
@@ -358,118 +380,6 @@ class PrepaymentMarshallingResourceIT {
 
         // Get all the prepaymentMarshallingList where inactive is null
         defaultPrepaymentMarshallingShouldNotBeFound("inactive.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentMarshallingsByAmortizationCommencementDateIsEqualToSomething() throws Exception {
-        // Initialize the database
-        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
-
-        // Get all the prepaymentMarshallingList where amortizationCommencementDate equals to DEFAULT_AMORTIZATION_COMMENCEMENT_DATE
-        defaultPrepaymentMarshallingShouldBeFound("amortizationCommencementDate.equals=" + DEFAULT_AMORTIZATION_COMMENCEMENT_DATE);
-
-        // Get all the prepaymentMarshallingList where amortizationCommencementDate equals to UPDATED_AMORTIZATION_COMMENCEMENT_DATE
-        defaultPrepaymentMarshallingShouldNotBeFound("amortizationCommencementDate.equals=" + UPDATED_AMORTIZATION_COMMENCEMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentMarshallingsByAmortizationCommencementDateIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
-
-        // Get all the prepaymentMarshallingList where amortizationCommencementDate not equals to DEFAULT_AMORTIZATION_COMMENCEMENT_DATE
-        defaultPrepaymentMarshallingShouldNotBeFound("amortizationCommencementDate.notEquals=" + DEFAULT_AMORTIZATION_COMMENCEMENT_DATE);
-
-        // Get all the prepaymentMarshallingList where amortizationCommencementDate not equals to UPDATED_AMORTIZATION_COMMENCEMENT_DATE
-        defaultPrepaymentMarshallingShouldBeFound("amortizationCommencementDate.notEquals=" + UPDATED_AMORTIZATION_COMMENCEMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentMarshallingsByAmortizationCommencementDateIsInShouldWork() throws Exception {
-        // Initialize the database
-        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
-
-        // Get all the prepaymentMarshallingList where amortizationCommencementDate in DEFAULT_AMORTIZATION_COMMENCEMENT_DATE or UPDATED_AMORTIZATION_COMMENCEMENT_DATE
-        defaultPrepaymentMarshallingShouldBeFound(
-            "amortizationCommencementDate.in=" + DEFAULT_AMORTIZATION_COMMENCEMENT_DATE + "," + UPDATED_AMORTIZATION_COMMENCEMENT_DATE
-        );
-
-        // Get all the prepaymentMarshallingList where amortizationCommencementDate equals to UPDATED_AMORTIZATION_COMMENCEMENT_DATE
-        defaultPrepaymentMarshallingShouldNotBeFound("amortizationCommencementDate.in=" + UPDATED_AMORTIZATION_COMMENCEMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentMarshallingsByAmortizationCommencementDateIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
-
-        // Get all the prepaymentMarshallingList where amortizationCommencementDate is not null
-        defaultPrepaymentMarshallingShouldBeFound("amortizationCommencementDate.specified=true");
-
-        // Get all the prepaymentMarshallingList where amortizationCommencementDate is null
-        defaultPrepaymentMarshallingShouldNotBeFound("amortizationCommencementDate.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentMarshallingsByAmortizationCommencementDateIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
-
-        // Get all the prepaymentMarshallingList where amortizationCommencementDate is greater than or equal to DEFAULT_AMORTIZATION_COMMENCEMENT_DATE
-        defaultPrepaymentMarshallingShouldBeFound(
-            "amortizationCommencementDate.greaterThanOrEqual=" + DEFAULT_AMORTIZATION_COMMENCEMENT_DATE
-        );
-
-        // Get all the prepaymentMarshallingList where amortizationCommencementDate is greater than or equal to UPDATED_AMORTIZATION_COMMENCEMENT_DATE
-        defaultPrepaymentMarshallingShouldNotBeFound(
-            "amortizationCommencementDate.greaterThanOrEqual=" + UPDATED_AMORTIZATION_COMMENCEMENT_DATE
-        );
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentMarshallingsByAmortizationCommencementDateIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
-
-        // Get all the prepaymentMarshallingList where amortizationCommencementDate is less than or equal to DEFAULT_AMORTIZATION_COMMENCEMENT_DATE
-        defaultPrepaymentMarshallingShouldBeFound("amortizationCommencementDate.lessThanOrEqual=" + DEFAULT_AMORTIZATION_COMMENCEMENT_DATE);
-
-        // Get all the prepaymentMarshallingList where amortizationCommencementDate is less than or equal to SMALLER_AMORTIZATION_COMMENCEMENT_DATE
-        defaultPrepaymentMarshallingShouldNotBeFound(
-            "amortizationCommencementDate.lessThanOrEqual=" + SMALLER_AMORTIZATION_COMMENCEMENT_DATE
-        );
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentMarshallingsByAmortizationCommencementDateIsLessThanSomething() throws Exception {
-        // Initialize the database
-        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
-
-        // Get all the prepaymentMarshallingList where amortizationCommencementDate is less than DEFAULT_AMORTIZATION_COMMENCEMENT_DATE
-        defaultPrepaymentMarshallingShouldNotBeFound("amortizationCommencementDate.lessThan=" + DEFAULT_AMORTIZATION_COMMENCEMENT_DATE);
-
-        // Get all the prepaymentMarshallingList where amortizationCommencementDate is less than UPDATED_AMORTIZATION_COMMENCEMENT_DATE
-        defaultPrepaymentMarshallingShouldBeFound("amortizationCommencementDate.lessThan=" + UPDATED_AMORTIZATION_COMMENCEMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllPrepaymentMarshallingsByAmortizationCommencementDateIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
-
-        // Get all the prepaymentMarshallingList where amortizationCommencementDate is greater than DEFAULT_AMORTIZATION_COMMENCEMENT_DATE
-        defaultPrepaymentMarshallingShouldNotBeFound("amortizationCommencementDate.greaterThan=" + DEFAULT_AMORTIZATION_COMMENCEMENT_DATE);
-
-        // Get all the prepaymentMarshallingList where amortizationCommencementDate is greater than SMALLER_AMORTIZATION_COMMENCEMENT_DATE
-        defaultPrepaymentMarshallingShouldBeFound("amortizationCommencementDate.greaterThan=" + SMALLER_AMORTIZATION_COMMENCEMENT_DATE);
     }
 
     @Test
@@ -580,6 +490,110 @@ class PrepaymentMarshallingResourceIT {
 
     @Test
     @Transactional
+    void getAllPrepaymentMarshallingsByProcessedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
+
+        // Get all the prepaymentMarshallingList where processed equals to DEFAULT_PROCESSED
+        defaultPrepaymentMarshallingShouldBeFound("processed.equals=" + DEFAULT_PROCESSED);
+
+        // Get all the prepaymentMarshallingList where processed equals to UPDATED_PROCESSED
+        defaultPrepaymentMarshallingShouldNotBeFound("processed.equals=" + UPDATED_PROCESSED);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentMarshallingsByProcessedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
+
+        // Get all the prepaymentMarshallingList where processed not equals to DEFAULT_PROCESSED
+        defaultPrepaymentMarshallingShouldNotBeFound("processed.notEquals=" + DEFAULT_PROCESSED);
+
+        // Get all the prepaymentMarshallingList where processed not equals to UPDATED_PROCESSED
+        defaultPrepaymentMarshallingShouldBeFound("processed.notEquals=" + UPDATED_PROCESSED);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentMarshallingsByProcessedIsInShouldWork() throws Exception {
+        // Initialize the database
+        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
+
+        // Get all the prepaymentMarshallingList where processed in DEFAULT_PROCESSED or UPDATED_PROCESSED
+        defaultPrepaymentMarshallingShouldBeFound("processed.in=" + DEFAULT_PROCESSED + "," + UPDATED_PROCESSED);
+
+        // Get all the prepaymentMarshallingList where processed equals to UPDATED_PROCESSED
+        defaultPrepaymentMarshallingShouldNotBeFound("processed.in=" + UPDATED_PROCESSED);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentMarshallingsByProcessedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
+
+        // Get all the prepaymentMarshallingList where processed is not null
+        defaultPrepaymentMarshallingShouldBeFound("processed.specified=true");
+
+        // Get all the prepaymentMarshallingList where processed is null
+        defaultPrepaymentMarshallingShouldNotBeFound("processed.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentMarshallingsByCompilationTokenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
+
+        // Get all the prepaymentMarshallingList where compilationToken equals to DEFAULT_COMPILATION_TOKEN
+        defaultPrepaymentMarshallingShouldBeFound("compilationToken.equals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the prepaymentMarshallingList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultPrepaymentMarshallingShouldNotBeFound("compilationToken.equals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentMarshallingsByCompilationTokenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
+
+        // Get all the prepaymentMarshallingList where compilationToken not equals to DEFAULT_COMPILATION_TOKEN
+        defaultPrepaymentMarshallingShouldNotBeFound("compilationToken.notEquals=" + DEFAULT_COMPILATION_TOKEN);
+
+        // Get all the prepaymentMarshallingList where compilationToken not equals to UPDATED_COMPILATION_TOKEN
+        defaultPrepaymentMarshallingShouldBeFound("compilationToken.notEquals=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentMarshallingsByCompilationTokenIsInShouldWork() throws Exception {
+        // Initialize the database
+        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
+
+        // Get all the prepaymentMarshallingList where compilationToken in DEFAULT_COMPILATION_TOKEN or UPDATED_COMPILATION_TOKEN
+        defaultPrepaymentMarshallingShouldBeFound("compilationToken.in=" + DEFAULT_COMPILATION_TOKEN + "," + UPDATED_COMPILATION_TOKEN);
+
+        // Get all the prepaymentMarshallingList where compilationToken equals to UPDATED_COMPILATION_TOKEN
+        defaultPrepaymentMarshallingShouldNotBeFound("compilationToken.in=" + UPDATED_COMPILATION_TOKEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentMarshallingsByCompilationTokenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
+
+        // Get all the prepaymentMarshallingList where compilationToken is not null
+        defaultPrepaymentMarshallingShouldBeFound("compilationToken.specified=true");
+
+        // Get all the prepaymentMarshallingList where compilationToken is null
+        defaultPrepaymentMarshallingShouldNotBeFound("compilationToken.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllPrepaymentMarshallingsByPrepaymentAccountIsEqualToSomething() throws Exception {
         // Initialize the database
         prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
@@ -630,6 +644,84 @@ class PrepaymentMarshallingResourceIT {
         defaultPrepaymentMarshallingShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllPrepaymentMarshallingsByFirstFiscalMonthIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
+        FiscalMonth firstFiscalMonth;
+        if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
+            firstFiscalMonth = FiscalMonthResourceIT.createEntity(em);
+            em.persist(firstFiscalMonth);
+            em.flush();
+        } else {
+            firstFiscalMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
+        }
+        em.persist(firstFiscalMonth);
+        em.flush();
+        prepaymentMarshalling.setFirstFiscalMonth(firstFiscalMonth);
+        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
+        Long firstFiscalMonthId = firstFiscalMonth.getId();
+
+        // Get all the prepaymentMarshallingList where firstFiscalMonth equals to firstFiscalMonthId
+        defaultPrepaymentMarshallingShouldBeFound("firstFiscalMonthId.equals=" + firstFiscalMonthId);
+
+        // Get all the prepaymentMarshallingList where firstFiscalMonth equals to (firstFiscalMonthId + 1)
+        defaultPrepaymentMarshallingShouldNotBeFound("firstFiscalMonthId.equals=" + (firstFiscalMonthId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentMarshallingsByLastFiscalMonthIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
+        FiscalMonth lastFiscalMonth;
+        if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
+            lastFiscalMonth = FiscalMonthResourceIT.createEntity(em);
+            em.persist(lastFiscalMonth);
+            em.flush();
+        } else {
+            lastFiscalMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
+        }
+        em.persist(lastFiscalMonth);
+        em.flush();
+        prepaymentMarshalling.setLastFiscalMonth(lastFiscalMonth);
+        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
+        Long lastFiscalMonthId = lastFiscalMonth.getId();
+
+        // Get all the prepaymentMarshallingList where lastFiscalMonth equals to lastFiscalMonthId
+        defaultPrepaymentMarshallingShouldBeFound("lastFiscalMonthId.equals=" + lastFiscalMonthId);
+
+        // Get all the prepaymentMarshallingList where lastFiscalMonth equals to (lastFiscalMonthId + 1)
+        defaultPrepaymentMarshallingShouldNotBeFound("lastFiscalMonthId.equals=" + (lastFiscalMonthId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentMarshallingsByFirstAmortizationPeriodIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
+        AmortizationPeriod firstAmortizationPeriod;
+        if (TestUtil.findAll(em, AmortizationPeriod.class).isEmpty()) {
+            firstAmortizationPeriod = AmortizationPeriodResourceIT.createEntity(em);
+            em.persist(firstAmortizationPeriod);
+            em.flush();
+        } else {
+            firstAmortizationPeriod = TestUtil.findAll(em, AmortizationPeriod.class).get(0);
+        }
+        em.persist(firstAmortizationPeriod);
+        em.flush();
+        prepaymentMarshalling.setFirstAmortizationPeriod(firstAmortizationPeriod);
+        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
+        Long firstAmortizationPeriodId = firstAmortizationPeriod.getId();
+
+        // Get all the prepaymentMarshallingList where firstAmortizationPeriod equals to firstAmortizationPeriodId
+        defaultPrepaymentMarshallingShouldBeFound("firstAmortizationPeriodId.equals=" + firstAmortizationPeriodId);
+
+        // Get all the prepaymentMarshallingList where firstAmortizationPeriod equals to (firstAmortizationPeriodId + 1)
+        defaultPrepaymentMarshallingShouldNotBeFound("firstAmortizationPeriodId.equals=" + (firstAmortizationPeriodId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -640,8 +732,9 @@ class PrepaymentMarshallingResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentMarshalling.getId().intValue())))
             .andExpect(jsonPath("$.[*].inactive").value(hasItem(DEFAULT_INACTIVE.booleanValue())))
-            .andExpect(jsonPath("$.[*].amortizationCommencementDate").value(hasItem(DEFAULT_AMORTIZATION_COMMENCEMENT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].amortizationPeriods").value(hasItem(DEFAULT_AMORTIZATION_PERIODS)));
+            .andExpect(jsonPath("$.[*].amortizationPeriods").value(hasItem(DEFAULT_AMORTIZATION_PERIODS)))
+            .andExpect(jsonPath("$.[*].processed").value(hasItem(DEFAULT_PROCESSED.booleanValue())))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN.toString())));
 
         // Check, that the count call also returns 1
         restPrepaymentMarshallingMockMvc
@@ -691,8 +784,9 @@ class PrepaymentMarshallingResourceIT {
         em.detach(updatedPrepaymentMarshalling);
         updatedPrepaymentMarshalling
             .inactive(UPDATED_INACTIVE)
-            .amortizationCommencementDate(UPDATED_AMORTIZATION_COMMENCEMENT_DATE)
-            .amortizationPeriods(UPDATED_AMORTIZATION_PERIODS);
+            .amortizationPeriods(UPDATED_AMORTIZATION_PERIODS)
+            .processed(UPDATED_PROCESSED)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
         PrepaymentMarshallingDTO prepaymentMarshallingDTO = prepaymentMarshallingMapper.toDto(updatedPrepaymentMarshalling);
 
         restPrepaymentMarshallingMockMvc
@@ -708,8 +802,9 @@ class PrepaymentMarshallingResourceIT {
         assertThat(prepaymentMarshallingList).hasSize(databaseSizeBeforeUpdate);
         PrepaymentMarshalling testPrepaymentMarshalling = prepaymentMarshallingList.get(prepaymentMarshallingList.size() - 1);
         assertThat(testPrepaymentMarshalling.getInactive()).isEqualTo(UPDATED_INACTIVE);
-        assertThat(testPrepaymentMarshalling.getAmortizationCommencementDate()).isEqualTo(UPDATED_AMORTIZATION_COMMENCEMENT_DATE);
         assertThat(testPrepaymentMarshalling.getAmortizationPeriods()).isEqualTo(UPDATED_AMORTIZATION_PERIODS);
+        assertThat(testPrepaymentMarshalling.getProcessed()).isEqualTo(UPDATED_PROCESSED);
+        assertThat(testPrepaymentMarshalling.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
 
         // Validate the PrepaymentMarshalling in Elasticsearch
         verify(mockPrepaymentMarshallingSearchRepository).save(testPrepaymentMarshalling);
@@ -806,8 +901,9 @@ class PrepaymentMarshallingResourceIT {
         partialUpdatedPrepaymentMarshalling.setId(prepaymentMarshalling.getId());
 
         partialUpdatedPrepaymentMarshalling
-            .amortizationCommencementDate(UPDATED_AMORTIZATION_COMMENCEMENT_DATE)
-            .amortizationPeriods(UPDATED_AMORTIZATION_PERIODS);
+            .amortizationPeriods(UPDATED_AMORTIZATION_PERIODS)
+            .processed(UPDATED_PROCESSED)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
 
         restPrepaymentMarshallingMockMvc
             .perform(
@@ -822,8 +918,9 @@ class PrepaymentMarshallingResourceIT {
         assertThat(prepaymentMarshallingList).hasSize(databaseSizeBeforeUpdate);
         PrepaymentMarshalling testPrepaymentMarshalling = prepaymentMarshallingList.get(prepaymentMarshallingList.size() - 1);
         assertThat(testPrepaymentMarshalling.getInactive()).isEqualTo(DEFAULT_INACTIVE);
-        assertThat(testPrepaymentMarshalling.getAmortizationCommencementDate()).isEqualTo(UPDATED_AMORTIZATION_COMMENCEMENT_DATE);
         assertThat(testPrepaymentMarshalling.getAmortizationPeriods()).isEqualTo(UPDATED_AMORTIZATION_PERIODS);
+        assertThat(testPrepaymentMarshalling.getProcessed()).isEqualTo(UPDATED_PROCESSED);
+        assertThat(testPrepaymentMarshalling.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
 
     @Test
@@ -840,8 +937,9 @@ class PrepaymentMarshallingResourceIT {
 
         partialUpdatedPrepaymentMarshalling
             .inactive(UPDATED_INACTIVE)
-            .amortizationCommencementDate(UPDATED_AMORTIZATION_COMMENCEMENT_DATE)
-            .amortizationPeriods(UPDATED_AMORTIZATION_PERIODS);
+            .amortizationPeriods(UPDATED_AMORTIZATION_PERIODS)
+            .processed(UPDATED_PROCESSED)
+            .compilationToken(UPDATED_COMPILATION_TOKEN);
 
         restPrepaymentMarshallingMockMvc
             .perform(
@@ -856,8 +954,9 @@ class PrepaymentMarshallingResourceIT {
         assertThat(prepaymentMarshallingList).hasSize(databaseSizeBeforeUpdate);
         PrepaymentMarshalling testPrepaymentMarshalling = prepaymentMarshallingList.get(prepaymentMarshallingList.size() - 1);
         assertThat(testPrepaymentMarshalling.getInactive()).isEqualTo(UPDATED_INACTIVE);
-        assertThat(testPrepaymentMarshalling.getAmortizationCommencementDate()).isEqualTo(UPDATED_AMORTIZATION_COMMENCEMENT_DATE);
         assertThat(testPrepaymentMarshalling.getAmortizationPeriods()).isEqualTo(UPDATED_AMORTIZATION_PERIODS);
+        assertThat(testPrepaymentMarshalling.getProcessed()).isEqualTo(UPDATED_PROCESSED);
+        assertThat(testPrepaymentMarshalling.getCompilationToken()).isEqualTo(UPDATED_COMPILATION_TOKEN);
     }
 
     @Test
@@ -975,7 +1074,8 @@ class PrepaymentMarshallingResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentMarshalling.getId().intValue())))
             .andExpect(jsonPath("$.[*].inactive").value(hasItem(DEFAULT_INACTIVE.booleanValue())))
-            .andExpect(jsonPath("$.[*].amortizationCommencementDate").value(hasItem(DEFAULT_AMORTIZATION_COMMENCEMENT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].amortizationPeriods").value(hasItem(DEFAULT_AMORTIZATION_PERIODS)));
+            .andExpect(jsonPath("$.[*].amortizationPeriods").value(hasItem(DEFAULT_AMORTIZATION_PERIODS)))
+            .andExpect(jsonPath("$.[*].processed").value(hasItem(DEFAULT_PROCESSED.booleanValue())))
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN.toString())));
     }
 }

@@ -2,16 +2,19 @@
   "fields": [
     {
       "fieldName": "inactive",
-      "fieldType": "Boolean",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "amortizationCommencementDate",
-      "fieldType": "LocalDate"
+      "fieldType": "Boolean"
     },
     {
       "fieldName": "amortizationPeriods",
       "fieldType": "Integer"
+    },
+    {
+      "fieldName": "processed",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "UUID"
     }
   ],
   "relationships": [
@@ -29,6 +32,27 @@
       "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "prepaymentMarshalling"
+    },
+    {
+      "relationshipName": "firstFiscalMonth",
+      "otherEntityName": "fiscalMonth",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "startDate"
+    },
+    {
+      "relationshipName": "lastFiscalMonth",
+      "otherEntityName": "fiscalMonth",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "endDate"
+    },
+    {
+      "relationshipName": "firstAmortizationPeriod",
+      "otherEntityName": "amortizationPeriod",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "periodCode"
     }
   ],
   "service": "serviceImpl",

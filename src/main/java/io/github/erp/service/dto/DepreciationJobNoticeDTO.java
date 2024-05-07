@@ -1,8 +1,8 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Lob;
-import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link io.github.erp.domain.DepreciationJobNotice} entity.
@@ -34,13 +33,10 @@ public class DepreciationJobNoticeDTO implements Serializable {
 
     private Long id;
 
-    @NotNull
     private String eventNarrative;
 
-    @NotNull
     private ZonedDateTime eventTimeStamp;
 
-    @NotNull
     private DepreciationNoticeStatusType depreciationNoticeStatus;
 
     private String sourceModule;
@@ -66,8 +62,6 @@ public class DepreciationJobNoticeDTO implements Serializable {
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     private Set<UniversallyUniqueMappingDTO> universallyUniqueMappings = new HashSet<>();
-
-    private ApplicationUserDTO superintended;
 
     public Long getId() {
         return id;
@@ -189,14 +183,6 @@ public class DepreciationJobNoticeDTO implements Serializable {
         this.universallyUniqueMappings = universallyUniqueMappings;
     }
 
-    public ApplicationUserDTO getSuperintended() {
-        return superintended;
-    }
-
-    public void setSuperintended(ApplicationUserDTO superintended) {
-        this.superintended = superintended;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -237,7 +223,6 @@ public class DepreciationJobNoticeDTO implements Serializable {
             ", depreciationPeriod=" + getDepreciationPeriod() +
             ", placeholders=" + getPlaceholders() +
             ", universallyUniqueMappings=" + getUniversallyUniqueMappings() +
-            ", superintended=" + getSuperintended() +
             "}";
     }
 }

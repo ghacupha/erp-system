@@ -26,6 +26,8 @@ logging:
     ROOT: INFO
     tech.jhipster: INFO
     io.github.erp: INFO
+    org.apache.kafka: DEBUG
+    org.springframework: WARN
 
 management:
   metrics:
@@ -45,7 +47,8 @@ spring:
         initial-interval: 1000
         max-interval: 2000
         max-attempts: 100
-      uri: http://admin:${jhipster.registry.password}@localhost:8761/config
+      #uri: http://admin:${jhipster.registry.password}@localhost:8761/config
+      uri: ${SPRING_CLOUD_CONFIG_URI}
       # name of the config server's property source (file.yml) that we want to use
       name: erpSystem
       profile: prod
@@ -64,6 +67,59 @@ spring:
   jpa:
     show-sql: false
     database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAPSERVERS}
+    admin:
+      properties:
+        replication.factor: ${KAFKA_REPLICATION_FACTOR}
+    topics:
+      depreciation-batch:
+        topic:
+          name: "depreciation_batch_topic"
+        consumer:
+          group.id: erp-system-depreciation
+          auto.offset.reset: earliest
+          properties:
+            spring.json.trusted.packages: "*"
+            replication.factor: ${KAFKA_REPLICATION_FACTOR}
+        producer:
+          key.serializer: org.apache.kafka.common.serialization.StringSerializer
+          properties:
+            replication.factor: ${KAFKA_REPLICATION_FACTOR};
+      nbv:
+        topic:
+          name: "nbv_batch_topic"
+        consumer:
+          group.id: erp-system-nbv
+          auto.offset.reset: earliest
+          properties:
+            spring.json.trusted.packages: "*"
+            replication.factor: ${KAFKA_REPLICATION_FACTOR}
+        producer:
+          key.serializer: org.apache.kafka.common.serialization.StringSerializer
+          properties:
+            replication.factor: ${KAFKA_REPLICATION_FACTOR};
+#  kafka:
+#    bootstrap-servers: ${KAFKA_BOOTSTRAPSERVERS}
+#    admin:
+#      properties:
+#        replication.factor: ${KAFKA_REPLICATION_FACTOR}
+#    consumer:
+#      group.id: erp-system
+#      key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value.deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+#      auto.offset.reset: earliest
+#      properties:
+#        spring.json.trusted.packages: "*"
+#        replication.factor: ${KAFKA_REPLICATION_FACTOR}
+#    producer:
+#      key.serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value.serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#      properties:
+#        replication.factor: ${KAFKA_REPLICATION_FACTOR};
+#    depreciation-batch:
+#      topic:
+#        name: "depreciation_batch_topic"
   elasticsearch:
     rest:
       # uris: http://localhost:9200
@@ -134,7 +190,7 @@ jhipster:
     # The allowed origin that is dynamically configured just straight-out refused to work
     #allowed-origins: 'http://localhost:8100,https://localhost:8100,http://localhost:9000,https://localhost:9000,https://localhost:8981,http://localhost:8981,https://localhost:8984,http://localhost:8984,https://localhost:8982,http://localhost:8982,${app.SandboxInstance.urls}'
     #allowed-origins: 'http://localhost:8100,https://localhost:8100,http://localhost:9000,https://localhost:9000,https://localhost:8981,http://localhost:8981,${app.SandboxInstance.urls}'
-    allowed-origins: 'http://localhost:9000,https://localhost:9000,https://localhost:8981,http://localhost:8981,http://10.60.27.22:9000,${app.SandboxInstance.urls}'
+    allowed-origins: 'http://localhost:9000,https://localhost:9000,https://localhost:8981,http://localhost:8981,http://10.60.27.22:9000,http://localhost:8985,http://127.0.0.1:8985,http://127.0.0.1:8985,http://10.60.27.22:8985,${app.SandboxInstance.urls}'
     allowed-methods: '*'
     allowed-headers: '*'
     exposed-headers: 'Origin,X-Requested-With,Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params'
@@ -164,6 +220,7 @@ jhipster:
       queue-size: 512
   registry:
     password: admin
+    # host: ${JHIPSTER_REGISTRY_HOST}
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
@@ -183,3 +240,5 @@ app:
   ReIndexer:
     #      interval: PT3600S
     interval: ${ERP_REINDEXER_INTERVAL_PROD}
+
+

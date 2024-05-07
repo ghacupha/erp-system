@@ -1,8 +1,8 @@
 package io.github.erp.web.rest;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -84,7 +86,7 @@ public class DepreciationJobResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/depreciation-jobs")
-    public ResponseEntity<DepreciationJobDTO> createDepreciationJob(@RequestBody DepreciationJobDTO depreciationJobDTO)
+    public ResponseEntity<DepreciationJobDTO> createDepreciationJob(@Valid @RequestBody DepreciationJobDTO depreciationJobDTO)
         throws URISyntaxException {
         log.debug("REST request to save DepreciationJob : {}", depreciationJobDTO);
         if (depreciationJobDTO.getId() != null) {
@@ -110,7 +112,7 @@ public class DepreciationJobResource {
     @PutMapping("/depreciation-jobs/{id}")
     public ResponseEntity<DepreciationJobDTO> updateDepreciationJob(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody DepreciationJobDTO depreciationJobDTO
+        @Valid @RequestBody DepreciationJobDTO depreciationJobDTO
     ) throws URISyntaxException {
         log.debug("REST request to update DepreciationJob : {}, {}", id, depreciationJobDTO);
         if (depreciationJobDTO.getId() == null) {
@@ -145,7 +147,7 @@ public class DepreciationJobResource {
     @PatchMapping(value = "/depreciation-jobs/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<DepreciationJobDTO> partialUpdateDepreciationJob(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody DepreciationJobDTO depreciationJobDTO
+        @NotNull @RequestBody DepreciationJobDTO depreciationJobDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update DepreciationJob partially : {}, {}", id, depreciationJobDTO);
         if (depreciationJobDTO.getId() == null) {

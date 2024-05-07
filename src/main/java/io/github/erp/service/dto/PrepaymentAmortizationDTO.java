@@ -1,8 +1,8 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,8 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link io.github.erp.domain.PrepaymentAmortization} entity.
@@ -40,6 +42,8 @@ public class PrepaymentAmortizationDTO implements Serializable {
 
     private Boolean inactive;
 
+    private UUID amortizationIdentifier;
+
     private PrepaymentAccountDTO prepaymentAccount;
 
     private SettlementCurrencyDTO settlementCurrency;
@@ -49,6 +53,12 @@ public class PrepaymentAmortizationDTO implements Serializable {
     private TransactionAccountDTO creditAccount;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
+
+    private FiscalMonthDTO fiscalMonth;
+
+    private PrepaymentCompilationRequestDTO prepaymentCompilationRequest;
+
+    private AmortizationPeriodDTO amortizationPeriod;
 
     public Long getId() {
         return id;
@@ -88,6 +98,14 @@ public class PrepaymentAmortizationDTO implements Serializable {
 
     public void setInactive(Boolean inactive) {
         this.inactive = inactive;
+    }
+
+    public UUID getAmortizationIdentifier() {
+        return amortizationIdentifier;
+    }
+
+    public void setAmortizationIdentifier(UUID amortizationIdentifier) {
+        this.amortizationIdentifier = amortizationIdentifier;
     }
 
     public PrepaymentAccountDTO getPrepaymentAccount() {
@@ -130,6 +148,30 @@ public class PrepaymentAmortizationDTO implements Serializable {
         this.placeholders = placeholders;
     }
 
+    public FiscalMonthDTO getFiscalMonth() {
+        return fiscalMonth;
+    }
+
+    public void setFiscalMonth(FiscalMonthDTO fiscalMonth) {
+        this.fiscalMonth = fiscalMonth;
+    }
+
+    public PrepaymentCompilationRequestDTO getPrepaymentCompilationRequest() {
+        return prepaymentCompilationRequest;
+    }
+
+    public void setPrepaymentCompilationRequest(PrepaymentCompilationRequestDTO prepaymentCompilationRequest) {
+        this.prepaymentCompilationRequest = prepaymentCompilationRequest;
+    }
+
+    public AmortizationPeriodDTO getAmortizationPeriod() {
+        return amortizationPeriod;
+    }
+
+    public void setAmortizationPeriod(AmortizationPeriodDTO amortizationPeriod) {
+        this.amortizationPeriod = amortizationPeriod;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -160,11 +202,15 @@ public class PrepaymentAmortizationDTO implements Serializable {
             ", prepaymentPeriod='" + getPrepaymentPeriod() + "'" +
             ", prepaymentAmount=" + getPrepaymentAmount() +
             ", inactive='" + getInactive() + "'" +
+            ", amortizationIdentifier='" + getAmortizationIdentifier() + "'" +
             ", prepaymentAccount=" + getPrepaymentAccount() +
             ", settlementCurrency=" + getSettlementCurrency() +
             ", debitAccount=" + getDebitAccount() +
             ", creditAccount=" + getCreditAccount() +
             ", placeholders=" + getPlaceholders() +
+            ", fiscalMonth=" + getFiscalMonth() +
+            ", prepaymentCompilationRequest=" + getPrepaymentCompilationRequest() +
+            ", amortizationPeriod=" + getAmortizationPeriod() +
             "}";
     }
 }

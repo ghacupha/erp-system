@@ -1,0 +1,33 @@
+{
+  "fields": [
+    {
+      "fieldName": "fiscalMonthEndDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "totalPrepaymentAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "totalAmortisedAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "totalOutstandingAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "numberOfPrepaymentAccounts",
+      "fieldType": "Integer"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": true,
+  "pagination": "infinite-scroll",
+  "name": "MonthlyPrepaymentOutstandingReportItem",
+  "changelogDate": "20240304133311",
+  "incrementalChangelog": false
+}

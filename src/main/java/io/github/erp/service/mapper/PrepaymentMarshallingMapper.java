@@ -1,8 +1,8 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,10 +25,16 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link PrepaymentMarshalling} and its DTO {@link PrepaymentMarshallingDTO}.
  */
-@Mapper(componentModel = "spring", uses = { PrepaymentAccountMapper.class, PlaceholderMapper.class })
+@Mapper(
+    componentModel = "spring",
+    uses = { PrepaymentAccountMapper.class, PlaceholderMapper.class, FiscalMonthMapper.class, AmortizationPeriodMapper.class }
+)
 public interface PrepaymentMarshallingMapper extends EntityMapper<PrepaymentMarshallingDTO, PrepaymentMarshalling> {
     @Mapping(target = "prepaymentAccount", source = "prepaymentAccount", qualifiedByName = "catalogueNumber")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
+    @Mapping(target = "firstFiscalMonth", source = "firstFiscalMonth", qualifiedByName = "startDate")
+    @Mapping(target = "lastFiscalMonth", source = "lastFiscalMonth", qualifiedByName = "endDate")
+    @Mapping(target = "firstAmortizationPeriod", source = "firstAmortizationPeriod", qualifiedByName = "periodCode")
     PrepaymentMarshallingDTO toDto(PrepaymentMarshalling s);
 
     @Mapping(target = "removePlaceholder", ignore = true)

@@ -7,10 +7,9 @@
 
     <groupId>io.github.erp</groupId>
     <artifactId>erp-system</artifactId>
-    <version>1.5.2</version>
+    <version>1.7.9</version>
     <packaging>jar</packaging>
     <name>Erp System</name>
-    <!--<description>Mark III No 6 (Caleb Series) Server ver 0.3.0-SNAPSHOT</description>-->
     <description>${ERP_SYSTEM_DEPLOYMENT_TITLE}</description>
 
     <repositories>
@@ -25,8 +24,8 @@
 
     <properties>
         <!-- Build properties -->
-        <ERP_SYSTEM_DEPLOYMENT_SERIES>Phoebe Series</ERP_SYSTEM_DEPLOYMENT_SERIES>
-        <ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>Mark VI No 1 </ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>
+        <ERP_SYSTEM_DEPLOYMENT_SERIES>Jehoiada Series</ERP_SYSTEM_DEPLOYMENT_SERIES>
+        <ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>Mark X No 7 </ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>
         <ERP_SYSTEM_DEPLOYMENT_VERSION>${project.version}</ERP_SYSTEM_DEPLOYMENT_VERSION>
         <ERP_SYSTEM_DEPLOYMENT_TITLE>${ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER} (${ERP_SYSTEM_DEPLOYMENT_SERIES}) Server ver ${ERP_SYSTEM_DEPLOYMENT_VERSION}</ERP_SYSTEM_DEPLOYMENT_TITLE>
         <maven.version>3.3.9</maven.version>
@@ -37,7 +36,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <start-class>io.github.erp.ErpSystemApp</start-class>
-        <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx2560m</argLine>
+        <argLine>-Djava.security.egd=file:/dev/./urandom -Xms6g -Xmx10g</argLine>
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <run.addResources>false</run.addResources>
         <!-- These remain empty unless the corresponding profile is active -->
@@ -50,9 +49,8 @@
         <docker.image.prefix>ghacupha</docker.image.prefix>
         <founder.website>https://github.com/ghacupha</founder.website>
         <owner.email>mailnjeru@gmail.com</owner.email>
-        <project.inceptionYear>2021 - 2023</project.inceptionYear>
-        <project.owner>Edwin Njeru</project.owner>
-        <!--<application.port>8979</application.port>-->
+        <project.inceptionYear>2021 - 2024</project.inceptionYear>
+        <project.owner>Edwin Njeru and the ERP System Contributors</project.owner>
         <application.port>${env.ERP_SYSTEM_DEV_PORT}</application.port>
 
         <maven.javadoc.skip>true</maven.javadoc.skip>
@@ -101,12 +99,16 @@
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
         <properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
         <sonar-maven-plugin.version>3.9.0.2155</sonar-maven-plugin.version>
+        <sonar.organization>erp-system-contributors</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <guava.version>30.1.1-jre</guava.version>
-        <lombok.version>1.18.12</lombok.version>
+        <lombok.version>1.18.30</lombok.version>
         <poiji.version>3.0.0</poiji.version>
         <jetbrains-annotations.version>23.0.0</jetbrains-annotations.version>
         <jasperreports.version>6.19.1</jasperreports.version>
         <spring-kafka.version>2.6.0</spring-kafka.version>
+        <opencsv.version>5.9</opencsv.version>
+        <dynamicreports.version>6.12.1</dynamicreports.version>
         <!-- jhipster-needle-maven-property -->
     </properties>
 
@@ -129,6 +131,20 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxjava -->
+        <dependency>
+            <groupId>io.reactivex.rxjava2</groupId>
+            <artifactId>rxjava</artifactId>
+            <version>2.2.21</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/com.opencsv/opencsv -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>${opencsv.version}</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.yaml/snakeyaml -->
         <dependency>
             <groupId>org.yaml</groupId>
@@ -179,25 +195,6 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-config</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-netflix-eureka-client -->
-        <!--<dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-netflix-eureka-client</artifactId>
-        </dependency>-->
-        <!--<dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
-        </dependency>-->
-        <!--<dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-config-server</artifactId>
-        </dependency>-->
-        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-commons -->
-        <!--<dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-commons</artifactId>
-        </dependency>-->
-        <!-- https://mvnrepository.com/artifact/org.webjars/font-awesome -->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>font-awesome</artifactId>
@@ -207,18 +204,18 @@
         <dependency>
             <groupId>net.sourceforge.dynamicreports</groupId>
             <artifactId>dynamicreports-core</artifactId>
-            <version>6.12.1</version>
+            <version>${dynamicreports.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/net.sourceforge.dynamicreports/dynamicreports-adhoc -->
         <dependency>
             <groupId>net.sourceforge.dynamicreports</groupId>
             <artifactId>dynamicreports-adhoc</artifactId>
-            <version>6.12.1</version>
+            <version>${dynamicreports.version}</version>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.dynamicreports</groupId>
             <artifactId>dynamicreports-googlecharts</artifactId>
-            <version>6.12.1</version>
+            <version>${dynamicreports.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
@@ -259,32 +256,6 @@
             <version>${jasperreports.version}</version>
         </dependency>
 
-
-        <!--<dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-webmvc-core</artifactId>
-            <version>1.6.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-data-rest</artifactId>
-            <version>1.6.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-security</artifactId>
-            <version>1.6.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-native</artifactId>
-            <version>1.6.7</version>
-        </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>

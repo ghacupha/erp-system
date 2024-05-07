@@ -3,12 +3,12 @@
     {
       "fieldName": "startDate",
       "fieldType": "LocalDate",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required", "unique"]
     },
     {
       "fieldName": "endDate",
       "fieldType": "LocalDate",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required", "unique"]
     },
     {
       "fieldName": "depreciationPeriodStatus",
@@ -36,31 +36,11 @@
       "otherEntityRelationshipName": "nextPeriod"
     },
     {
-      "relationshipName": "createdBy",
-      "otherEntityName": "applicationUser",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "applicationIdentity"
-    },
-    {
-      "relationshipName": "fiscalYear",
-      "otherEntityName": "fiscalYear",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "fiscalYearCode"
-    },
-    {
       "relationshipName": "fiscalMonth",
       "otherEntityName": "fiscalMonth",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipName": "fiscalQuarter",
-      "otherEntityName": "fiscalQuarter",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "id"
+      "otherEntityField": "fiscalMonthCode"
     }
   ],
   "service": "serviceImpl",

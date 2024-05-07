@@ -1,8 +1,8 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,6 +62,12 @@ public class WorkInProgressRegistration implements Serializable {
     @Column(name = "comments_content_type")
     private String commentsContentType;
 
+    @Column(name = "level_of_completion")
+    private Double levelOfCompletion;
+
+    @Column(name = "completed")
+    private Boolean completed;
+
     @ManyToMany
     @JoinTable(
         name = "rel_work_in_progress_registration__placeholder",
@@ -72,133 +78,23 @@ public class WorkInProgressRegistration implements Serializable {
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-        name = "rel_work_in_progress_registration__payment_invoices",
-        joinColumns = @JoinColumn(name = "work_in_progress_registration_id"),
-        inverseJoinColumns = @JoinColumn(name = "payment_invoices_id")
-    )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = {
-            "purchaseOrders",
-            "placeholders",
-            "paymentLabels",
-            "settlementCurrency",
-            "biller",
-            "deliveryNotes",
-            "jobSheets",
-            "businessDocuments",
-        },
-        allowSetters = true
-    )
-    private Set<PaymentInvoice> paymentInvoices = new HashSet<>();
-
-    @ManyToMany
-    @JoinTable(
-        name = "rel_work_in_progress_registration__service_outlet",
-        joinColumns = @JoinColumn(name = "work_in_progress_registration_id"),
-        inverseJoinColumns = @JoinColumn(name = "service_outlet_id")
-    )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = { "placeholders", "bankCode", "outletType", "outletStatus", "countyName", "subCountyName" },
-        allowSetters = true
-    )
-    private Set<ServiceOutlet> serviceOutlets = new HashSet<>();
-
-    @ManyToMany
-    @JoinTable(
-        name = "rel_work_in_progress_registration__settlement",
-        joinColumns = @JoinColumn(name = "work_in_progress_registration_id"),
-        inverseJoinColumns = @JoinColumn(name = "settlement_id")
-    )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = {
-            "placeholders",
-            "settlementCurrency",
-            "paymentLabels",
-            "paymentCategory",
-            "groupSettlement",
-            "biller",
-            "paymentInvoices",
-            "signatories",
-            "businessDocuments",
-        },
-        allowSetters = true
-    )
-    private Set<Settlement> settlements = new HashSet<>();
-
-    @ManyToMany
-    @JoinTable(
-        name = "rel_work_in_progress_registration__purchase_order",
-        joinColumns = @JoinColumn(name = "work_in_progress_registration_id"),
-        inverseJoinColumns = @JoinColumn(name = "purchase_order_id")
-    )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = { "settlementCurrency", "placeholders", "signatories", "vendor", "businessDocuments" },
-        allowSetters = true
-    )
-    private Set<PurchaseOrder> purchaseOrders = new HashSet<>();
-
-    @ManyToMany
-    @JoinTable(
-        name = "rel_work_in_progress_registration__delivery_note",
-        joinColumns = @JoinColumn(name = "work_in_progress_registration_id"),
-        inverseJoinColumns = @JoinColumn(name = "delivery_note_id")
-    )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = {
-            "placeholders",
-            "receivedBy",
-            "deliveryStamps",
-            "purchaseOrder",
-            "supplier",
-            "signatories",
-            "otherPurchaseOrders",
-            "businessDocuments",
-        },
-        allowSetters = true
-    )
-    private Set<DeliveryNote> deliveryNotes = new HashSet<>();
-
-    @ManyToMany
-    @JoinTable(
-        name = "rel_work_in_progress_registration__job_sheet",
-        joinColumns = @JoinColumn(name = "work_in_progress_registration_id"),
-        inverseJoinColumns = @JoinColumn(name = "job_sheet_id")
-    )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = { "biller", "signatories", "contactPerson", "businessStamps", "placeholders", "paymentLabels", "businessDocuments" },
-        allowSetters = true
-    )
-    private Set<JobSheet> jobSheets = new HashSet<>();
-
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "placeholders" }, allowSetters = true)
-    private Dealer dealer;
-
     @ManyToOne
     @JsonIgnoreProperties(
         value = {
             "placeholders",
-            "paymentInvoices",
-            "serviceOutlets",
-            "settlements",
-            "purchaseOrders",
-            "deliveryNotes",
-            "jobSheets",
-            "dealer",
             "workInProgressGroup",
             "settlementCurrency",
             "workProjectRegister",
             "businessDocuments",
             "assetAccessories",
             "assetWarranties",
+            "invoice",
+            "outletCode",
+            "settlementTransaction",
+            "purchaseOrder",
+            "deliveryNote",
+            "jobSheet",
+            "dealer",
         },
         allowSetters = true
     )
@@ -270,6 +166,80 @@ public class WorkInProgressRegistration implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "placeholders", "universallyUniqueMappings", "dealer", "warrantyAttachments" }, allowSetters = true)
     private Set<AssetWarranty> assetWarranties = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = {
+            "purchaseOrders",
+            "placeholders",
+            "paymentLabels",
+            "settlementCurrency",
+            "biller",
+            "deliveryNotes",
+            "jobSheets",
+            "businessDocuments",
+        },
+        allowSetters = true
+    )
+    private PaymentInvoice invoice;
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = { "placeholders", "bankCode", "outletType", "outletStatus", "countyName", "subCountyName" },
+        allowSetters = true
+    )
+    private ServiceOutlet outletCode;
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = {
+            "placeholders",
+            "settlementCurrency",
+            "paymentLabels",
+            "paymentCategory",
+            "groupSettlement",
+            "biller",
+            "paymentInvoices",
+            "signatories",
+            "businessDocuments",
+        },
+        allowSetters = true
+    )
+    private Settlement settlementTransaction;
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = { "settlementCurrency", "placeholders", "signatories", "vendor", "businessDocuments" },
+        allowSetters = true
+    )
+    private PurchaseOrder purchaseOrder;
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = {
+            "placeholders",
+            "receivedBy",
+            "deliveryStamps",
+            "purchaseOrder",
+            "supplier",
+            "signatories",
+            "otherPurchaseOrders",
+            "businessDocuments",
+        },
+        allowSetters = true
+    )
+    private DeliveryNote deliveryNote;
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = { "biller", "signatories", "contactPerson", "businessStamps", "placeholders", "paymentLabels", "businessDocuments" },
+        allowSetters = true
+    )
+    private JobSheet jobSheet;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "paymentLabels", "dealerGroup", "placeholders" }, allowSetters = true)
+    private Dealer dealer;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -351,6 +321,32 @@ public class WorkInProgressRegistration implements Serializable {
         this.commentsContentType = commentsContentType;
     }
 
+    public Double getLevelOfCompletion() {
+        return this.levelOfCompletion;
+    }
+
+    public WorkInProgressRegistration levelOfCompletion(Double levelOfCompletion) {
+        this.setLevelOfCompletion(levelOfCompletion);
+        return this;
+    }
+
+    public void setLevelOfCompletion(Double levelOfCompletion) {
+        this.levelOfCompletion = levelOfCompletion;
+    }
+
+    public Boolean getCompleted() {
+        return this.completed;
+    }
+
+    public WorkInProgressRegistration completed(Boolean completed) {
+        this.setCompleted(completed);
+        return this;
+    }
+
+    public void setCompleted(Boolean completed) {
+        this.completed = completed;
+    }
+
     public Set<Placeholder> getPlaceholders() {
         return this.placeholders;
     }
@@ -371,157 +367,6 @@ public class WorkInProgressRegistration implements Serializable {
 
     public WorkInProgressRegistration removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
-        return this;
-    }
-
-    public Set<PaymentInvoice> getPaymentInvoices() {
-        return this.paymentInvoices;
-    }
-
-    public void setPaymentInvoices(Set<PaymentInvoice> paymentInvoices) {
-        this.paymentInvoices = paymentInvoices;
-    }
-
-    public WorkInProgressRegistration paymentInvoices(Set<PaymentInvoice> paymentInvoices) {
-        this.setPaymentInvoices(paymentInvoices);
-        return this;
-    }
-
-    public WorkInProgressRegistration addPaymentInvoices(PaymentInvoice paymentInvoice) {
-        this.paymentInvoices.add(paymentInvoice);
-        return this;
-    }
-
-    public WorkInProgressRegistration removePaymentInvoices(PaymentInvoice paymentInvoice) {
-        this.paymentInvoices.remove(paymentInvoice);
-        return this;
-    }
-
-    public Set<ServiceOutlet> getServiceOutlets() {
-        return this.serviceOutlets;
-    }
-
-    public void setServiceOutlets(Set<ServiceOutlet> serviceOutlets) {
-        this.serviceOutlets = serviceOutlets;
-    }
-
-    public WorkInProgressRegistration serviceOutlets(Set<ServiceOutlet> serviceOutlets) {
-        this.setServiceOutlets(serviceOutlets);
-        return this;
-    }
-
-    public WorkInProgressRegistration addServiceOutlet(ServiceOutlet serviceOutlet) {
-        this.serviceOutlets.add(serviceOutlet);
-        return this;
-    }
-
-    public WorkInProgressRegistration removeServiceOutlet(ServiceOutlet serviceOutlet) {
-        this.serviceOutlets.remove(serviceOutlet);
-        return this;
-    }
-
-    public Set<Settlement> getSettlements() {
-        return this.settlements;
-    }
-
-    public void setSettlements(Set<Settlement> settlements) {
-        this.settlements = settlements;
-    }
-
-    public WorkInProgressRegistration settlements(Set<Settlement> settlements) {
-        this.setSettlements(settlements);
-        return this;
-    }
-
-    public WorkInProgressRegistration addSettlement(Settlement settlement) {
-        this.settlements.add(settlement);
-        return this;
-    }
-
-    public WorkInProgressRegistration removeSettlement(Settlement settlement) {
-        this.settlements.remove(settlement);
-        return this;
-    }
-
-    public Set<PurchaseOrder> getPurchaseOrders() {
-        return this.purchaseOrders;
-    }
-
-    public void setPurchaseOrders(Set<PurchaseOrder> purchaseOrders) {
-        this.purchaseOrders = purchaseOrders;
-    }
-
-    public WorkInProgressRegistration purchaseOrders(Set<PurchaseOrder> purchaseOrders) {
-        this.setPurchaseOrders(purchaseOrders);
-        return this;
-    }
-
-    public WorkInProgressRegistration addPurchaseOrder(PurchaseOrder purchaseOrder) {
-        this.purchaseOrders.add(purchaseOrder);
-        return this;
-    }
-
-    public WorkInProgressRegistration removePurchaseOrder(PurchaseOrder purchaseOrder) {
-        this.purchaseOrders.remove(purchaseOrder);
-        return this;
-    }
-
-    public Set<DeliveryNote> getDeliveryNotes() {
-        return this.deliveryNotes;
-    }
-
-    public void setDeliveryNotes(Set<DeliveryNote> deliveryNotes) {
-        this.deliveryNotes = deliveryNotes;
-    }
-
-    public WorkInProgressRegistration deliveryNotes(Set<DeliveryNote> deliveryNotes) {
-        this.setDeliveryNotes(deliveryNotes);
-        return this;
-    }
-
-    public WorkInProgressRegistration addDeliveryNote(DeliveryNote deliveryNote) {
-        this.deliveryNotes.add(deliveryNote);
-        return this;
-    }
-
-    public WorkInProgressRegistration removeDeliveryNote(DeliveryNote deliveryNote) {
-        this.deliveryNotes.remove(deliveryNote);
-        return this;
-    }
-
-    public Set<JobSheet> getJobSheets() {
-        return this.jobSheets;
-    }
-
-    public void setJobSheets(Set<JobSheet> jobSheets) {
-        this.jobSheets = jobSheets;
-    }
-
-    public WorkInProgressRegistration jobSheets(Set<JobSheet> jobSheets) {
-        this.setJobSheets(jobSheets);
-        return this;
-    }
-
-    public WorkInProgressRegistration addJobSheet(JobSheet jobSheet) {
-        this.jobSheets.add(jobSheet);
-        return this;
-    }
-
-    public WorkInProgressRegistration removeJobSheet(JobSheet jobSheet) {
-        this.jobSheets.remove(jobSheet);
-        return this;
-    }
-
-    public Dealer getDealer() {
-        return this.dealer;
-    }
-
-    public void setDealer(Dealer dealer) {
-        this.dealer = dealer;
-    }
-
-    public WorkInProgressRegistration dealer(Dealer dealer) {
-        this.setDealer(dealer);
         return this;
     }
 
@@ -633,6 +478,97 @@ public class WorkInProgressRegistration implements Serializable {
         return this;
     }
 
+    public PaymentInvoice getInvoice() {
+        return this.invoice;
+    }
+
+    public void setInvoice(PaymentInvoice paymentInvoice) {
+        this.invoice = paymentInvoice;
+    }
+
+    public WorkInProgressRegistration invoice(PaymentInvoice paymentInvoice) {
+        this.setInvoice(paymentInvoice);
+        return this;
+    }
+
+    public ServiceOutlet getOutletCode() {
+        return this.outletCode;
+    }
+
+    public void setOutletCode(ServiceOutlet serviceOutlet) {
+        this.outletCode = serviceOutlet;
+    }
+
+    public WorkInProgressRegistration outletCode(ServiceOutlet serviceOutlet) {
+        this.setOutletCode(serviceOutlet);
+        return this;
+    }
+
+    public Settlement getSettlementTransaction() {
+        return this.settlementTransaction;
+    }
+
+    public void setSettlementTransaction(Settlement settlement) {
+        this.settlementTransaction = settlement;
+    }
+
+    public WorkInProgressRegistration settlementTransaction(Settlement settlement) {
+        this.setSettlementTransaction(settlement);
+        return this;
+    }
+
+    public PurchaseOrder getPurchaseOrder() {
+        return this.purchaseOrder;
+    }
+
+    public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
+    }
+
+    public WorkInProgressRegistration purchaseOrder(PurchaseOrder purchaseOrder) {
+        this.setPurchaseOrder(purchaseOrder);
+        return this;
+    }
+
+    public DeliveryNote getDeliveryNote() {
+        return this.deliveryNote;
+    }
+
+    public void setDeliveryNote(DeliveryNote deliveryNote) {
+        this.deliveryNote = deliveryNote;
+    }
+
+    public WorkInProgressRegistration deliveryNote(DeliveryNote deliveryNote) {
+        this.setDeliveryNote(deliveryNote);
+        return this;
+    }
+
+    public JobSheet getJobSheet() {
+        return this.jobSheet;
+    }
+
+    public void setJobSheet(JobSheet jobSheet) {
+        this.jobSheet = jobSheet;
+    }
+
+    public WorkInProgressRegistration jobSheet(JobSheet jobSheet) {
+        this.setJobSheet(jobSheet);
+        return this;
+    }
+
+    public Dealer getDealer() {
+        return this.dealer;
+    }
+
+    public void setDealer(Dealer dealer) {
+        this.dealer = dealer;
+    }
+
+    public WorkInProgressRegistration dealer(Dealer dealer) {
+        this.setDealer(dealer);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -662,6 +598,8 @@ public class WorkInProgressRegistration implements Serializable {
             ", instalmentAmount=" + getInstalmentAmount() +
             ", comments='" + getComments() + "'" +
             ", commentsContentType='" + getCommentsContentType() + "'" +
+            ", levelOfCompletion=" + getLevelOfCompletion() +
+            ", completed='" + getCompleted() + "'" +
             "}";
     }
 }

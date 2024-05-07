@@ -1,8 +1,8 @@
 package io.github.erp.security;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,6 +43,16 @@ public final class AuthoritiesConstants {
     public static final String PREPAYMENTS_MODULE_USER = "ROLE_PREPAYMENTS_MODULE_USER";
 
     public static final String GRANULAR_REPORTS_USER = "ROLE_GRANULAR_REPORTS_USER";
+    public static final String GDI_FINANCE_USER = "ROLE_GDI_FINANCE_USER";
+    public static final String GDI_OPERATIONS_USER = "ROLE_GDI_OPERATIONS_USER";
+    public static final String GDI_CARD_USER = "ROLE_GDI_CARD_CENTRE_USER";
+    public static final String GDI_CREDIT_MANAGEMENT_USER = "ROLE_GDI_CREDIT_MANAGEMENT_USER";
+    public static final String GDI_PAYMENTS_USER = "ROLE_GDI_PAYMENTS_USER";
+    public static final String GDI_PRODUCTS_USER = "ROLE_GDI_PRODUCTS_USER";
+    public static final String GDI_SECURITY_USER = "ROLE_SECURITY_USER";
+    public static final String GDI_RISK_DEPARTMENT_USER = "ROLE_RISK_DEPARTMENT_USER";
+    public static final String GDI_TREASURY_USER = "ROLE_TREASURY_USER";
+    public static final String GDI_HR_USER = "ROLE_HR_USER";
 
     public static final String REPORT_ACCESSOR = "ROLE_REPORT_ACCESSOR";
 

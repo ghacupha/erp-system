@@ -1,8 +1,8 @@
 package io.github.erp.repository;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,18 +34,18 @@ import org.springframework.stereotype.Repository;
 public interface GdiTransactionDataIndexRepository
     extends JpaRepository<GdiTransactionDataIndex, Long>, JpaSpecificationExecutor<GdiTransactionDataIndex> {
     @Query(
-        value = "select distinct gdiTransactionDataIndex from GdiTransactionDataIndex gdiTransactionDataIndex left join fetch gdiTransactionDataIndex.masterDataItems",
+        value = "select distinct gdiTransactionDataIndex from GdiTransactionDataIndex gdiTransactionDataIndex left join fetch gdiTransactionDataIndex.masterDataItems left join fetch gdiTransactionDataIndex.placeholders",
         countQuery = "select count(distinct gdiTransactionDataIndex) from GdiTransactionDataIndex gdiTransactionDataIndex"
     )
     Page<GdiTransactionDataIndex> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct gdiTransactionDataIndex from GdiTransactionDataIndex gdiTransactionDataIndex left join fetch gdiTransactionDataIndex.masterDataItems"
+        "select distinct gdiTransactionDataIndex from GdiTransactionDataIndex gdiTransactionDataIndex left join fetch gdiTransactionDataIndex.masterDataItems left join fetch gdiTransactionDataIndex.placeholders"
     )
     List<GdiTransactionDataIndex> findAllWithEagerRelationships();
 
     @Query(
-        "select gdiTransactionDataIndex from GdiTransactionDataIndex gdiTransactionDataIndex left join fetch gdiTransactionDataIndex.masterDataItems where gdiTransactionDataIndex.id =:id"
+        "select gdiTransactionDataIndex from GdiTransactionDataIndex gdiTransactionDataIndex left join fetch gdiTransactionDataIndex.masterDataItems left join fetch gdiTransactionDataIndex.placeholders where gdiTransactionDataIndex.id =:id"
     )
     Optional<GdiTransactionDataIndex> findOneWithEagerRelationships(@Param("id") Long id);
 }

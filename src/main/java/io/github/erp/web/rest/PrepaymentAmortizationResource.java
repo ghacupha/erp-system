@@ -1,8 +1,8 @@
 package io.github.erp.web.rest;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -85,7 +87,7 @@ public class PrepaymentAmortizationResource {
      */
     @PostMapping("/prepayment-amortizations")
     public ResponseEntity<PrepaymentAmortizationDTO> createPrepaymentAmortization(
-        @RequestBody PrepaymentAmortizationDTO prepaymentAmortizationDTO
+        @Valid @RequestBody PrepaymentAmortizationDTO prepaymentAmortizationDTO
     ) throws URISyntaxException {
         log.debug("REST request to save PrepaymentAmortization : {}", prepaymentAmortizationDTO);
         if (prepaymentAmortizationDTO.getId() != null) {
@@ -111,7 +113,7 @@ public class PrepaymentAmortizationResource {
     @PutMapping("/prepayment-amortizations/{id}")
     public ResponseEntity<PrepaymentAmortizationDTO> updatePrepaymentAmortization(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody PrepaymentAmortizationDTO prepaymentAmortizationDTO
+        @Valid @RequestBody PrepaymentAmortizationDTO prepaymentAmortizationDTO
     ) throws URISyntaxException {
         log.debug("REST request to update PrepaymentAmortization : {}, {}", id, prepaymentAmortizationDTO);
         if (prepaymentAmortizationDTO.getId() == null) {
@@ -146,7 +148,7 @@ public class PrepaymentAmortizationResource {
     @PatchMapping(value = "/prepayment-amortizations/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<PrepaymentAmortizationDTO> partialUpdatePrepaymentAmortization(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody PrepaymentAmortizationDTO prepaymentAmortizationDTO
+        @NotNull @RequestBody PrepaymentAmortizationDTO prepaymentAmortizationDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update PrepaymentAmortization partially : {}, {}", id, prepaymentAmortizationDTO);
         if (prepaymentAmortizationDTO.getId() == null) {

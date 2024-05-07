@@ -1,8 +1,8 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@ import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
@@ -47,17 +46,14 @@ public class DepreciationJobNotice implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @NotNull
-    @Column(name = "event_narrative", nullable = false)
+    @Column(name = "event_narrative")
     private String eventNarrative;
 
-    @NotNull
-    @Column(name = "event_time_stamp", nullable = false)
+    @Column(name = "event_time_stamp")
     private ZonedDateTime eventTimeStamp;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "depreciation_notice_status", nullable = false)
+    @Column(name = "depreciation_notice_status")
     private DepreciationNoticeStatusType depreciationNoticeStatus;
 
     @Column(name = "source_module")
@@ -91,7 +87,7 @@ public class DepreciationJobNotice implements Serializable {
     private DepreciationBatchSequence depreciationBatchSequence;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "previousPeriod", "createdBy", "fiscalYear", "fiscalMonth", "fiscalQuarter" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "previousPeriod", "fiscalMonth" }, allowSetters = true)
     private DepreciationPeriod depreciationPeriod;
 
     @ManyToMany
@@ -113,13 +109,6 @@ public class DepreciationJobNotice implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "parentMapping", "placeholders" }, allowSetters = true)
     private Set<UniversallyUniqueMapping> universallyUniqueMappings = new HashSet<>();
-
-    @ManyToOne
-    @JsonIgnoreProperties(
-        value = { "organization", "department", "securityClearance", "systemIdentity", "userProperties", "dealerIdentity", "placeholders" },
-        allowSetters = true
-    )
-    private ApplicationUser superintended;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -335,19 +324,6 @@ public class DepreciationJobNotice implements Serializable {
 
     public DepreciationJobNotice removeUniversallyUniqueMapping(UniversallyUniqueMapping universallyUniqueMapping) {
         this.universallyUniqueMappings.remove(universallyUniqueMapping);
-        return this;
-    }
-
-    public ApplicationUser getSuperintended() {
-        return this.superintended;
-    }
-
-    public void setSuperintended(ApplicationUser applicationUser) {
-        this.superintended = applicationUser;
-    }
-
-    public DepreciationJobNotice superintended(ApplicationUser applicationUser) {
-        this.setSuperintended(applicationUser);
         return this;
     }
 

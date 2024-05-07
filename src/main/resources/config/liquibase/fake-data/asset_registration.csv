@@ -1,11 +1,11 @@
-id;asset_number;asset_tag;asset_details;asset_cost;comments;comments_content_type;model_number;serial_number;remarks;capitalization_date;historical_cost;registration_date;asset_category_id;dealer_id
-1;Fantastic;Berkshire;firewall;96225;../fake-data/blob/hipster.png;image/png;EXE;pink technologies;../fake-data/blob/hipster.txt;2022-04-13;64382;2022-04-12;1;1
-2;Director Account Optimization;Granite;Rubber;327;../fake-data/blob/hipster.png;image/png;systems firewall;foreground Ngultrum;../fake-data/blob/hipster.txt;2022-04-13;13800;2022-04-12;2;2
-3;functionalities;withdrawal;deposit Gorgeous;59556;../fake-data/blob/hipster.png;image/png;visualize green systems;responsive conglomeration;../fake-data/blob/hipster.txt;2022-04-12;98223;2022-04-13;3;3
-4;El;Soap;Mouse Rand;23538;../fake-data/blob/hipster.png;image/png;Practical;web-enabled Fresh 24/7;../fake-data/blob/hipster.txt;2022-04-13;6137;2022-04-13;4;4
-5;optimize Bacon;XSS;technologies 24/365 tan;12680;../fake-data/blob/hipster.png;image/png;hack;Producer HDD Corner;../fake-data/blob/hipster.txt;2022-04-12;30738;2022-04-12;5;5
-6;solutions;pixel;synthesize Afghani;99091;../fake-data/blob/hipster.png;image/png;Robust;Cedi facilitate;../fake-data/blob/hipster.txt;2022-04-12;52182;2022-04-12;6;6
-7;Home Shoes Metal;COM Borders port;one-to-one calculate vertical;61423;../fake-data/blob/hipster.png;image/png;Fresh North Grenada;Washington Harbors Implementation;../fake-data/blob/hipster.txt;2022-04-12;70810;2022-04-13;7;7
-8;Officer expedite;Ford;eyeballs Account;65630;../fake-data/blob/hipster.png;image/png;Interface Ethiopia;1080p Refined;../fake-data/blob/hipster.txt;2022-04-13;35506;2022-04-12;8;8
-9;Kids;benchmark local panel;Poland Gibraltar;66597;../fake-data/blob/hipster.png;image/png;deposit;Supervisor;../fake-data/blob/hipster.txt;2022-04-13;35347;2022-04-13;9;9
-10;Soap projection Oklahoma;Trail productize Division;transmitter tan;84838;../fake-data/blob/hipster.png;image/png;Sports maximize;plum Versatile Specialist;../fake-data/blob/hipster.txt;2022-04-13;4754;2022-04-12;10;10
+id;asset_number;asset_tag;asset_details;asset_cost;comments;comments_content_type;model_number;serial_number;remarks;capitalization_date;historical_cost;registration_date;asset_category_id;dealer_id;acquiring_transaction_id
+1;Fantastic;Berkshire;firewall;96225;../fake-data/blob/hipster.png;image/png;EXE;pink technologies;../fake-data/blob/hipster.txt;2022-04-13;64382;2022-04-12;1;1;1
+2;Director Account Optimization;Granite;Rubber;327;../fake-data/blob/hipster.png;image/png;systems firewall;foreground Ngultrum;../fake-data/blob/hipster.txt;2022-04-13;13800;2022-04-12;2;2;2
+3;functionalities;withdrawal;deposit Gorgeous;59556;../fake-data/blob/hipster.png;image/png;visualize green systems;responsive conglomeration;../fake-data/blob/hipster.txt;2022-04-12;98223;2022-04-13;3;3;3
+4;El;Soap;Mouse Rand;23538;../fake-data/blob/hipster.png;image/png;Practical;web-enabled Fresh 24/7;../fake-data/blob/hipster.txt;2022-04-13;6137;2022-04-13;4;4;4
+5;optimize Bacon;XSS;technologies 24/365 tan;12680;../fake-data/blob/hipster.png;image/png;hack;Producer HDD Corner;../fake-data/blob/hipster.txt;2022-04-12;30738;2022-04-12;5;5;5
+6;solutions;pixel;synthesize Afghani;99091;../fake-data/blob/hipster.png;image/png;Robust;Cedi facilitate;../fake-data/blob/hipster.txt;2022-04-12;52182;2022-04-12;6;6;6
+7;Home Shoes Metal;COM Borders port;one-to-one calculate vertical;61423;../fake-data/blob/hipster.png;image/png;Fresh North Grenada;Washington Harbors Implementation;../fake-data/blob/hipster.txt;2022-04-12;70810;2022-04-13;7;7;7
+8;Officer expedite;Ford;eyeballs Account;65630;../fake-data/blob/hipster.png;image/png;Interface Ethiopia;1080p Refined;../fake-data/blob/hipster.txt;2022-04-13;35506;2022-04-12;8;8;8
+9;Kids;benchmark local panel;Poland Gibraltar;66597;../fake-data/blob/hipster.png;image/png;deposit;Supervisor;../fake-data/blob/hipster.txt;2022-04-13;35347;2022-04-13;9;9;9
+10;Soap projection Oklahoma;Trail productize Division;transmitter tan;84838;../fake-data/blob/hipster.png;image/png;Sports maximize;plum Versatile Specialist;../fake-data/blob/hipster.txt;2022-04-13;4754;2022-04-12;10;10;10

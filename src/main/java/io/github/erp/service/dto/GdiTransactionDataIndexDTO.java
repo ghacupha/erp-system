@@ -1,8 +1,8 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,18 +46,22 @@ public class GdiTransactionDataIndexDTO implements Serializable {
     @NotNull
     private DatasetBehaviorTypes datasetBehavior;
 
-    private Integer minimumDatarowsPerRequest;
+    private Integer minimumDataRowsPerRequest;
 
     private Integer maximumDataRowsPerRequest;
 
     @Lob
     private String datasetDescription;
 
-    @Lob
-    private byte[] dataTemplate;
+    private String dataPath;
 
-    private String dataTemplateContentType;
     private Set<GdiMasterDataIndexDTO> masterDataItems = new HashSet<>();
+
+    private BusinessTeamDTO businessTeam;
+
+    private BusinessDocumentDTO dataSetTemplate;
+
+    private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -99,12 +103,12 @@ public class GdiTransactionDataIndexDTO implements Serializable {
         this.datasetBehavior = datasetBehavior;
     }
 
-    public Integer getMinimumDatarowsPerRequest() {
-        return minimumDatarowsPerRequest;
+    public Integer getMinimumDataRowsPerRequest() {
+        return minimumDataRowsPerRequest;
     }
 
-    public void setMinimumDatarowsPerRequest(Integer minimumDatarowsPerRequest) {
-        this.minimumDatarowsPerRequest = minimumDatarowsPerRequest;
+    public void setMinimumDataRowsPerRequest(Integer minimumDataRowsPerRequest) {
+        this.minimumDataRowsPerRequest = minimumDataRowsPerRequest;
     }
 
     public Integer getMaximumDataRowsPerRequest() {
@@ -123,20 +127,12 @@ public class GdiTransactionDataIndexDTO implements Serializable {
         this.datasetDescription = datasetDescription;
     }
 
-    public byte[] getDataTemplate() {
-        return dataTemplate;
+    public String getDataPath() {
+        return dataPath;
     }
 
-    public void setDataTemplate(byte[] dataTemplate) {
-        this.dataTemplate = dataTemplate;
-    }
-
-    public String getDataTemplateContentType() {
-        return dataTemplateContentType;
-    }
-
-    public void setDataTemplateContentType(String dataTemplateContentType) {
-        this.dataTemplateContentType = dataTemplateContentType;
+    public void setDataPath(String dataPath) {
+        this.dataPath = dataPath;
     }
 
     public Set<GdiMasterDataIndexDTO> getMasterDataItems() {
@@ -145,6 +141,30 @@ public class GdiTransactionDataIndexDTO implements Serializable {
 
     public void setMasterDataItems(Set<GdiMasterDataIndexDTO> masterDataItems) {
         this.masterDataItems = masterDataItems;
+    }
+
+    public BusinessTeamDTO getBusinessTeam() {
+        return businessTeam;
+    }
+
+    public void setBusinessTeam(BusinessTeamDTO businessTeam) {
+        this.businessTeam = businessTeam;
+    }
+
+    public BusinessDocumentDTO getDataSetTemplate() {
+        return dataSetTemplate;
+    }
+
+    public void setDataSetTemplate(BusinessDocumentDTO dataSetTemplate) {
+        this.dataSetTemplate = dataSetTemplate;
+    }
+
+    public Set<PlaceholderDTO> getPlaceholders() {
+        return placeholders;
+    }
+
+    public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
+        this.placeholders = placeholders;
     }
 
     @Override
@@ -177,11 +197,14 @@ public class GdiTransactionDataIndexDTO implements Serializable {
             ", databaseName='" + getDatabaseName() + "'" +
             ", updateFrequency='" + getUpdateFrequency() + "'" +
             ", datasetBehavior='" + getDatasetBehavior() + "'" +
-            ", minimumDatarowsPerRequest=" + getMinimumDatarowsPerRequest() +
+            ", minimumDataRowsPerRequest=" + getMinimumDataRowsPerRequest() +
             ", maximumDataRowsPerRequest=" + getMaximumDataRowsPerRequest() +
             ", datasetDescription='" + getDatasetDescription() + "'" +
-            ", dataTemplate='" + getDataTemplate() + "'" +
+            ", dataPath='" + getDataPath() + "'" +
             ", masterDataItems=" + getMasterDataItems() +
+            ", businessTeam=" + getBusinessTeam() +
+            ", dataSetTemplate=" + getDataSetTemplate() +
+            ", placeholders=" + getPlaceholders() +
             "}";
     }
 }

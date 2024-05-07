@@ -1,8 +1,8 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -130,75 +130,21 @@ public class WorkInProgressRegistrationQueryService extends QueryService<WorkInP
                         buildRangeSpecification(criteria.getInstalmentAmount(), WorkInProgressRegistration_.instalmentAmount)
                     );
             }
+            if (criteria.getLevelOfCompletion() != null) {
+                specification =
+                    specification.and(
+                        buildRangeSpecification(criteria.getLevelOfCompletion(), WorkInProgressRegistration_.levelOfCompletion)
+                    );
+            }
+            if (criteria.getCompleted() != null) {
+                specification = specification.and(buildSpecification(criteria.getCompleted(), WorkInProgressRegistration_.completed));
+            }
             if (criteria.getPlaceholderId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
                             criteria.getPlaceholderId(),
                             root -> root.join(WorkInProgressRegistration_.placeholders, JoinType.LEFT).get(Placeholder_.id)
-                        )
-                    );
-            }
-            if (criteria.getPaymentInvoicesId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getPaymentInvoicesId(),
-                            root -> root.join(WorkInProgressRegistration_.paymentInvoices, JoinType.LEFT).get(PaymentInvoice_.id)
-                        )
-                    );
-            }
-            if (criteria.getServiceOutletId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getServiceOutletId(),
-                            root -> root.join(WorkInProgressRegistration_.serviceOutlets, JoinType.LEFT).get(ServiceOutlet_.id)
-                        )
-                    );
-            }
-            if (criteria.getSettlementId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getSettlementId(),
-                            root -> root.join(WorkInProgressRegistration_.settlements, JoinType.LEFT).get(Settlement_.id)
-                        )
-                    );
-            }
-            if (criteria.getPurchaseOrderId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getPurchaseOrderId(),
-                            root -> root.join(WorkInProgressRegistration_.purchaseOrders, JoinType.LEFT).get(PurchaseOrder_.id)
-                        )
-                    );
-            }
-            if (criteria.getDeliveryNoteId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getDeliveryNoteId(),
-                            root -> root.join(WorkInProgressRegistration_.deliveryNotes, JoinType.LEFT).get(DeliveryNote_.id)
-                        )
-                    );
-            }
-            if (criteria.getJobSheetId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getJobSheetId(),
-                            root -> root.join(WorkInProgressRegistration_.jobSheets, JoinType.LEFT).get(JobSheet_.id)
-                        )
-                    );
-            }
-            if (criteria.getDealerId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getDealerId(),
-                            root -> root.join(WorkInProgressRegistration_.dealer, JoinType.LEFT).get(Dealer_.id)
                         )
                     );
             }
@@ -256,6 +202,69 @@ public class WorkInProgressRegistrationQueryService extends QueryService<WorkInP
                         buildSpecification(
                             criteria.getAssetWarrantyId(),
                             root -> root.join(WorkInProgressRegistration_.assetWarranties, JoinType.LEFT).get(AssetWarranty_.id)
+                        )
+                    );
+            }
+            if (criteria.getInvoiceId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getInvoiceId(),
+                            root -> root.join(WorkInProgressRegistration_.invoice, JoinType.LEFT).get(PaymentInvoice_.id)
+                        )
+                    );
+            }
+            if (criteria.getOutletCodeId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getOutletCodeId(),
+                            root -> root.join(WorkInProgressRegistration_.outletCode, JoinType.LEFT).get(ServiceOutlet_.id)
+                        )
+                    );
+            }
+            if (criteria.getSettlementTransactionId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getSettlementTransactionId(),
+                            root -> root.join(WorkInProgressRegistration_.settlementTransaction, JoinType.LEFT).get(Settlement_.id)
+                        )
+                    );
+            }
+            if (criteria.getPurchaseOrderId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPurchaseOrderId(),
+                            root -> root.join(WorkInProgressRegistration_.purchaseOrder, JoinType.LEFT).get(PurchaseOrder_.id)
+                        )
+                    );
+            }
+            if (criteria.getDeliveryNoteId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getDeliveryNoteId(),
+                            root -> root.join(WorkInProgressRegistration_.deliveryNote, JoinType.LEFT).get(DeliveryNote_.id)
+                        )
+                    );
+            }
+            if (criteria.getJobSheetId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getJobSheetId(),
+                            root -> root.join(WorkInProgressRegistration_.jobSheet, JoinType.LEFT).get(JobSheet_.id)
+                        )
+                    );
+            }
+            if (criteria.getDealerId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getDealerId(),
+                            root -> root.join(WorkInProgressRegistration_.dealer, JoinType.LEFT).get(Dealer_.id)
                         )
                     );
             }

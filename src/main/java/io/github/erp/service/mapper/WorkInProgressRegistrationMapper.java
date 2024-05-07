@@ -1,8 +1,8 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@ package io.github.erp.service.mapper;
 
 import io.github.erp.domain.WorkInProgressRegistration;
 import io.github.erp.service.dto.WorkInProgressRegistrationDTO;
-import java.util.Set;
 import org.mapstruct.*;
 
 /**
@@ -30,6 +29,11 @@ import org.mapstruct.*;
     componentModel = "spring",
     uses = {
         PlaceholderMapper.class,
+        SettlementCurrencyMapper.class,
+        WorkProjectRegisterMapper.class,
+        BusinessDocumentMapper.class,
+        AssetAccessoryMapper.class,
+        AssetWarrantyMapper.class,
         PaymentInvoiceMapper.class,
         ServiceOutletMapper.class,
         SettlementMapper.class,
@@ -37,42 +41,26 @@ import org.mapstruct.*;
         DeliveryNoteMapper.class,
         JobSheetMapper.class,
         DealerMapper.class,
-        SettlementCurrencyMapper.class,
-        WorkProjectRegisterMapper.class,
-        BusinessDocumentMapper.class,
-        AssetAccessoryMapper.class,
-        AssetWarrantyMapper.class,
     }
 )
 public interface WorkInProgressRegistrationMapper extends EntityMapper<WorkInProgressRegistrationDTO, WorkInProgressRegistration> {
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
-    @Mapping(target = "paymentInvoices", source = "paymentInvoices", qualifiedByName = "invoiceNumberSet")
-    @Mapping(target = "serviceOutlets", source = "serviceOutlets", qualifiedByName = "outletCodeSet")
-    @Mapping(target = "settlements", source = "settlements", qualifiedByName = "paymentNumberSet")
-    @Mapping(target = "purchaseOrders", source = "purchaseOrders", qualifiedByName = "purchaseOrderNumberSet")
-    @Mapping(target = "deliveryNotes", source = "deliveryNotes", qualifiedByName = "deliveryNoteNumberSet")
-    @Mapping(target = "jobSheets", source = "jobSheets", qualifiedByName = "serialNumberSet")
-    @Mapping(target = "dealer", source = "dealer", qualifiedByName = "dealerName")
     @Mapping(target = "workInProgressGroup", source = "workInProgressGroup", qualifiedByName = "sequenceNumber")
     @Mapping(target = "settlementCurrency", source = "settlementCurrency", qualifiedByName = "iso4217CurrencyCode")
     @Mapping(target = "workProjectRegister", source = "workProjectRegister", qualifiedByName = "catalogueNumber")
     @Mapping(target = "businessDocuments", source = "businessDocuments", qualifiedByName = "documentTitleSet")
     @Mapping(target = "assetAccessories", source = "assetAccessories", qualifiedByName = "assetDetailsSet")
     @Mapping(target = "assetWarranties", source = "assetWarranties", qualifiedByName = "descriptionSet")
+    @Mapping(target = "invoice", source = "invoice", qualifiedByName = "invoiceNumber")
+    @Mapping(target = "outletCode", source = "outletCode", qualifiedByName = "outletCode")
+    @Mapping(target = "settlementTransaction", source = "settlementTransaction", qualifiedByName = "paymentNumber")
+    @Mapping(target = "purchaseOrder", source = "purchaseOrder", qualifiedByName = "purchaseOrderNumber")
+    @Mapping(target = "deliveryNote", source = "deliveryNote", qualifiedByName = "deliveryNoteNumber")
+    @Mapping(target = "jobSheet", source = "jobSheet", qualifiedByName = "serialNumber")
+    @Mapping(target = "dealer", source = "dealer", qualifiedByName = "dealerName")
     WorkInProgressRegistrationDTO toDto(WorkInProgressRegistration s);
 
-    @Named("idSet")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    Set<WorkInProgressRegistrationDTO> toDtoIdSet(Set<WorkInProgressRegistration> workInProgressRegistration);
-
     @Mapping(target = "removePlaceholder", ignore = true)
-    @Mapping(target = "removePaymentInvoices", ignore = true)
-    @Mapping(target = "removeServiceOutlet", ignore = true)
-    @Mapping(target = "removeSettlement", ignore = true)
-    @Mapping(target = "removePurchaseOrder", ignore = true)
-    @Mapping(target = "removeDeliveryNote", ignore = true)
-    @Mapping(target = "removeJobSheet", ignore = true)
     @Mapping(target = "removeBusinessDocument", ignore = true)
     @Mapping(target = "removeAssetAccessory", ignore = true)
     @Mapping(target = "removeAssetWarranty", ignore = true)

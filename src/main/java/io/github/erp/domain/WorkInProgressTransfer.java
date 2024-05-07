@@ -1,8 +1,8 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,10 +19,14 @@ package io.github.erp.domain;
  */
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.github.erp.domain.enumeration.WorkInProgressTransferType;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -49,33 +53,18 @@ public class WorkInProgressTransfer implements Serializable {
     @Column(name = "target_asset_number")
     private String targetAssetNumber;
 
-    @ManyToMany
-    @JoinTable(
-        name = "rel_work_in_progress_transfer__work_in_progress_registration",
-        joinColumns = @JoinColumn(name = "work_in_progress_transfer_id"),
-        inverseJoinColumns = @JoinColumn(name = "work_in_progress_registration_id")
-    )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = {
-            "placeholders",
-            "paymentInvoices",
-            "serviceOutlets",
-            "settlements",
-            "purchaseOrders",
-            "deliveryNotes",
-            "jobSheets",
-            "dealer",
-            "workInProgressGroup",
-            "settlementCurrency",
-            "workProjectRegister",
-            "businessDocuments",
-            "assetAccessories",
-            "assetWarranties",
-        },
-        allowSetters = true
-    )
-    private Set<WorkInProgressRegistration> workInProgressRegistrations = new HashSet<>();
+    @NotNull
+    @Column(name = "transfer_amount", precision = 21, scale = 2, nullable = false)
+    private BigDecimal transferAmount;
+
+    @NotNull
+    @Column(name = "transfer_date", nullable = false)
+    private LocalDate transferDate;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "transfer_type", nullable = false)
+    private WorkInProgressTransferType transferType;
 
     @ManyToMany
     @JoinTable(
@@ -107,6 +96,60 @@ public class WorkInProgressTransfer implements Serializable {
         allowSetters = true
     )
     private Set<BusinessDocument> businessDocuments = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "depreciationMethod", "placeholders" }, allowSetters = true)
+    private AssetCategory assetCategory;
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = {
+            "placeholders",
+            "workInProgressGroup",
+            "settlementCurrency",
+            "workProjectRegister",
+            "businessDocuments",
+            "assetAccessories",
+            "assetWarranties",
+            "invoice",
+            "outletCode",
+            "settlementTransaction",
+            "purchaseOrder",
+            "deliveryNote",
+            "jobSheet",
+            "dealer",
+        },
+        allowSetters = true
+    )
+    private WorkInProgressRegistration workInProgressRegistration;
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = { "placeholders", "bankCode", "outletType", "outletStatus", "countyName", "subCountyName" },
+        allowSetters = true
+    )
+    private ServiceOutlet serviceOutlet;
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = {
+            "placeholders",
+            "settlementCurrency",
+            "paymentLabels",
+            "paymentCategory",
+            "groupSettlement",
+            "biller",
+            "paymentInvoices",
+            "signatories",
+            "businessDocuments",
+        },
+        allowSetters = true
+    )
+    private Settlement settlement;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "dealers", "settlementCurrency", "placeholders", "businessDocuments" }, allowSetters = true)
+    private WorkProjectRegister workProjectRegister;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -149,27 +192,43 @@ public class WorkInProgressTransfer implements Serializable {
         this.targetAssetNumber = targetAssetNumber;
     }
 
-    public Set<WorkInProgressRegistration> getWorkInProgressRegistrations() {
-        return this.workInProgressRegistrations;
+    public BigDecimal getTransferAmount() {
+        return this.transferAmount;
     }
 
-    public void setWorkInProgressRegistrations(Set<WorkInProgressRegistration> workInProgressRegistrations) {
-        this.workInProgressRegistrations = workInProgressRegistrations;
-    }
-
-    public WorkInProgressTransfer workInProgressRegistrations(Set<WorkInProgressRegistration> workInProgressRegistrations) {
-        this.setWorkInProgressRegistrations(workInProgressRegistrations);
+    public WorkInProgressTransfer transferAmount(BigDecimal transferAmount) {
+        this.setTransferAmount(transferAmount);
         return this;
     }
 
-    public WorkInProgressTransfer addWorkInProgressRegistration(WorkInProgressRegistration workInProgressRegistration) {
-        this.workInProgressRegistrations.add(workInProgressRegistration);
+    public void setTransferAmount(BigDecimal transferAmount) {
+        this.transferAmount = transferAmount;
+    }
+
+    public LocalDate getTransferDate() {
+        return this.transferDate;
+    }
+
+    public WorkInProgressTransfer transferDate(LocalDate transferDate) {
+        this.setTransferDate(transferDate);
         return this;
     }
 
-    public WorkInProgressTransfer removeWorkInProgressRegistration(WorkInProgressRegistration workInProgressRegistration) {
-        this.workInProgressRegistrations.remove(workInProgressRegistration);
+    public void setTransferDate(LocalDate transferDate) {
+        this.transferDate = transferDate;
+    }
+
+    public WorkInProgressTransferType getTransferType() {
+        return this.transferType;
+    }
+
+    public WorkInProgressTransfer transferType(WorkInProgressTransferType transferType) {
+        this.setTransferType(transferType);
         return this;
+    }
+
+    public void setTransferType(WorkInProgressTransferType transferType) {
+        this.transferType = transferType;
     }
 
     public Set<Placeholder> getPlaceholders() {
@@ -218,6 +277,71 @@ public class WorkInProgressTransfer implements Serializable {
         return this;
     }
 
+    public AssetCategory getAssetCategory() {
+        return this.assetCategory;
+    }
+
+    public void setAssetCategory(AssetCategory assetCategory) {
+        this.assetCategory = assetCategory;
+    }
+
+    public WorkInProgressTransfer assetCategory(AssetCategory assetCategory) {
+        this.setAssetCategory(assetCategory);
+        return this;
+    }
+
+    public WorkInProgressRegistration getWorkInProgressRegistration() {
+        return this.workInProgressRegistration;
+    }
+
+    public void setWorkInProgressRegistration(WorkInProgressRegistration workInProgressRegistration) {
+        this.workInProgressRegistration = workInProgressRegistration;
+    }
+
+    public WorkInProgressTransfer workInProgressRegistration(WorkInProgressRegistration workInProgressRegistration) {
+        this.setWorkInProgressRegistration(workInProgressRegistration);
+        return this;
+    }
+
+    public ServiceOutlet getServiceOutlet() {
+        return this.serviceOutlet;
+    }
+
+    public void setServiceOutlet(ServiceOutlet serviceOutlet) {
+        this.serviceOutlet = serviceOutlet;
+    }
+
+    public WorkInProgressTransfer serviceOutlet(ServiceOutlet serviceOutlet) {
+        this.setServiceOutlet(serviceOutlet);
+        return this;
+    }
+
+    public Settlement getSettlement() {
+        return this.settlement;
+    }
+
+    public void setSettlement(Settlement settlement) {
+        this.settlement = settlement;
+    }
+
+    public WorkInProgressTransfer settlement(Settlement settlement) {
+        this.setSettlement(settlement);
+        return this;
+    }
+
+    public WorkProjectRegister getWorkProjectRegister() {
+        return this.workProjectRegister;
+    }
+
+    public void setWorkProjectRegister(WorkProjectRegister workProjectRegister) {
+        this.workProjectRegister = workProjectRegister;
+    }
+
+    public WorkInProgressTransfer workProjectRegister(WorkProjectRegister workProjectRegister) {
+        this.setWorkProjectRegister(workProjectRegister);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -244,6 +368,9 @@ public class WorkInProgressTransfer implements Serializable {
             "id=" + getId() +
             ", description='" + getDescription() + "'" +
             ", targetAssetNumber='" + getTargetAssetNumber() + "'" +
+            ", transferAmount=" + getTransferAmount() +
+            ", transferDate='" + getTransferDate() + "'" +
+            ", transferType='" + getTransferType() + "'" +
             "}";
     }
 }

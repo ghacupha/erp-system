@@ -1,8 +1,8 @@
 package io.github.erp.service.criteria;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
+import tech.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link io.github.erp.domain.PrepaymentAmortization} entity. This class is used
@@ -54,6 +55,8 @@ public class PrepaymentAmortizationCriteria implements Serializable, Criteria {
 
     private BooleanFilter inactive;
 
+    private UUIDFilter amortizationIdentifier;
+
     private LongFilter prepaymentAccountId;
 
     private LongFilter settlementCurrencyId;
@@ -63,6 +66,12 @@ public class PrepaymentAmortizationCriteria implements Serializable, Criteria {
     private LongFilter creditAccountId;
 
     private LongFilter placeholderId;
+
+    private LongFilter fiscalMonthId;
+
+    private LongFilter prepaymentCompilationRequestId;
+
+    private LongFilter amortizationPeriodId;
 
     private Boolean distinct;
 
@@ -74,11 +83,16 @@ public class PrepaymentAmortizationCriteria implements Serializable, Criteria {
         this.prepaymentPeriod = other.prepaymentPeriod == null ? null : other.prepaymentPeriod.copy();
         this.prepaymentAmount = other.prepaymentAmount == null ? null : other.prepaymentAmount.copy();
         this.inactive = other.inactive == null ? null : other.inactive.copy();
+        this.amortizationIdentifier = other.amortizationIdentifier == null ? null : other.amortizationIdentifier.copy();
         this.prepaymentAccountId = other.prepaymentAccountId == null ? null : other.prepaymentAccountId.copy();
         this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
         this.debitAccountId = other.debitAccountId == null ? null : other.debitAccountId.copy();
         this.creditAccountId = other.creditAccountId == null ? null : other.creditAccountId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.fiscalMonthId = other.fiscalMonthId == null ? null : other.fiscalMonthId.copy();
+        this.prepaymentCompilationRequestId =
+            other.prepaymentCompilationRequestId == null ? null : other.prepaymentCompilationRequestId.copy();
+        this.amortizationPeriodId = other.amortizationPeriodId == null ? null : other.amortizationPeriodId.copy();
         this.distinct = other.distinct;
     }
 
@@ -162,6 +176,21 @@ public class PrepaymentAmortizationCriteria implements Serializable, Criteria {
         this.inactive = inactive;
     }
 
+    public UUIDFilter getAmortizationIdentifier() {
+        return amortizationIdentifier;
+    }
+
+    public UUIDFilter amortizationIdentifier() {
+        if (amortizationIdentifier == null) {
+            amortizationIdentifier = new UUIDFilter();
+        }
+        return amortizationIdentifier;
+    }
+
+    public void setAmortizationIdentifier(UUIDFilter amortizationIdentifier) {
+        this.amortizationIdentifier = amortizationIdentifier;
+    }
+
     public LongFilter getPrepaymentAccountId() {
         return prepaymentAccountId;
     }
@@ -237,6 +266,51 @@ public class PrepaymentAmortizationCriteria implements Serializable, Criteria {
         this.placeholderId = placeholderId;
     }
 
+    public LongFilter getFiscalMonthId() {
+        return fiscalMonthId;
+    }
+
+    public LongFilter fiscalMonthId() {
+        if (fiscalMonthId == null) {
+            fiscalMonthId = new LongFilter();
+        }
+        return fiscalMonthId;
+    }
+
+    public void setFiscalMonthId(LongFilter fiscalMonthId) {
+        this.fiscalMonthId = fiscalMonthId;
+    }
+
+    public LongFilter getPrepaymentCompilationRequestId() {
+        return prepaymentCompilationRequestId;
+    }
+
+    public LongFilter prepaymentCompilationRequestId() {
+        if (prepaymentCompilationRequestId == null) {
+            prepaymentCompilationRequestId = new LongFilter();
+        }
+        return prepaymentCompilationRequestId;
+    }
+
+    public void setPrepaymentCompilationRequestId(LongFilter prepaymentCompilationRequestId) {
+        this.prepaymentCompilationRequestId = prepaymentCompilationRequestId;
+    }
+
+    public LongFilter getAmortizationPeriodId() {
+        return amortizationPeriodId;
+    }
+
+    public LongFilter amortizationPeriodId() {
+        if (amortizationPeriodId == null) {
+            amortizationPeriodId = new LongFilter();
+        }
+        return amortizationPeriodId;
+    }
+
+    public void setAmortizationPeriodId(LongFilter amortizationPeriodId) {
+        this.amortizationPeriodId = amortizationPeriodId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -260,11 +334,15 @@ public class PrepaymentAmortizationCriteria implements Serializable, Criteria {
             Objects.equals(prepaymentPeriod, that.prepaymentPeriod) &&
             Objects.equals(prepaymentAmount, that.prepaymentAmount) &&
             Objects.equals(inactive, that.inactive) &&
+            Objects.equals(amortizationIdentifier, that.amortizationIdentifier) &&
             Objects.equals(prepaymentAccountId, that.prepaymentAccountId) &&
             Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
             Objects.equals(debitAccountId, that.debitAccountId) &&
             Objects.equals(creditAccountId, that.creditAccountId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(fiscalMonthId, that.fiscalMonthId) &&
+            Objects.equals(prepaymentCompilationRequestId, that.prepaymentCompilationRequestId) &&
+            Objects.equals(amortizationPeriodId, that.amortizationPeriodId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -277,11 +355,15 @@ public class PrepaymentAmortizationCriteria implements Serializable, Criteria {
             prepaymentPeriod,
             prepaymentAmount,
             inactive,
+            amortizationIdentifier,
             prepaymentAccountId,
             settlementCurrencyId,
             debitAccountId,
             creditAccountId,
             placeholderId,
+            fiscalMonthId,
+            prepaymentCompilationRequestId,
+            amortizationPeriodId,
             distinct
         );
     }
@@ -295,11 +377,15 @@ public class PrepaymentAmortizationCriteria implements Serializable, Criteria {
             (prepaymentPeriod != null ? "prepaymentPeriod=" + prepaymentPeriod + ", " : "") +
             (prepaymentAmount != null ? "prepaymentAmount=" + prepaymentAmount + ", " : "") +
             (inactive != null ? "inactive=" + inactive + ", " : "") +
+            (amortizationIdentifier != null ? "amortizationIdentifier=" + amortizationIdentifier + ", " : "") +
             (prepaymentAccountId != null ? "prepaymentAccountId=" + prepaymentAccountId + ", " : "") +
             (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
             (debitAccountId != null ? "debitAccountId=" + debitAccountId + ", " : "") +
             (creditAccountId != null ? "creditAccountId=" + creditAccountId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (fiscalMonthId != null ? "fiscalMonthId=" + fiscalMonthId + ", " : "") +
+            (prepaymentCompilationRequestId != null ? "prepaymentCompilationRequestId=" + prepaymentCompilationRequestId + ", " : "") +
+            (amortizationPeriodId != null ? "amortizationPeriodId=" + amortizationPeriodId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

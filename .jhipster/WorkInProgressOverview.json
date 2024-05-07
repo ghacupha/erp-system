@@ -1,0 +1,28 @@
+{
+  "fields": [
+    {
+      "fieldName": "numberOfItems",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "instalmentAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "totalTransferAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "outstandingAmount",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "relationships": [],
+  "service": "no",
+  "readOnly": true,
+  "clientRootFolder": "assets",
+  "pagination": "pagination",
+  "name": "WorkInProgressOverview",
+  "changelogDate": "20231114132844",
+  "incrementalChangelog": false
+}

@@ -1,8 +1,8 @@
 package io.github.erp.repository;
 
 /*-
- * Erp System - Mark VI No 1 (Phoebe Series) Server ver 1.5.2
- * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+ * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,18 +34,18 @@ import org.springframework.stereotype.Repository;
 public interface WorkInProgressTransferRepository
     extends JpaRepository<WorkInProgressTransfer, Long>, JpaSpecificationExecutor<WorkInProgressTransfer> {
     @Query(
-        value = "select distinct workInProgressTransfer from WorkInProgressTransfer workInProgressTransfer left join fetch workInProgressTransfer.workInProgressRegistrations left join fetch workInProgressTransfer.placeholders left join fetch workInProgressTransfer.businessDocuments",
+        value = "select distinct workInProgressTransfer from WorkInProgressTransfer workInProgressTransfer left join fetch workInProgressTransfer.placeholders left join fetch workInProgressTransfer.businessDocuments",
         countQuery = "select count(distinct workInProgressTransfer) from WorkInProgressTransfer workInProgressTransfer"
     )
     Page<WorkInProgressTransfer> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct workInProgressTransfer from WorkInProgressTransfer workInProgressTransfer left join fetch workInProgressTransfer.workInProgressRegistrations left join fetch workInProgressTransfer.placeholders left join fetch workInProgressTransfer.businessDocuments"
+        "select distinct workInProgressTransfer from WorkInProgressTransfer workInProgressTransfer left join fetch workInProgressTransfer.placeholders left join fetch workInProgressTransfer.businessDocuments"
     )
     List<WorkInProgressTransfer> findAllWithEagerRelationships();
 
     @Query(
-        "select workInProgressTransfer from WorkInProgressTransfer workInProgressTransfer left join fetch workInProgressTransfer.workInProgressRegistrations left join fetch workInProgressTransfer.placeholders left join fetch workInProgressTransfer.businessDocuments where workInProgressTransfer.id =:id"
+        "select workInProgressTransfer from WorkInProgressTransfer workInProgressTransfer left join fetch workInProgressTransfer.placeholders left join fetch workInProgressTransfer.businessDocuments where workInProgressTransfer.id =:id"
     )
     Optional<WorkInProgressTransfer> findOneWithEagerRelationships(@Param("id") Long id);
 }

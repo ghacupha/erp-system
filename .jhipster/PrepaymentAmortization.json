@@ -15,6 +15,10 @@
     {
       "fieldName": "inactive",
       "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "amortizationIdentifier",
+      "fieldType": "UUID"
     }
   ],
   "relationships": [
@@ -49,6 +53,27 @@
       "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "prepaymentAmortization"
+    },
+    {
+      "relationshipName": "fiscalMonth",
+      "otherEntityName": "fiscalMonth",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "endDate"
+    },
+    {
+      "relationshipName": "prepaymentCompilationRequest",
+      "otherEntityName": "prepaymentCompilationRequest",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "amortizationPeriod",
+      "otherEntityName": "amortizationPeriod",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "periodCode"
     }
   ],
   "service": "serviceImpl",
