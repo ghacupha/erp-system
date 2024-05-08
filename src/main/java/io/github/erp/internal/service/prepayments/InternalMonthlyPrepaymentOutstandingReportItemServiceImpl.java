@@ -147,9 +147,8 @@ public class InternalMonthlyPrepaymentOutstandingReportItemServiceImpl implement
     @Override
     @Transactional(readOnly = true)
     public Optional<List<MonthlyPrepaymentOutstandingReportItemDTO>> findReportItemsByFiscalYear(FiscalYearDTO fiscalYear) {
-      Page<MonthlyPrepaymentOutstandingReportItemDTO>  reportPage = findAllWithStartAndEndDate(Pageable.ofSize(Integer.MAX_VALUE), fiscalYear);
-
-      return Optional.of(reportPage.toList());
+        return monthlyPrepaymentOutstandingReportItemRepository.findReportItemsByFiscalPeriod(fiscalYear.getStartDate(), fiscalYear.getEndDate())
+          .map(monthlyPrepaymentOutstandingReportInternalMapper::toValue2);
     }
 
 }
