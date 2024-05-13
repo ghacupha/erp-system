@@ -1,7 +1,6 @@
-package io.github.erp.aop.reporting;
 
 /*-
- * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,8 +16,10 @@ package io.github.erp.aop.reporting;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+package io.github.erp.aop.reporting.wip;
+
 import io.github.erp.internal.report.attachment.ReportAttachmentService;
-import io.github.erp.service.dto.AssetAdditionsReportDTO;
+import io.github.erp.service.dto.WorkInProgressOutstandingReportRequisitionDTO;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -33,16 +34,19 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Intercept for the get request on the api/prepayments/prepayment-by-account-report-requisitions/{id}
+ * path which is responsible for attaching to the object that is fetched from the server with the
+ * file related to the same object that is fetched from the file system
+ */
 @Aspect
-public class AssetAdditionsReportAttachmentInterceptor {
+public class WorkInProgressOutstandingReportAttachmentInterceptor {
 
+    private final ReportAttachmentService<WorkInProgressOutstandingReportRequisitionDTO> reportAttachmentService;
 
-    private final ReportAttachmentService<AssetAdditionsReportDTO> reportAttachmentService;
-
-    public AssetAdditionsReportAttachmentInterceptor(ReportAttachmentService<AssetAdditionsReportDTO> reportAttachmentService) {
+    public WorkInProgressOutstandingReportAttachmentInterceptor(ReportAttachmentService<WorkInProgressOutstandingReportRequisitionDTO> reportAttachmentService) {
         this.reportAttachmentService = reportAttachmentService;
     }
-
 
     /**
      * Advice that attaches a report to a response when we are responding to client.
@@ -52,15 +56,15 @@ public class AssetAdditionsReportAttachmentInterceptor {
      * @throws Throwable throws {@link IllegalArgumentException}.
      */
     @Around(value = "reportResponsePointcut()")
-    public ResponseEntity<AssetAdditionsReportDTO> attachReportToResponse(ProceedingJoinPoint joinPoint) throws Throwable {
+    public ResponseEntity<WorkInProgressOutstandingReportRequisitionDTO> attachReportToResponse(ProceedingJoinPoint joinPoint) throws Throwable {
         Logger log = logger(joinPoint);
         if (log.isDebugEnabled()) {
             log.debug("Enter: {}() with argument[s] = {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
         }
         try {
-            ResponseEntity<AssetAdditionsReportDTO> result = (ResponseEntity<AssetAdditionsReportDTO>)joinPoint.proceed();
+            ResponseEntity<WorkInProgressOutstandingReportRequisitionDTO> result = (ResponseEntity<WorkInProgressOutstandingReportRequisitionDTO>)joinPoint.proceed();
 
-            ResponseEntity<AssetAdditionsReportDTO> advisedReport =
+            ResponseEntity<WorkInProgressOutstandingReportRequisitionDTO> advisedReport =
                 ResponseUtil.wrapOrNotFound(
                     Optional.of(
                         reportAttachmentService.attachReport(Objects.requireNonNull(result.getBody())))
@@ -89,7 +93,7 @@ public class AssetAdditionsReportAttachmentInterceptor {
     /**
      * Pointcut for report-requisition file attachment
      */
-    @Pointcut("execution(* io.github.erp.erp.resources.assets.AssetAdditionsReportResourceProd.getAssetAdditionsReport(..))")
+    @Pointcut("execution(* io.github.erp.erp.resources.wip.WorkInProgressOutstandingReportRequisitionResourceProd.getWorkInProgressOutstandingReportRequisition(..)))")
     public void reportResponsePointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }

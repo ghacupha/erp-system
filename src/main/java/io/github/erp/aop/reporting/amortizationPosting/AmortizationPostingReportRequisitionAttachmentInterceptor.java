@@ -1,7 +1,7 @@
-package io.github.erp.aop.reporting;
+package io.github.erp.aop.reporting.amortizationPosting;
 
 /*-
- * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,10 +17,8 @@ package io.github.erp.aop.reporting;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.internal.report.attachment.ReportAttachmentService;
-import io.github.erp.service.dto.AssetAdditionsReportDTO;
-import io.github.erp.service.dto.PrepaymentReportRequisitionDTO;
+import io.github.erp.service.dto.AmortizationPostingReportRequisitionDTO;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -35,21 +33,12 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
-/**
- * This aspect intercepts the get request for the prepayment-report requisition entity
- * and using the stored instructions and procedures updates the instance with the
- * report file which currently at this point exists on the report directory. The relevant
- * service will review and update the status of the file on validation, and so when the
- * request goes to the client it is Indistinguishable from an entity whose entire data
- * resides entirely in the database
- */
 @Aspect
-public class PrepaymentReportRequisitionAttachmentInterceptor {
+public class AmortizationPostingReportRequisitionAttachmentInterceptor {
 
+    private final ReportAttachmentService<AmortizationPostingReportRequisitionDTO> reportAttachmentService;
 
-    private final ReportAttachmentService<PrepaymentReportRequisitionDTO> reportAttachmentService;
-
-    public PrepaymentReportRequisitionAttachmentInterceptor(ReportAttachmentService<PrepaymentReportRequisitionDTO> reportAttachmentService) {
+    public AmortizationPostingReportRequisitionAttachmentInterceptor(ReportAttachmentService<AmortizationPostingReportRequisitionDTO> reportAttachmentService) {
         this.reportAttachmentService = reportAttachmentService;
     }
 
@@ -60,16 +49,16 @@ public class PrepaymentReportRequisitionAttachmentInterceptor {
      * @return result.
      * @throws Throwable throws {@link IllegalArgumentException}.
      */
-    @Around(value = "reportResponsePointcut()")
-    public ResponseEntity<PrepaymentReportRequisitionDTO> attachReportToResponse(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Around(value = "reportRequisitionResponsePointcut()")
+    public ResponseEntity<AmortizationPostingReportRequisitionDTO> attachReportToResponse(ProceedingJoinPoint joinPoint) throws Throwable {
         Logger log = logger(joinPoint);
         if (log.isDebugEnabled()) {
             log.debug("Enter: {}() with argument[s] = {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
         }
         try {
-            ResponseEntity<PrepaymentReportRequisitionDTO> result = (ResponseEntity<PrepaymentReportRequisitionDTO>)joinPoint.proceed();
+            ResponseEntity<AmortizationPostingReportRequisitionDTO> result = (ResponseEntity<AmortizationPostingReportRequisitionDTO>)joinPoint.proceed();
 
-            ResponseEntity<PrepaymentReportRequisitionDTO> advisedReport =
+            ResponseEntity<AmortizationPostingReportRequisitionDTO> advisedReport =
                 ResponseUtil.wrapOrNotFound(
                     Optional.of(
                         reportAttachmentService.attachReport(Objects.requireNonNull(result.getBody())))
@@ -96,10 +85,10 @@ public class PrepaymentReportRequisitionAttachmentInterceptor {
     }
 
     /**
-     * Pointcut for report-requisition file attachment
+     * Pointcut for amortization-posting-report file attachment
      */
-    @Pointcut("execution(* io.github.erp.erp.resources.prepayments.PrepaymentReportRequisitionResourceProd.getPrepaymentReportRequisition(..))")
-    public void reportResponsePointcut() {
+    @Pointcut("execution(* io.github.erp.erp.resources.prepayments.AmortizationPostingReportRequisitionResourceProd.getAmortizationPostingReportRequisition(..))")
+    public void reportRequisitionResponsePointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }
 }

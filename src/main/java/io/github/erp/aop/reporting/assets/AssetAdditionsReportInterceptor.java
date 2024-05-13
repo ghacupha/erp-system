@@ -1,7 +1,7 @@
-package io.github.erp.aop.reporting;
+package io.github.erp.aop.reporting.assets;
 
 /*-
- * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -33,7 +33,7 @@ import java.util.Objects;
 @Aspect
 public class AssetAdditionsReportInterceptor {
 
-    private static final Logger log = LoggerFactory.getLogger(DepreciationReportInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(AssetAdditionsReportInterceptor.class);
 
     private final ExportReportService<AssetAdditionsReportDTO> assetReportExportReportService;
 

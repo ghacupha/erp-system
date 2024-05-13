@@ -1,7 +1,7 @@
 package io.github.erp.internal.service.prepayments;
 
 /*-
- * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -147,9 +147,8 @@ public class InternalMonthlyPrepaymentOutstandingReportItemServiceImpl implement
     @Override
     @Transactional(readOnly = true)
     public Optional<List<MonthlyPrepaymentOutstandingReportItemDTO>> findReportItemsByFiscalYear(FiscalYearDTO fiscalYear) {
-      Page<MonthlyPrepaymentOutstandingReportItemDTO>  reportPage = findAllWithStartAndEndDate(Pageable.ofSize(Integer.MAX_VALUE), fiscalYear);
-
-      return Optional.of(reportPage.toList());
+        return monthlyPrepaymentOutstandingReportItemRepository.findReportItemsByFiscalPeriod(fiscalYear.getStartDate(), fiscalYear.getEndDate())
+          .map(monthlyPrepaymentOutstandingReportInternalMapper::toValue2);
     }
 
 }
