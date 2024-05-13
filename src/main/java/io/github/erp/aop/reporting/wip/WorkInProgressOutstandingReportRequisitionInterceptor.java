@@ -1,4 +1,22 @@
-package io.github.erp.aop.reporting;
+
+/*-
+ * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+package io.github.erp.aop.reporting.wip;
 
 /*-
  * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
@@ -18,9 +36,9 @@ package io.github.erp.aop.reporting;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.aop.reporting.amortizationPosting.AmortizationPostingReportRequisitionInterceptor;
 import io.github.erp.internal.report.service.ExportReportService;
-import io.github.erp.service.dto.AmortizationPostingReportRequisitionDTO;
-import io.github.erp.service.dto.PrepaymentReportRequisitionDTO;
+import io.github.erp.service.dto.WorkInProgressOutstandingReportRequisitionDTO;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -32,31 +50,25 @@ import org.springframework.scheduling.annotation.Async;
 
 import java.util.Objects;
 
-/**
- * Amortization posting requisition intercept intercepts the API call for the AmortizationPostingReportRequisition
- * routing the same to actual (but asynchronous) report-generating entities which will run a report
- * and export it to the file system.
- */
 @Aspect
-public class AmortizationPostingReportRequisitionInterceptor {
+public class WorkInProgressOutstandingReportRequisitionInterceptor {
 
     private static final Logger log = LoggerFactory.getLogger(AmortizationPostingReportRequisitionInterceptor.class);
 
-    private final ExportReportService<AmortizationPostingReportRequisitionDTO> amortizationPostingReportRequisitionExportReportService;
+    private final ExportReportService<WorkInProgressOutstandingReportRequisitionDTO> exportReportService;
 
-    public AmortizationPostingReportRequisitionInterceptor(
-        ExportReportService<AmortizationPostingReportRequisitionDTO> amortizationPostingReportRequisitionExportReportService){
-        this.amortizationPostingReportRequisitionExportReportService = amortizationPostingReportRequisitionExportReportService;
+    public WorkInProgressOutstandingReportRequisitionInterceptor(ExportReportService<WorkInProgressOutstandingReportRequisitionDTO> exportReportService) {
+        this.exportReportService = exportReportService;
     }
 
     @AfterReturning(
         pointcut="reportRequisitionPointcut()",
         returning="response")
-    public void getCreatedReportInfo(JoinPoint joinPoint, ResponseEntity<AmortizationPostingReportRequisitionDTO> response) {
+    public void getCreatedReportInfo(JoinPoint joinPoint, ResponseEntity<WorkInProgressOutstandingReportRequisitionDTO> response) {
 
         log.info("Report requisition response intercept completed successfully");
 
-        AmortizationPostingReportRequisitionDTO reportDTO = Objects.requireNonNull(response.getBody());
+        WorkInProgressOutstandingReportRequisitionDTO reportDTO = Objects.requireNonNull(response.getBody());
         String reportId = reportDTO.getRequestId().toString();
         long entityId = reportDTO.getId();
 
@@ -66,12 +78,12 @@ public class AmortizationPostingReportRequisitionInterceptor {
     }
 
     @Async
-    void createReport(AmortizationPostingReportRequisitionDTO reportDTO) {
+    void createReport(WorkInProgressOutstandingReportRequisitionDTO reportDTO) {
 
-        amortizationPostingReportRequisitionExportReportService.exportReport(reportDTO);
+        exportReportService.exportReport(reportDTO);
     }
 
-    @Pointcut("execution(* io.github.erp.erp.resources.prepayments.AmortizationPostingReportRequisitionResourceProd.createAmortizationPostingReportRequisition(..))")
+    @Pointcut("execution(* io.github.erp.erp.resources.wip.WorkInProgressOutstandingReportRequisitionResourceProd.createWorkInProgressOutstandingReportRequisition(..))")
     public void reportRequisitionPointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }

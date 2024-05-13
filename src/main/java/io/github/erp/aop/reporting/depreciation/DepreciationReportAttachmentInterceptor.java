@@ -1,7 +1,7 @@
-package io.github.erp.aop.reporting;
+package io.github.erp.aop.reporting.depreciation;
 
 /*-
- * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,9 +17,8 @@ package io.github.erp.aop.reporting;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.internal.report.attachment.ReportAttachmentService;
-import io.github.erp.service.dto.AmortizationPostingReportRequisitionDTO;
+import io.github.erp.service.dto.DepreciationReportDTO;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -35,11 +34,11 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Aspect
-public class AmortizationPostingReportRequisitionAttachmentInterceptor {
+public class DepreciationReportAttachmentInterceptor {
 
-    private final ReportAttachmentService<AmortizationPostingReportRequisitionDTO> reportAttachmentService;
+    private final ReportAttachmentService<DepreciationReportDTO> reportAttachmentService;
 
-    public AmortizationPostingReportRequisitionAttachmentInterceptor(ReportAttachmentService<AmortizationPostingReportRequisitionDTO> reportAttachmentService) {
+    public DepreciationReportAttachmentInterceptor(ReportAttachmentService<DepreciationReportDTO> reportAttachmentService) {
         this.reportAttachmentService = reportAttachmentService;
     }
 
@@ -50,16 +49,16 @@ public class AmortizationPostingReportRequisitionAttachmentInterceptor {
      * @return result.
      * @throws Throwable throws {@link IllegalArgumentException}.
      */
-    @Around(value = "reportRequisitionResponsePointcut()")
-    public ResponseEntity<AmortizationPostingReportRequisitionDTO> attachReportToResponse(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Around(value = "reportResponsePointcut()")
+    public ResponseEntity<DepreciationReportDTO> attachReportToResponse(ProceedingJoinPoint joinPoint) throws Throwable {
         Logger log = logger(joinPoint);
         if (log.isDebugEnabled()) {
             log.debug("Enter: {}() with argument[s] = {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
         }
         try {
-            ResponseEntity<AmortizationPostingReportRequisitionDTO> result = (ResponseEntity<AmortizationPostingReportRequisitionDTO>)joinPoint.proceed();
+            ResponseEntity<DepreciationReportDTO> result = (ResponseEntity<DepreciationReportDTO>)joinPoint.proceed();
 
-            ResponseEntity<AmortizationPostingReportRequisitionDTO> advisedReport =
+            ResponseEntity<DepreciationReportDTO> advisedReport =
                 ResponseUtil.wrapOrNotFound(
                     Optional.of(
                         reportAttachmentService.attachReport(Objects.requireNonNull(result.getBody())))
@@ -86,10 +85,10 @@ public class AmortizationPostingReportRequisitionAttachmentInterceptor {
     }
 
     /**
-     * Pointcut for amortization-posting-report file attachment
+     * Pointcut for report-requisition file attachment
      */
-    @Pointcut("execution(* io.github.erp.erp.resources.prepayments.AmortizationPostingReportRequisitionResourceProd.getAmortizationPostingReportRequisition(..))")
-    public void reportRequisitionResponsePointcut() {
+    @Pointcut("execution(* io.github.erp.erp.resources.depreciation.DepreciationReportResourceProd.getDepreciationReport(..))")
+    public void reportResponsePointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }
 }

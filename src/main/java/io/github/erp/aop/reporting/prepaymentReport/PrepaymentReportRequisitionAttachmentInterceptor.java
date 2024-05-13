@@ -1,7 +1,7 @@
-package io.github.erp.aop.reporting;
+package io.github.erp.aop.reporting.prepaymentReport;
 
 /*-
- * Erp System - Mark X No 7 (Jehoiada Series) Server ver 1.7.9
+ * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,8 @@ package io.github.erp.aop.reporting;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.internal.report.attachment.ReportAttachmentService;
-import io.github.erp.service.dto.DepreciationReportDTO;
+import io.github.erp.service.dto.AssetAdditionsReportDTO;
+import io.github.erp.service.dto.PrepaymentReportRequisitionDTO;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -33,12 +34,21 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * This aspect intercepts the get request for the prepayment-report requisition entity
+ * and using the stored instructions and procedures updates the instance with the
+ * report file which currently at this point exists on the report directory. The relevant
+ * service will review and update the status of the file on validation, and so when the
+ * request goes to the client it is Indistinguishable from an entity whose entire data
+ * resides entirely in the database
+ */
 @Aspect
-public class DepreciationReportAttachmentInterceptor {
+public class PrepaymentReportRequisitionAttachmentInterceptor {
 
-    private final ReportAttachmentService<DepreciationReportDTO> reportAttachmentService;
 
-    public DepreciationReportAttachmentInterceptor(ReportAttachmentService<DepreciationReportDTO> reportAttachmentService) {
+    private final ReportAttachmentService<PrepaymentReportRequisitionDTO> reportAttachmentService;
+
+    public PrepaymentReportRequisitionAttachmentInterceptor(ReportAttachmentService<PrepaymentReportRequisitionDTO> reportAttachmentService) {
         this.reportAttachmentService = reportAttachmentService;
     }
 
@@ -50,15 +60,15 @@ public class DepreciationReportAttachmentInterceptor {
      * @throws Throwable throws {@link IllegalArgumentException}.
      */
     @Around(value = "reportResponsePointcut()")
-    public ResponseEntity<DepreciationReportDTO> attachReportToResponse(ProceedingJoinPoint joinPoint) throws Throwable {
+    public ResponseEntity<PrepaymentReportRequisitionDTO> attachReportToResponse(ProceedingJoinPoint joinPoint) throws Throwable {
         Logger log = logger(joinPoint);
         if (log.isDebugEnabled()) {
             log.debug("Enter: {}() with argument[s] = {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
         }
         try {
-            ResponseEntity<DepreciationReportDTO> result = (ResponseEntity<DepreciationReportDTO>)joinPoint.proceed();
+            ResponseEntity<PrepaymentReportRequisitionDTO> result = (ResponseEntity<PrepaymentReportRequisitionDTO>)joinPoint.proceed();
 
-            ResponseEntity<DepreciationReportDTO> advisedReport =
+            ResponseEntity<PrepaymentReportRequisitionDTO> advisedReport =
                 ResponseUtil.wrapOrNotFound(
                     Optional.of(
                         reportAttachmentService.attachReport(Objects.requireNonNull(result.getBody())))
@@ -87,7 +97,7 @@ public class DepreciationReportAttachmentInterceptor {
     /**
      * Pointcut for report-requisition file attachment
      */
-    @Pointcut("execution(* io.github.erp.erp.resources.depreciation.DepreciationReportResourceProd.getDepreciationReport(..))")
+    @Pointcut("execution(* io.github.erp.erp.resources.prepayments.PrepaymentReportRequisitionResourceProd.getPrepaymentReportRequisition(..))")
     public void reportResponsePointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }
