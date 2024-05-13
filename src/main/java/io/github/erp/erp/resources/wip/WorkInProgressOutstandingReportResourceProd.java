@@ -19,10 +19,9 @@ package io.github.erp.erp.resources.wip;
  */
 import io.github.erp.domain.WorkInProgressOutstandingReportREPO;
 import io.github.erp.internal.framework.Mapping;
-import io.github.erp.internal.repository.InternalWIPOutstandingReportRepository;
 import io.github.erp.internal.report.autonomousReport.DatedReportExportService;
+import io.github.erp.internal.service.wip.InternalWorkInProgressOutstandingReportService;
 import io.github.erp.service.WorkInProgressOutstandingReportQueryService;
-import io.github.erp.service.WorkInProgressOutstandingReportService;
 import io.github.erp.service.criteria.WorkInProgressOutstandingReportCriteria;
 import io.github.erp.service.dto.WorkInProgressOutstandingReportDTO;
 import org.slf4j.Logger;
@@ -52,25 +51,21 @@ public class WorkInProgressOutstandingReportResourceProd {
     private final static String WIP_OUTSTANDING_REPORT_ID = "WIP-outstanding-report";
     private final Logger log = LoggerFactory.getLogger(WorkInProgressOutstandingReportResourceProd.class);
 
-    private final WorkInProgressOutstandingReportService workInProgressOutstandingReportService;
+    private final InternalWorkInProgressOutstandingReportService workInProgressOutstandingReportService;
 
     private final WorkInProgressOutstandingReportQueryService workInProgressOutstandingReportQueryService;
-
-    private final InternalWIPOutstandingReportRepository internalWIPOutstandingReportRepository;
 
     private final DatedReportExportService<WorkInProgressOutstandingReportDTO> datedReportExportService;
 
     private final Mapping<WorkInProgressOutstandingReportREPO, WorkInProgressOutstandingReportDTO> workInProgressOutstandingReportDTOMapping;
 
     public WorkInProgressOutstandingReportResourceProd(
-        WorkInProgressOutstandingReportService workInProgressOutstandingReportService,
+        InternalWorkInProgressOutstandingReportService workInProgressOutstandingReportService,
         WorkInProgressOutstandingReportQueryService workInProgressOutstandingReportQueryService,
-        InternalWIPOutstandingReportRepository internalWIPOutstandingReportRepository,
         DatedReportExportService<WorkInProgressOutstandingReportDTO> datedReportExportService,
         Mapping<WorkInProgressOutstandingReportREPO, WorkInProgressOutstandingReportDTO> workInProgressOutstandingReportDTOMapping) {
         this.workInProgressOutstandingReportService = workInProgressOutstandingReportService;
         this.workInProgressOutstandingReportQueryService = workInProgressOutstandingReportQueryService;
-        this.internalWIPOutstandingReportRepository = internalWIPOutstandingReportRepository;
         this.datedReportExportService = datedReportExportService;
         this.workInProgressOutstandingReportDTOMapping = workInProgressOutstandingReportDTOMapping;
     }
@@ -105,12 +100,9 @@ public class WorkInProgressOutstandingReportResourceProd {
     ) throws IOException {
         log.debug("REST request to get WorkInProgressOutstandingReports by criteria, report-date: {}", reportDate);
 
-        Page<WorkInProgressOutstandingReportDTO> page =
-            internalWIPOutstandingReportRepository.findByReportDate(LocalDate.parse(reportDate), pageable)
-            .map(workInProgressOutstandingReportDTOMapping::toValue2);
+        Page<WorkInProgressOutstandingReportDTO> page = workInProgressOutstandingReportService.findReportItemsByReportDate(LocalDate.parse(reportDate), pageable);
 
         exportCSVReport(LocalDate.parse(reportDate));
-
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
@@ -161,8 +153,7 @@ public class WorkInProgressOutstandingReportResourceProd {
         log.debug("REST request to get WorkInProgressOutstandingReport : {}", id);
 
         Optional<WorkInProgressOutstandingReportDTO> workInProgressOutstandingReportDTO =
-            internalWIPOutstandingReportRepository.findByReportDate(LocalDate.parse(reportDate), id)
-            .map(workInProgressOutstandingReportDTOMapping::toValue2);
+            workInProgressOutstandingReportService.findByReportDate(LocalDate.parse(reportDate), id);
 
 
         return ResponseUtil.wrapOrNotFound(workInProgressOutstandingReportDTO);

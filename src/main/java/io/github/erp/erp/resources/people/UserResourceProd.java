@@ -35,7 +35,6 @@ package io.github.erp.erp.resources.people;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.config.Constants;
 import io.github.erp.domain.User;
 import io.github.erp.internal.service.applicationUser.InternalSystemUserService;
