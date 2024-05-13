@@ -17,10 +17,20 @@ package io.github.erp.aop.reporting;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.aop.reporting.amortizationPosting.AmortizationPostingReportRequisitionAttachmentInterceptor;
+import io.github.erp.aop.reporting.amortizationPosting.AmortizationPostingReportRequisitionInterceptor;
+import io.github.erp.aop.reporting.assets.AssetAdditionsReportAttachmentInterceptor;
+import io.github.erp.aop.reporting.assets.AssetAdditionsReportInterceptor;
+import io.github.erp.aop.reporting.depreciation.DepreciationReportAttachmentInterceptor;
+import io.github.erp.aop.reporting.depreciation.DepreciationReportInterceptor;
 import io.github.erp.aop.reporting.monthlyPrepaymentReport.MonthlyPrepaymentReportRequisitionIntercept;
 import io.github.erp.aop.reporting.monthlyPrepaymentReport.MonthlyPrepaymentReportRequisitionAttachmentInterceptor;
 import io.github.erp.aop.reporting.prepaymentByAccount.PrepaymentByAccountReportAttachmentInterceptor;
 import io.github.erp.aop.reporting.prepaymentByAccount.PrepaymentByAccountReportRequisitionInterceptor;
+import io.github.erp.aop.reporting.prepaymentReport.PrepaymentReportRequisitionAttachmentInterceptor;
+import io.github.erp.aop.reporting.prepaymentReport.PrepaymentReportRequisitionInterceptor;
+import io.github.erp.aop.reporting.wip.WorkInProgressOutstandingReportAttachmentInterceptor;
+import io.github.erp.aop.reporting.wip.WorkInProgressOutstandingReportRequisitionInterceptor;
 import io.github.erp.internal.report.service.DepreciationEntryExportReportService;
 import io.github.erp.internal.report.service.ExportReportService;
 import io.github.erp.internal.repository.InternalProcessStatusRepository;
@@ -90,7 +100,6 @@ public class ReportingAspectConfiguration {
     @Autowired
     private ReportAttachmentService<DepreciationReportDTO> depreciationReportReportAttachmentService;
 
-
     @Autowired
     private ExportReportService<AssetAdditionsReportDTO> assetReportExportReportService;
 
@@ -122,6 +131,12 @@ public class ReportingAspectConfiguration {
 
     @Autowired
     private ReportAttachmentService<MonthlyPrepaymentReportRequisitionDTO> monthlyPrepaymentReportRequisitionReportAttachmentService;
+
+    @Autowired
+    private ExportReportService<WorkInProgressOutstandingReportRequisitionDTO> workInProgressOutstandingReportRequisitionExportReportService;
+
+    @Autowired
+    private ReportAttachmentService<WorkInProgressOutstandingReportRequisitionDTO> workInProgressOutstandingReportRequisitionReportAttachmentService;
 
     @Bean
     public ReportRequisitionInterceptor reportRequisitionInterceptor() {
@@ -224,5 +239,17 @@ public class ReportingAspectConfiguration {
     public MonthlyPrepaymentReportRequisitionAttachmentInterceptor prepaymentByMonthReportAttachmentInterceptor() {
 
         return new MonthlyPrepaymentReportRequisitionAttachmentInterceptor(monthlyPrepaymentReportRequisitionReportAttachmentService);
+    }
+
+    @Bean
+    public WorkInProgressOutstandingReportRequisitionInterceptor workInProgressOutstandingReportRequisitionInterceptor() {
+
+        return new WorkInProgressOutstandingReportRequisitionInterceptor(workInProgressOutstandingReportRequisitionExportReportService);
+    }
+
+    @Bean
+    public WorkInProgressOutstandingReportAttachmentInterceptor workInProgressOutstandingReportAttachmentInterceptor() {
+
+        return new WorkInProgressOutstandingReportAttachmentInterceptor(workInProgressOutstandingReportRequisitionReportAttachmentService);
     }
 }

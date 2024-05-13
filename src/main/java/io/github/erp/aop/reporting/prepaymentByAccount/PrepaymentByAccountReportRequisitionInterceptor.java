@@ -36,7 +36,7 @@ package io.github.erp.aop.reporting.prepaymentByAccount;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.aop.reporting.AmortizationPostingReportRequisitionInterceptor;
+import io.github.erp.aop.reporting.amortizationPosting.AmortizationPostingReportRequisitionInterceptor;
 import io.github.erp.internal.report.service.ExportReportService;
 import io.github.erp.service.dto.PrepaymentByAccountReportRequisitionDTO;
 import org.aspectj.lang.JoinPoint;

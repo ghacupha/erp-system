@@ -1,4 +1,4 @@
-package io.github.erp.aop.reporting;
+package io.github.erp.aop.reporting.depreciation;
 
 /*-
  * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
@@ -18,7 +18,7 @@ package io.github.erp.aop.reporting;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.internal.report.attachment.ReportAttachmentService;
-import io.github.erp.service.dto.AssetAdditionsReportDTO;
+import io.github.erp.service.dto.DepreciationReportDTO;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -34,15 +34,13 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Aspect
-public class AssetAdditionsReportAttachmentInterceptor {
+public class DepreciationReportAttachmentInterceptor {
 
+    private final ReportAttachmentService<DepreciationReportDTO> reportAttachmentService;
 
-    private final ReportAttachmentService<AssetAdditionsReportDTO> reportAttachmentService;
-
-    public AssetAdditionsReportAttachmentInterceptor(ReportAttachmentService<AssetAdditionsReportDTO> reportAttachmentService) {
+    public DepreciationReportAttachmentInterceptor(ReportAttachmentService<DepreciationReportDTO> reportAttachmentService) {
         this.reportAttachmentService = reportAttachmentService;
     }
-
 
     /**
      * Advice that attaches a report to a response when we are responding to client.
@@ -52,15 +50,15 @@ public class AssetAdditionsReportAttachmentInterceptor {
      * @throws Throwable throws {@link IllegalArgumentException}.
      */
     @Around(value = "reportResponsePointcut()")
-    public ResponseEntity<AssetAdditionsReportDTO> attachReportToResponse(ProceedingJoinPoint joinPoint) throws Throwable {
+    public ResponseEntity<DepreciationReportDTO> attachReportToResponse(ProceedingJoinPoint joinPoint) throws Throwable {
         Logger log = logger(joinPoint);
         if (log.isDebugEnabled()) {
             log.debug("Enter: {}() with argument[s] = {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
         }
         try {
-            ResponseEntity<AssetAdditionsReportDTO> result = (ResponseEntity<AssetAdditionsReportDTO>)joinPoint.proceed();
+            ResponseEntity<DepreciationReportDTO> result = (ResponseEntity<DepreciationReportDTO>)joinPoint.proceed();
 
-            ResponseEntity<AssetAdditionsReportDTO> advisedReport =
+            ResponseEntity<DepreciationReportDTO> advisedReport =
                 ResponseUtil.wrapOrNotFound(
                     Optional.of(
                         reportAttachmentService.attachReport(Objects.requireNonNull(result.getBody())))
@@ -89,7 +87,7 @@ public class AssetAdditionsReportAttachmentInterceptor {
     /**
      * Pointcut for report-requisition file attachment
      */
-    @Pointcut("execution(* io.github.erp.erp.resources.assets.AssetAdditionsReportResourceProd.getAssetAdditionsReport(..))")
+    @Pointcut("execution(* io.github.erp.erp.resources.depreciation.DepreciationReportResourceProd.getDepreciationReport(..))")
     public void reportResponsePointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }

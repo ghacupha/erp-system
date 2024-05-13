@@ -1,4 +1,4 @@
-package io.github.erp.aop.reporting;
+package io.github.erp.aop.reporting.assets;
 
 /*-
  * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
@@ -18,8 +18,7 @@ package io.github.erp.aop.reporting;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.internal.report.service.ExportReportService;
-import io.github.erp.service.dto.AmortizationPostingReportRequisitionDTO;
-import io.github.erp.service.dto.PrepaymentReportRequisitionDTO;
+import io.github.erp.service.dto.AssetAdditionsReportDTO;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -31,31 +30,25 @@ import org.springframework.scheduling.annotation.Async;
 
 import java.util.Objects;
 
-/**
- * Amortization posting requisition intercept intercepts the API call for the AmortizationPostingReportRequisition
- * routing the same to actual (but asynchronous) report-generating entities which will run a report
- * and export it to the file system.
- */
 @Aspect
-public class AmortizationPostingReportRequisitionInterceptor {
+public class AssetAdditionsReportInterceptor {
 
-    private static final Logger log = LoggerFactory.getLogger(AmortizationPostingReportRequisitionInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(AssetAdditionsReportInterceptor.class);
 
-    private final ExportReportService<AmortizationPostingReportRequisitionDTO> amortizationPostingReportRequisitionExportReportService;
+    private final ExportReportService<AssetAdditionsReportDTO> assetReportExportReportService;
 
-    public AmortizationPostingReportRequisitionInterceptor(
-        ExportReportService<AmortizationPostingReportRequisitionDTO> amortizationPostingReportRequisitionExportReportService){
-        this.amortizationPostingReportRequisitionExportReportService = amortizationPostingReportRequisitionExportReportService;
+    public AssetAdditionsReportInterceptor(ExportReportService<AssetAdditionsReportDTO> assetReportExportReportService) {
+        this.assetReportExportReportService = assetReportExportReportService;
     }
 
     @AfterReturning(
-        pointcut="reportRequisitionPointcut()",
+        pointcut="assetAdditionsReportPointcut()",
         returning="response")
-    public void getCreatedReportInfo(JoinPoint joinPoint, ResponseEntity<AmortizationPostingReportRequisitionDTO> response) {
+    public void getCreatedReportInfo(JoinPoint joinPoint, ResponseEntity<AssetAdditionsReportDTO> response) {
 
         log.info("Report requisition response intercept completed successfully");
 
-        AmortizationPostingReportRequisitionDTO reportDTO = Objects.requireNonNull(response.getBody());
+        AssetAdditionsReportDTO reportDTO = Objects.requireNonNull(response.getBody());
         String reportId = reportDTO.getRequestId().toString();
         long entityId = reportDTO.getId();
 
@@ -64,14 +57,15 @@ public class AmortizationPostingReportRequisitionInterceptor {
         createReport(reportDTO);
     }
 
-    @Async
-    void createReport(AmortizationPostingReportRequisitionDTO reportDTO) {
-
-        amortizationPostingReportRequisitionExportReportService.exportReport(reportDTO);
+    @Async void createReport(AssetAdditionsReportDTO reportDTO) {
+        assetReportExportReportService.exportReport(reportDTO);
     }
 
-    @Pointcut("execution(* io.github.erp.erp.resources.prepayments.AmortizationPostingReportRequisitionResourceProd.createAmortizationPostingReportRequisition(..))")
-    public void reportRequisitionPointcut() {
+    /**
+     * Pointcut for report-requisition file attachment
+     */
+    @Pointcut("execution(* io.github.erp.erp.resources.assets.AssetAdditionsReportResourceProd.createAssetAdditionsReport(..))")
+    public void assetAdditionsReportPointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }
 }

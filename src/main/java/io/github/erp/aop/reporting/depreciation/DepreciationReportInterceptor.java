@@ -1,4 +1,4 @@
-package io.github.erp.aop.reporting;
+package io.github.erp.aop.reporting.depreciation;
 
 /*-
  * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
