@@ -17,9 +17,9 @@ package io.github.erp.erp.resources.wip;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.service.wip.InternalWorkInProgressRegistrationService;
 import io.github.erp.repository.WorkInProgressRegistrationRepository;
 import io.github.erp.service.WorkInProgressRegistrationQueryService;
-import io.github.erp.service.WorkInProgressRegistrationService;
 import io.github.erp.service.criteria.WorkInProgressRegistrationCriteria;
 import io.github.erp.service.dto.WorkInProgressRegistrationDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
@@ -57,14 +57,14 @@ public class WorkInProgressRegistrationResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final WorkInProgressRegistrationService workInProgressRegistrationService;
+    private final InternalWorkInProgressRegistrationService workInProgressRegistrationService;
 
     private final WorkInProgressRegistrationRepository workInProgressRegistrationRepository;
 
     private final WorkInProgressRegistrationQueryService workInProgressRegistrationQueryService;
 
     public WorkInProgressRegistrationResourceProd(
-        WorkInProgressRegistrationService workInProgressRegistrationService,
+        InternalWorkInProgressRegistrationService workInProgressRegistrationService,
         WorkInProgressRegistrationRepository workInProgressRegistrationRepository,
         WorkInProgressRegistrationQueryService workInProgressRegistrationQueryService
     ) {
@@ -241,5 +241,17 @@ public class WorkInProgressRegistrationResourceProd {
         Page<WorkInProgressRegistrationDTO> page = workInProgressRegistrationService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /work-in-progress-registrations/next/catalogue-number} : get the next catalogue number.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the next number code in body.
+     */
+    @GetMapping("/work-in-progress-registrations/next/catalogue-number")
+    public ResponseEntity<Long> getNextAssetNumber() {
+        log.debug("REST request to fetch the next asset number");
+
+        return ResponseEntity.ok().body(workInProgressRegistrationService.calculateNextNumber());
     }
 }

@@ -239,7 +239,7 @@ public class AssetRegistrationResourceProd {
     }
 
     /**
-     * {@code GET  /prepayment-accounts/next/catalogue-number} : get the next catalogue number.
+     * {@code GET  /asset-registrations/next/asset-number} : get the next catalogue number.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the next number code in body.
      */
