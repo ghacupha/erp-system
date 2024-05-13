@@ -119,7 +119,11 @@ public class InternalPrepaymentByAccountReportRequisitionServiceImpl implements 
     @Transactional(readOnly = true)
     public Optional<PrepaymentByAccountReportRequisitionDTO> findOne(Long id) {
         log.debug("Request to get PrepaymentByAccountReportRequisition : {}", id);
-        return prepaymentByAccountReportRequisitionRepository.findById(id).map(prepaymentByAccountReportRequisitionMapper::toDto);
+        Optional<PrepaymentByAccountReportRequisitionDTO> one =  prepaymentByAccountReportRequisitionRepository.findById(id).map(prepaymentByAccountReportRequisitionMapper::toDto);
+
+        save(one.get());
+
+        return one;
     }
 
     @Override
