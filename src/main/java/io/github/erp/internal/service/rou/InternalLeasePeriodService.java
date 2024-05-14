@@ -22,6 +22,7 @@ import io.github.erp.service.dto.LeasePeriodDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 /**
@@ -76,4 +77,15 @@ public interface InternalLeasePeriodService {
      * @return the list of entities.
      */
     Page<LeasePeriodDTO> search(String query, Pageable pageable);
+
+
+    /**
+     * Get the initial leasePeriod in which the commencement-date belongs.
+     * The appropriate initial leasePeriod is one in whose duration the
+     * commencementDate is contained
+     *
+     * @param commencementDate of the leaseModelMetadata
+     * @return the entity.
+     */
+    Optional<LeasePeriodDTO> findInitialPeriod(LocalDate commencementDate);
 }

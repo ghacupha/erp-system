@@ -48,6 +48,8 @@ public class RouDepreciationEntryDTO implements Serializable {
 
     private Integer sequenceNumber;
 
+    private Boolean activated;
+
     private TransactionAccountDTO debitAccount;
 
     private TransactionAccountDTO creditAccount;
@@ -114,6 +116,14 @@ public class RouDepreciationEntryDTO implements Serializable {
 
     public void setSequenceNumber(Integer sequenceNumber) {
         this.sequenceNumber = sequenceNumber;
+    }
+
+    public Boolean getActivated() {
+        return activated;
+    }
+
+    public void setActivated(Boolean activated) {
+        this.activated = activated;
     }
 
     public TransactionAccountDTO getDebitAccount() {
@@ -196,6 +206,7 @@ public class RouDepreciationEntryDTO implements Serializable {
             ", rouAssetIdentifier='" + getRouAssetIdentifier() + "'" +
             ", rouDepreciationIdentifier='" + getRouDepreciationIdentifier() + "'" +
             ", sequenceNumber=" + getSequenceNumber() +
+            ", activated='" + getActivated() + "'" +
             ", debitAccount=" + getDebitAccount() +
             ", creditAccount=" + getCreditAccount() +
             ", assetCategory=" + getAssetCategory() +

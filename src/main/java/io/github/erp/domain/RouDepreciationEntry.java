@@ -67,6 +67,9 @@ public class RouDepreciationEntry implements Serializable {
     @Column(name = "sequence_number")
     private Integer sequenceNumber;
 
+    @Column(name = "activated")
+    private Boolean activated;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
@@ -210,6 +213,19 @@ public class RouDepreciationEntry implements Serializable {
         this.sequenceNumber = sequenceNumber;
     }
 
+    public Boolean getActivated() {
+        return this.activated;
+    }
+
+    public RouDepreciationEntry activated(Boolean activated) {
+        this.setActivated(activated);
+        return this;
+    }
+
+    public void setActivated(Boolean activated) {
+        this.activated = activated;
+    }
+
     public TransactionAccount getDebitAccount() {
         return this.debitAccount;
     }
@@ -318,6 +334,7 @@ public class RouDepreciationEntry implements Serializable {
             ", rouAssetIdentifier='" + getRouAssetIdentifier() + "'" +
             ", rouDepreciationIdentifier='" + getRouDepreciationIdentifier() + "'" +
             ", sequenceNumber=" + getSequenceNumber() +
+            ", activated='" + getActivated() + "'" +
             "}";
     }
 }

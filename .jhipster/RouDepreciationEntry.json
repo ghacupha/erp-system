@@ -28,6 +28,10 @@
     {
       "fieldName": "sequenceNumber",
       "fieldType": "Integer"
+    },
+    {
+      "fieldName": "activated",
+      "fieldType": "Boolean"
     }
   ],
   "relationships": [
