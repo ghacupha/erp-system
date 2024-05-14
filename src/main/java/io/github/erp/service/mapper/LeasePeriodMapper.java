@@ -29,4 +29,10 @@ import org.mapstruct.*;
 public interface LeasePeriodMapper extends EntityMapper<LeasePeriodDTO, LeasePeriod> {
     @Mapping(target = "fiscalMonth", source = "fiscalMonth", qualifiedByName = "fiscalMonthCode")
     LeasePeriodDTO toDto(LeasePeriod s);
+
+    @Named("periodCode")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "periodCode", source = "periodCode")
+    LeasePeriodDTO toDtoPeriodCode(LeasePeriod leasePeriod);
 }

@@ -112,6 +112,11 @@ public class RouDepreciationEntry implements Serializable {
     )
     private RouModelMetadata rouMetadata;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "fiscalMonth" }, allowSetters = true)
+    private LeasePeriod leasePeriod;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -267,6 +272,19 @@ public class RouDepreciationEntry implements Serializable {
 
     public RouDepreciationEntry rouMetadata(RouModelMetadata rouModelMetadata) {
         this.setRouMetadata(rouModelMetadata);
+        return this;
+    }
+
+    public LeasePeriod getLeasePeriod() {
+        return this.leasePeriod;
+    }
+
+    public void setLeasePeriod(LeasePeriod leasePeriod) {
+        this.leasePeriod = leasePeriod;
+    }
+
+    public RouDepreciationEntry leasePeriod(LeasePeriod leasePeriod) {
+        this.setLeasePeriod(leasePeriod);
         return this;
     }
 

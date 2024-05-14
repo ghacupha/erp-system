@@ -1,11 +1,11 @@
-id;description;depreciation_amount;outstanding_amount;rou_asset_identifier;rou_depreciation_identifier;sequence_number;debit_account_id;credit_account_id;asset_category_id;lease_contract_id;rou_metadata_id
-1;SMTP Supervisor;87226;69292;f954f9c2-2d82-4554-a228-a5e3f9e7149c;dd163704-0757-4a9e-957c-1ab8cfa220de;15292;1;1;1;1;1
-2;New;68860;52827;f3011dc4-a1a1-4a16-82cf-37dc31116d33;2ba822f2-59d0-4e59-8e5c-075bff47b1e5;11171;2;2;2;2;2
-3;SDR Interactions up;17884;94420;2ecb256d-9682-4d78-bf84-0d7114b6fd76;9ecc0be5-b04a-4e30-a242-3f1fc63ffa81;53056;3;3;3;3;3
-4;Plastic;99404;19105;ff2de07e-19ab-436c-a5a6-0bcb804b0cb1;fc7d4184-0c98-466f-9dea-3b269eff2129;20514;4;4;4;4;4
-5;experiences generating Triple-buffered;41687;9712;025827f0-3ee9-4a2f-901e-9ce4f3899fa3;0bbb1427-3779-494c-865a-42622c44939b;82930;5;5;5;5;5
-6;Solutions;75480;47009;e75a395f-6aad-41e4-954f-a4bf7ecbdfe0;2bd37a48-0a24-405a-aed9-f0ff02378ca2;44991;6;6;6;6;6
-7;Pizza Public-key enable;43386;39913;78d5a3ad-26e8-4071-8f35-aba6f9cfdb98;caf7e434-d930-4bec-8126-1be4355b8a61;3071;7;7;7;7;7
-8;azure;6680;71847;3c3fec61-1a7c-479d-88b0-70e8773a3337;d193963c-aeb8-4689-8e0b-a3f0f9516524;33337;8;8;8;8;8
-9;ivory;80169;42083;086ab016-8aa2-4c88-a3bd-a69dc802ddf3;2fcc19b3-b5ed-42cb-a20c-901136f433fb;46039;9;9;9;9;9
-10;FTP Senior;74696;11404;d92ae9d2-d5b9-4610-962e-f736d2fb5163;efe67780-1a66-403f-a5cc-4c7a043b0844;44596;10;10;10;10;10
+id;description;depreciation_amount;outstanding_amount;rou_asset_identifier;rou_depreciation_identifier;sequence_number;debit_account_id;credit_account_id;asset_category_id;lease_contract_id;rou_metadata_id;lease_period_id
+1;SMTP Supervisor;87226;69292;f954f9c2-2d82-4554-a228-a5e3f9e7149c;dd163704-0757-4a9e-957c-1ab8cfa220de;15292;1;1;1;1;1;1
+2;New;68860;52827;f3011dc4-a1a1-4a16-82cf-37dc31116d33;2ba822f2-59d0-4e59-8e5c-075bff47b1e5;11171;2;2;2;2;2;2
+3;SDR Interactions up;17884;94420;2ecb256d-9682-4d78-bf84-0d7114b6fd76;9ecc0be5-b04a-4e30-a242-3f1fc63ffa81;53056;3;3;3;3;3;3
+4;Plastic;99404;19105;ff2de07e-19ab-436c-a5a6-0bcb804b0cb1;fc7d4184-0c98-466f-9dea-3b269eff2129;20514;4;4;4;4;4;4
+5;experiences generating Triple-buffered;41687;9712;025827f0-3ee9-4a2f-901e-9ce4f3899fa3;0bbb1427-3779-494c-865a-42622c44939b;82930;5;5;5;5;5;5
+6;Solutions;75480;47009;e75a395f-6aad-41e4-954f-a4bf7ecbdfe0;2bd37a48-0a24-405a-aed9-f0ff02378ca2;44991;6;6;6;6;6;6
+7;Pizza Public-key enable;43386;39913;78d5a3ad-26e8-4071-8f35-aba6f9cfdb98;caf7e434-d930-4bec-8126-1be4355b8a61;3071;7;7;7;7;7;7
+8;azure;6680;71847;3c3fec61-1a7c-479d-88b0-70e8773a3337;d193963c-aeb8-4689-8e0b-a3f0f9516524;33337;8;8;8;8;8;8
+9;ivory;80169;42083;086ab016-8aa2-4c88-a3bd-a69dc802ddf3;2fcc19b3-b5ed-42cb-a20c-901136f433fb;46039;9;9;9;9;9;9
+10;FTP Senior;74696;11404;d92ae9d2-d5b9-4610-962e-f736d2fb5163;efe67780-1a66-403f-a5cc-4c7a043b0844;44596;10;10;10;10;10;10

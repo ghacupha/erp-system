@@ -58,6 +58,8 @@ public class RouDepreciationEntryDTO implements Serializable {
 
     private RouModelMetadataDTO rouMetadata;
 
+    private LeasePeriodDTO leasePeriod;
+
     public Long getId() {
         return id;
     }
@@ -154,6 +156,14 @@ public class RouDepreciationEntryDTO implements Serializable {
         this.rouMetadata = rouMetadata;
     }
 
+    public LeasePeriodDTO getLeasePeriod() {
+        return leasePeriod;
+    }
+
+    public void setLeasePeriod(LeasePeriodDTO leasePeriod) {
+        this.leasePeriod = leasePeriod;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -191,6 +201,7 @@ public class RouDepreciationEntryDTO implements Serializable {
             ", assetCategory=" + getAssetCategory() +
             ", leaseContract=" + getLeaseContract() +
             ", rouMetadata=" + getRouMetadata() +
+            ", leasePeriod=" + getLeasePeriod() +
             "}";
     }
 }
