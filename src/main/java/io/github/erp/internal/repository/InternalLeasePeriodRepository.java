@@ -19,13 +19,58 @@ package io.github.erp.internal.repository;
  */
 
 import io.github.erp.domain.LeasePeriod;
+import io.github.erp.service.dto.LeasePeriodDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * Spring Data SQL repository for the LeasePeriod entity.
  */
 @SuppressWarnings("unused")
 @Repository
-public interface InternalLeasePeriodRepository extends JpaRepository<LeasePeriod, Long>, JpaSpecificationExecutor<LeasePeriod> {}
+public interface InternalLeasePeriodRepository extends JpaRepository<LeasePeriod, Long>, JpaSpecificationExecutor<LeasePeriod> {
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT * FROM lease_period " +
+            "WHERE start_date <= :commencementDate " +
+            "AND end_date >= :commencementDate " +
+            "ORDER BY sequence_number " +
+            "LIMIT 1;"
+    )
+    Optional<LeasePeriod> findInitialPeriod(@Param("commencementDate") LocalDate commencementDate);
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "WITH RECURSIVE LeasePeriods AS ( " +
+            "    SELECT *, " +
+            "           1 AS iteration " +
+            "    FROM lease_period " +
+            "    WHERE start_date <= :commencementDate " +
+            "      AND end_date >= :commencementDate " +
+            " " +
+            "    UNION ALL " +
+            " " +
+            "    SELECT lp.*, " +
+            "           prev.iteration + 1 AS iteration " +
+            "    FROM LeasePeriods prev " +
+            "             JOIN lease_period lp ON lp.sequence_number = prev.sequence_number + 1 " +
+            "    WHERE prev.end_date < ( " +
+            "        SELECT MAX(end_date) FROM lease_period " + // -- This computes the end date condition so that the query never exceeds the periods available currently on the leaseTermPeriods table
+            "    ) " +
+            "      AND prev.iteration < :leaseTermPeriods " + //  -- Limit the number of iterations to the leaseTerm periods
+            ") " +
+            "SELECT * FROM LeasePeriods;"
+    )
+    Optional<LeasePeriod> findLeaseDepreciationPeriods(@Param("commencementDate") LocalDate commencementDate,
+                                                       @Param("leaseTermPeriods") int leaseTermPeriods);
+
+}

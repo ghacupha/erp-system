@@ -19,6 +19,7 @@ package io.github.erp.internal.service.rou;
  */
 
 import io.github.erp.domain.LeasePeriod;
+import io.github.erp.internal.repository.InternalLeasePeriodRepository;
 import io.github.erp.repository.LeasePeriodRepository;
 import io.github.erp.repository.search.LeasePeriodSearchRepository;
 import io.github.erp.service.LeasePeriodService;
@@ -31,6 +32,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 /**
@@ -42,14 +44,14 @@ public class InternalLeasePeriodServiceImpl implements InternalLeasePeriodServic
 
     private final Logger log = LoggerFactory.getLogger(InternalLeasePeriodServiceImpl.class);
 
-    private final LeasePeriodRepository leasePeriodRepository;
+    private final InternalLeasePeriodRepository leasePeriodRepository;
 
     private final LeasePeriodMapper leasePeriodMapper;
 
     private final LeasePeriodSearchRepository leasePeriodSearchRepository;
 
     public InternalLeasePeriodServiceImpl(
-        LeasePeriodRepository leasePeriodRepository,
+        InternalLeasePeriodRepository leasePeriodRepository,
         LeasePeriodMapper leasePeriodMapper,
         LeasePeriodSearchRepository leasePeriodSearchRepository
     ) {
@@ -114,5 +116,19 @@ public class InternalLeasePeriodServiceImpl implements InternalLeasePeriodServic
     public Page<LeasePeriodDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of LeasePeriods for query {}", query);
         return leasePeriodSearchRepository.search(query, pageable).map(leasePeriodMapper::toDto);
+    }
+
+    /**
+     * Get the initial leasePeriod in which the commencement-date belongs.
+     * The appropriate initial leasePeriod is one in whose duration the
+     * commencementDate is contained
+     *
+     * @param commencementDate of the leaseModelMetadata
+     * @return the entity.
+     */
+    @Override
+    public Optional<LeasePeriodDTO> findInitialPeriod(LocalDate commencementDate) {
+        return leasePeriodRepository.findInitialPeriod(commencementDate)
+            .map(leasePeriodMapper::toDto);
     }
 }

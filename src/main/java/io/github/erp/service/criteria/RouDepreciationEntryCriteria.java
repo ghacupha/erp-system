@@ -58,6 +58,8 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
 
     private IntegerFilter sequenceNumber;
 
+    private BooleanFilter activated;
+
     private LongFilter debitAccountId;
 
     private LongFilter creditAccountId;
@@ -82,6 +84,7 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
         this.rouAssetIdentifier = other.rouAssetIdentifier == null ? null : other.rouAssetIdentifier.copy();
         this.rouDepreciationIdentifier = other.rouDepreciationIdentifier == null ? null : other.rouDepreciationIdentifier.copy();
         this.sequenceNumber = other.sequenceNumber == null ? null : other.sequenceNumber.copy();
+        this.activated = other.activated == null ? null : other.activated.copy();
         this.debitAccountId = other.debitAccountId == null ? null : other.debitAccountId.copy();
         this.creditAccountId = other.creditAccountId == null ? null : other.creditAccountId.copy();
         this.assetCategoryId = other.assetCategoryId == null ? null : other.assetCategoryId.copy();
@@ -201,6 +204,21 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
         this.sequenceNumber = sequenceNumber;
     }
 
+    public BooleanFilter getActivated() {
+        return activated;
+    }
+
+    public BooleanFilter activated() {
+        if (activated == null) {
+            activated = new BooleanFilter();
+        }
+        return activated;
+    }
+
+    public void setActivated(BooleanFilter activated) {
+        this.activated = activated;
+    }
+
     public LongFilter getDebitAccountId() {
         return debitAccountId;
     }
@@ -316,6 +334,7 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
             Objects.equals(rouAssetIdentifier, that.rouAssetIdentifier) &&
             Objects.equals(rouDepreciationIdentifier, that.rouDepreciationIdentifier) &&
             Objects.equals(sequenceNumber, that.sequenceNumber) &&
+            Objects.equals(activated, that.activated) &&
             Objects.equals(debitAccountId, that.debitAccountId) &&
             Objects.equals(creditAccountId, that.creditAccountId) &&
             Objects.equals(assetCategoryId, that.assetCategoryId) &&
@@ -336,6 +355,7 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
             rouAssetIdentifier,
             rouDepreciationIdentifier,
             sequenceNumber,
+            activated,
             debitAccountId,
             creditAccountId,
             assetCategoryId,
@@ -357,6 +377,7 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
             (rouAssetIdentifier != null ? "rouAssetIdentifier=" + rouAssetIdentifier + ", " : "") +
             (rouDepreciationIdentifier != null ? "rouDepreciationIdentifier=" + rouDepreciationIdentifier + ", " : "") +
             (sequenceNumber != null ? "sequenceNumber=" + sequenceNumber + ", " : "") +
+            (activated != null ? "activated=" + activated + ", " : "") +
             (debitAccountId != null ? "debitAccountId=" + debitAccountId + ", " : "") +
             (creditAccountId != null ? "creditAccountId=" + creditAccountId + ", " : "") +
             (assetCategoryId != null ? "assetCategoryId=" + assetCategoryId + ", " : "") +
