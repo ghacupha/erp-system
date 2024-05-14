@@ -68,6 +68,8 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
 
     private LongFilter rouMetadataId;
 
+    private LongFilter leasePeriodId;
+
     private Boolean distinct;
 
     public RouDepreciationEntryCriteria() {}
@@ -85,6 +87,7 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
         this.assetCategoryId = other.assetCategoryId == null ? null : other.assetCategoryId.copy();
         this.leaseContractId = other.leaseContractId == null ? null : other.leaseContractId.copy();
         this.rouMetadataId = other.rouMetadataId == null ? null : other.rouMetadataId.copy();
+        this.leasePeriodId = other.leasePeriodId == null ? null : other.leasePeriodId.copy();
         this.distinct = other.distinct;
     }
 
@@ -273,6 +276,21 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
         this.rouMetadataId = rouMetadataId;
     }
 
+    public LongFilter getLeasePeriodId() {
+        return leasePeriodId;
+    }
+
+    public LongFilter leasePeriodId() {
+        if (leasePeriodId == null) {
+            leasePeriodId = new LongFilter();
+        }
+        return leasePeriodId;
+    }
+
+    public void setLeasePeriodId(LongFilter leasePeriodId) {
+        this.leasePeriodId = leasePeriodId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -303,6 +321,7 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
             Objects.equals(assetCategoryId, that.assetCategoryId) &&
             Objects.equals(leaseContractId, that.leaseContractId) &&
             Objects.equals(rouMetadataId, that.rouMetadataId) &&
+            Objects.equals(leasePeriodId, that.leasePeriodId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -322,6 +341,7 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
             assetCategoryId,
             leaseContractId,
             rouMetadataId,
+            leasePeriodId,
             distinct
         );
     }
@@ -342,6 +362,7 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
             (assetCategoryId != null ? "assetCategoryId=" + assetCategoryId + ", " : "") +
             (leaseContractId != null ? "leaseContractId=" + leaseContractId + ", " : "") +
             (rouMetadataId != null ? "rouMetadataId=" + rouMetadataId + ", " : "") +
+            (leasePeriodId != null ? "leasePeriodId=" + leasePeriodId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

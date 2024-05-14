@@ -1,4 +1,4 @@
-package io.github.erp.web.rest;
+package io.github.erp.erp.resources;
 
 /*-
  * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
@@ -18,36 +18,16 @@ package io.github.erp.web.rest;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import static io.github.erp.web.rest.TestUtil.sameNumber;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.AssetCategory;
-import io.github.erp.domain.IFRS16LeaseContract;
-import io.github.erp.domain.LeasePeriod;
-import io.github.erp.domain.RouDepreciationEntry;
-import io.github.erp.domain.RouModelMetadata;
-import io.github.erp.domain.TransactionAccount;
+import io.github.erp.domain.*;
 import io.github.erp.repository.RouDepreciationEntryRepository;
 import io.github.erp.repository.search.RouDepreciationEntrySearchRepository;
-import io.github.erp.service.criteria.RouDepreciationEntryCriteria;
 import io.github.erp.service.dto.RouDepreciationEntryDTO;
 import io.github.erp.service.mapper.RouDepreciationEntryMapper;
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -58,13 +38,28 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static io.github.erp.web.rest.TestUtil.sameNumber;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 /**
- * Integration tests for the {@link RouDepreciationEntryResource} REST controller.
+ * Integration tests for the RouDepreciationEntryResource REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"LEASE_MANAGER"})
 class RouDepreciationEntryResourceIT {
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
@@ -88,9 +83,9 @@ class RouDepreciationEntryResourceIT {
     private static final Integer UPDATED_SEQUENCE_NUMBER = 2;
     private static final Integer SMALLER_SEQUENCE_NUMBER = 1 - 1;
 
-    private static final String ENTITY_API_URL = "/api/rou-depreciation-entries";
+    private static final String ENTITY_API_URL = "/api/leases/rou-depreciation-entries";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/rou-depreciation-entries";
+    private static final String ENTITY_SEARCH_API_URL = "/api/leases/_search/rou-depreciation-entries";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

@@ -186,6 +186,15 @@ public class RouDepreciationEntryQueryService extends QueryService<RouDepreciati
                         )
                     );
             }
+            if (criteria.getLeasePeriodId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLeasePeriodId(),
+                            root -> root.join(RouDepreciationEntry_.leasePeriod, JoinType.LEFT).get(LeasePeriod_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }
