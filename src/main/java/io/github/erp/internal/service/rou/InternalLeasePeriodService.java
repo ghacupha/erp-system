@@ -19,10 +19,12 @@ package io.github.erp.internal.service.rou;
  */
 
 import io.github.erp.service.dto.LeasePeriodDTO;
+import io.github.erp.service.dto.RouModelMetadataDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -88,4 +90,15 @@ public interface InternalLeasePeriodService {
      * @return the entity.
      */
     Optional<LeasePeriodDTO> findInitialPeriod(LocalDate commencementDate);
+
+    /**
+     * Get the initial leasePeriod in which the commencement-date belongs.
+     * The appropriate initial leasePeriod is one in whose duration the
+     * commencementDate is contained. The query then fetches the subsequent
+     * periods until the lease-term-periods are attained
+     *
+     * @param modelMetadata This is the lease item for which we need to obtain lease-periods
+     * @return the entity.
+     */
+    Optional<List<LeasePeriodDTO>> findLeasePeriods(RouModelMetadataDTO modelMetadata);
 }

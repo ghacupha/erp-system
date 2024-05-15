@@ -20,10 +20,10 @@ package io.github.erp.internal.service.rou;
 
 import io.github.erp.domain.LeasePeriod;
 import io.github.erp.internal.repository.InternalLeasePeriodRepository;
-import io.github.erp.repository.LeasePeriodRepository;
 import io.github.erp.repository.search.LeasePeriodSearchRepository;
-import io.github.erp.service.LeasePeriodService;
+import io.github.erp.service.RouModelMetadataService;
 import io.github.erp.service.dto.LeasePeriodDTO;
+import io.github.erp.service.dto.RouModelMetadataDTO;
 import io.github.erp.service.mapper.LeasePeriodMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -46,16 +47,19 @@ public class InternalLeasePeriodServiceImpl implements InternalLeasePeriodServic
 
     private final InternalLeasePeriodRepository leasePeriodRepository;
 
+    private final RouModelMetadataService rouModelMetadataService;
+
     private final LeasePeriodMapper leasePeriodMapper;
 
     private final LeasePeriodSearchRepository leasePeriodSearchRepository;
 
     public InternalLeasePeriodServiceImpl(
         InternalLeasePeriodRepository leasePeriodRepository,
-        LeasePeriodMapper leasePeriodMapper,
+        RouModelMetadataService rouModelMetadataService, LeasePeriodMapper leasePeriodMapper,
         LeasePeriodSearchRepository leasePeriodSearchRepository
     ) {
         this.leasePeriodRepository = leasePeriodRepository;
+        this.rouModelMetadataService = rouModelMetadataService;
         this.leasePeriodMapper = leasePeriodMapper;
         this.leasePeriodSearchRepository = leasePeriodSearchRepository;
     }
@@ -130,5 +134,22 @@ public class InternalLeasePeriodServiceImpl implements InternalLeasePeriodServic
     public Optional<LeasePeriodDTO> findInitialPeriod(LocalDate commencementDate) {
         return leasePeriodRepository.findInitialPeriod(commencementDate)
             .map(leasePeriodMapper::toDto);
+    }
+
+    /**
+     * Get the initial leasePeriod in which the commencement-date belongs.
+     * The appropriate initial leasePeriod is one in whose duration the
+     * commencementDate is contained. The query then fetches the subsequent
+     * periods until the lease-term-periods are attained
+     *
+     * @param modelMetadata This is the lease item for which we need to obtain lease-periods
+     * @return the entity.
+     */
+    @Override
+    public Optional<List<LeasePeriodDTO>> findLeasePeriods(RouModelMetadataDTO modelMetadata) {
+
+        return rouModelMetadataService.findOne(modelMetadata.getId())
+            .flatMap(metadata -> leasePeriodRepository.findLeaseDepreciationPeriods(metadata.getCommencementDate(), metadata.getLeaseTermPeriods())
+                .map(leasePeriodMapper::toDto));
     }
 }
