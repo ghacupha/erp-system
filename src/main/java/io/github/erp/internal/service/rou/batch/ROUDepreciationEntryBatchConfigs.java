@@ -104,7 +104,7 @@ public class ROUDepreciationEntryBatchConfigs {
     @Bean(READ_FILE_STEP_NAME)
     public Step depreciationBatchStep() {
         return stepBuilderFactory.get(READ_FILE_STEP_NAME)
-            .<RouModelMetadataDTO, List<RouDepreciationEntryDTO>>chunk(10)
+            .<RouModelMetadataDTO, List<RouDepreciationEntryDTO>>chunk(100)
             .reader(rouModelMetadataItemReader(rouDepreciationRequestId))
             .processor(rouModelMetadataDTOListItemProcessor())
             .writer(rouDepreciationEntryWriter())
