@@ -178,4 +178,17 @@ public class InternalRouDepreciationEntryServiceImpl implements InternalRouDepre
 
         return outstandingAmount.get();
     }
+
+    /**
+     * This query looks for processed items whose outstanding amount has not yet been
+     * updated. It's used in the batch sequence to further update the outstanding amounts
+     *
+     * @return list of entities for processing
+     */
+    @Override
+    public Optional<List<RouDepreciationEntryDTO>> getOutstandingAmountItems() {
+
+        return rouDepreciationEntryRepository.getOutstandingAmountItems(BigDecimal.TEN)
+            .map(rouDepreciationEntryMapper::toDto);
+    }
 }
