@@ -52,8 +52,16 @@ public interface InternalRouModelMetadataRepository extends JpaRepository<RouMod
 
     @Query(
         nativeQuery = true,
-        value = "",
-        countQuery = ""
+        value = "" +
+            "SELECT * " +
+            "FROM public.rou_model_metadata " +
+            "WHERE (has_been_decommissioned = 'false' OR has_been_decommissioned IS NULL) " +
+            "  AND (has_been_fully_amortised = 'false' OR has_been_fully_amortised IS NULL)",
+        countQuery = "" +
+            "SELECT * " +
+            "FROM public.rou_model_metadata " +
+            "WHERE (has_been_decommissioned = 'false' OR has_been_decommissioned IS NULL) " +
+            "  AND (has_been_fully_amortised = 'false' OR has_been_fully_amortised IS NULL)"
     )
-    Optional<List<RouModelMetadata>> getDepreciationAdjacentMetadataItems(@Param("rouDepreciationRequestId")long rouDepreciationRequestId);
+    Optional<List<RouModelMetadata>> getDepreciationAdjacentMetadataItems();
 }

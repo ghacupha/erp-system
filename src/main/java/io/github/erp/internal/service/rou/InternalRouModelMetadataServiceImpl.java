@@ -131,7 +131,8 @@ public class InternalRouModelMetadataServiceImpl implements InternalRouModelMeta
      */
     @Override
     public Optional<List<RouModelMetadataDTO>> getDepreciationAdjacentMetadataItems(long rouDepreciationRequestId) {
-        return rouModelMetadataRepository.getDepreciationAdjacentMetadataItems(rouDepreciationRequestId)
+        // TODO update rouDepreciationRequestId status
+        return rouModelMetadataRepository.getDepreciationAdjacentMetadataItems()
             .map(rouModelMetadataMapper::toDto);
     }
 }

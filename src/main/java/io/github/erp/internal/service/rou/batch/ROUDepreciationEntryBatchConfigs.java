@@ -54,17 +54,18 @@ public class ROUDepreciationEntryBatchConfigs {
     private static long rouDepreciationRequestId;
 
     @SuppressWarnings("SpringElStaticFieldInjectionInspection")
-    @Value("#{jobParameters['messageToken']}")
-    private static String jobUploadToken;
+    @Value("#{jobParameters['jobToken']}")
+    private static String jobToken;
+
+    @SuppressWarnings("SpringElStaticFieldInjectionInspection")
+    @Value("#{jobParameters['batchJobIdentifier']}")
+    private static String batchJobIdentifier;
 
     @Autowired
     private JobBuilderFactory jobBuilderFactory;
 
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
-
-    @Autowired
-    private DeletionUploadService<PaymentBEO> fileUploadDeletionService;
 
     @Autowired
     private InternalRouModelMetadataService rouModelMetadataService;
