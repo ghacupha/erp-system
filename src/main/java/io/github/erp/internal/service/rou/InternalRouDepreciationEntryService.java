@@ -38,7 +38,7 @@ public interface InternalRouDepreciationEntryService {
     RouDepreciationEntryDTO save(RouDepreciationEntryDTO rouDepreciationEntryDTO);
 
     /**
-     * Save a rouDepreciationEntry.
+     * Save a collection of rouDepreciationEntry
      *
      * @param rouDepreciationEntryDTO the entity to save.
      * @return the persisted entity.
