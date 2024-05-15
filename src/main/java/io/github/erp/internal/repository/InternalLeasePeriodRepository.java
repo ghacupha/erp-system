@@ -27,6 +27,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -70,7 +71,6 @@ public interface InternalLeasePeriodRepository extends JpaRepository<LeasePeriod
             ") " +
             "SELECT * FROM LeasePeriods;"
     )
-    Optional<LeasePeriod> findLeaseDepreciationPeriods(@Param("commencementDate") LocalDate commencementDate,
-                                                       @Param("leaseTermPeriods") int leaseTermPeriods);
+    Optional<List<LeasePeriod>> findLeaseDepreciationPeriods(@Param("commencementDate") LocalDate commencementDate, @Param("leaseTermPeriods") int leaseTermPeriods);
 
 }
