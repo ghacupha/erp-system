@@ -68,7 +68,7 @@ public class ROUDepreciationEntryCompilationServiceImpl implements ROUDepreciati
     private RouDepreciationEntryDTO updateMetadataValues(RouDepreciationEntryDTO entry, RouModelMetadataDTO modelMetadataDTO) {
 
         entry.setDescription(entry.getLeasePeriod().getPeriodCode().concat(" ").concat(modelMetadataDTO.getModelTitle()).concat(" depreciation"));
-        entry.setDepreciationAmount(modelMetadataDTO.getLeaseAmount().divide(BigDecimal.valueOf(modelMetadataDTO.getLeaseTermPeriods()), RoundingMode.HALF_EVEN).setScale(2, RoundingMode.HALF_EVEN));
+        entry.setDepreciationAmount(modelMetadataDTO.getLeaseAmount().divide(BigDecimal.valueOf(modelMetadataDTO.getLeaseTermPeriods()), RoundingMode.HALF_EVEN).setScale(6, RoundingMode.HALF_EVEN));
         entry.setOutstandingAmount(BigDecimal.ZERO);
         entry.setRouAssetIdentifier(modelMetadataDTO.getRouModelReference());
         entry.setRouDepreciationIdentifier(UUID.randomUUID());
