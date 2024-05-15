@@ -46,21 +46,19 @@ import java.util.stream.Collectors;
  */
 @Transactional
 @Service
-public class ROUDepreciationEntryCompilationServiceImpl {
+public class ROUDepreciationEntryCompilationServiceImpl implements ROUDepreciationEntryCompilationService {
 
     private final InternalLeasePeriodService internalLeasePeriodService;
-    private final InternalRouDepreciationEntryService internalRouDepreciationEntryService;
 
-    public ROUDepreciationEntryCompilationServiceImpl(InternalLeasePeriodService internalLeasePeriodService, InternalRouDepreciationEntryService internalRouDepreciationEntryService) {
+    public ROUDepreciationEntryCompilationServiceImpl(InternalLeasePeriodService internalLeasePeriodService) {
         this.internalLeasePeriodService = internalLeasePeriodService;
-        this.internalRouDepreciationEntryService = internalRouDepreciationEntryService;
     }
 
     public List<RouDepreciationEntryDTO> compileDepreciationEntries(RouModelMetadataDTO model) {
 
         return internalLeasePeriodService.findLeasePeriods(model)
             .map(this::mapDepreciationEntryPeriod)
-            .get()
+            .orElse(new ArrayList<>()) //  Blank List<RouDepreciationEntryDTO> just in case
             .stream()
             .map(entries -> updateMetadataValues(entries, model))
             .collect(Collectors.toUnmodifiableList());
@@ -81,7 +79,7 @@ public class ROUDepreciationEntryCompilationServiceImpl {
         entry.setLeaseContract(modelMetadataDTO.getIfrs16LeaseContract());
         entry.setRouMetadata(modelMetadataDTO);
 
-        return internalRouDepreciationEntryService.save(entry);
+        return entry;
     }
 
     private List<RouDepreciationEntryDTO> mapDepreciationEntryPeriod(List<LeasePeriodDTO> leasePeriods) {

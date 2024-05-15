@@ -23,7 +23,25 @@ import io.github.erp.service.dto.RouModelMetadataDTO;
 
 import java.util.List;
 
+/**
+ * This object compiles the depreciation entries for each ROU model metadata
+ * provided in the following way:
+ * 1. We calculate the initial lease-period using the commencementDate of the
+ * model-metadata provided
+ * 2. Fetch a list of x lease-periods starting with the initial period computed
+ * above and going through sequential increments until the leaseTerm specified
+ * in the model metadata is attained
+ * 3. For each period compute the depreciation amount using the straight line basis
+ * and save a corresponding rou-depreciation-entry
+ * <p>
+ * After these steps the compilation for a single rouModelMetadata is complete
+ */
 public interface ROUDepreciationEntryCompilationService {
 
+    /**
+     *
+     * @param model RouModelMetadataDTO whose depreciation-entry instances we are calculating
+     * @return list of calculated depreciation-entry instances
+     */
     List<RouDepreciationEntryDTO> compileDepreciationEntries(RouModelMetadataDTO model);
 }
