@@ -126,7 +126,17 @@ public class InternalRouDepreciationEntryServiceImpl implements InternalRouDepre
      */
     @Override
     public List<RouDepreciationEntryDTO> save(List<RouDepreciationEntryDTO> rouDepreciationEntryDTO) {
-        return rouDepreciationEntryDTO.stream().map(this::save).collect(Collectors.toUnmodifiableList());
+
+        List<RouDepreciationEntry> rouDepreciationEntry = rouDepreciationEntryMapper.toEntity(rouDepreciationEntryDTO);
+
+
+        rouDepreciationEntry = rouDepreciationEntryRepository.saveAllAndFlush(rouDepreciationEntry);
+
+        List<RouDepreciationEntryDTO> result = rouDepreciationEntryMapper.toDto(rouDepreciationEntry);
+
+        rouDepreciationEntrySearchRepository.saveAll(rouDepreciationEntry);
+
+        return result;
 
     }
 }
