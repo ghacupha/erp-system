@@ -89,8 +89,15 @@ public interface InternalRouDepreciationEntryService {
 
     /**
      * Calculate the outstanding amount for the current depreciation entry
-     * @param entry
-     * @return
+     * @param entry Depreciation entry whose oustanding amount we compute
+     * @return Calculated outstanding amount corresponding to the depreciation entry
      */
     BigDecimal calculateOutstandingAmount(RouDepreciationEntryDTO entry);
+
+    /**
+     * This query looks for processed items whose outstanding amount has not yet been
+     * updated. It's used in the batch sequence to further update the outstanding amounts
+     * @return list of entities for processing
+     */
+    Optional<List<RouDepreciationEntryDTO>> getOutstandingAmountItems();
 }

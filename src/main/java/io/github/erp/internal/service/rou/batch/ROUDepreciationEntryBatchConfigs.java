@@ -24,7 +24,6 @@ import io.github.erp.internal.service.rou.InternalRouModelMetadataService;
 import io.github.erp.internal.service.rou.ROUDepreciationEntryCompilationService;
 import io.github.erp.service.dto.RouDepreciationEntryDTO;
 import io.github.erp.service.dto.RouModelMetadataDTO;
-import io.github.erp.service.mapper.RouDepreciationEntryMapper;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -33,14 +32,12 @@ import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilder;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -92,10 +89,10 @@ public class ROUDepreciationEntryBatchConfigs {
     private EntityManagerFactory entityManagerFactory;
 
     @Autowired
-    private RouDepreciationEntryMapper rouDepreciationEntryMapper;
+    private InternalRouDepreciationEntryService depreciationEntryService;
 
     @Autowired
-    private InternalRouDepreciationEntryService depreciationEntryService;
+    private InternalRouDepreciationEntryService internalRouDepreciationEntryService;
 
     @Bean(PERSISTENCE_READER_NAME)
     @StepScope
@@ -136,7 +133,7 @@ public class ROUDepreciationEntryBatchConfigs {
     @Bean(UPDATE_OUTSTANDING_AMOUNT_STEP_NAME)
     public Step updateOutstandingAmountStep() {
         return stepBuilderFactory.get(UPDATE_OUTSTANDING_AMOUNT_STEP_NAME)
-            .<RouDepreciationEntry, RouDepreciationEntryDTO>chunk(50)
+            .<RouDepreciationEntryDTO, RouDepreciationEntryDTO>chunk(50)
             .reader(updateOutstandingAmountItemReader())
             .processor(updateOutstandingAmountProcessor())
             .writer(updateOutstandingAmountItemWriter())
@@ -144,8 +141,8 @@ public class ROUDepreciationEntryBatchConfigs {
     }
 
     @Bean(UPDATE_OUTSTANDING_AMOUNT_ITEM_PROCESSOR_NAME)
-    public ItemProcessor<RouDepreciationEntry, RouDepreciationEntryDTO> updateOutstandingAmountProcessor() {
-        return new UpdateOutstandingAmountProcessor(rouDepreciationEntryMapper, depreciationEntryService);
+    public ItemProcessor<RouDepreciationEntryDTO, RouDepreciationEntryDTO> updateOutstandingAmountProcessor() {
+        return new UpdateOutstandingAmountProcessor(depreciationEntryService);
     }
 
     @Bean(UPDATE_OUTSTANDING_AMOUNT_ITEM_WRITER_NAME)
@@ -156,14 +153,8 @@ public class ROUDepreciationEntryBatchConfigs {
 
     @Bean(UPDATE_OUTSTANDING_AMOUNT_ITEM_READER_NAME)
     @StepScope
-    public ItemReader<RouDepreciationEntry> updateOutstandingAmountItemReader() {
-        return new JpaPagingItemReaderBuilder<RouDepreciationEntry>()
-            .name(UPDATE_OUTSTANDING_AMOUNT_ITEM_READER_NAME)
-            .entityManagerFactory(entityManagerFactory)
-            .queryString(UPDATE_OUTSTANDING_AMOUNT_ITEM_READER_QUERY)
-            .parameterValues(Collections.singletonMap(UPDATE_OUTSTANDING_AMOUNT_ITEM_READER_PARAMETER, new BigDecimal("10.00")))
-            .pageSize(100)
-            .build();
-    }
+    public ItemReader<RouDepreciationEntryDTO> updateOutstandingAmountItemReader() {
 
+        return new UpdateOutstandingAmountItemReader(internalRouDepreciationEntryService);
+    }
 }
