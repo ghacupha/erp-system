@@ -9,10 +9,13 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class DepreciationEntryItemWriter implements ItemWriter<List<RouDepreciationEntryDTO>> {
+public class ROUDepreciationEntryItemWriter implements ItemWriter<List<RouDepreciationEntryDTO>> {
 
-    @Autowired
-    private InternalRouDepreciationEntryService rouDepreciationEntryService;
+    private final InternalRouDepreciationEntryService rouDepreciationEntryService;
+
+    public ROUDepreciationEntryItemWriter(InternalRouDepreciationEntryService rouDepreciationEntryService) {
+        this.rouDepreciationEntryService = rouDepreciationEntryService;
+    }
 
     @Override
     public void write(List<? extends List<RouDepreciationEntryDTO>> items) throws Exception {

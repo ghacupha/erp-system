@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class DepreciationEntryItemProcessor implements ItemProcessor<RouModelMetadataDTO, List<RouDepreciationEntryDTO>> {
+public class ROUDepreciationEntryItemProcessor implements ItemProcessor<RouModelMetadataDTO, List<RouDepreciationEntryDTO>> {
 
     private final ROUDepreciationEntryCompilationService rouDepreciationEntryCompilationService;
 
-    public DepreciationEntryItemProcessor(ROUDepreciationEntryCompilationService rouDepreciationEntryCompilationService) {
+    public ROUDepreciationEntryItemProcessor(ROUDepreciationEntryCompilationService rouDepreciationEntryCompilationService) {
         this.rouDepreciationEntryCompilationService = rouDepreciationEntryCompilationService;
     }
 
