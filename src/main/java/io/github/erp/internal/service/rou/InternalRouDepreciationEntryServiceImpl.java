@@ -21,8 +21,9 @@ package io.github.erp.internal.service.rou;
 import io.github.erp.domain.RouDepreciationEntry;
 import io.github.erp.repository.RouDepreciationEntryRepository;
 import io.github.erp.repository.search.RouDepreciationEntrySearchRepository;
-import io.github.erp.service.RouDepreciationEntryService;
+import io.github.erp.service.dto.LeasePeriodDTO;
 import io.github.erp.service.dto.RouDepreciationEntryDTO;
+import io.github.erp.service.dto.RouModelMetadataDTO;
 import io.github.erp.service.mapper.RouDepreciationEntryMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +32,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Service Implementation for managing {@link RouDepreciationEntry}.
@@ -50,14 +53,17 @@ public class InternalRouDepreciationEntryServiceImpl implements InternalRouDepre
 
     private final RouDepreciationEntrySearchRepository rouDepreciationEntrySearchRepository;
 
+    private final InternalLeasePeriodService internalLeasePeriodService;
+
     public InternalRouDepreciationEntryServiceImpl(
         RouDepreciationEntryRepository rouDepreciationEntryRepository,
         RouDepreciationEntryMapper rouDepreciationEntryMapper,
-        RouDepreciationEntrySearchRepository rouDepreciationEntrySearchRepository
-    ) {
+        RouDepreciationEntrySearchRepository rouDepreciationEntrySearchRepository,
+        InternalLeasePeriodService internalLeasePeriodService) {
         this.rouDepreciationEntryRepository = rouDepreciationEntryRepository;
         this.rouDepreciationEntryMapper = rouDepreciationEntryMapper;
         this.rouDepreciationEntrySearchRepository = rouDepreciationEntrySearchRepository;
+        this.internalLeasePeriodService = internalLeasePeriodService;
     }
 
     @Override
@@ -138,5 +144,38 @@ public class InternalRouDepreciationEntryServiceImpl implements InternalRouDepre
 
         return result;
 
+    }
+
+    /**
+     * Calculate the outstanding amount for the current depreciation entry
+     *
+     * @param entry
+     * @return
+     */
+    @Override
+    public BigDecimal calculateOutstandingAmount(RouDepreciationEntryDTO entry) {
+
+        AtomicReference<BigDecimal> outstandingAmount = new AtomicReference<>(BigDecimal.ZERO);
+
+            // Fetch from db with all details
+        findOne(entry.getId()).ifPresent(depreciation -> {
+
+            RouModelMetadataDTO modelMetadataDTO = depreciation.getRouMetadata();
+
+            BigDecimal depreciationPerPeriod = modelMetadataDTO.getLeaseAmount().divide(BigDecimal.valueOf(modelMetadataDTO.getLeaseTermPeriods()), RoundingMode.HALF_EVEN).setScale(2, RoundingMode.HALF_EVEN);
+
+            LeasePeriodDTO initialLeasePeriod = internalLeasePeriodService.findInitialPeriod(modelMetadataDTO.getCommencementDate())
+                .orElseThrow();
+
+            long lapsedPeriods = depreciation.getLeasePeriod().getSequenceNumber() - initialLeasePeriod.getSequenceNumber() + 1;
+
+                // todo multiply with lapsed periods
+            BigDecimal accruedDepreciation = depreciationPerPeriod.multiply(BigDecimal.valueOf(lapsedPeriods));
+
+            outstandingAmount.set(modelMetadataDTO.getLeaseAmount().subtract(accruedDepreciation));
+
+        });
+
+        return outstandingAmount.get();
     }
 }
