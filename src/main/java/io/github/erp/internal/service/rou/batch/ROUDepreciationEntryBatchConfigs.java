@@ -116,10 +116,10 @@ public class ROUDepreciationEntryBatchConfigs {
     }
 
     @Bean(PERSISTENCE_JOB_NAME)
-    public Job depreciationBatchJob(EntityManagerFactory entityManagerFactory) {
+    public Job depreciationBatchJob() {
         return jobBuilderFactory.get(PERSISTENCE_JOB_NAME)
             .start(updateDepreciationAmountStep())
-            .next(updateOutstandingAmountStep(entityManagerFactory))
+            .next(updateOutstandingAmountStep())
             .build();
     }
 
