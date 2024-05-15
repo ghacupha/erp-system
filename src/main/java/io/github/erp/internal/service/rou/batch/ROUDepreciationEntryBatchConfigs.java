@@ -18,39 +18,22 @@ package io.github.erp.internal.service.rou.batch;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.domain.Payment;
-import io.github.erp.internal.framework.BatchService;
-import io.github.erp.internal.framework.FileUploadsProperties;
-import io.github.erp.internal.framework.Mapping;
-import io.github.erp.internal.framework.batch.BatchPersistentFileUploadService;
-import io.github.erp.internal.framework.batch.DataDeletionStep;
-import io.github.erp.internal.framework.batch.DeletionService;
-import io.github.erp.internal.framework.batch.EntityDeletionProcessor;
-import io.github.erp.internal.framework.batch.EntityItemsDeletionReader;
-import io.github.erp.internal.framework.batch.EntityItemsReader;
-import io.github.erp.internal.framework.batch.EntityListItemsWriter;
-import io.github.erp.internal.framework.batch.NoOpsItemWriter;
-import io.github.erp.internal.framework.batch.ReadFileStep;
-import io.github.erp.internal.framework.batch.SingleStepEntityJob;
-import io.github.erp.internal.framework.excel.ExcelFileDeserializer;
-import io.github.erp.internal.framework.model.FileUploadHasDataFile;
-import io.github.erp.internal.framework.service.DataFileContainer;
 import io.github.erp.internal.framework.service.DeletionUploadService;
 import io.github.erp.internal.model.PaymentBEO;
-import io.github.erp.internal.model.PaymentEVM;
-import io.github.erp.service.dto.PaymentDTO;
+import io.github.erp.internal.service.rou.InternalRouDepreciationEntryService;
+import io.github.erp.internal.service.rou.InternalRouModelMetadataService;
+import io.github.erp.internal.service.rou.ROUDepreciationEntryCompilationService;
+import io.github.erp.service.dto.RouDepreciationEntryDTO;
+import io.github.erp.service.dto.RouModelMetadataDTO;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -61,46 +44,18 @@ import java.util.List;
 public class ROUDepreciationEntryBatchConfigs {
 
     public static final String PERSISTENCE_JOB_NAME = "rouDepreciationEntryPersistenceJob";
-    private static final String DELETION_JOB_NAME = "rouDepreciationEntryDeletionJob";
     private static final String READ_FILE_STEP_NAME = "readROUModelMetadataFromDB";
-    private static final String DELETION_STEP_NAME = "deleteROUDepreciationEntryItemsFromDB";
-    private static final String DELETION_PROCESSOR_NAME = "rouDepreciationEntryDeletionProcessor";
-    private static final String DELETION_WRITER_NAME = "rouDepreciationEntryDeletionWriter";
-    private static final String DELETION_READER_NAME = "rouDepreciationEntryDeletionReader";
     private static final String PERSISTENCE_READER_NAME = "rouDepreciationEntryItemReader";
     private static final String PERSISTENCE_PROCESSOR_NAME = "rouDepreciationEntryItemProcessor";
     private static final String PERSISTENCE_WRITER_NAME = "rouDepreciationEntryListItemsWriter";
 
     @SuppressWarnings("SpringElStaticFieldInjectionInspection")
-    @Value("#{jobParameters['fileId']}")
-    private static long fileId;
+    @Value("#{jobParameters['rouDepreciationRequestId']}")
+    private static long rouDepreciationRequestId;
 
     @SuppressWarnings("SpringElStaticFieldInjectionInspection")
     @Value("#{jobParameters['messageToken']}")
     private static String jobUploadToken;
-
-    @Autowired
-    private FileUploadsProperties fileUploadsProperties;
-
-    @Autowired
-    @Qualifier("persistenceJobListener")
-    private JobExecutionListener persistenceJobListener;
-
-    @Autowired
-    @Qualifier("deletionJobListener")
-    private JobExecutionListener deletionJobListener;
-
-    @Autowired
-    private ExcelFileDeserializer<PaymentEVM> paymentDeserializer;
-
-    @Autowired
-    private BatchService<PaymentDTO> batchService;
-
-    @Autowired
-    private DeletionService<Payment> paymentDeletionService;
-
-    @Autowired
-    private Mapping<PaymentEVM, PaymentDTO> mapping;
 
     @Autowired
     private JobBuilderFactory jobBuilderFactory;
@@ -109,84 +64,49 @@ public class ROUDepreciationEntryBatchConfigs {
     private StepBuilderFactory stepBuilderFactory;
 
     @Autowired
-    private BatchPersistentFileUploadService fileUploadService;
-
-    @Autowired
     private DeletionUploadService<PaymentBEO> fileUploadDeletionService;
 
     @Autowired
-    private DataFileContainer<FileUploadHasDataFile> dataFileContainer;
+    private InternalRouModelMetadataService rouModelMetadataService;
+
+    @Autowired
+    private ROUDepreciationEntryCompilationService rouDepreciationEntryCompilationService;
+
+    @Autowired
+    private InternalRouDepreciationEntryService rouDepreciationEntryService;
 
     @Bean(PERSISTENCE_READER_NAME)
     @StepScope
-    public EntityItemsReader<PaymentEVM> listItemReader(@Value("#{jobParameters['fileId']}") long fileId ) {
-        return new EntityItemsReader<>(paymentDeserializer, fileUploadService, fileId, fileUploadsProperties);
+    public ItemReader<RouModelMetadataDTO> rouModelMetadataItemReader(@Value("#{jobParameters['rouDepreciationRequestId']}") long rouDepreciationRequestId) {
+        return new RouModelMetadataItemReader(rouModelMetadataService, rouDepreciationRequestId);
     }
 
     @Bean(PERSISTENCE_PROCESSOR_NAME)
     @StepScope
-    public ItemProcessor<List<PaymentEVM>, List<PaymentDTO>> listItemsProcessor(@Value("#{jobParameters['messageToken']}") String jobUploadToken) {
-        return new PaymentPersistenceProcessor(mapping, jobUploadToken);
+    public ItemProcessor<RouModelMetadataDTO, List<RouDepreciationEntryDTO>> rouModelMetadataDTOListItemProcessor() {
+        return new ROUDepreciationEntryItemProcessor(rouDepreciationEntryCompilationService);
     }
 
     @Bean(PERSISTENCE_WRITER_NAME)
     @StepScope
-    public EntityListItemsWriter<PaymentDTO> listItemsWriter() {
-        return new EntityListItemsWriter<>(batchService);
-    }
-
-    @Bean(READ_FILE_STEP_NAME)
-    @JobScope
-    public Step readFile() {
-        return new ReadFileStep<>(
-            READ_FILE_STEP_NAME,
-            listItemReader(fileId),
-            listItemsProcessor(jobUploadToken),
-            listItemsWriter(),
-            stepBuilderFactory
-        );
+    public ItemWriter<List<RouDepreciationEntryDTO>> rouDepreciationEntryWriter() {
+        return new ROUDepreciationEntryItemWriter(rouDepreciationEntryService);
     }
 
     @Bean(PERSISTENCE_JOB_NAME)
-    public Job persistenceJob() {
-        return new SingleStepEntityJob(PERSISTENCE_JOB_NAME, persistenceJobListener, readFile(), jobBuilderFactory);
+    public Job depreciationBatchJob() {
+        return jobBuilderFactory.get(PERSISTENCE_JOB_NAME)
+            .start(depreciationBatchStep())
+            .build();
     }
 
-    // paymentDeletionJob
-    @Bean(DELETION_JOB_NAME)
-    public Job paymentDeletionJob() {
-        return new SingleStepEntityJob(DELETION_JOB_NAME, deletionJobListener, deleteEntityListFromFile(), jobBuilderFactory);
-    }
-
-    @Bean(DELETION_STEP_NAME)
-    @JobScope
-    public Step deleteEntityListFromFile() {
-        return new DataDeletionStep<>(
-            stepBuilderFactory,
-            DELETION_STEP_NAME,
-            deletionReader(fileId),
-            deletionProcessor(),
-            deletionWriter()
-        );
-    }
-
-
-
-    @Bean(DELETION_READER_NAME)
-    @StepScope
-    public ItemReader<List<Long>> deletionReader(@Value("#{jobParameters['fileId']}") long fileId) {
-        return new EntityItemsDeletionReader(fileId, fileUploadDeletionService, fileUploadsProperties, dataFileContainer);
-    }
-
-    @Bean(DELETION_PROCESSOR_NAME)
-    @StepScope
-    public ItemProcessor<List<Long>, List<Payment>> deletionProcessor() {
-        return new EntityDeletionProcessor<>(paymentDeletionService);
-    }
-
-    @Bean(DELETION_WRITER_NAME)
-    @StepScope
-    public ItemWriter<? super List<Payment>> deletionWriter() {
-        return new NoOpsItemWriter<>();
+    @Bean(READ_FILE_STEP_NAME)
+    public Step depreciationBatchStep() {
+        return stepBuilderFactory.get(READ_FILE_STEP_NAME)
+            .<RouModelMetadataDTO, List<RouDepreciationEntryDTO>>chunk(10)
+            .reader(rouModelMetadataItemReader(rouDepreciationRequestId))
+            .processor(rouModelMetadataDTOListItemProcessor())
+            .writer(rouDepreciationEntryWriter())
+            .build();
     }
 }
