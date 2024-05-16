@@ -39,6 +39,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static io.github.erp.erp.assets.depreciation.calculation.DepreciationConstants.ZERO;
+
 /**
  * Service Implementation for managing {@link RouDepreciationEntry}.
  */
@@ -174,10 +176,9 @@ public class InternalRouDepreciationEntryServiceImpl implements InternalRouDepre
 
             long lapsedPeriods = entryLeasePeriod.getSequenceNumber() - initialLeasePeriod.getSequenceNumber() + 1;
 
-                // todo multiply with lapsed periods
             BigDecimal accruedDepreciation = depreciationPerPeriod.multiply(BigDecimal.valueOf(lapsedPeriods));
 
-            outstandingAmount.set(modelMetadataDTO.getLeaseAmount().subtract(accruedDepreciation));
+            outstandingAmount.set(modelMetadataDTO.getLeaseAmount().subtract(accruedDepreciation).max(ZERO));
 
         });
 
