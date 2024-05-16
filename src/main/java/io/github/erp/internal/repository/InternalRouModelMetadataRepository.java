@@ -28,6 +28,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.security.config.web.servlet.PortMapperDsl;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,18 +51,33 @@ public interface InternalRouModelMetadataRepository extends JpaRepository<RouMod
     )
     Optional<RouModelMetadata> findOneWithEagerRelationships(@Param("id") Long id);
 
+    /**
+     * This query returns a conditional list of items for calculation of depreciation upon
+     * first checking if the items have been flagged as fully amortised and also if the items
+     * have been decommissioned. We also check if the instance has depreciation entries to the
+     * extent that it is already fully depreciated or the amount calculated comes to within a
+     * threshold of currency units specified in the param, where currency is represented in BigDecimal type
+     * @return List of items qualified for depreciation
+     */
     @Query(
         nativeQuery = true,
         value = "" +
-            "SELECT * " +
-            "FROM public.rou_model_metadata " +
-            "WHERE (has_been_decommissioned = 'false' OR has_been_decommissioned IS NULL) " +
-            "  AND (has_been_fully_amortised = 'false' OR has_been_fully_amortised IS NULL)",
+            "SELECT m.*  " +
+            "  FROM rou_model_metadata m   " +
+            "  LEFT JOIN rou_depreciation_entry e ON m.id = e.rou_metadata_id  " +
+            "  GROUP BY m.id   " +
+            "  HAVING (m.has_been_decommissioned = 'false' OR m.has_been_decommissioned IS NULL)  " +
+            "     AND (m.has_been_fully_amortised = 'false' OR m.has_been_fully_amortised IS NULL)   " +
+            "     AND (m.lease_amount - COALESCE(SUM(e.depreciation_amount), 0) > 10)",
         countQuery = "" +
-            "SELECT * " +
-            "FROM public.rou_model_metadata " +
-            "WHERE (has_been_decommissioned = 'false' OR has_been_decommissioned IS NULL) " +
-            "  AND (has_been_fully_amortised = 'false' OR has_been_fully_amortised IS NULL)"
+            "SELECT m.*  " +
+            "  FROM rou_model_metadata m   " +
+            "  LEFT JOIN rou_depreciation_entry e ON m.id = e.rou_metadata_id  " +
+            "  GROUP BY m.id   " +
+            "  HAVING (m.has_been_decommissioned = 'false' OR m.has_been_decommissioned IS NULL)  " +
+            "     AND (m.has_been_fully_amortised = 'false' OR m.has_been_fully_amortised IS NULL)   " +
+            "     AND (m.lease_amount - COALESCE(SUM(e.depreciation_amount), 0) > :thresholdAmount)"
     )
-    Optional<List<RouModelMetadata>> getDepreciationAdjacentMetadataItems();
+    Optional<List<RouModelMetadata>> getDepreciationAdjacentMetadataItems(@Param("thresholdAmount")BigDecimal thresholdAmount);
+
 }
