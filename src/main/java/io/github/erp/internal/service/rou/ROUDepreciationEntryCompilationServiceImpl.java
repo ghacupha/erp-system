@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static io.github.erp.internal.service.rou.ROUCalculationUtils.calculate12MonthlyPeriodicityDepreciationAmount;
+
 /**
  * This class compile the depreciation entries for each ROU model metadata
  * provided in the following way:
@@ -67,8 +69,10 @@ public class ROUDepreciationEntryCompilationServiceImpl implements ROUDepreciati
 
     private RouDepreciationEntryDTO updateMetadataValues(RouDepreciationEntryDTO entry, RouModelMetadataDTO modelMetadataDTO) {
 
+        BigDecimal depreciationAmount = calculate12MonthlyPeriodicityDepreciationAmount(modelMetadataDTO.getLeaseAmount(), modelMetadataDTO.getCommencementDate(), modelMetadataDTO.getExpirationDate());
         entry.setDescription(entry.getLeasePeriod().getPeriodCode().concat(" ").concat(modelMetadataDTO.getModelTitle()).concat(" depreciation"));
-        entry.setDepreciationAmount(modelMetadataDTO.getLeaseAmount().divide(BigDecimal.valueOf(modelMetadataDTO.getLeaseTermPeriods()), RoundingMode.HALF_EVEN).setScale(6, RoundingMode.HALF_EVEN));
+        // entry.setDepreciationAmount(modelMetadataDTO.getLeaseAmount().divide(BigDecimal.valueOf(modelMetadataDTO.getLeaseTermPeriods()), RoundingMode.HALF_EVEN).setScale(6, RoundingMode.HALF_EVEN));
+        entry.setDepreciationAmount(depreciationAmount);
         entry.setOutstandingAmount(BigDecimal.ZERO);
         entry.setRouAssetIdentifier(modelMetadataDTO.getRouModelReference());
         entry.setRouDepreciationIdentifier(UUID.randomUUID());
