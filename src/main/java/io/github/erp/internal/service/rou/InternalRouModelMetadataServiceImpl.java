@@ -32,6 +32,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -131,8 +132,7 @@ public class InternalRouModelMetadataServiceImpl implements InternalRouModelMeta
      */
     @Override
     public Optional<List<RouModelMetadataDTO>> getDepreciationAdjacentMetadataItems(long rouDepreciationRequestId) {
-        // TODO update rouDepreciationRequestId status
-        return rouModelMetadataRepository.getDepreciationAdjacentMetadataItems()
+        return rouModelMetadataRepository.getDepreciationAdjacentMetadataItems(BigDecimal.TEN)
             .map(rouModelMetadataMapper::toDto);
     }
 }
