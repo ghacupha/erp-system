@@ -33,7 +33,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "rou_depreciation_entry")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "roudepreciationentry")
+// @org.springframework.data.elasticsearch.annotations.Document(indexName = "roudepreciationentry")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "roudepreciationentry-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
 public class RouDepreciationEntry implements Serializable {
 
     private static final long serialVersionUID = 1L;

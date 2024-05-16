@@ -38,7 +38,6 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Table(name = "asset_registration")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "assetregistration-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
-// @org.springframework.data.elasticsearch.annotations.Document(indexName = "assetregistration")
 public class AssetRegistration implements Serializable {
 
     private static final long serialVersionUID = 1L;
