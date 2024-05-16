@@ -158,12 +158,13 @@ public class InternalRouDepreciationEntryServiceImpl implements InternalRouDepre
     @Override
     public BigDecimal calculateOutstandingAmount(RouDepreciationEntryDTO entry) {
 
+        log.debug("Request to calculate outstanding amount on entry {}", entry);
+
         AtomicReference<BigDecimal> outstandingAmount = new AtomicReference<>(BigDecimal.ZERO);
 
             // Fetch from db with all details
         findOne(entry.getId()).ifPresent(depreciation -> {
 
-            // TODO FETCH MODEL
             RouModelMetadataDTO modelMetadataDTO = internalRouModelMetadataService.findOne(depreciation.getRouMetadata().getId()).orElseThrow();
 
             BigDecimal depreciationPerPeriod = modelMetadataDTO.getLeaseAmount().divide(BigDecimal.valueOf(modelMetadataDTO.getLeaseTermPeriods()), RoundingMode.HALF_EVEN).setScale(2, RoundingMode.HALF_EVEN);
@@ -171,7 +172,6 @@ public class InternalRouDepreciationEntryServiceImpl implements InternalRouDepre
             LeasePeriodDTO initialLeasePeriod = internalLeasePeriodService.findInitialPeriod(modelMetadataDTO.getCommencementDate())
                 .orElseThrow();
 
-            // TODO GET LEASE PERIOD
             LeasePeriodDTO entryLeasePeriod = internalLeasePeriodService.findOne(depreciation.getLeasePeriod().getId()).orElseThrow();
 
             long lapsedPeriods = entryLeasePeriod.getSequenceNumber() - initialLeasePeriod.getSequenceNumber() + 1;
