@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,15 +56,18 @@ public class InternalRouDepreciationEntryServiceImpl implements InternalRouDepre
 
     private final InternalLeasePeriodService internalLeasePeriodService;
 
+    private final InternalRouModelMetadataService internalRouModelMetadataService;
+
     public InternalRouDepreciationEntryServiceImpl(
         RouDepreciationEntryRepository rouDepreciationEntryRepository,
         RouDepreciationEntryMapper rouDepreciationEntryMapper,
         RouDepreciationEntrySearchRepository rouDepreciationEntrySearchRepository,
-        InternalLeasePeriodService internalLeasePeriodService) {
+        InternalLeasePeriodService internalLeasePeriodService, InternalRouModelMetadataService internalRouModelMetadataService) {
         this.rouDepreciationEntryRepository = rouDepreciationEntryRepository;
         this.rouDepreciationEntryMapper = rouDepreciationEntryMapper;
         this.rouDepreciationEntrySearchRepository = rouDepreciationEntrySearchRepository;
         this.internalLeasePeriodService = internalLeasePeriodService;
+        this.internalRouModelMetadataService = internalRouModelMetadataService;
     }
 
     @Override
@@ -135,12 +139,9 @@ public class InternalRouDepreciationEntryServiceImpl implements InternalRouDepre
 
         List<RouDepreciationEntry> rouDepreciationEntry = rouDepreciationEntryMapper.toEntity(rouDepreciationEntryDTO);
 
-
         rouDepreciationEntry = rouDepreciationEntryRepository.saveAllAndFlush(rouDepreciationEntry);
 
         List<RouDepreciationEntryDTO> result = rouDepreciationEntryMapper.toDto(rouDepreciationEntry);
-
-        rouDepreciationEntrySearchRepository.saveAll(rouDepreciationEntry);
 
         return result;
 
@@ -160,14 +161,18 @@ public class InternalRouDepreciationEntryServiceImpl implements InternalRouDepre
             // Fetch from db with all details
         findOne(entry.getId()).ifPresent(depreciation -> {
 
-            RouModelMetadataDTO modelMetadataDTO = depreciation.getRouMetadata();
+            // TODO FETCH MODEL
+            RouModelMetadataDTO modelMetadataDTO = internalRouModelMetadataService.findOne(depreciation.getRouMetadata().getId()).orElseThrow();
 
             BigDecimal depreciationPerPeriod = modelMetadataDTO.getLeaseAmount().divide(BigDecimal.valueOf(modelMetadataDTO.getLeaseTermPeriods()), RoundingMode.HALF_EVEN).setScale(2, RoundingMode.HALF_EVEN);
 
             LeasePeriodDTO initialLeasePeriod = internalLeasePeriodService.findInitialPeriod(modelMetadataDTO.getCommencementDate())
                 .orElseThrow();
 
-            long lapsedPeriods = depreciation.getLeasePeriod().getSequenceNumber() - initialLeasePeriod.getSequenceNumber() + 1;
+            // TODO GET LEASE PERIOD
+            LeasePeriodDTO entryLeasePeriod = internalLeasePeriodService.findOne(depreciation.getLeasePeriod().getId()).orElseThrow();
+
+            long lapsedPeriods = entryLeasePeriod.getSequenceNumber() - initialLeasePeriod.getSequenceNumber() + 1;
 
                 // todo multiply with lapsed periods
             BigDecimal accruedDepreciation = depreciationPerPeriod.multiply(BigDecimal.valueOf(lapsedPeriods));
