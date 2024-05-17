@@ -72,6 +72,16 @@ public class RouDepreciationRequestCriteria implements Serializable, Criteria {
 
     private IntegerFilter numberOfEnumeratedItems;
 
+    private UUIDFilter batchJobIdentifier;
+
+    private UUIDFilter depreciationAmountStepIdentifier;
+
+    private UUIDFilter outstandingAmountStepIdentifier;
+
+    private UUIDFilter flagAmortisedStepIdentifier;
+
+    private ZonedDateTimeFilter compilationTime;
+
     private LongFilter initiatedById;
 
     private Boolean distinct;
@@ -84,6 +94,13 @@ public class RouDepreciationRequestCriteria implements Serializable, Criteria {
         this.timeOfRequest = other.timeOfRequest == null ? null : other.timeOfRequest.copy();
         this.depreciationProcessStatus = other.depreciationProcessStatus == null ? null : other.depreciationProcessStatus.copy();
         this.numberOfEnumeratedItems = other.numberOfEnumeratedItems == null ? null : other.numberOfEnumeratedItems.copy();
+        this.batchJobIdentifier = other.batchJobIdentifier == null ? null : other.batchJobIdentifier.copy();
+        this.depreciationAmountStepIdentifier =
+            other.depreciationAmountStepIdentifier == null ? null : other.depreciationAmountStepIdentifier.copy();
+        this.outstandingAmountStepIdentifier =
+            other.outstandingAmountStepIdentifier == null ? null : other.outstandingAmountStepIdentifier.copy();
+        this.flagAmortisedStepIdentifier = other.flagAmortisedStepIdentifier == null ? null : other.flagAmortisedStepIdentifier.copy();
+        this.compilationTime = other.compilationTime == null ? null : other.compilationTime.copy();
         this.initiatedById = other.initiatedById == null ? null : other.initiatedById.copy();
         this.distinct = other.distinct;
     }
@@ -168,6 +185,81 @@ public class RouDepreciationRequestCriteria implements Serializable, Criteria {
         this.numberOfEnumeratedItems = numberOfEnumeratedItems;
     }
 
+    public UUIDFilter getBatchJobIdentifier() {
+        return batchJobIdentifier;
+    }
+
+    public UUIDFilter batchJobIdentifier() {
+        if (batchJobIdentifier == null) {
+            batchJobIdentifier = new UUIDFilter();
+        }
+        return batchJobIdentifier;
+    }
+
+    public void setBatchJobIdentifier(UUIDFilter batchJobIdentifier) {
+        this.batchJobIdentifier = batchJobIdentifier;
+    }
+
+    public UUIDFilter getDepreciationAmountStepIdentifier() {
+        return depreciationAmountStepIdentifier;
+    }
+
+    public UUIDFilter depreciationAmountStepIdentifier() {
+        if (depreciationAmountStepIdentifier == null) {
+            depreciationAmountStepIdentifier = new UUIDFilter();
+        }
+        return depreciationAmountStepIdentifier;
+    }
+
+    public void setDepreciationAmountStepIdentifier(UUIDFilter depreciationAmountStepIdentifier) {
+        this.depreciationAmountStepIdentifier = depreciationAmountStepIdentifier;
+    }
+
+    public UUIDFilter getOutstandingAmountStepIdentifier() {
+        return outstandingAmountStepIdentifier;
+    }
+
+    public UUIDFilter outstandingAmountStepIdentifier() {
+        if (outstandingAmountStepIdentifier == null) {
+            outstandingAmountStepIdentifier = new UUIDFilter();
+        }
+        return outstandingAmountStepIdentifier;
+    }
+
+    public void setOutstandingAmountStepIdentifier(UUIDFilter outstandingAmountStepIdentifier) {
+        this.outstandingAmountStepIdentifier = outstandingAmountStepIdentifier;
+    }
+
+    public UUIDFilter getFlagAmortisedStepIdentifier() {
+        return flagAmortisedStepIdentifier;
+    }
+
+    public UUIDFilter flagAmortisedStepIdentifier() {
+        if (flagAmortisedStepIdentifier == null) {
+            flagAmortisedStepIdentifier = new UUIDFilter();
+        }
+        return flagAmortisedStepIdentifier;
+    }
+
+    public void setFlagAmortisedStepIdentifier(UUIDFilter flagAmortisedStepIdentifier) {
+        this.flagAmortisedStepIdentifier = flagAmortisedStepIdentifier;
+    }
+
+    public ZonedDateTimeFilter getCompilationTime() {
+        return compilationTime;
+    }
+
+    public ZonedDateTimeFilter compilationTime() {
+        if (compilationTime == null) {
+            compilationTime = new ZonedDateTimeFilter();
+        }
+        return compilationTime;
+    }
+
+    public void setCompilationTime(ZonedDateTimeFilter compilationTime) {
+        this.compilationTime = compilationTime;
+    }
+
     public LongFilter getInitiatedById() {
         return initiatedById;
     }
@@ -206,6 +298,11 @@ public class RouDepreciationRequestCriteria implements Serializable, Criteria {
             Objects.equals(timeOfRequest, that.timeOfRequest) &&
             Objects.equals(depreciationProcessStatus, that.depreciationProcessStatus) &&
             Objects.equals(numberOfEnumeratedItems, that.numberOfEnumeratedItems) &&
+            Objects.equals(batchJobIdentifier, that.batchJobIdentifier) &&
+            Objects.equals(depreciationAmountStepIdentifier, that.depreciationAmountStepIdentifier) &&
+            Objects.equals(outstandingAmountStepIdentifier, that.outstandingAmountStepIdentifier) &&
+            Objects.equals(flagAmortisedStepIdentifier, that.flagAmortisedStepIdentifier) &&
+            Objects.equals(compilationTime, that.compilationTime) &&
             Objects.equals(initiatedById, that.initiatedById) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -213,7 +310,20 @@ public class RouDepreciationRequestCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, requisitionId, timeOfRequest, depreciationProcessStatus, numberOfEnumeratedItems, initiatedById, distinct);
+        return Objects.hash(
+            id,
+            requisitionId,
+            timeOfRequest,
+            depreciationProcessStatus,
+            numberOfEnumeratedItems,
+            batchJobIdentifier,
+            depreciationAmountStepIdentifier,
+            outstandingAmountStepIdentifier,
+            flagAmortisedStepIdentifier,
+            compilationTime,
+            initiatedById,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -225,6 +335,11 @@ public class RouDepreciationRequestCriteria implements Serializable, Criteria {
             (timeOfRequest != null ? "timeOfRequest=" + timeOfRequest + ", " : "") +
             (depreciationProcessStatus != null ? "depreciationProcessStatus=" + depreciationProcessStatus + ", " : "") +
             (numberOfEnumeratedItems != null ? "numberOfEnumeratedItems=" + numberOfEnumeratedItems + ", " : "") +
+            (batchJobIdentifier != null ? "batchJobIdentifier=" + batchJobIdentifier + ", " : "") +
+            (depreciationAmountStepIdentifier != null ? "depreciationAmountStepIdentifier=" + depreciationAmountStepIdentifier + ", " : "") +
+            (outstandingAmountStepIdentifier != null ? "outstandingAmountStepIdentifier=" + outstandingAmountStepIdentifier + ", " : "") +
+            (flagAmortisedStepIdentifier != null ? "flagAmortisedStepIdentifier=" + flagAmortisedStepIdentifier + ", " : "") +
+            (compilationTime != null ? "compilationTime=" + compilationTime + ", " : "") +
             (initiatedById != null ? "initiatedById=" + initiatedById + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

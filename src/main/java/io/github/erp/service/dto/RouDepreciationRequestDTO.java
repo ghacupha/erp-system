@@ -41,6 +41,16 @@ public class RouDepreciationRequestDTO implements Serializable {
 
     private Integer numberOfEnumeratedItems;
 
+    private UUID batchJobIdentifier;
+
+    private UUID depreciationAmountStepIdentifier;
+
+    private UUID outstandingAmountStepIdentifier;
+
+    private UUID flagAmortisedStepIdentifier;
+
+    private ZonedDateTime compilationTime;
+
     private ApplicationUserDTO initiatedBy;
 
     public Long getId() {
@@ -83,6 +93,46 @@ public class RouDepreciationRequestDTO implements Serializable {
         this.numberOfEnumeratedItems = numberOfEnumeratedItems;
     }
 
+    public UUID getBatchJobIdentifier() {
+        return batchJobIdentifier;
+    }
+
+    public void setBatchJobIdentifier(UUID batchJobIdentifier) {
+        this.batchJobIdentifier = batchJobIdentifier;
+    }
+
+    public UUID getDepreciationAmountStepIdentifier() {
+        return depreciationAmountStepIdentifier;
+    }
+
+    public void setDepreciationAmountStepIdentifier(UUID depreciationAmountStepIdentifier) {
+        this.depreciationAmountStepIdentifier = depreciationAmountStepIdentifier;
+    }
+
+    public UUID getOutstandingAmountStepIdentifier() {
+        return outstandingAmountStepIdentifier;
+    }
+
+    public void setOutstandingAmountStepIdentifier(UUID outstandingAmountStepIdentifier) {
+        this.outstandingAmountStepIdentifier = outstandingAmountStepIdentifier;
+    }
+
+    public UUID getFlagAmortisedStepIdentifier() {
+        return flagAmortisedStepIdentifier;
+    }
+
+    public void setFlagAmortisedStepIdentifier(UUID flagAmortisedStepIdentifier) {
+        this.flagAmortisedStepIdentifier = flagAmortisedStepIdentifier;
+    }
+
+    public ZonedDateTime getCompilationTime() {
+        return compilationTime;
+    }
+
+    public void setCompilationTime(ZonedDateTime compilationTime) {
+        this.compilationTime = compilationTime;
+    }
+
     public ApplicationUserDTO getInitiatedBy() {
         return initiatedBy;
     }
@@ -121,6 +171,11 @@ public class RouDepreciationRequestDTO implements Serializable {
             ", timeOfRequest='" + getTimeOfRequest() + "'" +
             ", depreciationProcessStatus='" + getDepreciationProcessStatus() + "'" +
             ", numberOfEnumeratedItems=" + getNumberOfEnumeratedItems() +
+            ", batchJobIdentifier='" + getBatchJobIdentifier() + "'" +
+            ", depreciationAmountStepIdentifier='" + getDepreciationAmountStepIdentifier() + "'" +
+            ", outstandingAmountStepIdentifier='" + getOutstandingAmountStepIdentifier() + "'" +
+            ", flagAmortisedStepIdentifier='" + getFlagAmortisedStepIdentifier() + "'" +
+            ", compilationTime='" + getCompilationTime() + "'" +
             ", initiatedBy=" + getInitiatedBy() +
             "}";
     }

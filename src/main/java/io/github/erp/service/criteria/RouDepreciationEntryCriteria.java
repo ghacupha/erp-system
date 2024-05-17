@@ -30,6 +30,7 @@ import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 import tech.jhipster.service.filter.UUIDFilter;
+import tech.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
  * Criteria class for the {@link io.github.erp.domain.RouDepreciationEntry} entity. This class is used
@@ -60,6 +61,18 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
 
     private BooleanFilter activated;
 
+    private BooleanFilter isDeleted;
+
+    private UUIDFilter batchJobIdentifier;
+
+    private UUIDFilter depreciationAmountStepIdentifier;
+
+    private UUIDFilter outstandingAmountStepIdentifier;
+
+    private UUIDFilter flagAmortisedStepIdentifier;
+
+    private ZonedDateTimeFilter compilationTime;
+
     private LongFilter debitAccountId;
 
     private LongFilter creditAccountId;
@@ -85,6 +98,14 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
         this.rouDepreciationIdentifier = other.rouDepreciationIdentifier == null ? null : other.rouDepreciationIdentifier.copy();
         this.sequenceNumber = other.sequenceNumber == null ? null : other.sequenceNumber.copy();
         this.activated = other.activated == null ? null : other.activated.copy();
+        this.isDeleted = other.isDeleted == null ? null : other.isDeleted.copy();
+        this.batchJobIdentifier = other.batchJobIdentifier == null ? null : other.batchJobIdentifier.copy();
+        this.depreciationAmountStepIdentifier =
+            other.depreciationAmountStepIdentifier == null ? null : other.depreciationAmountStepIdentifier.copy();
+        this.outstandingAmountStepIdentifier =
+            other.outstandingAmountStepIdentifier == null ? null : other.outstandingAmountStepIdentifier.copy();
+        this.flagAmortisedStepIdentifier = other.flagAmortisedStepIdentifier == null ? null : other.flagAmortisedStepIdentifier.copy();
+        this.compilationTime = other.compilationTime == null ? null : other.compilationTime.copy();
         this.debitAccountId = other.debitAccountId == null ? null : other.debitAccountId.copy();
         this.creditAccountId = other.creditAccountId == null ? null : other.creditAccountId.copy();
         this.assetCategoryId = other.assetCategoryId == null ? null : other.assetCategoryId.copy();
@@ -219,6 +240,96 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
         this.activated = activated;
     }
 
+    public BooleanFilter getIsDeleted() {
+        return isDeleted;
+    }
+
+    public BooleanFilter isDeleted() {
+        if (isDeleted == null) {
+            isDeleted = new BooleanFilter();
+        }
+        return isDeleted;
+    }
+
+    public void setIsDeleted(BooleanFilter isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public UUIDFilter getBatchJobIdentifier() {
+        return batchJobIdentifier;
+    }
+
+    public UUIDFilter batchJobIdentifier() {
+        if (batchJobIdentifier == null) {
+            batchJobIdentifier = new UUIDFilter();
+        }
+        return batchJobIdentifier;
+    }
+
+    public void setBatchJobIdentifier(UUIDFilter batchJobIdentifier) {
+        this.batchJobIdentifier = batchJobIdentifier;
+    }
+
+    public UUIDFilter getDepreciationAmountStepIdentifier() {
+        return depreciationAmountStepIdentifier;
+    }
+
+    public UUIDFilter depreciationAmountStepIdentifier() {
+        if (depreciationAmountStepIdentifier == null) {
+            depreciationAmountStepIdentifier = new UUIDFilter();
+        }
+        return depreciationAmountStepIdentifier;
+    }
+
+    public void setDepreciationAmountStepIdentifier(UUIDFilter depreciationAmountStepIdentifier) {
+        this.depreciationAmountStepIdentifier = depreciationAmountStepIdentifier;
+    }
+
+    public UUIDFilter getOutstandingAmountStepIdentifier() {
+        return outstandingAmountStepIdentifier;
+    }
+
+    public UUIDFilter outstandingAmountStepIdentifier() {
+        if (outstandingAmountStepIdentifier == null) {
+            outstandingAmountStepIdentifier = new UUIDFilter();
+        }
+        return outstandingAmountStepIdentifier;
+    }
+
+    public void setOutstandingAmountStepIdentifier(UUIDFilter outstandingAmountStepIdentifier) {
+        this.outstandingAmountStepIdentifier = outstandingAmountStepIdentifier;
+    }
+
+    public UUIDFilter getFlagAmortisedStepIdentifier() {
+        return flagAmortisedStepIdentifier;
+    }
+
+    public UUIDFilter flagAmortisedStepIdentifier() {
+        if (flagAmortisedStepIdentifier == null) {
+            flagAmortisedStepIdentifier = new UUIDFilter();
+        }
+        return flagAmortisedStepIdentifier;
+    }
+
+    public void setFlagAmortisedStepIdentifier(UUIDFilter flagAmortisedStepIdentifier) {
+        this.flagAmortisedStepIdentifier = flagAmortisedStepIdentifier;
+    }
+
+    public ZonedDateTimeFilter getCompilationTime() {
+        return compilationTime;
+    }
+
+    public ZonedDateTimeFilter compilationTime() {
+        if (compilationTime == null) {
+            compilationTime = new ZonedDateTimeFilter();
+        }
+        return compilationTime;
+    }
+
+    public void setCompilationTime(ZonedDateTimeFilter compilationTime) {
+        this.compilationTime = compilationTime;
+    }
+
     public LongFilter getDebitAccountId() {
         return debitAccountId;
     }
@@ -335,6 +446,12 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
             Objects.equals(rouDepreciationIdentifier, that.rouDepreciationIdentifier) &&
             Objects.equals(sequenceNumber, that.sequenceNumber) &&
             Objects.equals(activated, that.activated) &&
+            Objects.equals(isDeleted, that.isDeleted) &&
+            Objects.equals(batchJobIdentifier, that.batchJobIdentifier) &&
+            Objects.equals(depreciationAmountStepIdentifier, that.depreciationAmountStepIdentifier) &&
+            Objects.equals(outstandingAmountStepIdentifier, that.outstandingAmountStepIdentifier) &&
+            Objects.equals(flagAmortisedStepIdentifier, that.flagAmortisedStepIdentifier) &&
+            Objects.equals(compilationTime, that.compilationTime) &&
             Objects.equals(debitAccountId, that.debitAccountId) &&
             Objects.equals(creditAccountId, that.creditAccountId) &&
             Objects.equals(assetCategoryId, that.assetCategoryId) &&
@@ -356,6 +473,12 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
             rouDepreciationIdentifier,
             sequenceNumber,
             activated,
+            isDeleted,
+            batchJobIdentifier,
+            depreciationAmountStepIdentifier,
+            outstandingAmountStepIdentifier,
+            flagAmortisedStepIdentifier,
+            compilationTime,
             debitAccountId,
             creditAccountId,
             assetCategoryId,
@@ -378,6 +501,12 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
             (rouDepreciationIdentifier != null ? "rouDepreciationIdentifier=" + rouDepreciationIdentifier + ", " : "") +
             (sequenceNumber != null ? "sequenceNumber=" + sequenceNumber + ", " : "") +
             (activated != null ? "activated=" + activated + ", " : "") +
+            (isDeleted != null ? "isDeleted=" + isDeleted + ", " : "") +
+            (batchJobIdentifier != null ? "batchJobIdentifier=" + batchJobIdentifier + ", " : "") +
+            (depreciationAmountStepIdentifier != null ? "depreciationAmountStepIdentifier=" + depreciationAmountStepIdentifier + ", " : "") +
+            (outstandingAmountStepIdentifier != null ? "outstandingAmountStepIdentifier=" + outstandingAmountStepIdentifier + ", " : "") +
+            (flagAmortisedStepIdentifier != null ? "flagAmortisedStepIdentifier=" + flagAmortisedStepIdentifier + ", " : "") +
+            (compilationTime != null ? "compilationTime=" + compilationTime + ", " : "") +
             (debitAccountId != null ? "debitAccountId=" + debitAccountId + ", " : "") +
             (creditAccountId != null ? "creditAccountId=" + creditAccountId + ", " : "") +
             (assetCategoryId != null ? "assetCategoryId=" + assetCategoryId + ", " : "") +

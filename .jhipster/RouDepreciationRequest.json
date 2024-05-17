@@ -17,6 +17,26 @@
     {
       "fieldName": "numberOfEnumeratedItems",
       "fieldType": "Integer"
+    },
+    {
+      "fieldName": "batchJobIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "depreciationAmountStepIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "outstandingAmountStepIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "flagAmortisedStepIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "compilationTime",
+      "fieldType": "ZonedDateTime"
     }
   ],
   "relationships": [

@@ -21,6 +21,7 @@ package io.github.erp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -33,8 +34,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "rou_depreciation_entry")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-// @org.springframework.data.elasticsearch.annotations.Document(indexName = "roudepreciationentry")
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "roudepreciationentry-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "roudepreciationentry")
 public class RouDepreciationEntry implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -70,6 +70,24 @@ public class RouDepreciationEntry implements Serializable {
 
     @Column(name = "activated")
     private Boolean activated;
+
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
+    @Column(name = "batch_job_identifier")
+    private UUID batchJobIdentifier;
+
+    @Column(name = "depreciation_amount_step_identifier")
+    private UUID depreciationAmountStepIdentifier;
+
+    @Column(name = "outstanding_amount_step_identifier")
+    private UUID outstandingAmountStepIdentifier;
+
+    @Column(name = "flag_amortised_step_identifier")
+    private UUID flagAmortisedStepIdentifier;
+
+    @Column(name = "compilation_time")
+    private ZonedDateTime compilationTime;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -227,6 +245,84 @@ public class RouDepreciationEntry implements Serializable {
         this.activated = activated;
     }
 
+    public Boolean getIsDeleted() {
+        return this.isDeleted;
+    }
+
+    public RouDepreciationEntry isDeleted(Boolean isDeleted) {
+        this.setIsDeleted(isDeleted);
+        return this;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public UUID getBatchJobIdentifier() {
+        return this.batchJobIdentifier;
+    }
+
+    public RouDepreciationEntry batchJobIdentifier(UUID batchJobIdentifier) {
+        this.setBatchJobIdentifier(batchJobIdentifier);
+        return this;
+    }
+
+    public void setBatchJobIdentifier(UUID batchJobIdentifier) {
+        this.batchJobIdentifier = batchJobIdentifier;
+    }
+
+    public UUID getDepreciationAmountStepIdentifier() {
+        return this.depreciationAmountStepIdentifier;
+    }
+
+    public RouDepreciationEntry depreciationAmountStepIdentifier(UUID depreciationAmountStepIdentifier) {
+        this.setDepreciationAmountStepIdentifier(depreciationAmountStepIdentifier);
+        return this;
+    }
+
+    public void setDepreciationAmountStepIdentifier(UUID depreciationAmountStepIdentifier) {
+        this.depreciationAmountStepIdentifier = depreciationAmountStepIdentifier;
+    }
+
+    public UUID getOutstandingAmountStepIdentifier() {
+        return this.outstandingAmountStepIdentifier;
+    }
+
+    public RouDepreciationEntry outstandingAmountStepIdentifier(UUID outstandingAmountStepIdentifier) {
+        this.setOutstandingAmountStepIdentifier(outstandingAmountStepIdentifier);
+        return this;
+    }
+
+    public void setOutstandingAmountStepIdentifier(UUID outstandingAmountStepIdentifier) {
+        this.outstandingAmountStepIdentifier = outstandingAmountStepIdentifier;
+    }
+
+    public UUID getFlagAmortisedStepIdentifier() {
+        return this.flagAmortisedStepIdentifier;
+    }
+
+    public RouDepreciationEntry flagAmortisedStepIdentifier(UUID flagAmortisedStepIdentifier) {
+        this.setFlagAmortisedStepIdentifier(flagAmortisedStepIdentifier);
+        return this;
+    }
+
+    public void setFlagAmortisedStepIdentifier(UUID flagAmortisedStepIdentifier) {
+        this.flagAmortisedStepIdentifier = flagAmortisedStepIdentifier;
+    }
+
+    public ZonedDateTime getCompilationTime() {
+        return this.compilationTime;
+    }
+
+    public RouDepreciationEntry compilationTime(ZonedDateTime compilationTime) {
+        this.setCompilationTime(compilationTime);
+        return this;
+    }
+
+    public void setCompilationTime(ZonedDateTime compilationTime) {
+        this.compilationTime = compilationTime;
+    }
+
     public TransactionAccount getDebitAccount() {
         return this.debitAccount;
     }
@@ -336,6 +432,12 @@ public class RouDepreciationEntry implements Serializable {
             ", rouDepreciationIdentifier='" + getRouDepreciationIdentifier() + "'" +
             ", sequenceNumber=" + getSequenceNumber() +
             ", activated='" + getActivated() + "'" +
+            ", isDeleted='" + getIsDeleted() + "'" +
+            ", batchJobIdentifier='" + getBatchJobIdentifier() + "'" +
+            ", depreciationAmountStepIdentifier='" + getDepreciationAmountStepIdentifier() + "'" +
+            ", outstandingAmountStepIdentifier='" + getOutstandingAmountStepIdentifier() + "'" +
+            ", flagAmortisedStepIdentifier='" + getFlagAmortisedStepIdentifier() + "'" +
+            ", compilationTime='" + getCompilationTime() + "'" +
             "}";
     }
 }
