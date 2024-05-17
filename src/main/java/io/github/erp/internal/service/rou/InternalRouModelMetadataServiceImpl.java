@@ -35,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Service Implementation for managing {@link RouModelMetadata}.
@@ -134,5 +135,33 @@ public class InternalRouModelMetadataServiceImpl implements InternalRouModelMeta
     public Optional<List<RouModelMetadataDTO>> getDepreciationAdjacentMetadataItems(long rouDepreciationRequestId) {
         return rouModelMetadataRepository.getDepreciationAdjacentMetadataItems(BigDecimal.TEN)
             .map(rouModelMetadataMapper::toDto);
+    }
+
+    /**
+     * This method will fetch the items that have been processed in a particular job
+     *
+     * @param batchJobIdentifier
+     * @return
+     */
+    @Override
+    public Optional<List<RouModelMetadataDTO>> getProcessedItems(UUID batchJobIdentifier) {
+        return rouModelMetadataRepository.getProcessedItems(batchJobIdentifier)
+            .map(rouModelMetadataMapper::toDto);
+    }
+
+    /**
+     * Save a rouModelMetadata.
+     *
+     * @param rouModelMetadata the entity to save.
+     * @return the persisted entity.
+     */
+    @Override
+    public List<RouModelMetadataDTO> saveAll(List<RouModelMetadataDTO> rouModelMetadata) {
+
+        List<RouModelMetadataDTO> result =  rouModelMetadataMapper.toDto(rouModelMetadataRepository.saveAll(rouModelMetadataMapper.toEntity(rouModelMetadata)));
+
+        rouModelMetadataSearchRepository.saveAll(rouModelMetadataMapper.toEntity(rouModelMetadata));
+
+        return result;
     }
 }

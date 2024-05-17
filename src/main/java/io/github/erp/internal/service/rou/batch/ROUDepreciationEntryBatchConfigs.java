@@ -42,6 +42,7 @@ import javax.persistence.EntityManagerFactory;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Configuration
 public class ROUDepreciationEntryBatchConfigs {
@@ -53,10 +54,12 @@ public class ROUDepreciationEntryBatchConfigs {
     private static final String PERSISTENCE_PROCESSOR_NAME = "rouDepreciationEntryItemProcessor";
     private static final String UPDATE_OUTSTANDING_AMOUNT_ITEM_PROCESSOR_NAME = "updateOutstandingAmountStepItemProcessor";
     private static final String UPDATE_OUTSTANDING_AMOUNT_ITEM_READER_NAME = "updateOutstandingAmountStepItemReader";
-    private static final String UPDATE_OUTSTANDING_AMOUNT_ITEM_READER_QUERY = "SELECT r FROM RouDepreciationEntry r WHERE r.outstandingAmount <= :thresholdAmount ORDER BY r.leasePeriod.sequenceNumber";
-    private static final String UPDATE_OUTSTANDING_AMOUNT_ITEM_READER_PARAMETER = "thresholdAmount";
     private static final String UPDATE_OUTSTANDING_AMOUNT_ITEM_WRITER_NAME = "updateOutstandingAmountStepItemWriter";
     private static final String PERSISTENCE_WRITER_NAME = "rouDepreciationEntryListItemsWriter";
+    private static final String UPDATE_FULLY_AMORTISED_STEP_NAME = "updateFullyAmortisedStep";
+    private static final String UPDATE_FULLY_AMORTISED_ITEM_READER_NAME = "updateFullyAmortisedItemReader";
+    private static final String UPDATE_FULLY_AMORTISED_ITEM_PROCESSOR_NAME = "updateFullyAmortisedItemProcessor";
+    private static final String UPDATE_FULLY_AMORTISED_ITEM_WRITER_NAME = "updateFullyAmortisedItemWriter";
 
     @SuppressWarnings("SpringElStaticFieldInjectionInspection")
     @Value("#{jobParameters['rouDepreciationRequestId']}")
@@ -94,6 +97,9 @@ public class ROUDepreciationEntryBatchConfigs {
     @Autowired
     private InternalRouDepreciationEntryService internalRouDepreciationEntryService;
 
+    @Autowired
+    private InternalRouModelMetadataService internalRouModelMetadataService;
+
     @Bean(PERSISTENCE_READER_NAME)
     @StepScope
     public ItemReader<RouModelMetadataDTO> rouModelMetadataItemReader(@Value("#{jobParameters['rouDepreciationRequestId']}") long rouDepreciationRequestId) {
@@ -117,6 +123,7 @@ public class ROUDepreciationEntryBatchConfigs {
         return jobBuilderFactory.get(PERSISTENCE_JOB_NAME)
             .start(updateDepreciationAmountStep())
             .next(updateOutstandingAmountStep())
+            .next(updateFullyAmortisedStep())
             .build();
     }
 
@@ -156,5 +163,32 @@ public class ROUDepreciationEntryBatchConfigs {
     public ItemReader<RouDepreciationEntryDTO> updateOutstandingAmountItemReader() {
 
         return new UpdateOutstandingAmountItemReader(internalRouDepreciationEntryService);
+    }
+
+    @Bean(UPDATE_FULLY_AMORTISED_STEP_NAME)
+    public Step updateFullyAmortisedStep() {
+        return stepBuilderFactory.get(UPDATE_FULLY_AMORTISED_STEP_NAME)
+            .<RouModelMetadataDTO, RouModelMetadataDTO>chunk(100)
+            .reader(updateFullyAmortisedItemReader(batchJobIdentifier))
+            .processor(updateFullyAmortisedProcessor())
+            .writer(updateFullyAmortisedItemWriter())
+            .build();
+    }
+
+    @Bean(UPDATE_FULLY_AMORTISED_ITEM_READER_NAME)
+    @StepScope
+    public ItemReader<RouModelMetadataDTO> updateFullyAmortisedItemReader(@Value("#{jobParameters['batchJobIdentifier']}") String batchJobIdentifier) {
+        return new UpdateFullyAmortisedItemReader(internalRouModelMetadataService, UUID.fromString(batchJobIdentifier));
+    }
+
+    @Bean(UPDATE_FULLY_AMORTISED_ITEM_PROCESSOR_NAME)
+    public ItemProcessor<RouModelMetadataDTO, RouModelMetadataDTO> updateFullyAmortisedProcessor() {
+        return new UpdateFullyAmortisedProcessor();
+    }
+
+    @Bean(UPDATE_FULLY_AMORTISED_ITEM_WRITER_NAME)
+    @StepScope
+    public ItemWriter<RouModelMetadataDTO> updateFullyAmortisedItemWriter() {
+        return new UpdateFullyAmortisedItemWriter(rouModelMetadataService);
     }
 }
