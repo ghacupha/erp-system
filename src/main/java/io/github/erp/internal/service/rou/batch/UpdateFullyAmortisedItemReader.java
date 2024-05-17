@@ -36,10 +36,10 @@ public class UpdateFullyAmortisedItemReader implements ItemReader<RouModelMetada
 
     private List<RouModelMetadataDTO> metadataList;
     private Iterator<RouModelMetadataDTO> metadataIterator;
-    private final UUID batchJobIdentifier;
+    private final String batchJobIdentifier;
 
 
-    public UpdateFullyAmortisedItemReader(InternalRouModelMetadataService internalRouModelMetadataService, UUID batchJobIdentifier) {
+    public UpdateFullyAmortisedItemReader(InternalRouModelMetadataService internalRouModelMetadataService, String batchJobIdentifier) {
         this.internalRouModelMetadataService = internalRouModelMetadataService;
         this.batchJobIdentifier = batchJobIdentifier;
     }
@@ -67,7 +67,7 @@ public class UpdateFullyAmortisedItemReader implements ItemReader<RouModelMetada
     public RouModelMetadataDTO read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
 
         if (metadataList == null) {
-            metadataList = internalRouModelMetadataService.getProcessedItems(batchJobIdentifier).orElse(Collections.emptyList());
+            metadataList = internalRouModelMetadataService.getProcessedItems(UUID.fromString(batchJobIdentifier)).orElse(Collections.emptyList());
             metadataIterator = metadataList.iterator();
         }
 

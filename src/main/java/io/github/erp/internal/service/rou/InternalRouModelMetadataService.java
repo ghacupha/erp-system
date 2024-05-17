@@ -105,10 +105,21 @@ public interface InternalRouModelMetadataService {
     Optional<List<RouModelMetadataDTO>> getDepreciationAdjacentMetadataItems(long rouDepreciationRequestId /*TODO, UUID batchJobIdentifier*/);
 
     /**
+     * Get all items that are due for depreciation depending on status and
+     * conditions of the depreciation process, and update the same with the
+     * batchJobIdentifier from the process, and update the items with the batchJobIdentifier
+     *
+     * @param rouDepreciationRequestId Id of the requisition entity
+     * @param rouDepreciationRequestId Id of the requisition entity
+     * @return the list of entities for depreciation
+     */
+    Optional<List<RouModelMetadataDTO>> getDepreciationAdjacentMetadataItems(long rouDepreciationRequestId, String batchJobIdentifier);
+
+    /**
      * This method will fetch the items that have been processed in a particular job
      *
-     * @param batchJobIdentifier
-     * @return
+     * @param batchJobIdentifier Id of the current job
+     * @return the list of items processed by a job with the above identifier
      */
     Optional<List<RouModelMetadataDTO>> getProcessedItems(UUID batchJobIdentifier);
 }
