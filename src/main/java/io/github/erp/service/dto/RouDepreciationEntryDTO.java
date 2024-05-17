@@ -20,6 +20,7 @@ package io.github.erp.service.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import javax.validation.constraints.*;
@@ -49,6 +50,18 @@ public class RouDepreciationEntryDTO implements Serializable {
     private Integer sequenceNumber;
 
     private Boolean activated;
+
+    private Boolean isDeleted;
+
+    private UUID batchJobIdentifier;
+
+    private UUID depreciationAmountStepIdentifier;
+
+    private UUID outstandingAmountStepIdentifier;
+
+    private UUID flagAmortisedStepIdentifier;
+
+    private ZonedDateTime compilationTime;
 
     private TransactionAccountDTO debitAccount;
 
@@ -124,6 +137,54 @@ public class RouDepreciationEntryDTO implements Serializable {
 
     public void setActivated(Boolean activated) {
         this.activated = activated;
+    }
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public UUID getBatchJobIdentifier() {
+        return batchJobIdentifier;
+    }
+
+    public void setBatchJobIdentifier(UUID batchJobIdentifier) {
+        this.batchJobIdentifier = batchJobIdentifier;
+    }
+
+    public UUID getDepreciationAmountStepIdentifier() {
+        return depreciationAmountStepIdentifier;
+    }
+
+    public void setDepreciationAmountStepIdentifier(UUID depreciationAmountStepIdentifier) {
+        this.depreciationAmountStepIdentifier = depreciationAmountStepIdentifier;
+    }
+
+    public UUID getOutstandingAmountStepIdentifier() {
+        return outstandingAmountStepIdentifier;
+    }
+
+    public void setOutstandingAmountStepIdentifier(UUID outstandingAmountStepIdentifier) {
+        this.outstandingAmountStepIdentifier = outstandingAmountStepIdentifier;
+    }
+
+    public UUID getFlagAmortisedStepIdentifier() {
+        return flagAmortisedStepIdentifier;
+    }
+
+    public void setFlagAmortisedStepIdentifier(UUID flagAmortisedStepIdentifier) {
+        this.flagAmortisedStepIdentifier = flagAmortisedStepIdentifier;
+    }
+
+    public ZonedDateTime getCompilationTime() {
+        return compilationTime;
+    }
+
+    public void setCompilationTime(ZonedDateTime compilationTime) {
+        this.compilationTime = compilationTime;
     }
 
     public TransactionAccountDTO getDebitAccount() {
@@ -207,6 +268,12 @@ public class RouDepreciationEntryDTO implements Serializable {
             ", rouDepreciationIdentifier='" + getRouDepreciationIdentifier() + "'" +
             ", sequenceNumber=" + getSequenceNumber() +
             ", activated='" + getActivated() + "'" +
+            ", isDeleted='" + getIsDeleted() + "'" +
+            ", batchJobIdentifier='" + getBatchJobIdentifier() + "'" +
+            ", depreciationAmountStepIdentifier='" + getDepreciationAmountStepIdentifier() + "'" +
+            ", outstandingAmountStepIdentifier='" + getOutstandingAmountStepIdentifier() + "'" +
+            ", flagAmortisedStepIdentifier='" + getFlagAmortisedStepIdentifier() + "'" +
+            ", compilationTime='" + getCompilationTime() + "'" +
             ", debitAccount=" + getDebitAccount() +
             ", creditAccount=" + getCreditAccount() +
             ", assetCategory=" + getAssetCategory() +

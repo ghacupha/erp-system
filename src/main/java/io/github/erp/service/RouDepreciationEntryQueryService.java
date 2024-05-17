@@ -144,6 +144,41 @@ public class RouDepreciationEntryQueryService extends QueryService<RouDepreciati
             if (criteria.getActivated() != null) {
                 specification = specification.and(buildSpecification(criteria.getActivated(), RouDepreciationEntry_.activated));
             }
+            if (criteria.getIsDeleted() != null) {
+                specification = specification.and(buildSpecification(criteria.getIsDeleted(), RouDepreciationEntry_.isDeleted));
+            }
+            if (criteria.getBatchJobIdentifier() != null) {
+                specification =
+                    specification.and(buildSpecification(criteria.getBatchJobIdentifier(), RouDepreciationEntry_.batchJobIdentifier));
+            }
+            if (criteria.getDepreciationAmountStepIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getDepreciationAmountStepIdentifier(),
+                            RouDepreciationEntry_.depreciationAmountStepIdentifier
+                        )
+                    );
+            }
+            if (criteria.getOutstandingAmountStepIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getOutstandingAmountStepIdentifier(),
+                            RouDepreciationEntry_.outstandingAmountStepIdentifier
+                        )
+                    );
+            }
+            if (criteria.getFlagAmortisedStepIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getFlagAmortisedStepIdentifier(), RouDepreciationEntry_.flagAmortisedStepIdentifier)
+                    );
+            }
+            if (criteria.getCompilationTime() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getCompilationTime(), RouDepreciationEntry_.compilationTime));
+            }
             if (criteria.getDebitAccountId() != null) {
                 specification =
                     specification.and(

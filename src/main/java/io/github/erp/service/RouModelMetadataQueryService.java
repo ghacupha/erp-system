@@ -150,6 +150,35 @@ public class RouModelMetadataQueryService extends QueryService<RouModelMetadata>
                 specification =
                     specification.and(buildSpecification(criteria.getHasBeenDecommissioned(), RouModelMetadata_.hasBeenDecommissioned));
             }
+            if (criteria.getBatchJobIdentifier() != null) {
+                specification =
+                    specification.and(buildSpecification(criteria.getBatchJobIdentifier(), RouModelMetadata_.batchJobIdentifier));
+            }
+            if (criteria.getDepreciationAmountStepIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getDepreciationAmountStepIdentifier(),
+                            RouModelMetadata_.depreciationAmountStepIdentifier
+                        )
+                    );
+            }
+            if (criteria.getOutstandingAmountStepIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getOutstandingAmountStepIdentifier(), RouModelMetadata_.outstandingAmountStepIdentifier)
+                    );
+            }
+            if (criteria.getFlagAmortisedStepIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getFlagAmortisedStepIdentifier(), RouModelMetadata_.flagAmortisedStepIdentifier)
+                    );
+            }
+            if (criteria.getCompilationTime() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getCompilationTime(), RouModelMetadata_.compilationTime));
+            }
             if (criteria.getIfrs16LeaseContractId() != null) {
                 specification =
                     specification.and(

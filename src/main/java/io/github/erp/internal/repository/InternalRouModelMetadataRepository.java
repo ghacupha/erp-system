@@ -80,6 +80,12 @@ public interface InternalRouModelMetadataRepository extends JpaRepository<RouMod
     )
     Optional<List<RouModelMetadata>> getDepreciationAdjacentMetadataItems(@Param("thresholdAmount")BigDecimal thresholdAmount);
 
-    @Query()
-    Optional<List<RouModelMetadata>> getProcessedItems(UUID batchJobIdentifier);
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT *  " +
+            "FROM public.rou_model_metadata  " +
+            "WHERE batch_job_identifier = :batch_job_identifier"
+    )
+    Optional<List<RouModelMetadata>> getProcessedItems(@Param("batch_job_identifier")UUID batchJobIdentifier);
 }

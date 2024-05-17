@@ -135,6 +135,38 @@ public class RouDepreciationRequestQueryService extends QueryService<RouDeprecia
                         buildRangeSpecification(criteria.getNumberOfEnumeratedItems(), RouDepreciationRequest_.numberOfEnumeratedItems)
                     );
             }
+            if (criteria.getBatchJobIdentifier() != null) {
+                specification =
+                    specification.and(buildSpecification(criteria.getBatchJobIdentifier(), RouDepreciationRequest_.batchJobIdentifier));
+            }
+            if (criteria.getDepreciationAmountStepIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getDepreciationAmountStepIdentifier(),
+                            RouDepreciationRequest_.depreciationAmountStepIdentifier
+                        )
+                    );
+            }
+            if (criteria.getOutstandingAmountStepIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getOutstandingAmountStepIdentifier(),
+                            RouDepreciationRequest_.outstandingAmountStepIdentifier
+                        )
+                    );
+            }
+            if (criteria.getFlagAmortisedStepIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getFlagAmortisedStepIdentifier(), RouDepreciationRequest_.flagAmortisedStepIdentifier)
+                    );
+            }
+            if (criteria.getCompilationTime() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getCompilationTime(), RouDepreciationRequest_.compilationTime));
+            }
             if (criteria.getInitiatedById() != null) {
                 specification =
                     specification.and(

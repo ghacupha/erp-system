@@ -18,6 +18,7 @@ package io.github.erp.web.rest;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import static io.github.erp.web.rest.TestUtil.sameInstant;
 import static io.github.erp.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -38,8 +39,11 @@ import io.github.erp.service.criteria.RouModelMetadataCriteria;
 import io.github.erp.service.dto.RouModelMetadataDTO;
 import io.github.erp.service.mapper.RouModelMetadataMapper;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -105,6 +109,22 @@ class RouModelMetadataResourceIT {
     private static final Boolean DEFAULT_HAS_BEEN_DECOMMISSIONED = false;
     private static final Boolean UPDATED_HAS_BEEN_DECOMMISSIONED = true;
 
+    private static final UUID DEFAULT_BATCH_JOB_IDENTIFIER = UUID.randomUUID();
+    private static final UUID UPDATED_BATCH_JOB_IDENTIFIER = UUID.randomUUID();
+
+    private static final UUID DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER = UUID.randomUUID();
+    private static final UUID UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER = UUID.randomUUID();
+
+    private static final UUID DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER = UUID.randomUUID();
+    private static final UUID UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER = UUID.randomUUID();
+
+    private static final UUID DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER = UUID.randomUUID();
+    private static final UUID UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER = UUID.randomUUID();
+
+    private static final ZonedDateTime DEFAULT_COMPILATION_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_COMPILATION_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final ZonedDateTime SMALLER_COMPILATION_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
+
     private static final String ENTITY_API_URL = "/api/rou-model-metadata";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/rou-model-metadata";
@@ -157,7 +177,12 @@ class RouModelMetadataResourceIT {
             .commencementDate(DEFAULT_COMMENCEMENT_DATE)
             .expirationDate(DEFAULT_EXPIRATION_DATE)
             .hasBeenFullyAmortised(DEFAULT_HAS_BEEN_FULLY_AMORTISED)
-            .hasBeenDecommissioned(DEFAULT_HAS_BEEN_DECOMMISSIONED);
+            .hasBeenDecommissioned(DEFAULT_HAS_BEEN_DECOMMISSIONED)
+            .batchJobIdentifier(DEFAULT_BATCH_JOB_IDENTIFIER)
+            .depreciationAmountStepIdentifier(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER)
+            .outstandingAmountStepIdentifier(DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER)
+            .flagAmortisedStepIdentifier(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER)
+            .compilationTime(DEFAULT_COMPILATION_TIME);
         // Add required entity
         IFRS16LeaseContract iFRS16LeaseContract;
         if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
@@ -202,7 +227,12 @@ class RouModelMetadataResourceIT {
             .commencementDate(UPDATED_COMMENCEMENT_DATE)
             .expirationDate(UPDATED_EXPIRATION_DATE)
             .hasBeenFullyAmortised(UPDATED_HAS_BEEN_FULLY_AMORTISED)
-            .hasBeenDecommissioned(UPDATED_HAS_BEEN_DECOMMISSIONED);
+            .hasBeenDecommissioned(UPDATED_HAS_BEEN_DECOMMISSIONED)
+            .batchJobIdentifier(UPDATED_BATCH_JOB_IDENTIFIER)
+            .depreciationAmountStepIdentifier(UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER)
+            .outstandingAmountStepIdentifier(UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER)
+            .flagAmortisedStepIdentifier(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER)
+            .compilationTime(UPDATED_COMPILATION_TIME);
         // Add required entity
         IFRS16LeaseContract iFRS16LeaseContract;
         if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
@@ -261,6 +291,11 @@ class RouModelMetadataResourceIT {
         assertThat(testRouModelMetadata.getExpirationDate()).isEqualTo(DEFAULT_EXPIRATION_DATE);
         assertThat(testRouModelMetadata.getHasBeenFullyAmortised()).isEqualTo(DEFAULT_HAS_BEEN_FULLY_AMORTISED);
         assertThat(testRouModelMetadata.getHasBeenDecommissioned()).isEqualTo(DEFAULT_HAS_BEEN_DECOMMISSIONED);
+        assertThat(testRouModelMetadata.getBatchJobIdentifier()).isEqualTo(DEFAULT_BATCH_JOB_IDENTIFIER);
+        assertThat(testRouModelMetadata.getDepreciationAmountStepIdentifier()).isEqualTo(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER);
+        assertThat(testRouModelMetadata.getOutstandingAmountStepIdentifier()).isEqualTo(DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
+        assertThat(testRouModelMetadata.getFlagAmortisedStepIdentifier()).isEqualTo(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER);
+        assertThat(testRouModelMetadata.getCompilationTime()).isEqualTo(DEFAULT_COMPILATION_TIME);
 
         // Validate the RouModelMetadata in Elasticsearch
         verify(mockRouModelMetadataSearchRepository, times(1)).save(testRouModelMetadata);
@@ -316,26 +351,6 @@ class RouModelMetadataResourceIT {
         int databaseSizeBeforeTest = rouModelMetadataRepository.findAll().size();
         // set the field null
         rouModelMetadata.setModelVersion(null);
-
-        // Create the RouModelMetadata, which fails.
-        RouModelMetadataDTO rouModelMetadataDTO = rouModelMetadataMapper.toDto(rouModelMetadata);
-
-        restRouModelMetadataMockMvc
-            .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(rouModelMetadataDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<RouModelMetadata> rouModelMetadataList = rouModelMetadataRepository.findAll();
-        assertThat(rouModelMetadataList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    void checkLeaseTermPeriodsIsRequired() throws Exception {
-        int databaseSizeBeforeTest = rouModelMetadataRepository.findAll().size();
-        // set the field null
-        rouModelMetadata.setLeaseTermPeriods(null);
 
         // Create the RouModelMetadata, which fails.
         RouModelMetadataDTO rouModelMetadataDTO = rouModelMetadataMapper.toDto(rouModelMetadata);
@@ -411,7 +426,16 @@ class RouModelMetadataResourceIT {
             .andExpect(jsonPath("$.[*].commencementDate").value(hasItem(DEFAULT_COMMENCEMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].expirationDate").value(hasItem(DEFAULT_EXPIRATION_DATE.toString())))
             .andExpect(jsonPath("$.[*].hasBeenFullyAmortised").value(hasItem(DEFAULT_HAS_BEEN_FULLY_AMORTISED.booleanValue())))
-            .andExpect(jsonPath("$.[*].hasBeenDecommissioned").value(hasItem(DEFAULT_HAS_BEEN_DECOMMISSIONED.booleanValue())));
+            .andExpect(jsonPath("$.[*].hasBeenDecommissioned").value(hasItem(DEFAULT_HAS_BEEN_DECOMMISSIONED.booleanValue())))
+            .andExpect(jsonPath("$.[*].batchJobIdentifier").value(hasItem(DEFAULT_BATCH_JOB_IDENTIFIER.toString())))
+            .andExpect(
+                jsonPath("$.[*].depreciationAmountStepIdentifier").value(hasItem(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER.toString()))
+            )
+            .andExpect(
+                jsonPath("$.[*].outstandingAmountStepIdentifier").value(hasItem(DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER.toString()))
+            )
+            .andExpect(jsonPath("$.[*].flagAmortisedStepIdentifier").value(hasItem(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].compilationTime").value(hasItem(sameInstant(DEFAULT_COMPILATION_TIME))));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -453,7 +477,12 @@ class RouModelMetadataResourceIT {
             .andExpect(jsonPath("$.commencementDate").value(DEFAULT_COMMENCEMENT_DATE.toString()))
             .andExpect(jsonPath("$.expirationDate").value(DEFAULT_EXPIRATION_DATE.toString()))
             .andExpect(jsonPath("$.hasBeenFullyAmortised").value(DEFAULT_HAS_BEEN_FULLY_AMORTISED.booleanValue()))
-            .andExpect(jsonPath("$.hasBeenDecommissioned").value(DEFAULT_HAS_BEEN_DECOMMISSIONED.booleanValue()));
+            .andExpect(jsonPath("$.hasBeenDecommissioned").value(DEFAULT_HAS_BEEN_DECOMMISSIONED.booleanValue()))
+            .andExpect(jsonPath("$.batchJobIdentifier").value(DEFAULT_BATCH_JOB_IDENTIFIER.toString()))
+            .andExpect(jsonPath("$.depreciationAmountStepIdentifier").value(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER.toString()))
+            .andExpect(jsonPath("$.outstandingAmountStepIdentifier").value(DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER.toString()))
+            .andExpect(jsonPath("$.flagAmortisedStepIdentifier").value(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER.toString()))
+            .andExpect(jsonPath("$.compilationTime").value(sameInstant(DEFAULT_COMPILATION_TIME)));
     }
 
     @Test
@@ -1312,6 +1341,332 @@ class RouModelMetadataResourceIT {
 
     @Test
     @Transactional
+    void getAllRouModelMetadataByBatchJobIdentifierIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where batchJobIdentifier equals to DEFAULT_BATCH_JOB_IDENTIFIER
+        defaultRouModelMetadataShouldBeFound("batchJobIdentifier.equals=" + DEFAULT_BATCH_JOB_IDENTIFIER);
+
+        // Get all the rouModelMetadataList where batchJobIdentifier equals to UPDATED_BATCH_JOB_IDENTIFIER
+        defaultRouModelMetadataShouldNotBeFound("batchJobIdentifier.equals=" + UPDATED_BATCH_JOB_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByBatchJobIdentifierIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where batchJobIdentifier not equals to DEFAULT_BATCH_JOB_IDENTIFIER
+        defaultRouModelMetadataShouldNotBeFound("batchJobIdentifier.notEquals=" + DEFAULT_BATCH_JOB_IDENTIFIER);
+
+        // Get all the rouModelMetadataList where batchJobIdentifier not equals to UPDATED_BATCH_JOB_IDENTIFIER
+        defaultRouModelMetadataShouldBeFound("batchJobIdentifier.notEquals=" + UPDATED_BATCH_JOB_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByBatchJobIdentifierIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where batchJobIdentifier in DEFAULT_BATCH_JOB_IDENTIFIER or UPDATED_BATCH_JOB_IDENTIFIER
+        defaultRouModelMetadataShouldBeFound("batchJobIdentifier.in=" + DEFAULT_BATCH_JOB_IDENTIFIER + "," + UPDATED_BATCH_JOB_IDENTIFIER);
+
+        // Get all the rouModelMetadataList where batchJobIdentifier equals to UPDATED_BATCH_JOB_IDENTIFIER
+        defaultRouModelMetadataShouldNotBeFound("batchJobIdentifier.in=" + UPDATED_BATCH_JOB_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByBatchJobIdentifierIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where batchJobIdentifier is not null
+        defaultRouModelMetadataShouldBeFound("batchJobIdentifier.specified=true");
+
+        // Get all the rouModelMetadataList where batchJobIdentifier is null
+        defaultRouModelMetadataShouldNotBeFound("batchJobIdentifier.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByDepreciationAmountStepIdentifierIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where depreciationAmountStepIdentifier equals to DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
+        defaultRouModelMetadataShouldBeFound("depreciationAmountStepIdentifier.equals=" + DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER);
+
+        // Get all the rouModelMetadataList where depreciationAmountStepIdentifier equals to UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
+        defaultRouModelMetadataShouldNotBeFound("depreciationAmountStepIdentifier.equals=" + UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByDepreciationAmountStepIdentifierIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where depreciationAmountStepIdentifier not equals to DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
+        defaultRouModelMetadataShouldNotBeFound(
+            "depreciationAmountStepIdentifier.notEquals=" + DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
+        );
+
+        // Get all the rouModelMetadataList where depreciationAmountStepIdentifier not equals to UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
+        defaultRouModelMetadataShouldBeFound("depreciationAmountStepIdentifier.notEquals=" + UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByDepreciationAmountStepIdentifierIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where depreciationAmountStepIdentifier in DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER or UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
+        defaultRouModelMetadataShouldBeFound(
+            "depreciationAmountStepIdentifier.in=" +
+            DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER +
+            "," +
+            UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
+        );
+
+        // Get all the rouModelMetadataList where depreciationAmountStepIdentifier equals to UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
+        defaultRouModelMetadataShouldNotBeFound("depreciationAmountStepIdentifier.in=" + UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByDepreciationAmountStepIdentifierIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where depreciationAmountStepIdentifier is not null
+        defaultRouModelMetadataShouldBeFound("depreciationAmountStepIdentifier.specified=true");
+
+        // Get all the rouModelMetadataList where depreciationAmountStepIdentifier is null
+        defaultRouModelMetadataShouldNotBeFound("depreciationAmountStepIdentifier.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByOutstandingAmountStepIdentifierIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where outstandingAmountStepIdentifier equals to DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER
+        defaultRouModelMetadataShouldBeFound("outstandingAmountStepIdentifier.equals=" + DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
+
+        // Get all the rouModelMetadataList where outstandingAmountStepIdentifier equals to UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER
+        defaultRouModelMetadataShouldNotBeFound("outstandingAmountStepIdentifier.equals=" + UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByOutstandingAmountStepIdentifierIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where outstandingAmountStepIdentifier not equals to DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER
+        defaultRouModelMetadataShouldNotBeFound("outstandingAmountStepIdentifier.notEquals=" + DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
+
+        // Get all the rouModelMetadataList where outstandingAmountStepIdentifier not equals to UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER
+        defaultRouModelMetadataShouldBeFound("outstandingAmountStepIdentifier.notEquals=" + UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByOutstandingAmountStepIdentifierIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where outstandingAmountStepIdentifier in DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER or UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER
+        defaultRouModelMetadataShouldBeFound(
+            "outstandingAmountStepIdentifier.in=" +
+            DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER +
+            "," +
+            UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER
+        );
+
+        // Get all the rouModelMetadataList where outstandingAmountStepIdentifier equals to UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER
+        defaultRouModelMetadataShouldNotBeFound("outstandingAmountStepIdentifier.in=" + UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByOutstandingAmountStepIdentifierIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where outstandingAmountStepIdentifier is not null
+        defaultRouModelMetadataShouldBeFound("outstandingAmountStepIdentifier.specified=true");
+
+        // Get all the rouModelMetadataList where outstandingAmountStepIdentifier is null
+        defaultRouModelMetadataShouldNotBeFound("outstandingAmountStepIdentifier.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByFlagAmortisedStepIdentifierIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where flagAmortisedStepIdentifier equals to DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER
+        defaultRouModelMetadataShouldBeFound("flagAmortisedStepIdentifier.equals=" + DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER);
+
+        // Get all the rouModelMetadataList where flagAmortisedStepIdentifier equals to UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER
+        defaultRouModelMetadataShouldNotBeFound("flagAmortisedStepIdentifier.equals=" + UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByFlagAmortisedStepIdentifierIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where flagAmortisedStepIdentifier not equals to DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER
+        defaultRouModelMetadataShouldNotBeFound("flagAmortisedStepIdentifier.notEquals=" + DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER);
+
+        // Get all the rouModelMetadataList where flagAmortisedStepIdentifier not equals to UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER
+        defaultRouModelMetadataShouldBeFound("flagAmortisedStepIdentifier.notEquals=" + UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByFlagAmortisedStepIdentifierIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where flagAmortisedStepIdentifier in DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER or UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER
+        defaultRouModelMetadataShouldBeFound(
+            "flagAmortisedStepIdentifier.in=" + DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER + "," + UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER
+        );
+
+        // Get all the rouModelMetadataList where flagAmortisedStepIdentifier equals to UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER
+        defaultRouModelMetadataShouldNotBeFound("flagAmortisedStepIdentifier.in=" + UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByFlagAmortisedStepIdentifierIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where flagAmortisedStepIdentifier is not null
+        defaultRouModelMetadataShouldBeFound("flagAmortisedStepIdentifier.specified=true");
+
+        // Get all the rouModelMetadataList where flagAmortisedStepIdentifier is null
+        defaultRouModelMetadataShouldNotBeFound("flagAmortisedStepIdentifier.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByCompilationTimeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where compilationTime equals to DEFAULT_COMPILATION_TIME
+        defaultRouModelMetadataShouldBeFound("compilationTime.equals=" + DEFAULT_COMPILATION_TIME);
+
+        // Get all the rouModelMetadataList where compilationTime equals to UPDATED_COMPILATION_TIME
+        defaultRouModelMetadataShouldNotBeFound("compilationTime.equals=" + UPDATED_COMPILATION_TIME);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByCompilationTimeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where compilationTime not equals to DEFAULT_COMPILATION_TIME
+        defaultRouModelMetadataShouldNotBeFound("compilationTime.notEquals=" + DEFAULT_COMPILATION_TIME);
+
+        // Get all the rouModelMetadataList where compilationTime not equals to UPDATED_COMPILATION_TIME
+        defaultRouModelMetadataShouldBeFound("compilationTime.notEquals=" + UPDATED_COMPILATION_TIME);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByCompilationTimeIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where compilationTime in DEFAULT_COMPILATION_TIME or UPDATED_COMPILATION_TIME
+        defaultRouModelMetadataShouldBeFound("compilationTime.in=" + DEFAULT_COMPILATION_TIME + "," + UPDATED_COMPILATION_TIME);
+
+        // Get all the rouModelMetadataList where compilationTime equals to UPDATED_COMPILATION_TIME
+        defaultRouModelMetadataShouldNotBeFound("compilationTime.in=" + UPDATED_COMPILATION_TIME);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByCompilationTimeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where compilationTime is not null
+        defaultRouModelMetadataShouldBeFound("compilationTime.specified=true");
+
+        // Get all the rouModelMetadataList where compilationTime is null
+        defaultRouModelMetadataShouldNotBeFound("compilationTime.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByCompilationTimeIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where compilationTime is greater than or equal to DEFAULT_COMPILATION_TIME
+        defaultRouModelMetadataShouldBeFound("compilationTime.greaterThanOrEqual=" + DEFAULT_COMPILATION_TIME);
+
+        // Get all the rouModelMetadataList where compilationTime is greater than or equal to UPDATED_COMPILATION_TIME
+        defaultRouModelMetadataShouldNotBeFound("compilationTime.greaterThanOrEqual=" + UPDATED_COMPILATION_TIME);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByCompilationTimeIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where compilationTime is less than or equal to DEFAULT_COMPILATION_TIME
+        defaultRouModelMetadataShouldBeFound("compilationTime.lessThanOrEqual=" + DEFAULT_COMPILATION_TIME);
+
+        // Get all the rouModelMetadataList where compilationTime is less than or equal to SMALLER_COMPILATION_TIME
+        defaultRouModelMetadataShouldNotBeFound("compilationTime.lessThanOrEqual=" + SMALLER_COMPILATION_TIME);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByCompilationTimeIsLessThanSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where compilationTime is less than DEFAULT_COMPILATION_TIME
+        defaultRouModelMetadataShouldNotBeFound("compilationTime.lessThan=" + DEFAULT_COMPILATION_TIME);
+
+        // Get all the rouModelMetadataList where compilationTime is less than UPDATED_COMPILATION_TIME
+        defaultRouModelMetadataShouldBeFound("compilationTime.lessThan=" + UPDATED_COMPILATION_TIME);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouModelMetadataByCompilationTimeIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
+
+        // Get all the rouModelMetadataList where compilationTime is greater than DEFAULT_COMPILATION_TIME
+        defaultRouModelMetadataShouldNotBeFound("compilationTime.greaterThan=" + DEFAULT_COMPILATION_TIME);
+
+        // Get all the rouModelMetadataList where compilationTime is greater than SMALLER_COMPILATION_TIME
+        defaultRouModelMetadataShouldBeFound("compilationTime.greaterThan=" + SMALLER_COMPILATION_TIME);
+    }
+
+    @Test
+    @Transactional
     void getAllRouModelMetadataByIfrs16LeaseContractIsEqualToSomething() throws Exception {
         // Initialize the database
         rouModelMetadataRepository.saveAndFlush(rouModelMetadata);
@@ -1484,7 +1839,16 @@ class RouModelMetadataResourceIT {
             .andExpect(jsonPath("$.[*].commencementDate").value(hasItem(DEFAULT_COMMENCEMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].expirationDate").value(hasItem(DEFAULT_EXPIRATION_DATE.toString())))
             .andExpect(jsonPath("$.[*].hasBeenFullyAmortised").value(hasItem(DEFAULT_HAS_BEEN_FULLY_AMORTISED.booleanValue())))
-            .andExpect(jsonPath("$.[*].hasBeenDecommissioned").value(hasItem(DEFAULT_HAS_BEEN_DECOMMISSIONED.booleanValue())));
+            .andExpect(jsonPath("$.[*].hasBeenDecommissioned").value(hasItem(DEFAULT_HAS_BEEN_DECOMMISSIONED.booleanValue())))
+            .andExpect(jsonPath("$.[*].batchJobIdentifier").value(hasItem(DEFAULT_BATCH_JOB_IDENTIFIER.toString())))
+            .andExpect(
+                jsonPath("$.[*].depreciationAmountStepIdentifier").value(hasItem(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER.toString()))
+            )
+            .andExpect(
+                jsonPath("$.[*].outstandingAmountStepIdentifier").value(hasItem(DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER.toString()))
+            )
+            .andExpect(jsonPath("$.[*].flagAmortisedStepIdentifier").value(hasItem(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].compilationTime").value(hasItem(sameInstant(DEFAULT_COMPILATION_TIME))));
 
         // Check, that the count call also returns 1
         restRouModelMetadataMockMvc
@@ -1542,7 +1906,12 @@ class RouModelMetadataResourceIT {
             .commencementDate(UPDATED_COMMENCEMENT_DATE)
             .expirationDate(UPDATED_EXPIRATION_DATE)
             .hasBeenFullyAmortised(UPDATED_HAS_BEEN_FULLY_AMORTISED)
-            .hasBeenDecommissioned(UPDATED_HAS_BEEN_DECOMMISSIONED);
+            .hasBeenDecommissioned(UPDATED_HAS_BEEN_DECOMMISSIONED)
+            .batchJobIdentifier(UPDATED_BATCH_JOB_IDENTIFIER)
+            .depreciationAmountStepIdentifier(UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER)
+            .outstandingAmountStepIdentifier(UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER)
+            .flagAmortisedStepIdentifier(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER)
+            .compilationTime(UPDATED_COMPILATION_TIME);
         RouModelMetadataDTO rouModelMetadataDTO = rouModelMetadataMapper.toDto(updatedRouModelMetadata);
 
         restRouModelMetadataMockMvc
@@ -1567,6 +1936,11 @@ class RouModelMetadataResourceIT {
         assertThat(testRouModelMetadata.getExpirationDate()).isEqualTo(UPDATED_EXPIRATION_DATE);
         assertThat(testRouModelMetadata.getHasBeenFullyAmortised()).isEqualTo(UPDATED_HAS_BEEN_FULLY_AMORTISED);
         assertThat(testRouModelMetadata.getHasBeenDecommissioned()).isEqualTo(UPDATED_HAS_BEEN_DECOMMISSIONED);
+        assertThat(testRouModelMetadata.getBatchJobIdentifier()).isEqualTo(UPDATED_BATCH_JOB_IDENTIFIER);
+        assertThat(testRouModelMetadata.getDepreciationAmountStepIdentifier()).isEqualTo(UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER);
+        assertThat(testRouModelMetadata.getOutstandingAmountStepIdentifier()).isEqualTo(UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
+        assertThat(testRouModelMetadata.getFlagAmortisedStepIdentifier()).isEqualTo(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER);
+        assertThat(testRouModelMetadata.getCompilationTime()).isEqualTo(UPDATED_COMPILATION_TIME);
 
         // Validate the RouModelMetadata in Elasticsearch
         verify(mockRouModelMetadataSearchRepository).save(testRouModelMetadata);
@@ -1668,7 +2042,8 @@ class RouModelMetadataResourceIT {
             .rouModelReference(UPDATED_ROU_MODEL_REFERENCE)
             .commencementDate(UPDATED_COMMENCEMENT_DATE)
             .expirationDate(UPDATED_EXPIRATION_DATE)
-            .hasBeenDecommissioned(UPDATED_HAS_BEEN_DECOMMISSIONED);
+            .hasBeenDecommissioned(UPDATED_HAS_BEEN_DECOMMISSIONED)
+            .compilationTime(UPDATED_COMPILATION_TIME);
 
         restRouModelMetadataMockMvc
             .perform(
@@ -1692,6 +2067,11 @@ class RouModelMetadataResourceIT {
         assertThat(testRouModelMetadata.getExpirationDate()).isEqualTo(UPDATED_EXPIRATION_DATE);
         assertThat(testRouModelMetadata.getHasBeenFullyAmortised()).isEqualTo(DEFAULT_HAS_BEEN_FULLY_AMORTISED);
         assertThat(testRouModelMetadata.getHasBeenDecommissioned()).isEqualTo(UPDATED_HAS_BEEN_DECOMMISSIONED);
+        assertThat(testRouModelMetadata.getBatchJobIdentifier()).isEqualTo(DEFAULT_BATCH_JOB_IDENTIFIER);
+        assertThat(testRouModelMetadata.getDepreciationAmountStepIdentifier()).isEqualTo(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER);
+        assertThat(testRouModelMetadata.getOutstandingAmountStepIdentifier()).isEqualTo(DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
+        assertThat(testRouModelMetadata.getFlagAmortisedStepIdentifier()).isEqualTo(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER);
+        assertThat(testRouModelMetadata.getCompilationTime()).isEqualTo(UPDATED_COMPILATION_TIME);
     }
 
     @Test
@@ -1716,7 +2096,12 @@ class RouModelMetadataResourceIT {
             .commencementDate(UPDATED_COMMENCEMENT_DATE)
             .expirationDate(UPDATED_EXPIRATION_DATE)
             .hasBeenFullyAmortised(UPDATED_HAS_BEEN_FULLY_AMORTISED)
-            .hasBeenDecommissioned(UPDATED_HAS_BEEN_DECOMMISSIONED);
+            .hasBeenDecommissioned(UPDATED_HAS_BEEN_DECOMMISSIONED)
+            .batchJobIdentifier(UPDATED_BATCH_JOB_IDENTIFIER)
+            .depreciationAmountStepIdentifier(UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER)
+            .outstandingAmountStepIdentifier(UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER)
+            .flagAmortisedStepIdentifier(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER)
+            .compilationTime(UPDATED_COMPILATION_TIME);
 
         restRouModelMetadataMockMvc
             .perform(
@@ -1740,6 +2125,11 @@ class RouModelMetadataResourceIT {
         assertThat(testRouModelMetadata.getExpirationDate()).isEqualTo(UPDATED_EXPIRATION_DATE);
         assertThat(testRouModelMetadata.getHasBeenFullyAmortised()).isEqualTo(UPDATED_HAS_BEEN_FULLY_AMORTISED);
         assertThat(testRouModelMetadata.getHasBeenDecommissioned()).isEqualTo(UPDATED_HAS_BEEN_DECOMMISSIONED);
+        assertThat(testRouModelMetadata.getBatchJobIdentifier()).isEqualTo(UPDATED_BATCH_JOB_IDENTIFIER);
+        assertThat(testRouModelMetadata.getDepreciationAmountStepIdentifier()).isEqualTo(UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER);
+        assertThat(testRouModelMetadata.getOutstandingAmountStepIdentifier()).isEqualTo(UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
+        assertThat(testRouModelMetadata.getFlagAmortisedStepIdentifier()).isEqualTo(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER);
+        assertThat(testRouModelMetadata.getCompilationTime()).isEqualTo(UPDATED_COMPILATION_TIME);
     }
 
     @Test
@@ -1865,6 +2255,15 @@ class RouModelMetadataResourceIT {
             .andExpect(jsonPath("$.[*].commencementDate").value(hasItem(DEFAULT_COMMENCEMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].expirationDate").value(hasItem(DEFAULT_EXPIRATION_DATE.toString())))
             .andExpect(jsonPath("$.[*].hasBeenFullyAmortised").value(hasItem(DEFAULT_HAS_BEEN_FULLY_AMORTISED.booleanValue())))
-            .andExpect(jsonPath("$.[*].hasBeenDecommissioned").value(hasItem(DEFAULT_HAS_BEEN_DECOMMISSIONED.booleanValue())));
+            .andExpect(jsonPath("$.[*].hasBeenDecommissioned").value(hasItem(DEFAULT_HAS_BEEN_DECOMMISSIONED.booleanValue())))
+            .andExpect(jsonPath("$.[*].batchJobIdentifier").value(hasItem(DEFAULT_BATCH_JOB_IDENTIFIER.toString())))
+            .andExpect(
+                jsonPath("$.[*].depreciationAmountStepIdentifier").value(hasItem(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER.toString()))
+            )
+            .andExpect(
+                jsonPath("$.[*].outstandingAmountStepIdentifier").value(hasItem(DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER.toString()))
+            )
+            .andExpect(jsonPath("$.[*].flagAmortisedStepIdentifier").value(hasItem(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].compilationTime").value(hasItem(sameInstant(DEFAULT_COMPILATION_TIME))));
     }
 }

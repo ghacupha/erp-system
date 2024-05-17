@@ -1,4 +1,4 @@
-package io.github.erp.repository;
+package io.github.erp.internal.repository;
 
 /*-
  * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
@@ -19,13 +19,34 @@ package io.github.erp.repository;
  */
 
 import io.github.erp.domain.RouDepreciationEntry;
-import org.springframework.data.jpa.repository.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data SQL repository for the RouDepreciationEntry entity.
  */
 @SuppressWarnings("unused")
 @Repository
-public interface RouDepreciationEntryRepository
-    extends JpaRepository<RouDepreciationEntry, Long>, JpaSpecificationExecutor<RouDepreciationEntry> {}
+public interface InternalRouDepreciationEntryRepository
+    extends JpaRepository<RouDepreciationEntry, Long>, JpaSpecificationExecutor<RouDepreciationEntry> {
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT * " +
+            "FROM public.rou_depreciation_entry " +
+            "WHERE outstanding_amounT <= :thresholdAmount",
+        countQuery = "" +
+            "SELECT * " +
+            "FROM public.rou_depreciation_entry " +
+            "WHERE outstanding_amounT <= :thresholdAmount"
+    )
+    Optional<List<RouDepreciationEntry>> getOutstandingAmountItems(@Param("thresholdAmount") BigDecimal thresholdAmount);
+}

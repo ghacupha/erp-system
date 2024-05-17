@@ -31,6 +31,7 @@ import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 import tech.jhipster.service.filter.UUIDFilter;
+import tech.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
  * Criteria class for the {@link io.github.erp.domain.RouModelMetadata} entity. This class is used
@@ -67,6 +68,16 @@ public class RouModelMetadataCriteria implements Serializable, Criteria {
 
     private BooleanFilter hasBeenDecommissioned;
 
+    private UUIDFilter batchJobIdentifier;
+
+    private UUIDFilter depreciationAmountStepIdentifier;
+
+    private UUIDFilter outstandingAmountStepIdentifier;
+
+    private UUIDFilter flagAmortisedStepIdentifier;
+
+    private ZonedDateTimeFilter compilationTime;
+
     private LongFilter ifrs16LeaseContractId;
 
     private LongFilter assetAccountId;
@@ -95,6 +106,13 @@ public class RouModelMetadataCriteria implements Serializable, Criteria {
         this.expirationDate = other.expirationDate == null ? null : other.expirationDate.copy();
         this.hasBeenFullyAmortised = other.hasBeenFullyAmortised == null ? null : other.hasBeenFullyAmortised.copy();
         this.hasBeenDecommissioned = other.hasBeenDecommissioned == null ? null : other.hasBeenDecommissioned.copy();
+        this.batchJobIdentifier = other.batchJobIdentifier == null ? null : other.batchJobIdentifier.copy();
+        this.depreciationAmountStepIdentifier =
+            other.depreciationAmountStepIdentifier == null ? null : other.depreciationAmountStepIdentifier.copy();
+        this.outstandingAmountStepIdentifier =
+            other.outstandingAmountStepIdentifier == null ? null : other.outstandingAmountStepIdentifier.copy();
+        this.flagAmortisedStepIdentifier = other.flagAmortisedStepIdentifier == null ? null : other.flagAmortisedStepIdentifier.copy();
+        this.compilationTime = other.compilationTime == null ? null : other.compilationTime.copy();
         this.ifrs16LeaseContractId = other.ifrs16LeaseContractId == null ? null : other.ifrs16LeaseContractId.copy();
         this.assetAccountId = other.assetAccountId == null ? null : other.assetAccountId.copy();
         this.depreciationAccountId = other.depreciationAccountId == null ? null : other.depreciationAccountId.copy();
@@ -274,6 +292,81 @@ public class RouModelMetadataCriteria implements Serializable, Criteria {
         this.hasBeenDecommissioned = hasBeenDecommissioned;
     }
 
+    public UUIDFilter getBatchJobIdentifier() {
+        return batchJobIdentifier;
+    }
+
+    public UUIDFilter batchJobIdentifier() {
+        if (batchJobIdentifier == null) {
+            batchJobIdentifier = new UUIDFilter();
+        }
+        return batchJobIdentifier;
+    }
+
+    public void setBatchJobIdentifier(UUIDFilter batchJobIdentifier) {
+        this.batchJobIdentifier = batchJobIdentifier;
+    }
+
+    public UUIDFilter getDepreciationAmountStepIdentifier() {
+        return depreciationAmountStepIdentifier;
+    }
+
+    public UUIDFilter depreciationAmountStepIdentifier() {
+        if (depreciationAmountStepIdentifier == null) {
+            depreciationAmountStepIdentifier = new UUIDFilter();
+        }
+        return depreciationAmountStepIdentifier;
+    }
+
+    public void setDepreciationAmountStepIdentifier(UUIDFilter depreciationAmountStepIdentifier) {
+        this.depreciationAmountStepIdentifier = depreciationAmountStepIdentifier;
+    }
+
+    public UUIDFilter getOutstandingAmountStepIdentifier() {
+        return outstandingAmountStepIdentifier;
+    }
+
+    public UUIDFilter outstandingAmountStepIdentifier() {
+        if (outstandingAmountStepIdentifier == null) {
+            outstandingAmountStepIdentifier = new UUIDFilter();
+        }
+        return outstandingAmountStepIdentifier;
+    }
+
+    public void setOutstandingAmountStepIdentifier(UUIDFilter outstandingAmountStepIdentifier) {
+        this.outstandingAmountStepIdentifier = outstandingAmountStepIdentifier;
+    }
+
+    public UUIDFilter getFlagAmortisedStepIdentifier() {
+        return flagAmortisedStepIdentifier;
+    }
+
+    public UUIDFilter flagAmortisedStepIdentifier() {
+        if (flagAmortisedStepIdentifier == null) {
+            flagAmortisedStepIdentifier = new UUIDFilter();
+        }
+        return flagAmortisedStepIdentifier;
+    }
+
+    public void setFlagAmortisedStepIdentifier(UUIDFilter flagAmortisedStepIdentifier) {
+        this.flagAmortisedStepIdentifier = flagAmortisedStepIdentifier;
+    }
+
+    public ZonedDateTimeFilter getCompilationTime() {
+        return compilationTime;
+    }
+
+    public ZonedDateTimeFilter compilationTime() {
+        if (compilationTime == null) {
+            compilationTime = new ZonedDateTimeFilter();
+        }
+        return compilationTime;
+    }
+
+    public void setCompilationTime(ZonedDateTimeFilter compilationTime) {
+        this.compilationTime = compilationTime;
+    }
+
     public LongFilter getIfrs16LeaseContractId() {
         return ifrs16LeaseContractId;
     }
@@ -393,6 +486,11 @@ public class RouModelMetadataCriteria implements Serializable, Criteria {
             Objects.equals(expirationDate, that.expirationDate) &&
             Objects.equals(hasBeenFullyAmortised, that.hasBeenFullyAmortised) &&
             Objects.equals(hasBeenDecommissioned, that.hasBeenDecommissioned) &&
+            Objects.equals(batchJobIdentifier, that.batchJobIdentifier) &&
+            Objects.equals(depreciationAmountStepIdentifier, that.depreciationAmountStepIdentifier) &&
+            Objects.equals(outstandingAmountStepIdentifier, that.outstandingAmountStepIdentifier) &&
+            Objects.equals(flagAmortisedStepIdentifier, that.flagAmortisedStepIdentifier) &&
+            Objects.equals(compilationTime, that.compilationTime) &&
             Objects.equals(ifrs16LeaseContractId, that.ifrs16LeaseContractId) &&
             Objects.equals(assetAccountId, that.assetAccountId) &&
             Objects.equals(depreciationAccountId, that.depreciationAccountId) &&
@@ -417,6 +515,11 @@ public class RouModelMetadataCriteria implements Serializable, Criteria {
             expirationDate,
             hasBeenFullyAmortised,
             hasBeenDecommissioned,
+            batchJobIdentifier,
+            depreciationAmountStepIdentifier,
+            outstandingAmountStepIdentifier,
+            flagAmortisedStepIdentifier,
+            compilationTime,
             ifrs16LeaseContractId,
             assetAccountId,
             depreciationAccountId,
@@ -442,6 +545,11 @@ public class RouModelMetadataCriteria implements Serializable, Criteria {
             (expirationDate != null ? "expirationDate=" + expirationDate + ", " : "") +
             (hasBeenFullyAmortised != null ? "hasBeenFullyAmortised=" + hasBeenFullyAmortised + ", " : "") +
             (hasBeenDecommissioned != null ? "hasBeenDecommissioned=" + hasBeenDecommissioned + ", " : "") +
+            (batchJobIdentifier != null ? "batchJobIdentifier=" + batchJobIdentifier + ", " : "") +
+            (depreciationAmountStepIdentifier != null ? "depreciationAmountStepIdentifier=" + depreciationAmountStepIdentifier + ", " : "") +
+            (outstandingAmountStepIdentifier != null ? "outstandingAmountStepIdentifier=" + outstandingAmountStepIdentifier + ", " : "") +
+            (flagAmortisedStepIdentifier != null ? "flagAmortisedStepIdentifier=" + flagAmortisedStepIdentifier + ", " : "") +
+            (compilationTime != null ? "compilationTime=" + compilationTime + ", " : "") +
             (ifrs16LeaseContractId != null ? "ifrs16LeaseContractId=" + ifrs16LeaseContractId + ", " : "") +
             (assetAccountId != null ? "assetAccountId=" + assetAccountId + ", " : "") +
             (depreciationAccountId != null ? "depreciationAccountId=" + depreciationAccountId + ", " : "") +

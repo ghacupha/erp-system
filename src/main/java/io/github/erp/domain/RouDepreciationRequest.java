@@ -59,6 +59,21 @@ public class RouDepreciationRequest implements Serializable {
     @Column(name = "number_of_enumerated_items")
     private Integer numberOfEnumeratedItems;
 
+    @Column(name = "batch_job_identifier")
+    private UUID batchJobIdentifier;
+
+    @Column(name = "depreciation_amount_step_identifier")
+    private UUID depreciationAmountStepIdentifier;
+
+    @Column(name = "outstanding_amount_step_identifier")
+    private UUID outstandingAmountStepIdentifier;
+
+    @Column(name = "flag_amortised_step_identifier")
+    private UUID flagAmortisedStepIdentifier;
+
+    @Column(name = "compilation_time")
+    private ZonedDateTime compilationTime;
+
     @ManyToOne
     @JsonIgnoreProperties(
         value = { "organization", "department", "securityClearance", "systemIdentity", "userProperties", "dealerIdentity", "placeholders" },
@@ -133,6 +148,71 @@ public class RouDepreciationRequest implements Serializable {
         this.numberOfEnumeratedItems = numberOfEnumeratedItems;
     }
 
+    public UUID getBatchJobIdentifier() {
+        return this.batchJobIdentifier;
+    }
+
+    public RouDepreciationRequest batchJobIdentifier(UUID batchJobIdentifier) {
+        this.setBatchJobIdentifier(batchJobIdentifier);
+        return this;
+    }
+
+    public void setBatchJobIdentifier(UUID batchJobIdentifier) {
+        this.batchJobIdentifier = batchJobIdentifier;
+    }
+
+    public UUID getDepreciationAmountStepIdentifier() {
+        return this.depreciationAmountStepIdentifier;
+    }
+
+    public RouDepreciationRequest depreciationAmountStepIdentifier(UUID depreciationAmountStepIdentifier) {
+        this.setDepreciationAmountStepIdentifier(depreciationAmountStepIdentifier);
+        return this;
+    }
+
+    public void setDepreciationAmountStepIdentifier(UUID depreciationAmountStepIdentifier) {
+        this.depreciationAmountStepIdentifier = depreciationAmountStepIdentifier;
+    }
+
+    public UUID getOutstandingAmountStepIdentifier() {
+        return this.outstandingAmountStepIdentifier;
+    }
+
+    public RouDepreciationRequest outstandingAmountStepIdentifier(UUID outstandingAmountStepIdentifier) {
+        this.setOutstandingAmountStepIdentifier(outstandingAmountStepIdentifier);
+        return this;
+    }
+
+    public void setOutstandingAmountStepIdentifier(UUID outstandingAmountStepIdentifier) {
+        this.outstandingAmountStepIdentifier = outstandingAmountStepIdentifier;
+    }
+
+    public UUID getFlagAmortisedStepIdentifier() {
+        return this.flagAmortisedStepIdentifier;
+    }
+
+    public RouDepreciationRequest flagAmortisedStepIdentifier(UUID flagAmortisedStepIdentifier) {
+        this.setFlagAmortisedStepIdentifier(flagAmortisedStepIdentifier);
+        return this;
+    }
+
+    public void setFlagAmortisedStepIdentifier(UUID flagAmortisedStepIdentifier) {
+        this.flagAmortisedStepIdentifier = flagAmortisedStepIdentifier;
+    }
+
+    public ZonedDateTime getCompilationTime() {
+        return this.compilationTime;
+    }
+
+    public RouDepreciationRequest compilationTime(ZonedDateTime compilationTime) {
+        this.setCompilationTime(compilationTime);
+        return this;
+    }
+
+    public void setCompilationTime(ZonedDateTime compilationTime) {
+        this.compilationTime = compilationTime;
+    }
+
     public ApplicationUser getInitiatedBy() {
         return this.initiatedBy;
     }
@@ -174,6 +254,11 @@ public class RouDepreciationRequest implements Serializable {
             ", timeOfRequest='" + getTimeOfRequest() + "'" +
             ", depreciationProcessStatus='" + getDepreciationProcessStatus() + "'" +
             ", numberOfEnumeratedItems=" + getNumberOfEnumeratedItems() +
+            ", batchJobIdentifier='" + getBatchJobIdentifier() + "'" +
+            ", depreciationAmountStepIdentifier='" + getDepreciationAmountStepIdentifier() + "'" +
+            ", outstandingAmountStepIdentifier='" + getOutstandingAmountStepIdentifier() + "'" +
+            ", flagAmortisedStepIdentifier='" + getFlagAmortisedStepIdentifier() + "'" +
+            ", compilationTime='" + getCompilationTime() + "'" +
             "}";
     }
 }

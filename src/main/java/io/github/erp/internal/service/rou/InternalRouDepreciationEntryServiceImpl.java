@@ -19,6 +19,7 @@ package io.github.erp.internal.service.rou;
  */
 
 import io.github.erp.domain.RouDepreciationEntry;
+import io.github.erp.internal.repository.InternalRouDepreciationEntryRepository;
 import io.github.erp.repository.RouDepreciationEntryRepository;
 import io.github.erp.repository.search.RouDepreciationEntrySearchRepository;
 import io.github.erp.service.dto.LeasePeriodDTO;
@@ -50,7 +51,7 @@ public class InternalRouDepreciationEntryServiceImpl implements InternalRouDepre
 
     private final Logger log = LoggerFactory.getLogger(InternalRouDepreciationEntryServiceImpl.class);
 
-    private final RouDepreciationEntryRepository rouDepreciationEntryRepository;
+    private final InternalRouDepreciationEntryRepository rouDepreciationEntryRepository;
 
     private final RouDepreciationEntryMapper rouDepreciationEntryMapper;
 
@@ -61,7 +62,7 @@ public class InternalRouDepreciationEntryServiceImpl implements InternalRouDepre
     private final InternalRouModelMetadataService internalRouModelMetadataService;
 
     public InternalRouDepreciationEntryServiceImpl(
-        RouDepreciationEntryRepository rouDepreciationEntryRepository,
+        InternalRouDepreciationEntryRepository rouDepreciationEntryRepository,
         RouDepreciationEntryMapper rouDepreciationEntryMapper,
         RouDepreciationEntrySearchRepository rouDepreciationEntrySearchRepository,
         InternalLeasePeriodService internalLeasePeriodService, InternalRouModelMetadataService internalRouModelMetadataService) {
@@ -143,17 +144,15 @@ public class InternalRouDepreciationEntryServiceImpl implements InternalRouDepre
 
         rouDepreciationEntry = rouDepreciationEntryRepository.saveAllAndFlush(rouDepreciationEntry);
 
-        List<RouDepreciationEntryDTO> result = rouDepreciationEntryMapper.toDto(rouDepreciationEntry);
-
-        return result;
+        return rouDepreciationEntryMapper.toDto(rouDepreciationEntry);
 
     }
 
     /**
      * Calculate the outstanding amount for the current depreciation entry
      *
-     * @param entry
-     * @return
+     * @param entry The instance for outstanding amount calculation
+     * @return Calculated outstanding amount
      */
     @Override
     public BigDecimal calculateOutstandingAmount(RouDepreciationEntryDTO entry) {
