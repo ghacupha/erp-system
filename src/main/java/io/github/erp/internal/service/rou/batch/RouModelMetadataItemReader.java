@@ -33,16 +33,20 @@ public class RouModelMetadataItemReader implements ItemReader<RouModelMetadataDT
     private Iterator<RouModelMetadataDTO> metadataIterator;
 
     private final long rouDepreciationRequestId;
+    private final String batchJobIdentifier;
 
-    public RouModelMetadataItemReader(InternalRouModelMetadataService rouModelMetadataService, long rouDepreciationRequestId) {
+    public RouModelMetadataItemReader(
+        InternalRouModelMetadataService rouModelMetadataService,
+        long rouDepreciationRequestId, String batchJobIdentifier) {
         this.rouModelMetadataService = rouModelMetadataService;
         this.rouDepreciationRequestId = rouDepreciationRequestId;
+        this.batchJobIdentifier = batchJobIdentifier;
     }
 
     @Override
     public RouModelMetadataDTO read() {
         if (metadataList == null) {
-            metadataList = rouModelMetadataService.getDepreciationAdjacentMetadataItems(rouDepreciationRequestId).orElse(Collections.emptyList());
+            metadataList = rouModelMetadataService.getDepreciationAdjacentMetadataItems(rouDepreciationRequestId, batchJobIdentifier).orElse(Collections.emptyList());
             metadataIterator = metadataList.iterator();
         }
         return metadataIterator.hasNext() ? metadataIterator.next() : null;

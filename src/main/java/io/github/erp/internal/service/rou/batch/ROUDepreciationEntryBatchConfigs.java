@@ -102,8 +102,10 @@ public class ROUDepreciationEntryBatchConfigs {
 
     @Bean(PERSISTENCE_READER_NAME)
     @StepScope
-    public ItemReader<RouModelMetadataDTO> rouModelMetadataItemReader(@Value("#{jobParameters['rouDepreciationRequestId']}") long rouDepreciationRequestId) {
-        return new RouModelMetadataItemReader(rouModelMetadataService, rouDepreciationRequestId);
+    public ItemReader<RouModelMetadataDTO> rouModelMetadataItemReader(
+        @Value("#{jobParameters['rouDepreciationRequestId']}") long rouDepreciationRequestId,
+        @Value("#{jobParameters['batchJobIdentifier']}") String batchJobIdentifier) {
+        return new RouModelMetadataItemReader(rouModelMetadataService, rouDepreciationRequestId, batchJobIdentifier);
     }
 
     @Bean(PERSISTENCE_PROCESSOR_NAME)
@@ -131,7 +133,7 @@ public class ROUDepreciationEntryBatchConfigs {
     public Step updateDepreciationAmountStep() {
         return stepBuilderFactory.get(READ_FILE_STEP_NAME)
             .<RouModelMetadataDTO, List<RouDepreciationEntryDTO>>chunk(50)
-            .reader(rouModelMetadataItemReader(rouDepreciationRequestId))
+            .reader(rouModelMetadataItemReader(rouDepreciationRequestId, batchJobIdentifier))
             .processor(rouModelMetadataDTOListItemProcessor())
             .writer(rouDepreciationEntryWriter())
             .build();
@@ -178,7 +180,7 @@ public class ROUDepreciationEntryBatchConfigs {
     @Bean(UPDATE_FULLY_AMORTISED_ITEM_READER_NAME)
     @StepScope
     public ItemReader<RouModelMetadataDTO> updateFullyAmortisedItemReader(@Value("#{jobParameters['batchJobIdentifier']}") String batchJobIdentifier) {
-        return new UpdateFullyAmortisedItemReader(internalRouModelMetadataService, UUID.fromString(batchJobIdentifier));
+        return new UpdateFullyAmortisedItemReader(internalRouModelMetadataService, batchJobIdentifier);
     }
 
     @Bean(UPDATE_FULLY_AMORTISED_ITEM_PROCESSOR_NAME)

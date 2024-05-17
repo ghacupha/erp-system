@@ -138,9 +138,29 @@ public class InternalRouModelMetadataServiceImpl implements InternalRouModelMeta
     }
 
     /**
+     * Get all items that are due for depreciation depending on status and
+     * conditions of the depreciation process, and update the drawn items with the
+     * batchJobIdentifier
+     *
+     * @param batchJobIdentifier Identifier for the current job
+     * @param rouDepreciationRequestId Id of the requisition entity
+     * @return the list of entities for depreciation
+     */
+    @Override
+    public Optional<List<RouModelMetadataDTO>> getDepreciationAdjacentMetadataItems(long rouDepreciationRequestId, String batchJobIdentifier) {
+
+        return rouModelMetadataRepository.getDepreciationAdjacentMetadataItems(BigDecimal.TEN)
+            .map(rouModelMetadataMapper::toDto).map(metadata -> {
+            metadata.forEach(dataItem -> dataItem.setBatchJobIdentifier(UUID.fromString(batchJobIdentifier)));
+
+            return saveAll(metadata);
+        });
+    }
+
+    /**
      * This method will fetch the items that have been processed in a particular job
      *
-     * @param batchJobIdentifier
+     * @param batchJobIdentifier Identifier for the current job
      * @return
      */
     @Override
