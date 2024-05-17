@@ -24,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Service Interface for managing {@link io.github.erp.domain.RouModelMetadata}.
@@ -36,6 +37,14 @@ public interface InternalRouModelMetadataService {
      * @return the persisted entity.
      */
     RouModelMetadataDTO save(RouModelMetadataDTO rouModelMetadataDTO);
+
+    /**
+     * Save a rouModelMetadata.
+     *
+     * @param rouModelMetadataDTO the entity to save.
+     * @return the persisted entity.
+     */
+    List<RouModelMetadataDTO> saveAll(List<RouModelMetadataDTO> rouModelMetadataDTO);
 
     /**
      * Partially updates a rouModelMetadata.
@@ -88,9 +97,18 @@ public interface InternalRouModelMetadataService {
 
     /**
      * Get all items that are due for depreciation depending on status and
-     * conditions of the depreciation process
+     * conditions of the depreciation process, and update the same with the
+     * batchJobIdentifier from the process
      * @param rouDepreciationRequestId Id of the requisition entity
      * @return the list of entities for depreciation
      */
-    Optional<List<RouModelMetadataDTO>> getDepreciationAdjacentMetadataItems(long rouDepreciationRequestId);
+    Optional<List<RouModelMetadataDTO>> getDepreciationAdjacentMetadataItems(long rouDepreciationRequestId /*TODO, UUID batchJobIdentifier*/);
+
+    /**
+     * This method will fetch the items that have been processed in a particular job
+     *
+     * @param batchJobIdentifier
+     * @return
+     */
+    Optional<List<RouModelMetadataDTO>> getProcessedItems(UUID batchJobIdentifier);
 }
