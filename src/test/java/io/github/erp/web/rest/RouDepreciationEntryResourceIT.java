@@ -115,6 +115,9 @@ class RouDepreciationEntryResourceIT {
     private static final ZonedDateTime UPDATED_COMPILATION_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
     private static final ZonedDateTime SMALLER_COMPILATION_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
 
+    private static final Boolean DEFAULT_INVALIDATED = false;
+    private static final Boolean UPDATED_INVALIDATED = true;
+
     private static final String ENTITY_API_URL = "/api/rou-depreciation-entries";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/rou-depreciation-entries";
@@ -164,7 +167,8 @@ class RouDepreciationEntryResourceIT {
             .depreciationAmountStepIdentifier(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER)
             .outstandingAmountStepIdentifier(DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER)
             .flagAmortisedStepIdentifier(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER)
-            .compilationTime(DEFAULT_COMPILATION_TIME);
+            .compilationTime(DEFAULT_COMPILATION_TIME)
+            .invalidated(DEFAULT_INVALIDATED);
         // Add required entity
         TransactionAccount transactionAccount;
         if (TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
@@ -240,7 +244,8 @@ class RouDepreciationEntryResourceIT {
             .depreciationAmountStepIdentifier(UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER)
             .outstandingAmountStepIdentifier(UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER)
             .flagAmortisedStepIdentifier(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER)
-            .compilationTime(UPDATED_COMPILATION_TIME);
+            .compilationTime(UPDATED_COMPILATION_TIME)
+            .invalidated(UPDATED_INVALIDATED);
         // Add required entity
         TransactionAccount transactionAccount;
         if (TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
@@ -332,6 +337,7 @@ class RouDepreciationEntryResourceIT {
         assertThat(testRouDepreciationEntry.getOutstandingAmountStepIdentifier()).isEqualTo(DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
         assertThat(testRouDepreciationEntry.getFlagAmortisedStepIdentifier()).isEqualTo(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER);
         assertThat(testRouDepreciationEntry.getCompilationTime()).isEqualTo(DEFAULT_COMPILATION_TIME);
+        assertThat(testRouDepreciationEntry.getInvalidated()).isEqualTo(DEFAULT_INVALIDATED);
 
         // Validate the RouDepreciationEntry in Elasticsearch
         verify(mockRouDepreciationEntrySearchRepository, times(1)).save(testRouDepreciationEntry);
@@ -457,7 +463,8 @@ class RouDepreciationEntryResourceIT {
                 jsonPath("$.[*].outstandingAmountStepIdentifier").value(hasItem(DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER.toString()))
             )
             .andExpect(jsonPath("$.[*].flagAmortisedStepIdentifier").value(hasItem(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].compilationTime").value(hasItem(sameInstant(DEFAULT_COMPILATION_TIME))));
+            .andExpect(jsonPath("$.[*].compilationTime").value(hasItem(sameInstant(DEFAULT_COMPILATION_TIME))))
+            .andExpect(jsonPath("$.[*].invalidated").value(hasItem(DEFAULT_INVALIDATED.booleanValue())));
     }
 
     @Test
@@ -484,7 +491,8 @@ class RouDepreciationEntryResourceIT {
             .andExpect(jsonPath("$.depreciationAmountStepIdentifier").value(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER.toString()))
             .andExpect(jsonPath("$.outstandingAmountStepIdentifier").value(DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER.toString()))
             .andExpect(jsonPath("$.flagAmortisedStepIdentifier").value(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER.toString()))
-            .andExpect(jsonPath("$.compilationTime").value(sameInstant(DEFAULT_COMPILATION_TIME)));
+            .andExpect(jsonPath("$.compilationTime").value(sameInstant(DEFAULT_COMPILATION_TIME)))
+            .andExpect(jsonPath("$.invalidated").value(DEFAULT_INVALIDATED.booleanValue()));
     }
 
     @Test
@@ -1445,6 +1453,58 @@ class RouDepreciationEntryResourceIT {
 
     @Test
     @Transactional
+    void getAllRouDepreciationEntriesByInvalidatedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where invalidated equals to DEFAULT_INVALIDATED
+        defaultRouDepreciationEntryShouldBeFound("invalidated.equals=" + DEFAULT_INVALIDATED);
+
+        // Get all the rouDepreciationEntryList where invalidated equals to UPDATED_INVALIDATED
+        defaultRouDepreciationEntryShouldNotBeFound("invalidated.equals=" + UPDATED_INVALIDATED);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByInvalidatedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where invalidated not equals to DEFAULT_INVALIDATED
+        defaultRouDepreciationEntryShouldNotBeFound("invalidated.notEquals=" + DEFAULT_INVALIDATED);
+
+        // Get all the rouDepreciationEntryList where invalidated not equals to UPDATED_INVALIDATED
+        defaultRouDepreciationEntryShouldBeFound("invalidated.notEquals=" + UPDATED_INVALIDATED);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByInvalidatedIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where invalidated in DEFAULT_INVALIDATED or UPDATED_INVALIDATED
+        defaultRouDepreciationEntryShouldBeFound("invalidated.in=" + DEFAULT_INVALIDATED + "," + UPDATED_INVALIDATED);
+
+        // Get all the rouDepreciationEntryList where invalidated equals to UPDATED_INVALIDATED
+        defaultRouDepreciationEntryShouldNotBeFound("invalidated.in=" + UPDATED_INVALIDATED);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByInvalidatedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where invalidated is not null
+        defaultRouDepreciationEntryShouldBeFound("invalidated.specified=true");
+
+        // Get all the rouDepreciationEntryList where invalidated is null
+        defaultRouDepreciationEntryShouldNotBeFound("invalidated.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllRouDepreciationEntriesByDebitAccountIsEqualToSomething() throws Exception {
         // Initialize the database
         rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
@@ -1624,7 +1684,8 @@ class RouDepreciationEntryResourceIT {
                 jsonPath("$.[*].outstandingAmountStepIdentifier").value(hasItem(DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER.toString()))
             )
             .andExpect(jsonPath("$.[*].flagAmortisedStepIdentifier").value(hasItem(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].compilationTime").value(hasItem(sameInstant(DEFAULT_COMPILATION_TIME))));
+            .andExpect(jsonPath("$.[*].compilationTime").value(hasItem(sameInstant(DEFAULT_COMPILATION_TIME))))
+            .andExpect(jsonPath("$.[*].invalidated").value(hasItem(DEFAULT_INVALIDATED.booleanValue())));
 
         // Check, that the count call also returns 1
         restRouDepreciationEntryMockMvc
@@ -1685,7 +1746,8 @@ class RouDepreciationEntryResourceIT {
             .depreciationAmountStepIdentifier(UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER)
             .outstandingAmountStepIdentifier(UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER)
             .flagAmortisedStepIdentifier(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER)
-            .compilationTime(UPDATED_COMPILATION_TIME);
+            .compilationTime(UPDATED_COMPILATION_TIME)
+            .invalidated(UPDATED_INVALIDATED);
         RouDepreciationEntryDTO rouDepreciationEntryDTO = rouDepreciationEntryMapper.toDto(updatedRouDepreciationEntry);
 
         restRouDepreciationEntryMockMvc
@@ -1713,6 +1775,7 @@ class RouDepreciationEntryResourceIT {
         assertThat(testRouDepreciationEntry.getOutstandingAmountStepIdentifier()).isEqualTo(UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
         assertThat(testRouDepreciationEntry.getFlagAmortisedStepIdentifier()).isEqualTo(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER);
         assertThat(testRouDepreciationEntry.getCompilationTime()).isEqualTo(UPDATED_COMPILATION_TIME);
+        assertThat(testRouDepreciationEntry.getInvalidated()).isEqualTo(UPDATED_INVALIDATED);
 
         // Validate the RouDepreciationEntry in Elasticsearch
         verify(mockRouDepreciationEntrySearchRepository).save(testRouDepreciationEntry);
@@ -1842,6 +1905,7 @@ class RouDepreciationEntryResourceIT {
         assertThat(testRouDepreciationEntry.getOutstandingAmountStepIdentifier()).isEqualTo(UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
         assertThat(testRouDepreciationEntry.getFlagAmortisedStepIdentifier()).isEqualTo(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER);
         assertThat(testRouDepreciationEntry.getCompilationTime()).isEqualTo(UPDATED_COMPILATION_TIME);
+        assertThat(testRouDepreciationEntry.getInvalidated()).isEqualTo(DEFAULT_INVALIDATED);
     }
 
     @Test
@@ -1869,7 +1933,8 @@ class RouDepreciationEntryResourceIT {
             .depreciationAmountStepIdentifier(UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER)
             .outstandingAmountStepIdentifier(UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER)
             .flagAmortisedStepIdentifier(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER)
-            .compilationTime(UPDATED_COMPILATION_TIME);
+            .compilationTime(UPDATED_COMPILATION_TIME)
+            .invalidated(UPDATED_INVALIDATED);
 
         restRouDepreciationEntryMockMvc
             .perform(
@@ -1896,6 +1961,7 @@ class RouDepreciationEntryResourceIT {
         assertThat(testRouDepreciationEntry.getOutstandingAmountStepIdentifier()).isEqualTo(UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
         assertThat(testRouDepreciationEntry.getFlagAmortisedStepIdentifier()).isEqualTo(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER);
         assertThat(testRouDepreciationEntry.getCompilationTime()).isEqualTo(UPDATED_COMPILATION_TIME);
+        assertThat(testRouDepreciationEntry.getInvalidated()).isEqualTo(UPDATED_INVALIDATED);
     }
 
     @Test
@@ -2028,6 +2094,7 @@ class RouDepreciationEntryResourceIT {
                 jsonPath("$.[*].outstandingAmountStepIdentifier").value(hasItem(DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER.toString()))
             )
             .andExpect(jsonPath("$.[*].flagAmortisedStepIdentifier").value(hasItem(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].compilationTime").value(hasItem(sameInstant(DEFAULT_COMPILATION_TIME))));
+            .andExpect(jsonPath("$.[*].compilationTime").value(hasItem(sameInstant(DEFAULT_COMPILATION_TIME))))
+            .andExpect(jsonPath("$.[*].invalidated").value(hasItem(DEFAULT_INVALIDATED.booleanValue())));
     }
 }

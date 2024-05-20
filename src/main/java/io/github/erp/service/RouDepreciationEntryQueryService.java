@@ -179,6 +179,9 @@ public class RouDepreciationEntryQueryService extends QueryService<RouDepreciati
                 specification =
                     specification.and(buildRangeSpecification(criteria.getCompilationTime(), RouDepreciationEntry_.compilationTime));
             }
+            if (criteria.getInvalidated() != null) {
+                specification = specification.and(buildSpecification(criteria.getInvalidated(), RouDepreciationEntry_.invalidated));
+            }
             if (criteria.getDebitAccountId() != null) {
                 specification =
                     specification.and(

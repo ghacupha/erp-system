@@ -74,6 +74,9 @@ public class RouDepreciationRequest implements Serializable {
     @Column(name = "compilation_time")
     private ZonedDateTime compilationTime;
 
+    @Column(name = "invalidated")
+    private Boolean invalidated;
+
     @ManyToOne
     @JsonIgnoreProperties(
         value = { "organization", "department", "securityClearance", "systemIdentity", "userProperties", "dealerIdentity", "placeholders" },
@@ -213,6 +216,19 @@ public class RouDepreciationRequest implements Serializable {
         this.compilationTime = compilationTime;
     }
 
+    public Boolean getInvalidated() {
+        return this.invalidated;
+    }
+
+    public RouDepreciationRequest invalidated(Boolean invalidated) {
+        this.setInvalidated(invalidated);
+        return this;
+    }
+
+    public void setInvalidated(Boolean invalidated) {
+        this.invalidated = invalidated;
+    }
+
     public ApplicationUser getInitiatedBy() {
         return this.initiatedBy;
     }
@@ -259,6 +275,7 @@ public class RouDepreciationRequest implements Serializable {
             ", outstandingAmountStepIdentifier='" + getOutstandingAmountStepIdentifier() + "'" +
             ", flagAmortisedStepIdentifier='" + getFlagAmortisedStepIdentifier() + "'" +
             ", compilationTime='" + getCompilationTime() + "'" +
+            ", invalidated='" + getInvalidated() + "'" +
             "}";
     }
 }

@@ -51,6 +51,8 @@ public class RouDepreciationRequestDTO implements Serializable {
 
     private ZonedDateTime compilationTime;
 
+    private Boolean invalidated;
+
     private ApplicationUserDTO initiatedBy;
 
     public Long getId() {
@@ -133,6 +135,14 @@ public class RouDepreciationRequestDTO implements Serializable {
         this.compilationTime = compilationTime;
     }
 
+    public Boolean getInvalidated() {
+        return invalidated;
+    }
+
+    public void setInvalidated(Boolean invalidated) {
+        this.invalidated = invalidated;
+    }
+
     public ApplicationUserDTO getInitiatedBy() {
         return initiatedBy;
     }
@@ -176,6 +186,7 @@ public class RouDepreciationRequestDTO implements Serializable {
             ", outstandingAmountStepIdentifier='" + getOutstandingAmountStepIdentifier() + "'" +
             ", flagAmortisedStepIdentifier='" + getFlagAmortisedStepIdentifier() + "'" +
             ", compilationTime='" + getCompilationTime() + "'" +
+            ", invalidated='" + getInvalidated() + "'" +
             ", initiatedBy=" + getInitiatedBy() +
             "}";
     }

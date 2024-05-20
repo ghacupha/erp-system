@@ -63,6 +63,8 @@ public class RouDepreciationEntryDTO implements Serializable {
 
     private ZonedDateTime compilationTime;
 
+    private Boolean invalidated;
+
     private TransactionAccountDTO debitAccount;
 
     private TransactionAccountDTO creditAccount;
@@ -187,6 +189,14 @@ public class RouDepreciationEntryDTO implements Serializable {
         this.compilationTime = compilationTime;
     }
 
+    public Boolean getInvalidated() {
+        return invalidated;
+    }
+
+    public void setInvalidated(Boolean invalidated) {
+        this.invalidated = invalidated;
+    }
+
     public TransactionAccountDTO getDebitAccount() {
         return debitAccount;
     }
@@ -274,6 +284,7 @@ public class RouDepreciationEntryDTO implements Serializable {
             ", outstandingAmountStepIdentifier='" + getOutstandingAmountStepIdentifier() + "'" +
             ", flagAmortisedStepIdentifier='" + getFlagAmortisedStepIdentifier() + "'" +
             ", compilationTime='" + getCompilationTime() + "'" +
+            ", invalidated='" + getInvalidated() + "'" +
             ", debitAccount=" + getDebitAccount() +
             ", creditAccount=" + getCreditAccount() +
             ", assetCategory=" + getAssetCategory() +
