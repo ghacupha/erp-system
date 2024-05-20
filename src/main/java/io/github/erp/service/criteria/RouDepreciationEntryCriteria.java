@@ -73,6 +73,8 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
 
     private ZonedDateTimeFilter compilationTime;
 
+    private BooleanFilter invalidated;
+
     private LongFilter debitAccountId;
 
     private LongFilter creditAccountId;
@@ -106,6 +108,7 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
             other.outstandingAmountStepIdentifier == null ? null : other.outstandingAmountStepIdentifier.copy();
         this.flagAmortisedStepIdentifier = other.flagAmortisedStepIdentifier == null ? null : other.flagAmortisedStepIdentifier.copy();
         this.compilationTime = other.compilationTime == null ? null : other.compilationTime.copy();
+        this.invalidated = other.invalidated == null ? null : other.invalidated.copy();
         this.debitAccountId = other.debitAccountId == null ? null : other.debitAccountId.copy();
         this.creditAccountId = other.creditAccountId == null ? null : other.creditAccountId.copy();
         this.assetCategoryId = other.assetCategoryId == null ? null : other.assetCategoryId.copy();
@@ -330,6 +333,21 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
         this.compilationTime = compilationTime;
     }
 
+    public BooleanFilter getInvalidated() {
+        return invalidated;
+    }
+
+    public BooleanFilter invalidated() {
+        if (invalidated == null) {
+            invalidated = new BooleanFilter();
+        }
+        return invalidated;
+    }
+
+    public void setInvalidated(BooleanFilter invalidated) {
+        this.invalidated = invalidated;
+    }
+
     public LongFilter getDebitAccountId() {
         return debitAccountId;
     }
@@ -452,6 +470,7 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
             Objects.equals(outstandingAmountStepIdentifier, that.outstandingAmountStepIdentifier) &&
             Objects.equals(flagAmortisedStepIdentifier, that.flagAmortisedStepIdentifier) &&
             Objects.equals(compilationTime, that.compilationTime) &&
+            Objects.equals(invalidated, that.invalidated) &&
             Objects.equals(debitAccountId, that.debitAccountId) &&
             Objects.equals(creditAccountId, that.creditAccountId) &&
             Objects.equals(assetCategoryId, that.assetCategoryId) &&
@@ -479,6 +498,7 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
             outstandingAmountStepIdentifier,
             flagAmortisedStepIdentifier,
             compilationTime,
+            invalidated,
             debitAccountId,
             creditAccountId,
             assetCategoryId,
@@ -507,6 +527,7 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
             (outstandingAmountStepIdentifier != null ? "outstandingAmountStepIdentifier=" + outstandingAmountStepIdentifier + ", " : "") +
             (flagAmortisedStepIdentifier != null ? "flagAmortisedStepIdentifier=" + flagAmortisedStepIdentifier + ", " : "") +
             (compilationTime != null ? "compilationTime=" + compilationTime + ", " : "") +
+            (invalidated != null ? "invalidated=" + invalidated + ", " : "") +
             (debitAccountId != null ? "debitAccountId=" + debitAccountId + ", " : "") +
             (creditAccountId != null ? "creditAccountId=" + creditAccountId + ", " : "") +
             (assetCategoryId != null ? "assetCategoryId=" + assetCategoryId + ", " : "") +

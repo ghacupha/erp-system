@@ -82,6 +82,8 @@ public class RouDepreciationRequestCriteria implements Serializable, Criteria {
 
     private ZonedDateTimeFilter compilationTime;
 
+    private BooleanFilter invalidated;
+
     private LongFilter initiatedById;
 
     private Boolean distinct;
@@ -101,6 +103,7 @@ public class RouDepreciationRequestCriteria implements Serializable, Criteria {
             other.outstandingAmountStepIdentifier == null ? null : other.outstandingAmountStepIdentifier.copy();
         this.flagAmortisedStepIdentifier = other.flagAmortisedStepIdentifier == null ? null : other.flagAmortisedStepIdentifier.copy();
         this.compilationTime = other.compilationTime == null ? null : other.compilationTime.copy();
+        this.invalidated = other.invalidated == null ? null : other.invalidated.copy();
         this.initiatedById = other.initiatedById == null ? null : other.initiatedById.copy();
         this.distinct = other.distinct;
     }
@@ -260,6 +263,21 @@ public class RouDepreciationRequestCriteria implements Serializable, Criteria {
         this.compilationTime = compilationTime;
     }
 
+    public BooleanFilter getInvalidated() {
+        return invalidated;
+    }
+
+    public BooleanFilter invalidated() {
+        if (invalidated == null) {
+            invalidated = new BooleanFilter();
+        }
+        return invalidated;
+    }
+
+    public void setInvalidated(BooleanFilter invalidated) {
+        this.invalidated = invalidated;
+    }
+
     public LongFilter getInitiatedById() {
         return initiatedById;
     }
@@ -303,6 +321,7 @@ public class RouDepreciationRequestCriteria implements Serializable, Criteria {
             Objects.equals(outstandingAmountStepIdentifier, that.outstandingAmountStepIdentifier) &&
             Objects.equals(flagAmortisedStepIdentifier, that.flagAmortisedStepIdentifier) &&
             Objects.equals(compilationTime, that.compilationTime) &&
+            Objects.equals(invalidated, that.invalidated) &&
             Objects.equals(initiatedById, that.initiatedById) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -321,6 +340,7 @@ public class RouDepreciationRequestCriteria implements Serializable, Criteria {
             outstandingAmountStepIdentifier,
             flagAmortisedStepIdentifier,
             compilationTime,
+            invalidated,
             initiatedById,
             distinct
         );
@@ -340,6 +360,7 @@ public class RouDepreciationRequestCriteria implements Serializable, Criteria {
             (outstandingAmountStepIdentifier != null ? "outstandingAmountStepIdentifier=" + outstandingAmountStepIdentifier + ", " : "") +
             (flagAmortisedStepIdentifier != null ? "flagAmortisedStepIdentifier=" + flagAmortisedStepIdentifier + ", " : "") +
             (compilationTime != null ? "compilationTime=" + compilationTime + ", " : "") +
+            (invalidated != null ? "invalidated=" + invalidated + ", " : "") +
             (initiatedById != null ? "initiatedById=" + initiatedById + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

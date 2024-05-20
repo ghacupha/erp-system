@@ -37,6 +37,10 @@
     {
       "fieldName": "compilationTime",
       "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "invalidated",
+      "fieldType": "Boolean"
     }
   ],
   "relationships": [

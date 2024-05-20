@@ -89,6 +89,9 @@ public class RouDepreciationEntry implements Serializable {
     @Column(name = "compilation_time")
     private ZonedDateTime compilationTime;
 
+    @Column(name = "invalidated")
+    private Boolean invalidated;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
@@ -323,6 +326,19 @@ public class RouDepreciationEntry implements Serializable {
         this.compilationTime = compilationTime;
     }
 
+    public Boolean getInvalidated() {
+        return this.invalidated;
+    }
+
+    public RouDepreciationEntry invalidated(Boolean invalidated) {
+        this.setInvalidated(invalidated);
+        return this;
+    }
+
+    public void setInvalidated(Boolean invalidated) {
+        this.invalidated = invalidated;
+    }
+
     public TransactionAccount getDebitAccount() {
         return this.debitAccount;
     }
@@ -438,6 +454,7 @@ public class RouDepreciationEntry implements Serializable {
             ", outstandingAmountStepIdentifier='" + getOutstandingAmountStepIdentifier() + "'" +
             ", flagAmortisedStepIdentifier='" + getFlagAmortisedStepIdentifier() + "'" +
             ", compilationTime='" + getCompilationTime() + "'" +
+            ", invalidated='" + getInvalidated() + "'" +
             "}";
     }
 }
