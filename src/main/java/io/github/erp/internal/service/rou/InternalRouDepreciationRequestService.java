@@ -79,4 +79,6 @@ public interface InternalRouDepreciationRequestService {
     Page<RouDepreciationRequestDTO> search(String query, Pageable pageable);
 
     RouDepreciationRequestDTO saveIdentifier(RouDepreciationRequestDTO requestDTO, UUID fromString);
+
+    RouDepreciationRequestDTO markRequestComplete(RouDepreciationRequestDTO completed);
 }

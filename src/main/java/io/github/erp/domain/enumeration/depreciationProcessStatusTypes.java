@@ -26,4 +26,5 @@ public enum depreciationProcessStatusTypes {
     RUNNING,
     ERRORED,
     COMPLETE,
+    INVALIDATED,
 }

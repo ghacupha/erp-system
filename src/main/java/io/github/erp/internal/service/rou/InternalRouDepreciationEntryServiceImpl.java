@@ -224,4 +224,10 @@ public class InternalRouDepreciationEntryServiceImpl implements InternalRouDepre
         rouDepreciationEntryRepository.saveAll(rouDepreciationEntryMapper.toEntity(new ArrayList<>(items)));
         rouDepreciationEntrySearchRepository.saveAll(rouDepreciationEntryMapper.toEntity(new ArrayList<>(items)));
     }
+
+    @Override
+    public Optional<Integer> countProcessedItems(UUID batchJobIdentifier) {
+
+        return rouDepreciationEntryRepository.countRouDepreciationEntriesByBatchJobIdentifierEquals(batchJobIdentifier);
+    }
 }

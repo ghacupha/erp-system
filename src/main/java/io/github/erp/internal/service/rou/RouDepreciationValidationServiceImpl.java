@@ -99,7 +99,7 @@ public class RouDepreciationValidationServiceImpl implements RouDepreciationVali
 
     private void markJobComplete(RouDepreciationRequestDTO requestDTO) {
 
-        requestDTO.setDepreciationProcessStatus(depreciationProcessStatusTypes.COMPLETE);
+        requestDTO.setDepreciationProcessStatus(depreciationProcessStatusTypes.INVALIDATED);
 
         internalRouDepreciationRequestService.save(requestDTO);
     }

@@ -82,6 +82,7 @@ public class ROUDepreciationEntryCompilationServiceImpl implements ROUDepreciati
         entry.setLeaseContract(modelMetadataDTO.getIfrs16LeaseContract());
         entry.setRouMetadata(modelMetadataDTO);
         entry.setBatchJobIdentifier(UUID.fromString(batchJobIdentifier));
+        entry.setInvalidated(false);
 
         return entry;
     }

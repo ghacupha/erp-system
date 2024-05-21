@@ -18,8 +18,6 @@ package io.github.erp.internal.service.rou;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import static io.github.erp.internal.service.rou.batch.InvalidateDepreciationBatchConfig.INVALIDATE_DEPRECIATION_JOB_NAME;
-
 import io.github.erp.domain.RouDepreciationRequest;
 import io.github.erp.domain.enumeration.depreciationProcessStatusTypes;
 import io.github.erp.internal.repository.InternalRouDepreciationRequestRepository;
@@ -32,18 +30,8 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.JobParametersInvalidException;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
-import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
-import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,16 +52,19 @@ public class InternalRouDepreciationRequestServiceImpl implements InternalRouDep
 
     private final RouDepreciationRequestSearchRepository rouDepreciationRequestSearchRepository;
 
+    private final InternalRouDepreciationEntryService internalRouDepreciationEntryService;
+
     public InternalRouDepreciationRequestServiceImpl(
         InternalApplicationUserDetailService internalApplicationUserDetailService,
         InternalRouDepreciationRequestRepository rouDepreciationRequestRepository,
         RouDepreciationRequestMapper rouDepreciationRequestMapper,
-        RouDepreciationRequestSearchRepository rouDepreciationRequestSearchRepository
-    ) {
+        RouDepreciationRequestSearchRepository rouDepreciationRequestSearchRepository,
+        InternalRouDepreciationEntryService internalRouDepreciationEntryService) {
         this.internalApplicationUserDetailService = internalApplicationUserDetailService;
         this.rouDepreciationRequestRepository = rouDepreciationRequestRepository;
         this.rouDepreciationRequestMapper = rouDepreciationRequestMapper;
         this.rouDepreciationRequestSearchRepository = rouDepreciationRequestSearchRepository;
+        this.internalRouDepreciationEntryService = internalRouDepreciationEntryService;
     }
 
     @Override
@@ -145,6 +136,19 @@ public class InternalRouDepreciationRequestServiceImpl implements InternalRouDep
 
         RouDepreciationRequest request = rouDepreciationRequestRepository.save(rouDepreciationRequestMapper.toEntity(requestDTO));
         rouDepreciationRequestSearchRepository.save(rouDepreciationRequestMapper.toEntity(requestDTO));
+
+        return rouDepreciationRequestMapper.toDto(request);
+    }
+
+    @Override
+    public RouDepreciationRequestDTO markRequestComplete(RouDepreciationRequestDTO completed) {
+        completed.setDepreciationProcessStatus(depreciationProcessStatusTypes.COMPLETE);
+        completed.setNumberOfEnumeratedItems(
+            internalRouDepreciationEntryService.countProcessedItems(completed.getBatchJobIdentifier()).orElse(0)
+        );
+
+        RouDepreciationRequest request = rouDepreciationRequestRepository.save(rouDepreciationRequestMapper.toEntity(completed));
+        rouDepreciationRequestSearchRepository.save(request);
 
         return rouDepreciationRequestMapper.toDto(request);
     }
