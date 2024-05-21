@@ -36,8 +36,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static io.github.erp.erp.assets.depreciation.calculation.DepreciationConstants.ZERO;
@@ -195,5 +197,31 @@ public class InternalRouDepreciationEntryServiceImpl implements InternalRouDepre
 
         return rouDepreciationEntryRepository.getOutstandingAmountItems(BigDecimal.TEN)
             .map(rouDepreciationEntryMapper::toDto);
+    }
+
+    /**
+     * Fetch items that contain the provided batch-job-processor. These are items that have
+     * been processed in a particular way through a batch process whose identifier is the same
+     * as the parameter
+     *
+     * @param batchJobIdentifier Identifier of the batch process
+     * @return List of items from a particular batch process instance
+     */
+    @Override
+    public Optional<List<RouDepreciationEntryDTO>> getProcessedItems(UUID batchJobIdentifier) {
+        return rouDepreciationEntryRepository.getProcessedItems(batchJobIdentifier)
+            .map(rouDepreciationEntryMapper::toDto);
+    }
+
+    /**
+     * Typically applied in a batch process to save a collection
+     *
+     * @param items Collection for persistence
+     */
+    @Override
+    public void saveAll(List<? extends RouDepreciationEntryDTO> items) {
+
+        rouDepreciationEntryRepository.saveAll(rouDepreciationEntryMapper.toEntity(new ArrayList<>(items)));
+        rouDepreciationEntrySearchRepository.saveAll(rouDepreciationEntryMapper.toEntity(new ArrayList<>(items)));
     }
 }

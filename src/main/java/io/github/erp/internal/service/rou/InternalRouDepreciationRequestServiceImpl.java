@@ -1,4 +1,4 @@
-package io.github.erp.service.impl;
+package io.github.erp.internal.service.rou;
 
 /*-
  * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
@@ -21,10 +21,10 @@ package io.github.erp.service.impl;
 import static io.github.erp.internal.service.rou.batch.InvalidateDepreciationBatchConfig.INVALIDATE_DEPRECIATION_JOB_NAME;
 
 import io.github.erp.domain.RouDepreciationRequest;
+import io.github.erp.domain.enumeration.depreciationProcessStatusTypes;
+import io.github.erp.internal.repository.InternalRouDepreciationRequestRepository;
 import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
-import io.github.erp.repository.RouDepreciationRequestRepository;
 import io.github.erp.repository.search.RouDepreciationRequestSearchRepository;
-import io.github.erp.service.RouDepreciationRequestService;
 import io.github.erp.service.dto.RouDepreciationRequestDTO;
 import io.github.erp.service.mapper.RouDepreciationRequestMapper;
 import java.util.Optional;
@@ -52,30 +52,24 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class RouDepreciationRequestServiceImpl implements RouDepreciationRequestService {
+public class InternalRouDepreciationRequestServiceImpl implements InternalRouDepreciationRequestService {
 
-    public final Job invalidateDepreciationJob;
-
-    private final JobLauncher jobLauncher;
-
-    private final Logger log = LoggerFactory.getLogger(RouDepreciationRequestServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(InternalRouDepreciationRequestServiceImpl.class);
 
     private final InternalApplicationUserDetailService internalApplicationUserDetailService;
-    private final RouDepreciationRequestRepository rouDepreciationRequestRepository;
+
+    private final InternalRouDepreciationRequestRepository rouDepreciationRequestRepository;
 
     private final RouDepreciationRequestMapper rouDepreciationRequestMapper;
 
     private final RouDepreciationRequestSearchRepository rouDepreciationRequestSearchRepository;
 
-    public RouDepreciationRequestServiceImpl(
-        @Qualifier(INVALIDATE_DEPRECIATION_JOB_NAME) Job invalidateDepreciationJob,
-        JobLauncher jobLauncher,
-        InternalApplicationUserDetailService internalApplicationUserDetailService, RouDepreciationRequestRepository rouDepreciationRequestRepository,
+    public InternalRouDepreciationRequestServiceImpl(
+        InternalApplicationUserDetailService internalApplicationUserDetailService,
+        InternalRouDepreciationRequestRepository rouDepreciationRequestRepository,
         RouDepreciationRequestMapper rouDepreciationRequestMapper,
         RouDepreciationRequestSearchRepository rouDepreciationRequestSearchRepository
     ) {
-        this.invalidateDepreciationJob = invalidateDepreciationJob;
-        this.jobLauncher = jobLauncher;
         this.internalApplicationUserDetailService = internalApplicationUserDetailService;
         this.rouDepreciationRequestRepository = rouDepreciationRequestRepository;
         this.rouDepreciationRequestMapper = rouDepreciationRequestMapper;
@@ -87,7 +81,7 @@ public class RouDepreciationRequestServiceImpl implements RouDepreciationRequest
         log.debug("Request to save RouDepreciationRequest : {}", rouDepreciationRequestDTO);
 
         // Simply short-circuit a non-compliant request
-        rouDepreciationRequestDTO.setInitiatedBy(internalApplicationUserDetailService.getCurrentApplicationUser().orElseThrow());
+        internalApplicationUserDetailService.getCurrentApplicationUser().ifPresent(rouDepreciationRequestDTO::setInitiatedBy);
 
         RouDepreciationRequest rouDepreciationRequest = rouDepreciationRequestMapper.toEntity(rouDepreciationRequestDTO);
         rouDepreciationRequest = rouDepreciationRequestRepository.save(rouDepreciationRequest);
@@ -142,5 +136,16 @@ public class RouDepreciationRequestServiceImpl implements RouDepreciationRequest
     public Page<RouDepreciationRequestDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of RouDepreciationRequests for query {}", query);
         return rouDepreciationRequestSearchRepository.search(query, pageable).map(rouDepreciationRequestMapper::toDto);
+    }
+
+    @Override
+    public RouDepreciationRequestDTO saveIdentifier(RouDepreciationRequestDTO requestDTO, UUID batchJobIdentifier) {
+
+        requestDTO.setBatchJobIdentifier(batchJobIdentifier);
+
+        RouDepreciationRequest request = rouDepreciationRequestRepository.save(rouDepreciationRequestMapper.toEntity(requestDTO));
+        rouDepreciationRequestSearchRepository.save(rouDepreciationRequestMapper.toEntity(requestDTO));
+
+        return rouDepreciationRequestMapper.toDto(request);
     }
 }

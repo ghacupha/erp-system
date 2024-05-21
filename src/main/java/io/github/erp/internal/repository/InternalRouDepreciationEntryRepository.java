@@ -19,15 +19,18 @@ package io.github.erp.internal.repository;
  */
 
 import io.github.erp.domain.RouDepreciationEntry;
+import io.github.erp.service.dto.RouDepreciationEntryDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.config.web.servlet.PortMapperDsl;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Spring Data SQL repository for the RouDepreciationEntry entity.
@@ -42,11 +45,24 @@ public interface InternalRouDepreciationEntryRepository
         value = "" +
             "SELECT * " +
             "FROM public.rou_depreciation_entry " +
-            "WHERE outstanding_amounT <= :thresholdAmount",
+            "WHERE outstanding_amount <= :thresholdAmount",
         countQuery = "" +
             "SELECT * " +
             "FROM public.rou_depreciation_entry " +
-            "WHERE outstanding_amounT <= :thresholdAmount"
+            "WHERE outstanding_amount <= :thresholdAmount"
     )
     Optional<List<RouDepreciationEntry>> getOutstandingAmountItems(@Param("thresholdAmount") BigDecimal thresholdAmount);
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT * " +
+            "FROM public.rou_depreciation_entry " +
+            "WHERE batch_job_identifier <= :batchJobIdentifier",
+        countQuery = "" +
+            "SELECT * " +
+            "FROM public.rou_depreciation_entry " +
+            "WHERE batch_job_identifier = :batchJobIdentifier"
+    )
+    Optional<List<RouDepreciationEntry>> getProcessedItems(@Param("batchJobIdentifier") UUID batchJobIdentifier);
 }

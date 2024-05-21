@@ -23,20 +23,21 @@ import io.github.erp.service.dto.RouDepreciationEntryDTO;
 import io.github.erp.service.dto.RouModelMetadataDTO;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 public class ROUDepreciationEntryItemProcessor implements ItemProcessor<RouModelMetadataDTO, List<RouDepreciationEntryDTO>> {
 
+    private final String batchJobIdentifier;
     private final ROUDepreciationEntryCompilationService rouDepreciationEntryCompilationService;
 
-    public ROUDepreciationEntryItemProcessor(ROUDepreciationEntryCompilationService rouDepreciationEntryCompilationService) {
+    public ROUDepreciationEntryItemProcessor(String batchJobIdentifier, ROUDepreciationEntryCompilationService rouDepreciationEntryCompilationService) {
+        this.batchJobIdentifier = batchJobIdentifier;
         this.rouDepreciationEntryCompilationService = rouDepreciationEntryCompilationService;
     }
 
     @Override
     public List<RouDepreciationEntryDTO> process(@NotNull RouModelMetadataDTO model) {
-        return rouDepreciationEntryCompilationService.compileDepreciationEntries(model);
+        return rouDepreciationEntryCompilationService.compileDepreciationEntries(model, batchJobIdentifier);
     }
 }

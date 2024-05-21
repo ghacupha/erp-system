@@ -122,4 +122,11 @@ public interface InternalRouModelMetadataService {
      * @return the list of items processed by a job with the above identifier
      */
     Optional<List<RouModelMetadataDTO>> getProcessedItems(UUID batchJobIdentifier);
+
+    /**
+     * Typically applied in a batch to save entities within the writer component
+     *
+     * @param items Items for persistence
+     */
+    void saveAllWithSearch(List<RouModelMetadataDTO> items);
 }

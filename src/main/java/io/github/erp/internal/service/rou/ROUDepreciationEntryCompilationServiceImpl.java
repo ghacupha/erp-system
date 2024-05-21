@@ -31,8 +31,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static io.github.erp.internal.service.rou.ROUCalculationUtils.calculate12MonthlyPeriodicityDepreciationAmount;
-
 /**
  * This class compile the depreciation entries for each ROU model metadata
  * provided in the following way:
@@ -56,18 +54,18 @@ public class ROUDepreciationEntryCompilationServiceImpl implements ROUDepreciati
         this.internalLeasePeriodService = internalLeasePeriodService;
     }
 
-    public List<RouDepreciationEntryDTO> compileDepreciationEntries(RouModelMetadataDTO model) {
+    public List<RouDepreciationEntryDTO> compileDepreciationEntries(RouModelMetadataDTO model, String batchJobIdentifier) {
 
         return internalLeasePeriodService.findLeasePeriods(model)
             .map(this::mapDepreciationEntryPeriod)
             .orElse(new ArrayList<>()) //  Blank List<RouDepreciationEntryDTO> just in case
             .stream()
-            .map(entries -> updateMetadataValues(entries, model))
+            .map(entries -> updateMetadataValues(entries, model, batchJobIdentifier))
             .collect(Collectors.toUnmodifiableList());
 
     }
 
-    private RouDepreciationEntryDTO updateMetadataValues(RouDepreciationEntryDTO entry, RouModelMetadataDTO modelMetadataDTO) {
+    private RouDepreciationEntryDTO updateMetadataValues(RouDepreciationEntryDTO entry, RouModelMetadataDTO modelMetadataDTO, String batchJobIdentifier) {
 
         // TODO BigDecimal depreciationAmount = calculate12MonthlyPeriodicityDepreciationAmount(modelMetadataDTO.getLeaseAmount(), modelMetadataDTO.getCommencementDate(), modelMetadataDTO.getExpirationDate());
         entry.setDescription(entry.getLeasePeriod().getPeriodCode().concat(" ").concat(modelMetadataDTO.getModelTitle()).concat(" depreciation"));
@@ -83,6 +81,7 @@ public class ROUDepreciationEntryCompilationServiceImpl implements ROUDepreciati
         entry.setAssetCategory(modelMetadataDTO.getAssetCategory());
         entry.setLeaseContract(modelMetadataDTO.getIfrs16LeaseContract());
         entry.setRouMetadata(modelMetadataDTO);
+        entry.setBatchJobIdentifier(UUID.fromString(batchJobIdentifier));
 
         return entry;
     }

@@ -20,9 +20,7 @@ package io.github.erp.internal.service.rou;
 
 import io.github.erp.domain.RouModelMetadata;
 import io.github.erp.internal.repository.InternalRouModelMetadataRepository;
-import io.github.erp.repository.RouModelMetadataRepository;
 import io.github.erp.repository.search.RouModelMetadataSearchRepository;
-import io.github.erp.service.RouModelMetadataService;
 import io.github.erp.service.dto.RouModelMetadataDTO;
 import io.github.erp.service.mapper.RouModelMetadataMapper;
 import org.slf4j.Logger;
@@ -33,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -161,7 +160,7 @@ public class InternalRouModelMetadataServiceImpl implements InternalRouModelMeta
      * This method will fetch the items that have been processed in a particular job
      *
      * @param batchJobIdentifier Identifier for the current job
-     * @return
+     * @return  list of identified process items
      */
     @Override
     public Optional<List<RouModelMetadataDTO>> getProcessedItems(UUID batchJobIdentifier) {
@@ -183,5 +182,17 @@ public class InternalRouModelMetadataServiceImpl implements InternalRouModelMeta
         rouModelMetadataSearchRepository.saveAll(rouModelMetadataMapper.toEntity(rouModelMetadata));
 
         return result;
+    }
+
+    /**
+     * Typically applied in a batch to save entities within the writer component
+     *
+     * @param items Items for persistence
+     */
+    @Override
+    public void saveAllWithSearch(List<RouModelMetadataDTO> items) {
+
+        rouModelMetadataRepository.saveAll(rouModelMetadataMapper.toEntity(new ArrayList<>(items)));
+        rouModelMetadataSearchRepository.saveAll(rouModelMetadataMapper.toEntity(new ArrayList<>(items)));
     }
 }

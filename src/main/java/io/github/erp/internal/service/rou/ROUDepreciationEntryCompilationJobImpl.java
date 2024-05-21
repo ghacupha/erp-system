@@ -31,6 +31,7 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -44,31 +45,37 @@ public class ROUDepreciationEntryCompilationJobImpl implements ROUDepreciationEn
 
     private final Job rouDepreciationEntryPersistenceJob;
 
+    private final InternalRouDepreciationRequestService internalRouDepreciationEntryService;
+
     public ROUDepreciationEntryCompilationJobImpl(
         JobLauncher jobLauncher,
-        @Qualifier(PERSISTENCE_JOB_NAME)
-        Job rouDepreciationEntryPersistenceJob) {
+        @Qualifier(PERSISTENCE_JOB_NAME) Job rouDepreciationEntryPersistenceJob,
+        InternalRouDepreciationRequestService internalRouDepreciationEntryService) {
         this.jobLauncher = jobLauncher;
         this.rouDepreciationEntryPersistenceJob = rouDepreciationEntryPersistenceJob;
+        this.internalRouDepreciationEntryService = internalRouDepreciationEntryService;
     }
 
     /**
      * Initiate a rou depreciation job
      *
-     * @param reportDTO Request entity
+     * @param requestDTO Request entity
      */
     @Async
     @Override
-    public void compileROUDepreciationEntries(RouDepreciationRequestDTO reportDTO) {
-
+    public void compileROUDepreciationEntries(RouDepreciationRequestDTO requestDTO) {
         // Trigger the Spring Batch job
         try {
+            String batchJobIdentifier = UUID.randomUUID().toString();
             JobParameters jobParameters = new JobParametersBuilder()
                 .addString("jobToken", String.valueOf(System.currentTimeMillis()))
-                .addString("batchJobIdentifier", UUID.randomUUID().toString())
-                .addLong("rouDepreciationRequestId", reportDTO.getId())
+                .addString("batchJobIdentifier", batchJobIdentifier)
+                .addLong("rouDepreciationRequestId", requestDTO.getId())
                 .toJobParameters();
             jobLauncher.run(rouDepreciationEntryPersistenceJob, jobParameters);
+
+            internalRouDepreciationEntryService.saveIdentifier(requestDTO, UUID.fromString(batchJobIdentifier));
+
         } catch (JobExecutionAlreadyRunningException alreadyRunningException) {
             log.error("The JobInstance identified by the properties already has an execution running.", alreadyRunningException);
         } catch (IllegalArgumentException args) {
@@ -80,6 +87,5 @@ public class ROUDepreciationEntryCompilationJobImpl implements ROUDepreciationEn
         } catch (JobParametersInvalidException jpi) {
             log.error("Job parameters are not valid for this job", jpi);
         }
-
     }
 }
