@@ -41,7 +41,8 @@ public interface ROUDepreciationEntryCompilationService {
     /**
      *
      * @param model RouModelMetadataDTO whose depreciation-entry instances we are calculating
+     * @param batchJobIdentifier Identifier for the currently running job
      * @return list of calculated depreciation-entry instances
      */
-    List<RouDepreciationEntryDTO> compileDepreciationEntries(RouModelMetadataDTO model);
+    List<RouDepreciationEntryDTO> compileDepreciationEntries(RouModelMetadataDTO model, String batchJobIdentifier);
 }

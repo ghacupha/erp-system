@@ -25,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Service Interface for managing {@link io.github.erp.domain.RouDepreciationEntry}.
@@ -100,4 +101,20 @@ public interface InternalRouDepreciationEntryService {
      * @return list of entities for processing
      */
     Optional<List<RouDepreciationEntryDTO>> getOutstandingAmountItems();
+
+    /**
+     * Fetch items that contain the provided batch-job-processor. These are items that have
+     * been processed in a particular way through a batch process whose identifier is the same
+     * as the parameter
+     *
+     * @param batchJobIdentifier Identifier of the batch process
+     * @return List of items from a particular batch process instance
+     */
+    Optional<List<RouDepreciationEntryDTO>> getProcessedItems(UUID batchJobIdentifier);
+
+    /**
+     * Typically applied in a batch process to save a collection
+     * @param items Collection for persistence
+     */
+    void saveAll(List<? extends RouDepreciationEntryDTO> items);
 }

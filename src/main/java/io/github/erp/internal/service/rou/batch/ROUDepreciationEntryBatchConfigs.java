@@ -18,7 +18,6 @@ package io.github.erp.internal.service.rou.batch;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.domain.RouDepreciationEntry;
 import io.github.erp.internal.service.rou.InternalRouDepreciationEntryService;
 import io.github.erp.internal.service.rou.InternalRouModelMetadataService;
 import io.github.erp.internal.service.rou.ROUDepreciationEntryCompilationService;
@@ -30,19 +29,12 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.persistence.EntityManagerFactory;
-import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 @Configuration
 public class ROUDepreciationEntryBatchConfigs {
@@ -73,36 +65,44 @@ public class ROUDepreciationEntryBatchConfigs {
     @Value("#{jobParameters['batchJobIdentifier']}")
     private static String batchJobIdentifier;
 
-    @Autowired
-    private JobBuilderFactory jobBuilderFactory;
+    private final JobBuilderFactory jobBuilderFactory;
 
-    @Autowired
-    private StepBuilderFactory stepBuilderFactory;
+    private final StepBuilderFactory stepBuilderFactory;
 
-    @Autowired
-    private InternalRouModelMetadataService rouModelMetadataService;
+    private final InternalRouModelMetadataService rouModelMetadataService;
 
-    @Autowired
-    private ROUDepreciationEntryCompilationService rouDepreciationEntryCompilationService;
+    private final ROUDepreciationEntryCompilationService rouDepreciationEntryCompilationService;
 
-    @Autowired
-    private InternalRouDepreciationEntryService rouDepreciationEntryService;
+    private final InternalRouDepreciationEntryService rouDepreciationEntryService;
 
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    private final InternalRouDepreciationEntryService depreciationEntryService;
 
-    @Autowired
-    private InternalRouDepreciationEntryService depreciationEntryService;
+    private final InternalRouDepreciationEntryService internalRouDepreciationEntryService;
 
-    @Autowired
-    private InternalRouDepreciationEntryService internalRouDepreciationEntryService;
+    private final InternalRouModelMetadataService internalRouModelMetadataService;
 
-    @Autowired
-    private InternalRouModelMetadataService internalRouModelMetadataService;
+    public ROUDepreciationEntryBatchConfigs(
+        JobBuilderFactory jobBuilderFactory,
+        StepBuilderFactory stepBuilderFactory,
+        InternalRouModelMetadataService rouModelMetadataService,
+        ROUDepreciationEntryCompilationService rouDepreciationEntryCompilationService,
+        InternalRouDepreciationEntryService rouDepreciationEntryService,
+        InternalRouDepreciationEntryService depreciationEntryService,
+        InternalRouDepreciationEntryService internalRouDepreciationEntryService,
+        InternalRouModelMetadataService internalRouModelMetadataService) {
+        this.jobBuilderFactory = jobBuilderFactory;
+        this.stepBuilderFactory = stepBuilderFactory;
+        this.rouModelMetadataService = rouModelMetadataService;
+        this.rouDepreciationEntryCompilationService = rouDepreciationEntryCompilationService;
+        this.rouDepreciationEntryService = rouDepreciationEntryService;
+        this.depreciationEntryService = depreciationEntryService;
+        this.internalRouDepreciationEntryService = internalRouDepreciationEntryService;
+        this.internalRouModelMetadataService = internalRouModelMetadataService;
+    }
 
     @Bean(PERSISTENCE_READER_NAME)
     @StepScope
-    public ItemReader<RouModelMetadataDTO> rouModelMetadataItemReader(
+    public RouModelMetadataItemReader rouModelMetadataItemReader(
         @Value("#{jobParameters['rouDepreciationRequestId']}") long rouDepreciationRequestId,
         @Value("#{jobParameters['batchJobIdentifier']}") String batchJobIdentifier) {
         return new RouModelMetadataItemReader(rouModelMetadataService, rouDepreciationRequestId, batchJobIdentifier);
@@ -110,8 +110,10 @@ public class ROUDepreciationEntryBatchConfigs {
 
     @Bean(PERSISTENCE_PROCESSOR_NAME)
     @StepScope
-    public ItemProcessor<RouModelMetadataDTO, List<RouDepreciationEntryDTO>> rouModelMetadataDTOListItemProcessor() {
-        return new ROUDepreciationEntryItemProcessor(rouDepreciationEntryCompilationService);
+    public ItemProcessor<RouModelMetadataDTO, List<RouDepreciationEntryDTO>> rouModelMetadataDTOListItemProcessor(
+        @Value("#{jobParameters['batchJobIdentifier']}") String batchJobIdentifier
+    ) {
+        return new ROUDepreciationEntryItemProcessor(batchJobIdentifier, rouDepreciationEntryCompilationService);
     }
 
     @Bean(PERSISTENCE_WRITER_NAME)
@@ -134,7 +136,7 @@ public class ROUDepreciationEntryBatchConfigs {
         return stepBuilderFactory.get(READ_FILE_STEP_NAME)
             .<RouModelMetadataDTO, List<RouDepreciationEntryDTO>>chunk(50)
             .reader(rouModelMetadataItemReader(rouDepreciationRequestId, batchJobIdentifier))
-            .processor(rouModelMetadataDTOListItemProcessor())
+            .processor(rouModelMetadataDTOListItemProcessor(batchJobIdentifier))
             .writer(rouDepreciationEntryWriter())
             .build();
     }
@@ -162,7 +164,7 @@ public class ROUDepreciationEntryBatchConfigs {
 
     @Bean(UPDATE_OUTSTANDING_AMOUNT_ITEM_READER_NAME)
     @StepScope
-    public ItemReader<RouDepreciationEntryDTO> updateOutstandingAmountItemReader() {
+    public UpdateOutstandingAmountItemReader updateOutstandingAmountItemReader() {
 
         return new UpdateOutstandingAmountItemReader(internalRouDepreciationEntryService);
     }
@@ -179,7 +181,7 @@ public class ROUDepreciationEntryBatchConfigs {
 
     @Bean(UPDATE_FULLY_AMORTISED_ITEM_READER_NAME)
     @StepScope
-    public ItemReader<RouModelMetadataDTO> updateFullyAmortisedItemReader(@Value("#{jobParameters['batchJobIdentifier']}") String batchJobIdentifier) {
+    public UpdateFullyAmortisedItemReader updateFullyAmortisedItemReader(@Value("#{jobParameters['batchJobIdentifier']}") String batchJobIdentifier) {
         return new UpdateFullyAmortisedItemReader(internalRouModelMetadataService, batchJobIdentifier);
     }
 
