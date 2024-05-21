@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 import static io.github.erp.internal.service.rou.batch.InvalidateDepreciationBatchConfig.INVALIDATE_DEPRECIATION_JOB_NAME;
+import static io.github.erp.internal.service.rou.batch.RevalidateDepreciationBatchConfig.REVALIDATE_DEPRECIATION_JOB_NAME;
 
 @Slf4j
 @Service
@@ -32,6 +33,8 @@ public class RouDepreciationValidationServiceImpl implements RouDepreciationVali
 
     public final Job invalidateDepreciationJob;
 
+    public final Job revalidateDepreciationJob;
+
     private final JobLauncher jobLauncher;
 
     public RouDepreciationValidationServiceImpl(
@@ -39,11 +42,13 @@ public class RouDepreciationValidationServiceImpl implements RouDepreciationVali
         InternalRouDepreciationRequestService internalRouDepreciationRequestService,
         RouDepreciationRequestMapper rouDepreciationRequestMapper,
         @Qualifier(INVALIDATE_DEPRECIATION_JOB_NAME) Job invalidateDepreciationJob,
+        @Qualifier(REVALIDATE_DEPRECIATION_JOB_NAME) Job revalidateDepreciationJob,
         JobLauncher jobLauncher) {
         this.rouDepreciationRequestRepository = rouDepreciationRequestRepository;
         this.internalRouDepreciationRequestService = internalRouDepreciationRequestService;
         this.rouDepreciationRequestMapper = rouDepreciationRequestMapper;
         this.invalidateDepreciationJob = invalidateDepreciationJob;
+        this.revalidateDepreciationJob = revalidateDepreciationJob;
         this.jobLauncher = jobLauncher;
     }
 
@@ -67,6 +72,26 @@ public class RouDepreciationValidationServiceImpl implements RouDepreciationVali
         return requestDTO;
     }
 
+    /**
+     * Changes the state of the request to activated
+     *
+     * @param rouDepreciationRequestDTO
+     * @return
+     */
+    @Override
+    public RouDepreciationRequestDTO revalidate(RouDepreciationRequestDTO rouDepreciationRequestDTO) {
+
+        RouDepreciationRequest requestEntity = rouDepreciationRequestRepository.findById(rouDepreciationRequestDTO.getId()).orElseThrow();
+
+        requestEntity.setInvalidated(false);
+
+        RouDepreciationRequestDTO requestDTO = internalRouDepreciationRequestService.save(rouDepreciationRequestMapper.toDto(requestEntity));
+
+        runRevalidationJob(requestDTO);
+
+        return requestDTO;
+    }
+
     @Async
     void runInvalidationJob(RouDepreciationRequestDTO requestDTO) {
 
@@ -82,7 +107,7 @@ public class RouDepreciationValidationServiceImpl implements RouDepreciationVali
             jobLauncher.run(invalidateDepreciationJob, jobParameters);
 
             RouDepreciationRequestDTO completed = internalRouDepreciationRequestService.saveIdentifier(requestDTO, UUID.fromString(batchJobIdentifier));
-            markJobComplete(completed);
+            markRequestInvalidated(completed);
 
         } catch (JobExecutionAlreadyRunningException alreadyRunningException) {
             log.error("The JobInstance identified by the properties already has an execution running.", alreadyRunningException);
@@ -97,9 +122,46 @@ public class RouDepreciationValidationServiceImpl implements RouDepreciationVali
         }
     }
 
-    private void markJobComplete(RouDepreciationRequestDTO requestDTO) {
+    private void markRequestInvalidated(RouDepreciationRequestDTO requestDTO) {
 
         requestDTO.setDepreciationProcessStatus(depreciationProcessStatusTypes.INVALIDATED);
+
+        internalRouDepreciationRequestService.save(requestDTO);
+    }
+
+    @Async
+    void runRevalidationJob(RouDepreciationRequestDTO requestDTO) {
+
+        // Trigger the Spring Batch job
+        try {
+            String batchJobIdentifier = UUID.randomUUID().toString();
+
+            JobParameters jobParameters = new JobParametersBuilder()
+                .addString("jobToken", String.valueOf(System.currentTimeMillis()))
+                .addString("batchJobIdentifier", batchJobIdentifier)
+                .addString("previousBatchJobIdentifier", requestDTO.getBatchJobIdentifier().toString())
+                .toJobParameters();
+            jobLauncher.run(revalidateDepreciationJob, jobParameters);
+
+            RouDepreciationRequestDTO completed = internalRouDepreciationRequestService.saveIdentifier(requestDTO, UUID.fromString(batchJobIdentifier));
+            markRequestRevalidated(completed);
+
+        } catch (JobExecutionAlreadyRunningException alreadyRunningException) {
+            log.error("The JobInstance identified by the properties already has an execution running.", alreadyRunningException);
+        } catch (IllegalArgumentException args) {
+            log.error("Either the job or the job instances are null", args);
+        } catch (JobRestartException jre) {
+            log.error("Job has been run before and circumstances that preclude a re-start", jre);
+        } catch (JobInstanceAlreadyCompleteException jic) {
+            log.error("The job has been run before with the same parameters and completed successfull", jic);
+        } catch (JobParametersInvalidException jpi) {
+            log.error("Job parameters are not valid for this job", jpi);
+        }
+    }
+
+    private void markRequestRevalidated(RouDepreciationRequestDTO requestDTO) {
+
+        requestDTO.setDepreciationProcessStatus(depreciationProcessStatusTypes.COMPLETE);
 
         internalRouDepreciationRequestService.save(requestDTO);
     }

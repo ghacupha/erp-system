@@ -135,7 +135,7 @@ public class RouDepreciationRequestResourceProd {
     }
 
     /**
-     * {@code PUT  /rou-depreciation-requests/:id} : invalidates an existing rouDepreciationRequest.
+     * {@code PUT  /rou-depreciation-requests/invalidate/:id} : invalidates an existing rouDepreciationRequest.
      *
      * @param id the id of the rouDepreciationRequestDTO to save.
      * @param rouDepreciationRequestDTO the rouDepreciationRequestDTO to update.
@@ -162,6 +162,42 @@ public class RouDepreciationRequestResourceProd {
         }
 
         RouDepreciationRequestDTO result = rouDepreciationValidationService.invalidate(rouDepreciationRequestDTO);
+
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, rouDepreciationRequestDTO.getId().toString()))
+            .body(result);
+    }
+
+
+    /**
+     * {@code PUT  /rou-depreciation-requests/revalidate/:id} : reversal of an invalidated rouDepreciationRequest.
+     *
+     * @param id the id of the rouDepreciationRequestDTO to save.
+     * @param rouDepreciationRequestDTO the rouDepreciationRequestDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated rouDepreciationRequestDTO,
+     * or with status {@code 400 (Bad Request)} if the rouDepreciationRequestDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the rouDepreciationRequestDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/rou-depreciation-requests/revalidate/{id}")
+    public ResponseEntity<RouDepreciationRequestDTO> revalidateRouDepreciationRequest(
+        @PathVariable(value = "id", required = false) final Long id,
+        @Valid @RequestBody RouDepreciationRequestDTO rouDepreciationRequestDTO
+    ) throws URISyntaxException {
+        log.debug("REST request to update RouDepreciationRequest : {}, {}", id, rouDepreciationRequestDTO);
+        if (rouDepreciationRequestDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, rouDepreciationRequestDTO.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!rouDepreciationRequestRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        RouDepreciationRequestDTO result = rouDepreciationValidationService.revalidate(rouDepreciationRequestDTO);
 
         return ResponseEntity
             .ok()
