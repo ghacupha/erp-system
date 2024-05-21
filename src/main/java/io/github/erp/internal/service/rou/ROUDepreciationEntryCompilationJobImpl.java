@@ -31,7 +31,6 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -45,15 +44,15 @@ public class ROUDepreciationEntryCompilationJobImpl implements ROUDepreciationEn
 
     private final Job rouDepreciationEntryPersistenceJob;
 
-    private final InternalRouDepreciationRequestService internalRouDepreciationEntryService;
+    private final InternalRouDepreciationRequestService internalRouDepreciationRequestService;
 
     public ROUDepreciationEntryCompilationJobImpl(
         JobLauncher jobLauncher,
         @Qualifier(PERSISTENCE_JOB_NAME) Job rouDepreciationEntryPersistenceJob,
-        InternalRouDepreciationRequestService internalRouDepreciationEntryService) {
+        InternalRouDepreciationRequestService internalRouDepreciationRequestService) {
         this.jobLauncher = jobLauncher;
         this.rouDepreciationEntryPersistenceJob = rouDepreciationEntryPersistenceJob;
-        this.internalRouDepreciationEntryService = internalRouDepreciationEntryService;
+        this.internalRouDepreciationRequestService = internalRouDepreciationRequestService;
     }
 
     /**
@@ -74,7 +73,9 @@ public class ROUDepreciationEntryCompilationJobImpl implements ROUDepreciationEn
                 .toJobParameters();
             jobLauncher.run(rouDepreciationEntryPersistenceJob, jobParameters);
 
-            internalRouDepreciationEntryService.saveIdentifier(requestDTO, UUID.fromString(batchJobIdentifier));
+            RouDepreciationRequestDTO completed = internalRouDepreciationRequestService.saveIdentifier(requestDTO, UUID.fromString(batchJobIdentifier));
+
+            internalRouDepreciationRequestService.markRequestComplete(completed);
 
         } catch (JobExecutionAlreadyRunningException alreadyRunningException) {
             log.error("The JobInstance identified by the properties already has an execution running.", alreadyRunningException);

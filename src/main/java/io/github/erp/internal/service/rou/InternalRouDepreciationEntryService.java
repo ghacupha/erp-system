@@ -117,4 +117,13 @@ public interface InternalRouDepreciationEntryService {
      * @param items Collection for persistence
      */
     void saveAll(List<? extends RouDepreciationEntryDTO> items);
+
+    /**
+     * Count of items processed in a particular batch based on the identifier of the
+     * batch instance
+     *
+     * @param batchJobIdentifier Identifier of the batch onstance
+     * @return Count of processed items
+     */
+    Optional<Integer> countProcessedItems(UUID batchJobIdentifier);
 }

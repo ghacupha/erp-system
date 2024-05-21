@@ -65,4 +65,6 @@ public interface InternalRouDepreciationEntryRepository
             "WHERE batch_job_identifier = :batchJobIdentifier"
     )
     Optional<List<RouDepreciationEntry>> getProcessedItems(@Param("batchJobIdentifier") UUID batchJobIdentifier);
+
+    Optional<Integer> countRouDepreciationEntriesByBatchJobIdentifierEquals(UUID batchJobIdentifier);
 }
