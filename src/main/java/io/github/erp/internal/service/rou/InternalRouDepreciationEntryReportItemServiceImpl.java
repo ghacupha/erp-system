@@ -19,19 +19,16 @@ package io.github.erp.internal.service.rou;
  */
 
 import io.github.erp.domain.RouDepreciationEntryReportItem;
-import io.github.erp.domain.RouDepreciationEntryReportItem_;
+import io.github.erp.internal.framework.Mapping;
+import io.github.erp.internal.model.RouDepreciationEntryReportItemInternal;
 import io.github.erp.internal.repository.InternalRouDepreciationEntryReportItemRepository;
-import io.github.erp.repository.RouDepreciationEntryReportItemRepository;
 import io.github.erp.repository.search.RouDepreciationEntryReportItemSearchRepository;
-import io.github.erp.service.RouDepreciationEntryReportItemService;
-import io.github.erp.service.criteria.RouDepreciationEntryReportItemCriteria;
 import io.github.erp.service.dto.RouDepreciationEntryReportItemDTO;
 import io.github.erp.service.mapper.RouDepreciationEntryReportItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,14 +49,17 @@ public class InternalRouDepreciationEntryReportItemServiceImpl implements Intern
 
     private final RouDepreciationEntryReportItemSearchRepository rouDepreciationEntryReportItemSearchRepository;
 
+    private final Mapping<RouDepreciationEntryReportItemInternal, RouDepreciationEntryReportItemDTO> rouDepreciationEntryReportItemMapping;
+
     public InternalRouDepreciationEntryReportItemServiceImpl(
         InternalRouDepreciationEntryReportItemRepository rouDepreciationEntryReportItemRepository,
         RouDepreciationEntryReportItemMapper rouDepreciationEntryReportItemMapper,
-        RouDepreciationEntryReportItemSearchRepository rouDepreciationEntryReportItemSearchRepository
-    ) {
+        RouDepreciationEntryReportItemSearchRepository rouDepreciationEntryReportItemSearchRepository,
+        Mapping<RouDepreciationEntryReportItemInternal, RouDepreciationEntryReportItemDTO> rouDepreciationEntryReportItemMapping) {
         this.rouDepreciationEntryReportItemRepository = rouDepreciationEntryReportItemRepository;
         this.rouDepreciationEntryReportItemMapper = rouDepreciationEntryReportItemMapper;
         this.rouDepreciationEntryReportItemSearchRepository = rouDepreciationEntryReportItemSearchRepository;
+        this.rouDepreciationEntryReportItemMapping = rouDepreciationEntryReportItemMapping;
     }
 
     @Override
@@ -101,14 +101,24 @@ public class InternalRouDepreciationEntryReportItemServiceImpl implements Intern
     @Transactional(readOnly = true)
     public Page<RouDepreciationEntryReportItemDTO> findAll(Pageable pageable) {
         log.debug("Request to get all RouDepreciationEntryReportItems");
-        return rouDepreciationEntryReportItemRepository.findAll(pageable).map(rouDepreciationEntryReportItemMapper::toDto);
+        return rouDepreciationEntryReportItemRepository.allDepreciationItemsReport(pageable)
+            .map(rouDepreciationEntryReportItemMapping::toValue2);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<RouDepreciationEntryReportItemDTO> findAllByMetadataId(Pageable pageable, Long metadataId) {
+        log.debug("Request to get all RouDepreciationEntryReportItems");
+        return rouDepreciationEntryReportItemRepository.getAllByMetadataId(pageable, metadataId)
+            .map(rouDepreciationEntryReportItemMapping::toValue2);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<RouDepreciationEntryReportItemDTO> findOne(Long id) {
         log.debug("Request to get RouDepreciationEntryReportItem : {}", id);
-        return rouDepreciationEntryReportItemRepository.findById(id).map(rouDepreciationEntryReportItemMapper::toDto);
+        return rouDepreciationEntryReportItemRepository.getOneByDepreciationEntryId(id)
+            .map(rouDepreciationEntryReportItemMapping::toValue2);
     }
 
     @Override

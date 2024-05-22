@@ -83,6 +83,20 @@ public class RouDepreciationEntryReportItemResourceProd {
     }
 
     /**
+     * {@code GET  /rou-depreciation-entry-report-items/by-query} : get all the rouDepreciationEntryReportItems.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of rouDepreciationEntryReportItems in body.
+     */
+    @GetMapping("/rou-depreciation-entry-report-items/by-query")
+    public ResponseEntity<List<RouDepreciationEntryReportItemDTO>> getAllReportItemsByQuery(Pageable pageable) {
+        log.debug("REST request to get RouDepreciationEntryReportItems by query");
+        Page<RouDepreciationEntryReportItemDTO> page = rouDepreciationEntryReportItemService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
      * {@code GET  /rou-depreciation-entry-report-items/count} : count all the rouDepreciationEntryReportItems.
      *
      * @param criteria the criteria which the requested entities should match.

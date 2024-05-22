@@ -53,6 +53,18 @@ public interface InternalRouDepreciationEntryReportItemService {
     Page<RouDepreciationEntryReportItemDTO> findAll(Pageable pageable);
 
     /**
+     * This is the list of entries for an individual metadata selection, given the id
+     * Ideally this would be used when the client selects a metadata item on the frontend
+     * and the list which will have the same parameters will shift to show only items for an
+     * individual model-metadata
+     *
+     * @param pageable the pagination information
+     * @param metadataId id of the model
+     * @return list of depreciation entries for the model
+     */
+    public Page<RouDepreciationEntryReportItemDTO> findAllByMetadataId(Pageable pageable, Long metadataId);
+
+    /**
      * Get the "id" rouDepreciationEntryReportItem.
      *
      * @param id the id of the entity.
