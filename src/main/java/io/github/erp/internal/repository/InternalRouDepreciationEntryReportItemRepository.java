@@ -19,12 +19,14 @@ package io.github.erp.internal.repository;
  */
 
 import io.github.erp.domain.RouDepreciationEntryReportItem;
+import io.github.erp.internal.model.RouDepreciationEntryReportItemInternal;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -41,19 +43,148 @@ public interface InternalRouDepreciationEntryReportItemRepository
     @Query(
         nativeQuery = true,
         value = "" +
-            "SELECT * " +
-            "FROM public.rou_depreciation_entry  " +
-            "WHERE  " +
-            "    (is_deleted='false' OR is_deleted ISNULL) AND  " +
-            "    (activated='true' OR activated ISNULL) AND  " +
-            "    (invalidated='false' OR invalidated ISNULL)",
+            "SELECT  " +
+            "    rde.id,  " +
+            "    CAST( rmm.model_title AS VARCHAR) AS leaseContractNumber,  " +
+            "    CAST( lp.period_code AS VARCHAR) AS fiscalPeriodCode, " +
+            "    CAST( fm.end_date AS DATE) AS fiscalPeriodEndDate, " +
+            "    CAST( ac.asset_category_name AS VARCHAR) AS assetCategoryName, " +
+            "    CAST( dta.account_number AS VARCHAR) AS debitAccountNumber, " +
+            "    CAST( cta.account_number AS VARCHAR) AS creditAccountNumber , " +
+            "    CAST( rde.description AS VARCHAR) AS description, " +
+            "    CAST( ifr.short_title AS VARCHAR) AS shortTitle,  " +
+            "    CAST(rou_asset_identifier AS VARCHAR) AS rouAssetIdentifier,  " +
+            "    CAST(rde.sequence_number AS INTEGER) AS sequenceNumber,  " +
+            "    CAST(depreciation_amount AS NUMERIC) AS depreciationAmount,  " +
+            "    CAST(outstanding_amount AS NUMERIC) AS outstandingAmount           " +
+            " FROM rou_depreciation_entry rde  " +
+            "    LEFT JOIN lease_period lp ON lease_period_id = lp.id  " +
+            "    LEFT JOIN fiscal_month fm ON lp.fiscal_month_id = fm.id  " +
+            "    LEFT JOIN asset_category ac ON asset_category_id = ac.id  " +
+            "    LEFT JOIN transaction_account dta ON debit_account_id = dta.id  " +
+            "    LEFT JOIN transaction_account cta ON debit_account_id = cta.id  " +
+            "    LEFT JOIN rou_model_metadata rmm ON rou_metadata_id = rmm.id " +
+            "    LEFT JOIN ifrs16lease_contract ifr ON rmm.ifrs16lease_contract_id = ifr.id " +
+            " WHERE (is_deleted=false OR is_deleted IS NULL) AND       " +
+            "    (activated=true OR activated IS NULL) AND       " +
+            "    (invalidated=false OR invalidated IS NULL)",
         countQuery = "" +
-            "SELECT * " +
-            "FROM public.rou_depreciation_entry  " +
-            "WHERE  " +
-            "    (is_deleted='false' OR is_deleted ISNULL) AND  " +
-            "    (activated='true' OR activated ISNULL) AND  " +
-            "    (invalidated='false' OR invalidated ISNULL)"
+            "SELECT  " +
+            "    rde.id,  " +
+            "    CAST( rmm.model_title AS VARCHAR) AS leaseContractNumber,  " +
+            "    CAST( lp.period_code AS VARCHAR) AS fiscalPeriodCode, " +
+            "    CAST( fm.end_date AS DATE) AS fiscalPeriodEndDate, " +
+            "    CAST( ac.asset_category_name AS VARCHAR) AS assetCategoryName, " +
+            "    CAST( dta.account_number AS VARCHAR) AS debitAccountNumber, " +
+            "    CAST( cta.account_number AS VARCHAR) AS creditAccountNumber , " +
+            "    CAST( rde.description AS VARCHAR) AS description, " +
+            "    CAST( ifr.short_title AS VARCHAR) AS shortTitle,  " +
+            "    CAST(rou_asset_identifier AS VARCHAR) AS rouAssetIdentifier,  " +
+            "    CAST(rde.sequence_number AS INTEGER) AS sequenceNumber,  " +
+            "    CAST(depreciation_amount AS NUMERIC) AS depreciationAmount,  " +
+            "    CAST(outstanding_amount AS NUMERIC) AS outstandingAmount           " +
+            " FROM rou_depreciation_entry rde  " +
+            "    LEFT JOIN lease_period lp ON lease_period_id = lp.id  " +
+            "    LEFT JOIN fiscal_month fm ON lp.fiscal_month_id = fm.id  " +
+            "    LEFT JOIN asset_category ac ON asset_category_id = ac.id  " +
+            "    LEFT JOIN transaction_account dta ON debit_account_id = dta.id  " +
+            "    LEFT JOIN transaction_account cta ON debit_account_id = cta.id  " +
+            "    LEFT JOIN rou_model_metadata rmm ON rou_metadata_id = rmm.id " +
+            "    LEFT JOIN ifrs16lease_contract ifr ON rmm.ifrs16lease_contract_id = ifr.id " +
+            " WHERE (is_deleted=false OR is_deleted IS NULL) AND       " +
+            "    (activated=true OR activated IS NULL) AND       " +
+            "    (invalidated=false OR invalidated IS NULL)"
     )
-    Page<RouDepreciationEntryReportItem> allDepreciationItemsReport(Specification<RouDepreciationEntryReportItem> specification, Pageable pageable);
+    Page<RouDepreciationEntryReportItemInternal> allDepreciationItemsReport(Pageable pageable);
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT  " +
+            "    rde.id,  " +
+            "    CAST( rmm.model_title AS VARCHAR) AS leaseContractNumber,  " +
+            "    CAST( lp.period_code AS VARCHAR) AS fiscalPeriodCode, " +
+            "    CAST( fm.end_date AS DATE) AS fiscalPeriodEndDate, " +
+            "    CAST( ac.asset_category_name AS VARCHAR) AS assetCategoryName, " +
+            "    CAST( dta.account_number AS VARCHAR) AS debitAccountNumber, " +
+            "    CAST( cta.account_number AS VARCHAR) AS creditAccountNumber , " +
+            "    CAST( rde.description AS VARCHAR) AS description, " +
+            "    CAST( ifr.short_title AS VARCHAR) AS shortTitle,  " +
+            "    CAST(rou_asset_identifier AS VARCHAR) AS rouAssetIdentifier,  " +
+            "    CAST(rde.sequence_number AS INTEGER) AS sequenceNumber,  " +
+            "    CAST(depreciation_amount AS NUMERIC) AS depreciationAmount,  " +
+            "    CAST(outstanding_amount AS NUMERIC) AS outstandingAmount           " +
+            " FROM rou_depreciation_entry rde  " +
+            "    LEFT JOIN lease_period lp ON lease_period_id = lp.id  " +
+            "    LEFT JOIN fiscal_month fm ON lp.fiscal_month_id = fm.id  " +
+            "    LEFT JOIN asset_category ac ON asset_category_id = ac.id  " +
+            "    LEFT JOIN transaction_account dta ON debit_account_id = dta.id  " +
+            "    LEFT JOIN transaction_account cta ON debit_account_id = cta.id  " +
+            "    LEFT JOIN rou_model_metadata rmm ON rou_metadata_id = rmm.id " +
+            "    LEFT JOIN ifrs16lease_contract ifr ON rmm.ifrs16lease_contract_id = ifr.id " +
+            " WHERE (is_deleted=false OR is_deleted IS NULL) AND       " +
+            "    (activated=true OR activated IS NULL) AND       " +
+            "    (invalidated=false OR invalidated IS NULL) AND " +
+            "    rde.rou_metadata_id = :metadataId",
+        countQuery = "" +
+            "SELECT  " +
+            "    rde.id,  " +
+            "    CAST( rmm.model_title AS VARCHAR) AS leaseContractNumber,  " +
+            "    CAST( lp.period_code AS VARCHAR) AS fiscalPeriodCode, " +
+            "    CAST( fm.end_date AS DATE) AS fiscalPeriodEndDate, " +
+            "    CAST( ac.asset_category_name AS VARCHAR) AS assetCategoryName, " +
+            "    CAST( dta.account_number AS VARCHAR) AS debitAccountNumber, " +
+            "    CAST( cta.account_number AS VARCHAR) AS creditAccountNumber , " +
+            "    CAST( rde.description AS VARCHAR) AS description, " +
+            "    CAST( ifr.short_title AS VARCHAR) AS shortTitle,  " +
+            "    CAST(rou_asset_identifier AS VARCHAR) AS rouAssetIdentifier,  " +
+            "    CAST(rde.sequence_number AS INTEGER) AS sequenceNumber,  " +
+            "    CAST(depreciation_amount AS NUMERIC) AS depreciationAmount,  " +
+            "    CAST(outstanding_amount AS NUMERIC) AS outstandingAmount           " +
+            " FROM rou_depreciation_entry rde  " +
+            "    LEFT JOIN lease_period lp ON lease_period_id = lp.id  " +
+            "    LEFT JOIN fiscal_month fm ON lp.fiscal_month_id = fm.id  " +
+            "    LEFT JOIN asset_category ac ON asset_category_id = ac.id  " +
+            "    LEFT JOIN transaction_account dta ON debit_account_id = dta.id  " +
+            "    LEFT JOIN transaction_account cta ON debit_account_id = cta.id  " +
+            "    LEFT JOIN rou_model_metadata rmm ON rou_metadata_id = rmm.id " +
+            "    LEFT JOIN ifrs16lease_contract ifr ON rmm.ifrs16lease_contract_id = ifr.id " +
+            " WHERE (is_deleted=false OR is_deleted IS NULL) AND       " +
+            "    (activated=true OR activated IS NULL) AND       " +
+            "    (invalidated=false OR invalidated IS NULL) AND " +
+            "    rde.rou_metadata_id = :metadataId"
+    )
+    Page<RouDepreciationEntryReportItemInternal> getAllByMetadataId(Pageable pageable, @Param("metadataId")long metadataId);
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT  " +
+            "    rde.id,  " +
+            "    CAST( rmm.model_title AS VARCHAR) AS leaseContractNumber,  " +
+            "    CAST( lp.period_code AS VARCHAR) AS fiscalPeriodCode, " +
+            "    CAST( fm.end_date AS DATE) AS fiscalPeriodEndDate, " +
+            "    CAST( ac.asset_category_name AS VARCHAR) AS assetCategoryName, " +
+            "    CAST( dta.account_number AS VARCHAR) AS debitAccountNumber, " +
+            "    CAST( cta.account_number AS VARCHAR) AS creditAccountNumber , " +
+            "    CAST( rde.description AS VARCHAR) AS description, " +
+            "    CAST( ifr.short_title AS VARCHAR) AS shortTitle,  " +
+            "    CAST(rou_asset_identifier AS VARCHAR) AS rouAssetIdentifier,  " +
+            "    CAST(rde.sequence_number AS INTEGER) AS sequenceNumber,  " +
+            "    CAST(depreciation_amount AS NUMERIC) AS depreciationAmount,  " +
+            "    CAST(outstanding_amount AS NUMERIC) AS outstandingAmount           " +
+            " FROM rou_depreciation_entry rde  " +
+            "    LEFT JOIN lease_period lp ON lease_period_id = lp.id  " +
+            "    LEFT JOIN fiscal_month fm ON lp.fiscal_month_id = fm.id  " +
+            "    LEFT JOIN asset_category ac ON asset_category_id = ac.id  " +
+            "    LEFT JOIN transaction_account dta ON debit_account_id = dta.id  " +
+            "    LEFT JOIN transaction_account cta ON debit_account_id = cta.id  " +
+            "    LEFT JOIN rou_model_metadata rmm ON rou_metadata_id = rmm.id " +
+            "    LEFT JOIN ifrs16lease_contract ifr ON rmm.ifrs16lease_contract_id = ifr.id " +
+            " WHERE (is_deleted=false OR is_deleted IS NULL) AND       " +
+            "    (activated=true OR activated IS NULL) AND       " +
+            "    (invalidated=false OR invalidated IS NULL) AND " +
+            "    rde.id = :depreciationEntryId"
+    )
+    Optional<RouDepreciationEntryReportItemInternal> getOneByDepreciationEntryId(@Param("depreciationEntryId")long depreciationEntryId);
 }

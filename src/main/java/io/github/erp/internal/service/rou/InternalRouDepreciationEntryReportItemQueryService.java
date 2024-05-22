@@ -87,7 +87,7 @@ public class InternalRouDepreciationEntryReportItemQueryService extends QuerySer
     public Page<RouDepreciationEntryReportItemDTO> findByCriteria(RouDepreciationEntryReportItemCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<RouDepreciationEntryReportItem> specification = createSpecification(criteria);
-        return rouDepreciationEntryReportItemRepository.allDepreciationItemsReport(specification, page).map(rouDepreciationEntryReportItemMapper::toDto);
+        return rouDepreciationEntryReportItemRepository.findAll(specification, page).map(rouDepreciationEntryReportItemMapper::toDto);
     }
 
     /**
