@@ -17,6 +17,9 @@ package io.github.erp.erp.resources.leases;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.repository.InternalRouDepreciationEntryReportItemRepository;
+import io.github.erp.internal.service.rou.InternalRouDepreciationEntryReportItemQueryService;
+import io.github.erp.internal.service.rou.InternalRouDepreciationEntryReportItemService;
 import io.github.erp.repository.RouDepreciationEntryReportItemRepository;
 import io.github.erp.service.RouDepreciationEntryReportItemQueryService;
 import io.github.erp.service.RouDepreciationEntryReportItemService;
@@ -45,16 +48,16 @@ public class RouDepreciationEntryReportItemResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(RouDepreciationEntryReportItemResourceProd.class);
 
-    private final RouDepreciationEntryReportItemService rouDepreciationEntryReportItemService;
+    private final InternalRouDepreciationEntryReportItemService rouDepreciationEntryReportItemService;
 
-    private final RouDepreciationEntryReportItemRepository rouDepreciationEntryReportItemRepository;
+    private final InternalRouDepreciationEntryReportItemRepository rouDepreciationEntryReportItemRepository;
 
-    private final RouDepreciationEntryReportItemQueryService rouDepreciationEntryReportItemQueryService;
+    private final InternalRouDepreciationEntryReportItemQueryService rouDepreciationEntryReportItemQueryService;
 
     public RouDepreciationEntryReportItemResourceProd(
-        RouDepreciationEntryReportItemService rouDepreciationEntryReportItemService,
-        RouDepreciationEntryReportItemRepository rouDepreciationEntryReportItemRepository,
-        RouDepreciationEntryReportItemQueryService rouDepreciationEntryReportItemQueryService
+        InternalRouDepreciationEntryReportItemService rouDepreciationEntryReportItemService,
+        InternalRouDepreciationEntryReportItemRepository rouDepreciationEntryReportItemRepository,
+        InternalRouDepreciationEntryReportItemQueryService rouDepreciationEntryReportItemQueryService
     ) {
         this.rouDepreciationEntryReportItemService = rouDepreciationEntryReportItemService;
         this.rouDepreciationEntryReportItemRepository = rouDepreciationEntryReportItemRepository;

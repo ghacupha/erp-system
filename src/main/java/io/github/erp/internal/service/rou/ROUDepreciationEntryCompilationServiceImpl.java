@@ -83,6 +83,7 @@ public class ROUDepreciationEntryCompilationServiceImpl implements ROUDepreciati
         entry.setRouMetadata(modelMetadataDTO);
         entry.setBatchJobIdentifier(UUID.fromString(batchJobIdentifier));
         entry.setInvalidated(false);
+        entry.setIsDeleted(false);
 
         return entry;
     }
