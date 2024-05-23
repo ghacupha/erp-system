@@ -62,7 +62,16 @@ public interface InternalRouDepreciationEntryReportItemService {
      * @param metadataId id of the model
      * @return list of depreciation entries for the model
      */
-    public Page<RouDepreciationEntryReportItemDTO> findAllByMetadataId(Pageable pageable, Long metadataId);
+    Page<RouDepreciationEntryReportItemDTO> findAllByMetadataId(Pageable pageable, Long metadataId);
+
+    /**
+     * This is the list of items posted for a given lease period
+     *
+     * @param pageable the pagination information
+     * @param leasePeriodId id of the lease period
+     * @return list of depreciation entries for the model
+     */
+    Page<RouDepreciationEntryReportItemDTO> findAllByLeasePeriodId(Pageable pageable, Long leasePeriodId);
 
     /**
      * Get the "id" rouDepreciationEntryReportItem.

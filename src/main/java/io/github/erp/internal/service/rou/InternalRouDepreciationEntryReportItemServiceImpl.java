@@ -135,4 +135,17 @@ public class InternalRouDepreciationEntryReportItemServiceImpl implements Intern
         return rouDepreciationEntryReportItemSearchRepository.search(query, pageable).map(rouDepreciationEntryReportItemMapper::toDto);
     }
 
+    /**
+     * This is the list of items posted for a given lease period
+     *
+     * @param pageable      the pagination information
+     * @param leasePeriodId id of the lease period
+     * @return list of depreciation entries for the model
+     */
+    @Override
+    public Page<RouDepreciationEntryReportItemDTO> findAllByLeasePeriodId(Pageable pageable, Long leasePeriodId) {
+        log.debug("Request to get items posted for a given lease period id : {}", leasePeriodId);
+        return rouDepreciationEntryReportItemRepository.getAllByLeasePeriodId(pageable, leasePeriodId)
+            .map(rouDepreciationEntryReportItemMapping::toValue2);
+    }
 }
