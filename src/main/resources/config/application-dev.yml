@@ -97,19 +97,19 @@ spring:
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev #, faker
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${ERP_SYSTEM_EMAIL_USER}
-    password: ${ERP_SYSTEM_EMAIL_PASSWORD}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-          ssl:
-            trust: smtp.gmail.com
+#  mail:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: ${ERP_SYSTEM_EMAIL_USER}
+#    password: ${ERP_SYSTEM_EMAIL_PASSWORD}
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+#          ssl:
+#            trust: smtp.gmail.com
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:
