@@ -215,6 +215,40 @@ public interface InternalRouDepreciationEntryReportItemRepository
     )
     Page<RouDepreciationEntryReportItemInternal> getAllByLeasePeriodId(Pageable pageable, @Param("leasePeriodId")long leasePeriodId);
 
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT  " +
+            "    rde.id,  " +
+            "    rmm.model_title AS leaseContractNumber,  " +
+            "    lp.period_code AS fiscalPeriodCode, " +
+            "    fm.end_date AS fiscalPeriodEndDate, " +
+            "    ac.asset_category_name AS assetCategoryName, " +
+            "    dta.account_number AS debitAccountNumber, " +
+            "    cta.account_number AS creditAccountNumber, " +
+            "    rde.description AS description, " +
+            "    CONCAT(ifr.short_title,' ',rmm.description) AS shortTitle,  " +
+            "    rou_asset_identifier AS rouAssetIdentifier,  " +
+            "    rde.sequence_number AS sequenceNumber,  " +
+            "    depreciation_amount AS depreciationAmount,  " +
+            "    outstanding_amount AS outstandingAmount           " +
+            " FROM rou_depreciation_entry rde  " +
+            "    LEFT JOIN lease_period lp ON lease_period_id = lp.id  " +
+            "    LEFT JOIN fiscal_month fm ON lp.fiscal_month_id = fm.id  " +
+            "    LEFT JOIN asset_category ac ON asset_category_id = ac.id  " +
+            "    LEFT JOIN transaction_account dta ON debit_account_id = dta.id  " +
+            "    LEFT JOIN transaction_account cta ON debit_account_id = cta.id  " +
+            "    LEFT JOIN rou_model_metadata rmm ON rou_metadata_id = rmm.id " +
+            "    LEFT JOIN ifrs16lease_contract ifr ON rmm.ifrs16lease_contract_id = ifr.id " +
+            " WHERE (is_deleted=false OR is_deleted IS NULL) AND       " +
+            "    (activated=true OR activated IS NULL) AND       " +
+            "    (invalidated=false OR invalidated IS NULL) AND  " +
+            "    lp.id = :leasePeriodId AND " +
+            "    rde.id = :depreciationEntryId"
+    )
+    Optional<RouDepreciationEntryReportItemInternal> getOneByLeasePeriodId(@Param("depreciationEntryId")long depreciationEntryId, @Param("leasePeriodId")long leasePeriodId);
+
     @Query(
         nativeQuery = true,
         value = "" +
