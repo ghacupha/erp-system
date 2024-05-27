@@ -143,21 +143,21 @@ public class RouDepreciationPostingReportQueryService extends QueryService<RouDe
                         buildStringSpecification(criteria.getReportParameters(), RouDepreciationPostingReport_.reportParameters)
                     );
             }
-            if (criteria.getFiscalMonthId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getFiscalMonthId(),
-                            root -> root.join(RouDepreciationPostingReport_.fiscalMonth, JoinType.LEFT).get(FiscalMonth_.id)
-                        )
-                    );
-            }
             if (criteria.getRequestedById() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
                             criteria.getRequestedById(),
                             root -> root.join(RouDepreciationPostingReport_.requestedBy, JoinType.LEFT).get(ApplicationUser_.id)
+                        )
+                    );
+            }
+            if (criteria.getLeasePeriodId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLeasePeriodId(),
+                            root -> root.join(RouDepreciationPostingReport_.leasePeriod, JoinType.LEFT).get(LeasePeriod_.id)
                         )
                     );
             }

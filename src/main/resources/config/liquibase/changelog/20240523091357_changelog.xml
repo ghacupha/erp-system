@@ -1,0 +1,19 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1716455780545-7">
+        <addColumn tableName="rou_deprec_pst_rpt">
+            <column name="lease_period_id" type="int8">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1716455780545-12">
+        <addForeignKeyConstraint baseColumnNames="lease_period_id" baseTableName="rou_deprec_pst_rpt" constraintName="FKe95ki925qpy6tdc3bg5xvk5gh" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="lease_period" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1716455780545-15">
+        <dropForeignKeyConstraint baseTableName="rou_deprec_pst_rpt" constraintName="fk_rou_deprec_pst_rpt__fiscal_month_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1716455780545-27">
+        <dropColumn columnName="fiscal_month_id" tableName="rou_deprec_pst_rpt"/>
+    </changeSet>
+</databaseChangeLog>
