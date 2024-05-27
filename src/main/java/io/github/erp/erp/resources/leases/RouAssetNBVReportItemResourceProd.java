@@ -17,6 +17,8 @@ package io.github.erp.erp.resources.leases;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.repository.InternalRouAssetNBVReportItemRepository;
+import io.github.erp.internal.service.rou.InternalRouAssetNBVReportItemService;
 import io.github.erp.repository.RouAssetNBVReportItemRepository;
 import io.github.erp.service.RouAssetNBVReportItemQueryService;
 import io.github.erp.service.RouAssetNBVReportItemService;
@@ -45,15 +47,15 @@ public class RouAssetNBVReportItemResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(RouAssetNBVReportItemResourceProd.class);
 
-    private final RouAssetNBVReportItemService rouAssetNBVReportItemService;
+    private final InternalRouAssetNBVReportItemService rouAssetNBVReportItemService;
 
-    private final RouAssetNBVReportItemRepository rouAssetNBVReportItemRepository;
+    private final InternalRouAssetNBVReportItemRepository rouAssetNBVReportItemRepository;
 
     private final RouAssetNBVReportItemQueryService rouAssetNBVReportItemQueryService;
 
     public RouAssetNBVReportItemResourceProd(
-        RouAssetNBVReportItemService rouAssetNBVReportItemService,
-        RouAssetNBVReportItemRepository rouAssetNBVReportItemRepository,
+        InternalRouAssetNBVReportItemService rouAssetNBVReportItemService,
+        InternalRouAssetNBVReportItemRepository rouAssetNBVReportItemRepository,
         RouAssetNBVReportItemQueryService rouAssetNBVReportItemQueryService
     ) {
         this.rouAssetNBVReportItemService = rouAssetNBVReportItemService;
@@ -75,6 +77,24 @@ public class RouAssetNBVReportItemResourceProd {
     ) {
         log.debug("REST request to get RouAssetNBVReportItems by criteria: {}", criteria);
         Page<RouAssetNBVReportItemDTO> page = rouAssetNBVReportItemQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /rou-asset-nbv-report-items/reports/{leasePeriodId}} : get all the rouAssetNBVReportItems for specified lease-period.
+     *
+     * @param pageable the pagination information.
+     * @param leasePeriodId id of the lease period at the end of which we assess the NBV.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of rouAssetNBVReportItems in body.
+     */
+    @GetMapping("/rou-asset-nbv-report-items/reports/{leasePeriodId}")
+    public ResponseEntity<List<RouAssetNBVReportItemDTO>> getAllRouAssetNBVReportItemsForSpecifiedLeasePeriod(
+        Pageable pageable,
+        @PathVariable long leasePeriodId
+    ) {
+        log.debug("REST request to get RouAssetNBVReportItems by for the lease-period with id: {}", leasePeriodId);
+        Page<RouAssetNBVReportItemDTO> page = rouAssetNBVReportItemService.findAllAsAtPeriod(pageable, leasePeriodId);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
