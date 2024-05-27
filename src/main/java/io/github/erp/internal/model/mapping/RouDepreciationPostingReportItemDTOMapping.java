@@ -29,7 +29,7 @@ public class RouDepreciationPostingReportItemDTOMapping implements Mapping<RouDe
 
     @Override
     public RouDepreciationEntryReportItemInternal toValue1(RouDepreciationPostingReportItemDTO vs) {
-        throw new IllegalArgumentException("This feature is disabled");
+        throw new UnsupportedOperationException("This feature is disabled");
     }
 
     @Override

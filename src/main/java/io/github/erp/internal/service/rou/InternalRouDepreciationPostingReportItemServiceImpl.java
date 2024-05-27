@@ -51,6 +51,7 @@ public class InternalRouDepreciationPostingReportItemServiceImpl implements Inte
     private final RouDepreciationPostingReportItemSearchRepository rouDepreciationPostingReportItemSearchRepository;
 
     private final Mapping<RouDepreciationEntryReportItemInternal, RouDepreciationPostingReportItemDTO> rouDepreciationPostingReportItemDTOMapping;
+
     private final InternalRouDepreciationEntryReportItemRepository internalRouDepreciationEntryReportItemRepository;
 
     public InternalRouDepreciationPostingReportItemServiceImpl(
@@ -126,9 +127,10 @@ public class InternalRouDepreciationPostingReportItemServiceImpl implements Inte
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<RouDepreciationPostingReportItemDTO> findOne(Long id) {
+    public Optional<RouDepreciationPostingReportItemDTO> findOne(Long id, Long leasePeriodId) {
         log.debug("Request to get RouDepreciationPostingReportItem : {}", id);
-        return rouDepreciationPostingReportItemRepository.findById(id).map(rouDepreciationPostingReportItemMapper::toDto);
+        return internalRouDepreciationEntryReportItemRepository.getOneByLeasePeriodId(id, leasePeriodId)
+            .map(rouDepreciationPostingReportItemDTOMapping::toValue2);
     }
 
     @Override

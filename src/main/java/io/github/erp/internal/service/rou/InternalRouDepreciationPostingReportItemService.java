@@ -65,9 +65,10 @@ public interface InternalRouDepreciationPostingReportItemService {
      * Get the "id" rouDepreciationPostingReportItem.
      *
      * @param id the id of the entity.
+     * @param leasePeriodId the id of the period.
      * @return the entity.
      */
-    Optional<RouDepreciationPostingReportItemDTO> findOne(Long id);
+    Optional<RouDepreciationPostingReportItemDTO> findOne(Long id, Long leasePeriodId);
 
     /**
      * Delete the "id" rouDepreciationPostingReportItem.

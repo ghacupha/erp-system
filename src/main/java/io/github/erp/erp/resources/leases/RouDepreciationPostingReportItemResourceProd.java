@@ -112,12 +112,10 @@ public class RouDepreciationPostingReportItemResourceProd {
      * @param id the id of the rouDepreciationPostingReportItemDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the rouDepreciationPostingReportItemDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/rou-depreciation-posting-report-items/{id}")
-    public ResponseEntity<RouDepreciationPostingReportItemDTO> getRouDepreciationPostingReportItem(@PathVariable Long id) {
-        log.debug("REST request to get RouDepreciationPostingReportItem : {}", id);
-        Optional<RouDepreciationPostingReportItemDTO> rouDepreciationPostingReportItemDTO = rouDepreciationPostingReportItemService.findOne(
-            id
-        );
+    @GetMapping("/rou-depreciation-posting-report-items/{leasePeriodId}/{id}")
+    public ResponseEntity<RouDepreciationPostingReportItemDTO> getRouDepreciationPostingReportItem(@PathVariable Long id, @PathVariable Long leasePeriodId) {
+        log.debug("REST request to get RouDepreciationPostingReportItem : {} for lease-period id {}", id, leasePeriodId);
+        Optional<RouDepreciationPostingReportItemDTO> rouDepreciationPostingReportItemDTO = rouDepreciationPostingReportItemService.findOne(id, leasePeriodId);
         return ResponseUtil.wrapOrNotFound(rouDepreciationPostingReportItemDTO);
     }
 
