@@ -18,32 +18,19 @@ package io.github.erp.service.impl;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import static io.github.erp.internal.service.rou.batch.InvalidateDepreciationBatchConfig.INVALIDATE_DEPRECIATION_JOB_NAME;
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.domain.RouDepreciationRequest;
-import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.repository.RouDepreciationRequestRepository;
 import io.github.erp.repository.search.RouDepreciationRequestSearchRepository;
 import io.github.erp.service.RouDepreciationRequestService;
 import io.github.erp.service.dto.RouDepreciationRequestDTO;
 import io.github.erp.service.mapper.RouDepreciationRequestMapper;
 import java.util.Optional;
-import java.util.UUID;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.JobParametersInvalidException;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
-import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
-import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,13 +41,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class RouDepreciationRequestServiceImpl implements RouDepreciationRequestService {
 
-    public final Job invalidateDepreciationJob;
-
-    private final JobLauncher jobLauncher;
-
     private final Logger log = LoggerFactory.getLogger(RouDepreciationRequestServiceImpl.class);
 
-    private final InternalApplicationUserDetailService internalApplicationUserDetailService;
     private final RouDepreciationRequestRepository rouDepreciationRequestRepository;
 
     private final RouDepreciationRequestMapper rouDepreciationRequestMapper;
@@ -68,15 +50,10 @@ public class RouDepreciationRequestServiceImpl implements RouDepreciationRequest
     private final RouDepreciationRequestSearchRepository rouDepreciationRequestSearchRepository;
 
     public RouDepreciationRequestServiceImpl(
-        @Qualifier(INVALIDATE_DEPRECIATION_JOB_NAME) Job invalidateDepreciationJob,
-        JobLauncher jobLauncher,
-        InternalApplicationUserDetailService internalApplicationUserDetailService, RouDepreciationRequestRepository rouDepreciationRequestRepository,
+        RouDepreciationRequestRepository rouDepreciationRequestRepository,
         RouDepreciationRequestMapper rouDepreciationRequestMapper,
         RouDepreciationRequestSearchRepository rouDepreciationRequestSearchRepository
     ) {
-        this.invalidateDepreciationJob = invalidateDepreciationJob;
-        this.jobLauncher = jobLauncher;
-        this.internalApplicationUserDetailService = internalApplicationUserDetailService;
         this.rouDepreciationRequestRepository = rouDepreciationRequestRepository;
         this.rouDepreciationRequestMapper = rouDepreciationRequestMapper;
         this.rouDepreciationRequestSearchRepository = rouDepreciationRequestSearchRepository;
@@ -85,10 +62,6 @@ public class RouDepreciationRequestServiceImpl implements RouDepreciationRequest
     @Override
     public RouDepreciationRequestDTO save(RouDepreciationRequestDTO rouDepreciationRequestDTO) {
         log.debug("Request to save RouDepreciationRequest : {}", rouDepreciationRequestDTO);
-
-        // Simply short-circuit a non-compliant request
-        rouDepreciationRequestDTO.setInitiatedBy(internalApplicationUserDetailService.getCurrentApplicationUser().orElseThrow());
-
         RouDepreciationRequest rouDepreciationRequest = rouDepreciationRequestMapper.toEntity(rouDepreciationRequestDTO);
         rouDepreciationRequest = rouDepreciationRequestRepository.save(rouDepreciationRequest);
         RouDepreciationRequestDTO result = rouDepreciationRequestMapper.toDto(rouDepreciationRequest);

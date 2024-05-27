@@ -25,9 +25,9 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link RouDepreciationPostingReport} and its DTO {@link RouDepreciationPostingReportDTO}.
  */
-@Mapper(componentModel = "spring", uses = { FiscalMonthMapper.class, ApplicationUserMapper.class })
+@Mapper(componentModel = "spring", uses = { ApplicationUserMapper.class, LeasePeriodMapper.class })
 public interface RouDepreciationPostingReportMapper extends EntityMapper<RouDepreciationPostingReportDTO, RouDepreciationPostingReport> {
-    @Mapping(target = "fiscalMonth", source = "fiscalMonth", qualifiedByName = "fiscalMonthCode")
     @Mapping(target = "requestedBy", source = "requestedBy", qualifiedByName = "applicationIdentity")
+    @Mapping(target = "leasePeriod", source = "leasePeriod", qualifiedByName = "periodCode")
     RouDepreciationPostingReportDTO toDto(RouDepreciationPostingReport s);
 }

@@ -1,4 +1,4 @@
-id;request_id;time_of_request;report_is_compiled;file_checksum;tampered;filename;report_parameters;report_file;report_file_content_type;fiscal_month_id
+id;request_id;time_of_request;report_is_compiled;file_checksum;tampered;filename;report_parameters;report_file;report_file_content_type;lease_period_id
 1;b6846e9d-892f-4a1f-8657-561718f6ae3c;2024-03-12T14:39:07;true;Rustic applications;true;fe8e944b-0ad9-4bee-9b4d-3e0271807113;bypassing Rubber deposit;../fake-data/blob/hipster.png;image/png;1
 2;77087a8f-7898-47ec-b549-2aad55ff958d;2024-03-13T01:46:17;true;Account Cotton Jewelery;true;b2d720cc-bb3b-44e4-a4b4-dc375af013f1;Markets Rubber;../fake-data/blob/hipster.png;image/png;2
 3;9e6ef6d1-b7be-4b9f-8866-b30e7bf30f72;2024-03-12T18:29:44;true;Markets Account multi-byte;true;76fba974-b4f1-460f-8f9f-9e0f3a540d97;virtual Soap;../fake-data/blob/hipster.png;image/png;3

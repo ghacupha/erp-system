@@ -60,9 +60,9 @@ public class RouDepreciationPostingReportCriteria implements Serializable, Crite
 
     private StringFilter reportParameters;
 
-    private LongFilter fiscalMonthId;
-
     private LongFilter requestedById;
+
+    private LongFilter leasePeriodId;
 
     private Boolean distinct;
 
@@ -77,8 +77,8 @@ public class RouDepreciationPostingReportCriteria implements Serializable, Crite
         this.tampered = other.tampered == null ? null : other.tampered.copy();
         this.filename = other.filename == null ? null : other.filename.copy();
         this.reportParameters = other.reportParameters == null ? null : other.reportParameters.copy();
-        this.fiscalMonthId = other.fiscalMonthId == null ? null : other.fiscalMonthId.copy();
         this.requestedById = other.requestedById == null ? null : other.requestedById.copy();
+        this.leasePeriodId = other.leasePeriodId == null ? null : other.leasePeriodId.copy();
         this.distinct = other.distinct;
     }
 
@@ -207,21 +207,6 @@ public class RouDepreciationPostingReportCriteria implements Serializable, Crite
         this.reportParameters = reportParameters;
     }
 
-    public LongFilter getFiscalMonthId() {
-        return fiscalMonthId;
-    }
-
-    public LongFilter fiscalMonthId() {
-        if (fiscalMonthId == null) {
-            fiscalMonthId = new LongFilter();
-        }
-        return fiscalMonthId;
-    }
-
-    public void setFiscalMonthId(LongFilter fiscalMonthId) {
-        this.fiscalMonthId = fiscalMonthId;
-    }
-
     public LongFilter getRequestedById() {
         return requestedById;
     }
@@ -235,6 +220,21 @@ public class RouDepreciationPostingReportCriteria implements Serializable, Crite
 
     public void setRequestedById(LongFilter requestedById) {
         this.requestedById = requestedById;
+    }
+
+    public LongFilter getLeasePeriodId() {
+        return leasePeriodId;
+    }
+
+    public LongFilter leasePeriodId() {
+        if (leasePeriodId == null) {
+            leasePeriodId = new LongFilter();
+        }
+        return leasePeriodId;
+    }
+
+    public void setLeasePeriodId(LongFilter leasePeriodId) {
+        this.leasePeriodId = leasePeriodId;
     }
 
     public Boolean getDistinct() {
@@ -263,8 +263,8 @@ public class RouDepreciationPostingReportCriteria implements Serializable, Crite
             Objects.equals(tampered, that.tampered) &&
             Objects.equals(filename, that.filename) &&
             Objects.equals(reportParameters, that.reportParameters) &&
-            Objects.equals(fiscalMonthId, that.fiscalMonthId) &&
             Objects.equals(requestedById, that.requestedById) &&
+            Objects.equals(leasePeriodId, that.leasePeriodId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -280,8 +280,8 @@ public class RouDepreciationPostingReportCriteria implements Serializable, Crite
             tampered,
             filename,
             reportParameters,
-            fiscalMonthId,
             requestedById,
+            leasePeriodId,
             distinct
         );
     }
@@ -298,8 +298,8 @@ public class RouDepreciationPostingReportCriteria implements Serializable, Crite
             (tampered != null ? "tampered=" + tampered + ", " : "") +
             (filename != null ? "filename=" + filename + ", " : "") +
             (reportParameters != null ? "reportParameters=" + reportParameters + ", " : "") +
-            (fiscalMonthId != null ? "fiscalMonthId=" + fiscalMonthId + ", " : "") +
             (requestedById != null ? "requestedById=" + requestedById + ", " : "") +
+            (leasePeriodId != null ? "leasePeriodId=" + leasePeriodId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
