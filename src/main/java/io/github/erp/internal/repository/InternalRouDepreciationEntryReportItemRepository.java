@@ -169,7 +169,7 @@ public interface InternalRouDepreciationEntryReportItemRepository
             "    cta.account_number AS creditAccountNumber, " +
             "    rde.description AS description, " +
             "    CONCAT(ifr.short_title,' ',rmm.description) AS shortTitle,  " +
-            "    rou_asset_identifier AS rouAssetIdentifier,  " +
+            "    CAST(rou_asset_identifier AS TEXT)  AS rouAssetIdentifier,  " +
             "    rde.sequence_number AS sequenceNumber,  " +
             "    depreciation_amount AS depreciationAmount,  " +
             "    outstanding_amount AS outstandingAmount           " +
@@ -196,7 +196,7 @@ public interface InternalRouDepreciationEntryReportItemRepository
             "    cta.account_number AS creditAccountNumber, " +
             "    rde.description AS description, " +
             "    CONCAT(ifr.short_title,' ',rmm.description) AS shortTitle,  " +
-            "    rou_asset_identifier AS rouAssetIdentifier,  " +
+            "    CAST(rou_asset_identifier AS text) AS rouAssetIdentifier,  " +
             "    rde.sequence_number AS sequenceNumber,  " +
             "    depreciation_amount AS depreciationAmount,  " +
             "    outstanding_amount AS outstandingAmount           " +
