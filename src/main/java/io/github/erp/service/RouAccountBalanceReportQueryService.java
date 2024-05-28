@@ -141,21 +141,21 @@ public class RouAccountBalanceReportQueryService extends QueryService<RouAccount
                 specification =
                     specification.and(buildStringSpecification(criteria.getReportParameters(), RouAccountBalanceReport_.reportParameters));
             }
+            if (criteria.getLeasePeriodId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLeasePeriodId(),
+                            root -> root.join(RouAccountBalanceReport_.leasePeriod, JoinType.LEFT).get(LeasePeriod_.id)
+                        )
+                    );
+            }
             if (criteria.getRequestedById() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
                             criteria.getRequestedById(),
                             root -> root.join(RouAccountBalanceReport_.requestedBy, JoinType.LEFT).get(ApplicationUser_.id)
-                        )
-                    );
-            }
-            if (criteria.getReportingMonthId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getReportingMonthId(),
-                            root -> root.join(RouAccountBalanceReport_.reportingMonth, JoinType.LEFT).get(FiscalMonth_.id)
                         )
                     );
             }

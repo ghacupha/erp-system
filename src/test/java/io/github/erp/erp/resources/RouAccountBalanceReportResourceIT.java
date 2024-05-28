@@ -17,9 +17,10 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.ApplicationUser;
-import io.github.erp.domain.FiscalMonth;
+import io.github.erp.domain.LeasePeriod;
 import io.github.erp.domain.RouAccountBalanceReport;
 import io.github.erp.repository.RouAccountBalanceReportRepository;
 import io.github.erp.repository.search.RouAccountBalanceReportSearchRepository;
@@ -140,6 +141,16 @@ class RouAccountBalanceReportResourceIT {
             .reportParameters(DEFAULT_REPORT_PARAMETERS)
             .reportFile(DEFAULT_REPORT_FILE)
             .reportFileContentType(DEFAULT_REPORT_FILE_CONTENT_TYPE);
+        // Add required entity
+        LeasePeriod leasePeriod;
+        if (TestUtil.findAll(em, LeasePeriod.class).isEmpty()) {
+            leasePeriod = LeasePeriodResourceIT.createEntity(em);
+            em.persist(leasePeriod);
+            em.flush();
+        } else {
+            leasePeriod = TestUtil.findAll(em, LeasePeriod.class).get(0);
+        }
+        rouAccountBalanceReport.setLeasePeriod(leasePeriod);
         return rouAccountBalanceReport;
     }
 
@@ -160,6 +171,16 @@ class RouAccountBalanceReportResourceIT {
             .reportParameters(UPDATED_REPORT_PARAMETERS)
             .reportFile(UPDATED_REPORT_FILE)
             .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE);
+        // Add required entity
+        LeasePeriod leasePeriod;
+        if (TestUtil.findAll(em, LeasePeriod.class).isEmpty()) {
+            leasePeriod = LeasePeriodResourceIT.createUpdatedEntity(em);
+            em.persist(leasePeriod);
+            em.flush();
+        } else {
+            leasePeriod = TestUtil.findAll(em, LeasePeriod.class).get(0);
+        }
+        rouAccountBalanceReport.setLeasePeriod(leasePeriod);
         return rouAccountBalanceReport;
     }
 
@@ -782,6 +803,32 @@ class RouAccountBalanceReportResourceIT {
 
     @Test
     @Transactional
+    void getAllRouAccountBalanceReportsByLeasePeriodIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportRepository.saveAndFlush(rouAccountBalanceReport);
+        LeasePeriod leasePeriod;
+        if (TestUtil.findAll(em, LeasePeriod.class).isEmpty()) {
+            leasePeriod = LeasePeriodResourceIT.createEntity(em);
+            em.persist(leasePeriod);
+            em.flush();
+        } else {
+            leasePeriod = TestUtil.findAll(em, LeasePeriod.class).get(0);
+        }
+        em.persist(leasePeriod);
+        em.flush();
+        rouAccountBalanceReport.setLeasePeriod(leasePeriod);
+        rouAccountBalanceReportRepository.saveAndFlush(rouAccountBalanceReport);
+        Long leasePeriodId = leasePeriod.getId();
+
+        // Get all the rouAccountBalanceReportList where leasePeriod equals to leasePeriodId
+        defaultRouAccountBalanceReportShouldBeFound("leasePeriodId.equals=" + leasePeriodId);
+
+        // Get all the rouAccountBalanceReportList where leasePeriod equals to (leasePeriodId + 1)
+        defaultRouAccountBalanceReportShouldNotBeFound("leasePeriodId.equals=" + (leasePeriodId + 1));
+    }
+
+    @Test
+    @Transactional
     void getAllRouAccountBalanceReportsByRequestedByIsEqualToSomething() throws Exception {
         // Initialize the database
         rouAccountBalanceReportRepository.saveAndFlush(rouAccountBalanceReport);
@@ -804,32 +851,6 @@ class RouAccountBalanceReportResourceIT {
 
         // Get all the rouAccountBalanceReportList where requestedBy equals to (requestedById + 1)
         defaultRouAccountBalanceReportShouldNotBeFound("requestedById.equals=" + (requestedById + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllRouAccountBalanceReportsByReportingMonthIsEqualToSomething() throws Exception {
-        // Initialize the database
-        rouAccountBalanceReportRepository.saveAndFlush(rouAccountBalanceReport);
-        FiscalMonth reportingMonth;
-        if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
-            reportingMonth = FiscalMonthResourceIT.createEntity(em);
-            em.persist(reportingMonth);
-            em.flush();
-        } else {
-            reportingMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
-        }
-        em.persist(reportingMonth);
-        em.flush();
-        rouAccountBalanceReport.setReportingMonth(reportingMonth);
-        rouAccountBalanceReportRepository.saveAndFlush(rouAccountBalanceReport);
-        Long reportingMonthId = reportingMonth.getId();
-
-        // Get all the rouAccountBalanceReportList where reportingMonth equals to reportingMonthId
-        defaultRouAccountBalanceReportShouldBeFound("reportingMonthId.equals=" + reportingMonthId);
-
-        // Get all the rouAccountBalanceReportList where reportingMonth equals to (reportingMonthId + 1)
-        defaultRouAccountBalanceReportShouldNotBeFound("reportingMonthId.equals=" + (reportingMonthId + 1));
     }
 
     /**

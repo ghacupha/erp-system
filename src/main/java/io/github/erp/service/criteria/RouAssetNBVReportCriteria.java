@@ -60,7 +60,7 @@ public class RouAssetNBVReportCriteria implements Serializable, Criteria {
 
     private StringFilter reportParameters;
 
-    private LongFilter fiscalReportingMonthId;
+    private LongFilter leasePeriodId;
 
     private LongFilter requestedById;
 
@@ -77,7 +77,7 @@ public class RouAssetNBVReportCriteria implements Serializable, Criteria {
         this.tampered = other.tampered == null ? null : other.tampered.copy();
         this.filename = other.filename == null ? null : other.filename.copy();
         this.reportParameters = other.reportParameters == null ? null : other.reportParameters.copy();
-        this.fiscalReportingMonthId = other.fiscalReportingMonthId == null ? null : other.fiscalReportingMonthId.copy();
+        this.leasePeriodId = other.leasePeriodId == null ? null : other.leasePeriodId.copy();
         this.requestedById = other.requestedById == null ? null : other.requestedById.copy();
         this.distinct = other.distinct;
     }
@@ -207,19 +207,19 @@ public class RouAssetNBVReportCriteria implements Serializable, Criteria {
         this.reportParameters = reportParameters;
     }
 
-    public LongFilter getFiscalReportingMonthId() {
-        return fiscalReportingMonthId;
+    public LongFilter getLeasePeriodId() {
+        return leasePeriodId;
     }
 
-    public LongFilter fiscalReportingMonthId() {
-        if (fiscalReportingMonthId == null) {
-            fiscalReportingMonthId = new LongFilter();
+    public LongFilter leasePeriodId() {
+        if (leasePeriodId == null) {
+            leasePeriodId = new LongFilter();
         }
-        return fiscalReportingMonthId;
+        return leasePeriodId;
     }
 
-    public void setFiscalReportingMonthId(LongFilter fiscalReportingMonthId) {
-        this.fiscalReportingMonthId = fiscalReportingMonthId;
+    public void setLeasePeriodId(LongFilter leasePeriodId) {
+        this.leasePeriodId = leasePeriodId;
     }
 
     public LongFilter getRequestedById() {
@@ -263,7 +263,7 @@ public class RouAssetNBVReportCriteria implements Serializable, Criteria {
             Objects.equals(tampered, that.tampered) &&
             Objects.equals(filename, that.filename) &&
             Objects.equals(reportParameters, that.reportParameters) &&
-            Objects.equals(fiscalReportingMonthId, that.fiscalReportingMonthId) &&
+            Objects.equals(leasePeriodId, that.leasePeriodId) &&
             Objects.equals(requestedById, that.requestedById) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -280,7 +280,7 @@ public class RouAssetNBVReportCriteria implements Serializable, Criteria {
             tampered,
             filename,
             reportParameters,
-            fiscalReportingMonthId,
+            leasePeriodId,
             requestedById,
             distinct
         );
@@ -298,7 +298,7 @@ public class RouAssetNBVReportCriteria implements Serializable, Criteria {
             (tampered != null ? "tampered=" + tampered + ", " : "") +
             (filename != null ? "filename=" + filename + ", " : "") +
             (reportParameters != null ? "reportParameters=" + reportParameters + ", " : "") +
-            (fiscalReportingMonthId != null ? "fiscalReportingMonthId=" + fiscalReportingMonthId + ", " : "") +
+            (leasePeriodId != null ? "leasePeriodId=" + leasePeriodId + ", " : "") +
             (requestedById != null ? "requestedById=" + requestedById + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

@@ -138,12 +138,12 @@ public class RouAssetNBVReportQueryService extends QueryService<RouAssetNBVRepor
                 specification =
                     specification.and(buildStringSpecification(criteria.getReportParameters(), RouAssetNBVReport_.reportParameters));
             }
-            if (criteria.getFiscalReportingMonthId() != null) {
+            if (criteria.getLeasePeriodId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
-                            criteria.getFiscalReportingMonthId(),
-                            root -> root.join(RouAssetNBVReport_.fiscalReportingMonth, JoinType.LEFT).get(FiscalMonth_.id)
+                            criteria.getLeasePeriodId(),
+                            root -> root.join(RouAssetNBVReport_.leasePeriod, JoinType.LEFT).get(LeasePeriod_.id)
                         )
                     );
             }
