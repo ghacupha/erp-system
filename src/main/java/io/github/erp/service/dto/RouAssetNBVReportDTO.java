@@ -51,7 +51,7 @@ public class RouAssetNBVReportDTO implements Serializable {
     private byte[] reportFile;
 
     private String reportFileContentType;
-    private FiscalMonthDTO fiscalReportingMonth;
+    private LeasePeriodDTO leasePeriod;
 
     private ApplicationUserDTO requestedBy;
 
@@ -135,12 +135,12 @@ public class RouAssetNBVReportDTO implements Serializable {
         this.reportFileContentType = reportFileContentType;
     }
 
-    public FiscalMonthDTO getFiscalReportingMonth() {
-        return fiscalReportingMonth;
+    public LeasePeriodDTO getLeasePeriod() {
+        return leasePeriod;
     }
 
-    public void setFiscalReportingMonth(FiscalMonthDTO fiscalReportingMonth) {
-        this.fiscalReportingMonth = fiscalReportingMonth;
+    public void setLeasePeriod(LeasePeriodDTO leasePeriod) {
+        this.leasePeriod = leasePeriod;
     }
 
     public ApplicationUserDTO getRequestedBy() {
@@ -185,7 +185,7 @@ public class RouAssetNBVReportDTO implements Serializable {
             ", filename='" + getFilename() + "'" +
             ", reportParameters='" + getReportParameters() + "'" +
             ", reportFile='" + getReportFile() + "'" +
-            ", fiscalReportingMonth=" + getFiscalReportingMonth() +
+            ", leasePeriod=" + getLeasePeriod() +
             ", requestedBy=" + getRequestedBy() +
             "}";
     }

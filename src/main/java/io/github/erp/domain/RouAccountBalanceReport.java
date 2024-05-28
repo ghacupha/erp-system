@@ -73,16 +73,17 @@ public class RouAccountBalanceReport implements Serializable {
     @Column(name = "report_file_content_type")
     private String reportFileContentType;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "fiscalMonth" }, allowSetters = true)
+    private LeasePeriod leasePeriod;
+
     @ManyToOne
     @JsonIgnoreProperties(
         value = { "organization", "department", "securityClearance", "systemIdentity", "userProperties", "dealerIdentity", "placeholders" },
         allowSetters = true
     )
     private ApplicationUser requestedBy;
-
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "fiscalYear", "placeholders", "universallyUniqueMappings", "fiscalQuarter" }, allowSetters = true)
-    private FiscalMonth reportingMonth;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -216,6 +217,19 @@ public class RouAccountBalanceReport implements Serializable {
         this.reportFileContentType = reportFileContentType;
     }
 
+    public LeasePeriod getLeasePeriod() {
+        return this.leasePeriod;
+    }
+
+    public void setLeasePeriod(LeasePeriod leasePeriod) {
+        this.leasePeriod = leasePeriod;
+    }
+
+    public RouAccountBalanceReport leasePeriod(LeasePeriod leasePeriod) {
+        this.setLeasePeriod(leasePeriod);
+        return this;
+    }
+
     public ApplicationUser getRequestedBy() {
         return this.requestedBy;
     }
@@ -226,19 +240,6 @@ public class RouAccountBalanceReport implements Serializable {
 
     public RouAccountBalanceReport requestedBy(ApplicationUser applicationUser) {
         this.setRequestedBy(applicationUser);
-        return this;
-    }
-
-    public FiscalMonth getReportingMonth() {
-        return this.reportingMonth;
-    }
-
-    public void setReportingMonth(FiscalMonth fiscalMonth) {
-        this.reportingMonth = fiscalMonth;
-    }
-
-    public RouAccountBalanceReport reportingMonth(FiscalMonth fiscalMonth) {
-        this.setReportingMonth(fiscalMonth);
         return this;
     }
 

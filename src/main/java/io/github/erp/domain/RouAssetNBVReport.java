@@ -75,8 +75,8 @@ public class RouAssetNBVReport implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "fiscalYear", "placeholders", "universallyUniqueMappings", "fiscalQuarter" }, allowSetters = true)
-    private FiscalMonth fiscalReportingMonth;
+    @JsonIgnoreProperties(value = { "fiscalMonth" }, allowSetters = true)
+    private LeasePeriod leasePeriod;
 
     @ManyToOne
     @JsonIgnoreProperties(
@@ -217,16 +217,16 @@ public class RouAssetNBVReport implements Serializable {
         this.reportFileContentType = reportFileContentType;
     }
 
-    public FiscalMonth getFiscalReportingMonth() {
-        return this.fiscalReportingMonth;
+    public LeasePeriod getLeasePeriod() {
+        return this.leasePeriod;
     }
 
-    public void setFiscalReportingMonth(FiscalMonth fiscalMonth) {
-        this.fiscalReportingMonth = fiscalMonth;
+    public void setLeasePeriod(LeasePeriod leasePeriod) {
+        this.leasePeriod = leasePeriod;
     }
 
-    public RouAssetNBVReport fiscalReportingMonth(FiscalMonth fiscalMonth) {
-        this.setFiscalReportingMonth(fiscalMonth);
+    public RouAssetNBVReport leasePeriod(LeasePeriod leasePeriod) {
+        this.setLeasePeriod(leasePeriod);
         return this;
     }
 
