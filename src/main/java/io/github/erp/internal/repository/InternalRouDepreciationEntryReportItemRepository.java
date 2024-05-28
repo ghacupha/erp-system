@@ -62,7 +62,7 @@ public interface InternalRouDepreciationEntryReportItemRepository
             "    LEFT JOIN fiscal_month fm ON lp.fiscal_month_id = fm.id  " +
             "    LEFT JOIN asset_category ac ON asset_category_id = ac.id  " +
             "    LEFT JOIN transaction_account dta ON debit_account_id = dta.id  " +
-            "    LEFT JOIN transaction_account cta ON debit_account_id = cta.id  " +
+            "    LEFT JOIN transaction_account cta ON credit_account_id = cta.id  " +
             "    LEFT JOIN rou_model_metadata rmm ON rou_metadata_id = rmm.id " +
             "    LEFT JOIN ifrs16lease_contract ifr ON rmm.ifrs16lease_contract_id = ifr.id " +
             " WHERE (is_deleted=false OR is_deleted IS NULL) AND       " +
@@ -88,7 +88,7 @@ public interface InternalRouDepreciationEntryReportItemRepository
             "    LEFT JOIN fiscal_month fm ON lp.fiscal_month_id = fm.id  " +
             "    LEFT JOIN asset_category ac ON asset_category_id = ac.id  " +
             "    LEFT JOIN transaction_account dta ON debit_account_id = dta.id  " +
-            "    LEFT JOIN transaction_account cta ON debit_account_id = cta.id  " +
+            "    LEFT JOIN transaction_account cta ON credit_account_id = cta.id  " +
             "    LEFT JOIN rou_model_metadata rmm ON rou_metadata_id = rmm.id " +
             "    LEFT JOIN ifrs16lease_contract ifr ON rmm.ifrs16lease_contract_id = ifr.id " +
             " WHERE (is_deleted=false OR is_deleted IS NULL) AND       " +
@@ -119,7 +119,7 @@ public interface InternalRouDepreciationEntryReportItemRepository
             "    LEFT JOIN fiscal_month fm ON lp.fiscal_month_id = fm.id  " +
             "    LEFT JOIN asset_category ac ON asset_category_id = ac.id  " +
             "    LEFT JOIN transaction_account dta ON debit_account_id = dta.id  " +
-            "    LEFT JOIN transaction_account cta ON debit_account_id = cta.id  " +
+            "    LEFT JOIN transaction_account cta ON credit_account_id = cta.id  " +
             "    LEFT JOIN rou_model_metadata rmm ON rou_metadata_id = rmm.id " +
             "    LEFT JOIN ifrs16lease_contract ifr ON rmm.ifrs16lease_contract_id = ifr.id " +
             " WHERE (is_deleted=false OR is_deleted IS NULL) AND       " +
@@ -146,7 +146,7 @@ public interface InternalRouDepreciationEntryReportItemRepository
             "    LEFT JOIN fiscal_month fm ON lp.fiscal_month_id = fm.id  " +
             "    LEFT JOIN asset_category ac ON asset_category_id = ac.id  " +
             "    LEFT JOIN transaction_account dta ON debit_account_id = dta.id  " +
-            "    LEFT JOIN transaction_account cta ON debit_account_id = cta.id  " +
+            "    LEFT JOIN transaction_account cta ON credit_account_id = cta.id  " +
             "    LEFT JOIN rou_model_metadata rmm ON rou_metadata_id = rmm.id " +
             "    LEFT JOIN ifrs16lease_contract ifr ON rmm.ifrs16lease_contract_id = ifr.id " +
             " WHERE (is_deleted=false OR is_deleted IS NULL) AND       " +
@@ -178,7 +178,7 @@ public interface InternalRouDepreciationEntryReportItemRepository
             "    LEFT JOIN fiscal_month fm ON lp.fiscal_month_id = fm.id  " +
             "    LEFT JOIN asset_category ac ON asset_category_id = ac.id  " +
             "    LEFT JOIN transaction_account dta ON debit_account_id = dta.id  " +
-            "    LEFT JOIN transaction_account cta ON debit_account_id = cta.id  " +
+            "    LEFT JOIN transaction_account cta ON credit_account_id = cta.id  " +
             "    LEFT JOIN rou_model_metadata rmm ON rou_metadata_id = rmm.id " +
             "    LEFT JOIN ifrs16lease_contract ifr ON rmm.ifrs16lease_contract_id = ifr.id " +
             " WHERE (is_deleted=false OR is_deleted IS NULL) AND       " +
@@ -205,7 +205,7 @@ public interface InternalRouDepreciationEntryReportItemRepository
             "    LEFT JOIN fiscal_month fm ON lp.fiscal_month_id = fm.id  " +
             "    LEFT JOIN asset_category ac ON asset_category_id = ac.id  " +
             "    LEFT JOIN transaction_account dta ON debit_account_id = dta.id  " +
-            "    LEFT JOIN transaction_account cta ON debit_account_id = cta.id  " +
+            "    LEFT JOIN transaction_account cta ON credit_account_id = cta.id  " +
             "    LEFT JOIN rou_model_metadata rmm ON rou_metadata_id = rmm.id " +
             "    LEFT JOIN ifrs16lease_contract ifr ON rmm.ifrs16lease_contract_id = ifr.id " +
             " WHERE (is_deleted=false OR is_deleted IS NULL) AND       " +
@@ -238,7 +238,7 @@ public interface InternalRouDepreciationEntryReportItemRepository
             "    LEFT JOIN fiscal_month fm ON lp.fiscal_month_id = fm.id  " +
             "    LEFT JOIN asset_category ac ON asset_category_id = ac.id  " +
             "    LEFT JOIN transaction_account dta ON debit_account_id = dta.id  " +
-            "    LEFT JOIN transaction_account cta ON debit_account_id = cta.id  " +
+            "    LEFT JOIN transaction_account cta ON credit_account_id = cta.id  " +
             "    LEFT JOIN rou_model_metadata rmm ON rou_metadata_id = rmm.id " +
             "    LEFT JOIN ifrs16lease_contract ifr ON rmm.ifrs16lease_contract_id = ifr.id " +
             " WHERE (is_deleted=false OR is_deleted IS NULL) AND       " +
@@ -271,7 +271,7 @@ public interface InternalRouDepreciationEntryReportItemRepository
             "    LEFT JOIN fiscal_month fm ON lp.fiscal_month_id = fm.id  " +
             "    LEFT JOIN asset_category ac ON asset_category_id = ac.id  " +
             "    LEFT JOIN transaction_account dta ON debit_account_id = dta.id  " +
-            "    LEFT JOIN transaction_account cta ON debit_account_id = cta.id  " +
+            "    LEFT JOIN transaction_account cta ON credit_account_id = cta.id  " +
             "    LEFT JOIN rou_model_metadata rmm ON rou_metadata_id = rmm.id " +
             "    LEFT JOIN ifrs16lease_contract ifr ON rmm.ifrs16lease_contract_id = ifr.id " +
             " WHERE (is_deleted=false OR is_deleted IS NULL) AND       " +
