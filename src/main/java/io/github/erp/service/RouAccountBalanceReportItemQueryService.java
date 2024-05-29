@@ -137,14 +137,38 @@ public class RouAccountBalanceReportItemQueryService extends QueryService<RouAcc
                         )
                     );
             }
+            if (criteria.getTotalLeaseAmount() != null) {
+                specification =
+                    specification.and(
+                        buildRangeSpecification(criteria.getTotalLeaseAmount(), RouAccountBalanceReportItem_.totalLeaseAmount)
+                    );
+            }
+            if (criteria.getAccruedDepreciationAmount() != null) {
+                specification =
+                    specification.and(
+                        buildRangeSpecification(
+                            criteria.getAccruedDepreciationAmount(),
+                            RouAccountBalanceReportItem_.accruedDepreciationAmount
+                        )
+                    );
+            }
+            if (criteria.getCurrentPeriodDepreciationAmount() != null) {
+                specification =
+                    specification.and(
+                        buildRangeSpecification(
+                            criteria.getCurrentPeriodDepreciationAmount(),
+                            RouAccountBalanceReportItem_.currentPeriodDepreciationAmount
+                        )
+                    );
+            }
             if (criteria.getNetBookValue() != null) {
                 specification =
                     specification.and(buildRangeSpecification(criteria.getNetBookValue(), RouAccountBalanceReportItem_.netBookValue));
             }
-            if (criteria.getFiscalMonthEndDate() != null) {
+            if (criteria.getFiscalPeriodEndDate() != null) {
                 specification =
                     specification.and(
-                        buildRangeSpecification(criteria.getFiscalMonthEndDate(), RouAccountBalanceReportItem_.fiscalMonthEndDate)
+                        buildRangeSpecification(criteria.getFiscalPeriodEndDate(), RouAccountBalanceReportItem_.fiscalPeriodEndDate)
                     );
             }
         }

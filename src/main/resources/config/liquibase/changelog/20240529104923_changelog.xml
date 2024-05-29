@@ -1,0 +1,26 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1716979928847-10">
+        <addColumn tableName="rou_account_balance_report_item">
+            <column name="accrued_depreciation_amount" type="numeric(21, 2)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1716979928847-11">
+        <addColumn tableName="rou_account_balance_report_item">
+            <column name="current_period_depreciation_amount" type="numeric(21, 2)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1716979928847-12">
+        <addColumn tableName="rou_account_balance_report_item">
+            <column name="fiscal_period_end_date" type="date"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1716979928847-13">
+        <addColumn tableName="rou_account_balance_report_item">
+            <column name="total_lease_amount" type="numeric(21, 2)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1716979928847-31">
+        <dropColumn columnName="fiscal_month_end_date" tableName="rou_account_balance_report_item"/>
+    </changeSet>
+</databaseChangeLog>

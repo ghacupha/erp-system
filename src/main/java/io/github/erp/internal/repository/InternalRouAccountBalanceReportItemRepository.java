@@ -42,8 +42,10 @@ public interface InternalRouAccountBalanceReportItemRepository
             "WITH current_period AS ( " +
             "    SELECT  " +
             "        lp.id, " +
-            "        lp.end_date " +
-            "    FROM lease_period lp " +
+            "        lp.end_date, " +
+            "        fm.end_date as fiscal_end_date " +
+            "    FROM lease_period lp  " +
+            "    LEFT JOIN fiscal_month fm ON lp.fiscal_month_id = fm.id  " +
             "    WHERE lp.id = :leasePeriodId " +
             "), " +
             "accrued_depreciation AS ( " +
@@ -74,10 +76,11 @@ public interface InternalRouAccountBalanceReportItemRepository
             "    cta.account_name AS assetAccountName, " +
             "    cta.account_number AS assetAccountNumber, " +
             "    dta.account_number AS depreciationAccountNumber,     " +
-            "    tla.total_lease_amount AS leaseAmount, " +
+            "    tla.total_lease_amount AS totalLeaseAmount, " +
             "    ad.accrued_depreciation_amount AS accruedDepreciationAmount, " +
             "    SUM(rde.depreciation_amount) AS currentPeriodDepreciationAmount,  " +
-            "    SUM(rde.outstanding_amount) AS netBookValue     " +
+            "    SUM(rde.outstanding_amount) AS netBookValue, " +
+            "    (SELECT fiscal_end_date FROM current_period) AS fiscalPeriodEndDate " +
             "FROM rou_depreciation_entry rde  " +
             "LEFT JOIN lease_period lp ON rde.lease_period_id = lp.id  " +
             "LEFT JOIN fiscal_month fm ON lp.fiscal_month_id = fm.id  " +
@@ -98,8 +101,10 @@ public interface InternalRouAccountBalanceReportItemRepository
             "WITH current_period AS ( " +
             "    SELECT  " +
             "        lp.id, " +
-            "        lp.end_date " +
-            "    FROM lease_period lp " +
+            "        lp.end_date, " +
+            "        fm.end_date as fiscal_end_date " +
+            "    FROM lease_period lp  " +
+            "    LEFT JOIN fiscal_month fm ON lp.fiscal_month_id = fm.id  " +
             "    WHERE lp.id = :leasePeriodId " +
             "), " +
             "accrued_depreciation AS ( " +
@@ -130,10 +135,11 @@ public interface InternalRouAccountBalanceReportItemRepository
             "    cta.account_name AS assetAccountName, " +
             "    cta.account_number AS assetAccountNumber, " +
             "    dta.account_number AS depreciationAccountNumber,     " +
-            "    tla.total_lease_amount AS leaseAmount, " +
+            "    tla.total_lease_amount AS totalLeaseAmount, " +
             "    ad.accrued_depreciation_amount AS accruedDepreciationAmount, " +
             "    SUM(rde.depreciation_amount) AS currentPeriodDepreciationAmount,  " +
-            "    SUM(rde.outstanding_amount) AS netBookValue     " +
+            "    SUM(rde.outstanding_amount) AS netBookValue, " +
+            "    (SELECT fiscal_end_date FROM current_period) AS fiscalPeriodEndDate " +
             "FROM rou_depreciation_entry rde  " +
             "LEFT JOIN lease_period lp ON rde.lease_period_id = lp.id  " +
             "LEFT JOIN fiscal_month fm ON lp.fiscal_month_id = fm.id  " +
@@ -149,7 +155,8 @@ public interface InternalRouAccountBalanceReportItemRepository
             "    (rde.activated = true OR rde.activated IS NULL) AND " +
             "    (rde.invalidated = false OR rde.invalidated IS NULL) AND " +
             "    lp.id = :leasePeriodId " +
-            "GROUP BY cta.id, cta.account_name, dta.account_number, ad.accrued_depreciation_amount, tla.total_lease_amount"
+            "GROUP BY cta.id, cta.account_name, dta.account_number, ad.accrued_depreciation_amount, tla.total_lease_amount "
+
     )
     Page<RouAccountBalanceReportItemInternal> getRouAccountBalanceReportItemByLeasePeriodParameter(Pageable pageable, @Param("leasePeriodId") long leasePeriodId);
 }

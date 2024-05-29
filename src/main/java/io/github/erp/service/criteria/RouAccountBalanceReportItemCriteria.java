@@ -52,9 +52,15 @@ public class RouAccountBalanceReportItemCriteria implements Serializable, Criter
 
     private StringFilter depreciationAccountNumber;
 
+    private BigDecimalFilter totalLeaseAmount;
+
+    private BigDecimalFilter accruedDepreciationAmount;
+
+    private BigDecimalFilter currentPeriodDepreciationAmount;
+
     private BigDecimalFilter netBookValue;
 
-    private LocalDateFilter fiscalMonthEndDate;
+    private LocalDateFilter fiscalPeriodEndDate;
 
     private Boolean distinct;
 
@@ -65,8 +71,12 @@ public class RouAccountBalanceReportItemCriteria implements Serializable, Criter
         this.assetAccountName = other.assetAccountName == null ? null : other.assetAccountName.copy();
         this.assetAccountNumber = other.assetAccountNumber == null ? null : other.assetAccountNumber.copy();
         this.depreciationAccountNumber = other.depreciationAccountNumber == null ? null : other.depreciationAccountNumber.copy();
+        this.totalLeaseAmount = other.totalLeaseAmount == null ? null : other.totalLeaseAmount.copy();
+        this.accruedDepreciationAmount = other.accruedDepreciationAmount == null ? null : other.accruedDepreciationAmount.copy();
+        this.currentPeriodDepreciationAmount =
+            other.currentPeriodDepreciationAmount == null ? null : other.currentPeriodDepreciationAmount.copy();
         this.netBookValue = other.netBookValue == null ? null : other.netBookValue.copy();
-        this.fiscalMonthEndDate = other.fiscalMonthEndDate == null ? null : other.fiscalMonthEndDate.copy();
+        this.fiscalPeriodEndDate = other.fiscalPeriodEndDate == null ? null : other.fiscalPeriodEndDate.copy();
         this.distinct = other.distinct;
     }
 
@@ -135,6 +145,51 @@ public class RouAccountBalanceReportItemCriteria implements Serializable, Criter
         this.depreciationAccountNumber = depreciationAccountNumber;
     }
 
+    public BigDecimalFilter getTotalLeaseAmount() {
+        return totalLeaseAmount;
+    }
+
+    public BigDecimalFilter totalLeaseAmount() {
+        if (totalLeaseAmount == null) {
+            totalLeaseAmount = new BigDecimalFilter();
+        }
+        return totalLeaseAmount;
+    }
+
+    public void setTotalLeaseAmount(BigDecimalFilter totalLeaseAmount) {
+        this.totalLeaseAmount = totalLeaseAmount;
+    }
+
+    public BigDecimalFilter getAccruedDepreciationAmount() {
+        return accruedDepreciationAmount;
+    }
+
+    public BigDecimalFilter accruedDepreciationAmount() {
+        if (accruedDepreciationAmount == null) {
+            accruedDepreciationAmount = new BigDecimalFilter();
+        }
+        return accruedDepreciationAmount;
+    }
+
+    public void setAccruedDepreciationAmount(BigDecimalFilter accruedDepreciationAmount) {
+        this.accruedDepreciationAmount = accruedDepreciationAmount;
+    }
+
+    public BigDecimalFilter getCurrentPeriodDepreciationAmount() {
+        return currentPeriodDepreciationAmount;
+    }
+
+    public BigDecimalFilter currentPeriodDepreciationAmount() {
+        if (currentPeriodDepreciationAmount == null) {
+            currentPeriodDepreciationAmount = new BigDecimalFilter();
+        }
+        return currentPeriodDepreciationAmount;
+    }
+
+    public void setCurrentPeriodDepreciationAmount(BigDecimalFilter currentPeriodDepreciationAmount) {
+        this.currentPeriodDepreciationAmount = currentPeriodDepreciationAmount;
+    }
+
     public BigDecimalFilter getNetBookValue() {
         return netBookValue;
     }
@@ -150,19 +205,19 @@ public class RouAccountBalanceReportItemCriteria implements Serializable, Criter
         this.netBookValue = netBookValue;
     }
 
-    public LocalDateFilter getFiscalMonthEndDate() {
-        return fiscalMonthEndDate;
+    public LocalDateFilter getFiscalPeriodEndDate() {
+        return fiscalPeriodEndDate;
     }
 
-    public LocalDateFilter fiscalMonthEndDate() {
-        if (fiscalMonthEndDate == null) {
-            fiscalMonthEndDate = new LocalDateFilter();
+    public LocalDateFilter fiscalPeriodEndDate() {
+        if (fiscalPeriodEndDate == null) {
+            fiscalPeriodEndDate = new LocalDateFilter();
         }
-        return fiscalMonthEndDate;
+        return fiscalPeriodEndDate;
     }
 
-    public void setFiscalMonthEndDate(LocalDateFilter fiscalMonthEndDate) {
-        this.fiscalMonthEndDate = fiscalMonthEndDate;
+    public void setFiscalPeriodEndDate(LocalDateFilter fiscalPeriodEndDate) {
+        this.fiscalPeriodEndDate = fiscalPeriodEndDate;
     }
 
     public Boolean getDistinct() {
@@ -187,8 +242,11 @@ public class RouAccountBalanceReportItemCriteria implements Serializable, Criter
             Objects.equals(assetAccountName, that.assetAccountName) &&
             Objects.equals(assetAccountNumber, that.assetAccountNumber) &&
             Objects.equals(depreciationAccountNumber, that.depreciationAccountNumber) &&
+            Objects.equals(totalLeaseAmount, that.totalLeaseAmount) &&
+            Objects.equals(accruedDepreciationAmount, that.accruedDepreciationAmount) &&
+            Objects.equals(currentPeriodDepreciationAmount, that.currentPeriodDepreciationAmount) &&
             Objects.equals(netBookValue, that.netBookValue) &&
-            Objects.equals(fiscalMonthEndDate, that.fiscalMonthEndDate) &&
+            Objects.equals(fiscalPeriodEndDate, that.fiscalPeriodEndDate) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -200,8 +258,11 @@ public class RouAccountBalanceReportItemCriteria implements Serializable, Criter
             assetAccountName,
             assetAccountNumber,
             depreciationAccountNumber,
+            totalLeaseAmount,
+            accruedDepreciationAmount,
+            currentPeriodDepreciationAmount,
             netBookValue,
-            fiscalMonthEndDate,
+            fiscalPeriodEndDate,
             distinct
         );
     }
@@ -214,8 +275,11 @@ public class RouAccountBalanceReportItemCriteria implements Serializable, Criter
             (assetAccountName != null ? "assetAccountName=" + assetAccountName + ", " : "") +
             (assetAccountNumber != null ? "assetAccountNumber=" + assetAccountNumber + ", " : "") +
             (depreciationAccountNumber != null ? "depreciationAccountNumber=" + depreciationAccountNumber + ", " : "") +
+            (totalLeaseAmount != null ? "totalLeaseAmount=" + totalLeaseAmount + ", " : "") +
+            (accruedDepreciationAmount != null ? "accruedDepreciationAmount=" + accruedDepreciationAmount + ", " : "") +
+            (currentPeriodDepreciationAmount != null ? "currentPeriodDepreciationAmount=" + currentPeriodDepreciationAmount + ", " : "") +
             (netBookValue != null ? "netBookValue=" + netBookValue + ", " : "") +
-            (fiscalMonthEndDate != null ? "fiscalMonthEndDate=" + fiscalMonthEndDate + ", " : "") +
+            (fiscalPeriodEndDate != null ? "fiscalPeriodEndDate=" + fiscalPeriodEndDate + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
