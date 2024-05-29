@@ -17,6 +17,7 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.RouAccountBalanceReportItem;
 import io.github.erp.repository.RouAccountBalanceReportItemRepository;
@@ -68,13 +69,25 @@ class RouAccountBalanceReportItemResourceIT {
     private static final String DEFAULT_DEPRECIATION_ACCOUNT_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_DEPRECIATION_ACCOUNT_NUMBER = "BBBBBBBBBB";
 
+    private static final BigDecimal DEFAULT_TOTAL_LEASE_AMOUNT = new BigDecimal(1);
+    private static final BigDecimal UPDATED_TOTAL_LEASE_AMOUNT = new BigDecimal(2);
+    private static final BigDecimal SMALLER_TOTAL_LEASE_AMOUNT = new BigDecimal(1 - 1);
+
+    private static final BigDecimal DEFAULT_ACCRUED_DEPRECIATION_AMOUNT = new BigDecimal(1);
+    private static final BigDecimal UPDATED_ACCRUED_DEPRECIATION_AMOUNT = new BigDecimal(2);
+    private static final BigDecimal SMALLER_ACCRUED_DEPRECIATION_AMOUNT = new BigDecimal(1 - 1);
+
+    private static final BigDecimal DEFAULT_CURRENT_PERIOD_DEPRECIATION_AMOUNT = new BigDecimal(1);
+    private static final BigDecimal UPDATED_CURRENT_PERIOD_DEPRECIATION_AMOUNT = new BigDecimal(2);
+    private static final BigDecimal SMALLER_CURRENT_PERIOD_DEPRECIATION_AMOUNT = new BigDecimal(1 - 1);
+
     private static final BigDecimal DEFAULT_NET_BOOK_VALUE = new BigDecimal(1);
     private static final BigDecimal UPDATED_NET_BOOK_VALUE = new BigDecimal(2);
     private static final BigDecimal SMALLER_NET_BOOK_VALUE = new BigDecimal(1 - 1);
 
-    private static final LocalDate DEFAULT_FISCAL_MONTH_END_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_FISCAL_MONTH_END_DATE = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_FISCAL_MONTH_END_DATE = LocalDate.ofEpochDay(-1L);
+    private static final LocalDate DEFAULT_FISCAL_PERIOD_END_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_FISCAL_PERIOD_END_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_FISCAL_PERIOD_END_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final String ENTITY_API_URL = "/api/leases/rou-account-balance-report-items";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -116,8 +129,11 @@ class RouAccountBalanceReportItemResourceIT {
             .assetAccountName(DEFAULT_ASSET_ACCOUNT_NAME)
             .assetAccountNumber(DEFAULT_ASSET_ACCOUNT_NUMBER)
             .depreciationAccountNumber(DEFAULT_DEPRECIATION_ACCOUNT_NUMBER)
+            .totalLeaseAmount(DEFAULT_TOTAL_LEASE_AMOUNT)
+            .accruedDepreciationAmount(DEFAULT_ACCRUED_DEPRECIATION_AMOUNT)
+            .currentPeriodDepreciationAmount(DEFAULT_CURRENT_PERIOD_DEPRECIATION_AMOUNT)
             .netBookValue(DEFAULT_NET_BOOK_VALUE)
-            .fiscalMonthEndDate(DEFAULT_FISCAL_MONTH_END_DATE);
+            .fiscalPeriodEndDate(DEFAULT_FISCAL_PERIOD_END_DATE);
         return rouAccountBalanceReportItem;
     }
 
@@ -132,8 +148,11 @@ class RouAccountBalanceReportItemResourceIT {
             .assetAccountName(UPDATED_ASSET_ACCOUNT_NAME)
             .assetAccountNumber(UPDATED_ASSET_ACCOUNT_NUMBER)
             .depreciationAccountNumber(UPDATED_DEPRECIATION_ACCOUNT_NUMBER)
+            .totalLeaseAmount(UPDATED_TOTAL_LEASE_AMOUNT)
+            .accruedDepreciationAmount(UPDATED_ACCRUED_DEPRECIATION_AMOUNT)
+            .currentPeriodDepreciationAmount(UPDATED_CURRENT_PERIOD_DEPRECIATION_AMOUNT)
             .netBookValue(UPDATED_NET_BOOK_VALUE)
-            .fiscalMonthEndDate(UPDATED_FISCAL_MONTH_END_DATE);
+            .fiscalPeriodEndDate(UPDATED_FISCAL_PERIOD_END_DATE);
         return rouAccountBalanceReportItem;
     }
 
@@ -157,8 +176,13 @@ class RouAccountBalanceReportItemResourceIT {
             .andExpect(jsonPath("$.[*].assetAccountName").value(hasItem(DEFAULT_ASSET_ACCOUNT_NAME)))
             .andExpect(jsonPath("$.[*].assetAccountNumber").value(hasItem(DEFAULT_ASSET_ACCOUNT_NUMBER)))
             .andExpect(jsonPath("$.[*].depreciationAccountNumber").value(hasItem(DEFAULT_DEPRECIATION_ACCOUNT_NUMBER)))
+            .andExpect(jsonPath("$.[*].totalLeaseAmount").value(hasItem(sameNumber(DEFAULT_TOTAL_LEASE_AMOUNT))))
+            .andExpect(jsonPath("$.[*].accruedDepreciationAmount").value(hasItem(sameNumber(DEFAULT_ACCRUED_DEPRECIATION_AMOUNT))))
+            .andExpect(
+                jsonPath("$.[*].currentPeriodDepreciationAmount").value(hasItem(sameNumber(DEFAULT_CURRENT_PERIOD_DEPRECIATION_AMOUNT)))
+            )
             .andExpect(jsonPath("$.[*].netBookValue").value(hasItem(sameNumber(DEFAULT_NET_BOOK_VALUE))))
-            .andExpect(jsonPath("$.[*].fiscalMonthEndDate").value(hasItem(DEFAULT_FISCAL_MONTH_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].fiscalPeriodEndDate").value(hasItem(DEFAULT_FISCAL_PERIOD_END_DATE.toString())));
     }
 
     @Test
@@ -176,8 +200,11 @@ class RouAccountBalanceReportItemResourceIT {
             .andExpect(jsonPath("$.assetAccountName").value(DEFAULT_ASSET_ACCOUNT_NAME))
             .andExpect(jsonPath("$.assetAccountNumber").value(DEFAULT_ASSET_ACCOUNT_NUMBER))
             .andExpect(jsonPath("$.depreciationAccountNumber").value(DEFAULT_DEPRECIATION_ACCOUNT_NUMBER))
+            .andExpect(jsonPath("$.totalLeaseAmount").value(sameNumber(DEFAULT_TOTAL_LEASE_AMOUNT)))
+            .andExpect(jsonPath("$.accruedDepreciationAmount").value(sameNumber(DEFAULT_ACCRUED_DEPRECIATION_AMOUNT)))
+            .andExpect(jsonPath("$.currentPeriodDepreciationAmount").value(sameNumber(DEFAULT_CURRENT_PERIOD_DEPRECIATION_AMOUNT)))
             .andExpect(jsonPath("$.netBookValue").value(sameNumber(DEFAULT_NET_BOOK_VALUE)))
-            .andExpect(jsonPath("$.fiscalMonthEndDate").value(DEFAULT_FISCAL_MONTH_END_DATE.toString()));
+            .andExpect(jsonPath("$.fiscalPeriodEndDate").value(DEFAULT_FISCAL_PERIOD_END_DATE.toString()));
     }
 
     @Test
@@ -442,6 +469,359 @@ class RouAccountBalanceReportItemResourceIT {
 
     @Test
     @Transactional
+    void getAllRouAccountBalanceReportItemsByTotalLeaseAmountIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where totalLeaseAmount equals to DEFAULT_TOTAL_LEASE_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound("totalLeaseAmount.equals=" + DEFAULT_TOTAL_LEASE_AMOUNT);
+
+        // Get all the rouAccountBalanceReportItemList where totalLeaseAmount equals to UPDATED_TOTAL_LEASE_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound("totalLeaseAmount.equals=" + UPDATED_TOTAL_LEASE_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByTotalLeaseAmountIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where totalLeaseAmount not equals to DEFAULT_TOTAL_LEASE_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound("totalLeaseAmount.notEquals=" + DEFAULT_TOTAL_LEASE_AMOUNT);
+
+        // Get all the rouAccountBalanceReportItemList where totalLeaseAmount not equals to UPDATED_TOTAL_LEASE_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound("totalLeaseAmount.notEquals=" + UPDATED_TOTAL_LEASE_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByTotalLeaseAmountIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where totalLeaseAmount in DEFAULT_TOTAL_LEASE_AMOUNT or UPDATED_TOTAL_LEASE_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound(
+            "totalLeaseAmount.in=" + DEFAULT_TOTAL_LEASE_AMOUNT + "," + UPDATED_TOTAL_LEASE_AMOUNT
+        );
+
+        // Get all the rouAccountBalanceReportItemList where totalLeaseAmount equals to UPDATED_TOTAL_LEASE_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound("totalLeaseAmount.in=" + UPDATED_TOTAL_LEASE_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByTotalLeaseAmountIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where totalLeaseAmount is not null
+        defaultRouAccountBalanceReportItemShouldBeFound("totalLeaseAmount.specified=true");
+
+        // Get all the rouAccountBalanceReportItemList where totalLeaseAmount is null
+        defaultRouAccountBalanceReportItemShouldNotBeFound("totalLeaseAmount.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByTotalLeaseAmountIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where totalLeaseAmount is greater than or equal to DEFAULT_TOTAL_LEASE_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound("totalLeaseAmount.greaterThanOrEqual=" + DEFAULT_TOTAL_LEASE_AMOUNT);
+
+        // Get all the rouAccountBalanceReportItemList where totalLeaseAmount is greater than or equal to UPDATED_TOTAL_LEASE_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound("totalLeaseAmount.greaterThanOrEqual=" + UPDATED_TOTAL_LEASE_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByTotalLeaseAmountIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where totalLeaseAmount is less than or equal to DEFAULT_TOTAL_LEASE_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound("totalLeaseAmount.lessThanOrEqual=" + DEFAULT_TOTAL_LEASE_AMOUNT);
+
+        // Get all the rouAccountBalanceReportItemList where totalLeaseAmount is less than or equal to SMALLER_TOTAL_LEASE_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound("totalLeaseAmount.lessThanOrEqual=" + SMALLER_TOTAL_LEASE_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByTotalLeaseAmountIsLessThanSomething() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where totalLeaseAmount is less than DEFAULT_TOTAL_LEASE_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound("totalLeaseAmount.lessThan=" + DEFAULT_TOTAL_LEASE_AMOUNT);
+
+        // Get all the rouAccountBalanceReportItemList where totalLeaseAmount is less than UPDATED_TOTAL_LEASE_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound("totalLeaseAmount.lessThan=" + UPDATED_TOTAL_LEASE_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByTotalLeaseAmountIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where totalLeaseAmount is greater than DEFAULT_TOTAL_LEASE_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound("totalLeaseAmount.greaterThan=" + DEFAULT_TOTAL_LEASE_AMOUNT);
+
+        // Get all the rouAccountBalanceReportItemList where totalLeaseAmount is greater than SMALLER_TOTAL_LEASE_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound("totalLeaseAmount.greaterThan=" + SMALLER_TOTAL_LEASE_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByAccruedDepreciationAmountIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where accruedDepreciationAmount equals to DEFAULT_ACCRUED_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound("accruedDepreciationAmount.equals=" + DEFAULT_ACCRUED_DEPRECIATION_AMOUNT);
+
+        // Get all the rouAccountBalanceReportItemList where accruedDepreciationAmount equals to UPDATED_ACCRUED_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound("accruedDepreciationAmount.equals=" + UPDATED_ACCRUED_DEPRECIATION_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByAccruedDepreciationAmountIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where accruedDepreciationAmount not equals to DEFAULT_ACCRUED_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound("accruedDepreciationAmount.notEquals=" + DEFAULT_ACCRUED_DEPRECIATION_AMOUNT);
+
+        // Get all the rouAccountBalanceReportItemList where accruedDepreciationAmount not equals to UPDATED_ACCRUED_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound("accruedDepreciationAmount.notEquals=" + UPDATED_ACCRUED_DEPRECIATION_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByAccruedDepreciationAmountIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where accruedDepreciationAmount in DEFAULT_ACCRUED_DEPRECIATION_AMOUNT or UPDATED_ACCRUED_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound(
+            "accruedDepreciationAmount.in=" + DEFAULT_ACCRUED_DEPRECIATION_AMOUNT + "," + UPDATED_ACCRUED_DEPRECIATION_AMOUNT
+        );
+
+        // Get all the rouAccountBalanceReportItemList where accruedDepreciationAmount equals to UPDATED_ACCRUED_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound("accruedDepreciationAmount.in=" + UPDATED_ACCRUED_DEPRECIATION_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByAccruedDepreciationAmountIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where accruedDepreciationAmount is not null
+        defaultRouAccountBalanceReportItemShouldBeFound("accruedDepreciationAmount.specified=true");
+
+        // Get all the rouAccountBalanceReportItemList where accruedDepreciationAmount is null
+        defaultRouAccountBalanceReportItemShouldNotBeFound("accruedDepreciationAmount.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByAccruedDepreciationAmountIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where accruedDepreciationAmount is greater than or equal to DEFAULT_ACCRUED_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound(
+            "accruedDepreciationAmount.greaterThanOrEqual=" + DEFAULT_ACCRUED_DEPRECIATION_AMOUNT
+        );
+
+        // Get all the rouAccountBalanceReportItemList where accruedDepreciationAmount is greater than or equal to UPDATED_ACCRUED_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound(
+            "accruedDepreciationAmount.greaterThanOrEqual=" + UPDATED_ACCRUED_DEPRECIATION_AMOUNT
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByAccruedDepreciationAmountIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where accruedDepreciationAmount is less than or equal to DEFAULT_ACCRUED_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound("accruedDepreciationAmount.lessThanOrEqual=" + DEFAULT_ACCRUED_DEPRECIATION_AMOUNT);
+
+        // Get all the rouAccountBalanceReportItemList where accruedDepreciationAmount is less than or equal to SMALLER_ACCRUED_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound(
+            "accruedDepreciationAmount.lessThanOrEqual=" + SMALLER_ACCRUED_DEPRECIATION_AMOUNT
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByAccruedDepreciationAmountIsLessThanSomething() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where accruedDepreciationAmount is less than DEFAULT_ACCRUED_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound("accruedDepreciationAmount.lessThan=" + DEFAULT_ACCRUED_DEPRECIATION_AMOUNT);
+
+        // Get all the rouAccountBalanceReportItemList where accruedDepreciationAmount is less than UPDATED_ACCRUED_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound("accruedDepreciationAmount.lessThan=" + UPDATED_ACCRUED_DEPRECIATION_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByAccruedDepreciationAmountIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where accruedDepreciationAmount is greater than DEFAULT_ACCRUED_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound("accruedDepreciationAmount.greaterThan=" + DEFAULT_ACCRUED_DEPRECIATION_AMOUNT);
+
+        // Get all the rouAccountBalanceReportItemList where accruedDepreciationAmount is greater than SMALLER_ACCRUED_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound("accruedDepreciationAmount.greaterThan=" + SMALLER_ACCRUED_DEPRECIATION_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByCurrentPeriodDepreciationAmountIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where currentPeriodDepreciationAmount equals to DEFAULT_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound(
+            "currentPeriodDepreciationAmount.equals=" + DEFAULT_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        );
+
+        // Get all the rouAccountBalanceReportItemList where currentPeriodDepreciationAmount equals to UPDATED_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound(
+            "currentPeriodDepreciationAmount.equals=" + UPDATED_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByCurrentPeriodDepreciationAmountIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where currentPeriodDepreciationAmount not equals to DEFAULT_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound(
+            "currentPeriodDepreciationAmount.notEquals=" + DEFAULT_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        );
+
+        // Get all the rouAccountBalanceReportItemList where currentPeriodDepreciationAmount not equals to UPDATED_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound(
+            "currentPeriodDepreciationAmount.notEquals=" + UPDATED_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByCurrentPeriodDepreciationAmountIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where currentPeriodDepreciationAmount in DEFAULT_CURRENT_PERIOD_DEPRECIATION_AMOUNT or UPDATED_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound(
+            "currentPeriodDepreciationAmount.in=" +
+            DEFAULT_CURRENT_PERIOD_DEPRECIATION_AMOUNT +
+            "," +
+            UPDATED_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        );
+
+        // Get all the rouAccountBalanceReportItemList where currentPeriodDepreciationAmount equals to UPDATED_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound(
+            "currentPeriodDepreciationAmount.in=" + UPDATED_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByCurrentPeriodDepreciationAmountIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where currentPeriodDepreciationAmount is not null
+        defaultRouAccountBalanceReportItemShouldBeFound("currentPeriodDepreciationAmount.specified=true");
+
+        // Get all the rouAccountBalanceReportItemList where currentPeriodDepreciationAmount is null
+        defaultRouAccountBalanceReportItemShouldNotBeFound("currentPeriodDepreciationAmount.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByCurrentPeriodDepreciationAmountIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where currentPeriodDepreciationAmount is greater than or equal to DEFAULT_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound(
+            "currentPeriodDepreciationAmount.greaterThanOrEqual=" + DEFAULT_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        );
+
+        // Get all the rouAccountBalanceReportItemList where currentPeriodDepreciationAmount is greater than or equal to UPDATED_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound(
+            "currentPeriodDepreciationAmount.greaterThanOrEqual=" + UPDATED_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByCurrentPeriodDepreciationAmountIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where currentPeriodDepreciationAmount is less than or equal to DEFAULT_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound(
+            "currentPeriodDepreciationAmount.lessThanOrEqual=" + DEFAULT_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        );
+
+        // Get all the rouAccountBalanceReportItemList where currentPeriodDepreciationAmount is less than or equal to SMALLER_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound(
+            "currentPeriodDepreciationAmount.lessThanOrEqual=" + SMALLER_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByCurrentPeriodDepreciationAmountIsLessThanSomething() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where currentPeriodDepreciationAmount is less than DEFAULT_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound(
+            "currentPeriodDepreciationAmount.lessThan=" + DEFAULT_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        );
+
+        // Get all the rouAccountBalanceReportItemList where currentPeriodDepreciationAmount is less than UPDATED_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound(
+            "currentPeriodDepreciationAmount.lessThan=" + UPDATED_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllRouAccountBalanceReportItemsByCurrentPeriodDepreciationAmountIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
+
+        // Get all the rouAccountBalanceReportItemList where currentPeriodDepreciationAmount is greater than DEFAULT_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldNotBeFound(
+            "currentPeriodDepreciationAmount.greaterThan=" + DEFAULT_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        );
+
+        // Get all the rouAccountBalanceReportItemList where currentPeriodDepreciationAmount is greater than SMALLER_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        defaultRouAccountBalanceReportItemShouldBeFound(
+            "currentPeriodDepreciationAmount.greaterThan=" + SMALLER_CURRENT_PERIOD_DEPRECIATION_AMOUNT
+        );
+    }
+
+    @Test
+    @Transactional
     void getAllRouAccountBalanceReportItemsByNetBookValueIsEqualToSomething() throws Exception {
         // Initialize the database
         rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
@@ -546,108 +926,108 @@ class RouAccountBalanceReportItemResourceIT {
 
     @Test
     @Transactional
-    void getAllRouAccountBalanceReportItemsByFiscalMonthEndDateIsEqualToSomething() throws Exception {
+    void getAllRouAccountBalanceReportItemsByFiscalPeriodEndDateIsEqualToSomething() throws Exception {
         // Initialize the database
         rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
 
-        // Get all the rouAccountBalanceReportItemList where fiscalMonthEndDate equals to DEFAULT_FISCAL_MONTH_END_DATE
-        defaultRouAccountBalanceReportItemShouldBeFound("fiscalMonthEndDate.equals=" + DEFAULT_FISCAL_MONTH_END_DATE);
+        // Get all the rouAccountBalanceReportItemList where fiscalPeriodEndDate equals to DEFAULT_FISCAL_PERIOD_END_DATE
+        defaultRouAccountBalanceReportItemShouldBeFound("fiscalPeriodEndDate.equals=" + DEFAULT_FISCAL_PERIOD_END_DATE);
 
-        // Get all the rouAccountBalanceReportItemList where fiscalMonthEndDate equals to UPDATED_FISCAL_MONTH_END_DATE
-        defaultRouAccountBalanceReportItemShouldNotBeFound("fiscalMonthEndDate.equals=" + UPDATED_FISCAL_MONTH_END_DATE);
+        // Get all the rouAccountBalanceReportItemList where fiscalPeriodEndDate equals to UPDATED_FISCAL_PERIOD_END_DATE
+        defaultRouAccountBalanceReportItemShouldNotBeFound("fiscalPeriodEndDate.equals=" + UPDATED_FISCAL_PERIOD_END_DATE);
     }
 
     @Test
     @Transactional
-    void getAllRouAccountBalanceReportItemsByFiscalMonthEndDateIsNotEqualToSomething() throws Exception {
+    void getAllRouAccountBalanceReportItemsByFiscalPeriodEndDateIsNotEqualToSomething() throws Exception {
         // Initialize the database
         rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
 
-        // Get all the rouAccountBalanceReportItemList where fiscalMonthEndDate not equals to DEFAULT_FISCAL_MONTH_END_DATE
-        defaultRouAccountBalanceReportItemShouldNotBeFound("fiscalMonthEndDate.notEquals=" + DEFAULT_FISCAL_MONTH_END_DATE);
+        // Get all the rouAccountBalanceReportItemList where fiscalPeriodEndDate not equals to DEFAULT_FISCAL_PERIOD_END_DATE
+        defaultRouAccountBalanceReportItemShouldNotBeFound("fiscalPeriodEndDate.notEquals=" + DEFAULT_FISCAL_PERIOD_END_DATE);
 
-        // Get all the rouAccountBalanceReportItemList where fiscalMonthEndDate not equals to UPDATED_FISCAL_MONTH_END_DATE
-        defaultRouAccountBalanceReportItemShouldBeFound("fiscalMonthEndDate.notEquals=" + UPDATED_FISCAL_MONTH_END_DATE);
+        // Get all the rouAccountBalanceReportItemList where fiscalPeriodEndDate not equals to UPDATED_FISCAL_PERIOD_END_DATE
+        defaultRouAccountBalanceReportItemShouldBeFound("fiscalPeriodEndDate.notEquals=" + UPDATED_FISCAL_PERIOD_END_DATE);
     }
 
     @Test
     @Transactional
-    void getAllRouAccountBalanceReportItemsByFiscalMonthEndDateIsInShouldWork() throws Exception {
+    void getAllRouAccountBalanceReportItemsByFiscalPeriodEndDateIsInShouldWork() throws Exception {
         // Initialize the database
         rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
 
-        // Get all the rouAccountBalanceReportItemList where fiscalMonthEndDate in DEFAULT_FISCAL_MONTH_END_DATE or UPDATED_FISCAL_MONTH_END_DATE
+        // Get all the rouAccountBalanceReportItemList where fiscalPeriodEndDate in DEFAULT_FISCAL_PERIOD_END_DATE or UPDATED_FISCAL_PERIOD_END_DATE
         defaultRouAccountBalanceReportItemShouldBeFound(
-            "fiscalMonthEndDate.in=" + DEFAULT_FISCAL_MONTH_END_DATE + "," + UPDATED_FISCAL_MONTH_END_DATE
+            "fiscalPeriodEndDate.in=" + DEFAULT_FISCAL_PERIOD_END_DATE + "," + UPDATED_FISCAL_PERIOD_END_DATE
         );
 
-        // Get all the rouAccountBalanceReportItemList where fiscalMonthEndDate equals to UPDATED_FISCAL_MONTH_END_DATE
-        defaultRouAccountBalanceReportItemShouldNotBeFound("fiscalMonthEndDate.in=" + UPDATED_FISCAL_MONTH_END_DATE);
+        // Get all the rouAccountBalanceReportItemList where fiscalPeriodEndDate equals to UPDATED_FISCAL_PERIOD_END_DATE
+        defaultRouAccountBalanceReportItemShouldNotBeFound("fiscalPeriodEndDate.in=" + UPDATED_FISCAL_PERIOD_END_DATE);
     }
 
     @Test
     @Transactional
-    void getAllRouAccountBalanceReportItemsByFiscalMonthEndDateIsNullOrNotNull() throws Exception {
+    void getAllRouAccountBalanceReportItemsByFiscalPeriodEndDateIsNullOrNotNull() throws Exception {
         // Initialize the database
         rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
 
-        // Get all the rouAccountBalanceReportItemList where fiscalMonthEndDate is not null
-        defaultRouAccountBalanceReportItemShouldBeFound("fiscalMonthEndDate.specified=true");
+        // Get all the rouAccountBalanceReportItemList where fiscalPeriodEndDate is not null
+        defaultRouAccountBalanceReportItemShouldBeFound("fiscalPeriodEndDate.specified=true");
 
-        // Get all the rouAccountBalanceReportItemList where fiscalMonthEndDate is null
-        defaultRouAccountBalanceReportItemShouldNotBeFound("fiscalMonthEndDate.specified=false");
+        // Get all the rouAccountBalanceReportItemList where fiscalPeriodEndDate is null
+        defaultRouAccountBalanceReportItemShouldNotBeFound("fiscalPeriodEndDate.specified=false");
     }
 
     @Test
     @Transactional
-    void getAllRouAccountBalanceReportItemsByFiscalMonthEndDateIsGreaterThanOrEqualToSomething() throws Exception {
+    void getAllRouAccountBalanceReportItemsByFiscalPeriodEndDateIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
 
-        // Get all the rouAccountBalanceReportItemList where fiscalMonthEndDate is greater than or equal to DEFAULT_FISCAL_MONTH_END_DATE
-        defaultRouAccountBalanceReportItemShouldBeFound("fiscalMonthEndDate.greaterThanOrEqual=" + DEFAULT_FISCAL_MONTH_END_DATE);
+        // Get all the rouAccountBalanceReportItemList where fiscalPeriodEndDate is greater than or equal to DEFAULT_FISCAL_PERIOD_END_DATE
+        defaultRouAccountBalanceReportItemShouldBeFound("fiscalPeriodEndDate.greaterThanOrEqual=" + DEFAULT_FISCAL_PERIOD_END_DATE);
 
-        // Get all the rouAccountBalanceReportItemList where fiscalMonthEndDate is greater than or equal to UPDATED_FISCAL_MONTH_END_DATE
-        defaultRouAccountBalanceReportItemShouldNotBeFound("fiscalMonthEndDate.greaterThanOrEqual=" + UPDATED_FISCAL_MONTH_END_DATE);
+        // Get all the rouAccountBalanceReportItemList where fiscalPeriodEndDate is greater than or equal to UPDATED_FISCAL_PERIOD_END_DATE
+        defaultRouAccountBalanceReportItemShouldNotBeFound("fiscalPeriodEndDate.greaterThanOrEqual=" + UPDATED_FISCAL_PERIOD_END_DATE);
     }
 
     @Test
     @Transactional
-    void getAllRouAccountBalanceReportItemsByFiscalMonthEndDateIsLessThanOrEqualToSomething() throws Exception {
+    void getAllRouAccountBalanceReportItemsByFiscalPeriodEndDateIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
         rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
 
-        // Get all the rouAccountBalanceReportItemList where fiscalMonthEndDate is less than or equal to DEFAULT_FISCAL_MONTH_END_DATE
-        defaultRouAccountBalanceReportItemShouldBeFound("fiscalMonthEndDate.lessThanOrEqual=" + DEFAULT_FISCAL_MONTH_END_DATE);
+        // Get all the rouAccountBalanceReportItemList where fiscalPeriodEndDate is less than or equal to DEFAULT_FISCAL_PERIOD_END_DATE
+        defaultRouAccountBalanceReportItemShouldBeFound("fiscalPeriodEndDate.lessThanOrEqual=" + DEFAULT_FISCAL_PERIOD_END_DATE);
 
-        // Get all the rouAccountBalanceReportItemList where fiscalMonthEndDate is less than or equal to SMALLER_FISCAL_MONTH_END_DATE
-        defaultRouAccountBalanceReportItemShouldNotBeFound("fiscalMonthEndDate.lessThanOrEqual=" + SMALLER_FISCAL_MONTH_END_DATE);
+        // Get all the rouAccountBalanceReportItemList where fiscalPeriodEndDate is less than or equal to SMALLER_FISCAL_PERIOD_END_DATE
+        defaultRouAccountBalanceReportItemShouldNotBeFound("fiscalPeriodEndDate.lessThanOrEqual=" + SMALLER_FISCAL_PERIOD_END_DATE);
     }
 
     @Test
     @Transactional
-    void getAllRouAccountBalanceReportItemsByFiscalMonthEndDateIsLessThanSomething() throws Exception {
+    void getAllRouAccountBalanceReportItemsByFiscalPeriodEndDateIsLessThanSomething() throws Exception {
         // Initialize the database
         rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
 
-        // Get all the rouAccountBalanceReportItemList where fiscalMonthEndDate is less than DEFAULT_FISCAL_MONTH_END_DATE
-        defaultRouAccountBalanceReportItemShouldNotBeFound("fiscalMonthEndDate.lessThan=" + DEFAULT_FISCAL_MONTH_END_DATE);
+        // Get all the rouAccountBalanceReportItemList where fiscalPeriodEndDate is less than DEFAULT_FISCAL_PERIOD_END_DATE
+        defaultRouAccountBalanceReportItemShouldNotBeFound("fiscalPeriodEndDate.lessThan=" + DEFAULT_FISCAL_PERIOD_END_DATE);
 
-        // Get all the rouAccountBalanceReportItemList where fiscalMonthEndDate is less than UPDATED_FISCAL_MONTH_END_DATE
-        defaultRouAccountBalanceReportItemShouldBeFound("fiscalMonthEndDate.lessThan=" + UPDATED_FISCAL_MONTH_END_DATE);
+        // Get all the rouAccountBalanceReportItemList where fiscalPeriodEndDate is less than UPDATED_FISCAL_PERIOD_END_DATE
+        defaultRouAccountBalanceReportItemShouldBeFound("fiscalPeriodEndDate.lessThan=" + UPDATED_FISCAL_PERIOD_END_DATE);
     }
 
     @Test
     @Transactional
-    void getAllRouAccountBalanceReportItemsByFiscalMonthEndDateIsGreaterThanSomething() throws Exception {
+    void getAllRouAccountBalanceReportItemsByFiscalPeriodEndDateIsGreaterThanSomething() throws Exception {
         // Initialize the database
         rouAccountBalanceReportItemRepository.saveAndFlush(rouAccountBalanceReportItem);
 
-        // Get all the rouAccountBalanceReportItemList where fiscalMonthEndDate is greater than DEFAULT_FISCAL_MONTH_END_DATE
-        defaultRouAccountBalanceReportItemShouldNotBeFound("fiscalMonthEndDate.greaterThan=" + DEFAULT_FISCAL_MONTH_END_DATE);
+        // Get all the rouAccountBalanceReportItemList where fiscalPeriodEndDate is greater than DEFAULT_FISCAL_PERIOD_END_DATE
+        defaultRouAccountBalanceReportItemShouldNotBeFound("fiscalPeriodEndDate.greaterThan=" + DEFAULT_FISCAL_PERIOD_END_DATE);
 
-        // Get all the rouAccountBalanceReportItemList where fiscalMonthEndDate is greater than SMALLER_FISCAL_MONTH_END_DATE
-        defaultRouAccountBalanceReportItemShouldBeFound("fiscalMonthEndDate.greaterThan=" + SMALLER_FISCAL_MONTH_END_DATE);
+        // Get all the rouAccountBalanceReportItemList where fiscalPeriodEndDate is greater than SMALLER_FISCAL_PERIOD_END_DATE
+        defaultRouAccountBalanceReportItemShouldBeFound("fiscalPeriodEndDate.greaterThan=" + SMALLER_FISCAL_PERIOD_END_DATE);
     }
 
     /**
@@ -662,8 +1042,13 @@ class RouAccountBalanceReportItemResourceIT {
             .andExpect(jsonPath("$.[*].assetAccountName").value(hasItem(DEFAULT_ASSET_ACCOUNT_NAME)))
             .andExpect(jsonPath("$.[*].assetAccountNumber").value(hasItem(DEFAULT_ASSET_ACCOUNT_NUMBER)))
             .andExpect(jsonPath("$.[*].depreciationAccountNumber").value(hasItem(DEFAULT_DEPRECIATION_ACCOUNT_NUMBER)))
+            .andExpect(jsonPath("$.[*].totalLeaseAmount").value(hasItem(sameNumber(DEFAULT_TOTAL_LEASE_AMOUNT))))
+            .andExpect(jsonPath("$.[*].accruedDepreciationAmount").value(hasItem(sameNumber(DEFAULT_ACCRUED_DEPRECIATION_AMOUNT))))
+            .andExpect(
+                jsonPath("$.[*].currentPeriodDepreciationAmount").value(hasItem(sameNumber(DEFAULT_CURRENT_PERIOD_DEPRECIATION_AMOUNT)))
+            )
             .andExpect(jsonPath("$.[*].netBookValue").value(hasItem(sameNumber(DEFAULT_NET_BOOK_VALUE))))
-            .andExpect(jsonPath("$.[*].fiscalMonthEndDate").value(hasItem(DEFAULT_FISCAL_MONTH_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].fiscalPeriodEndDate").value(hasItem(DEFAULT_FISCAL_PERIOD_END_DATE.toString())));
 
         // Check, that the count call also returns 1
         restRouAccountBalanceReportItemMockMvc
@@ -717,7 +1102,12 @@ class RouAccountBalanceReportItemResourceIT {
             .andExpect(jsonPath("$.[*].assetAccountName").value(hasItem(DEFAULT_ASSET_ACCOUNT_NAME)))
             .andExpect(jsonPath("$.[*].assetAccountNumber").value(hasItem(DEFAULT_ASSET_ACCOUNT_NUMBER)))
             .andExpect(jsonPath("$.[*].depreciationAccountNumber").value(hasItem(DEFAULT_DEPRECIATION_ACCOUNT_NUMBER)))
+            .andExpect(jsonPath("$.[*].totalLeaseAmount").value(hasItem(sameNumber(DEFAULT_TOTAL_LEASE_AMOUNT))))
+            .andExpect(jsonPath("$.[*].accruedDepreciationAmount").value(hasItem(sameNumber(DEFAULT_ACCRUED_DEPRECIATION_AMOUNT))))
+            .andExpect(
+                jsonPath("$.[*].currentPeriodDepreciationAmount").value(hasItem(sameNumber(DEFAULT_CURRENT_PERIOD_DEPRECIATION_AMOUNT)))
+            )
             .andExpect(jsonPath("$.[*].netBookValue").value(hasItem(sameNumber(DEFAULT_NET_BOOK_VALUE))))
-            .andExpect(jsonPath("$.[*].fiscalMonthEndDate").value(hasItem(DEFAULT_FISCAL_MONTH_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].fiscalPeriodEndDate").value(hasItem(DEFAULT_FISCAL_PERIOD_END_DATE.toString())));
     }
 }

@@ -36,9 +36,15 @@ public class RouAccountBalanceReportItemDTO implements Serializable {
 
     private String depreciationAccountNumber;
 
+    private BigDecimal totalLeaseAmount;
+
+    private BigDecimal accruedDepreciationAmount;
+
+    private BigDecimal currentPeriodDepreciationAmount;
+
     private BigDecimal netBookValue;
 
-    private LocalDate fiscalMonthEndDate;
+    private LocalDate fiscalPeriodEndDate;
 
     public Long getId() {
         return id;
@@ -72,6 +78,30 @@ public class RouAccountBalanceReportItemDTO implements Serializable {
         this.depreciationAccountNumber = depreciationAccountNumber;
     }
 
+    public BigDecimal getTotalLeaseAmount() {
+        return totalLeaseAmount;
+    }
+
+    public void setTotalLeaseAmount(BigDecimal totalLeaseAmount) {
+        this.totalLeaseAmount = totalLeaseAmount;
+    }
+
+    public BigDecimal getAccruedDepreciationAmount() {
+        return accruedDepreciationAmount;
+    }
+
+    public void setAccruedDepreciationAmount(BigDecimal accruedDepreciationAmount) {
+        this.accruedDepreciationAmount = accruedDepreciationAmount;
+    }
+
+    public BigDecimal getCurrentPeriodDepreciationAmount() {
+        return currentPeriodDepreciationAmount;
+    }
+
+    public void setCurrentPeriodDepreciationAmount(BigDecimal currentPeriodDepreciationAmount) {
+        this.currentPeriodDepreciationAmount = currentPeriodDepreciationAmount;
+    }
+
     public BigDecimal getNetBookValue() {
         return netBookValue;
     }
@@ -80,12 +110,12 @@ public class RouAccountBalanceReportItemDTO implements Serializable {
         this.netBookValue = netBookValue;
     }
 
-    public LocalDate getFiscalMonthEndDate() {
-        return fiscalMonthEndDate;
+    public LocalDate getFiscalPeriodEndDate() {
+        return fiscalPeriodEndDate;
     }
 
-    public void setFiscalMonthEndDate(LocalDate fiscalMonthEndDate) {
-        this.fiscalMonthEndDate = fiscalMonthEndDate;
+    public void setFiscalPeriodEndDate(LocalDate fiscalPeriodEndDate) {
+        this.fiscalPeriodEndDate = fiscalPeriodEndDate;
     }
 
     @Override
@@ -117,8 +147,11 @@ public class RouAccountBalanceReportItemDTO implements Serializable {
             ", assetAccountName='" + getAssetAccountName() + "'" +
             ", assetAccountNumber='" + getAssetAccountNumber() + "'" +
             ", depreciationAccountNumber='" + getDepreciationAccountNumber() + "'" +
+            ", totalLeaseAmount=" + getTotalLeaseAmount() +
+            ", accruedDepreciationAmount=" + getAccruedDepreciationAmount() +
+            ", currentPeriodDepreciationAmount=" + getCurrentPeriodDepreciationAmount() +
             ", netBookValue=" + getNetBookValue() +
-            ", fiscalMonthEndDate='" + getFiscalMonthEndDate() + "'" +
+            ", fiscalPeriodEndDate='" + getFiscalPeriodEndDate() + "'" +
             "}";
     }
 }

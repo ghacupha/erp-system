@@ -17,9 +17,9 @@ package io.github.erp.erp.resources.leases;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.repository.RouAccountBalanceReportItemRepository;
+import io.github.erp.internal.repository.InternalRouAccountBalanceReportItemRepository;
+import io.github.erp.internal.service.rou.InternalRouAccountBalanceReportItemService;
 import io.github.erp.service.RouAccountBalanceReportItemQueryService;
-import io.github.erp.service.RouAccountBalanceReportItemService;
 import io.github.erp.service.criteria.RouAccountBalanceReportItemCriteria;
 import io.github.erp.service.dto.RouAccountBalanceReportItemDTO;
 import org.slf4j.Logger;
@@ -45,19 +45,15 @@ public class RouAccountBalanceReportItemResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(RouAccountBalanceReportItemResourceProd.class);
 
-    private final RouAccountBalanceReportItemService rouAccountBalanceReportItemService;
-
-    private final RouAccountBalanceReportItemRepository rouAccountBalanceReportItemRepository;
+    private final InternalRouAccountBalanceReportItemService rouAccountBalanceReportItemService;
 
     private final RouAccountBalanceReportItemQueryService rouAccountBalanceReportItemQueryService;
 
     public RouAccountBalanceReportItemResourceProd(
-        RouAccountBalanceReportItemService rouAccountBalanceReportItemService,
-        RouAccountBalanceReportItemRepository rouAccountBalanceReportItemRepository,
+        InternalRouAccountBalanceReportItemService rouAccountBalanceReportItemService,
         RouAccountBalanceReportItemQueryService rouAccountBalanceReportItemQueryService
     ) {
         this.rouAccountBalanceReportItemService = rouAccountBalanceReportItemService;
-        this.rouAccountBalanceReportItemRepository = rouAccountBalanceReportItemRepository;
         this.rouAccountBalanceReportItemQueryService = rouAccountBalanceReportItemQueryService;
     }
 
@@ -75,6 +71,20 @@ public class RouAccountBalanceReportItemResourceProd {
     ) {
         log.debug("REST request to get RouAccountBalanceReportItems by criteria: {}", criteria);
         Page<RouAccountBalanceReportItemDTO> page = rouAccountBalanceReportItemQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /rou-account-balance-report-items/reports/:leasePeriodId} : get the rouAccountBalanceReportItems for the given lease-period-id.
+     *
+     * @param leasePeriodId the id of the lease-period to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the rouAccountBalanceReportItemDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/rou-account-balance-report-items/reports/{leasePeriodId}")
+    public ResponseEntity<List<RouAccountBalanceReportItemDTO>> getRouAccountBalanceReportItems(@PathVariable Long leasePeriodId, Pageable pageable) {
+        log.debug("REST request to get RouAccountBalanceReportItems for lease-period-id : {}", leasePeriodId);
+        Page<RouAccountBalanceReportItemDTO> page = rouAccountBalanceReportItemService.findAllForGivenLeasePeriod(pageable, leasePeriodId);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
