@@ -1,4 +1,4 @@
-package io.github.erp.internal.model;
+package io.github.erp.repository.search;
 
 /*-
  * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
@@ -17,26 +17,17 @@ package io.github.erp.internal.model;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
-public interface RouAccountBalanceReportItemInternal {
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Configuration;
 
-    Long getId();
+/**
+ * Configure a Mock version of {@link MemoActionSearchRepository} to test the
+ * application without starting Elasticsearch.
+ */
+@Configuration
+public class MemoActionSearchRepositoryMockConfiguration {
 
-    String getAssetAccountName();
-
-    String getAssetAccountNumber();
-
-    String getDepreciationAccountNumber();
-
-    BigDecimal getTotalLeaseAmount();
-
-    BigDecimal getAccruedDepreciationAmount();
-
-    BigDecimal getCurrentPeriodDepreciationAmount();
-
-    BigDecimal getNetBookValue();
-
-    LocalDate getFiscalPeriodEndDate();
+    @MockBean
+    private MemoActionSearchRepository mockMemoActionSearchRepository;
 }

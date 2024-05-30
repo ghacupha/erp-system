@@ -1,4 +1,4 @@
-package io.github.erp.internal.model;
+package io.github.erp.repository;
 
 /*-
  * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
@@ -17,26 +17,14 @@ package io.github.erp.internal.model;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
-public interface RouAccountBalanceReportItemInternal {
+import io.github.erp.domain.MemoAction;
+import org.springframework.data.jpa.repository.*;
+import org.springframework.stereotype.Repository;
 
-    Long getId();
-
-    String getAssetAccountName();
-
-    String getAssetAccountNumber();
-
-    String getDepreciationAccountNumber();
-
-    BigDecimal getTotalLeaseAmount();
-
-    BigDecimal getAccruedDepreciationAmount();
-
-    BigDecimal getCurrentPeriodDepreciationAmount();
-
-    BigDecimal getNetBookValue();
-
-    LocalDate getFiscalPeriodEndDate();
-}
+/**
+ * Spring Data SQL repository for the MemoAction entity.
+ */
+@SuppressWarnings("unused")
+@Repository
+public interface MemoActionRepository extends JpaRepository<MemoAction, Long> {}

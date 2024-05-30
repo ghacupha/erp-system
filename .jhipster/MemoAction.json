@@ -1,0 +1,16 @@
+{
+  "fields": [
+    {
+      "fieldName": "action",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "relationships": [],
+  "service": "no",
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "MemoAction",
+  "changelogDate": "20240530082522",
+  "incrementalChangelog": false
+}

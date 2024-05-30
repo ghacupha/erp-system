@@ -279,6 +279,7 @@
     <include file="config/liquibase/changelog/20240506110010_added_entity_PrepaymentByAccountReportRequisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240509064742_added_entity_WorkInProgressOutstandingReportRequisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240514054407_added_entity_LeasePeriod.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240530082522_added_entity_MemoAction.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
