@@ -1,4 +1,4 @@
-package io.github.erp.internal.model;
+package io.github.erp.domain;
 
 /*-
  * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
@@ -17,26 +17,25 @@ package io.github.erp.internal.model;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
-public interface RouAccountBalanceReportItemInternal {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    Long getId();
+import io.github.erp.web.rest.TestUtil;
+import org.junit.jupiter.api.Test;
 
-    String getAssetAccountName();
+class MemoActionTest {
 
-    String getAssetAccountNumber();
-
-    String getDepreciationAccountNumber();
-
-    BigDecimal getTotalLeaseAmount();
-
-    BigDecimal getAccruedDepreciationAmount();
-
-    BigDecimal getCurrentPeriodDepreciationAmount();
-
-    BigDecimal getNetBookValue();
-
-    LocalDate getFiscalPeriodEndDate();
+    @Test
+    void equalsVerifier() throws Exception {
+        TestUtil.equalsVerifier(MemoAction.class);
+        MemoAction memoAction1 = new MemoAction();
+        memoAction1.setId(1L);
+        MemoAction memoAction2 = new MemoAction();
+        memoAction2.setId(memoAction1.getId());
+        assertThat(memoAction1).isEqualTo(memoAction2);
+        memoAction2.setId(2L);
+        assertThat(memoAction1).isNotEqualTo(memoAction2);
+        memoAction1.setId(null);
+        assertThat(memoAction1).isNotEqualTo(memoAction2);
+    }
 }
