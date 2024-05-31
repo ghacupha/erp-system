@@ -20,16 +20,15 @@ package io.github.erp.web.rest;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
-import io.github.erp.domain.MemoAction;
 import io.github.erp.repository.MemoActionRepository;
-import io.github.erp.repository.search.MemoActionSearchRepository;
+import io.github.erp.service.MemoActionService;
+import io.github.erp.service.dto.MemoActionDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -41,7 +40,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -53,7 +51,6 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class MemoActionResource {
 
     private final Logger log = LoggerFactory.getLogger(MemoActionResource.class);
@@ -63,30 +60,29 @@ public class MemoActionResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final MemoActionService memoActionService;
+
     private final MemoActionRepository memoActionRepository;
 
-    private final MemoActionSearchRepository memoActionSearchRepository;
-
-    public MemoActionResource(MemoActionRepository memoActionRepository, MemoActionSearchRepository memoActionSearchRepository) {
+    public MemoActionResource(MemoActionService memoActionService, MemoActionRepository memoActionRepository) {
+        this.memoActionService = memoActionService;
         this.memoActionRepository = memoActionRepository;
-        this.memoActionSearchRepository = memoActionSearchRepository;
     }
 
     /**
      * {@code POST  /memo-actions} : Create a new memoAction.
      *
-     * @param memoAction the memoAction to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new memoAction, or with status {@code 400 (Bad Request)} if the memoAction has already an ID.
+     * @param memoActionDTO the memoActionDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new memoActionDTO, or with status {@code 400 (Bad Request)} if the memoAction has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/memo-actions")
-    public ResponseEntity<MemoAction> createMemoAction(@Valid @RequestBody MemoAction memoAction) throws URISyntaxException {
-        log.debug("REST request to save MemoAction : {}", memoAction);
-        if (memoAction.getId() != null) {
+    public ResponseEntity<MemoActionDTO> createMemoAction(@Valid @RequestBody MemoActionDTO memoActionDTO) throws URISyntaxException {
+        log.debug("REST request to save MemoAction : {}", memoActionDTO);
+        if (memoActionDTO.getId() != null) {
             throw new BadRequestAlertException("A new memoAction cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        MemoAction result = memoActionRepository.save(memoAction);
-        memoActionSearchRepository.save(result);
+        MemoActionDTO result = memoActionService.save(memoActionDTO);
         return ResponseEntity
             .created(new URI("/api/memo-actions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -96,23 +92,23 @@ public class MemoActionResource {
     /**
      * {@code PUT  /memo-actions/:id} : Updates an existing memoAction.
      *
-     * @param id the id of the memoAction to save.
-     * @param memoAction the memoAction to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated memoAction,
-     * or with status {@code 400 (Bad Request)} if the memoAction is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the memoAction couldn't be updated.
+     * @param id the id of the memoActionDTO to save.
+     * @param memoActionDTO the memoActionDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated memoActionDTO,
+     * or with status {@code 400 (Bad Request)} if the memoActionDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the memoActionDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/memo-actions/{id}")
-    public ResponseEntity<MemoAction> updateMemoAction(
+    public ResponseEntity<MemoActionDTO> updateMemoAction(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody MemoAction memoAction
+        @Valid @RequestBody MemoActionDTO memoActionDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update MemoAction : {}, {}", id, memoAction);
-        if (memoAction.getId() == null) {
+        log.debug("REST request to update MemoAction : {}, {}", id, memoActionDTO);
+        if (memoActionDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, memoAction.getId())) {
+        if (!Objects.equals(id, memoActionDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -120,35 +116,34 @@ public class MemoActionResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        MemoAction result = memoActionRepository.save(memoAction);
-        memoActionSearchRepository.save(result);
+        MemoActionDTO result = memoActionService.save(memoActionDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, memoAction.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, memoActionDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /memo-actions/:id} : Partial updates given fields of an existing memoAction, field will ignore if it is null
      *
-     * @param id the id of the memoAction to save.
-     * @param memoAction the memoAction to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated memoAction,
-     * or with status {@code 400 (Bad Request)} if the memoAction is not valid,
-     * or with status {@code 404 (Not Found)} if the memoAction is not found,
-     * or with status {@code 500 (Internal Server Error)} if the memoAction couldn't be updated.
+     * @param id the id of the memoActionDTO to save.
+     * @param memoActionDTO the memoActionDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated memoActionDTO,
+     * or with status {@code 400 (Bad Request)} if the memoActionDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the memoActionDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the memoActionDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/memo-actions/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<MemoAction> partialUpdateMemoAction(
+    public ResponseEntity<MemoActionDTO> partialUpdateMemoAction(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody MemoAction memoAction
+        @NotNull @RequestBody MemoActionDTO memoActionDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update MemoAction partially : {}, {}", id, memoAction);
-        if (memoAction.getId() == null) {
+        log.debug("REST request to partial update MemoAction partially : {}, {}", id, memoActionDTO);
+        if (memoActionDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, memoAction.getId())) {
+        if (!Objects.equals(id, memoActionDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -156,25 +151,11 @@ public class MemoActionResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<MemoAction> result = memoActionRepository
-            .findById(memoAction.getId())
-            .map(existingMemoAction -> {
-                if (memoAction.getAction() != null) {
-                    existingMemoAction.setAction(memoAction.getAction());
-                }
-
-                return existingMemoAction;
-            })
-            .map(memoActionRepository::save)
-            .map(savedMemoAction -> {
-                memoActionSearchRepository.save(savedMemoAction);
-
-                return savedMemoAction;
-            });
+        Optional<MemoActionDTO> result = memoActionService.partialUpdate(memoActionDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, memoAction.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, memoActionDTO.getId().toString())
         );
     }
 
@@ -185,9 +166,9 @@ public class MemoActionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of memoActions in body.
      */
     @GetMapping("/memo-actions")
-    public ResponseEntity<List<MemoAction>> getAllMemoActions(Pageable pageable) {
+    public ResponseEntity<List<MemoActionDTO>> getAllMemoActions(Pageable pageable) {
         log.debug("REST request to get a page of MemoActions");
-        Page<MemoAction> page = memoActionRepository.findAll(pageable);
+        Page<MemoActionDTO> page = memoActionService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -195,27 +176,26 @@ public class MemoActionResource {
     /**
      * {@code GET  /memo-actions/:id} : get the "id" memoAction.
      *
-     * @param id the id of the memoAction to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the memoAction, or with status {@code 404 (Not Found)}.
+     * @param id the id of the memoActionDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the memoActionDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/memo-actions/{id}")
-    public ResponseEntity<MemoAction> getMemoAction(@PathVariable Long id) {
+    public ResponseEntity<MemoActionDTO> getMemoAction(@PathVariable Long id) {
         log.debug("REST request to get MemoAction : {}", id);
-        Optional<MemoAction> memoAction = memoActionRepository.findById(id);
-        return ResponseUtil.wrapOrNotFound(memoAction);
+        Optional<MemoActionDTO> memoActionDTO = memoActionService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(memoActionDTO);
     }
 
     /**
      * {@code DELETE  /memo-actions/:id} : delete the "id" memoAction.
      *
-     * @param id the id of the memoAction to delete.
+     * @param id the id of the memoActionDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/memo-actions/{id}")
     public ResponseEntity<Void> deleteMemoAction(@PathVariable Long id) {
         log.debug("REST request to delete MemoAction : {}", id);
-        memoActionRepository.deleteById(id);
-        memoActionSearchRepository.deleteById(id);
+        memoActionService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
@@ -231,9 +211,9 @@ public class MemoActionResource {
      * @return the result of the search.
      */
     @GetMapping("/_search/memo-actions")
-    public ResponseEntity<List<MemoAction>> searchMemoActions(@RequestParam String query, Pageable pageable) {
+    public ResponseEntity<List<MemoActionDTO>> searchMemoActions(@RequestParam String query, Pageable pageable) {
         log.debug("REST request to search for a page of MemoActions for query {}", query);
-        Page<MemoAction> page = memoActionSearchRepository.search(query, pageable);
+        Page<MemoActionDTO> page = memoActionService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
