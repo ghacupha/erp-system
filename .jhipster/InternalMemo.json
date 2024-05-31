@@ -1,0 +1,94 @@
+{
+  "fields": [
+    {
+      "fieldName": "catalogueNumber",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "minlength", "maxlength"],
+      "fieldValidateRulesMinlength": "8",
+      "fieldValidateRulesMaxlength": "8"
+    },
+    {
+      "fieldName": "referenceNumber",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "memoDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "purposeDescription",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "actionRequired",
+      "otherEntityName": "memoAction",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "action"
+    },
+    {
+      "relationshipName": "addressedTo",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "dealerName"
+    },
+    {
+      "relationshipName": "from",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "dealerName"
+    },
+    {
+      "relationshipName": "preparedBy",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "dealerName",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "internalMemo"
+    },
+    {
+      "relationshipName": "reviewedBy",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "dealerName",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "internalMemo"
+    },
+    {
+      "relationshipName": "approvedBy",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "dealerName",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "internalMemo"
+    },
+    {
+      "relationshipName": "memoDocument",
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-many",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "documentTitle",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "internalMemo"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "internalMemo"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "InternalMemo",
+  "changelogDate": "20240530092852",
+  "incrementalChangelog": false
+}

@@ -28,6 +28,8 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.domain.MemoAction;
 import io.github.erp.repository.MemoActionRepository;
 import io.github.erp.repository.search.MemoActionSearchRepository;
+import io.github.erp.service.dto.MemoActionDTO;
+import io.github.erp.service.mapper.MemoActionMapper;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -68,6 +70,9 @@ class MemoActionResourceIT {
 
     @Autowired
     private MemoActionRepository memoActionRepository;
+
+    @Autowired
+    private MemoActionMapper memoActionMapper;
 
     /**
      * This repository is mocked in the io.github.erp.repository.search test package.
@@ -117,8 +122,9 @@ class MemoActionResourceIT {
     void createMemoAction() throws Exception {
         int databaseSizeBeforeCreate = memoActionRepository.findAll().size();
         // Create the MemoAction
+        MemoActionDTO memoActionDTO = memoActionMapper.toDto(memoAction);
         restMemoActionMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(memoAction)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(memoActionDTO)))
             .andExpect(status().isCreated());
 
         // Validate the MemoAction in the database
@@ -136,12 +142,13 @@ class MemoActionResourceIT {
     void createMemoActionWithExistingId() throws Exception {
         // Create the MemoAction with an existing ID
         memoAction.setId(1L);
+        MemoActionDTO memoActionDTO = memoActionMapper.toDto(memoAction);
 
         int databaseSizeBeforeCreate = memoActionRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restMemoActionMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(memoAction)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(memoActionDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the MemoAction in the database
@@ -160,9 +167,10 @@ class MemoActionResourceIT {
         memoAction.setAction(null);
 
         // Create the MemoAction, which fails.
+        MemoActionDTO memoActionDTO = memoActionMapper.toDto(memoAction);
 
         restMemoActionMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(memoAction)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(memoActionDTO)))
             .andExpect(status().isBadRequest());
 
         List<MemoAction> memoActionList = memoActionRepository.findAll();
@@ -219,12 +227,13 @@ class MemoActionResourceIT {
         // Disconnect from session so that the updates on updatedMemoAction are not directly saved in db
         em.detach(updatedMemoAction);
         updatedMemoAction.action(UPDATED_ACTION);
+        MemoActionDTO memoActionDTO = memoActionMapper.toDto(updatedMemoAction);
 
         restMemoActionMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedMemoAction.getId())
+                put(ENTITY_API_URL_ID, memoActionDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedMemoAction))
+                    .content(TestUtil.convertObjectToJsonBytes(memoActionDTO))
             )
             .andExpect(status().isOk());
 
@@ -244,12 +253,15 @@ class MemoActionResourceIT {
         int databaseSizeBeforeUpdate = memoActionRepository.findAll().size();
         memoAction.setId(count.incrementAndGet());
 
+        // Create the MemoAction
+        MemoActionDTO memoActionDTO = memoActionMapper.toDto(memoAction);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restMemoActionMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, memoAction.getId())
+                put(ENTITY_API_URL_ID, memoActionDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(memoAction))
+                    .content(TestUtil.convertObjectToJsonBytes(memoActionDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -267,12 +279,15 @@ class MemoActionResourceIT {
         int databaseSizeBeforeUpdate = memoActionRepository.findAll().size();
         memoAction.setId(count.incrementAndGet());
 
+        // Create the MemoAction
+        MemoActionDTO memoActionDTO = memoActionMapper.toDto(memoAction);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restMemoActionMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(memoAction))
+                    .content(TestUtil.convertObjectToJsonBytes(memoActionDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -290,9 +305,12 @@ class MemoActionResourceIT {
         int databaseSizeBeforeUpdate = memoActionRepository.findAll().size();
         memoAction.setId(count.incrementAndGet());
 
+        // Create the MemoAction
+        MemoActionDTO memoActionDTO = memoActionMapper.toDto(memoAction);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restMemoActionMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(memoAction)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(memoActionDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the MemoAction in the database
@@ -365,12 +383,15 @@ class MemoActionResourceIT {
         int databaseSizeBeforeUpdate = memoActionRepository.findAll().size();
         memoAction.setId(count.incrementAndGet());
 
+        // Create the MemoAction
+        MemoActionDTO memoActionDTO = memoActionMapper.toDto(memoAction);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restMemoActionMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, memoAction.getId())
+                patch(ENTITY_API_URL_ID, memoActionDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(memoAction))
+                    .content(TestUtil.convertObjectToJsonBytes(memoActionDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -388,12 +409,15 @@ class MemoActionResourceIT {
         int databaseSizeBeforeUpdate = memoActionRepository.findAll().size();
         memoAction.setId(count.incrementAndGet());
 
+        // Create the MemoAction
+        MemoActionDTO memoActionDTO = memoActionMapper.toDto(memoAction);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restMemoActionMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(memoAction))
+                    .content(TestUtil.convertObjectToJsonBytes(memoActionDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -411,10 +435,13 @@ class MemoActionResourceIT {
         int databaseSizeBeforeUpdate = memoActionRepository.findAll().size();
         memoAction.setId(count.incrementAndGet());
 
+        // Create the MemoAction
+        MemoActionDTO memoActionDTO = memoActionMapper.toDto(memoAction);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restMemoActionMockMvc
             .perform(
-                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(memoAction))
+                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(memoActionDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 
