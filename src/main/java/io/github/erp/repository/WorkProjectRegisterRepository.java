@@ -48,4 +48,7 @@ public interface WorkProjectRegisterRepository
         "select workProjectRegister from WorkProjectRegister workProjectRegister left join fetch workProjectRegister.dealers left join fetch workProjectRegister.placeholders left join fetch workProjectRegister.businessDocuments where workProjectRegister.id =:id"
     )
     Optional<WorkProjectRegister> findOneWithEagerRelationships(@Param("id") Long id);
+
+    @Query(nativeQuery = true, value = "SELECT catalogue_number FROM work_project_register")
+    List<Long> findAllIds();
 }
