@@ -17,6 +17,7 @@ package io.github.erp.erp.resources.wip;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.service.wip.InternalWorkProjectRegisterService;
 import io.github.erp.repository.WorkProjectRegisterRepository;
 import io.github.erp.service.WorkProjectRegisterQueryService;
 import io.github.erp.service.WorkProjectRegisterService;
@@ -58,20 +59,32 @@ public class WorkProjectRegisterResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final WorkProjectRegisterService workProjectRegisterService;
+    private final InternalWorkProjectRegisterService workProjectRegisterService;
 
     private final WorkProjectRegisterRepository workProjectRegisterRepository;
 
     private final WorkProjectRegisterQueryService workProjectRegisterQueryService;
 
     public WorkProjectRegisterResourceProd(
-        WorkProjectRegisterService workProjectRegisterService,
+        InternalWorkProjectRegisterService workProjectRegisterService,
         WorkProjectRegisterRepository workProjectRegisterRepository,
         WorkProjectRegisterQueryService workProjectRegisterQueryService
     ) {
         this.workProjectRegisterService = workProjectRegisterService;
         this.workProjectRegisterRepository = workProjectRegisterRepository;
         this.workProjectRegisterQueryService = workProjectRegisterQueryService;
+    }
+
+    /**
+     * {@code GET  /work-project-registers/next/catalogue-number} : get the next catalogue number.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the next number code in body.
+     */
+    @GetMapping("/work-project-registers/next/catalogue-number")
+    public ResponseEntity<Long> getNextCatalogueNumber() {
+        log.debug("REST request to fetch the next catalogue number");
+
+        return ResponseEntity.ok().body(workProjectRegisterService.calculateNextCatalogueNumber());
     }
 
     /**
