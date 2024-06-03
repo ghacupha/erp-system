@@ -135,14 +135,6 @@ public class InternalAmortizationPostingReportServiceImpl implements InternalAmo
     public Optional<List<AmortizationPostingReportDTO>> findAllByReportDate(LocalDate reportDate) {
         log.debug("Request to find all amortization entries whose amortization period end date is {}", reportDate);
 
-//        Page<AmortizationPostingReportInternal> page = amortizationPostingReportRepository.findByReportDate(reportDate, Pageable.ofSize(Integer.MAX_VALUE));
-//
-//        List<AmortizationPostingReportDTO> pageList =
-//            page.toList().stream().map(amortizationPostingInternalMapping::toValue2)
-//                .collect(Collectors.toUnmodifiableList());
-//
-//        return Optional.of(pageList);
-//
         return amortizationPostingReportRepository.findByAllReportDate(reportDate)
             .map(amortizationPostingInternalMapping::toValue2);
     }
