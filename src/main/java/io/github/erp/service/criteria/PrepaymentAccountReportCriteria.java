@@ -45,7 +45,9 @@ public class PrepaymentAccountReportCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private StringFilter prepaymentAccount;
+    private StringFilter accountName;
+
+    private StringFilter accountNumber;
 
     private BigDecimalFilter prepaymentAmount;
 
@@ -63,7 +65,8 @@ public class PrepaymentAccountReportCriteria implements Serializable, Criteria {
 
     public PrepaymentAccountReportCriteria(PrepaymentAccountReportCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.prepaymentAccount = other.prepaymentAccount == null ? null : other.prepaymentAccount.copy();
+        this.accountName = other.accountName == null ? null : other.accountName.copy();
+        this.accountNumber = other.accountNumber == null ? null : other.accountNumber.copy();
         this.prepaymentAmount = other.prepaymentAmount == null ? null : other.prepaymentAmount.copy();
         this.amortisedAmount = other.amortisedAmount == null ? null : other.amortisedAmount.copy();
         this.outstandingAmount = other.outstandingAmount == null ? null : other.outstandingAmount.copy();
@@ -92,19 +95,34 @@ public class PrepaymentAccountReportCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
-    public StringFilter getPrepaymentAccount() {
-        return prepaymentAccount;
+    public StringFilter getAccountName() {
+        return accountName;
     }
 
-    public StringFilter prepaymentAccount() {
-        if (prepaymentAccount == null) {
-            prepaymentAccount = new StringFilter();
+    public StringFilter accountName() {
+        if (accountName == null) {
+            accountName = new StringFilter();
         }
-        return prepaymentAccount;
+        return accountName;
     }
 
-    public void setPrepaymentAccount(StringFilter prepaymentAccount) {
-        this.prepaymentAccount = prepaymentAccount;
+    public void setAccountName(StringFilter accountName) {
+        this.accountName = accountName;
+    }
+
+    public StringFilter getAccountNumber() {
+        return accountNumber;
+    }
+
+    public StringFilter accountNumber() {
+        if (accountNumber == null) {
+            accountNumber = new StringFilter();
+        }
+        return accountNumber;
+    }
+
+    public void setAccountNumber(StringFilter accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public BigDecimalFilter getPrepaymentAmount() {
@@ -201,7 +219,8 @@ public class PrepaymentAccountReportCriteria implements Serializable, Criteria {
         final PrepaymentAccountReportCriteria that = (PrepaymentAccountReportCriteria) o;
         return (
             Objects.equals(id, that.id) &&
-            Objects.equals(prepaymentAccount, that.prepaymentAccount) &&
+            Objects.equals(accountName, that.accountName) &&
+            Objects.equals(accountNumber, that.accountNumber) &&
             Objects.equals(prepaymentAmount, that.prepaymentAmount) &&
             Objects.equals(amortisedAmount, that.amortisedAmount) &&
             Objects.equals(outstandingAmount, that.outstandingAmount) &&
@@ -215,7 +234,8 @@ public class PrepaymentAccountReportCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
             id,
-            prepaymentAccount,
+            accountName,
+            accountNumber,
             prepaymentAmount,
             amortisedAmount,
             outstandingAmount,
@@ -230,7 +250,8 @@ public class PrepaymentAccountReportCriteria implements Serializable, Criteria {
     public String toString() {
         return "PrepaymentAccountReportCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
-            (prepaymentAccount != null ? "prepaymentAccount=" + prepaymentAccount + ", " : "") +
+            (accountName != null ? "accountName=" + accountName + ", " : "") +
+            (accountNumber != null ? "accountNumber=" + accountNumber + ", " : "") +
             (prepaymentAmount != null ? "prepaymentAmount=" + prepaymentAmount + ", " : "") +
             (amortisedAmount != null ? "amortisedAmount=" + amortisedAmount + ", " : "") +
             (outstandingAmount != null ? "outstandingAmount=" + outstandingAmount + ", " : "") +

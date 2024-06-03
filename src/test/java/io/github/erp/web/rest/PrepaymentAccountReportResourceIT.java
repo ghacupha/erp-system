@@ -61,8 +61,11 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class PrepaymentAccountReportResourceIT {
 
-    private static final String DEFAULT_PREPAYMENT_ACCOUNT = "AAAAAAAAAA";
-    private static final String UPDATED_PREPAYMENT_ACCOUNT = "BBBBBBBBBB";
+    private static final String DEFAULT_ACCOUNT_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_ACCOUNT_NAME = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ACCOUNT_NUMBER = "AAAAAAAAAA";
+    private static final String UPDATED_ACCOUNT_NUMBER = "BBBBBBBBBB";
 
     private static final BigDecimal DEFAULT_PREPAYMENT_AMOUNT = new BigDecimal(1);
     private static final BigDecimal UPDATED_PREPAYMENT_AMOUNT = new BigDecimal(2);
@@ -121,7 +124,8 @@ class PrepaymentAccountReportResourceIT {
      */
     public static PrepaymentAccountReport createEntity(EntityManager em) {
         PrepaymentAccountReport prepaymentAccountReport = new PrepaymentAccountReport()
-            .prepaymentAccount(DEFAULT_PREPAYMENT_ACCOUNT)
+            .accountName(DEFAULT_ACCOUNT_NAME)
+            .accountNumber(DEFAULT_ACCOUNT_NUMBER)
             .prepaymentAmount(DEFAULT_PREPAYMENT_AMOUNT)
             .amortisedAmount(DEFAULT_AMORTISED_AMOUNT)
             .outstandingAmount(DEFAULT_OUTSTANDING_AMOUNT)
@@ -138,7 +142,8 @@ class PrepaymentAccountReportResourceIT {
      */
     public static PrepaymentAccountReport createUpdatedEntity(EntityManager em) {
         PrepaymentAccountReport prepaymentAccountReport = new PrepaymentAccountReport()
-            .prepaymentAccount(UPDATED_PREPAYMENT_ACCOUNT)
+            .accountName(UPDATED_ACCOUNT_NAME)
+            .accountNumber(UPDATED_ACCOUNT_NUMBER)
             .prepaymentAmount(UPDATED_PREPAYMENT_AMOUNT)
             .amortisedAmount(UPDATED_AMORTISED_AMOUNT)
             .outstandingAmount(UPDATED_OUTSTANDING_AMOUNT)
@@ -164,7 +169,8 @@ class PrepaymentAccountReportResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentAccountReport.getId().intValue())))
-            .andExpect(jsonPath("$.[*].prepaymentAccount").value(hasItem(DEFAULT_PREPAYMENT_ACCOUNT)))
+            .andExpect(jsonPath("$.[*].accountName").value(hasItem(DEFAULT_ACCOUNT_NAME)))
+            .andExpect(jsonPath("$.[*].accountNumber").value(hasItem(DEFAULT_ACCOUNT_NUMBER)))
             .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].amortisedAmount").value(hasItem(sameNumber(DEFAULT_AMORTISED_AMOUNT))))
             .andExpect(jsonPath("$.[*].outstandingAmount").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_AMOUNT))))
@@ -184,7 +190,8 @@ class PrepaymentAccountReportResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(prepaymentAccountReport.getId().intValue()))
-            .andExpect(jsonPath("$.prepaymentAccount").value(DEFAULT_PREPAYMENT_ACCOUNT))
+            .andExpect(jsonPath("$.accountName").value(DEFAULT_ACCOUNT_NAME))
+            .andExpect(jsonPath("$.accountNumber").value(DEFAULT_ACCOUNT_NUMBER))
             .andExpect(jsonPath("$.prepaymentAmount").value(sameNumber(DEFAULT_PREPAYMENT_AMOUNT)))
             .andExpect(jsonPath("$.amortisedAmount").value(sameNumber(DEFAULT_AMORTISED_AMOUNT)))
             .andExpect(jsonPath("$.outstandingAmount").value(sameNumber(DEFAULT_OUTSTANDING_AMOUNT)))
@@ -212,82 +219,158 @@ class PrepaymentAccountReportResourceIT {
 
     @Test
     @Transactional
-    void getAllPrepaymentAccountReportsByPrepaymentAccountIsEqualToSomething() throws Exception {
+    void getAllPrepaymentAccountReportsByAccountNameIsEqualToSomething() throws Exception {
         // Initialize the database
         prepaymentAccountReportRepository.saveAndFlush(prepaymentAccountReport);
 
-        // Get all the prepaymentAccountReportList where prepaymentAccount equals to DEFAULT_PREPAYMENT_ACCOUNT
-        defaultPrepaymentAccountReportShouldBeFound("prepaymentAccount.equals=" + DEFAULT_PREPAYMENT_ACCOUNT);
+        // Get all the prepaymentAccountReportList where accountName equals to DEFAULT_ACCOUNT_NAME
+        defaultPrepaymentAccountReportShouldBeFound("accountName.equals=" + DEFAULT_ACCOUNT_NAME);
 
-        // Get all the prepaymentAccountReportList where prepaymentAccount equals to UPDATED_PREPAYMENT_ACCOUNT
-        defaultPrepaymentAccountReportShouldNotBeFound("prepaymentAccount.equals=" + UPDATED_PREPAYMENT_ACCOUNT);
+        // Get all the prepaymentAccountReportList where accountName equals to UPDATED_ACCOUNT_NAME
+        defaultPrepaymentAccountReportShouldNotBeFound("accountName.equals=" + UPDATED_ACCOUNT_NAME);
     }
 
     @Test
     @Transactional
-    void getAllPrepaymentAccountReportsByPrepaymentAccountIsNotEqualToSomething() throws Exception {
+    void getAllPrepaymentAccountReportsByAccountNameIsNotEqualToSomething() throws Exception {
         // Initialize the database
         prepaymentAccountReportRepository.saveAndFlush(prepaymentAccountReport);
 
-        // Get all the prepaymentAccountReportList where prepaymentAccount not equals to DEFAULT_PREPAYMENT_ACCOUNT
-        defaultPrepaymentAccountReportShouldNotBeFound("prepaymentAccount.notEquals=" + DEFAULT_PREPAYMENT_ACCOUNT);
+        // Get all the prepaymentAccountReportList where accountName not equals to DEFAULT_ACCOUNT_NAME
+        defaultPrepaymentAccountReportShouldNotBeFound("accountName.notEquals=" + DEFAULT_ACCOUNT_NAME);
 
-        // Get all the prepaymentAccountReportList where prepaymentAccount not equals to UPDATED_PREPAYMENT_ACCOUNT
-        defaultPrepaymentAccountReportShouldBeFound("prepaymentAccount.notEquals=" + UPDATED_PREPAYMENT_ACCOUNT);
+        // Get all the prepaymentAccountReportList where accountName not equals to UPDATED_ACCOUNT_NAME
+        defaultPrepaymentAccountReportShouldBeFound("accountName.notEquals=" + UPDATED_ACCOUNT_NAME);
     }
 
     @Test
     @Transactional
-    void getAllPrepaymentAccountReportsByPrepaymentAccountIsInShouldWork() throws Exception {
+    void getAllPrepaymentAccountReportsByAccountNameIsInShouldWork() throws Exception {
         // Initialize the database
         prepaymentAccountReportRepository.saveAndFlush(prepaymentAccountReport);
 
-        // Get all the prepaymentAccountReportList where prepaymentAccount in DEFAULT_PREPAYMENT_ACCOUNT or UPDATED_PREPAYMENT_ACCOUNT
-        defaultPrepaymentAccountReportShouldBeFound(
-            "prepaymentAccount.in=" + DEFAULT_PREPAYMENT_ACCOUNT + "," + UPDATED_PREPAYMENT_ACCOUNT
-        );
+        // Get all the prepaymentAccountReportList where accountName in DEFAULT_ACCOUNT_NAME or UPDATED_ACCOUNT_NAME
+        defaultPrepaymentAccountReportShouldBeFound("accountName.in=" + DEFAULT_ACCOUNT_NAME + "," + UPDATED_ACCOUNT_NAME);
 
-        // Get all the prepaymentAccountReportList where prepaymentAccount equals to UPDATED_PREPAYMENT_ACCOUNT
-        defaultPrepaymentAccountReportShouldNotBeFound("prepaymentAccount.in=" + UPDATED_PREPAYMENT_ACCOUNT);
+        // Get all the prepaymentAccountReportList where accountName equals to UPDATED_ACCOUNT_NAME
+        defaultPrepaymentAccountReportShouldNotBeFound("accountName.in=" + UPDATED_ACCOUNT_NAME);
     }
 
     @Test
     @Transactional
-    void getAllPrepaymentAccountReportsByPrepaymentAccountIsNullOrNotNull() throws Exception {
+    void getAllPrepaymentAccountReportsByAccountNameIsNullOrNotNull() throws Exception {
         // Initialize the database
         prepaymentAccountReportRepository.saveAndFlush(prepaymentAccountReport);
 
-        // Get all the prepaymentAccountReportList where prepaymentAccount is not null
-        defaultPrepaymentAccountReportShouldBeFound("prepaymentAccount.specified=true");
+        // Get all the prepaymentAccountReportList where accountName is not null
+        defaultPrepaymentAccountReportShouldBeFound("accountName.specified=true");
 
-        // Get all the prepaymentAccountReportList where prepaymentAccount is null
-        defaultPrepaymentAccountReportShouldNotBeFound("prepaymentAccount.specified=false");
+        // Get all the prepaymentAccountReportList where accountName is null
+        defaultPrepaymentAccountReportShouldNotBeFound("accountName.specified=false");
     }
 
     @Test
     @Transactional
-    void getAllPrepaymentAccountReportsByPrepaymentAccountContainsSomething() throws Exception {
+    void getAllPrepaymentAccountReportsByAccountNameContainsSomething() throws Exception {
         // Initialize the database
         prepaymentAccountReportRepository.saveAndFlush(prepaymentAccountReport);
 
-        // Get all the prepaymentAccountReportList where prepaymentAccount contains DEFAULT_PREPAYMENT_ACCOUNT
-        defaultPrepaymentAccountReportShouldBeFound("prepaymentAccount.contains=" + DEFAULT_PREPAYMENT_ACCOUNT);
+        // Get all the prepaymentAccountReportList where accountName contains DEFAULT_ACCOUNT_NAME
+        defaultPrepaymentAccountReportShouldBeFound("accountName.contains=" + DEFAULT_ACCOUNT_NAME);
 
-        // Get all the prepaymentAccountReportList where prepaymentAccount contains UPDATED_PREPAYMENT_ACCOUNT
-        defaultPrepaymentAccountReportShouldNotBeFound("prepaymentAccount.contains=" + UPDATED_PREPAYMENT_ACCOUNT);
+        // Get all the prepaymentAccountReportList where accountName contains UPDATED_ACCOUNT_NAME
+        defaultPrepaymentAccountReportShouldNotBeFound("accountName.contains=" + UPDATED_ACCOUNT_NAME);
     }
 
     @Test
     @Transactional
-    void getAllPrepaymentAccountReportsByPrepaymentAccountNotContainsSomething() throws Exception {
+    void getAllPrepaymentAccountReportsByAccountNameNotContainsSomething() throws Exception {
         // Initialize the database
         prepaymentAccountReportRepository.saveAndFlush(prepaymentAccountReport);
 
-        // Get all the prepaymentAccountReportList where prepaymentAccount does not contain DEFAULT_PREPAYMENT_ACCOUNT
-        defaultPrepaymentAccountReportShouldNotBeFound("prepaymentAccount.doesNotContain=" + DEFAULT_PREPAYMENT_ACCOUNT);
+        // Get all the prepaymentAccountReportList where accountName does not contain DEFAULT_ACCOUNT_NAME
+        defaultPrepaymentAccountReportShouldNotBeFound("accountName.doesNotContain=" + DEFAULT_ACCOUNT_NAME);
 
-        // Get all the prepaymentAccountReportList where prepaymentAccount does not contain UPDATED_PREPAYMENT_ACCOUNT
-        defaultPrepaymentAccountReportShouldBeFound("prepaymentAccount.doesNotContain=" + UPDATED_PREPAYMENT_ACCOUNT);
+        // Get all the prepaymentAccountReportList where accountName does not contain UPDATED_ACCOUNT_NAME
+        defaultPrepaymentAccountReportShouldBeFound("accountName.doesNotContain=" + UPDATED_ACCOUNT_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountReportsByAccountNumberIsEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountReportRepository.saveAndFlush(prepaymentAccountReport);
+
+        // Get all the prepaymentAccountReportList where accountNumber equals to DEFAULT_ACCOUNT_NUMBER
+        defaultPrepaymentAccountReportShouldBeFound("accountNumber.equals=" + DEFAULT_ACCOUNT_NUMBER);
+
+        // Get all the prepaymentAccountReportList where accountNumber equals to UPDATED_ACCOUNT_NUMBER
+        defaultPrepaymentAccountReportShouldNotBeFound("accountNumber.equals=" + UPDATED_ACCOUNT_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountReportsByAccountNumberIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountReportRepository.saveAndFlush(prepaymentAccountReport);
+
+        // Get all the prepaymentAccountReportList where accountNumber not equals to DEFAULT_ACCOUNT_NUMBER
+        defaultPrepaymentAccountReportShouldNotBeFound("accountNumber.notEquals=" + DEFAULT_ACCOUNT_NUMBER);
+
+        // Get all the prepaymentAccountReportList where accountNumber not equals to UPDATED_ACCOUNT_NUMBER
+        defaultPrepaymentAccountReportShouldBeFound("accountNumber.notEquals=" + UPDATED_ACCOUNT_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountReportsByAccountNumberIsInShouldWork() throws Exception {
+        // Initialize the database
+        prepaymentAccountReportRepository.saveAndFlush(prepaymentAccountReport);
+
+        // Get all the prepaymentAccountReportList where accountNumber in DEFAULT_ACCOUNT_NUMBER or UPDATED_ACCOUNT_NUMBER
+        defaultPrepaymentAccountReportShouldBeFound("accountNumber.in=" + DEFAULT_ACCOUNT_NUMBER + "," + UPDATED_ACCOUNT_NUMBER);
+
+        // Get all the prepaymentAccountReportList where accountNumber equals to UPDATED_ACCOUNT_NUMBER
+        defaultPrepaymentAccountReportShouldNotBeFound("accountNumber.in=" + UPDATED_ACCOUNT_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountReportsByAccountNumberIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        prepaymentAccountReportRepository.saveAndFlush(prepaymentAccountReport);
+
+        // Get all the prepaymentAccountReportList where accountNumber is not null
+        defaultPrepaymentAccountReportShouldBeFound("accountNumber.specified=true");
+
+        // Get all the prepaymentAccountReportList where accountNumber is null
+        defaultPrepaymentAccountReportShouldNotBeFound("accountNumber.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountReportsByAccountNumberContainsSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountReportRepository.saveAndFlush(prepaymentAccountReport);
+
+        // Get all the prepaymentAccountReportList where accountNumber contains DEFAULT_ACCOUNT_NUMBER
+        defaultPrepaymentAccountReportShouldBeFound("accountNumber.contains=" + DEFAULT_ACCOUNT_NUMBER);
+
+        // Get all the prepaymentAccountReportList where accountNumber contains UPDATED_ACCOUNT_NUMBER
+        defaultPrepaymentAccountReportShouldNotBeFound("accountNumber.contains=" + UPDATED_ACCOUNT_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllPrepaymentAccountReportsByAccountNumberNotContainsSomething() throws Exception {
+        // Initialize the database
+        prepaymentAccountReportRepository.saveAndFlush(prepaymentAccountReport);
+
+        // Get all the prepaymentAccountReportList where accountNumber does not contain DEFAULT_ACCOUNT_NUMBER
+        defaultPrepaymentAccountReportShouldNotBeFound("accountNumber.doesNotContain=" + DEFAULT_ACCOUNT_NUMBER);
+
+        // Get all the prepaymentAccountReportList where accountNumber does not contain UPDATED_ACCOUNT_NUMBER
+        defaultPrepaymentAccountReportShouldBeFound("accountNumber.doesNotContain=" + UPDATED_ACCOUNT_NUMBER);
     }
 
     @Test
@@ -831,7 +914,8 @@ class PrepaymentAccountReportResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentAccountReport.getId().intValue())))
-            .andExpect(jsonPath("$.[*].prepaymentAccount").value(hasItem(DEFAULT_PREPAYMENT_ACCOUNT)))
+            .andExpect(jsonPath("$.[*].accountName").value(hasItem(DEFAULT_ACCOUNT_NAME)))
+            .andExpect(jsonPath("$.[*].accountNumber").value(hasItem(DEFAULT_ACCOUNT_NUMBER)))
             .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].amortisedAmount").value(hasItem(sameNumber(DEFAULT_AMORTISED_AMOUNT))))
             .andExpect(jsonPath("$.[*].outstandingAmount").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_AMOUNT))))
@@ -887,7 +971,8 @@ class PrepaymentAccountReportResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(prepaymentAccountReport.getId().intValue())))
-            .andExpect(jsonPath("$.[*].prepaymentAccount").value(hasItem(DEFAULT_PREPAYMENT_ACCOUNT)))
+            .andExpect(jsonPath("$.[*].accountName").value(hasItem(DEFAULT_ACCOUNT_NAME)))
+            .andExpect(jsonPath("$.[*].accountNumber").value(hasItem(DEFAULT_ACCOUNT_NUMBER)))
             .andExpect(jsonPath("$.[*].prepaymentAmount").value(hasItem(sameNumber(DEFAULT_PREPAYMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].amortisedAmount").value(hasItem(sameNumber(DEFAULT_AMORTISED_AMOUNT))))
             .andExpect(jsonPath("$.[*].outstandingAmount").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_AMOUNT))))
