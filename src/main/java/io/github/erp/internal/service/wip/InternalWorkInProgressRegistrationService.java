@@ -91,4 +91,12 @@ public interface InternalWorkInProgressRegistrationService {
      * @return the next catalogue number
      */
     Long calculateNextNumber();
+
+    /**
+     * Save a workInProgressRegistration bypassing the limitation in the es engine of 1000
+     *
+     * @param workInProgressRegistrationDTO the entity to save.
+     * @return the persisted entity.
+     */
+    WorkInProgressRegistrationDTO update(WorkInProgressRegistrationDTO workInProgressRegistrationDTO);
 }

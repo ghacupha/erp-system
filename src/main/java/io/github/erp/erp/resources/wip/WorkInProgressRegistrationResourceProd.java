@@ -122,7 +122,9 @@ public class WorkInProgressRegistrationResourceProd {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        WorkInProgressRegistrationDTO result = workInProgressRegistrationService.save(workInProgressRegistrationDTO);
+        // WorkInProgressRegistrationDTO result = workInProgressRegistrationService.save(workInProgressRegistrationDTO);
+        WorkInProgressRegistrationDTO result = workInProgressRegistrationService.update(workInProgressRegistrationDTO);
+
         return ResponseEntity
             .ok()
             .headers(

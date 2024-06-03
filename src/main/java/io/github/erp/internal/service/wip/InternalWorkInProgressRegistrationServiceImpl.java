@@ -71,6 +71,15 @@ public class InternalWorkInProgressRegistrationServiceImpl implements InternalWo
     }
 
     @Override
+    public WorkInProgressRegistrationDTO update(WorkInProgressRegistrationDTO workInProgressRegistrationDTO) {
+        log.debug("Request to save WorkInProgressRegistration : {}", workInProgressRegistrationDTO);
+        WorkInProgressRegistration workInProgressRegistration = workInProgressRegistrationMapper.toEntity(workInProgressRegistrationDTO);
+        workInProgressRegistration = workInProgressRegistrationRepository.save(workInProgressRegistration);
+
+        return workInProgressRegistrationMapper.toDto(workInProgressRegistration);
+    }
+
+    @Override
     public Optional<WorkInProgressRegistrationDTO> partialUpdate(WorkInProgressRegistrationDTO workInProgressRegistrationDTO) {
         log.debug("Request to partially update WorkInProgressRegistration : {}", workInProgressRegistrationDTO);
 
