@@ -27,6 +27,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A WorkInProgressRegistration.
@@ -34,7 +36,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "work_in_progress_registration")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "workinprogressregistration")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "workinprogressregistration-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
 public class WorkInProgressRegistration implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,29 +45,37 @@ public class WorkInProgressRegistration implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
     @NotNull
     @Column(name = "sequence_number", nullable = false, unique = true)
+    @Field(type = FieldType.Text)
     private String sequenceNumber;
 
     @Column(name = "particulars")
+    @Field(type = FieldType.Text)
     private String particulars;
 
     @Column(name = "instalment_amount", precision = 21, scale = 2)
+    @Field(type = FieldType.Double)
     private BigDecimal instalmentAmount;
 
     @Lob
     @Column(name = "comments")
+    @Field(type = FieldType.Byte)
     private byte[] comments;
 
     @Column(name = "comments_content_type")
+    @Field(type = FieldType.Text)
     private String commentsContentType;
 
     @Column(name = "level_of_completion")
+    @Field(type = FieldType.Double)
     private Double levelOfCompletion;
 
     @Column(name = "completed")
+    @Field(type = FieldType.Boolean)
     private Boolean completed;
 
     @ManyToMany

@@ -24,6 +24,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A Placeholder.
@@ -40,19 +42,24 @@ public class Placeholder implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
     @NotNull
     @Column(name = "description", nullable = false, unique = true)
+    @Field(type = FieldType.Text)
     private String description;
 
     @Column(name = "token", unique = true)
+    @Field(type = FieldType.Text)
     private String token;
 
     @Column(name = "file_upload_token")
+    @Field(type = FieldType.Text)
     private String fileUploadToken;
 
     @Column(name = "compilation_token")
+    @Field(type = FieldType.Text)
     private String compilationToken;
 
     @ManyToOne
