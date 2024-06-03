@@ -41,8 +41,11 @@ public class PrepaymentAccountReport implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "prepayment_account")
-    private String prepaymentAccount;
+    @Column(name = "account_name")
+    private String accountName;
+
+    @Column(name = "account_number")
+    private String accountNumber;
 
     @Column(name = "prepayment_amount", precision = 21, scale = 2)
     private BigDecimal prepaymentAmount;
@@ -74,17 +77,30 @@ public class PrepaymentAccountReport implements Serializable {
         this.id = id;
     }
 
-    public String getPrepaymentAccount() {
-        return this.prepaymentAccount;
+    public String getAccountName() {
+        return this.accountName;
     }
 
-    public PrepaymentAccountReport prepaymentAccount(String prepaymentAccount) {
-        this.setPrepaymentAccount(prepaymentAccount);
+    public PrepaymentAccountReport accountName(String accountName) {
+        this.setAccountName(accountName);
         return this;
     }
 
-    public void setPrepaymentAccount(String prepaymentAccount) {
-        this.prepaymentAccount = prepaymentAccount;
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public String getAccountNumber() {
+        return this.accountNumber;
+    }
+
+    public PrepaymentAccountReport accountNumber(String accountNumber) {
+        this.setAccountNumber(accountNumber);
+        return this;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public BigDecimal getPrepaymentAmount() {
@@ -176,7 +192,8 @@ public class PrepaymentAccountReport implements Serializable {
     public String toString() {
         return "PrepaymentAccountReport{" +
             "id=" + getId() +
-            ", prepaymentAccount='" + getPrepaymentAccount() + "'" +
+            ", accountName='" + getAccountName() + "'" +
+            ", accountNumber='" + getAccountNumber() + "'" +
             ", prepaymentAmount=" + getPrepaymentAmount() +
             ", amortisedAmount=" + getAmortisedAmount() +
             ", outstandingAmount=" + getOutstandingAmount() +

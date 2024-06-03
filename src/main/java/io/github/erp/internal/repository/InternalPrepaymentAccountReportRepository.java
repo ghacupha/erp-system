@@ -37,7 +37,8 @@ public interface InternalPrepaymentAccountReportRepository
         nativeQuery = true,
         value = "SELECT " +
         " ps.acc_id AS id, " +
-        " ps.account_name as PrepaymentAccount, " +
+        " ps.account_name as accountName, " +
+        " ps.account_number as accountNumber, " +
         " SUM(ps.prepayment_amount) as PrepaymentAmount, " +
         " SUM(ps.amortised_amount) as AmortisedAmount, " +
         " SUM(ps.outstanding_amount) as OutstandingAmount, " +
@@ -47,6 +48,7 @@ public interface InternalPrepaymentAccountReportRepository
         "    ta.id as acc_id, " +
         "    p.id,   " +
         "    ta.account_name as account_name, " +
+        "    ta.account_number as account_number, " +
         "    COALESCE(p.prepayment_amount, 0) as prepayment_amount, " +
         "    COALESCE(SUM(pa.prepayment_amount), 0) as amortised_amount, " +
         "    COALESCE(p.prepayment_amount, 0) - COALESCE(SUM(pa.prepayment_amount), 0) as outstanding_amount, " +
@@ -72,10 +74,14 @@ public interface InternalPrepaymentAccountReportRepository
         "    p.id,   " +
         "    ta.id,   " +
         "    ta.account_name,   " +
+        "    ta.account_number,   " +
         "    c.iso_4217_currency_code,   " +
         "    p.prepayment_amount   " +
-        ") ps   " +
-        "GROUP BY ps.account_name, ps.acc_id",
+        ") ps " +
+        "GROUP BY " +
+            "ps.account_number, " +
+            "ps.account_name, " +
+            "ps.acc_id",
 
         countQuery = "SELECT " +
         " count(ps.acc_id) " +
@@ -106,13 +112,14 @@ public interface InternalPrepaymentAccountReportRepository
         "    c.iso_4217_currency_code,   " +
         "    p.prepayment_amount   " +
         ") ps   " +
-        "GROUP BY ps.account_name, ps.acc_id"
+        "GROUP BY ps.acc_id"
     )
     Page<PrepaymentAccountReportTuple> findAllByReportDate(@Param("reportDate") LocalDate reportDate, Pageable page);
 
     @Query(value = "SELECT   " +
         " ps.acc_id AS id,   " +
-        " ps.account_name AS PrepaymentAccount,   " +
+        " ps.account_name AS accountName,   " +
+        " ps.account_number AS accountNumber,   " +
         " SUM(ps.prepayment_amount) AS PrepaymentAmount,   " +
         " SUM(ps.amortised_amount) AS AmortisedAmount,   " +
         " SUM(ps.outstanding_amount) AS OutstandingAmount,   " +
@@ -122,6 +129,7 @@ public interface InternalPrepaymentAccountReportRepository
         "  ta.id as acc_id,   " +
         "    p.id,   " +
         "    ta.account_name as account_name,   " +
+        "    ta.account_number as account_number,   " +
         "    c.iso_4217_currency_code as currency,   " +
         "    COALESCE(p.prepayment_amount, 0) as prepayment_amount,   " +
         "    COALESCE(SUM(pa.prepayment_amount), 0) as amortised_amount,   " +
@@ -148,12 +156,13 @@ public interface InternalPrepaymentAccountReportRepository
         "    p.id,   " +
         "    ta.id,   " +
         "    ta.account_name,   " +
+        "    ta.account_number,   " +
         "    c.iso_4217_currency_code,   " +
         "    p.prepayment_amount   " +
         "    ) ps   " +
         "       " +
-        "WHERE ps.acc_id = :id " +
-        "GROUP BY ps.account_name, ps.acc_id", nativeQuery = true)
+        "WHERE ps.acc_id = :id ",
+         nativeQuery = true)
     Optional<PrepaymentAccountReportTuple> findOneByReportDate(@Param("reportDate") LocalDate reportDate, @Param("id") long id);
 }
 

@@ -287,8 +287,13 @@ public class PrepaymentAccountReportTupleMapper implements Mapping<PrepaymentAcc
             }
 
             @Override
-            public String getPrepaymentAccount() {
-                return vs.getPrepaymentAccount();
+            public String getAccountName() {
+                return vs.getAccountName();
+            }
+
+            @Override
+            public String getAccountNumber() {
+                return vs.getAccountNumber();
             }
 
             @Override
@@ -324,7 +329,8 @@ public class PrepaymentAccountReportTupleMapper implements Mapping<PrepaymentAcc
     public PrepaymentAccountReportDTO toValue2(PrepaymentAccountReportTuple vs) {
         PrepaymentAccountReportDTO report = new PrepaymentAccountReportDTO();
         report.setId(vs.getId());
-        report.setPrepaymentAccount(vs.getPrepaymentAccount());
+        report.setAccountName(vs.getAccountName());
+        report.setAccountNumber(vs.getAccountNumber());
         report.setNumberOfPrepaymentAccounts(vs.getNumberOfPrepaymentAccounts());
         report.setNumberOfAmortisedItems(vs.getNumberOfAmortisedItems());
         report.setPrepaymentAmount(vs.getPrepaymentAmount());

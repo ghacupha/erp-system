@@ -23,7 +23,9 @@ public interface PrepaymentAccountReportTuple {
 
     Long getId();
 
-    String getPrepaymentAccount();
+    String getAccountName();
+
+    String getAccountNumber();
 
     BigDecimal getPrepaymentAmount();
 

@@ -1,11 +1,11 @@
-id;prepayment_account;prepayment_amount;amortised_amount;outstanding_amount;number_of_prepayment_accounts;number_of_amortised_items
-1;Wooden deliver;84881;21086;8405;36208;54340
-2;customized Soft;9190;88533;73485;54232;65813
-3;transition Steel Metal;16028;60428;87781;55496;7562
-4;administration;52505;79841;82172;19010;31775
-5;Avon;66199;41061;76027;63507;57589
-6;De-engineered;6536;83492;69687;86667;83620
-7;Account Balboa Guinea;2330;97365;79303;63615;89264
-8;bus hub Horizontal;15050;45938;57930;12230;31438
-9;asymmetric deposit haptic;86937;35874;85772;60020;5182
-10;Jewelery;12742;77432;7358;41745;26504
+id;account_name;account_number;prepayment_amount;amortised_amount;outstanding_amount;number_of_prepayment_accounts;number_of_amortised_items
+1;Investment Account;Bacon;53708;32140;84881;21086;8405
+2;Money Market Account;withdrawal Rustic;93196;9190;88533;73485;54232
+3;Credit Card Account;transition Steel Metal;16028;60428;87781;55496;7562
+4;Checking Account;Facilitator;79841;82172;19010;31775;6604
+5;Investment Account;Metal;76027;63507;57589;20368;23025
+6;Savings Account;Pizza Communications;84572;69439;62041;16507;52683
+7;Money Market Account;Industrial invoice bus;29685;46006;56366;22909;36912
+8;Savings Account;Pass;31438;79921;29497;8536;71360
+9;Credit Card Account;synthesizing;95869;86937;35874;85772;60020
+10;Checking Account;Jewelery;12742;77432;7358;41745;26504

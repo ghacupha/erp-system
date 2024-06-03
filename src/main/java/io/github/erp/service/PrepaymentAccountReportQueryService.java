@@ -116,11 +116,13 @@ public class PrepaymentAccountReportQueryService extends QueryService<Prepayment
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), PrepaymentAccountReport_.id));
             }
-            if (criteria.getPrepaymentAccount() != null) {
+            if (criteria.getAccountName() != null) {
                 specification =
-                    specification.and(
-                        buildStringSpecification(criteria.getPrepaymentAccount(), PrepaymentAccountReport_.prepaymentAccount)
-                    );
+                    specification.and(buildStringSpecification(criteria.getAccountName(), PrepaymentAccountReport_.accountName));
+            }
+            if (criteria.getAccountNumber() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getAccountNumber(), PrepaymentAccountReport_.accountNumber));
             }
             if (criteria.getPrepaymentAmount() != null) {
                 specification =
