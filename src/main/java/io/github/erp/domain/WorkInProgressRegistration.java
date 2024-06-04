@@ -63,7 +63,7 @@ public class WorkInProgressRegistration implements Serializable {
 
     @Lob
     @Column(name = "comments")
-    @Field(type = FieldType.Byte)
+    @Field(type = FieldType.Binary)
     private byte[] comments;
 
     @Column(name = "comments_content_type")
