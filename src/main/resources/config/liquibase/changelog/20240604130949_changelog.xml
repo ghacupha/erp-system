@@ -3,7 +3,7 @@
     <changeSet author="edwin.njeru (generated)" id="1717506714190-8">
         <addColumn tableName="work_in_progress_registration">
             <column name="instalment_date" type="date">
-                <constraints nullable="true"/>
+                <constraints nullable="false"/>
             </column>
         </addColumn>
     </changeSet>
