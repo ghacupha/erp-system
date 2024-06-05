@@ -20,6 +20,7 @@ package io.github.erp.service.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -37,6 +38,9 @@ public class WorkInProgressRegistrationDTO implements Serializable {
     private String sequenceNumber;
 
     private String particulars;
+
+    @NotNull
+    private LocalDate instalmentDate;
 
     private BigDecimal instalmentAmount;
 
@@ -98,6 +102,14 @@ public class WorkInProgressRegistrationDTO implements Serializable {
 
     public void setParticulars(String particulars) {
         this.particulars = particulars;
+    }
+
+    public LocalDate getInstalmentDate() {
+        return instalmentDate;
+    }
+
+    public void setInstalmentDate(LocalDate instalmentDate) {
+        this.instalmentDate = instalmentDate;
     }
 
     public BigDecimal getInstalmentAmount() {
@@ -280,6 +292,7 @@ public class WorkInProgressRegistrationDTO implements Serializable {
             "id=" + getId() +
             ", sequenceNumber='" + getSequenceNumber() + "'" +
             ", particulars='" + getParticulars() + "'" +
+            ", instalmentDate='" + getInstalmentDate() + "'" +
             ", instalmentAmount=" + getInstalmentAmount() +
             ", comments='" + getComments() + "'" +
             ", levelOfCompletion=" + getLevelOfCompletion() +

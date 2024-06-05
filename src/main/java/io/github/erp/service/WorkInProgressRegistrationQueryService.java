@@ -124,6 +124,10 @@ public class WorkInProgressRegistrationQueryService extends QueryService<WorkInP
                 specification =
                     specification.and(buildStringSpecification(criteria.getParticulars(), WorkInProgressRegistration_.particulars));
             }
+            if (criteria.getInstalmentDate() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getInstalmentDate(), WorkInProgressRegistration_.instalmentDate));
+            }
             if (criteria.getInstalmentAmount() != null) {
                 specification =
                     specification.and(

@@ -21,6 +21,7 @@ package io.github.erp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -56,6 +57,11 @@ public class WorkInProgressRegistration implements Serializable {
     @Column(name = "particulars")
     @Field(type = FieldType.Text)
     private String particulars;
+
+    @NotNull
+    @Field(type = FieldType.Date)
+    @Column(name = "instalment_date", nullable = false)
+    private LocalDate instalmentDate;
 
     @Column(name = "instalment_amount", precision = 21, scale = 2)
     @Field(type = FieldType.Double)
@@ -290,6 +296,19 @@ public class WorkInProgressRegistration implements Serializable {
 
     public void setParticulars(String particulars) {
         this.particulars = particulars;
+    }
+
+    public LocalDate getInstalmentDate() {
+        return this.instalmentDate;
+    }
+
+    public WorkInProgressRegistration instalmentDate(LocalDate instalmentDate) {
+        this.setInstalmentDate(instalmentDate);
+        return this;
+    }
+
+    public void setInstalmentDate(LocalDate instalmentDate) {
+        this.instalmentDate = instalmentDate;
     }
 
     public BigDecimal getInstalmentAmount() {
@@ -605,6 +624,7 @@ public class WorkInProgressRegistration implements Serializable {
             "id=" + getId() +
             ", sequenceNumber='" + getSequenceNumber() + "'" +
             ", particulars='" + getParticulars() + "'" +
+            ", instalmentDate='" + getInstalmentDate() + "'" +
             ", instalmentAmount=" + getInstalmentAmount() +
             ", comments='" + getComments() + "'" +
             ", commentsContentType='" + getCommentsContentType() + "'" +

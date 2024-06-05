@@ -19,8 +19,8 @@ package io.github.erp.internal.service.wip;
  */
 
 import io.github.erp.domain.WorkProjectRegister;
+import io.github.erp.internal.repository.InternalWorkProjectRegisterRepository;
 import io.github.erp.internal.utilities.NextIntegerFiller;
-import io.github.erp.repository.WorkProjectRegisterRepository;
 import io.github.erp.repository.search.WorkProjectRegisterSearchRepository;
 import io.github.erp.service.dto.WorkProjectRegisterDTO;
 import io.github.erp.service.mapper.WorkProjectRegisterMapper;
@@ -42,14 +42,14 @@ public class InternalWorkProjectRegisterServiceImpl implements InternalWorkProje
 
     private final Logger log = LoggerFactory.getLogger(InternalWorkProjectRegisterServiceImpl.class);
 
-    private final WorkProjectRegisterRepository workProjectRegisterRepository;
+    private final InternalWorkProjectRegisterRepository workProjectRegisterRepository;
 
     private final WorkProjectRegisterMapper workProjectRegisterMapper;
 
     private final WorkProjectRegisterSearchRepository workProjectRegisterSearchRepository;
 
     public InternalWorkProjectRegisterServiceImpl(
-        WorkProjectRegisterRepository workProjectRegisterRepository,
+        InternalWorkProjectRegisterRepository workProjectRegisterRepository,
         WorkProjectRegisterMapper workProjectRegisterMapper,
         WorkProjectRegisterSearchRepository workProjectRegisterSearchRepository
     ) {
