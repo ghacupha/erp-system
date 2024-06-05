@@ -1,4 +1,4 @@
-package io.github.erp.repository;
+package io.github.erp.internal.repository;
 
 /*-
  * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
@@ -19,19 +19,22 @@ package io.github.erp.repository;
  */
 
 import io.github.erp.domain.WorkProjectRegister;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data SQL repository for the WorkProjectRegister entity.
  */
 @Repository
-public interface WorkProjectRegisterRepository
+public interface InternalWorkProjectRegisterRepository
     extends JpaRepository<WorkProjectRegister, Long>, JpaSpecificationExecutor<WorkProjectRegister> {
     @Query(
         value = "select distinct workProjectRegister from WorkProjectRegister workProjectRegister left join fetch workProjectRegister.dealers left join fetch workProjectRegister.placeholders left join fetch workProjectRegister.businessDocuments",
@@ -48,4 +51,7 @@ public interface WorkProjectRegisterRepository
         "select workProjectRegister from WorkProjectRegister workProjectRegister left join fetch workProjectRegister.dealers left join fetch workProjectRegister.placeholders left join fetch workProjectRegister.businessDocuments where workProjectRegister.id =:id"
     )
     Optional<WorkProjectRegister> findOneWithEagerRelationships(@Param("id") Long id);
+
+    @Query(nativeQuery = true, value = "SELECT catalogue_number FROM work_project_register")
+    List<Long> findAllIds();
 }
