@@ -13,8 +13,7 @@
     },
     {
       "fieldName": "instalmentDate",
-      "fieldType": "LocalDate",
-      "fieldValidateRules": ["required"]
+      "fieldType": "LocalDate"
     },
     {
       "fieldName": "instalmentAmount",

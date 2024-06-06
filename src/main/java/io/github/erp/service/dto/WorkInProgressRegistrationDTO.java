@@ -39,7 +39,6 @@ public class WorkInProgressRegistrationDTO implements Serializable {
 
     private String particulars;
 
-    @NotNull
     private LocalDate instalmentDate;
 
     private BigDecimal instalmentAmount;
