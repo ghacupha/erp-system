@@ -17,6 +17,7 @@ package io.github.erp.service.criteria;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.enumeration.WorkInProgressTransferType;
 import java.io.Serializable;
 import java.util.Objects;
@@ -83,7 +84,9 @@ public class WorkInProgressTransferCriteria implements Serializable, Criteria {
 
     private LongFilter serviceOutletId;
 
-    private LongFilter settlementId;
+    private LongFilter transferSettlementId;
+
+    private LongFilter originalSettlementId;
 
     private LongFilter workProjectRegisterId;
 
@@ -103,7 +106,8 @@ public class WorkInProgressTransferCriteria implements Serializable, Criteria {
         this.assetCategoryId = other.assetCategoryId == null ? null : other.assetCategoryId.copy();
         this.workInProgressRegistrationId = other.workInProgressRegistrationId == null ? null : other.workInProgressRegistrationId.copy();
         this.serviceOutletId = other.serviceOutletId == null ? null : other.serviceOutletId.copy();
-        this.settlementId = other.settlementId == null ? null : other.settlementId.copy();
+        this.transferSettlementId = other.transferSettlementId == null ? null : other.transferSettlementId.copy();
+        this.originalSettlementId = other.originalSettlementId == null ? null : other.originalSettlementId.copy();
         this.workProjectRegisterId = other.workProjectRegisterId == null ? null : other.workProjectRegisterId.copy();
         this.distinct = other.distinct;
     }
@@ -278,19 +282,34 @@ public class WorkInProgressTransferCriteria implements Serializable, Criteria {
         this.serviceOutletId = serviceOutletId;
     }
 
-    public LongFilter getSettlementId() {
-        return settlementId;
+    public LongFilter getTransferSettlementId() {
+        return transferSettlementId;
     }
 
-    public LongFilter settlementId() {
-        if (settlementId == null) {
-            settlementId = new LongFilter();
+    public LongFilter transferSettlementId() {
+        if (transferSettlementId == null) {
+            transferSettlementId = new LongFilter();
         }
-        return settlementId;
+        return transferSettlementId;
     }
 
-    public void setSettlementId(LongFilter settlementId) {
-        this.settlementId = settlementId;
+    public void setTransferSettlementId(LongFilter transferSettlementId) {
+        this.transferSettlementId = transferSettlementId;
+    }
+
+    public LongFilter getOriginalSettlementId() {
+        return originalSettlementId;
+    }
+
+    public LongFilter originalSettlementId() {
+        if (originalSettlementId == null) {
+            originalSettlementId = new LongFilter();
+        }
+        return originalSettlementId;
+    }
+
+    public void setOriginalSettlementId(LongFilter originalSettlementId) {
+        this.originalSettlementId = originalSettlementId;
     }
 
     public LongFilter getWorkProjectRegisterId() {
@@ -337,7 +356,8 @@ public class WorkInProgressTransferCriteria implements Serializable, Criteria {
             Objects.equals(assetCategoryId, that.assetCategoryId) &&
             Objects.equals(workInProgressRegistrationId, that.workInProgressRegistrationId) &&
             Objects.equals(serviceOutletId, that.serviceOutletId) &&
-            Objects.equals(settlementId, that.settlementId) &&
+            Objects.equals(transferSettlementId, that.transferSettlementId) &&
+            Objects.equals(originalSettlementId, that.originalSettlementId) &&
             Objects.equals(workProjectRegisterId, that.workProjectRegisterId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -357,7 +377,8 @@ public class WorkInProgressTransferCriteria implements Serializable, Criteria {
             assetCategoryId,
             workInProgressRegistrationId,
             serviceOutletId,
-            settlementId,
+            transferSettlementId,
+            originalSettlementId,
             workProjectRegisterId,
             distinct
         );
@@ -378,7 +399,8 @@ public class WorkInProgressTransferCriteria implements Serializable, Criteria {
             (assetCategoryId != null ? "assetCategoryId=" + assetCategoryId + ", " : "") +
             (workInProgressRegistrationId != null ? "workInProgressRegistrationId=" + workInProgressRegistrationId + ", " : "") +
             (serviceOutletId != null ? "serviceOutletId=" + serviceOutletId + ", " : "") +
-            (settlementId != null ? "settlementId=" + settlementId + ", " : "") +
+            (transferSettlementId != null ? "transferSettlementId=" + transferSettlementId + ", " : "") +
+            (originalSettlementId != null ? "originalSettlementId=" + originalSettlementId + ", " : "") +
             (workProjectRegisterId != null ? "workProjectRegisterId=" + workProjectRegisterId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

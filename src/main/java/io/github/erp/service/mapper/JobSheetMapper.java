@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.JobSheet;
 import io.github.erp.service.dto.JobSheetDTO;
 import java.util.Set;
@@ -48,15 +49,15 @@ public interface JobSheetMapper extends EntityMapper<JobSheetDTO, JobSheet> {
     @Mapping(target = "removeBusinessDocument", ignore = true)
     JobSheet toEntity(JobSheetDTO jobSheetDTO);
 
-    @Named("serialNumber")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "serialNumber", source = "serialNumber")
-    JobSheetDTO toDtoSerialNumber(JobSheet jobSheet);
-
     @Named("serialNumberSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "serialNumber", source = "serialNumber")
     Set<JobSheetDTO> toDtoSerialNumberSet(Set<JobSheet> jobSheet);
+
+    @Named("serialNumber")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "serialNumber", source = "serialNumber")
+    JobSheetDTO toDtoSerialNumber(JobSheet jobSheet);
 }

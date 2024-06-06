@@ -17,6 +17,7 @@ package io.github.erp.web.rest;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import static io.github.erp.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -248,28 +249,6 @@ class WorkInProgressRegistrationResourceIT {
         int databaseSizeBeforeTest = workInProgressRegistrationRepository.findAll().size();
         // set the field null
         workInProgressRegistration.setSequenceNumber(null);
-
-        // Create the WorkInProgressRegistration, which fails.
-        WorkInProgressRegistrationDTO workInProgressRegistrationDTO = workInProgressRegistrationMapper.toDto(workInProgressRegistration);
-
-        restWorkInProgressRegistrationMockMvc
-            .perform(
-                post(ENTITY_API_URL)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<WorkInProgressRegistration> workInProgressRegistrationList = workInProgressRegistrationRepository.findAll();
-        assertThat(workInProgressRegistrationList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    void checkInstalmentDateIsRequired() throws Exception {
-        int databaseSizeBeforeTest = workInProgressRegistrationRepository.findAll().size();
-        // set the field null
-        workInProgressRegistration.setInstalmentDate(null);
 
         // Create the WorkInProgressRegistration, which fails.
         WorkInProgressRegistrationDTO workInProgressRegistrationDTO = workInProgressRegistrationMapper.toDto(workInProgressRegistration);

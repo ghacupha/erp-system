@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.PurchaseOrder;
 import io.github.erp.service.dto.PurchaseOrderDTO;
 import java.util.Set;
@@ -42,15 +43,15 @@ public interface PurchaseOrderMapper extends EntityMapper<PurchaseOrderDTO, Purc
     @Mapping(target = "removeBusinessDocument", ignore = true)
     PurchaseOrder toEntity(PurchaseOrderDTO purchaseOrderDTO);
 
-    @Named("purchaseOrderNumber")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "purchaseOrderNumber", source = "purchaseOrderNumber")
-    PurchaseOrderDTO toDtoPurchaseOrderNumber(PurchaseOrder purchaseOrder);
-
     @Named("purchaseOrderNumberSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "purchaseOrderNumber", source = "purchaseOrderNumber")
     Set<PurchaseOrderDTO> toDtoPurchaseOrderNumberSet(Set<PurchaseOrder> purchaseOrder);
+
+    @Named("purchaseOrderNumber")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "purchaseOrderNumber", source = "purchaseOrderNumber")
+    PurchaseOrderDTO toDtoPurchaseOrderNumber(PurchaseOrder purchaseOrder);
 }

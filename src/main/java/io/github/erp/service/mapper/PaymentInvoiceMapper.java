@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.PaymentInvoice;
 import io.github.erp.service.dto.PaymentInvoiceDTO;
 import java.util.Set;
@@ -57,15 +58,15 @@ public interface PaymentInvoiceMapper extends EntityMapper<PaymentInvoiceDTO, Pa
     @Mapping(target = "removeBusinessDocument", ignore = true)
     PaymentInvoice toEntity(PaymentInvoiceDTO paymentInvoiceDTO);
 
-    @Named("invoiceNumber")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "invoiceNumber", source = "invoiceNumber")
-    PaymentInvoiceDTO toDtoInvoiceNumber(PaymentInvoice paymentInvoice);
-
     @Named("invoiceNumberSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "invoiceNumber", source = "invoiceNumber")
     Set<PaymentInvoiceDTO> toDtoInvoiceNumberSet(Set<PaymentInvoice> paymentInvoice);
+
+    @Named("invoiceNumber")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "invoiceNumber", source = "invoiceNumber")
+    PaymentInvoiceDTO toDtoInvoiceNumber(PaymentInvoice paymentInvoice);
 }

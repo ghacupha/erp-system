@@ -35,7 +35,6 @@ package io.github.erp.aop.reporting.wip;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.internal.report.attachment.ReportAttachmentService;
 import io.github.erp.service.dto.WorkInProgressOutstandingReportRequisitionDTO;
 import org.aspectj.lang.JoinPoint;

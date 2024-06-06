@@ -17,6 +17,7 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.WorkInProgressTransfer;
 import io.github.erp.service.dto.WorkInProgressTransferDTO;
 import org.mapstruct.*;
@@ -42,7 +43,8 @@ public interface WorkInProgressTransferMapper extends EntityMapper<WorkInProgres
     @Mapping(target = "assetCategory", source = "assetCategory", qualifiedByName = "assetCategoryName")
     @Mapping(target = "workInProgressRegistration", source = "workInProgressRegistration", qualifiedByName = "sequenceNumber")
     @Mapping(target = "serviceOutlet", source = "serviceOutlet", qualifiedByName = "outletCode")
-    @Mapping(target = "settlement", source = "settlement", qualifiedByName = "paymentNumber")
+    @Mapping(target = "transferSettlement", source = "transferSettlement", qualifiedByName = "paymentNumber")
+    @Mapping(target = "originalSettlement", source = "originalSettlement", qualifiedByName = "paymentNumber")
     @Mapping(target = "workProjectRegister", source = "workProjectRegister", qualifiedByName = "projectTitle")
     WorkInProgressTransferDTO toDto(WorkInProgressTransfer s);
 
