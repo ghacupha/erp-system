@@ -17,10 +17,10 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
 import io.github.erp.domain.enumeration.WorkInProgressTransferType;
-import io.github.erp.erp.resources.wip.WorkInProgressTransferResourceProd;
 import io.github.erp.repository.WorkInProgressTransferRepository;
 import io.github.erp.repository.search.WorkInProgressTransferSearchRepository;
 import io.github.erp.service.WorkInProgressTransferService;
@@ -59,7 +59,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link WorkInProgressTransferResourceProd} REST controller.
+ * Integration tests for the WorkInProgressTransferResourceProd REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -73,9 +73,9 @@ public class WorkInProgressTransferResourceIT {
     private static final String DEFAULT_TARGET_ASSET_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_TARGET_ASSET_NUMBER = "BBBBBBBBBB";
 
-    private static final BigDecimal DEFAULT_TRANSFER_AMOUNT = new BigDecimal(0);
-    private static final BigDecimal UPDATED_TRANSFER_AMOUNT = new BigDecimal(1);
-    private static final BigDecimal SMALLER_TRANSFER_AMOUNT = new BigDecimal(0 - 1);
+    private static final BigDecimal DEFAULT_TRANSFER_AMOUNT = new BigDecimal(1);
+    private static final BigDecimal UPDATED_TRANSFER_AMOUNT = new BigDecimal(2);
+    private static final BigDecimal SMALLER_TRANSFER_AMOUNT = new BigDecimal(1 - 1);
 
     private static final LocalDate DEFAULT_TRANSFER_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_TRANSFER_DATE = LocalDate.now(ZoneId.systemDefault());
@@ -210,7 +210,7 @@ public class WorkInProgressTransferResourceIT {
         verify(mockWorkInProgressTransferSearchRepository, times(0)).save(workInProgressTransfer);
     }
 
-    // TODO CHECK REASON FOR FAILING @Test
+    @Test
     @Transactional
     void checkTransferAmountIsRequired() throws Exception {
         int databaseSizeBeforeTest = workInProgressTransferRepository.findAll().size();
@@ -232,7 +232,7 @@ public class WorkInProgressTransferResourceIT {
         assertThat(workInProgressTransferList).hasSize(databaseSizeBeforeTest);
     }
 
-    // TODO CHECK REASON FOR FAILING @Test
+    @Test
     @Transactional
     void checkTransferDateIsRequired() throws Exception {
         int databaseSizeBeforeTest = workInProgressTransferRepository.findAll().size();
@@ -254,7 +254,7 @@ public class WorkInProgressTransferResourceIT {
         assertThat(workInProgressTransferList).hasSize(databaseSizeBeforeTest);
     }
 
-    // TODO CHECK REASON FOR FAILING @Test
+    @Test
     @Transactional
     void checkTransferTypeIsRequired() throws Exception {
         int databaseSizeBeforeTest = workInProgressTransferRepository.findAll().size();
@@ -900,28 +900,54 @@ public class WorkInProgressTransferResourceIT {
 
     @Test
     @Transactional
-    void getAllWorkInProgressTransfersBySettlementIsEqualToSomething() throws Exception {
+    void getAllWorkInProgressTransfersByTransferSettlementIsEqualToSomething() throws Exception {
         // Initialize the database
         workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
-        Settlement settlement;
+        Settlement transferSettlement;
         if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
-            settlement = SettlementResourceIT.createEntity(em);
-            em.persist(settlement);
+            transferSettlement = SettlementResourceIT.createEntity(em);
+            em.persist(transferSettlement);
             em.flush();
         } else {
-            settlement = TestUtil.findAll(em, Settlement.class).get(0);
+            transferSettlement = TestUtil.findAll(em, Settlement.class).get(0);
         }
-        em.persist(settlement);
+        em.persist(transferSettlement);
         em.flush();
-        workInProgressTransfer.setSettlement(settlement);
+        workInProgressTransfer.setTransferSettlement(transferSettlement);
         workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
-        Long settlementId = settlement.getId();
+        Long transferSettlementId = transferSettlement.getId();
 
-        // Get all the workInProgressTransferList where settlement equals to settlementId
-        defaultWorkInProgressTransferShouldBeFound("settlementId.equals=" + settlementId);
+        // Get all the workInProgressTransferList where transferSettlement equals to transferSettlementId
+        defaultWorkInProgressTransferShouldBeFound("transferSettlementId.equals=" + transferSettlementId);
 
-        // Get all the workInProgressTransferList where settlement equals to (settlementId + 1)
-        defaultWorkInProgressTransferShouldNotBeFound("settlementId.equals=" + (settlementId + 1));
+        // Get all the workInProgressTransferList where transferSettlement equals to (transferSettlementId + 1)
+        defaultWorkInProgressTransferShouldNotBeFound("transferSettlementId.equals=" + (transferSettlementId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByOriginalSettlementIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+        Settlement originalSettlement;
+        if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
+            originalSettlement = SettlementResourceIT.createEntity(em);
+            em.persist(originalSettlement);
+            em.flush();
+        } else {
+            originalSettlement = TestUtil.findAll(em, Settlement.class).get(0);
+        }
+        em.persist(originalSettlement);
+        em.flush();
+        workInProgressTransfer.setOriginalSettlement(originalSettlement);
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+        Long originalSettlementId = originalSettlement.getId();
+
+        // Get all the workInProgressTransferList where originalSettlement equals to originalSettlementId
+        defaultWorkInProgressTransferShouldBeFound("originalSettlementId.equals=" + originalSettlementId);
+
+        // Get all the workInProgressTransferList where originalSettlement equals to (originalSettlementId + 1)
+        defaultWorkInProgressTransferShouldNotBeFound("originalSettlementId.equals=" + (originalSettlementId + 1));
     }
 
     @Test

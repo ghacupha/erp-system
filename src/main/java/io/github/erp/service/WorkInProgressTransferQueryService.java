@@ -17,6 +17,7 @@ package io.github.erp.service;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.*; // for static metamodels
 import io.github.erp.domain.WorkInProgressTransfer;
 import io.github.erp.repository.WorkInProgressTransferRepository;
@@ -181,12 +182,21 @@ public class WorkInProgressTransferQueryService extends QueryService<WorkInProgr
                         )
                     );
             }
-            if (criteria.getSettlementId() != null) {
+            if (criteria.getTransferSettlementId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
-                            criteria.getSettlementId(),
-                            root -> root.join(WorkInProgressTransfer_.settlement, JoinType.LEFT).get(Settlement_.id)
+                            criteria.getTransferSettlementId(),
+                            root -> root.join(WorkInProgressTransfer_.transferSettlement, JoinType.LEFT).get(Settlement_.id)
+                        )
+                    );
+            }
+            if (criteria.getOriginalSettlementId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getOriginalSettlementId(),
+                            root -> root.join(WorkInProgressTransfer_.originalSettlement, JoinType.LEFT).get(Settlement_.id)
                         )
                     );
             }

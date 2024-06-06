@@ -20,7 +20,6 @@
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/ContractMetadataResourceIT.java
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/SecurityClearanceResourceIT.java
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/PrepaymentCompilationRequestResourceIT.java
-REM git checkout HEAD~1 src/main/java/io/github/erp/service/dto/WorkInProgressOutstandingReportDTO.java
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/FiscalYearResourceIT.java
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/FiscalMonthResourceIT.java
 git checkout HEAD~1 src/test/java/io/github/erp/web/rest/FiscalQuarterResourceIT.java

@@ -17,6 +17,7 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.github.erp.domain.enumeration.WorkInProgressTransferType;
 import java.io.Serializable;
@@ -144,7 +145,24 @@ public class WorkInProgressTransfer implements Serializable {
         },
         allowSetters = true
     )
-    private Settlement settlement;
+    private Settlement transferSettlement;
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = {
+            "placeholders",
+            "settlementCurrency",
+            "paymentLabels",
+            "paymentCategory",
+            "groupSettlement",
+            "biller",
+            "paymentInvoices",
+            "signatories",
+            "businessDocuments",
+        },
+        allowSetters = true
+    )
+    private Settlement originalSettlement;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "dealers", "settlementCurrency", "placeholders", "businessDocuments" }, allowSetters = true)
@@ -315,16 +333,29 @@ public class WorkInProgressTransfer implements Serializable {
         return this;
     }
 
-    public Settlement getSettlement() {
-        return this.settlement;
+    public Settlement getTransferSettlement() {
+        return this.transferSettlement;
     }
 
-    public void setSettlement(Settlement settlement) {
-        this.settlement = settlement;
+    public void setTransferSettlement(Settlement settlement) {
+        this.transferSettlement = settlement;
     }
 
-    public WorkInProgressTransfer settlement(Settlement settlement) {
-        this.setSettlement(settlement);
+    public WorkInProgressTransfer transferSettlement(Settlement settlement) {
+        this.setTransferSettlement(settlement);
+        return this;
+    }
+
+    public Settlement getOriginalSettlement() {
+        return this.originalSettlement;
+    }
+
+    public void setOriginalSettlement(Settlement settlement) {
+        this.originalSettlement = settlement;
+    }
+
+    public WorkInProgressTransfer originalSettlement(Settlement settlement) {
+        this.setOriginalSettlement(settlement);
         return this;
     }
 
