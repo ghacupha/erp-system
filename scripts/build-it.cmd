@@ -1,5 +1,5 @@
 @REM
-@REM Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+@REM Erp System - Mark X No 9 (Jehoiada Series) Server ver 1.8.1
 @REM Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
 @REM
 @REM This program is free software: you can redistribute it and/or modify
