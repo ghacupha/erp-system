@@ -21,9 +21,9 @@ package io.github.erp.internal.service.wip;
 import io.github.erp.domain.WorkInProgressRegistration;
 import io.github.erp.internal.repository.InternalWorkInProgressRegistrationRepository;
 import io.github.erp.internal.utilities.NextIntegerFiller;
-import io.github.erp.repository.WorkInProgressRegistrationRepository;
 import io.github.erp.repository.search.WorkInProgressRegistrationSearchRepository;
-import io.github.erp.service.WorkInProgressRegistrationService;
+import io.github.erp.service.SettlementService;
+import io.github.erp.service.dto.SettlementDTO;
 import io.github.erp.service.dto.WorkInProgressRegistrationDTO;
 import io.github.erp.service.mapper.WorkInProgressRegistrationMapper;
 import org.slf4j.Logger;
@@ -50,19 +50,27 @@ public class InternalWorkInProgressRegistrationServiceImpl implements InternalWo
 
     private final WorkInProgressRegistrationSearchRepository workInProgressRegistrationSearchRepository;
 
+    private final SettlementService settlementService;
+
     public InternalWorkInProgressRegistrationServiceImpl(
         InternalWorkInProgressRegistrationRepository workInProgressRegistrationRepository,
         WorkInProgressRegistrationMapper workInProgressRegistrationMapper,
-        WorkInProgressRegistrationSearchRepository workInProgressRegistrationSearchRepository
-    ) {
+        WorkInProgressRegistrationSearchRepository workInProgressRegistrationSearchRepository,
+        SettlementService settlementService) {
         this.workInProgressRegistrationRepository = workInProgressRegistrationRepository;
         this.workInProgressRegistrationMapper = workInProgressRegistrationMapper;
         this.workInProgressRegistrationSearchRepository = workInProgressRegistrationSearchRepository;
+        this.settlementService = settlementService;
     }
 
     @Override
     public WorkInProgressRegistrationDTO save(WorkInProgressRegistrationDTO workInProgressRegistrationDTO) {
         log.debug("Request to save WorkInProgressRegistration : {}", workInProgressRegistrationDTO);
+
+        SettlementDTO settlement = settlementService.findOne(workInProgressRegistrationDTO.getSettlementTransaction().getId()).orElseThrow();
+
+        // Update payment date
+        workInProgressRegistrationDTO.setInstalmentDate(settlement.getPaymentDate());
         WorkInProgressRegistration workInProgressRegistration = workInProgressRegistrationMapper.toEntity(workInProgressRegistrationDTO);
         workInProgressRegistration = workInProgressRegistrationRepository.save(workInProgressRegistration);
         WorkInProgressRegistrationDTO result = workInProgressRegistrationMapper.toDto(workInProgressRegistration);
