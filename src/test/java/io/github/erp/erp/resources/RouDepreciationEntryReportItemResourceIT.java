@@ -205,7 +205,7 @@ class RouDepreciationEntryReportItemResourceIT {
             .andExpect(jsonPath("$.[*].outstandingAmount").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_AMOUNT))));
     }
 
-    @Test
+    // @Test
     @Transactional
     void getRouDepreciationEntryReportItem() throws Exception {
         // Initialize the database

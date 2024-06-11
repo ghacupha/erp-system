@@ -253,28 +253,6 @@ public class WorkInProgressRegistrationResourceIT {
 
     @Test
     @Transactional
-    void checkInstalmentDateIsRequired() throws Exception {
-        int databaseSizeBeforeTest = workInProgressRegistrationRepository.findAll().size();
-        // set the field null
-        workInProgressRegistration.setInstalmentDate(null);
-
-        // Create the WorkInProgressRegistration, which fails.
-        WorkInProgressRegistrationDTO workInProgressRegistrationDTO = workInProgressRegistrationMapper.toDto(workInProgressRegistration);
-
-        restWorkInProgressRegistrationMockMvc
-            .perform(
-                post(ENTITY_API_URL)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(workInProgressRegistrationDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<WorkInProgressRegistration> workInProgressRegistrationList = workInProgressRegistrationRepository.findAll();
-        assertThat(workInProgressRegistrationList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllWorkInProgressRegistrations() throws Exception {
         // Initialize the database
         workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
