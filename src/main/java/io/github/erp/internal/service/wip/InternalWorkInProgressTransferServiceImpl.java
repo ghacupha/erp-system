@@ -66,9 +66,10 @@ public class InternalWorkInProgressTransferServiceImpl implements InternalWorkIn
 
         WorkInProgressRegistrationDTO workInProgressRegistration = workInProgressTransferDTO.getWorkInProgressRegistration();
 
-        // TODO get settlement from service
-        internalSettlementService.findOne(workInProgressRegistration.getSettlementTransaction().getId())
-            .ifPresent(workInProgressTransferDTO::setOriginalSettlement);
+        if (workInProgressTransferDTO.getOriginalSettlement() == null) {
+            internalSettlementService.findOne(workInProgressRegistration.getSettlementTransaction().getId())
+                .ifPresent(workInProgressTransferDTO::setOriginalSettlement);
+        }
 
         WorkInProgressTransfer workInProgressTransfer = workInProgressTransferMapper.toEntity(workInProgressTransferDTO);
         workInProgressTransfer = workInProgressTransferRepository.save(workInProgressTransfer);
