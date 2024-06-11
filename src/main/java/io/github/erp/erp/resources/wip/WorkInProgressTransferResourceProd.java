@@ -17,6 +17,7 @@ package io.github.erp.erp.resources.wip;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.service.wip.InternalWorkInProgressTransferService;
 import io.github.erp.repository.WorkInProgressTransferRepository;
 import io.github.erp.service.WorkInProgressTransferQueryService;
 import io.github.erp.service.WorkInProgressTransferService;
@@ -56,14 +57,14 @@ public class WorkInProgressTransferResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final WorkInProgressTransferService workInProgressTransferService;
+    private final InternalWorkInProgressTransferService workInProgressTransferService;
 
     private final WorkInProgressTransferRepository workInProgressTransferRepository;
 
     private final WorkInProgressTransferQueryService workInProgressTransferQueryService;
 
     public WorkInProgressTransferResourceProd(
-        WorkInProgressTransferService workInProgressTransferService,
+        InternalWorkInProgressTransferService workInProgressTransferService,
         WorkInProgressTransferRepository workInProgressTransferRepository,
         WorkInProgressTransferQueryService workInProgressTransferQueryService
     ) {
