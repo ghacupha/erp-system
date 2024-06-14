@@ -500,6 +500,7 @@
     <include file="config/liquibase/changelog/20240604130949_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240606110103_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240606123747_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240614141251_changelog.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

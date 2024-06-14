@@ -5,18 +5,6 @@
       "fieldType": "Integer"
     },
     {
-      "fieldName": "periodIncluded",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "periodStartDate",
-      "fieldType": "LocalDate"
-    },
-    {
-      "fieldName": "periodEndDate",
-      "fieldType": "LocalDate"
-    },
-    {
       "fieldName": "openingBalance",
       "fieldType": "BigDecimal"
     },
@@ -41,11 +29,11 @@
       "fieldType": "BigDecimal"
     },
     {
-      "fieldName": "interestExpenseAccrued",
+      "fieldName": "interestAccrued",
       "fieldType": "BigDecimal"
     },
     {
-      "fieldName": "interestPayableBalance",
+      "fieldName": "interestPayableClosing",
       "fieldType": "BigDecimal"
     }
   ],
@@ -78,6 +66,12 @@
       "otherEntityField": "universalKey",
       "ownerSide": true,
       "otherEntityRelationshipName": "leaseLiabilityScheduleItem"
+    },
+    {
+      "relationshipName": "leasePeriod",
+      "otherEntityName": "leasePeriod",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "periodCode"
     }
   ],
   "service": "serviceImpl",
