@@ -281,6 +281,7 @@
     <include file="config/liquibase/changelog/20240514054407_added_entity_LeasePeriod.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240530082522_added_entity_MemoAction.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240530092852_added_entity_InternalMemo.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240614144622_added_entity_LeaseAmortizationCalculation.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
@@ -501,6 +502,7 @@
     <include file="config/liquibase/changelog/20240606110103_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240606123747_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240614141251_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240614144622_added_entity_constraints_LeaseAmortizationCalculation.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
