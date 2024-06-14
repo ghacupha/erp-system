@@ -21,7 +21,6 @@ package io.github.erp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -49,15 +48,6 @@ public class LeaseLiabilityScheduleItem implements Serializable {
     @Column(name = "sequence_number")
     private Integer sequenceNumber;
 
-    @Column(name = "period_included")
-    private Boolean periodIncluded;
-
-    @Column(name = "period_start_date")
-    private LocalDate periodStartDate;
-
-    @Column(name = "period_end_date")
-    private LocalDate periodEndDate;
-
     @Column(name = "opening_balance", precision = 21, scale = 2)
     private BigDecimal openingBalance;
 
@@ -76,11 +66,11 @@ public class LeaseLiabilityScheduleItem implements Serializable {
     @Column(name = "interest_payable_opening", precision = 21, scale = 2)
     private BigDecimal interestPayableOpening;
 
-    @Column(name = "interest_expense_accrued", precision = 21, scale = 2)
-    private BigDecimal interestExpenseAccrued;
+    @Column(name = "interest_accrued", precision = 21, scale = 2)
+    private BigDecimal interestAccrued;
 
-    @Column(name = "interest_payable_balance", precision = 21, scale = 2)
-    private BigDecimal interestPayableBalance;
+    @Column(name = "interest_payable_closing", precision = 21, scale = 2)
+    private BigDecimal interestPayableClosing;
 
     @ManyToMany
     @JoinTable(
@@ -129,6 +119,10 @@ public class LeaseLiabilityScheduleItem implements Serializable {
     @JsonIgnoreProperties(value = { "parentMapping", "placeholders" }, allowSetters = true)
     private Set<UniversallyUniqueMapping> universallyUniqueMappings = new HashSet<>();
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "fiscalMonth" }, allowSetters = true)
+    private LeasePeriod leasePeriod;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -155,45 +149,6 @@ public class LeaseLiabilityScheduleItem implements Serializable {
 
     public void setSequenceNumber(Integer sequenceNumber) {
         this.sequenceNumber = sequenceNumber;
-    }
-
-    public Boolean getPeriodIncluded() {
-        return this.periodIncluded;
-    }
-
-    public LeaseLiabilityScheduleItem periodIncluded(Boolean periodIncluded) {
-        this.setPeriodIncluded(periodIncluded);
-        return this;
-    }
-
-    public void setPeriodIncluded(Boolean periodIncluded) {
-        this.periodIncluded = periodIncluded;
-    }
-
-    public LocalDate getPeriodStartDate() {
-        return this.periodStartDate;
-    }
-
-    public LeaseLiabilityScheduleItem periodStartDate(LocalDate periodStartDate) {
-        this.setPeriodStartDate(periodStartDate);
-        return this;
-    }
-
-    public void setPeriodStartDate(LocalDate periodStartDate) {
-        this.periodStartDate = periodStartDate;
-    }
-
-    public LocalDate getPeriodEndDate() {
-        return this.periodEndDate;
-    }
-
-    public LeaseLiabilityScheduleItem periodEndDate(LocalDate periodEndDate) {
-        this.setPeriodEndDate(periodEndDate);
-        return this;
-    }
-
-    public void setPeriodEndDate(LocalDate periodEndDate) {
-        this.periodEndDate = periodEndDate;
     }
 
     public BigDecimal getOpeningBalance() {
@@ -274,30 +229,30 @@ public class LeaseLiabilityScheduleItem implements Serializable {
         this.interestPayableOpening = interestPayableOpening;
     }
 
-    public BigDecimal getInterestExpenseAccrued() {
-        return this.interestExpenseAccrued;
+    public BigDecimal getInterestAccrued() {
+        return this.interestAccrued;
     }
 
-    public LeaseLiabilityScheduleItem interestExpenseAccrued(BigDecimal interestExpenseAccrued) {
-        this.setInterestExpenseAccrued(interestExpenseAccrued);
+    public LeaseLiabilityScheduleItem interestAccrued(BigDecimal interestAccrued) {
+        this.setInterestAccrued(interestAccrued);
         return this;
     }
 
-    public void setInterestExpenseAccrued(BigDecimal interestExpenseAccrued) {
-        this.interestExpenseAccrued = interestExpenseAccrued;
+    public void setInterestAccrued(BigDecimal interestAccrued) {
+        this.interestAccrued = interestAccrued;
     }
 
-    public BigDecimal getInterestPayableBalance() {
-        return this.interestPayableBalance;
+    public BigDecimal getInterestPayableClosing() {
+        return this.interestPayableClosing;
     }
 
-    public LeaseLiabilityScheduleItem interestPayableBalance(BigDecimal interestPayableBalance) {
-        this.setInterestPayableBalance(interestPayableBalance);
+    public LeaseLiabilityScheduleItem interestPayableClosing(BigDecimal interestPayableClosing) {
+        this.setInterestPayableClosing(interestPayableClosing);
         return this;
     }
 
-    public void setInterestPayableBalance(BigDecimal interestPayableBalance) {
-        this.interestPayableBalance = interestPayableBalance;
+    public void setInterestPayableClosing(BigDecimal interestPayableClosing) {
+        this.interestPayableClosing = interestPayableClosing;
     }
 
     public Set<Placeholder> getPlaceholders() {
@@ -372,6 +327,19 @@ public class LeaseLiabilityScheduleItem implements Serializable {
         return this;
     }
 
+    public LeasePeriod getLeasePeriod() {
+        return this.leasePeriod;
+    }
+
+    public void setLeasePeriod(LeasePeriod leasePeriod) {
+        this.leasePeriod = leasePeriod;
+    }
+
+    public LeaseLiabilityScheduleItem leasePeriod(LeasePeriod leasePeriod) {
+        this.setLeasePeriod(leasePeriod);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -397,17 +365,14 @@ public class LeaseLiabilityScheduleItem implements Serializable {
         return "LeaseLiabilityScheduleItem{" +
             "id=" + getId() +
             ", sequenceNumber=" + getSequenceNumber() +
-            ", periodIncluded='" + getPeriodIncluded() + "'" +
-            ", periodStartDate='" + getPeriodStartDate() + "'" +
-            ", periodEndDate='" + getPeriodEndDate() + "'" +
             ", openingBalance=" + getOpeningBalance() +
             ", cashPayment=" + getCashPayment() +
             ", principalPayment=" + getPrincipalPayment() +
             ", interestPayment=" + getInterestPayment() +
             ", outstandingBalance=" + getOutstandingBalance() +
             ", interestPayableOpening=" + getInterestPayableOpening() +
-            ", interestExpenseAccrued=" + getInterestExpenseAccrued() +
-            ", interestPayableBalance=" + getInterestPayableBalance() +
+            ", interestAccrued=" + getInterestAccrued() +
+            ", interestPayableClosing=" + getInterestPayableClosing() +
             "}";
     }
 }

@@ -120,18 +120,6 @@ public class LeaseLiabilityScheduleItemQueryService extends QueryService<LeaseLi
                 specification =
                     specification.and(buildRangeSpecification(criteria.getSequenceNumber(), LeaseLiabilityScheduleItem_.sequenceNumber));
             }
-            if (criteria.getPeriodIncluded() != null) {
-                specification =
-                    specification.and(buildSpecification(criteria.getPeriodIncluded(), LeaseLiabilityScheduleItem_.periodIncluded));
-            }
-            if (criteria.getPeriodStartDate() != null) {
-                specification =
-                    specification.and(buildRangeSpecification(criteria.getPeriodStartDate(), LeaseLiabilityScheduleItem_.periodStartDate));
-            }
-            if (criteria.getPeriodEndDate() != null) {
-                specification =
-                    specification.and(buildRangeSpecification(criteria.getPeriodEndDate(), LeaseLiabilityScheduleItem_.periodEndDate));
-            }
             if (criteria.getOpeningBalance() != null) {
                 specification =
                     specification.and(buildRangeSpecification(criteria.getOpeningBalance(), LeaseLiabilityScheduleItem_.openingBalance));
@@ -162,16 +150,14 @@ public class LeaseLiabilityScheduleItemQueryService extends QueryService<LeaseLi
                         buildRangeSpecification(criteria.getInterestPayableOpening(), LeaseLiabilityScheduleItem_.interestPayableOpening)
                     );
             }
-            if (criteria.getInterestExpenseAccrued() != null) {
+            if (criteria.getInterestAccrued() != null) {
                 specification =
-                    specification.and(
-                        buildRangeSpecification(criteria.getInterestExpenseAccrued(), LeaseLiabilityScheduleItem_.interestExpenseAccrued)
-                    );
+                    specification.and(buildRangeSpecification(criteria.getInterestAccrued(), LeaseLiabilityScheduleItem_.interestAccrued));
             }
-            if (criteria.getInterestPayableBalance() != null) {
+            if (criteria.getInterestPayableClosing() != null) {
                 specification =
                     specification.and(
-                        buildRangeSpecification(criteria.getInterestPayableBalance(), LeaseLiabilityScheduleItem_.interestPayableBalance)
+                        buildRangeSpecification(criteria.getInterestPayableClosing(), LeaseLiabilityScheduleItem_.interestPayableClosing)
                     );
             }
             if (criteria.getPlaceholderId() != null) {
@@ -210,6 +196,15 @@ public class LeaseLiabilityScheduleItemQueryService extends QueryService<LeaseLi
                                 root
                                     .join(LeaseLiabilityScheduleItem_.universallyUniqueMappings, JoinType.LEFT)
                                     .get(UniversallyUniqueMapping_.id)
+                        )
+                    );
+            }
+            if (criteria.getLeasePeriodId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLeasePeriodId(),
+                            root -> root.join(LeaseLiabilityScheduleItem_.leasePeriod, JoinType.LEFT).get(LeasePeriod_.id)
                         )
                     );
             }

@@ -20,7 +20,6 @@ package io.github.erp.service.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -35,12 +34,6 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
 
     private Integer sequenceNumber;
 
-    private Boolean periodIncluded;
-
-    private LocalDate periodStartDate;
-
-    private LocalDate periodEndDate;
-
     private BigDecimal openingBalance;
 
     private BigDecimal cashPayment;
@@ -53,9 +46,9 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
 
     private BigDecimal interestPayableOpening;
 
-    private BigDecimal interestExpenseAccrued;
+    private BigDecimal interestAccrued;
 
-    private BigDecimal interestPayableBalance;
+    private BigDecimal interestPayableClosing;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
@@ -64,6 +57,8 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
     private LeaseModelMetadataDTO leaseModelMetadata;
 
     private Set<UniversallyUniqueMappingDTO> universallyUniqueMappings = new HashSet<>();
+
+    private LeasePeriodDTO leasePeriod;
 
     public Long getId() {
         return id;
@@ -79,30 +74,6 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
 
     public void setSequenceNumber(Integer sequenceNumber) {
         this.sequenceNumber = sequenceNumber;
-    }
-
-    public Boolean getPeriodIncluded() {
-        return periodIncluded;
-    }
-
-    public void setPeriodIncluded(Boolean periodIncluded) {
-        this.periodIncluded = periodIncluded;
-    }
-
-    public LocalDate getPeriodStartDate() {
-        return periodStartDate;
-    }
-
-    public void setPeriodStartDate(LocalDate periodStartDate) {
-        this.periodStartDate = periodStartDate;
-    }
-
-    public LocalDate getPeriodEndDate() {
-        return periodEndDate;
-    }
-
-    public void setPeriodEndDate(LocalDate periodEndDate) {
-        this.periodEndDate = periodEndDate;
     }
 
     public BigDecimal getOpeningBalance() {
@@ -153,20 +124,20 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
         this.interestPayableOpening = interestPayableOpening;
     }
 
-    public BigDecimal getInterestExpenseAccrued() {
-        return interestExpenseAccrued;
+    public BigDecimal getInterestAccrued() {
+        return interestAccrued;
     }
 
-    public void setInterestExpenseAccrued(BigDecimal interestExpenseAccrued) {
-        this.interestExpenseAccrued = interestExpenseAccrued;
+    public void setInterestAccrued(BigDecimal interestAccrued) {
+        this.interestAccrued = interestAccrued;
     }
 
-    public BigDecimal getInterestPayableBalance() {
-        return interestPayableBalance;
+    public BigDecimal getInterestPayableClosing() {
+        return interestPayableClosing;
     }
 
-    public void setInterestPayableBalance(BigDecimal interestPayableBalance) {
-        this.interestPayableBalance = interestPayableBalance;
+    public void setInterestPayableClosing(BigDecimal interestPayableClosing) {
+        this.interestPayableClosing = interestPayableClosing;
     }
 
     public Set<PlaceholderDTO> getPlaceholders() {
@@ -201,6 +172,14 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
         this.universallyUniqueMappings = universallyUniqueMappings;
     }
 
+    public LeasePeriodDTO getLeasePeriod() {
+        return leasePeriod;
+    }
+
+    public void setLeasePeriod(LeasePeriodDTO leasePeriod) {
+        this.leasePeriod = leasePeriod;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -228,21 +207,19 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
         return "LeaseLiabilityScheduleItemDTO{" +
             "id=" + getId() +
             ", sequenceNumber=" + getSequenceNumber() +
-            ", periodIncluded='" + getPeriodIncluded() + "'" +
-            ", periodStartDate='" + getPeriodStartDate() + "'" +
-            ", periodEndDate='" + getPeriodEndDate() + "'" +
             ", openingBalance=" + getOpeningBalance() +
             ", cashPayment=" + getCashPayment() +
             ", principalPayment=" + getPrincipalPayment() +
             ", interestPayment=" + getInterestPayment() +
             ", outstandingBalance=" + getOutstandingBalance() +
             ", interestPayableOpening=" + getInterestPayableOpening() +
-            ", interestExpenseAccrued=" + getInterestExpenseAccrued() +
-            ", interestPayableBalance=" + getInterestPayableBalance() +
+            ", interestAccrued=" + getInterestAccrued() +
+            ", interestPayableClosing=" + getInterestPayableClosing() +
             ", placeholders=" + getPlaceholders() +
             ", leaseContract=" + getLeaseContract() +
             ", leaseModelMetadata=" + getLeaseModelMetadata() +
             ", universallyUniqueMappings=" + getUniversallyUniqueMappings() +
+            ", leasePeriod=" + getLeasePeriod() +
             "}";
     }
 }
