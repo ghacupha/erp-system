@@ -20,6 +20,7 @@ package io.github.erp.erp.resources;
 
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
+import io.github.erp.erp.resources.leases.LeaseLiabilityScheduleItemResourceProd;
 import io.github.erp.repository.LeaseLiabilityScheduleItemRepository;
 import io.github.erp.repository.search.LeaseLiabilityScheduleItemSearchRepository;
 import io.github.erp.service.LeaseLiabilityScheduleItemService;

@@ -1,4 +1,4 @@
-package io.github.erp.erp.resources;
+package io.github.erp.erp.resources.leases;
 
 /*-
  * Erp System - Mark X No 9 (Jehoiada Series) Server ver 1.8.1

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity LeaseAmortizationCalculation.
+    -->
+    <changeSet id="20240614144622-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="ifrs16lease_contract_id"
+                                 baseTableName="lease_amortization_calculation"
+                                 constraintName="fk_lease_amortization_calculation__ifrs16lease_contract_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ifrs16lease_contract"/>
+    </changeSet>
+</databaseChangeLog>
