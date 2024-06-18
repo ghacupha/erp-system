@@ -123,6 +123,10 @@ public class LeaseLiabilityScheduleItem implements Serializable {
     @JsonIgnoreProperties(value = { "fiscalMonth" }, allowSetters = true)
     private LeasePeriod leasePeriod;
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "leaseLiability", "leaseLiabilityScheduleItems" }, allowSetters = true)
+    private LeaseAmortizationSchedule leaseAmortizationSchedule;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -337,6 +341,19 @@ public class LeaseLiabilityScheduleItem implements Serializable {
 
     public LeaseLiabilityScheduleItem leasePeriod(LeasePeriod leasePeriod) {
         this.setLeasePeriod(leasePeriod);
+        return this;
+    }
+
+    public LeaseAmortizationSchedule getLeaseAmortizationSchedule() {
+        return this.leaseAmortizationSchedule;
+    }
+
+    public void setLeaseAmortizationSchedule(LeaseAmortizationSchedule leaseAmortizationSchedule) {
+        this.leaseAmortizationSchedule = leaseAmortizationSchedule;
+    }
+
+    public LeaseLiabilityScheduleItem leaseAmortizationSchedule(LeaseAmortizationSchedule leaseAmortizationSchedule) {
+        this.setLeaseAmortizationSchedule(leaseAmortizationSchedule);
         return this;
     }
 

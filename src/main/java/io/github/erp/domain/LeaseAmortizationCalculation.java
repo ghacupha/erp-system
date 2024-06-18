@@ -71,6 +71,10 @@ public class LeaseAmortizationCalculation implements Serializable {
     @JoinColumn(unique = true)
     private IFRS16LeaseContract iFRS16LeaseContract;
 
+    @JsonIgnoreProperties(value = { "leaseAmortizationCalculation", "leasePayments" }, allowSetters = true)
+    @OneToOne(mappedBy = "leaseAmortizationCalculation")
+    private LeaseLiability leaseLiability;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -148,6 +152,25 @@ public class LeaseAmortizationCalculation implements Serializable {
 
     public LeaseAmortizationCalculation iFRS16LeaseContract(IFRS16LeaseContract IFRS16LeaseContract) {
         this.setIFRS16LeaseContract(IFRS16LeaseContract);
+        return this;
+    }
+
+    public LeaseLiability getLeaseLiability() {
+        return this.leaseLiability;
+    }
+
+    public void setLeaseLiability(LeaseLiability leaseLiability) {
+        if (this.leaseLiability != null) {
+            this.leaseLiability.setLeaseAmortizationCalculation(null);
+        }
+        if (leaseLiability != null) {
+            leaseLiability.setLeaseAmortizationCalculation(this);
+        }
+        this.leaseLiability = leaseLiability;
+    }
+
+    public LeaseAmortizationCalculation leaseLiability(LeaseLiability leaseLiability) {
+        this.setLeaseLiability(leaseLiability);
         return this;
     }
 

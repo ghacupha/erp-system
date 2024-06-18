@@ -27,6 +27,13 @@
       "ownerSide": true,
       "id": false,
       "otherEntityRelationshipName": "leaseAmortizationCalculation"
+    },
+    {
+      "relationshipName": "leaseLiability",
+      "otherEntityName": "leaseLiability",
+      "relationshipType": "one-to-one",
+      "ownerSide": false,
+      "otherEntityRelationshipName": "leaseAmortizationCalculation"
     }
   ],
   "service": "serviceImpl",

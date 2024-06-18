@@ -29,4 +29,9 @@ import org.mapstruct.*;
 public interface LeaseAmortizationCalculationMapper extends EntityMapper<LeaseAmortizationCalculationDTO, LeaseAmortizationCalculation> {
     @Mapping(target = "IFRS16LeaseContract", source = "IFRS16LeaseContract", qualifiedByName = "bookingId")
     LeaseAmortizationCalculationDTO toDto(LeaseAmortizationCalculation s);
+
+    @Named("id")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    LeaseAmortizationCalculationDTO toDtoId(LeaseAmortizationCalculation leaseAmortizationCalculation);
 }

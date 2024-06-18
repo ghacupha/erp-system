@@ -73,6 +73,8 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
 
     private LongFilter leasePeriodId;
 
+    private LongFilter leaseAmortizationScheduleId;
+
     private Boolean distinct;
 
     public LeaseLiabilityScheduleItemCriteria() {}
@@ -93,6 +95,7 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
         this.leaseModelMetadataId = other.leaseModelMetadataId == null ? null : other.leaseModelMetadataId.copy();
         this.universallyUniqueMappingId = other.universallyUniqueMappingId == null ? null : other.universallyUniqueMappingId.copy();
         this.leasePeriodId = other.leasePeriodId == null ? null : other.leasePeriodId.copy();
+        this.leaseAmortizationScheduleId = other.leaseAmortizationScheduleId == null ? null : other.leaseAmortizationScheduleId.copy();
         this.distinct = other.distinct;
     }
 
@@ -326,6 +329,21 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
         this.leasePeriodId = leasePeriodId;
     }
 
+    public LongFilter getLeaseAmortizationScheduleId() {
+        return leaseAmortizationScheduleId;
+    }
+
+    public LongFilter leaseAmortizationScheduleId() {
+        if (leaseAmortizationScheduleId == null) {
+            leaseAmortizationScheduleId = new LongFilter();
+        }
+        return leaseAmortizationScheduleId;
+    }
+
+    public void setLeaseAmortizationScheduleId(LongFilter leaseAmortizationScheduleId) {
+        this.leaseAmortizationScheduleId = leaseAmortizationScheduleId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -359,6 +377,7 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
             Objects.equals(leaseModelMetadataId, that.leaseModelMetadataId) &&
             Objects.equals(universallyUniqueMappingId, that.universallyUniqueMappingId) &&
             Objects.equals(leasePeriodId, that.leasePeriodId) &&
+            Objects.equals(leaseAmortizationScheduleId, that.leaseAmortizationScheduleId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -381,6 +400,7 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
             leaseModelMetadataId,
             universallyUniqueMappingId,
             leasePeriodId,
+            leaseAmortizationScheduleId,
             distinct
         );
     }
@@ -404,6 +424,7 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
             (leaseModelMetadataId != null ? "leaseModelMetadataId=" + leaseModelMetadataId + ", " : "") +
             (universallyUniqueMappingId != null ? "universallyUniqueMappingId=" + universallyUniqueMappingId + ", " : "") +
             (leasePeriodId != null ? "leasePeriodId=" + leasePeriodId + ", " : "") +
+            (leaseAmortizationScheduleId != null ? "leaseAmortizationScheduleId=" + leaseAmortizationScheduleId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

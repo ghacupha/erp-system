@@ -21,6 +21,7 @@ package io.github.erp.erp.resources;
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.IFRS16LeaseContract;
 import io.github.erp.domain.LeaseAmortizationCalculation;
+import io.github.erp.domain.LeaseLiability;
 import io.github.erp.repository.LeaseAmortizationCalculationRepository;
 import io.github.erp.repository.search.LeaseAmortizationCalculationSearchRepository;
 import io.github.erp.service.dto.LeaseAmortizationCalculationDTO;
@@ -119,15 +120,15 @@ class LeaseAmortizationCalculationResourceIT {
             .leaseAmount(DEFAULT_LEASE_AMOUNT)
             .numberOfPeriods(DEFAULT_NUMBER_OF_PERIODS);
         // Add required entity
-        IFRS16LeaseContract iFRS16LeaseContract;
+        IFRS16LeaseContract IFRS16LeaseContract;
         if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
-            iFRS16LeaseContract = IFRS16LeaseContractResourceIT.createEntity(em);
-            em.persist(iFRS16LeaseContract);
+            IFRS16LeaseContract = IFRS16LeaseContractResourceIT.createEntity(em);
+            em.persist(IFRS16LeaseContract);
             em.flush();
         } else {
-            iFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
+            IFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
         }
-        leaseAmortizationCalculation.setIFRS16LeaseContract(iFRS16LeaseContract);
+        leaseAmortizationCalculation.setIFRS16LeaseContract(IFRS16LeaseContract);
         return leaseAmortizationCalculation;
     }
 
@@ -144,15 +145,15 @@ class LeaseAmortizationCalculationResourceIT {
             .leaseAmount(UPDATED_LEASE_AMOUNT)
             .numberOfPeriods(UPDATED_NUMBER_OF_PERIODS);
         // Add required entity
-        IFRS16LeaseContract iFRS16LeaseContract;
+        IFRS16LeaseContract IFRS16LeaseContract;
         if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
-            iFRS16LeaseContract = IFRS16LeaseContractResourceIT.createUpdatedEntity(em);
-            em.persist(iFRS16LeaseContract);
+            IFRS16LeaseContract = IFRS16LeaseContractResourceIT.createUpdatedEntity(em);
+            em.persist(IFRS16LeaseContract);
             em.flush();
         } else {
-            iFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
+            IFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
         }
-        leaseAmortizationCalculation.setIFRS16LeaseContract(iFRS16LeaseContract);
+        leaseAmortizationCalculation.setIFRS16LeaseContract(IFRS16LeaseContract);
         return leaseAmortizationCalculation;
     }
 
@@ -679,6 +680,33 @@ class LeaseAmortizationCalculationResourceIT {
 
         // Get all the leaseAmortizationCalculationList where iFRS16LeaseContract equals to (iFRS16LeaseContractId + 1)
         defaultLeaseAmortizationCalculationShouldNotBeFound("iFRS16LeaseContractId.equals=" + (iFRS16LeaseContractId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseAmortizationCalculationsByLeaseLiabilityIsEqualToSomething() throws Exception {
+        // Initialize the database
+        leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
+        LeaseLiability leaseLiability;
+        if (TestUtil.findAll(em, LeaseLiability.class).isEmpty()) {
+            leaseLiability = LeaseLiabilityResourceIT.createEntity(em);
+            em.persist(leaseLiability);
+            em.flush();
+        } else {
+            leaseLiability = TestUtil.findAll(em, LeaseLiability.class).get(0);
+        }
+        em.persist(leaseLiability);
+        em.flush();
+        leaseAmortizationCalculation.setLeaseLiability(leaseLiability);
+        leaseLiability.setLeaseAmortizationCalculation(leaseAmortizationCalculation);
+        leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
+        Long leaseLiabilityId = leaseLiability.getId();
+
+        // Get all the leaseAmortizationCalculationList where leaseLiability equals to leaseLiabilityId
+        defaultLeaseAmortizationCalculationShouldBeFound("leaseLiabilityId.equals=" + leaseLiabilityId);
+
+        // Get all the leaseAmortizationCalculationList where leaseLiability equals to (leaseLiabilityId + 1)
+        defaultLeaseAmortizationCalculationShouldNotBeFound("leaseLiabilityId.equals=" + (leaseLiabilityId + 1));
     }
 
     /**

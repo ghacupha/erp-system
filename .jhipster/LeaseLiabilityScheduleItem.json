@@ -72,6 +72,12 @@
       "otherEntityName": "leasePeriod",
       "relationshipType": "many-to-one",
       "otherEntityField": "periodCode"
+    },
+    {
+      "relationshipName": "leaseAmortizationSchedule",
+      "otherEntityName": "leaseAmortizationSchedule",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
     }
   ],
   "service": "serviceImpl",

@@ -26,7 +26,11 @@ import io.github.erp.repository.search.LeaseAmortizationCalculationSearchReposit
 import io.github.erp.service.LeaseAmortizationCalculationService;
 import io.github.erp.service.dto.LeaseAmortizationCalculationDTO;
 import io.github.erp.service.mapper.LeaseAmortizationCalculationMapper;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -96,6 +100,20 @@ public class LeaseAmortizationCalculationServiceImpl implements LeaseAmortizatio
     public Page<LeaseAmortizationCalculationDTO> findAll(Pageable pageable) {
         log.debug("Request to get all LeaseAmortizationCalculations");
         return leaseAmortizationCalculationRepository.findAll(pageable).map(leaseAmortizationCalculationMapper::toDto);
+    }
+
+    /**
+     *  Get all the leaseAmortizationCalculations where LeaseLiability is {@code null}.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<LeaseAmortizationCalculationDTO> findAllWhereLeaseLiabilityIsNull() {
+        log.debug("Request to get all leaseAmortizationCalculations where LeaseLiability is null");
+        return StreamSupport
+            .stream(leaseAmortizationCalculationRepository.findAll().spliterator(), false)
+            .filter(leaseAmortizationCalculation -> leaseAmortizationCalculation.getLeaseLiability() == null)
+            .map(leaseAmortizationCalculationMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override
