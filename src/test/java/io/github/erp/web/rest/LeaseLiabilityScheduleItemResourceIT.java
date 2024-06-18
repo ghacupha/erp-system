@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.LeaseAmortizationSchedule;
 import io.github.erp.domain.LeaseContract;
 import io.github.erp.domain.LeaseLiabilityScheduleItem;
 import io.github.erp.domain.LeaseModelMetadata;
@@ -1418,6 +1419,32 @@ class LeaseLiabilityScheduleItemResourceIT {
 
         // Get all the leaseLiabilityScheduleItemList where leasePeriod equals to (leasePeriodId + 1)
         defaultLeaseLiabilityScheduleItemShouldNotBeFound("leasePeriodId.equals=" + (leasePeriodId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityScheduleItemsByLeaseAmortizationScheduleIsEqualToSomething() throws Exception {
+        // Initialize the database
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+        LeaseAmortizationSchedule leaseAmortizationSchedule;
+        if (TestUtil.findAll(em, LeaseAmortizationSchedule.class).isEmpty()) {
+            leaseAmortizationSchedule = LeaseAmortizationScheduleResourceIT.createEntity(em);
+            em.persist(leaseAmortizationSchedule);
+            em.flush();
+        } else {
+            leaseAmortizationSchedule = TestUtil.findAll(em, LeaseAmortizationSchedule.class).get(0);
+        }
+        em.persist(leaseAmortizationSchedule);
+        em.flush();
+        leaseLiabilityScheduleItem.setLeaseAmortizationSchedule(leaseAmortizationSchedule);
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+        Long leaseAmortizationScheduleId = leaseAmortizationSchedule.getId();
+
+        // Get all the leaseLiabilityScheduleItemList where leaseAmortizationSchedule equals to leaseAmortizationScheduleId
+        defaultLeaseLiabilityScheduleItemShouldBeFound("leaseAmortizationScheduleId.equals=" + leaseAmortizationScheduleId);
+
+        // Get all the leaseLiabilityScheduleItemList where leaseAmortizationSchedule equals to (leaseAmortizationScheduleId + 1)
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("leaseAmortizationScheduleId.equals=" + (leaseAmortizationScheduleId + 1));
     }
 
     /**

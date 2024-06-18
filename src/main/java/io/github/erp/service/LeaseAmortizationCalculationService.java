@@ -19,6 +19,7 @@ package io.github.erp.service;
  */
 
 import io.github.erp.service.dto.LeaseAmortizationCalculationDTO;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,6 +51,12 @@ public interface LeaseAmortizationCalculationService {
      * @return the list of entities.
      */
     Page<LeaseAmortizationCalculationDTO> findAll(Pageable pageable);
+    /**
+     * Get all the LeaseAmortizationCalculationDTO where LeaseLiability is {@code null}.
+     *
+     * @return the {@link List} of entities.
+     */
+    List<LeaseAmortizationCalculationDTO> findAllWhereLeaseLiabilityIsNull();
 
     /**
      * Get the "id" leaseAmortizationCalculation.

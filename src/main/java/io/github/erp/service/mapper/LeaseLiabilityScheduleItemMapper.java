@@ -33,6 +33,7 @@ import org.mapstruct.*;
         LeaseModelMetadataMapper.class,
         UniversallyUniqueMappingMapper.class,
         LeasePeriodMapper.class,
+        LeaseAmortizationScheduleMapper.class,
     }
 )
 public interface LeaseLiabilityScheduleItemMapper extends EntityMapper<LeaseLiabilityScheduleItemDTO, LeaseLiabilityScheduleItem> {
@@ -41,6 +42,7 @@ public interface LeaseLiabilityScheduleItemMapper extends EntityMapper<LeaseLiab
     @Mapping(target = "leaseModelMetadata", source = "leaseModelMetadata", qualifiedByName = "modelTitle")
     @Mapping(target = "universallyUniqueMappings", source = "universallyUniqueMappings", qualifiedByName = "universalKeySet")
     @Mapping(target = "leasePeriod", source = "leasePeriod", qualifiedByName = "periodCode")
+    @Mapping(target = "leaseAmortizationSchedule", source = "leaseAmortizationSchedule", qualifiedByName = "id")
     LeaseLiabilityScheduleItemDTO toDto(LeaseLiabilityScheduleItem s);
 
     @Mapping(target = "removePlaceholder", ignore = true)
