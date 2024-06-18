@@ -33,19 +33,19 @@ import static java.math.BigDecimal.ROUND_HALF_EVEN;
 
 @Service
 @Transactional
-public class LeaseAmortizationService {
+public class LeaseAmortizationService implements LeaseAmortizationCompilationService {
 
     private final InternalLeaseLiabilityService leaseLiabilityService;
     private final InternalLeaseAmortizationCalculationService leaseAmortizationCalculationService;
-    private final InternalLeaseLiabilityScheduleItemService leaseAmortizationScheduleItemService;
 
-    public LeaseAmortizationService(InternalLeaseLiabilityService leaseLiabilityService, InternalLeaseAmortizationCalculationService leaseAmortizationCalculationService, InternalLeaseLiabilityScheduleItemService leaseAmortizationScheduleItemService) {
+    public LeaseAmortizationService(
+        InternalLeaseLiabilityService leaseLiabilityService,
+        InternalLeaseAmortizationCalculationService leaseAmortizationCalculationService) {
         this.leaseLiabilityService = leaseLiabilityService;
         this.leaseAmortizationCalculationService = leaseAmortizationCalculationService;
-        this.leaseAmortizationScheduleItemService = leaseAmortizationScheduleItemService;
     }
 
-    public void generateAmortizationSchedule(Long leaseLiabilityId) {
+    public List<LeaseLiabilityScheduleItemDTO> generateAmortizationSchedule(Long leaseLiabilityId) {
         Optional<LeaseLiabilityDTO> leaseLiabilityOpt = leaseLiabilityService.findOne(leaseLiabilityId);
 
         if (leaseLiabilityOpt.isEmpty()) {
@@ -66,10 +66,7 @@ public class LeaseAmortizationService {
         BigDecimal interestRate = BigDecimal.valueOf(calculation.getInterestRate());
         int periods = calculation.getNumberOfPeriods();
 
-        List<LeaseLiabilityScheduleItemDTO> scheduleItems = calculateAmortizationSchedule(principal, interestRate, periods);
-
-        // Save schedule items
-        leaseAmortizationScheduleItemService.saveAll(scheduleItems);
+        return calculateAmortizationSchedule(principal, interestRate, periods);
     }
 
     private List<LeaseLiabilityScheduleItemDTO> calculateAmortizationSchedule(
