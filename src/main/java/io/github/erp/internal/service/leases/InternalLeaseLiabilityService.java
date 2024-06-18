@@ -22,6 +22,7 @@ import io.github.erp.service.dto.LeaseLiabilityDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -76,4 +77,13 @@ public interface InternalLeaseLiabilityService {
      * @return the list of entities.
      */
     Page<LeaseLiabilityDTO> search(String query, Pageable pageable);
+
+    /**
+     * Lease liability items due for lease liability amortization
+     *
+     * @param leaseLiabilityCompilationRequestId id of the requisition entity instance
+     * @param batchJobIdentifier id of the current compilation spring batch job
+     * @return List of leases for processing
+     */
+    Optional<List<LeaseLiabilityDTO>> getCompilationAdjacentMetadataItems(long leaseLiabilityCompilationRequestId, String batchJobIdentifier);
 }
