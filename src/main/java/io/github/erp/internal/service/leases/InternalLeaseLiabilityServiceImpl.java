@@ -30,6 +30,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -113,5 +114,19 @@ public class InternalLeaseLiabilityServiceImpl implements InternalLeaseLiability
     public Page<LeaseLiabilityDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of LeaseLiabilities for query {}", query);
         return leaseLiabilitySearchRepository.search(query, pageable).map(leaseLiabilityMapper::toDto);
+    }
+
+    /**
+     * Lease liability items due for lease liability amortization
+     *
+     * @param leaseLiabilityCompilationRequestId id of the requisition entity instance
+     * @param batchJobIdentifier                 id of the current compilation spring batch job
+     * @return List of leases for processing
+     */
+    @Override
+    public Optional<List<LeaseLiabilityDTO>> getCompilationAdjacentMetadataItems(long leaseLiabilityCompilationRequestId, String batchJobIdentifier) {
+
+        return Optional.of(leaseLiabilityRepository.findAll())
+            .map(leaseLiabilityMapper::toDto);
     }
 }
