@@ -23,64 +23,60 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import io.github.erp.domain.LeaseAmortizationCalculation;
-import io.github.erp.domain.LeaseLiability;
-import io.github.erp.domain.LeaseLiabilityScheduleItem;
-import io.github.erp.internal.repository.InternalLeaseAmortizationCalculationRepository;
-import io.github.erp.repository.LeaseLiabilityRepository;
-import io.github.erp.repository.LeaseLiabilityScheduleItemRepository;
+import io.github.erp.service.dto.LeaseAmortizationCalculationDTO;
+import io.github.erp.service.dto.LeaseLiabilityDTO;
+import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static java.math.BigDecimal.ROUND_HALF_EVEN;
 
 @Service
 @Transactional
 public class LeaseAmortizationService {
 
-    private final LeaseLiabilityRepository leaseLiabilityRepository;
-    private final InternalLeaseAmortizationCalculationRepository leaseAmortizationCalculationRepository;
-    private final LeaseLiabilityScheduleItemRepository leaseAmortizationScheduleItemRepository;
+    private final InternalLeaseLiabilityService leaseLiabilityService;
+    private final InternalLeaseAmortizationCalculationService leaseAmortizationCalculationService;
+    private final InternalLeaseLiabilityScheduleItemService leaseAmortizationScheduleItemService;
 
-    public LeaseAmortizationService(LeaseLiabilityRepository leaseLiabilityRepository,
-                                    InternalLeaseAmortizationCalculationRepository leaseAmortizationCalculationRepository,
-                                    LeaseLiabilityScheduleItemRepository leaseAmortizationScheduleItemRepository) {
-        this.leaseLiabilityRepository = leaseLiabilityRepository;
-        this.leaseAmortizationCalculationRepository = leaseAmortizationCalculationRepository;
-        this.leaseAmortizationScheduleItemRepository = leaseAmortizationScheduleItemRepository;
+    public LeaseAmortizationService(InternalLeaseLiabilityService leaseLiabilityService, InternalLeaseAmortizationCalculationService leaseAmortizationCalculationService, InternalLeaseLiabilityScheduleItemService leaseAmortizationScheduleItemService) {
+        this.leaseLiabilityService = leaseLiabilityService;
+        this.leaseAmortizationCalculationService = leaseAmortizationCalculationService;
+        this.leaseAmortizationScheduleItemService = leaseAmortizationScheduleItemService;
     }
 
     public void generateAmortizationSchedule(Long leaseLiabilityId) {
-        Optional<LeaseLiability> leaseLiabilityOpt = leaseLiabilityRepository.findById(leaseLiabilityId);
+        Optional<LeaseLiabilityDTO> leaseLiabilityOpt = leaseLiabilityService.findOne(leaseLiabilityId);
+
         if (leaseLiabilityOpt.isEmpty()) {
             throw new IllegalArgumentException("Lease Liability not found");
         }
 
-        LeaseLiability leaseLiability = leaseLiabilityOpt.get();
-        Optional<LeaseAmortizationCalculation> leaseAmortizationCalculationOpt =
-            leaseAmortizationCalculationRepository.findByLeaseLiabilityId(leaseLiabilityId);
+        LeaseLiabilityDTO leaseLiability = leaseLiabilityOpt.get();
+        Optional<LeaseAmortizationCalculationDTO> leaseAmortizationCalculationOpt =
+            leaseAmortizationCalculationService.findByLeaseLiabilityId(leaseLiabilityId);
 
         if (leaseAmortizationCalculationOpt.isEmpty()) {
             throw new IllegalArgumentException("Lease Amortization Calculation not found");
         }
 
-        LeaseAmortizationCalculation calculation = leaseAmortizationCalculationOpt.get();
+        LeaseAmortizationCalculationDTO calculation = leaseAmortizationCalculationOpt.get();
 
         BigDecimal principal = leaseLiability.getLiabilityAmount();
         BigDecimal interestRate = BigDecimal.valueOf(calculation.getInterestRate());
         int periods = calculation.getNumberOfPeriods();
 
-        // TODO
-        List<LeaseLiabilityScheduleItem> scheduleItems = calculateAmortizationSchedule(
-            principal, interestRate, periods);
+        List<LeaseLiabilityScheduleItemDTO> scheduleItems = calculateAmortizationSchedule(principal, interestRate, periods);
 
         // Save schedule items
-        leaseAmortizationScheduleItemRepository.saveAll(scheduleItems);
+        leaseAmortizationScheduleItemService.saveAll(scheduleItems);
     }
 
-    private List<LeaseLiabilityScheduleItem> calculateAmortizationSchedule(
+    private List<LeaseLiabilityScheduleItemDTO> calculateAmortizationSchedule(
         BigDecimal principal, BigDecimal interestRate, int periods) {
 
-        List<LeaseLiabilityScheduleItem> scheduleItems = new ArrayList<>();
-        BigDecimal monthlyRate = interestRate.divide(BigDecimal.valueOf(12), BigDecimal.ROUND_HALF_EVEN);
+        List<LeaseLiabilityScheduleItemDTO> scheduleItems = new ArrayList<>();
+        BigDecimal monthlyRate = interestRate.divide(BigDecimal.valueOf(12), ROUND_HALF_EVEN);
         BigDecimal openingBalance = principal;
         BigDecimal interestPayableOpening = BigDecimal.ZERO;
 
@@ -91,7 +87,7 @@ public class LeaseAmortizationService {
             BigDecimal closingBalance = openingBalance.subtract(principalPayment);
             BigDecimal interestPayableClosing = interestPayableOpening.add(interestAccrued).subtract(interestAccrued);
 
-            LeaseLiabilityScheduleItem item = new LeaseLiabilityScheduleItem();
+            LeaseLiabilityScheduleItemDTO item = new LeaseLiabilityScheduleItemDTO();
             item.setSequenceNumber(period);
             item.setOpeningBalance(openingBalance);
             item.setOutstandingBalance(closingBalance);
@@ -112,10 +108,10 @@ public class LeaseAmortizationService {
     }
 
     private BigDecimal calculateMonthlyPayment(BigDecimal principal, BigDecimal interestRate, int periods) {
-        BigDecimal monthlyRate = interestRate.divide(BigDecimal.valueOf(12), BigDecimal.ROUND_HALF_EVEN);
+        BigDecimal monthlyRate = interestRate.divide(BigDecimal.valueOf(12), ROUND_HALF_EVEN);
         BigDecimal numerator = monthlyRate.multiply(principal);
         BigDecimal denominator = BigDecimal.ONE.subtract(BigDecimal.ONE.divide(
-            (BigDecimal.ONE.add(monthlyRate)).pow(periods), BigDecimal.ROUND_HALF_EVEN));
-        return numerator.divide(denominator, BigDecimal.ROUND_HALF_EVEN);
+            (BigDecimal.ONE.add(monthlyRate)).pow(periods), ROUND_HALF_EVEN));
+        return numerator.divide(denominator, ROUND_HALF_EVEN);
     }
 }
