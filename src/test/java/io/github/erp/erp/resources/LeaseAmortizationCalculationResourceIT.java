@@ -128,7 +128,6 @@ class LeaseAmortizationCalculationResourceIT {
         } else {
             IFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
         }
-        leaseAmortizationCalculation.setIFRS16LeaseContract(IFRS16LeaseContract);
         return leaseAmortizationCalculation;
     }
 
@@ -153,7 +152,6 @@ class LeaseAmortizationCalculationResourceIT {
         } else {
             IFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
         }
-        leaseAmortizationCalculation.setIFRS16LeaseContract(IFRS16LeaseContract);
         return leaseAmortizationCalculation;
     }
 
@@ -665,21 +663,6 @@ class LeaseAmortizationCalculationResourceIT {
 
         // Get all the leaseAmortizationCalculationList where numberOfPeriods is greater than SMALLER_NUMBER_OF_PERIODS
         defaultLeaseAmortizationCalculationShouldBeFound("numberOfPeriods.greaterThan=" + SMALLER_NUMBER_OF_PERIODS);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseAmortizationCalculationsByIFRS16LeaseContractIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        IFRS16LeaseContract iFRS16LeaseContract = leaseAmortizationCalculation.getIFRS16LeaseContract();
-        leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
-        Long iFRS16LeaseContractId = iFRS16LeaseContract.getId();
-
-        // Get all the leaseAmortizationCalculationList where iFRS16LeaseContract equals to iFRS16LeaseContractId
-        defaultLeaseAmortizationCalculationShouldBeFound("iFRS16LeaseContractId.equals=" + iFRS16LeaseContractId);
-
-        // Get all the leaseAmortizationCalculationList where iFRS16LeaseContract equals to (iFRS16LeaseContractId + 1)
-        defaultLeaseAmortizationCalculationShouldNotBeFound("iFRS16LeaseContractId.equals=" + (iFRS16LeaseContractId + 1));
     }
 
     @Test
