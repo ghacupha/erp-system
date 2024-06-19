@@ -32,8 +32,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -87,7 +85,7 @@ public class LeaseAmortizationCalculationResource {
      */
     @PostMapping("/lease-amortization-calculations")
     public ResponseEntity<LeaseAmortizationCalculationDTO> createLeaseAmortizationCalculation(
-        @Valid @RequestBody LeaseAmortizationCalculationDTO leaseAmortizationCalculationDTO
+        @RequestBody LeaseAmortizationCalculationDTO leaseAmortizationCalculationDTO
     ) throws URISyntaxException {
         log.debug("REST request to save LeaseAmortizationCalculation : {}", leaseAmortizationCalculationDTO);
         if (leaseAmortizationCalculationDTO.getId() != null) {
@@ -113,7 +111,7 @@ public class LeaseAmortizationCalculationResource {
     @PutMapping("/lease-amortization-calculations/{id}")
     public ResponseEntity<LeaseAmortizationCalculationDTO> updateLeaseAmortizationCalculation(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody LeaseAmortizationCalculationDTO leaseAmortizationCalculationDTO
+        @RequestBody LeaseAmortizationCalculationDTO leaseAmortizationCalculationDTO
     ) throws URISyntaxException {
         log.debug("REST request to update LeaseAmortizationCalculation : {}, {}", id, leaseAmortizationCalculationDTO);
         if (leaseAmortizationCalculationDTO.getId() == null) {
@@ -150,7 +148,7 @@ public class LeaseAmortizationCalculationResource {
     @PatchMapping(value = "/lease-amortization-calculations/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<LeaseAmortizationCalculationDTO> partialUpdateLeaseAmortizationCalculation(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody LeaseAmortizationCalculationDTO leaseAmortizationCalculationDTO
+        @RequestBody LeaseAmortizationCalculationDTO leaseAmortizationCalculationDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update LeaseAmortizationCalculation partially : {}, {}", id, leaseAmortizationCalculationDTO);
         if (leaseAmortizationCalculationDTO.getId() == null) {

@@ -22,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -54,22 +53,6 @@ public class LeaseAmortizationCalculation implements Serializable {
 
     @Column(name = "number_of_periods")
     private Integer numberOfPeriods;
-
-    @JsonIgnoreProperties(
-        value = {
-            "superintendentServiceOutlet",
-            "mainDealer",
-            "firstReportingPeriod",
-            "lastReportingPeriod",
-            "leaseContractDocument",
-            "leaseContractCalculations",
-        },
-        allowSetters = true
-    )
-    @OneToOne(optional = false)
-    @NotNull
-    @JoinColumn(unique = true)
-    private IFRS16LeaseContract iFRS16LeaseContract;
 
     @JsonIgnoreProperties(value = { "leaseAmortizationCalculation", "leasePayments" }, allowSetters = true)
     @OneToOne(mappedBy = "leaseAmortizationCalculation")
@@ -140,19 +123,6 @@ public class LeaseAmortizationCalculation implements Serializable {
 
     public void setNumberOfPeriods(Integer numberOfPeriods) {
         this.numberOfPeriods = numberOfPeriods;
-    }
-
-    public IFRS16LeaseContract getIFRS16LeaseContract() {
-        return this.iFRS16LeaseContract;
-    }
-
-    public void setIFRS16LeaseContract(IFRS16LeaseContract IFRS16LeaseContract) {
-        this.iFRS16LeaseContract = IFRS16LeaseContract;
-    }
-
-    public LeaseAmortizationCalculation iFRS16LeaseContract(IFRS16LeaseContract IFRS16LeaseContract) {
-        this.setIFRS16LeaseContract(IFRS16LeaseContract);
-        return this;
     }
 
     public LeaseLiability getLeaseLiability() {

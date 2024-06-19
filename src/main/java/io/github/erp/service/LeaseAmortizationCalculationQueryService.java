@@ -134,15 +134,6 @@ public class LeaseAmortizationCalculationQueryService extends QueryService<Lease
                         buildRangeSpecification(criteria.getNumberOfPeriods(), LeaseAmortizationCalculation_.numberOfPeriods)
                     );
             }
-            if (criteria.getIFRS16LeaseContractId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getIFRS16LeaseContractId(),
-                            root -> root.join(LeaseAmortizationCalculation_.iFRS16LeaseContract, JoinType.LEFT).get(IFRS16LeaseContract_.id)
-                        )
-                    );
-            }
             if (criteria.getLeaseLiabilityId() != null) {
                 specification =
                     specification.and(

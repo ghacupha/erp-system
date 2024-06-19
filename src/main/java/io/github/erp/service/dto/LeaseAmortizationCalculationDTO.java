@@ -21,7 +21,6 @@ package io.github.erp.service.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
-import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link io.github.erp.domain.LeaseAmortizationCalculation} entity.
@@ -37,8 +36,6 @@ public class LeaseAmortizationCalculationDTO implements Serializable {
     private BigDecimal leaseAmount;
 
     private Integer numberOfPeriods;
-
-    private IFRS16LeaseContractDTO IFRS16LeaseContract;
 
     public Long getId() {
         return id;
@@ -80,14 +77,6 @@ public class LeaseAmortizationCalculationDTO implements Serializable {
         this.numberOfPeriods = numberOfPeriods;
     }
 
-    public IFRS16LeaseContractDTO getIFRS16LeaseContract() {
-        return IFRS16LeaseContract;
-    }
-
-    public void setIFRS16LeaseContract(IFRS16LeaseContractDTO IFRS16LeaseContract) {
-        this.IFRS16LeaseContract = IFRS16LeaseContract;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -118,7 +107,6 @@ public class LeaseAmortizationCalculationDTO implements Serializable {
             ", periodicity='" + getPeriodicity() + "'" +
             ", leaseAmount=" + getLeaseAmount() +
             ", numberOfPeriods=" + getNumberOfPeriods() +
-            ", IFRS16LeaseContract=" + getIFRS16LeaseContract() +
             "}";
     }
 }

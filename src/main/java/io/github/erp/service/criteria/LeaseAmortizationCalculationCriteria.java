@@ -53,8 +53,6 @@ public class LeaseAmortizationCalculationCriteria implements Serializable, Crite
 
     private IntegerFilter numberOfPeriods;
 
-    private LongFilter iFRS16LeaseContractId;
-
     private LongFilter leaseLiabilityId;
 
     private Boolean distinct;
@@ -67,7 +65,6 @@ public class LeaseAmortizationCalculationCriteria implements Serializable, Crite
         this.periodicity = other.periodicity == null ? null : other.periodicity.copy();
         this.leaseAmount = other.leaseAmount == null ? null : other.leaseAmount.copy();
         this.numberOfPeriods = other.numberOfPeriods == null ? null : other.numberOfPeriods.copy();
-        this.iFRS16LeaseContractId = other.iFRS16LeaseContractId == null ? null : other.iFRS16LeaseContractId.copy();
         this.leaseLiabilityId = other.leaseLiabilityId == null ? null : other.leaseLiabilityId.copy();
         this.distinct = other.distinct;
     }
@@ -152,21 +149,6 @@ public class LeaseAmortizationCalculationCriteria implements Serializable, Crite
         this.numberOfPeriods = numberOfPeriods;
     }
 
-    public LongFilter getIFRS16LeaseContractId() {
-        return iFRS16LeaseContractId;
-    }
-
-    public LongFilter iFRS16LeaseContractId() {
-        if (iFRS16LeaseContractId == null) {
-            iFRS16LeaseContractId = new LongFilter();
-        }
-        return iFRS16LeaseContractId;
-    }
-
-    public void setIFRS16LeaseContractId(LongFilter iFRS16LeaseContractId) {
-        this.iFRS16LeaseContractId = iFRS16LeaseContractId;
-    }
-
     public LongFilter getLeaseLiabilityId() {
         return leaseLiabilityId;
     }
@@ -205,7 +187,6 @@ public class LeaseAmortizationCalculationCriteria implements Serializable, Crite
             Objects.equals(periodicity, that.periodicity) &&
             Objects.equals(leaseAmount, that.leaseAmount) &&
             Objects.equals(numberOfPeriods, that.numberOfPeriods) &&
-            Objects.equals(iFRS16LeaseContractId, that.iFRS16LeaseContractId) &&
             Objects.equals(leaseLiabilityId, that.leaseLiabilityId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -213,7 +194,7 @@ public class LeaseAmortizationCalculationCriteria implements Serializable, Crite
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, interestRate, periodicity, leaseAmount, numberOfPeriods, iFRS16LeaseContractId, leaseLiabilityId, distinct);
+        return Objects.hash(id, interestRate, periodicity, leaseAmount, numberOfPeriods, leaseLiabilityId, distinct);
     }
 
     // prettier-ignore
@@ -225,7 +206,6 @@ public class LeaseAmortizationCalculationCriteria implements Serializable, Crite
             (periodicity != null ? "periodicity=" + periodicity + ", " : "") +
             (leaseAmount != null ? "leaseAmount=" + leaseAmount + ", " : "") +
             (numberOfPeriods != null ? "numberOfPeriods=" + numberOfPeriods + ", " : "") +
-            (iFRS16LeaseContractId != null ? "iFRS16LeaseContractId=" + iFRS16LeaseContractId + ", " : "") +
             (leaseLiabilityId != null ? "leaseLiabilityId=" + leaseLiabilityId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

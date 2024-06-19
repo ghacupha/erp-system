@@ -69,7 +69,7 @@ public class LeaseLiability implements Serializable {
     @Column(name = "end_date", nullable = false)
     private Float endDate;
 
-    @JsonIgnoreProperties(value = { "iFRS16LeaseContract", "leaseLiability" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "leaseLiability" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
     private LeaseAmortizationCalculation leaseAmortizationCalculation;
