@@ -22,7 +22,6 @@
       "relationshipName": "IFRS16LeaseContract",
       "otherEntityName": "IFRS16LeaseContract",
       "relationshipType": "one-to-one",
-      "relationshipValidateRules": ["required"],
       "otherEntityField": "bookingId",
       "ownerSide": true,
       "id": false,
