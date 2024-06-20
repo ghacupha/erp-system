@@ -24,6 +24,16 @@
       "relationshipType": "one-to-one",
       "ownerSide": false,
       "otherEntityRelationshipName": "leaseAmortizationCalculation"
+    },
+    {
+      "relationshipName": "leaseContract",
+      "otherEntityName": "iFRS16LeaseContract",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "bookingId",
+      "ownerSide": true,
+      "id": false,
+      "otherEntityRelationshipName": "leaseAmortizationCalculation"
     }
   ],
   "service": "serviceImpl",

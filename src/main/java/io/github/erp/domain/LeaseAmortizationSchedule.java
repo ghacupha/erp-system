@@ -51,18 +51,34 @@ public class LeaseAmortizationSchedule implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "leaseAmortizationCalculation", "leasePayments" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "leaseAmortizationCalculation", "leasePayments", "leaseContract" }, allowSetters = true)
     private LeaseLiability leaseLiability;
 
     @OneToMany(mappedBy = "leaseAmortizationSchedule")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
         value = {
-            "placeholders", "leaseContract", "leaseModelMetadata", "universallyUniqueMappings", "leasePeriod", "leaseAmortizationSchedule",
+            "placeholders", "universallyUniqueMappings", "leasePeriod", "leaseAmortizationSchedule", "leaseContract", "leaseLiability",
         },
         allowSetters = true
     )
     private Set<LeaseLiabilityScheduleItem> leaseLiabilityScheduleItems = new HashSet<>();
+
+    @JsonIgnoreProperties(
+        value = {
+            "superintendentServiceOutlet",
+            "mainDealer",
+            "firstReportingPeriod",
+            "lastReportingPeriod",
+            "leaseContractDocument",
+            "leaseContractCalculations",
+        },
+        allowSetters = true
+    )
+    @OneToOne(optional = false)
+    @NotNull
+    @JoinColumn(unique = true)
+    private IFRS16LeaseContract leaseContract;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -133,6 +149,19 @@ public class LeaseAmortizationSchedule implements Serializable {
     public LeaseAmortizationSchedule removeLeaseLiabilityScheduleItem(LeaseLiabilityScheduleItem leaseLiabilityScheduleItem) {
         this.leaseLiabilityScheduleItems.remove(leaseLiabilityScheduleItem);
         leaseLiabilityScheduleItem.setLeaseAmortizationSchedule(null);
+        return this;
+    }
+
+    public IFRS16LeaseContract getLeaseContract() {
+        return this.leaseContract;
+    }
+
+    public void setLeaseContract(IFRS16LeaseContract iFRS16LeaseContract) {
+        this.leaseContract = iFRS16LeaseContract;
+    }
+
+    public LeaseAmortizationSchedule leaseContract(IFRS16LeaseContract iFRS16LeaseContract) {
+        this.setLeaseContract(iFRS16LeaseContract);
         return this;
     }
 

@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -54,9 +55,25 @@ public class LeaseAmortizationCalculation implements Serializable {
     @Column(name = "number_of_periods")
     private Integer numberOfPeriods;
 
-    @JsonIgnoreProperties(value = { "leaseAmortizationCalculation", "leasePayments" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "leaseAmortizationCalculation", "leasePayments", "leaseContract" }, allowSetters = true)
     @OneToOne(mappedBy = "leaseAmortizationCalculation")
     private LeaseLiability leaseLiability;
+
+    @JsonIgnoreProperties(
+        value = {
+            "superintendentServiceOutlet",
+            "mainDealer",
+            "firstReportingPeriod",
+            "lastReportingPeriod",
+            "leaseContractDocument",
+            "leaseContractCalculations",
+        },
+        allowSetters = true
+    )
+    @OneToOne(optional = false)
+    @NotNull
+    @JoinColumn(unique = true)
+    private IFRS16LeaseContract leaseContract;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -141,6 +158,19 @@ public class LeaseAmortizationCalculation implements Serializable {
 
     public LeaseAmortizationCalculation leaseLiability(LeaseLiability leaseLiability) {
         this.setLeaseLiability(leaseLiability);
+        return this;
+    }
+
+    public IFRS16LeaseContract getLeaseContract() {
+        return this.leaseContract;
+    }
+
+    public void setLeaseContract(IFRS16LeaseContract iFRS16LeaseContract) {
+        this.leaseContract = iFRS16LeaseContract;
+    }
+
+    public LeaseAmortizationCalculation leaseContract(IFRS16LeaseContract iFRS16LeaseContract) {
+        this.setLeaseContract(iFRS16LeaseContract);
         return this;
     }
 

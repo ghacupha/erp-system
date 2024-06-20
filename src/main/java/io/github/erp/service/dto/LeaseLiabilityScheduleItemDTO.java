@@ -52,15 +52,15 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
-    private LeaseContractDTO leaseContract;
-
-    private LeaseModelMetadataDTO leaseModelMetadata;
-
     private Set<UniversallyUniqueMappingDTO> universallyUniqueMappings = new HashSet<>();
 
     private LeasePeriodDTO leasePeriod;
 
     private LeaseAmortizationScheduleDTO leaseAmortizationSchedule;
+
+    private IFRS16LeaseContractDTO leaseContract;
+
+    private LeaseLiabilityDTO leaseLiability;
 
     public Long getId() {
         return id;
@@ -150,22 +150,6 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
         this.placeholders = placeholders;
     }
 
-    public LeaseContractDTO getLeaseContract() {
-        return leaseContract;
-    }
-
-    public void setLeaseContract(LeaseContractDTO leaseContract) {
-        this.leaseContract = leaseContract;
-    }
-
-    public LeaseModelMetadataDTO getLeaseModelMetadata() {
-        return leaseModelMetadata;
-    }
-
-    public void setLeaseModelMetadata(LeaseModelMetadataDTO leaseModelMetadata) {
-        this.leaseModelMetadata = leaseModelMetadata;
-    }
-
     public Set<UniversallyUniqueMappingDTO> getUniversallyUniqueMappings() {
         return universallyUniqueMappings;
     }
@@ -188,6 +172,22 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
 
     public void setLeaseAmortizationSchedule(LeaseAmortizationScheduleDTO leaseAmortizationSchedule) {
         this.leaseAmortizationSchedule = leaseAmortizationSchedule;
+    }
+
+    public IFRS16LeaseContractDTO getLeaseContract() {
+        return leaseContract;
+    }
+
+    public void setLeaseContract(IFRS16LeaseContractDTO leaseContract) {
+        this.leaseContract = leaseContract;
+    }
+
+    public LeaseLiabilityDTO getLeaseLiability() {
+        return leaseLiability;
+    }
+
+    public void setLeaseLiability(LeaseLiabilityDTO leaseLiability) {
+        this.leaseLiability = leaseLiability;
     }
 
     @Override
@@ -226,11 +226,11 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
             ", interestAccrued=" + getInterestAccrued() +
             ", interestPayableClosing=" + getInterestPayableClosing() +
             ", placeholders=" + getPlaceholders() +
-            ", leaseContract=" + getLeaseContract() +
-            ", leaseModelMetadata=" + getLeaseModelMetadata() +
             ", universallyUniqueMappings=" + getUniversallyUniqueMappings() +
             ", leasePeriod=" + getLeasePeriod() +
             ", leaseAmortizationSchedule=" + getLeaseAmortizationSchedule() +
+            ", leaseContract=" + getLeaseContract() +
+            ", leaseLiability=" + getLeaseLiability() +
             "}";
     }
 }

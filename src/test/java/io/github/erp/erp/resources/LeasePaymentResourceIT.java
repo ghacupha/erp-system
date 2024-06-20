@@ -25,7 +25,6 @@ import io.github.erp.repository.LeasePaymentRepository;
 import io.github.erp.repository.search.LeasePaymentSearchRepository;
 import io.github.erp.service.dto.LeasePaymentDTO;
 import io.github.erp.service.mapper.LeasePaymentMapper;
-import io.github.erp.web.rest.LeasePaymentResource;
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,7 +59,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link LeasePaymentResource} REST controller.
+ * Integration tests for the LeasePaymentResource REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)

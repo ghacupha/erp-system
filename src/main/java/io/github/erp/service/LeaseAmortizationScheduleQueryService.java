@@ -140,6 +140,15 @@ public class LeaseAmortizationScheduleQueryService extends QueryService<LeaseAmo
                         )
                     );
             }
+            if (criteria.getLeaseContractId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLeaseContractId(),
+                            root -> root.join(LeaseAmortizationSchedule_.leaseContract, JoinType.LEFT).get(IFRS16LeaseContract_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

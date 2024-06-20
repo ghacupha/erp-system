@@ -19,6 +19,7 @@ package io.github.erp.erp.resources;
  */
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.IFRS16LeaseContract;
 import io.github.erp.domain.LeaseAmortizationCalculation;
 import io.github.erp.domain.LeaseLiability;
 import io.github.erp.domain.LeasePayment;
@@ -26,7 +27,6 @@ import io.github.erp.repository.LeaseLiabilityRepository;
 import io.github.erp.repository.search.LeaseLiabilitySearchRepository;
 import io.github.erp.service.dto.LeaseLiabilityDTO;
 import io.github.erp.service.mapper.LeaseLiabilityMapper;
-import io.github.erp.web.rest.LeaseLiabilityResource;
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,16 +43,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static io.github.erp.web.rest.TestUtil.sameInstant;
 import static io.github.erp.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -61,7 +58,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link LeaseLiabilityResource} REST controller.
+ * Integration tests for the LeaseLiabilityResource REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -80,13 +77,13 @@ class LeaseLiabilityResourceIT {
     private static final Float UPDATED_INTEREST_RATE = 1F;
     private static final Float SMALLER_INTEREST_RATE = 0F - 1F;
 
-    private static final ZonedDateTime DEFAULT_START_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
-    private static final ZonedDateTime UPDATED_START_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
-    private static final ZonedDateTime SMALLER_START_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
+    private static final LocalDate DEFAULT_START_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_START_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_START_DATE = LocalDate.ofEpochDay(-1L);
 
-    private static final Float DEFAULT_END_DATE = 0F;
-    private static final Float UPDATED_END_DATE = 1F;
-    private static final Float SMALLER_END_DATE = 0F - 1F;
+    private static final LocalDate DEFAULT_END_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_END_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_END_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final String ENTITY_API_URL = "/api/leases/lease-liabilities";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -130,6 +127,16 @@ class LeaseLiabilityResourceIT {
             .interestRate(DEFAULT_INTEREST_RATE)
             .startDate(DEFAULT_START_DATE)
             .endDate(DEFAULT_END_DATE);
+        // Add required entity
+        IFRS16LeaseContract iFRS16LeaseContract;
+        if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
+            iFRS16LeaseContract = IFRS16LeaseContractResourceIT.createEntity(em);
+            em.persist(iFRS16LeaseContract);
+            em.flush();
+        } else {
+            iFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
+        }
+        leaseLiability.setLeaseContract(iFRS16LeaseContract);
         return leaseLiability;
     }
 
@@ -146,6 +153,16 @@ class LeaseLiabilityResourceIT {
             .interestRate(UPDATED_INTEREST_RATE)
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE);
+        // Add required entity
+        IFRS16LeaseContract iFRS16LeaseContract;
+        if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
+            iFRS16LeaseContract = IFRS16LeaseContractResourceIT.createUpdatedEntity(em);
+            em.persist(iFRS16LeaseContract);
+            em.flush();
+        } else {
+            iFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
+        }
+        leaseLiability.setLeaseContract(iFRS16LeaseContract);
         return leaseLiability;
     }
 
@@ -319,8 +336,8 @@ class LeaseLiabilityResourceIT {
             .andExpect(jsonPath("$.[*].leaseId").value(hasItem(DEFAULT_LEASE_ID)))
             .andExpect(jsonPath("$.[*].liabilityAmount").value(hasItem(sameNumber(DEFAULT_LIABILITY_AMOUNT))))
             .andExpect(jsonPath("$.[*].interestRate").value(hasItem(DEFAULT_INTEREST_RATE.doubleValue())))
-            .andExpect(jsonPath("$.[*].startDate").value(hasItem(sameInstant(DEFAULT_START_DATE))))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.doubleValue())));
+            .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
     }
 
     @Test
@@ -338,8 +355,8 @@ class LeaseLiabilityResourceIT {
             .andExpect(jsonPath("$.leaseId").value(DEFAULT_LEASE_ID))
             .andExpect(jsonPath("$.liabilityAmount").value(sameNumber(DEFAULT_LIABILITY_AMOUNT)))
             .andExpect(jsonPath("$.interestRate").value(DEFAULT_INTEREST_RATE.doubleValue()))
-            .andExpect(jsonPath("$.startDate").value(sameInstant(DEFAULT_START_DATE)))
-            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.doubleValue()));
+            .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
+            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()));
     }
 
     @Test
@@ -906,6 +923,21 @@ class LeaseLiabilityResourceIT {
         defaultLeaseLiabilityShouldNotBeFound("leasePaymentId.equals=" + (leasePaymentId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllLeaseLiabilitiesByLeaseContractIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        IFRS16LeaseContract leaseContract = leaseLiability.getLeaseContract();
+        leaseLiabilityRepository.saveAndFlush(leaseLiability);
+        Long leaseContractId = leaseContract.getId();
+
+        // Get all the leaseLiabilityList where leaseContract equals to leaseContractId
+        defaultLeaseLiabilityShouldBeFound("leaseContractId.equals=" + leaseContractId);
+
+        // Get all the leaseLiabilityList where leaseContract equals to (leaseContractId + 1)
+        defaultLeaseLiabilityShouldNotBeFound("leaseContractId.equals=" + (leaseContractId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -918,8 +950,8 @@ class LeaseLiabilityResourceIT {
             .andExpect(jsonPath("$.[*].leaseId").value(hasItem(DEFAULT_LEASE_ID)))
             .andExpect(jsonPath("$.[*].liabilityAmount").value(hasItem(sameNumber(DEFAULT_LIABILITY_AMOUNT))))
             .andExpect(jsonPath("$.[*].interestRate").value(hasItem(DEFAULT_INTEREST_RATE.doubleValue())))
-            .andExpect(jsonPath("$.[*].startDate").value(hasItem(sameInstant(DEFAULT_START_DATE))))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.doubleValue())));
+            .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
 
         // Check, that the count call also returns 1
         restLeaseLiabilityMockMvc
@@ -1261,7 +1293,7 @@ class LeaseLiabilityResourceIT {
             .andExpect(jsonPath("$.[*].leaseId").value(hasItem(DEFAULT_LEASE_ID)))
             .andExpect(jsonPath("$.[*].liabilityAmount").value(hasItem(sameNumber(DEFAULT_LIABILITY_AMOUNT))))
             .andExpect(jsonPath("$.[*].interestRate").value(hasItem(DEFAULT_INTEREST_RATE.doubleValue())))
-            .andExpect(jsonPath("$.[*].startDate").value(hasItem(sameInstant(DEFAULT_START_DATE))))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.doubleValue())));
+            .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
     }
 }

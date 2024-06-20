@@ -27,9 +27,9 @@ import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
+import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
-import tech.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
  * Criteria class for the {@link io.github.erp.domain.LeaseLiability} entity. This class is used
@@ -52,13 +52,15 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
 
     private FloatFilter interestRate;
 
-    private ZonedDateTimeFilter startDate;
+    private LocalDateFilter startDate;
 
-    private FloatFilter endDate;
+    private LocalDateFilter endDate;
 
     private LongFilter leaseAmortizationCalculationId;
 
     private LongFilter leasePaymentId;
+
+    private LongFilter leaseContractId;
 
     private Boolean distinct;
 
@@ -74,6 +76,7 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
         this.leaseAmortizationCalculationId =
             other.leaseAmortizationCalculationId == null ? null : other.leaseAmortizationCalculationId.copy();
         this.leasePaymentId = other.leasePaymentId == null ? null : other.leasePaymentId.copy();
+        this.leaseContractId = other.leaseContractId == null ? null : other.leaseContractId.copy();
         this.distinct = other.distinct;
     }
 
@@ -142,33 +145,33 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
         this.interestRate = interestRate;
     }
 
-    public ZonedDateTimeFilter getStartDate() {
+    public LocalDateFilter getStartDate() {
         return startDate;
     }
 
-    public ZonedDateTimeFilter startDate() {
+    public LocalDateFilter startDate() {
         if (startDate == null) {
-            startDate = new ZonedDateTimeFilter();
+            startDate = new LocalDateFilter();
         }
         return startDate;
     }
 
-    public void setStartDate(ZonedDateTimeFilter startDate) {
+    public void setStartDate(LocalDateFilter startDate) {
         this.startDate = startDate;
     }
 
-    public FloatFilter getEndDate() {
+    public LocalDateFilter getEndDate() {
         return endDate;
     }
 
-    public FloatFilter endDate() {
+    public LocalDateFilter endDate() {
         if (endDate == null) {
-            endDate = new FloatFilter();
+            endDate = new LocalDateFilter();
         }
         return endDate;
     }
 
-    public void setEndDate(FloatFilter endDate) {
+    public void setEndDate(LocalDateFilter endDate) {
         this.endDate = endDate;
     }
 
@@ -202,6 +205,21 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
         this.leasePaymentId = leasePaymentId;
     }
 
+    public LongFilter getLeaseContractId() {
+        return leaseContractId;
+    }
+
+    public LongFilter leaseContractId() {
+        if (leaseContractId == null) {
+            leaseContractId = new LongFilter();
+        }
+        return leaseContractId;
+    }
+
+    public void setLeaseContractId(LongFilter leaseContractId) {
+        this.leaseContractId = leaseContractId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -228,6 +246,7 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
             Objects.equals(endDate, that.endDate) &&
             Objects.equals(leaseAmortizationCalculationId, that.leaseAmortizationCalculationId) &&
             Objects.equals(leasePaymentId, that.leasePaymentId) &&
+            Objects.equals(leaseContractId, that.leaseContractId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -243,6 +262,7 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
             endDate,
             leaseAmortizationCalculationId,
             leasePaymentId,
+            leaseContractId,
             distinct
         );
     }
@@ -259,6 +279,7 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
             (endDate != null ? "endDate=" + endDate + ", " : "") +
             (leaseAmortizationCalculationId != null ? "leaseAmortizationCalculationId=" + leaseAmortizationCalculationId + ", " : "") +
             (leasePaymentId != null ? "leasePaymentId=" + leasePaymentId + ", " : "") +
+            (leaseContractId != null ? "leaseContractId=" + leaseContractId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
