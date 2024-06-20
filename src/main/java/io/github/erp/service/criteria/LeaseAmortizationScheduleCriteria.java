@@ -51,6 +51,8 @@ public class LeaseAmortizationScheduleCriteria implements Serializable, Criteria
 
     private LongFilter leaseLiabilityScheduleItemId;
 
+    private LongFilter leaseContractId;
+
     private Boolean distinct;
 
     public LeaseAmortizationScheduleCriteria() {}
@@ -60,6 +62,7 @@ public class LeaseAmortizationScheduleCriteria implements Serializable, Criteria
         this.identifier = other.identifier == null ? null : other.identifier.copy();
         this.leaseLiabilityId = other.leaseLiabilityId == null ? null : other.leaseLiabilityId.copy();
         this.leaseLiabilityScheduleItemId = other.leaseLiabilityScheduleItemId == null ? null : other.leaseLiabilityScheduleItemId.copy();
+        this.leaseContractId = other.leaseContractId == null ? null : other.leaseContractId.copy();
         this.distinct = other.distinct;
     }
 
@@ -128,6 +131,21 @@ public class LeaseAmortizationScheduleCriteria implements Serializable, Criteria
         this.leaseLiabilityScheduleItemId = leaseLiabilityScheduleItemId;
     }
 
+    public LongFilter getLeaseContractId() {
+        return leaseContractId;
+    }
+
+    public LongFilter leaseContractId() {
+        if (leaseContractId == null) {
+            leaseContractId = new LongFilter();
+        }
+        return leaseContractId;
+    }
+
+    public void setLeaseContractId(LongFilter leaseContractId) {
+        this.leaseContractId = leaseContractId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -150,13 +168,14 @@ public class LeaseAmortizationScheduleCriteria implements Serializable, Criteria
             Objects.equals(identifier, that.identifier) &&
             Objects.equals(leaseLiabilityId, that.leaseLiabilityId) &&
             Objects.equals(leaseLiabilityScheduleItemId, that.leaseLiabilityScheduleItemId) &&
+            Objects.equals(leaseContractId, that.leaseContractId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, identifier, leaseLiabilityId, leaseLiabilityScheduleItemId, distinct);
+        return Objects.hash(id, identifier, leaseLiabilityId, leaseLiabilityScheduleItemId, leaseContractId, distinct);
     }
 
     // prettier-ignore
@@ -167,6 +186,7 @@ public class LeaseAmortizationScheduleCriteria implements Serializable, Criteria
             (identifier != null ? "identifier=" + identifier + ", " : "") +
             (leaseLiabilityId != null ? "leaseLiabilityId=" + leaseLiabilityId + ", " : "") +
             (leaseLiabilityScheduleItemId != null ? "leaseLiabilityScheduleItemId=" + leaseLiabilityScheduleItemId + ", " : "") +
+            (leaseContractId != null ? "leaseContractId=" + leaseContractId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

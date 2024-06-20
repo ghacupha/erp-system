@@ -65,15 +65,15 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
 
     private LongFilter placeholderId;
 
-    private LongFilter leaseContractId;
-
-    private LongFilter leaseModelMetadataId;
-
     private LongFilter universallyUniqueMappingId;
 
     private LongFilter leasePeriodId;
 
     private LongFilter leaseAmortizationScheduleId;
+
+    private LongFilter leaseContractId;
+
+    private LongFilter leaseLiabilityId;
 
     private Boolean distinct;
 
@@ -91,11 +91,11 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
         this.interestAccrued = other.interestAccrued == null ? null : other.interestAccrued.copy();
         this.interestPayableClosing = other.interestPayableClosing == null ? null : other.interestPayableClosing.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
-        this.leaseContractId = other.leaseContractId == null ? null : other.leaseContractId.copy();
-        this.leaseModelMetadataId = other.leaseModelMetadataId == null ? null : other.leaseModelMetadataId.copy();
         this.universallyUniqueMappingId = other.universallyUniqueMappingId == null ? null : other.universallyUniqueMappingId.copy();
         this.leasePeriodId = other.leasePeriodId == null ? null : other.leasePeriodId.copy();
         this.leaseAmortizationScheduleId = other.leaseAmortizationScheduleId == null ? null : other.leaseAmortizationScheduleId.copy();
+        this.leaseContractId = other.leaseContractId == null ? null : other.leaseContractId.copy();
+        this.leaseLiabilityId = other.leaseLiabilityId == null ? null : other.leaseLiabilityId.copy();
         this.distinct = other.distinct;
     }
 
@@ -269,36 +269,6 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
         this.placeholderId = placeholderId;
     }
 
-    public LongFilter getLeaseContractId() {
-        return leaseContractId;
-    }
-
-    public LongFilter leaseContractId() {
-        if (leaseContractId == null) {
-            leaseContractId = new LongFilter();
-        }
-        return leaseContractId;
-    }
-
-    public void setLeaseContractId(LongFilter leaseContractId) {
-        this.leaseContractId = leaseContractId;
-    }
-
-    public LongFilter getLeaseModelMetadataId() {
-        return leaseModelMetadataId;
-    }
-
-    public LongFilter leaseModelMetadataId() {
-        if (leaseModelMetadataId == null) {
-            leaseModelMetadataId = new LongFilter();
-        }
-        return leaseModelMetadataId;
-    }
-
-    public void setLeaseModelMetadataId(LongFilter leaseModelMetadataId) {
-        this.leaseModelMetadataId = leaseModelMetadataId;
-    }
-
     public LongFilter getUniversallyUniqueMappingId() {
         return universallyUniqueMappingId;
     }
@@ -344,6 +314,36 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
         this.leaseAmortizationScheduleId = leaseAmortizationScheduleId;
     }
 
+    public LongFilter getLeaseContractId() {
+        return leaseContractId;
+    }
+
+    public LongFilter leaseContractId() {
+        if (leaseContractId == null) {
+            leaseContractId = new LongFilter();
+        }
+        return leaseContractId;
+    }
+
+    public void setLeaseContractId(LongFilter leaseContractId) {
+        this.leaseContractId = leaseContractId;
+    }
+
+    public LongFilter getLeaseLiabilityId() {
+        return leaseLiabilityId;
+    }
+
+    public LongFilter leaseLiabilityId() {
+        if (leaseLiabilityId == null) {
+            leaseLiabilityId = new LongFilter();
+        }
+        return leaseLiabilityId;
+    }
+
+    public void setLeaseLiabilityId(LongFilter leaseLiabilityId) {
+        this.leaseLiabilityId = leaseLiabilityId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -373,11 +373,11 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
             Objects.equals(interestAccrued, that.interestAccrued) &&
             Objects.equals(interestPayableClosing, that.interestPayableClosing) &&
             Objects.equals(placeholderId, that.placeholderId) &&
-            Objects.equals(leaseContractId, that.leaseContractId) &&
-            Objects.equals(leaseModelMetadataId, that.leaseModelMetadataId) &&
             Objects.equals(universallyUniqueMappingId, that.universallyUniqueMappingId) &&
             Objects.equals(leasePeriodId, that.leasePeriodId) &&
             Objects.equals(leaseAmortizationScheduleId, that.leaseAmortizationScheduleId) &&
+            Objects.equals(leaseContractId, that.leaseContractId) &&
+            Objects.equals(leaseLiabilityId, that.leaseLiabilityId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -396,11 +396,11 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
             interestAccrued,
             interestPayableClosing,
             placeholderId,
-            leaseContractId,
-            leaseModelMetadataId,
             universallyUniqueMappingId,
             leasePeriodId,
             leaseAmortizationScheduleId,
+            leaseContractId,
+            leaseLiabilityId,
             distinct
         );
     }
@@ -420,11 +420,11 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
             (interestAccrued != null ? "interestAccrued=" + interestAccrued + ", " : "") +
             (interestPayableClosing != null ? "interestPayableClosing=" + interestPayableClosing + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
-            (leaseContractId != null ? "leaseContractId=" + leaseContractId + ", " : "") +
-            (leaseModelMetadataId != null ? "leaseModelMetadataId=" + leaseModelMetadataId + ", " : "") +
             (universallyUniqueMappingId != null ? "universallyUniqueMappingId=" + universallyUniqueMappingId + ", " : "") +
             (leasePeriodId != null ? "leasePeriodId=" + leasePeriodId + ", " : "") +
             (leaseAmortizationScheduleId != null ? "leaseAmortizationScheduleId=" + leaseAmortizationScheduleId + ", " : "") +
+            (leaseContractId != null ? "leaseContractId=" + leaseContractId + ", " : "") +
+            (leaseLiabilityId != null ? "leaseLiabilityId=" + leaseLiabilityId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

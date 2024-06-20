@@ -169,24 +169,6 @@ public class LeaseLiabilityScheduleItemQueryService extends QueryService<LeaseLi
                         )
                     );
             }
-            if (criteria.getLeaseContractId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getLeaseContractId(),
-                            root -> root.join(LeaseLiabilityScheduleItem_.leaseContract, JoinType.LEFT).get(LeaseContract_.id)
-                        )
-                    );
-            }
-            if (criteria.getLeaseModelMetadataId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getLeaseModelMetadataId(),
-                            root -> root.join(LeaseLiabilityScheduleItem_.leaseModelMetadata, JoinType.LEFT).get(LeaseModelMetadata_.id)
-                        )
-                    );
-            }
             if (criteria.getUniversallyUniqueMappingId() != null) {
                 specification =
                     specification.and(
@@ -217,6 +199,24 @@ public class LeaseLiabilityScheduleItemQueryService extends QueryService<LeaseLi
                                 root
                                     .join(LeaseLiabilityScheduleItem_.leaseAmortizationSchedule, JoinType.LEFT)
                                     .get(LeaseAmortizationSchedule_.id)
+                        )
+                    );
+            }
+            if (criteria.getLeaseContractId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLeaseContractId(),
+                            root -> root.join(LeaseLiabilityScheduleItem_.leaseContract, JoinType.LEFT).get(IFRS16LeaseContract_.id)
+                        )
+                    );
+            }
+            if (criteria.getLeaseLiabilityId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLeaseLiabilityId(),
+                            root -> root.join(LeaseLiabilityScheduleItem_.leaseLiability, JoinType.LEFT).get(LeaseLiability_.id)
                         )
                     );
             }

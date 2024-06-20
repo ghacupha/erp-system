@@ -47,19 +47,6 @@
       "otherEntityRelationshipName": "leaseLiabilityScheduleItem"
     },
     {
-      "relationshipName": "leaseContract",
-      "otherEntityName": "leaseContract",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "bookingId"
-    },
-    {
-      "relationshipName": "leaseModelMetadata",
-      "otherEntityName": "leaseModelMetadata",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "modelTitle"
-    },
-    {
       "relationshipName": "universallyUniqueMapping",
       "otherEntityName": "universallyUniqueMapping",
       "relationshipType": "many-to-many",
@@ -77,6 +64,20 @@
       "relationshipName": "leaseAmortizationSchedule",
       "otherEntityName": "leaseAmortizationSchedule",
       "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "leaseContract",
+      "otherEntityName": "iFRS16LeaseContract",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "bookingId"
+    },
+    {
+      "relationshipName": "leaseLiability",
+      "otherEntityName": "leaseLiability",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
       "otherEntityField": "id"
     }
   ],

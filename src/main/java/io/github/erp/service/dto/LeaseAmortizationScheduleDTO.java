@@ -35,6 +35,8 @@ public class LeaseAmortizationScheduleDTO implements Serializable {
 
     private LeaseLiabilityDTO leaseLiability;
 
+    private IFRS16LeaseContractDTO leaseContract;
+
     public Long getId() {
         return id;
     }
@@ -57,6 +59,14 @@ public class LeaseAmortizationScheduleDTO implements Serializable {
 
     public void setLeaseLiability(LeaseLiabilityDTO leaseLiability) {
         this.leaseLiability = leaseLiability;
+    }
+
+    public IFRS16LeaseContractDTO getLeaseContract() {
+        return leaseContract;
+    }
+
+    public void setLeaseContract(IFRS16LeaseContractDTO leaseContract) {
+        this.leaseContract = leaseContract;
     }
 
     @Override
@@ -87,6 +97,7 @@ public class LeaseAmortizationScheduleDTO implements Serializable {
             "id=" + getId() +
             ", identifier='" + getIdentifier() + "'" +
             ", leaseLiability=" + getLeaseLiability() +
+            ", leaseContract=" + getLeaseContract() +
             "}";
     }
 }

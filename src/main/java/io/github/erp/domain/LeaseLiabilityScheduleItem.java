@@ -82,33 +82,6 @@ public class LeaseLiabilityScheduleItem implements Serializable {
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
 
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties(value = { "placeholders", "systemMappings", "businessDocuments", "contractMetadata" }, allowSetters = true)
-    private LeaseContract leaseContract;
-
-    @ManyToOne
-    @JsonIgnoreProperties(
-        value = {
-            "placeholders",
-            "leaseMappings",
-            "leaseContract",
-            "predecessor",
-            "liabilityCurrency",
-            "rouAssetCurrency",
-            "modelAttachments",
-            "securityClearance",
-            "leaseLiabilityAccount",
-            "interestPayableAccount",
-            "interestExpenseAccount",
-            "rouAssetAccount",
-            "rouDepreciationAccount",
-            "accruedDepreciationAccount",
-        },
-        allowSetters = true
-    )
-    private LeaseModelMetadata leaseModelMetadata;
-
     @ManyToMany
     @JoinTable(
         name = "rel_lease_liability_schedule_item__universally_unique_mapping",
@@ -124,8 +97,28 @@ public class LeaseLiabilityScheduleItem implements Serializable {
     private LeasePeriod leasePeriod;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "leaseLiability", "leaseLiabilityScheduleItems" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "leaseLiability", "leaseLiabilityScheduleItems", "leaseContract" }, allowSetters = true)
     private LeaseAmortizationSchedule leaseAmortizationSchedule;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(
+        value = {
+            "superintendentServiceOutlet",
+            "mainDealer",
+            "firstReportingPeriod",
+            "lastReportingPeriod",
+            "leaseContractDocument",
+            "leaseContractCalculations",
+        },
+        allowSetters = true
+    )
+    private IFRS16LeaseContract leaseContract;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "leaseAmortizationCalculation", "leasePayments", "leaseContract" }, allowSetters = true)
+    private LeaseLiability leaseLiability;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -282,32 +275,6 @@ public class LeaseLiabilityScheduleItem implements Serializable {
         return this;
     }
 
-    public LeaseContract getLeaseContract() {
-        return this.leaseContract;
-    }
-
-    public void setLeaseContract(LeaseContract leaseContract) {
-        this.leaseContract = leaseContract;
-    }
-
-    public LeaseLiabilityScheduleItem leaseContract(LeaseContract leaseContract) {
-        this.setLeaseContract(leaseContract);
-        return this;
-    }
-
-    public LeaseModelMetadata getLeaseModelMetadata() {
-        return this.leaseModelMetadata;
-    }
-
-    public void setLeaseModelMetadata(LeaseModelMetadata leaseModelMetadata) {
-        this.leaseModelMetadata = leaseModelMetadata;
-    }
-
-    public LeaseLiabilityScheduleItem leaseModelMetadata(LeaseModelMetadata leaseModelMetadata) {
-        this.setLeaseModelMetadata(leaseModelMetadata);
-        return this;
-    }
-
     public Set<UniversallyUniqueMapping> getUniversallyUniqueMappings() {
         return this.universallyUniqueMappings;
     }
@@ -354,6 +321,32 @@ public class LeaseLiabilityScheduleItem implements Serializable {
 
     public LeaseLiabilityScheduleItem leaseAmortizationSchedule(LeaseAmortizationSchedule leaseAmortizationSchedule) {
         this.setLeaseAmortizationSchedule(leaseAmortizationSchedule);
+        return this;
+    }
+
+    public IFRS16LeaseContract getLeaseContract() {
+        return this.leaseContract;
+    }
+
+    public void setLeaseContract(IFRS16LeaseContract iFRS16LeaseContract) {
+        this.leaseContract = iFRS16LeaseContract;
+    }
+
+    public LeaseLiabilityScheduleItem leaseContract(IFRS16LeaseContract iFRS16LeaseContract) {
+        this.setLeaseContract(iFRS16LeaseContract);
+        return this;
+    }
+
+    public LeaseLiability getLeaseLiability() {
+        return this.leaseLiability;
+    }
+
+    public void setLeaseLiability(LeaseLiability leaseLiability) {
+        this.leaseLiability = leaseLiability;
+    }
+
+    public LeaseLiabilityScheduleItem leaseLiability(LeaseLiability leaseLiability) {
+        this.setLeaseLiability(leaseLiability);
         return this;
     }
 

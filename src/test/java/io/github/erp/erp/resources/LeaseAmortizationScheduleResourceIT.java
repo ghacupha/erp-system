@@ -19,6 +19,7 @@ package io.github.erp.erp.resources;
  */
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.IFRS16LeaseContract;
 import io.github.erp.domain.LeaseAmortizationSchedule;
 import io.github.erp.domain.LeaseLiability;
 import io.github.erp.domain.LeaseLiabilityScheduleItem;
@@ -26,7 +27,6 @@ import io.github.erp.repository.LeaseAmortizationScheduleRepository;
 import io.github.erp.repository.search.LeaseAmortizationScheduleSearchRepository;
 import io.github.erp.service.dto.LeaseAmortizationScheduleDTO;
 import io.github.erp.service.mapper.LeaseAmortizationScheduleMapper;
-import io.github.erp.web.rest.LeaseAmortizationScheduleResource;
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,7 +55,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link LeaseAmortizationScheduleResource} REST controller.
+ * Integration tests for the LeaseAmortizationScheduleResource REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -113,6 +113,16 @@ class LeaseAmortizationScheduleResourceIT {
             leaseLiability = TestUtil.findAll(em, LeaseLiability.class).get(0);
         }
         leaseAmortizationSchedule.setLeaseLiability(leaseLiability);
+        // Add required entity
+        IFRS16LeaseContract iFRS16LeaseContract;
+        if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
+            iFRS16LeaseContract = IFRS16LeaseContractResourceIT.createEntity(em);
+            em.persist(iFRS16LeaseContract);
+            em.flush();
+        } else {
+            iFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
+        }
+        leaseAmortizationSchedule.setLeaseContract(iFRS16LeaseContract);
         return leaseAmortizationSchedule;
     }
 
@@ -134,6 +144,16 @@ class LeaseAmortizationScheduleResourceIT {
             leaseLiability = TestUtil.findAll(em, LeaseLiability.class).get(0);
         }
         leaseAmortizationSchedule.setLeaseLiability(leaseLiability);
+        // Add required entity
+        IFRS16LeaseContract iFRS16LeaseContract;
+        if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
+            iFRS16LeaseContract = IFRS16LeaseContractResourceIT.createUpdatedEntity(em);
+            em.persist(iFRS16LeaseContract);
+            em.flush();
+        } else {
+            iFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
+        }
+        leaseAmortizationSchedule.setLeaseContract(iFRS16LeaseContract);
         return leaseAmortizationSchedule;
     }
 
@@ -366,6 +386,21 @@ class LeaseAmortizationScheduleResourceIT {
 
         // Get all the leaseAmortizationScheduleList where leaseLiabilityScheduleItem equals to (leaseLiabilityScheduleItemId + 1)
         defaultLeaseAmortizationScheduleShouldNotBeFound("leaseLiabilityScheduleItemId.equals=" + (leaseLiabilityScheduleItemId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseAmortizationSchedulesByLeaseContractIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        IFRS16LeaseContract leaseContract = leaseAmortizationSchedule.getLeaseContract();
+        leaseAmortizationScheduleRepository.saveAndFlush(leaseAmortizationSchedule);
+        Long leaseContractId = leaseContract.getId();
+
+        // Get all the leaseAmortizationScheduleList where leaseContract equals to leaseContractId
+        defaultLeaseAmortizationScheduleShouldBeFound("leaseContractId.equals=" + leaseContractId);
+
+        // Get all the leaseAmortizationScheduleList where leaseContract equals to (leaseContractId + 1)
+        defaultLeaseAmortizationScheduleShouldNotBeFound("leaseContractId.equals=" + (leaseContractId + 1));
     }
 
     /**

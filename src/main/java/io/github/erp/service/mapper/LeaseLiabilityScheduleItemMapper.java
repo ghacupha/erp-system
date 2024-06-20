@@ -29,20 +29,20 @@ import org.mapstruct.*;
     componentModel = "spring",
     uses = {
         PlaceholderMapper.class,
-        LeaseContractMapper.class,
-        LeaseModelMetadataMapper.class,
         UniversallyUniqueMappingMapper.class,
         LeasePeriodMapper.class,
         LeaseAmortizationScheduleMapper.class,
+        IFRS16LeaseContractMapper.class,
+        LeaseLiabilityMapper.class,
     }
 )
 public interface LeaseLiabilityScheduleItemMapper extends EntityMapper<LeaseLiabilityScheduleItemDTO, LeaseLiabilityScheduleItem> {
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
-    @Mapping(target = "leaseContract", source = "leaseContract", qualifiedByName = "bookingId")
-    @Mapping(target = "leaseModelMetadata", source = "leaseModelMetadata", qualifiedByName = "modelTitle")
     @Mapping(target = "universallyUniqueMappings", source = "universallyUniqueMappings", qualifiedByName = "universalKeySet")
     @Mapping(target = "leasePeriod", source = "leasePeriod", qualifiedByName = "periodCode")
     @Mapping(target = "leaseAmortizationSchedule", source = "leaseAmortizationSchedule", qualifiedByName = "id")
+    @Mapping(target = "leaseContract", source = "leaseContract", qualifiedByName = "bookingId")
+    @Mapping(target = "leaseLiability", source = "leaseLiability", qualifiedByName = "id")
     LeaseLiabilityScheduleItemDTO toDto(LeaseLiabilityScheduleItem s);
 
     @Mapping(target = "removePlaceholder", ignore = true)

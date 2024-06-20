@@ -19,14 +19,13 @@
     },
     {
       "fieldName": "startDate",
-      "fieldType": "ZonedDateTime",
+      "fieldType": "LocalDate",
       "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "endDate",
-      "fieldType": "Float",
-      "fieldValidateRules": ["required", "min"],
-      "fieldValidateRulesMin": 0
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
     }
   ],
   "relationships": [
@@ -43,6 +42,16 @@
       "relationshipName": "leasePayment",
       "otherEntityName": "leasePayment",
       "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "leaseLiability"
+    },
+    {
+      "relationshipName": "leaseContract",
+      "otherEntityName": "iFRS16LeaseContract",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "bookingId",
+      "ownerSide": true,
+      "id": false,
       "otherEntityRelationshipName": "leaseLiability"
     }
   ],

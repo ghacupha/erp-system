@@ -56,7 +56,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the LeaseLiabilityScheduleItemResourceProd REST controller.
+ * Integration tests for the LeaseLiabilityScheduleItemResource REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -153,15 +153,25 @@ class LeaseLiabilityScheduleItemResourceIT {
             .interestAccrued(DEFAULT_INTEREST_ACCRUED)
             .interestPayableClosing(DEFAULT_INTEREST_PAYABLE_CLOSING);
         // Add required entity
-        LeaseContract leaseContract;
-        if (TestUtil.findAll(em, LeaseContract.class).isEmpty()) {
-            leaseContract = LeaseContractResourceIT.createEntity(em);
-            em.persist(leaseContract);
+        IFRS16LeaseContract iFRS16LeaseContract;
+        if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
+            iFRS16LeaseContract = IFRS16LeaseContractResourceIT.createEntity(em);
+            em.persist(iFRS16LeaseContract);
             em.flush();
         } else {
-            leaseContract = TestUtil.findAll(em, LeaseContract.class).get(0);
+            iFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
         }
-        leaseLiabilityScheduleItem.setLeaseContract(leaseContract);
+        leaseLiabilityScheduleItem.setLeaseContract(iFRS16LeaseContract);
+        // Add required entity
+        LeaseLiability leaseLiability;
+        if (TestUtil.findAll(em, LeaseLiability.class).isEmpty()) {
+            leaseLiability = LeaseLiabilityResourceIT.createEntity(em);
+            em.persist(leaseLiability);
+            em.flush();
+        } else {
+            leaseLiability = TestUtil.findAll(em, LeaseLiability.class).get(0);
+        }
+        leaseLiabilityScheduleItem.setLeaseLiability(leaseLiability);
         return leaseLiabilityScheduleItem;
     }
 
@@ -183,15 +193,25 @@ class LeaseLiabilityScheduleItemResourceIT {
             .interestAccrued(UPDATED_INTEREST_ACCRUED)
             .interestPayableClosing(UPDATED_INTEREST_PAYABLE_CLOSING);
         // Add required entity
-        LeaseContract leaseContract;
-        if (TestUtil.findAll(em, LeaseContract.class).isEmpty()) {
-            leaseContract = LeaseContractResourceIT.createUpdatedEntity(em);
-            em.persist(leaseContract);
+        IFRS16LeaseContract iFRS16LeaseContract;
+        if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
+            iFRS16LeaseContract = IFRS16LeaseContractResourceIT.createUpdatedEntity(em);
+            em.persist(iFRS16LeaseContract);
             em.flush();
         } else {
-            leaseContract = TestUtil.findAll(em, LeaseContract.class).get(0);
+            iFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
         }
-        leaseLiabilityScheduleItem.setLeaseContract(leaseContract);
+        leaseLiabilityScheduleItem.setLeaseContract(iFRS16LeaseContract);
+        // Add required entity
+        LeaseLiability leaseLiability;
+        if (TestUtil.findAll(em, LeaseLiability.class).isEmpty()) {
+            leaseLiability = LeaseLiabilityResourceIT.createUpdatedEntity(em);
+            em.persist(leaseLiability);
+            em.flush();
+        } else {
+            leaseLiability = TestUtil.findAll(em, LeaseLiability.class).get(0);
+        }
+        leaseLiabilityScheduleItem.setLeaseLiability(leaseLiability);
         return leaseLiabilityScheduleItem;
     }
 
@@ -1314,58 +1334,6 @@ class LeaseLiabilityScheduleItemResourceIT {
 
     @Test
     @Transactional
-    void getAllLeaseLiabilityScheduleItemsByLeaseContractIsEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-        LeaseContract leaseContract;
-        if (TestUtil.findAll(em, LeaseContract.class).isEmpty()) {
-            leaseContract = LeaseContractResourceIT.createEntity(em);
-            em.persist(leaseContract);
-            em.flush();
-        } else {
-            leaseContract = TestUtil.findAll(em, LeaseContract.class).get(0);
-        }
-        em.persist(leaseContract);
-        em.flush();
-        leaseLiabilityScheduleItem.setLeaseContract(leaseContract);
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-        Long leaseContractId = leaseContract.getId();
-
-        // Get all the leaseLiabilityScheduleItemList where leaseContract equals to leaseContractId
-        defaultLeaseLiabilityScheduleItemShouldBeFound("leaseContractId.equals=" + leaseContractId);
-
-        // Get all the leaseLiabilityScheduleItemList where leaseContract equals to (leaseContractId + 1)
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("leaseContractId.equals=" + (leaseContractId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByLeaseModelMetadataIsEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-        LeaseModelMetadata leaseModelMetadata;
-        if (TestUtil.findAll(em, LeaseModelMetadata.class).isEmpty()) {
-            leaseModelMetadata = LeaseModelMetadataResourceIT.createEntity(em);
-            em.persist(leaseModelMetadata);
-            em.flush();
-        } else {
-            leaseModelMetadata = TestUtil.findAll(em, LeaseModelMetadata.class).get(0);
-        }
-        em.persist(leaseModelMetadata);
-        em.flush();
-        leaseLiabilityScheduleItem.setLeaseModelMetadata(leaseModelMetadata);
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-        Long leaseModelMetadataId = leaseModelMetadata.getId();
-
-        // Get all the leaseLiabilityScheduleItemList where leaseModelMetadata equals to leaseModelMetadataId
-        defaultLeaseLiabilityScheduleItemShouldBeFound("leaseModelMetadataId.equals=" + leaseModelMetadataId);
-
-        // Get all the leaseLiabilityScheduleItemList where leaseModelMetadata equals to (leaseModelMetadataId + 1)
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("leaseModelMetadataId.equals=" + (leaseModelMetadataId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllLeaseLiabilityScheduleItemsByUniversallyUniqueMappingIsEqualToSomething() throws Exception {
         // Initialize the database
         leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
@@ -1440,6 +1408,58 @@ class LeaseLiabilityScheduleItemResourceIT {
 
         // Get all the leaseLiabilityScheduleItemList where leaseAmortizationSchedule equals to (leaseAmortizationScheduleId + 1)
         defaultLeaseLiabilityScheduleItemShouldNotBeFound("leaseAmortizationScheduleId.equals=" + (leaseAmortizationScheduleId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityScheduleItemsByLeaseContractIsEqualToSomething() throws Exception {
+        // Initialize the database
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+        IFRS16LeaseContract leaseContract;
+        if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
+            leaseContract = IFRS16LeaseContractResourceIT.createEntity(em);
+            em.persist(leaseContract);
+            em.flush();
+        } else {
+            leaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
+        }
+        em.persist(leaseContract);
+        em.flush();
+        leaseLiabilityScheduleItem.setLeaseContract(leaseContract);
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+        Long leaseContractId = leaseContract.getId();
+
+        // Get all the leaseLiabilityScheduleItemList where leaseContract equals to leaseContractId
+        defaultLeaseLiabilityScheduleItemShouldBeFound("leaseContractId.equals=" + leaseContractId);
+
+        // Get all the leaseLiabilityScheduleItemList where leaseContract equals to (leaseContractId + 1)
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("leaseContractId.equals=" + (leaseContractId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityScheduleItemsByLeaseLiabilityIsEqualToSomething() throws Exception {
+        // Initialize the database
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+        LeaseLiability leaseLiability;
+        if (TestUtil.findAll(em, LeaseLiability.class).isEmpty()) {
+            leaseLiability = LeaseLiabilityResourceIT.createEntity(em);
+            em.persist(leaseLiability);
+            em.flush();
+        } else {
+            leaseLiability = TestUtil.findAll(em, LeaseLiability.class).get(0);
+        }
+        em.persist(leaseLiability);
+        em.flush();
+        leaseLiabilityScheduleItem.setLeaseLiability(leaseLiability);
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+        Long leaseLiabilityId = leaseLiability.getId();
+
+        // Get all the leaseLiabilityScheduleItemList where leaseLiability equals to leaseLiabilityId
+        defaultLeaseLiabilityScheduleItemShouldBeFound("leaseLiabilityId.equals=" + leaseLiabilityId);
+
+        // Get all the leaseLiabilityScheduleItemList where leaseLiability equals to (leaseLiabilityId + 1)
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("leaseLiabilityId.equals=" + (leaseLiabilityId + 1));
     }
 
     /**
