@@ -1,11 +1,11 @@
-id;lease_id;liability_amount
-1;system Franc;39925
-2;circuit Analyst;14182
-3;wireless Granite;58836
-4;hybrid Executive;20866
-5;web-enabled;40459
-6;world-class haptic Soft;90555
-7;Yemen Latvian;31359
-8;embrace;50491
-9;Fresh Engineer;27569
-10;Oregon Books;44358
+id;lease_id;liability_amount;interest_rate;start_date;end_date;lease_contract_id
+1;system Franc;39925;55990;2024-06-17;2024-06-17;1
+2;Analyst Granite online;52448;86878;2024-06-17;2024-06-17;2
+3;Bedfordshire;8837;13980;2024-06-18;2024-06-18;3
+4;Assurance;90454;34740;2024-06-17;2024-06-17;4
+5;Buckinghamshire primary architectures;15831;68786;2024-06-17;2024-06-17;5
+6;Fantastic;94069;50491;2024-06-17;2024-06-18;6
+7;Wisconsin open-source Oregon;2378;2363;2024-06-17;2024-06-17;7
+8;interfaces Human;82396;81928;2024-06-18;2024-06-17;8
+9;override;59262;66691;2024-06-17;2024-06-17;9
+10;Industrial robust;21901;35073;2024-06-18;2024-06-17;10
