@@ -122,15 +122,6 @@ public class LeaseLiabilityQueryService extends QueryService<LeaseLiability> {
             if (criteria.getLiabilityAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getLiabilityAmount(), LeaseLiability_.liabilityAmount));
             }
-            if (criteria.getInterestRate() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getInterestRate(), LeaseLiability_.interestRate));
-            }
-            if (criteria.getStartDate() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getStartDate(), LeaseLiability_.startDate));
-            }
-            if (criteria.getEndDate() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getEndDate(), LeaseLiability_.endDate));
-            }
             if (criteria.getLeaseAmortizationCalculationId() != null) {
                 specification =
                     specification.and(
@@ -147,15 +138,6 @@ public class LeaseLiabilityQueryService extends QueryService<LeaseLiability> {
                         buildSpecification(
                             criteria.getLeasePaymentId(),
                             root -> root.join(LeaseLiability_.leasePayments, JoinType.LEFT).get(LeasePayment_.id)
-                        )
-                    );
-            }
-            if (criteria.getLeaseContractId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getLeaseContractId(),
-                            root -> root.join(LeaseLiability_.leaseContract, JoinType.LEFT).get(IFRS16LeaseContract_.id)
                         )
                     );
             }

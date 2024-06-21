@@ -27,7 +27,6 @@ import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
-import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 
@@ -50,17 +49,9 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter liabilityAmount;
 
-    private FloatFilter interestRate;
-
-    private LocalDateFilter startDate;
-
-    private LocalDateFilter endDate;
-
     private LongFilter leaseAmortizationCalculationId;
 
     private LongFilter leasePaymentId;
-
-    private LongFilter leaseContractId;
 
     private Boolean distinct;
 
@@ -70,13 +61,9 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.leaseId = other.leaseId == null ? null : other.leaseId.copy();
         this.liabilityAmount = other.liabilityAmount == null ? null : other.liabilityAmount.copy();
-        this.interestRate = other.interestRate == null ? null : other.interestRate.copy();
-        this.startDate = other.startDate == null ? null : other.startDate.copy();
-        this.endDate = other.endDate == null ? null : other.endDate.copy();
         this.leaseAmortizationCalculationId =
             other.leaseAmortizationCalculationId == null ? null : other.leaseAmortizationCalculationId.copy();
         this.leasePaymentId = other.leasePaymentId == null ? null : other.leasePaymentId.copy();
-        this.leaseContractId = other.leaseContractId == null ? null : other.leaseContractId.copy();
         this.distinct = other.distinct;
     }
 
@@ -130,51 +117,6 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
         this.liabilityAmount = liabilityAmount;
     }
 
-    public FloatFilter getInterestRate() {
-        return interestRate;
-    }
-
-    public FloatFilter interestRate() {
-        if (interestRate == null) {
-            interestRate = new FloatFilter();
-        }
-        return interestRate;
-    }
-
-    public void setInterestRate(FloatFilter interestRate) {
-        this.interestRate = interestRate;
-    }
-
-    public LocalDateFilter getStartDate() {
-        return startDate;
-    }
-
-    public LocalDateFilter startDate() {
-        if (startDate == null) {
-            startDate = new LocalDateFilter();
-        }
-        return startDate;
-    }
-
-    public void setStartDate(LocalDateFilter startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDateFilter getEndDate() {
-        return endDate;
-    }
-
-    public LocalDateFilter endDate() {
-        if (endDate == null) {
-            endDate = new LocalDateFilter();
-        }
-        return endDate;
-    }
-
-    public void setEndDate(LocalDateFilter endDate) {
-        this.endDate = endDate;
-    }
-
     public LongFilter getLeaseAmortizationCalculationId() {
         return leaseAmortizationCalculationId;
     }
@@ -205,21 +147,6 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
         this.leasePaymentId = leasePaymentId;
     }
 
-    public LongFilter getLeaseContractId() {
-        return leaseContractId;
-    }
-
-    public LongFilter leaseContractId() {
-        if (leaseContractId == null) {
-            leaseContractId = new LongFilter();
-        }
-        return leaseContractId;
-    }
-
-    public void setLeaseContractId(LongFilter leaseContractId) {
-        this.leaseContractId = leaseContractId;
-    }
-
     public Boolean getDistinct() {
         return distinct;
     }
@@ -241,30 +168,15 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(leaseId, that.leaseId) &&
             Objects.equals(liabilityAmount, that.liabilityAmount) &&
-            Objects.equals(interestRate, that.interestRate) &&
-            Objects.equals(startDate, that.startDate) &&
-            Objects.equals(endDate, that.endDate) &&
             Objects.equals(leaseAmortizationCalculationId, that.leaseAmortizationCalculationId) &&
             Objects.equals(leasePaymentId, that.leasePaymentId) &&
-            Objects.equals(leaseContractId, that.leaseContractId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(
-            id,
-            leaseId,
-            liabilityAmount,
-            interestRate,
-            startDate,
-            endDate,
-            leaseAmortizationCalculationId,
-            leasePaymentId,
-            leaseContractId,
-            distinct
-        );
+        return Objects.hash(id, leaseId, liabilityAmount, leaseAmortizationCalculationId, leasePaymentId, distinct);
     }
 
     // prettier-ignore
@@ -274,12 +186,8 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (leaseId != null ? "leaseId=" + leaseId + ", " : "") +
             (liabilityAmount != null ? "liabilityAmount=" + liabilityAmount + ", " : "") +
-            (interestRate != null ? "interestRate=" + interestRate + ", " : "") +
-            (startDate != null ? "startDate=" + startDate + ", " : "") +
-            (endDate != null ? "endDate=" + endDate + ", " : "") +
             (leaseAmortizationCalculationId != null ? "leaseAmortizationCalculationId=" + leaseAmortizationCalculationId + ", " : "") +
             (leasePaymentId != null ? "leasePaymentId=" + leasePaymentId + ", " : "") +
-            (leaseContractId != null ? "leaseContractId=" + leaseContractId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

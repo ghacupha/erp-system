@@ -20,7 +20,6 @@ package io.github.erp.service.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Objects;
 import javax.validation.constraints.*;
 
@@ -38,19 +37,7 @@ public class LeaseLiabilityDTO implements Serializable {
     @DecimalMin(value = "0")
     private BigDecimal liabilityAmount;
 
-    @NotNull
-    @DecimalMin(value = "0")
-    private Float interestRate;
-
-    @NotNull
-    private LocalDate startDate;
-
-    @NotNull
-    private LocalDate endDate;
-
     private LeaseAmortizationCalculationDTO leaseAmortizationCalculation;
-
-    private IFRS16LeaseContractDTO leaseContract;
 
     public Long getId() {
         return id;
@@ -76,44 +63,12 @@ public class LeaseLiabilityDTO implements Serializable {
         this.liabilityAmount = liabilityAmount;
     }
 
-    public Float getInterestRate() {
-        return interestRate;
-    }
-
-    public void setInterestRate(Float interestRate) {
-        this.interestRate = interestRate;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
     public LeaseAmortizationCalculationDTO getLeaseAmortizationCalculation() {
         return leaseAmortizationCalculation;
     }
 
     public void setLeaseAmortizationCalculation(LeaseAmortizationCalculationDTO leaseAmortizationCalculation) {
         this.leaseAmortizationCalculation = leaseAmortizationCalculation;
-    }
-
-    public IFRS16LeaseContractDTO getLeaseContract() {
-        return leaseContract;
-    }
-
-    public void setLeaseContract(IFRS16LeaseContractDTO leaseContract) {
-        this.leaseContract = leaseContract;
     }
 
     @Override
@@ -144,11 +99,7 @@ public class LeaseLiabilityDTO implements Serializable {
             "id=" + getId() +
             ", leaseId='" + getLeaseId() + "'" +
             ", liabilityAmount=" + getLiabilityAmount() +
-            ", interestRate=" + getInterestRate() +
-            ", startDate='" + getStartDate() + "'" +
-            ", endDate='" + getEndDate() + "'" +
             ", leaseAmortizationCalculation=" + getLeaseAmortizationCalculation() +
-            ", leaseContract=" + getLeaseContract() +
             "}";
     }
 }

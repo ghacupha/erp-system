@@ -10,22 +10,6 @@
       "fieldType": "BigDecimal",
       "fieldValidateRules": ["required", "min"],
       "fieldValidateRulesMin": 0
-    },
-    {
-      "fieldName": "interestRate",
-      "fieldType": "Float",
-      "fieldValidateRules": ["required", "min"],
-      "fieldValidateRulesMin": 0
-    },
-    {
-      "fieldName": "startDate",
-      "fieldType": "LocalDate",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "endDate",
-      "fieldType": "LocalDate",
-      "fieldValidateRules": ["required"]
     }
   ],
   "relationships": [
@@ -42,16 +26,6 @@
       "relationshipName": "leasePayment",
       "otherEntityName": "leasePayment",
       "relationshipType": "one-to-many",
-      "otherEntityRelationshipName": "leaseLiability"
-    },
-    {
-      "relationshipName": "leaseContract",
-      "otherEntityName": "iFRS16LeaseContract",
-      "relationshipType": "one-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "bookingId",
-      "ownerSide": true,
-      "id": false,
       "otherEntityRelationshipName": "leaseLiability"
     }
   ],
