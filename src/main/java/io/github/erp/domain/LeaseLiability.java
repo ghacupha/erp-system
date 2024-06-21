@@ -21,6 +21,7 @@ package io.github.erp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -54,6 +55,18 @@ public class LeaseLiability implements Serializable {
     @Column(name = "liability_amount", precision = 21, scale = 2, nullable = false)
     private BigDecimal liabilityAmount;
 
+    @NotNull
+    @Column(name = "interest_rate", nullable = false)
+    private Float interestRate;
+
+    @NotNull
+    @Column(name = "start_date", nullable = false)
+    private LocalDate startDate;
+
+    @NotNull
+    @Column(name = "end_date", nullable = false)
+    private LocalDate endDate;
+
     @JsonIgnoreProperties(value = { "leaseLiability", "leaseContract" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
@@ -63,6 +76,22 @@ public class LeaseLiability implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "leaseLiability" }, allowSetters = true)
     private Set<LeasePayment> leasePayments = new HashSet<>();
+
+    @JsonIgnoreProperties(
+        value = {
+            "superintendentServiceOutlet",
+            "mainDealer",
+            "firstReportingPeriod",
+            "lastReportingPeriod",
+            "leaseContractDocument",
+            "leaseContractCalculations",
+        },
+        allowSetters = true
+    )
+    @OneToOne(optional = false)
+    @NotNull
+    @JoinColumn(unique = true)
+    private IFRS16LeaseContract leaseContract;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -103,6 +132,45 @@ public class LeaseLiability implements Serializable {
 
     public void setLiabilityAmount(BigDecimal liabilityAmount) {
         this.liabilityAmount = liabilityAmount;
+    }
+
+    public Float getInterestRate() {
+        return this.interestRate;
+    }
+
+    public LeaseLiability interestRate(Float interestRate) {
+        this.setInterestRate(interestRate);
+        return this;
+    }
+
+    public void setInterestRate(Float interestRate) {
+        this.interestRate = interestRate;
+    }
+
+    public LocalDate getStartDate() {
+        return this.startDate;
+    }
+
+    public LeaseLiability startDate(LocalDate startDate) {
+        this.setStartDate(startDate);
+        return this;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return this.endDate;
+    }
+
+    public LeaseLiability endDate(LocalDate endDate) {
+        this.setEndDate(endDate);
+        return this;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
     public LeaseAmortizationCalculation getLeaseAmortizationCalculation() {
@@ -149,6 +217,19 @@ public class LeaseLiability implements Serializable {
         return this;
     }
 
+    public IFRS16LeaseContract getLeaseContract() {
+        return this.leaseContract;
+    }
+
+    public void setLeaseContract(IFRS16LeaseContract iFRS16LeaseContract) {
+        this.leaseContract = iFRS16LeaseContract;
+    }
+
+    public LeaseLiability leaseContract(IFRS16LeaseContract iFRS16LeaseContract) {
+        this.setLeaseContract(iFRS16LeaseContract);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -175,6 +256,9 @@ public class LeaseLiability implements Serializable {
             "id=" + getId() +
             ", leaseId='" + getLeaseId() + "'" +
             ", liabilityAmount=" + getLiabilityAmount() +
+            ", interestRate=" + getInterestRate() +
+            ", startDate='" + getStartDate() + "'" +
+            ", endDate='" + getEndDate() + "'" +
             "}";
     }
 }

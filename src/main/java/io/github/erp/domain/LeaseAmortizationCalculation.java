@@ -55,7 +55,7 @@ public class LeaseAmortizationCalculation implements Serializable {
     @Column(name = "number_of_periods")
     private Integer numberOfPeriods;
 
-    @JsonIgnoreProperties(value = { "leaseAmortizationCalculation", "leasePayments" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "leaseAmortizationCalculation", "leasePayments", "leaseContract" }, allowSetters = true)
     @OneToOne(mappedBy = "leaseAmortizationCalculation")
     private LeaseLiability leaseLiability;
 
