@@ -26,7 +26,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.IFRS16LeaseContract;
 import io.github.erp.domain.LeaseAmortizationCalculation;
 import io.github.erp.domain.LeaseLiability;
 import io.github.erp.domain.LeasePayment;
@@ -36,8 +35,6 @@ import io.github.erp.service.criteria.LeaseLiabilityCriteria;
 import io.github.erp.service.dto.LeaseLiabilityDTO;
 import io.github.erp.service.mapper.LeaseLiabilityMapper;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -72,18 +69,6 @@ class LeaseLiabilityResourceIT {
     private static final BigDecimal DEFAULT_LIABILITY_AMOUNT = new BigDecimal(0);
     private static final BigDecimal UPDATED_LIABILITY_AMOUNT = new BigDecimal(1);
     private static final BigDecimal SMALLER_LIABILITY_AMOUNT = new BigDecimal(0 - 1);
-
-    private static final Float DEFAULT_INTEREST_RATE = 0F;
-    private static final Float UPDATED_INTEREST_RATE = 1F;
-    private static final Float SMALLER_INTEREST_RATE = 0F - 1F;
-
-    private static final LocalDate DEFAULT_START_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_START_DATE = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_START_DATE = LocalDate.ofEpochDay(-1L);
-
-    private static final LocalDate DEFAULT_END_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_END_DATE = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_END_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final String ENTITY_API_URL = "/api/lease-liabilities";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -121,22 +106,7 @@ class LeaseLiabilityResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static LeaseLiability createEntity(EntityManager em) {
-        LeaseLiability leaseLiability = new LeaseLiability()
-            .leaseId(DEFAULT_LEASE_ID)
-            .liabilityAmount(DEFAULT_LIABILITY_AMOUNT)
-            .interestRate(DEFAULT_INTEREST_RATE)
-            .startDate(DEFAULT_START_DATE)
-            .endDate(DEFAULT_END_DATE);
-        // Add required entity
-        IFRS16LeaseContract iFRS16LeaseContract;
-        if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
-            iFRS16LeaseContract = IFRS16LeaseContractResourceIT.createEntity(em);
-            em.persist(iFRS16LeaseContract);
-            em.flush();
-        } else {
-            iFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
-        }
-        leaseLiability.setLeaseContract(iFRS16LeaseContract);
+        LeaseLiability leaseLiability = new LeaseLiability().leaseId(DEFAULT_LEASE_ID).liabilityAmount(DEFAULT_LIABILITY_AMOUNT);
         return leaseLiability;
     }
 
@@ -147,22 +117,7 @@ class LeaseLiabilityResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static LeaseLiability createUpdatedEntity(EntityManager em) {
-        LeaseLiability leaseLiability = new LeaseLiability()
-            .leaseId(UPDATED_LEASE_ID)
-            .liabilityAmount(UPDATED_LIABILITY_AMOUNT)
-            .interestRate(UPDATED_INTEREST_RATE)
-            .startDate(UPDATED_START_DATE)
-            .endDate(UPDATED_END_DATE);
-        // Add required entity
-        IFRS16LeaseContract iFRS16LeaseContract;
-        if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
-            iFRS16LeaseContract = IFRS16LeaseContractResourceIT.createUpdatedEntity(em);
-            em.persist(iFRS16LeaseContract);
-            em.flush();
-        } else {
-            iFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
-        }
-        leaseLiability.setLeaseContract(iFRS16LeaseContract);
+        LeaseLiability leaseLiability = new LeaseLiability().leaseId(UPDATED_LEASE_ID).liabilityAmount(UPDATED_LIABILITY_AMOUNT);
         return leaseLiability;
     }
 
@@ -189,9 +144,6 @@ class LeaseLiabilityResourceIT {
         LeaseLiability testLeaseLiability = leaseLiabilityList.get(leaseLiabilityList.size() - 1);
         assertThat(testLeaseLiability.getLeaseId()).isEqualTo(DEFAULT_LEASE_ID);
         assertThat(testLeaseLiability.getLiabilityAmount()).isEqualByComparingTo(DEFAULT_LIABILITY_AMOUNT);
-        assertThat(testLeaseLiability.getInterestRate()).isEqualTo(DEFAULT_INTEREST_RATE);
-        assertThat(testLeaseLiability.getStartDate()).isEqualTo(DEFAULT_START_DATE);
-        assertThat(testLeaseLiability.getEndDate()).isEqualTo(DEFAULT_END_DATE);
 
         // Validate the LeaseLiability in Elasticsearch
         verify(mockLeaseLiabilitySearchRepository, times(1)).save(testLeaseLiability);
@@ -263,66 +215,6 @@ class LeaseLiabilityResourceIT {
 
     @Test
     @Transactional
-    void checkInterestRateIsRequired() throws Exception {
-        int databaseSizeBeforeTest = leaseLiabilityRepository.findAll().size();
-        // set the field null
-        leaseLiability.setInterestRate(null);
-
-        // Create the LeaseLiability, which fails.
-        LeaseLiabilityDTO leaseLiabilityDTO = leaseLiabilityMapper.toDto(leaseLiability);
-
-        restLeaseLiabilityMockMvc
-            .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(leaseLiabilityDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<LeaseLiability> leaseLiabilityList = leaseLiabilityRepository.findAll();
-        assertThat(leaseLiabilityList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    void checkStartDateIsRequired() throws Exception {
-        int databaseSizeBeforeTest = leaseLiabilityRepository.findAll().size();
-        // set the field null
-        leaseLiability.setStartDate(null);
-
-        // Create the LeaseLiability, which fails.
-        LeaseLiabilityDTO leaseLiabilityDTO = leaseLiabilityMapper.toDto(leaseLiability);
-
-        restLeaseLiabilityMockMvc
-            .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(leaseLiabilityDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<LeaseLiability> leaseLiabilityList = leaseLiabilityRepository.findAll();
-        assertThat(leaseLiabilityList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    void checkEndDateIsRequired() throws Exception {
-        int databaseSizeBeforeTest = leaseLiabilityRepository.findAll().size();
-        // set the field null
-        leaseLiability.setEndDate(null);
-
-        // Create the LeaseLiability, which fails.
-        LeaseLiabilityDTO leaseLiabilityDTO = leaseLiabilityMapper.toDto(leaseLiability);
-
-        restLeaseLiabilityMockMvc
-            .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(leaseLiabilityDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<LeaseLiability> leaseLiabilityList = leaseLiabilityRepository.findAll();
-        assertThat(leaseLiabilityList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllLeaseLiabilities() throws Exception {
         // Initialize the database
         leaseLiabilityRepository.saveAndFlush(leaseLiability);
@@ -334,10 +226,7 @@ class LeaseLiabilityResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(leaseLiability.getId().intValue())))
             .andExpect(jsonPath("$.[*].leaseId").value(hasItem(DEFAULT_LEASE_ID)))
-            .andExpect(jsonPath("$.[*].liabilityAmount").value(hasItem(sameNumber(DEFAULT_LIABILITY_AMOUNT))))
-            .andExpect(jsonPath("$.[*].interestRate").value(hasItem(DEFAULT_INTEREST_RATE.doubleValue())))
-            .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].liabilityAmount").value(hasItem(sameNumber(DEFAULT_LIABILITY_AMOUNT))));
     }
 
     @Test
@@ -353,10 +242,7 @@ class LeaseLiabilityResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(leaseLiability.getId().intValue()))
             .andExpect(jsonPath("$.leaseId").value(DEFAULT_LEASE_ID))
-            .andExpect(jsonPath("$.liabilityAmount").value(sameNumber(DEFAULT_LIABILITY_AMOUNT)))
-            .andExpect(jsonPath("$.interestRate").value(DEFAULT_INTEREST_RATE.doubleValue()))
-            .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
-            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()));
+            .andExpect(jsonPath("$.liabilityAmount").value(sameNumber(DEFAULT_LIABILITY_AMOUNT)));
     }
 
     @Test
@@ -561,318 +447,6 @@ class LeaseLiabilityResourceIT {
 
     @Test
     @Transactional
-    void getAllLeaseLiabilitiesByInterestRateIsEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where interestRate equals to DEFAULT_INTEREST_RATE
-        defaultLeaseLiabilityShouldBeFound("interestRate.equals=" + DEFAULT_INTEREST_RATE);
-
-        // Get all the leaseLiabilityList where interestRate equals to UPDATED_INTEREST_RATE
-        defaultLeaseLiabilityShouldNotBeFound("interestRate.equals=" + UPDATED_INTEREST_RATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByInterestRateIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where interestRate not equals to DEFAULT_INTEREST_RATE
-        defaultLeaseLiabilityShouldNotBeFound("interestRate.notEquals=" + DEFAULT_INTEREST_RATE);
-
-        // Get all the leaseLiabilityList where interestRate not equals to UPDATED_INTEREST_RATE
-        defaultLeaseLiabilityShouldBeFound("interestRate.notEquals=" + UPDATED_INTEREST_RATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByInterestRateIsInShouldWork() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where interestRate in DEFAULT_INTEREST_RATE or UPDATED_INTEREST_RATE
-        defaultLeaseLiabilityShouldBeFound("interestRate.in=" + DEFAULT_INTEREST_RATE + "," + UPDATED_INTEREST_RATE);
-
-        // Get all the leaseLiabilityList where interestRate equals to UPDATED_INTEREST_RATE
-        defaultLeaseLiabilityShouldNotBeFound("interestRate.in=" + UPDATED_INTEREST_RATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByInterestRateIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where interestRate is not null
-        defaultLeaseLiabilityShouldBeFound("interestRate.specified=true");
-
-        // Get all the leaseLiabilityList where interestRate is null
-        defaultLeaseLiabilityShouldNotBeFound("interestRate.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByInterestRateIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where interestRate is greater than or equal to DEFAULT_INTEREST_RATE
-        defaultLeaseLiabilityShouldBeFound("interestRate.greaterThanOrEqual=" + DEFAULT_INTEREST_RATE);
-
-        // Get all the leaseLiabilityList where interestRate is greater than or equal to UPDATED_INTEREST_RATE
-        defaultLeaseLiabilityShouldNotBeFound("interestRate.greaterThanOrEqual=" + UPDATED_INTEREST_RATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByInterestRateIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where interestRate is less than or equal to DEFAULT_INTEREST_RATE
-        defaultLeaseLiabilityShouldBeFound("interestRate.lessThanOrEqual=" + DEFAULT_INTEREST_RATE);
-
-        // Get all the leaseLiabilityList where interestRate is less than or equal to SMALLER_INTEREST_RATE
-        defaultLeaseLiabilityShouldNotBeFound("interestRate.lessThanOrEqual=" + SMALLER_INTEREST_RATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByInterestRateIsLessThanSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where interestRate is less than DEFAULT_INTEREST_RATE
-        defaultLeaseLiabilityShouldNotBeFound("interestRate.lessThan=" + DEFAULT_INTEREST_RATE);
-
-        // Get all the leaseLiabilityList where interestRate is less than UPDATED_INTEREST_RATE
-        defaultLeaseLiabilityShouldBeFound("interestRate.lessThan=" + UPDATED_INTEREST_RATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByInterestRateIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where interestRate is greater than DEFAULT_INTEREST_RATE
-        defaultLeaseLiabilityShouldNotBeFound("interestRate.greaterThan=" + DEFAULT_INTEREST_RATE);
-
-        // Get all the leaseLiabilityList where interestRate is greater than SMALLER_INTEREST_RATE
-        defaultLeaseLiabilityShouldBeFound("interestRate.greaterThan=" + SMALLER_INTEREST_RATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByStartDateIsEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where startDate equals to DEFAULT_START_DATE
-        defaultLeaseLiabilityShouldBeFound("startDate.equals=" + DEFAULT_START_DATE);
-
-        // Get all the leaseLiabilityList where startDate equals to UPDATED_START_DATE
-        defaultLeaseLiabilityShouldNotBeFound("startDate.equals=" + UPDATED_START_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByStartDateIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where startDate not equals to DEFAULT_START_DATE
-        defaultLeaseLiabilityShouldNotBeFound("startDate.notEquals=" + DEFAULT_START_DATE);
-
-        // Get all the leaseLiabilityList where startDate not equals to UPDATED_START_DATE
-        defaultLeaseLiabilityShouldBeFound("startDate.notEquals=" + UPDATED_START_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByStartDateIsInShouldWork() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where startDate in DEFAULT_START_DATE or UPDATED_START_DATE
-        defaultLeaseLiabilityShouldBeFound("startDate.in=" + DEFAULT_START_DATE + "," + UPDATED_START_DATE);
-
-        // Get all the leaseLiabilityList where startDate equals to UPDATED_START_DATE
-        defaultLeaseLiabilityShouldNotBeFound("startDate.in=" + UPDATED_START_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByStartDateIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where startDate is not null
-        defaultLeaseLiabilityShouldBeFound("startDate.specified=true");
-
-        // Get all the leaseLiabilityList where startDate is null
-        defaultLeaseLiabilityShouldNotBeFound("startDate.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByStartDateIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where startDate is greater than or equal to DEFAULT_START_DATE
-        defaultLeaseLiabilityShouldBeFound("startDate.greaterThanOrEqual=" + DEFAULT_START_DATE);
-
-        // Get all the leaseLiabilityList where startDate is greater than or equal to UPDATED_START_DATE
-        defaultLeaseLiabilityShouldNotBeFound("startDate.greaterThanOrEqual=" + UPDATED_START_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByStartDateIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where startDate is less than or equal to DEFAULT_START_DATE
-        defaultLeaseLiabilityShouldBeFound("startDate.lessThanOrEqual=" + DEFAULT_START_DATE);
-
-        // Get all the leaseLiabilityList where startDate is less than or equal to SMALLER_START_DATE
-        defaultLeaseLiabilityShouldNotBeFound("startDate.lessThanOrEqual=" + SMALLER_START_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByStartDateIsLessThanSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where startDate is less than DEFAULT_START_DATE
-        defaultLeaseLiabilityShouldNotBeFound("startDate.lessThan=" + DEFAULT_START_DATE);
-
-        // Get all the leaseLiabilityList where startDate is less than UPDATED_START_DATE
-        defaultLeaseLiabilityShouldBeFound("startDate.lessThan=" + UPDATED_START_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByStartDateIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where startDate is greater than DEFAULT_START_DATE
-        defaultLeaseLiabilityShouldNotBeFound("startDate.greaterThan=" + DEFAULT_START_DATE);
-
-        // Get all the leaseLiabilityList where startDate is greater than SMALLER_START_DATE
-        defaultLeaseLiabilityShouldBeFound("startDate.greaterThan=" + SMALLER_START_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByEndDateIsEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where endDate equals to DEFAULT_END_DATE
-        defaultLeaseLiabilityShouldBeFound("endDate.equals=" + DEFAULT_END_DATE);
-
-        // Get all the leaseLiabilityList where endDate equals to UPDATED_END_DATE
-        defaultLeaseLiabilityShouldNotBeFound("endDate.equals=" + UPDATED_END_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByEndDateIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where endDate not equals to DEFAULT_END_DATE
-        defaultLeaseLiabilityShouldNotBeFound("endDate.notEquals=" + DEFAULT_END_DATE);
-
-        // Get all the leaseLiabilityList where endDate not equals to UPDATED_END_DATE
-        defaultLeaseLiabilityShouldBeFound("endDate.notEquals=" + UPDATED_END_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByEndDateIsInShouldWork() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where endDate in DEFAULT_END_DATE or UPDATED_END_DATE
-        defaultLeaseLiabilityShouldBeFound("endDate.in=" + DEFAULT_END_DATE + "," + UPDATED_END_DATE);
-
-        // Get all the leaseLiabilityList where endDate equals to UPDATED_END_DATE
-        defaultLeaseLiabilityShouldNotBeFound("endDate.in=" + UPDATED_END_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByEndDateIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where endDate is not null
-        defaultLeaseLiabilityShouldBeFound("endDate.specified=true");
-
-        // Get all the leaseLiabilityList where endDate is null
-        defaultLeaseLiabilityShouldNotBeFound("endDate.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByEndDateIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where endDate is greater than or equal to DEFAULT_END_DATE
-        defaultLeaseLiabilityShouldBeFound("endDate.greaterThanOrEqual=" + DEFAULT_END_DATE);
-
-        // Get all the leaseLiabilityList where endDate is greater than or equal to UPDATED_END_DATE
-        defaultLeaseLiabilityShouldNotBeFound("endDate.greaterThanOrEqual=" + UPDATED_END_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByEndDateIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where endDate is less than or equal to DEFAULT_END_DATE
-        defaultLeaseLiabilityShouldBeFound("endDate.lessThanOrEqual=" + DEFAULT_END_DATE);
-
-        // Get all the leaseLiabilityList where endDate is less than or equal to SMALLER_END_DATE
-        defaultLeaseLiabilityShouldNotBeFound("endDate.lessThanOrEqual=" + SMALLER_END_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByEndDateIsLessThanSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where endDate is less than DEFAULT_END_DATE
-        defaultLeaseLiabilityShouldNotBeFound("endDate.lessThan=" + DEFAULT_END_DATE);
-
-        // Get all the leaseLiabilityList where endDate is less than UPDATED_END_DATE
-        defaultLeaseLiabilityShouldBeFound("endDate.lessThan=" + UPDATED_END_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByEndDateIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-
-        // Get all the leaseLiabilityList where endDate is greater than DEFAULT_END_DATE
-        defaultLeaseLiabilityShouldNotBeFound("endDate.greaterThan=" + DEFAULT_END_DATE);
-
-        // Get all the leaseLiabilityList where endDate is greater than SMALLER_END_DATE
-        defaultLeaseLiabilityShouldBeFound("endDate.greaterThan=" + SMALLER_END_DATE);
-    }
-
-    @Test
-    @Transactional
     void getAllLeaseLiabilitiesByLeaseAmortizationCalculationIsEqualToSomething() throws Exception {
         // Initialize the database
         leaseLiabilityRepository.saveAndFlush(leaseLiability);
@@ -923,21 +497,6 @@ class LeaseLiabilityResourceIT {
         defaultLeaseLiabilityShouldNotBeFound("leasePaymentId.equals=" + (leasePaymentId + 1));
     }
 
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByLeaseContractIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        IFRS16LeaseContract leaseContract = leaseLiability.getLeaseContract();
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-        Long leaseContractId = leaseContract.getId();
-
-        // Get all the leaseLiabilityList where leaseContract equals to leaseContractId
-        defaultLeaseLiabilityShouldBeFound("leaseContractId.equals=" + leaseContractId);
-
-        // Get all the leaseLiabilityList where leaseContract equals to (leaseContractId + 1)
-        defaultLeaseLiabilityShouldNotBeFound("leaseContractId.equals=" + (leaseContractId + 1));
-    }
-
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -948,10 +507,7 @@ class LeaseLiabilityResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(leaseLiability.getId().intValue())))
             .andExpect(jsonPath("$.[*].leaseId").value(hasItem(DEFAULT_LEASE_ID)))
-            .andExpect(jsonPath("$.[*].liabilityAmount").value(hasItem(sameNumber(DEFAULT_LIABILITY_AMOUNT))))
-            .andExpect(jsonPath("$.[*].interestRate").value(hasItem(DEFAULT_INTEREST_RATE.doubleValue())))
-            .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].liabilityAmount").value(hasItem(sameNumber(DEFAULT_LIABILITY_AMOUNT))));
 
         // Check, that the count call also returns 1
         restLeaseLiabilityMockMvc
@@ -999,12 +555,7 @@ class LeaseLiabilityResourceIT {
         LeaseLiability updatedLeaseLiability = leaseLiabilityRepository.findById(leaseLiability.getId()).get();
         // Disconnect from session so that the updates on updatedLeaseLiability are not directly saved in db
         em.detach(updatedLeaseLiability);
-        updatedLeaseLiability
-            .leaseId(UPDATED_LEASE_ID)
-            .liabilityAmount(UPDATED_LIABILITY_AMOUNT)
-            .interestRate(UPDATED_INTEREST_RATE)
-            .startDate(UPDATED_START_DATE)
-            .endDate(UPDATED_END_DATE);
+        updatedLeaseLiability.leaseId(UPDATED_LEASE_ID).liabilityAmount(UPDATED_LIABILITY_AMOUNT);
         LeaseLiabilityDTO leaseLiabilityDTO = leaseLiabilityMapper.toDto(updatedLeaseLiability);
 
         restLeaseLiabilityMockMvc
@@ -1021,9 +572,6 @@ class LeaseLiabilityResourceIT {
         LeaseLiability testLeaseLiability = leaseLiabilityList.get(leaseLiabilityList.size() - 1);
         assertThat(testLeaseLiability.getLeaseId()).isEqualTo(UPDATED_LEASE_ID);
         assertThat(testLeaseLiability.getLiabilityAmount()).isEqualTo(UPDATED_LIABILITY_AMOUNT);
-        assertThat(testLeaseLiability.getInterestRate()).isEqualTo(UPDATED_INTEREST_RATE);
-        assertThat(testLeaseLiability.getStartDate()).isEqualTo(UPDATED_START_DATE);
-        assertThat(testLeaseLiability.getEndDate()).isEqualTo(UPDATED_END_DATE);
 
         // Validate the LeaseLiability in Elasticsearch
         verify(mockLeaseLiabilitySearchRepository).save(testLeaseLiability);
@@ -1117,7 +665,7 @@ class LeaseLiabilityResourceIT {
         LeaseLiability partialUpdatedLeaseLiability = new LeaseLiability();
         partialUpdatedLeaseLiability.setId(leaseLiability.getId());
 
-        partialUpdatedLeaseLiability.liabilityAmount(UPDATED_LIABILITY_AMOUNT).interestRate(UPDATED_INTEREST_RATE);
+        partialUpdatedLeaseLiability.liabilityAmount(UPDATED_LIABILITY_AMOUNT);
 
         restLeaseLiabilityMockMvc
             .perform(
@@ -1133,9 +681,6 @@ class LeaseLiabilityResourceIT {
         LeaseLiability testLeaseLiability = leaseLiabilityList.get(leaseLiabilityList.size() - 1);
         assertThat(testLeaseLiability.getLeaseId()).isEqualTo(DEFAULT_LEASE_ID);
         assertThat(testLeaseLiability.getLiabilityAmount()).isEqualByComparingTo(UPDATED_LIABILITY_AMOUNT);
-        assertThat(testLeaseLiability.getInterestRate()).isEqualTo(UPDATED_INTEREST_RATE);
-        assertThat(testLeaseLiability.getStartDate()).isEqualTo(DEFAULT_START_DATE);
-        assertThat(testLeaseLiability.getEndDate()).isEqualTo(DEFAULT_END_DATE);
     }
 
     @Test
@@ -1150,12 +695,7 @@ class LeaseLiabilityResourceIT {
         LeaseLiability partialUpdatedLeaseLiability = new LeaseLiability();
         partialUpdatedLeaseLiability.setId(leaseLiability.getId());
 
-        partialUpdatedLeaseLiability
-            .leaseId(UPDATED_LEASE_ID)
-            .liabilityAmount(UPDATED_LIABILITY_AMOUNT)
-            .interestRate(UPDATED_INTEREST_RATE)
-            .startDate(UPDATED_START_DATE)
-            .endDate(UPDATED_END_DATE);
+        partialUpdatedLeaseLiability.leaseId(UPDATED_LEASE_ID).liabilityAmount(UPDATED_LIABILITY_AMOUNT);
 
         restLeaseLiabilityMockMvc
             .perform(
@@ -1171,9 +711,6 @@ class LeaseLiabilityResourceIT {
         LeaseLiability testLeaseLiability = leaseLiabilityList.get(leaseLiabilityList.size() - 1);
         assertThat(testLeaseLiability.getLeaseId()).isEqualTo(UPDATED_LEASE_ID);
         assertThat(testLeaseLiability.getLiabilityAmount()).isEqualByComparingTo(UPDATED_LIABILITY_AMOUNT);
-        assertThat(testLeaseLiability.getInterestRate()).isEqualTo(UPDATED_INTEREST_RATE);
-        assertThat(testLeaseLiability.getStartDate()).isEqualTo(UPDATED_START_DATE);
-        assertThat(testLeaseLiability.getEndDate()).isEqualTo(UPDATED_END_DATE);
     }
 
     @Test
@@ -1291,9 +828,6 @@ class LeaseLiabilityResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(leaseLiability.getId().intValue())))
             .andExpect(jsonPath("$.[*].leaseId").value(hasItem(DEFAULT_LEASE_ID)))
-            .andExpect(jsonPath("$.[*].liabilityAmount").value(hasItem(sameNumber(DEFAULT_LIABILITY_AMOUNT))))
-            .andExpect(jsonPath("$.[*].interestRate").value(hasItem(DEFAULT_INTEREST_RATE.doubleValue())))
-            .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].liabilityAmount").value(hasItem(sameNumber(DEFAULT_LIABILITY_AMOUNT))));
     }
 }

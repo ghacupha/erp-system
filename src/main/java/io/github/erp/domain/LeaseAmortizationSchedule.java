@@ -51,7 +51,7 @@ public class LeaseAmortizationSchedule implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "leaseAmortizationCalculation", "leasePayments", "leaseContract" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "leaseAmortizationCalculation", "leasePayments" }, allowSetters = true)
     private LeaseLiability leaseLiability;
 
     @OneToMany(mappedBy = "leaseAmortizationSchedule")
