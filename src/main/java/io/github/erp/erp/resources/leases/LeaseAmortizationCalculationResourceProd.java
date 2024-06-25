@@ -18,6 +18,8 @@ package io.github.erp.erp.resources.leases;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.internal.repository.InternalLeaseAmortizationCalculationRepository;
+import io.github.erp.internal.service.leases.InternalLeaseAmortizationCalculationService;
 import io.github.erp.repository.LeaseAmortizationCalculationRepository;
 import io.github.erp.service.LeaseAmortizationCalculationQueryService;
 import io.github.erp.service.LeaseAmortizationCalculationService;
@@ -59,15 +61,15 @@ public class LeaseAmortizationCalculationResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final LeaseAmortizationCalculationService leaseAmortizationCalculationService;
+    private final InternalLeaseAmortizationCalculationService leaseAmortizationCalculationService;
 
-    private final LeaseAmortizationCalculationRepository leaseAmortizationCalculationRepository;
+    private final InternalLeaseAmortizationCalculationRepository leaseAmortizationCalculationRepository;
 
     private final LeaseAmortizationCalculationQueryService leaseAmortizationCalculationQueryService;
 
     public LeaseAmortizationCalculationResourceProd(
-        LeaseAmortizationCalculationService leaseAmortizationCalculationService,
-        LeaseAmortizationCalculationRepository leaseAmortizationCalculationRepository,
+        InternalLeaseAmortizationCalculationService leaseAmortizationCalculationService,
+        InternalLeaseAmortizationCalculationRepository leaseAmortizationCalculationRepository,
         LeaseAmortizationCalculationQueryService leaseAmortizationCalculationQueryService
     ) {
         this.leaseAmortizationCalculationService = leaseAmortizationCalculationService;
@@ -211,6 +213,19 @@ public class LeaseAmortizationCalculationResourceProd {
     public ResponseEntity<LeaseAmortizationCalculationDTO> getLeaseAmortizationCalculation(@PathVariable Long id) {
         log.debug("REST request to get LeaseAmortizationCalculation : {}", id);
         Optional<LeaseAmortizationCalculationDTO> leaseAmortizationCalculationDTO = leaseAmortizationCalculationService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(leaseAmortizationCalculationDTO);
+    }
+
+    /**
+     * {@code GET  /lease-amortization-calculations/by-lease-contract-id/:leaseContractId} : get the "id" of IFRS16LeaseContract instance
+     *
+     * @param leaseContractId the id of the leaseAmortizationCalculationDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the leaseAmortizationCalculationDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/lease-amortization-calculations/by-lease-contract-id/{leaseContractId}")
+    public ResponseEntity<LeaseAmortizationCalculationDTO> getLeaseAmortizationCalculationByLeaseContract(@PathVariable Long leaseContractId) {
+        log.debug("REST request to get LeaseAmortizationCalculation with lease-contract-id : {}", leaseContractId);
+        Optional<LeaseAmortizationCalculationDTO> leaseAmortizationCalculationDTO = leaseAmortizationCalculationService.findByLeaseContractId(leaseContractId);
         return ResponseUtil.wrapOrNotFound(leaseAmortizationCalculationDTO);
     }
 

@@ -34,4 +34,6 @@ public interface InternalLeaseAmortizationCalculationRepository
     extends JpaRepository<LeaseAmortizationCalculation, Long>, JpaSpecificationExecutor<LeaseAmortizationCalculation> {
 
     Optional<LeaseAmortizationCalculation> findByLeaseLiabilityId(long leaseLiabilityId);
+
+    Optional<LeaseAmortizationCalculation> findByLeaseContractId(long leaseLContractId);
 }
