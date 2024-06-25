@@ -82,4 +82,13 @@ public interface LeaseAmortizationCalculationService {
      * @return the list of entities.
      */
     Page<LeaseAmortizationCalculationDTO> search(String query, Pageable pageable);
+
+    /**
+     * Finds the lease-amortization-calculation which has a relations with the instance
+     * of IFRS16LeaseContract whose id is equivalent to the id value provided
+     *
+     * @param leaseContractId id of the IFRS16LeaseContract instance
+     * @return LeaseAmortizationCalculation
+     */
+    Optional<LeaseAmortizationCalculationDTO> findByLeaseContractId(Long leaseContractId);
 }

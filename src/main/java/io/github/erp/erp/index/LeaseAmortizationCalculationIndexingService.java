@@ -1,33 +1,12 @@
 package io.github.erp.erp.index;
 
-/*-
- * Erp System - Mark X No 9 (Jehoiada Series) Server ver 1.8.1
- * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import com.google.common.collect.ImmutableList;
 import io.github.erp.erp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.index.engine_v1.IndexingServiceChainSingleton;
 import io.github.erp.internal.IndexProperties;
-import io.github.erp.repository.search.LeaseLiabilityScheduleItemSearchRepository;
-import io.github.erp.repository.search.LeaseLiabilitySearchRepository;
-import io.github.erp.service.LeaseLiabilityScheduleItemService;
-import io.github.erp.service.LeaseLiabilityService;
-import io.github.erp.service.mapper.LeaseLiabilityMapper;
-import io.github.erp.service.mapper.LeaseLiabilityScheduleItemMapper;
+import io.github.erp.repository.search.LeaseAmortizationCalculationSearchRepository;
+import io.github.erp.service.LeaseAmortizationCalculationService;
+import io.github.erp.service.mapper.LeaseAmortizationCalculationMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -40,16 +19,17 @@ import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @Transactional
-public class LeaseLiabilityIndexingService extends AbstractStartupRegisteredIndexService {
+public class LeaseAmortizationCalculationIndexingService extends AbstractStartupRegisteredIndexService {
 
-    private static final String TAG = "LeaseLiabilityScheduleItemIndex";
-    private static final Logger log = LoggerFactory.getLogger(LeaseLiabilityScheduleItemIndexingService.class);
 
-    private final LeaseLiabilityService service;
-    private final LeaseLiabilityMapper mapper;
-    private final LeaseLiabilitySearchRepository searchRepository;
+    private static final String TAG = "LeaseAmortizationCalculationIndex";
+    private static final Logger log = LoggerFactory.getLogger(LeaseAmortizationCalculationIndexingService.class);
 
-    public LeaseLiabilityIndexingService (IndexProperties indexProperties, LeaseLiabilityService service, LeaseLiabilityMapper mapper, LeaseLiabilitySearchRepository searchRepository) {
+    private final LeaseAmortizationCalculationService service;
+    private final LeaseAmortizationCalculationMapper mapper;
+    private final LeaseAmortizationCalculationSearchRepository searchRepository;
+
+    public LeaseAmortizationCalculationIndexingService (IndexProperties indexProperties, LeaseAmortizationCalculationService service, LeaseAmortizationCalculationMapper mapper, LeaseAmortizationCalculationSearchRepository searchRepository) {
         super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;

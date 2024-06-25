@@ -136,4 +136,16 @@ public class LeaseAmortizationCalculationServiceImpl implements LeaseAmortizatio
         log.debug("Request to search for a page of LeaseAmortizationCalculations for query {}", query);
         return leaseAmortizationCalculationSearchRepository.search(query, pageable).map(leaseAmortizationCalculationMapper::toDto);
     }
+
+    /**
+     * Finds the lease-amortization-calculation which has a relations with the instance
+     * of IFRS16LeaseContract whose id is equivalent to the id value provided
+     *
+     * @param leaseContractId id of the IFRS16LeaseContract instance
+     * @return LeaseAmortizationCalculation
+     */
+    @Override
+    public Optional<LeaseAmortizationCalculationDTO> findByLeaseContractId(Long leaseContractId) {
+        return Optional.empty();
+    }
 }

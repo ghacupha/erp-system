@@ -141,4 +141,17 @@ public class InternalLeaseAmortizationCalculationServiceImpl implements Internal
         return leaseAmortizationCalculationRepository.findByLeaseLiabilityId(leaseLiabilityId)
             .map(leaseAmortizationCalculationMapper::toDto);
     }
+
+    /**
+     * Finds the lease-amortization-calculation which has a relations with the instance
+     * of IFRS16LeaseContract whose id is equivalent to the id value provided
+     *
+     * @param leaseContractId id of the IFRS16LeaseContract instance
+     * @return LeaseAmortizationCalculation
+     */
+    @Override
+    public Optional<LeaseAmortizationCalculationDTO> findByLeaseContractId(Long leaseContractId) {
+        return leaseAmortizationCalculationRepository.findByLeaseContractId(leaseContractId)
+            .map(leaseAmortizationCalculationMapper::toDto);
+    }
 }
