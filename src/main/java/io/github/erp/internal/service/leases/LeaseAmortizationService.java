@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import io.github.erp.service.IFRS16LeaseContractService;
 import io.github.erp.service.dto.LeaseAmortizationCalculationDTO;
 import io.github.erp.service.dto.LeaseLiabilityDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
@@ -44,9 +43,10 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
 
     public LeaseAmortizationService(
         InternalLeaseLiabilityService leaseLiabilityService,
-        InternalLeaseAmortizationCalculationService leaseAmortizationCalculationService) {
+        InternalLeaseAmortizationCalculationService leaseAmortizationCalculationService, InternalIFRS16LeaseContractService internalIFRS16LeaseContractService) {
         this.leaseLiabilityService = leaseLiabilityService;
         this.leaseAmortizationCalculationService = leaseAmortizationCalculationService;
+        this.internalIFRS16LeaseContractService = internalIFRS16LeaseContractService;
     }
 
     public List<LeaseLiabilityScheduleItemDTO> generateAmortizationSchedule(Long leaseLiabilityId) {
