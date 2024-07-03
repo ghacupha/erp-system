@@ -27,9 +27,9 @@ import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
+import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
-import tech.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
  * Criteria class for the {@link io.github.erp.domain.LeasePayment} entity. This class is used
@@ -46,9 +46,9 @@ public class LeasePaymentCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private ZonedDateTimeFilter paymentDate;
-
     private BigDecimalFilter paymentAmount;
+
+    private LocalDateFilter paymentDate;
 
     private LongFilter leaseLiabilityId;
 
@@ -58,8 +58,8 @@ public class LeasePaymentCriteria implements Serializable, Criteria {
 
     public LeasePaymentCriteria(LeasePaymentCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.paymentDate = other.paymentDate == null ? null : other.paymentDate.copy();
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
+        this.paymentDate = other.paymentDate == null ? null : other.paymentDate.copy();
         this.leaseLiabilityId = other.leaseLiabilityId == null ? null : other.leaseLiabilityId.copy();
         this.distinct = other.distinct;
     }
@@ -84,21 +84,6 @@ public class LeasePaymentCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
-    public ZonedDateTimeFilter getPaymentDate() {
-        return paymentDate;
-    }
-
-    public ZonedDateTimeFilter paymentDate() {
-        if (paymentDate == null) {
-            paymentDate = new ZonedDateTimeFilter();
-        }
-        return paymentDate;
-    }
-
-    public void setPaymentDate(ZonedDateTimeFilter paymentDate) {
-        this.paymentDate = paymentDate;
-    }
-
     public BigDecimalFilter getPaymentAmount() {
         return paymentAmount;
     }
@@ -112,6 +97,21 @@ public class LeasePaymentCriteria implements Serializable, Criteria {
 
     public void setPaymentAmount(BigDecimalFilter paymentAmount) {
         this.paymentAmount = paymentAmount;
+    }
+
+    public LocalDateFilter getPaymentDate() {
+        return paymentDate;
+    }
+
+    public LocalDateFilter paymentDate() {
+        if (paymentDate == null) {
+            paymentDate = new LocalDateFilter();
+        }
+        return paymentDate;
+    }
+
+    public void setPaymentDate(LocalDateFilter paymentDate) {
+        this.paymentDate = paymentDate;
     }
 
     public LongFilter getLeaseLiabilityId() {
@@ -148,8 +148,8 @@ public class LeasePaymentCriteria implements Serializable, Criteria {
         final LeasePaymentCriteria that = (LeasePaymentCriteria) o;
         return (
             Objects.equals(id, that.id) &&
-            Objects.equals(paymentDate, that.paymentDate) &&
             Objects.equals(paymentAmount, that.paymentAmount) &&
+            Objects.equals(paymentDate, that.paymentDate) &&
             Objects.equals(leaseLiabilityId, that.leaseLiabilityId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -157,7 +157,7 @@ public class LeasePaymentCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, paymentDate, paymentAmount, leaseLiabilityId, distinct);
+        return Objects.hash(id, paymentAmount, paymentDate, leaseLiabilityId, distinct);
     }
 
     // prettier-ignore
@@ -165,8 +165,8 @@ public class LeasePaymentCriteria implements Serializable, Criteria {
     public String toString() {
         return "LeasePaymentCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
-            (paymentDate != null ? "paymentDate=" + paymentDate + ", " : "") +
             (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
+            (paymentDate != null ? "paymentDate=" + paymentDate + ", " : "") +
             (leaseLiabilityId != null ? "leaseLiabilityId=" + leaseLiabilityId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

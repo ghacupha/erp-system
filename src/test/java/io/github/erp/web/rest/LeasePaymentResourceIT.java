@@ -18,7 +18,6 @@ package io.github.erp.web.rest;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import static io.github.erp.web.rest.TestUtil.sameInstant;
 import static io.github.erp.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -35,10 +34,8 @@ import io.github.erp.service.criteria.LeasePaymentCriteria;
 import io.github.erp.service.dto.LeasePaymentDTO;
 import io.github.erp.service.mapper.LeasePaymentMapper;
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -67,13 +64,13 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class LeasePaymentResourceIT {
 
-    private static final ZonedDateTime DEFAULT_PAYMENT_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
-    private static final ZonedDateTime UPDATED_PAYMENT_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
-    private static final ZonedDateTime SMALLER_PAYMENT_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
-
     private static final BigDecimal DEFAULT_PAYMENT_AMOUNT = new BigDecimal(1);
     private static final BigDecimal UPDATED_PAYMENT_AMOUNT = new BigDecimal(2);
     private static final BigDecimal SMALLER_PAYMENT_AMOUNT = new BigDecimal(1 - 1);
+
+    private static final LocalDate DEFAULT_PAYMENT_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_PAYMENT_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_PAYMENT_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final String ENTITY_API_URL = "/api/lease-payments";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -111,7 +108,7 @@ class LeasePaymentResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static LeasePayment createEntity(EntityManager em) {
-        LeasePayment leasePayment = new LeasePayment().paymentDate(DEFAULT_PAYMENT_DATE).paymentAmount(DEFAULT_PAYMENT_AMOUNT);
+        LeasePayment leasePayment = new LeasePayment().paymentAmount(DEFAULT_PAYMENT_AMOUNT).paymentDate(DEFAULT_PAYMENT_DATE);
         // Add required entity
         LeaseLiability leaseLiability;
         if (TestUtil.findAll(em, LeaseLiability.class).isEmpty()) {
@@ -132,7 +129,7 @@ class LeasePaymentResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static LeasePayment createUpdatedEntity(EntityManager em) {
-        LeasePayment leasePayment = new LeasePayment().paymentDate(UPDATED_PAYMENT_DATE).paymentAmount(UPDATED_PAYMENT_AMOUNT);
+        LeasePayment leasePayment = new LeasePayment().paymentAmount(UPDATED_PAYMENT_AMOUNT).paymentDate(UPDATED_PAYMENT_DATE);
         // Add required entity
         LeaseLiability leaseLiability;
         if (TestUtil.findAll(em, LeaseLiability.class).isEmpty()) {
@@ -167,8 +164,8 @@ class LeasePaymentResourceIT {
         List<LeasePayment> leasePaymentList = leasePaymentRepository.findAll();
         assertThat(leasePaymentList).hasSize(databaseSizeBeforeCreate + 1);
         LeasePayment testLeasePayment = leasePaymentList.get(leasePaymentList.size() - 1);
-        assertThat(testLeasePayment.getPaymentDate()).isEqualTo(DEFAULT_PAYMENT_DATE);
         assertThat(testLeasePayment.getPaymentAmount()).isEqualByComparingTo(DEFAULT_PAYMENT_AMOUNT);
+        assertThat(testLeasePayment.getPaymentDate()).isEqualTo(DEFAULT_PAYMENT_DATE);
 
         // Validate the LeasePayment in Elasticsearch
         verify(mockLeasePaymentSearchRepository, times(1)).save(testLeasePayment);
@@ -210,8 +207,8 @@ class LeasePaymentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(leasePayment.getId().intValue())))
-            .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(sameInstant(DEFAULT_PAYMENT_DATE))))
-            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))));
+            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))))
+            .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())));
     }
 
     @Test
@@ -226,8 +223,8 @@ class LeasePaymentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(leasePayment.getId().intValue()))
-            .andExpect(jsonPath("$.paymentDate").value(sameInstant(DEFAULT_PAYMENT_DATE)))
-            .andExpect(jsonPath("$.paymentAmount").value(sameNumber(DEFAULT_PAYMENT_AMOUNT)));
+            .andExpect(jsonPath("$.paymentAmount").value(sameNumber(DEFAULT_PAYMENT_AMOUNT)))
+            .andExpect(jsonPath("$.paymentDate").value(DEFAULT_PAYMENT_DATE.toString()));
     }
 
     @Test
@@ -246,110 +243,6 @@ class LeasePaymentResourceIT {
 
         defaultLeasePaymentShouldBeFound("id.lessThanOrEqual=" + id);
         defaultLeasePaymentShouldNotBeFound("id.lessThan=" + id);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeasePaymentsByPaymentDateIsEqualToSomething() throws Exception {
-        // Initialize the database
-        leasePaymentRepository.saveAndFlush(leasePayment);
-
-        // Get all the leasePaymentList where paymentDate equals to DEFAULT_PAYMENT_DATE
-        defaultLeasePaymentShouldBeFound("paymentDate.equals=" + DEFAULT_PAYMENT_DATE);
-
-        // Get all the leasePaymentList where paymentDate equals to UPDATED_PAYMENT_DATE
-        defaultLeasePaymentShouldNotBeFound("paymentDate.equals=" + UPDATED_PAYMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeasePaymentsByPaymentDateIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        leasePaymentRepository.saveAndFlush(leasePayment);
-
-        // Get all the leasePaymentList where paymentDate not equals to DEFAULT_PAYMENT_DATE
-        defaultLeasePaymentShouldNotBeFound("paymentDate.notEquals=" + DEFAULT_PAYMENT_DATE);
-
-        // Get all the leasePaymentList where paymentDate not equals to UPDATED_PAYMENT_DATE
-        defaultLeasePaymentShouldBeFound("paymentDate.notEquals=" + UPDATED_PAYMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeasePaymentsByPaymentDateIsInShouldWork() throws Exception {
-        // Initialize the database
-        leasePaymentRepository.saveAndFlush(leasePayment);
-
-        // Get all the leasePaymentList where paymentDate in DEFAULT_PAYMENT_DATE or UPDATED_PAYMENT_DATE
-        defaultLeasePaymentShouldBeFound("paymentDate.in=" + DEFAULT_PAYMENT_DATE + "," + UPDATED_PAYMENT_DATE);
-
-        // Get all the leasePaymentList where paymentDate equals to UPDATED_PAYMENT_DATE
-        defaultLeasePaymentShouldNotBeFound("paymentDate.in=" + UPDATED_PAYMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeasePaymentsByPaymentDateIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        leasePaymentRepository.saveAndFlush(leasePayment);
-
-        // Get all the leasePaymentList where paymentDate is not null
-        defaultLeasePaymentShouldBeFound("paymentDate.specified=true");
-
-        // Get all the leasePaymentList where paymentDate is null
-        defaultLeasePaymentShouldNotBeFound("paymentDate.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllLeasePaymentsByPaymentDateIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        leasePaymentRepository.saveAndFlush(leasePayment);
-
-        // Get all the leasePaymentList where paymentDate is greater than or equal to DEFAULT_PAYMENT_DATE
-        defaultLeasePaymentShouldBeFound("paymentDate.greaterThanOrEqual=" + DEFAULT_PAYMENT_DATE);
-
-        // Get all the leasePaymentList where paymentDate is greater than or equal to UPDATED_PAYMENT_DATE
-        defaultLeasePaymentShouldNotBeFound("paymentDate.greaterThanOrEqual=" + UPDATED_PAYMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeasePaymentsByPaymentDateIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        leasePaymentRepository.saveAndFlush(leasePayment);
-
-        // Get all the leasePaymentList where paymentDate is less than or equal to DEFAULT_PAYMENT_DATE
-        defaultLeasePaymentShouldBeFound("paymentDate.lessThanOrEqual=" + DEFAULT_PAYMENT_DATE);
-
-        // Get all the leasePaymentList where paymentDate is less than or equal to SMALLER_PAYMENT_DATE
-        defaultLeasePaymentShouldNotBeFound("paymentDate.lessThanOrEqual=" + SMALLER_PAYMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeasePaymentsByPaymentDateIsLessThanSomething() throws Exception {
-        // Initialize the database
-        leasePaymentRepository.saveAndFlush(leasePayment);
-
-        // Get all the leasePaymentList where paymentDate is less than DEFAULT_PAYMENT_DATE
-        defaultLeasePaymentShouldNotBeFound("paymentDate.lessThan=" + DEFAULT_PAYMENT_DATE);
-
-        // Get all the leasePaymentList where paymentDate is less than UPDATED_PAYMENT_DATE
-        defaultLeasePaymentShouldBeFound("paymentDate.lessThan=" + UPDATED_PAYMENT_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeasePaymentsByPaymentDateIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        leasePaymentRepository.saveAndFlush(leasePayment);
-
-        // Get all the leasePaymentList where paymentDate is greater than DEFAULT_PAYMENT_DATE
-        defaultLeasePaymentShouldNotBeFound("paymentDate.greaterThan=" + DEFAULT_PAYMENT_DATE);
-
-        // Get all the leasePaymentList where paymentDate is greater than SMALLER_PAYMENT_DATE
-        defaultLeasePaymentShouldBeFound("paymentDate.greaterThan=" + SMALLER_PAYMENT_DATE);
     }
 
     @Test
@@ -458,6 +351,110 @@ class LeasePaymentResourceIT {
 
     @Test
     @Transactional
+    void getAllLeasePaymentsByPaymentDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        leasePaymentRepository.saveAndFlush(leasePayment);
+
+        // Get all the leasePaymentList where paymentDate equals to DEFAULT_PAYMENT_DATE
+        defaultLeasePaymentShouldBeFound("paymentDate.equals=" + DEFAULT_PAYMENT_DATE);
+
+        // Get all the leasePaymentList where paymentDate equals to UPDATED_PAYMENT_DATE
+        defaultLeasePaymentShouldNotBeFound("paymentDate.equals=" + UPDATED_PAYMENT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeasePaymentsByPaymentDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        leasePaymentRepository.saveAndFlush(leasePayment);
+
+        // Get all the leasePaymentList where paymentDate not equals to DEFAULT_PAYMENT_DATE
+        defaultLeasePaymentShouldNotBeFound("paymentDate.notEquals=" + DEFAULT_PAYMENT_DATE);
+
+        // Get all the leasePaymentList where paymentDate not equals to UPDATED_PAYMENT_DATE
+        defaultLeasePaymentShouldBeFound("paymentDate.notEquals=" + UPDATED_PAYMENT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeasePaymentsByPaymentDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        leasePaymentRepository.saveAndFlush(leasePayment);
+
+        // Get all the leasePaymentList where paymentDate in DEFAULT_PAYMENT_DATE or UPDATED_PAYMENT_DATE
+        defaultLeasePaymentShouldBeFound("paymentDate.in=" + DEFAULT_PAYMENT_DATE + "," + UPDATED_PAYMENT_DATE);
+
+        // Get all the leasePaymentList where paymentDate equals to UPDATED_PAYMENT_DATE
+        defaultLeasePaymentShouldNotBeFound("paymentDate.in=" + UPDATED_PAYMENT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeasePaymentsByPaymentDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        leasePaymentRepository.saveAndFlush(leasePayment);
+
+        // Get all the leasePaymentList where paymentDate is not null
+        defaultLeasePaymentShouldBeFound("paymentDate.specified=true");
+
+        // Get all the leasePaymentList where paymentDate is null
+        defaultLeasePaymentShouldNotBeFound("paymentDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllLeasePaymentsByPaymentDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        leasePaymentRepository.saveAndFlush(leasePayment);
+
+        // Get all the leasePaymentList where paymentDate is greater than or equal to DEFAULT_PAYMENT_DATE
+        defaultLeasePaymentShouldBeFound("paymentDate.greaterThanOrEqual=" + DEFAULT_PAYMENT_DATE);
+
+        // Get all the leasePaymentList where paymentDate is greater than or equal to UPDATED_PAYMENT_DATE
+        defaultLeasePaymentShouldNotBeFound("paymentDate.greaterThanOrEqual=" + UPDATED_PAYMENT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeasePaymentsByPaymentDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        leasePaymentRepository.saveAndFlush(leasePayment);
+
+        // Get all the leasePaymentList where paymentDate is less than or equal to DEFAULT_PAYMENT_DATE
+        defaultLeasePaymentShouldBeFound("paymentDate.lessThanOrEqual=" + DEFAULT_PAYMENT_DATE);
+
+        // Get all the leasePaymentList where paymentDate is less than or equal to SMALLER_PAYMENT_DATE
+        defaultLeasePaymentShouldNotBeFound("paymentDate.lessThanOrEqual=" + SMALLER_PAYMENT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeasePaymentsByPaymentDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        leasePaymentRepository.saveAndFlush(leasePayment);
+
+        // Get all the leasePaymentList where paymentDate is less than DEFAULT_PAYMENT_DATE
+        defaultLeasePaymentShouldNotBeFound("paymentDate.lessThan=" + DEFAULT_PAYMENT_DATE);
+
+        // Get all the leasePaymentList where paymentDate is less than UPDATED_PAYMENT_DATE
+        defaultLeasePaymentShouldBeFound("paymentDate.lessThan=" + UPDATED_PAYMENT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeasePaymentsByPaymentDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        leasePaymentRepository.saveAndFlush(leasePayment);
+
+        // Get all the leasePaymentList where paymentDate is greater than DEFAULT_PAYMENT_DATE
+        defaultLeasePaymentShouldNotBeFound("paymentDate.greaterThan=" + DEFAULT_PAYMENT_DATE);
+
+        // Get all the leasePaymentList where paymentDate is greater than SMALLER_PAYMENT_DATE
+        defaultLeasePaymentShouldBeFound("paymentDate.greaterThan=" + SMALLER_PAYMENT_DATE);
+    }
+
+    @Test
+    @Transactional
     void getAllLeasePaymentsByLeaseLiabilityIsEqualToSomething() throws Exception {
         // Initialize the database
         leasePaymentRepository.saveAndFlush(leasePayment);
@@ -491,8 +488,8 @@ class LeasePaymentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(leasePayment.getId().intValue())))
-            .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(sameInstant(DEFAULT_PAYMENT_DATE))))
-            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))));
+            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))))
+            .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())));
 
         // Check, that the count call also returns 1
         restLeasePaymentMockMvc
@@ -540,7 +537,7 @@ class LeasePaymentResourceIT {
         LeasePayment updatedLeasePayment = leasePaymentRepository.findById(leasePayment.getId()).get();
         // Disconnect from session so that the updates on updatedLeasePayment are not directly saved in db
         em.detach(updatedLeasePayment);
-        updatedLeasePayment.paymentDate(UPDATED_PAYMENT_DATE).paymentAmount(UPDATED_PAYMENT_AMOUNT);
+        updatedLeasePayment.paymentAmount(UPDATED_PAYMENT_AMOUNT).paymentDate(UPDATED_PAYMENT_DATE);
         LeasePaymentDTO leasePaymentDTO = leasePaymentMapper.toDto(updatedLeasePayment);
 
         restLeasePaymentMockMvc
@@ -555,8 +552,8 @@ class LeasePaymentResourceIT {
         List<LeasePayment> leasePaymentList = leasePaymentRepository.findAll();
         assertThat(leasePaymentList).hasSize(databaseSizeBeforeUpdate);
         LeasePayment testLeasePayment = leasePaymentList.get(leasePaymentList.size() - 1);
-        assertThat(testLeasePayment.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
         assertThat(testLeasePayment.getPaymentAmount()).isEqualTo(UPDATED_PAYMENT_AMOUNT);
+        assertThat(testLeasePayment.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
 
         // Validate the LeasePayment in Elasticsearch
         verify(mockLeasePaymentSearchRepository).save(testLeasePayment);
@@ -650,7 +647,7 @@ class LeasePaymentResourceIT {
         LeasePayment partialUpdatedLeasePayment = new LeasePayment();
         partialUpdatedLeasePayment.setId(leasePayment.getId());
 
-        partialUpdatedLeasePayment.paymentDate(UPDATED_PAYMENT_DATE);
+        partialUpdatedLeasePayment.paymentAmount(UPDATED_PAYMENT_AMOUNT);
 
         restLeasePaymentMockMvc
             .perform(
@@ -664,8 +661,8 @@ class LeasePaymentResourceIT {
         List<LeasePayment> leasePaymentList = leasePaymentRepository.findAll();
         assertThat(leasePaymentList).hasSize(databaseSizeBeforeUpdate);
         LeasePayment testLeasePayment = leasePaymentList.get(leasePaymentList.size() - 1);
-        assertThat(testLeasePayment.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
-        assertThat(testLeasePayment.getPaymentAmount()).isEqualByComparingTo(DEFAULT_PAYMENT_AMOUNT);
+        assertThat(testLeasePayment.getPaymentAmount()).isEqualByComparingTo(UPDATED_PAYMENT_AMOUNT);
+        assertThat(testLeasePayment.getPaymentDate()).isEqualTo(DEFAULT_PAYMENT_DATE);
     }
 
     @Test
@@ -680,7 +677,7 @@ class LeasePaymentResourceIT {
         LeasePayment partialUpdatedLeasePayment = new LeasePayment();
         partialUpdatedLeasePayment.setId(leasePayment.getId());
 
-        partialUpdatedLeasePayment.paymentDate(UPDATED_PAYMENT_DATE).paymentAmount(UPDATED_PAYMENT_AMOUNT);
+        partialUpdatedLeasePayment.paymentAmount(UPDATED_PAYMENT_AMOUNT).paymentDate(UPDATED_PAYMENT_DATE);
 
         restLeasePaymentMockMvc
             .perform(
@@ -694,8 +691,8 @@ class LeasePaymentResourceIT {
         List<LeasePayment> leasePaymentList = leasePaymentRepository.findAll();
         assertThat(leasePaymentList).hasSize(databaseSizeBeforeUpdate);
         LeasePayment testLeasePayment = leasePaymentList.get(leasePaymentList.size() - 1);
-        assertThat(testLeasePayment.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
         assertThat(testLeasePayment.getPaymentAmount()).isEqualByComparingTo(UPDATED_PAYMENT_AMOUNT);
+        assertThat(testLeasePayment.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
     }
 
     @Test
@@ -812,7 +809,7 @@ class LeasePaymentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(leasePayment.getId().intValue())))
-            .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(sameInstant(DEFAULT_PAYMENT_DATE))))
-            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))));
+            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(sameNumber(DEFAULT_PAYMENT_AMOUNT))))
+            .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())));
     }
 }

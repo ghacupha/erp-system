@@ -20,7 +20,7 @@ package io.github.erp.service.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
 import java.util.Objects;
 import javax.validation.constraints.*;
 
@@ -31,9 +31,9 @@ public class LeasePaymentDTO implements Serializable {
 
     private Long id;
 
-    private ZonedDateTime paymentDate;
-
     private BigDecimal paymentAmount;
+
+    private LocalDate paymentDate;
 
     private LeaseLiabilityDTO leaseLiability;
 
@@ -45,20 +45,20 @@ public class LeasePaymentDTO implements Serializable {
         this.id = id;
     }
 
-    public ZonedDateTime getPaymentDate() {
-        return paymentDate;
-    }
-
-    public void setPaymentDate(ZonedDateTime paymentDate) {
-        this.paymentDate = paymentDate;
-    }
-
     public BigDecimal getPaymentAmount() {
         return paymentAmount;
     }
 
     public void setPaymentAmount(BigDecimal paymentAmount) {
         this.paymentAmount = paymentAmount;
+    }
+
+    public LocalDate getPaymentDate() {
+        return paymentDate;
+    }
+
+    public void setPaymentDate(LocalDate paymentDate) {
+        this.paymentDate = paymentDate;
     }
 
     public LeaseLiabilityDTO getLeaseLiability() {
@@ -95,8 +95,8 @@ public class LeasePaymentDTO implements Serializable {
     public String toString() {
         return "LeasePaymentDTO{" +
             "id=" + getId() +
-            ", paymentDate='" + getPaymentDate() + "'" +
             ", paymentAmount=" + getPaymentAmount() +
+            ", paymentDate='" + getPaymentDate() + "'" +
             ", leaseLiability=" + getLeaseLiability() +
             "}";
     }
