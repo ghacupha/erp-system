@@ -1,12 +1,12 @@
 {
   "fields": [
     {
-      "fieldName": "paymentDate",
-      "fieldType": "ZonedDateTime"
-    },
-    {
       "fieldName": "paymentAmount",
       "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "paymentDate",
+      "fieldType": "LocalDate"
     }
   ],
   "relationships": [

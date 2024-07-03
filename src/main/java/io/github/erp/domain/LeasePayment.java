@@ -21,7 +21,7 @@ package io.github.erp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -44,11 +44,11 @@ public class LeasePayment implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "payment_date")
-    private ZonedDateTime paymentDate;
-
     @Column(name = "payment_amount", precision = 21, scale = 2)
     private BigDecimal paymentAmount;
+
+    @Column(name = "payment_date")
+    private LocalDate paymentDate;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -70,19 +70,6 @@ public class LeasePayment implements Serializable {
         this.id = id;
     }
 
-    public ZonedDateTime getPaymentDate() {
-        return this.paymentDate;
-    }
-
-    public LeasePayment paymentDate(ZonedDateTime paymentDate) {
-        this.setPaymentDate(paymentDate);
-        return this;
-    }
-
-    public void setPaymentDate(ZonedDateTime paymentDate) {
-        this.paymentDate = paymentDate;
-    }
-
     public BigDecimal getPaymentAmount() {
         return this.paymentAmount;
     }
@@ -94,6 +81,19 @@ public class LeasePayment implements Serializable {
 
     public void setPaymentAmount(BigDecimal paymentAmount) {
         this.paymentAmount = paymentAmount;
+    }
+
+    public LocalDate getPaymentDate() {
+        return this.paymentDate;
+    }
+
+    public LeasePayment paymentDate(LocalDate paymentDate) {
+        this.setPaymentDate(paymentDate);
+        return this;
+    }
+
+    public void setPaymentDate(LocalDate paymentDate) {
+        this.paymentDate = paymentDate;
     }
 
     public LeaseLiability getLeaseLiability() {
@@ -133,8 +133,8 @@ public class LeasePayment implements Serializable {
     public String toString() {
         return "LeasePayment{" +
             "id=" + getId() +
-            ", paymentDate='" + getPaymentDate() + "'" +
             ", paymentAmount=" + getPaymentAmount() +
+            ", paymentDate='" + getPaymentDate() + "'" +
             "}";
     }
 }
