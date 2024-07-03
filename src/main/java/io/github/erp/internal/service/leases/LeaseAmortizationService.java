@@ -19,24 +19,28 @@ package io.github.erp.internal.service.leases;
  */
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import io.github.erp.service.IFRS16LeaseContractService;
 import io.github.erp.service.dto.LeaseAmortizationCalculationDTO;
 import io.github.erp.service.dto.LeaseLiabilityDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static java.math.BigDecimal.ROUND_HALF_EVEN;
-
+// TODO LeaseLiability and IFRS16LeaseContract
 @Service
 @Transactional
 public class LeaseAmortizationService implements LeaseAmortizationCompilationService {
 
+    private static final RoundingMode ROUND_HALF_EVEN = RoundingMode.HALF_EVEN;
     private final InternalLeaseLiabilityService leaseLiabilityService;
     private final InternalLeaseAmortizationCalculationService leaseAmortizationCalculationService;
+
+    private final InternalIFRS16LeaseContractService internalIFRS16LeaseContractService;
 
     public LeaseAmortizationService(
         InternalLeaseLiabilityService leaseLiabilityService,
@@ -105,10 +109,10 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
     }
 
     private BigDecimal calculateMonthlyPayment(BigDecimal principal, BigDecimal interestRate, int periods) {
-        BigDecimal monthlyRate = interestRate.divide(BigDecimal.valueOf(12), ROUND_HALF_EVEN);
+        BigDecimal monthlyRate = interestRate.divide(BigDecimal.valueOf(12), 12, ROUND_HALF_EVEN);
         BigDecimal numerator = monthlyRate.multiply(principal);
         BigDecimal denominator = BigDecimal.ONE.subtract(BigDecimal.ONE.divide(
-            (BigDecimal.ONE.add(monthlyRate)).pow(periods), ROUND_HALF_EVEN));
-        return numerator.divide(denominator, ROUND_HALF_EVEN);
+            (BigDecimal.ONE.add(monthlyRate)).pow(periods), 12, ROUND_HALF_EVEN));
+        return numerator.divide(denominator, 12, ROUND_HALF_EVEN);
     }
 }
