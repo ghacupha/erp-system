@@ -25,8 +25,6 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A LeaseAmortizationCalculation.
@@ -34,7 +32,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Entity
 @Table(name = "lease_amortization_calculation")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "leaseamortizationcalculation-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "leaseamortizationcalculation")
 public class LeaseAmortizationCalculation implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,23 +41,18 @@ public class LeaseAmortizationCalculation implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
-    @Field(type = FieldType.Long)
     private Long id;
 
     @Column(name = "interest_rate")
-    @Field(type = FieldType.Double)
     private Float interestRate;
 
     @Column(name = "periodicity")
-    @Field(type = FieldType.Text)
     private String periodicity;
 
     @Column(name = "lease_amount", precision = 21, scale = 2)
-    @Field(type = FieldType.Double)
     private BigDecimal leaseAmount;
 
     @Column(name = "number_of_periods")
-    @Field(type = FieldType.Integer)
     private Integer numberOfPeriods;
 
     @JsonIgnoreProperties(value = { "leaseAmortizationCalculation", "leasePayments", "leaseContract" }, allowSetters = true)

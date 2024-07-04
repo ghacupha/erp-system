@@ -12,11 +12,6 @@
       "fieldValidateRulesMin": 0
     },
     {
-      "fieldName": "interestRate",
-      "fieldType": "Float",
-      "fieldValidateRules": ["required"]
-    },
-    {
       "fieldName": "startDate",
       "fieldType": "LocalDate",
       "fieldValidateRules": ["required"]
@@ -25,6 +20,12 @@
       "fieldName": "endDate",
       "fieldType": "LocalDate",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "interestRate",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": 0
     }
   ],
   "relationships": [

@@ -28,8 +28,6 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A LeaseLiability.
@@ -37,7 +35,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Entity
 @Table(name = "lease_liability")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "leaseliability-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "leaseliability")
 public class LeaseLiability implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,34 +44,29 @@ public class LeaseLiability implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
-    @Field(type = FieldType.Long)
     private Long id;
 
     @NotNull
     @Column(name = "lease_id", nullable = false, unique = true)
-    @Field(type = FieldType.Keyword)
     private String leaseId;
 
     @NotNull
     @DecimalMin(value = "0")
     @Column(name = "liability_amount", precision = 21, scale = 2, nullable = false)
-    @Field(type = FieldType.Double)
     private BigDecimal liabilityAmount;
 
     @NotNull
-    @Column(name = "interest_rate", nullable = false)
-    @Field(type = FieldType.Double)
-    private Float interestRate;
-
-    @NotNull
     @Column(name = "start_date", nullable = false)
-    @Field(type = FieldType.Date)
     private LocalDate startDate;
 
     @NotNull
     @Column(name = "end_date", nullable = false)
-    @Field(type = FieldType.Date)
     private LocalDate endDate;
+
+    @NotNull
+    @DecimalMin(value = "0")
+    @Column(name = "interest_rate", precision = 21, scale = 15, nullable = false)
+    private BigDecimal interestRate;
 
     @JsonIgnoreProperties(value = { "leaseLiability", "leaseContract" }, allowSetters = true)
     @OneToOne
@@ -142,19 +135,6 @@ public class LeaseLiability implements Serializable {
         this.liabilityAmount = liabilityAmount;
     }
 
-    public Float getInterestRate() {
-        return this.interestRate;
-    }
-
-    public LeaseLiability interestRate(Float interestRate) {
-        this.setInterestRate(interestRate);
-        return this;
-    }
-
-    public void setInterestRate(Float interestRate) {
-        this.interestRate = interestRate;
-    }
-
     public LocalDate getStartDate() {
         return this.startDate;
     }
@@ -179,6 +159,19 @@ public class LeaseLiability implements Serializable {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public BigDecimal getInterestRate() {
+        return this.interestRate;
+    }
+
+    public LeaseLiability interestRate(BigDecimal interestRate) {
+        this.setInterestRate(interestRate);
+        return this;
+    }
+
+    public void setInterestRate(BigDecimal interestRate) {
+        this.interestRate = interestRate;
     }
 
     public LeaseAmortizationCalculation getLeaseAmortizationCalculation() {
@@ -264,9 +257,9 @@ public class LeaseLiability implements Serializable {
             "id=" + getId() +
             ", leaseId='" + getLeaseId() + "'" +
             ", liabilityAmount=" + getLiabilityAmount() +
-            ", interestRate=" + getInterestRate() +
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
+            ", interestRate=" + getInterestRate() +
             "}";
     }
 }

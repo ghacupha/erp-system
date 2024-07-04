@@ -39,13 +39,14 @@ public class LeaseLiabilityDTO implements Serializable {
     private BigDecimal liabilityAmount;
 
     @NotNull
-    private Float interestRate;
-
-    @NotNull
     private LocalDate startDate;
 
     @NotNull
     private LocalDate endDate;
+
+    @NotNull
+    @DecimalMin(value = "0")
+    private BigDecimal interestRate;
 
     private LeaseAmortizationCalculationDTO leaseAmortizationCalculation;
 
@@ -75,14 +76,6 @@ public class LeaseLiabilityDTO implements Serializable {
         this.liabilityAmount = liabilityAmount;
     }
 
-    public Float getInterestRate() {
-        return interestRate;
-    }
-
-    public void setInterestRate(Float interestRate) {
-        this.interestRate = interestRate;
-    }
-
     public LocalDate getStartDate() {
         return startDate;
     }
@@ -97,6 +90,14 @@ public class LeaseLiabilityDTO implements Serializable {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public BigDecimal getInterestRate() {
+        return interestRate;
+    }
+
+    public void setInterestRate(BigDecimal interestRate) {
+        this.interestRate = interestRate;
     }
 
     public LeaseAmortizationCalculationDTO getLeaseAmortizationCalculation() {
@@ -143,9 +144,9 @@ public class LeaseLiabilityDTO implements Serializable {
             "id=" + getId() +
             ", leaseId='" + getLeaseId() + "'" +
             ", liabilityAmount=" + getLiabilityAmount() +
-            ", interestRate=" + getInterestRate() +
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
+            ", interestRate=" + getInterestRate() +
             ", leaseAmortizationCalculation=" + getLeaseAmortizationCalculation() +
             ", leaseContract=" + getLeaseContract() +
             "}";
