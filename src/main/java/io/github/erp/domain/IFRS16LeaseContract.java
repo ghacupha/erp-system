@@ -26,6 +26,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A IFRS16LeaseContract.
@@ -33,7 +35,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "ifrs16lease_contract")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "ifrs16leasecontract")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "ifrs16leasecontract-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
 public class IFRS16LeaseContract implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,31 +44,39 @@ public class IFRS16LeaseContract implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
     @NotNull
     @Column(name = "booking_id", nullable = false, unique = true)
+    @Field(type = FieldType.Keyword)
     private String bookingId;
 
     @NotNull
     @Column(name = "lease_title", nullable = false)
+    @Field(type = FieldType.Keyword)
     private String leaseTitle;
 
     @Column(name = "short_title", unique = true)
+    @Field(type = FieldType.Keyword)
     private String shortTitle;
 
     @Column(name = "description")
+    @Field(type = FieldType.Text)
     private String description;
 
     @NotNull
     @Column(name = "inception_date", nullable = false)
+    @Field(type = FieldType.Date)
     private LocalDate inceptionDate;
 
     @NotNull
     @Column(name = "commencement_date", nullable = false)
+    @Field(type = FieldType.Date)
     private LocalDate commencementDate;
 
     @Column(name = "serial_number")
+    @Field(type = FieldType.Binary)
     private UUID serialNumber;
 
     @ManyToOne(optional = false)

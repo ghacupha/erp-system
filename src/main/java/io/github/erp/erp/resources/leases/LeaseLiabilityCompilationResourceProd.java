@@ -18,6 +18,7 @@ package io.github.erp.erp.resources.leases;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.internal.service.leases.InternalLeaseLiabilityCompilationService;
 import io.github.erp.repository.LeaseLiabilityCompilationRepository;
 import io.github.erp.service.LeaseLiabilityCompilationQueryService;
 import io.github.erp.service.LeaseLiabilityCompilationService;
@@ -59,14 +60,14 @@ public class LeaseLiabilityCompilationResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final LeaseLiabilityCompilationService leaseLiabilityCompilationService;
+    private final InternalLeaseLiabilityCompilationService leaseLiabilityCompilationService;
 
     private final LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository;
 
     private final LeaseLiabilityCompilationQueryService leaseLiabilityCompilationQueryService;
 
     public LeaseLiabilityCompilationResourceProd(
-        LeaseLiabilityCompilationService leaseLiabilityCompilationService,
+        InternalLeaseLiabilityCompilationService leaseLiabilityCompilationService,
         LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository,
         LeaseLiabilityCompilationQueryService leaseLiabilityCompilationQueryService
     ) {

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import io.github.erp.service.dto.IFRS16LeaseContractDTO;
 import io.github.erp.service.dto.LeaseAmortizationCalculationDTO;
 import io.github.erp.service.dto.LeaseLiabilityDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
@@ -39,29 +40,41 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
     private final InternalLeaseLiabilityService leaseLiabilityService;
     private final InternalLeaseAmortizationCalculationService leaseAmortizationCalculationService;
 
-    private final InternalIFRS16LeaseContractService internalIFRS16LeaseContractService;
+    private final InternalIFRS16LeaseContractService leaseContractService;
 
     public LeaseAmortizationService(
         InternalLeaseLiabilityService leaseLiabilityService,
-        InternalLeaseAmortizationCalculationService leaseAmortizationCalculationService, InternalIFRS16LeaseContractService internalIFRS16LeaseContractService) {
+        InternalLeaseAmortizationCalculationService leaseAmortizationCalculationService,
+        InternalIFRS16LeaseContractService internalIFRS16LeaseContractService,
+        InternalIFRS16LeaseContractService leaseContractService) {
         this.leaseLiabilityService = leaseLiabilityService;
         this.leaseAmortizationCalculationService = leaseAmortizationCalculationService;
-        this.internalIFRS16LeaseContractService = internalIFRS16LeaseContractService;
+        this.leaseContractService = leaseContractService;
     }
 
     public List<LeaseLiabilityScheduleItemDTO> generateAmortizationSchedule(Long leaseLiabilityId) {
         Optional<LeaseLiabilityDTO> leaseLiabilityOpt = leaseLiabilityService.findOne(leaseLiabilityId);
 
         if (leaseLiabilityOpt.isEmpty()) {
-            throw new IllegalArgumentException("Lease Liability not found");
+            throw new IllegalArgumentException("Lease Liability id # " + leaseLiabilityId + " not found");
         }
 
         LeaseLiabilityDTO leaseLiability = leaseLiabilityOpt.get();
+
+        Optional<IFRS16LeaseContractDTO> ifrs16LeaseContractOpt = leaseContractService.findOne(leaseLiability.getLeaseContract().getId());
+
+
+        if (ifrs16LeaseContractOpt.isEmpty()) {
+            throw new IllegalArgumentException("IFRS16 Contract id # " + leaseLiability.getLeaseContract().getId() + " not found");
+        }
+
+        IFRS16LeaseContractDTO ifrs16LeaseContract = ifrs16LeaseContractOpt.get();
+
         Optional<LeaseAmortizationCalculationDTO> leaseAmortizationCalculationOpt =
             leaseAmortizationCalculationService.findByLeaseLiabilityId(leaseLiabilityId);
 
         if (leaseAmortizationCalculationOpt.isEmpty()) {
-            throw new IllegalArgumentException("Lease Amortization Calculation not found");
+            throw new IllegalArgumentException("Lease Amortization Calculation for Lease Liability id # " + leaseLiabilityId + "not found");
         }
 
         LeaseAmortizationCalculationDTO calculation = leaseAmortizationCalculationOpt.get();
@@ -70,11 +83,11 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
         BigDecimal interestRate = BigDecimal.valueOf(calculation.getInterestRate());
         int periods = calculation.getNumberOfPeriods();
 
-        return calculateAmortizationSchedule(principal, interestRate, periods);
+        return calculateAmortizationSchedule(principal, interestRate, periods, leaseLiability, ifrs16LeaseContract);
     }
 
     private List<LeaseLiabilityScheduleItemDTO> calculateAmortizationSchedule(
-        BigDecimal principal, BigDecimal interestRate, int periods) {
+        BigDecimal principal, BigDecimal interestRate, int periods, LeaseLiabilityDTO leaseLiability, IFRS16LeaseContractDTO ifrs16LeaseContract) {
 
         List<LeaseLiabilityScheduleItemDTO> scheduleItems = new ArrayList<>();
         BigDecimal monthlyRate = interestRate.divide(BigDecimal.valueOf(12), ROUND_HALF_EVEN);
@@ -98,6 +111,9 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
             item.setInterestPayableOpening(interestPayableOpening);
             item.setInterestAccrued(interestAccrued);
             item.setInterestPayableClosing(interestPayableClosing);
+            item.setLeaseLiability(leaseLiability);
+            item.setLeaseContract(ifrs16LeaseContract);
+            // TODO item.setLeasePeriod(leasePeriod);
 
             scheduleItems.add(item);
 
@@ -109,10 +125,10 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
     }
 
     private BigDecimal calculateMonthlyPayment(BigDecimal principal, BigDecimal interestRate, int periods) {
-        BigDecimal monthlyRate = interestRate.divide(BigDecimal.valueOf(12), 12, ROUND_HALF_EVEN);
+        BigDecimal monthlyRate = interestRate.divide(BigDecimal.valueOf(12), ROUND_HALF_EVEN);
         BigDecimal numerator = monthlyRate.multiply(principal);
         BigDecimal denominator = BigDecimal.ONE.subtract(BigDecimal.ONE.divide(
-            (BigDecimal.ONE.add(monthlyRate)).pow(periods), 12, ROUND_HALF_EVEN));
-        return numerator.divide(denominator, 12, ROUND_HALF_EVEN);
+            (BigDecimal.ONE.add(monthlyRate)).pow(periods), 12,ROUND_HALF_EVEN));
+        return numerator.divide(denominator, ROUND_HALF_EVEN);
     }
 }

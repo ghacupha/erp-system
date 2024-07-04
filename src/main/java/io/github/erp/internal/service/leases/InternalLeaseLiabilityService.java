@@ -38,6 +38,14 @@ public interface InternalLeaseLiabilityService {
     LeaseLiabilityDTO save(LeaseLiabilityDTO leaseLiabilityDTO);
 
     /**
+     * Save a leaseLiability. Search index ops ommitted because of stackoverflow errors
+     *
+     * @param leaseLiabilityDTO the entity to save.
+     * @return the persisted entity.
+     */
+    LeaseLiabilityDTO update(LeaseLiabilityDTO leaseLiabilityDTO);
+
+    /**
      * Partially updates a leaseLiability.
      *
      * @param leaseLiabilityDTO the entity to update partially.
