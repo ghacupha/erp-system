@@ -122,14 +122,14 @@ public class LeaseLiabilityQueryService extends QueryService<LeaseLiability> {
             if (criteria.getLiabilityAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getLiabilityAmount(), LeaseLiability_.liabilityAmount));
             }
-            if (criteria.getInterestRate() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getInterestRate(), LeaseLiability_.interestRate));
-            }
             if (criteria.getStartDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getStartDate(), LeaseLiability_.startDate));
             }
             if (criteria.getEndDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getEndDate(), LeaseLiability_.endDate));
+            }
+            if (criteria.getInterestRate() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getInterestRate(), LeaseLiability_.interestRate));
             }
             if (criteria.getLeaseAmortizationCalculationId() != null) {
                 specification =

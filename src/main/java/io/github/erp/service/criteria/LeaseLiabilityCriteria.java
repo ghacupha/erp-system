@@ -50,11 +50,11 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter liabilityAmount;
 
-    private FloatFilter interestRate;
-
     private LocalDateFilter startDate;
 
     private LocalDateFilter endDate;
+
+    private BigDecimalFilter interestRate;
 
     private LongFilter leaseAmortizationCalculationId;
 
@@ -70,9 +70,9 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.leaseId = other.leaseId == null ? null : other.leaseId.copy();
         this.liabilityAmount = other.liabilityAmount == null ? null : other.liabilityAmount.copy();
-        this.interestRate = other.interestRate == null ? null : other.interestRate.copy();
         this.startDate = other.startDate == null ? null : other.startDate.copy();
         this.endDate = other.endDate == null ? null : other.endDate.copy();
+        this.interestRate = other.interestRate == null ? null : other.interestRate.copy();
         this.leaseAmortizationCalculationId =
             other.leaseAmortizationCalculationId == null ? null : other.leaseAmortizationCalculationId.copy();
         this.leasePaymentId = other.leasePaymentId == null ? null : other.leasePaymentId.copy();
@@ -130,21 +130,6 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
         this.liabilityAmount = liabilityAmount;
     }
 
-    public FloatFilter getInterestRate() {
-        return interestRate;
-    }
-
-    public FloatFilter interestRate() {
-        if (interestRate == null) {
-            interestRate = new FloatFilter();
-        }
-        return interestRate;
-    }
-
-    public void setInterestRate(FloatFilter interestRate) {
-        this.interestRate = interestRate;
-    }
-
     public LocalDateFilter getStartDate() {
         return startDate;
     }
@@ -173,6 +158,21 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
 
     public void setEndDate(LocalDateFilter endDate) {
         this.endDate = endDate;
+    }
+
+    public BigDecimalFilter getInterestRate() {
+        return interestRate;
+    }
+
+    public BigDecimalFilter interestRate() {
+        if (interestRate == null) {
+            interestRate = new BigDecimalFilter();
+        }
+        return interestRate;
+    }
+
+    public void setInterestRate(BigDecimalFilter interestRate) {
+        this.interestRate = interestRate;
     }
 
     public LongFilter getLeaseAmortizationCalculationId() {
@@ -241,9 +241,9 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(leaseId, that.leaseId) &&
             Objects.equals(liabilityAmount, that.liabilityAmount) &&
-            Objects.equals(interestRate, that.interestRate) &&
             Objects.equals(startDate, that.startDate) &&
             Objects.equals(endDate, that.endDate) &&
+            Objects.equals(interestRate, that.interestRate) &&
             Objects.equals(leaseAmortizationCalculationId, that.leaseAmortizationCalculationId) &&
             Objects.equals(leasePaymentId, that.leasePaymentId) &&
             Objects.equals(leaseContractId, that.leaseContractId) &&
@@ -257,9 +257,9 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
             id,
             leaseId,
             liabilityAmount,
-            interestRate,
             startDate,
             endDate,
+            interestRate,
             leaseAmortizationCalculationId,
             leasePaymentId,
             leaseContractId,
@@ -274,9 +274,9 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (leaseId != null ? "leaseId=" + leaseId + ", " : "") +
             (liabilityAmount != null ? "liabilityAmount=" + liabilityAmount + ", " : "") +
-            (interestRate != null ? "interestRate=" + interestRate + ", " : "") +
             (startDate != null ? "startDate=" + startDate + ", " : "") +
             (endDate != null ? "endDate=" + endDate + ", " : "") +
+            (interestRate != null ? "interestRate=" + interestRate + ", " : "") +
             (leaseAmortizationCalculationId != null ? "leaseAmortizationCalculationId=" + leaseAmortizationCalculationId + ", " : "") +
             (leasePaymentId != null ? "leasePaymentId=" + leasePaymentId + ", " : "") +
             (leaseContractId != null ? "leaseContractId=" + leaseContractId + ", " : "") +
