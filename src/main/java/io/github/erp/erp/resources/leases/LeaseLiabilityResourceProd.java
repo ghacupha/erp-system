@@ -18,6 +18,7 @@ package io.github.erp.erp.resources.leases;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.internal.service.leases.InternalLeaseLiabilityService;
 import io.github.erp.repository.LeaseLiabilityRepository;
 import io.github.erp.service.LeaseLiabilityQueryService;
 import io.github.erp.service.LeaseLiabilityService;
@@ -59,14 +60,14 @@ public class LeaseLiabilityResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final LeaseLiabilityService leaseLiabilityService;
+    private final InternalLeaseLiabilityService leaseLiabilityService;
 
     private final LeaseLiabilityRepository leaseLiabilityRepository;
 
     private final LeaseLiabilityQueryService leaseLiabilityQueryService;
 
     public LeaseLiabilityResourceProd(
-        LeaseLiabilityService leaseLiabilityService,
+        InternalLeaseLiabilityService leaseLiabilityService,
         LeaseLiabilityRepository leaseLiabilityRepository,
         LeaseLiabilityQueryService leaseLiabilityQueryService
     ) {
@@ -123,7 +124,7 @@ public class LeaseLiabilityResourceProd {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        LeaseLiabilityDTO result = leaseLiabilityService.save(leaseLiabilityDTO);
+        LeaseLiabilityDTO result = leaseLiabilityService.update(leaseLiabilityDTO);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, leaseLiabilityDTO.getId().toString()))

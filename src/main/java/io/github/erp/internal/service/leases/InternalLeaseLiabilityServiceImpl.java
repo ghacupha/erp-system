@@ -69,6 +69,14 @@ public class InternalLeaseLiabilityServiceImpl implements InternalLeaseLiability
     }
 
     @Override
+    public LeaseLiabilityDTO update(LeaseLiabilityDTO leaseLiabilityDTO) {
+        log.debug("Request to save LeaseLiability : {}", leaseLiabilityDTO);
+        LeaseLiability leaseLiability = leaseLiabilityMapper.toEntity(leaseLiabilityDTO);
+        leaseLiability = leaseLiabilityRepository.save(leaseLiability);
+        return leaseLiabilityMapper.toDto(leaseLiability);
+    }
+
+    @Override
     public Optional<LeaseLiabilityDTO> partialUpdate(LeaseLiabilityDTO leaseLiabilityDTO) {
         log.debug("Request to partially update LeaseLiability : {}", leaseLiabilityDTO);
 
