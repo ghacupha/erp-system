@@ -27,6 +27,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A LeaseAmortizationSchedule.
@@ -34,7 +36,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "lease_amortization_schedule")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "leaseamortizationschedule")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "leaseamortizationschedule-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
 public class LeaseAmortizationSchedule implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,10 +45,12 @@ public class LeaseAmortizationSchedule implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
     @NotNull
     @Column(name = "identifier", nullable = false, unique = true)
+    @Field(type = FieldType.Binary)
     private UUID identifier;
 
     @ManyToOne(optional = false)

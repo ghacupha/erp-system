@@ -28,6 +28,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A LeaseLiability.
@@ -35,7 +37,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "lease_liability")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "leaseliability")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "leaseliability-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
 public class LeaseLiability implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,28 +46,34 @@ public class LeaseLiability implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
     @NotNull
     @Column(name = "lease_id", nullable = false, unique = true)
+    @Field(type = FieldType.Text)
     private String leaseId;
 
     @NotNull
     @DecimalMin(value = "0")
     @Column(name = "liability_amount", precision = 21, scale = 2, nullable = false)
+    @Field(type = FieldType.Double)
     private BigDecimal liabilityAmount;
 
     @NotNull
     @Column(name = "start_date", nullable = false)
+    @Field(type = FieldType.Date)
     private LocalDate startDate;
 
     @NotNull
     @Column(name = "end_date", nullable = false)
+    @Field(type = FieldType.Date)
     private LocalDate endDate;
 
     @NotNull
     @DecimalMin(value = "0")
     @Column(name = "interest_rate", precision = 21, scale = 15, nullable = false)
+    @Field(type = FieldType.Double)
     private BigDecimal interestRate;
 
     @JsonIgnoreProperties(value = { "leaseLiability", "leaseContract" }, allowSetters = true)

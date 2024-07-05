@@ -30,13 +30,15 @@ public class LeaseAmortizationCalculationDTO implements Serializable {
 
     private Long id;
 
-    private Float interestRate;
-
     private String periodicity;
 
     private BigDecimal leaseAmount;
 
     private Integer numberOfPeriods;
+
+    @NotNull
+    @DecimalMin(value = "0")
+    private BigDecimal interestRate;
 
     private IFRS16LeaseContractDTO leaseContract;
 
@@ -46,14 +48,6 @@ public class LeaseAmortizationCalculationDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Float getInterestRate() {
-        return interestRate;
-    }
-
-    public void setInterestRate(Float interestRate) {
-        this.interestRate = interestRate;
     }
 
     public String getPeriodicity() {
@@ -78,6 +72,14 @@ public class LeaseAmortizationCalculationDTO implements Serializable {
 
     public void setNumberOfPeriods(Integer numberOfPeriods) {
         this.numberOfPeriods = numberOfPeriods;
+    }
+
+    public BigDecimal getInterestRate() {
+        return interestRate;
+    }
+
+    public void setInterestRate(BigDecimal interestRate) {
+        this.interestRate = interestRate;
     }
 
     public IFRS16LeaseContractDTO getLeaseContract() {
@@ -114,10 +116,10 @@ public class LeaseAmortizationCalculationDTO implements Serializable {
     public String toString() {
         return "LeaseAmortizationCalculationDTO{" +
             "id=" + getId() +
-            ", interestRate=" + getInterestRate() +
             ", periodicity='" + getPeriodicity() + "'" +
             ", leaseAmount=" + getLeaseAmount() +
             ", numberOfPeriods=" + getNumberOfPeriods() +
+            ", interestRate=" + getInterestRate() +
             ", leaseContract=" + getLeaseContract() +
             "}";
     }
