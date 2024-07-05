@@ -80,7 +80,7 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
         LeaseAmortizationCalculationDTO calculation = leaseAmortizationCalculationOpt.get();
 
         BigDecimal principal = leaseLiability.getLiabilityAmount();
-        BigDecimal interestRate = BigDecimal.valueOf(calculation.getInterestRate());
+        BigDecimal interestRate = calculation.getInterestRate();
         int periods = calculation.getNumberOfPeriods();
 
         return calculateAmortizationSchedule(principal, interestRate, periods, leaseLiability, ifrs16LeaseContract);

@@ -45,13 +45,13 @@ public class LeaseAmortizationCalculationCriteria implements Serializable, Crite
 
     private LongFilter id;
 
-    private FloatFilter interestRate;
-
     private StringFilter periodicity;
 
     private BigDecimalFilter leaseAmount;
 
     private IntegerFilter numberOfPeriods;
+
+    private BigDecimalFilter interestRate;
 
     private LongFilter leaseLiabilityId;
 
@@ -63,10 +63,10 @@ public class LeaseAmortizationCalculationCriteria implements Serializable, Crite
 
     public LeaseAmortizationCalculationCriteria(LeaseAmortizationCalculationCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.interestRate = other.interestRate == null ? null : other.interestRate.copy();
         this.periodicity = other.periodicity == null ? null : other.periodicity.copy();
         this.leaseAmount = other.leaseAmount == null ? null : other.leaseAmount.copy();
         this.numberOfPeriods = other.numberOfPeriods == null ? null : other.numberOfPeriods.copy();
+        this.interestRate = other.interestRate == null ? null : other.interestRate.copy();
         this.leaseLiabilityId = other.leaseLiabilityId == null ? null : other.leaseLiabilityId.copy();
         this.leaseContractId = other.leaseContractId == null ? null : other.leaseContractId.copy();
         this.distinct = other.distinct;
@@ -90,21 +90,6 @@ public class LeaseAmortizationCalculationCriteria implements Serializable, Crite
 
     public void setId(LongFilter id) {
         this.id = id;
-    }
-
-    public FloatFilter getInterestRate() {
-        return interestRate;
-    }
-
-    public FloatFilter interestRate() {
-        if (interestRate == null) {
-            interestRate = new FloatFilter();
-        }
-        return interestRate;
-    }
-
-    public void setInterestRate(FloatFilter interestRate) {
-        this.interestRate = interestRate;
     }
 
     public StringFilter getPeriodicity() {
@@ -150,6 +135,21 @@ public class LeaseAmortizationCalculationCriteria implements Serializable, Crite
 
     public void setNumberOfPeriods(IntegerFilter numberOfPeriods) {
         this.numberOfPeriods = numberOfPeriods;
+    }
+
+    public BigDecimalFilter getInterestRate() {
+        return interestRate;
+    }
+
+    public BigDecimalFilter interestRate() {
+        if (interestRate == null) {
+            interestRate = new BigDecimalFilter();
+        }
+        return interestRate;
+    }
+
+    public void setInterestRate(BigDecimalFilter interestRate) {
+        this.interestRate = interestRate;
     }
 
     public LongFilter getLeaseLiabilityId() {
@@ -201,10 +201,10 @@ public class LeaseAmortizationCalculationCriteria implements Serializable, Crite
         final LeaseAmortizationCalculationCriteria that = (LeaseAmortizationCalculationCriteria) o;
         return (
             Objects.equals(id, that.id) &&
-            Objects.equals(interestRate, that.interestRate) &&
             Objects.equals(periodicity, that.periodicity) &&
             Objects.equals(leaseAmount, that.leaseAmount) &&
             Objects.equals(numberOfPeriods, that.numberOfPeriods) &&
+            Objects.equals(interestRate, that.interestRate) &&
             Objects.equals(leaseLiabilityId, that.leaseLiabilityId) &&
             Objects.equals(leaseContractId, that.leaseContractId) &&
             Objects.equals(distinct, that.distinct)
@@ -213,7 +213,7 @@ public class LeaseAmortizationCalculationCriteria implements Serializable, Crite
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, interestRate, periodicity, leaseAmount, numberOfPeriods, leaseLiabilityId, leaseContractId, distinct);
+        return Objects.hash(id, periodicity, leaseAmount, numberOfPeriods, interestRate, leaseLiabilityId, leaseContractId, distinct);
     }
 
     // prettier-ignore
@@ -221,10 +221,10 @@ public class LeaseAmortizationCalculationCriteria implements Serializable, Crite
     public String toString() {
         return "LeaseAmortizationCalculationCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
-            (interestRate != null ? "interestRate=" + interestRate + ", " : "") +
             (periodicity != null ? "periodicity=" + periodicity + ", " : "") +
             (leaseAmount != null ? "leaseAmount=" + leaseAmount + ", " : "") +
             (numberOfPeriods != null ? "numberOfPeriods=" + numberOfPeriods + ", " : "") +
+            (interestRate != null ? "interestRate=" + interestRate + ", " : "") +
             (leaseLiabilityId != null ? "leaseLiabilityId=" + leaseLiabilityId + ", " : "") +
             (leaseContractId != null ? "leaseContractId=" + leaseContractId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

@@ -116,10 +116,6 @@ public class LeaseAmortizationCalculationQueryService extends QueryService<Lease
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), LeaseAmortizationCalculation_.id));
             }
-            if (criteria.getInterestRate() != null) {
-                specification =
-                    specification.and(buildRangeSpecification(criteria.getInterestRate(), LeaseAmortizationCalculation_.interestRate));
-            }
             if (criteria.getPeriodicity() != null) {
                 specification =
                     specification.and(buildStringSpecification(criteria.getPeriodicity(), LeaseAmortizationCalculation_.periodicity));
@@ -133,6 +129,10 @@ public class LeaseAmortizationCalculationQueryService extends QueryService<Lease
                     specification.and(
                         buildRangeSpecification(criteria.getNumberOfPeriods(), LeaseAmortizationCalculation_.numberOfPeriods)
                     );
+            }
+            if (criteria.getInterestRate() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getInterestRate(), LeaseAmortizationCalculation_.interestRate));
             }
             if (criteria.getLeaseLiabilityId() != null) {
                 specification =

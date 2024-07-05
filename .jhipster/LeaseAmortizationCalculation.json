@@ -1,10 +1,6 @@
 {
   "fields": [
     {
-      "fieldName": "interestRate",
-      "fieldType": "Float"
-    },
-    {
       "fieldName": "periodicity",
       "fieldType": "String"
     },
@@ -15,6 +11,12 @@
     {
       "fieldName": "numberOfPeriods",
       "fieldType": "Integer"
+    },
+    {
+      "fieldName": "interestRate",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": 0
     }
   ],
   "relationships": [

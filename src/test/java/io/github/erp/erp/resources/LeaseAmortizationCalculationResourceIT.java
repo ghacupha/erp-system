@@ -63,10 +63,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser(roles = {"LEASE_MANAGER"})
 class LeaseAmortizationCalculationResourceIT {
 
-    private static final Float DEFAULT_INTEREST_RATE = 1F;
-    private static final Float UPDATED_INTEREST_RATE = 2F;
-    private static final Float SMALLER_INTEREST_RATE = 1F - 1F;
-
     private static final String DEFAULT_PERIODICITY = "AAAAAAAAAA";
     private static final String UPDATED_PERIODICITY = "BBBBBBBBBB";
 
@@ -77,6 +73,10 @@ class LeaseAmortizationCalculationResourceIT {
     private static final Integer DEFAULT_NUMBER_OF_PERIODS = 1;
     private static final Integer UPDATED_NUMBER_OF_PERIODS = 2;
     private static final Integer SMALLER_NUMBER_OF_PERIODS = 1 - 1;
+
+    private static final BigDecimal DEFAULT_INTEREST_RATE = new BigDecimal(0);
+    private static final BigDecimal UPDATED_INTEREST_RATE = new BigDecimal(1);
+    private static final BigDecimal SMALLER_INTEREST_RATE = new BigDecimal(0 - 1);
 
     private static final String ENTITY_API_URL = "/api/leases/lease-amortization-calculations";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -115,10 +115,10 @@ class LeaseAmortizationCalculationResourceIT {
      */
     public static LeaseAmortizationCalculation createEntity(EntityManager em) {
         LeaseAmortizationCalculation leaseAmortizationCalculation = new LeaseAmortizationCalculation()
-            .interestRate(DEFAULT_INTEREST_RATE)
             .periodicity(DEFAULT_PERIODICITY)
             .leaseAmount(DEFAULT_LEASE_AMOUNT)
-            .numberOfPeriods(DEFAULT_NUMBER_OF_PERIODS);
+            .numberOfPeriods(DEFAULT_NUMBER_OF_PERIODS)
+            .interestRate(DEFAULT_INTEREST_RATE);
         // Add required entity
         IFRS16LeaseContract iFRS16LeaseContract;
         if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
@@ -140,10 +140,10 @@ class LeaseAmortizationCalculationResourceIT {
      */
     public static LeaseAmortizationCalculation createUpdatedEntity(EntityManager em) {
         LeaseAmortizationCalculation leaseAmortizationCalculation = new LeaseAmortizationCalculation()
-            .interestRate(UPDATED_INTEREST_RATE)
             .periodicity(UPDATED_PERIODICITY)
             .leaseAmount(UPDATED_LEASE_AMOUNT)
-            .numberOfPeriods(UPDATED_NUMBER_OF_PERIODS);
+            .numberOfPeriods(UPDATED_NUMBER_OF_PERIODS)
+            .interestRate(UPDATED_INTEREST_RATE);
         // Add required entity
         IFRS16LeaseContract iFRS16LeaseContract;
         if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
@@ -184,10 +184,10 @@ class LeaseAmortizationCalculationResourceIT {
         LeaseAmortizationCalculation testLeaseAmortizationCalculation = leaseAmortizationCalculationList.get(
             leaseAmortizationCalculationList.size() - 1
         );
-        assertThat(testLeaseAmortizationCalculation.getInterestRate()).isEqualTo(DEFAULT_INTEREST_RATE);
         assertThat(testLeaseAmortizationCalculation.getPeriodicity()).isEqualTo(DEFAULT_PERIODICITY);
         assertThat(testLeaseAmortizationCalculation.getLeaseAmount()).isEqualByComparingTo(DEFAULT_LEASE_AMOUNT);
         assertThat(testLeaseAmortizationCalculation.getNumberOfPeriods()).isEqualTo(DEFAULT_NUMBER_OF_PERIODS);
+        assertThat(testLeaseAmortizationCalculation.getInterestRate()).isEqualByComparingTo(DEFAULT_INTEREST_RATE);
 
         // Validate the LeaseAmortizationCalculation in Elasticsearch
         verify(mockLeaseAmortizationCalculationSearchRepository, times(1)).save(testLeaseAmortizationCalculation);
@@ -223,6 +223,30 @@ class LeaseAmortizationCalculationResourceIT {
 
     @Test
     @Transactional
+    void checkInterestRateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = leaseAmortizationCalculationRepository.findAll().size();
+        // set the field null
+        leaseAmortizationCalculation.setInterestRate(null);
+
+        // Create the LeaseAmortizationCalculation, which fails.
+        LeaseAmortizationCalculationDTO leaseAmortizationCalculationDTO = leaseAmortizationCalculationMapper.toDto(
+            leaseAmortizationCalculation
+        );
+
+        restLeaseAmortizationCalculationMockMvc
+            .perform(
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(leaseAmortizationCalculationDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<LeaseAmortizationCalculation> leaseAmortizationCalculationList = leaseAmortizationCalculationRepository.findAll();
+        assertThat(leaseAmortizationCalculationList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllLeaseAmortizationCalculations() throws Exception {
         // Initialize the database
         leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
@@ -233,10 +257,10 @@ class LeaseAmortizationCalculationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(leaseAmortizationCalculation.getId().intValue())))
-            .andExpect(jsonPath("$.[*].interestRate").value(hasItem(DEFAULT_INTEREST_RATE.doubleValue())))
             .andExpect(jsonPath("$.[*].periodicity").value(hasItem(DEFAULT_PERIODICITY)))
             .andExpect(jsonPath("$.[*].leaseAmount").value(hasItem(sameNumber(DEFAULT_LEASE_AMOUNT))))
-            .andExpect(jsonPath("$.[*].numberOfPeriods").value(hasItem(DEFAULT_NUMBER_OF_PERIODS)));
+            .andExpect(jsonPath("$.[*].numberOfPeriods").value(hasItem(DEFAULT_NUMBER_OF_PERIODS)))
+            .andExpect(jsonPath("$.[*].interestRate").value(hasItem(sameNumber(DEFAULT_INTEREST_RATE))));
     }
 
     @Test
@@ -251,10 +275,10 @@ class LeaseAmortizationCalculationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(leaseAmortizationCalculation.getId().intValue()))
-            .andExpect(jsonPath("$.interestRate").value(DEFAULT_INTEREST_RATE.doubleValue()))
             .andExpect(jsonPath("$.periodicity").value(DEFAULT_PERIODICITY))
             .andExpect(jsonPath("$.leaseAmount").value(sameNumber(DEFAULT_LEASE_AMOUNT)))
-            .andExpect(jsonPath("$.numberOfPeriods").value(DEFAULT_NUMBER_OF_PERIODS));
+            .andExpect(jsonPath("$.numberOfPeriods").value(DEFAULT_NUMBER_OF_PERIODS))
+            .andExpect(jsonPath("$.interestRate").value(sameNumber(DEFAULT_INTEREST_RATE)));
     }
 
     @Test
@@ -273,110 +297,6 @@ class LeaseAmortizationCalculationResourceIT {
 
         defaultLeaseAmortizationCalculationShouldBeFound("id.lessThanOrEqual=" + id);
         defaultLeaseAmortizationCalculationShouldNotBeFound("id.lessThan=" + id);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseAmortizationCalculationsByInterestRateIsEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
-
-        // Get all the leaseAmortizationCalculationList where interestRate equals to DEFAULT_INTEREST_RATE
-        defaultLeaseAmortizationCalculationShouldBeFound("interestRate.equals=" + DEFAULT_INTEREST_RATE);
-
-        // Get all the leaseAmortizationCalculationList where interestRate equals to UPDATED_INTEREST_RATE
-        defaultLeaseAmortizationCalculationShouldNotBeFound("interestRate.equals=" + UPDATED_INTEREST_RATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseAmortizationCalculationsByInterestRateIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
-
-        // Get all the leaseAmortizationCalculationList where interestRate not equals to DEFAULT_INTEREST_RATE
-        defaultLeaseAmortizationCalculationShouldNotBeFound("interestRate.notEquals=" + DEFAULT_INTEREST_RATE);
-
-        // Get all the leaseAmortizationCalculationList where interestRate not equals to UPDATED_INTEREST_RATE
-        defaultLeaseAmortizationCalculationShouldBeFound("interestRate.notEquals=" + UPDATED_INTEREST_RATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseAmortizationCalculationsByInterestRateIsInShouldWork() throws Exception {
-        // Initialize the database
-        leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
-
-        // Get all the leaseAmortizationCalculationList where interestRate in DEFAULT_INTEREST_RATE or UPDATED_INTEREST_RATE
-        defaultLeaseAmortizationCalculationShouldBeFound("interestRate.in=" + DEFAULT_INTEREST_RATE + "," + UPDATED_INTEREST_RATE);
-
-        // Get all the leaseAmortizationCalculationList where interestRate equals to UPDATED_INTEREST_RATE
-        defaultLeaseAmortizationCalculationShouldNotBeFound("interestRate.in=" + UPDATED_INTEREST_RATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseAmortizationCalculationsByInterestRateIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
-
-        // Get all the leaseAmortizationCalculationList where interestRate is not null
-        defaultLeaseAmortizationCalculationShouldBeFound("interestRate.specified=true");
-
-        // Get all the leaseAmortizationCalculationList where interestRate is null
-        defaultLeaseAmortizationCalculationShouldNotBeFound("interestRate.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseAmortizationCalculationsByInterestRateIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
-
-        // Get all the leaseAmortizationCalculationList where interestRate is greater than or equal to DEFAULT_INTEREST_RATE
-        defaultLeaseAmortizationCalculationShouldBeFound("interestRate.greaterThanOrEqual=" + DEFAULT_INTEREST_RATE);
-
-        // Get all the leaseAmortizationCalculationList where interestRate is greater than or equal to UPDATED_INTEREST_RATE
-        defaultLeaseAmortizationCalculationShouldNotBeFound("interestRate.greaterThanOrEqual=" + UPDATED_INTEREST_RATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseAmortizationCalculationsByInterestRateIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
-
-        // Get all the leaseAmortizationCalculationList where interestRate is less than or equal to DEFAULT_INTEREST_RATE
-        defaultLeaseAmortizationCalculationShouldBeFound("interestRate.lessThanOrEqual=" + DEFAULT_INTEREST_RATE);
-
-        // Get all the leaseAmortizationCalculationList where interestRate is less than or equal to SMALLER_INTEREST_RATE
-        defaultLeaseAmortizationCalculationShouldNotBeFound("interestRate.lessThanOrEqual=" + SMALLER_INTEREST_RATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseAmortizationCalculationsByInterestRateIsLessThanSomething() throws Exception {
-        // Initialize the database
-        leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
-
-        // Get all the leaseAmortizationCalculationList where interestRate is less than DEFAULT_INTEREST_RATE
-        defaultLeaseAmortizationCalculationShouldNotBeFound("interestRate.lessThan=" + DEFAULT_INTEREST_RATE);
-
-        // Get all the leaseAmortizationCalculationList where interestRate is less than UPDATED_INTEREST_RATE
-        defaultLeaseAmortizationCalculationShouldBeFound("interestRate.lessThan=" + UPDATED_INTEREST_RATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseAmortizationCalculationsByInterestRateIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
-
-        // Get all the leaseAmortizationCalculationList where interestRate is greater than DEFAULT_INTEREST_RATE
-        defaultLeaseAmortizationCalculationShouldNotBeFound("interestRate.greaterThan=" + DEFAULT_INTEREST_RATE);
-
-        // Get all the leaseAmortizationCalculationList where interestRate is greater than SMALLER_INTEREST_RATE
-        defaultLeaseAmortizationCalculationShouldBeFound("interestRate.greaterThan=" + SMALLER_INTEREST_RATE);
     }
 
     @Test
@@ -669,6 +589,110 @@ class LeaseAmortizationCalculationResourceIT {
 
     @Test
     @Transactional
+    void getAllLeaseAmortizationCalculationsByInterestRateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
+
+        // Get all the leaseAmortizationCalculationList where interestRate equals to DEFAULT_INTEREST_RATE
+        defaultLeaseAmortizationCalculationShouldBeFound("interestRate.equals=" + DEFAULT_INTEREST_RATE);
+
+        // Get all the leaseAmortizationCalculationList where interestRate equals to UPDATED_INTEREST_RATE
+        defaultLeaseAmortizationCalculationShouldNotBeFound("interestRate.equals=" + UPDATED_INTEREST_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseAmortizationCalculationsByInterestRateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
+
+        // Get all the leaseAmortizationCalculationList where interestRate not equals to DEFAULT_INTEREST_RATE
+        defaultLeaseAmortizationCalculationShouldNotBeFound("interestRate.notEquals=" + DEFAULT_INTEREST_RATE);
+
+        // Get all the leaseAmortizationCalculationList where interestRate not equals to UPDATED_INTEREST_RATE
+        defaultLeaseAmortizationCalculationShouldBeFound("interestRate.notEquals=" + UPDATED_INTEREST_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseAmortizationCalculationsByInterestRateIsInShouldWork() throws Exception {
+        // Initialize the database
+        leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
+
+        // Get all the leaseAmortizationCalculationList where interestRate in DEFAULT_INTEREST_RATE or UPDATED_INTEREST_RATE
+        defaultLeaseAmortizationCalculationShouldBeFound("interestRate.in=" + DEFAULT_INTEREST_RATE + "," + UPDATED_INTEREST_RATE);
+
+        // Get all the leaseAmortizationCalculationList where interestRate equals to UPDATED_INTEREST_RATE
+        defaultLeaseAmortizationCalculationShouldNotBeFound("interestRate.in=" + UPDATED_INTEREST_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseAmortizationCalculationsByInterestRateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
+
+        // Get all the leaseAmortizationCalculationList where interestRate is not null
+        defaultLeaseAmortizationCalculationShouldBeFound("interestRate.specified=true");
+
+        // Get all the leaseAmortizationCalculationList where interestRate is null
+        defaultLeaseAmortizationCalculationShouldNotBeFound("interestRate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseAmortizationCalculationsByInterestRateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
+
+        // Get all the leaseAmortizationCalculationList where interestRate is greater than or equal to DEFAULT_INTEREST_RATE
+        defaultLeaseAmortizationCalculationShouldBeFound("interestRate.greaterThanOrEqual=" + DEFAULT_INTEREST_RATE);
+
+        // Get all the leaseAmortizationCalculationList where interestRate is greater than or equal to UPDATED_INTEREST_RATE
+        defaultLeaseAmortizationCalculationShouldNotBeFound("interestRate.greaterThanOrEqual=" + UPDATED_INTEREST_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseAmortizationCalculationsByInterestRateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
+
+        // Get all the leaseAmortizationCalculationList where interestRate is less than or equal to DEFAULT_INTEREST_RATE
+        defaultLeaseAmortizationCalculationShouldBeFound("interestRate.lessThanOrEqual=" + DEFAULT_INTEREST_RATE);
+
+        // Get all the leaseAmortizationCalculationList where interestRate is less than or equal to SMALLER_INTEREST_RATE
+        defaultLeaseAmortizationCalculationShouldNotBeFound("interestRate.lessThanOrEqual=" + SMALLER_INTEREST_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseAmortizationCalculationsByInterestRateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
+
+        // Get all the leaseAmortizationCalculationList where interestRate is less than DEFAULT_INTEREST_RATE
+        defaultLeaseAmortizationCalculationShouldNotBeFound("interestRate.lessThan=" + DEFAULT_INTEREST_RATE);
+
+        // Get all the leaseAmortizationCalculationList where interestRate is less than UPDATED_INTEREST_RATE
+        defaultLeaseAmortizationCalculationShouldBeFound("interestRate.lessThan=" + UPDATED_INTEREST_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseAmortizationCalculationsByInterestRateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
+
+        // Get all the leaseAmortizationCalculationList where interestRate is greater than DEFAULT_INTEREST_RATE
+        defaultLeaseAmortizationCalculationShouldNotBeFound("interestRate.greaterThan=" + DEFAULT_INTEREST_RATE);
+
+        // Get all the leaseAmortizationCalculationList where interestRate is greater than SMALLER_INTEREST_RATE
+        defaultLeaseAmortizationCalculationShouldBeFound("interestRate.greaterThan=" + SMALLER_INTEREST_RATE);
+    }
+
+    @Test
+    @Transactional
     void getAllLeaseAmortizationCalculationsByLeaseLiabilityIsEqualToSomething() throws Exception {
         // Initialize the database
         leaseAmortizationCalculationRepository.saveAndFlush(leaseAmortizationCalculation);
@@ -718,10 +742,10 @@ class LeaseAmortizationCalculationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(leaseAmortizationCalculation.getId().intValue())))
-            .andExpect(jsonPath("$.[*].interestRate").value(hasItem(DEFAULT_INTEREST_RATE.doubleValue())))
             .andExpect(jsonPath("$.[*].periodicity").value(hasItem(DEFAULT_PERIODICITY)))
             .andExpect(jsonPath("$.[*].leaseAmount").value(hasItem(sameNumber(DEFAULT_LEASE_AMOUNT))))
-            .andExpect(jsonPath("$.[*].numberOfPeriods").value(hasItem(DEFAULT_NUMBER_OF_PERIODS)));
+            .andExpect(jsonPath("$.[*].numberOfPeriods").value(hasItem(DEFAULT_NUMBER_OF_PERIODS)))
+            .andExpect(jsonPath("$.[*].interestRate").value(hasItem(sameNumber(DEFAULT_INTEREST_RATE))));
 
         // Check, that the count call also returns 1
         restLeaseAmortizationCalculationMockMvc
@@ -772,10 +796,10 @@ class LeaseAmortizationCalculationResourceIT {
         // Disconnect from session so that the updates on updatedLeaseAmortizationCalculation are not directly saved in db
         em.detach(updatedLeaseAmortizationCalculation);
         updatedLeaseAmortizationCalculation
-            .interestRate(UPDATED_INTEREST_RATE)
             .periodicity(UPDATED_PERIODICITY)
             .leaseAmount(UPDATED_LEASE_AMOUNT)
-            .numberOfPeriods(UPDATED_NUMBER_OF_PERIODS);
+            .numberOfPeriods(UPDATED_NUMBER_OF_PERIODS)
+            .interestRate(UPDATED_INTEREST_RATE);
         LeaseAmortizationCalculationDTO leaseAmortizationCalculationDTO = leaseAmortizationCalculationMapper.toDto(
             updatedLeaseAmortizationCalculation
         );
@@ -794,10 +818,10 @@ class LeaseAmortizationCalculationResourceIT {
         LeaseAmortizationCalculation testLeaseAmortizationCalculation = leaseAmortizationCalculationList.get(
             leaseAmortizationCalculationList.size() - 1
         );
-        assertThat(testLeaseAmortizationCalculation.getInterestRate()).isEqualTo(UPDATED_INTEREST_RATE);
         assertThat(testLeaseAmortizationCalculation.getPeriodicity()).isEqualTo(UPDATED_PERIODICITY);
         assertThat(testLeaseAmortizationCalculation.getLeaseAmount()).isEqualTo(UPDATED_LEASE_AMOUNT);
         assertThat(testLeaseAmortizationCalculation.getNumberOfPeriods()).isEqualTo(UPDATED_NUMBER_OF_PERIODS);
+        assertThat(testLeaseAmortizationCalculation.getInterestRate()).isEqualTo(UPDATED_INTEREST_RATE);
 
         // Validate the LeaseAmortizationCalculation in Elasticsearch
         verify(mockLeaseAmortizationCalculationSearchRepository).save(testLeaseAmortizationCalculation);
@@ -900,10 +924,10 @@ class LeaseAmortizationCalculationResourceIT {
         partialUpdatedLeaseAmortizationCalculation.setId(leaseAmortizationCalculation.getId());
 
         partialUpdatedLeaseAmortizationCalculation
-            .interestRate(UPDATED_INTEREST_RATE)
             .periodicity(UPDATED_PERIODICITY)
             .leaseAmount(UPDATED_LEASE_AMOUNT)
-            .numberOfPeriods(UPDATED_NUMBER_OF_PERIODS);
+            .numberOfPeriods(UPDATED_NUMBER_OF_PERIODS)
+            .interestRate(UPDATED_INTEREST_RATE);
 
         restLeaseAmortizationCalculationMockMvc
             .perform(
@@ -919,10 +943,10 @@ class LeaseAmortizationCalculationResourceIT {
         LeaseAmortizationCalculation testLeaseAmortizationCalculation = leaseAmortizationCalculationList.get(
             leaseAmortizationCalculationList.size() - 1
         );
-        assertThat(testLeaseAmortizationCalculation.getInterestRate()).isEqualTo(UPDATED_INTEREST_RATE);
         assertThat(testLeaseAmortizationCalculation.getPeriodicity()).isEqualTo(UPDATED_PERIODICITY);
         assertThat(testLeaseAmortizationCalculation.getLeaseAmount()).isEqualByComparingTo(UPDATED_LEASE_AMOUNT);
         assertThat(testLeaseAmortizationCalculation.getNumberOfPeriods()).isEqualTo(UPDATED_NUMBER_OF_PERIODS);
+        assertThat(testLeaseAmortizationCalculation.getInterestRate()).isEqualByComparingTo(UPDATED_INTEREST_RATE);
     }
 
     @Test
@@ -938,10 +962,10 @@ class LeaseAmortizationCalculationResourceIT {
         partialUpdatedLeaseAmortizationCalculation.setId(leaseAmortizationCalculation.getId());
 
         partialUpdatedLeaseAmortizationCalculation
-            .interestRate(UPDATED_INTEREST_RATE)
             .periodicity(UPDATED_PERIODICITY)
             .leaseAmount(UPDATED_LEASE_AMOUNT)
-            .numberOfPeriods(UPDATED_NUMBER_OF_PERIODS);
+            .numberOfPeriods(UPDATED_NUMBER_OF_PERIODS)
+            .interestRate(UPDATED_INTEREST_RATE);
 
         restLeaseAmortizationCalculationMockMvc
             .perform(
@@ -957,10 +981,10 @@ class LeaseAmortizationCalculationResourceIT {
         LeaseAmortizationCalculation testLeaseAmortizationCalculation = leaseAmortizationCalculationList.get(
             leaseAmortizationCalculationList.size() - 1
         );
-        assertThat(testLeaseAmortizationCalculation.getInterestRate()).isEqualTo(UPDATED_INTEREST_RATE);
         assertThat(testLeaseAmortizationCalculation.getPeriodicity()).isEqualTo(UPDATED_PERIODICITY);
         assertThat(testLeaseAmortizationCalculation.getLeaseAmount()).isEqualByComparingTo(UPDATED_LEASE_AMOUNT);
         assertThat(testLeaseAmortizationCalculation.getNumberOfPeriods()).isEqualTo(UPDATED_NUMBER_OF_PERIODS);
+        assertThat(testLeaseAmortizationCalculation.getInterestRate()).isEqualByComparingTo(UPDATED_INTEREST_RATE);
     }
 
     @Test
@@ -1083,9 +1107,9 @@ class LeaseAmortizationCalculationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(leaseAmortizationCalculation.getId().intValue())))
-            .andExpect(jsonPath("$.[*].interestRate").value(hasItem(DEFAULT_INTEREST_RATE.doubleValue())))
             .andExpect(jsonPath("$.[*].periodicity").value(hasItem(DEFAULT_PERIODICITY)))
             .andExpect(jsonPath("$.[*].leaseAmount").value(hasItem(sameNumber(DEFAULT_LEASE_AMOUNT))))
-            .andExpect(jsonPath("$.[*].numberOfPeriods").value(hasItem(DEFAULT_NUMBER_OF_PERIODS)));
+            .andExpect(jsonPath("$.[*].numberOfPeriods").value(hasItem(DEFAULT_NUMBER_OF_PERIODS)))
+            .andExpect(jsonPath("$.[*].interestRate").value(hasItem(sameNumber(DEFAULT_INTEREST_RATE))));
     }
 }

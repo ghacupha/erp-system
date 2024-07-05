@@ -25,6 +25,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A LeaseAmortizationCalculation.
@@ -32,7 +34,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "lease_amortization_calculation")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "leaseamortizationcalculation")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "leaseamortizationcalculation-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
 public class LeaseAmortizationCalculation implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,18 +43,25 @@ public class LeaseAmortizationCalculation implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
-    @Column(name = "interest_rate")
-    private Float interestRate;
+    @NotNull
+    @DecimalMin(value = "0")
+    @Column(name = "interest_rate", precision = 21, scale = 15, nullable = false)
+    @Field(type = FieldType.Double)
+    private BigDecimal interestRate;
 
     @Column(name = "periodicity")
+    @Field(type = FieldType.Text)
     private String periodicity;
 
     @Column(name = "lease_amount", precision = 21, scale = 2)
+    @Field(type = FieldType.Double)
     private BigDecimal leaseAmount;
 
     @Column(name = "number_of_periods")
+    @Field(type = FieldType.Integer)
     private Integer numberOfPeriods;
 
     @JsonIgnoreProperties(value = { "leaseAmortizationCalculation", "leasePayments", "leaseContract" }, allowSetters = true)
@@ -88,19 +97,6 @@ public class LeaseAmortizationCalculation implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Float getInterestRate() {
-        return this.interestRate;
-    }
-
-    public LeaseAmortizationCalculation interestRate(Float interestRate) {
-        this.setInterestRate(interestRate);
-        return this;
-    }
-
-    public void setInterestRate(Float interestRate) {
-        this.interestRate = interestRate;
     }
 
     public String getPeriodicity() {
@@ -140,6 +136,19 @@ public class LeaseAmortizationCalculation implements Serializable {
 
     public void setNumberOfPeriods(Integer numberOfPeriods) {
         this.numberOfPeriods = numberOfPeriods;
+    }
+
+    public BigDecimal getInterestRate() {
+        return this.interestRate;
+    }
+
+    public LeaseAmortizationCalculation interestRate(BigDecimal interestRate) {
+        this.setInterestRate(interestRate);
+        return this;
+    }
+
+    public void setInterestRate(BigDecimal interestRate) {
+        this.interestRate = interestRate;
     }
 
     public LeaseLiability getLeaseLiability() {
@@ -198,10 +207,10 @@ public class LeaseAmortizationCalculation implements Serializable {
     public String toString() {
         return "LeaseAmortizationCalculation{" +
             "id=" + getId() +
-            ", interestRate=" + getInterestRate() +
             ", periodicity='" + getPeriodicity() + "'" +
             ", leaseAmount=" + getLeaseAmount() +
             ", numberOfPeriods=" + getNumberOfPeriods() +
+            ", interestRate=" + getInterestRate() +
             "}";
     }
 }
