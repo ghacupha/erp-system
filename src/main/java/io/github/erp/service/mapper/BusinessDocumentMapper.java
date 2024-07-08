@@ -51,15 +51,15 @@ public interface BusinessDocumentMapper extends EntityMapper<BusinessDocumentDTO
     @Mapping(target = "removePlaceholder", ignore = true)
     BusinessDocument toEntity(BusinessDocumentDTO businessDocumentDTO);
 
-    @Named("documentTitleSet")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "documentTitle", source = "documentTitle")
-    Set<BusinessDocumentDTO> toDtoDocumentTitleSet(Set<BusinessDocument> businessDocument);
-
     @Named("documentTitle")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "documentTitle", source = "documentTitle")
     BusinessDocumentDTO toDtoDocumentTitle(BusinessDocument businessDocument);
+
+    @Named("documentTitleSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "documentTitle", source = "documentTitle")
+    Set<BusinessDocumentDTO> toDtoDocumentTitleSet(Set<BusinessDocument> businessDocument);
 }

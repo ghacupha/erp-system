@@ -39,12 +39,6 @@
       "otherEntityRelationshipName": "leaseLiability"
     },
     {
-      "relationshipName": "leasePayment",
-      "otherEntityName": "leasePayment",
-      "relationshipType": "one-to-many",
-      "otherEntityRelationshipName": "leaseLiability"
-    },
-    {
       "relationshipName": "leaseContract",
       "otherEntityName": "iFRS16LeaseContract",
       "relationshipType": "one-to-one",

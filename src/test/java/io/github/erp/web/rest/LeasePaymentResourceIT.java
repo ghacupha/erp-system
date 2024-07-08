@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
-import io.github.erp.domain.LeaseLiability;
+import io.github.erp.domain.IFRS16LeaseContract;
 import io.github.erp.domain.LeasePayment;
 import io.github.erp.repository.LeasePaymentRepository;
 import io.github.erp.repository.search.LeasePaymentSearchRepository;
@@ -110,15 +110,15 @@ class LeasePaymentResourceIT {
     public static LeasePayment createEntity(EntityManager em) {
         LeasePayment leasePayment = new LeasePayment().paymentAmount(DEFAULT_PAYMENT_AMOUNT).paymentDate(DEFAULT_PAYMENT_DATE);
         // Add required entity
-        LeaseLiability leaseLiability;
-        if (TestUtil.findAll(em, LeaseLiability.class).isEmpty()) {
-            leaseLiability = LeaseLiabilityResourceIT.createEntity(em);
-            em.persist(leaseLiability);
+        IFRS16LeaseContract iFRS16LeaseContract;
+        if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
+            iFRS16LeaseContract = IFRS16LeaseContractResourceIT.createEntity(em);
+            em.persist(iFRS16LeaseContract);
             em.flush();
         } else {
-            leaseLiability = TestUtil.findAll(em, LeaseLiability.class).get(0);
+            iFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
         }
-        leasePayment.setLeaseLiability(leaseLiability);
+        leasePayment.setLeaseContract(iFRS16LeaseContract);
         return leasePayment;
     }
 
@@ -131,15 +131,15 @@ class LeasePaymentResourceIT {
     public static LeasePayment createUpdatedEntity(EntityManager em) {
         LeasePayment leasePayment = new LeasePayment().paymentAmount(UPDATED_PAYMENT_AMOUNT).paymentDate(UPDATED_PAYMENT_DATE);
         // Add required entity
-        LeaseLiability leaseLiability;
-        if (TestUtil.findAll(em, LeaseLiability.class).isEmpty()) {
-            leaseLiability = LeaseLiabilityResourceIT.createUpdatedEntity(em);
-            em.persist(leaseLiability);
+        IFRS16LeaseContract iFRS16LeaseContract;
+        if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
+            iFRS16LeaseContract = IFRS16LeaseContractResourceIT.createUpdatedEntity(em);
+            em.persist(iFRS16LeaseContract);
             em.flush();
         } else {
-            leaseLiability = TestUtil.findAll(em, LeaseLiability.class).get(0);
+            iFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
         }
-        leasePayment.setLeaseLiability(leaseLiability);
+        leasePayment.setLeaseContract(iFRS16LeaseContract);
         return leasePayment;
     }
 
@@ -455,28 +455,28 @@ class LeasePaymentResourceIT {
 
     @Test
     @Transactional
-    void getAllLeasePaymentsByLeaseLiabilityIsEqualToSomething() throws Exception {
+    void getAllLeasePaymentsByLeaseContractIsEqualToSomething() throws Exception {
         // Initialize the database
         leasePaymentRepository.saveAndFlush(leasePayment);
-        LeaseLiability leaseLiability;
-        if (TestUtil.findAll(em, LeaseLiability.class).isEmpty()) {
-            leaseLiability = LeaseLiabilityResourceIT.createEntity(em);
-            em.persist(leaseLiability);
+        IFRS16LeaseContract leaseContract;
+        if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
+            leaseContract = IFRS16LeaseContractResourceIT.createEntity(em);
+            em.persist(leaseContract);
             em.flush();
         } else {
-            leaseLiability = TestUtil.findAll(em, LeaseLiability.class).get(0);
+            leaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
         }
-        em.persist(leaseLiability);
+        em.persist(leaseContract);
         em.flush();
-        leasePayment.setLeaseLiability(leaseLiability);
+        leasePayment.setLeaseContract(leaseContract);
         leasePaymentRepository.saveAndFlush(leasePayment);
-        Long leaseLiabilityId = leaseLiability.getId();
+        Long leaseContractId = leaseContract.getId();
 
-        // Get all the leasePaymentList where leaseLiability equals to leaseLiabilityId
-        defaultLeasePaymentShouldBeFound("leaseLiabilityId.equals=" + leaseLiabilityId);
+        // Get all the leasePaymentList where leaseContract equals to leaseContractId
+        defaultLeasePaymentShouldBeFound("leaseContractId.equals=" + leaseContractId);
 
-        // Get all the leasePaymentList where leaseLiability equals to (leaseLiabilityId + 1)
-        defaultLeasePaymentShouldNotBeFound("leaseLiabilityId.equals=" + (leaseLiabilityId + 1));
+        // Get all the leasePaymentList where leaseContract equals to (leaseContractId + 1)
+        defaultLeasePaymentShouldNotBeFound("leaseContractId.equals=" + (leaseContractId + 1));
     }
 
     /**
