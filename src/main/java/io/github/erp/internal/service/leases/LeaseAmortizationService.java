@@ -24,10 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import io.github.erp.service.dto.IFRS16LeaseContractDTO;
-import io.github.erp.service.dto.LeaseAmortizationCalculationDTO;
-import io.github.erp.service.dto.LeaseLiabilityDTO;
-import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
+import io.github.erp.service.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,16 +36,17 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
     private static final RoundingMode ROUND_HALF_EVEN = RoundingMode.HALF_EVEN;
     private final InternalLeaseLiabilityService leaseLiabilityService;
     private final InternalLeaseAmortizationCalculationService leaseAmortizationCalculationService;
-
+    private final InternalLeaseAmortizationScheduleService internalLeaseAmortizationScheduleService;
     private final InternalIFRS16LeaseContractService leaseContractService;
 
     public LeaseAmortizationService(
         InternalLeaseLiabilityService leaseLiabilityService,
         InternalLeaseAmortizationCalculationService leaseAmortizationCalculationService,
         InternalIFRS16LeaseContractService internalIFRS16LeaseContractService,
-        InternalIFRS16LeaseContractService leaseContractService) {
+        InternalLeaseAmortizationScheduleService internalLeaseAmortizationScheduleService, InternalIFRS16LeaseContractService leaseContractService) {
         this.leaseLiabilityService = leaseLiabilityService;
         this.leaseAmortizationCalculationService = leaseAmortizationCalculationService;
+        this.internalLeaseAmortizationScheduleService = internalLeaseAmortizationScheduleService;
         this.leaseContractService = leaseContractService;
     }
 
@@ -79,15 +77,23 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
 
         LeaseAmortizationCalculationDTO calculation = leaseAmortizationCalculationOpt.get();
 
+        Optional<LeaseAmortizationScheduleDTO> scheduleOpt = internalLeaseAmortizationScheduleService.findOneByBookingId(ifrs16LeaseContract.getBookingId());
+
+        if (scheduleOpt.isEmpty()) {
+            throw new IllegalArgumentException("Lease Amortization Schedule for Lease Booking id # " + ifrs16LeaseContract.getBookingId() + "not found");
+        }
+
+        LeaseAmortizationScheduleDTO leaseAmortizationSchedule = scheduleOpt.get();
+
         BigDecimal principal = leaseLiability.getLiabilityAmount();
         BigDecimal interestRate = calculation.getInterestRate();
         int periods = calculation.getNumberOfPeriods();
 
-        return calculateAmortizationSchedule(principal, interestRate, periods, leaseLiability, ifrs16LeaseContract);
+        return calculateAmortizationSchedule(principal, interestRate, periods, leaseLiability, ifrs16LeaseContract, leaseAmortizationSchedule);
     }
 
     private List<LeaseLiabilityScheduleItemDTO> calculateAmortizationSchedule(
-        BigDecimal principal, BigDecimal interestRate, int periods, LeaseLiabilityDTO leaseLiability, IFRS16LeaseContractDTO ifrs16LeaseContract) {
+        BigDecimal principal, BigDecimal interestRate, int periods, LeaseLiabilityDTO leaseLiability, IFRS16LeaseContractDTO ifrs16LeaseContract, LeaseAmortizationScheduleDTO leaseAmortizationSchedule) {
 
         List<LeaseLiabilityScheduleItemDTO> scheduleItems = new ArrayList<>();
         BigDecimal monthlyRate = interestRate.divide(BigDecimal.valueOf(12), ROUND_HALF_EVEN);
@@ -113,6 +119,7 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
             item.setInterestPayableClosing(interestPayableClosing);
             item.setLeaseLiability(leaseLiability);
             item.setLeaseContract(ifrs16LeaseContract);
+            item.setLeaseAmortizationSchedule(leaseAmortizationSchedule);
             // TODO item.setLeasePeriod(leasePeriod);
 
             scheduleItems.add(item);
