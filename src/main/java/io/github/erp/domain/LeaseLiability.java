@@ -22,8 +22,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -81,11 +79,6 @@ public class LeaseLiability implements Serializable {
     @JoinColumn(unique = true)
     private LeaseAmortizationCalculation leaseAmortizationCalculation;
 
-    @OneToMany(mappedBy = "leaseLiability")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "leaseLiability" }, allowSetters = true)
-    private Set<LeasePayment> leasePayments = new HashSet<>();
-
     @JsonIgnoreProperties(
         value = {
             "superintendentServiceOutlet",
@@ -94,6 +87,7 @@ public class LeaseLiability implements Serializable {
             "lastReportingPeriod",
             "leaseContractDocument",
             "leaseContractCalculations",
+            "leasePayments",
         },
         allowSetters = true
     )
@@ -192,37 +186,6 @@ public class LeaseLiability implements Serializable {
 
     public LeaseLiability leaseAmortizationCalculation(LeaseAmortizationCalculation leaseAmortizationCalculation) {
         this.setLeaseAmortizationCalculation(leaseAmortizationCalculation);
-        return this;
-    }
-
-    public Set<LeasePayment> getLeasePayments() {
-        return this.leasePayments;
-    }
-
-    public void setLeasePayments(Set<LeasePayment> leasePayments) {
-        if (this.leasePayments != null) {
-            this.leasePayments.forEach(i -> i.setLeaseLiability(null));
-        }
-        if (leasePayments != null) {
-            leasePayments.forEach(i -> i.setLeaseLiability(this));
-        }
-        this.leasePayments = leasePayments;
-    }
-
-    public LeaseLiability leasePayments(Set<LeasePayment> leasePayments) {
-        this.setLeasePayments(leasePayments);
-        return this;
-    }
-
-    public LeaseLiability addLeasePayment(LeasePayment leasePayment) {
-        this.leasePayments.add(leasePayment);
-        leasePayment.setLeaseLiability(this);
-        return this;
-    }
-
-    public LeaseLiability removeLeasePayment(LeasePayment leasePayment) {
-        this.leasePayments.remove(leasePayment);
-        leasePayment.setLeaseLiability(null);
         return this;
     }
 

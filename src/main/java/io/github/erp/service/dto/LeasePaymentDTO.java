@@ -35,7 +35,7 @@ public class LeasePaymentDTO implements Serializable {
 
     private LocalDate paymentDate;
 
-    private LeaseLiabilityDTO leaseLiability;
+    private IFRS16LeaseContractDTO leaseContract;
 
     public Long getId() {
         return id;
@@ -61,12 +61,12 @@ public class LeasePaymentDTO implements Serializable {
         this.paymentDate = paymentDate;
     }
 
-    public LeaseLiabilityDTO getLeaseLiability() {
-        return leaseLiability;
+    public IFRS16LeaseContractDTO getLeaseContract() {
+        return leaseContract;
     }
 
-    public void setLeaseLiability(LeaseLiabilityDTO leaseLiability) {
-        this.leaseLiability = leaseLiability;
+    public void setLeaseContract(IFRS16LeaseContractDTO leaseContract) {
+        this.leaseContract = leaseContract;
     }
 
     @Override
@@ -97,7 +97,7 @@ public class LeasePaymentDTO implements Serializable {
             "id=" + getId() +
             ", paymentAmount=" + getPaymentAmount() +
             ", paymentDate='" + getPaymentDate() + "'" +
-            ", leaseLiability=" + getLeaseLiability() +
+            ", leaseContract=" + getLeaseContract() +
             "}";
     }
 }

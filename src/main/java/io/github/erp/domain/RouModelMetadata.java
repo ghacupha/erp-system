@@ -108,6 +108,7 @@ public class RouModelMetadata implements Serializable {
             "lastReportingPeriod",
             "leaseContractDocument",
             "leaseContractCalculations",
+            "leasePayments",
         },
         allowSetters = true
     )

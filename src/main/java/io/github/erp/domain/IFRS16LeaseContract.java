@@ -21,6 +21,8 @@ package io.github.erp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -131,6 +133,11 @@ public class IFRS16LeaseContract implements Serializable {
         allowSetters = true
     )
     private BusinessDocument leaseContractCalculations;
+
+    @OneToMany(mappedBy = "leaseContract")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "leaseContract" }, allowSetters = true)
+    private Set<LeasePayment> leasePayments = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -313,6 +320,37 @@ public class IFRS16LeaseContract implements Serializable {
 
     public IFRS16LeaseContract leaseContractCalculations(BusinessDocument businessDocument) {
         this.setLeaseContractCalculations(businessDocument);
+        return this;
+    }
+
+    public Set<LeasePayment> getLeasePayments() {
+        return this.leasePayments;
+    }
+
+    public void setLeasePayments(Set<LeasePayment> leasePayments) {
+        if (this.leasePayments != null) {
+            this.leasePayments.forEach(i -> i.setLeaseContract(null));
+        }
+        if (leasePayments != null) {
+            leasePayments.forEach(i -> i.setLeaseContract(this));
+        }
+        this.leasePayments = leasePayments;
+    }
+
+    public IFRS16LeaseContract leasePayments(Set<LeasePayment> leasePayments) {
+        this.setLeasePayments(leasePayments);
+        return this;
+    }
+
+    public IFRS16LeaseContract addLeasePayment(LeasePayment leasePayment) {
+        this.leasePayments.add(leasePayment);
+        leasePayment.setLeaseContract(this);
+        return this;
+    }
+
+    public IFRS16LeaseContract removeLeasePayment(LeasePayment leasePayment) {
+        this.leasePayments.remove(leasePayment);
+        leasePayment.setLeaseContract(null);
         return this;
     }
 

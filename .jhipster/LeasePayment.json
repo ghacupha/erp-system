@@ -11,11 +11,11 @@
   ],
   "relationships": [
     {
-      "relationshipName": "leaseLiability",
-      "otherEntityName": "leaseLiability",
+      "relationshipName": "leaseContract",
+      "otherEntityName": "iFRS16LeaseContract",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
-      "otherEntityField": "leaseId"
+      "otherEntityField": "bookingId"
     }
   ],
   "service": "serviceImpl",

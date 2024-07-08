@@ -52,8 +52,19 @@ public class LeasePayment implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "leaseAmortizationCalculation", "leasePayments", "leaseContract" }, allowSetters = true)
-    private LeaseLiability leaseLiability;
+    @JsonIgnoreProperties(
+        value = {
+            "superintendentServiceOutlet",
+            "mainDealer",
+            "firstReportingPeriod",
+            "lastReportingPeriod",
+            "leaseContractDocument",
+            "leaseContractCalculations",
+            "leasePayments",
+        },
+        allowSetters = true
+    )
+    private IFRS16LeaseContract leaseContract;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -96,16 +107,16 @@ public class LeasePayment implements Serializable {
         this.paymentDate = paymentDate;
     }
 
-    public LeaseLiability getLeaseLiability() {
-        return this.leaseLiability;
+    public IFRS16LeaseContract getLeaseContract() {
+        return this.leaseContract;
     }
 
-    public void setLeaseLiability(LeaseLiability leaseLiability) {
-        this.leaseLiability = leaseLiability;
+    public void setLeaseContract(IFRS16LeaseContract iFRS16LeaseContract) {
+        this.leaseContract = iFRS16LeaseContract;
     }
 
-    public LeasePayment leaseLiability(LeaseLiability leaseLiability) {
-        this.setLeaseLiability(leaseLiability);
+    public LeasePayment leaseContract(IFRS16LeaseContract iFRS16LeaseContract) {
+        this.setLeaseContract(iFRS16LeaseContract);
         return this;
     }
 

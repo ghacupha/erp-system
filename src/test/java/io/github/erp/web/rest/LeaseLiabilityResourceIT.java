@@ -29,7 +29,6 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.domain.IFRS16LeaseContract;
 import io.github.erp.domain.LeaseAmortizationCalculation;
 import io.github.erp.domain.LeaseLiability;
-import io.github.erp.domain.LeasePayment;
 import io.github.erp.repository.LeaseLiabilityRepository;
 import io.github.erp.repository.search.LeaseLiabilitySearchRepository;
 import io.github.erp.service.criteria.LeaseLiabilityCriteria;
@@ -895,32 +894,6 @@ class LeaseLiabilityResourceIT {
 
         // Get all the leaseLiabilityList where leaseAmortizationCalculation equals to (leaseAmortizationCalculationId + 1)
         defaultLeaseLiabilityShouldNotBeFound("leaseAmortizationCalculationId.equals=" + (leaseAmortizationCalculationId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilitiesByLeasePaymentIsEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-        LeasePayment leasePayment;
-        if (TestUtil.findAll(em, LeasePayment.class).isEmpty()) {
-            leasePayment = LeasePaymentResourceIT.createEntity(em);
-            em.persist(leasePayment);
-            em.flush();
-        } else {
-            leasePayment = TestUtil.findAll(em, LeasePayment.class).get(0);
-        }
-        em.persist(leasePayment);
-        em.flush();
-        leaseLiability.addLeasePayment(leasePayment);
-        leaseLiabilityRepository.saveAndFlush(leaseLiability);
-        Long leasePaymentId = leasePayment.getId();
-
-        // Get all the leaseLiabilityList where leasePayment equals to leasePaymentId
-        defaultLeaseLiabilityShouldBeFound("leasePaymentId.equals=" + leasePaymentId);
-
-        // Get all the leaseLiabilityList where leasePayment equals to (leasePaymentId + 1)
-        defaultLeaseLiabilityShouldNotBeFound("leasePaymentId.equals=" + (leasePaymentId + 1));
     }
 
     @Test

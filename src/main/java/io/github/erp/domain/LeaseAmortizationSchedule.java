@@ -18,7 +18,6 @@ package io.github.erp.domain;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,6 +27,7 @@ import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Field;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
@@ -55,7 +55,7 @@ public class LeaseAmortizationSchedule implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "leaseAmortizationCalculation", "leasePayments", "leaseContract" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "leaseAmortizationCalculation", "leaseContract" }, allowSetters = true)
     private LeaseLiability leaseLiability;
 
     @OneToMany(mappedBy = "leaseAmortizationSchedule")
@@ -76,6 +76,7 @@ public class LeaseAmortizationSchedule implements Serializable {
             "lastReportingPeriod",
             "leaseContractDocument",
             "leaseContractCalculations",
+            "leasePayments",
         },
         allowSetters = true
     )

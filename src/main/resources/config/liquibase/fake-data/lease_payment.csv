@@ -1,4 +1,4 @@
-id;payment_amount;payment_date;lease_liability_id
+id;payment_amount;payment_date;lease_contract_id
 1;15234;2024-06-17;1
 2;77514;2024-06-17;2
 3;75570;2024-06-17;3

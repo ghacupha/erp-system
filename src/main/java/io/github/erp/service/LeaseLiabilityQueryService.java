@@ -141,15 +141,6 @@ public class LeaseLiabilityQueryService extends QueryService<LeaseLiability> {
                         )
                     );
             }
-            if (criteria.getLeasePaymentId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getLeasePaymentId(),
-                            root -> root.join(LeaseLiability_.leasePayments, JoinType.LEFT).get(LeasePayment_.id)
-                        )
-                    );
-            }
             if (criteria.getLeaseContractId() != null) {
                 specification =
                     specification.and(

@@ -50,7 +50,7 @@ public class LeasePaymentCriteria implements Serializable, Criteria {
 
     private LocalDateFilter paymentDate;
 
-    private LongFilter leaseLiabilityId;
+    private LongFilter leaseContractId;
 
     private Boolean distinct;
 
@@ -60,7 +60,7 @@ public class LeasePaymentCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
         this.paymentDate = other.paymentDate == null ? null : other.paymentDate.copy();
-        this.leaseLiabilityId = other.leaseLiabilityId == null ? null : other.leaseLiabilityId.copy();
+        this.leaseContractId = other.leaseContractId == null ? null : other.leaseContractId.copy();
         this.distinct = other.distinct;
     }
 
@@ -114,19 +114,19 @@ public class LeasePaymentCriteria implements Serializable, Criteria {
         this.paymentDate = paymentDate;
     }
 
-    public LongFilter getLeaseLiabilityId() {
-        return leaseLiabilityId;
+    public LongFilter getLeaseContractId() {
+        return leaseContractId;
     }
 
-    public LongFilter leaseLiabilityId() {
-        if (leaseLiabilityId == null) {
-            leaseLiabilityId = new LongFilter();
+    public LongFilter leaseContractId() {
+        if (leaseContractId == null) {
+            leaseContractId = new LongFilter();
         }
-        return leaseLiabilityId;
+        return leaseContractId;
     }
 
-    public void setLeaseLiabilityId(LongFilter leaseLiabilityId) {
-        this.leaseLiabilityId = leaseLiabilityId;
+    public void setLeaseContractId(LongFilter leaseContractId) {
+        this.leaseContractId = leaseContractId;
     }
 
     public Boolean getDistinct() {
@@ -150,14 +150,14 @@ public class LeasePaymentCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(paymentAmount, that.paymentAmount) &&
             Objects.equals(paymentDate, that.paymentDate) &&
-            Objects.equals(leaseLiabilityId, that.leaseLiabilityId) &&
+            Objects.equals(leaseContractId, that.leaseContractId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, paymentAmount, paymentDate, leaseLiabilityId, distinct);
+        return Objects.hash(id, paymentAmount, paymentDate, leaseContractId, distinct);
     }
 
     // prettier-ignore
@@ -167,7 +167,7 @@ public class LeasePaymentCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
             (paymentDate != null ? "paymentDate=" + paymentDate + ", " : "") +
-            (leaseLiabilityId != null ? "leaseLiabilityId=" + leaseLiabilityId + ", " : "") +
+            (leaseContractId != null ? "leaseContractId=" + leaseContractId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

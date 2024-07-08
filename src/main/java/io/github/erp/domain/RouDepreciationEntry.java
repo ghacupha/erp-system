@@ -117,6 +117,7 @@ public class RouDepreciationEntry implements Serializable {
             "lastReportingPeriod",
             "leaseContractDocument",
             "leaseContractCalculations",
+            "leasePayments",
         },
         allowSetters = true
     )

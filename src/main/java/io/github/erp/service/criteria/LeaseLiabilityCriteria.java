@@ -58,8 +58,6 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
 
     private LongFilter leaseAmortizationCalculationId;
 
-    private LongFilter leasePaymentId;
-
     private LongFilter leaseContractId;
 
     private Boolean distinct;
@@ -75,7 +73,6 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
         this.interestRate = other.interestRate == null ? null : other.interestRate.copy();
         this.leaseAmortizationCalculationId =
             other.leaseAmortizationCalculationId == null ? null : other.leaseAmortizationCalculationId.copy();
-        this.leasePaymentId = other.leasePaymentId == null ? null : other.leasePaymentId.copy();
         this.leaseContractId = other.leaseContractId == null ? null : other.leaseContractId.copy();
         this.distinct = other.distinct;
     }
@@ -190,21 +187,6 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
         this.leaseAmortizationCalculationId = leaseAmortizationCalculationId;
     }
 
-    public LongFilter getLeasePaymentId() {
-        return leasePaymentId;
-    }
-
-    public LongFilter leasePaymentId() {
-        if (leasePaymentId == null) {
-            leasePaymentId = new LongFilter();
-        }
-        return leasePaymentId;
-    }
-
-    public void setLeasePaymentId(LongFilter leasePaymentId) {
-        this.leasePaymentId = leasePaymentId;
-    }
-
     public LongFilter getLeaseContractId() {
         return leaseContractId;
     }
@@ -245,7 +227,6 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
             Objects.equals(endDate, that.endDate) &&
             Objects.equals(interestRate, that.interestRate) &&
             Objects.equals(leaseAmortizationCalculationId, that.leaseAmortizationCalculationId) &&
-            Objects.equals(leasePaymentId, that.leasePaymentId) &&
             Objects.equals(leaseContractId, that.leaseContractId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -261,7 +242,6 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
             endDate,
             interestRate,
             leaseAmortizationCalculationId,
-            leasePaymentId,
             leaseContractId,
             distinct
         );
@@ -278,7 +258,6 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
             (endDate != null ? "endDate=" + endDate + ", " : "") +
             (interestRate != null ? "interestRate=" + interestRate + ", " : "") +
             (leaseAmortizationCalculationId != null ? "leaseAmortizationCalculationId=" + leaseAmortizationCalculationId + ", " : "") +
-            (leasePaymentId != null ? "leasePaymentId=" + leasePaymentId + ", " : "") +
             (leaseContractId != null ? "leaseContractId=" + leaseContractId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

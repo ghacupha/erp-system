@@ -122,6 +122,7 @@ public class LeaseLiabilityScheduleItem implements Serializable {
             "lastReportingPeriod",
             "leaseContractDocument",
             "leaseContractCalculations",
+            "leasePayments",
         },
         allowSetters = true
     )
@@ -129,7 +130,7 @@ public class LeaseLiabilityScheduleItem implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "leaseAmortizationCalculation", "leasePayments", "leaseContract" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "leaseAmortizationCalculation", "leaseContract" }, allowSetters = true)
     private LeaseLiability leaseLiability;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
