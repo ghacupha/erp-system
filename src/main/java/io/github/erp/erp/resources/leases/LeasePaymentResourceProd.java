@@ -18,6 +18,8 @@ package io.github.erp.erp.resources.leases;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.internal.repository.InternalLeasePaymentRepository;
+import io.github.erp.internal.service.leases.InternalLeasePaymentService;
 import io.github.erp.repository.LeasePaymentRepository;
 import io.github.erp.service.LeasePaymentQueryService;
 import io.github.erp.service.LeasePaymentService;
@@ -59,15 +61,15 @@ public class LeasePaymentResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final LeasePaymentService leasePaymentService;
+    private final InternalLeasePaymentService leasePaymentService;
 
-    private final LeasePaymentRepository leasePaymentRepository;
+    private final InternalLeasePaymentRepository leasePaymentRepository;
 
     private final LeasePaymentQueryService leasePaymentQueryService;
 
     public LeasePaymentResourceProd(
-        LeasePaymentService leasePaymentService,
-        LeasePaymentRepository leasePaymentRepository,
+        InternalLeasePaymentService leasePaymentService,
+        InternalLeasePaymentRepository leasePaymentRepository,
         LeasePaymentQueryService leasePaymentQueryService
     ) {
         this.leasePaymentService = leasePaymentService;
@@ -123,7 +125,7 @@ public class LeasePaymentResourceProd {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        LeasePaymentDTO result = leasePaymentService.save(leasePaymentDTO);
+        LeasePaymentDTO result = leasePaymentService.update(leasePaymentDTO);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, leasePaymentDTO.getId().toString()))
