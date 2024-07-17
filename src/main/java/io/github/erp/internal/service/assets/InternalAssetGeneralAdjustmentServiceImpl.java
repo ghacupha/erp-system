@@ -17,23 +17,30 @@ package io.github.erp.internal.service.assets;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.AssetGeneralAdjustment;
 import io.github.erp.internal.repository.InternalAssetGeneralAdjustmentRepository;
 import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.repository.search.AssetGeneralAdjustmentSearchRepository;
+import io.github.erp.service.AssetGeneralAdjustmentQueryService;
+import io.github.erp.service.criteria.AssetGeneralAdjustmentCriteria;
 import io.github.erp.service.dto.AssetGeneralAdjustmentDTO;
+import io.github.erp.service.dto.AssetRegistrationDTO;
 import io.github.erp.service.mapper.ApplicationUserMapper;
 import io.github.erp.service.mapper.AssetGeneralAdjustmentMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing AssetGeneralAdjustment
@@ -52,17 +59,26 @@ public class InternalAssetGeneralAdjustmentServiceImpl implements InternalAssetG
 
     private final InternalApplicationUserDetailService internalApplicationUserDetailService;
 
+    private final AssetGeneralAdjustmentQueryService assetGeneralAdjustmentQueryService;
+
+    private final ScheduledAssetRegistrationCacheRefreshService scheduledAssetRegistrationCacheRefreshService;
+
+    private final InternalAssetRegistrationService assetRegistrationService;
+
     private final ApplicationUserMapper applicationUserMapper;
 
     public InternalAssetGeneralAdjustmentServiceImpl(
         InternalAssetGeneralAdjustmentRepository assetGeneralAdjustmentRepository,
         AssetGeneralAdjustmentMapper assetGeneralAdjustmentMapper,
         AssetGeneralAdjustmentSearchRepository assetGeneralAdjustmentSearchRepository,
-        InternalApplicationUserDetailService internalApplicationUserDetailService, ApplicationUserMapper applicationUserMapper) {
+        InternalApplicationUserDetailService internalApplicationUserDetailService, AssetGeneralAdjustmentQueryService assetGeneralAdjustmentQueryService, ScheduledAssetRegistrationCacheRefreshService scheduledAssetRegistrationCacheRefreshService, InternalAssetRegistrationService assetRegistrationService, ApplicationUserMapper applicationUserMapper) {
         this.assetGeneralAdjustmentRepository = assetGeneralAdjustmentRepository;
         this.assetGeneralAdjustmentMapper = assetGeneralAdjustmentMapper;
         this.assetGeneralAdjustmentSearchRepository = assetGeneralAdjustmentSearchRepository;
         this.internalApplicationUserDetailService = internalApplicationUserDetailService;
+        this.assetGeneralAdjustmentQueryService = assetGeneralAdjustmentQueryService;
+        this.scheduledAssetRegistrationCacheRefreshService = scheduledAssetRegistrationCacheRefreshService;
+        this.assetRegistrationService = assetRegistrationService;
         this.applicationUserMapper = applicationUserMapper;
     }
 
@@ -71,7 +87,7 @@ public class InternalAssetGeneralAdjustmentServiceImpl implements InternalAssetG
         log.debug("Request to save AssetGeneralAdjustment : {}", assetGeneralAdjustmentDTO);
         internalApplicationUserDetailService.getCurrentApplicationUser().ifPresent(appUser -> {
             assetGeneralAdjustmentDTO.setCreatedBy(appUser);
-            if (assetGeneralAdjustmentDTO.getId() != null ) {
+            if (assetGeneralAdjustmentDTO.getId() != null) {
                 assetGeneralAdjustmentDTO.setLastModifiedBy(appUser);
             }
         });
@@ -126,8 +142,6 @@ public class InternalAssetGeneralAdjustmentServiceImpl implements InternalAssetG
         return dto;
     }
 
-
-
     @Override
     public void delete(Long id) {
         log.debug("Request to delete AssetGeneralAdjustment : {}", id);
@@ -154,5 +168,21 @@ public class InternalAssetGeneralAdjustmentServiceImpl implements InternalAssetG
     public Optional<List<AssetGeneralAdjustmentDTO>> findAdjustmentItems(Long adjustedAssetId, LocalDate depreciationPeriodStartDate) {
         return assetGeneralAdjustmentRepository.findAssetGeneralAdjustment(adjustedAssetId, depreciationPeriodStartDate)
             .map(assetGeneralAdjustmentMapper::toDto);
+    }
+
+    /**
+     * Return a {@link Page} of {@link AssetGeneralAdjustmentDTO} which matches the criteria from the database.
+     * This implementation includes an extra step in which the system refreshes the AssetRegistration cache for related assets
+     *
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @param pageable The page, which should be returned.
+     * @return the matching entities.
+     */
+    @Override
+    public Page<AssetGeneralAdjustmentDTO> findByCriteria(AssetGeneralAdjustmentCriteria criteria, Pageable pageable) {
+
+      scheduledAssetRegistrationCacheRefreshService.refreshDefinedCacheItems(assetRegistrationService.findAdjustedAssetIds());
+
+      return assetGeneralAdjustmentQueryService.findByCriteria(criteria, pageable);
     }
 }

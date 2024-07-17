@@ -141,4 +141,37 @@ public class InternalAssetRegistrationServiceImpl implements InternalAssetRegist
 
         return assetRegistrationRepository.findAllIds();
     }
+
+    /**
+     * List of asset ids of assets related to asset-general-adjustment
+     *
+     * @return List of ids
+     */
+    @Override
+    public List<Long> findAdjustedAssetIds() {
+
+        return assetRegistrationRepository.findAdjustedAssetIds();
+    }
+
+    /**
+     * List of asset ids of assets related to asset-general-adjustment
+     *
+     * @return List of ids
+     */
+    @Override
+    public List<Long> findDisposedAssetIds() {
+
+        return assetRegistrationRepository.findDisposedAssetIds();
+    }
+
+    /**
+     * List of asset ids of assets related to asset-write-off
+     *
+     * @return List of ids
+     */
+    @Override
+    public List<Long> findWrittenOffAssetIds() {
+
+        return assetRegistrationRepository.findWrittenOffAssetIds();
+    }
 }
