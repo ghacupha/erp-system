@@ -188,7 +188,8 @@ public class AssetGeneralAdjustmentResourceProd {
         Pageable pageable
     ) {
         log.debug("REST request to get AssetGeneralAdjustments by criteria: {}", criteria);
-        Page<AssetGeneralAdjustmentDTO> page = assetGeneralAdjustmentQueryService.findByCriteria(criteria, pageable);
+        Page<AssetGeneralAdjustmentDTO> page = assetGeneralAdjustmentService.findByCriteria(criteria, pageable);
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

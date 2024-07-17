@@ -17,6 +17,8 @@ package io.github.erp.erp.resources.assets;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.repository.InternalAssetWriteOffRepository;
+import io.github.erp.internal.service.assets.InternalAssetWriteOffService;
 import io.github.erp.repository.AssetWriteOffRepository;
 import io.github.erp.service.AssetWriteOffQueryService;
 import io.github.erp.service.AssetWriteOffService;
@@ -58,15 +60,15 @@ public class AssetWriteOffResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final AssetWriteOffService assetWriteOffService;
+    private final InternalAssetWriteOffService assetWriteOffService;
 
-    private final AssetWriteOffRepository assetWriteOffRepository;
+    private final InternalAssetWriteOffRepository assetWriteOffRepository;
 
     private final AssetWriteOffQueryService assetWriteOffQueryService;
 
     public AssetWriteOffResourceProd(
-        AssetWriteOffService assetWriteOffService,
-        AssetWriteOffRepository assetWriteOffRepository,
+        InternalAssetWriteOffService assetWriteOffService,
+        InternalAssetWriteOffRepository assetWriteOffRepository,
         AssetWriteOffQueryService assetWriteOffQueryService
     ) {
         this.assetWriteOffService = assetWriteOffService;
@@ -175,7 +177,7 @@ public class AssetWriteOffResourceProd {
     @GetMapping("/asset-write-offs")
     public ResponseEntity<List<AssetWriteOffDTO>> getAllAssetWriteOffs(AssetWriteOffCriteria criteria, Pageable pageable) {
         log.debug("REST request to get AssetWriteOffs by criteria: {}", criteria);
-        Page<AssetWriteOffDTO> page = assetWriteOffQueryService.findByCriteria(criteria, pageable);
+        Page<AssetWriteOffDTO> page = assetWriteOffService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

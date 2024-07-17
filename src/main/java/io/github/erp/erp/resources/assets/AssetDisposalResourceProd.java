@@ -17,6 +17,8 @@ package io.github.erp.erp.resources.assets;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.repository.InternalAssetDisposalRepository;
+import io.github.erp.internal.service.assets.InternalAssetDisposalService;
 import io.github.erp.repository.AssetDisposalRepository;
 import io.github.erp.service.AssetDisposalQueryService;
 import io.github.erp.service.AssetDisposalService;
@@ -58,15 +60,15 @@ public class AssetDisposalResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final AssetDisposalService assetDisposalService;
+    private final InternalAssetDisposalService assetDisposalService;
 
-    private final AssetDisposalRepository assetDisposalRepository;
+    private final InternalAssetDisposalRepository assetDisposalRepository;
 
     private final AssetDisposalQueryService assetDisposalQueryService;
 
     public AssetDisposalResourceProd(
-        AssetDisposalService assetDisposalService,
-        AssetDisposalRepository assetDisposalRepository,
+        InternalAssetDisposalService assetDisposalService,
+        InternalAssetDisposalRepository assetDisposalRepository,
         AssetDisposalQueryService assetDisposalQueryService
     ) {
         this.assetDisposalService = assetDisposalService;
@@ -175,7 +177,7 @@ public class AssetDisposalResourceProd {
     @GetMapping("/asset-disposals")
     public ResponseEntity<List<AssetDisposalDTO>> getAllAssetDisposals(AssetDisposalCriteria criteria, Pageable pageable) {
         log.debug("REST request to get AssetDisposals by criteria: {}", criteria);
-        Page<AssetDisposalDTO> page = assetDisposalQueryService.findByCriteria(criteria, pageable);
+        Page<AssetDisposalDTO> page = assetDisposalService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

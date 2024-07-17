@@ -128,4 +128,55 @@ public interface InternalAssetRegistrationRepository
         countQuery = "SELECT asset_number FROM public.asset_registration"
     )
     List<Long> findAllIds();
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT " +
+            "   CAST(reg.id  AS BIGINT) " +
+            "  FROM public.asset_registration reg " +
+            "  LEFT JOIN asset_general_adjustment aga on reg.id = aga.asset_registration_id " +
+            "  WHERE aga.asset_registration_id IS NOT NULL",
+        countQuery = "" +
+            "SELECT " +
+            "   CAST(reg.id  AS BIGINT) " +
+            "  FROM public.asset_registration reg " +
+            "  LEFT JOIN asset_general_adjustment aga on reg.id = aga.asset_registration_id " +
+            "  WHERE aga.asset_registration_id IS NOT NULL"
+    )
+    List<Long> findAdjustedAssetIds();
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT " +
+            "   CAST(reg.id  AS BIGINT) " +
+            "  FROM public.asset_registration reg " +
+            "  LEFT JOIN asset_disposal dis on reg.id = dis.asset_disposed_id " +
+            "  WHERE dis.asset_disposed_id IS NOT NULL",
+        countQuery = "" +
+            "SELECT " +
+            "   CAST(reg.id  AS BIGINT) " +
+            "  FROM public.asset_registration reg " +
+            "  LEFT JOIN asset_disposal dis on reg.id = dis.asset_disposed_id " +
+            "  WHERE dis.asset_disposed_id IS NOT NULL"
+    )
+    List<Long> findDisposedAssetIds();
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT " +
+            "   CAST(reg.id  AS BIGINT) " +
+            " FROM public.asset_registration reg " +
+            " LEFT JOIN asset_write_off wr on reg.id = wr.asset_written_off_id " +
+            " WHERE wr.asset_written_off_id IS NOT NULL",
+        countQuery = "" +
+            "SELECT " +
+            "   CAST(reg.id  AS BIGINT) " +
+            " FROM public.asset_registration reg " +
+            " LEFT JOIN asset_write_off wr on reg.id = wr.asset_written_off_id " +
+            " WHERE wr.asset_written_off_id IS NOT NULL"
+    )
+    List<Long> findWrittenOffAssetIds();
 }

@@ -103,4 +103,25 @@ public interface InternalAssetRegistrationService {
      * @return List of ids
      */
     List<Long> findAllIds();
+
+    /**
+     * List of asset ids of assets related to asset-general-adjustment
+     *
+     * @return List of ids
+     */
+    List<Long> findAdjustedAssetIds();
+
+    /**
+     * List of asset ids of assets related to asset-general-adjustment
+     *
+     * @return List of ids
+     */
+    List<Long> findDisposedAssetIds();
+
+    /**
+     * List of asset ids of assets related to asset-write-off
+     *
+     * @return List of ids
+     */
+    List<Long> findWrittenOffAssetIds();
 }

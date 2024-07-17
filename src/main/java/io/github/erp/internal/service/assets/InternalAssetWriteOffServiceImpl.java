@@ -23,6 +23,8 @@ import io.github.erp.erp.assets.nbv.buffer.BufferedSinkProcessor;
 import io.github.erp.internal.repository.InternalAssetWriteOffRepository;
 import io.github.erp.internal.service.applicationUser.CurrentUserContext;
 import io.github.erp.repository.search.AssetWriteOffSearchRepository;
+import io.github.erp.service.AssetWriteOffQueryService;
+import io.github.erp.service.criteria.AssetWriteOffCriteria;
 import io.github.erp.service.dto.AssetWriteOffDTO;
 import io.github.erp.service.dto.DepreciationPeriodDTO;
 import io.github.erp.service.mapper.AssetWriteOffMapper;
@@ -52,16 +54,25 @@ public class InternalAssetWriteOffServiceImpl implements InternalAssetWriteOffSe
 
     private final AssetWriteOffSearchRepository assetWriteOffSearchRepository;
 
+    private final AssetWriteOffQueryService assetWriteOffQueryService;
+
+    private final ScheduledAssetRegistrationCacheRefreshService scheduledAssetRegistrationCacheRefreshService;
+
+    private final InternalAssetRegistrationService assetRegistrationService;
+
     private final BufferedSinkProcessor<AssetWriteOff> bufferedSinkProcessor;
 
     public InternalAssetWriteOffServiceImpl(
         InternalAssetWriteOffRepository assetWriteOffRepository,
         AssetWriteOffMapper assetWriteOffMapper,
         AssetWriteOffSearchRepository assetWriteOffSearchRepository,
-        BufferedSinkProcessor<AssetWriteOff> bufferedSinkProcessor) {
+        AssetWriteOffQueryService assetWriteOffQueryService, ScheduledAssetRegistrationCacheRefreshService scheduledAssetRegistrationCacheRefreshService, InternalAssetRegistrationService assetRegistrationService, BufferedSinkProcessor<AssetWriteOff> bufferedSinkProcessor) {
         this.assetWriteOffRepository = assetWriteOffRepository;
         this.assetWriteOffMapper = assetWriteOffMapper;
         this.assetWriteOffSearchRepository = assetWriteOffSearchRepository;
+        this.assetWriteOffQueryService = assetWriteOffQueryService;
+        this.scheduledAssetRegistrationCacheRefreshService = scheduledAssetRegistrationCacheRefreshService;
+        this.assetRegistrationService = assetRegistrationService;
         this.bufferedSinkProcessor = bufferedSinkProcessor;
     }
 
@@ -145,5 +156,21 @@ public class InternalAssetWriteOffServiceImpl implements InternalAssetWriteOffSe
     public Page<AssetWriteOffDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of AssetWriteOffs for query {}", query);
         return assetWriteOffSearchRepository.search(query, pageable).map(assetWriteOffMapper::toDto);
+    }
+
+    /**
+     * Return a {@link Page} of {@link AssetWriteOffDTO} which matches the criteria from the database.
+     *
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @param pageable The page, which should be returned.
+     * @return the matching entities.
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<AssetWriteOffDTO> findByCriteria(AssetWriteOffCriteria criteria, Pageable pageable) {
+
+        scheduledAssetRegistrationCacheRefreshService.refreshDefinedCacheItems(assetRegistrationService.findWrittenOffAssetIds());
+
+        return assetWriteOffQueryService.findByCriteria(criteria, pageable);
     }
 }
