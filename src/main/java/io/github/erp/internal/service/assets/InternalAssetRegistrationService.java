@@ -97,4 +97,10 @@ public interface InternalAssetRegistrationService {
      * @return the next catalogue number
      */
     Long calculateNextAssetNumber();
+
+    /**
+     * List of asset ids
+     * @return List of ids
+     */
+    List<Long> findAllIds();
 }
