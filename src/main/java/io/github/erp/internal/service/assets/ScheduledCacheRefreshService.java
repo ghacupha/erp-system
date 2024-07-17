@@ -20,14 +20,14 @@ public class ScheduledCacheRefreshService {
         this.assetRegistrationService = assetRegistrationService;
     }
 
-//    @Scheduled(fixedRate = 43200000) // Refresh cache every hour
-//    public void refreshCache() {
-//        // Fetch all IDs or a subset of IDs
-//        List<Long> ids = assetRegistrationService.findAllIds();
-//        for (Long id : ids) {
-//            assetRegistrationService.findOne(id); // This does seem to refresh the cache
-//        }
-//    }
+    @Scheduled(fixedRate = 1800000)
+    public void refreshCache() {
+        // Fetch all IDs or a subset of IDs
+        List<Long> ids = assetRegistrationService.findAllIds();
+        for (Long id : ids) {
+            assetRegistrationService.findOne(id); // This does seem to refresh the cache
+        }
+    }
 
     @Scheduled(cron = "0 0 19 * * *") // Run every day at 19:00 (7:00 PM)
     public void refreshCacheAt1900Hours() {

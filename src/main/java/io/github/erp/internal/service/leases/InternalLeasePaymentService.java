@@ -37,6 +37,14 @@ public interface InternalLeasePaymentService {
     LeasePaymentDTO save(LeasePaymentDTO leasePaymentDTO);
 
     /**
+     * Save a leasePayment in the db and exclude index update step
+     *
+     * @param leasePaymentDTO the entity to save.
+     * @return the persisted entity.
+     */
+    LeasePaymentDTO update(LeasePaymentDTO leasePaymentDTO);
+
+    /**
      * Partially updates a leasePayment.
      *
      * @param leasePaymentDTO the entity to update partially.

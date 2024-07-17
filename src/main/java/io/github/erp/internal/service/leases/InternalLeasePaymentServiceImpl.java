@@ -68,6 +68,14 @@ public class InternalLeasePaymentServiceImpl implements InternalLeasePaymentServ
     }
 
     @Override
+    public LeasePaymentDTO update(LeasePaymentDTO leasePaymentDTO) {
+        log.debug("Request to save LeasePayment : {}", leasePaymentDTO);
+        LeasePayment leasePayment = leasePaymentMapper.toEntity(leasePaymentDTO);
+        leasePayment = leasePaymentRepository.save(leasePayment);
+        return leasePaymentMapper.toDto(leasePayment);
+    }
+
+    @Override
     public Optional<LeasePaymentDTO> partialUpdate(LeasePaymentDTO leasePaymentDTO) {
         log.debug("Request to partially update LeasePayment : {}", leasePaymentDTO);
 
