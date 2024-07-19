@@ -30,6 +30,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -121,5 +122,17 @@ public class InternalLeasePaymentServiceImpl implements InternalLeasePaymentServ
     public Page<LeasePaymentDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of LeasePayments for query {}", query);
         return leasePaymentSearchRepository.search(query, pageable).map(leasePaymentMapper::toDto);
+    }
+
+    /**
+     * @param leaseContractId id of the adjacent lease-contract
+     * @return List of lease-payments related to specified lease-contract
+     */
+    @Override
+    public Optional<List<LeasePaymentDTO>> findPaymentsByContractId(Long leaseContractId) {
+        log.debug("Request to fetch lease-payment instances adjacent to lease-contract-id: {}", leaseContractId);
+
+        return leasePaymentRepository.findLeasePaymentsForLeaseContract(leaseContractId)
+            .map(leasePaymentMapper::toDto);
     }
 }

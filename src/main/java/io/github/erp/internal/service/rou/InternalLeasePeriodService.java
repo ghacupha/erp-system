@@ -17,6 +17,7 @@ package io.github.erp.internal.service.rou;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.service.dto.IFRS16LeaseContractDTO;
 import io.github.erp.service.dto.LeasePeriodDTO;
 import io.github.erp.service.dto.RouModelMetadataDTO;
 import org.springframework.data.domain.Page;
@@ -100,4 +101,15 @@ public interface InternalLeasePeriodService {
      * @return the entity.
      */
     Optional<List<LeasePeriodDTO>> findLeasePeriods(RouModelMetadataDTO modelMetadata);
+
+    /**
+     * Get the initial leasePeriod in which the commencement-date belongs.
+     * The appropriate initial leasePeriod is one in whose duration the
+     * commencementDate is contained. The query then fetches the subsequent
+     * periods until the lease-term-periods are attained
+     *
+     * @param leaseContract This is the lease item for which we need to obtain lease-periods
+     * @return the entity.
+     */
+    Optional<List<LeasePeriodDTO>> findLeasePeriods(IFRS16LeaseContractDTO leaseContract);
 }

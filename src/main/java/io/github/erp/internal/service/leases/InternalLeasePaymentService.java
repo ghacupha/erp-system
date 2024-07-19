@@ -22,6 +22,7 @@ import io.github.erp.service.dto.LeasePaymentDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -84,4 +85,11 @@ public interface InternalLeasePaymentService {
      * @return the list of entities.
      */
     Page<LeasePaymentDTO> search(String query, Pageable pageable);
+
+    /**
+     *
+     * @param leaseContractId id of the adjacent lease-contract
+     * @return List of lease-payments related to specified lease-contract
+     */
+    Optional<List<LeasePaymentDTO>> findPaymentsByContractId(Long leaseContractId);
 }

@@ -38,7 +38,6 @@ public class ScheduledAssetRegistrationCacheRefreshServiceImpl implements Schedu
         this.assetRegistrationService = assetRegistrationService;
     }
 
-    // @Scheduled(fixedRate = 1800000)
     public void refreshCache() {
         // Fetch all IDs or a subset of IDs
         List<Long> ids = assetRegistrationService.findAllIds();
@@ -47,7 +46,7 @@ public class ScheduledAssetRegistrationCacheRefreshServiceImpl implements Schedu
         }
     }
 
-    @Scheduled(cron = "0 0 19 * * *") // Run every day at 19:00 (7:00 PM)
+    // @Scheduled(cron = "0 0 19 * * *") // Run every day at 19:00 (7:00 PM)
     public void refreshCacheAt1900Hours() {
         // Fetch all IDs or a subset of IDs
         List<Long> ids = assetRegistrationService.findAllIds();
