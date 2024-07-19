@@ -21,11 +21,33 @@ package io.github.erp.internal.repository;
 import io.github.erp.domain.LeasePayment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data SQL repository for the LeasePayment entity.
  */
 @SuppressWarnings("unused")
 @Repository
-public interface InternalLeasePaymentRepository extends JpaRepository<LeasePayment, Long>, JpaSpecificationExecutor<LeasePayment> {}
+public interface InternalLeasePaymentRepository extends JpaRepository<LeasePayment, Long>, JpaSpecificationExecutor<LeasePayment> {
+
+    /**
+     *
+     * @param leaseContractId id of the IFRS16-lease-contract
+     * @return list of adjacent lease-payment instances
+     */
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT * FROM public.lease_payment " +
+            "WHERE lease_contract_id=:leaseContractId",
+        countQuery = "" +
+            "SELECT * FROM public.lease_payment " +
+            "WHERE lease_contract_id=:leaseContractId"
+    )
+    Optional<List<LeasePayment>> findLeasePaymentsForLeaseContract(@Param("leaseContractId") Long leaseContractId);
+}

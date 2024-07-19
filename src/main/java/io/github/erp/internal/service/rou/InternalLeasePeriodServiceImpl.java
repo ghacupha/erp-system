@@ -21,6 +21,8 @@ import io.github.erp.domain.LeasePeriod;
 import io.github.erp.internal.repository.InternalLeasePeriodRepository;
 import io.github.erp.repository.search.LeasePeriodSearchRepository;
 import io.github.erp.service.RouModelMetadataService;
+import io.github.erp.service.dto.IFRS16LeaseContractDTO;
+import io.github.erp.service.dto.LeaseLiabilityDTO;
 import io.github.erp.service.dto.LeasePeriodDTO;
 import io.github.erp.service.dto.RouModelMetadataDTO;
 import io.github.erp.service.mapper.LeasePeriodMapper;
@@ -150,5 +152,33 @@ public class InternalLeasePeriodServiceImpl implements InternalLeasePeriodServic
         return rouModelMetadataService.findOne(modelMetadata.getId())
             .flatMap(metadata -> leasePeriodRepository.findLeaseDepreciationPeriods(metadata.getCommencementDate(), metadata.getLeaseTermPeriods())
                 .map(leasePeriodMapper::toDto));
+    }
+
+    /**
+     * Get the initial leasePeriod in which the commencement-date belongs.
+     * The appropriate initial leasePeriod is one in whose duration the
+     * commencementDate is contained. The query then fetches the subsequent
+     * periods until the lease-term-periods are attained
+     *
+     * @param leaseContract This is the lease item for which we need to obtain lease-periods
+     * @return the entity.
+     */
+    @Override
+    public Optional<List<LeasePeriodDTO>> findLeasePeriods(IFRS16LeaseContractDTO leaseContract) {
+
+        var ref = new Object() {
+            Optional<List<LeasePeriodDTO>> periodList = Optional.empty();
+        };
+
+        leasePeriodRepository.findInitialPeriod(leaseContract.getId()).ifPresent(commencementDate -> {
+
+            leasePeriodRepository.findNumberOfLeaseTermPeriods(leaseContract.getId()).ifPresent(periods -> {
+
+                ref.periodList = leasePeriodRepository.findLeaseAmortizationPeriods(commencementDate.getStartDate(), periods)
+                    .map(leasePeriodMapper::toDto);
+            });
+        });
+
+        return ref.periodList;
     }
 }

@@ -50,6 +50,55 @@ public interface InternalLeasePeriodRepository extends JpaRepository<LeasePeriod
     @Query(
         nativeQuery = true,
         value = "" +
+            "SELECT " +
+            "    lp.id, " +
+            "    sequence_number, " +
+            "    lp.start_date, " +
+            "    lp.end_date, " +
+            "    period_code, " +
+            "    fiscal_month_id " +
+            " FROM lease_period lp " +
+            " LEFT JOIN lease_liability ll on ll.lease_contract_id = :leaseContractId " +
+            " WHERE lp.start_date <= ll.start_date" +
+            " AND lp.end_date >= ll.start_date" +
+            " ORDER BY sequence_number " +
+            "LIMIT 1;"
+    )
+    Optional<LeasePeriod> findInitialPeriod(@Param("leaseContractId") Long leaseContractId);
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT " +
+            "  CAST(number_of_periods as BIGINT) " +
+            "FROM lease_amortization_calculation ll " +
+            "WHERE ll.lease_contract_id = :leaseContractId"
+    )
+    Optional<Integer> findNumberOfLeaseTermPeriods(@Param("leaseContractId") Long leaseContractId);
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "WITH RECURSIVE LeasePeriods AS ( " +
+            "    SELECT *, " +
+            "           1 AS iteration " +
+            "    FROM lease_period " +
+            "    WHERE start_date <= :commencementDate " +
+            "      AND end_date >= :commencementDate " +
+            " " +
+            "    UNION ALL " +
+            " " +
+            "    SELECT lp.*, " +
+            "           prev.iteration + 1 AS iteration " +
+            "    FROM LeasePeriods prev " +
+            "             JOIN lease_period lp ON lp.sequence_number = prev.sequence_number + 1 " +
+            "    WHERE prev.end_date < ( " +
+            "        SELECT MAX(end_date) FROM lease_period " + // -- This computes the end date condition so that the query never exceeds the periods available currently on the leaseTermPeriods table
+            "    ) " +
+            "      AND prev.iteration < :leaseTermPeriods " + //  -- Limit the number of iterations to the leaseTerm periods
+            ") " +
+            "SELECT * FROM LeasePeriods;",
+        countQuery = "" +
             "WITH RECURSIVE LeasePeriods AS ( " +
             "    SELECT *, " +
             "           1 AS iteration " +
@@ -71,5 +120,58 @@ public interface InternalLeasePeriodRepository extends JpaRepository<LeasePeriod
             "SELECT * FROM LeasePeriods;"
     )
     Optional<List<LeasePeriod>> findLeaseDepreciationPeriods(@Param("commencementDate") LocalDate commencementDate, @Param("leaseTermPeriods") int leaseTermPeriods);
+
+
+    /**
+     * Method used to derive periods for use in the amortization table
+     *
+     * @param commencementDate The first date on the schedule
+     * @param leaseTermPeriods The number of monthly (reporting) periods
+     * @return List of lease amortization periods
+     */
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "WITH RECURSIVE LeasePeriods AS ( " +
+            "    SELECT *, " +
+            "           1 AS iteration " +
+            "    FROM lease_period " +
+            "    WHERE start_date <= :commencementDate " +
+            "      AND end_date >= :commencementDate " +
+            " " +
+            "    UNION ALL " +
+            " " +
+            "    SELECT lp.*, " +
+            "           prev.iteration + 1 AS iteration " +
+            "    FROM LeasePeriods prev " +
+            "             JOIN lease_period lp ON lp.sequence_number = prev.sequence_number + 1 " +
+            "    WHERE prev.end_date < ( " +
+            "        SELECT MAX(end_date) FROM lease_period " + // -- This computes the end date condition so that the query never exceeds the periods available currently on the leaseTermPeriods table
+            "    ) " +
+            "      AND prev.iteration < :leaseTermPeriods " + //  -- Limit the number of iterations to the leaseTerm periods
+            ") " +
+            "SELECT * FROM LeasePeriods",
+        countQuery = "" +
+            "WITH RECURSIVE LeasePeriods AS ( " +
+            "    SELECT *, " +
+            "           1 AS iteration " +
+            "    FROM lease_period " +
+            "    WHERE start_date <= :commencementDate " +
+            "      AND end_date >= :commencementDate " +
+            " " +
+            "    UNION ALL " +
+            " " +
+            "    SELECT lp.*, " +
+            "           prev.iteration + 1 AS iteration " +
+            "    FROM LeasePeriods prev " +
+            "             JOIN lease_period lp ON lp.sequence_number = prev.sequence_number + 1 " +
+            "    WHERE prev.end_date < ( " +
+            "        SELECT MAX(end_date) FROM lease_period " + // -- This computes the end date condition so that the query never exceeds the periods available currently on the leaseTermPeriods table
+            "    ) " +
+            "      AND prev.iteration < :leaseTermPeriods " + //  -- Limit the number of iterations to the leaseTerm periods
+            ") " +
+            "SELECT * FROM LeasePeriods"
+    )
+    Optional<List<LeasePeriod>> findLeaseAmortizationPeriods(@Param("commencementDate") LocalDate commencementDate, @Param("leaseTermPeriods") int leaseTermPeriods);
 
 }
