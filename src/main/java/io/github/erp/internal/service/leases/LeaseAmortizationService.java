@@ -116,6 +116,8 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
             BigDecimal interestPayableOpening = BigDecimal.ZERO;
         };
 
+        // TODO fix first period
+        // TODO replace leasePeriod with leaseRepaymentPeriod
         Optional<List<LeasePeriodDTO>> leasePeriods = leasePeriodService.findLeasePeriods(ifrs16LeaseContract);
 
         Optional<List<LeasePaymentDTO>> leasePayments = leasePaymentService.findPaymentsByContractId(ifrs16LeaseContract.getId());
