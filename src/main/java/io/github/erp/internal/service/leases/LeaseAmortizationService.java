@@ -126,10 +126,17 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
 
         leasePeriods.ifPresent(periods -> {
             for (int period = 0; period < periods.size(); period++) {
+
+                BigDecimal interestPayableOpening = openingBalanceRef.interestPayableOpening;
+
                 BigDecimal interestAccrued = openingBalanceRef.openingBalance.multiply(monthlyRate);
                 BigDecimal totalPayment = calculateMonthlyPayment(leasePayments.get(), periods.get(period));
-                BigDecimal principalPayment = totalPayment.subtract(interestAccrued).max(BigDecimal.ZERO);
-                BigDecimal interestPayment = totalPayment.subtract(principalPayment).max(BigDecimal.ZERO);
+
+
+                BigDecimal interestPayment = interestPayableOpening.add(interestAccrued).min(totalPayment).max(BigDecimal.ZERO);
+
+                BigDecimal principalPayment = totalPayment.subtract(interestPayment).max(BigDecimal.ZERO);
+
                 BigDecimal closingBalance = openingBalanceRef.openingBalance.subtract(principalPayment);
                 BigDecimal interestPayableClosing = openingBalanceRef.interestPayableOpening.add(interestAccrued).subtract(interestPayment);
 
@@ -139,8 +146,8 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
                 item.setOutstandingBalance(closingBalance);
                 item.setCashPayment(totalPayment);
                 item.setPrincipalPayment(principalPayment);
-                item.setInterestPayment(interestAccrued);
-                item.setInterestPayableOpening(openingBalanceRef.interestPayableOpening);
+                item.setInterestPayment(interestPayment);
+                item.setInterestPayableOpening(interestPayableOpening);
                 item.setInterestAccrued(interestAccrued);
                 item.setInterestPayableClosing(interestPayableClosing);
                 item.setLeaseLiability(leaseLiability);
