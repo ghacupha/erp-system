@@ -25,14 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import io.github.erp.internal.service.rou.InternalLeasePeriodService;
 import io.github.erp.service.dto.IFRS16LeaseContractDTO;
 import io.github.erp.service.dto.LeaseAmortizationCalculationDTO;
 import io.github.erp.service.dto.LeaseAmortizationScheduleDTO;
 import io.github.erp.service.dto.LeaseLiabilityDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
 import io.github.erp.service.dto.LeasePaymentDTO;
-import io.github.erp.service.dto.LeasePeriodDTO;
+import io.github.erp.service.dto.LeaseRepaymentPeriodDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +41,7 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
 
     private static final RoundingMode ROUND_HALF_EVEN = RoundingMode.HALF_EVEN;
 
-    private final InternalLeasePeriodService leasePeriodService;
+    private final InternalLeaseRepaymentPeriodService leaseRepaymentPeriodService;
     private final InternalLeasePaymentService leasePaymentService;
     private final InternalLeaseLiabilityService leaseLiabilityService;
     private final InternalLeaseAmortizationCalculationService leaseAmortizationCalculationService;
@@ -50,15 +49,15 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
     private final InternalIFRS16LeaseContractService leaseContractService;
 
     public LeaseAmortizationService(
+        InternalLeaseRepaymentPeriodService leaseRepaymentPeriodService,
         InternalLeaseLiabilityService leaseLiabilityService,
         InternalLeaseAmortizationCalculationService leaseAmortizationCalculationService,
-        InternalLeasePeriodService leasePeriodService,
         InternalLeasePaymentService leasePaymentService,
         InternalLeaseAmortizationScheduleService internalLeaseAmortizationScheduleService,
         InternalIFRS16LeaseContractService leaseContractService) {
+        this.leaseRepaymentPeriodService = leaseRepaymentPeriodService;
         this.leaseLiabilityService = leaseLiabilityService;
         this.leaseAmortizationCalculationService = leaseAmortizationCalculationService;
-        this.leasePeriodService = leasePeriodService;
         this.leasePaymentService = leasePaymentService;
         this.internalLeaseAmortizationScheduleService = internalLeaseAmortizationScheduleService;
         this.leaseContractService = leaseContractService;
@@ -74,7 +73,6 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
         LeaseLiabilityDTO leaseLiability = leaseLiabilityOpt.get();
 
         Optional<IFRS16LeaseContractDTO> ifrs16LeaseContractOpt = leaseContractService.findOne(leaseLiability.getLeaseContract().getId());
-
 
         if (ifrs16LeaseContractOpt.isEmpty()) {
             throw new IllegalArgumentException("IFRS16 Contract id # " + leaseLiability.getLeaseContract().getId() + " not found");
@@ -99,26 +97,20 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
 
         LeaseAmortizationScheduleDTO leaseAmortizationSchedule = scheduleOpt.get();
 
-        BigDecimal principal = leaseLiability.getLiabilityAmount();
-        BigDecimal interestRate = calculation.getInterestRate();
-        int periods = calculation.getNumberOfPeriods();
-
-        return calculateAmortizationSchedule(principal, interestRate, leaseLiability, ifrs16LeaseContract, leaseAmortizationSchedule);
+        return calculateAmortizationSchedule(calculation, leaseLiability, ifrs16LeaseContract, leaseAmortizationSchedule);
     }
 
     private List<LeaseLiabilityScheduleItemDTO> calculateAmortizationSchedule(
-        BigDecimal principal, BigDecimal interestRate, LeaseLiabilityDTO leaseLiability, IFRS16LeaseContractDTO ifrs16LeaseContract, LeaseAmortizationScheduleDTO leaseAmortizationSchedule) {
+        LeaseAmortizationCalculationDTO calculation, LeaseLiabilityDTO leaseLiability, IFRS16LeaseContractDTO ifrs16LeaseContract, LeaseAmortizationScheduleDTO leaseAmortizationSchedule) {
 
         List<LeaseLiabilityScheduleItemDTO> scheduleItems = new ArrayList<>();
-        BigDecimal monthlyRate = interestRate.divide(BigDecimal.valueOf(12), ROUND_HALF_EVEN);
+        BigDecimal monthlyRate = calculation.getInterestRate().divide(BigDecimal.valueOf(12), ROUND_HALF_EVEN);
         var openingBalanceRef = new Object() {
-            BigDecimal openingBalance = principal;
+            BigDecimal openingBalance = leaseLiability.getLiabilityAmount();
             BigDecimal interestPayableOpening = BigDecimal.ZERO;
         };
 
-        // TODO fix first period
-        // TODO replace leasePeriod with leaseRepaymentPeriod
-        Optional<List<LeasePeriodDTO>> leasePeriods = leasePeriodService.findLeasePeriods(ifrs16LeaseContract);
+        Optional<List<LeaseRepaymentPeriodDTO>> leasePeriods = leaseRepaymentPeriodService.findLeasePeriods(ifrs16LeaseContract.getCommencementDate(), calculation.getNumberOfPeriods());
 
         Optional<List<LeasePaymentDTO>> leasePayments = leasePaymentService.findPaymentsByContractId(ifrs16LeaseContract.getId());
 
@@ -155,7 +147,9 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
                 item.setLeaseLiability(leaseLiability);
                 item.setLeaseContract(ifrs16LeaseContract);
                 item.setLeaseAmortizationSchedule(leaseAmortizationSchedule);
-                item.setLeasePeriod(periods.get(period));
+
+                // TODO CHANGE TO LEASE REPAYMENT PERIOD
+                // item.setLeasePeriod(periods.get(period));
 
                 scheduleItems.add(item);
 
@@ -168,14 +162,14 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
         return scheduleItems;
     }
 
-    private BigDecimal calculateMonthlyPayment(List<LeasePaymentDTO> leasePayments, LeasePeriodDTO currentPeriod) {
+    private BigDecimal calculateMonthlyPayment(List<LeasePaymentDTO> leasePayments, LeaseRepaymentPeriodDTO currentPeriod) {
 
         // Pick adjacent lease-payment instance amount, return Zero otherwise
         // Does the current period have a payment?
         return findPaymentAmountWithinPeriod(leasePayments, currentPeriod);
     }
 
-    private BigDecimal findPaymentAmountWithinPeriod(List<LeasePaymentDTO> leasePayments, LeasePeriodDTO leasePeriod) {
+    private BigDecimal findPaymentAmountWithinPeriod(List<LeasePaymentDTO> leasePayments, LeaseRepaymentPeriodDTO leasePeriod) {
         for (LeasePaymentDTO leasePayment : leasePayments) {
             if (isPaymentDateWithinPeriod(leasePayment.getPaymentDate(), leasePeriod)) {
                 return leasePayment.getPaymentAmount();
@@ -184,7 +178,7 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
         return BigDecimal.ZERO;
     }
 
-    private static boolean isPaymentDateWithinPeriod(LocalDate paymentDate, LeasePeriodDTO leasePeriod) {
+    private static boolean isPaymentDateWithinPeriod(LocalDate paymentDate, LeaseRepaymentPeriodDTO leasePeriod) {
         return (paymentDate.isEqual(leasePeriod.getStartDate()) || paymentDate.isAfter(leasePeriod.getStartDate())) &&
             (paymentDate.isEqual(leasePeriod.getEndDate()) || paymentDate.isBefore(leasePeriod.getEndDate()));
     }
