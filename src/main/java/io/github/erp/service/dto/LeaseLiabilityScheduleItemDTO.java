@@ -54,8 +54,6 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
 
     private Set<UniversallyUniqueMappingDTO> universallyUniqueMappings = new HashSet<>();
 
-    private LeasePeriodDTO leasePeriod;
-
     private LeaseAmortizationScheduleDTO leaseAmortizationSchedule;
 
     private IFRS16LeaseContractDTO leaseContract;
@@ -158,14 +156,6 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
         this.universallyUniqueMappings = universallyUniqueMappings;
     }
 
-    public LeasePeriodDTO getLeasePeriod() {
-        return leasePeriod;
-    }
-
-    public void setLeasePeriod(LeasePeriodDTO leasePeriod) {
-        this.leasePeriod = leasePeriod;
-    }
-
     public LeaseAmortizationScheduleDTO getLeaseAmortizationSchedule() {
         return leaseAmortizationSchedule;
     }
@@ -227,7 +217,6 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
             ", interestPayableClosing=" + getInterestPayableClosing() +
             ", placeholders=" + getPlaceholders() +
             ", universallyUniqueMappings=" + getUniversallyUniqueMappings() +
-            ", leasePeriod=" + getLeasePeriod() +
             ", leaseAmortizationSchedule=" + getLeaseAmortizationSchedule() +
             ", leaseContract=" + getLeaseContract() +
             ", leaseLiability=" + getLeaseLiability() +

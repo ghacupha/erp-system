@@ -27,8 +27,6 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A LeaseLiabilityScheduleItem.
@@ -36,7 +34,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Entity
 @Table(name = "lease_liability_schedule_item")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "leaseliabilityscheduleitem-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "leaseliabilityscheduleitem")
 public class LeaseLiabilityScheduleItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,43 +43,33 @@ public class LeaseLiabilityScheduleItem implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
-    @Field(type = FieldType.Long)
     private Long id;
 
     @Column(name = "sequence_number")
-    @Field(type = FieldType.Integer)
     private Integer sequenceNumber;
 
     @Column(name = "opening_balance", precision = 21, scale = 2)
-    @Field(type = FieldType.Double)
     private BigDecimal openingBalance;
 
     @Column(name = "cash_payment", precision = 21, scale = 2)
-    @Field(type = FieldType.Double)
     private BigDecimal cashPayment;
 
     @Column(name = "principal_payment", precision = 21, scale = 2)
-    @Field(type = FieldType.Double)
     private BigDecimal principalPayment;
 
     @Column(name = "interest_payment", precision = 21, scale = 2)
-    @Field(type = FieldType.Double)
     private BigDecimal interestPayment;
 
     @Column(name = "outstanding_balance", precision = 21, scale = 2)
-    @Field(type = FieldType.Double)
     private BigDecimal outstandingBalance;
 
     @Column(name = "interest_payable_opening", precision = 21, scale = 2)
-    @Field(type = FieldType.Double)
     private BigDecimal interestPayableOpening;
 
     @Column(name = "interest_accrued", precision = 21, scale = 2)
-    @Field(type = FieldType.Double)
     private BigDecimal interestAccrued;
 
     @Column(name = "interest_payable_closing", precision = 21, scale = 2)
-    @Field(type = FieldType.Double)
     private BigDecimal interestPayableClosing;
 
     @ManyToMany
@@ -103,10 +91,6 @@ public class LeaseLiabilityScheduleItem implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "parentMapping", "placeholders" }, allowSetters = true)
     private Set<UniversallyUniqueMapping> universallyUniqueMappings = new HashSet<>();
-
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "fiscalMonth" }, allowSetters = true)
-    private LeasePeriod leasePeriod;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "leaseLiability", "leaseLiabilityScheduleItems", "leaseContract" }, allowSetters = true)
@@ -308,19 +292,6 @@ public class LeaseLiabilityScheduleItem implements Serializable {
 
     public LeaseLiabilityScheduleItem removeUniversallyUniqueMapping(UniversallyUniqueMapping universallyUniqueMapping) {
         this.universallyUniqueMappings.remove(universallyUniqueMapping);
-        return this;
-    }
-
-    public LeasePeriod getLeasePeriod() {
-        return this.leasePeriod;
-    }
-
-    public void setLeasePeriod(LeasePeriod leasePeriod) {
-        this.leasePeriod = leasePeriod;
-    }
-
-    public LeaseLiabilityScheduleItem leasePeriod(LeasePeriod leasePeriod) {
-        this.setLeasePeriod(leasePeriod);
         return this;
     }
 
