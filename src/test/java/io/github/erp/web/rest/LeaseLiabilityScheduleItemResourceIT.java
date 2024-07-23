@@ -30,7 +30,6 @@ import io.github.erp.domain.IFRS16LeaseContract;
 import io.github.erp.domain.LeaseAmortizationSchedule;
 import io.github.erp.domain.LeaseLiability;
 import io.github.erp.domain.LeaseLiabilityScheduleItem;
-import io.github.erp.domain.LeasePeriod;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.repository.LeaseLiabilityScheduleItemRepository;
@@ -1361,32 +1360,6 @@ class LeaseLiabilityScheduleItemResourceIT {
 
         // Get all the leaseLiabilityScheduleItemList where universallyUniqueMapping equals to (universallyUniqueMappingId + 1)
         defaultLeaseLiabilityScheduleItemShouldNotBeFound("universallyUniqueMappingId.equals=" + (universallyUniqueMappingId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByLeasePeriodIsEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-        LeasePeriod leasePeriod;
-        if (TestUtil.findAll(em, LeasePeriod.class).isEmpty()) {
-            leasePeriod = LeasePeriodResourceIT.createEntity(em);
-            em.persist(leasePeriod);
-            em.flush();
-        } else {
-            leasePeriod = TestUtil.findAll(em, LeasePeriod.class).get(0);
-        }
-        em.persist(leasePeriod);
-        em.flush();
-        leaseLiabilityScheduleItem.setLeasePeriod(leasePeriod);
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-        Long leasePeriodId = leasePeriod.getId();
-
-        // Get all the leaseLiabilityScheduleItemList where leasePeriod equals to leasePeriodId
-        defaultLeaseLiabilityScheduleItemShouldBeFound("leasePeriodId.equals=" + leasePeriodId);
-
-        // Get all the leaseLiabilityScheduleItemList where leasePeriod equals to (leasePeriodId + 1)
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("leasePeriodId.equals=" + (leasePeriodId + 1));
     }
 
     @Test

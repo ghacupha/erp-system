@@ -67,8 +67,6 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
 
     private LongFilter universallyUniqueMappingId;
 
-    private LongFilter leasePeriodId;
-
     private LongFilter leaseAmortizationScheduleId;
 
     private LongFilter leaseContractId;
@@ -92,7 +90,6 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
         this.interestPayableClosing = other.interestPayableClosing == null ? null : other.interestPayableClosing.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.universallyUniqueMappingId = other.universallyUniqueMappingId == null ? null : other.universallyUniqueMappingId.copy();
-        this.leasePeriodId = other.leasePeriodId == null ? null : other.leasePeriodId.copy();
         this.leaseAmortizationScheduleId = other.leaseAmortizationScheduleId == null ? null : other.leaseAmortizationScheduleId.copy();
         this.leaseContractId = other.leaseContractId == null ? null : other.leaseContractId.copy();
         this.leaseLiabilityId = other.leaseLiabilityId == null ? null : other.leaseLiabilityId.copy();
@@ -284,21 +281,6 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
         this.universallyUniqueMappingId = universallyUniqueMappingId;
     }
 
-    public LongFilter getLeasePeriodId() {
-        return leasePeriodId;
-    }
-
-    public LongFilter leasePeriodId() {
-        if (leasePeriodId == null) {
-            leasePeriodId = new LongFilter();
-        }
-        return leasePeriodId;
-    }
-
-    public void setLeasePeriodId(LongFilter leasePeriodId) {
-        this.leasePeriodId = leasePeriodId;
-    }
-
     public LongFilter getLeaseAmortizationScheduleId() {
         return leaseAmortizationScheduleId;
     }
@@ -374,7 +356,6 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
             Objects.equals(interestPayableClosing, that.interestPayableClosing) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(universallyUniqueMappingId, that.universallyUniqueMappingId) &&
-            Objects.equals(leasePeriodId, that.leasePeriodId) &&
             Objects.equals(leaseAmortizationScheduleId, that.leaseAmortizationScheduleId) &&
             Objects.equals(leaseContractId, that.leaseContractId) &&
             Objects.equals(leaseLiabilityId, that.leaseLiabilityId) &&
@@ -397,7 +378,6 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
             interestPayableClosing,
             placeholderId,
             universallyUniqueMappingId,
-            leasePeriodId,
             leaseAmortizationScheduleId,
             leaseContractId,
             leaseLiabilityId,
@@ -421,7 +401,6 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
             (interestPayableClosing != null ? "interestPayableClosing=" + interestPayableClosing + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (universallyUniqueMappingId != null ? "universallyUniqueMappingId=" + universallyUniqueMappingId + ", " : "") +
-            (leasePeriodId != null ? "leasePeriodId=" + leasePeriodId + ", " : "") +
             (leaseAmortizationScheduleId != null ? "leaseAmortizationScheduleId=" + leaseAmortizationScheduleId + ", " : "") +
             (leaseContractId != null ? "leaseContractId=" + leaseContractId + ", " : "") +
             (leaseLiabilityId != null ? "leaseLiabilityId=" + leaseLiabilityId + ", " : "") +
