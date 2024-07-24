@@ -117,6 +117,12 @@ public class LeaseLiabilityScheduleItem implements Serializable {
     @JsonIgnoreProperties(value = { "leaseAmortizationCalculation", "leaseContract" }, allowSetters = true)
     private LeaseLiability leaseLiability;
 
+    @JsonIgnoreProperties(value = { "fiscalMonth" }, allowSetters = true)
+    @OneToOne(optional = false)
+    @NotNull
+    @JoinColumn(unique = true)
+    private LeaseRepaymentPeriod leasePeriod;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -331,6 +337,19 @@ public class LeaseLiabilityScheduleItem implements Serializable {
 
     public LeaseLiabilityScheduleItem leaseLiability(LeaseLiability leaseLiability) {
         this.setLeaseLiability(leaseLiability);
+        return this;
+    }
+
+    public LeaseRepaymentPeriod getLeasePeriod() {
+        return this.leasePeriod;
+    }
+
+    public void setLeasePeriod(LeaseRepaymentPeriod leaseRepaymentPeriod) {
+        this.leasePeriod = leaseRepaymentPeriod;
+    }
+
+    public LeaseLiabilityScheduleItem leasePeriod(LeaseRepaymentPeriod leaseRepaymentPeriod) {
+        this.setLeasePeriod(leaseRepaymentPeriod);
         return this;
     }
 

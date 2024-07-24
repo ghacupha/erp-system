@@ -73,6 +73,16 @@
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
       "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "leasePeriod",
+      "otherEntityName": "leaseRepaymentPeriod",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "periodCode",
+      "ownerSide": true,
+      "id": false,
+      "otherEntityRelationshipName": "leaseLiabilityScheduleItem"
     }
   ],
   "service": "serviceImpl",

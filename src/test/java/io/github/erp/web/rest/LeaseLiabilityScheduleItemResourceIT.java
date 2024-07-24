@@ -30,6 +30,7 @@ import io.github.erp.domain.IFRS16LeaseContract;
 import io.github.erp.domain.LeaseAmortizationSchedule;
 import io.github.erp.domain.LeaseLiability;
 import io.github.erp.domain.LeaseLiabilityScheduleItem;
+import io.github.erp.domain.LeaseRepaymentPeriod;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.UniversallyUniqueMapping;
 import io.github.erp.repository.LeaseLiabilityScheduleItemRepository;
@@ -176,6 +177,16 @@ class LeaseLiabilityScheduleItemResourceIT {
             leaseLiability = TestUtil.findAll(em, LeaseLiability.class).get(0);
         }
         leaseLiabilityScheduleItem.setLeaseLiability(leaseLiability);
+        // Add required entity
+        LeaseRepaymentPeriod leaseRepaymentPeriod;
+        if (TestUtil.findAll(em, LeaseRepaymentPeriod.class).isEmpty()) {
+            leaseRepaymentPeriod = LeaseRepaymentPeriodResourceIT.createEntity(em);
+            em.persist(leaseRepaymentPeriod);
+            em.flush();
+        } else {
+            leaseRepaymentPeriod = TestUtil.findAll(em, LeaseRepaymentPeriod.class).get(0);
+        }
+        leaseLiabilityScheduleItem.setLeasePeriod(leaseRepaymentPeriod);
         return leaseLiabilityScheduleItem;
     }
 
@@ -216,6 +227,16 @@ class LeaseLiabilityScheduleItemResourceIT {
             leaseLiability = TestUtil.findAll(em, LeaseLiability.class).get(0);
         }
         leaseLiabilityScheduleItem.setLeaseLiability(leaseLiability);
+        // Add required entity
+        LeaseRepaymentPeriod leaseRepaymentPeriod;
+        if (TestUtil.findAll(em, LeaseRepaymentPeriod.class).isEmpty()) {
+            leaseRepaymentPeriod = LeaseRepaymentPeriodResourceIT.createUpdatedEntity(em);
+            em.persist(leaseRepaymentPeriod);
+            em.flush();
+        } else {
+            leaseRepaymentPeriod = TestUtil.findAll(em, LeaseRepaymentPeriod.class).get(0);
+        }
+        leaseLiabilityScheduleItem.setLeasePeriod(leaseRepaymentPeriod);
         return leaseLiabilityScheduleItem;
     }
 
@@ -1438,6 +1459,21 @@ class LeaseLiabilityScheduleItemResourceIT {
 
         // Get all the leaseLiabilityScheduleItemList where leaseLiability equals to (leaseLiabilityId + 1)
         defaultLeaseLiabilityScheduleItemShouldNotBeFound("leaseLiabilityId.equals=" + (leaseLiabilityId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityScheduleItemsByLeasePeriodIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        LeaseRepaymentPeriod leasePeriod = leaseLiabilityScheduleItem.getLeasePeriod();
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+        Long leasePeriodId = leasePeriod.getId();
+
+        // Get all the leaseLiabilityScheduleItemList where leasePeriod equals to leasePeriodId
+        defaultLeaseLiabilityScheduleItemShouldBeFound("leasePeriodId.equals=" + leasePeriodId);
+
+        // Get all the leaseLiabilityScheduleItemList where leasePeriod equals to (leasePeriodId + 1)
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("leasePeriodId.equals=" + (leasePeriodId + 1));
     }
 
     /**

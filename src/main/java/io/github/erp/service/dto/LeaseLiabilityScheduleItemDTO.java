@@ -60,6 +60,8 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
 
     private LeaseLiabilityDTO leaseLiability;
 
+    private LeaseRepaymentPeriodDTO leasePeriod;
+
     public Long getId() {
         return id;
     }
@@ -180,6 +182,14 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
         this.leaseLiability = leaseLiability;
     }
 
+    public LeaseRepaymentPeriodDTO getLeasePeriod() {
+        return leasePeriod;
+    }
+
+    public void setLeasePeriod(LeaseRepaymentPeriodDTO leasePeriod) {
+        this.leasePeriod = leasePeriod;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -220,6 +230,7 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
             ", leaseAmortizationSchedule=" + getLeaseAmortizationSchedule() +
             ", leaseContract=" + getLeaseContract() +
             ", leaseLiability=" + getLeaseLiability() +
+            ", leasePeriod=" + getLeasePeriod() +
             "}";
     }
 }
