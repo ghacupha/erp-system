@@ -73,6 +73,8 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
 
     private LongFilter leaseLiabilityId;
 
+    private LongFilter leasePeriodId;
+
     private Boolean distinct;
 
     public LeaseLiabilityScheduleItemCriteria() {}
@@ -93,6 +95,7 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
         this.leaseAmortizationScheduleId = other.leaseAmortizationScheduleId == null ? null : other.leaseAmortizationScheduleId.copy();
         this.leaseContractId = other.leaseContractId == null ? null : other.leaseContractId.copy();
         this.leaseLiabilityId = other.leaseLiabilityId == null ? null : other.leaseLiabilityId.copy();
+        this.leasePeriodId = other.leasePeriodId == null ? null : other.leasePeriodId.copy();
         this.distinct = other.distinct;
     }
 
@@ -326,6 +329,21 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
         this.leaseLiabilityId = leaseLiabilityId;
     }
 
+    public LongFilter getLeasePeriodId() {
+        return leasePeriodId;
+    }
+
+    public LongFilter leasePeriodId() {
+        if (leasePeriodId == null) {
+            leasePeriodId = new LongFilter();
+        }
+        return leasePeriodId;
+    }
+
+    public void setLeasePeriodId(LongFilter leasePeriodId) {
+        this.leasePeriodId = leasePeriodId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -359,6 +377,7 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
             Objects.equals(leaseAmortizationScheduleId, that.leaseAmortizationScheduleId) &&
             Objects.equals(leaseContractId, that.leaseContractId) &&
             Objects.equals(leaseLiabilityId, that.leaseLiabilityId) &&
+            Objects.equals(leasePeriodId, that.leasePeriodId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -381,6 +400,7 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
             leaseAmortizationScheduleId,
             leaseContractId,
             leaseLiabilityId,
+            leasePeriodId,
             distinct
         );
     }
@@ -404,6 +424,7 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
             (leaseAmortizationScheduleId != null ? "leaseAmortizationScheduleId=" + leaseAmortizationScheduleId + ", " : "") +
             (leaseContractId != null ? "leaseContractId=" + leaseContractId + ", " : "") +
             (leaseLiabilityId != null ? "leaseLiabilityId=" + leaseLiabilityId + ", " : "") +
+            (leasePeriodId != null ? "leasePeriodId=" + leasePeriodId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

@@ -131,7 +131,6 @@ public class InternalLeaseRepaymentPeriodServiceImpl implements InternalLeaseRep
     public Optional<List<LeaseRepaymentPeriodDTO>> findLeasePeriods(LocalDate commencementDate, int numberOfPeriods) {
         log.debug("Request to get all LeaseRepaymentPeriods for starting {} for {} periods", commencementDate.format(DateTimeFormatter.ISO_LOCAL_DATE), numberOfPeriods);
 
-
         return leaseRepaymentPeriodRepository.findLeasePeriods(commencementDate, numberOfPeriods).map(leaseRepaymentPeriodMapper::toDto);
     }
 }

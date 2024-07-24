@@ -155,7 +155,7 @@ class LeaseLiabilityScheduleItemResourceIT {
         // Add required entity
         IFRS16LeaseContract iFRS16LeaseContract;
         if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
-            iFRS16LeaseContract =IFRS16LeaseContractResourceIT.createEntity(em);
+            iFRS16LeaseContract = IFRS16LeaseContractResourceIT.createEntity(em);
             em.persist(iFRS16LeaseContract);
             em.flush();
         } else {
@@ -165,13 +165,23 @@ class LeaseLiabilityScheduleItemResourceIT {
         // Add required entity
         LeaseLiability leaseLiability;
         if (TestUtil.findAll(em, LeaseLiability.class).isEmpty()) {
-            leaseLiability =LeaseLiabilityResourceIT.createEntity(em);
+            leaseLiability = LeaseLiabilityResourceIT.createEntity(em);
             em.persist(leaseLiability);
             em.flush();
         } else {
             leaseLiability = TestUtil.findAll(em, LeaseLiability.class).get(0);
         }
         leaseLiabilityScheduleItem.setLeaseLiability(leaseLiability);
+        // Add required entity
+        LeaseRepaymentPeriod leaseRepaymentPeriod;
+        if (TestUtil.findAll(em, LeaseRepaymentPeriod.class).isEmpty()) {
+            leaseRepaymentPeriod = LeaseRepaymentPeriodResourceIT.createEntity(em);
+            em.persist(leaseRepaymentPeriod);
+            em.flush();
+        } else {
+            leaseRepaymentPeriod = TestUtil.findAll(em, LeaseRepaymentPeriod.class).get(0);
+        }
+        leaseLiabilityScheduleItem.setLeasePeriod(leaseRepaymentPeriod);
         return leaseLiabilityScheduleItem;
     }
 
@@ -195,7 +205,7 @@ class LeaseLiabilityScheduleItemResourceIT {
         // Add required entity
         IFRS16LeaseContract iFRS16LeaseContract;
         if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
-            iFRS16LeaseContract =IFRS16LeaseContractResourceIT.createUpdatedEntity(em);
+            iFRS16LeaseContract = IFRS16LeaseContractResourceIT.createUpdatedEntity(em);
             em.persist(iFRS16LeaseContract);
             em.flush();
         } else {
@@ -205,13 +215,23 @@ class LeaseLiabilityScheduleItemResourceIT {
         // Add required entity
         LeaseLiability leaseLiability;
         if (TestUtil.findAll(em, LeaseLiability.class).isEmpty()) {
-            leaseLiability =LeaseLiabilityResourceIT.createUpdatedEntity(em);
+            leaseLiability = LeaseLiabilityResourceIT.createUpdatedEntity(em);
             em.persist(leaseLiability);
             em.flush();
         } else {
             leaseLiability = TestUtil.findAll(em, LeaseLiability.class).get(0);
         }
         leaseLiabilityScheduleItem.setLeaseLiability(leaseLiability);
+        // Add required entity
+        LeaseRepaymentPeriod leaseRepaymentPeriod;
+        if (TestUtil.findAll(em, LeaseRepaymentPeriod.class).isEmpty()) {
+            leaseRepaymentPeriod = LeaseRepaymentPeriodResourceIT.createUpdatedEntity(em);
+            em.persist(leaseRepaymentPeriod);
+            em.flush();
+        } else {
+            leaseRepaymentPeriod = TestUtil.findAll(em, LeaseRepaymentPeriod.class).get(0);
+        }
+        leaseLiabilityScheduleItem.setLeasePeriod(leaseRepaymentPeriod);
         return leaseLiabilityScheduleItem;
     }
 
@@ -1313,7 +1333,7 @@ class LeaseLiabilityScheduleItemResourceIT {
         leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
         Placeholder placeholder;
         if (TestUtil.findAll(em, Placeholder.class).isEmpty()) {
-            placeholder =PlaceholderResourceIT.createEntity(em);
+            placeholder = PlaceholderResourceIT.createEntity(em);
             em.persist(placeholder);
             em.flush();
         } else {
@@ -1339,7 +1359,7 @@ class LeaseLiabilityScheduleItemResourceIT {
         leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
         UniversallyUniqueMapping universallyUniqueMapping;
         if (TestUtil.findAll(em, UniversallyUniqueMapping.class).isEmpty()) {
-            universallyUniqueMapping =UniversallyUniqueMappingResourceIT.createEntity(em);
+            universallyUniqueMapping = UniversallyUniqueMappingResourceIT.createEntity(em);
             em.persist(universallyUniqueMapping);
             em.flush();
         } else {
@@ -1365,7 +1385,7 @@ class LeaseLiabilityScheduleItemResourceIT {
         leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
         LeaseAmortizationSchedule leaseAmortizationSchedule;
         if (TestUtil.findAll(em, LeaseAmortizationSchedule.class).isEmpty()) {
-            leaseAmortizationSchedule =LeaseAmortizationScheduleResourceIT.createEntity(em);
+            leaseAmortizationSchedule = LeaseAmortizationScheduleResourceIT.createEntity(em);
             em.persist(leaseAmortizationSchedule);
             em.flush();
         } else {
@@ -1391,7 +1411,7 @@ class LeaseLiabilityScheduleItemResourceIT {
         leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
         IFRS16LeaseContract leaseContract;
         if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
-            leaseContract =IFRS16LeaseContractResourceIT.createEntity(em);
+            leaseContract = IFRS16LeaseContractResourceIT.createEntity(em);
             em.persist(leaseContract);
             em.flush();
         } else {
@@ -1417,7 +1437,7 @@ class LeaseLiabilityScheduleItemResourceIT {
         leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
         LeaseLiability leaseLiability;
         if (TestUtil.findAll(em, LeaseLiability.class).isEmpty()) {
-            leaseLiability =LeaseLiabilityResourceIT.createEntity(em);
+            leaseLiability = LeaseLiabilityResourceIT.createEntity(em);
             em.persist(leaseLiability);
             em.flush();
         } else {
@@ -1434,6 +1454,21 @@ class LeaseLiabilityScheduleItemResourceIT {
 
         // Get all the leaseLiabilityScheduleItemList where leaseLiability equals to (leaseLiabilityId + 1)
         defaultLeaseLiabilityScheduleItemShouldNotBeFound("leaseLiabilityId.equals=" + (leaseLiabilityId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityScheduleItemsByLeasePeriodIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        LeaseRepaymentPeriod leasePeriod = leaseLiabilityScheduleItem.getLeasePeriod();
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+        Long leasePeriodId = leasePeriod.getId();
+
+        // Get all the leaseLiabilityScheduleItemList where leasePeriod equals to leasePeriodId
+        defaultLeaseLiabilityScheduleItemShouldBeFound("leasePeriodId.equals=" + leasePeriodId);
+
+        // Get all the leaseLiabilityScheduleItemList where leasePeriod equals to (leasePeriodId + 1)
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("leasePeriodId.equals=" + (leasePeriodId + 1));
     }
 
     /**

@@ -83,7 +83,8 @@ public interface InternalLeaseRepaymentPeriodService {
     /**
      * List of lease-repayment-period items related to the IFRS16 contract.
      *
-     * @param ifrs16LeaseContract lease-contract
+     * @param commencementDate of the ifrs16LeaseContract
+     * @param numberOfPeriods of the ifrs16LeaseContract
      *
      * @return the list of entities.
      */

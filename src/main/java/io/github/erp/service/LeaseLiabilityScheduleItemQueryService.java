@@ -211,6 +211,15 @@ public class LeaseLiabilityScheduleItemQueryService extends QueryService<LeaseLi
                         )
                     );
             }
+            if (criteria.getLeasePeriodId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLeasePeriodId(),
+                            root -> root.join(LeaseLiabilityScheduleItem_.leasePeriod, JoinType.LEFT).get(LeaseRepaymentPeriod_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

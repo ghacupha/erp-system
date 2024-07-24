@@ -44,7 +44,7 @@ public interface InternalLeaseRepaymentPeriodRepository
             "WITH RECURSIVE LeasePeriods AS ( " +
             "    SELECT *, " +
             "           1 AS iteration " +
-            "    FROM lease_period " +
+            "    FROM lease_repayment_period " +
             "    WHERE start_date <= :commencementDate " +
             "      AND end_date >= :commencementDate " +
             " " +
@@ -53,9 +53,9 @@ public interface InternalLeaseRepaymentPeriodRepository
             "    SELECT lp.*, " +
             "           prev.iteration + 1 AS iteration " +
             "    FROM LeasePeriods prev " +
-            "             JOIN lease_period lp ON lp.sequence_number = prev.sequence_number + 1 " +
+            "             JOIN lease_repayment_period lp ON lp.sequence_number = prev.sequence_number + 1 " +
             "    WHERE prev.end_date < ( " +
-            "        SELECT MAX(end_date) FROM lease_period " + // -- This computes the end date condition so that the query never exceeds the periods available currently on the leaseTermPeriods table
+            "        SELECT MAX(end_date) FROM lease_repayment_period " + // -- This computes the end date condition so that the query never exceeds the periods available currently on the leaseTermPeriods table
             "    ) " +
             "      AND prev.iteration < :leaseTermPeriods " + //  -- Limit the number of iterations to the leaseTerm periods
             ") " +
@@ -64,7 +64,7 @@ public interface InternalLeaseRepaymentPeriodRepository
             "WITH RECURSIVE LeasePeriods AS ( " +
             "    SELECT *, " +
             "           1 AS iteration " +
-            "    FROM lease_period " +
+            "    FROM lease_repayment_period " +
             "    WHERE start_date <= :commencementDate " +
             "      AND end_date >= :commencementDate " +
             " " +
@@ -73,9 +73,9 @@ public interface InternalLeaseRepaymentPeriodRepository
             "    SELECT lp.*, " +
             "           prev.iteration + 1 AS iteration " +
             "    FROM LeasePeriods prev " +
-            "             JOIN lease_period lp ON lp.sequence_number = prev.sequence_number + 1 " +
+            "             JOIN lease_repayment_period lp ON lp.sequence_number = prev.sequence_number + 1 " +
             "    WHERE prev.end_date < ( " +
-            "        SELECT MAX(end_date) FROM lease_period " + // -- This computes the end date condition so that the query never exceeds the periods available currently on the leaseTermPeriods table
+            "        SELECT MAX(end_date) FROM lease_repayment_period " + // -- This computes the end date condition so that the query never exceeds the periods available currently on the leaseTermPeriods table
             "    ) " +
             "      AND prev.iteration < :leaseTermPeriods " + //  -- Limit the number of iterations to the leaseTerm periods
             ") " +

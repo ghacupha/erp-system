@@ -21,9 +21,8 @@ package io.github.erp.internal.service.leases;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import io.github.erp.service.dto.IFRS16LeaseContractDTO;
 import io.github.erp.service.dto.LeaseAmortizationCalculationDTO;
@@ -118,13 +117,16 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
             throw new IllegalArgumentException("No lease-payments prescribed for lease-booking # " + ifrs16LeaseContract.getBookingId() + ". Please record lease-payments and try again");
         }
 
-        leasePeriods.ifPresent(periods -> {
-            for (int period = 0; period < periods.size(); period++) {
+        leasePeriods.ifPresent( periods -> {
+
+            List<LeaseRepaymentPeriodDTO> sortedPeriods = periods.stream().sorted(Comparator.comparing(LeaseRepaymentPeriodDTO::getStartDate)).collect(Collectors.toList());
+
+            for (int period = 0; period < sortedPeriods.size(); period++) {
 
                 BigDecimal interestPayableOpening = openingBalanceRef.interestPayableOpening;
 
                 BigDecimal interestAccrued = openingBalanceRef.openingBalance.multiply(monthlyRate);
-                BigDecimal totalPayment = calculateMonthlyPayment(leasePayments.get(), periods.get(period));
+                BigDecimal totalPayment = calculateMonthlyPayment(leasePayments.get(), sortedPeriods.get(period));
 
 
                 BigDecimal interestPayment = interestPayableOpening.add(interestAccrued).min(totalPayment).max(BigDecimal.ZERO);
@@ -149,7 +151,7 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
                 item.setLeaseAmortizationSchedule(leaseAmortizationSchedule);
 
                 // TODO CHANGE TO LEASE REPAYMENT PERIOD
-                // item.setLeasePeriod(periods.get(period));
+                item.setLeasePeriod(sortedPeriods.get(period));
 
                 scheduleItems.add(item);
 
