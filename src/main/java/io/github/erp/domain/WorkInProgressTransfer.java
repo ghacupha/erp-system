@@ -29,6 +29,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A WorkInProgressTransfer.
@@ -36,7 +38,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "work_in_progress_transfer")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "workinprogresstransfer")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "workinprogresstransfer-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
 public class WorkInProgressTransfer implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,20 +47,25 @@ public class WorkInProgressTransfer implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
     @Column(name = "description")
+    @Field(type = FieldType.Text)
     private String description;
 
     @Column(name = "target_asset_number")
+    @Field(type = FieldType.Keyword)
     private String targetAssetNumber;
 
     @NotNull
     @Column(name = "transfer_amount", precision = 21, scale = 2, nullable = false)
+    @Field(type = FieldType.Double)
     private BigDecimal transferAmount;
 
     @NotNull
     @Column(name = "transfer_date", nullable = false)
+    @Field(type = FieldType.Date)
     private LocalDate transferDate;
 
     @NotNull
