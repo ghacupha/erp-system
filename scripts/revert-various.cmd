@@ -37,9 +37,10 @@ git checkout HEAD~1 src/main/java/io/github/erp/domain/Placeholder.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/Dealer.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/WorkProjectRegister.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/WorkInProgressRegistration.java
+git checkout HEAD~1 src/main/java/io/github/erp/domain/WorkInProgressTransfer.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/LeaseLiability.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/LeaseAmortizationCalculation.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/LeaseAmortizationSchedule.java
-git checkout HEAD~1 src/main/java/io/github/erp/domain/LeaseLiabilityScheduleItem.java
+REM git checkout HEAD~1 src/main/java/io/github/erp/domain/LeaseLiabilityScheduleItem.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/IFRS16LeaseContract.java
 git checkout HEAD~1 src/main/resources/config/liquibase/changelog/
