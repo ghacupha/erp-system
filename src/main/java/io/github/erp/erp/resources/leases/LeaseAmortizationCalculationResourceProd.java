@@ -126,7 +126,7 @@ public class LeaseAmortizationCalculationResourceProd {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        LeaseAmortizationCalculationDTO result = leaseAmortizationCalculationService.save(leaseAmortizationCalculationDTO);
+        LeaseAmortizationCalculationDTO result = leaseAmortizationCalculationService.update(leaseAmortizationCalculationDTO);
         return ResponseEntity
             .ok()
             .headers(
