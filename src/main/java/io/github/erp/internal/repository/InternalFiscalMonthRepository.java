@@ -17,10 +17,13 @@ package io.github.erp.internal.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.domain.AmortizationPeriod;
 import io.github.erp.domain.FiscalMonth;
 import io.github.erp.repository.FiscalMonthRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -31,4 +34,27 @@ public interface InternalFiscalMonthRepository extends
     JpaSpecificationExecutor<FiscalMonth> {
 
     Optional<FiscalMonth> findFiscalMonthByStartDateAndEndDate(LocalDate startDate, LocalDate endDate);
+
+    /**
+     * Retrieve the nth item in the sequence after the current instance given the
+     * currentPeriod_id
+     *
+     * @param currentPeriodId of the fiscal-month
+     * @param nthValue number of lapsed periods
+     * @return
+     */
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT * " +
+            "FROM fiscal_month " +
+            "WHERE id = ( " +
+            "    SELECT id + :n_value - 1 " +
+            "    FROM fiscal_month " +
+            "    WHERE id = :currentFiscalMonthId " +
+            ")"
+    )
+    Optional<FiscalMonth> getNextFiscalPeriodAfterLapsedMonths(@Param("currentFiscalMonthId") long currentPeriodId, @Param("n_value") long nthValue);
+
+
 }
