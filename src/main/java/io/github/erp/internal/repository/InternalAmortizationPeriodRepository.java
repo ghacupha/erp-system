@@ -24,6 +24,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.nio.channels.FileChannel;
+import java.time.LocalDate;
 import java.util.Optional;
 
 /**
@@ -55,4 +57,14 @@ public interface InternalAmortizationPeriodRepository
             ");"
     )
     Optional<AmortizationPeriod> getNextAmortizationPeriod(@Param("currentPeriodId") long currentPeriodId, @Param("n_value") long nthValue);
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT * " +
+            "FROM amortization_period " +
+            "WHERE :queryDate BETWEEN start_date AND end_date " +
+            "LIMIT 1;"
+    )
+    Optional<AmortizationPeriod> findByDateGiven(@Param("queryDate")LocalDate queryDate);
 }
