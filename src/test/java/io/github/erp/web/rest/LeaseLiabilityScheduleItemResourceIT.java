@@ -1464,8 +1464,19 @@ class LeaseLiabilityScheduleItemResourceIT {
     @Test
     @Transactional
     void getAllLeaseLiabilityScheduleItemsByLeasePeriodIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        LeaseRepaymentPeriod leasePeriod = leaseLiabilityScheduleItem.getLeasePeriod();
+        // Initialize the database
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+        LeaseRepaymentPeriod leasePeriod;
+        if (TestUtil.findAll(em, LeaseRepaymentPeriod.class).isEmpty()) {
+            leasePeriod = LeaseRepaymentPeriodResourceIT.createEntity(em);
+            em.persist(leasePeriod);
+            em.flush();
+        } else {
+            leasePeriod = TestUtil.findAll(em, LeaseRepaymentPeriod.class).get(0);
+        }
+        em.persist(leasePeriod);
+        em.flush();
+        leaseLiabilityScheduleItem.setLeasePeriod(leasePeriod);
         leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
         Long leasePeriodId = leasePeriod.getId();
 
