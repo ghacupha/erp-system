@@ -17,6 +17,7 @@ package io.github.erp.erp.resources.period;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.service.periods.InternalFiscalMonthService;
 import io.github.erp.repository.FiscalMonthRepository;
 import io.github.erp.service.FiscalMonthQueryService;
 import io.github.erp.service.FiscalMonthService;
@@ -58,14 +59,14 @@ public class FiscalMonthResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final FiscalMonthService fiscalMonthService;
+    private final InternalFiscalMonthService fiscalMonthService;
 
     private final FiscalMonthRepository fiscalMonthRepository;
 
     private final FiscalMonthQueryService fiscalMonthQueryService;
 
     public FiscalMonthResourceProd(
-        FiscalMonthService fiscalMonthService,
+        InternalFiscalMonthService fiscalMonthService,
         FiscalMonthRepository fiscalMonthRepository,
         FiscalMonthQueryService fiscalMonthQueryService
     ) {
@@ -201,6 +202,21 @@ public class FiscalMonthResourceProd {
     public ResponseEntity<FiscalMonthDTO> getFiscalMonth(@PathVariable Long id) {
         log.debug("REST request to get FiscalMonth : {}", id);
         Optional<FiscalMonthDTO> fiscalMonthDTO = fiscalMonthService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(fiscalMonthDTO);
+    }
+
+    /**
+     * {@code GET  /fiscal-months/lapsed-period} : get fiscal after lapsed number of months.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of fiscalMonths in body.
+     */
+    @GetMapping("/fiscal-months/lapsed-period")
+    public ResponseEntity<FiscalMonthDTO> getOneAfterLapsedMonths(@RequestParam long currentFiscalMonthId, @RequestParam int fiscalPeriods ) {
+        log.debug("REST request to get FiscalMonths {} after fiscal-month id", fiscalPeriods, currentFiscalMonthId);
+
+        Optional<FiscalMonthDTO> fiscalMonthDTO = fiscalMonthService.findOneAfterXPeriods(currentFiscalMonthId, fiscalPeriods);
+
         return ResponseUtil.wrapOrNotFound(fiscalMonthDTO);
     }
 
