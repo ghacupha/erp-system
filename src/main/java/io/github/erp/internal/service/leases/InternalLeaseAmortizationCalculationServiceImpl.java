@@ -154,4 +154,23 @@ public class InternalLeaseAmortizationCalculationServiceImpl implements Internal
         return leaseAmortizationCalculationRepository.findByLeaseContractId(leaseContractId)
             .map(leaseAmortizationCalculationMapper::toDto);
     }
+
+    /**
+     * Save a leaseAmortizationCalculation, without ES updates.
+     *
+     * @param leaseAmortizationCalculationDTO the entity to save.
+     * @return the persisted entity.
+     */
+    @Override
+    public LeaseAmortizationCalculationDTO update(LeaseAmortizationCalculationDTO leaseAmortizationCalculationDTO) {
+        log.debug("Request to update LeaseAmortizationCalculation : {}", leaseAmortizationCalculationDTO);
+        LeaseAmortizationCalculation leaseAmortizationCalculation = leaseAmortizationCalculationMapper.toEntity(
+            leaseAmortizationCalculationDTO
+        );
+        leaseAmortizationCalculation = leaseAmortizationCalculationRepository.save(leaseAmortizationCalculation);
+        LeaseAmortizationCalculationDTO result = leaseAmortizationCalculationMapper.toDto(leaseAmortizationCalculation);
+        // leaseAmortizationCalculationSearchRepository.save(leaseAmortizationCalculation);
+        return result;
+    }
+
 }

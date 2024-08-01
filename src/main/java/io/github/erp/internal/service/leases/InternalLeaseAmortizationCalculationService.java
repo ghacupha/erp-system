@@ -100,4 +100,12 @@ public interface InternalLeaseAmortizationCalculationService {
      * @return LeaseAmortizationCalculation
      */
     Optional<LeaseAmortizationCalculationDTO> findByLeaseContractId(Long leaseContractId);
+
+    /**
+     * Save a leaseAmortizationCalculation, without ES updates.
+     *
+     * @param leaseAmortizationCalculationDTO the entity to save.
+     * @return the persisted entity.
+     */
+    LeaseAmortizationCalculationDTO update(LeaseAmortizationCalculationDTO leaseAmortizationCalculationDTO);
 }
