@@ -206,6 +206,19 @@ public class AmortizationPeriodResourceProd {
     }
 
     /**
+     * {@code GET  /amortization-periods/by-date/:id} : get the "id" amortizationPeriod.
+     *
+     * @param queryDate the date of the amortizationPeriodDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the amortizationPeriodDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/amortization-periods/by-date/{queryDate}")
+    public ResponseEntity<AmortizationPeriodDTO> getAmortizationPeriod(@PathVariable String queryDate) {
+        log.debug("REST request to get AmortizationPeriod for the date given : {}", queryDate);
+        Optional<AmortizationPeriodDTO> amortizationPeriodDTO = amortizationPeriodService.findOneByDate(queryDate);
+        return ResponseUtil.wrapOrNotFound(amortizationPeriodDTO);
+    }
+
+    /**
      * {@code DELETE  /amortization-periods/:id} : delete the "id" amortizationPeriod.
      *
      * @param id the id of the amortizationPeriodDTO to delete.

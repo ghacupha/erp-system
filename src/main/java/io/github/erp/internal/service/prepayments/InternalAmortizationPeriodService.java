@@ -84,4 +84,12 @@ public interface InternalAmortizationPeriodService {
      * @return the list of entities.
      */
     Page<AmortizationPeriodDTO> search(String query, Pageable pageable);
+
+    /**
+     * Get the amortizationPeriod to which the queryDate belongs.
+     *
+     * @param queryDate the date enclosed by the amortization-period in string.
+     * @return the entity.
+     */
+    Optional<AmortizationPeriodDTO> findOneByDate(String queryDate);
 }
