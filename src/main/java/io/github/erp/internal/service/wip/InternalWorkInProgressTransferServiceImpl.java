@@ -78,6 +78,24 @@ public class InternalWorkInProgressTransferServiceImpl implements InternalWorkIn
         return result;
     }
 
+    /**
+     * Save a workInProgressTransfer without the ES updates.
+     * <p>
+     * This method retrieves the original-transfer from the wip-registration repository so the
+     * original settlement is not necessary
+     *
+     * @param workInProgressTransferDTO the entity to save.
+     * @return the persisted entity.
+     */
+    @Override
+    public WorkInProgressTransferDTO update(WorkInProgressTransferDTO workInProgressTransferDTO) {
+        log.debug("Request to update WorkInProgressTransfer : {}", workInProgressTransferDTO);
+
+        WorkInProgressTransfer workInProgressTransfer = workInProgressTransferMapper.toEntity(workInProgressTransferDTO);
+        workInProgressTransfer = workInProgressTransferRepository.save(workInProgressTransfer);
+        return workInProgressTransferMapper.toDto(workInProgressTransfer);
+    }
+
     @Override
     public Optional<WorkInProgressTransferDTO> partialUpdate(WorkInProgressTransferDTO workInProgressTransferDTO) {
         log.debug("Request to partially update WorkInProgressTransfer : {}", workInProgressTransferDTO);
