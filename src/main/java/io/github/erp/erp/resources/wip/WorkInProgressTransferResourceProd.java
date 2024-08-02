@@ -122,7 +122,7 @@ public class WorkInProgressTransferResourceProd {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        WorkInProgressTransferDTO result = workInProgressTransferService.save(workInProgressTransferDTO);
+        WorkInProgressTransferDTO result = workInProgressTransferService.update(workInProgressTransferDTO);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, workInProgressTransferDTO.getId().toString()))

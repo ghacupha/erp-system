@@ -86,4 +86,15 @@ public interface InternalWorkInProgressTransferService {
      * @return the list of entities.
      */
     Page<WorkInProgressTransferDTO> search(String query, Pageable pageable);
+
+    /**
+     * Save a workInProgressTransfer without the ES updates.
+     *
+     * This method retrieves the original-transfer from the wip-registration repository so the
+     * original settlement is not necessary
+     *
+     * @param workInProgressTransferDTO the entity to save.
+     * @return the persisted entity.
+     */
+    WorkInProgressTransferDTO update(WorkInProgressTransferDTO workInProgressTransferDTO);
 }
