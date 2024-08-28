@@ -19,6 +19,7 @@ package io.github.erp.internal.service.leases;
  */
 
 import io.github.erp.domain.LeaseLiabilityPostingReportItem;
+import io.github.erp.internal.repository.InternalLeaseLiabilityPostingReportItemRepository;
 import io.github.erp.repository.LeaseLiabilityPostingReportItemRepository;
 import io.github.erp.repository.search.LeaseLiabilityPostingReportItemSearchRepository;
 import io.github.erp.service.LeaseLiabilityPostingReportItemService;
@@ -42,14 +43,14 @@ public class InternalLeaseLiabilityPostingReportItemServiceImpl implements Inter
 
     private final Logger log = LoggerFactory.getLogger(InternalLeaseLiabilityPostingReportItemServiceImpl.class);
 
-    private final LeaseLiabilityPostingReportItemRepository leaseLiabilityPostingReportItemRepository;
+    private final InternalLeaseLiabilityPostingReportItemRepository leaseLiabilityPostingReportItemRepository;
 
     private final LeaseLiabilityPostingReportItemMapper leaseLiabilityPostingReportItemMapper;
 
     private final LeaseLiabilityPostingReportItemSearchRepository leaseLiabilityPostingReportItemSearchRepository;
 
     public InternalLeaseLiabilityPostingReportItemServiceImpl(
-        LeaseLiabilityPostingReportItemRepository leaseLiabilityPostingReportItemRepository,
+        InternalLeaseLiabilityPostingReportItemRepository leaseLiabilityPostingReportItemRepository,
         LeaseLiabilityPostingReportItemMapper leaseLiabilityPostingReportItemMapper,
         LeaseLiabilityPostingReportItemSearchRepository leaseLiabilityPostingReportItemSearchRepository
     ) {
