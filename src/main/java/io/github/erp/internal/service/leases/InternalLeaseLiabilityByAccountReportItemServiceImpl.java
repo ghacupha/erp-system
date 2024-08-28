@@ -19,6 +19,7 @@ package io.github.erp.internal.service.leases;
  */
 
 import io.github.erp.domain.LeaseLiabilityByAccountReportItem;
+import io.github.erp.internal.repository.InternalLeaseLiabilityByAccountReportItemRepository;
 import io.github.erp.repository.LeaseLiabilityByAccountReportItemRepository;
 import io.github.erp.repository.search.LeaseLiabilityByAccountReportItemSearchRepository;
 import io.github.erp.service.LeaseLiabilityByAccountReportItemService;
@@ -42,14 +43,14 @@ public class InternalLeaseLiabilityByAccountReportItemServiceImpl implements Int
 
     private final Logger log = LoggerFactory.getLogger(InternalLeaseLiabilityByAccountReportItemServiceImpl.class);
 
-    private final LeaseLiabilityByAccountReportItemRepository leaseLiabilityByAccountReportItemRepository;
+    private final InternalLeaseLiabilityByAccountReportItemRepository leaseLiabilityByAccountReportItemRepository;
 
     private final LeaseLiabilityByAccountReportItemMapper leaseLiabilityByAccountReportItemMapper;
 
     private final LeaseLiabilityByAccountReportItemSearchRepository leaseLiabilityByAccountReportItemSearchRepository;
 
     public InternalLeaseLiabilityByAccountReportItemServiceImpl(
-        LeaseLiabilityByAccountReportItemRepository leaseLiabilityByAccountReportItemRepository,
+        InternalLeaseLiabilityByAccountReportItemRepository leaseLiabilityByAccountReportItemRepository,
         LeaseLiabilityByAccountReportItemMapper leaseLiabilityByAccountReportItemMapper,
         LeaseLiabilityByAccountReportItemSearchRepository leaseLiabilityByAccountReportItemSearchRepository
     ) {

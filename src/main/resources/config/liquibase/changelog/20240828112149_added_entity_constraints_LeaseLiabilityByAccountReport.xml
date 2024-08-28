@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity LeaseLiabilityByAccountReport.
+    -->
+    <changeSet id="20240828112149-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="requested_by_id"
+                                 baseTableName="lease_liability_by_acct_rpt"
+                                 constraintName="fk_lease_liability_by_acct_rpt__requested_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="lease_period_id"
+                                 baseTableName="lease_liability_by_acct_rpt"
+                                 constraintName="fk_lease_liability_by_acct_rpt__lease_period_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lease_period"/>
+    </changeSet>
+</databaseChangeLog>
