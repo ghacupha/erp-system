@@ -54,7 +54,6 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
     private static final Logger log = LoggerFactory.getLogger(DepreciationJobSequenceServiceImpl.class);
     public static final int PREFERRED_BATCH_SIZE = 650;
 
-    // private final AssetRegistrationService assetRegistrationService;
     private final DepreciationBatchProducer depreciationBatchProducer;
     private final DepreciationJobService depreciationJobService;
     private final DepreciationBatchSequenceService depreciationBatchSequenceService;
@@ -65,14 +64,12 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
     private final DepreciationEntrySinkProcessor depreciationEntrySinkProcessor;
 
     public DepreciationJobSequenceServiceImpl(
-        // AssetRegistrationService assetRegistrationService,
         DepreciationBatchProducer depreciationBatchProducer,
         DepreciationJobService depreciationJobService,
         DepreciationBatchSequenceService depreciationBatchSequenceService,
         DepreciationPeriodService depreciationPeriodService,
         InternalAssetRegistrationService internalAssetRegistrationService,
         DepreciationEntrySinkProcessor depreciationEntrySinkProcessor) {
-        // this.assetRegistrationService = assetRegistrationService;
         this.depreciationBatchProducer = depreciationBatchProducer;
         this.depreciationJobService = depreciationJobService;
         this.depreciationBatchSequenceService = depreciationBatchSequenceService;
