@@ -101,7 +101,7 @@ public interface InternalAssetRegistrationRepository
      * @param capitalizationDate
      * @return
      */
-    List<AssetRegistration> findAllByCapitalizationDateBefore(LocalDate capitalizationDate);
+    List<AssetRegistration> findAllByCapitalizationDateLessThanEqual(LocalDate capitalizationDate);
 
     @Query(nativeQuery = true,
         value = "select " +

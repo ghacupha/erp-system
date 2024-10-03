@@ -124,7 +124,7 @@ public class InternalAssetRegistrationServiceImpl implements InternalAssetRegist
     @Transactional(readOnly = true)
     public List<AssetRegistrationDTO> findByCapitalizationDateBefore(LocalDate capitalizationDate) {
 
-        return internalAssetRegistrationRepository.findAllByCapitalizationDateBefore(capitalizationDate)
+        return internalAssetRegistrationRepository.findAllByCapitalizationDateLessThanEqual(capitalizationDate)
             .stream().map(assetRegistrationMapper::toDto).collect(Collectors.toList());
     }
 
