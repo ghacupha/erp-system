@@ -1,8 +1,8 @@
 {
   "name": "erp-system",
-  "version": "1.8.0",
+  "version": "1.8.2",
   "private": true,
-  "description": "Back-end for the ERP System: Mark X No 8 (Jehoiada Series) Server v1.8.0",
+  "description": "Back-end for the ERP System: Mark X No 10 (Jehoiada Series) Server v1.8.2",
   "license": "APACHEv2",
   "scripts": {
     "app:start": "./mvnw",
