@@ -34,7 +34,7 @@ public interface DepreciationJobSequenceService<Job> {
      * from the database, checks for any opt-out conditions, and initiates the depreciation sequence by enqueuing depreciation batch
      * messages for processing.
      *
-     * @param Job The DTO containing the details of the depreciation job to be processed.
+     * @param job The DTO containing the details of the depreciation job to be processed.
      */
     void  triggerDepreciation(Job job);
 }
