@@ -1,0 +1,11 @@
+id;request_id;time_of_requisition;file_checksum;filename;report_parameters;report_file;report_file_content_type;report_date;tampered
+1;1f273090-7f5b-47a4-a83e-c446752e1f19;2024-05-05T12:53:50;Chair Gorgeous Austria;69723587-9326-4260-895c-91fecb1d69df;CSS Licensed;../fake-data/blob/hipster.png;image/png;2024-05-06;false
+2;db793efa-c83f-4ca0-9519-0b6f4162af06;2024-05-06T03:12:47;plug-and-play;fd46dd49-af7a-4e01-ac87-19a920a8b8ca;Account sensor;../fake-data/blob/hipster.png;image/png;2024-05-05;true
+3;9a43e097-26a1-4e78-8eaf-5ebaa49c3f9d;2024-05-05T14:15:06;HTTP;aacc31ef-d037-4904-aaa2-558d0c7b16d5;back-end Kentucky drive;../fake-data/blob/hipster.png;image/png;2024-05-06;false
+4;d2e86992-fc83-4712-856b-6102ea068182;2024-05-06T03:35:43;SQL;e10c3c0a-a140-447d-9235-3a7fdc7a908a;Assistant scalable exploit;../fake-data/blob/hipster.png;image/png;2024-05-05;true
+5;c5f58c91-782c-4f70-8db3-f98354cad533;2024-05-06T02:10:37;South Credit Dynamic;3f863f33-1d6f-4a31-a6e6-4866fece8522;Garden Tactics Israel;../fake-data/blob/hipster.png;image/png;2024-05-06;true
+6;b77ae550-1ab3-4d20-810f-8386b3b52d5e;2024-05-06T08:26:02;Incredible;a042be09-6b93-47c5-a3de-2262f6c5a787;Granite Dynamic invoice;../fake-data/blob/hipster.png;image/png;2024-05-05;true
+7;c24c130c-ecbb-4697-ad95-37476432563d;2024-05-05T11:49:47;card bricks-and-clicks;00372e6d-5606-402f-a953-15b70a3a73b1;Chips Principal;../fake-data/blob/hipster.png;image/png;2024-05-06;false
+8;7d43d392-e841-4303-86c7-805953649c8d;2024-05-05T16:58:53;Palladium synthesize;005f49a5-e4c9-4b99-a75e-f53ef013ec8f;Ohio;../fake-data/blob/hipster.png;image/png;2024-05-05;false
+9;4a3bf786-47d9-4358-81a2-3e9a9e715c4d;2024-05-06T00:18:06;functionalities Plastic Argentina;547ca1ad-1d1e-4b9b-a874-decb835b4e16;Buckinghamshire;../fake-data/blob/hipster.png;image/png;2024-05-06;false
+10;4dd2186d-64a9-44b8-82ec-97c786cea652;2024-05-05T19:21:14;hack Steel;bfa310f1-2ae2-430e-bbba-c66d9621e1f4;Steel open-source Frozen;../fake-data/blob/hipster.png;image/png;2024-05-06;true

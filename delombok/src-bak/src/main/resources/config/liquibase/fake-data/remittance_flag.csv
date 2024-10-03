@@ -1,0 +1,11 @@
+id;remittance_type_flag;remittance_type;remittance_type_details
+1;RMTIN;INFLOWS;../fake-data/blob/hipster.txt
+2;RMTIN;INFLOWS;../fake-data/blob/hipster.txt
+3;RMTOUT;INFLOWS;../fake-data/blob/hipster.txt
+4;RMTIN;OUTFLOWS;../fake-data/blob/hipster.txt
+5;RMTIN;INFLOWS;../fake-data/blob/hipster.txt
+6;RMTOUT;OUTFLOWS;../fake-data/blob/hipster.txt
+7;RMTOUT;OUTFLOWS;../fake-data/blob/hipster.txt
+8;RMTIN;INFLOWS;../fake-data/blob/hipster.txt
+9;RMTOUT;OUTFLOWS;../fake-data/blob/hipster.txt
+10;RMTOUT;OUTFLOWS;../fake-data/blob/hipster.txt

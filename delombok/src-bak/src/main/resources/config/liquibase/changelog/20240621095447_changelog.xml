@@ -1,0 +1,37 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1718963808668-8">
+        <addColumn tableName="lease_liability">
+            <column name="end_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718963808668-9">
+        <addColumn tableName="lease_liability">
+            <column name="interest_rate" type="float4">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718963808668-10">
+        <addColumn tableName="lease_liability">
+            <column name="lease_contract_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718963808668-11">
+        <addColumn tableName="lease_liability">
+            <column name="start_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718963808668-14">
+        <addUniqueConstraint columnNames="lease_contract_id" constraintName="UK_6xw26bvsan0j5btcfkij1ilel" tableName="lease_liability"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718963808668-18">
+        <addForeignKeyConstraint baseColumnNames="lease_contract_id" baseTableName="lease_liability" constraintName="FKg918ftb6dkicciipbtl2mople" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ifrs16lease_contract" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

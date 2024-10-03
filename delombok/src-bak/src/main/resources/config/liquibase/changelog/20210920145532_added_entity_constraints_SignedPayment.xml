@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity SignedPayment.
+    -->
+    <changeSet id="20210920145532-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="signed_payment_id"
+                                 baseTableName="rel_signed_payment__payment_label"
+                                 constraintName="fk_rel_signed_payment__payment_label__signed_payment_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="signed_payment"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_label_id"
+                                 baseTableName="rel_signed_payment__payment_label"
+                                 constraintName="fk_rel_signed_payment__payment_label__payment_label_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_label"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_category_id"
+                                 baseTableName="signed_payment"
+                                 constraintName="fk_signed_payment__payment_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_category"/>
+
+        <addForeignKeyConstraint baseColumnNames="signed_payment_id"
+                                 baseTableName="rel_signed_payment__placeholder"
+                                 constraintName="fk_rel_signed_payment__placeholder__signed_payment_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="signed_payment"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_signed_payment__placeholder"
+                                 constraintName="fk_rel_signed_payment__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="signed_payment_group_id"
+                                 baseTableName="signed_payment"
+                                 constraintName="fk_signed_payment__signed_payment_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="signed_payment"/>
+    </changeSet>
+</databaseChangeLog>

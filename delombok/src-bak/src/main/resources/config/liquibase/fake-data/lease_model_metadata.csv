@@ -1,0 +1,11 @@
+id;model_title;model_version;description;model_notes;model_notes_content_type;annual_discounting_rate;commencement_date;terminal_date;total_reporting_periods;reporting_periods_per_year;settlement_periods_per_year;initial_liability_amount;initial_rou_amount;total_depreciation_periods;lease_contract_id;liability_currency_id;rou_asset_currency_id
+1;hack withdrawal Rubber;68211;copy;../fake-data/blob/hipster.png;image/png;35519;2023-03-27;2023-03-27;59787;90066;53187;72030;90312;91511;1;1;1
+2;Berkshire;47654;Small connect gold;../fake-data/blob/hipster.png;image/png;29270;2023-03-28;2023-03-27;66685;19019;17296;66488;71673;96482;2;2;2
+3;Dynamic Berkshire users;65394;backing;../fake-data/blob/hipster.png;image/png;42185;2023-03-27;2023-03-28;8641;76986;587;50630;24050;44460;3;3;3
+4;Handcrafted;61384;Fantastic projection Associate;../fake-data/blob/hipster.png;image/png;56760;2023-03-27;2023-03-27;2106;10372;74509;98517;19432;67730;4;4;4
+5;Oklahoma;82240;Guinea quantify cultivate;../fake-data/blob/hipster.png;image/png;21758;2023-03-27;2023-03-28;63021;94744;506;53441;30553;40477;5;5;5
+6;Slovenia parse bluetooth;35146;Books compress El;../fake-data/blob/hipster.png;image/png;30571;2023-03-28;2023-03-28;92171;85420;617;38028;76718;7936;6;6;6
+7;Card Organic;93044;program;../fake-data/blob/hipster.png;image/png;40094;2023-03-28;2023-03-27;91173;28712;6725;70043;2641;25965;7;7;7
+8;Senior technologies;80447;calculating calculate;../fake-data/blob/hipster.png;image/png;45369;2023-03-27;2023-03-28;612;33459;63991;68922;56504;49907;8;8;8
+9;fuchsia;16374;stable back-end;../fake-data/blob/hipster.png;image/png;5243;2023-03-28;2023-03-28;46328;60763;96824;11079;4132;6477;9;9;9
+10;Brand;16250;Rubber;../fake-data/blob/hipster.png;image/png;36545;2023-03-27;2023-03-28;42095;73775;53611;4513;36436;28101;10;10;10

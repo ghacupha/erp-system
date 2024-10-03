@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity CollateralInformation.
+    -->
+    <changeSet id="20231004123713-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="bank_code_id"
+                                 baseTableName="collateral_information"
+                                 constraintName="fk_collateral_information__bank_code_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="institution_code"/>
+
+        <addForeignKeyConstraint baseColumnNames="branch_code_id"
+                                 baseTableName="collateral_information"
+                                 constraintName="fk_collateral_information__branch_code_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="bank_branch_code"/>
+
+        <addForeignKeyConstraint baseColumnNames="collateral_type_id"
+                                 baseTableName="collateral_information"
+                                 constraintName="fk_collateral_information__collateral_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="collateral_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="county_code_id"
+                                 baseTableName="collateral_information"
+                                 constraintName="fk_collateral_information__county_code_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="county_sub_county_code"/>
+    </changeSet>
+</databaseChangeLog>

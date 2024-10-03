@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity LeaseLiabilityScheduleReport.
+    -->
+    <changeSet id="20240828112619-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="requested_by_id"
+                                 baseTableName="lease_liability_schedule_rpt"
+                                 constraintName="fk_lease_liability_schedule_rpt__requested_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="lease_amortization_schedule_id"
+                                 baseTableName="lease_liability_schedule_rpt"
+                                 constraintName="fk_lease_liability_schedule_rpt__lease_amortization_sched_fe_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lease_amortization_schedule"/>
+    </changeSet>
+</databaseChangeLog>

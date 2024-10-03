@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity ReportRequisition.
+    -->
+    <changeSet id="20220616111329-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="report_requisition_id"
+                                 baseTableName="rel_report_requisition__placeholders"
+                                 constraintName="fk_rel_report_requisition__placeholders__report_requisition_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="report_requisition"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholders_id"
+                                 baseTableName="rel_report_requisition__placeholders"
+                                 constraintName="fk_rel_report_requisition__placeholders__placeholders_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="report_requisition_id"
+                                 baseTableName="rel_report_requisition__parameters"
+                                 constraintName="fk_rel_report_requisition__parameters__report_requisition_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="report_requisition"/>
+
+        <addForeignKeyConstraint baseColumnNames="parameters_id"
+                                 baseTableName="rel_report_requisition__parameters"
+                                 constraintName="fk_rel_report_requisition__parameters__parameters_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="universally_unique_mapping"/>
+
+        <addForeignKeyConstraint baseColumnNames="report_template_id"
+                                 baseTableName="report_requisition"
+                                 constraintName="fk_report_requisition__report_template_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="report_template"/>
+    </changeSet>
+</databaseChangeLog>
