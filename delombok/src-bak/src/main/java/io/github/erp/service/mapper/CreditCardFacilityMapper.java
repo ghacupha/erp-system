@@ -1,0 +1,34 @@
+package io.github.erp.service.mapper;
+
+/*-
+ * Erp System - Mark X No 9 (Jehoiada Series) Server ver 1.8.1
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import io.github.erp.domain.CreditCardFacility;
+import io.github.erp.service.dto.CreditCardFacilityDTO;
+import org.mapstruct.*;
+
+/**
+ * Mapper for the entity {@link CreditCardFacility} and its DTO {@link CreditCardFacilityDTO}.
+ */
+@Mapper(componentModel = "spring", uses = { InstitutionCodeMapper.class, CreditCardOwnershipMapper.class, IsoCurrencyCodeMapper.class })
+public interface CreditCardFacilityMapper extends EntityMapper<CreditCardFacilityDTO, CreditCardFacility> {
+    @Mapping(target = "bankCode", source = "bankCode", qualifiedByName = "institutionName")
+    @Mapping(target = "customerCategory", source = "customerCategory", qualifiedByName = "creditCardOwnershipCategoryType")
+    @Mapping(target = "currencyCode", source = "currencyCode", qualifiedByName = "alphabeticCode")
+    CreditCardFacilityDTO toDto(CreditCardFacility s);
+}

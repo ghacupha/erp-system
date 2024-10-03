@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity ContractMetadata.
+    -->
+    <changeSet id="20230321110432-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="contract_metadata_id"
+                                 baseTableName="rel_contract_metadata__related_contracts"
+                                 constraintName="fk_rel_contract_metadata__relat__contract_metadata_7e_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="contract_metadata"/>
+
+        <addForeignKeyConstraint baseColumnNames="related_contracts_id"
+                                 baseTableName="rel_contract_metadata__related_contracts"
+                                 constraintName="fk_rel_contract_metadata__relat__related_contracts_b9_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="contract_metadata"/>
+
+        <addForeignKeyConstraint baseColumnNames="department_id"
+                                 baseTableName="contract_metadata"
+                                 constraintName="fk_contract_metadata__department_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="contract_partner_id"
+                                 baseTableName="contract_metadata"
+                                 constraintName="fk_contract_metadata__contract_partner_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="responsible_person_id"
+                                 baseTableName="contract_metadata"
+                                 constraintName="fk_contract_metadata__responsible_person_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="contract_metadata_id"
+                                 baseTableName="rel_contract_metadata__signatory"
+                                 constraintName="fk_rel_contract_metadata__signatory__contract_metadata_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="contract_metadata"/>
+
+        <addForeignKeyConstraint baseColumnNames="signatory_id"
+                                 baseTableName="rel_contract_metadata__signatory"
+                                 constraintName="fk_rel_contract_metadata__signatory__signatory_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="security_clearance_id"
+                                 baseTableName="contract_metadata"
+                                 constraintName="fk_contract_metadata__security_clearance_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="security_clearance"/>
+
+        <addForeignKeyConstraint baseColumnNames="contract_metadata_id"
+                                 baseTableName="rel_contract_metadata__placeholder"
+                                 constraintName="fk_rel_contract_metadata__placeholder__contract_metadata_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="contract_metadata"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_contract_metadata__placeholder"
+                                 constraintName="fk_rel_contract_metadata__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="contract_metadata_id"
+                                 baseTableName="rel_contract_metadata__contract_document_file"
+                                 constraintName="fk_rel_contract_metadata__contr__contract_metadata_fb_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="contract_metadata"/>
+
+        <addForeignKeyConstraint baseColumnNames="contract_document_file_id"
+                                 baseTableName="rel_contract_metadata__contract_document_file"
+                                 constraintName="fk_rel_contract_metadata__contr__contract_document_file_c3_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="business_document"/>
+
+        <addForeignKeyConstraint baseColumnNames="contract_metadata_id"
+                                 baseTableName="rel_contract_metadata__contract_mappings"
+                                 constraintName="fk_rel_contract_metadata__contr__contract_metadata_3b_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="contract_metadata"/>
+
+        <addForeignKeyConstraint baseColumnNames="contract_mappings_id"
+                                 baseTableName="rel_contract_metadata__contract_mappings"
+                                 constraintName="fk_rel_contract_metadata__contr__contract_mappings_73_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="universally_unique_mapping"/>
+    </changeSet>
+</databaseChangeLog>

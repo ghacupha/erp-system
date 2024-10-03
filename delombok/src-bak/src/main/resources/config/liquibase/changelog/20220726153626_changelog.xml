@@ -1,0 +1,62 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru" id="1658849877692-8">
+        <createTable tableName="rel_prepayment_account__general_parameters">
+            <column name="prepayment_account_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="general_parameters_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru" id="1658849877692-9">
+        <createTable tableName="rel_prepayment_account__prepayment_parameters">
+            <column name="prepayment_account_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="prepayment_parameters_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru" id="1658849877692-10">
+        <createTable tableName="rel_prepayment_mapping__placeholder">
+            <column name="prepayment_mapping_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="placeholder_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru" id="1658849877692-11">
+        <addColumn tableName="prepayment_account">
+            <column name="guid" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru" id="1658849877692-13">
+        <addUniqueConstraint columnNames="guid" constraintName="UC_PREPAYMENT_MAPPINGGUID_COL" tableName="prepayment_mapping"/>
+    </changeSet>
+    <changeSet author="edwin.njeru" id="1658849877692-14">
+        <addUniqueConstraint columnNames="key" constraintName="UC_PREPAYMENT_MAPPINGKEY_COL" tableName="prepayment_mapping"/>
+    </changeSet>
+    <changeSet author="edwin.njeru" id="1658849877692-17">
+        <addForeignKeyConstraint baseColumnNames="prepayment_parameters_id" baseTableName="rel_prepayment_account__prepayment_parameters" constraintName="FK3n00b0gy57630b6a60fa90pea" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="prepayment_mapping" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru" id="1658849877692-18">
+        <addForeignKeyConstraint baseColumnNames="general_parameters_id" baseTableName="rel_prepayment_account__general_parameters" constraintName="FKg4hu8mytipou59hwn03akgmr9" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="universally_unique_mapping" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru" id="1658849877692-19">
+        <addForeignKeyConstraint baseColumnNames="prepayment_account_id" baseTableName="rel_prepayment_account__general_parameters" constraintName="FKil2lyrwcp6whkhd3acj28sg4n" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="prepayment_account" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru" id="1658849877692-20">
+        <addForeignKeyConstraint baseColumnNames="prepayment_mapping_id" baseTableName="rel_prepayment_mapping__placeholder" constraintName="FKjftfi0yjmstrb9p6unbbvgvcy" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="prepayment_mapping" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru" id="1658849877692-21">
+        <addForeignKeyConstraint baseColumnNames="placeholder_id" baseTableName="rel_prepayment_mapping__placeholder" constraintName="FKjjhi3njsri3dilqox3304ih9s" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="placeholder" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru" id="1658849877692-23">
+        <addForeignKeyConstraint baseColumnNames="prepayment_account_id" baseTableName="rel_prepayment_account__prepayment_parameters" constraintName="FKp1il9g97n7slv99nuhi65aks5" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="prepayment_account" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

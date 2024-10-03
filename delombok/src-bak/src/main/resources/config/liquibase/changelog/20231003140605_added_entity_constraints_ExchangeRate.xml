@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity ExchangeRate.
+    -->
+    <changeSet id="20231003140605-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="institution_code_id"
+                                 baseTableName="exchange_rate"
+                                 constraintName="fk_exchange_rate__institution_code_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="institution_code"/>
+
+        <addForeignKeyConstraint baseColumnNames="currency_code_id"
+                                 baseTableName="exchange_rate"
+                                 constraintName="fk_exchange_rate__currency_code_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="iso_currency_code"/>
+    </changeSet>
+</databaseChangeLog>

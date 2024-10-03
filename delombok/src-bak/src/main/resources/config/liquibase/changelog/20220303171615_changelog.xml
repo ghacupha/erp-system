@@ -1,0 +1,176 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-6">
+        <addColumn tableName="agency_notice">
+            <column name="assessment_notice_content_type" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-7">
+        <addUniqueConstraint columnNames="reference_number" constraintName="UC_AGENCY_NOTICEREFERENCE_NUMBER_COL" tableName="agency_notice"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-8">
+        <addUniqueConstraint columnNames="asset_category_name" constraintName="UC_ASSET_CATEGORYASSET_CATEGORY_NAME_COL" tableName="asset_category"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-9">
+        <addUniqueConstraint columnNames="branch_code" constraintName="UC_BANK_BRANCH_CODEBRANCH_CODE_COL" tableName="bank_branch_code"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-10">
+        <addUniqueConstraint columnNames="sub_county_code" constraintName="UC_COUNTY_CODESUB_COUNTY_CODE_COL" tableName="county_code"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-11">
+        <addUniqueConstraint columnNames="sub_county_name" constraintName="UC_COUNTY_CODESUB_COUNTY_NAME_COL" tableName="county_code"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-12">
+        <addUniqueConstraint columnNames="dealer_name" constraintName="UC_DEALERDEALER_NAME_COL" tableName="dealer"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-13">
+        <addUniqueConstraint columnNames="delivery_note_number" constraintName="UC_DELIVERY_NOTEDELIVERY_NOTE_NUMBER_COL" tableName="delivery_note"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-14">
+        <addUniqueConstraint columnNames="depreciation_method_name" constraintName="UC_DEPRECIATION_METHODDEPRECIATION_METHOD_NAME_COL" tableName="depreciation_method"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-15">
+        <addUniqueConstraint columnNames="depreciation_type" constraintName="UC_DEPRECIATION_METHODDEPRECIATION_TYPE_COL" tableName="depreciation_method"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-16">
+        <addUniqueConstraint columnNames="file_type" constraintName="UC_FILE_TYPEFILE_TYPE_COL" tableName="file_type"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-17">
+        <addUniqueConstraint columnNames="file_type_name" constraintName="UC_FILE_TYPEFILE_TYPE_NAME_COL" tableName="file_type"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-18">
+        <addUniqueConstraint columnNames="file_name" constraintName="UC_FILE_UPLOADFILE_NAME_COL" tableName="file_upload"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-19">
+        <addUniqueConstraint columnNames="upload_token" constraintName="UC_FILE_UPLOADUPLOAD_TOKEN_COL" tableName="file_upload"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-20">
+        <addUniqueConstraint columnNames="asset_number" constraintName="UC_FIXED_ASSET_ACQUISITIONASSET_NUMBER_COL" tableName="fixed_asset_acquisition"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-21">
+        <addUniqueConstraint columnNames="invoice_number" constraintName="UC_INVOICEINVOICE_NUMBER_COL" tableName="invoice"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-22">
+        <addUniqueConstraint columnNames="email" constraintName="UC_JHI_USEREMAIL_COL" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-23">
+        <addUniqueConstraint columnNames="login" constraintName="UC_JHI_USERLOGIN_COL" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-24">
+        <addUniqueConstraint columnNames="branch_status_type_code" constraintName="UC_OUTLET_STATUSBRANCH_STATUS_TYPE_CODE_COL" tableName="outlet_status"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-25">
+        <addUniqueConstraint columnNames="branch_status_type" constraintName="UC_OUTLET_STATUSBRANCH_STATUS_TYPE_COL" tableName="outlet_status"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-26">
+        <addUniqueConstraint columnNames="outlet_type_code" constraintName="UC_OUTLET_TYPEOUTLET_TYPE_CODE_COL" tableName="outlet_type"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-27">
+        <addUniqueConstraint columnNames="outlet_type" constraintName="UC_OUTLET_TYPEOUTLET_TYPE_COL" tableName="outlet_type"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-28">
+        <addUniqueConstraint columnNames="invoice_number" constraintName="UC_PAYMENT_INVOICEINVOICE_NUMBER_COL" tableName="payment_invoice"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-29">
+        <addUniqueConstraint columnNames="description" constraintName="UC_PAYMENT_LABELDESCRIPTION_COL" tableName="payment_label"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-30">
+        <addUniqueConstraint columnNames="purchase_order_number" constraintName="UC_PURCHASE_ORDERPURCHASE_ORDER_NUMBER_COL" tableName="purchase_order"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-31">
+        <addUniqueConstraint columnNames="outlet_code" constraintName="UC_SERVICE_OUTLETOUTLET_CODE_COL" tableName="service_outlet"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-32">
+        <addUniqueConstraint columnNames="outlet_name" constraintName="UC_SERVICE_OUTLETOUTLET_NAME_COL" tableName="service_outlet"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-33">
+        <addUniqueConstraint columnNames="country" constraintName="UC_SETTLEMENT_CURRENCYCOUNTRY_COL" tableName="settlement_currency"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-34">
+        <addUniqueConstraint columnNames="currency_name" constraintName="UC_SETTLEMENT_CURRENCYCURRENCY_NAME_COL" tableName="settlement_currency"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-35">
+        <addUniqueConstraint columnNames="iso_4217_currency_code" constraintName="UC_SETTLEMENT_CURRENCYISO_4217_CURRENCY_CODE_COL" tableName="settlement_currency"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-36">
+        <addUniqueConstraint columnNames="tax_name" constraintName="UC_TAX_REFERENCETAX_NAME_COL" tableName="tax_reference"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-37">
+        <addUniqueConstraint columnNames="tax_reference_type" constraintName="UC_TAX_REFERENCETAX_REFERENCE_TYPE_COL" tableName="tax_reference"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-38">
+        <dropForeignKeyConstraint baseTableName="agency_notice_backup" constraintName="fk_agency_notice_backup__assessor_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-39">
+        <dropForeignKeyConstraint baseTableName="agency_notice_backup" constraintName="fk_agency_notice_backup__settlement_currency_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-40">
+        <dropForeignKeyConstraint baseTableName="dealer_backup" constraintName="fk_dealer_backup__dealer_group_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-41">
+        <dropForeignKeyConstraint baseTableName="batch_job_execution_context" constraintName="job_exec_ctx_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-42">
+        <dropForeignKeyConstraint baseTableName="batch_job_execution_params" constraintName="job_exec_params_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-43">
+        <dropForeignKeyConstraint baseTableName="batch_step_execution" constraintName="job_execution_step_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-44">
+        <dropForeignKeyConstraint baseTableName="batch_job_execution" constraintName="job_instance_execution_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-45">
+        <dropForeignKeyConstraint baseTableName="batch_step_execution_context" constraintName="step_exec_ctx_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-46">
+        <dropTable tableName="agency_notice_backup"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-47">
+        <dropTable tableName="batch_job_execution"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-48">
+        <dropTable tableName="batch_job_execution_context"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-49">
+        <dropTable tableName="batch_job_execution_params"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-50">
+        <dropTable tableName="batch_job_instance"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-51">
+        <dropTable tableName="batch_step_execution"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-52">
+        <dropTable tableName="batch_step_execution_context"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-53">
+        <dropTable tableName="dealer_backup"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-54">
+        <dropColumn columnName="assessment_notice_file_content_type" tableName="agency_notice"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-55">
+        <dropSequence sequenceName="batch_job_execution_seq"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-56">
+        <dropSequence sequenceName="batch_job_seq"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-57">
+        <dropSequence sequenceName="batch_step_execution_seq"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-1">
+        <alterSequence sequenceName="sequence_generator"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-2">
+        <dropNotNullConstraint columnDataType="bigint" columnName="assessor_id" tableName="agency_notice"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-3">
+        <addNotNullConstraint columnDataType="bigint" columnName="biller_id" tableName="settlement" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-4">
+        <addNotNullConstraint columnDataType="bigint" columnName="payment_category_id" tableName="settlement" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1646327852711-5">
+        <dropNotNullConstraint columnDataType="bigint" columnName="settlement_currency_id" tableName="agency_notice"/>
+    </changeSet>
+</databaseChangeLog>

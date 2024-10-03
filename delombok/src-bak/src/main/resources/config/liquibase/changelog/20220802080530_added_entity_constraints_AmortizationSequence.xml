@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity AmortizationSequence.
+    -->
+    <changeSet id="20220802080530-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="prepayment_account_id"
+                                 baseTableName="amortization_sequence"
+                                 constraintName="fk_amortization_sequence__prepayment_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="prepayment_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="amortization_recurrence_id"
+                                 baseTableName="amortization_sequence"
+                                 constraintName="fk_amortization_sequence__amortization_recurrence_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="amortization_recurrence"/>
+
+        <addForeignKeyConstraint baseColumnNames="amortization_sequence_id"
+                                 baseTableName="rel_amortization_sequence__placeholder"
+                                 constraintName="fk_rel_amortization_sequence__p__amortization_sequence_aa_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="amortization_sequence"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_amortization_sequence__placeholder"
+                                 constraintName="fk_rel_amortization_sequence__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="amortization_sequence_id"
+                                 baseTableName="rel_amortization_sequence__prepayment_mapping"
+                                 constraintName="fk_rel_amortization_sequence__p__amortization_sequence_47_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="amortization_sequence"/>
+
+        <addForeignKeyConstraint baseColumnNames="prepayment_mapping_id"
+                                 baseTableName="rel_amortization_sequence__prepayment_mapping"
+                                 constraintName="fk_rel_amortization_sequence__p__prepayment_mapping_35_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="prepayment_mapping"/>
+
+        <addForeignKeyConstraint baseColumnNames="amortization_sequence_id"
+                                 baseTableName="rel_amortization_sequence__application_parameters"
+                                 constraintName="fk_rel_amortization_sequence__a__amortization_sequence_f1_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="amortization_sequence"/>
+
+        <addForeignKeyConstraint baseColumnNames="application_parameters_id"
+                                 baseTableName="rel_amortization_sequence__application_parameters"
+                                 constraintName="fk_rel_amortization_sequence__a__application_parameters_9f_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="universally_unique_mapping"/>
+    </changeSet>
+</databaseChangeLog>

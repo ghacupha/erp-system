@@ -1,0 +1,11 @@
+id;currency_authenticity_flag;currency_authenticity_type;currency_authenticity_type_details
+1;N;COUNTERFEIT;../fake-data/blob/hipster.txt
+2;N;COUNTERFEIT;../fake-data/blob/hipster.txt
+3;Y;GENUINE;../fake-data/blob/hipster.txt
+4;Y;GENUINE;../fake-data/blob/hipster.txt
+5;Y;GENUINE;../fake-data/blob/hipster.txt
+6;Y;COUNTERFEIT;../fake-data/blob/hipster.txt
+7;N;COUNTERFEIT;../fake-data/blob/hipster.txt
+8;N;COUNTERFEIT;../fake-data/blob/hipster.txt
+9;N;GENUINE;../fake-data/blob/hipster.txt
+10;Y;GENUINE;../fake-data/blob/hipster.txt

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity AssetCategory.
+    -->
+    <changeSet id="20220301105946-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="depreciation_method_id"
+                                 baseTableName="asset_category"
+                                 constraintName="fk_asset_category__depreciation_method_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="depreciation_method"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_category_id"
+                                 baseTableName="rel_asset_category__placeholder"
+                                 constraintName="fk_rel_asset_category__placeholder__asset_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_category"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_asset_category__placeholder"
+                                 constraintName="fk_rel_asset_category__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+    </changeSet>
+</databaseChangeLog>
