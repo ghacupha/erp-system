@@ -169,6 +169,7 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
      * @return List of AssetRegistrationDTO containing the fetched assets.
      */
     private List<AssetRegistrationDTO> fetchAssets(DepreciationJobDTO depreciationJob) {
+        // TODO ensure assets with same cap date as the depreciation-period#endDate
         List<AssetRegistrationDTO> assets = internalAssetRegistrationService.findByCapitalizationDateBefore(depreciationJob.getDepreciationPeriod().getEndDate());
         log.info("System has retrieved {} assets for depreciation.", assets.size());
         return assets;
