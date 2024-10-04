@@ -18,9 +18,12 @@ package io.github.erp.internal.service.leases;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.internal.model.LeaseLiabilityReportItemREPO;
 import io.github.erp.service.dto.LeaseLiabilityReportItemDTO;
+import io.github.erp.service.dto.LeasePeriodDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
@@ -76,4 +79,13 @@ public interface InternalLeaseLiabilityReportItemService {
      * @return the list of entities.
      */
     Page<LeaseLiabilityReportItemDTO> search(String query, Pageable pageable);
+
+    /**
+     * Pageable lease-period-report items listed down for a user specified period
+     *
+     * @param leasePeriod Period for which the lease-liability item is current
+     * @param pageable Pageable object for the lease liability listings
+     * @return Lease liability items
+     */
+    Page<LeaseLiabilityReportItemDTO> leaseLiabilityReportItemsByLeasePeriod(LeasePeriodDTO leasePeriod, Pageable pageable);
 }
