@@ -27,6 +27,7 @@ import io.github.erp.repository.search.LeaseLiabilityReportItemSearchRepository;
 import io.github.erp.service.LeaseLiabilityReportItemService;
 import io.github.erp.service.dto.LeaseLiabilityReportItemDTO;
 import io.github.erp.service.dto.LeasePeriodDTO;
+import io.github.erp.service.dto.LeaseRepaymentPeriodDTO;
 import io.github.erp.service.mapper.LeaseLiabilityReportItemMapper;
 import liquibase.pro.packaged.L;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
@@ -127,7 +128,7 @@ public class InternalLeaseLiabilityReportItemServiceImpl implements InternalLeas
 
     @Override
     @Transactional(readOnly = true)
-    public Page<LeaseLiabilityReportItemDTO> leaseLiabilityReportItemsByLeasePeriod(LeasePeriodDTO leasePeriod, Pageable pageable) {
+    public Page<LeaseLiabilityReportItemDTO> leaseLiabilityReportItemsByLeasePeriod(LeaseRepaymentPeriodDTO leasePeriod, Pageable pageable) {
         log.debug("Request to fetch list of items for the LeasePeriod : {}", leasePeriod);
         // TODO number set for testing purposes
         return leaseLiabilityReportItemRepository.leaseLiabilityReportItemsByLeasePeriod(leasePeriod.getId(), pageable)

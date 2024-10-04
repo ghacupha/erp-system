@@ -1,29 +1,20 @@
 package io.github.erp.internal.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class LeaseLiabilityReportItemREPO {
+public interface LeaseLiabilityReportItemREPO {
 
-    private Long id;
+    Long getId();
 
-    private String bookingId;
+    String getBookingId();
 
-    private String leaseTitle;
+    String getLeaseTitle();
 
-    private String liabilityAccountNumber;
+    String getLiabilityAccountNumber();
 
-    private BigDecimal liabilityAmount;
+    BigDecimal getLiabilityAmount();
 
-    private String interestPayableAccountNumber;
+    String getInterestPayableAccountNumber();
 
-    private BigDecimal interestPayableAmount;
+    BigDecimal getInterestPayableAmount();
 }

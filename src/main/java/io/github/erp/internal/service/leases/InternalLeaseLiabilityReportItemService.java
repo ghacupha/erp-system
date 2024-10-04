@@ -21,6 +21,7 @@ package io.github.erp.internal.service.leases;
 import io.github.erp.internal.model.LeaseLiabilityReportItemREPO;
 import io.github.erp.service.dto.LeaseLiabilityReportItemDTO;
 import io.github.erp.service.dto.LeasePeriodDTO;
+import io.github.erp.service.dto.LeaseRepaymentPeriodDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
@@ -87,5 +88,5 @@ public interface InternalLeaseLiabilityReportItemService {
      * @param pageable Pageable object for the lease liability listings
      * @return Lease liability items
      */
-    Page<LeaseLiabilityReportItemDTO> leaseLiabilityReportItemsByLeasePeriod(LeasePeriodDTO leasePeriod, Pageable pageable);
+    Page<LeaseLiabilityReportItemDTO> leaseLiabilityReportItemsByLeasePeriod(LeaseRepaymentPeriodDTO leasePeriod, Pageable pageable);
 }

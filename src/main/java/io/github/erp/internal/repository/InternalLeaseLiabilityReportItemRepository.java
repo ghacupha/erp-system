@@ -43,6 +43,7 @@ public interface InternalLeaseLiabilityReportItemRepository
         nativeQuery = true,
         value = "" +
             "SELECT " +
+            "   ll.id as id, " +
             "   ll.lease_id as bookingId, " +
             "   lc.short_title as leaseTitle," +
             "   'Liability a/c' as liabilityAccountNumber," +
@@ -52,10 +53,11 @@ public interface InternalLeaseLiabilityReportItemRepository
             "FROM lease_liability_schedule_item sched " +
             "LEFT JOIN lease_liability ll ON sched.lease_liability_id = ll.id " +
             "LEFT JOIN ifrs16lease_contract lc ON sched.lease_contract_id = lc.id " +
-            "LEFT JOIN lease_period lp ON sched.lease_period_id = lp.id " +
+            "LEFT JOIN lease_repayment_period lp ON sched.lease_period_id = lp.id " +
             "WHERE sched.lease_period_id = :leasePeriodId",
         countQuery = "" +
             "SELECT " +
+            "   ll.id as id, " +
             "   ll.lease_id as bookingId, " +
             "   lc.short_title as leaseTitle," +
             "   'Liability a/c' as liabilityAccountNumber," +
@@ -65,7 +67,7 @@ public interface InternalLeaseLiabilityReportItemRepository
             "FROM lease_liability_schedule_item sched " +
             "LEFT JOIN lease_liability ll ON sched.lease_liability_id = ll.id " +
             "LEFT JOIN ifrs16lease_contract lc ON sched.lease_contract_id = lc.id " +
-            "LEFT JOIN lease_period lp ON sched.lease_period_id = lp.id " +
+            "LEFT JOIN lease_repayment_period lp ON sched.lease_period_id = lp.id " +
             "WHERE sched.lease_period_id = :leasePeriodId"
     )
     Page<LeaseLiabilityReportItemREPO> leaseLiabilityReportItemsByLeasePeriod(@Param("leasePeriodId") Long leasePeriodId, Pageable pageable);
