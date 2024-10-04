@@ -19,12 +19,17 @@ package io.github.erp.internal.service.leases;
  */
 
 import io.github.erp.domain.LeaseLiabilityReportItem;
+import io.github.erp.internal.framework.Mapping;
+import io.github.erp.internal.model.LeaseLiabilityReportItemREPO;
 import io.github.erp.internal.repository.InternalLeaseLiabilityReportItemRepository;
 import io.github.erp.repository.LeaseLiabilityReportItemRepository;
 import io.github.erp.repository.search.LeaseLiabilityReportItemSearchRepository;
 import io.github.erp.service.LeaseLiabilityReportItemService;
 import io.github.erp.service.dto.LeaseLiabilityReportItemDTO;
+import io.github.erp.service.dto.LeasePeriodDTO;
 import io.github.erp.service.mapper.LeaseLiabilityReportItemMapper;
+import liquibase.pro.packaged.L;
+import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -49,14 +54,17 @@ public class InternalLeaseLiabilityReportItemServiceImpl implements InternalLeas
 
     private final LeaseLiabilityReportItemSearchRepository leaseLiabilityReportItemSearchRepository;
 
+    private final Mapping<LeaseLiabilityReportItemDTO, LeaseLiabilityReportItemREPO> leaseLiabilityReportREPOItemMapper;
+
     public InternalLeaseLiabilityReportItemServiceImpl(
         InternalLeaseLiabilityReportItemRepository leaseLiabilityReportItemRepository,
         LeaseLiabilityReportItemMapper leaseLiabilityReportItemMapper,
-        LeaseLiabilityReportItemSearchRepository leaseLiabilityReportItemSearchRepository
+        LeaseLiabilityReportItemSearchRepository leaseLiabilityReportItemSearchRepository, Mapping<LeaseLiabilityReportItemDTO, LeaseLiabilityReportItemREPO> leaseLiabilityReportREPOItemMapper
     ) {
         this.leaseLiabilityReportItemRepository = leaseLiabilityReportItemRepository;
         this.leaseLiabilityReportItemMapper = leaseLiabilityReportItemMapper;
         this.leaseLiabilityReportItemSearchRepository = leaseLiabilityReportItemSearchRepository;
+        this.leaseLiabilityReportREPOItemMapper = leaseLiabilityReportREPOItemMapper;
     }
 
     @Override
@@ -115,5 +123,14 @@ public class InternalLeaseLiabilityReportItemServiceImpl implements InternalLeas
     public Page<LeaseLiabilityReportItemDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of LeaseLiabilityReportItems for query {}", query);
         return leaseLiabilityReportItemSearchRepository.search(query, pageable).map(leaseLiabilityReportItemMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<LeaseLiabilityReportItemDTO> leaseLiabilityReportItemsByLeasePeriod(LeasePeriodDTO leasePeriod, Pageable pageable) {
+        log.debug("Request to fetch list of items for the LeasePeriod : {}", leasePeriod);
+        // TODO number set for testing purposes
+        return leaseLiabilityReportItemRepository.leaseLiabilityReportItemsByLeasePeriod(leasePeriod.getId(), pageable)
+            .map(leaseLiabilityReportREPOItemMapper::toValue1);
     }
 }

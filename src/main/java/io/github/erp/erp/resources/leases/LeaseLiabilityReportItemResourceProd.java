@@ -18,10 +18,11 @@ package io.github.erp.erp.resources.leases;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.domain.LeaseLiabilityReportItem;
+import io.github.erp.internal.repository.InternalLeaseLiabilityReportItemRepository;
 import io.github.erp.internal.service.leases.InternalLeaseLiabilityReportItemService;
-import io.github.erp.repository.LeaseLiabilityReportItemRepository;
+import io.github.erp.internal.service.rou.InternalLeasePeriodService;
 import io.github.erp.service.LeaseLiabilityReportItemQueryService;
-import io.github.erp.service.LeaseLiabilityReportItemService;
 import io.github.erp.service.criteria.LeaseLiabilityReportItemCriteria;
 import io.github.erp.service.dto.LeaseLiabilityReportItemDTO;
 import org.slf4j.Logger;
@@ -37,9 +38,10 @@ import tech.jhipster.web.util.ResponseUtil;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * REST controller for managing {@link io.github.erp.domain.LeaseLiabilityReportItem}.
+ * REST controller for managing {@link LeaseLiabilityReportItem}.
  */
 @RestController
 @RequestMapping("/api/leases")
@@ -49,17 +51,20 @@ public class LeaseLiabilityReportItemResourceProd {
 
     private final InternalLeaseLiabilityReportItemService leaseLiabilityReportItemService;
 
-    private final LeaseLiabilityReportItemRepository leaseLiabilityReportItemRepository;
+    private final InternalLeaseLiabilityReportItemRepository leaseLiabilityReportItemRepository;
+
+    private final InternalLeasePeriodService leasePeriodService;
 
     private final LeaseLiabilityReportItemQueryService leaseLiabilityReportItemQueryService;
 
     public LeaseLiabilityReportItemResourceProd(
         InternalLeaseLiabilityReportItemService leaseLiabilityReportItemService,
-        LeaseLiabilityReportItemRepository leaseLiabilityReportItemRepository,
+        InternalLeaseLiabilityReportItemRepository leaseLiabilityReportItemRepository, InternalLeasePeriodService leasePeriodService,
         LeaseLiabilityReportItemQueryService leaseLiabilityReportItemQueryService
     ) {
         this.leaseLiabilityReportItemService = leaseLiabilityReportItemService;
         this.leaseLiabilityReportItemRepository = leaseLiabilityReportItemRepository;
+        this.leasePeriodService = leasePeriodService;
         this.leaseLiabilityReportItemQueryService = leaseLiabilityReportItemQueryService;
     }
 
@@ -79,6 +84,29 @@ public class LeaseLiabilityReportItemResourceProd {
         Page<LeaseLiabilityReportItemDTO> page = leaseLiabilityReportItemQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /lease-liability-report-items/lease-period} : get all the leaseLiabilityReportItems.
+     *
+     * @param pageable the pagination information.
+     * @param leasePeriodId the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of leaseLiabilityReportItems in body.
+     */
+    @GetMapping("/lease-liability-report-items/reports/{leasePeriodId}")
+    public ResponseEntity<List<LeaseLiabilityReportItemDTO>> getAllLeaseLiabilityReportItemsByPeriod(
+        @PathVariable Long leasePeriodId,
+        Pageable pageable
+    ) {
+        AtomicReference<Page<LeaseLiabilityReportItemDTO>> page = new AtomicReference<>();
+
+        leasePeriodService.findOne(leasePeriodId).ifPresent(leasePeriod -> {
+            log.debug("REST request to get LeaseLiabilityReportItems by period: {}", leasePeriod);
+            page.set(leaseLiabilityReportItemService.leaseLiabilityReportItemsByLeasePeriod(leasePeriod, pageable));
+        });
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page.get());
+        return ResponseEntity.ok().headers(headers).body(page.get().getContent());
     }
 
     /**

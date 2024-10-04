@@ -19,9 +19,17 @@ package io.github.erp.internal.repository;
  */
 
 import io.github.erp.domain.LeaseLiabilityReportItem;
+import io.github.erp.internal.model.LeaseLiabilityReportItemREPO;
+import io.github.erp.service.dto.LeaseLiabilityReportItemDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDate;
 
 /**
  * Spring Data SQL repository for the LeaseLiabilityReportItem entity.
@@ -29,4 +37,36 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface InternalLeaseLiabilityReportItemRepository
-    extends JpaRepository<LeaseLiabilityReportItem, Long>, JpaSpecificationExecutor<LeaseLiabilityReportItem> {}
+    extends JpaRepository<LeaseLiabilityReportItem, Long>, JpaSpecificationExecutor<LeaseLiabilityReportItem> {
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT " +
+            "   ll.lease_id as bookingId, " +
+            "   lc.short_title as leaseTitle," +
+            "   'Liability a/c' as liabilityAccountNumber," +
+            "   sched.outstanding_balance as liabilityAmount," +
+            "   'Interest Payable a/c' as interestPayableAccountNumber," +
+            "   sched.interest_payable_closing as interestPayableAmount " +
+            "FROM lease_liability_schedule_item sched " +
+            "LEFT JOIN lease_liability ll ON sched.lease_liability_id = ll.id " +
+            "LEFT JOIN ifrs16lease_contract lc ON sched.lease_contract_id = lc.id " +
+            "LEFT JOIN lease_period lp ON sched.lease_period_id = lp.id " +
+            "WHERE sched.lease_period_id = :leasePeriodId",
+        countQuery = "" +
+            "SELECT " +
+            "   ll.lease_id as bookingId, " +
+            "   lc.short_title as leaseTitle," +
+            "   'Liability a/c' as liabilityAccountNumber," +
+            "   sched.outstanding_balance as liabilityAmount," +
+            "   'Interest Payable a/c' as interestPayableAccountNumber," +
+            "   sched.interest_payable_closing as interestPayableAmount " +
+            "FROM lease_liability_schedule_item sched " +
+            "LEFT JOIN lease_liability ll ON sched.lease_liability_id = ll.id " +
+            "LEFT JOIN ifrs16lease_contract lc ON sched.lease_contract_id = lc.id " +
+            "LEFT JOIN lease_period lp ON sched.lease_period_id = lp.id " +
+            "WHERE sched.lease_period_id = :leasePeriodId"
+    )
+    Page<LeaseLiabilityReportItemREPO> leaseLiabilityReportItemsByLeasePeriod(@Param("leasePeriodId") Long leasePeriodId, Pageable pageable);
+}
