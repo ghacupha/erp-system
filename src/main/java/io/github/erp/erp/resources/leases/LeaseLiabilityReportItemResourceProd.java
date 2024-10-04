@@ -21,7 +21,7 @@ package io.github.erp.erp.resources.leases;
 import io.github.erp.domain.LeaseLiabilityReportItem;
 import io.github.erp.internal.repository.InternalLeaseLiabilityReportItemRepository;
 import io.github.erp.internal.service.leases.InternalLeaseLiabilityReportItemService;
-import io.github.erp.internal.service.rou.InternalLeasePeriodService;
+import io.github.erp.internal.service.leases.InternalLeaseRepaymentPeriodService;
 import io.github.erp.service.LeaseLiabilityReportItemQueryService;
 import io.github.erp.service.criteria.LeaseLiabilityReportItemCriteria;
 import io.github.erp.service.dto.LeaseLiabilityReportItemDTO;
@@ -53,18 +53,19 @@ public class LeaseLiabilityReportItemResourceProd {
 
     private final InternalLeaseLiabilityReportItemRepository leaseLiabilityReportItemRepository;
 
-    private final InternalLeasePeriodService leasePeriodService;
+    private final InternalLeaseRepaymentPeriodService leaseRepaymentPeriodService;
 
     private final LeaseLiabilityReportItemQueryService leaseLiabilityReportItemQueryService;
 
     public LeaseLiabilityReportItemResourceProd(
         InternalLeaseLiabilityReportItemService leaseLiabilityReportItemService,
-        InternalLeaseLiabilityReportItemRepository leaseLiabilityReportItemRepository, InternalLeasePeriodService leasePeriodService,
+        InternalLeaseLiabilityReportItemRepository leaseLiabilityReportItemRepository,
+        InternalLeaseRepaymentPeriodService leaseRepaymentPeriodService,
         LeaseLiabilityReportItemQueryService leaseLiabilityReportItemQueryService
     ) {
         this.leaseLiabilityReportItemService = leaseLiabilityReportItemService;
         this.leaseLiabilityReportItemRepository = leaseLiabilityReportItemRepository;
-        this.leasePeriodService = leasePeriodService;
+        this.leaseRepaymentPeriodService = leaseRepaymentPeriodService;
         this.leaseLiabilityReportItemQueryService = leaseLiabilityReportItemQueryService;
     }
 
@@ -100,7 +101,7 @@ public class LeaseLiabilityReportItemResourceProd {
     ) {
         AtomicReference<Page<LeaseLiabilityReportItemDTO>> page = new AtomicReference<>();
 
-        leasePeriodService.findOne(leasePeriodId).ifPresent(leasePeriod -> {
+        leaseRepaymentPeriodService.findOne(leasePeriodId).ifPresent(leasePeriod -> {
             log.debug("REST request to get LeaseLiabilityReportItems by period: {}", leasePeriod);
             page.set(leaseLiabilityReportItemService.leaseLiabilityReportItemsByLeasePeriod(leasePeriod, pageable));
         });
