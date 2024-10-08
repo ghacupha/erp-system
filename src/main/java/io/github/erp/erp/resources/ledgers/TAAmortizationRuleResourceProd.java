@@ -18,9 +18,9 @@ package io.github.erp.erp.resources.ledgers;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.repository.TAAmortizationRuleRepository;
+import io.github.erp.internal.repository.InternalTAAmortizationRuleRepository;
+import io.github.erp.internal.service.leases.InternalTAAmortizationRuleService;
 import io.github.erp.service.TAAmortizationRuleQueryService;
-import io.github.erp.service.TAAmortizationRuleService;
 import io.github.erp.service.criteria.TAAmortizationRuleCriteria;
 import io.github.erp.service.dto.TAAmortizationRuleDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
@@ -59,15 +59,15 @@ public class TAAmortizationRuleResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final TAAmortizationRuleService tAAmortizationRuleService;
+    private final InternalTAAmortizationRuleService tAAmortizationRuleService;
 
-    private final TAAmortizationRuleRepository tAAmortizationRuleRepository;
+    private final InternalTAAmortizationRuleRepository tAAmortizationRuleRepository;
 
     private final TAAmortizationRuleQueryService tAAmortizationRuleQueryService;
 
     public TAAmortizationRuleResourceProd(
-        TAAmortizationRuleService tAAmortizationRuleService,
-        TAAmortizationRuleRepository tAAmortizationRuleRepository,
+        InternalTAAmortizationRuleService tAAmortizationRuleService,
+        InternalTAAmortizationRuleRepository tAAmortizationRuleRepository,
         TAAmortizationRuleQueryService tAAmortizationRuleQueryService
     ) {
         this.tAAmortizationRuleService = tAAmortizationRuleService;
