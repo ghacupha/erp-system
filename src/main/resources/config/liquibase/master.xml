@@ -297,6 +297,10 @@
     <include file="config/liquibase/changelog/20240828112926_added_entity_LeaseLiabilityReport.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241007115738_added_entity_TransactionAccountCategory.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241007122528_added_entity_TransactionAccountPostingProcessType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241008093214_added_entity_TransactionAccountPostingRun.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241008092538_added_entity_TransactionAccountPostingRule.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241008094705_added_entity_TransactionAccountTypeMapping.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241008111457_added_entity_TAAmortizationRule.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
@@ -548,6 +552,10 @@
     <include file="config/liquibase/changelog/20240828112926_added_entity_constraints_LeaseLiabilityReport.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241007115738_added_entity_constraints_TransactionAccountCategory.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241007122528_added_entity_constraints_TransactionAccountPostingProcessType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241008093214_added_entity_constraints_TransactionAccountPostingRun.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241008092538_added_entity_constraints_TransactionAccountPostingRule.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241008094705_added_entity_constraints_TransactionAccountTypeMapping.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241008111457_added_entity_constraints_TAAmortizationRule.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
