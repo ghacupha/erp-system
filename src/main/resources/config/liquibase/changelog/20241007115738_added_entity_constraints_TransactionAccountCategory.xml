@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity TransactionAccountCategory.
+    -->
+    <changeSet id="20241007115738-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="transaction_account_category_id"
+                                 baseTableName="rel_transaction_account_category__placeholder"
+                                 constraintName="fk_rel_transaction_account_cate__transaction_account_cate_68_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account_category"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_transaction_account_category__placeholder"
+                                 constraintName="fk_rel_transaction_account_cate__placeholder_07_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+    </changeSet>
+</databaseChangeLog>
