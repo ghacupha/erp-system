@@ -34,7 +34,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "taamortization_rule")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "taamortizationrule")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "taamortizationrule-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
 public class TAAmortizationRule implements Serializable {
 
     private static final long serialVersionUID = 1L;

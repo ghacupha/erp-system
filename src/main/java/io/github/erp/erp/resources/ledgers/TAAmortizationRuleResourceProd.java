@@ -123,7 +123,9 @@ public class TAAmortizationRuleResourceProd {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        TAAmortizationRuleDTO result = tAAmortizationRuleService.save(tAAmortizationRuleDTO);
+        TAAmortizationRuleDTO result = tAAmortizationRuleService.partialUpdate(tAAmortizationRuleDTO)
+            .get();
+
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, tAAmortizationRuleDTO.getId().toString()))

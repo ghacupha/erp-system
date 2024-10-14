@@ -43,4 +43,5 @@ git checkout HEAD~1 src/main/java/io/github/erp/domain/LeaseAmortizationCalculat
 git checkout HEAD~1 src/main/java/io/github/erp/domain/LeaseAmortizationSchedule.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/LeaseLiabilityScheduleItem.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/IFRS16LeaseContract.java
+git checkout HEAD~1 src/main/java/io/github/erp/domain/TAAmortizationRule.java
 git checkout HEAD~1 src/main/resources/config/liquibase/changelog/
