@@ -109,6 +109,31 @@
       "name": "spring.kafka.topics.nbv.consumer.auto.offset.reset",
       "type": "java.lang.String",
       "description": "Description for spring.kafka.topics.nbv.consumer.auto.offset.reset."
+    },
+    {
+      "name": "spring.kafka.topics.depreciation-batch.consumer.auto.offset.reset",
+      "type": "java.lang.String",
+      "description": "Description for spring.kafka.topics.depreciation-batch.consumer.auto.offset.reset."
+    },
+    {
+      "name": "spring.kafka.topics.depreciation-batch.consumer.properties.spring.json.trusted.packages",
+      "type": "java.lang.String",
+      "description": "Description for spring.kafka.topics.depreciation-batch.consumer.properties.spring.json.trusted.packages."
+    },
+    {
+      "name": "spring.kafka.topics.depreciation-batch.consumer.properties.replication.factor",
+      "type": "java.lang.String",
+      "description": "Description for spring.kafka.topics.depreciation-batch.consumer.properties.replication.factor."
+    },
+    {
+      "name": "spring.kafka.topics.depreciation-batch.producer.key.serializer",
+      "type": "java.lang.String",
+      "description": "Description for spring.kafka.topics.depreciation-batch.producer.key.serializer."
+    },
+    {
+      "name": "spring.kafka.topics.depreciation-batch.producer.properties.replication.factor",
+      "type": "java.lang.String",
+      "description": "Description for spring.kafka.topics.depreciation-batch.producer.properties.replication.factor."
     }
   ]
 }
