@@ -1,0 +1,55 @@
+{
+  "fields": [
+    {
+      "fieldName": "entryId",
+      "fieldType": "Long",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "transactionDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "amount",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "debitAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "accountNumber"
+    },
+    {
+      "relationshipName": "creditAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "accountNumber"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "transactionDetails"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "TransactionDetails",
+  "changelogDate": "20241014145156",
+  "incrementalChangelog": false
+}
