@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity TARecognitionROURule.
+    -->
+    <changeSet id="20241014150903-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="lease_contract_id"
+                                 baseTableName="tarecognitionrourule"
+                                 constraintName="fk_tarecognitionrourule__lease_contract_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ifrs16lease_contract"/>
+
+        <addForeignKeyConstraint baseColumnNames="debit_id"
+                                 baseTableName="tarecognitionrourule"
+                                 constraintName="fk_tarecognitionrourule__debit_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="credit_id"
+                                 baseTableName="tarecognitionrourule"
+                                 constraintName="fk_tarecognitionrourule__credit_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="tarecognitionrourule_id"
+                                 baseTableName="rel_tarecognitionrourule__placeholder"
+                                 constraintName="fk_rel_tarecognitionrourule__pl__tarecognitionrourule_db_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tarecognitionrourule"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_tarecognitionrourule__placeholder"
+                                 constraintName="fk_rel_tarecognitionrourule__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+    </changeSet>
+</databaseChangeLog>
