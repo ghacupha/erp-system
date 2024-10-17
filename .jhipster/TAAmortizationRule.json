@@ -1,4 +1,5 @@
 {
+  "clientRootFolder": "accounting",
   "fields": [
     {
       "fieldName": "name",

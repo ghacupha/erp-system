@@ -51,7 +51,7 @@ import java.util.Optional;
  * REST controller for managing {@link io.github.erp.domain.TALeaseRecognitionRule}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/accounts")
 public class TALeaseRecognitionRuleResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(TALeaseRecognitionRuleResourceProd.class);

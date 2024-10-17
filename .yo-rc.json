@@ -311,7 +311,8 @@
       "TARecognitionROURule",
       "TALeaseInterestAccrualRule",
       "TALeaseRepaymentRule",
-      "TAInterestPaidTransferRule"
+      "TAInterestPaidTransferRule",
+      "TACompilationRequest"
     ],
     "entitySuffix": "",
     "incrementalChangelog": false,
