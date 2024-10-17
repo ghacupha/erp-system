@@ -51,7 +51,7 @@ import java.util.Optional;
  * REST controller for managing {@link io.github.erp.domain.TARecognitionROURule}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/accounts")
 public class TARecognitionROURuleResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(TARecognitionROURuleResourceProd.class);

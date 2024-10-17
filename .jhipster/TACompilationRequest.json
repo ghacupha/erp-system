@@ -1,0 +1,77 @@
+{
+  "clientRootFolder": "accounting",
+  "fields": [
+    {
+      "fieldName": "requisitionId",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "timeOfRequest",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "compilationProcessStatus",
+      "fieldType": "compilationProcessStatusTypes",
+      "fieldValues": "STARTED,RUNNING,ERRORED,COMPLETE,INVALIDATED"
+    },
+    {
+      "fieldName": "numberOfEnumeratedItems",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "batchJobIdentifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "initialAmountStepIdentifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "depreciationAmountStepIdentifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "initialLeaseAmountStepIdentifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "interestAmountStepIdentifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "flagAmortisedStepIdentifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "compilationTime",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "invalidated",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "initiatedBy",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "applicationIdentity"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "TACompilationRequest",
+  "changelogDate": "20241014154806",
+  "incrementalChangelog": false
+}

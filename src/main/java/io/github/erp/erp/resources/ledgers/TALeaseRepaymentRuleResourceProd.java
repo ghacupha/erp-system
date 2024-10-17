@@ -51,7 +51,7 @@ import java.util.Optional;
  * REST controller for managing {@link io.github.erp.domain.TALeaseRepaymentRule}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/accounts")
 public class TALeaseRepaymentRuleResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(TALeaseRepaymentRuleResourceProd.class);

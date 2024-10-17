@@ -51,7 +51,7 @@ import java.util.Optional;
  * REST controller for managing {@link io.github.erp.domain.TAInterestPaidTransferRule}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/accounts")
 public class TAInterestPaidTransferRuleResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(TAInterestPaidTransferRuleResourceProd.class);

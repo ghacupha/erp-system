@@ -51,7 +51,7 @@ import java.util.Optional;
  * REST controller for managing {@link io.github.erp.domain.TransactionDetails}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/accounts")
 public class TransactionDetailsResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(TransactionDetailsResourceProd.class);
