@@ -20,6 +20,7 @@ package io.github.erp.erp.resources.ledgers;
 
 import io.github.erp.internal.repository.InternalTACompilationRequestRepository;
 import io.github.erp.internal.service.leases.InternalTACompilationRequestService;
+import io.github.erp.internal.service.leases.ROUAmortizationTransactionDetailsService;
 import io.github.erp.repository.TACompilationRequestRepository;
 import io.github.erp.service.TACompilationRequestQueryService;
 import io.github.erp.service.TACompilationRequestService;
@@ -67,14 +68,17 @@ public class TACompilationRequestResourceProd {
 
     private final TACompilationRequestQueryService tACompilationRequestQueryService;
 
+    private final ROUAmortizationTransactionDetailsService rouAmortizationTransactionDetailsService;
+
     public TACompilationRequestResourceProd(
         InternalTACompilationRequestService tACompilationRequestService,
         InternalTACompilationRequestRepository tACompilationRequestRepository,
-        TACompilationRequestQueryService tACompilationRequestQueryService
+        TACompilationRequestQueryService tACompilationRequestQueryService, ROUAmortizationTransactionDetailsService rouAmortizationTransactionDetailsService
     ) {
         this.tACompilationRequestService = tACompilationRequestService;
         this.tACompilationRequestRepository = tACompilationRequestRepository;
         this.tACompilationRequestQueryService = tACompilationRequestQueryService;
+        this.rouAmortizationTransactionDetailsService = rouAmortizationTransactionDetailsService;
     }
 
     /**
@@ -93,6 +97,9 @@ public class TACompilationRequestResourceProd {
             throw new BadRequestAlertException("A new tACompilationRequest cannot already have an ID", ENTITY_NAME, "idexists");
         }
         TACompilationRequestDTO result = tACompilationRequestService.save(tACompilationRequestDTO);
+
+        rouAmortizationTransactionDetailsService.createTransactionDetails();
+
         return ResponseEntity
             .created(new URI("/api/ta-compilation-requests/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
