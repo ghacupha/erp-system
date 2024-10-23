@@ -27,6 +27,16 @@ import io.github.erp.service.dto.TACompilationRequestDTO;
 import io.github.erp.service.mapper.TACompilationRequestMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRestartException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -34,11 +44,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static io.github.erp.internal.service.leases.batch.ta.ROUAmortizationBatchConfig.ROU_AMORTIZATION_JOB_NAME;
+
 /**
  * Service Implementation for managing {@link TACompilationRequest}.
  */
 @Service
-@Transactional
 public class InternalTACompilationRequestServiceImpl implements InternalTACompilationRequestService {
 
     private final Logger log = LoggerFactory.getLogger(InternalTACompilationRequestServiceImpl.class);
@@ -49,16 +60,24 @@ public class InternalTACompilationRequestServiceImpl implements InternalTACompil
 
     private final TACompilationRequestSearchRepository tACompilationRequestSearchRepository;
 
+    private final JobLauncher jobLauncher;
+
+    private final Job leaseAmortizationJob;
+
     public InternalTACompilationRequestServiceImpl(
         InternalTACompilationRequestRepository tACompilationRequestRepository,
         TACompilationRequestMapper tACompilationRequestMapper,
-        TACompilationRequestSearchRepository tACompilationRequestSearchRepository
-    ) {
+        TACompilationRequestSearchRepository tACompilationRequestSearchRepository,
+        JobLauncher jobLauncher,
+        @Qualifier(ROU_AMORTIZATION_JOB_NAME) Job leaseAmortizationJob) {
         this.tACompilationRequestRepository = tACompilationRequestRepository;
         this.tACompilationRequestMapper = tACompilationRequestMapper;
         this.tACompilationRequestSearchRepository = tACompilationRequestSearchRepository;
+        this.jobLauncher = jobLauncher;
+        this.leaseAmortizationJob = leaseAmortizationJob;
     }
 
+    @Transactional
     @Override
     public TACompilationRequestDTO save(TACompilationRequestDTO tACompilationRequestDTO) {
         log.debug("Request to save TACompilationRequest : {}", tACompilationRequestDTO);
@@ -72,6 +91,7 @@ public class InternalTACompilationRequestServiceImpl implements InternalTACompil
         return result;
     }
 
+    @Transactional
     @Override
     public Optional<TACompilationRequestDTO> partialUpdate(TACompilationRequestDTO tACompilationRequestDTO) {
         log.debug("Request to partially update TACompilationRequest : {}", tACompilationRequestDTO);
@@ -106,6 +126,7 @@ public class InternalTACompilationRequestServiceImpl implements InternalTACompil
         return tACompilationRequestRepository.findById(id).map(tACompilationRequestMapper::toDto);
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
         log.debug("Request to delete TACompilationRequest : {}", id);
@@ -118,5 +139,15 @@ public class InternalTACompilationRequestServiceImpl implements InternalTACompil
     public Page<TACompilationRequestDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of TACompilationRequests for query {}", query);
         return tACompilationRequestSearchRepository.search(query, pageable).map(tACompilationRequestMapper::toDto);
+    }
+
+    @Override
+    public void launchTACompilationBatch(TACompilationRequestDTO compilationRequest) throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+
+        JobParameters jobParameters = new JobParametersBuilder()
+            .addLong("startTime", System.currentTimeMillis())
+            .toJobParameters();
+
+        jobLauncher.run(leaseAmortizationJob, jobParameters);
     }
 }
